@@ -2,7 +2,7 @@
 	<info organisation="ncicb" module="sdk-grid-jaas-module" />
 	<configurations>
 		<conf name="compile"  />
-		<conf name="runtime"/>
+		<conf name="runtime" extends="compile"/>
 	</configurations>
 
 	<publications>
@@ -20,7 +20,7 @@
 		<dependency org="caGrid" name="dorian" rev="1.2" conf="compile->client"/>
 		<dependency org="globus" name="axis" rev="1.2RC2" conf="compile->runtime" />
 		<dependency org="globus" name="ws-enumeration" rev="4.0.3" conf="compile" />
-		<dependency org="caGrid" name="syncgts" rev="1.2" conf="compile->stubs;compile->common"/>
+		<dependency org="caGrid" name="syncgts" rev="1.2" conf="compile->stubs;compile->common;compile->client;compile->service"/>
 		<dependency org="caGrid" name="data" rev="1.2" conf="compile->utils"/>
 		
 		<dependency org="caGrid" name="gts" rev="1.2" conf="runtime->client;runtime->common" />
