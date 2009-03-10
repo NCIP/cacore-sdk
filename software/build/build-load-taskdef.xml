@@ -16,7 +16,7 @@
 	</path>
 
 	<path id="taskdef.cp">
-		<fileset dir="${tools.dir}">
+		<fileset dir="${tools.lib.dir}">
 			<include name="*.jar" />
 		</fileset>
 	</path>
