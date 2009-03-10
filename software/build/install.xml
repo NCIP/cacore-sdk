@@ -283,7 +283,7 @@
 	<target name="install:server:binaries" depends="install:jboss:binaries,install:tomcat:binaries"/>
 	<target name="install:server:configure" depends="install:jboss:configure,install:tomcat:configure"/>
 	<target name="install:server:project-webapp" depends="install:jboss:project-webapp,install:tomcat:project-webapp"/>
-	<target name="install:server:grid-login-webapp" depends="install:tomcat:grid-login-webapp,install:tomcat:grid-login-webapp"/>
+	<target name="install:server:grid-login-webapp" depends="install:jboss:grid-login-webapp,install:tomcat:grid-login-webapp"/>
 	<target name="install:post" depends="install:post:jboss, install:post:tomcat" />
 
 	<target name="install:server:root-certs" >
