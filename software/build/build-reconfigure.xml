@@ -8,7 +8,6 @@
 	<property file="install.properties"/>
 	<property name="tools.dir" location="${basedir}/tools" />
 	<property name="tools.lib.dir" location="${tools.dir}/lib" />
-	<property name="load-ivy" location="false" />
 	<property name="lib.dir" location="${output.project.dir}/lib" />
 
 

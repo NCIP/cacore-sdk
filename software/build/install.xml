@@ -65,7 +65,6 @@
 	<property name="jboss.binding.template.location" value="${bda-utils.dir}/resource/${jboss.template.relative.dir}/bindings.xml" />
 	<property name="jboss.service.template.location" value="${bda-utils.dir}/resource/${jboss.template.relative.dir}/jboss-service.xml" />
 
-	<property name="load-ivy" value="false" />
 	<condition property="taskdef-file" value="build-load-taskdef.xml" else="build-no-taskdef.xml">
 		<not>
 			<typefound name="xmltask"/>

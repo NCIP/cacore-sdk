@@ -23,7 +23,9 @@
 	<property name="db.src.dir" value="${project.home}/db"/>
 	<property name="MODEL_FILE_PATH" value="${project.home}/models/${MODEL_FILE}"/>
 
-	<target name="deploy-local" depends="">
+	<target name="deploy-local" depends="build-modules,build-system,deploy-local-nobuild"/>
+
+	<target name="deploy-local-nobuild" depends="">
 		<ant antfile="build.xml" target="deploy:local:install:nocodegen" inheritall="true" inheritrefs="false" dir="${SDK_INSTALL_DIR}/build">
 			<property file="install.properties" />
 			<property name="properties.file" value="${project.build.home}/install.properties" />
