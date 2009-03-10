@@ -17,8 +17,7 @@
 
 	<path id="taskdef.cp">
 		<fileset dir="${tools.dir}">
-			<include name="xmltask-v1.14.jar" />
-			<include name="ant-contrib*.jar" />
+			<include name="*.jar" />
 		</fileset>
 	</path>
 
