@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?xml-stylesheet type="text/xsl"
+                 href="http://gforge.nci.nih.gov/svnroot/commonlibrary/trunk/ivy-xsl/ivy.xsl"?>
+       
+<ivy-module version="1.0">
+	<info organisation="ncicb" module="sdk-system-core-module" status="integration"/>
+
+	<configurations>
+		<conf name="compile"  />
+		<conf name="runtime"  />
+	</configurations>
+	
+	<publications>
+		<artifact name="sdk-system-core" type="jar" conf="compile" />
+	</publications>
+
+	<dependencies>
+		<!-- local shared-repository jars -->
+		<dependency org="ncicb" name="sdk-system-client-module" rev="latest.integration" conf="compile" />
+		<dependency org="ncicb" name="sdk-security-module" rev="latest.integration" conf="compile" />
+		<dependency org="ncicb" name="sdk-security-client-module" rev="latest.integration" conf="compile" />
+		<dependency org="caGrid" name="cql" rev="1.2" conf="compile->cql"/>
+		<dependency org="caGrid" name="sdkQuery4" rev="1.2" conf="compile->processor"/>
+				
+		<dependency org="org.hibernate" name="hibernate" rev="3.2.0.ga" conf="compile" />
+		<dependency org="springsource" name="spring" rev="2.0.2" conf="compile"/>
+		<dependency org="jakarta" name="commons-logging" rev="1.1" conf="compile" />
+		<dependency org="apache" name="log4j" rev="1.2.13" conf="compile" />
+
+		
+	</dependencies>
+</ivy-module>

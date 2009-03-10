@@ -1,0 +1,26 @@
+<!-- *********************************************************************** -->
+<!-- ** PROJECT:   BDA Blueprints Web Application                         ** -->
+<!-- *********************************************************************** -->
+
+<project name="sdk-codegen-validator-templates-module" default="build:all" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant" xmlns="antlib:org.apache.tools.ant" xmlns:cs="antlib:com.puppycrawl.tools.checkstyle">
+
+	<property file="build.properties"/>
+	<property name="root.dir" value="${basedir}/../../.."/>
+	<property name="software.dir" value="${root.dir}/software"/>
+	<property name="modules.dir" value="${software.dir}/modules"/>
+	<property name="templates.dir" value="${basedir}/templates"/>
+
+	<import file="${modules.dir}/build-module.xml" />
+	
+	<target name="-compile:templates" depends="-init, ivy:setup-compile" description="Compiles all subproject code">
+		<taskdef name="jetc" classname="ch.paranor.epla.structure.JETCTask" classpathref="project.compile.classpath" />
+		<jetc destDir="${src.java.dir}">
+			<fileset dir="${templates.dir}" includes="**/*.javajet"/>
+		</jetc>
+	</target>
+	
+	
+	<target name="build:all" depends="-pre-clean,-init,-compile:templates,jar,ivy:publish,post-clean" description="Default target" >
+	</target>
+
+</project>

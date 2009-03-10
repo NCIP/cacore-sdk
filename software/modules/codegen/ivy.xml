@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?xml-stylesheet type="text/xsl"
+                 href="http://gforge.nci.nih.gov/svnroot/commonlibrary/trunk/ivy-xsl/ivy.xsl"?>
+       
+<ivy-module version="1.0">
+	<info organisation="ncicb" module="sdk-codegen-module" status="integration"/>
+
+	<configurations>
+		<conf name="compile" />
+		<conf name="runtime" />
+	</configurations>
+
+	<publications>
+		<artifact name="sdk-codegen" type="jar" conf="compile" />
+	</publications>
+
+	<dependencies>
+		<dependency org="apache" name="log4j" rev="1.2.13" conf="compile" />
+		<dependency org="dom4j" name="dom4j" rev="1.6.1" conf="compile" />
+		<dependency org="org.hibernate" name="hibernate" rev="3.2.0.ga" conf="compile" />
+		<dependency org="org.jdom" name="jdom" rev="1.1" conf="compile" />
+		<dependency org="jakarta" name="commons-lang" rev="1.0.1" conf="compile" />
+		<dependency org="jakarta" name="commons-logging" rev="1.1" conf="compile" />
+		<dependency org="springsource" name="spring" rev="2.0.2" conf="compile"/>
+		<dependency org="ncicb" name="xmi.in.out" rev="1.0" conf="compile"/>	
+		<dependency org="mmbase" name="mmbase" rev="1.8.4" conf="compile"/>
+		<dependency org="junit" name="junit" rev="3.8.1" conf="compile"/>
+	</dependencies>
+</ivy-module>

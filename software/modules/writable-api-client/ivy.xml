@@ -1,0 +1,19 @@
+<ivy-module version="1.0">
+	<info organisation="ncicb" module="sdk-writable-api-client-module"/>
+	<configurations>
+		<conf name="compile"  />
+		<conf name="runtime"  />
+	</configurations>
+
+	<publications>
+		<artifact name="sdk-writable-api-client" type="jar" conf="compile" />
+	</publications>
+		
+	<dependencies>
+		<!-- local shared-repository jars -->
+		<dependency org="ncicb" name="sdk-system-client-module" rev="latest.integration" conf="compile" />
+		<dependency org="org.hibernate" name="hibernate" rev="3.2.0.ga" conf="compile" />
+		<dependency org="caGrid" name="cql" rev="1.2" conf="compile->cql"/>
+		
+	</dependencies>
+</ivy-module>

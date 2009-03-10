@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?xml-stylesheet type="text/xsl"
+                 href="http://gforge.nci.nih.gov/svnroot/commonlibrary/trunk/ivy-xsl/ivy.xsl"?>
+       
+<ivy-module version="1.0">
+	<info organisation="ncicb" module="sdk-system-logging-module" status="integration"/>
+
+	<configurations>
+		<conf name="compile"  />
+		<conf name="runtime"  />
+	</configurations>
+	
+	<publications>
+		<artifact name="sdk-system-logging" type="jar" conf="compile" />
+	</publications>
+
+	<dependencies>
+		<!-- local shared-repository jars -->
+		<dependency org="ncicb" name="clm" rev="4.0" conf="compile" />
+		<dependency org="springsource" name="spring" rev="2.0.2" conf="compile"/>
+		<dependency org="jakarta" name="commons-logging" rev="1.1" conf="compile" />
+		<dependency org="apache" name="log4j" rev="1.2.13" conf="compile" />
+		<dependency org="springsource" name="acegi-security" rev="1.0.4" conf="compile"/>
+
+		
+	</dependencies>
+</ivy-module>
