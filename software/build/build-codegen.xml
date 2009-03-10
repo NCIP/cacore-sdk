@@ -667,23 +667,23 @@
 
 	<target name="package-system" depends="package-drivers,package-remote-client,package-local-client,package-ws-client,package-server,-package-web,-build-grid-login-service-war,dist" description="Packages the system"/>
 	<target name="package-drivers" depends="ivy:package-drivers"/>
-	<target name="package-local-client" depends="ivy:clean,-package-local-client-core,-package-local-client-writable-api,-package-local-client-security,-package-local-client-grid-security,-package-system-logging" />
+	<target name="package-local-client" depends="-package-local-client-core,-package-local-client-writable-api,-package-local-client-security,-package-local-client-grid-security,-package-system-logging" />
 	<target name="-package-local-client-core" depends="ivy:package-local-client"/>
 	<target name="-package-local-client-writable-api" depends="ivy:package-writable-api"/>
 	<target name="-package-system-logging" depends="ivy:package-system-logging"/>
 	<target name="-package-local-client-security" depends="ivy:package-security-api"/>
 	<target name="-package-local-client-grid-security" depends="ivy:package-grid-jaas-api"/>
-	<target name="package-remote-client" depends="ivy:clean,-package-remote-client-core,-package-remote-client-writable-api,-package-remote-client-security,-package-remote-client-grid-security" />
+	<target name="package-remote-client" depends="-package-remote-client-core,-package-remote-client-writable-api,-package-remote-client-security,-package-remote-client-grid-security" />
 	<target name="-package-remote-client-core" depends="ivy:package-remote-client"/>
 	<target name="-package-remote-client-writable-api" depends="ivy:package-writable-client-api"/>
 	<target name="-package-remote-client-security" depends="ivy:package-security-client-api"/>
 	<target name="-package-remote-client-grid-security" depends="ivy:package-grid-jaas-client-api"/>
 	<target name="-staging-war" depends="ivy:package-writable-api,ivy:package-system-logging,ivy:package-security-api,ivy:package-grid-jaas-client-api"/>
 	<target name="-build-project-war" depends="ivy:package-webapp,-staging-war"/>
-	<target name="package-ws-client" depends="ivy:clean,ivy:package-ws-client"/>
+	<target name="package-ws-client" depends="ivy:package-ws-client"/>
 	<target name="-package-tomcat-server" depends="ivy:package-server-tomcat"/>
 	<target name="-package-jboss-server" depends="ivy:package-server-jboss"/>
-	<target name="package-server" depends="ivy:clean,ivy:package-webapp,-package-tomcat-server,-package-jboss-server">
+	<target name="package-server" depends="ivy:package-webapp,-package-tomcat-server,-package-jboss-server">
 	</target>	
 
 	<target name="-package-web">
