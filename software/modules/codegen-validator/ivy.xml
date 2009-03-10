@@ -16,7 +16,7 @@
 
 	<dependencies>
 		<dependency org="apache" name="log4j" rev="1.2.13" conf="compile" />
-		<dependency org="dom4j" name="dom4j" rev="1.6.1" conf="compile" />
+		<dependency org="dom4j" name="dom4j" rev="1.6.1" conf="compile->master" />
 		<dependency org="org.hibernate" name="hibernate" rev="3.2.0.ga" conf="compile" />
 		<dependency org="org.jdom" name="jdom" rev="1.1" conf="compile" />
 		<dependency org="jakarta" name="commons-lang" rev="1.0.1" conf="compile" />
