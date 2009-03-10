@@ -1,0 +1,113 @@
+<Context path="/@PROJECT_NAME@" docBase="${catalina.home}/webapps/@PROJECT_NAME@"
+	debug="0" privileged="true">
+	
+	<!--@DB_JNDI_URL_START@-->
+	<Logger className="org.apache.catalina.logger.FileLogger"
+		prefix="@PROJECT_NAME@_log." suffix=".txt" timestamp="true" />
+	<Resource name="@DB_JNDI_NAME@" auth="Container" type="javax.sql.DataSource" />
+	<ResourceParams name="@DB_JNDI_NAME@">
+		<parameter>
+			<name>factory</name>
+			<value>org.apache.commons.dbcp.BasicDataSourceFactory
+			</value>
+		</parameter>
+		<parameter>
+			<name>driverClassName</name>
+			<value>@DB_DRIVER@</value>
+		</parameter>
+		<parameter>
+			<name>url</name>
+			<value>@DB_CONNECTION_URL@</value>
+		</parameter>
+		<parameter>
+			<name>username</name>
+			<value>@DB_USERNAME@</value>
+		</parameter>
+		<parameter>
+			<name>password</name>
+			<value>@DB_PASSWORD@</value>
+		</parameter>
+		<parameter>
+			<name>maxActive</name>
+			<value>20</value>
+		</parameter>
+		<parameter>
+			<name>maxIdle</name>
+			<value>10</value>
+		</parameter>
+		<parameter>
+			<name>maxWait</name>
+			<value>-1</value>
+		</parameter>
+		<parameter>
+			<name>removeAbandoned</name>
+			<value>true</value>
+		</parameter>
+		<parameter>
+			<name>removeAbandonedTimeout</name>
+			<value>300</value>
+		</parameter>
+		<parameter>
+			<name>logAbandoned</name>
+			<value>true</value>
+		</parameter>
+	</ResourceParams>
+	<!--@DB_JNDI_URL_END@-->
+	
+	<!--@CSM_DB_JNDI_SERVER_START@-->
+	<Resource name="@CSM_JNDI_NAME@" auth="Container" type="javax.sql.DataSource" />
+	<ResourceParams name="@CSM_JNDI_NAME@">
+		<parameter>
+			<name>factory</name>
+			<value>org.apache.commons.dbcp.BasicDataSourceFactory
+			</value>
+		</parameter>
+		<parameter>
+			<name>driverClassName</name>
+			<value>@CSM_DB_DRIVER@</value>
+		</parameter>
+		<parameter>
+			<name>url</name>
+			<value>@CSM_DB_CONNECTION_URL@</value>
+		</parameter>
+		<parameter>
+			<name>username</name>
+			<value>@CSM_DB_USERNAME@</value>
+		</parameter>
+		<parameter>
+			<name>password</name>
+			<value>@CSM_DB_PASSWORD@</value>
+		</parameter>
+		<parameter>
+			<name>maxActive</name>
+			<value>20</value>
+		</parameter>
+		<parameter>
+			<name>maxIdle</name>
+			<value>10</value>
+		</parameter>
+		<parameter>
+			<name>maxWait</name>
+			<value>-1</value>
+		</parameter>
+		<parameter>
+			<name>removeAbandoned</name>
+			<value>true</value>
+		</parameter>
+		<parameter>
+			<name>removeAbandonedTimeout</name>
+			<value>300</value>
+		</parameter>
+		<parameter>
+			<name>logAbandoned</name>
+			<value>true</value>
+		</parameter>
+	</ResourceParams>
+	<!--@CSM_DB_JNDI_SERVER_END@-->
+	
+ 	<!--@GRID_LOGIN_MODULE_START@-->
+	<ResourceLink name="@GRID_JNDI_NAME@" global="GlobalSDKGridSecurityMap"
+		type="java.util.Map" />	
+	<!--@GRID_LOGIN_MODULE_END@-->
+	
+</Context>

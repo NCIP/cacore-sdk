@@ -1,0 +1,16 @@
+<!-- *********************************************************************** -->
+<!-- ** PROJECT:   BDA Blueprints Web Application                         ** -->
+<!-- *********************************************************************** -->
+
+<project name="sdk-system-core-module" default="build:all" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant" xmlns="antlib:org.apache.tools.ant" xmlns:cs="antlib:com.puppycrawl.tools.checkstyle">
+
+	<property file="build.properties"/>
+	<property name="root.dir" value="${basedir}/../../.."/>
+	<property name="software.dir" value="${root.dir}/software"/>
+	<property name="modules.dir" value="${software.dir}/modules"/>
+
+	<import file="${modules.dir}/build-module.xml" />
+	
+
+
+</project>

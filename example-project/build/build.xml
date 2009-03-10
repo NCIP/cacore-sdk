@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="caCore SDK - Example Project" basedir="." default="build-system">
+
+	<description>Build script for caCORE SDK Generator</description>
+
+	<!--***********************************************************************
+	*** Load the build properties from the file
+	*********************************************************************** -->
+	<property file="codegen.properties"  />
+
+	<property name="project.home" location="${basedir}/.." />
+	<property name="project.build.home" location="${project.home}/build" />
+	<property name="project.common.dir" location="${project.home}/common" />
+
+	<property name="root.dir" location="${SDK_INSTALL_DIR}/.." />
+	<property name="software.dir" location="${root.dir}/software" />
+	<property name="common.dir" value="${software.dir}/common" />
+
+	<property name="target.dir" value="${project.home}/target"/>
+	<property name="target.exploded.dir" value="${target.dir}/dist/exploded"/>
+	<property name="output.dir.location" value="${target.dir}/workspace"/>
+	<property name="output.dir" value="${output.dir.location}/output"/>
+	<property name="db.src.dir" value="${project.home}/db"/>
+	<property name="MODEL_FILE_PATH" value="${project.home}/models/${MODEL_FILE}"/>
+
+	<target name="deploy-local" depends="">
+		<ant antfile="build.xml" target="deploy:local:install:nocodegen" inheritall="true" inheritrefs="false" dir="${SDK_INSTALL_DIR}/build">
+			<property file="install.properties" />
+			<property name="properties.file" value="${project.build.home}/install.properties" />
+		</ant>
+	</target>
+	
+	<target name="deploy-local-upgrade" depends="">
+		<ant antfile="build.xml" target="deploy:local:upgrade:nocodegen" inheritall="true" inheritrefs="false" dir="${SDK_INSTALL_DIR}/build">
+			<property file="install.properties" />
+			<property name="properties.file" value="${project.build.home}/install.properties" />
+		</ant>
+	</target>
+
+	<target name="deploy-local-install" depends="">
+		<ant antfile="build.xml" target="deploy:local:install" inheritall="true" inheritrefs="false" dir="${SDK_INSTALL_DIR}/build">
+			<property file="install.properties" />
+			<property name="properties.file" value="${project.build.home}/install.properties" />
+		</ant>
+	</target>
+
+	<target name="deploy-remote-install" depends="">
+		<ant antfile="build.xml" target="deploy:remote:install" inheritall="true" inheritrefs="false" dir="${SDK_INSTALL_DIR}/build">
+			<property file="install.properties" />
+			<property name="properties.file" value="${project.build.home}/install.properties" />
+		</ant>
+	</target>
+
+	<target name="deploy-remote-upgrade" depends="">
+		<ant antfile="build.xml" target="deploy:remote:upgrade" inheritall="true" inheritrefs="false" dir="${SDK_INSTALL_DIR}/build">
+			<property file="install.properties" />
+			<property name="properties.file" value="${project.build.home}/install.properties" />
+		</ant>
+	</target>
+
+	<target name="build-system" depends="build-codegen,build-installer">
+	</target>
+	
+	<target name="build-reconfigure" depends="">
+		<ant antfile="build.xml" target="deploy:local:install:re-configure" inheritall="true" inheritrefs="false" dir="${SDK_INSTALL_DIR}/build">
+			<property file="install.properties" />
+			<property name="properties.file" value="${project.build.home}/install.properties" />
+		</ant>
+	</target>
+	
+	<target name="build-installer" description="Generates a complete system">
+		<echoproperties />
+		<ant antfile="build.xml" target="dist:installer" inheritall="true" inheritrefs="false" dir="${SDK_INSTALL_DIR}/build">
+
+		</ant>
+	</target>
+	
+	<target name="build-codegen" description="Generates a complete system">
+		<ant antfile="build.xml" target="build:all" inheritall="true" inheritrefs="false" dir="${SDK_INSTALL_DIR}/build">
+		</ant>
+	</target>
+
+	<target name="build-modules" description="Generates a complete system">
+		<ant antfile="build.xml" target="build:workspace-modules" inheritall="false" inheritrefs="false" dir="${SDK_INSTALL_DIR}/build">
+			<property name="target.dir" location="${target.dir}"/>
+		</ant>
+	</target>
+
+	<target name="clean-all" description="Cleans the target folder">
+		<delete dir="${target.dir}" failonerror="false"/>
+	</target>
+
+</project>

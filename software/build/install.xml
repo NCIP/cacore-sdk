@@ -1,0 +1,867 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<project name="caCORE SDK - Installer" default="install" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
+
+	<!-- Properties file related properties and tasks -->
+	<property environment="env" />
+
+	<property file="codegen.properties" />
+	<property file="project.properties" />
+	<property name="properties.file" value="${basedir}/install.properties" />
+	<echo message="Using properties file of ${properties.file}." />
+	<available file="${properties.file}" property="properties.file.exists" />
+	<fail unless="properties.file.exists" message="The properties.file ${properties.file} does not exist, please make sure that you pass in an accurate file name with the 'ant -Dproperties.file=somepath/somefile', otherwise the build will fail." />
+	<replaceregexp file="${properties.file}" byline="true" match="^([\w\d.]+)=(.*[\w\d\/\{\}\\]+)[ \t]+\r*$" replace="\1=\2" />
+	<replaceregexp file="${properties.file}" byline="true" match="^([\w\d.]+)=[ \t]+(.*[\w\d\/\{\}\\]+)\r*$" replace="\1=\2" />
+	<property file="${properties.file}" />
+
+	<!-- Set application.base.path based on platform -->
+	<condition property="application.base.path" value="${application.base.path.linux}">
+		<or>
+			<os family="unix" />
+			<os family="mac" />
+		</or>
+	</condition>
+
+	<condition property="application.base.path" value="${application.base.path.windows}">
+		<os family="windows" />
+	</condition>
+
+	<!--OS Temp dir -->
+	<condition property="os.temp.dir" value="/tmp">
+		<or>
+			<os family="unix" />
+			<os family="mac" />
+		</or>
+	</condition>
+
+	<condition property="os.temp.dir" value="c:/temp">
+		<os family="windows" />
+	</condition>
+
+	<echo message="application.base.path=${application.base.path}" />
+	<property name="jboss.home" value="${application.base.path}/${jboss.binaries.relative.dir}" />
+	<property name="tomcat.home" value="${application.base.path}/${tomcat.binaries.relative.dir}" />
+
+	<!-- Generic properties -->
+	<property name="log.dir" value="${basedir}/logs" />
+	<property name="working.dir" value="${basedir}/working" />
+	<property name="temp.dir" value="${working.dir}/temp" />
+
+
+	<!-- Install Time properties -->
+	<!-- Source and target directories -->
+	<property name="bda-utils.dir" value="bda-utils" />
+	<property name="tools.dir" value="${basedir}/${tools.dist.relative.dir}" />
+	<property name="tools.lib.dir" location="${tools.dir}/lib" />
+	<property name="common.dir.src" value="${basedir}/${common.dist.relative.dir}" />
+	<property name="common.dir.dest" value="${working.dir}/${common.dist.relative.dir}" />
+	<property name="db.dir.src" value="${basedir}/${db.dist.relative.dir}" />
+	<property name="db.dir.dest" value="${working.dir}/${db.dist.relative.dir}" />
+	<property name="db-install.dir.dest" value="${working.dir}/${db-install.dist.relative.dir}" />
+	<property name="db-upgrade.dir.dest" value="${working.dir}/${db-upgrade.dist.relative.dir}" />
+
+	<!-- Jboss binding configurtion related properties -->
+	<property name="jboss.binding.template.location" value="${bda-utils.dir}/resource/${jboss.template.relative.dir}/bindings.xml" />
+	<property name="jboss.service.template.location" value="${bda-utils.dir}/resource/${jboss.template.relative.dir}/jboss-service.xml" />
+
+	<property name="load-ivy" value="false" />
+	<condition property="taskdef-file" value="build-load-taskdef.xml" else="build-no-taskdef.xml">
+		<not>
+			<typefound name="xmltask"/>
+		</not>
+	</condition>
+	
+	<import file="${basedir}/${taskdef-file}"/>
+
+	
+	<!-- webapp can use either Oracle or MySQL as its database platform, this is controled by the database.type property.  Based on the value of this property sent several variables for use during install -->
+	<switch value="${DB_TYPE}">
+		<case value="oracle">
+			<property name="DB_DIALECT" value="org.hibernate.dialect.OracleDialect" />
+			<property name="DB_DRIVER" value="oracle.jdbc.driver.OracleDriver" />
+			<property name="DB_CONNECTION_URL" value="jdbc:oracle:thin:@${DB_SERVER}:${DB_SERVER_PORT}:${DB_NAME}" />
+			<property name="db-upgrade.list.file" value="${db-upgrade.oracle.list.file}" />
+			<property name="db-upgrade.conf.file" value="${db-upgrade.oracle.conf.file}" />
+		</case>
+		<case value="mysql">
+			<property name="DB_DIALECT" value="org.hibernate.dialect.MySQLDialect" />
+			<property name="DB_DRIVER" value="com.mysql.jdbc.Driver" />
+			<property name="DB_CONNECTION_URL" value="jdbc:mysql://${DB_SERVER}:${DB_SERVER_PORT}/${DB_NAME}" />
+			<property name="db-upgrade.list.file" value="${db-upgrade.mysql.list.file}" />
+			<property name="db-upgrade.conf.file" value="${db-upgrade.mysql.conf.file}" />
+		</case>
+		<default>
+			<fail message="Invalid database type ${DB_TYPE}" />
+		</default>
+	</switch>
+
+	<switch value="${CSM_DB_TYPE}">
+		<case value="oracle">
+			<property name="CSM_DB_DIALECT" value="org.hibernate.dialect.OracleDialect" />
+			<property name="CSM_DB_DRIVER" value="oracle.jdbc.driver.OracleDriver" />
+			<property name="CSM_DB_CONNECTION_URL" value="jdbc:oracle:thin:@${CSM_DB_SERVER}:${CSM_DB_SERVER_PORT}:${CSM_DB_NAME}" />
+		</case>
+		<case value="mysql">
+			<property name="CSM_DB_DIALECT" value="org.hibernate.dialect.MySQLDialect" />
+			<property name="CSM_DB_DRIVER" value="com.mysql.jdbc.Driver" />
+			<property name="CSM_DB_CONNECTION_URL" value="jdbc:mysql://${CSM_DB_SERVER}:${CSM_DB_SERVER_PORT}/${CSM_DB_NAME}" />
+		</case>
+		<default>
+			<fail message="Invalid database type ${CSM_DB_TYPE}" />
+		</default>
+	</switch>
+
+	<switch value="${CLM_DB_TYPE}">
+		<case value="mysql">
+			<property name="CLM_DB_DRIVER" value="com.mysql.jdbc.Driver" />
+			<property name="CLM_DB_CONNECTION_URL" value="jdbc:mysql://${CLM_DB_SERVER}:${CLM_DB_SERVER_PORT}/${CLM_DB_NAME}" />
+		</case>
+		<default>
+			<fail message="Invalid database type ${CLM_DB_TYPE}" />
+		</default>
+	</switch>
+
+	<switch value="${SERVER_TYPE}">
+		<case value="jboss">
+			<property name="SERVER_HOST_NAME" value="${jboss.server.hostname}"/>
+			<property name="SERVER_HTTP_PORT" value="${jboss.server.port}"/>
+			<property name="SERVER_SSL_PORT" value="${jboss.server.ssl.port}"/>
+			<property name="exclude.tomcat" value="true"/>
+		</case>
+		<case value="tomcat">
+			<property name="exclude.jboss" value="true"/>
+			<property name="SERVER_HOST_NAME" value="${tomcat.hostname}"/>
+			<property name="SERVER_SSL_PORT" value="${tomcat.port.ssl}"/>
+			<property name="SERVER_HTTP_PORT" value="${tomcat.port.http}"/>
+		</case>
+		<default>
+			<fail message="Invalid server type ${SERVER_TYPE}" />
+		</default>
+	</switch>
+
+	<switch value="${TARGET_GRID}">
+		<case value="training-1.2">
+			<property name="CAGRID_AUTHENTICATION_SERVICE_URL" value="https://dorian.training.cagrid.org:8443/wsrf/services/cagrid/Dorian"/>
+			<property name="CAGRID_DORIAN_SERVICE_URL" value="${CAGRID_AUTHENTICATION_SERVICE_URL}"/>
+		</case>
+		<case value="nci_dev-1.2">
+			<property name="CAGRID_AUTHENTICATION_SERVICE_URL" value="https://cbiovdev5035.nci.nih.gov:8443/wsrf/services/cagrid/Dorian"/>
+			<property name="CAGRID_DORIAN_SERVICE_URL" value="${CAGRID_AUTHENTICATION_SERVICE_URL}"/>
+		</case>
+		<case value="nci_qa-1.2">
+			<property name="CAGRID_AUTHENTICATION_SERVICE_URL" value="https://cagrid-dorian-qa.nci.nih.gov:8443/wsrf/services/cagrid/Dorian"/>
+			<property name="CAGRID_DORIAN_SERVICE_URL" value="${CAGRID_AUTHENTICATION_SERVICE_URL}"/>
+		</case>
+		<case value="nci_stage-1.2">
+			<property name="CAGRID_AUTHENTICATION_SERVICE_URL" value="https://cagrid-dorian-stage.nci.nih.gov:8443/wsrf/services/cagrid/Dorian"/>
+			<property name="CAGRID_DORIAN_SERVICE_URL" value="${CAGRID_AUTHENTICATION_SERVICE_URL}"/>
+		</case>
+		<case value="nci_prod-1.2">
+			<property name="CAGRID_AUTHENTICATION_SERVICE_URL" value="https://cagrid-dorian.nci.nih.gov:8443/wsrf/services/cagrid/Dorian"/>
+			<property name="CAGRID_DORIAN_SERVICE_URL" value="${CAGRID_AUTHENTICATION_SERVICE_URL}"/>
+		</case>
+
+		<default>
+			<fail message="Invalid target grid ${TARGET_GRID}." />
+		</default>
+	</switch>
+
+	<!-- Grid related properties -->
+	<property name="grid.secure.key.file.location" value="${security.dir.src}/${grid.secure.key.file}" />
+	<property name="grid.secure.cert.file.location" value="${security.dir.src}/${grid.secure.cert.file}" />
+
+	<property name="jboss.server.name" value="default"/>
+	<property name="grid.secure.cert.location" value="${security.dist.relative.dir}/${grid.secure.cert.file}"/>
+	<property name="grid.secure.key.location" value="${security.dist.relative.dir}/${grid.secure.key.file}"/>
+
+	<property name="database.system.user" value="${DB_USERNAME}"/>
+	<property name="database.system.password" value="${DB_PASSWORD}"/>
+	<property name="database.system.url" value="${DB_CONNECTION_URL}"/>
+
+	<property name="database.type" value="${DB_TYPE}"/>
+	<property name="database.server" value="${DB_SERVER}"/>
+	<property name="database.port" value="${DB_SERVER_PORT}"/>
+	<property name="database.name" value="${DB_NAME}"/>
+	<property name="database.user" value="${DB_USERNAME}"/>
+	<property name="database.password" value="${DB_PASSWORD}"/>
+	<property name="database.url" value="${DB_CONNECTION_URL}"/>
+
+
+	<!-- Added to convert location to file and path -->
+	<basename file="${grid.secure.cert.location}" property="grid.secure.cert.file" />
+	<dirname file="${grid.secure.cert.location}" property="grid.secure.dir" />
+	<basename file="${grid.secure.key.location}" property="grid.secure.key.file" />
+
+	<!-- Conditionals -->
+	<available file="${jboss.home}/server/${jboss.server.name}/conf/jboss-service.xml" property="jboss.exists" />
+
+	<!-- Includes-->
+	<import file="${bda-utils.dir}/bda-build-utils-${bda.version}.xml" />
+	<import file="build-reconfigure.xml" />
+
+	<property name="application.url" value="${SERVER_URL}" />
+
+	<!-- figure out whether to use install-properties.template or upgrade-proprties.template based on the name of the properties file -->
+	<propertyregex property="properties.file.type" input="${properties.file}" regexp=".*(install|upgrade).*" select="\1" />
+	<echo message="Properties file type = ${properties.file.type}" />
+	<switch value="${properties.file.type}">
+		<case value="install">
+			<property name="properties.template.file" value="install-properties.template" />
+		</case>
+		<case value="upgrade">
+			<property name="properties.template.file" value="upgrade-properties.template" />
+		</case>
+		<default>
+			<fail message="Property file name must include 'install' or 'upgrade' so it can be determined which properties template should be used. If you are not certain include 'upgrade' in the name of your proeprties file." />
+		</default>
+	</switch>
+
+
+
+	<!-- #################################################################### -->
+	<!-- ########################## TODO targets ############################ -->
+	<!-- #################################################################### -->
+
+
+	<!-- Does directory management and copy some files with filtering to ensure token expansion -->
+	<target name="install:init" description="Does directory management to initialize install">
+		<math result="jboss.ssl.port" operand1="${jboss.server.port}" operation="+" operand2="363" datatype="int" />
+		<filterset id="embedded.filterset">
+			<filter token="application.base.path" value="${application.base.path}" />
+			<filter token="application.url" value="${SERVER_URL}" />
+			<filter token="database.url" value="${database.url}" />
+			<filter token="database.user" value="${database.user}" />
+			<filter token="database.password" value="${database.password}" />
+			<filter token="database.system.url" value="${database.system.url}" />
+			<!-- added internal properties that may be used in a filtered copy -->
+			<filter token="database.driver" value="${DB_DRIVER}" />
+			<!-- added for liquibase -->
+			<filter token="db-upgrade.run.dir" value="${db-upgrade.dir.dest}/${database.type}" />
+			<filter token="jboss.home" value="${jboss.home}" />
+			<filter token="tomcat.home" value="${tomcat.home}" />
+			<filter token="database.dialect" value="${DB_DIALECT}" />
+			<filter token="hibernate.cfg.file.path" value="${hibernate.cfg.file.path}" />
+		</filterset>
+
+		<property name="db.prop.list" value="database.url,database.user,database.password,database.name" />
+		<echo message="Checking if database properties exist: ${db.prop.list}" />
+		<properties-exist properties.list="${db.prop.list}" />
+		<mkdir dir="${working.dir}" />
+		<delete dir="${working.dir}" />
+		<mkdir dir="${working.dir}" />
+	</target>
+
+
+	<target name="upgrade:init">
+	</target>
+
+	<!-- ############################################## -->
+	<!-- ############## RESTRUCTURED ################## -->
+	<!-- ############################################## -->
+	<target name="install" description="Installs and configures JBOSS, creates database, and deploys application" depends="
+		install:validation:pre-install,
+		install:server:stop,
+		install:validation:pre-install:ports,
+		install:clean,
+		install:init,
+		install:database,
+		install:re-configure,
+		install:server:binaries,
+		install:server:configure,
+		install:server:project-webapp,
+		install:server:grid-login-webapp,
+		install:server:root-certs,
+		install:post,
+		install:server:start,
+		install:validation:post-install
+		" />
+
+
+	<target name="install:server:stop" depends="install:jboss:stop,install:tomcat:stop"/>
+	<target name="install:server:start" depends="install:jboss:start,install:tomcat:start"/>
+	<target name="install:clean" depends="install:clean:jboss,install:clean:tomcat" />
+	<target name="install:server:binaries" depends="install:jboss:binaries,install:tomcat:binaries"/>
+	<target name="install:server:configure" depends="install:jboss:configure,install:tomcat:configure"/>
+	<target name="install:server:project-webapp" depends="install:jboss:project-webapp,install:tomcat:project-webapp"/>
+	<target name="install:server:grid-login-webapp" depends="install:tomcat:grid-login-webapp,install:tomcat:grid-login-webapp"/>
+	<target name="install:post" depends="install:post:jboss, install:post:tomcat" />
+
+	<target name="install:server:root-certs" >
+		<if>
+            <istrue value="${GRID_LOGIN_MODULE_ENABLED}"/>
+            <then>
+                <mkdir dir="${user.home}/.globus/certificates"/>
+                <copy todir="${user.home}/.globus/certificates" overwrite="true">
+                    <fileset dir="${grid.dist.relative.dir}/${TARGET_GRID}/certificates">
+                        <include name="*"/>
+                    </fileset>
+                </copy>
+            </then>
+		</if>
+	</target>
+	<!-- #################################################################### -->
+	<!-- ###################### JBoss specific targets ###################### -->
+	<!-- #################################################################### -->
+	<target name="install:jboss:stop" description="Stops jboss" unless="exclude.jboss">
+		<if>
+			<isset property="jboss.exists" />
+			<then>
+				<jboss-stop-jboss jboss.server.jndi.port="${jboss.server.jndi.port}" />
+			</then>
+		</if>
+	</target>
+
+	<target name="install:jboss:start" description="Starts jboss" unless="exclude.jboss">
+		<if>
+			<not>
+				<isset property="exclude.start.servers" />
+			</not>
+			<then>
+				<jboss-start-jboss />
+				<sleep seconds="15" />
+			</then>
+		</if>
+	</target>
+
+	<target name="install:clean:jboss" unless="exclude.jboss">
+		<sleep seconds="5" />
+		<property name="backup.count" value="5" />
+
+		<if>
+			<not>
+				<equals arg1="${exclude.jboss.backup}" arg2="true" />
+			</not>
+			<then>
+				<!-- Jboss backup, do not compress until install is finished -->
+				<property name="backup.jboss.base.dir" location="${application.base.path}/backup/jboss" />
+
+				<!-- So these directories won't be included in the backup, they are not needed to use jboss -->
+				<delete dir="${jboss.home}/server/${jboss.server.name}/work" />
+				<delete dir="${jboss.home}/server/${jboss.server.name}/tmp" />
+
+				<backup-dir src.dir="${jboss.home}" backup.base.dir="${backup.jboss.base.dir}" backup.count="${backup.count}" />
+			</then>
+		</if>
+		<delete dir="${jboss.home}" />
+	</target>
+
+	<target name="install:jboss:binaries" description="Install JBoss binaries" unless="exclude.jboss">
+		<jboss-install-binaries />
+	</target>
+
+	<target name="install:jboss:configure" description="Configure JBoss (bindings, login-config.xml, ect)" unless="exclude.jboss" depends="
+		install:jboss:binaries,
+		install:jboss:configure:bindings,
+		install:jboss:configure:ports,
+		install:jboss:configure:grid-ports,
+		install:jboss:configure:login-config,
+		install:jboss:configure:login-config-grid,
+		install:jboss:configure:datasource,
+		install:jboss:configure:libraries
+		">
+	</target>
+
+	<target name="install:jboss:configure:bindings" unless="exclude.jboss" >
+		<jboss-bindings
+			jboss.server.bindingfile.location="${jboss.home}/server/${jboss.server.name}/conf/bindings.xml"
+			jboss.server.binding.template.location="${jboss-bindings.file}"
+		/>
+	</target>
+
+	<target name="install:jboss:configure:ports" unless="exclude.jboss" >
+		<xmlconfig in="${jboss.home}/server/${jboss.server.name}/deploy/jbossweb-tomcat55.sar/server.xml" verbose="false">
+			<update path="(//Connector)[@port=8080]/@port" value="${jboss.server.port}" />
+			<update path="(//Connector)[@redirectPort=8443]/@redirectPort" value="${jboss.server.ssl.port}" />
+			<update path="(//Connector)[@port=8009]/@port" value="${jboss.server.ajp.port}" />
+			<update path="(//Connector)[@port=8443]/@port" value="${jboss.server.ssl.port}" />
+		</xmlconfig>
+	</target>
+
+	<target name="install:jboss:configure:grid-ports">
+		<if>
+			<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+			<then>
+				<echo message="modifying ${jboss.home}/server/${jboss.server.name}/deploy/jbossweb-tomcat55.sar/server.xml"/>
+				<echo message="modifying server.xml adding https connector"/>
+				<grid-secure-configure-connector
+						appserver.conf.dir="${jboss.home}/server/${jboss.server.name}/deploy/jbossweb-tomcat55.sar"
+						appserver.server-xml.file="${jboss.home}/server/${jboss.server.name}/deploy/jbossweb-tomcat55.sar/server.xml"
+						appserver.server-xml.service.name="jboss.web"
+						grid.secure.dir="${grid.secure.dir}"
+						grid.secure.enable="${GRID_LOGIN_MODULE_ENABLED}"
+						grid.secure.port="${jboss.server.ssl.port}" 
+						grid.secure.key.file="${grid.secure.key.file}"
+						grid.secure.cert.file="${grid.secure.cert.file}"
+				/>
+				<echo message="configuring https valve and connector "/>
+				<grid-secure-configure-valve
+						appserver.server-xml.file="${jboss.home}/server/${jboss.server.name}/deploy/jbossweb-tomcat55.sar/server.xml"
+						appserver.server-xml.service.name="jboss.web"
+				/>
+			</then>
+		</if>
+	</target>
+
+
+	<target name="install:jboss:configure:login-config" unless="exclude.jboss" >
+		<if>
+			<equals arg1="${CSM_LOGIN_MODULE_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+			<then>
+				<echo message="Inserting ${login-config.block.file} into ${jboss.home}/server/${jboss.server.name}/conf/login-config.xml" />
+				<xmlconfig in="${jboss.home}/server/${jboss.server.name}/conf/login-config.xml" verbose="false">
+					<insertbranch path="//policy" srcxmlfile="${package.client.jboss.default.conf.dir}/${login-config.block.file}" srcpath="//application-policy" />
+				</xmlconfig>
+			</then>
+		</if>
+	</target>
+
+	<target name="install:jboss:configure:login-config-grid" unless="exclude.jboss" >
+		<if>
+			<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+			<then>
+				<echo message="Inserting ${login-config.grid.block.file} into ${jboss.home}/server/${jboss.server.name}/conf/login-config.xml" />
+				<xmlconfig in="${jboss.home}/server/${jboss.server.name}/conf/login-config.xml" verbose="false">
+					<insertbranch path="//policy" srcxmlfile="${package.client.jboss.default.conf.dir}/${login-config.grid.block.file}" srcpath="//application-policy" />
+				</xmlconfig>
+			</then>
+		</if>
+	</target>
+
+	<target name="install:jboss:configure:datasource"  unless="exclude.jboss"  >
+		<if>
+			<equals arg1="${USE_DATA_SOURCE}" arg2="true" casesensitive="false" trim="true" />
+			<then>
+				<copy file="${package.client.jboss.default.deploy.dir}/${PROJECT_NAME}-ds.xml" todir="${jboss.home}/server/${jboss.server.name}/deploy" overwrite="true" />
+				<echo message="Copying libraries to JBoss" />
+				<copy todir="${jboss.home}/server/${jboss.server.name}/lib">
+					<fileset dir="${package.client.jboss.default.lib.dir}">
+					</fileset>
+				</copy>
+			</then>
+		</if>
+	</target>
+
+	<target name="install:jboss:configure:libraries" unless="exclude.jboss">
+		<if>
+			<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+			<then>
+				<echo message="Copying libraries to JBoss" />
+				<copy todir="${jboss.home}/server/${jboss.server.name}/lib">
+					<fileset dir="${package.client.jboss.default.lib.dir}">
+					</fileset>
+				</copy>
+			</then>
+		</if>
+	</target>
+
+	<target name="install:jboss:project-webapp" description="Deploy example-webapp and common libraries to jboss installation" unless="exclude.jboss">
+		<!-- added to ensure working.dirs are fresh for our install -->
+		<delete dir="${jboss.home}/server/${jboss.server.name}/tmp" />
+		<delete dir="${jboss.home}/server/${jboss.server.name}/work" />
+		<copy file="${package.client.jboss.default.deploy.dir}/${PROJECT_NAME}.war" todir="${jboss.home}/server/${jboss.server.name}/deploy" overwrite="true" />
+	</target>
+
+	<target name="install:jboss:grid-login-webapp" description="Deploy grid-webapp and default/lib libraries to jboss installation" unless="exclude.jboss">
+		<delete dir="${jboss.home}/server/${jboss.server.name}/tmp" />
+		<delete dir="${jboss.home}/server/${jboss.server.name}/work" />
+		<if>
+			<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+			<then>
+				<copy file="${package.client.jboss.default.deploy.dir}/${SDK_GRID_LOGIN_SERVICE_NAME}.war" todir="${jboss.home}/server/${jboss.server.name}/deploy" overwrite="true" />
+			</then>
+		</if>
+	</target>
+
+
+	<target name="install:post:jboss" unless="exclude.jboss">
+		<if>
+			<not>
+				<equals arg1="${exclude.jboss.backup}" arg2="true" />
+			</not>
+			<then>
+				<property name="changelogFile" location="${install-logs.dir}/chagneLog-${install.time}.txt" />
+				<property name="compare1.dir" location="${backup.jboss.base.dir}/backup/${jboss.binaries.relative.dir}" />
+				<property name="compare2.dir" location="${jboss.home}" />
+				<report-dir-diff dir1="${compare1.dir}" dir2="${compare2.dir}" reportFile="${changelogFile}" />
+				<!-- Copy app server logs -->
+				<mkdir dir="${jboss.home}/server/${jboss.server.name}/log" />
+				<mkdir dir="${backup.jboss.base.dir}/backup/${jboss.binaries.relative.dir}/server/${jboss.server.name}/log" />
+				<!-- so the logs wont be included in the zip -->
+				<move todir="${jboss.home}/server/${jboss.server.name}/log">
+					<fileset dir="${backup.jboss.base.dir}/backup/${jboss.binaries.relative.dir}/server/${jboss.server.name}/log">
+						<include name="*" />
+					</fileset>
+				</move>
+
+				<!-- Compress backup and cleanup -->
+				<mkdir dir="${backup.jboss.base.dir}/backup1" />
+				<zip destfile="${backup.jboss.base.dir}/backup1/${jboss.binaries.relative.dir}.zip" basedir="${backup.jboss.base.dir}/backup" />
+				<delete dir="${backup.jboss.base.dir}/backup" />
+			</then>
+		</if>
+
+	</target>
+
+
+	<!-- #################################################################### -->
+	<!-- ###################### Tomcat specific targets ###################### -->
+	<!-- #################################################################### -->
+
+	<target name="install:tomcat:stop" description="Stop Tomcat" unless="exclude.tomcat">
+		<if>
+			<available file="${tomcat.home}/bin/shutdown.sh" />
+			<then>
+				<echo message="Shutting down tomcat" />
+				<tomcat-stop tomcat.home="${tomcat.home}" />
+			</then>
+			<else>
+				<echo message="Tomcat not found , not shutting down tomcat" />
+			</else>
+		</if>
+	</target>
+
+
+	<target name="install:tomcat:start" description="Start Tomcat" unless="exclude.tomcat">
+		<if>
+			<not>
+				<isset property="exclude.start.servers" />
+			</not>
+			<then>
+				<tomcat-start tomcat.home="${tomcat.home}" />
+			</then>
+		</if>
+	</target>
+
+	<target name="install:clean:tomcat" unless="exclude.tomcat">
+		<sleep seconds="5" />
+		<property name="backup.count" value="5" />
+		<if>
+			<not>
+				<equals arg1="${exclude.tomcat.backup}" arg2="true" />
+			</not>
+			<then>
+				<property name="backup.tomcat.base.dir" location="${application.base.path}/backup/tomcat" />
+
+				<backup-dir src.dir="${tomcat.home}" backup.base.dir="${backup.tomcat.base.dir}" backup.count="${backup.count}" />
+			</then>
+		</if>
+		<delete dir="${tomcat.home}" />
+	</target>
+
+	<target name="install:tomcat:binaries" description="Install tomcat binaries" unless="exclude.tomcat">
+		<delete dir="${tomcat.home}" />
+		<unzip dest="${application.base.path}" src="${tools.dir}/${tomcat.binaries.file}" />
+		<if>
+			<os family="unix" />
+			<then>
+				<chmod dir="${tomcat.home}/bin" perm="ugo+rx" includes="**/*.sh" />
+			</then>
+		</if>
+	</target>
+
+	<target name="install:tomcat:configure"  description="Configure tomcat (change ports and login-config)" unless="exclude.tomcat" depends="
+		install:tomcat:configure:ports,
+		install:tomcat:configure:grid-ports,
+		install:tomcat:configure:login-config,
+		install:tomcat:configure:project-context,
+		install:tomcat:configure:grid-login-project-context,
+		install:tomcat:configure:global-resource,
+		install:tomcat:configure:libraries
+		">
+	</target>
+
+	<target name="install:tomcat:configure:ports" unless="exclude.tomcat" >
+		<echo message="Updating Tomcat Ports" />
+		<xmlconfig in="${tomcat.home}/conf/server.xml" verbose="false">
+			<update path="(//Connector)[@port=8080]/@port" value="${tomcat.port.http}" />
+			<update path="(//Connector)[@redirectPort=8443]/@redirectPort" value="${tomcat.port.ssl}" />
+			<update path="(//Connector)[@port=8009]/@port" value="${tomcat.port.ajp}" />
+			<update path="(//Connector)[@port=8443]/@port" value="${tomcat.port.ssl}" />
+			<update path="(//Server)[@port=8005]/@port" value="${tomcat.port.shutdown}" />
+		</xmlconfig>
+	</target>
+
+	<target name="install:tomcat:configure:grid-ports" unless="exclude.tomcat" >
+		<if>
+			<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+			<then>
+				<echo message="configuring https valve and connector "/>
+				<property name="security.dir.src" value="${security.dist.relative.dir}"/>
+				<grid-secure-configure-connector 
+					appserver.conf.dir="${tomcat.home}/conf" 
+					appserver.server-xml.file="${tomcat.home}/conf/server.xml" 
+					appserver.server-xml.service.name="Catalina" 
+					grid.secure.enable="${GRID_LOGIN_MODULE_ENABLED}" 
+					grid.secure.port="${tomcat.port.ssl}" 
+					grid.secure.dir="${security.dir.src}" 
+					grid.secure.key.file="${grid.secure.key.file}" 
+					grid.secure.cert.file="${grid.secure.cert.file}" />
+				<grid-secure-configure-valve 
+					appserver.server-xml.file="${tomcat.home}/conf/server.xml" 
+					appserver.server-xml.service.name="Catalina" />
+			</then>
+		</if>
+	</target>
+
+	<target name="install:tomcat:configure:login-config" unless="exclude.tomcat" >
+		<if>
+			<equals arg1="${SECURITY_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+			<then>
+				<copyfile src="${package.client.tomcat.serverxml.dir}/login.config" dest="${tomcat.home}/conf/login.config" />
+				<propertyfile file="${tomcat.home}/conf/catalina.properties" comment="append login.config file path">
+					<entry key="java.security.auth.login.config" value="${catalina.home}/conf/login.config" />
+				</propertyfile>
+			</then>
+		</if>
+	</target>
+
+
+	<target name="install:tomcat:configure:project-context"  unless="exclude.tomcat" >
+		<if>
+			<or>
+				<equals arg1="${USE_DATA_SOURCE}" arg2="true" casesensitive="false" trim="true" />
+				<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+			</or>
+			<then>
+				<copy file="${package.client.tomcat.context.dir}/${PROJECT_NAME}.xml" todir="${tomcat.home}/conf/Catalina/localhost" overwrite="true"  />
+			</then>
+			<else>
+				<delete file="${tomcat.home}/conf/Catalina/localhost/${PROJECT_NAME}.xml" />
+			</else>
+		</if>
+	</target>
+
+	<target name="install:tomcat:configure:grid-login-project-context"  unless="exclude.tomcat" >
+		<if>
+			<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+			<then>
+				<copy file="${package.client.tomcat.context.dir}/${SDK_GRID_LOGIN_SERVICE_NAME}.xml" todir="${tomcat.home}/conf/Catalina/localhost" overwrite="true"  />
+			</then>
+			<else>
+				<delete file="${tomcat.home}/conf/Catalina/localhost/${SDK_GRID_LOGIN_SERVICE_NAME}.xml" />
+			</else>
+		</if>
+	</target>
+
+	<target name="install:tomcat:configure:global-resource" unless="exclude.tomcat" >
+
+		<if>
+			<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+			<then>
+				<property name="naming.resource.server.xml" value="${package.client.tomcat.serverxml.dir}/server-global-naming-resource-block.xml" />
+				<property name="naming.resource.param.server.xml" value="${package.client.tomcat.serverxml.dir}/server-global-naming-resource-params-block.xml" />
+				<echo message="configuring global resources and resource params"/>
+
+				<echo message="Inserting ${naming.resource.server.xml} into ${tomcat.home}/conf/server.xml" />
+				<xmlconfig in="${tomcat.home}/conf/server.xml" verbose="true">
+					<delete path="//GlobalNamingResources/Resource[2]"/>
+				</xmlconfig>
+				<xmlconfig in="${tomcat.home}/conf/server.xml" verbose="true">
+					<insertbranch path="//GlobalNamingResources" srcxmlfile="${naming.resource.server.xml}" srcpath="//Resource" />
+				</xmlconfig>
+
+				<echo message="Inserting ${naming.resource.param.server.xml} into ${tomcat.home}/conf/server.xml" />
+				<xmlconfig in="${tomcat.home}/conf/server.xml" verbose="true">
+					<delete path="//GlobalNamingResources/ResourceParams[2]"/>
+				</xmlconfig>
+				<xmlconfig in="${tomcat.home}/conf/server.xml" verbose="true">
+					<insertbranch path="//GlobalNamingResources" srcxmlfile="${naming.resource.param.server.xml}" srcpath="//ResourceParams" />
+				</xmlconfig>
+			</then>
+		</if>
+	</target>
+
+	<target name="install:tomcat:configure:libraries" description="Deploy grid-webapp and common libraries to tomcat installation" unless="exclude.tomcat">
+		<echo message="copying globus jars into tomcat common and server folder "/>
+		<copy todir="${tomcat.home}">
+			<fileset dir="${package.client.tomcat.dir}">
+				<include name="**/*.jar"/>
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="install:tomcat:project-webapp" description="Deploy example-webapp and common libraries to tomcat installation" unless="exclude.tomcat">
+		<copy file="${package.client.tomcat.webapps.dir}/${PROJECT_NAME}.war" todir="${tomcat.home}/webapps" overwrite="true" />
+	</target>
+
+	<target name="install:tomcat:grid-login-webapp" description="Deploy grid-webapp and common libraries to tomcat installation" unless="exclude.tomcat">
+		<if>
+			<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+			<then>
+				<copy file="${package.client.tomcat.webapps.dir}/${SDK_GRID_LOGIN_SERVICE_NAME}.war" todir="${tomcat.home}/webapps" overwrite="true" />
+			</then>
+		</if>
+	</target>
+
+	<target name="install:post:tomcat" unless="exclude.tomcat">
+		<!-- Tomcat
+		<property name="changelogFile" location="${install-logs.dir}/changeLog-${install.time}.txt"/>
+		<property name="compare1.dir" location="${backup.tomcat.dir}/backup/${tomcat.relative.path}"/>
+		<property name="compare2.dir" location="${tomcat.home}"/>
+		<report-dir-diff
+			dir1="${compare1.dir}"
+			dir2="${compare2.dir}"
+			reportFile="${changelogFile}"
+			/>
+		
+		<mkdir dir="${tomcat.home}/server/${tomcat.server.name}/log"/>
+		<mkdir dir="${backup.tomcat.dir}/backup/${tomcat.relative.path}/server/${tomcat.server.name}/log"/>
+		<copy todir="${tomcat.home}/server/${tomcat.server.name}/log">
+			<fileset dir="${backup.tomcat.dir}/backup/${tomcat.relative.path}/server/${tomcat.server.name}/log">
+				<include name="*"/>
+			</fileset>
+		</copy>
+		-->
+	</target>
+
+	<!-- #################################################################### -->
+	<!-- ###################### Other specific targets ###################### -->
+	<!-- #################################################################### -->
+
+	<!-- Start logging -->
+	<property name="install-logs.dir" location="${application.base.path}/change-logs" />
+	<mkdir dir="${install-logs.dir}" />
+	<tstamp>
+		<format property="install.time" pattern="yyyy-MM-dd-HH-mm" />
+	</tstamp>
+	<record name="${install-logs.dir}/install-${install.time}.log" action="start" />
+
+	<!-- Installer section -->
+	<target name="diag">
+		<echoproperties />
+	</target>
+
+
+	<!-- TODO: What about Oracle version check  -->
+	<target name="install:validation:pre-install" description="Runs pre-install validation checks bda-utils">
+		<!--
+		<validate-pre-install ant.check.version="${ant.minimum.version}" java.check.version.major="${java.major.version}" java.check.version.minor="${java.minor.version}" database.version="${mysql.minimum.version}" />
+		-->
+	</target>
+
+	<target name="install:validation:pre-install:ports" description="Checks to see if configured ports are listenting and fails buld, meant to be run after jboss:stop">
+		<validate-ports-preinstall />
+	</target>
+
+	<target name="install:validation:post-install" description="Run post-install checks from bda-utils">
+		<if>
+			<not>
+				<isset property="exclude.start.servers" />
+			</not>
+			<then>
+				<validate-post-install />
+			</then>
+		</if>
+	</target>
+
+	<target name="install:re-configure" description="Configure example-webapp application, copies over externalized properties or configurations that are not part of the tomcat configuration">
+		<!--
+		<ant antfile="build-reconfigure.xml" target="package-system" ></ant>
+		-->
+		<antcall target="package-system"/>
+	</target>
+
+
+	<!-- #################################################################### -->
+	<!-- ###################### Database targets ############################ -->
+	<!-- #################################################################### -->
+
+	<!-- Wrapper install database target, depends on both MySQL and Oracle sub-targets, ifs should ensure only one is run.  Target path can be skipped by exlude.database also calls upgrade:database -->
+	<target name="install:database:prep" description="Copies db files with filtering" unless="exclude.database" depends="install:init">
+		<echoproperties prefix="database" />
+		<copy todir="${db.dir.dest}" filtering="true">
+			<fileset dir="${db.dir.src}">
+				<include name="**/*" />
+			</fileset>
+			<filterset refid="embedded.filterset" />
+			<filterset>
+				<filtersfile file="${properties.file}" />
+				<filtersfile file="project.properties" />
+			</filterset>
+		</copy>
+		<mkdir dir="${os.temp.dir}/${PROJECT_NAME}" />
+		<copy todir="${os.temp.dir}/${PROJECT_NAME}" filtering="true" flatten="true" overwrite="true">
+			<fileset dir="${db.dir.dest}">
+				<include name="**/db-upgrade.xml" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="install:database" description="Runs datbase creation scripts then calls uprade database." unless="exclude.database" depends="
+		install:init,
+		install:database:prep
+		">
+		<!-- Drop all schema objects or re-create the db -->
+		<database-clean />
+		<!-- Run baseline scripts stored in db.install.create.${database.type}.file.list variable -->
+		<switch value="${database.type}">
+			<case value="oracle">
+				<database-install db.install.create.file.list="${db.install.create.oracle.file.list}" sql.delimiter="/" sql.delimitertype="row" />
+			</case>
+			<case value="postgresql">
+				<database-install db.install.create.file.list="${db.install.create.postgresql.file.list}" sql.delimiter="/" sql.delimitertype="row" />
+			</case>
+			<case value="mysql">
+				<database-install db.install.create.file.list="${db.install.create.mysql.file.list}" />
+			</case>
+		</switch>
+		<!-- @TODO modify
+		<database-upgrade
+			database.changelog.file="${os.temp.dir}/${PROJECT_NAME}/db-upgrade.xml"
+			/>
+		<database-tag/> -->
+	</target>
+
+	<target name="upgrade:database" description="Upgrades database using BDA Datbase Upgrade process." unless="exclude.database" depends="
+		upgrade:init,
+		install:init,
+		install:database:prep
+		">
+		<database-upgrade database.changelog.file="${os.temp.dir}/${PROJECT_NAME}/db-upgrade.xml" />
+		<database-tag />
+	</target>
+
+
+	<target name="upgrade:database:tag" description="Tags current state of database with a tag to allow for rollback of database to previous versions." unless="exclude.database" depends="
+		upgrade:init,
+		install:init,
+		install:database:prep
+		">
+		<database-tag />
+	</target>
+
+	<target name="upgrade:database:rollback" description="Rolls back database to previous tagged version using rollback scripts." unless="exclude.database" depends="
+		upgrade:init,
+		install:init,
+		install:database:prep
+		">
+		<database-rollback />
+	</target>
+
+	<!-- #################################################################### -->
+	<!-- ###################### Unwanted targets ############################ -->
+	<!-- #################################################################### -->
+
+	<!-- Wrapper target to upgrade jboss container. Does not install or configure binaries -->
+
+	<target name="upgrade" description="Upgrades JBoss and Database" depends="
+		upgrade:init,
+		install:validation:pre-install,
+		install:server:stop,
+		install:validation:pre-install:ports,
+		install:clean,
+		install:re-configure,
+		install:server:configure,
+		install:server:project-webapp,
+		install:server:grid-login-webapp,
+		install:post,
+		install:server:start,
+		install:validation:post-install
+		" />
+	
+	<target name="print">
+		<echoproperties />
+	</target>
+	
+</project>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?xml-stylesheet type="text/xsl"
+                 href="http://gforge.nci.nih.gov/svnroot/commonlibrary/trunk/ivy-xsl/ivy.xsl"?>
+       
+<ivy-module version="1.0">
+	<info organisation="ncicb" module="sdk-security-client-module" status="integration"/>
+
+	<configurations>
+		<conf name="compile"  />
+		<conf name="runtime"  />
+	</configurations>
+
+	<publications>
+		<artifact name="sdk-security-client" type="jar" conf="compile" />
+	</publications>
+
+	<dependencies>
+		<!-- local shared-repository jars -->
+		<dependency org="springsource" name="acegi-security" rev="1.0.4" conf="compile"/>
+		<dependency org="springsource" name="spring" rev="2.0.2" conf="compile"/>
+	</dependencies>
+</ivy-module>

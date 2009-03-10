@@ -1,0 +1,8 @@
+<application-policy name="@CAGRID_LOGIN_MODULE_NAME@">
+	<authentication>
+		<login-module
+			code="gov.nih.nci.security.authentication.cagrid.GridJAASLoginModule"
+			flag="required">
+		</login-module>
+	</authentication>
+</application-policy>

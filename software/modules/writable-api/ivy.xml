@@ -1,0 +1,17 @@
+<ivy-module version="1.0">
+	<info organisation="ncicb" module="sdk-writable-api-module"/>
+	<configurations>
+		<conf name="compile"  />
+		<conf name="runtime"  />
+	</configurations>
+
+	<publications>
+		<artifact name="sdk-writable-api" type="jar" conf="compile" />
+	</publications>
+		
+	<dependencies>
+		<!-- local shared-repository jars -->
+		<dependency org="ncicb" name="sdk-system-core-module" rev="latest.integration" conf="compile" />
+		<dependency org="ncicb" name="sdk-writable-api-client-module" rev="latest.integration" conf="compile" />
+	</dependencies>
+</ivy-module>

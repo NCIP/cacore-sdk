@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?xml-stylesheet type="text/xsl"
+                 href="http://gforge.nci.nih.gov/svnroot/commonlibrary/trunk/ivy-xsl/ivy.xsl"?>
+       
+<ivy-module version="1.0">
+	<info organisation="ncicb" module="sdk-codegen-validator-templates-module" status="integration"/>
+
+	<configurations>
+		<conf name="compile" />
+		<conf name="runtime" />
+	</configurations>
+
+	<publications>
+		<artifact name="sdk-codegen-validator-templates" type="jar" conf="compile" />
+	</publications>
+
+	<dependencies>
+		<dependency org="eclipse" name="eclipse-codegen" rev="1.0" conf="compile"/>
+		<dependency org="eclipse" name="eclipse-emf-common" rev="1.0" conf="compile"/>
+		<dependency org="eclipse" name="eclipse-jdtcore" rev="1.0" conf="compile"/>
+		<dependency org="eclipse" name="eclipse-osgi" rev="1.0" conf="compile"/>
+		<dependency org="eclipse" name="eclipse-resources" rev="1.0" conf="compile"/>
+		<dependency org="eclipse" name="eclipse-runtime" rev="1.0" conf="compile"/>
+		<dependency org="eclipse" name="jetc-task" rev="1.0" conf="compile"/> 
+		
+		<dependency org="ncicb" name="sdk-codegen-validator-module" rev="latest.integration" conf="compile"/>		
+	</dependencies>
+</ivy-module>
