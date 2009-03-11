@@ -57,7 +57,7 @@
 		<dependency org="org.codehaus.castor" name="castor" rev="1.0.2" conf="common->compile"/>
 		<dependency org="cglib" name="cglib" rev="2.1_3" conf="common->compile" />
 		<dependency org="globus" name="jcog" rev="1.2" conf="common->compile" />
-		<dependency org="jakarta" name="commons-codec" rev="1.3" conf="common->compile" />
+		<dependency org="jakarta" name="commons-codec" rev="1.3" conf="common->compile;security-api-client->compile" />
 		<dependency org="jakarta" name="commons-logging" rev="1.1" conf="common->compile" />
 		<dependency org="apache" name="log4j" rev="1.2.13" conf="common->compile" />
 	
@@ -78,6 +78,7 @@
 		<dependency org="ncicb" name="clm" rev="4.0" conf="security-api->compile" />
 		<dependency org="ncicb" name="csm" rev="4.1.beta" conf="security-api->compile" />
 		
+		<dependency org="ncicb" name="sdk-security-client-module" rev="latest.integration" conf="security-api-client->compile"/>
 		<dependency org="ncicb" name="sdk-security-client-module" rev="latest.integration" conf="security-api-client->compile"/>
 		<!-- writable api jars -->
 		<dependency org="ncicb" name="sdk-writable-api-module" rev="latest.integration" conf="writable-api->compile"/>
