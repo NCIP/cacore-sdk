@@ -366,6 +366,12 @@
 			jboss.server.bindingfile.location="${jboss.home}/server/${jboss.server.name}/conf/bindings.xml"
 			jboss.server.binding.template.location="${jboss-bindings.file}"
 		/>
+		<echo message="Updating JBoss shutdown.jar to allow shutdown without command line args"/>
+		<jboss-update-shutdown
+			jboss.home="${jboss.home}"
+			jboss.server.hostname="${jboss.server.hostname}"
+			jboss.server.jndi.port="${jboss.server.jndi.port}"
+		/>
 	</target>
 
 	<target name="install:jboss:configure:ports" unless="exclude.jboss" >
