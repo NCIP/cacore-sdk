@@ -9,14 +9,16 @@
 	<property name="build.dir" location="${software.dir}\build" />
 	<property name="modules.dir" location="${software.dir}/modules" />
 	<property name="target.dir" location="${software.dir}/target" />
-	<property name="lib.dir" location="${target.dir}/modules/${module.name}/lib" />
+	<property name="target.module.dir" location="${target.dir}/modules" />
+
+	<property name="module.lib.dir" location="${target.module.dir}/${module.name}/lib" />
 
 	<import file="${build.dir}\build-common.xml" />
 
 	<property name="ivy.def.file" location="ivy.xml" />
 
-	<property name="runtime.lib.dir" location="${lib.dir}/runtime" />
-	<property name="compile.lib.dir" location="${lib.dir}/compile" />
+	<property name="runtime.lib.dir" location="${module.lib.dir}/runtime" />
+	<property name="compile.lib.dir" location="${module.lib.dir}/compile" />
 	<property name="src.java.dir" value="${basedir}/src" />
 	<property name="build.classes.dir" value="${target.dir}/modules/${module.name}/classes" />
 
@@ -40,12 +42,12 @@
 
 	<target name="ivy:setup-runtime" depends="ivy:init">
 		<ivy:resolve refresh="true" conf="runtime" />
-		<ivy:retrieve pattern="${lib.dir}/[conf]/[artifact]-[revision].[ext]" conf="runtime" />
+		<ivy:retrieve pattern="${module.lib.dir}/[conf]/[artifact]-[revision].[ext]" conf="runtime" />
 	</target>
 
 	<target name="ivy:setup-compile" depends="ivy:init">
 		<ivy:resolve refresh="true" conf="compile" />
-		<ivy:retrieve pattern="${lib.dir}/[conf]/[artifact]-[revision].[ext]" conf="compile" />
+		<ivy:retrieve pattern="${module.lib.dir}/[conf]/[artifact]-[revision].[ext]" conf="compile" />
 	</target>
 
 
@@ -68,7 +70,7 @@
 	</target>
 
 	<target name="jar" depends="compile:application-code,ivy:setup-runtime">
-		<jar destfile="${lib.dir}/${jar.name}">
+		<jar destfile="${module.lib.dir}/${jar.name}">
 			<fileset dir="${build.classes.dir}" />
 		</jar>
 	</target>
