@@ -203,8 +203,8 @@
 	<target name="build:all" description="Builds all the sub projects, putting artifacts in the project level target directory, used by distribution targets to make distributions" depends="
 		clean,
 		init,
-		build:example-webapp,
-		build:example-webapp:dist
+		build:project-webapp,
+		build:project-webapp:dist
 		" />
 
 	<target name="build:workspace-modules" description="Call modules build target to produce artifiacts">
@@ -213,13 +213,13 @@
 	</target>
 
 
-	<target name="build:example-webapp" depends="init" description="Call webapp sub-projects build target to produce artifiacts">
+	<target name="build:project-webapp" depends="init" description="Call webapp sub-projects build target to produce artifiacts">
 		<echo>Project Name = ${PROJECT_NAME}.........</echo>
 		<ant inheritAll="true" inheritRefs="false" antfile="${codegen.build.file}" target="${codegen.build.target}" dir="${build.dir}">
 		</ant>
 	</target>
 
-	<target name="build:example-webapp:dist" depends="init" description="Call webapp sub-projects build target to produce artifiacts">
+	<target name="build:project-webapp:dist" depends="init" description="Call webapp sub-projects build target to produce artifiacts">
 		<!-- setting the property in the ant call overrides the property in the sub-project allowing the artifact to be produced where needed -->
 		<ant inheritAll="true" inheritRefs="false" antfile="${codegen.build.file}" target="${package.build.target}" dir="${build.dir}">
 		</ant>
