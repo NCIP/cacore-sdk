@@ -350,7 +350,6 @@
 	</target>
 
 	<target name="install:jboss:configure" description="Configure JBoss (bindings, login-config.xml, ect)" unless="exclude.jboss" depends="
-		install:jboss:binaries,
 		install:jboss:configure:bindings,
 		install:jboss:configure:ports,
 		install:jboss:configure:grid-ports,
