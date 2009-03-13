@@ -20,6 +20,9 @@
 	<property name="bda-download.dir" location="${target.dir}/bda-download" />
 	<property name="bda-utils.dir" location="${target.dir}/bda-utils" />
 	<property name="bda-lib.dir" location="${target.dir}/lib" />
+
+	<property name="target.module.dir" location="${target.dir}/modules" />
+	<property name="module.lib.dir" location="${target.module.dir}/${module.name}/lib" />
 	
 	<property name="project.properties.file" value="${build.dir}/project.properties" />
 	<property file="${project.properties.file}" />
@@ -70,7 +73,7 @@
 			<format property="now" pattern="yyyyMMddHHmmss" />
 		</tstamp>
 		<property name="version" value="${sdk.version}" />
-		<ivy:publish artifactspattern="${lib.dir}/[artifact].[ext]" resolver="shared-local-repo"  
+		<ivy:publish artifactspattern="${module.lib.dir}/[artifact].[ext]" resolver="shared-local-repo"  
 			pubrevision="${version}" status="release" forcedeliver="true" pubdate="${now}" update="true" overwrite="true" />
 	</target>
 </project>

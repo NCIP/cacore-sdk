@@ -773,6 +773,9 @@
 			<fileset dir="${output.project.dir}/web">
 				<include name="**/*" />
 			</fileset>
+			<fileset dir="${output.codegen.dir}">
+				<include name="${javadoc.relative.dir}/**/*.*" />
+			</fileset>
 			<fileset dir="${system.config.client.webapp.dir}">
 				<include name="**/*" />
 				<exclude name="**/web.xml" />

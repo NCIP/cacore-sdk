@@ -9,8 +9,9 @@
 	<!-- The project.properties stores properties that are shared between both build.xml and install.xml. Typically properties that are related to the distribution directories, or files. -->
 
 	<!-- BDA standard structure -->
-	<property name="build.dir" location="." />
+	
 	<property name="software.dir" location=".." />
+	<property name="build.dir" location="${software.dir}/build" />
 	<property name="common.dir" location="${software.dir}/common" />
 	<property name="local.repo.dir" location="${software.dir}/local-ivy-repo" />
 	<property name="target.dir" location="${software.dir}/target" />
@@ -34,7 +35,7 @@
 	<property name="package.build.target" value="package-system" />
 	<property name="target.workspace.dir" location="${target.dir}/workspace" />
 
-	<property file="project.properties" />
+	<property file="${build.dir}/project.properties" />
 
 	<!-- Set application.base.path based on platform -->
 	<condition property="application.base.path" value="${application.base.path.linux}">
@@ -194,9 +195,7 @@
 			<property name="lib.dir" value="${lib.dir}" />
 			<property name="software.dir" value="${software.dir}" />
 		</ant>
-		<!--
-		<ant inheritAll="false" inheritRefs="false" antfile="${bda-blueprints-webapp.build.file}" target="ivy-clean" dir="${bda-blueprints-webapp.base.dir}" />
-		-->
+		<ant inheritAll="true" inheritRefs="false" antfile="${modules.build.file}" target="clean:dependencies" dir="${modules.dir}" />
 	</target>
 
 	<!-- Wrapper build target, call appropriate builds for sub-projects -->
@@ -204,10 +203,13 @@
 		clean,
 		init,
 		build:project-webapp,
-		build:project-webapp:dist
+		build:project-webapp:dist,
+		dist:installer
 		" />
 
 	<target name="build:workspace-modules" description="Call modules build target to produce artifiacts">
+		<echo>target DIR = ${target.dir}</echo>
+		<echo>modules DIR = ${modules.dir}</echo>
 		<ant inheritAll="true" inheritRefs="false" antfile="${modules.build.file}" target="${modules.build.target}" dir="${modules.dir}">
 		</ant>
 	</target>
@@ -392,4 +394,13 @@
 		<!-- SSH to machine ant run ant command line to install application -->
 		<remote-ssh remotesshcommand=". .bash_profile;cd ${ssh.dir.temp}; ant -Dproperties.file=${properties.file.name} -Dforce.reinstall=true ${upgrade.target}" />
 	</target>
+	
+	<target name="clean:software:target">
+		<delete dir="${target.dir}" failonerror="false"/>
+	</target>
+
+	<target name="clean:target">
+		<delete dir="${target.dir}" failonerror="false"/>
+	</target>
+
 </project>
