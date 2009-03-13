@@ -181,14 +181,6 @@
 		</and>
 	</condition>
 
-	<condition property="USE_DATA_SOURCE" value="true" else="false">
-		<or>
-			<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
-			<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="yes" casesensitive="false" trim="true" />
-			<equals arg1="${DB_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
-			<equals arg1="${DB_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
-		</or>
-	</condition>
 
 	<condition property="CSM_LOGIN_MODULE_ENABLED" value="true" else="false">
 		<and>
@@ -210,6 +202,20 @@
 		</and>
 	</condition>
 
+	<condition property="USE_DATA_SOURCE" value="true" else="false">
+		<or>
+			<and>
+				<or>
+					<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
+					<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="yes" casesensitive="false" trim="true" />
+				</or>
+				<equals arg1="${CSM_LOGIN_MODULE_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+			</and>
+			<equals arg1="${DB_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${DB_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
+		</or>
+	</condition>
+	
 	<condition property="TOMCAT_START" value="${xml.comment.start}" else="">
 		<equals arg1="${SERVER_TYPE}" arg2="jboss" casesensitive="false" trim="true" />
 	</condition>
