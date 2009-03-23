@@ -23,6 +23,13 @@
 	<property name="output.dir" value="${output.dir.location}/output"/>
 	<property name="db.src.dir" value="${project.home}/db"/>
 	<property name="MODEL_FILE_PATH" value="${project.home}/models/${MODEL_FILE}"/>
+	
+	<property name="properties.file" value="${project.build.home}/install.properties"/>
+	<replaceregexp file="${properties.file}" byline="true" match="^([\w\d.]+)=(.*[\w\d\/\{\}\\]+)[ \t]+\r*$" replace="\1=\2"/>
+	<replaceregexp file="${properties.file}" byline="true" match="^([\w\d.]+)=[ \t]+(.*[\w\d\/\{\}\\]+)\r*$" replace="\1=\2"/>
+	<property file="${properties.file}" />
+	<!-- added for remote deployments since file is copied to root of install dir -->
+	<basename property="properties.file.name" file="${properties.file}"/>
 
 	<import file="${software.dir}/build/build.xml"/>
 	
