@@ -860,7 +860,7 @@
 		install:validation:pre-install,
 		install:server:stop,
 		install:validation:pre-install:ports,
-		install:clean,
+		upgrade:database,
 		install:re-configure,
 		install:server:configure,
 		install:server:project-webapp,
