@@ -371,8 +371,7 @@
 	<target name="deploy:local:install" depends="build:all,dist:installer:prep,deploy:local:install:nocodegen" description="Installs and configures the application and required binaries and re-creates the datbase  on the local machine. Used for developer desktops and ci environments.">
 	</target>
 
-	<target name="deploy:local:upgrade" depends="build:all,dist:upgrader:prep" description="Upgrades and configures the application and database  on the local machine. Used for developer desktops and ci environments.">
-		<deploy-local target.name="${upgrade.target}" />
+	<target name="deploy:local:upgrade" depends="build:all,dist:upgrader:prep,deploy:local:upgrade:nocodegen" description="Upgrades and configures the application and database  on the local machine. Used for developer desktops and ci environments.">
 	</target>
 
 	<!-- ant -Dproperties.file=C:/devroot/scm-private/sdk/properties/dev-install.properties  deploy:remote:install 
@@ -403,5 +402,26 @@
 
 	<target name="clean:target">
 		<delete dir="${target.dir}" failonerror="false"/>
+	</target>
+	
+
+	<!-- These targets are for adding files to ivy -->
+	<target name="ivy:module:add2repo" >
+		<!-- you would want to use this value instead and you can get rid of the mkdir below
+		<property name="ivy-repo.base.dir" location="${software.dir}/../../ivy-repo"/>
+		-->
+		<property name="svn.user.name" value="garmillas"></property>
+		<property name="svn.user.pass" value="kiran819"></property>
+		
+		<mkdir dir="${user.home}/tmp"/>
+		<ivy-module-add2repo
+			ivy-repo.base.dir="${user.home}/tmp/ivy-repo"
+			ivy.add.org="ncicb"
+			ivy.add.module="ssaksa-test-module3"
+			ivy.add.version="0.1.0"
+			ivy.add.module.src.dir="${build.dir}"
+			ivy.add.module.src.file.list="build.xml"
+			ivy.add.xml.src.location="${build.dir}/install.xml"
+			/>
 	</target>
 </project>
