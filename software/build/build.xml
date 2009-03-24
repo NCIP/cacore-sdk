@@ -375,6 +375,8 @@
 		<deploy-local target.name="${upgrade.target}" />
 	</target>
 
+	<!-- ant -Dproperties.file=C:/devroot/scm-private/sdk/properties/dev-install.properties  deploy:remote:install 
+		https://wiki.nci.nih.gov/display/BuildandDeploymentAutomation/AHP+-+Testing+command+line+build   -->
 	<target name="deploy:remote:install" description="Installs and configures the application and required binaries and re-creates the datbase  on a remote machine. Used for NCI tiers (dev, qa, stg, prod)" depends="
 		build:all,
 		dist:installer
@@ -402,5 +404,4 @@
 	<target name="clean:target">
 		<delete dir="${target.dir}" failonerror="false"/>
 	</target>
-
 </project>
