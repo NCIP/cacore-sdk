@@ -364,6 +364,7 @@
 		<jboss-bindings
 			jboss.server.bindingfile.location="${jboss.home}/server/${jboss.server.name}/conf/bindings.xml"
 			jboss.server.binding.template.location="${jboss-bindings.file}"
+			jboss.server.ports.name="${jboss.port.configuration}"
 		/>
 		<echo message="Updating JBoss shutdown.jar to allow shutdown without command line args"/>
 		<jboss-update-shutdown
