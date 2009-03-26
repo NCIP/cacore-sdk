@@ -215,7 +215,7 @@
 			<equals arg1="${DB_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
 		</or>
 	</condition>
-	
+
 	<condition property="TOMCAT_START" value="${xml.comment.start}" else="">
 		<equals arg1="${SERVER_TYPE}" arg2="jboss" casesensitive="false" trim="true" />
 	</condition>
@@ -244,12 +244,12 @@
 	<condition property="SERVER_PORT" value="${SERVER_SSL_PORT}" else="${SERVER_HTTP_PORT}">
 		<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true" />
 	</condition>
-	
+
 	<property name="SERVER_URL" value="${SERVER_PROTOCOL}://${SERVER_HOST_NAME}:${SERVER_PORT}/${PROJECT_NAME}"/>
 	<property name="SDK_GRID_LOGIN_SERVICE_URL" value="${SERVER_PROTOCOL}://${SERVER_HOST_NAME}:${SERVER_PORT}/${SDK_GRID_LOGIN_SERVICE_NAME}"/>
-	
+
 	<echo>${GRID_LOGIN_MODULE_ENABLED} ${SERVER_URL}</echo>
-	
+
 	<target name="-replace-templates-filter-tokens-reconfigure">
 		<filterset id="filtertoken3" begintoken="@" endtoken="@" onmissingfiltersfile="fail">
 			<filter token="CACHE_PATH" value="${CACHE_PATH}" />
@@ -328,18 +328,44 @@
 			<filterset refid="filtertoken3" />
 			<filterset refid="filtertoken4" />
 		</copy>
+		<if>
+			<equals arg1="${DB_TYPE}" arg2="mysql" />
+			<then>
+				<copy todir="${db-install.dist.mysql.relative.dir}" filtering="true">
+					<fileset dir="${db-install.dist.mysql.relative.dir}" />
+					<globmapper from="*-template.sql" to="*.sql" />
+					<filterset refid="filtertoken3" />
+					<filterset refid="filtertoken4" />
+				</copy>
+			</then>
+			<elseif>
+				<equals arg1="${DB_TYPE}" arg2="oracle" />
+				<then>
+					<copy todir="${db-install.dist.oracle.relative.dir}" filtering="true">
+						<fileset dir="${db-install.dist.oracle.relative.dir}" />
+						<globmapper from="*-template.sql" to="*.sql" />
+						<filterset refid="filtertoken3" />
+						<filterset refid="filtertoken4" />
+					</copy>
+				</then>
+			</elseif>
+		</if>
 		<outofdate>
 			<sourcefiles>
 				<fileset dir="${system.config.dir}" includes="**/*.xml" />
 				<fileset dir="${system.config.dir}" includes="**/*.wsdd" />
 				<fileset dir="${system.config.dir}" includes="**/*.config" />
 				<fileset dir="${system.config.dir}" includes="**/*.properties" />
+				<fileset dir="${db-install.dist.mysql.relative.dir}" includes="**/*.sql" />
+				<fileset dir="${db-install.dist.oracle.relative.dir}" includes="**/*.sql" />
 			</sourcefiles>
 			<targetfiles>
 				<fileset dir="${system.config.dir}" includes="**/*.xml" />
 				<fileset dir="${system.config.dir}" includes="**/*.wsdd" />
 				<fileset dir="${system.config.dir}" includes="**/*.config" />
 				<fileset dir="${system.config.dir}" includes="**/*.properties" />
+				<fileset dir="${db-install.dist.mysql.relative.dir}" includes="**/*.sql" />
+				<fileset dir="${db-install.dist.oracle.relative.dir}" includes="**/*.sql" />
 			</targetfiles>
 			<sequential>
 				<copy todir="${system.config.dir}" overwrite="true">
@@ -366,6 +392,28 @@
 					<filterset refid="filtertoken3" />
 					<filterset refid="filtertoken4" />
 				</copy>
+				<if>
+					<equals arg1="${DB_TYPE}" arg2="mysql" />
+					<then>
+						<copy todir="${db-install.dist.mysql.relative.dir}" filtering="true">
+							<fileset dir="${db-install.dist.mysql.relative.dir}" />
+							<globmapper from="*-template.sql" to="*.sql" />
+							<filterset refid="filtertoken3" />
+							<filterset refid="filtertoken4" />
+						</copy>
+					</then>
+					<elseif>
+						<equals arg1="${DB_TYPE}" arg2="oracle" />
+						<then>
+							<copy todir="${db-install.dist.oracle.relative.dir}" filtering="true">
+								<fileset dir="${db-install.dist.oracle.relative.dir}" />
+								<globmapper from="*-template.sql" to="*.sql" />
+								<filterset refid="filtertoken3" />
+								<filterset refid="filtertoken4" />
+							</copy>
+						</then>
+					</elseif>
+				</if>
 			</sequential>
 		</outofdate>
 		<copy todir="${system.config.dir}">
@@ -646,8 +694,8 @@
 			<fileset dir="${output.target.dir}">
 				<include name="${bean.file}" />
 			</fileset>
-		</copy>		
-		
+		</copy>
+
 		<copy todir="${package.client.ws.dir}">
 			<fileset dir="${system.config.client.ws.dir}">
 				<exclude name="**/*template*" />
@@ -767,9 +815,9 @@
 				<attribute name="Version" value="${VERSION}" />
 			</manifest>
 			<lib dir="${temp.webapp.staging.lib.dir}">
-				 <exclude name="cog*.*"/>
-				 <exclude name="${server-exclude-list}" />
-			 </lib>
+				<exclude name="cog*.*"/>
+				<exclude name="${server-exclude-list}" />
+			</lib>
 			<fileset dir="${output.project.dir}/web">
 				<include name="**/*" />
 			</fileset>
