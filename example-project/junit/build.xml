@@ -12,7 +12,7 @@
 
 	<property file="${project.build.home}/codegen.properties" />
 	<property file="${project.build.home}/install.properties" />
-	<property file="${SDK_INSTALL_DIR}/build/project.properties"/>
+	<property file="${SDK_INSTALL_DIR}/software/build/project.properties"/>
 
 	<property name="junit.home" location="${project.home}/junit" />
 	<property name="src.dir" value="${junit.home}/src"/>
