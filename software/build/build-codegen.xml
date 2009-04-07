@@ -252,49 +252,35 @@
 	</condition>
 
 	<condition property="GRID_LOGIN_MODULE_START" value="${xml.comment.start}" else="">
-		<and>
-			<not>
-				<or>
-					<equals arg1="${ENABLE_GRID_LOGIN_MODULE}" arg2="true" casesensitive="false" trim="true" />
-					<equals arg1="${ENABLE_GRID_LOGIN_MODULE}" arg2="yes" casesensitive="false" trim="true" />
-				</or>
-			</not>
-			<equals arg1="${SECURITY_ENABLED}" arg2="true" casesensitive="false" trim="true" />
-		</and>
+		<not>
+			<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+		</not>
 	</condition>
 	<condition property="GRID_LOGIN_MODULE_END" value="${xml.comment.end}" else="">
-		<and>
-			<not>
-				<or>
-					<equals arg1="${ENABLE_GRID_LOGIN_MODULE}" arg2="true" casesensitive="false" trim="true" />
-					<equals arg1="${ENABLE_GRID_LOGIN_MODULE}" arg2="yes" casesensitive="false" trim="true" />
-				</or>
-			</not>
-			<equals arg1="${SECURITY_ENABLED}" arg2="true" casesensitive="false" trim="true" />
-		</and>
+		<not>
+			<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+		</not>
 	</condition>
 
-	<condition property="CSM_LOGIN_MODULE_START" value="${xml.comment.start}" else="">
+	<condition property="CSM_LOGIN_MODULE_ENABLED" value="true" else="false">
 		<and>
-			<not>
-				<or>
-					<equals arg1="${ENABLE_CSM_LOGIN_MODULE}" arg2="true" casesensitive="false" trim="true" />
-					<equals arg1="${ENABLE_CSM_LOGIN_MODULE}" arg2="yes" casesensitive="false" trim="true" />
-				</or>
-			</not>
+			<or>
+				<equals arg1="${ENABLE_CSM_LOGIN_MODULE}" arg2="true" casesensitive="false" trim="true" />
+				<equals arg1="${ENABLE_CSM_LOGIN_MODULE}" arg2="yes" casesensitive="false" trim="true" />
+			</or>
 			<equals arg1="${SECURITY_ENABLED}" arg2="true" casesensitive="false" trim="true" />
 		</and>
 	</condition>
+	
+	<condition property="CSM_LOGIN_MODULE_START" value="${xml.comment.start}" else="">
+		<not>
+			<equals arg1="${CSM_LOGIN_MODULE_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+		</not>
+	</condition>
 	<condition property="CSM_LOGIN_MODULE_END" value="${xml.comment.end}" else="">
-		<and>
-			<not>
-				<or>
-					<equals arg1="${ENABLE_CSM_LOGIN_MODULE}" arg2="true" casesensitive="false" trim="true" />
-					<equals arg1="${ENABLE_CSM_LOGIN_MODULE}" arg2="yes" casesensitive="false" trim="true" />
-				</or>
-			</not>
-			<equals arg1="${SECURITY_ENABLED}" arg2="true" casesensitive="false" trim="true" />
-		</and>
+		<not>
+			<equals arg1="${CSM_LOGIN_MODULE_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+		</not>
 	</condition>
 
 	<condition property="MODEL_FILE_IN_DIRECTORY" value="${MODEL_FILE_PATH}" else="models/${MODEL_FILE}">

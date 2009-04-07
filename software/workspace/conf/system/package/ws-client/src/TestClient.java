@@ -1,10 +1,12 @@
 import java.io.File;
+import java.io.FileInputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
+import java.util.Properties;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -34,8 +36,11 @@ public class TestClient
 	public void testSearch() throws Exception
 	{
 		Collection<Class> classList = getClasses();
+		
+		Properties properties = new Properties();
+		properties.load(new FileInputStream("build.properties"));
 
-		String url = "@SERVER_URL@/services/@WEBSERVICE_NAME@";
+		String url = properties.get("SERVER_URL")+ "/services/" +properties.get("WEBSERVICE_NAME");
 		Service  service = new Service();
 		Call call = null;
 
@@ -68,17 +73,17 @@ public class TestClient
 					call.addParameter("arg2", searchClassQName, ParameterMode.IN);
 					call.setReturnType(org.apache.axis.encoding.XMLType.SOAP_ARRAY);
 
-					/*
-				//This block inserts the security headers in the service call
-				SOAPHeaderElement headerElement = new SOAPHeaderElement(call.getOperationName().getNamespaceURI(),"SecurityHeader");
-				headerElement.setPrefix("security");
-				headerElement.setMustUnderstand(false);
-				SOAPElement usernameElement = headerElement.addChildElement("username");
-				usernameElement.addTextNode("userId");
-				SOAPElement passwordElement = headerElement.addChildElement("password");
-				passwordElement.addTextNode("password");
-				call.addHeader(headerElement);				
-					 */
+					if (properties.get("SECURITY_ENABLED").equals("true")
+								|| properties.get("SECURITY_ENABLED").equals("yes")) {
+						SOAPHeaderElement headerElement = new SOAPHeaderElement(call.getOperationName().getNamespaceURI(),"SecurityHeader");
+						headerElement.setPrefix("security");
+						headerElement.setMustUnderstand(false);
+						SOAPElement usernameElement = headerElement.addChildElement("username");
+						usernameElement.addTextNode("userId");
+						SOAPElement passwordElement = headerElement.addChildElement("password");
+						passwordElement.addTextNode("password");
+						call.addHeader(headerElement);				
+					}
 
 					Object o = klass.newInstance();
 
