@@ -126,7 +126,7 @@
 
 	<!-- Targets -->
 	<target name="diagnostics" description="diagnostics">
-		<echoproperties />
+		<echoproperties destfile="antproperties.txt"/>
 		<diagnostics />
 	</target>
 

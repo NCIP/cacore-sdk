@@ -15,6 +15,16 @@
 	<replaceregexp file="${properties.file}" byline="true" match="^([\w\d.]+)=[ \t]+(.*[\w\d\/\{\}\\]+)\r*$" replace="\1=\2" />
 	<property file="${properties.file}" />
 
+	<condition property="exclude.database" value="true">
+		<not>
+			<or>
+				<isset property="exclude.database"/>
+				<isset property="database.re-create"/>
+			</or>
+		</not>
+	</condition>
+	
+	
 	<!-- Set application.base.path based on platform -->
 	<condition property="application.base.path" value="${application.base.path.linux}">
 		<or>
@@ -70,10 +80,10 @@
 			<typefound name="xmltask"/>
 		</not>
 	</condition>
-	
+
 	<import file="${basedir}/${taskdef-file}"/>
 
-	
+
 	<!-- webapp can use either Oracle or MySQL as its database platform, this is controled by the database.type property.  Based on the value of this property sent several variables for use during install -->
 	<switch value="${DB_TYPE}">
 		<case value="oracle">
@@ -288,15 +298,15 @@
 
 	<target name="install:server:root-certs" >
 		<if>
-            <istrue value="${GRID_LOGIN_MODULE_ENABLED}"/>
-            <then>
-                <mkdir dir="${user.home}/.globus/certificates"/>
-                <copy todir="${user.home}/.globus/certificates" overwrite="true">
-                    <fileset dir="${grid.dist.relative.dir}/${TARGET_GRID}/certificates">
-                        <include name="*"/>
-                    </fileset>
-                </copy>
-            </then>
+			<istrue value="${GRID_LOGIN_MODULE_ENABLED}"/>
+			<then>
+				<mkdir dir="${user.home}/.globus/certificates"/>
+				<copy todir="${user.home}/.globus/certificates" overwrite="true">
+					<fileset dir="${grid.dist.relative.dir}/${TARGET_GRID}/certificates">
+						<include name="*"/>
+					</fileset>
+				</copy>
+			</then>
 		</if>
 	</target>
 	<!-- #################################################################### -->
@@ -356,16 +366,25 @@
 		install:jboss:configure:login-config,
 		install:jboss:configure:login-config-grid,
 		install:jboss:configure:datasource,
-		install:jboss:configure:libraries
+		install:jboss:configure:libraries,
+		install:jboss:configure:log4j
 		">
 	</target>
 
-	<target name="install:jboss:configure:bindings" unless="exclude.jboss" >
-		<jboss-bindings
-			jboss.server.bindingfile.location="${jboss.home}/server/${jboss.server.name}/conf/bindings.xml"
-			jboss.server.binding.template.location="${jboss-bindings.file}"
-			jboss.server.ports.name="${jboss.port.configuration}"
-		/>
+	<!-- bug in BDA macro -->
+	<target name="install:jboss:configure:log4j" unless="exclude.jboss">
+		<property name="log4j.template.file" value="${system.config.client.webapp.dir}/WEB-INF/classes/log4j-jboss.xml" />
+		<copy file="${jboss.home}/server/${jboss.server.name}/conf/log4j.xml" tofile="${jboss.home}/server/${jboss.server.name}/conf/log4j.xml.bak" overwrite="true" />
+		<copy file="${log4j.template.file}" tofile="${jboss.home}/server/${jboss.server.name}/conf/log4j.xml" overwrite="true">
+			<filterset>
+				<filtersfile file="${properties.file}" />
+				<filtersfile file="project.properties" />
+			</filterset>
+		</copy>
+	</target>
+
+	<target name="install:jboss:configure:bindings" unless="exclude.jboss">
+		<jboss-bindings jboss.server.bindingfile.location="${jboss.home}/server/${jboss.server.name}/conf/bindings.xml" jboss.server.binding.template.location="${jboss-bindings.file}" jboss.server.ports.name="${jboss.port.configuration}" />
 		<echo message="Updating JBoss shutdown.jar to allow shutdown without command line args"/>
 		<jboss-update-shutdown
 			jboss.home="${jboss.home}"
@@ -393,17 +412,26 @@
 						appserver.conf.dir="${jboss.home}/server/${jboss.server.name}/deploy/jbossweb-tomcat55.sar"
 						appserver.server-xml.file="${jboss.home}/server/${jboss.server.name}/deploy/jbossweb-tomcat55.sar/server.xml"
 						appserver.server-xml.service.name="jboss.web"
-						grid.secure.dir="${grid.secure.dir}"
+						grid.secure.dir="${grid.dist.relative.dir}/${TARGET_GRID}"
 						grid.secure.enable="${GRID_LOGIN_MODULE_ENABLED}"
 						grid.secure.port="${jboss.server.ssl.port}" 
-						grid.secure.key.file="${grid.secure.key.file}"
-						grid.secure.cert.file="${grid.secure.cert.file}"
+						grid.secure.key.file="host-key.pem"
+						grid.secure.cert.file="host-cert.pem"
 				/>
 				<echo message="configuring https valve and connector "/>
 				<grid-secure-configure-valve
 						appserver.server-xml.file="${jboss.home}/server/${jboss.server.name}/deploy/jbossweb-tomcat55.sar/server.xml"
 						appserver.server-xml.service.name="jboss.web"
 				/>
+				<xmltask source="${jboss.home}/server/${jboss.server.name}/deploy/jbossweb-tomcat55.sar/server.xml"
+					dest="${jboss.home}/server/${jboss.server.name}/deploy/jbossweb-tomcat55.sar/server.xml">
+					<remove path="/Server/Service[@name='jboss.web']/ConnenctorEngine[@name='jboss.web']/Valve[@className='org.globus.tomcat.coyote.valves.HTTPSValve55']" />
+					<insert path="/Server/Service[@name='jboss.web']/Engine[@name='jboss.web']">
+						<![CDATA[                               
+						<Valve className="org.globus.tomcat.coyote.valves.HTTPSValve55"/>
+						]]>                                     
+					</insert>                
+				</xmltask> 					
 			</then>
 		</if>
 	</target>
@@ -539,7 +567,7 @@
 	</target>
 
 	<target name="install:clean:tomcat" unless="exclude.tomcat">
-		<sleep seconds="5" />
+		<sleep seconds="30" />
 		<property name="backup.count" value="5" />
 		<if>
 			<not>
@@ -592,19 +620,27 @@
 			<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true" casesensitive="false" trim="true" />
 			<then>
 				<echo message="configuring https valve and connector "/>
-				<property name="security.dir.src" value="${security.dist.relative.dir}"/>
 				<grid-secure-configure-connector 
 					appserver.conf.dir="${tomcat.home}/conf" 
 					appserver.server-xml.file="${tomcat.home}/conf/server.xml" 
 					appserver.server-xml.service.name="Catalina" 
 					grid.secure.enable="${GRID_LOGIN_MODULE_ENABLED}" 
 					grid.secure.port="${tomcat.port.ssl}" 
-					grid.secure.dir="${security.dir.src}" 
-					grid.secure.key.file="${grid.secure.key.file}" 
-					grid.secure.cert.file="${grid.secure.cert.file}" />
+					grid.secure.dir="${grid.dist.relative.dir}/${TARGET_GRID}" 
+					grid.secure.key.file="host-key.pem" 
+					grid.secure.cert.file="host-cert.pem" />
 				<grid-secure-configure-valve 
 					appserver.server-xml.file="${tomcat.home}/conf/server.xml" 
 					appserver.server-xml.service.name="Catalina" />
+				<xmltask source="${tomcat.home}/conf/server.xml"
+					dest="${tomcat.home}/conf/server.xml">
+					<remove path="/Server/Service[@name='Catalina']/ConnenctorEngine[@name='Catalina']/Valve[@className='org.globus.tomcat.coyote.valves.HTTPSValve']" />
+					<insert path="/Server/Service[@name='Catalina']/Engine[@name='Catalina']">
+						<![CDATA[                               
+						<Valve className="org.globus.tomcat.coyote.valves.HTTPSValve"/>
+						]]>                                     
+					</insert>                
+				</xmltask> 	
 			</then>
 		</if>
 	</target>
@@ -755,7 +791,7 @@
 		<validate-ports-preinstall />
 	</target>
 
-	<target name="install:validation:post-install" description="Run post-install checks from bda-utils">
+	<target name="install:validation:post-install" description="Run post-install checks from bda-utils" unless="exclude.jboss">
 		<if>
 			<not>
 				<isset property="exclude.start.servers" />
@@ -780,7 +816,7 @@
 
 	<!-- Wrapper install database target, depends on both MySQL and Oracle sub-targets, ifs should ensure only one is run.  Target path can be skipped by exlude.database also calls upgrade:database -->
 	<target name="install:database:prep" description="Copies db files with filtering" unless="exclude.database" depends="install:init">
-		<echoproperties prefix="database" />
+		<echoproperties prefix="database" destfile="antproperties.txt"/>
 		<copy todir="${db.dir.dest}" filtering="true">
 			<fileset dir="${db.dir.src}">
 				<include name="**/*" />
@@ -870,9 +906,9 @@
 		install:server:start,
 		install:validation:post-install
 		" />
-	
+
 	<target name="print">
-		<echoproperties />
+		<echoproperties destfile="antproperties.txt"/>
 	</target>
-	
+
 </project>

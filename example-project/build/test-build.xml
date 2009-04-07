@@ -8,11 +8,24 @@
 	<property name="dist.dir" value="${project.target.dir}/dist"/>
 	<property name="dist.exploded.dir" value="${dist.dir}/exploded"/>
 
+	<property name="junit.dir" value="${project.home}/junit"/>
+
+	<!-- load ant contrib -->
+	<path id="taskdef.cp">
+		<fileset dir="${junit.dir}/lib">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="taskdef.cp" />
+	<taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpathref="taskdef.cp" />
+
 	<macrodef name="run-test">
 
 		<attribute name="SERVER.TYPE" default="tomcat" />
 		<attribute name="MODEL.FILE.TYPE" default="EA" />
-
+		<attribute name="MODEL.FILE" default="sdk.xmi" />
+		
 		<attribute name="DB.TYPE" default="oracle" />
 		<attribute name="DB.USE.JNDI.BASED.CONNECTION" default="false" />
 
@@ -31,10 +44,17 @@
 		<attribute name="GENERATE.XSD.WITH.PERMISSIBLE.VALUE" default="false" />
 		<attribute name="GENERATE.HIBERNATE.VALIDATOR" default="false" />
 
+		<attribute name="TARGET.GRID" default="nci_dev-1.2" />
+
+		<attribute name="SERVER.URL" default="localhost" />
+
+		<attribute name="REPORT.PROJECT.DIR" default="defaultTest" />
+
 		<sequential>
 			<property name="SERVER_TYPE" value="@{SERVER.TYPE}" />
 			<property name="MODEL_FILE_TYPE" value="@{MODEL.FILE.TYPE}" />
-
+			<property name="MODEL_FILE" value="@{MODEL.FILE}" />
+			
 			<property name="DB_TYPE" value="@{DB.TYPE}" />
 			<property name="DB_USE_JNDI_BASED_CONNECTION" value="@{DB.USE.JNDI.BASED.CONNECTION}" />
 
@@ -45,7 +65,7 @@
 			<property name="ENABLE_GRID_LOGIN_MODULE" value="@{ENABLE.GRID.LOGIN.MODULE}" />
 			<property name="ENABLE_CSM_LOGIN_MODULE" value="@{ENABLE.CSM.LOGIN.MODULE}" />
 			<property name="ENABLE_INSTANCE_LEVEL_SECURITY" value="@{ENABLE.INSTANCE.LEVEL.SECURITY}" />
-			<property name="ENABLE_property_LEVEL_SECURITY" value="@{ENABLE.property.LEVEL.SECURITY}" />
+			<property name="ENABLE_ATTRIBUTE_LEVEL_SECURITY" value="@{ENABLE.ATTRIBUTE.LEVEL.SECURITY}" />
 			<property name="CACHE_PROTECTION_ELEMENTS" value="@{CACHE.PROTECTION.ELEMENTS}" />
 			<property name="CSM_USE_JNDI_BASED_CONNECTION" value="@{CSM.USE.JNDI.BASED.CONNECTION}" />
 
@@ -53,82 +73,172 @@
 			<property name="GENERATE_XSD_WITH_PERMISSIBLE_VALUE" value="@{GENERATE.XSD.WITH.PERMISSIBLE.VALUE}" />
 			<property name="GENERATE_HIBERNATE_VALIDATOR" value="@{GENERATE.HIBERNATE.VALIDATOR}" />
 
+			<property name="TARGET_GRID" value="@{TARGET.GRID}" />
+
+			<if>
+				<or>
+					<equals arg1="${DB_TYPE}" arg2="mysql"/>
+				</or>
+				<then>
+					<property file="${junit.dir}/db-mysql.properties" />
+				</then>
+				<else>
+					<property file="${junit.dir}/db-oracle.properties" />
+				</else>
+			</if>
+			
+			<property name="report.project.dir" value="report/@{REPORT.PROJECT.DIR}" />
+			
+			
 			<ant antfile="build.xml" dir="." target="dist" inheritAll="true">
 			</ant>
-
+				
 			<copy todir="${dist.exploded.dir}" overwrite="true">
 				<fileset dir="." includes="*.properties" />
 			</copy>
+
 			<ant antfile="build.xml" dir="${dist.exploded.dir}" target="install" inheritAll="true">
 				<property name="bda-utils.dir" value="${dist.exploded.dir}/bda-utils" />
 			</ant>
 
+			<ant antfile="build.xml" dir="${junit.dir}" target="xmlMappingTest" inheritAll="true"/>
+			<ant antfile="build.xml" dir="${junit.dir}" target="hbmMappingTest" inheritAll="true"/>
+			
+			
+			<!-- @TODO different setup stop jboss rename war run testcase 
+			<ant antfile="build.xml" dir="${junit.dir}" target="appServiceTest" inheritAll="true"/>-->	
+			
+			<if>
+				<not>
+					<or>
+						<equals arg1="${DB_USE_JNDI_BASED_CONNECTION}" arg2="true" />
+						<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="true" />
+					</or>
+				</not>
+				<then>
+					<if>
+						<not>
+							<equals arg1="${ENABLE_SECURITY}" arg2="true" />
+						</not>
+						<then>
+							<ant antfile="build.xml" dir="${junit.dir}" target="readThickClientTest" inheritAll="true" />
+							<ant antfile="build.xml" dir="${junit.dir}" target="cqlQueryThickClientTest" inheritAll="true" />
+						</then>
+						<else>
+							<ant antfile="build.xml" dir="${junit.dir}" target="securityThickClientTest" inheritAll="true" />
+							<ant antfile="build.xml" dir="${junit.dir}" target="securityGroupThickClientTest" inheritAll="true" />
+						</else>
+					</if>
+				</then>
+			</if>
+			
+			<if>
+				<not>
+					<equals arg1="${ENABLE_SECURITY}" arg2="true" />
+				</not>
+				<then>
+					<ant antfile="build.xml" dir="${junit.dir}" target="readRemoteClientTest" inheritAll="true" />
+					<ant antfile="build.xml" dir="${junit.dir}" target="cqlQueryRemoteClientTest" inheritAll="true" />
+					<ant antfile="build.xml" dir="${junit.dir}" target="xmlDataRemoteClientTest" inheritAll="true" />
+					<ant antfile="build.xml" dir="${junit.dir}" target="webServicesTest" inheritAll="true" />
+				</then>
+				<else>
+					<ant antfile="build.xml" dir="${junit.dir}" target="securityRemoteClientTest" inheritAll="true" />
+				</else>
+			</if>
+
+			<if>
+				<equals arg1="${ENABLE_WRITABLE_API_EXTENSION}" arg2="true" />
+				<then>
+					<ant antfile="build.xml" dir="${junit.dir}" target="hibernateValidatorTest" inheritAll="true" />
+					<ant antfile="build.xml" dir="${junit.dir}" target="writeRemoteClientTest" inheritAll="true" />
+					<if>
+						<not>
+							<or>
+								<equals arg1="${DB_USE_JNDI_BASED_CONNECTION}" arg2="true" />
+								<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="true" />
+							</or>
+						</not>
+						<then>
+							<ant antfile="build.xml" dir="${junit.dir}" target="writeThickClientTest" inheritAll="true" />
+						</then>
+					</if>
+					<ant antfile="build.xml" dir="${junit.dir}" target="writeDatabaseCleanUpTest" inheritAll="true" />
+				</then>
+			</if>
 		</sequential>
 	</macrodef>
+
+	<target name="test">
+		<antcall target="defaultTest" inheritall="false">
+		</antcall>
+		<antcall target="build2Test" inheritall="false">
+		</antcall>
+	</target>
 
 	<target name="defaultTest">
 		<run-test />
 	</target>
 
 	<target name="build2Test">
-		<run-test ENABLE.WRITABLE.API.EXTENSION="true" GENERATE.XSD.WITH.GME.TAGS="true" />
-		
+		<run-test ENABLE.WRITABLE.API.EXTENSION="true" DB.TYPE="mysql" GENERATE.XSD.WITH.GME.TAGS="true" REPORT.PROJECT.DIR="build2Test" />
 	</target>
 
 	<target name="build3Test">
-		<run-test MODEL.FILE.TYPE="ARGO" DB.USE.JNDI.BASED.CONNECTION="true" ENABLE.COMMON.LOGGING.MODULE="true" ENABLE.WRITABLE.API.EXTENSION="true" />
+		<run-test MODEL.FILE.TYPE="ARGO" MODEL.FILE="sdk.uml" DB.USE.JNDI.BASED.CONNECTION="true" ENABLE.COMMON.LOGGING.MODULE="true" ENABLE.WRITABLE.API.EXTENSION="true"  REPORT.PROJECT.DIR="build3Test" />
 	</target>
 
 	<target name="build4Test">
-		<run-test DB.USE.JNDI.BASED.CONNECTION="true" ENABLE.SECURITY="true" ENABLE.CSM.LOGIN.MODULE="true" GENERATE.XSD.WITH.PERMISSIBLE.VALUE="true" />
+		<run-test DB.USE.JNDI.BASED.CONNECTION="true" ENABLE.SECURITY="true" ENABLE.CSM.LOGIN.MODULE="true" GENERATE.XSD.WITH.PERMISSIBLE.VALUE="true" REPORT.PROJECT.DIR="build4Test" />
 	</target>
 
+	<!-- some build fails  CACHE.PROTECTION.ELEMENTS="true" bug in CSM -->
 	<target name="build5Test">
-		<run-test ENABLE.SECURITY="true" CACHE.PROTECTION.ELEMENTS="true" ENABLE.CSM.LOGIN.MODULE="true" CSM.USE.JNDI.BASED.CONNECTION="true" />
+		<run-test ENABLE.SECURITY="true" CACHE.PROTECTION.ELEMENTS="true" ENABLE.CSM.LOGIN.MODULE="true" CSM.USE.JNDI.BASED.CONNECTION="true" REPORT.PROJECT.DIR="build5Test" />
 	</target>
 
 	<target name="build6Test">
-		<run-test ENABLE.SECURITY="true" ENABLE.CSM.LOGIN.MODULE="true" ENABLE.INSTANCE.LEVEL.SECURITY="true" GENERATE.XSD.WITH.GME.TAGS="true" GENERATE.XSD.WITH.PERMISSIBLE.VALUE="true" />
+		<run-test ENABLE.SECURITY="true" ENABLE.CSM.LOGIN.MODULE="true" ENABLE.INSTANCE.LEVEL.SECURITY="true" GENERATE.XSD.WITH.GME.TAGS="true" GENERATE.XSD.WITH.PERMISSIBLE.VALUE="true" REPORT.PROJECT.DIR="build6Test" />
 	</target>
 
 	<target name="build7Test">
-		<run-test ENABLE.SECURITY="true" ENABLE.CSM.LOGIN.MODULE="true" ENABLE.ATTRIBUTE.LEVEL.SECURITY="true" />
+		<run-test ENABLE.SECURITY="true" ENABLE.CSM.LOGIN.MODULE="true" ENABLE.ATTRIBUTE.LEVEL.SECURITY="true" REPORT.PROJECT.DIR="build7Test" />
 	</target>
 
 	<target name="build8Test">
-		<run-test ENABLE.SECURITY="true" CACHE.PROTECTION.ELEMENTS="true" ENABLE.CSM.LOGIN.MODULE="true" ENABLE.INSTANCE.LEVEL.SECURITY="true" ENABLE.ATTRIBUTE.LEVEL.SECURITY="true" />
+		<run-test ENABLE.SECURITY="true" CACHE.PROTECTION.ELEMENTS="true" ENABLE.CSM.LOGIN.MODULE="true" ENABLE.INSTANCE.LEVEL.SECURITY="true" ENABLE.ATTRIBUTE.LEVEL.SECURITY="true" REPORT.PROJECT.DIR="build8Test" />
 	</target>
 
 	<target name="build9Test">
-		<run-test SERVER.TYPE="mysql" ENABLE.WRITABLE.API.EXTENSION="true" ENABLE.SECURITY="true" ENABLE.CSM.LOGIN.MODULE="true" />
+		<run-test DB.TYPE="mysql" ENABLE.WRITABLE.API.EXTENSION="true" ENABLE.SECURITY="true" ENABLE.CSM.LOGIN.MODULE="true" REPORT.PROJECT.DIR="build9Test" />
 	</target>
 
 	<target name="build10Test">
-		<run-test ENABLE.WRITABLE.API.EXTENSION="true" ENABLE.COMMON.LOGGING.MODULE="true" ENABLE.SECURITY="true" ENABLE.CSM.LOGIN.MODULE="true" ENABLE.ATTRIBUTE.LEVEL.SECURITY="true" />
+		<run-test ENABLE.WRITABLE.API.EXTENSION="true" ENABLE.COMMON.LOGGING.MODULE="true" ENABLE.SECURITY="true" ENABLE.CSM.LOGIN.MODULE="true" ENABLE.ATTRIBUTE.LEVEL.SECURITY="true" REPORT.PROJECT.DIR="build10Test" />
 	</target>
 
 	<target name="build11Test">
-		<run-test ENABLE.SECURITY="true" ENABLE.GRID.LOGIN.MODULE="true" />
+		<run-test ENABLE.SECURITY="true" ENABLE.GRID.LOGIN.MODULE="true"  REPORT.PROJECT.DIR="build11Test" />
 	</target>
 
 	<target name="build12Test">
-		<run-test ENABLE.SECURITY="true" CACHE.PROTECTION.ELEMENTS="true" ENABLE.GRID.LOGIN.MODULE="true" ENABLE.CSM.LOGIN.MODULE="true" ENABLE.INSTANCE.LEVEL.SECURITY="true" />
+		<run-test ENABLE.SECURITY="true" CACHE.PROTECTION.ELEMENTS="true" ENABLE.GRID.LOGIN.MODULE="true" ENABLE.CSM.LOGIN.MODULE="true" ENABLE.INSTANCE.LEVEL.SECURITY="true" REPORT.PROJECT.DIR="build12Test" />
 	</target>
 
 	<target name="build13Test">
-		<run-test SERVER.TYPE="jboss" DB.TYPE="mysql" />
+		<run-test SERVER.TYPE="jboss" DB.TYPE="mysql"  REPORT.PROJECT.DIR="build13Test"/>
 	</target>
 
 	<target name="build14Test">
-		<run-test SERVER.TYPE="jboss" DB.TYPE="mysql" MODEL.FILE.TYPE="ARGO" ENABLE.WRITABLE.API.EXTENSION="true" ENABLE.COMMON.LOGGING.MODULE="true" GENERATE.HIBERNATE.VALIDATOR="true" />
+		<run-test SERVER.TYPE="jboss" DB.TYPE="mysql" MODEL.FILE.TYPE="ARGO" MODEL.FILE="sdk.uml" ENABLE.WRITABLE.API.EXTENSION="true" ENABLE.COMMON.LOGGING.MODULE="true" GENERATE.HIBERNATE.VALIDATOR="true"  REPORT.PROJECT.DIR="build14Test" />
 	</target>
 
 	<target name="build15Test">
-		<run-test SERVER.TYPE="jboss" DB.USE.JNDI.BASED.CONNECTION="true" ENABLE.SECURITY="true" ENABLE.CSM.LOGIN.MODULE="true" CSM.USE.JNDI.BASED.CONNECTION="true" />
+		<run-test SERVER.TYPE="jboss" DB.USE.JNDI.BASED.CONNECTION="true" ENABLE.SECURITY="true" ENABLE.CSM.LOGIN.MODULE="true" CSM.USE.JNDI.BASED.CONNECTION="true" REPORT.PROJECT.DIR="build15Test"  />
 	</target>
 
 	<target name="build16Test">
-		<run-test SERVER.TYPE="jboss" ENABLE.SECURITY="true" ENABLE.GRID.LOGIN.MODULE="true" />
+		<run-test SERVER.TYPE="jboss" ENABLE.SECURITY="true" ENABLE.GRID.LOGIN.MODULE="true"  REPORT.PROJECT.DIR="build16Test"/>
 	</target>
-	
+
 </project>

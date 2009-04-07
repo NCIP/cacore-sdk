@@ -64,25 +64,44 @@
 			<equals arg1="${DB_USE_JNDI_BASED_CONNECTION}" arg2="yes" casesensitive="false" trim="true" />
 		</or>
 	</condition>
-	<condition property="CSM_JNDI_START" value="" else="${xml.comment.start}">
+
+	<condition property="SECURITY_ENABLED" value="true" else="false">
 		<or>
-			<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
-			<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="yes" casesensitive="false" trim="true" />
+			<equals arg1="${ENABLE_SECURITY}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${ENABLE_SECURITY}" arg2="yes" casesensitive="false" trim="true" />
 		</or>
+	</condition>
+
+	<condition property="CSM_JNDI_START" value="" else="${xml.comment.start}">
+		<and>
+			<or>
+				<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
+				<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="yes" casesensitive="false" trim="true" />
+			</or>
+			<equals arg1="${SECURITY_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+		</and>
 	</condition>
 	<condition property="CSM_JNDI_END" value="" else="${xml.comment.end}">
-		<or>
-			<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
-			<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="yes" casesensitive="false" trim="true" />
-		</or>
+		<and>
+			<or>
+				<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
+				<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="yes" casesensitive="false" trim="true" />
+			</or>
+			<equals arg1="${SECURITY_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+		</and>
 	</condition>
+
+	
 	<condition property="CSM_JNDI_SERVER_START" value="" else="${xml.comment.start}">
 		<or>
 			<and>
-				<or>
-					<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
-					<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="yes" casesensitive="false" trim="true" />
-				</or>
+				<and>
+					<or>
+						<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
+						<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="yes" casesensitive="false" trim="true" />
+					</or>
+					<equals arg1="${SECURITY_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+				</and>
 				<not>
 					<or>
 						<equals arg1="${DB_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
@@ -91,10 +110,13 @@
 				</not>
 			</and>
 			<and>
-				<or>
-					<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
-					<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="yes" casesensitive="false" trim="true" />
-				</or>
+				<and>
+					<or>
+						<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
+						<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="yes" casesensitive="false" trim="true" />
+					</or>
+					<equals arg1="${SECURITY_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+				</and>
 				<or>
 					<equals arg1="${DB_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
 					<equals arg1="${DB_USE_JNDI_BASED_CONNECTION}" arg2="yes" casesensitive="false" trim="true" />
@@ -108,10 +130,14 @@
 	<condition property="CSM_JNDI_SERVER_END" value="" else="${xml.comment.end}">
 		<or>
 			<and>
-				<or>
-					<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
-					<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="yes" casesensitive="false" trim="true" />
-				</or>
+				<and>
+					<or>
+						<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
+						<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="yes" casesensitive="false" trim="true" />
+					</or>
+					<equals arg1="${SECURITY_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+				</and>
+					
 				<not>
 					<or>
 						<equals arg1="${DB_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
@@ -120,10 +146,14 @@
 				</not>
 			</and>
 			<and>
-				<or>
-					<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
-					<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="yes" casesensitive="false" trim="true" />
-				</or>
+				<and>
+					<or>
+						<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
+						<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="yes" casesensitive="false" trim="true" />
+					</or>
+					<equals arg1="${SECURITY_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+				</and>
+					
 				<or>
 					<equals arg1="${DB_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
 					<equals arg1="${DB_USE_JNDI_BASED_CONNECTION}" arg2="yes" casesensitive="false" trim="true" />
@@ -134,6 +164,7 @@
 			</and>
 		</or>
 	</condition>
+	
 	<condition property="CSM_DB_CONNECTION_START" value="${xml.comment.start}" else="">
 		<or>
 			<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
@@ -144,12 +175,6 @@
 		<or>
 			<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
 			<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="yes" casesensitive="false" trim="true" />
-		</or>
-	</condition>
-	<condition property="SECURITY_ENABLED" value="true" else="false">
-		<or>
-			<equals arg1="${ENABLE_SECURITY}" arg2="true" casesensitive="false" trim="true" />
-			<equals arg1="${ENABLE_SECURITY}" arg2="yes" casesensitive="false" trim="true" />
 		</or>
 	</condition>
 	<condition property="server-exclude-list" value="log4j*.jar" else="">
@@ -202,17 +227,29 @@
 		</and>
 	</condition>
 
+	<condition property="USE_CSM_DATA_SOURCE" value="true" else="false">
+		<and>
+			<or>
+				<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
+				<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="yes" casesensitive="false" trim="true" />
+			</or>
+			<equals arg1="${CSM_LOGIN_MODULE_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+		</and>
+	</condition>
+
 	<condition property="USE_DATA_SOURCE" value="true" else="false">
 		<or>
-			<and>
-				<or>
-					<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
-					<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="yes" casesensitive="false" trim="true" />
-				</or>
-				<equals arg1="${CSM_LOGIN_MODULE_ENABLED}" arg2="true" casesensitive="false" trim="true" />
-			</and>
+			<equals arg1="${USE_CSM_DATA_SOURCE}" arg2="true" casesensitive="false" trim="true" />
 			<equals arg1="${DB_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
-			<equals arg1="${DB_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
+		</or>
+	</condition>
+
+	<condition property="USE_CONNECTION_POOL" value="true" else="false">
+		<or>
+			<not>
+				<equals arg1="${USE_CSM_DATA_SOURCE}" arg2="true" casesensitive="false" trim="true" />
+			</not>
+			<equals arg1="${DB_USE_JNDI_BASED_CONNECTION}" arg2="false" casesensitive="false" trim="true" />
 		</or>
 	</condition>
 
@@ -248,8 +285,6 @@
 	<property name="SERVER_URL" value="${SERVER_PROTOCOL}://${SERVER_HOST_NAME}:${SERVER_PORT}/${PROJECT_NAME}"/>
 	<property name="SDK_GRID_LOGIN_SERVICE_URL" value="${SERVER_PROTOCOL}://${SERVER_HOST_NAME}:${SERVER_PORT}/${SDK_GRID_LOGIN_SERVICE_NAME}"/>
 
-	<echo>${GRID_LOGIN_MODULE_ENABLED} ${SERVER_URL}</echo>
-
 	<target name="-replace-templates-filter-tokens-reconfigure">
 		<filterset id="filtertoken3" begintoken="@" endtoken="@" onmissingfiltersfile="fail">
 			<filter token="CACHE_PATH" value="${CACHE_PATH}" />
@@ -269,6 +304,7 @@
 			<filter token="CSM_DB_USERNAME" value="${CSM_DB_USERNAME}" />
 			<filter token="CSM_DB_PASSWORD" value="${CSM_DB_PASSWORD}" />
 			<filter token="CSM_DB_DIALECT" value="${CSM_DB_DIALECT}" />
+			<filter token="ENABLE_SECURITY" value="${ENABLE_SECURITY}" />
 
 			<filter token="CLM_DB_DRIVER" value="${CLM_DB_DRIVER}" />
 			<filter token="CLM_DB_CONNECTION_URL" value="${CLM_DB_CONNECTION_URL}" />
@@ -721,9 +757,7 @@
 		</copy>
 
 		<if>
-			<not>
-				<equals arg1="${USE_DATA_SOURCE}" arg2="true" />
-			</not>
+			<equals arg1="${USE_CONNECTION_POOL}" arg2="true" />
 			<then>
 				<echo message="using c3p connection pooling database" />
 				<copy todir="${temp.webapp.staging.lib.dir}" overwrite="true">

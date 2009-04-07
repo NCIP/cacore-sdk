@@ -30,7 +30,7 @@ public class TestClient
 	}
 	public ApplicationService getApplicationService() throws Exception
 	{
-		String username = "SDKTestUser";
+		String username = "SDKUser1";
 		String password = "Psat123!@#";
 		GridAuthenticationHelper loginHelper = new GridAuthenticationHelper("@CAGRID_LOGIN_MODULE_NAME@");
 		GlobusCredential proxy = loginHelper.login(username,password);

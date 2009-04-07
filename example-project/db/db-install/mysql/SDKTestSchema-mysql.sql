@@ -579,7 +579,7 @@ COMMIT;
 DROP TABLE IF EXISTS `CALCULATOR`;
 CREATE TABLE `CALCULATOR` (
   `ID` int(8) NOT NULL,
-  `DISCRIMINATOR` varchar(50) default NULL,
+  `DISCRIMINATOR` varchar(150) default NULL,
   `BRAND` varchar(50) default NULL,
   PRIMARY KEY  (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -943,7 +943,7 @@ COMMIT;
 DROP TABLE IF EXISTS `CURRENCY`;
 CREATE TABLE `CURRENCY` (
   `ID` int(8) NOT NULL,
-  `DISCRIMINATOR` varchar(50) default NULL,
+  `DISCRIMINATOR` varchar(150) default NULL,
   `COUNTRY` varchar(50) default NULL,
   `VALUE` int(8) default NULL,
   PRIMARY KEY  (`ID`)
@@ -1020,7 +1020,7 @@ CREATE TABLE `DESSERT` (
   `ID` int(8) NOT NULL,
   `TOPPING` varchar(50) default NULL,
   `FILLING` varchar(50) default NULL,
-  `DISCRIMINATOR` varchar(50) default NULL,
+  `DISCRIMINATOR` varchar(150) default NULL,
   PRIMARY KEY  (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -1273,7 +1273,7 @@ CREATE TABLE `FISH` (
   `GENERA` varchar(50) default NULL,
   `PRIMARY_COLOR` varchar(50) default NULL,
   `FIN_SIZE` int(8) default NULL,
-  `DISCRIMINATOR` varchar(50) default NULL,
+  `DISCRIMINATOR` varchar(150) default NULL,
   `TANK_ID` int(8) default NULL,
   `TANK_DISCRIMINATOR` varchar(50) default NULL,
   PRIMARY KEY  (`ID`)
@@ -1429,7 +1429,7 @@ COMMIT;
 DROP TABLE IF EXISTS `GOVERMENT`;
 CREATE TABLE `GOVERMENT` (
   `ID` int(8) NOT NULL,
-  `DISCRIMINATOR` varchar(50) default NULL,
+  `DISCRIMINATOR` varchar(150) default NULL,
   `COUNTRY` varchar(50) default NULL,
   `PRIME_MINISTER` varchar(50) default NULL,
   `PRESIDENT` varchar(50) default NULL,
@@ -1945,7 +1945,7 @@ COMMIT;
 DROP TABLE IF EXISTS `LUGGAGE`;
 CREATE TABLE `LUGGAGE` (
   `ID` int(8) NOT NULL,
-  `DISCRIMINATOR` varchar(50) default NULL,
+  `DISCRIMINATOR` varchar(150) default NULL,
   `CAPACITY` int(8) default NULL,
   `KEY_CODE` int(8) default NULL,
   `EXPANDABLE` varchar(1) default NULL,
@@ -2127,7 +2127,7 @@ COMMIT;
 DROP TABLE IF EXISTS `ORGANIZATION`;
 CREATE TABLE `ORGANIZATION` (
   `ID` int(8) NOT NULL,
-  `DISCRIMINATOR` varchar(50) default NULL,
+  `DISCRIMINATOR` varchar(150) default NULL,
   `NAME` varchar(50) default NULL,
   `AGENCY_BUDGET` int(8) default NULL,
   `CEO` varchar(50) default NULL,
@@ -2569,7 +2569,7 @@ COMMIT;
 DROP TABLE IF EXISTS `SHOES`;
 CREATE TABLE `SHOES` (
   `ID` int(8) NOT NULL,
-  `DISCRIMINATOR` varchar(50) default NULL,
+  `DISCRIMINATOR` varchar(150) default NULL,
   `COLOR` varchar(50) default NULL,
   `SPORTS_TYPE` varchar(50) default NULL,
   `DESIGNER_ID` int(8) default NULL,
@@ -2795,7 +2795,7 @@ DROP TABLE IF EXISTS `TANK_TANK_ACCESSORY`;
 CREATE TABLE `TANK_TANK_ACCESSORY` (
   `TANK_ID` int(8) NOT NULL,
   `TANK_ACCESSORY_ID` int(8) NOT NULL,
-  `TANK_DISCRIMINATOR` varchar(50) NOT NULL,
+  `TANK_DISCRIMINATOR` varchar(150) NOT NULL,
   PRIMARY KEY  (`TANK_ID`,`TANK_ACCESSORY_ID`),
   KEY `FK_TANK_TANK_ACCESSORY` (`TANK_ACCESSORY_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
