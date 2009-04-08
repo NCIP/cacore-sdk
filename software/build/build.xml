@@ -403,25 +403,5 @@
 	<target name="clean:target">
 		<delete dir="${target.dir}" failonerror="false"/>
 	</target>
-	
 
-	<!-- These targets are for adding files to ivy -->
-	<target name="ivy:module:add2repo" >
-		<!-- you would want to use this value instead and you can get rid of the mkdir below
-		<property name="ivy-repo.base.dir" location="${software.dir}/../../ivy-repo"/>
-		-->
-		<property name="svn.user.name" value="garmillas"></property>
-		<property name="svn.user.pass" value="kiran819"></property>
-		
-		<mkdir dir="${user.home}/tmp"/>
-		<ivy-module-add2repo
-			ivy-repo.base.dir="${user.home}/tmp/ivy-repo"
-			ivy.add.org="ncicb"
-			ivy.add.module="ssaksa-test-module3"
-			ivy.add.version="0.1.0"
-			ivy.add.module.src.dir="${build.dir}"
-			ivy.add.module.src.file.list="build.xml"
-			ivy.add.xml.src.location="${build.dir}/install.xml"
-			/>
-	</target>
 </project>
