@@ -23,8 +23,8 @@
 			</or>
 		</not>
 	</condition>
-	
-	
+
+
 	<!-- Set application.base.path based on platform -->
 	<condition property="application.base.path" value="${application.base.path.linux}">
 		<or>
@@ -105,31 +105,42 @@
 		</default>
 	</switch>
 
-	<switch value="${CSM_DB_TYPE}">
-		<case value="oracle">
-			<property name="CSM_DB_DIALECT" value="org.hibernate.dialect.OracleDialect" />
-			<property name="CSM_DB_DRIVER" value="oracle.jdbc.driver.OracleDriver" />
-			<property name="CSM_DB_CONNECTION_URL" value="jdbc:oracle:thin:@${CSM_DB_SERVER}:${CSM_DB_SERVER_PORT}:${CSM_DB_NAME}" />
-		</case>
-		<case value="mysql">
-			<property name="CSM_DB_DIALECT" value="org.hibernate.dialect.MySQLDialect" />
-			<property name="CSM_DB_DRIVER" value="com.mysql.jdbc.Driver" />
-			<property name="CSM_DB_CONNECTION_URL" value="jdbc:mysql://${CSM_DB_SERVER}:${CSM_DB_SERVER_PORT}/${CSM_DB_NAME}" />
-		</case>
-		<default>
-			<fail message="Invalid database type ${CSM_DB_TYPE}" />
-		</default>
-	</switch>
+	<if>
+		<equals arg1="${SECURITY_ENABLED}" arg2="true"/>
+		<then>
+			<switch value="${CSM_DB_TYPE}">
+				<case value="oracle">
+					<property name="CSM_DB_DIALECT" value="org.hibernate.dialect.OracleDialect" />
+					<property name="CSM_DB_DRIVER" value="oracle.jdbc.driver.OracleDriver" />
+					<property name="CSM_DB_CONNECTION_URL" value="jdbc:oracle:thin:@${CSM_DB_SERVER}:${CSM_DB_SERVER_PORT}:${CSM_DB_NAME}" />
+				</case>
+				<case value="mysql">
+					<property name="CSM_DB_DIALECT" value="org.hibernate.dialect.MySQLDialect" />
+					<property name="CSM_DB_DRIVER" value="com.mysql.jdbc.Driver" />
+					<property name="CSM_DB_CONNECTION_URL" value="jdbc:mysql://${CSM_DB_SERVER}:${CSM_DB_SERVER_PORT}/${CSM_DB_NAME}" />
+				</case>
+				<default>
+					<fail message="Invalid database type ${CSM_DB_TYPE}" />
+				</default>
+			</switch>
+		</then>
+	</if>
 
-	<switch value="${CLM_DB_TYPE}">
-		<case value="mysql">
-			<property name="CLM_DB_DRIVER" value="com.mysql.jdbc.Driver" />
-			<property name="CLM_DB_CONNECTION_URL" value="jdbc:mysql://${CLM_DB_SERVER}:${CLM_DB_SERVER_PORT}/${CLM_DB_NAME}" />
-		</case>
-		<default>
-			<fail message="Invalid database type ${CLM_DB_TYPE}" />
-		</default>
-	</switch>
+	<if>
+		<equals arg1="${ENABLE_CLM_LOGGER_CFG_GENERATION}" arg2="true" />
+		<then>
+
+			<switch value="${CLM_DB_TYPE}">
+				<case value="mysql">
+					<property name="CLM_DB_DRIVER" value="com.mysql.jdbc.Driver" />
+					<property name="CLM_DB_CONNECTION_URL" value="jdbc:mysql://${CLM_DB_SERVER}:${CLM_DB_SERVER_PORT}/${CLM_DB_NAME}" />
+				</case>
+				<default>
+					<fail message="Invalid database type ${CLM_DB_TYPE}" />
+				</default>
+			</switch>
+		</then>
+	</if>
 
 	<switch value="${SERVER_TYPE}">
 		<case value="jboss">
@@ -149,32 +160,37 @@
 		</default>
 	</switch>
 
-	<switch value="${TARGET_GRID}">
-		<case value="training-1.2">
-			<property name="CAGRID_AUTHENTICATION_SERVICE_URL" value="https://dorian.training.cagrid.org:8443/wsrf/services/cagrid/Dorian"/>
-			<property name="CAGRID_DORIAN_SERVICE_URL" value="${CAGRID_AUTHENTICATION_SERVICE_URL}"/>
-		</case>
-		<case value="nci_dev-1.2">
-			<property name="CAGRID_AUTHENTICATION_SERVICE_URL" value="https://cbiovdev5035.nci.nih.gov:8443/wsrf/services/cagrid/Dorian"/>
-			<property name="CAGRID_DORIAN_SERVICE_URL" value="${CAGRID_AUTHENTICATION_SERVICE_URL}"/>
-		</case>
-		<case value="nci_qa-1.2">
-			<property name="CAGRID_AUTHENTICATION_SERVICE_URL" value="https://cagrid-dorian-qa.nci.nih.gov:8443/wsrf/services/cagrid/Dorian"/>
-			<property name="CAGRID_DORIAN_SERVICE_URL" value="${CAGRID_AUTHENTICATION_SERVICE_URL}"/>
-		</case>
-		<case value="nci_stage-1.2">
-			<property name="CAGRID_AUTHENTICATION_SERVICE_URL" value="https://cagrid-dorian-stage.nci.nih.gov:8443/wsrf/services/cagrid/Dorian"/>
-			<property name="CAGRID_DORIAN_SERVICE_URL" value="${CAGRID_AUTHENTICATION_SERVICE_URL}"/>
-		</case>
-		<case value="nci_prod-1.2">
-			<property name="CAGRID_AUTHENTICATION_SERVICE_URL" value="https://cagrid-dorian.nci.nih.gov:8443/wsrf/services/cagrid/Dorian"/>
-			<property name="CAGRID_DORIAN_SERVICE_URL" value="${CAGRID_AUTHENTICATION_SERVICE_URL}"/>
-		</case>
+	<if>
+		<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true" />
+		<then>
+			<switch value="${TARGET_GRID}">
+				<case value="training-1.2">
+					<property name="CAGRID_AUTHENTICATION_SERVICE_URL" value="https://dorian.training.cagrid.org:8443/wsrf/services/cagrid/Dorian" />
+					<property name="CAGRID_DORIAN_SERVICE_URL" value="${CAGRID_AUTHENTICATION_SERVICE_URL}" />
+				</case>
+				<case value="nci_dev-1.2">
+					<property name="CAGRID_AUTHENTICATION_SERVICE_URL" value="https://cbiovdev5035.nci.nih.gov:8443/wsrf/services/cagrid/Dorian" />
+					<property name="CAGRID_DORIAN_SERVICE_URL" value="${CAGRID_AUTHENTICATION_SERVICE_URL}" />
+				</case>
+				<case value="nci_qa-1.2">
+					<property name="CAGRID_AUTHENTICATION_SERVICE_URL" value="https://cagrid-dorian-qa.nci.nih.gov:8443/wsrf/services/cagrid/Dorian" />
+					<property name="CAGRID_DORIAN_SERVICE_URL" value="${CAGRID_AUTHENTICATION_SERVICE_URL}" />
+				</case>
+				<case value="nci_stage-1.2">
+					<property name="CAGRID_AUTHENTICATION_SERVICE_URL" value="https://cagrid-dorian-stage.nci.nih.gov:8443/wsrf/services/cagrid/Dorian" />
+					<property name="CAGRID_DORIAN_SERVICE_URL" value="${CAGRID_AUTHENTICATION_SERVICE_URL}" />
+				</case>
+				<case value="nci_prod-1.2">
+					<property name="CAGRID_AUTHENTICATION_SERVICE_URL" value="https://cagrid-dorian.nci.nih.gov:8443/wsrf/services/cagrid/Dorian" />
+					<property name="CAGRID_DORIAN_SERVICE_URL" value="${CAGRID_AUTHENTICATION_SERVICE_URL}" />
+				</case>
 
-		<default>
-			<fail message="Invalid target grid ${TARGET_GRID}." />
-		</default>
-	</switch>
+				<default>
+					<fail message="Invalid target grid ${TARGET_GRID}." />
+				</default>
+			</switch>
+		</then>
+	</if>
 
 	<!-- Grid related properties -->
 	<property name="grid.secure.key.file.location" value="${security.dir.src}/${grid.secure.key.file}" />
@@ -235,7 +251,12 @@
 
 	<!-- Does directory management and copy some files with filtering to ensure token expansion -->
 	<target name="install:init" description="Does directory management to initialize install">
-		<math result="jboss.ssl.port" operand1="${jboss.server.port}" operation="+" operand2="363" datatype="int" />
+		<if>
+			<equals arg1="${SERVER_TYPE}" arg2="jboss" />
+			<then>
+				<math result="jboss.ssl.port" operand1="${jboss.server.port}" operation="+" operand2="363" datatype="int" />
+			</then>
+		</if>
 		<filterset id="embedded.filterset">
 			<filter token="application.base.path" value="${application.base.path}" />
 			<filter token="application.url" value="${SERVER_URL}" />
@@ -430,8 +451,8 @@
 						<![CDATA[                               
 						<Valve className="org.globus.tomcat.coyote.valves.HTTPSValve55"/>
 						]]>                                     
-					</insert>                
-				</xmltask> 					
+					</insert>
+				</xmltask>
 			</then>
 		</if>
 	</target>
@@ -639,8 +660,8 @@
 						<![CDATA[                               
 						<Valve className="org.globus.tomcat.coyote.valves.HTTPSValve"/>
 						]]>                                     
-					</insert>                
-				</xmltask> 	
+					</insert>
+				</xmltask>
 			</then>
 		</if>
 	</target>
