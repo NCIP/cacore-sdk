@@ -304,16 +304,7 @@
 
 		<dist-prep />
 
-		<!-- copy install.properties to exploded folder -->
-		<echo>Copying files from ${project.build.home} .......</echo>
-		<copy todir="${dist.exploded.dir}" >
-			<fileset dir="${project.build.home}" includes="*.properties" />
-		</copy>
-		<!-- copy common/resources folder to exploded folder -->
-		<echo>Copying dir from ${project.common.resources.dir} .......</echo>
-		<copy todir="${dist.exploded.dir}/common" >
-			<fileset dir="${project.common.dir}"/>
-		</copy>
+		<antcall target="-copyProjectProperties"></antcall>
 	</target>
 
 	<target name="dist:installer" depends="dist:installer:prep" description="Produces zip file based on installer distribution area. Zip is used by deploy:remote:* or external installations">
@@ -343,27 +334,28 @@
 		</copy>
 		<replaceregexp file="${dist.exploded.dir}/build.xml" byline="true" match="(&lt;property name=&quot;properties.file&quot;\s+value=&quot;).*(&quot;\s*\/&gt;)" replace="\1upgrade.properties\2" />
 		<zip destfile="${dist.dir}/${bda-blueprints-webapp.upgrade.zip.file}" basedir="${dist.exploded.dir}" />
-
 	</target>
 
-	<target name="deploy:local:install:re-configure">
+	<target name="-copyProjectProperties">
 		<copy todir="${dist.exploded.dir}" overwrite="true">
 			<fileset dir="${project.build.home}" includes="*.properties" />
 		</copy>
+			<!-- copy common/resources folder to exploded folder -->
+		<echo>Copying dir from ${project.common.resources.dir} .......</echo>
+		<copy todir="${dist.exploded.dir}/common">
+			<fileset dir="${project.common.dir}" />
+		</copy>
+	</target>
+
+	<target name="deploy:local:install:re-configure" depends="-copyProjectProperties">
 		<deploy-local target.name="install:re-configure" />
 	</target>
 
-	<target name="deploy:local:install:nocodegen">
-		<copy todir="${dist.exploded.dir}" overwrite="true">
-			<fileset dir="${project.build.home}" includes="*.properties" />
-		</copy>
+	<target name="deploy:local:install:nocodegen" depends="-copyProjectProperties">
 		<deploy-local target.name="${install.target}" />
 	</target>
 
-	<target name="deploy:local:upgrade:nocodegen">
-		<copy todir="${dist.exploded.dir}" overwrite="true">
-			<fileset dir="${project.build.home}" includes="*.properties" />
-		</copy>
+	<target name="deploy:local:upgrade:nocodegen" depends="-copyProjectProperties">
 		<deploy-local target.name="${upgrade.target}" />
 	</target>
 
