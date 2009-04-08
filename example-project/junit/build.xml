@@ -149,13 +149,15 @@
 
 	<macrodef name="SDKRunJUnit">
 		<attribute name="junitClasspath" />
-		<attribute name="junitOutputDir" />
+		<attribute name="junitOutputDir" default="${junit.home}/output"/>
 		<attribute name="includePattern" />
 		<attribute name="excludePattern" />
 		<attribute name="loginConfig.location" default="${dist.exploded.dir}/${package.client.local.conf.dir}"/>
 		<sequential>
 			<delete dir="@{junitOutputDir}" />
 			<mkdir dir="@{junitOutputDir}" />
+			<delete dir="${junit.home}/output"/>
+			<mkdir dir="${junit.home}/output"/>
 			<junit printsummary="yes" maxmemory="512m" showoutput="false" failureproperty="fail-prop" errorproperty="error-prop">
 				<sysproperty key="java.security.auth.login.config" value="@{loginConfig.location}/login.config" />
 				<sysproperty key="webservice.url" value="${SERVER_URL}/services/${WEBSERVICE_NAME}" />
@@ -342,6 +344,13 @@
 
 	<target name="securityThickClientTest" depends="createDir">
 		<SDKCompileJUnit compileClasspath="local-client-cp" includePattern="**/security/*SecurityTest*.java" excludePattern="**/Writable*.java" />
+		<SDKCompileJUnit compileClasspath="local-client-cp" includePattern="**/security/GridApplicationServiceProvider.java" excludePattern="" />
+		<if>
+			<equals arg1="${ENABLE_GRID_LOGIN_MODULE}" arg2="true"/>
+			<then>
+				<SDKCompileJUnit compileClasspath="local-client-cp" includePattern="**/security/GridApplicationServiceImpl.java" excludePattern="" />
+			</then>
+		</if>
 		<SDKRunJUnit junitClasspath="local-client-cp" junitOutputDir="${report.dir.security-thick-client}" includePattern="**/security/*SecurityTest.class" excludePattern="**/security/Writable*.class" loginConfig.location="${dist.exploded.dir}/${package.client.local.conf.dir}"/>
 		<SDKGenerateReport junitOutputDir="${report.dir.security-thick-client}" />
 	</target>
