@@ -360,7 +360,7 @@
 	</target>
 
 	<!-- build:all,  -->
-	<target name="deploy:local:install" depends="build:all,dist:installer:prep,deploy:local:install:nocodegen" description="Installs and configures the application and required binaries and re-creates the datbase  on the local machine. Used for developer desktops and ci environments.">
+	<target name="deploy:local:install" depends="build:workspace-modules,build:all,dist:installer:prep,deploy:local:install:nocodegen" description="Installs and configures the application and required binaries and re-creates the datbase  on the local machine. Used for developer desktops and ci environments.">
 	</target>
 
 	<target name="deploy:local:upgrade" depends="build:all,dist:upgrader:prep,deploy:local:upgrade:nocodegen" description="Upgrades and configures the application and database  on the local machine. Used for developer desktops and ci environments.">
