@@ -51,7 +51,7 @@
 
 	<echo message="application.base.path=${application.base.path}" />
 	<property name="jboss.home" value="${application.base.path}/${jboss.binaries.relative.dir}" />
-	<property name="tomcat.home" value="${application.base.path}/${tomcat.binaries.relative.dir}" />
+	<property name="deploy.tomcat.home" value="${application.base.path}/${tomcat.binaries.relative.dir}" />
 
 	<!-- Generic properties -->
 	<property name="log.dir" value="${basedir}/logs" />
@@ -269,7 +269,7 @@
 			<!-- added for liquibase -->
 			<filter token="db-upgrade.run.dir" value="${db-upgrade.dir.dest}/${database.type}" />
 			<filter token="jboss.home" value="${jboss.home}" />
-			<filter token="tomcat.home" value="${tomcat.home}" />
+			<filter token="tomcat.home" value="${deploy.tomcat.home}" />
 			<filter token="database.dialect" value="${DB_DIALECT}" />
 			<filter token="hibernate.cfg.file.path" value="${hibernate.cfg.file.path}" />
 		</filterset>
@@ -564,10 +564,10 @@
 
 	<target name="install:tomcat:stop" description="Stop Tomcat" unless="exclude.tomcat">
 		<if>
-			<available file="${tomcat.home}/bin/shutdown.sh" />
+			<available file="${deploy.tomcat.home}/bin/shutdown.sh" />
 			<then>
 				<echo message="Shutting down tomcat" />
-				<tomcat-stop tomcat.home="${tomcat.home}" />
+				<tomcat-stop tomcat.home="${deploy.tomcat.home}" />
 			</then>
 			<else>
 				<echo message="Tomcat not found , not shutting down tomcat" />
@@ -582,7 +582,7 @@
 				<isset property="exclude.start.servers" />
 			</not>
 			<then>
-				<tomcat-start tomcat.home="${tomcat.home}" />
+				<tomcat-start tomcat.home="${deploy.tomcat.home}" />
 			</then>
 		</if>
 	</target>
@@ -597,19 +597,19 @@
 			<then>
 				<property name="backup.tomcat.base.dir" location="${application.base.path}/backup/tomcat" />
 
-				<backup-dir src.dir="${tomcat.home}" backup.base.dir="${backup.tomcat.base.dir}" backup.count="${backup.count}" />
+				<backup-dir src.dir="${deploy.tomcat.home}" backup.base.dir="${backup.tomcat.base.dir}" backup.count="${backup.count}" />
 			</then>
 		</if>
-		<delete dir="${tomcat.home}" />
+		<delete dir="${deploy.tomcat.home}" />
 	</target>
 
 	<target name="install:tomcat:binaries" description="Install tomcat binaries" unless="exclude.tomcat">
-		<delete dir="${tomcat.home}" />
+		<delete dir="${deploy.tomcat.home}" />
 		<unzip dest="${application.base.path}" src="${tools.dir}/${tomcat.binaries.file}" />
 		<if>
 			<os family="unix" />
 			<then>
-				<chmod dir="${tomcat.home}/bin" perm="ugo+rx" includes="**/*.sh" />
+				<chmod dir="${deploy.tomcat.home}/bin" perm="ugo+rx" includes="**/*.sh" />
 			</then>
 		</if>
 	</target>
@@ -627,7 +627,7 @@
 
 	<target name="install:tomcat:configure:ports" unless="exclude.tomcat" >
 		<echo message="Updating Tomcat Ports" />
-		<xmlconfig in="${tomcat.home}/conf/server.xml" verbose="false">
+		<xmlconfig in="${deploy.tomcat.home}/conf/server.xml" verbose="false">
 			<update path="(//Connector)[@port=8080]/@port" value="${tomcat.port.http}" />
 			<update path="(//Connector)[@redirectPort=8443]/@redirectPort" value="${tomcat.port.ssl}" />
 			<update path="(//Connector)[@port=8009]/@port" value="${tomcat.port.ajp}" />
@@ -642,8 +642,8 @@
 			<then>
 				<echo message="configuring https valve and connector "/>
 				<grid-secure-configure-connector 
-					appserver.conf.dir="${tomcat.home}/conf" 
-					appserver.server-xml.file="${tomcat.home}/conf/server.xml" 
+					appserver.conf.dir="${deploy.tomcat.home}/conf" 
+					appserver.server-xml.file="${deploy.tomcat.home}/conf/server.xml" 
 					appserver.server-xml.service.name="Catalina" 
 					grid.secure.enable="${GRID_LOGIN_MODULE_ENABLED}" 
 					grid.secure.port="${tomcat.port.ssl}" 
@@ -651,10 +651,10 @@
 					grid.secure.key.file="host-key.pem" 
 					grid.secure.cert.file="host-cert.pem" />
 				<grid-secure-configure-valve 
-					appserver.server-xml.file="${tomcat.home}/conf/server.xml" 
+					appserver.server-xml.file="${deploy.tomcat.home}/conf/server.xml" 
 					appserver.server-xml.service.name="Catalina" />
-				<xmltask source="${tomcat.home}/conf/server.xml"
-					dest="${tomcat.home}/conf/server.xml">
+				<xmltask source="${deploy.tomcat.home}/conf/server.xml"
+					dest="${deploy.tomcat.home}/conf/server.xml">
 					<remove path="/Server/Service[@name='Catalina']/ConnenctorEngine[@name='Catalina']/Valve[@className='org.globus.tomcat.coyote.valves.HTTPSValve']" />
 					<insert path="/Server/Service[@name='Catalina']/Engine[@name='Catalina']">
 						<![CDATA[                               
@@ -670,8 +670,8 @@
 		<if>
 			<equals arg1="${SECURITY_ENABLED}" arg2="true" casesensitive="false" trim="true" />
 			<then>
-				<copyfile src="${package.client.tomcat.serverxml.dir}/login.config" dest="${tomcat.home}/conf/login.config" />
-				<propertyfile file="${tomcat.home}/conf/catalina.properties" comment="append login.config file path">
+				<copyfile src="${package.client.tomcat.serverxml.dir}/login.config" dest="${deploy.tomcat.home}/conf/login.config" />
+				<propertyfile file="${deploy.tomcat.home}/conf/catalina.properties" comment="append login.config file path">
 					<entry key="java.security.auth.login.config" value="${catalina.home}/conf/login.config" />
 				</propertyfile>
 			</then>
@@ -686,10 +686,10 @@
 				<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true" casesensitive="false" trim="true" />
 			</or>
 			<then>
-				<copy file="${package.client.tomcat.context.dir}/${PROJECT_NAME}.xml" todir="${tomcat.home}/conf/Catalina/localhost" overwrite="true"  />
+				<copy file="${package.client.tomcat.context.dir}/${PROJECT_NAME}.xml" todir="${deploy.tomcat.home}/conf/Catalina/localhost" overwrite="true"  />
 			</then>
 			<else>
-				<delete file="${tomcat.home}/conf/Catalina/localhost/${PROJECT_NAME}.xml" />
+				<delete file="${deploy.tomcat.home}/conf/Catalina/localhost/${PROJECT_NAME}.xml" />
 			</else>
 		</if>
 	</target>
@@ -698,10 +698,10 @@
 		<if>
 			<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true" casesensitive="false" trim="true" />
 			<then>
-				<copy file="${package.client.tomcat.context.dir}/${SDK_GRID_LOGIN_SERVICE_NAME}.xml" todir="${tomcat.home}/conf/Catalina/localhost" overwrite="true"  />
+				<copy file="${package.client.tomcat.context.dir}/${SDK_GRID_LOGIN_SERVICE_NAME}.xml" todir="${deploy.tomcat.home}/conf/Catalina/localhost" overwrite="true"  />
 			</then>
 			<else>
-				<delete file="${tomcat.home}/conf/Catalina/localhost/${SDK_GRID_LOGIN_SERVICE_NAME}.xml" />
+				<delete file="${deploy.tomcat.home}/conf/Catalina/localhost/${SDK_GRID_LOGIN_SERVICE_NAME}.xml" />
 			</else>
 		</if>
 	</target>
@@ -715,19 +715,19 @@
 				<property name="naming.resource.param.server.xml" value="${package.client.tomcat.serverxml.dir}/server-global-naming-resource-params-block.xml" />
 				<echo message="configuring global resources and resource params"/>
 
-				<echo message="Inserting ${naming.resource.server.xml} into ${tomcat.home}/conf/server.xml" />
-				<xmlconfig in="${tomcat.home}/conf/server.xml" verbose="true">
+				<echo message="Inserting ${naming.resource.server.xml} into ${deploy.tomcat.home}/conf/server.xml" />
+				<xmlconfig in="${deploy.tomcat.home}/conf/server.xml" verbose="true">
 					<delete path="//GlobalNamingResources/Resource[2]"/>
 				</xmlconfig>
-				<xmlconfig in="${tomcat.home}/conf/server.xml" verbose="true">
+				<xmlconfig in="${deploy.tomcat.home}/conf/server.xml" verbose="true">
 					<insertbranch path="//GlobalNamingResources" srcxmlfile="${naming.resource.server.xml}" srcpath="//Resource" />
 				</xmlconfig>
 
-				<echo message="Inserting ${naming.resource.param.server.xml} into ${tomcat.home}/conf/server.xml" />
-				<xmlconfig in="${tomcat.home}/conf/server.xml" verbose="true">
+				<echo message="Inserting ${naming.resource.param.server.xml} into ${deploy.tomcat.home}/conf/server.xml" />
+				<xmlconfig in="${deploy.tomcat.home}/conf/server.xml" verbose="true">
 					<delete path="//GlobalNamingResources/ResourceParams[2]"/>
 				</xmlconfig>
-				<xmlconfig in="${tomcat.home}/conf/server.xml" verbose="true">
+				<xmlconfig in="${deploy.tomcat.home}/conf/server.xml" verbose="true">
 					<insertbranch path="//GlobalNamingResources" srcxmlfile="${naming.resource.param.server.xml}" srcpath="//ResourceParams" />
 				</xmlconfig>
 			</then>
@@ -739,10 +739,10 @@
 		<if>
 			<available file="${package.client.tomcat.dir}/common/endorsed/xercesImpl-2.7.1.jar"/>
 			<then>
-				<delete file="${tomcat.home}/common/endorsed/xercesImpl.jar"/>
+				<delete file="${deploy.tomcat.home}/common/endorsed/xercesImpl.jar"/>
 			</then>
 		</if>
-		<copy todir="${tomcat.home}">
+		<copy todir="${deploy.tomcat.home}">
 			<fileset dir="${package.client.tomcat.dir}">
 				<include name="**/*.jar"/>
 			</fileset>
@@ -750,14 +750,14 @@
 	</target>
 
 	<target name="install:tomcat:project-webapp" description="Deploy example-webapp and common libraries to tomcat installation" unless="exclude.tomcat">
-		<copy file="${package.client.tomcat.webapps.dir}/${PROJECT_NAME}.war" todir="${tomcat.home}/webapps" overwrite="true" />
+		<copy file="${package.client.tomcat.webapps.dir}/${PROJECT_NAME}.war" todir="${deploy.tomcat.home}/webapps" overwrite="true" />
 	</target>
 
 	<target name="install:tomcat:grid-login-webapp" description="Deploy grid-webapp and common libraries to tomcat installation" unless="exclude.tomcat">
 		<if>
 			<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true" casesensitive="false" trim="true" />
 			<then>
-				<copy file="${package.client.tomcat.webapps.dir}/${SDK_GRID_LOGIN_SERVICE_NAME}.war" todir="${tomcat.home}/webapps" overwrite="true" />
+				<copy file="${package.client.tomcat.webapps.dir}/${SDK_GRID_LOGIN_SERVICE_NAME}.war" todir="${deploy.tomcat.home}/webapps" overwrite="true" />
 			</then>
 		</if>
 	</target>
@@ -766,16 +766,16 @@
 		<!-- Tomcat
 		<property name="changelogFile" location="${install-logs.dir}/changeLog-${install.time}.txt"/>
 		<property name="compare1.dir" location="${backup.tomcat.dir}/backup/${tomcat.relative.path}"/>
-		<property name="compare2.dir" location="${tomcat.home}"/>
+		<property name="compare2.dir" location="${deploy.tomcat.home}"/>
 		<report-dir-diff
 			dir1="${compare1.dir}"
 			dir2="${compare2.dir}"
 			reportFile="${changelogFile}"
 			/>
 		
-		<mkdir dir="${tomcat.home}/server/${tomcat.server.name}/log"/>
+		<mkdir dir="${deploy.tomcat.home}/server/${tomcat.server.name}/log"/>
 		<mkdir dir="${backup.tomcat.dir}/backup/${tomcat.relative.path}/server/${tomcat.server.name}/log"/>
-		<copy todir="${tomcat.home}/server/${tomcat.server.name}/log">
+		<copy todir="${deploy.tomcat.home}/server/${tomcat.server.name}/log">
 			<fileset dir="${backup.tomcat.dir}/backup/${tomcat.relative.path}/server/${tomcat.server.name}/log">
 				<include name="*"/>
 			</fileset>
