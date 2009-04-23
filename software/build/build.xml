@@ -241,6 +241,7 @@
 
 	<!-- @TODO dist:gui-installer,dist:upgrader -->
 	<target name="dist" description="Makes all distributions: installer, upgrader and source" depends="
+		build:workspace-modules,
 		build:all,
 		dist:installer,
 		dist:src
