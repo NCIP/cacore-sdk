@@ -140,6 +140,8 @@
 		<dependency org="jcp" name="jaxrpc" rev="1.1" conf="ws-client->compile" />
 		<dependency org="ibm" name="wsdl4j" rev="1.5.1" conf="ws-client->compile"/>
 		<dependency org="jcp" name="saaj" rev="1.2" conf="ws-client->compile"/>
+		<dependency org="apache" name="xerces" rev="2.7.1" conf="ws-client->compile" />
+		
 		
 		<!-- jars required by grid-login service module -->	
 		<dependency org="globus" name="ws-addressing" rev="1.0" conf="grid-login-service->runtime" />
