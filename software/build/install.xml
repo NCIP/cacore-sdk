@@ -463,9 +463,7 @@
 			<equals arg1="${CSM_LOGIN_MODULE_ENABLED}" arg2="true" casesensitive="false" trim="true" />
 			<then>
 				<echo message="Inserting ${login-config.block.file} into ${jboss.home}/server/${jboss.server.name}/conf/login-config.xml" />
-				<xmlconfig in="${jboss.home}/server/${jboss.server.name}/conf/login-config.xml" verbose="false">
-					<insertbranch path="//policy" srcxmlfile="${package.client.jboss.default.conf.dir}/${login-config.block.file}" srcpath="//application-policy" />
-				</xmlconfig>
+				<jboss-login-config authentication.type="db" login-config.db.file="${package.client.jboss.default.conf.dir}/${login-config.block.file}" login-config.ldap.file="${package.client.jboss.default.conf.dir}/${login-config.block.file}" jboss.server.name="${jboss.server.name}"/>
 			</then>
 		</if>
 	</target>
@@ -475,9 +473,7 @@
 			<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true" casesensitive="false" trim="true" />
 			<then>
 				<echo message="Inserting ${login-config.grid.block.file} into ${jboss.home}/server/${jboss.server.name}/conf/login-config.xml" />
-				<xmlconfig in="${jboss.home}/server/${jboss.server.name}/conf/login-config.xml" verbose="false">
-					<insertbranch path="//policy" srcxmlfile="${package.client.jboss.default.conf.dir}/${login-config.grid.block.file}" srcpath="//application-policy" />
-				</xmlconfig>
+				<jboss-login-config authentication.type="db" login-config.db.file="${package.client.jboss.default.conf.dir}/${login-config.grid.block.file}" login-config.ldap.file="${package.client.jboss.default.conf.dir}/${login-config.block.file}" jboss.server.name="${jboss.server.name}"/>
 			</then>
 		</if>
 	</target>
