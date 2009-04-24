@@ -172,6 +172,10 @@
 		</sequential>
 	</macrodef>
 
+	<target name="diag">
+		<echoproperties />
+	</target>
+
 	<target name="executeAllTests">
 		<antcall target="defaultTest" inheritall="false"/>		
 		<antcall target="build2Test" inheritall="false"/>
