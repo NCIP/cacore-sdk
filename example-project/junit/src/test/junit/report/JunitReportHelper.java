@@ -89,14 +89,15 @@ public class JunitReportHelper{
 			testSuite.setFailures(element.getAttribute(TestSuite.TEST_SUITE_FAILURES));
 			testSuite.setTests(element.getAttribute(TestSuite.TEST_SUITE_TESTS));
 			testSuite.setTime(element.getAttribute(TestSuite.TEST_SUITE_TIME));
-			testSuite.setHostName(element.getAttribute(TestSuite.TEST_SUITE_HOST_NAME));
 			testSuite.setTimeStamp(element.getAttribute(TestSuite.TEST_SUITE_TIME_STAMP));
 			
 			NodeList testCaseNodes = element.getElementsByTagName(TestSuite.TEST_CASE_TAG);
 			for (int j = 0; j < testCaseNodes.getLength(); j++) {
 				Element testCase = (Element) testCaseNodes.item(j);
 				String testCaseName = testCase.getAttribute(TestSuite.TEST_CASE_NAME);
+				String testCaseClassName = testCase.getAttribute(TestSuite.TEST_CASE_CLASS_NAME);
 				testCase.setAttribute(TestSuite.TEST_CASE_NAME, testSuiteName + "."+ testCaseName);
+				testCase.setAttribute(TestSuite.TEST_CASE_CLASS_NAME, testSuite.getName() + "."+ testCaseClassName);
 				String testCaseElement = getStringFromDocument(testCase);
 				buffer.append(testCaseElement.substring(38));
 			}
@@ -147,7 +148,6 @@ public class JunitReportHelper{
 		TestSuite suite=new TestSuite();
 		String testCaseName = getTestCaseName(inputFilesDir.getAbsolutePath());
 		suite.setName(testCaseName);
-				
 		for (int i = 0; i < files.size(); i++) {
 			Document doc = JunitReportHelper.createDocument(files.get(i));
 			StringBuffer buffer = JunitReportHelper.updateDocument(doc,suite);

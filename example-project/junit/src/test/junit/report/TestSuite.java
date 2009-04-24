@@ -12,6 +12,7 @@ public class TestSuite {
 	public final static String TEST_SUITE_TESTS = "tests";
 	public final static String TEST_CASE_TAG = "testcase";
 	public final static String TEST_CASE_NAME = "name";
+	public final static String TEST_CASE_CLASS_NAME = "classname";
 	
 	private String errors = "0";
 	private String failures = "0";
