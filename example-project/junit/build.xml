@@ -43,9 +43,9 @@
 	<property name="report.dir.xml-mapping-client" value="${report.dir}/xml-mapping-client" />
 	<property name="report.dir.xml-thick-data-client" value="${report.dir}/xml-local-data-client" />
 	<property name="report.dir.xml-remote-data-client" value="${report.dir}/xml-remote-data-client" />
-	<property name="report.dir.security-thick-client" value="${report.dir}/security-client/thick-client" />
-	<property name="report.dir.security-group-thick-client" value="${report.dir}/security-client/group-thick-client" />
-	<property name="report.dir.security-remote-client" value="${report.dir}/security-client/remote-client" />
+	<property name="report.dir.security-thick-client" value="${report.dir}/security-thick-client" />
+	<property name="report.dir.security-group-thick-client" value="${report.dir}/security-group-thick-client" />
+	<property name="report.dir.security-remote-client" value="${report.dir}/security-remote-client" />
 	<property name="report.dir.hbm-mapping-client" value="${report.dir}/hbm-mapping-client" />
 	<property name="report.dir.thickclient-writableapi" value="${report.dir}/writable-api-thick-client" />
 	<property name="report.dir.thickclient-writableapi-cleanup" value="${report.dir}/writable-api-thick-client-cleanup" />
@@ -456,7 +456,7 @@
 
 	<target name="builldTestAggregateReport" depends="createDir">
 		<delete dir="${build.report.dir}/report" />
-		<SDKGenerateReport junitOutputDir="${build.report.dir}" generateReport="true" />
+		<SDKGenerateReport junitOutputDir="${report.dir}" generateReport="true" />
 	</target>
 
 	<target name="buildAggregateReport" depends="createDir">
