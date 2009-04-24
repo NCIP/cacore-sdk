@@ -171,8 +171,9 @@
 			</if>
 		</sequential>
 	</macrodef>
-
+	
 	<target name="diag">
+		<property environment="env" />
 		<echoproperties />
 	</target>
 
