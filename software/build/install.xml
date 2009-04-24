@@ -563,7 +563,21 @@
 			<available file="${deploy.tomcat.home}/bin/shutdown.sh" />
 			<then>
 				<echo message="Shutting down tomcat" />
-				<tomcat-stop tomcat.home="${deploy.tomcat.home}" />
+				<sequential>
+					<echo message="Stopping Tomcat instance at ${deploy.tomcat.home}" />
+					<exec executable="sh" osfamily="unix" dir="${deploy.tomcat.home}/bin" spawn="true">
+						<env key="NOPAUSE" value="true" />
+						<arg line="shutdown.sh" />
+					</exec>
+					<exec osfamily="windows" executable="cmd" dir="${deploy.tomcat.home}/bin" spawn="true" >
+						<env key="NOPAUSE" value="true" />
+						<env key="CATALINA_BASE" value="" />
+						<env key="CATALINA_HOME" value="" />
+						<env key="CATALINA_TMPDIR" value="" />
+						<arg line="/c shutdown.bat" />
+					</exec>
+					<sleep seconds="5" />
+				</sequential>
 			</then>
 			<else>
 				<echo message="Tomcat not found , not shutting down tomcat" />
