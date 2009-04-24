@@ -90,10 +90,10 @@
 			
 			<property name="report.project.dir" value="${junit.dir}/report/@{REPORT.PROJECT.DIR}" />
 			
-			<!--
+			
 			<ant antfile="build.xml" dir="." target="dist" inheritAll="true">
 			</ant>
-			-->	
+			
 			<copy todir="${dist.exploded.dir}" overwrite="true">
 				<fileset dir="." includes="*.properties" />
 			</copy>
