@@ -84,7 +84,6 @@ public class JunitReportHelper{
 
 		for (int i = 0; i < list.getLength(); i++) {
 			Element element = (Element) list.item(i);
-			String testSuiteName = element.getAttribute(TestSuite.TEST_SUITE_NAME);
 			testSuite.setErrors(element.getAttribute(TestSuite.TEST_SUITE_ERRORS));
 			testSuite.setFailures(element.getAttribute(TestSuite.TEST_SUITE_FAILURES));
 			testSuite.setTests(element.getAttribute(TestSuite.TEST_SUITE_TESTS));
@@ -94,9 +93,7 @@ public class JunitReportHelper{
 			NodeList testCaseNodes = element.getElementsByTagName(TestSuite.TEST_CASE_TAG);
 			for (int j = 0; j < testCaseNodes.getLength(); j++) {
 				Element testCase = (Element) testCaseNodes.item(j);
-				String testCaseName = testCase.getAttribute(TestSuite.TEST_CASE_NAME);
 				String testCaseClassName = testCase.getAttribute(TestSuite.TEST_CASE_CLASS_NAME);
-				testCase.setAttribute(TestSuite.TEST_CASE_NAME, testSuiteName + "."+ testCaseName);
 				testCase.setAttribute(TestSuite.TEST_CASE_CLASS_NAME, testSuite.getName() + "."+ testCaseClassName);
 				String testCaseElement = getStringFromDocument(testCase);
 				buffer.append(testCaseElement.substring(38));
