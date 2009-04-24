@@ -578,7 +578,22 @@
 				<isset property="exclude.start.servers" />
 			</not>
 			<then>
-				<tomcat-start tomcat.home="${deploy.tomcat.home}" />
+				<sequential>
+					<echo message="Starting Tomcat instance at ${deploy.tomcat.home}" />
+					<exec executable="sh" osfamily="unix" dir="${deploy.tomcat.home}/bin" spawn="true">
+						<env key="NOPAUSE" value="true" />
+						<arg line="startup.sh" />
+					</exec>
+					<echo message="executing ${bda-utils.dir}/resource/psexec.exe"/>
+					<exec osfamily="windows" executable="${bda-utils.dir}/resource/psexec.exe" dir="${deploy.tomcat.home}/bin" spawn="true" >
+						<env key="NOPAUSE" value="true" />
+						<env key="CATALINA_BASE" value="" />
+						<env key="CATALINA_HOME" value="" />
+						<env key="CATALINA_TMPDIR" value="" />
+						<arg line="-d -i -w ${deploy.tomcat.home}/bin ${deploy.tomcat.home}/bin/startup.bat" />
+					</exec>
+					<sleep seconds="5" />
+				</sequential>
 			</then>
 		</if>
 	</target>
