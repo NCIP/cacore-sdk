@@ -90,6 +90,7 @@
 			
 			<property name="report.project.dir" value="${junit.dir}/report/@{REPORT.PROJECT.DIR}" />
 			
+			<!--
 			<ant antfile="build.xml" dir="." target="dist" inheritAll="true">
 			</ant>
 				
@@ -100,7 +101,7 @@
 			<ant antfile="build.xml" dir="${dist.exploded.dir}" target="install" inheritAll="true">
 				<property name="bda-utils.dir" value="${dist.exploded.dir}/bda-utils" />
 			</ant>
-			
+			-->
 			<delete dir="${report.project.dir}/build-report" />
 			
 			<ant antfile="build.xml" dir="${junit.dir}" target="xmlMappingTest" inheritAll="true"/>
