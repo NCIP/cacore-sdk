@@ -48,7 +48,7 @@ public class NoIdKeyPkHBMMappingTest extends SDKHBMMappingTestBase {
 						}
 						if(i==2){
 							assertEquals("max_lo", param.getAttributeValue("name"));
-							assertEquals("100", param.getContent(0).getValue());
+							assertEquals("10000", param.getContent(0).getValue());
 						}
 					}
 				}
