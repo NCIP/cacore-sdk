@@ -174,8 +174,7 @@
 			<delete dir="@{junitOutputDir}" />
 			<mkdir dir="@{junitOutputDir}" />
 			<delete dir="${junit.home}/output"/>
-			<mkdir dir="${junit.home}/output"/>
-			<delete dir="${junit.home}/output"/>
+			<mkdir dir="${junit.home}/output"/>			
 			<mkdir dir="${build.report.dir}" />
 			<junit printsummary="yes" maxmemory="512m" showoutput="false" failureproperty="fail-prop" errorproperty="error-prop">
 				<sysproperty key="java.security.auth.login.config" value="@{loginConfig.location}/login.config" />
