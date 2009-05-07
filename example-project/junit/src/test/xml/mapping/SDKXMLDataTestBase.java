@@ -85,7 +85,7 @@ public abstract class SDKXMLDataTestBase extends TestCase {
 	
 	protected void toXML(Object resultObj) throws Exception {
 		File myFile = new File(filepathPrefix + resultObj.getClass().getSimpleName() + filepathSuffix);						
-
+		log.info("writing data to file "+myFile.getAbsolutePath());
 		FileWriter myWriter = new FileWriter(myFile);
 		
 		myUtil.toXML(resultObj, myWriter);
