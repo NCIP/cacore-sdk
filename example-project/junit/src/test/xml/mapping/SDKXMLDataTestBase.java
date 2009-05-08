@@ -63,7 +63,10 @@ public abstract class SDKXMLDataTestBase extends TestCase {
 		
 		useGMETags=Boolean.parseBoolean(System.getProperty("useGMETags"));
 		namespaceUriPrefix=System.getProperty("namespaceUriPrefix");
-		filepathPrefix  = System.getProperty("outputDir");
+		String outputDir = System.getProperty("outputDir");
+		if(outputDir!=null){
+			filepathPrefix=outputDir;
+		}		
 	}
 
 
