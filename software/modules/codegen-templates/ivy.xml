@@ -8,6 +8,13 @@
 	<configurations>
 		<conf name="compile" />
 		<conf name="runtime" />
+
+		<conf name="test-pmd" />
+		<conf name="test-cobertura" />
+		<conf name="test-javancss" />
+		<conf name="test-checkstyle" />
+		<conf name="test-findbugs" />
+		<conf name="test-simian" />			
 	</configurations>
 
 	<publications>
@@ -24,5 +31,12 @@
 		<dependency org="eclipse" name="jetc-task" rev="1.0" conf="compile"/> 
 		
 		<dependency org="ncicb" name="sdk-codegen-module" rev="latest.integration" conf="compile"/>
+		
+		<dependency org="cobertura" name="cobertura" rev="1.9" conf="test-cobertura->runtime" />
+		<dependency org="javancss" name="javancss" rev="29.50" conf="test-javancss->runtime" />
+		<dependency org="checkstyle" name="checkstyle" rev="4.4" conf="test-checkstyle->runtime" />
+		<dependency org="umd" name="findbugs-ant" rev="1.3.4" conf="test-findbugs->runtime" />
+		<dependency org="redhillconsulting" name="simian" rev="2.2.24" conf="test-simian->runtime" />
+		<dependency org="pmd" name="pmd" rev="4.2.1" conf="test-pmd->runtime" />
 	</dependencies>
 </ivy-module>

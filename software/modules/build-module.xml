@@ -87,4 +87,111 @@
 	<target name="build:all" depends="-pre-clean,-init,jar,ivy:publish,post-clean" description="Default target" >
 	</target>
 
+	<!-- This is a wrapper target for all static analysis targets -->
+	<import file="static-analysis-build-module.xml" />
+	
+	<!--static-analysis:diff:pmd,
+	static-analysis:diff:checkstyle-->
+	<target name="static-analysis" description="Performs static analysis" depends="
+			static-analysis:ivy-init,
+			static-analysis:init,
+			static-analysis:findbugs-init,
+			static-analysis:simian,
+			static-analysis:pmd,
+			static-analysis:checkstyle,
+			static-analysis:javancss,
+			static-analysis:findbugs
+			">
+		<!-- 
+		<fail if="checkstyle.failure" message="There were Checkstyle failures." />
+		<fail if="pmd.failure.diff" message="There were PMD failures." />-->
+	</target>
+	
+	<!-- One target and one macro have been written for each static-analysis tool.  The macro runs static-analysis on an one set of values. The target then calls the macro with values for each sub-project.  If a user wanted to add options to the static-analysis tool in the the macro, they could add an attribute, refer to that attribute in the static-analysis call and then add the option to each of the calls to the marco in the wrapper target.
+		-->
+		<!-- Runs Simian a code duplication reporter.
+			You can find additional information about simian at:
+			http://www.redhillconsulting.com.au/products/simian/installation.html
+			-->
+		<target name="static-analysis:simian" depends="static-analysis:init" description="Performs code duplication analysis">
+			<static-analysis-simian simian.src.dir="${src.java.dir}" simian.rpt.dir="${reports.simian.dir}" simian.report-xsl.file="${common.dir}/simian/simian.xsl" simian.xml.name="simian-blueprints-webapp.xml" simian.html.name="simian-blueprints-webapp.html" />
+
+		</target>
+
+		<target name="static-analysis:pmd" depends="
+			static-analysis:ivy-init,
+			static-analysis:init
+			" description="PMD scans Java source code and looks for Possible bugs,Dead code,Overcomplicated expressions and Duplicate code">
+			<static-analysis-pmd pmd.src.dir="${src.java.dir}" pmd.rpt.dir="${reports.pmd.dir}" pmd.root-dir.name="software" pmd.sub-project.name="blueprints-webapp" pmd.report-xsl.file="${common.dir}/pmd/pmd-report.xslt" pmd.report-preprocessor.file="${common.dir}/pmd/pmd-hudson-preprocessor.xlst" pmd.rule-set.file="${common.dir}/pmd/pmd-ruleset-basic.xml" pmd.xml.name="pmd-report.xml" pmd.html.name="pmd-report.html" />
+		</target>
+
+		<target name="static-analysis:diff:pmd" depends="
+			static-analysis:ivy-init,
+			static-analysis:init
+			">
+			<static-analysis-diff-pmd differential.file.name="diff_list.txt" pmd.src.dir="${src.java.dir}" pmd.rpt.dir="${reports.pmd.dir}" pmd.root-dir.name="software" pmd.sub-project.name="blueprints-webapp" pmd.report-xsl.file="${common.dir}/pmd/pmd-report.xslt" pmd.report-preprocessor.file="${common.dir}/pmd/pmd-hudson-preprocessor.xlst" pmd.rule-set.file="${common.dir}/pmd/pmd-ruleset-basic.xml" pmd.xml.name="pmd-report.xml" pmd.html.name="pmd-report.html" />
+			<replaceregexp file="${project.properties.file}" byline="true" match="^(pmd.revision.number)=(.*)" replace="\1=${build.svn.revision}" />
+		</target>
+
+		<!-- Runs JavaNCSS a tool that identifies code Cyclomatic Complexity.
+			You can find additional information about JavaNCSS at:
+			http://www.kclee.de/clemens/java/javancss/
+			-->
+		<target name="static-analysis:javancss" depends="
+			static-analysis:ivy-init,
+			static-analysis:init
+			" description="Runs JavaNCSS a tool that identifies code Cyclomatic Complexity.">
+			<static-analysis-javancss javancss.src.dir="${src.java.dir}" javancss.rpt.dir="${reports.javancss.dir}" javancss.report-xsl.file="${common.dir}/javancss/javancss2methodhtml.xsl" javancss.xml.name="javancss_metrics_blueprints-webapp.xml" javancss.html.name="javancss_report_blueprints-webapp.html" />
+		</target>
+
+		<!-- Runs Findbugs a tool that attempts to find bugs.
+			You can find additional information about findbugs at:
+			http://findbugs.sourceforge.net/
+			-->
+		<target name="static-analysis:findbugs" depends="
+			compile:application-code,
+			static-analysis:ivy-init,
+			static-analysis:findbugs-init,
+			static-analysis:init
+			" description="static analysis to look for bugs in Java code">
+			<mkdir dir="${reports.findbugs.dir}/bda-blueprints-webapp" />
+
+			<static-analysis-findbugs findbugs.home.dir="${findbugs.home.dir}" findbugs.src.dir="${src.java.dir}" findbugs.classes.dir="${build.classes.dir}" findbugs.rpt.dir="${reports.findbugs.dir}/bda-blueprints-webapp" findbugs.report-xsl.file="${findbugs.home.dir}/src/xsl/fancy.xsl" findbugs.app.classpath.ref="project.compile.classpath" findbugs.xml.name="findbugs.xml" findbugs.html.name="findbugs.html" />
+		</target>
+
+		<!-- Runs CheckStyle is a codeing standard violation reporter.  
+			You can find additional information about checkstyle at:
+			http://checkstyle.sourceforge.net/
+			-->
+		<target name="static-analysis:checkstyle" depends="
+			static-analysis:ivy-init,
+			static-analysis:init
+			" description="Runs CheckStyle is a codeing standard violation reporter.">
+			<static-analysis-checkstyle checkstyle.src.dir="${src.java.dir}" checkstyle.rpt.dir="${reports.checkstyle.dir}" checkstyle.report-xsl.file="${common.dir}/checkstyle/checkstyle-simple.xsl" checkstyle.config.file="${checkstyle.config}" checkstyle.xml.name="checkstyle.xml" checkstyle.html.name="checkstyle.html" checkstyle.classpath.ref.name="project.test.checkstyle.classpath" />
+		</target>
+
+		<target name="static-analysis:diff:checkstyle" depends="
+			static-analysis:ivy-init,
+			static-analysis:init
+			">
+			<static-analysis-diff-checkstyle differential.file.name="diff_list.txt" checkstyle.src.dir="${src.java.dir}" checkstyle.rpt.dir="${reports.checkstyle.dir.diff}/changeset" checkstyle.report-xsl.file="${common.dir}/checkstyle/checkstyle-simple.xsl" checkstyle.config.file="${checkstyle.config}" checkstyle.xml.name="checkstyle.xml" checkstyle.html.name="checkstyle.html" checkstyle.classpath.ref.name="project.test.checkstyle.classpath" />
+			<replaceregexp file="${project.properties.file}" byline="true" match="^(checkstyle.revision.number)=(.*)" replace="\1=${build.svn.revision}" />
+		</target>
+
+		<!-- Runs Cobertura a code coveragetool.
+			You can find additional information about cobertura at:
+			http://cobertura.sourceforge.net/
+			-->
+		<target name="static-analysis:cobertura" depends="
+			compile:application-code,
+			static-analysis:ivy-init,
+			static-analysis:init
+			" description="Cobertura is a free Java tool that calculates the percentage of code accessed by tests.">
+			<mkdir dir="${basedir}/instrumented/generic-api" />
+			<mkdir dir="${basedir}/instrumented/blueprints-webapp" />
+			<static-analysis-cobertura cobertura.src.dir="${src.java.dir}" cobertura.classes.dir="${build.classes.dir}" cobertura.rpt.dir="${reports.cobertura.dir}/blueprints-webapp" cobertura.instrumented.dir="${basedir}/instrumented/blueprints-webapp" cobertura.report-xsl.file="${common.dir}/cobertura/cobertura-simple.xsl" cobertura.ser.file="cobertura.ser" cobertura.config.file="${common.dir}/cobertura/cobertura.xml" />
+			<!--
+			<static-analysis-cobertura cobertura.src.dir="${generic-api.java.dir}" cobertura.classes.dir="${generic-api.classes.dir}" cobertura.rpt.dir="${reports.cobertura.dir}/generic-api" cobertura.instrumented.dir="${basedir}/instrumented/generic-api" cobertura.report-xsl.file="${common.dir}/cobertura/cobertura-simple.xsl" cobertura.ser.file="cobertura.ser" cobertura.config.file="${common.dir}/cobertura/cobertura.xml" />
+			-->
+		</target>
 </project>

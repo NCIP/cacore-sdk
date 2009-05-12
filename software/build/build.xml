@@ -29,6 +29,7 @@
 
 	<property name="modules.build.file" value="build.xml" />
 	<property name="modules.build.target" value="build:all" />
+	<property name="modules.build.static-analysis.target" value="static-analysis:sub-projects" />
 	<property name="workspace.dir" location="${software.dir}/workspace" />
 	<property name="codegen.build.file" value="build-codegen.xml" />
 	<property name="codegen.build.target" value="build:all" />
@@ -211,6 +212,13 @@
 		<echo>target DIR = ${target.dir}</echo>
 		<echo>modules DIR = ${modules.dir}</echo>
 		<ant inheritAll="true" inheritRefs="false" antfile="${modules.build.file}" target="${modules.build.target}" dir="${modules.dir}">
+		</ant>
+	</target>
+	
+	<target name="static-analysis:workspace-modules" description="Call modules build target to produce static analysis of source code">
+		<echo>target DIR = ${target.dir}</echo>
+		<echo>modules DIR = ${modules.dir}</echo>
+		<ant inheritAll="true" inheritRefs="false" antfile="${modules.build.file}" target="${modules.build.static-analysis.target}" dir="${modules.dir}">
 		</ant>
 	</target>
 
