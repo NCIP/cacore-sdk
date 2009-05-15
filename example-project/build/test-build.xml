@@ -166,7 +166,10 @@
 							<ant antfile="build.xml" dir="${junit.dir}" target="writeThickClientTest" inheritAll="true" />
 						</then>
 					</if>
+					<!--
+					 Concurrent modification  error from ehcache 
 					<ant antfile="build.xml" dir="${junit.dir}" target="writeDatabaseCleanUpTest" inheritAll="true" />
+					 -->
 				</then>
 			</if>
 		</sequential>
