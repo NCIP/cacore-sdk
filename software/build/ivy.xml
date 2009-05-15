@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?xml-stylesheet type="text/xsl"
+                 href="http://gforge.nci.nih.gov/svnroot/commonlibrary/trunk/ivy-xsl/ivy.xsl"?>
+       
+<ivy-module version="1.0">
+	<info organisation="ncicb" module="workspace-module" status="integration"/>
+
+	<configurations>
+		<conf name="codegen-compile" />
+		<conf name="codegen-runtime" />
+
+		<conf name="common" />
+		<conf name="remote-client" extends="common" />
+		<conf name="local-client" extends="common" />
+
+		<conf name="security-api-client" />
+		<conf name="security-api" extends="security-api-client" />
+		<conf name="writable-api-client" />
+		<conf name="writable-api" extends="writable-api-client" />
+		<conf name="grid-jaas-client" />
+		<conf name="grid-jaas" extends="grid-jaas-client" />
+		
+		<conf name="webapp" />
+		<conf name="system-logging" />
+		
+		<conf name="ws-client" />
+		<conf name="grid-login-service" />
+		<conf name="server-tomcat" />
+		<conf name="server-jboss" />
+		<conf name="drivers" />
+	</configurations>
+
+	<publications>
+	</publications>
+
+	<dependencies>
+		<dependency org="org.hibernate" name="hibernate" rev="3.2.0.ga" conf="codegen-compile->compile;common->compile" />
+	
+		<dependency org="ncicb" name="sdk-codegen-validator-module" rev="latest.integration" conf="codegen-runtime->compile"/>
+		<dependency org="ncicb" name="sdk-codegen-templates-module" rev="latest.integration" conf="codegen-runtime->compile"/>
+		<dependency org="ncicb" name="sdk-codegen-validator-templates-module" rev="latest.integration" conf="codegen-runtime->compile"/>
+		<dependency org="ncicb" name="sdk-codegen-module" rev="latest.integration" conf="codegen-runtime->compile"/>
+				
+		<dependency org="backport-util-concurrent" name="backport-util-concurrent" rev="3.0" conf="codegen-runtime->compile" />
+		<dependency org="jaxen" name="jaxen" rev="1.1.1" conf="codegen-runtime->compile" />		
+
+		<!--  jars required to package local client -->
+		<dependency org="ncicb" name="sdk-system-core-module" rev="latest.integration" conf="local-client->compile"/>	
+		
+		<dependency org="springsource" name="acegi-security" rev="1.0.4" conf="common->compile"/>
+		<dependency org="springsource" name="spring" rev="2.0.2" conf="common->compile"/>
+		<dependency org="org.antlr" name="antlr" rev="2.7.6" conf="common->compile"/>
+		<dependency org="objectweb" name="asm" rev="1.5.3" conf="common->compile"/>
+		<dependency org="caGrid" name="cql" rev="1.2" conf="common->cql"/>
+		<dependency org="org.codehaus.castor" name="castor" rev="1.0.2" conf="common->compile"/>
+		<dependency org="cglib" name="cglib" rev="2.1_3" conf="common->compile" />
+		<dependency org="globus" name="jcog" rev="1.2" conf="common->compile" />
+		<dependency org="jakarta" name="commons-codec" rev="1.3" conf="common->compile;security-api-client->compile" />
+		<dependency org="jakarta" name="commons-logging" rev="1.1" conf="common->compile" />
+		<dependency org="apache" name="log4j" rev="1.2.13" conf="common->compile" />
+		<dependency org="dom4j" name="dom4j" rev="1.4" conf="common->master" />
+		<dependency org="org.jdom" name="jdom" rev="1.1" conf="common->compile" />
+		<dependency org="jaxen" name="jaxen" rev="1.1.1" conf="common->compile" />
+ 		<dependency org="org.hibernate" name="hibernate-annotations" rev="3.2.0" conf="common->compile" />
+		<dependency org="org.hibernate" name="hibernate-validator" rev="3.0.0.GA" conf="common->compile" />
+		<dependency org="org.hibernate" name="ejb3-persistence" rev="1.0.1" conf="common->master" />
+		<dependency org="apache" name="xerces" rev="2.7.1" conf="common->master" />
+		
+		<dependency org="jakarta" name="commons-collections" rev="3.2" conf="local-client->compile" />
+		<dependency org="javax.transaction" name="jta" rev="1.0.1B" conf="local-client->compile" />
+		<dependency org="mysql" name="mysql-connector-java" rev="5.1.5" conf="local-client->compile" />
+		<dependency org="oracle" name="ojdbc14" rev="10.2.0.3.0" conf="local-client->compile" />
+		<dependency org="c3p0" name="c3p0" rev="0.9.0" conf="drivers->runtime" />
+		<dependency org="ehcache" name="ehcache" rev="1.2.4" conf="local-client->compile" />
+		<dependency org="apache" name="axis" rev="1.4" conf="local-client->compile" />
+		<dependency org="jcp" name="jaxrpc" rev="1.1" conf="local-client->compile" />		  		
+		<dependency org="jakarta" name="commons-discovery" rev="0.2" conf="local-client->compile" />
+
+		<!-- security enabled jars -->
+		<dependency org="ncicb" name="sdk-security-module" rev="latest.integration" conf="security-api->compile"/>		
+		<dependency org="ncicb" name="clm" rev="4.0" conf="security-api->compile" />
+		<dependency org="ncicb" name="csm" rev="4.1.beta" conf="security-api->compile" />
+		
+		<dependency org="ncicb" name="sdk-security-client-module" rev="latest.integration" conf="security-api-client->compile"/>
+		<dependency org="ncicb" name="sdk-security-client-module" rev="latest.integration" conf="security-api-client->compile"/>
+		<!-- writable api jars -->
+		<dependency org="ncicb" name="sdk-writable-api-module" rev="latest.integration" conf="writable-api->compile"/>
+		
+		<dependency org="ncicb" name="sdk-writable-api-client-module" rev="latest.integration" conf="writable-api-client->compile"/>
+	
+		<!-- grid jars -->
+		<dependency org="ncicb" name="sdk-grid-jaas-module" rev="latest.integration" conf="grid-jaas->runtime" />
+		
+		<dependency org="ncicb" name="sdk-grid-jaas-client-module" rev="latest.integration" conf="grid-jaas-client->compile" />
+		
+		<!-- remote client jars -->
+		<dependency org="ncicb" name="sdk-system-client-module" rev="latest.integration" conf="remote-client->compile"/>
+		
+		<!-- system logging jars -->
+		<dependency org="ncicb" name="sdk-system-logging-module" rev="latest.integration" conf="system-logging->compile"/>
+		
+		<!-- webapp jars -->
+		<dependency org="dom4j" name="dom4j" rev="1.4" conf="webapp->master" />
+		<dependency org="ehcache" name="ehcache" rev="1.2.4" conf="webapp->master" />
+		<dependency org="org.antlr" name="antlr" rev="2.7.6" conf="webapp->master" />
+		<dependency org="backport-util-concurrent" name="backport-util-concurrent" rev="3.0" conf="webapp->compile" />
+		<dependency org="javax.transaction" name="jta" rev="1.0.1B" conf="webapp->compile" />
+		<dependency org="cglib" name="cglib" rev="2.1_3" conf="webapp->compile" />
+		<dependency org="objectweb" name="asm" rev="1.5.3" conf="webapp->compile"/>
+		<dependency org="jakarta" name="commons-discovery" rev="0.2" conf="webapp->compile" />
+		<dependency org="ibm" name="wsdl4j" rev="1.5.1" conf="webapp->compile"/>
+		<dependency org="freemarker" name="freemarker" rev="2.3.4" conf="webapp->runtime" />
+		<dependency org="ognl" name="ognl" rev="2.6.7" conf="webapp->runtime" />
+		<dependency org="org.hibernate" name="hibernate-annotations" rev="3.2.0" conf="webapp->master" />
+		<dependency org="org.hibernate" name="hibernate-validator" rev="3.0.0.GA" conf="webapp->master" />
+		<dependency org="org.hibernate" name="ejb3-persistence" rev="1.0.1" conf="webapp->master" />
+				
+		<dependency org="ncicb" name="sdk-system-web-module" rev="latest.integration" conf="webapp->compile" />
+		<dependency org="ncicb" name="sdk-system-ws-module" rev="latest.integration" conf="webapp->compile" />		
+		
+		<!-- app server(jboss,tomcat jars) -->			
+		<dependency org="globus" name="jcog" rev="1.2" conf="server-jboss->runtime;server-tomcat->runtime" />
+		<dependency org="globus" name="jcogtomcat" rev="noversion" conf="server-jboss->runtime;server-tomcat->runtime" />
+		<dependency org="globus" name="jcogfx" rev="noversion" conf="server-jboss->runtime;server-tomcat->runtime" />
+		<dependency org="globus" name="puretls" rev="0.9b5" conf="server-jboss->runtime;server-tomcat->runtime" />
+		<dependency org="apache" name="xml-apis" rev="1.2.01" conf="server-jboss->runtime;server-tomcat->runtime" />
+		<dependency org="mysql" name="mysql-connector-java" rev="5.1.5" conf="server-jboss->runtime;server-tomcat->runtime;drivers->runtime" />
+		<dependency org="oracle" name="ojdbc14" rev="10.2.0.3.0" conf="server-jboss->runtime;server-tomcat->runtime;drivers->runtime" />
+		
+		<dependency org="apache" name="xalan" rev="2.6.0" conf="server-tomcat->runtime"/>  
+		<dependency org="apache" name="xerces" rev="2.7.1" conf="server-tomcat->master" />
+		<dependency org="globus" name="jgss" rev="noversion" conf="server-tomcat->runtime" />
+		<dependency org="apache" name="log4j" rev="1.2.13" conf="server-tomcat->runtime" />
+		<dependency org="ncicb" name="sdk-grid-jaas-jndi-binder-module" rev="latest.integration" conf="server-tomcat->compile" />
+		
+		<!-- ws-client jars -->
+		<dependency org="apache" name="axis" rev="1.4" conf="ws-client->compile" />
+		<dependency org="jakarta" name="commons-discovery" rev="0.2" conf="ws-client->compile" />
+		<dependency org="jakarta" name="commons-logging" rev="1.1" conf="ws-client->compile" />
+		<dependency org="jcp" name="jaxrpc" rev="1.1" conf="ws-client->compile" />
+		<dependency org="ibm" name="wsdl4j" rev="1.5.1" conf="ws-client->compile"/>
+		<dependency org="jcp" name="saaj" rev="1.2" conf="ws-client->compile"/>
+		<dependency org="apache" name="xerces" rev="2.7.1" conf="ws-client->compile" />
+		
+		
+		<!-- jars required by grid-login service module -->	
+		<dependency org="globus" name="ws-addressing" rev="1.0" conf="grid-login-service->runtime" />
+		<dependency org="osu" name="mobius" rev="1.1" conf="grid-login-service->master" />
+		<dependency org="ncicb" name="sdk-grid-remoting-module" rev="latest.integration" conf="grid-login-service->compile" />
+		<dependency org="ncicb" name="sdk-grid-jaas-module" rev="latest.integration" conf="grid-login-service->runtime" />
+		<dependency org="ncicb" name="sdk-grid-jaas-jndi-binder-module" rev="latest.integration" conf="grid-login-service->compile" />
+		<dependency org="apache" name="xerces" rev="2.7.1" conf="grid-login-service->master;grid-jaas->master" />
+	</dependencies>
+</ivy-module>
