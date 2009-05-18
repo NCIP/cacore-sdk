@@ -5,6 +5,7 @@ import gov.nih.nci.system.query.SDKQuery;
 import java.util.List;
 
 
+import junit.framework.Assert;
 import junit.framework.TestCase;
 public class SDKWritableApiBaseTest extends TestCase{
 	
