@@ -70,7 +70,7 @@ public class BatchOperationWritableApiTest extends SDKWritableApiBaseTest {
 		batchOperations.add(updateExampleQuery);
 		executeBatchQuery(batchOperations);
 		
-		Assert.assertEquals(keyChain.getName(), resultKeyChain.getName());
+		Assert.assertEquals(resultKeyChain.getName(),"Keychain_Name1");
 		//Assert.assertEquals(latchKey.getType(), resultLatchKey.getType());
 	}
 }
