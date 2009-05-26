@@ -64,8 +64,4 @@ public class SDKWritableApiBaseTest extends TestCase{
 	protected void executeQuery(SDKQuery sdkQuery) {
 		serviceDelegator.executeQuery(sdkQuery);
 	}
-	
-	public void testSDKWritableApiBase(){
-		Assert.assertEquals("basetest","basetest");
-	}
 }
