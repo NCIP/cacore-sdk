@@ -7,7 +7,8 @@
 	<property name="dist.dir" value="dist"/>
 	<property name="temp.dir" value="${dist.dir}/temp"/>
 	<property name="docs.temp.dir" value="${temp.dir}/docs"/>
-	<property name="software.dir" value="software"/>
+	<property name="sdk.toolkit.dir" value="sdk-toolkit"/>
+	<property name="software.dir" value="${sdk.toolkit.dir}/software"/>
 	<property name="build.dir" value="${software.dir}/build"/>
 	<property name="modules.dir" value="${software.dir}/modules"/>
 
@@ -48,8 +49,8 @@
 				<exclude name="**/modules/**/*.*"/>
 				<exclude name="${dist.dir}/**/*"/>
 				<exclude name="build.xml"/>
-				<exclude name=".project"/>
-				<exclude name=".classpath"/>
+				<exclude name="**/.project"/>
+				<exclude name="**/.classpath"/>
 			</zipfileset>
 		</zip>
 	</target>
