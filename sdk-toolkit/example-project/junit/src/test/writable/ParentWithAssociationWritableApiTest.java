@@ -13,7 +13,7 @@ import gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.AssociateP
 import gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.Professor;
 import gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.TenuredProfessor;
 
-public class ParentWithAssociationWritableApiTest extends SDKWritableApiTestBase {
+public class ParentWithAssociationWritableApiTest extends SDKWritableApiBaseTest {
 	private static Logger log = Logger.getLogger(ParentWithAssociationWritableApiTest.class);
 	public static String getTestCaseName() {
 		return "Parent With Association WritableApi Test Case";

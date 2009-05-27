@@ -7,7 +7,7 @@ import java.util.List;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
-public class SDKWritableApiTestBase extends TestCase{
+public class SDKWritableApiBaseTest extends TestCase{
 	
 	private WritableApiTestServiceDelegator serviceDelegator;
 	

@@ -9,7 +9,7 @@ import org.junit.Assert;
 import gov.nih.nci.cacoresdk.domain.onetomany.bidirectional.withjoin.Flight;
 import gov.nih.nci.cacoresdk.domain.onetomany.bidirectional.withjoin.Passanger;
 
-public class O2MBidirectionalWJoinWritableApiTest extends SDKWritableApiTestBase {
+public class O2MBidirectionalWJoinWritableApiTest extends SDKWritableApiBaseTest {
 	private static Logger log = Logger.getLogger(O2MBidirectionalWJoinWritableApiTest.class);
 	public static String getTestCaseName() {
 		return "One to Many Bidirectional With Join WritableApi Test Case";

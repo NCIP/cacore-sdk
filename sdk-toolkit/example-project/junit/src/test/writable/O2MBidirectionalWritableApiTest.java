@@ -9,7 +9,7 @@ import org.junit.Assert;
 import gov.nih.nci.cacoresdk.domain.onetomany.bidirectional.Computer;
 import gov.nih.nci.cacoresdk.domain.onetomany.bidirectional.HardDrive;
 
-public class O2MBidirectionalWritableApiTest extends SDKWritableApiTestBase {
+public class O2MBidirectionalWritableApiTest extends SDKWritableApiBaseTest {
 	private static Logger log = Logger.getLogger(O2MBidirectionalWritableApiTest.class);
 	public static String getTestCaseName() {
 		return "One to Many Bidirectional WritableApi Test Case";

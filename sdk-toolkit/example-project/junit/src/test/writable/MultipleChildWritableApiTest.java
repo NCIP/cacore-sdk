@@ -7,7 +7,7 @@ import gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.GraduateStudent;
 import gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.Student;
 import gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.UndergraduateStudent;
 
-public class MultipleChildWritableApiTest extends SDKWritableApiTestBase{
+public class MultipleChildWritableApiTest extends SDKWritableApiBaseTest{
 	private static Logger log = Logger.getLogger(MultipleChildWritableApiTest.class);
 	public static String getTestCaseName() {
 		return "Multiple Child Writable Api Test Case";
