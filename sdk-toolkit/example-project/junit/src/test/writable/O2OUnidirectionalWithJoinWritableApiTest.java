@@ -6,7 +6,7 @@ import junit.framework.Assert;
 import gov.nih.nci.cacoresdk.domain.onetoone.unidirectional.Address;
 import gov.nih.nci.cacoresdk.domain.onetoone.unidirectional.Person;
 
-public class O2OUnidirectionalWithJoinWritableApiTest extends SDKWritableApiBaseTest{
+public class O2OUnidirectionalWithJoinWritableApiTest extends SDKWritableBaseTest{
 	private static Logger log = Logger.getLogger(O2OUnidirectionalWithJoinWritableApiTest.class);
 	public static String getTestCaseName() {
 		return "One to One Unidirectional WithJoin WritableApi Test Case";

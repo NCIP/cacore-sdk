@@ -9,7 +9,7 @@ import org.junit.Assert;
 import gov.nih.nci.cacoresdk.domain.onetomany.unidirectional.KeyChain;
 import gov.nih.nci.cacoresdk.domain.onetomany.unidirectional.LatchKey;
 
-public class O2MUnidirectionalWritableApiTest extends SDKWritableApiBaseTest {
+public class O2MUnidirectionalWritableApiTest extends SDKWritableBaseTest {
 	private static Logger log = Logger.getLogger(O2MUnidirectionalWritableApiTest.class);
 	public static String getTestCaseName() {
 		return "One to Many WritableApi Test Case";

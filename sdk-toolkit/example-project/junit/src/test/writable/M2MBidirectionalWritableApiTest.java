@@ -9,7 +9,7 @@ import junit.framework.Assert;
 import gov.nih.nci.cacoresdk.domain.manytomany.bidirectional.Employee;
 import gov.nih.nci.cacoresdk.domain.manytomany.bidirectional.Project;
 
-public class M2MBidirectionalWritableApiTest extends SDKWritableApiBaseTest {
+public class M2MBidirectionalWritableApiTest extends SDKWritableBaseTest {
 	private static Logger log = Logger.getLogger(M2MBidirectionalWritableApiTest.class);
 	public static String getTestCaseName() {
 		return "Many to Many Bidirectional WritableApi Test Case";

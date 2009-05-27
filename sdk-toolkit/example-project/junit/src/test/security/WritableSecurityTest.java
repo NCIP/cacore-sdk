@@ -15,7 +15,7 @@ import gov.nih.nci.system.query.example.UpdateExampleQuery;
 
 
 
-public class WritableApiSecurityTest extends SDKSecurityTestBase{
+public class WritableSecurityTest extends SDKSecurityTestBase{
 	
 	@Override
 	protected void setUp() throws Exception {

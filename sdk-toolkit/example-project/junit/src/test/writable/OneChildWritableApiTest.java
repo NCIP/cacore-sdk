@@ -6,7 +6,7 @@ import junit.framework.Assert;
 import gov.nih.nci.cacoresdk.domain.inheritance.onechild.Human;
 import gov.nih.nci.cacoresdk.domain.inheritance.onechild.Mammal;
 
-public class OneChildWritableApiTest extends SDKWritableApiBaseTest{
+public class OneChildWritableApiTest extends SDKWritableBaseTest{
 
 	private static Logger log = Logger.getLogger(OneChildWritableApiTest.class);
 	public static String getTestCaseName() {

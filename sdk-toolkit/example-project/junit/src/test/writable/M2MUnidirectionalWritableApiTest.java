@@ -10,7 +10,7 @@ import gov.nih.nci.cacoresdk.domain.manytomany.unidirectional.Author;
 import gov.nih.nci.cacoresdk.domain.manytomany.unidirectional.Book;
 
 
-public class M2MUnidirectionalWritableApiTest extends SDKWritableApiBaseTest {
+public class M2MUnidirectionalWritableApiTest extends SDKWritableBaseTest {
 	private static Logger log = Logger.getLogger(M2MUnidirectionalWritableApiTest.class);
 	public static String getTestCaseName() {
 		return "Many to Many Unidirectional WritableApi Test Case";

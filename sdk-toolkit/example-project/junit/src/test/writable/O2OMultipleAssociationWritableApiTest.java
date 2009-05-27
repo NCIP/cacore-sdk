@@ -6,7 +6,7 @@ import junit.framework.Assert;
 import gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation.Child;
 import gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation.Parent;
 
-public class O2OMultipleAssociationWritableApiTest extends SDKWritableApiBaseTest{
+public class O2OMultipleAssociationWritableApiTest extends SDKWritableBaseTest{
 	private static Logger log = Logger.getLogger(O2OMultipleAssociationWritableApiTest.class);
 	public static String getTestCaseName() {
 		return "One to One MultipleAssociation WritableApi Test Case";

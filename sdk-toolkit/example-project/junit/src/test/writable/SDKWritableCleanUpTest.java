@@ -9,10 +9,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.AbstractDependencyInjectionSpringContextTests;
 
 
-public class SDKWritableApiCleanUpTest extends AbstractDependencyInjectionSpringContextTests {
+public class SDKWritableCleanUpTest extends AbstractDependencyInjectionSpringContextTests {
 
 	private JdbcTemplate jdbcTemplate;
-	private static Logger log = Logger.getLogger(SDKWritableApiCleanUpTest.class);
+	private static Logger log = Logger.getLogger(SDKWritableCleanUpTest.class);
 	
 	protected String[] getConfigLocations() {
 		return new String[] { "classpath*:application-config-cleanup-writableapi-test.xml" };
