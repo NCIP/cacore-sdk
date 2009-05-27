@@ -433,8 +433,8 @@
 	<!-- ************************************************************************************************-->
 
 	<target name="writeThickClientTest" depends="createDir">
-		<SDKCompileJUnit compileClasspath="local-client-cp" includePattern="**/*WritableApi*.java" excludePattern="**/*WritableApiCleanUpTest*.java" />
-		<SDKRunJUnit junitClasspath="local-client-cp" junitOutputDir="${report.dir.thickclient-writableapi}" includePattern="**/*WritableApi*Test.class" excludePattern="**/security/*"  junitreportfile="TEST-writeThickClient.xml"/>
+		<SDKCompileJUnit compileClasspath="local-client-cp" includePattern="**/*WritableApi*.java" excludePattern="" />
+		<SDKRunJUnit junitClasspath="local-client-cp" junitOutputDir="${report.dir.thickclient-writableapi}" includePattern="**/*WritableApi*Test.class" excludePattern="**/security/*,**/*WritableApiCleanUpTest*.class,**/*WritableApiBaseTest*.class"  junitreportfile="TEST-writeThickClient.xml"/>
 		<SDKGenerateReport junitOutputDir="${report.dir.thickclient-writableapi}" />
 	</target>
 
