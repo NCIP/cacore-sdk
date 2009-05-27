@@ -17,7 +17,7 @@ import gov.nih.nci.system.query.hql.DeleteHQLQuery;
 import gov.nih.nci.system.query.hql.InsertHQLQuery;
 import gov.nih.nci.system.query.hql.UpdateHQLQuery;
 
-public class BatchOperationWritableApiTest extends SDKWritableApiBaseTest {
+public class BatchOperationWritableApiTest extends SDKWritableApiTestBase {
 	private static Logger log = Logger.getLogger(BatchOperationWritableApiTest.class);
 
 	public static String getTestCaseName() {

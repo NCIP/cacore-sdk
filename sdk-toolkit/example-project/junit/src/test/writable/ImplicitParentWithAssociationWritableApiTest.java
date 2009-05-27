@@ -15,7 +15,7 @@ import gov.nih.nci.cacoresdk.domain.inheritance.implicit.Substrate;
 import gov.nih.nci.cacoresdk.domain.inheritance.implicit.Tank;
 import gov.nih.nci.cacoresdk.domain.inheritance.implicit.TankAccessory;
 
-public class ImplicitParentWithAssociationWritableApiTest extends SDKWritableApiBaseTest {
+public class ImplicitParentWithAssociationWritableApiTest extends SDKWritableApiTestBase {
 	
 	private static Logger log = Logger.getLogger(ImplicitParentWithAssociationWritableApiTest.class);
 	public static String getTestCaseName() {

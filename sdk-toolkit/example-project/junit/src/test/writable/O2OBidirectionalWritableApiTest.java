@@ -6,7 +6,7 @@ import junit.framework.Assert;
 import gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.OrderLine;
 import gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.Product;
 
-public class O2OBidirectionalWritableApiTest extends SDKWritableApiBaseTest {
+public class O2OBidirectionalWritableApiTest extends SDKWritableApiTestBase {
 	private static Logger log = Logger.getLogger(O2OBidirectionalWritableApiTest.class);
 	public static String getTestCaseName() {
 		return "One to One Bidirectional WritableApi Test Case";

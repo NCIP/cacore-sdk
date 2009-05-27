@@ -6,7 +6,7 @@ import junit.framework.Assert;
 import gov.nih.nci.cacoresdk.domain.other.primarykey.NoIdKey;
 
 
-public class NoIdKeyWritableApiTest extends SDKWritableApiBaseTest {
+public class NoIdKeyWritableApiTest extends SDKWritableApiTestBase {
 	private static Logger log = Logger.getLogger(NoIdKeyWritableApiTest.class);
 	public static String getTestCaseName() {
 		return "NoId Pk WritableApi Test Case";

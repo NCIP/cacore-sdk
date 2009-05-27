@@ -6,7 +6,7 @@ import junit.framework.Assert;
 import gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation.withjoin.Bride;
 import gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation.withjoin.InLaw;
 
-public class O2OMultipleAssociationWithJoinWritableApiTest extends SDKWritableApiBaseTest{
+public class O2OMultipleAssociationWithJoinWritableApiTest extends SDKWritableApiTestBase{
 	private static Logger log = Logger.getLogger(O2OMultipleAssociationWithJoinWritableApiTest.class);
 	public static String getTestCaseName() {
 		return "One to One MultipleAssociation With Join WritableApi Test Case";

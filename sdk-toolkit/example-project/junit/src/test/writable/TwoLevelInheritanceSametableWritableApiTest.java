@@ -9,7 +9,7 @@ import gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.Go
 import gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.ParliamantaryGovt;
 import gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.PresidentialGovt;
 
-public class TwoLevelInheritanceSametableWritableApiTest extends SDKWritableApiBaseTest {
+public class TwoLevelInheritanceSametableWritableApiTest extends SDKWritableApiTestBase {
 	private static Logger log = Logger.getLogger(TwoLevelInheritanceSametableWritableApiTest.class);
 	public static String getTestCaseName() {
 		return "Two Level Inheritance Same Table Writable Api Test Case";
