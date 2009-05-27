@@ -7,7 +7,7 @@ import junit.framework.Assert;
 import gov.nih.nci.cacoresdk.domain.manytoone.unidirectional.withjoin.Album;
 import gov.nih.nci.cacoresdk.domain.manytoone.unidirectional.withjoin.Song;
 
-public class M2OUnidirectionalWithJoinWritableApiTest extends SDKWritableApiBaseTest{
+public class M2OUnidirectionalWithJoinWritableApiTest extends SDKWritableBaseTest{
 	private static Logger log = Logger.getLogger(M2OUnidirectionalWithJoinWritableApiTest.class);
 	public static String getTestCaseName() {
 		return "Many to One Unidirectional With Join WritableApi Test Case";

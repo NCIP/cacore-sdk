@@ -8,7 +8,7 @@ import gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametableroo
 import gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametablerootlevel.GraphicCalculator;
 import gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametablerootlevel.ScientificCalculator;
 
-public class TwoLevelInheritanceSametablerootlevelWritableApiTest extends SDKWritableApiBaseTest {
+public class TwoLevelInheritanceSametablerootlevelWritableApiTest extends SDKWritableBaseTest {
 	private static Logger log = Logger.getLogger(TwoLevelInheritanceSametablerootlevelWritableApiTest.class);
 	public static String getTestCaseName() {
 		return "Two Level Inheritance Same Table Root Level Writable Api Test Case";
