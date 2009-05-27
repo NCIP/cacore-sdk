@@ -9,7 +9,7 @@ import gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.Display;
 import gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.LCDMonitor;
 import gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.Monitor;
 
-public class TwoLevelInheritanceWritableApiTest extends SDKWritableApiBaseTest {
+public class TwoLevelInheritanceWritableApiTest extends SDKWritableApiTestBase {
 	private static Logger log = Logger.getLogger(TwoLevelInheritanceWritableApiTest.class);
 	public static String getTestCaseName() {
 		return "Two Level Inheritance WritableApi Test Case";

@@ -6,7 +6,7 @@ import gov.nih.nci.cacoresdk.domain.inheritance.onechild.sametable.Currency;
 import gov.nih.nci.cacoresdk.domain.inheritance.onechild.sametable.Note;
 import junit.framework.Assert;
 
-public class OneChildSametableWritableApiTest extends SDKWritableApiBaseTest {
+public class OneChildSametableWritableApiTest extends SDKWritableApiTestBase {
 	private static Logger log = Logger.getLogger(OneChildSametableWritableApiTest.class);
 	public static String getTestCaseName() {
 		return "One Child Same Table Writable Api Test Case";
