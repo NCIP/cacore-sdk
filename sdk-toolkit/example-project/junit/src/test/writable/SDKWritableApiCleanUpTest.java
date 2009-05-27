@@ -6,15 +6,16 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.test.AbstractTransactionalDataSourceSpringContextTests;
+import org.springframework.test.AbstractDependencyInjectionSpringContextTests;
 
-public class SDKWritableApiCleanUpTest extends AbstractTransactionalDataSourceSpringContextTests {
+
+public class SDKWritableApiCleanUpTest extends AbstractDependencyInjectionSpringContextTests {
 
 	private JdbcTemplate jdbcTemplate;
 	private static Logger log = Logger.getLogger(SDKWritableApiCleanUpTest.class);
 	
 	protected String[] getConfigLocations() {
-		return new String[] { "classpath*:application-config-client.xml" };
+		return new String[] { "classpath*:application-config-cleanup-writableapi-test.xml" };
 	}
 
 	final String ORACLE_ALL_TABLES_SQL = "select TABLE_NAME from ALL_TABLES where tablespace_name like 'CACORESDK_ANT'";
@@ -87,13 +88,14 @@ public class SDKWritableApiCleanUpTest extends AbstractTransactionalDataSourceSp
 
 		List<Map<String, String>> nonFkTableMap = new ArrayList<Map<String, String>>();
 		for (Map<String, String> tableNameMap : tableNames) {
-			String tableName = tableNameMap.get("Tables_in_cacoresdk");
+			String tableName = tableNameMap.get("TABLE_NAME");
+			if(tableName==null) return;
 			List<Map<String, String>> indexList = jdbcTemplate.queryForList("SHOW index FROM " + tableName);
 			if (indexList.size() > 1) {
 				log.info(tableName);
 				try {
 					for (Map<String, String> pkColumnNameMap : indexList) {
-						if(pkColumnNameMap.get("Key_name").equals("PRIMARY")){
+						if(pkColumnNameMap.get("INDEX_NAME").equals("PRIMARY")){
 							String pkColumnName = pkColumnNameMap.get("Column_name");
 							jdbcTemplate.execute("DELETE from " + tableName + " where "+ pkColumnName + " > 10000");
 						}
@@ -108,7 +110,7 @@ public class SDKWritableApiCleanUpTest extends AbstractTransactionalDataSourceSp
 
 		log.info("\n non foreign key dependent tables \n");
 		for (Map<String, String> tableNameMap : nonFkTableMap) {
-			String tableName = tableNameMap.get("Tables_in_cacoresdk");
+			String tableName = tableNameMap.get("TABLE_NAME");
 			log.info(tableName);
 			List<Map<String, String>> indexList = jdbcTemplate.queryForList("SHOW index FROM " + tableName);
 			try {

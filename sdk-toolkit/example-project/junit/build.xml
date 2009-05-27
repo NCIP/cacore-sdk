@@ -174,7 +174,7 @@
 			<delete dir="@{junitOutputDir}" />
 			<mkdir dir="@{junitOutputDir}" />
 			<delete dir="${junit.home}/output"/>
-			<mkdir dir="${junit.home}/output"/>			
+			<mkdir dir="${junit.home}/output"/>
 			<mkdir dir="${build.report.dir}" />
 			<junit printsummary="yes" maxmemory="512m" showoutput="false" failureproperty="fail-prop" errorproperty="error-prop">
 				<sysproperty key="java.security.auth.login.config" value="@{loginConfig.location}/login.config" />
@@ -419,7 +419,12 @@
 
 	<target name="writeDatabaseCleanUpTest" depends="createDir">
 		<SDKCompileJUnit compileClasspath="local-client-cp" includePattern="**/*WritableApi*.java" excludePattern="" />
-		<SDKRunJUnit junitClasspath="local-client-cp" junitOutputDir="${report.dir.thickclient-writableapi-cleanup}" includePattern="**/*SDKWritableApiCleanUpTest.class" excludePattern="**/security/*"  junitreportfile="TEST-writeDatabaseCleanUp.xml"/>
+		<copy todir="${dist.exploded.dir}/${package.client.local.conf.dir}" overwrite="true">
+			<fileset dir="conf">
+				<include name="**/*-writableapi-test.xml" />
+			</fileset>
+		</copy>
+		<SDKRunJUnit junitClasspath="local-client-cp" junitOutputDir="${report.dir.thickclient-writableapi-cleanup}" includePattern="**/*SDKWritableApiCleanUpTest.class" excludePattern="**/security/*" junitreportfile="TEST-writeDatabaseCleanUp.xml" />
 		<SDKGenerateReport junitOutputDir="${report.dir.thickclient-writableapi-cleanup}" />
 	</target>
 
