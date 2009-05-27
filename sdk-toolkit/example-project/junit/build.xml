@@ -433,7 +433,7 @@
 	<!-- ************************************************************************************************-->
 
 	<target name="writeThickClientTest" depends="createDir">
-		<SDKCompileJUnit compileClasspath="local-client-cp" includePattern="**/*WritableApi*.java" excludePattern="" />
+		<SDKCompileJUnit compileClasspath="local-client-cp" includePattern="**/*WritableApi*.java" excludePattern="**/*WritableApiCleanUpTest*.java" />
 		<SDKRunJUnit junitClasspath="local-client-cp" junitOutputDir="${report.dir.thickclient-writableapi}" includePattern="**/*WritableApi*Test.class" excludePattern="**/security/*"  junitreportfile="TEST-writeThickClient.xml"/>
 		<SDKGenerateReport junitOutputDir="${report.dir.thickclient-writableapi}" />
 	</target>
@@ -443,7 +443,7 @@
 	<!-- ************************************************************************************************-->
 
 	<target name="writeRemoteClientTest" depends="createDir">
-		<SDKCompileJUnit compileClasspath="remote-client-cp" includePattern="**/*WritableApi*.java" excludePattern="" />
+		<SDKCompileJUnit compileClasspath="remote-client-cp" includePattern="**/*WritableApi*.java" excludePattern="**/*WritableApiCleanUpTest*.java" />
 		<SDKRunJUnit junitClasspath="remote-client-cp" junitOutputDir="${report.dir.remoteclient-writableapi}" includePattern="**/*WritableApi*Test.class" excludePattern="**/security/*" junitreportfile="TEST-writeRemoteClient.xml" />
 		<SDKGenerateReport junitOutputDir="${report.dir.remoteclient-writableapi}" />
 	</target>
