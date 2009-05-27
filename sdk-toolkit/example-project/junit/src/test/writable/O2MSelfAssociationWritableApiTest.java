@@ -7,7 +7,7 @@ import java.util.Iterator;
 import junit.framework.Assert;
 import gov.nih.nci.cacoresdk.domain.onetomany.selfassociation.Element;
 
-public class O2MSelfAssociationWritableApiTest extends SDKWritableApiTestBase{
+public class O2MSelfAssociationWritableApiTest extends SDKWritableApiBaseTest{
 	
 	public static String getTestCaseName() {
 		return "One to Many self association WritableApi Test Case";

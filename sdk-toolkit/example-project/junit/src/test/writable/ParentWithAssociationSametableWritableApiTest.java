@@ -8,7 +8,7 @@ import gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.sametable.
 import gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.sametable.SoftTop;
 import gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.sametable.Wheel;
 
-public class ParentWithAssociationSametableWritableApiTest extends SDKWritableApiTestBase {
+public class ParentWithAssociationSametableWritableApiTest extends SDKWritableApiBaseTest {
 	private static Logger log = Logger.getLogger(ParentWithAssociationSametableWritableApiTest.class);
 	public static String getTestCaseName() {
 		return "Parent With Association Same Table Test Case";

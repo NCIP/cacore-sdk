@@ -10,7 +10,7 @@ import junit.framework.Assert;
 
 import gov.nih.nci.cacoresdk.domain.other.datatype.AllDataType;
 
-public class AllDataTypeWritableApiTest  extends SDKWritableApiTestBase{
+public class AllDataTypeWritableApiTest  extends SDKWritableApiBaseTest{
 	private static Logger log = Logger.getLogger(AllDataTypeWritableApiTest.class);
 	public static String getTestCaseName() {
 		return "All DataType WritableApi Test Case";

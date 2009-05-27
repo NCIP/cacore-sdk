@@ -9,7 +9,7 @@ import junit.framework.Assert;
 import gov.nih.nci.cacoresdk.domain.onetomany.unidirectional.withjoin.Button;
 import gov.nih.nci.cacoresdk.domain.onetomany.unidirectional.withjoin.Shirt;
 
-public class O2MUnidirectionalWJoinWritableApiTest extends SDKWritableApiTestBase {
+public class O2MUnidirectionalWJoinWritableApiTest extends SDKWritableApiBaseTest {
 	private static Logger log = Logger.getLogger(O2MUnidirectionalWJoinWritableApiTest.class);
 	public static String getTestCaseName() {
 		return "One to Many Unidirectional With Join WritableApi Test Case";

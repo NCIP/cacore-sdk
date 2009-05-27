@@ -9,7 +9,7 @@ import junit.framework.Assert;
 import gov.nih.nci.cacoresdk.domain.inheritance.abstrakt.PrivateTeacher;
 import gov.nih.nci.cacoresdk.domain.inheritance.abstrakt.Pupil;
 
-public class AbstractParentWithAssociationWritableApiTest extends SDKWritableApiTestBase {
+public class AbstractParentWithAssociationWritableApiTest extends SDKWritableApiBaseTest {
 
 	private static Logger log = Logger.getLogger(AbstractParentWithAssociationWritableApiTest.class);
 	public static String getTestCaseName() {
