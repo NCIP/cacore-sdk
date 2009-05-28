@@ -35,6 +35,10 @@ public abstract class SDKSecurityTestBase extends TestCase {
 		super.tearDown();
 	}
 	
+	public String getServerURL() {
+		return serverURL;
+	}
+	
 	protected ApplicationService getAppSvcUser1() throws Exception {
 		if (enableCaGridLoginModule){
 			GridApplicationServiceProvider initializer = (GridApplicationServiceProvider)(Class.forName("test.security.GridApplicationServiceImpl")).newInstance();
