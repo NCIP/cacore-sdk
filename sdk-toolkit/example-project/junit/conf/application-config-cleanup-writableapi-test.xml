@@ -2,6 +2,7 @@
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 <beans default-lazy-init="false" default-dependency-check="none"
 	default-autowire="no">
+ 
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName">
@@ -17,6 +18,22 @@
 			<value></value>
 		</property>
 	</bean>
+  <!--	
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName">
+			<value>oracle.jdbc.driver.OracleDriver</value>
+		</property>
+		<property name="url">
+			<value>jdbc:oracle:thin:@cbdb-d1001.nci.nih.gov:1521:NCID1DEV</value>
+		</property>
+		<property name="username">
+			<value>CACORESDK_ANT</value>
+		</property>
+		<property name="password">
+			<value>c0r3nt!</value>
+		</property>
+	</bean>-->
 	
 	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
 		<constructor-arg ref="dataSource"></constructor-arg>
