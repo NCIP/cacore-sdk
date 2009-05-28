@@ -596,7 +596,7 @@ public class ClassSecurityTest extends SDKSecurityTestBase
 
 		try
 		{
-			String searchUrl = super.serverURL+"/GetXML?query="+bankKlass.getName()+"&"+bankKlass.getName();
+			String searchUrl = getServerURL()+"/GetXML?query="+bankKlass.getName()+"&"+bankKlass.getName();
 			URL url = new URL(searchUrl);
 			URLConnection conn = url.openConnection();
 
@@ -641,7 +641,7 @@ public class ClassSecurityTest extends SDKSecurityTestBase
 		
 		try
 		{
-			String searchUrl = super.serverURL+"/GetXML?query="+cashKlass.getName()+"&"+cashKlass.getName();
+			String searchUrl = getServerURL()+"/GetXML?query="+cashKlass.getName()+"&"+cashKlass.getName();
 			URL url = new URL(searchUrl);
 			URLConnection conn = url.openConnection();
 
