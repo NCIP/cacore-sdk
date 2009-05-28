@@ -426,7 +426,7 @@
 				<include name="**/*-writableapi-test.xml" />
 			</fileset>
 		</copy>
-		<SDKRunJUnit junitClasspath="local-client-cp" junitOutputDir="${report.dir.thickclient-writableapi-cleanup}" includePattern="**/*SDKWritableApiCleanUpTest.class" excludePattern="**/security/*" junitreportfile="TEST-writeDatabaseCleanUp.xml" />
+		<SDKRunJUnit junitClasspath="local-client-cp" junitOutputDir="${report.dir.thickclient-writableapi-cleanup}" includePattern="**/*SDKWritableCleanUpTest.class" excludePattern="**/security/*" junitreportfile="TEST-writeDatabaseCleanUp.xml" />
 		<SDKGenerateReport junitOutputDir="${report.dir.thickclient-writableapi-cleanup}" />
 	</target>
 
