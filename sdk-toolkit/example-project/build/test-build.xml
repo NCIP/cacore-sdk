@@ -241,7 +241,7 @@
 	</target>
 
 	<target name="build3Test">
-		<run-test MODEL.FILE.TYPE="ARGO" MODEL.FILE="sdk.uml" DB.USE.JNDI.BASED.CONNECTION="true" ENABLE.COMMON.LOGGING.MODULE="true" ENABLE.WRITABLE.API.EXTENSION="true"  REPORT.PROJECT.DIR="build3Test" />
+		<run-test MODEL.FILE.TYPE="ARGO" MODEL.FILE="sdk.uml" DB.USE.JNDI.BASED.CONNECTION="true" ENABLE.COMMON.LOGGING.MODULE="true" DB.TYPE="mysql" ENABLE.WRITABLE.API.EXTENSION="true"  REPORT.PROJECT.DIR="build3Test" />
 	</target>
 
 	<target name="build4Test">
@@ -270,7 +270,7 @@
 	</target>
 
 	<target name="build10Test">
-		<run-test ENABLE.WRITABLE.API.EXTENSION="true" ENABLE.COMMON.LOGGING.MODULE="true" ENABLE.SECURITY="true" ENABLE.CSM.LOGIN.MODULE="true" ENABLE.ATTRIBUTE.LEVEL.SECURITY="true" REPORT.PROJECT.DIR="build10Test" />
+		<run-test DB.TYPE="mysql" ENABLE.WRITABLE.API.EXTENSION="true" ENABLE.COMMON.LOGGING.MODULE="true" ENABLE.SECURITY="true" ENABLE.CSM.LOGIN.MODULE="true" ENABLE.ATTRIBUTE.LEVEL.SECURITY="true" REPORT.PROJECT.DIR="build10Test" />
 	</target>
 
 	<target name="build11Test">
