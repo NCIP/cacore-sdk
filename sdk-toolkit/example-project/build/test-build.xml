@@ -203,7 +203,18 @@
 					<ant antfile="build.xml" dir="${junit.dir}" target="writeDatabaseCleanUpTest" inheritAll="true" />
 					 -->
 				</then>
-			</if>			
+			</if>
+			
+			<if>
+				<and>
+					<equals arg1="${ENABLE_WRITABLE_API_EXTENSION}" arg2="true" />
+					<equals arg1="${DB_TYPE}" arg2="mysql"/>
+				</and>
+				<then>
+					<ant antfile="build.xml" dir="${junit.dir}" target="writeDatabaseCleanUpTest" inheritAll="true" />
+				</then>
+			</if>	
+			
 			<ant antfile="build.xml" dir="${dist.exploded.dir}" target="install:server:stop" inheritAll="true" />			
 		</sequential>
 	</macrodef>
