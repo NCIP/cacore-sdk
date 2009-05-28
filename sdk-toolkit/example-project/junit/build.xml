@@ -187,6 +187,8 @@
 				<sysproperty key="enableInstanceLevelSecurity" value="${ENABLE_INSTANCE_LEVEL_SECURITY}"/>
 				<sysproperty key="enableCaGridLoginModule" value="${ENABLE_GRID_LOGIN_MODULE}"/>
 				<sysproperty key="outputDir" value="${junit.home}/output/"/>
+				<sysproperty key="serverURL" value="${SERVER_URL}"/>
+				
 
 				<classpath>
 					<path refid="@{junitClasspath}" />
