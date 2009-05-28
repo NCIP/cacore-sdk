@@ -592,13 +592,11 @@ public class ClassSecurityTest extends SDKSecurityTestBase
 	 */		
 	public void testBasicAuthenticationGetXML() throws Exception
 	{
-		String serverUrl = "http://localhost:8080/example";
-		
 		Class bankKlass = Bank.class;
 
 		try
 		{
-			String searchUrl = serverUrl+"/GetXML?query="+bankKlass.getName()+"&"+bankKlass.getName();
+			String searchUrl = super.serverURL+"/GetXML?query="+bankKlass.getName()+"&"+bankKlass.getName();
 			URL url = new URL(searchUrl);
 			URLConnection conn = url.openConnection();
 
@@ -639,13 +637,11 @@ public class ClassSecurityTest extends SDKSecurityTestBase
 	
 	public void testAccessDeniedBasicAuthenticationGetXML() throws Exception
 	{
-		String serverUrl = "http://localhost:8080/example";
-		
 		Class cashKlass = Cash.class;
 		
 		try
 		{
-			String searchUrl = serverUrl+"/GetXML?query="+cashKlass.getName()+"&"+cashKlass.getName();
+			String searchUrl = super.serverURL+"/GetXML?query="+cashKlass.getName()+"&"+cashKlass.getName();
 			URL url = new URL(searchUrl);
 			URLConnection conn = url.openConnection();
 
