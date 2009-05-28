@@ -28,7 +28,7 @@ public abstract class SDKSecurityTestBase extends TestCase {
 		enableInstanceLevelSecurity = Boolean.parseBoolean(System.getProperty("enableInstanceLevelSecurity"));
 		enableCaGridLoginModule = Boolean.parseBoolean(System.getProperty("enableCaGridLoginModule"));
 		serverURL = System.getProperty("serverURL");
-		System.out.println("Login config = "+System.getProperty("java.security.auth.login.config"));
+		System.out.println("SERVER URL  "+serverURL+"  Login config = "+System.getProperty("java.security.auth.login.config"));
 	}
 
 	protected void tearDown() throws Exception {
