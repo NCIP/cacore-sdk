@@ -16,7 +16,7 @@ public abstract class SDKSecurityTestBase extends TestCase {
 	protected boolean enableAttributeLevelSecurity=false;
 	protected boolean enableInstanceLevelSecurity=false;
 	protected boolean enableCaGridLoginModule=false;
-	protected String serverURL="";
+	protected String serverURL="http://localhost:21080/example";
 	
 	public static String getTestCaseName() {
 		return "SDK Security Base Test Case";
@@ -27,7 +27,10 @@ public abstract class SDKSecurityTestBase extends TestCase {
 		enableAttributeLevelSecurity = Boolean.parseBoolean(System.getProperty("enableAttributeLevelSecurity"));
 		enableInstanceLevelSecurity = Boolean.parseBoolean(System.getProperty("enableInstanceLevelSecurity"));
 		enableCaGridLoginModule = Boolean.parseBoolean(System.getProperty("enableCaGridLoginModule"));
-		serverURL = System.getProperty("serverURL");
+		String tempServerURL = System.getProperty("serverURL");
+		if(tempServerURL!=null){
+			serverURL=tempServerURL;
+		}
 		System.out.println("SERVER URL  "+serverURL+"  Login config = "+System.getProperty("java.security.auth.login.config"));
 	}
 
