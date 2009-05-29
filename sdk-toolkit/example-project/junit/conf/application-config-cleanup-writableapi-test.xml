@@ -3,19 +3,26 @@
 <beans default-lazy-init="false" default-dependency-check="none"
 	default-autowire="no">
  
+	 <bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location">
+			<value>classpath:db-mysql.properties</value>
+		</property>
+	</bean>
+	 
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName">
 			<value>com.mysql.jdbc.Driver</value>
 		</property>
 		<property name="url">
-			<value>jdbc:mysql://localhost:3306/cacoresdk</value>
+			<value>jdbc:mysql://${DB_SERVER}:${DB_SERVER_PORT}/${DB_NAME}</value>
 		</property>
 		<property name="username">
-			<value>root</value>
+			<value>${DB_USERNAME}</value>
 		</property>
 		<property name="password">
-			<value></value>
+			<value>${DB_PASSWORD}</value>
 		</property>
 	</bean>
   <!--	
