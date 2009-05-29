@@ -181,7 +181,7 @@ public class AllDataTypeWSTest extends SDKWSTestBase
 		Object[] results = getQueryObjectResults(targetClass, criteria);
 		
 		assertNotNull(results);
-		assertEquals(1,results.length);	
+		assertEquals(5,results.length);	
 	}	
 
 	/**
