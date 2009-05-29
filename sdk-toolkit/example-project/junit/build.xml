@@ -233,7 +233,7 @@
 	<!--***********************************************************************
 	*** Creates new directories
 	*********************************************************************** -->
-	<target name="createDir" depends="clean">
+	<target name="createDir" depends="clean-classes">
 		<mkdir dir="${report.dir}" />
 		<mkdir dir="${classes.dir}" />
 	</target>
