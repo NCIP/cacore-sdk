@@ -54,12 +54,6 @@
 		<load-on-startup>1</load-on-startup>
 	</servlet>	
 
-	<servlet>
-		<servlet-name>AdminServlet</servlet-name>
-		<servlet-class>org.apache.axis.transport.http.AdminServlet</servlet-class>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
-
     <servlet>
         <servlet-name>AxisServlet</servlet-name>
         <servlet-class>org.apache.axis.transport.http.AxisServlet</servlet-class> 
@@ -79,17 +73,11 @@
 		<servlet-name>httpinvoker</servlet-name>
 		<url-pattern>/http/*</url-pattern>
 	</servlet-mapping>
-     
-    <servlet-mapping>
-        <servlet-name>AdminServlet</servlet-name>
-        <url-pattern>/services/AdminService</url-pattern>
-    </servlet-mapping>
 
     <servlet-mapping>
 		<servlet-name>AxisServlet</servlet-name>
 		<url-pattern>/services/*</url-pattern>
 	</servlet-mapping>
-		
     
     <servlet-mapping>
         <servlet-name>AxisServlet</servlet-name>
