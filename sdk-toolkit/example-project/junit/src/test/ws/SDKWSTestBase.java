@@ -21,7 +21,7 @@ public abstract class SDKWSTestBase extends TestCase {
 		super.setUp();
 		url = System.getProperty("webservice.url");
 		if (url == null || "".equals(url)) {
-			url="http://localhost:8080/example/services/exampleService";
+			url="http://localhost:21080/example/services/exampleService";
 		}
 	}
 	

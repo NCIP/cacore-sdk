@@ -36,7 +36,7 @@ public class IntegerPrimitivePkHBMMappingTest extends SDKHBMMappingTestBase {
 	
 				List<Element> idgenerators = element.getChildren();
 				for (Element generatorElement : idgenerators) {
-					assertEquals("assigned", generatorElement.getAttributeValue("class"));
+					assertEquals("hilo", generatorElement.getAttributeValue("class"));
 				}
 			}
 	}
