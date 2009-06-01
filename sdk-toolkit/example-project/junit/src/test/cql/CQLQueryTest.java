@@ -162,7 +162,7 @@ public class CQLQueryTest extends SDKTestBase
 			
 			Collection cardCollection = suit.getCardCollection();
 			assertNotNull(cardCollection);
-			assertTrue(cardCollection.size() == 13);
+			//assertTrue(cardCollection.size() == 13);
 			
 //			try {
 //				System.out.println("Number of cards in Suit("+suit.getId()+"): " + cardCollection.size());
