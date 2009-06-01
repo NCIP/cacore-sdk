@@ -164,12 +164,12 @@ public class O2OMultipleAssociationWJoinTest extends SDKTestBase
 	 */
 	public void testOneAssociatedObjectNestedSearch() throws ApplicationException
 	{
-		boolean flag = false;
+		boolean flag = true;
 
 		try
 		{
 			Bride searchObject = new Bride();
-			searchObject.setId(new Integer(3));
+			searchObject.setId(new Integer(2));
 			Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation.withjoin.InLaw",searchObject );
 
 			assertNotNull(results);
@@ -177,7 +177,7 @@ public class O2OMultipleAssociationWJoinTest extends SDKTestBase
 		} 
 		catch(ApplicationException e)
 		{
-			flag = true;
+			flag = false;
 		}
 		assertTrue(flag);		
 
