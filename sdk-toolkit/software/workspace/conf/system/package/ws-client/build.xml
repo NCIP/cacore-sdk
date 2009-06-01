@@ -81,18 +81,6 @@
 	</target>
 	
 	<!--***********************************************************************
-	*** Undeploying the web service from the server
-	*********************************************************************** -->
-	<target name="undeploy"  description="Undeploys the webservice">
-		<SDKecho message="Undeploying web services from ${SERVER_URL}/services/${WEBSERVICE_NAME}"/>
-		<java classname="org.apache.axis.client.AdminClient" fork="true">
-			<classpath refid="classpath"/>
-			<arg value="-l${SERVER_URL}/services/AxisServlet"/>
-			<arg value="${conf.dir}/undeploy.wsdd"/>
-		</java>
-	</target>
-	
-	<!--***********************************************************************
 	*** Dumps the properties of the build script
 	*********************************************************************** -->
 	<target name="show-properties" description="Dumps a list of all properties currently set">
