@@ -285,7 +285,7 @@
 	</target>
 
 	<target name="build11Test">
-		<run-test ENABLE.SECURITY="true" ENABLE.GRID.LOGIN.MODULE="true"  REPORT.PROJECT.DIR="build11Test" />
+		<run-test DB.TYPE="mysql" ENABLE.SECURITY="true" ENABLE.GRID.LOGIN.MODULE="true"  REPORT.PROJECT.DIR="build11Test" />
 	</target>
 
 	<target name="build12Test">
