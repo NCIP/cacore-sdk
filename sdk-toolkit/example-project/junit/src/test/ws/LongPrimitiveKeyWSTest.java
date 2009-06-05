@@ -59,7 +59,7 @@ public class LongPrimitiveKeyWSTest extends SDKWSTestBase
 	{
 		Class targetClass = LongPrimitiveKey.class;
 		LongPrimitiveKey criteria = new LongPrimitiveKey();
-		criteria.setId(new Long("9876"));
+		criteria.setId(new Long("987654321234568000"));
 
 		Object[] results = getQueryObjectResults(targetClass, criteria);
 
