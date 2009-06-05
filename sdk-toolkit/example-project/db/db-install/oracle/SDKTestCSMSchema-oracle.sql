@@ -92,7 +92,7 @@ CREATE TABLE CSM_APPLICATION (
 ;
 CREATE SEQUENCE CSM_APPLICATI_APPLICATION__SEQ
 increment by 1
-start with 1
+start with 3
 NOMAXVALUE
 minvalue 1
 nocycle
@@ -110,7 +110,7 @@ CREATE TABLE CSM_GROUP (
 ;
 CREATE SEQUENCE CSM_GROUP_GROUP_ID_SEQ
 increment by 1
-start with 1
+start with 5
 NOMAXVALUE
 minvalue 1
 nocycle
@@ -127,7 +127,7 @@ CREATE TABLE CSM_PG_PE (
 ;
 CREATE SEQUENCE CSM_PG_PE_PG_PE_ID_SEQ
 increment by 1
-start with 1
+start with 780
 NOMAXVALUE
 minvalue 1
 nocycle
@@ -167,7 +167,7 @@ CREATE TABLE CSM_PRIVILEGE (
 ;
 CREATE SEQUENCE CSM_PRIVILEGE_PRIVILEGE_ID_SEQ
 increment by 1
-start with 1
+start with 8
 NOMAXVALUE
 minvalue 1
 nocycle
@@ -192,7 +192,7 @@ CREATE TABLE CSM_FILTER_CLAUSE (
 
 CREATE SEQUENCE CSM_FILTER_CLAUSE_FILTE_ID_SEQ
 increment by 1
-start with 1
+start with 21
 NOMAXVALUE
 minvalue 1
 nocycle
@@ -214,7 +214,7 @@ CREATE TABLE CSM_PROTECTION_ELEMENT (
 ;
 CREATE SEQUENCE CSM_PROTECTIO_PROTECTION_E_SEQ
 increment by 1
-start with 1
+start with 116
 NOMAXVALUE
 minvalue 1
 nocycle
@@ -234,7 +234,7 @@ CREATE TABLE CSM_PROTECTION_GROUP (
 ;
 CREATE SEQUENCE CSM_PROTECTIO_PROTECTION_G_SEQ
 increment by 1
-start with 1
+start with 8
 NOMAXVALUE
 minvalue 1
 nocycle
@@ -253,7 +253,7 @@ CREATE TABLE CSM_ROLE (
 ;
 CREATE SEQUENCE CSM_ROLE_ROLE_ID_SEQ
 increment by 1
-start with 1
+start with 7
 NOMAXVALUE
 minvalue 1
 nocycle
@@ -268,7 +268,7 @@ CREATE TABLE CSM_ROLE_PRIVILEGE (
 ;
 CREATE SEQUENCE CSM_ROLE_PRIV_ROLE_PRIVILE_SEQ
 increment by 1
-start with 1
+start with 16
 NOMAXVALUE
 minvalue 1
 nocycle
@@ -306,7 +306,7 @@ CREATE TABLE CSM_USER (
 ;
 CREATE SEQUENCE CSM_USER_USER_ID_SEQ
 increment by 1
-start with 1
+start with 18
 NOMAXVALUE
 minvalue 1
 nocycle
@@ -322,7 +322,7 @@ CREATE TABLE CSM_USER_GROUP (
 ;
 CREATE SEQUENCE CSM_USER_GROU_USER_GROUP_I_SEQ
 increment by 1
-start with 1
+start with 7
 NOMAXVALUE
 minvalue 1
 nocycle
@@ -352,7 +352,7 @@ CREATE TABLE CSM_USER_GROUP_ROLE_PG (
 ;
 CREATE SEQUENCE CSM_USER_GROU_USER_GROUP_R_SEQ
 increment by 1
-start with 1
+start with 49
 NOMAXVALUE
 minvalue 1
 nocycle
@@ -367,7 +367,7 @@ CREATE TABLE CSM_USER_PE (
 ;
 CREATE SEQUENCE CSM_USER_PE_USER_PROTECTIO_SEQ
 increment by 1
-start with 1
+start with 9
 NOMAXVALUE
 minvalue 1
 nocycle
