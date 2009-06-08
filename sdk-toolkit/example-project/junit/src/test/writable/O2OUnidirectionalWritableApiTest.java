@@ -3,79 +3,78 @@ package test.writable;
 import org.apache.log4j.Logger;
 
 import junit.framework.Assert;
-import gov.nih.nci.cacoresdk.domain.onetoone.unidirectional.withjoin.Bag;
-import gov.nih.nci.cacoresdk.domain.onetoone.unidirectional.withjoin.Handle;
+import gov.nih.nci.cacoresdk.domain.onetoone.unidirectional.Address;
+import gov.nih.nci.cacoresdk.domain.onetoone.unidirectional.Person;
 
 public class O2OUnidirectionalWritableApiTest extends SDKWritableBaseTest{
 	private static Logger log = Logger.getLogger(O2OUnidirectionalWritableApiTest.class);
 	public static String getTestCaseName() {
-		return "One to One Unidirectional WritableApi Test Case";
+		return "One to One Unidirectional WithJoin WritableApi Test Case";
 	}
 	
-	public void testSaveObjectBag(){
-		log.debug("\n--------------testSaveObjectBag()------------\n");
-		Bag bag=new Bag();
-		bag.setStyle("style");
+	public void testSaveObjectPerson(){
+		log.debug("\n--------------testSaveObjectPerson()------------\n");
+		Person person=new Person();
+		person.setName("person");
 		
-		save(bag);
+		save(person);
 		
-		Bag result=(Bag)getObject(Bag.class, bag.getId());
-		Assert.assertEquals(bag.getStyle(), result.getStyle());
+		Person result=(Person)getObject(Person.class, person.getId());
+		Assert.assertEquals(person.getName(), result.getName());
 	}
 	
-	public void testSaveObjectBagWithOne2OneAssociation(){
-		log.debug("\n--------------testSaveObjectBagWithOne2OneAssociation()------------\n");
-		Bag bag=new Bag();
-		bag.setStyle("style");
-		Handle handle=new Handle();
-		handle.setColor("color");
-		bag.setHandle(handle);
+	public void testSaveObjectPersonWithOne2OneAssociation(){
+		log.debug("\n--------------testSaveObjectPersonWithOne2OneAssociation()------------\n");
+		Person person=new Person();
+		person.setName("person");
+		Address address=new Address();
+		address.setZip("22030");
+		person.setLivesAt(address);
 		
-		save(bag);
+		save(person);
 		
-		Bag result = (Bag) getObjectAndLazyObject(Bag.class, bag.getId(),"handle");
-		Assert.assertEquals(bag.getStyle(), result.getStyle());
-		Assert.assertEquals(bag.getHandle().getColor(), result.getHandle().getColor());
+		Person result=(Person)getObjectAndLazyObject(Person.class, person.getId(),"livesAt");
+		Assert.assertEquals(person.getName(), result.getName());
+		Assert.assertEquals(person.getLivesAt().getZip(), result.getLivesAt().getZip());
 	}
 	
-	public void testUpdateObjectBagWithOne2OneAssociation(){
-		log.debug("\n--------------testUpdateObjectBagWithOne2OneAssociation()------------\n");
-		Bag bag=new Bag();
-		bag.setStyle("style");
-		Handle handle=new Handle();
-		handle.setColor("color");
-		bag.setHandle(handle);
+	public void testUpdateObjectPersonWithOne2OneAssociation(){
+		log.debug("\n--------------testSaveObjectPersonWithOne2OneAssociation()------------\n");
+		Person person=new Person();
+		person.setName("person");
+		Address address=new Address();
+		address.setZip("22030");
+		person.setLivesAt(address);
 		
-		save(bag);
+		save(person);
 		
-		Bag updateBag=(Bag)getObjectAndLazyObject(Bag.class, bag.getId(),"handle");
-		updateBag.setStyle("updateStyle");
-		updateBag.getHandle().setColor("updateColor");
-		update(updateBag);
+		Person updatePerson=(Person)getObjectAndLazyObject(Person.class, person.getId(),"livesAt");
+		updatePerson.setName("updatePerson");
+		updatePerson.getLivesAt().setZip("22142");
+		update(updatePerson);
 		
-		Bag result = (Bag) getObjectAndLazyObject(Bag.class, bag.getId(),"handle");
-		Assert.assertEquals(updateBag.getStyle(), result.getStyle());
-		Assert.assertEquals(updateBag.getHandle().getColor(), result.getHandle().getColor());
+		Person result=(Person)getObjectAndLazyObject(Person.class, person.getId(),"livesAt");
+		Assert.assertEquals(updatePerson.getName(), result.getName());
+		Assert.assertEquals(updatePerson.getLivesAt().getZip(), result.getLivesAt().getZip());
 	}
 	
-	public void testDeleteObjectBagWithOne2OneCascadeDelete(){
-		log.debug("\n--------------testDeleteObjectBagWithOne2OneCascadeDelete()------------\n");
-		Bag bag=new Bag();
-		bag.setStyle("style");
-		Handle handle=new Handle();
-		handle.setColor("color");
-		bag.setHandle(handle);
+	public void testDeleteObjectPersonWithOne2OneCascadeAll(){
+		log.debug("\n--------------testSaveObjectPersonWithOne2OneAssociation()------------\n");
+		Person person=new Person();
+		person.setName("person");
+		Address address=new Address();
+		address.setZip("22030");
+		person.setLivesAt(address);
 		
-		save(bag);
+		save(person);
 		
-		Bag deleteBag = (Bag) getObjectAndLazyObject(Bag.class, bag.getId(),"handle");
-		Handle deleteHandle = deleteBag.getHandle();
-		delete(deleteBag);
+		Person deletePerson=(Person)getObjectAndLazyObject(Person.class, person.getId(),"livesAt");
+		delete(deletePerson);
+		
+		Person resultPerson=(Person)getObjectAndLazyObject(Person.class, person.getId(),"livesAt");
+		Address resultAddress=(Address)getObject(Address.class, person.getLivesAt().getId());
 
-		Bag resultBag = (Bag) getObject(Bag.class, deleteBag.getId());
-		Handle resultHandle = (Handle) getObject(Handle.class, deleteHandle.getId());
-
-		Assert.assertNull(resultBag);
-		Assert.assertNull(resultHandle);
+		Assert.assertNull(resultPerson);
+		Assert.assertNull(resultAddress);
 	}
 }
