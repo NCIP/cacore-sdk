@@ -74,10 +74,12 @@ public class XmlMappingTransformer implements Transformer {
 
 		GeneratorErrors errors = new GeneratorErrors();
 		Collection<UMLClass> classes = null;
-		
-		setModelNamespace(model,transformerUtils.getBasePkgLogicalModel());
 
 		try {
+			if (useGMETags){
+				setModelNamespace(model,transformerUtils.getBasePkgLogicalModel());
+			}
+			
 			classes = transformerUtils.getAllClasses(model);
 		} catch(GenerationException ge){
 			errors.addError(new GeneratorError(getName() + ": Error while retrieving classes to process: ", ge));
