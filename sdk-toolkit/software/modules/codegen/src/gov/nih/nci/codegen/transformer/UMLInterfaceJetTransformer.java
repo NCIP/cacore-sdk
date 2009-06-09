@@ -6,7 +6,6 @@ import gov.nih.nci.codegen.GenerationException;
 import gov.nih.nci.codegen.GeneratorError;
 import gov.nih.nci.codegen.GeneratorErrors;
 import gov.nih.nci.codegen.Transformer;
-import gov.nih.nci.codegen.artifact.BaseArtifact;
 import gov.nih.nci.codegen.util.TransformerUtils;
 import gov.nih.nci.ncicb.xmiinout.domain.UMLInterface;
 import gov.nih.nci.ncicb.xmiinout.domain.UMLModel;
