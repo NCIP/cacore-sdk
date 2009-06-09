@@ -97,10 +97,10 @@
             name="sdk.todo" />
     <historyfile name="" />
   </argo>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Wed Jan 28 17:56:10 GMT 2009'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Fri Apr 24 01:55:40 GMT 2009'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
-      <XMI.exporterVersion>0.24(5) revised on $Date: 2009/01/30 22:54:38 $ </XMI.exporterVersion>
+      <XMI.exporterVersion>0.24(5) revised on $Date: 2006-11-06 19:55:22 +0100 (Mon, 06 Nov 2006) $ </XMI.exporterVersion>
     </XMI.documentation>
     <XMI.metamodel xmi.name="UML" xmi.version="1.4"/></XMI.header>
   <XMI.content>
@@ -10666,6 +10666,9 @@
                 <UML:Class xmi.id = '-64--88-0-1-16925b0:11549afc064:-8000:00000000000012FF'
                   name = 'SHIRT_BUTTON' visibility = 'public' isSpecification = 'false' isRoot = 'false'
                   isLeaf = 'false' isAbstract = 'false' isActive = 'false'>
+                  <UML:ModelElement.stereotype>
+                    <UML:Stereotype xmi.idref = 'EAID_05D28ABC_F678_4c6a_AA5C_513217EB2E68_fix_ster_0'/>
+                  </UML:ModelElement.stereotype>
                   <UML:Classifier.feature>
                     <UML:Attribute xmi.id = '-64--88-0-1-16925b0:11549afc064:-8000:0000000000001300'
                       name = 'BUTTON_ID' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
@@ -43991,7 +43994,7 @@
     />
   </group>
   <group name="Fig2"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[768, 152, 175, 97]pathVisible=false;operationsVisible=true;attributesVisible=true"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[768, 152, 175, 113]pathVisible=false;operationsVisible=true;attributesVisible=true"
        href="EAID_D74B8811_BD4F_49df_A171_7955DF4E7249"
        fill="1"
        fillcolor="white"
@@ -44005,7 +44008,7 @@
       x="768"
       y="152"
       width="175"
-      height="97"
+      height="113"
       fill="1"
       fillcolor="white"
       stroke="0"
@@ -44035,7 +44038,7 @@
       <text name="Fig2.1.1"
         x="769"
         y="153"
-        fill="1"
+        fill="0"
         fillcolor="white"
         stroke="0"
         strokecolor="black"
@@ -44054,7 +44057,7 @@
       textsize="10"
     >KEYCHAIN</text>
     <group name="Fig2.3"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[769, 227, 174, 22]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[769, 235, 174, 29]"
          fill="1"
          fillcolor="white"
          stroke="0"
@@ -44065,9 +44068,9 @@
       
       <rectangle name="Fig2.3.0"
         x="769"
-        y="227"
+        y="235"
         width="174"
-        height="22"
+        height="29"
         fill="1"
         fillcolor="white"
         stroke="0"
@@ -44081,13 +44084,13 @@
         strokecolor="black"
       >
         <moveto x="769"
-                y="227" />
+                y="235" />
         <lineto x="943"
-                y="227" />
+                y="235" />
       </path>
       <text name="Fig2.3.2"
         x="769"
-        y="228"
+        y="236"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -44097,7 +44100,7 @@
       >PK_KEYCHAIN(ID : NUMBER) :</text>
     </group>
     <group name="Fig2.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[769, 190, 174, 36]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[769, 190, 174, 44]"
          fill="1"
          fillcolor="white"
          stroke="0"
@@ -44110,7 +44113,7 @@
         x="769"
         y="190"
         width="174"
-        height="36"
+        height="44"
         fill="1"
         fillcolor="white"
         stroke="0"
@@ -44153,7 +44156,7 @@
       x="768"
       y="152"
       width="175"
-      height="97"
+      height="113"
       fill="0"
       fillcolor="white"
       stroke="1"
@@ -44397,7 +44400,7 @@
       <moveto x="856"
               y="472" />
       <lineto x="856"
-              y="249" />
+              y="265" />
     </path>
   </group>
   <group name="Fig6"
@@ -45200,7 +45203,7 @@
     </path>
   </group>
   <group name="Fig13"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[760, 1112, 358, 125]pathVisible=false;operationsVisible=true;attributesVisible=true"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[760, 1112, 358, 139]pathVisible=false;operationsVisible=true;attributesVisible=true"
        href="-64--88-0-1-16925b0:11549afc064:-8000:00000000000012FF"
        fill="1"
        fillcolor="white"
@@ -45214,14 +45217,14 @@
       x="760"
       y="1112"
       width="358"
-      height="125"
+      height="139"
       fill="1"
       fillcolor="white"
       stroke="0"
       strokecolor="black"
     />
     <group name="Fig13.1"
-         description="org.argouml.uml.diagram.ui.FigStereotypesCompartment[760, 1112, 358, 2]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesCompartment[760, 1112, 358, 16]"
          href="-64--88-0-1-16925b0:11549afc064:-8000:00000000000012FF"
          fill="1"
          fillcolor="white"
@@ -45235,16 +45238,26 @@
         x="760"
         y="1112"
         width="358"
-        height="2"
+        height="16"
         fill="1"
         fillcolor="white"
         stroke="1"
         strokecolor="black"
       />
+      <text name="Fig13.1.1"
+        x="761"
+        y="1113"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        font="Dialog"
+        textsize="10"
+      >&lt;&lt;table&gt;&gt;</text>
     </group>
     <text name="Fig13.2"
       x="760"
-      y="1114"
+      y="1128"
       fill="1"
       fillcolor="white"
       stroke="0"
@@ -45253,7 +45266,7 @@
       textsize="10"
     >SHIRT_BUTTON</text>
     <group name="Fig13.3"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[761, 1173, 357, 64]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[761, 1187, 357, 64]"
          fill="1"
          fillcolor="white"
          stroke="0"
@@ -45264,7 +45277,7 @@
       
       <rectangle name="Fig13.3.0"
         x="761"
-        y="1173"
+        y="1187"
         width="357"
         height="64"
         fill="1"
@@ -45280,13 +45293,13 @@
         strokecolor="black"
       >
         <moveto x="761"
-                y="1173" />
+                y="1187" />
         <lineto x="1118"
-                y="1173" />
+                y="1187" />
       </path>
       <text name="Fig13.3.2"
         x="761"
-        y="1174"
+        y="1188"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -45296,7 +45309,7 @@
       >&lt;&lt;FK&gt;&gt; FK_SHIRT_BUTTON_BUTTON(BUTTON_ID : NUMBER)</text>
       <text name="Fig13.3.3"
         x="761"
-        y="1188"
+        y="1202"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -45306,7 +45319,7 @@
       >&lt;&lt;FK&gt;&gt; FK_SHIRT_BUTTON_SHIRT(SHIRT_ID : NUMBER)</text>
       <text name="Fig13.3.4"
         x="761"
-        y="1202"
+        y="1216"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -45316,7 +45329,7 @@
       >&lt;&lt;PK&gt;&gt; PK_SHIRT_BUTTON(SHIRT_ID : NUMBER,BUTTON_ID : Integer)</text>
       <text name="Fig13.3.5"
         x="761"
-        y="1216"
+        y="1230"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -45326,7 +45339,7 @@
       >&lt;&lt;unique&gt;&gt; UQ_SHIRT_BUTTON_SHIRT_ID() : NUMBER</text>
     </group>
     <group name="Fig13.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[761, 1136, 357, 36]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[761, 1150, 357, 36]"
          fill="1"
          fillcolor="white"
          stroke="0"
@@ -45337,7 +45350,7 @@
       
       <rectangle name="Fig13.4.0"
         x="761"
-        y="1136"
+        y="1150"
         width="357"
         height="36"
         fill="1"
@@ -45353,13 +45366,13 @@
         strokecolor="black"
       >
         <moveto x="761"
-                y="1136" />
+                y="1150" />
         <lineto x="1118"
-                y="1136" />
+                y="1150" />
       </path>
       <text name="Fig13.4.2"
         x="761"
-        y="1137"
+        y="1151"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -45369,7 +45382,7 @@
       >BUTTON_ID : Integer</text>
       <text name="Fig13.4.3"
         x="761"
-        y="1151"
+        y="1165"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -45382,7 +45395,7 @@
       x="760"
       y="1112"
       width="358"
-      height="125"
+      height="139"
       fill="0"
       fillcolor="white"
       stroke="1"
@@ -45774,7 +45787,7 @@
       strokecolor="black"
     >
       <moveto x="936"
-              y="1237" />
+              y="1251" />
       <lineto x="936"
               y="1368" />
     </path>
