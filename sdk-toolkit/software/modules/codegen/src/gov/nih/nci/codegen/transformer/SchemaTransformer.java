@@ -19,10 +19,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
@@ -48,6 +50,8 @@ public class SchemaTransformer implements Transformer {
 	private static Logger log = Logger.getLogger(SchemaTransformer.class);
 
 	private GeneratorErrors generatorErrors = new GeneratorErrors();
+	
+	private Map<String,UMLClass> associatedClasses = new HashMap<String,UMLClass>();
 
 	private ArtifactHandler artifactHandler;
 	
@@ -143,10 +147,10 @@ public class SchemaTransformer implements Transformer {
 		}
 	}
 
-	private List<Namespace> getAssociatedNamespaces(List<UMLClass> associatedClasses) {
+	private List<Namespace> getAssociatedNamespaces(Map<String,UMLClass> associatedClasses) {
 		List<Namespace> namespaces = new ArrayList<Namespace>();
 
-		for (UMLClass associatedClass:associatedClasses) {
+		for (UMLClass associatedClass:associatedClasses.values()) {
 				String associatedURI = getNamespace(associatedClass);
 				String associatedPackageName=getPackageName(associatedClass);
 				log.debug("associatedURI: " + associatedURI);
@@ -159,12 +163,12 @@ public class SchemaTransformer implements Transformer {
 		return namespaces;
 	}
 
-	private List<Element> getAssociatedNamespaceImports(List<UMLClass> associatedClasses, Namespace w3cNS) {
+	private List<Element> getAssociatedNamespaceImports(Map<String,UMLClass> associatedClasses, Namespace w3cNS) {
 		HashSet<Element> elements = new HashSet<Element>();
 		Vector<String> tmpList = new Vector<String>();
 		
 		String associatedPackageName;
-		for (UMLClass associatedClass : associatedClasses){
+		for (UMLClass associatedClass : associatedClasses.values()){
 			associatedPackageName=getPackageName(associatedClass);
 			
 			if (!tmpList.contains(associatedPackageName)) {
@@ -208,6 +212,16 @@ public class SchemaTransformer implements Transformer {
 			klass = (UMLClass) i.next();
 			doMapping(klass, schemaElem, w3cNS);
 		}
+		
+		//Add namespace declarations
+		for(Namespace rNamespace: getAssociatedNamespaces(associatedClasses)){
+			schemaElem.addNamespaceDeclaration(rNamespace);
+		}        
+
+		//Add namespace import elements
+		for (Element namespaceImportElement : getAssociatedNamespaceImports(associatedClasses, w3cNS)){
+			schemaElem.addContent(0,namespaceImportElement);
+		}
 
 		Document doc = new Document();
 		doc.setRootElement(schemaElem);
@@ -224,7 +238,7 @@ public class SchemaTransformer implements Transformer {
 			log.error("Exception caught while getting Superclass for " + klass.getName(), ge);
 			generatorErrors.addError(new GeneratorError(getName() + ": " + ge.getMessage(), ge));
 		}
-
+		
 		if (superClass != null) {
 			String klassPackageName = getPackageName(klass);
 			String superClassPackageName = getPackageName(superClass);
@@ -232,6 +246,7 @@ public class SchemaTransformer implements Transformer {
 			if (klassPackageName.equals(superClassPackageName)){
 				superClassName = getClassName(superClass);
 			} else {
+				associatedClasses.put(getClassName(superClass),superClass);
 				superClassName = superClassPackageName + ':'+getClassName(superClass);
 			}
 		}
@@ -251,8 +266,6 @@ public class SchemaTransformer implements Transformer {
 		schemaElem.addContent(classE2);
 		
 		addCaDSRAnnotation(klass, classE2, w3cNS);
-
-		List<UMLClass> associatedClasses = new ArrayList<UMLClass>();
 		
 		if (superClassName!=null) {
 			log.debug("superClassName: " + superClassName);
@@ -397,16 +410,7 @@ public class SchemaTransformer implements Transformer {
 				addSequenceAssociationElement(sequence,klass,thisEnd,otherEnd,w3cNS);
 			}
 		}
-		
-		//Add namespace declarations
-		for(Namespace rNamespace: getAssociatedNamespaces(associatedClasses)){
-			schemaElem.addNamespaceDeclaration(rNamespace);
-		}        
-
-		//Add namespace import elements
-		for (Element namespaceImportElement : getAssociatedNamespaceImports(associatedClasses, w3cNS)){
-			schemaElem.addContent(0,namespaceImportElement);
-		}
+	//////////
 	}
 	
 	private void addCaDSRAnnotation(UMLTaggableElement tgElt, Element elt, Namespace w3cNS) {
@@ -469,15 +473,17 @@ public class SchemaTransformer implements Transformer {
 		}
 	}
 	
-	private void collectAssociatedClasses(UMLAssociationEnd thisEnd, UMLAssociationEnd otherEnd, List<UMLClass> associatedClassNames) {
+	private void collectAssociatedClasses(UMLAssociationEnd thisEnd, UMLAssociationEnd otherEnd, Map<String,UMLClass> associatedClassNames) {
 		if (otherEnd.isNavigable()) {
 			String associationPackage = getPackageName(((UMLClass)(otherEnd.getUMLElement())));
 			String thisPackage = getPackageName(((UMLClass)(thisEnd.getUMLElement())));
 			
 			log.debug("associationPackage: "+associationPackage+"; thisPackage: "+thisPackage+"; associationPackage.equals(thisPackage): " + associationPackage.equals(thisPackage));
 			
+			 
 			if (!associationPackage.equalsIgnoreCase(thisPackage)){
-				associatedClassNames.add( ((UMLClass)(otherEnd.getUMLElement())));
+				UMLClass klass = (UMLClass)(otherEnd.getUMLElement());
+				associatedClassNames.put(getClassName(klass), ((UMLClass)(otherEnd.getUMLElement())));
 			}
 		}
 	}
