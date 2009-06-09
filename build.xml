@@ -11,9 +11,10 @@
 	<property name="software.dir" value="${sdk.toolkit.dir}/software"/>
 	<property name="build.dir" value="${software.dir}/build"/>
 	<property name="modules.dir" value="${software.dir}/modules"/>
-
 	
 	<property file="${build.dir}/project.properties"/>
+	
+	<property name="sdk.src.file" value="SDK-${sdk.version}.zip"/>
 
 	<target name="init">
 		<mkdir dir="${dist.dir}"/>
@@ -43,14 +44,14 @@
 	</target>
 
 	<target name="-package-software" description="Packages the entire system">
-		<zip destfile="${dist.dir}/SDK-${sdk.version}.zip" whenempty="skip">
+		<zip destfile="${dist.dir}/${sdk.src.file}" whenempty="skip">
 			<zipfileset dir="${basedir}">
+				<exclude name="**/bin/**/*.*"/>
 				<exclude name="**/target/**/*.*"/>
-				<exclude name="**/modules/**/*.*"/>
 				<exclude name="${dist.dir}/**/*"/>
 				<exclude name="build.xml"/>
-				<exclude name="**/.project"/>
-				<exclude name="**/.classpath"/>
+				<exclude name=".project"/>
+				<exclude name=".classpath"/>
 			</zipfileset>
 		</zip>
 	</target>
