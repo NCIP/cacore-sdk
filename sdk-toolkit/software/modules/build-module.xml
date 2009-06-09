@@ -72,6 +72,7 @@
 	<target name="jar" depends="compile:application-code,ivy:setup-runtime">
 		<jar destfile="${module.lib.dir}/${jar.name}">
 			<fileset dir="${build.classes.dir}" />
+			<fileset dir="${src.java.dir}" />
 		</jar>
 	</target>
 
