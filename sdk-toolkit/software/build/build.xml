@@ -208,13 +208,13 @@
 		dist:installer
 		" />
 
-	<target name="build:workspace-modules" description="Call modules build target to produce artifiacts">
+	<target name="build:workspace-modules" description="Call modules build target to produce artifacts">
 		<echo>target DIR = ${target.dir}</echo>
 		<echo>modules DIR = ${modules.dir}</echo>
 		<ant inheritAll="true" inheritRefs="false" antfile="${modules.build.file}" target="${modules.build.target}" dir="${modules.dir}">
 		</ant>
 	</target>
-	
+
 	<target name="static-analysis:workspace-modules" description="Call modules build target to produce static analysis of source code">
 		<echo>target DIR = ${target.dir}</echo>
 		<echo>modules DIR = ${modules.dir}</echo>
@@ -312,11 +312,9 @@
 		</copy>
 
 		<dist-prep />
-
-		<antcall target="-copyProjectProperties"></antcall>
 	</target>
 
-	<target name="dist:installer" depends="dist:installer:prep" description="Produces zip file based on installer distribution area. Zip is used by deploy:remote:* or external installations">
+	<target name="dist:installer" depends="dist:installer:prep,-copyProjectProperties" description="Produces zip file based on installer distribution area. Zip is used by deploy:remote:* or external installations">
 		<delete file="${dist.dir}/${project-webapp.install.zip.file}" />
 		<obfuscate-properties-file properties.file="${dist.exploded.dir}/install.properties" required.property.list="application.base.path.linux,application.base.path.windows,database.system.user,database.system.password,database.server,database.port,database.name,database.user,database.password,mail.smtp.host,jboss.server.hostname" optional.property.list="ldap.url,ldap.basedn" delete.property.list="exclude.jboss.backup" />
 		<zip destfile="${dist.dir}/${project-webapp.install.zip.file}" basedir="${dist.exploded.dir}" />
@@ -369,7 +367,7 @@
 	</target>
 
 	<!-- build:all,  -->
-	<target name="deploy:local:install" depends="build:workspace-modules,build:all,dist:installer:prep,deploy:local:install:nocodegen" description="Installs and configures the application and required binaries and re-creates the datbase  on the local machine. Used for developer desktops and ci environments.">
+	<target name="deploy:local:install" depends="build:workspace-modules,build:all,dist:installer:prep,-copyProjectProperties,deploy:local:install:nocodegen" description="Installs and configures the application and required binaries and re-creates the datbase  on the local machine. Used for developer desktops and ci environments.">
 	</target>
 
 	<target name="deploy:local:upgrade" depends="build:all,dist:upgrader:prep,deploy:local:upgrade:nocodegen" description="Upgrades and configures the application and database  on the local machine. Used for developer desktops and ci environments.">
