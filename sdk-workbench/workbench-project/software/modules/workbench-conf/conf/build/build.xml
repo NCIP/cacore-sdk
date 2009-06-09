@@ -1,0 +1,112 @@
+<!-- ======================================================================= -->
+<!-- caCore Sdk Workbench Portal Build File                                  -->
+<!-- ======================================================================= -->
+<project name="SDK Workbench" basedir="." >
+
+	<!--***********************************************************************
+	*** Define the Environment Variable
+	*********************************************************************** -->
+	<property environment="env"/>
+
+	<!--***********************************************************************
+	*** Load the build properties for the project
+	*********************************************************************** -->
+
+	<macrodef name="SDKecho">
+		<attribute name="message" default="..." />
+		<sequential>
+			<echo>*****************************************************************</echo>
+			<echo>***  @{message}</echo>
+			<echo>*****************************************************************</echo>
+		</sequential>
+	</macrodef>
+
+	<!--***********************************************************************
+	*** Usage 
+	*********************************************************************** -->
+	<target name="usage">
+		<echo message="Not to be called directly.  This file contains utilities to be used to configure the SDK Workbench project generation directory."/>
+	</target>
+
+	<!--***********************************************************************
+	*** Configure the project generation directory 
+	*********************************************************************** -->
+	<target name="configureProject" description="Configure a project generation directory"
+		depends="checkInputProps,copySkeleton">
+	</target>
+	
+
+	<!--***********************************************************************
+	*** Copies the skeleton project-template contents
+	*********************************************************************** -->
+	<target name="copySkeleton" depends="prepareSkeleton">
+		<copy todir="${skeleton.destination.dir}">
+			<fileset dir="${skeleton.project.template.dir}" />
+		</copy>
+	</target>
+
+	<!--***********************************************************************
+	*** Copies the model file to the models subdirectory of  
+	*** the project generation directory
+	*********************************************************************** -->
+	<target name="copyModelFile" depends="prepareSkeleton">
+		<mkdir dir="${skeleton.destination.dir}/${models.dir}" />
+		<copy todir="${skeleton.destination.dir}/${models.dir}">
+			<fileset file="${skeleton.model.file}" />
+		</copy>
+	</target>
+
+	<!--***********************************************************************
+	*** Copies the caGrid Security certificate and key files to the  
+	*** build subdirectory of the project generation directory
+	*********************************************************************** -->
+	<target name="copyCertKeyFiles" depends="prepareSkeleton">
+		<mkdir dir="${skeleton.destination.dir}/${skeleton.target.grid.dir}" />
+		<copy tofile="${skeleton.destination.dir}/${skeleton.target.grid.dir}/host-cert.pem">
+			<fileset file="${skeleton.cert.file}"  />
+		</copy>
+		<copy tofile="${skeleton.destination.dir}/${skeleton.target.grid.dir}/host-key.pem">
+			<fileset file="${skeleton.key.file}" />
+		</copy>
+	</target>
+
+	<target name="checkInputProps">
+		<condition property="noInputNeeded">
+			<and>
+				<isset property="skeleton.destination.dir"/>
+			</and>
+		</condition>
+	</target>
+
+	<target name="prepareSkeleton" unless="noInputNeeded">
+		<input
+			message="Please enter the destination directory where your project should be generated: [${skeleton.destination.dir.default}]:"
+			addproperty="skeleton.destination.dir"
+			defaultvalue="${skeleton.destination.dir.default}"/>
+	</target>
+	
+	<target name="dist:tools:retrieve:sdk" description="Downloads SDK from binary repository">
+		<!-- Task definitions -->
+		<taskdef resource="net/sf/antcontrib/antlib.xml" onerror="ignore"/>
+		
+		<switch value="${workbench.type}">
+			<case value="standalone">
+				<copy tofile="${sdk.install.dir}/${sdk.dest.file}">
+					<fileset file="${sdk.src.path}" />
+				</copy>
+			</case>
+			<case value="webstart">
+				<echo message="* * * get src: ${sdk.src.url}; get dest: ${sdk.install.dir}/${sdk.dest.file}" />
+				<get src="${sdk.src.url}" dest="${sdk.install.dir}/${sdk.dest.file}" />
+			</case>
+			<default>
+				<fail message="Invalid workbench type: ${workbench.type}; should be 'standalone' or 'webstart'" />
+			</default>
+		</switch>
+	</target>
+	
+	<target name="install:sdk" depends="dist:tools:retrieve:sdk" description="Install SDK binaries" >
+		<unzip dest="${sdk.install.dir}" src="${sdk.install.dir}/${sdk.dest.file}" />
+	</target>
+
+</project>

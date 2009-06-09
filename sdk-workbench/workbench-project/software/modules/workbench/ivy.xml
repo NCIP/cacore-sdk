@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?xml-stylesheet type="text/xsl"
+                 href="http://gforge.nci.nih.gov/svnroot/commonlibrary/trunk/ivy-xsl/ivy.xsl"?>
+       
+<ivy-module version="1.0">
+	<info organisation="ncicb" module="sdk-workbench-module" status="integration"/>
+
+	<configurations>
+		<conf name="compile" />
+		<conf name="runtime" />
+	</configurations>
+
+	<publications>
+		<artifact name="sdk-workbench" type="jar" conf="compile" />
+	</publications>
+
+	<dependencies> <!-- change -->
+		<dependency org="apache" name="log4j" rev="1.2.13" conf="compile" />
+		<dependency org="apache" name="axis" rev="1.4" conf="compile" />
+		
+		<dependency org="jcp" name="jaxrpc" rev="1.1" conf="compile" />
+		<dependency org="jcp" name="saaj" rev="1.1" conf="compile" />
+		
+		<!-- caGrid -->
+		<dependency org="caGrid" name="core" rev="1.2" conf="compile->default" />
+		
+		<!-- caGrid Grape -->
+		<dependency org="caGrid" name="grape" rev="1.2" conf="compile->default" />
+		
+		<!-- caGrid Introduce -->
+		<dependency org="caGrid" name="introduce" rev="1.2" conf="compile->extension" />
+		
+		<dependency org="globus" name="ws-enumeration" rev="4.0.3" conf="compile" />
+		<dependency org="globus" name="jcog" rev="1.2" conf="compile" />
+		
+		<dependency org="springsource" name="spring" rev="2.0.2" conf="compile"/>
+		<dependency org="karsten" name="validation" rev="2.0.0" conf="compile"/>
+
+	</dependencies>
+</ivy-module>
