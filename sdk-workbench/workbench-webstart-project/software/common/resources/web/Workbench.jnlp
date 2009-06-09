@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- JNLP File for the SDK Workbench -->
+<jnlp spec="1.0+"
+      codebase="http://@SERVER_HOSTNAME@:@SERVER_PORT@/@PROJECT_NAME@/" 
+      href="Workbench.jnlp">
+   <information>
+      <title>SDK Workbench Web Start JNLP File</title>
+      <vendor>NCICB</vendor>
+      <description>SDK Workbench</description>
+      <homepage href="http://java.sun.com/docs/books/tutorial/deployment/webstart/running.html"/>
+      <description kind="short">Web Start JNLP Page for SDK Workbench</description>
+      <offline-allowed/>
+   </information>
+   <security>
+		<all-permissions/>
+   </security> 
+   <resources>
+   	<jar href="lib/ant-1.7.0.jar" download="eager" /> 
+   	<jar href="lib/ant-apache-log4j-1.7.0.jar" download="eager" />
+   	<jar href="lib/ant-contrib.jar" download="eager" />
+	<jar href="lib/ant-jsch-1.7.0.jar" download="eager" />	
+	<jar href="lib/ant-launcher-1.7.0.jar" download="eager" /> 
+	<jar href="lib/ant-nodeps-1.7.0.jar" download="eager" /> 
+	<jar href="lib/axis-1.4.jar" download="eager" /> 
+	<jar href="lib/caGrid-core-1.2.jar" download="eager" /> 
+	<jar href="lib/caGrid-grape-1.2.jar" download="eager" /> 
+	<jar href="lib/caGrid-grape-resources-1.2.jar" download="eager" /> 
+	<jar href="lib/caGrid-Introduce-core-1.2.jar" download="eager" /> 
+	<jar href="lib/commons-discovery-0.2.jar" download="eager" />
+	<jar href="lib/commons-logging-1.1.jar" download="eager" />
+	<jar href="lib/concurrent-1.3.4.jar" download="eager" />
+	<jar href="lib/jaxrpc-1.1.jar" download="eager" />
+	<jar href="lib/jsch-0.1.34.jar" download="eager" />
+	<jar href="lib/log4j-1.2.13.jar" download="eager" />
+	<jar href="lib/saaj-1.2.jar" download="eager" /> 
+	<jar href="lib/sdk-workbench-4.2-beta.jar" main="true" download="eager" />
+	<jar href="lib/sdk-workbench-conf-4.2-beta.jar" download="eager" />
+	<jar href="lib/spring-2.0.2.jar" download="eager" />
+	<jar href="lib/tools-1.5.0.jar" download="eager" />		
+	<jar href="lib/validation-2.0.0.jar" download="eager" />
+	<jar href="lib/wsrf_core_enum-4.0.3.jar" download="eager" />
+	<jar href="lib/zcog-jglobus-1.2.jar" download="eager" />
+	
+	<j2se version="1.5+" href="http://java.sun.com/products/autodl/j2se"/>
+   </resources>
+   <application-desc main-class="gov.nih.nci.cacoresdk.workbench.portal.SdkWorkbenchPortal">
+   	<argument>webstart</argument>
+   	<argument>http://@SERVER_HOSTNAME@:@SERVER_PORT@/@PROJECT_NAME@/@SDK_SRC_FILE@</argument>
+   	<argument>null</argument>
+   </application-desc>
+</jnlp>
