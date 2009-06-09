@@ -248,7 +248,7 @@
 	</target>
 
 	<target name="build2Test">
-		<run-test ENABLE.WRITABLE.API.EXTENSION="true" DB.TYPE="mysql" GENERATE.XSD.WITH.GME.TAGS="true" REPORT.PROJECT.DIR="build2Test" />
+		<run-test ENABLE.WRITABLE.API.EXTENSION="true" DB.TYPE="oracle" GENERATE.XSD.WITH.GME.TAGS="true" REPORT.PROJECT.DIR="build2Test" />
 	</target>
 
 	<target name="build3Test">
@@ -297,7 +297,7 @@
 	</target>
 
 	<target name="build14Test">
-		<run-test SERVER.TYPE="jboss" DB.TYPE="mysql" MODEL.FILE.TYPE="ARGO" MODEL.FILE="sdk.uml" ENABLE.WRITABLE.API.EXTENSION="true" ENABLE.COMMON.LOGGING.MODULE="true" GENERATE.HIBERNATE.VALIDATOR="true"  REPORT.PROJECT.DIR="build14Test" />
+		<run-test SERVER.TYPE="jboss" MODEL.FILE.TYPE="ARGO" MODEL.FILE="sdk.uml" ENABLE.WRITABLE.API.EXTENSION="true" ENABLE.COMMON.LOGGING.MODULE="true" GENERATE.HIBERNATE.VALIDATOR="true"  REPORT.PROJECT.DIR="build14Test" />
 	</target>
 
 	<target name="build15Test">
