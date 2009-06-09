@@ -12,8 +12,8 @@
 	*** Load the build properties for the project
 	*********************************************************************** -->
 	
-	<!-- Set the absolute path to the SDK installation home directory -->
-	<property name="sdk.install.home" value="C:\dan\dev\caCore\SDK4-svn"  />
+	<!-- Set the path to the SDK installation home (trunk) directory prior to running !!!-->
+	<property name="package.sdk.home" value="../../../.."  />
 	
 	<property file="build.properties" />
 	
@@ -171,10 +171,10 @@
 	</target>
 	
 	<target name="package:sdk:src" description="Packages SDK Source Distribution, and Copies to Local Resource Folder ">
-		<ant antfile="${sdk.install.home}/build.xml" target="package" inheritall="false" inheritrefs="false">
+		<ant antfile="${package.sdk.home}/build.xml" target="package" inheritall="false" inheritrefs="false">
 			<property name="sdk.src.file" value="${sdk.src.file}" />
 		</ant>
-		<copy file="${sdk.install.home}/dist/${sdk.src.file}" todir="${project.sdk.dist.dir}" />
+		<copy file="${package.sdk.home}/dist/${sdk.src.file}" todir="${project.sdk.dist.dir}" />
 	</target>
 
 </project>
