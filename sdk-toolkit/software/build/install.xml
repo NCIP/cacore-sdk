@@ -625,11 +625,11 @@
 				<backup-dir src.dir="${deploy.tomcat.home}" backup.base.dir="${backup.tomcat.base.dir}" backup.count="${backup.count}" />
 			</then>
 		</if>
-		<delete dir="${deploy.tomcat.home}" />
+		<delete dir="${deploy.tomcat.home}" failonerror="false" />
 	</target>
 
 	<target name="install:tomcat:binaries" description="Install tomcat binaries" unless="exclude.tomcat">
-		<delete dir="${deploy.tomcat.home}" />
+		<delete dir="${deploy.tomcat.home}" failonerror="false"/>
 		<unzip dest="${application.base.path}" src="${tools.dir}/${tomcat.binaries.file}" />
 		<if>
 			<os family="unix" />
