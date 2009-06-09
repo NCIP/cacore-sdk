@@ -1,0 +1,48 @@
+<!-- ======================================================================= -->
+<!-- caCore Sdk Workbench Portal build file                                  -->
+<!-- ======================================================================= -->
+<project name="SDK Workbench" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant" xmlns="antlib:org.apache.tools.ant" xmlns:cs="antlib:com.puppycrawl.tools.checkstyle" default="run">
+
+	<!--***********************************************************************
+	*** Define the Environment Variable
+	*********************************************************************** -->
+	<property environment="env"/>
+
+	<!--***********************************************************************
+	*** CLASSPATH AND UNIX-STYLE BASEDIR PROPERTIES
+	*********************************************************************** -->
+	<path id="runtime">
+		<!-- purposely load sdk-workbench-conf jar first so that expected log4j.properties file is loaded -->
+		<fileset dir=".">
+			<include name="**/sdk-workbench-conf*.jar"/>
+		</fileset>
+		<fileset dir=".">
+			<include name="**/*.jar"/>
+		</fileset>
+		<pathelement path="." />
+	</path>
+
+	<macrodef name="SDKecho">
+		<attribute name="message" default="..." />
+		<sequential>
+			<echo>*****************************************************************</echo>
+			<echo>***  @{message}</echo>
+			<echo>*****************************************************************</echo>
+		</sequential>
+	</macrodef>
+
+	<!--***********************************************************************
+	*** Runs the Workbench 
+	*********************************************************************** -->
+	<target name="run" description="Runs the Workbench">
+		<SDKecho message="${ant.project.name}: Running the SDK Workbench"/>
+		<SDKecho message="sdk.src.zip -> ${sdk.src.zip}"/>
+		<java classname="gov.nih.nci.cacoresdk.workbench.portal.SdkWorkbenchPortal" fork="true">
+			<classpath refid="runtime" />
+			<arg value="standalone"/>
+			<arg value="null"/>
+			<arg value="${sdk.src.file}"/>
+		</java>
+	</target>
+
+</project>
