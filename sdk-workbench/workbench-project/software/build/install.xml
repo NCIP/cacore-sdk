@@ -36,7 +36,6 @@
 	*********************************************************************** -->
 	<target name="run" description="Runs the Workbench">
 		<SDKecho message="${ant.project.name}: Running the SDK Workbench"/>
-		<SDKecho message="sdk.src.zip -> ${sdk.src.zip}"/>
 		<java classname="gov.nih.nci.cacoresdk.workbench.portal.SdkWorkbenchPortal" fork="true">
 			<classpath refid="runtime" />
 			<arg value="standalone"/>
