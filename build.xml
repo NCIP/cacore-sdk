@@ -45,11 +45,10 @@
 
 	<target name="-package-software" description="Packages the entire system">
 		<zip destfile="${dist.dir}/${sdk.src.file}" whenempty="skip">
-			<zipfileset dir="${basedir}">
+			<zipfileset dir="${sdk.toolkit.dir}">
 				<exclude name="**/bin/**/*.*"/>
 				<exclude name="**/target/**/*.*"/>
 				<exclude name="${dist.dir}/**/*"/>
-				<exclude name="build.xml"/>
 				<exclude name=".project"/>
 				<exclude name=".classpath"/>
 			</zipfileset>
