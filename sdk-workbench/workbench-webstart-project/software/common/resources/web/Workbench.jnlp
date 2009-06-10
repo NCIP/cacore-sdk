@@ -46,6 +46,6 @@
    <application-desc main-class="gov.nih.nci.cacoresdk.workbench.portal.SdkWorkbenchPortal">
    	<argument>webstart</argument>
    	<argument>http://@SERVER_HOSTNAME@:@SERVER_PORT@/@PROJECT_NAME@/@SDK_SRC_FILE@</argument>
-   	<argument>null</argument>
+   	<argument>@SDK_SRC_FILE@</argument>
    </application-desc>
 </jnlp>
