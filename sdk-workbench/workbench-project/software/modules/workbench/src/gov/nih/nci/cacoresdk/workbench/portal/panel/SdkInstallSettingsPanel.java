@@ -138,10 +138,6 @@ public final class SdkInstallSettingsPanel implements Panel, PanelValidator {
         	
             // Project Settings Panel Label Definitions
             JLabel sdkInstallDirLabel = null;
-            JLabel projectDirLabel = null;
-            JLabel projectNameLabel = null;
-            JLabel namespacePrefixLabel = null;
-            JLabel webserviceNameLabel = null;
         	
             GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
             gridBagConstraints10.anchor = java.awt.GridBagConstraints.WEST;
@@ -239,19 +235,6 @@ public final class SdkInstallSettingsPanel implements Panel, PanelValidator {
             sdkInstallDirLabel.setText("Select SDK Installation Directory:");
             sdkInstallDirLabel.setName("SDK Installation Directory");
             
-            projectDirLabel = new JLabel();
-            projectDirLabel.setText("Enter the project directory:");
-            projectDirLabel.setName("Project Directory");
-            
-            projectNameLabel = new JLabel();
-            projectNameLabel.setText("Enter the Project Name:");
-            
-            namespacePrefixLabel = new JLabel();
-            namespacePrefixLabel.setText("Enter the Project Namespace Prefix:");
-            
-            webserviceNameLabel = new JLabel();
-            webserviceNameLabel.setText("Enter the Project Web Service Name:");
-            
             sdkInstallSettingsPanel = new JPanel();
             sdkInstallSettingsPanel.setLayout(new GridBagLayout());
             sdkInstallSettingsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Define SDK Install Properties",
@@ -290,7 +273,7 @@ public final class SdkInstallSettingsPanel implements Panel, PanelValidator {
     }
     
     public void initValidation() {
-    	//Project
+    	//SDK Install
         ValidationComponentUtils.setMessageKey(getSdkInstallDirField(), SDK_INSTALL_DIR);
         ValidationComponentUtils.setMandatory(getSdkInstallDirField(), true);
     }
