@@ -67,22 +67,7 @@ public class SdkInstallPropertiesViewer extends WorkbenchViewerBaseComponent {
     /**
      * This method initializes this Viewer
      */
-    private void initialize() {
-
-    	//Request Project Directory value up front.  Used to determine whether
-        //to load deploy settings from either workbench template or existing project 
-        //properties file
-//        String projectDirPath=null;
-//
-//		try {
-//			projectDirPath = ResourceManager.promptDir("","Select the Project Generation Directory");
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//			return;
-//		}
-        
-		// Initialize WorkbenchPropertiesManager
-//		propsMgr = ResourceManager.getCodegenPropertiesManager(projectDirPath);   
+    private void initialize() {  
         
         //Initialize main tabbed panel validator
         propsValidator = new SdkInstallPropertiesValidator(this);
@@ -214,7 +199,7 @@ public class SdkInstallPropertiesViewer extends WorkbenchViewerBaseComponent {
     public JTabbedPane getMainTabbedPane() {
 		if (mainTabbedPane == null) {
 			mainTabbedPane = new JTabbedPane();
-			mainTabbedPane.addTab("Project", null, new IconFeedbackPanel(this.validationModel, sdkInstallSettingsPanel.getSettingsPanel()), null);
+			mainTabbedPane.addTab("Install SDK", null, new IconFeedbackPanel(this.validationModel, sdkInstallSettingsPanel.getSettingsPanel()), null);
 			
 			mainTabbedPane.addMouseListener(new java.awt.event.MouseListener() {
                 public void mouseEntered(java.awt.event.MouseEvent e) {
@@ -252,7 +237,7 @@ public class SdkInstallPropertiesViewer extends WorkbenchViewerBaseComponent {
 	private Map<String,String> getPropsMap(){
 		Map<String,String> propsMap=new TreeMap<String,String>();
 
-		// Project properties
+		// SDK Install properties
 		propsMap.putAll(sdkInstallSettingsPanel.getPropsMap());
 
 		return propsMap;
