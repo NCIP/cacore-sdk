@@ -27,6 +27,7 @@ public class TestClient
 		{
 			e.printStackTrace();
 		}
+		System.exit(0);
 	}
 	public ApplicationService getApplicationService() throws Exception
 	{

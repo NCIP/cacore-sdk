@@ -31,6 +31,7 @@ public class TestClient
 		{
 			e.printStackTrace();
 		}
+		System.exit(0);
 	}
 
 	public void testSearch() throws Exception
@@ -44,6 +45,10 @@ public class TestClient
 		Service  service = new Service();
 		Call call = null;
 
+		Boolean securityEnabled = false;
+		if (properties.get("SECURITY_ENABLED").equals("true")
+				|| properties.get("SECURITY_ENABLED").equals("yes")) 
+			securityEnabled = true;	
 
 		for(Class klass:classList)
 		{
@@ -73,15 +78,14 @@ public class TestClient
 					call.addParameter("arg2", searchClassQName, ParameterMode.IN);
 					call.setReturnType(org.apache.axis.encoding.XMLType.SOAP_ARRAY);
 
-					if (properties.get("SECURITY_ENABLED").equals("true")
-								|| properties.get("SECURITY_ENABLED").equals("yes")) {
+					if (securityEnabled == true){
 						SOAPHeaderElement headerElement = new SOAPHeaderElement(call.getOperationName().getNamespaceURI(),"SecurityHeader");
 						headerElement.setPrefix("security");
 						headerElement.setMustUnderstand(false);
 						SOAPElement usernameElement = headerElement.addChildElement("username");
-						usernameElement.addTextNode("userId");
+						usernameElement.addTextNode("/O=caBIG/OU=caGrid/OU=NCICB DEV LOA1/OU=Dorian/CN=SDKUser1");
 						SOAPElement passwordElement = headerElement.addChildElement("password");
-						passwordElement.addTextNode("password");
+						passwordElement.addTextNode("Psat123!@#");
 						call.addHeader(headerElement);				
 					}
 
@@ -112,7 +116,7 @@ public class TestClient
 											field = getField(obj, rolename);
 										}
 										rolename = field.getName();
-										testGetAssociation(url, service, obj, method.getReturnType(), rolename);
+										testGetAssociation(url, service, obj, method.getReturnType(), rolename, securityEnabled);
 									}
 								}
 							}
@@ -129,7 +133,7 @@ public class TestClient
 	}
 
 
-	private void testGetAssociation(String url, Service service, Object containingObj, Class associationClass, String rolename) throws Exception {
+	private void testGetAssociation(String url, Service service, Object containingObj, Class associationClass, String rolename, Boolean securityEnabled) throws Exception {
 		//Sample Scenario:  http://localhost:8080/example/GetHTML?query=Bank&Credit[@id=3]&roleName=issuingBank
 
 		Call call = (Call) service.createCall();
@@ -151,17 +155,17 @@ public class TestClient
 		call.addParameter("arg3", searchClassQName, ParameterMode.IN);					
 		call.setReturnType(org.apache.axis.encoding.XMLType.SOAP_ARRAY);
 
-		/*
-		//This block inserts the security headers in the service call
-		SOAPHeaderElement headerElement = new SOAPHeaderElement(call.getOperationName().getNamespaceURI(),"CSMSecurityHeader");
-		headerElement.setPrefix("csm");
-		headerElement.setMustUnderstand(false);
-		SOAPElement usernameElement = headerElement.addChildElement("username");
-		usernameElement.addTextNode("userId");
-		SOAPElement passwordElement = headerElement.addChildElement("password");
-		passwordElement.addTextNode("password");
-		call.addHeader(headerElement);				
-		 */
+		if (securityEnabled == true){
+			SOAPHeaderElement headerElement = new SOAPHeaderElement(call.getOperationName().getNamespaceURI(),"SecurityHeader");
+			headerElement.setPrefix("security");
+			headerElement.setMustUnderstand(false);
+			SOAPElement usernameElement = headerElement.addChildElement("username");
+			usernameElement.addTextNode("/O=caBIG/OU=caGrid/OU=NCICB DEV LOA1/OU=Dorian/CN=SDKUser1");
+			SOAPElement passwordElement = headerElement.addChildElement("password");
+			passwordElement.addTextNode("Psat123!@#");
+			call.addHeader(headerElement);				
+		}
+
 
 		System.out.println("Searching for association: " + containingObj.getClass().getName() + "." + rolename);
 		Object[] results = (Object[])call.invoke(new Object[] { containingObj, rolename, 0 });
