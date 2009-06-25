@@ -24,10 +24,11 @@ public class TestClient
 		{
 			e.printStackTrace();
 		}
+		System.exit(0);
 	}
 	public ApplicationService getApplicationService() throws Exception
 	{
-		return ApplicationServiceProvider.getApplicationService("user1","password");
+		return ApplicationServiceProvider.getApplicationService("/O=caBIG/OU=caGrid/OU=NCICB DEV LOA1/OU=Dorian/CN=SDKUser1","Psat123!@#");
 	}
 	
 	public void testSearch() throws Exception
