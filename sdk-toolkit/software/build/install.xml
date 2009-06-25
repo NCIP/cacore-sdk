@@ -760,7 +760,7 @@
 	</target>
 
 	<target name="install:tomcat:configure:libraries" description="Deploy grid-webapp and common libraries to tomcat installation" unless="exclude.tomcat">
-		<echo message="copying globus jars into tomcat common and server folder "/>
+		<echo message="copying jars into tomcat common and server folder "/>
 		<if>
 			<available file="${package.client.tomcat.dir}/common/endorsed/xercesImpl-2.7.1.jar"/>
 			<then>
