@@ -12,8 +12,10 @@
 -- Create schema cacoresdk
 --
 
-CREATE DATABASE IF NOT EXISTS cacoresdk;
-USE cacoresdk;
+-- 
+-- CREATE DATABASE IF NOT EXISTS cacoresdk
+-- USE cacoresdk;
+-- 
 
 --
 -- Definition of table `ADDRESS`
