@@ -283,7 +283,8 @@
 	</condition>
 
 	<property name="SERVER_URL" value="${SERVER_PROTOCOL}://${SERVER_HOST_NAME}:${SERVER_PORT}/${PROJECT_NAME}"/>
-	<property name="SDK_GRID_LOGIN_SERVICE_URL" value="${SERVER_PROTOCOL}://${SERVER_HOST_NAME}:${SERVER_PORT}/${SDK_GRID_LOGIN_SERVICE_NAME}"/>
+	<property name="SERVER_HTTP_URL" value="http://${SERVER_HOST_NAME}:${SERVER_HTTP_PORT}/${PROJECT_NAME}"/>
+	<property name="SDK_GRID_LOGIN_SERVICE_URL" value="http://localhost:${SERVER_HTTP_PORT}/${SDK_GRID_LOGIN_SERVICE_NAME}"/>
 
 	<target name="-replace-templates-filter-tokens-reconfigure">
 		<filterset id="filtertoken3" begintoken="@" endtoken="@" onmissingfiltersfile="fail">
@@ -297,6 +298,7 @@
 			<filter token="DB_DIALECT" value="${DB_DIALECT}" />
 
 			<filter token="SERVER_URL" value="${SERVER_URL}" />
+			<filter token="SERVER_HTTP_URL" value="${SERVER_HTTP_URL}" />			
 			<filter token="CSM_JNDI_NAME" value="${CSM_JNDI_NAME}" />
 			<filter token="CSM_DB_JNDI_URL" value="${JNDI_PREFIX}/${CSM_JNDI_NAME}" />
 			<filter token="CSM_DB_DRIVER" value="${CSM_DB_DRIVER}" />
@@ -571,6 +573,11 @@
 				<copy todir="${package.client.local.lib.dir}">
 					<fileset dir="${system.logging.lib.dir}" />
 				</copy>
+				<copy todir="${package.client.local.conf.dir}">
+					<fileset dir="${output.src.dir}">
+						<include name="${clm.object.state.logger.config}" />
+					</fileset>
+				</copy>
 			</then>
 		</if>
 	</target>
@@ -784,6 +791,11 @@
 				<echo message="system logging enabled" />
 				<copy todir="${temp.webapp.staging.lib.dir}" overwrite="true">
 					<fileset dir="${system.logging.lib.dir}" />
+				</copy>
+				<copy todir="${temp.webapp.staging.classes.dir}" overwrite="true">
+					<fileset dir="${output.src.dir}">
+						<include name="${clm.object.state.logger.config}" />
+					</fileset>
 				</copy>
 			</then>
 		</if>
@@ -1063,6 +1075,18 @@
 				<echo message="SECURITY_ENABLED or ENABLE_GRID_LOGIN_MODULE set to false" />
 			</else>
 		</if>
+
+		<if>
+			<equals arg1="${ENABLE_CLM_LOGGER_CFG_GENERATION}" arg2="true" />
+			<then>
+				<echo message="system logging enabled" />
+				<mkdir dir="${package.client.jboss.default.lib.dir}" />
+				<copy todir="${package.client.jboss.default.lib.dir}">
+					<fileset dir="${system.logging.lib.dir}" includes="**/clm*.jar"/>
+				</copy>
+			</then>
+		</if>
+		
 	</target>
 
 	<target name="package-server" depends="init">
