@@ -11,7 +11,7 @@ import javax.xml.soap.SOAPHeader;
 import org.acegisecurity.AcegiSecurityException;
 import org.acegisecurity.Authentication;
 import org.acegisecurity.context.SecurityContextHolder;
-import org.acegisecurity.providers.AuthenticationProvider;
+import org.acegisecurity.AuthenticationManager;
 import org.acegisecurity.providers.UsernamePasswordAuthenticationToken;
 import org.acegisecurity.providers.rcp.RemoteAuthenticationException;
 import org.apache.axis.AxisFault;
@@ -31,22 +31,22 @@ public class ACEGISOAPHandler extends BasicHandler {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private static AuthenticationProvider authProvider;
+	private static AuthenticationManager authManager;
 
 	private synchronized void initialize()
 	{
-		if(authProvider == null)
+		if(authManager == null)
 		{
 			try
 			{
 				HttpServlet srv = (HttpServlet) MessageContext.getCurrentContext().getProperty(HTTPConstants.MC_HTTP_SERVLET);
 				ServletContext context = srv.getServletContext();
 				WebApplicationContext ctx =  WebApplicationContextUtils.getWebApplicationContext(context);
-				authProvider = (AuthenticationProvider) ctx.getBean("authenticationProvider");
+				authManager = (AuthenticationManager) ctx.getBean("authenticationManager");
 			}
 			catch(Exception e)
 			{
-				authProvider = null;
+				authManager = null;
 			}
 		}
 	}
@@ -74,10 +74,10 @@ public class ACEGISOAPHandler extends BasicHandler {
 			headerElement = (SOAPHeaderElement) iterator.next();
 			if (headerElement.getNodeName().equals("security:SecurityHeader"))
 			{
-				if(authProvider == null)
+				if(authManager == null)
 					initialize();
 				
-				if(authProvider == null)
+				if(authManager == null)
 					throw new AxisFault("Authentication Provider not present in configuration file");
 				
 				String username = null;
@@ -96,7 +96,7 @@ public class ACEGISOAPHandler extends BasicHandler {
 				
 				try
 				{
-					authProvider.authenticate(auth);
+					authManager.authenticate(auth);
 					SecurityContextHolder.getContext().setAuthentication(auth);
 					break;
 				}
