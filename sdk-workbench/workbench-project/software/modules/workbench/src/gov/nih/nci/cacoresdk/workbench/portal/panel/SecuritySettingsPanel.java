@@ -44,6 +44,7 @@ public final class SecuritySettingsPanel implements Panel, PanelValidator {
 	// Security
 	private JPanel securitySettingsPanel = null;
 	private JPanel securitySettingsSubPanel = null;
+	private JPanel caGridLoginSettingsSubPanel = null;
 	private JPanel securitySettingsReviewPanel = null;
     
 	// Security Settings Panel Component Definitions
@@ -417,8 +418,6 @@ public final class SecuritySettingsPanel implements Panel, PanelValidator {
 		    JLabel csmProjectNameLabel = null;
 		    JLabel cacheProtectionElementsLabel = null;
 		    JLabel enableCaGridLoginModuleLabel = null;
-		    JLabel caGridLoginModuleNameLabel = null;
-		    JLabel sdkGridLoginSvcNameLabel = null;
 		    
 			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
 			gridBagConstraints10.anchor = java.awt.GridBagConstraints.WEST;
@@ -487,50 +486,28 @@ public final class SecuritySettingsPanel implements Panel, PanelValidator {
 			GridBagConstraints gridBagConstraints50 = new GridBagConstraints();
 			gridBagConstraints50.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints50.gridy = 5;
-			gridBagConstraints50.insets = new java.awt.Insets(15, 2, 2, 2);
+			gridBagConstraints50.insets = new java.awt.Insets(20, 2, 2, 2);
 			gridBagConstraints50.gridx = 0;
 
 			GridBagConstraints gridBagConstraints51 = new GridBagConstraints();
 			gridBagConstraints51.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints51.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints51.gridx = 1;
-			gridBagConstraints51.insets = new java.awt.Insets(15, 2, 2, 2);
+			gridBagConstraints51.insets = new java.awt.Insets(20, 2, 2, 2);
 			gridBagConstraints51.gridy = 5;
 			gridBagConstraints51.weighty = 1.0D;
 			gridBagConstraints51.weightx = 1.0D;  
 			gridBagConstraints51.gridwidth = 2;
-			
+
 			GridBagConstraints gridBagConstraints60 = new GridBagConstraints();
+			gridBagConstraints60.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints60.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints60.gridy = 6;
-			gridBagConstraints60.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints60.gridx = 0;
-
-			GridBagConstraints gridBagConstraints61 = new GridBagConstraints();
-			gridBagConstraints61.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints61.gridy = 6;
-			gridBagConstraints61.weightx = 1.0;
-			gridBagConstraints61.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints61.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints61.gridwidth = 2;
-			//gridBagConstraints61.weighty = 1.0D;
-			gridBagConstraints61.gridx = 1;
-			
-			GridBagConstraints gridBagConstraints70 = new GridBagConstraints();
-			gridBagConstraints70.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints70.gridy = 7;
-			gridBagConstraints70.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints70.gridx = 0;
-
-			GridBagConstraints gridBagConstraints71 = new GridBagConstraints();
-			gridBagConstraints71.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints71.gridy = 7;
-			gridBagConstraints71.weightx = 1.0;
-			gridBagConstraints71.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints71.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints71.gridwidth = 2;
-			//gridBagConstraints71.weighty = 1.0D;
-			gridBagConstraints71.gridx = 1;
+			gridBagConstraints60.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints60.gridwidth = 3;
+			//gridBagConstraints60.weighty = 1.0D; //Non-standard 1.0 setting
+			gridBagConstraints60.weightx = 1.0D;  
 		    
 		    enableInstanceLevelSecurityLabel = new JLabel();
 		    enableInstanceLevelSecurityLabel.setText("Enable Instance Level Security?");
@@ -547,12 +524,6 @@ public final class SecuritySettingsPanel implements Panel, PanelValidator {
 		    //caGrid Auth
 			enableCaGridLoginModuleLabel = new JLabel();
 			enableCaGridLoginModuleLabel.setText("Enable caGrid Login Module?");
-			
-			caGridLoginModuleNameLabel = new JLabel();
-			caGridLoginModuleNameLabel.setText("Enter caGrid Login Module Name:");
-			
-			sdkGridLoginSvcNameLabel = new JLabel();
-			sdkGridLoginSvcNameLabel.setText("Enter SDK Grid Login Service Name:");
 
 		    securitySettingsSubPanel = new JPanel();
 		    securitySettingsSubPanel.setLayout(new GridBagLayout());
@@ -572,15 +543,80 @@ public final class SecuritySettingsPanel implements Panel, PanelValidator {
 		    //caGrid Auth
 		    securitySettingsSubPanel.add(enableCaGridLoginModuleLabel, gridBagConstraints50);
 		    securitySettingsSubPanel.add(getEnableCaGridLoginModuleCheckBox(), gridBagConstraints51);
-		    securitySettingsSubPanel.add(sdkGridLoginSvcNameLabel, gridBagConstraints60);
-		    securitySettingsSubPanel.add(getSdkGridLoginSvcNameField(), gridBagConstraints61);
-		    securitySettingsSubPanel.add(caGridLoginModuleNameLabel, gridBagConstraints70);
-		    securitySettingsSubPanel.add(getCaGridLoginModuleNameField(), gridBagConstraints71);
+		    securitySettingsSubPanel.add(getCaGridLoginSettingsSubPanel(), gridBagConstraints60);
 
 		    securitySettingsSubPanel.validate();
 		}
 		return securitySettingsSubPanel;
 	}
+	
+	/**
+	 * This method initializes the caDSR Code Generation settings sub-panel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getCaGridLoginSettingsSubPanel() {
+		if (caGridLoginSettingsSubPanel == null) {
+			
+		    JLabel caGridLoginModuleNameLabel = null;
+		    JLabel sdkGridLoginSvcNameLabel = null;
+
+			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
+			gridBagConstraints10.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints10.gridy = 1;
+			gridBagConstraints10.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints10.gridx = 0;
+
+			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+			gridBagConstraints11.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints11.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints11.gridx = 1;
+			gridBagConstraints11.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints11.gridy = 1;
+			gridBagConstraints11.weighty = 1.0D;
+			gridBagConstraints11.weightx = 1.0D;  
+			gridBagConstraints11.gridwidth = 2;
+
+			GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
+			gridBagConstraints20.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints20.gridy = 2;
+			gridBagConstraints20.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints20.gridx = 0;
+
+			GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
+			gridBagConstraints21.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints21.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints21.gridx = 1;
+			gridBagConstraints21.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints21.gridy = 2;
+			gridBagConstraints21.weighty = 1.0D;
+			gridBagConstraints21.weightx = 1.0D;  
+			gridBagConstraints21.gridwidth = 2;
+		    
+			caGridLoginModuleNameLabel = new JLabel();
+			caGridLoginModuleNameLabel.setText("caGrid Login Module Name:");
+			
+			sdkGridLoginSvcNameLabel = new JLabel();
+			sdkGridLoginSvcNameLabel.setText("SDK Grid Login Service Name:");
+
+		    caGridLoginSettingsSubPanel = new JPanel();
+		    caGridLoginSettingsSubPanel.setLayout(new GridBagLayout());
+		    caGridLoginSettingsSubPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "caGRID Login Module Options",
+					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
+		    
+		    caGridLoginSettingsSubPanel.add(sdkGridLoginSvcNameLabel, gridBagConstraints10);
+		    caGridLoginSettingsSubPanel.add(getSdkGridLoginSvcNameField(), gridBagConstraints11);
+		    caGridLoginSettingsSubPanel.add(caGridLoginModuleNameLabel, gridBagConstraints20);
+		    caGridLoginSettingsSubPanel.add(getCaGridLoginModuleNameField(), gridBagConstraints21);
+			
+		    caGridLoginSettingsSubPanel.validate();
+		}
+		
+		return caGridLoginSettingsSubPanel;
+	}
+	
+	
     /**
      * This method initializes the Project Settings jPanel
      */
@@ -791,10 +827,13 @@ public final class SecuritySettingsPanel implements Panel, PanelValidator {
 
 		    	securitySettingsReviewPanel.add(enableCaGridLoginModuleLabel, gridBagConstraints60);
 		    	securitySettingsReviewPanel.add(enableCaGridLoginModuleValueLabel, gridBagConstraints61);
-		    	securitySettingsReviewPanel.add(caGridLoginModuleNameLabel, gridBagConstraints70);
-		    	securitySettingsReviewPanel.add(caGridLoginModuleNameValueLabel, gridBagConstraints71);
-		    	securitySettingsReviewPanel.add(sdkGridLoginSvcNameLabel, gridBagConstraints80);
-		    	securitySettingsReviewPanel.add(sdkGridLoginSvcNameValueLabel, gridBagConstraints81);
+		    	
+		    	if (getEnableCaGridLoginModuleCheckBox().isSelected()){
+			    	securitySettingsReviewPanel.add(caGridLoginModuleNameLabel, gridBagConstraints70);
+			    	securitySettingsReviewPanel.add(caGridLoginModuleNameValueLabel, gridBagConstraints71);
+			    	securitySettingsReviewPanel.add(sdkGridLoginSvcNameLabel, gridBagConstraints80);
+			    	securitySettingsReviewPanel.add(sdkGridLoginSvcNameValueLabel, gridBagConstraints81);
+		    	}
 		    }
             
             securitySettingsReviewPanel.validate();

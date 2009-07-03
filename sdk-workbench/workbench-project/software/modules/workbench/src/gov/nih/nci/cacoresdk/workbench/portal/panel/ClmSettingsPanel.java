@@ -538,22 +538,22 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
 			clmDbTypeLabel.setText("Select Database Type:");
 
 		    clmDbConnectionUrlLabel = new JLabel();
-		    clmDbConnectionUrlLabel.setText("DB Connection URL:");
+		    clmDbConnectionUrlLabel.setText("Connection URL:");
 		    
 		    clmDbConnectionUrlHostnameLabel = new JLabel();
-		    clmDbConnectionUrlHostnameLabel.setText("DB Hostname:");
+		    clmDbConnectionUrlHostnameLabel.setText("Hostname:");
 		    
 		    clmDbConnectionUrlPortLabel = new JLabel();
-		    clmDbConnectionUrlPortLabel.setText("DB Port:");
+		    clmDbConnectionUrlPortLabel.setText("Port:");
 		    
 		    clmDbConnectionUrlSchemaLabel = new JLabel();
-		    clmDbConnectionUrlSchemaLabel.setText("DB Schema:");
+		    clmDbConnectionUrlSchemaLabel.setText("Schema:");
 
 		    clmDbUsernameLabel = new JLabel();
-		    clmDbUsernameLabel.setText("DB Username:");
+		    clmDbUsernameLabel.setText("Username:");
 
 		    clmDbPasswordLabel = new JLabel();
-		    clmDbPasswordLabel.setText("DB Password:");
+		    clmDbPasswordLabel.setText("Password:");
 		    
 		    clmSettingsSubPanel = new JPanel();
 		    clmSettingsSubPanel.setLayout(new GridBagLayout());
@@ -658,22 +658,22 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
             gridBagConstraints41.weightx = 1.0;
         	
         	clmDbTypeLabel = new JLabel();
-        	clmDbTypeLabel.setText("DB Type:");
+        	clmDbTypeLabel.setText("Type:");
         	clmDbTypeValueLabel = new JLabel();
         	clmDbTypeValueLabel.setText(OptionsMapManager.getClmDbTypeOptionsMap().get(getClmDbTypeComboBox().getSelectedItem().toString()));
 		    
 		    clmDbConnectionUrlLabel = new JLabel();
-		    clmDbConnectionUrlLabel.setText("DB Connection URL:");
+		    clmDbConnectionUrlLabel.setText("Connection URL:");
 		    clmDbConnectionUrlValueLabel = new JLabel();
 		    clmDbConnectionUrlValueLabel.setText(getClmDbConnectionUrlField().getText());
 		    
 		    clmDbUsernameLabel = new JLabel();
-		    clmDbUsernameLabel.setText("DB Username:");
+		    clmDbUsernameLabel.setText("Username:");
 		    clmDbUsernameValueLabel = new JLabel();
 		    clmDbUsernameValueLabel.setText(getClmDbUsernameField().getText());
 		    
 		    clmDbPasswordLabel = new JLabel();
-		    clmDbPasswordLabel.setText("DB Password:");
+		    clmDbPasswordLabel.setText("Password:");
 		    clmDbPasswordValueLabel = new JLabel();
 		    clmDbPasswordValueLabel.setText(getClmDbPasswordField().getText());
             

@@ -39,19 +39,18 @@ public final class WritableApiSettingsPanel implements Panel, PanelValidator {
 	private static final String DATABASE_TYPE = "Database Type";
 	private static final String CLM_PROJECT_NAME = "CLM Project Name";
 	private static final String IDENTITY_GENERATOR_TAG = "Identity Generator Tag";
-	private static final String CADSR_CONNECTION_URL = "caDSR Connection URL";
-	
+
 	// Writable API
 	private JPanel writableApiSettingsPanel = null;
 	private JPanel writableApiSettingsReviewPanel = null;
 	private JPanel writableApiSettingsSubPanel = null;
+	private JPanel clmSettingsSubPanel = null;
     
-	//Writable API Settings Panel Component Definitions
+	// Writable API Settings Panel Component Definitions
     private JCheckBox  enableWritableApiExtensionCheckBox = null;
     private JComboBox  databaseTypeComboBox = null;
     private JTextField clmProjectNameField = null;
     private JTextField identityGeneratorTagField = null;
-    private JTextField caDsrConnectionUrlField = null;
     private JCheckBox  enableCommonLoggingModuleCheckBox = null;
 	
 	public WritableApiSettingsPanel(WorkbenchPropertiesManager propsMgr,TabbedPanePropertiesValidator mainPanelValidator){
@@ -184,36 +183,6 @@ public final class WritableApiSettingsPanel implements Panel, PanelValidator {
         }
         return identityGeneratorTagField;
     }
-
-    /**
-     * This method initializes the CLM Database Connection URL Field
-     * 
-     * @return javax.swing.JTextField
-     */
-    private JTextField getCaDsrConnectionUrlField() {
-        if (caDsrConnectionUrlField == null) {
-        	caDsrConnectionUrlField = new JTextField();
-        	caDsrConnectionUrlField.setText(propsMgr.getDeployPropertyValue("CADSR_CONNECTION_URL"));
-        	caDsrConnectionUrlField.getDocument().addDocumentListener(new DocumentListener() {
-                public void changedUpdate(DocumentEvent e) {
-                	mainPanelValidator.setDirty(true);
-                    mainPanelValidator.validateInput();
-                }
-
-                public void removeUpdate(DocumentEvent e) {
-                	mainPanelValidator.setDirty(true);
-                    mainPanelValidator.validateInput();
-                }
-
-                public void insertUpdate(DocumentEvent e) {
-                	mainPanelValidator.setDirty(true);
-                    mainPanelValidator.validateInput();
-                }
-            });
-        	caDsrConnectionUrlField.addFocusListener(new FocusChangeHandler());
-        }
-        return caDsrConnectionUrlField;
-    }
     
     /**
      * This method initializes the Enable Common Logging Module CheckBox
@@ -264,16 +233,19 @@ public final class WritableApiSettingsPanel implements Panel, PanelValidator {
     public void toggleWritableApiFields() {
 		if (getEnableWritableApiExtensionCheckBox().isSelected()){
 			getDatabaseTypeComboBox().setEnabled(true);
-			getClmProjectNameField().setEnabled(true);
+			
 			getIdentityGeneratorTagField().setEnabled(true);
-			getCaDsrConnectionUrlField().setEnabled(true);
 			getEnableCommonLoggingModuleCheckBox().setEnabled(true);
-
+			
+			if (getEnableCommonLoggingModuleCheckBox().isSelected()){
+				getClmProjectNameField().setEnabled(true);
+			} else{
+				getClmProjectNameField().setEnabled(false);
+			}
 		} else{
 			getDatabaseTypeComboBox().setEnabled(false);
 			getClmProjectNameField().setEnabled(false);
 			getIdentityGeneratorTagField().setEnabled(false);
-			getCaDsrConnectionUrlField().setEnabled(false);
 			getEnableCommonLoggingModuleCheckBox().setEnabled(false);
 		}
     }
@@ -343,9 +315,7 @@ public final class WritableApiSettingsPanel implements Panel, PanelValidator {
 			
 		    //Writable API Settings Panel Label Definitions
 			JLabel databaseTypeLabel = null;
-		    JLabel clmProjectNameLabel = null;
 		    JLabel identityGeneratorTagLabel = null;
-		    JLabel caDsrConnectionUrlLabel = null;
 		    JLabel enableCommonLoggingModuleLabel = null;
 
 			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
@@ -383,65 +353,37 @@ public final class WritableApiSettingsPanel implements Panel, PanelValidator {
 			GridBagConstraints gridBagConstraints30 = new GridBagConstraints();
 			gridBagConstraints30.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints30.gridy = 3;
-			gridBagConstraints30.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints30.insets = new java.awt.Insets(20, 2, 2, 2);
 			gridBagConstraints30.gridx = 0;
 
 			GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
 			gridBagConstraints31.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints31.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints31.gridx = 1;
-			gridBagConstraints31.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints31.insets = new java.awt.Insets(20, 2, 2, 2);
 			gridBagConstraints31.gridy = 3;
 			gridBagConstraints31.weighty = 1.0D;  // so that the Writable API options sub panel has priority
 			gridBagConstraints31.weightx = 1.0D;  
 			gridBagConstraints31.gridwidth = 2;
 			
 			GridBagConstraints gridBagConstraints40 = new GridBagConstraints();
+			gridBagConstraints40.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints40.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints40.gridy = 4;
-			gridBagConstraints40.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints40.gridx = 0;
-
-			GridBagConstraints gridBagConstraints41 = new GridBagConstraints();
-			gridBagConstraints41.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints41.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints41.gridx = 1;
-			gridBagConstraints41.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints41.gridy = 4;
-			gridBagConstraints41.weighty = 1.0D;  // so that the Writable API options sub panel has priority
-			gridBagConstraints41.weightx = 1.0D;  
-			gridBagConstraints41.gridwidth = 2;
-			
-			GridBagConstraints gridBagConstraints50 = new GridBagConstraints();
-			gridBagConstraints50.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints50.gridy = 5;
-			gridBagConstraints50.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints50.gridx = 0;
-
-			GridBagConstraints gridBagConstraints51 = new GridBagConstraints();
-			gridBagConstraints51.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints51.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints51.gridx = 1;
-			gridBagConstraints51.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints51.gridy = 5;
-			gridBagConstraints51.weighty = 1.0D;  // so that the Writable API options sub panel has priority
-			gridBagConstraints51.weightx = 1.0D;  
-			gridBagConstraints51.gridwidth = 2;
+			gridBagConstraints40.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints40.gridwidth = 3;
+			//gridBagConstraints40.weighty = 1.0D; //Non-standard 1.0 setting
+			gridBagConstraints40.weightx = 1.0D;  
 			
 		    databaseTypeLabel = new JLabel();
 		    databaseTypeLabel.setText("Select Database Type:");
-			
-		    clmProjectNameLabel = new JLabel();
-		    clmProjectNameLabel.setText("CLM Project Name:");
 
 		    identityGeneratorTagLabel = new JLabel();
 		    identityGeneratorTagLabel.setText("Enter Hibernate Identity Generator Tag:");
 
-		    caDsrConnectionUrlLabel = new JLabel();
-		    caDsrConnectionUrlLabel.setText("Enter caDSR Connection URL:");
-		    
 		    enableCommonLoggingModuleLabel = new JLabel();
-		    enableCommonLoggingModuleLabel.setText("Enable Common Logging Module?");
+		    enableCommonLoggingModuleLabel.setText("Enable Common Logging Module (CLM)?");
 		    
 			writableApiSettingsSubPanel = new JPanel();
 			writableApiSettingsSubPanel.setLayout(new GridBagLayout());
@@ -451,19 +393,60 @@ public final class WritableApiSettingsPanel implements Panel, PanelValidator {
 
 			writableApiSettingsSubPanel.add(databaseTypeLabel, gridBagConstraints10);
 			writableApiSettingsSubPanel.add(getDatabaseTypeComboBox(), gridBagConstraints11);
-			writableApiSettingsSubPanel.add(clmProjectNameLabel, gridBagConstraints20);
-			writableApiSettingsSubPanel.add(getClmProjectNameField(), gridBagConstraints21);
-			writableApiSettingsSubPanel.add(identityGeneratorTagLabel, gridBagConstraints30);
-			writableApiSettingsSubPanel.add(getIdentityGeneratorTagField(), gridBagConstraints31);
-			writableApiSettingsSubPanel.add(caDsrConnectionUrlLabel, gridBagConstraints40);
-			writableApiSettingsSubPanel.add(getCaDsrConnectionUrlField(), gridBagConstraints41);
-			writableApiSettingsSubPanel.add(enableCommonLoggingModuleLabel, gridBagConstraints50);
-			writableApiSettingsSubPanel.add(getEnableCommonLoggingModuleCheckBox(), gridBagConstraints51);
+			writableApiSettingsSubPanel.add(identityGeneratorTagLabel, gridBagConstraints20);
+			writableApiSettingsSubPanel.add(getIdentityGeneratorTagField(), gridBagConstraints21);
+			writableApiSettingsSubPanel.add(enableCommonLoggingModuleLabel, gridBagConstraints30);
+			writableApiSettingsSubPanel.add(getEnableCommonLoggingModuleCheckBox(), gridBagConstraints31);
+			writableApiSettingsSubPanel.add(getClmSettingsSubPanel(), gridBagConstraints40);
 
 			writableApiSettingsSubPanel.validate();
 		}
 		return writableApiSettingsSubPanel;
 	}
+	
+	/**
+	 * This method initializes the caDSR Code Generation settings sub-panel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getClmSettingsSubPanel() {
+		if (clmSettingsSubPanel == null) {
+			
+		    JLabel clmProjectNameLabel = null;
+
+			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
+			gridBagConstraints10.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints10.gridy = 1;
+			gridBagConstraints10.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints10.gridx = 0;
+
+			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+			gridBagConstraints11.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints11.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints11.gridx = 1;
+			gridBagConstraints11.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints11.gridy = 1;
+			gridBagConstraints11.weighty = 1.0D;
+			gridBagConstraints11.weightx = 1.0D;  
+			gridBagConstraints11.gridwidth = 2;
+		    
+		    clmProjectNameLabel = new JLabel();
+		    clmProjectNameLabel.setText("CLM Project Name:");
+
+		    clmSettingsSubPanel = new JPanel();
+		    clmSettingsSubPanel.setLayout(new GridBagLayout());
+		    clmSettingsSubPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Common Logging Module Options",
+					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
+		    
+		    clmSettingsSubPanel.add(clmProjectNameLabel, gridBagConstraints10);
+		    clmSettingsSubPanel.add(getClmProjectNameField(), gridBagConstraints11);
+			
+		    clmSettingsSubPanel.validate();
+		}
+		return clmSettingsSubPanel;
+	}
+	
     /**
      * This method initializes the Project Settings jPanel
      */
@@ -476,8 +459,6 @@ public final class WritableApiSettingsPanel implements Panel, PanelValidator {
 		    JLabel clmProjectNameValueLabel = null;
 		    JLabel identityGeneratorTagLabel = null;
 		    JLabel identityGeneratorTagValueLabel = null;
-		    JLabel caDsrConnectionUrlLabel = null;
-		    JLabel caDsrConnectionUrlValueLabel = null;
 		    JLabel enableCommonLoggingModuleLabel = null;
 		    JLabel enableCommonLoggingModuleValueLabel = null;
 		    JLabel databaseTypeLabel = null;
@@ -597,11 +578,6 @@ public final class WritableApiSettingsPanel implements Panel, PanelValidator {
 		    identityGeneratorTagValueLabel = new JLabel();
 		    identityGeneratorTagValueLabel.setText(getIdentityGeneratorTagField().getText());
             
-		    caDsrConnectionUrlLabel = new JLabel();
-		    caDsrConnectionUrlLabel.setText("caDSR Connection URL:");
-		    caDsrConnectionUrlValueLabel = new JLabel();
-		    caDsrConnectionUrlValueLabel.setText(getCaDsrConnectionUrlField().getText());
-            
 		    enableCommonLoggingModuleLabel = new JLabel();
 		    enableCommonLoggingModuleLabel.setText("Enable Common Logging Module?");
 		    enableCommonLoggingModuleValueLabel = new JLabel();
@@ -621,12 +597,10 @@ public final class WritableApiSettingsPanel implements Panel, PanelValidator {
             	writableApiSettingsReviewPanel.add(clmProjectNameValueLabel, gridBagConstraints21);
             	writableApiSettingsReviewPanel.add(identityGeneratorTagLabel, gridBagConstraints30);
             	writableApiSettingsReviewPanel.add(identityGeneratorTagValueLabel, gridBagConstraints31);
-            	writableApiSettingsReviewPanel.add(caDsrConnectionUrlLabel, gridBagConstraints40);
-            	writableApiSettingsReviewPanel.add(caDsrConnectionUrlValueLabel, gridBagConstraints41);
-            	writableApiSettingsReviewPanel.add(enableCommonLoggingModuleLabel, gridBagConstraints50);
-            	writableApiSettingsReviewPanel.add(enableCommonLoggingModuleValueLabel, gridBagConstraints51);  
-            	writableApiSettingsReviewPanel.add(databaseTypeLabel, gridBagConstraints60);
-            	writableApiSettingsReviewPanel.add(databaseTypeValueLabel, gridBagConstraints61);
+            	writableApiSettingsReviewPanel.add(enableCommonLoggingModuleLabel, gridBagConstraints40);
+            	writableApiSettingsReviewPanel.add(enableCommonLoggingModuleValueLabel, gridBagConstraints41);  
+            	writableApiSettingsReviewPanel.add(databaseTypeLabel, gridBagConstraints50);
+            	writableApiSettingsReviewPanel.add(databaseTypeValueLabel, gridBagConstraints51);
             }
             
             writableApiSettingsReviewPanel.validate();
@@ -640,18 +614,16 @@ public final class WritableApiSettingsPanel implements Panel, PanelValidator {
     	
     	//Writable API Settings Validation
     	if (getEnableWritableApiExtensionCheckBox().isSelected()){
-    		
-			if (!ValidationUtils.isNotBlank(this.getClmProjectNameField().getText())) {
-				result.add(new SimpleValidationMessage(CLM_PROJECT_NAME + " must not be blank.", Severity.ERROR, CLM_PROJECT_NAME));
-			}
 
     		if (!ValidationUtils.isNotBlank(this.getIdentityGeneratorTagField().getText())) {
     			result.add(new SimpleValidationMessage(IDENTITY_GENERATOR_TAG + " must not be blank.", Severity.ERROR, IDENTITY_GENERATOR_TAG));
     		} 
-
-    		if (!ValidationUtils.isNotBlank(this.getCaDsrConnectionUrlField().getText())) {
-    			result.add(new SimpleValidationMessage(CADSR_CONNECTION_URL + " must not be blank.", Severity.ERROR, CADSR_CONNECTION_URL));
-    		} 
+    		
+        	if (getEnableCommonLoggingModuleCheckBox().isSelected()){
+    			if (!ValidationUtils.isNotBlank(this.getClmProjectNameField().getText())) {
+    				result.add(new SimpleValidationMessage(CLM_PROJECT_NAME + " must not be blank.", Severity.ERROR, CLM_PROJECT_NAME));
+    			}
+        	}
     	}
     	
     	return result;
@@ -666,8 +638,6 @@ public final class WritableApiSettingsPanel implements Panel, PanelValidator {
         ValidationComponentUtils.setMandatory(getClmProjectNameField(), true);
         ValidationComponentUtils.setMessageKey(getIdentityGeneratorTagField(), IDENTITY_GENERATOR_TAG);
         ValidationComponentUtils.setMandatory(getIdentityGeneratorTagField(), true);   
-        ValidationComponentUtils.setMessageKey(getCaDsrConnectionUrlField(), CADSR_CONNECTION_URL);
-        ValidationComponentUtils.setMandatory(getCaDsrConnectionUrlField(), true);
         
         toggleWritableApiFields();
     }
@@ -680,7 +650,6 @@ public final class WritableApiSettingsPanel implements Panel, PanelValidator {
 		propsMap.put("DATABASE_TYPE", OptionsMapManager.getDbTypeOptionsMap().get(getDatabaseTypeComboBox().getSelectedItem().toString()));
 		propsMap.put("CLM_PROJECT_NAME", getClmProjectNameField().getText());
 		propsMap.put("IDENTITY_GENERATOR_TAG", getIdentityGeneratorTagField().getText());
-		propsMap.put("CADSR_CONNECTION_URL", getCaDsrConnectionUrlField().getText());
 		propsMap.put("ENABLE_COMMON_LOGGING_MODULE", Boolean.valueOf(getEnableCommonLoggingModuleCheckBox().isSelected()).toString() );
     	
     	return propsMap;

@@ -15,14 +15,24 @@ import java.util.Map;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
+import com.jgoodies.validation.Severity;
 import com.jgoodies.validation.ValidationResult;
+import com.jgoodies.validation.message.SimpleValidationMessage;
+import com.jgoodies.validation.util.ValidationUtils;
+import com.jgoodies.validation.view.ValidationComponentUtils;
 
 public final class CodegenSettingsPanel implements Panel, PanelValidator {
 	
 	WorkbenchPropertiesManager propsMgr = null;
 	TabbedPanePropertiesValidator mainPanelValidator = null;
+	
+	// Code Generation Panel Validation Message Constants
+	private static final String CADSR_CONNECTION_URL = "caDSR Connection URL";
     
 	// Code Generation Settings Panel
 	private JPanel codeGenSettingsPanel = null;
@@ -31,6 +41,8 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
 	//private JPanel codeGenSettingsPanel = null;
 	private JPanel ormCodeGenSettingsSubPanel = null;
 	private JPanel xsdCodeGenSettingsSubPanel = null;
+	private JPanel caDsrCodeGenSettingsSubPanel = null;
+	
     
 	//Code Generation Settings Panel Component Definitions
     private JCheckBox validateLogicalModelCheckBox = null;
@@ -44,6 +56,7 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
     private JCheckBox generateXsdWithPermissibleValuesCheckBox = null;
     private JCheckBox generateWsddCheckBox = null;
     private JCheckBox generateHibernateValidatorCheckBox = null;
+    private JTextField caDsrConnectionUrlField = null;
     
 	public CodegenSettingsPanel(WorkbenchPropertiesManager propsMgr,TabbedPanePropertiesValidator mainPanelValidator){
 		this.propsMgr=propsMgr;
@@ -64,7 +77,49 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
 		}
     }
     
+	
+    public void toggleCaDsrField() {
+		if (getGenerateXsdWithPermissibleValuesCheckBox().isSelected() || getGenerateHibernateValidatorCheckBox().isSelected()){
+			getCaDsrConnectionUrlField().setEnabled(true);
+			return;
+		} 
+		
+		getCaDsrConnectionUrlField().setEnabled(false);
+    }    
+    
     /**
+     * 
+     *     /**
+     * This method initializes the caDSR Connection URL Field
+     * 
+     * @return javax.swing.JTextField
+     */
+    private JTextField getCaDsrConnectionUrlField() {
+        if (caDsrConnectionUrlField == null) {
+        	caDsrConnectionUrlField = new JTextField();
+        	caDsrConnectionUrlField.setText(propsMgr.getDeployPropertyValue("CADSR_CONNECTION_URL"));
+        	caDsrConnectionUrlField.getDocument().addDocumentListener(new DocumentListener() {
+                public void changedUpdate(DocumentEvent e) {
+                	mainPanelValidator.setDirty(true);
+                    mainPanelValidator.validateInput();
+                }
+
+                public void removeUpdate(DocumentEvent e) {
+                	mainPanelValidator.setDirty(true);
+                    mainPanelValidator.validateInput();
+                }
+
+                public void insertUpdate(DocumentEvent e) {
+                	mainPanelValidator.setDirty(true);
+                    mainPanelValidator.validateInput();
+                }
+            });
+        	caDsrConnectionUrlField.addFocusListener(new FocusChangeHandler());
+        }
+        return caDsrConnectionUrlField;
+    }
+    
+    /*
      * This method initializes the Validate Logical Model Check Box
      * 
      * @return javax.swing.JCheckBox
@@ -280,6 +335,7 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
 			
         	generateXsdWithPermissibleValuesCheckBox.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
+					toggleCaDsrField();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
 				}
@@ -346,6 +402,7 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
 			
         	generateHibernateValidatorCheckBox.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
+					toggleCaDsrField();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
 				}
@@ -438,6 +495,17 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
 			gridBagConstraints50.gridwidth = 3;
 			//gridBagConstraints50.weighty = 1.0D;
 			gridBagConstraints50.gridx = 0;
+			
+
+			GridBagConstraints gridBagConstraints60 = new GridBagConstraints();
+			gridBagConstraints60.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints60.gridy = 6;
+			gridBagConstraints60.weightx = 1.0;
+			gridBagConstraints60.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints60.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints60.gridwidth = 3;
+			//gridBagConstraints60.weighty = 1.0D;
+			gridBagConstraints60.gridx = 0;
 
 		    validateLogicalModelLabel = new JLabel();
 		    validateLogicalModelLabel.setText("Validate Logical Model?");
@@ -461,7 +529,8 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
 			codeGenSettingsPanel.add(generateWsddLabel, gridBagConstraints30);
 			codeGenSettingsPanel.add(getGenerateWsddCheckBox(), gridBagConstraints31);
 			codeGenSettingsPanel.add(getOrmCodeGenSettingsPanel(), gridBagConstraints40);
-			codeGenSettingsPanel.add(getXsdCodeGenSettingsSubPanel(), gridBagConstraints50);            
+			codeGenSettingsPanel.add(getXsdCodeGenSettingsSubPanel(), gridBagConstraints50);
+			codeGenSettingsPanel.add(getCaDsrCodeGenSettingsSubPanel(), gridBagConstraints60);
             
             codeGenSettingsPanel.validate();
 		}
@@ -549,8 +618,6 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
 			ormCodeGenSettingsSubPanel.add(getGenerateHibernateMappingCheckBox(), gridBagConstraints21);
 			ormCodeGenSettingsSubPanel.add(generateHibernateValidatorLabel, gridBagConstraints30);
 			ormCodeGenSettingsSubPanel.add(getGenerateHibernateValidatorCheckBox(), gridBagConstraints31);
-
-
 			
 		    ormCodeGenSettingsSubPanel.validate();
 		}
@@ -687,6 +754,49 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
 		}
 		return xsdCodeGenSettingsSubPanel;
 	}
+	
+	/**
+	 * This method initializes the caDSR Code Generation settings sub-panel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getCaDsrCodeGenSettingsSubPanel() {
+		if (caDsrCodeGenSettingsSubPanel == null) {
+			
+		    JLabel caDsrConnectionUrlLabel = null;
+
+			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
+			gridBagConstraints10.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints10.gridy = 1;
+			gridBagConstraints10.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints10.gridx = 0;
+
+			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+			gridBagConstraints11.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints11.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints11.gridx = 1;
+			gridBagConstraints11.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints11.gridy = 1;
+			gridBagConstraints11.weighty = 1.0D;
+			gridBagConstraints11.weightx = 1.0D;  
+			gridBagConstraints11.gridwidth = 2;
+
+		    caDsrConnectionUrlLabel = new JLabel();
+		    caDsrConnectionUrlLabel.setText("caDSR Connection URL:");
+
+		    caDsrCodeGenSettingsSubPanel = new JPanel();
+		    caDsrCodeGenSettingsSubPanel.setLayout(new GridBagLayout());
+		    caDsrCodeGenSettingsSubPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "caDSR Connection Options",
+					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
+		    
+		    caDsrCodeGenSettingsSubPanel.add(caDsrConnectionUrlLabel, gridBagConstraints10);
+		    caDsrCodeGenSettingsSubPanel.add(getCaDsrConnectionUrlField(), gridBagConstraints11);
+			
+		    caDsrCodeGenSettingsSubPanel.validate();
+		}
+		return caDsrCodeGenSettingsSubPanel;
+	}
     
     /**
      * This method initializes the Project Settings jPanel
@@ -717,6 +827,8 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
 		    JLabel generateWsddValueLabel = null;
 		    JLabel generateHibernateValidatorLabel = null;
 		    JLabel generateHibernateValidatorValueLabel = null;
+		    JLabel caDsrConnectionUrlLabel = null;
+		    JLabel caDsrConnectionUrlValueLabel = null;
         	
             GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
             gridBagConstraints10.anchor = java.awt.GridBagConstraints.WEST;
@@ -891,6 +1003,23 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
             gridBagConstraints111.gridwidth = 2;
             gridBagConstraints111.weighty = 1.0D;
             gridBagConstraints111.gridx = 1;
+            
+            GridBagConstraints gridBagConstraints120 = new GridBagConstraints();
+            gridBagConstraints110.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints110.gridy = 12;
+            gridBagConstraints110.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints110.gridx = 0;
+            
+            GridBagConstraints gridBagConstraints121 = new GridBagConstraints();
+            gridBagConstraints111.fill = java.awt.GridBagConstraints.HORIZONTAL;
+            gridBagConstraints111.gridy = 12;
+            gridBagConstraints111.weightx = 1.0;
+            gridBagConstraints111.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints111.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints111.gridwidth = 2;
+            gridBagConstraints111.weighty = 1.0D;
+            gridBagConstraints111.gridx = 1;
+                        
                         
 		    validateLogicalModelLabel = new JLabel();
 		    validateLogicalModelLabel.setText("Validate Logical Model?");
@@ -946,6 +1075,11 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
 		    generateHibernateValidatorLabel.setText("Generate Hibernate Validator?");
 		    generateHibernateValidatorValueLabel = new JLabel();
 		    generateHibernateValidatorValueLabel.setText(Boolean.valueOf(getGenerateHibernateValidatorCheckBox().isSelected()).toString());
+		    
+		    caDsrConnectionUrlLabel = new JLabel();
+		    caDsrConnectionUrlLabel.setText("caDSR Connection URL:");
+		    caDsrConnectionUrlValueLabel = new JLabel();
+		    caDsrConnectionUrlValueLabel.setText(getCaDsrConnectionUrlField().getText());
             
             codeGenSettingsReviewPanel = new JPanel();
             codeGenSettingsReviewPanel.setLayout(new GridBagLayout());
@@ -980,8 +1114,11 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
             	codeGenSettingsReviewPanel.add(generateXsdWithPermissibleValuesLabel, gridBagConstraints110);
             	codeGenSettingsReviewPanel.add(generateXsdWithPermissibleValuesValueLabel, gridBagConstraints111);
             }
-    
-    
+            
+            if (getGenerateXsdWithPermissibleValuesCheckBox().isSelected() || getGenerateHibernateValidatorCheckBox().isSelected()){
+            	codeGenSettingsReviewPanel.add(caDsrConnectionUrlLabel, gridBagConstraints120);
+            	codeGenSettingsReviewPanel.add(caDsrConnectionUrlValueLabel, gridBagConstraints121);
+            }
             
             codeGenSettingsReviewPanel.validate();
         //}
@@ -992,15 +1129,22 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
 
     	ValidationResult result = new ValidationResult();
     	
-    	//Code Gen Settings Validation
-    	
-    	//Add any Code Gen Settings Validation logic here
+        if (getGenerateXsdWithPermissibleValuesCheckBox().isSelected() || getGenerateHibernateValidatorCheckBox().isSelected()){
+    		if (!ValidationUtils.isNotBlank(this.getCaDsrConnectionUrlField().getText())) {
+    			result.add(new SimpleValidationMessage(CADSR_CONNECTION_URL + " must not be blank.", Severity.ERROR, CADSR_CONNECTION_URL));
+    		} 
+        }
     	
     	return result;
     }
     
     public void initValidation() {
+    	
+        ValidationComponentUtils.setMessageKey(getCaDsrConnectionUrlField(), CADSR_CONNECTION_URL);
+        ValidationComponentUtils.setMandatory(getCaDsrConnectionUrlField(), true);
+    	
     	toggleXsdFields();
+    	toggleCaDsrField();
     }
     
     public Map<String,String> getPropsMap(){
@@ -1018,6 +1162,7 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
 		propsMap.put("GENERATE_XSD_WITH_PERMISSIBLE_VALUES", Boolean.valueOf(generateXsdWithPermissibleValuesCheckBox.isSelected()).toString() );
 		propsMap.put("GENERATE_WSDD", Boolean.valueOf(generateWsddCheckBox.isSelected()).toString() );
 		propsMap.put("GENERATE_HIBERNATE_VALIDATOR", Boolean.valueOf(generateHibernateValidatorCheckBox.isSelected()).toString() );
+		propsMap.put("CADSR_CONNECTION_URL", getCaDsrConnectionUrlField().getText());
     	
     	return propsMap;
     }
