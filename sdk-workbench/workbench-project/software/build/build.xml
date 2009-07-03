@@ -1,7 +1,7 @@
 <!-- ======================================================================= -->
-<!-- caCore Sdk Workbench Portal build file                                  -->
+<!-- caCore Workbench Portal build file                                  -->
 <!-- ======================================================================= -->
-<project name="SDK Workbench" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant" xmlns="antlib:org.apache.tools.ant" xmlns:cs="antlib:com.puppycrawl.tools.checkstyle" default="run">
+<project name="caCORE Workbench" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant" xmlns="antlib:org.apache.tools.ant" xmlns:cs="antlib:com.puppycrawl.tools.checkstyle" default="run">
 
 	<!--***********************************************************************
 	*** Define the Environment Variable
@@ -147,6 +147,8 @@
 			<fileset dir="${project.dist.workbench.runtime.dir}" includes="**/jaxrpc*.jar" />
 			<fileset dir="${project.dist.workbench.runtime.dir}" includes="**/jsch*.jar" />
 			<fileset dir="${project.dist.workbench.runtime.dir}" includes="**/log4j*.jar" />
+			<fileset dir="${project.dist.workbench.runtime.dir}" includes="**/ojdbc14*.jar" />
+			<fileset dir="${project.dist.workbench.runtime.dir}" includes="**/mysql-connector-java*.jar" />
 			<fileset dir="${project.dist.workbench.runtime.dir}" includes="**/saaj*.jar" />
 			<fileset dir="${project.dist.workbench.runtime.dir}" includes="**/sdk*.jar" />
 			<fileset dir="${project.dist.workbench.runtime.dir}" includes="**/spring*.jar" />

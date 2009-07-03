@@ -1,7 +1,7 @@
 <!-- ======================================================================= -->
-<!-- caCore Sdk Workbench Portal build file                                  -->
+<!-- caCore Workbench Portal build file                                  -->
 <!-- ======================================================================= -->
-<project name="SDK Workbench" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant" xmlns="antlib:org.apache.tools.ant" xmlns:cs="antlib:com.puppycrawl.tools.checkstyle" default="run">
+<project name="caCORE Workbench" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant" xmlns="antlib:org.apache.tools.ant" xmlns:cs="antlib:com.puppycrawl.tools.checkstyle" default="run">
 
 	<!--***********************************************************************
 	*** Define the Environment Variable
@@ -35,7 +35,7 @@
 	*** Runs the Workbench 
 	*********************************************************************** -->
 	<target name="run" description="Runs the Workbench">
-		<SDKecho message="${ant.project.name}: Running the SDK Workbench"/>
+		<SDKecho message="${ant.project.name}: Running the caCORE Workbench"/>
 		<java classname="gov.nih.nci.cacoresdk.workbench.portal.SdkWorkbenchPortal" fork="true">
 			<classpath refid="runtime" />
 			<arg value="standalone"/>

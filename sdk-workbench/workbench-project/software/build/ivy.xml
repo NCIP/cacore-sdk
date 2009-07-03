@@ -17,6 +17,9 @@
 	<dependencies>
 		<dependency org="ncicb" name="sdk-workbench-module" rev="latest.integration" conf="workbench-runtime->compile"/>
 		<dependency org="ncicb" name="sdk-workbench-conf-module" rev="latest.integration" conf="workbench-runtime->compile"/>
+		
+		<dependency org="mysql" name="mysql-connector-java" rev="5.1.5" conf="workbench-runtime->runtime" />
+		<dependency org="oracle" name="ojdbc14" rev="10.2.0.3.0" conf="workbench-runtime->runtime" />
 	
 		<dependency org="sun" name="tools" rev="1.5.0" conf="workbench-runtime->runtime"/>
 			
