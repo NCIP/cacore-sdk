@@ -1,7 +1,7 @@
 <!-- ======================================================================= -->
-<!-- caCore Sdk Workbench Portal build file                                  -->
+<!-- caCore Workbench Portal build file                                  -->
 <!-- ======================================================================= -->
-<project name="SDK Workbench Webstart" basedir="." default="deploy:local:install">
+<project name="caCORE Workbench Webstart" basedir="." default="deploy:local:install">
 
 	<!--***********************************************************************
 	*** Define the Environment Variable
@@ -63,10 +63,10 @@
 	<property name="sdk.src.file" value="SDK-src.zip" />
 
 	<!--***********************************************************************
-	*** Packages the SDK Workbench into a WebStart application
+	*** Packages the caCORE Workbench into a WebStart application
 	*********************************************************************** -->
 	<target name="package:webstart" depends="build:workbench-modules,-copy-webstart-jars,-create-webstart-keystore,-sign-webstart-jars,-package-webstart-webapp">
-		<SDKecho message="${ant.project.name}: Completed Packaging the SDK Workbench into a WebStart application"/>
+		<SDKecho message="${ant.project.name}: Completed Packaging the caCORE Workbench into a WebStart application"/>
 	</target>
 
 	<!--***********************************************************************
@@ -85,7 +85,7 @@
 	*********************************************************************** -->
 	<target name="-create-webstart-keystore">
 		<SDKecho message="${ant.project.name}: Creating Workbench WebStart Keystore; Required for Signing Jars"/>
-		<genkey alias="ncicb"  keystore="${keystore.dir}/workbench.jks" storepass="changeme" keypass="changeme" dname="cn=caCORE SDK Workbench,ou=caCORE SDK,o=NCICB,c=US" validity="720" verbose="true" />
+		<genkey alias="ncicb"  keystore="${keystore.dir}/workbench.jks" storepass="changeme" keypass="changeme" dname="cn=caCORE caCORE Workbench,ou=caCORE SDK,o=NCICB,c=US" validity="720" verbose="true" />
 	</target>
 
 	<!--***********************************************************************
@@ -109,7 +109,7 @@
 		<mkdir dir="${output.war.dir}" />
 		<war destfile="${output.war.dir}\${workbench.webstart.war.file}" webxml="${webstart.webinf.dir}\web.xml">
 			<manifest>
-				<attribute name="Generated-By" value="caCORE SDK Workbench"/>
+				<attribute name="Generated-By" value="caCORE caCORE Workbench"/>
 				<attribute name="Version" value="${VERSION}"/>
 			</manifest>	
 			<fileset dir="${keystore.dir}">
