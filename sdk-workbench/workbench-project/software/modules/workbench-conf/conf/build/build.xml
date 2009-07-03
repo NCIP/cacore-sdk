@@ -1,7 +1,7 @@
 <!-- ======================================================================= -->
-<!-- caCore Sdk Workbench Portal Build File                                  -->
+<!-- caCore Workbench Portal Build File                                  -->
 <!-- ======================================================================= -->
-<project name="SDK Workbench" basedir="." >
+<project name="caCORE Workbench" basedir="." >
 
 	<!--***********************************************************************
 	*** Define the Environment Variable
@@ -25,7 +25,7 @@
 	*** Usage 
 	*********************************************************************** -->
 	<target name="usage">
-		<echo message="Not to be called directly.  This file contains utilities to be used to configure the SDK Workbench project generation directory."/>
+		<echo message="Not to be called directly.  This file contains utilities to be used to configure the caCORE Workbench project generation directory."/>
 	</target>
 
 	<!--***********************************************************************
