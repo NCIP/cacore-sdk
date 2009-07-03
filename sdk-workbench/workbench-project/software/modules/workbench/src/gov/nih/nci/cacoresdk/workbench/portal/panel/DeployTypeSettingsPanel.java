@@ -43,7 +43,7 @@ public final class DeployTypeSettingsPanel implements Panel, PanelValidator {
 	
 	private static final String REMOTE_DEPLOY_ENV = "Remote Deployment Environment";
 	
-    private JButton loadProperiesButton = null;
+    private JButton loadPropertiesButton = null;
 
 	public DeployTypeSettingsPanel(DeployPropertiesViewer parentContainer,
 			TabbedPanePropertiesValidator mainPanelValidator) {
@@ -167,11 +167,11 @@ public final class DeployTypeSettingsPanel implements Panel, PanelValidator {
      * @return javax.swing.JButton
      */
     private JButton getLoadPropertiesButton() {
-        if (loadProperiesButton == null) {
-            loadProperiesButton = new JButton();
-            loadProperiesButton.setText("Load Properties");
-            loadProperiesButton.setIcon(LookAndFeel.getGenerateApplicationIcon());
-            loadProperiesButton.addActionListener(new java.awt.event.ActionListener() {
+        if (loadPropertiesButton == null) {
+            loadPropertiesButton = new JButton();
+            loadPropertiesButton.setText("Load/Create Configuration");
+            loadPropertiesButton.setIcon(LookAndFeel.getGenerateApplicationIcon());
+            loadPropertiesButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                 	parentContainer.loadDeployProperties();
                     mainPanelValidator.validateInput();
@@ -179,7 +179,7 @@ public final class DeployTypeSettingsPanel implements Panel, PanelValidator {
             });
         }
 
-        return loadProperiesButton;
+        return loadPropertiesButton;
     }
     
     public void toggleLoadPropertiesButton() {

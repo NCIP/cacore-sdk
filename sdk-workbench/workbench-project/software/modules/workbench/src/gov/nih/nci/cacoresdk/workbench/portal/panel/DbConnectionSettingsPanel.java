@@ -1,6 +1,8 @@
 package gov.nih.nci.cacoresdk.workbench.portal.panel;
 
+import gov.nih.nci.cacoresdk.workbench.common.LookAndFeel;
 import gov.nih.nci.cacoresdk.workbench.common.OptionsMapManager;
+import gov.nih.nci.cacoresdk.workbench.common.ResourceManager;
 import gov.nih.nci.cacoresdk.workbench.portal.validation.PanelValidator;
 import gov.nih.nci.cacoresdk.workbench.portal.validation.TabbedPanePropertiesValidator;
 import gov.nih.nci.cacoresdk.workbench.portal.viewer.DeployPropertiesViewer;
@@ -15,6 +17,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -43,6 +46,9 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
 	private static final String DB_NAME = "DB Schema";
 	private static final String DB_USERNAME = "DB Username";
 	private static final String DB_PASSWORD = "DB Password";
+	
+    //SDK Install Panel Buttons
+    private JButton testConnectionButton = null;
 	
 	public DbConnectionSettingsPanel(DeployPropertiesViewer parentContainer,TabbedPanePropertiesValidator mainPanelValidator){
 		this.parentContainer = parentContainer;
@@ -93,6 +99,7 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
         	dbTypeComboBox.addActionListener(new ActionListener() {
                     public void actionPerformed(java.awt.event.ActionEvent e) {
                     	updateDbFields();
+                    	parentContainer.syncDbCsmDbFields();
                         mainPanelValidator.setDirty(true);
                         mainPanelValidator.validateInput();
                     }
@@ -123,6 +130,7 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
 			
         	useJndiBasedConnectionCheckBox.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
+                	parentContainer.syncDbCsmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
 				}
@@ -133,7 +141,7 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
         return useJndiBasedConnectionCheckBox;
     }  
     
-    public boolean getUseJndiBasedConnection() {
+    public boolean isUseJndiBasedConnection() {
     	return getUseJndiBasedConnectionCheckBox().isSelected();
     }
     
@@ -142,22 +150,25 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
      * 
      * @return javax.swing.JTextField
      */
-    private JTextField getDbJndiNameField() {
+    public JTextField getDbJndiNameField() {
         if (dbJndiNameField == null) {
         	dbJndiNameField = new JTextField();
         	dbJndiNameField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("DB_JNDI_NAME"));
         	dbJndiNameField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
+                	parentContainer.syncDbCsmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
 
                 public void removeUpdate(DocumentEvent e) {
+                	parentContainer.syncDbCsmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
 
                 public void insertUpdate(DocumentEvent e) {
+                	parentContainer.syncDbCsmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
@@ -167,7 +178,7 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
         return dbJndiNameField;
     }
     
-    public String getDbJndiUrl() {
+    public String getDbJndiName() {
     	return getDbJndiNameField().getText();
     }
     
@@ -183,16 +194,19 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
         	dbUrlField.setEnabled(false);// use hostname, port, schema fields instead
         	dbUrlField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
+                	parentContainer.syncDbCsmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
 
                 public void removeUpdate(DocumentEvent e) {
+                	parentContainer.syncDbCsmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
 
                 public void insertUpdate(DocumentEvent e) {
+                	parentContainer.syncDbCsmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
@@ -218,18 +232,21 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
         	dbHostnameField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
                 	updateDbFields();
+                	parentContainer.syncDbCsmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
 
                 public void removeUpdate(DocumentEvent e) {
                 	updateDbFields();
+                	parentContainer.syncDbCsmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
 
                 public void insertUpdate(DocumentEvent e) {
                 	updateDbFields();
+                	parentContainer.syncDbCsmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
@@ -255,18 +272,21 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
         	dbPortField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
                 	updateDbFields();
+                	parentContainer.syncDbCsmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
 
                 public void removeUpdate(DocumentEvent e) {
                 	updateDbFields();
+                	parentContainer.syncDbCsmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
 
                 public void insertUpdate(DocumentEvent e) {
                 	updateDbFields();
+                	parentContainer.syncDbCsmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
@@ -292,18 +312,21 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
         	dbSchemaField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
                 	updateDbFields();
+                	parentContainer.syncDbCsmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
 
                 public void removeUpdate(DocumentEvent e) {
                 	updateDbFields();
+                	parentContainer.syncDbCsmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
 
                 public void insertUpdate(DocumentEvent e) {
                 	updateDbFields();
+                	parentContainer.syncDbCsmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
@@ -328,16 +351,19 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
         	dbUsernameField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("DB_USERNAME"));
         	dbUsernameField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
+                	parentContainer.syncDbCsmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
 
                 public void removeUpdate(DocumentEvent e) {
+                	parentContainer.syncDbCsmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
 
                 public void insertUpdate(DocumentEvent e) {
+                	parentContainer.syncDbCsmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
@@ -362,16 +388,19 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
         	dbPasswordField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("DB_PASSWORD"));
         	dbPasswordField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
+                	parentContainer.syncDbCsmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
 
                 public void removeUpdate(DocumentEvent e) {
+                	parentContainer.syncDbCsmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
 
                 public void insertUpdate(DocumentEvent e) {
+                	parentContainer.syncDbCsmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
@@ -383,6 +412,28 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
     
     public String getDbPassword(){
     	return getDbPasswordField().getText();
+    }
+    
+    /**
+     * This method initializes jButton
+     * 
+     * @return javax.swing.JButton
+     */
+    public JButton getTestConnectionButton() {
+        if (testConnectionButton == null) {
+        	testConnectionButton = new JButton();
+        	testConnectionButton.setText("Test Connection");
+        	testConnectionButton.setIcon(LookAndFeel.getGenerateApplicationIcon());
+        	testConnectionButton.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                	parentContainer.testDbConnection(OptionsMapManager.getDbTypeOptionsMap().get(getDbTypeComboBox().getSelectedItem().toString()), 
+                			getDbUrl(), getDbUsername(), getDbPassword());
+                    mainPanelValidator.validateInput();
+                }
+            });
+        }
+
+        return testConnectionButton;
     }
 
     private final class FocusChangeHandler implements FocusListener {
@@ -480,7 +531,7 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
 
 		    dbSettingsPanel = new JPanel();
 		    dbSettingsPanel.setLayout(new GridBagLayout());
-		    dbSettingsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Define Database Connection Properties",
+		    dbSettingsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Define Application Database Connection Properties",
 					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 
@@ -524,7 +575,7 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
 			gridBagConstraints11.gridwidth = 2;
 
 		    dbJndiUrlLabel = new JLabel();
-		    dbJndiUrlLabel.setText("DB JNDI Name:");
+		    dbJndiUrlLabel.setText("JNDI Name:");
 
 		    dbJndiSettingsSubPanel = new JPanel();
 		    dbJndiSettingsSubPanel.setLayout(new GridBagLayout());
@@ -655,38 +706,32 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
 			gridBagConstraints61.gridx = 1;
 
 			GridBagConstraints gridBagConstraints70 = new GridBagConstraints();
-			gridBagConstraints70.anchor = java.awt.GridBagConstraints.WEST;
+			//gridBagConstraints70.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints70.anchor = java.awt.GridBagConstraints.CENTER;
 			gridBagConstraints70.gridy = 7;
-			gridBagConstraints70.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints70.gridx = 0;
-
-			GridBagConstraints gridBagConstraints71 = new GridBagConstraints();
-			gridBagConstraints71.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints71.gridy = 7;
-			gridBagConstraints71.weightx = 1.0;
-			gridBagConstraints71.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints71.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints71.gridwidth = 2;
-			gridBagConstraints71.weighty = 1.0D;
-			gridBagConstraints71.gridx = 1;
+			gridBagConstraints70.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints70.gridwidth = 3;
+			//gridBagConstraints70.weighty = 1.0D;
+			gridBagConstraints70.weightx = 1.0D;  
 
 		    dbConnectionUrlLabel = new JLabel();
-		    dbConnectionUrlLabel.setText("DB Connection URL:");
+		    dbConnectionUrlLabel.setText("Connection URL:");
 		    
 		    dbConnectionUrlHostnameLabel = new JLabel();
-		    dbConnectionUrlHostnameLabel.setText("DB Hostname:");
+		    dbConnectionUrlHostnameLabel.setText("Hostname:");
 		    
 		    dbConnectionUrlPortLabel = new JLabel();
-		    dbConnectionUrlPortLabel.setText("DB Port:");
+		    dbConnectionUrlPortLabel.setText("Port:");
 		    
 		    dbConnectionUrlSchemaLabel = new JLabel();
-		    dbConnectionUrlSchemaLabel.setText("DB Schema:");
+		    dbConnectionUrlSchemaLabel.setText("Schema:");
 		    
 		    dbUsernameLabel = new JLabel();
-		    dbUsernameLabel.setText("DB Username:");
+		    dbUsernameLabel.setText("Username:");
 
 		    dbPasswordLabel = new JLabel();
-		    dbPasswordLabel.setText("DB Password:");
+		    dbPasswordLabel.setText("Password:");
 
 		    dbConnectionSettingsSubPanel = new JPanel();
 		    dbConnectionSettingsSubPanel.setLayout(new GridBagLayout());
@@ -708,6 +753,8 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
 		    dbConnectionSettingsSubPanel.add(getDbUsernameField(), gridBagConstraints51);
 		    dbConnectionSettingsSubPanel.add(dbPasswordLabel, gridBagConstraints60);
 		    dbConnectionSettingsSubPanel.add(getDbPasswordField(), gridBagConstraints61);
+		    
+		    dbConnectionSettingsSubPanel.add(getTestConnectionButton(), gridBagConstraints70);
 			
 		    dbConnectionSettingsSubPanel.validate();
 		}
@@ -830,33 +877,33 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
 		    useJndiBasedConnectionValueLabel.setText(Boolean.valueOf(getUseJndiBasedConnectionCheckBox().isSelected()).toString());
 		    
 		    dbJndiUrlLabel = new JLabel();
-		    dbJndiUrlLabel.setText("Db JNDI URL:");
+		    dbJndiUrlLabel.setText("JNDI URL:");
 		    dbJndiUrlValueLabel = new JLabel();
 		    dbJndiUrlValueLabel.setText(getDbJndiNameField().getText());
 		    
 		    dbConnectionUrlLabel = new JLabel();
-		    dbConnectionUrlLabel.setText("DB Connection URL:");
+		    dbConnectionUrlLabel.setText("Connection URL:");
 		    dbConnectionUrlValueLabel = new JLabel();
 		    dbConnectionUrlValueLabel.setText(getDbUrlField().getText());
 		    
 		    dbUsernameLabel = new JLabel();
-		    dbUsernameLabel.setText("DB Username:");
+		    dbUsernameLabel.setText("Username:");
 		    dbUsernameValueLabel = new JLabel();
 		    dbUsernameValueLabel.setText(getDbUsernameField().getText());
 		    
 		    dbPasswordLabel = new JLabel();
-		    dbPasswordLabel.setText("DB Password:");
+		    dbPasswordLabel.setText("Password:");
 		    dbPasswordValueLabel = new JLabel();
 		    dbPasswordValueLabel.setText(getDbPasswordField().getText());
 		    
 		    dbTypeLabel = new JLabel();
-		    dbTypeLabel.setText("DB Type:");
+		    dbTypeLabel.setText("Type:");
 		    dbTypeValueLabel = new JLabel();
 		    dbTypeValueLabel.setText(getDbTypeComboBox().getSelectedItem().toString());
             
 		    dbConnectionSettingsReviewPanel = new JPanel();
 		    dbConnectionSettingsReviewPanel.setLayout(new GridBagLayout());
-		    dbConnectionSettingsReviewPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "DB Connection Settings",
+		    dbConnectionSettingsReviewPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Database Connection Settings",
                 javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
                 javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 		    
@@ -931,6 +978,8 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
         ValidationComponentUtils.setMandatory(getDbPasswordField(), true);
         
         updateDbFields();
+        parentContainer.toggleTestConnectionButton();
+        parentContainer.toggleDbJndiNameField();
     }
     
     public Map<String,String> getPropsMap(){

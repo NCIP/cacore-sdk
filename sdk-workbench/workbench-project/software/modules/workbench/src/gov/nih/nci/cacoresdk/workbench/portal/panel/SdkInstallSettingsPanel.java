@@ -41,13 +41,13 @@ public final class SdkInstallSettingsPanel implements Panel, PanelValidator {
 		this.mainPanelValidator=mainPanelValidator;
 	}
 	
-	// Project Settings Panel
+	//SDK Install Settings Panel
 	private JPanel sdkInstallSettingsPanel = null;
     
-	//Project Settings Panel Component Definitions
+	//SDK Install Settings Panel Component Definitions
 	private JTextField sdkInstallDirField = null;
     
-    //Project Settings Buttons
+    //SDK Install Panel Buttons
     private JButton sdkInstallDirButton = null;
     
     private final class FocusChangeHandler implements FocusListener {

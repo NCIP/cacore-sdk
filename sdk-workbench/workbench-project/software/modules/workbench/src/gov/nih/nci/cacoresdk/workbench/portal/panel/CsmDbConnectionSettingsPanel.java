@@ -102,11 +102,11 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
         return csmUseDbConnectionSettingsCheckBox;
     } 
     
-    public boolean isCsmUseDBConnectionSettingsSelected(){
+    public boolean isCsmUseDBConnectionSettings(){
     	return getCsmUseDbConnectionSettingsCheckBox().isSelected();
     }
     
-    public void setCsmUseDbConnectionSettingsSelected(boolean isSelected){
+    public void setCsmUseDbConnectionSettings(boolean isSelected){
     	getCsmUseDbConnectionSettingsCheckBox().setSelected(isSelected);
     }
     
@@ -181,6 +181,10 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
         return csmUseJndiBasedConnectionCheckBox;
     }  
     
+    public boolean isCsmUseJndiBasedConnection(){
+    	return getCsmUseJndiBasedConnectionCheckBox().isSelected();
+    }
+    
     public void setCsmUseJndiBasedConnection(boolean isSelected){
     	getCsmUseJndiBasedConnectionCheckBox().setSelected(isSelected);
     }
@@ -190,7 +194,7 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
      * 
      * @return javax.swing.JTextField
      */
-    private JTextField getCsmDbJndiNameField() {
+    public JTextField getCsmDbJndiNameField() {
         if (csmDbJndiUrlField == null) {
         	csmDbJndiUrlField = new JTextField();
         	csmDbJndiUrlField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("CSM_JNDI_NAME"));
@@ -491,8 +495,6 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
     	}
     }
     
-
-    
 	/**
 	 * This method initializes dbConnectionSettingsPanel	
 	 * 	
@@ -627,7 +629,7 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
 			gridBagConstraints11.gridwidth = 2;
 
 		    csmDbJndiUrlLabel = new JLabel();
-		    csmDbJndiUrlLabel.setText("DB JNDI Name:");
+		    csmDbJndiUrlLabel.setText("JNDI Name:");
 
 		    csmDbConnectionJndiSettingsSubPanel = new JPanel();
 		    csmDbConnectionJndiSettingsSubPanel.setLayout(new GridBagLayout());
@@ -756,22 +758,22 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
 			gridBagConstraints61.gridx = 1;
 
 		    csmDbConnectionUrlLabel = new JLabel();
-		    csmDbConnectionUrlLabel.setText("DB Connection URL:");
+		    csmDbConnectionUrlLabel.setText("Connection URL:");
 		    
 		    csmDbConnectionUrlHostnameLabel = new JLabel();
-		    csmDbConnectionUrlHostnameLabel.setText("DB Hostname:");
+		    csmDbConnectionUrlHostnameLabel.setText("Hostname:");
 		    
 		    csmDbConnectionUrlPortLabel = new JLabel();
-		    csmDbConnectionUrlPortLabel.setText("DB Port:");
+		    csmDbConnectionUrlPortLabel.setText("Port:");
 		    
 		    csmDbConnectionUrlSchemaLabel = new JLabel();
-		    csmDbConnectionUrlSchemaLabel.setText("DB Schema:");
+		    csmDbConnectionUrlSchemaLabel.setText("Schema:");
 		    
 		    csmDbUsernameLabel = new JLabel();
-		    csmDbUsernameLabel.setText("DB Username:");
+		    csmDbUsernameLabel.setText("Username:");
 
 		    csmDbPasswordLabel = new JLabel();
-		    csmDbPasswordLabel.setText("DB Password:");
+		    csmDbPasswordLabel.setText("Password:");
 
 		    csmDbConnectionSettingsSubPanel = new JPanel();
 		    csmDbConnectionSettingsSubPanel.setLayout(new GridBagLayout());
@@ -983,7 +985,7 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
             gridBagConstraints111.weightx = 1.0;
              
 		    csmDatabaseTypeLabel = new JLabel();
-		    csmDatabaseTypeLabel.setText("DB Type:");
+		    csmDatabaseTypeLabel.setText("Type:");
 		    csmDatabaseTypeValueLabel = new JLabel();
 		    csmDatabaseTypeValueLabel.setText(OptionsMapManager.getDbTypeOptionsMap().get(getCsmDbTypeComboBox().getSelectedItem().toString()));
 		    
@@ -993,28 +995,28 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
 		    csmUseJndiBasedConnectionValueLabel.setText(Boolean.valueOf(getCsmUseJndiBasedConnectionCheckBox().isSelected()).toString());
 		    
 		    csmDbJndiUrlLabel = new JLabel();
-		    csmDbJndiUrlLabel.setText("DB JNDI URL:");
+		    csmDbJndiUrlLabel.setText("JNDI URL:");
 		    csmDbJndiUrlValueLabel = new JLabel();
 		    csmDbJndiUrlValueLabel.setText(getCsmDbJndiNameField().getText());
 		    
 		    csmDbConnectionUrlLabel = new JLabel();
-		    csmDbConnectionUrlLabel.setText("DB Connection URL:");
+		    csmDbConnectionUrlLabel.setText("Connection URL:");
 		    csmDbConnectionUrlValueLabel = new JLabel();
 		    csmDbConnectionUrlValueLabel.setText(getCsmDbConnectionUrlField().getText());
 		    
 		    csmDbUsernameLabel = new JLabel();
-		    csmDbUsernameLabel.setText("DB Username:");
+		    csmDbUsernameLabel.setText("Username:");
 		    csmDbUsernameValueLabel = new JLabel();
 		    csmDbUsernameValueLabel.setText(getCsmDbUsernameField().getText());
 		    
 		    csmDbPasswordLabel = new JLabel();
-		    csmDbPasswordLabel.setText("DB Password:");
+		    csmDbPasswordLabel.setText("Password:");
 		    csmDbPasswordValueLabel = new JLabel();
 		    csmDbPasswordValueLabel.setText(getCsmDbPasswordField().getText());
 		    
 		    csmDbConnectionSettingsReviewPanel = new JPanel();
 		    csmDbConnectionSettingsReviewPanel.setLayout(new GridBagLayout());
-		    csmDbConnectionSettingsReviewPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "CSM DB Connection Settings",
+		    csmDbConnectionSettingsReviewPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "CSM Database Connection Settings",
                 javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
                 javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 		    
@@ -1106,6 +1108,7 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
         ValidationComponentUtils.setMandatory(getCsmDbPasswordField(), true);
         
         toggleCsmDbConnectionFields();
+        parentContainer.toggleCsmDbJndiNameField();
         updateCsmDbFields();
     }
     
