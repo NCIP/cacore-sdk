@@ -490,10 +490,10 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
     }
     
     public void syncDbCsmDbFields() {
-    	if (csmDbConnectionSettingsPanel.isCsmUseDBConnectionSettingsSelected()){
+    	if (csmDbConnectionSettingsPanel.isCsmUseDBConnectionSettings()){
     		csmDbConnectionSettingsPanel.setCsmDatabaseType(dbConnectionSettingsPanel.getDatabaseType());
-    		csmDbConnectionSettingsPanel.setCsmUseJndiBasedConnection(dbConnectionSettingsPanel.getUseJndiBasedConnection());
-    		csmDbConnectionSettingsPanel.setCsmDbJndiUrl(dbConnectionSettingsPanel.getDbJndiUrl());
+    		csmDbConnectionSettingsPanel.setCsmUseJndiBasedConnection(dbConnectionSettingsPanel.isUseJndiBasedConnection());
+    		csmDbConnectionSettingsPanel.setCsmDbJndiUrl(dbConnectionSettingsPanel.getDbJndiName());
     		csmDbConnectionSettingsPanel.setCsmDbConnectionUrl(dbConnectionSettingsPanel.getDbUrl());
     		csmDbConnectionSettingsPanel.setCsmDbConnectionUrlHostname(dbConnectionSettingsPanel.getDbConnectionUrlHostname());
     		csmDbConnectionSettingsPanel.setCsmDbConnectionUrlPort(dbConnectionSettingsPanel.getDbConnectionUrlPort());
@@ -505,6 +505,37 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
     
     public String getDatabaseType(){
     	return dbConnectionSettingsPanel.getDatabaseType();
+    }
+    
+    public void toggleTestConnectionButton() {
+    	boolean hasValidationErrors = dbConnectionSettingsPanel.validateInput().hasErrors();
+    	if (!hasValidationErrors){
+    		dbConnectionSettingsPanel.getTestConnectionButton().setEnabled(true);
+    		return;
+        }
+    	
+    	dbConnectionSettingsPanel.getTestConnectionButton().setEnabled(false);
+
+    }
+    
+    public void toggleDbJndiNameField() {
+    	if (dbConnectionSettingsPanel.isUseJndiBasedConnection()){
+    		dbConnectionSettingsPanel.getDbJndiNameField().setEnabled(true);
+    		return;
+        }
+    	
+    	dbConnectionSettingsPanel.getDbJndiNameField().setEnabled(false);
+
+    }
+    
+    public void toggleCsmDbJndiNameField() {
+    	if (!csmDbConnectionSettingsPanel.isCsmUseDBConnectionSettings() && csmDbConnectionSettingsPanel.isCsmUseJndiBasedConnection()){
+    		csmDbConnectionSettingsPanel.getCsmDbJndiNameField().setEnabled(true);
+    		return;
+        }
+    	
+    	csmDbConnectionSettingsPanel.getCsmDbJndiNameField().setEnabled(false);
+
     }
     
     public void toggleWritableApiFields() {
@@ -600,7 +631,7 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
 				securitySettingsPanel.isSecurityEnabled() &&
 				securitySettingsPanel.isInstanceLevelSecurityEnabled()){
 			
-			csmDbConnectionSettingsPanel.setCsmUseDbConnectionSettingsSelected(true);
+			csmDbConnectionSettingsPanel.setCsmUseDbConnectionSettings(true);
 			csmDbConnectionSettingsPanel.setCsmUseDbConnectionSettingsEnabled(false);
 			
 			JOptionPane.showMessageDialog(
@@ -760,7 +791,7 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
 		
 			mainTabbedPane.addTab("Deploy Type", null, new IconFeedbackPanel(this.validationModel, deployTypeSettingsPanel.getSettingsPanel()), null);
 			mainTabbedPane.addTab("App Server", null, new IconFeedbackPanel(this.validationModel, appServerSettingsPanel.getSettingsPanel()), null);
-			mainTabbedPane.addTab("DB", null, new IconFeedbackPanel(this.validationModel, dbConnectionSettingsPanel.getSettingsPanel()), null);
+			mainTabbedPane.addTab("App DB", null, new IconFeedbackPanel(this.validationModel, dbConnectionSettingsPanel.getSettingsPanel()), null);
 			
 			mainTabbedPane.addTab("Logging", null, new IconFeedbackPanel(this.validationModel, clmSettingsPanel.getSettingsPanel()), null);
 			

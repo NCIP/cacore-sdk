@@ -7,6 +7,10 @@ import gov.nih.nci.cacoresdk.workbench.common.WorkbenchPropertiesManager;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.SQLWarning;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -322,7 +326,9 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 							return;
 						}
 				
-						setProgressText("SDK Successfully Installed");
+						setProgressText("The SDK has been successfully Installed");
+						
+
 
 					} catch (Exception e) {
 						log.error("ERROR: "+ e.getMessage(),e);
@@ -331,9 +337,14 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 					}
 				}
 			};
-
-			Thread th = new Thread(r);
-			th.start();
+			
+			r.run();
+			
+			JOptionPane.showMessageDialog(
+					this,
+					"The SDK has been successfully Installed");
+//			Thread th = new Thread(r);
+//			th.start();
 		}
 	}
 	
@@ -380,7 +391,7 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 				.showMessageDialog(
 						this,
 						"The project generation directory ("+ projectDirPath+ ")\n"
-						+"does not appear to be a SDK Workbench generated directory.  You \n"
+						+"does not appear to be a caCORE Workbench generated directory.  You \n"
 						+"must specify a different directory that already contains the \n"
 						+"code generation properties.");
 			}
@@ -445,6 +456,10 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 
 			Thread th = new Thread(r);
 			th.start();
+			
+			JOptionPane.showMessageDialog(
+					this,
+					"The application has been successfully generated");
 		}
 	}
 	
@@ -482,7 +497,7 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 				.showMessageDialog(
 						this,
 						"The project generation directory ("+ projectDirPath+ ")\n"
-						+"does not appear to be a SDK Workbench generated project directory.  You\n"
+						+"does not appear to be a caCORE Workbench generated project directory.  You\n"
 						+"must specify a directory that already contains both the code generation and\n"
 						+"deployment properties.");
 			} else {
@@ -554,6 +569,10 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 
 			Thread th = new Thread(r);
 			th.start();
+			
+			JOptionPane.showMessageDialog(
+					this,
+					"The application has been successfully deployed");
 		}
 	}
 	
@@ -582,6 +601,83 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 		}
 		
 		return true;
+	}
+	
+	public void testDbConnection(String dbType, String dbURL, String username, String password) {
+		try {
+			
+			log.debug("* * * Testing Connection");
+			log.debug("* * * DB Type: "+dbType);
+			log.debug("* * * DB URL: "+dbURL);
+			log.debug("* * * DB Username: "+username);
+			log.debug("* * * DB Password: "+password);
+			
+			if ("MySQL".equalsIgnoreCase(dbType)){
+				// Load the MySql driver
+				Class.forName("org.gjt.mm.mysql.Driver");
+			} else if ("Oracle".equalsIgnoreCase(dbType)){
+				// Load the Oracle driver
+				Class.forName("oracle.jdbc.driver.OracleDriver");
+				
+			} else {
+				// report error
+				JOptionPane.showMessageDialog(
+						this,
+						"Database Connection Test failed: invalid Database Type selected (must be 'Oracle' or 'MySql')\n"+
+						dbType);
+			}
+
+//			// Enable logging
+//			DriverManager.setLogWriter(new PrintWriter((System.err)));
+
+			log.debug("Getting Connection");
+			Connection conn = DriverManager.getConnection(dbURL, username, password);
+
+			// If a SQLWarning object is available, print its
+			// warning(s). There may be multiple warnings chained.
+
+			SQLWarning warn = conn.getWarnings();
+			if (warn != null){
+				StringBuilder sb = new StringBuilder("");
+				while (warn != null) {
+					log.debug("SQLState: " + warn.getSQLState());
+					log.debug("Message:  " + warn.getMessage());
+					log.debug("Vendor:   " + warn.getErrorCode());
+					log.debug("");
+					
+					sb.append("SQLState: " + warn.getSQLState()+"\n");
+					sb.append("SQLState: " + warn.getSQLState()+"\n");
+					sb.append("Message:  " + warn.getMessage()+"\n");
+					sb.append("Vendor:   " + warn.getErrorCode()+"\n");
+					sb.append("\n");
+
+					warn = warn.getNextWarning();
+				}
+				
+				JOptionPane.showMessageDialog(
+						this,
+						"Database Connection Test failed with the following warnings:\n"+
+						sb.toString());
+			}
+
+			conn.close(); 
+			
+			//Test is successful
+			JOptionPane.showMessageDialog(
+					this,
+					"Database Connection Test was successful.");
+
+		} catch (ClassNotFoundException e) {
+			log.error("Testing DB Connection: Can't load driver " + e);
+			JOptionPane.showMessageDialog(
+					this,
+					"Database Connection Test failed: Can't load driver " + e.getMessage());
+		} catch (SQLException e) {
+			log.error("Testing DB Connection: SQL Exception: " + e);
+			JOptionPane.showMessageDialog(
+					this,
+					"Database Connection Test failed: SQL Exception: " + e.getMessage());
+		}
 	}
 
 }
