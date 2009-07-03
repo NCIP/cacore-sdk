@@ -26,6 +26,10 @@ public class DeploymentPropertiesValidator implements TabbedPanePropertiesValida
     	parentContainer.toggleSecurityFields();
     	parentContainer.toggleRemoteSshFields();
     	
+    	parentContainer.toggleTestConnectionButton();
+    	parentContainer.toggleDbJndiNameField();
+    	parentContainer.toggleCsmDbJndiNameField();
+    	
     	parentContainer.toggleSaveButton();
     	parentContainer.togglePreviousButton();
     	parentContainer.toggleNextButton();
