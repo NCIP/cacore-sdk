@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- JNLP File for the SDK Workbench -->
+<!-- JNLP File for the caCORE Workbench -->
 <jnlp spec="1.0+"
       codebase="http://@SERVER_HOSTNAME@:@SERVER_PORT@/@PROJECT_NAME@/" 
       href="Workbench.jnlp">
    <information>
-      <title>SDK Workbench Web Start JNLP File</title>
-      <vendor>NCICB</vendor>
-      <description>SDK Workbench</description>
+      <title>caCORE Workbench Web Start JNLP File</title>
+      <vendor>National Cancer Institute Center for Bioinformatics (NCICB)</vendor>
+      <description>caCORE Workbench</description>
       <homepage href="http://java.sun.com/docs/books/tutorial/deployment/webstart/running.html"/>
-      <description kind="short">Web Start JNLP Page for SDK Workbench</description>
+      <description kind="short">Web Start JNLP Page for caCORE Workbench</description>
       <offline-allowed/>
    </information>
    <security>
