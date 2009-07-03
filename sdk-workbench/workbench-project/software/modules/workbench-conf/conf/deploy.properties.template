@@ -192,7 +192,7 @@ MODEL_FILE_TYPE=EA
 LOGICAL_MODEL=Logical View.Logical Model
 DATA_MODEL=Logical View.Data Model
 INCLUDE_PACKAGE=.*
-EXCLUDE_PACKAGE=.*?java.*
+EXCLUDE_PACKAGE=.*?java.*,.*?[V|v]alue.?domain.*
 EXCLUDE_NAME=
 EXCLUDE_NAMESPACE=
 
