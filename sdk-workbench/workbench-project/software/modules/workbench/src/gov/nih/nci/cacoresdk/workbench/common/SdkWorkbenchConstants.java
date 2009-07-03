@@ -1,7 +1,7 @@
 package gov.nih.nci.cacoresdk.workbench.common;
 
 /**
- * Constants used in the SDK Workbench Portal
+ * Constants used in the caCORE Workbench Portal
  * 
  * @author <A HREF="MAILTO:dumitrud@mail.nih.gov">Daniel Dumitru </A>
  * @author <A HREF="MAILTO:patelsat@mail.nih.gov">Satish Patel </A>
