@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="windows-1252"?>
-<XMI xmi.version="1.1" xmlns:UML="omg.org/UML1.3" timestamp="2009-06-26 17:19:38">
+<XMI xmi.version="1.1" xmlns:UML="omg.org/UML1.3" timestamp="2009-07-09 11:23:52">
 	<XMI.header>
 		<XMI.documentation>
 			<XMI.exporter>Enterprise Architect</XMI.exporter>
@@ -26303,7 +26303,7 @@
 																								<UML:TaggedValue tag="complexity" value="1"/>
 																								<UML:TaggedValue tag="status" value="Proposed"/>
 																								<UML:TaggedValue tag="ea_localid" value="971"/>
-																								<UML:TaggedValue tag="eventflags" value="ATT=1114;LNK=3a19;"/>
+																								<UML:TaggedValue tag="eventflags" value="ATT=1114;LNK=93ba;"/>
 																								<UML:TaggedValue tag="style" value="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=0;HSwimLanes=0;BorderStyle=0;"/>
 																								<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={5BDBAA34-DC4C-4302-A478-0A418B435C13}$XID;$NAM=CustomProperties$NAM;$TYP=element property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isActive@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={00F8EA6B-E027-4bad-B011-41830FF87842}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
 																							</UML:ModelElement.taggedValue>
@@ -26388,7 +26388,7 @@
 																										<UML:TaggedValue tag="ea_end" value="source"/>
 																									</UML:ModelElement.taggedValue>
 																								</UML:AssociationEnd>
-																								<UML:AssociationEnd visibility="public" multiplicity="1..*" name="assistantCollection" aggregation="none" isOrdered="false" isNavigable="true" type="EAID_5CA73A59_BD41_4920_B53C_AC571E123E64">
+																								<UML:AssociationEnd visibility="public" multiplicity="0..*" name="assistantCollection" aggregation="none" isOrdered="false" isNavigable="true" type="EAID_5CA73A59_BD41_4920_B53C_AC571E123E64">
 																									<UML:ModelElement.taggedValue>
 																										<UML:TaggedValue tag="containment" value="Unspecified"/>
 																										<UML:TaggedValue tag="ea_end" value="target"/>
@@ -26558,7 +26558,7 @@
 																								<UML:TaggedValue tag="complexity" value="1"/>
 																								<UML:TaggedValue tag="status" value="Proposed"/>
 																								<UML:TaggedValue tag="ea_localid" value="973"/>
-																								<UML:TaggedValue tag="eventflags" value="ATT=fff4;LNK=3a19;"/>
+																								<UML:TaggedValue tag="eventflags" value="ATT=fff4;LNK=93ca;"/>
 																								<UML:TaggedValue tag="style" value="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=0;HSwimLanes=0;BorderStyle=0;"/>
 																								<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={3760E66C-C5C0-4947-AA39-B27D6F4ABBE1}$XID;$NAM=CustomProperties$NAM;$TYP=element property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isActive@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={5CA73A59-BD41-4920-B53C-AC571E123E64}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
 																							</UML:ModelElement.taggedValue>
@@ -35324,6 +35324,7 @@
 			</UML:Namespace.ownedElement>
 		</UML:Model>
 		<UML:TaggedValue tag="NCI_GME_XML_NAMESPACE" xmi.id="EAID_81113ADD_4975_48f2_A8DA_DAA875A76BCC" value="gme://caCORE.caCORE/3.2/" modelElement="EAID_6A1F7B6A_C113_44b4_85DC_AC4BBBA11077"/>
+		<UML:TaggedValue xmi.id="EAID_D1CB5B9D_2A9C_4c26_9F64_7DAF45E4EDFD" value="gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.Assistant.professor" modelElement="EAID_249A807B_21BE_4be9_83B4_33E42B9CF9A2"/>
 		<UML:Diagram name="Many to Many" xmi.id="EAID_E8DE056F_3A0F_4ac7_8A32_8DE289851104" diagramType="ClassDiagram" owner="EAPK_13C2A393_A2C6_4d7c_9441_319ED9A21FBA" toolName="Enterprise Architect 2.5">
 			<UML:ModelElement.taggedValue>
 				<UML:TaggedValue tag="version" value="1.0"/>
