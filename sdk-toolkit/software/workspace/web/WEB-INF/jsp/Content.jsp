@@ -62,15 +62,25 @@
 					    <td width="1"><!-- anchor to skip main menu --><a href="#content"><img src="images/shim.gif" alt="Skip Menu" width="1" height="1" border="0" /></a></td>
 						<!-- link 1 begins -->
 					    <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" onclick="document.location.href='Home.action'">
-					      <a class="mainMenuLink" href="Home.action">HOME</a>
+					      <a class="mainMenuLink" href="Home.action">Home</a>
 					    </td>
 					    <!-- link 1 ends -->
 					    <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt="" /></td>
 					    <!-- link 2 begins -->
 					    <td height="20" class="mainMenuItemOver" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItemOver'),hideCursor()" onclick="document.location.href='ShowDynamicTree.action'">
-					      <a class="mainMenuLink" href="ShowDynamicTree.action">CRITERIA</a>
+					      <a class="mainMenuLink" href="ShowDynamicTree.action">Criteria</a>
 					    </td>
 					    <!-- link 2 ends -->
+					    <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt=""/></td>
+					    <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" onclick="document.location.href='docs'">
+					      <a class="mainMenuLink" href="docs">Domain Java Docs</a>
+					    </td>
+					    <!-- link 3 ends -->
+					    <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt=""/></td>
+					    <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" onclick="document.location.href='docs/system'">
+					      <a class="mainMenuLink" href="docs/system">API Java Docs</a>
+					    </td>
+					    <!-- link 3 ends -->
 					    <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt=""/></td>
 					    <td height="20" width="100%">&nbsp;</td> 
 					    <!-- link 3 begins -->
