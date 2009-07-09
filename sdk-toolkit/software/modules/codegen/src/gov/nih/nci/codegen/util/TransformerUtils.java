@@ -1111,18 +1111,23 @@ public class TransformerUtils
 	public UMLClass getTable(UMLClass klass) throws GenerationException
 	{
 		Set<UMLDependency> dependencies = klass.getDependencies();
+		Map<String,UMLClass> clientMap = new HashMap<String,UMLClass>();
 		int count = 0;
 		UMLClass result = null; 
 		for(UMLDependency dependency:dependencies)
 		{
 			UMLClass client = (UMLClass) dependency.getClient();
+			
 			log.debug("getTable: klass: " + klass.getName() + "Client stereotype: " +client.getStereotype() + "; dependency stereotype: " + dependency.getStereotype());
 			if(STEREO_TYPE_TABLE.equalsIgnoreCase(client.getStereotype()) && STEREO_TYPE_DATASOURCE_DEPENDENCY.equalsIgnoreCase(dependency.getStereotype()))
 			{
-				count++;
+				log.debug("* * * client.getName(): " + client.getName());
+				clientMap.put(client.getName(), client); 
 				result = client;
 			}
 		}
+		
+		count = clientMap.size();
 
 		if(count!=1){
 			log.debug("getTable: klass: " +klass.getName()+"; count: " + count);
