@@ -97,7 +97,7 @@
             name="sdk.todo" />
     <historyfile name="" />
   </argo>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Fri Apr 24 01:55:40 GMT 2009'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Fri Jun 26 16:57:58 GMT 2009'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.24(5) revised on $Date: 2006-11-06 19:55:22 +0100 (Mon, 06 Nov 2006) $ </XMI.exporterVersion>
@@ -20246,6 +20246,15 @@
                           isAbstract = 'false' isActive = 'false'/>
                       </UML:Namespace.ownedElement>
                     </UML:Package>
+                  </UML:Namespace.ownedElement>
+                </UML:Package>
+                <UML:Package xmi.id = '-64--88-1-103-13e58d4:1221d77f8e3:-8000:000000000000164B'
+                  name = 'value domain' isSpecification = 'false' isRoot = 'false' isLeaf = 'false'
+                  isAbstract = 'false'>
+                  <UML:Namespace.ownedElement>
+                    <UML:Class xmi.id = '-64--88-1-103-13e58d4:1221d77f8e3:-8000:000000000000164C'
+                      name = 'ValueDomain' visibility = 'public' isSpecification = 'false' isRoot = 'false'
+                      isLeaf = 'false' isAbstract = 'false' isActive = 'false'/>
                   </UML:Namespace.ownedElement>
                 </UML:Package>
               </UML:Namespace.ownedElement>
@@ -44038,7 +44047,7 @@
       <text name="Fig2.1.1"
         x="769"
         y="153"
-        fill="0"
+        fill="1"
         fillcolor="white"
         stroke="0"
         strokecolor="black"
@@ -45247,7 +45256,7 @@
       <text name="Fig13.1.1"
         x="761"
         y="1113"
-        fill="0"
+        fill="1"
         fillcolor="white"
         stroke="0"
         strokecolor="black"
