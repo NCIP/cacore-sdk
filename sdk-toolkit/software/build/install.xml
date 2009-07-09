@@ -14,6 +14,10 @@
 	<replaceregexp file="${properties.file}" byline="true" match="^([\w\d.]+)=(.*[\w\d\/\{\}\\]+)[ \t]+\r*$" replace="\1=\2" />
 	<replaceregexp file="${properties.file}" byline="true" match="^([\w\d.]+)=[ \t]+(.*[\w\d\/\{\}\\]+)\r*$" replace="\1=\2" />
 	<property file="${properties.file}" />
+	
+	<!-- Databases build/install properties -->
+	<property name="db.install.create.oracle.file.list" value="SDKTestSchema-oracle.sql,SDKTestCSMSchema-oracle.sql" />
+	<property name="db.install.create.mysql.file.list" value="SDKTestSchema-mysql.sql,SDKTestCSMSchema-mysql.sql" />
 
 	<condition property="exclude.database" value="true">
 		<not>
