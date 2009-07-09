@@ -15,6 +15,7 @@
 				/http/applicationservice/**=sessionContextIntegrationFilter,x509InitializingFilter,x509ProcessingFilter,basicProcessingFilter,basicExceptionTranslationFilter,filterInvocationInterceptor
 				/gethtml/**=sessionContextIntegrationFilter,logoutFilter,basicProcessingFilter,basicExceptionTranslationFilter,filterInvocationInterceptor
 				/getxml/**=sessionContextIntegrationFilter,logoutFilter,basicProcessingFilter,basicExceptionTranslationFilter,filterInvocationInterceptor
+				/getjson/**=sessionContextIntegrationFilter,logoutFilter,basicProcessingFilter,basicExceptionTranslationFilter,filterInvocationInterceptor
 				/**/*.action/**=sessionContextIntegrationFilter,logoutFilter,authenticationProcessingFilter,exceptionTranslationFilter,filterInvocationInterceptor
 				/j_acegi_security_check/**=sessionContextIntegrationFilter,authenticationProcessingFilter
 				/**=sessionContextIntegrationFilter,logoutFilter
