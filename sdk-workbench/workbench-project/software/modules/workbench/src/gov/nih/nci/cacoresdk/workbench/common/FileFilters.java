@@ -8,6 +8,7 @@ public interface FileFilters extends gov.nih.nci.cagrid.introduce.common.FileFil
 
 	public static final FileFilter ALL_FILTER = new AllFilter();
 	public static final FileFilter PEM_FILTER = new PEMFileFilter();
+	public static final FileFilter SQL_FILTER = new SQLFileFilter();
 	public static final FileFilter XMI_UML_FILTER = new XMIandUMLFileFilter();
 	
 	public class XMIandUMLFileFilter extends javax.swing.filechooser.FileFilter implements java.io.FileFilter {
@@ -29,6 +30,18 @@ public interface FileFilters extends gov.nih.nci.cagrid.introduce.common.FileFil
 
 		public String getDescription() {
 			return "Certificate and Key Files (*.pem)";
+		}
+	}
+	
+	
+	public class SQLFileFilter extends javax.swing.filechooser.FileFilter implements java.io.FileFilter {
+		public boolean accept(File file) {
+			String filename = file.getName();
+			return file.isDirectory() || filename.endsWith(".sql");
+		}
+
+		public String getDescription() {
+			return "Database SQL Files (*.sql)";
 		}
 	}
 	

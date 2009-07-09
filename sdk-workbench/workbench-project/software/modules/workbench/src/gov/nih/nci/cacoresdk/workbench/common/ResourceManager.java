@@ -29,6 +29,7 @@ public class ResourceManager {
 	private static final String WORKBENCH_DIR = "workbench-project/software";
 	private static final String BUILD_DIR = "build";
 	private static final String BUILD_FILE = "build.xml";
+	private static final String DB_SQL_DIR = "db/db-install";
 	private static final String CODEGEN_PROPS_FILE = "codegen.properties";
 	private static final String DEPLOY_PROPS_FILE = "install.properties";
 	
@@ -130,6 +131,13 @@ public class ResourceManager {
 		File buildFile = new File(getProjectBuildDir(projectDirPath).getAbsolutePath()+ File.separator + BUILD_FILE);
 		log.debug("* * * projectBuildFile.getAbsolutePath(): " + buildFile.getAbsolutePath());
 		return buildFile;
+	}
+	
+	
+	public static File getDbSqlDir(String projectDirPath, String dbType){
+		File dbSqlDir = new File(projectDirPath + File.separator + DB_SQL_DIR + File.separator + dbType.toLowerCase());
+		log.debug("* * * dbSqlDir.getAbsolutePath(): " + dbSqlDir.getAbsolutePath());
+		return dbSqlDir;
 	}
 
 	public static File getDeployPropsFile(String projectDirPath,String remoteDeployEnv){
