@@ -1,5 +1,6 @@
 package gov.nih.nci.cacoresdk.workbench.portal.panel;
 
+import gov.nih.nci.cacoresdk.workbench.common.LookAndFeel;
 import gov.nih.nci.cacoresdk.workbench.common.OptionsMapManager;
 import gov.nih.nci.cacoresdk.workbench.portal.validation.PanelValidator;
 import gov.nih.nci.cacoresdk.workbench.portal.validation.TabbedPanePropertiesValidator;
@@ -15,6 +16,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -58,7 +60,7 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
 	
 	// App Server Panel
 	private JPanel csmDbConnectionSettingsPanel = null;
-	private JPanel csmDbConnectionJndiSettingsSubPanel = null;
+	private JPanel csmDbJndiSettingsSubPanel = null;
 	private JPanel csmDbConnectionSettingsSubPanel = null;
 	
 	private JPanel csmDbConnectionSettingsReviewPanel = null;
@@ -74,6 +76,9 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
     private JTextField csmDbSchemaField = null;
     private JTextField csmDbUsernameField = null;
     private JTextField csmDbPasswordField = null;
+    
+    //Buttons
+    private JButton testConnectionButton = null;
     
     /**
      * This method initializes the CSM 'Use DB Connection Settings?' Check Box
@@ -254,6 +259,10 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
         return csmDbConnectionUrlField;
     }
     
+    public String getCsmDbConnectionUrl(){
+    	return getCsmDbConnectionUrlField().getText();
+    }
+    
     public void setCsmDbConnectionUrl(String csmDbConnectionUrl){
     	getCsmDbConnectionUrlField().setText(csmDbConnectionUrl);
     }
@@ -403,6 +412,10 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
         return csmDbUsernameField;
     }
     
+    public String getCsmDbUsername(){
+    	return getCsmDbUsernameField().getText();
+    }
+    
     public void setCsmDbUsername(String csmDbUsername){
     	getCsmDbUsernameField().setText(csmDbUsername);
     }
@@ -435,6 +448,11 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
         	csmDbPasswordField.addFocusListener(new FocusChangeHandler());
         }
         return csmDbPasswordField;
+    }
+    
+    
+    public String getCsmDbPassword(){
+    	return getCsmDbPasswordField().getText();
     }
     
     public void setCsmDbPassword(String csmDbPassword){
@@ -495,6 +513,32 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
     	}
     }
     
+    /**
+     * This method initializes jButton
+     * 
+     * @return javax.swing.JButton
+     */
+    private JButton getTestConnectionButton() {
+        if (testConnectionButton == null) {
+        	testConnectionButton = new JButton();
+        	testConnectionButton.setText("Test Connection");
+        	testConnectionButton.setIcon(LookAndFeel.getGenerateApplicationIcon());
+        	testConnectionButton.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                	parentContainer.testDbConnection(OptionsMapManager.getDbTypeOptionsMap().get(getCsmDbTypeComboBox().getSelectedItem().toString()), 
+                			getCsmDbConnectionUrl(), getCsmDbUsername(), getCsmDbPassword());
+                    mainPanelValidator.validateInput();
+                }
+            });
+        }
+
+        return testConnectionButton;
+    }
+    
+    public void setTestConnectionButtonEnabled(boolean enabled){
+    	getTestConnectionButton().setEnabled(enabled);
+    }
+    
 	/**
 	 * This method initializes dbConnectionSettingsPanel	
 	 * 	
@@ -541,21 +585,13 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
 			gridBagConstraints21.gridwidth = 2;
 			
 			GridBagConstraints gridBagConstraints30 = new GridBagConstraints();
+			gridBagConstraints30.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints30.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints30.gridy = 3;
 			gridBagConstraints30.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints30.gridx = 0;
+			gridBagConstraints30.gridwidth = 3;
 
-			GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
-			gridBagConstraints31.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints31.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints31.gridx = 1;
-			gridBagConstraints31.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints31.gridy = 3;
-			//gridBagConstraints31.weighty = 1.0D;
-			gridBagConstraints31.weightx = 1.0D;  
-			gridBagConstraints31.gridwidth = 2;
-			
 			GridBagConstraints gridBagConstraints40 = new GridBagConstraints();
 			gridBagConstraints40.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints40.anchor = java.awt.GridBagConstraints.WEST;
@@ -563,14 +599,6 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
 			gridBagConstraints40.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints40.gridx = 0;
 			gridBagConstraints40.gridwidth = 3;
-
-			GridBagConstraints gridBagConstraints50 = new GridBagConstraints();
-			gridBagConstraints50.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints50.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints50.gridy = 5;
-			gridBagConstraints50.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints50.gridx = 0;
-			gridBagConstraints50.gridwidth = 3;
 		    
 		    csmUseDbConnectionSettingsLabel = new JLabel();
 		    csmUseDbConnectionSettingsLabel.setText("Use DB connection Settings?");
@@ -591,25 +619,19 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
 		    csmDbConnectionSettingsPanel.add(getCsmUseDbConnectionSettingsCheckBox(), gridBagConstraints11);
 		    csmDbConnectionSettingsPanel.add(csmDatabaseTypeLabel, gridBagConstraints20);
 		    csmDbConnectionSettingsPanel.add(getCsmDbTypeComboBox(), gridBagConstraints21);
-		    csmDbConnectionSettingsPanel.add(csmUseJndiBasedConnectionLabel, gridBagConstraints30);
-		    csmDbConnectionSettingsPanel.add(getCsmUseJndiBasedConnectionCheckBox(), gridBagConstraints31);
-		    csmDbConnectionSettingsPanel.add(getCsmDbConnectionJndiSettingsSubPanel(), gridBagConstraints40);
-		    csmDbConnectionSettingsPanel.add(getCsmDbConnectionSettingsSubPanel(), gridBagConstraints50);
+		    csmDbConnectionSettingsPanel.add(getCsmDbJndiSettingsSubPanel(), gridBagConstraints30);
+		    csmDbConnectionSettingsPanel.add(getCsmDbConnectionSettingsSubPanel(), gridBagConstraints40);
 			
 		    csmDbConnectionSettingsPanel.validate();
 		}
 		return csmDbConnectionSettingsPanel;
 	}
 	
-	/**
-	 * This method initializes dbConnectionSettingsPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */
-	private JPanel getCsmDbConnectionJndiSettingsSubPanel() {
-		if (csmDbConnectionJndiSettingsSubPanel == null) {
+	private JPanel getCsmDbJndiSettingsSubPanel() {
+		if (csmDbJndiSettingsSubPanel == null) {
 			
-		    //CSM DB Connection Settings Panel Label Definitions
+		    //DB Connection Settings Panel Label Definitions
+		    JLabel csmUseJndiBasedConnectionLabel = null;
 		    JLabel csmDbJndiUrlLabel = null;
 			
 			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
@@ -627,22 +649,45 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
 			gridBagConstraints11.weighty = 1.0D;
 			gridBagConstraints11.weightx = 1.0D;  
 			gridBagConstraints11.gridwidth = 2;
+			
+			GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
+			gridBagConstraints20.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints20.gridy = 2;
+			gridBagConstraints20.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints20.gridx = 0;
+
+			GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
+			gridBagConstraints21.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints21.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints21.gridx = 1;
+			gridBagConstraints21.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints21.gridy = 2;
+			gridBagConstraints21.weighty = 1.0D;
+			gridBagConstraints21.weightx = 1.0D;  
+			gridBagConstraints21.gridwidth = 2;
+		    
+		    csmUseJndiBasedConnectionLabel = new JLabel();
+			csmUseJndiBasedConnectionLabel.setText("Use a JNDI-based Connection?");
 
 		    csmDbJndiUrlLabel = new JLabel();
 		    csmDbJndiUrlLabel.setText("JNDI Name:");
 
-		    csmDbConnectionJndiSettingsSubPanel = new JPanel();
-		    csmDbConnectionJndiSettingsSubPanel.setLayout(new GridBagLayout());
-		    csmDbConnectionJndiSettingsSubPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "CSM JNDI Options",
+		    csmDbJndiSettingsSubPanel = new JPanel();
+		    csmDbJndiSettingsSubPanel.setLayout(new GridBagLayout());
+		    csmDbJndiSettingsSubPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "JNDI Options",
 					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
+		    
+		    csmDbJndiSettingsSubPanel.add(csmUseJndiBasedConnectionLabel, gridBagConstraints10);
+		    csmDbJndiSettingsSubPanel.add(getCsmUseJndiBasedConnectionCheckBox(), gridBagConstraints11);
+		    
+		    csmDbJndiSettingsSubPanel.add(csmDbJndiUrlLabel, gridBagConstraints20);
+		    csmDbJndiSettingsSubPanel.add(getCsmDbJndiNameField(), gridBagConstraints21);
 			
-		    csmDbConnectionJndiSettingsSubPanel.add(csmDbJndiUrlLabel, gridBagConstraints10);
-		    csmDbConnectionJndiSettingsSubPanel.add(getCsmDbJndiNameField(), gridBagConstraints11);
-			
-		    csmDbConnectionJndiSettingsSubPanel.validate();
+		    csmDbJndiSettingsSubPanel.validate();
 		}
-		return csmDbConnectionJndiSettingsSubPanel;
+		
+		return csmDbJndiSettingsSubPanel;
 	}
 	
 	/**
@@ -756,6 +801,16 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
 			gridBagConstraints61.gridwidth = 2;
 			gridBagConstraints61.weighty = 1.0D;
 			gridBagConstraints61.gridx = 1;
+			
+			GridBagConstraints gridBagConstraints70 = new GridBagConstraints();
+			//gridBagConstraints70.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints70.anchor = java.awt.GridBagConstraints.CENTER;
+			gridBagConstraints70.gridy = 7;
+			gridBagConstraints70.gridx = 0;
+			gridBagConstraints70.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints70.gridwidth = 3;
+			//gridBagConstraints70.weighty = 1.0D;
+			gridBagConstraints70.weightx = 1.0D; 
 
 		    csmDbConnectionUrlLabel = new JLabel();
 		    csmDbConnectionUrlLabel.setText("Connection URL:");
@@ -793,6 +848,8 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
 		    csmDbConnectionSettingsSubPanel.add(getCsmDbUsernameField(), gridBagConstraints51);
 		    csmDbConnectionSettingsSubPanel.add(csmDbPasswordLabel, gridBagConstraints60);
 		    csmDbConnectionSettingsSubPanel.add(getCsmDbPasswordField(), gridBagConstraints61);
+		    
+		    csmDbConnectionSettingsSubPanel.add(getTestConnectionButton(), gridBagConstraints70);
 			
 		    csmDbConnectionSettingsSubPanel.validate();
 		}
@@ -1040,49 +1097,56 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
     
     public ValidationResult validateInput() {
 
-    	ValidationResult result = new ValidationResult();
+    	ValidationResult result = validateDbConnectionInput();
     	
-        //Security setting Validation
-    	if (isEnableSecuritySelected){
+    	if (isEnableSecuritySelected && !getCsmUseDbConnectionSettingsCheckBox().isSelected()){
     		
-    		//CSM DB Connection Setting Validation
-    		if (!getCsmUseJndiBasedConnectionCheckBox().isSelected() && !getCsmUseDbConnectionSettingsCheckBox().isSelected()){
-
-    			String csmDbConnectionUrlField = this.getCsmDbConnectionUrlField().getText();
-    			if (!ValidationUtils.isNotBlank(csmDbConnectionUrlField)) {
-    				result.add(new SimpleValidationMessage(CSM_DB_CONNECTION_URL + " must not be blank.", Severity.ERROR, CSM_DB_CONNECTION_URL));
-    			}
-    			
-        		if (getCsmDbConnectionUrlField().getText().indexOf('<') > 1 || csmDbConnectionUrlField.indexOf('@') > 1) {
-        			result.add(new SimpleValidationMessage(CSM_DB_CONNECTION_URL + " information is incomplete.  Make sure hostname, port and schema information is correct.", Severity.ERROR, CSM_DB_CONNECTION_URL));
-        		}
-        		
-        		if (!ValidationUtils.isNotBlank(getCsmDbHostnameField().getText())) {
-        			result.add(new SimpleValidationMessage(CSM_DB_SERVER + " must not be blank.", Severity.ERROR, CSM_DB_SERVER));
-        		}
-        		
-        		if (!ValidationUtils.isNotBlank(getCsmDbPortField().getText())) {
-        			result.add(new SimpleValidationMessage(CSM_DB_SERVER_PORT + " must not be blank.", Severity.ERROR, CSM_DB_SERVER_PORT));
-        		}
-        		
-        		if (!ValidationUtils.isNotBlank(getCsmDbSchemaField().getText())) {
-        			result.add(new SimpleValidationMessage(CSM_DB_NAME + " must not be blank.", Severity.ERROR, CSM_DB_NAME));
-        		}
-
-    			if (!ValidationUtils.isNotBlank(this.getCsmDbUsernameField().getText())) {
-    				result.add(new SimpleValidationMessage(CSM_DB_USERNAME + " must not be blank.", Severity.ERROR, CSM_DB_USERNAME));
-    			} 
-
-    			if (!ValidationUtils.isNotBlank(this.getCsmDbPasswordField().getText())) {
-    				result.add(new SimpleValidationMessage(CSM_DB_PASSWORD + " must not be blank.", Severity.ERROR, CSM_DB_PASSWORD));
-    			} 
-    		} else {
+    		if (getCsmUseJndiBasedConnectionCheckBox().isSelected() ){
     			if (!ValidationUtils.isNotBlank(this.getCsmDbJndiNameField().getText())) {
     				result.add(new SimpleValidationMessage(CSM_JNDI_NAME + " must not be blank.", Severity.ERROR, CSM_JNDI_NAME));
     			}
     		}
     	}
     	
+    	return result;
+    }
+    
+    public ValidationResult validateDbConnectionInput(){
+
+    	ValidationResult result = new ValidationResult();
+
+    	if (isEnableSecuritySelected && !getCsmUseDbConnectionSettingsCheckBox().isSelected()){
+
+    		String csmDbConnectionUrlField = this.getCsmDbConnectionUrlField().getText();
+    		if (!ValidationUtils.isNotBlank(csmDbConnectionUrlField)) {
+    			result.add(new SimpleValidationMessage(CSM_DB_CONNECTION_URL + " must not be blank.", Severity.ERROR, CSM_DB_CONNECTION_URL));
+    		}
+
+    		if (getCsmDbConnectionUrlField().getText().indexOf('<') > 1 || csmDbConnectionUrlField.indexOf('@') > 1) {
+    			result.add(new SimpleValidationMessage(CSM_DB_CONNECTION_URL + " information is incomplete.  Make sure hostname, port and schema information is correct.", Severity.ERROR, CSM_DB_CONNECTION_URL));
+    		}
+
+    		if (!ValidationUtils.isNotBlank(getCsmDbHostnameField().getText())) {
+    			result.add(new SimpleValidationMessage(CSM_DB_SERVER + " must not be blank.", Severity.ERROR, CSM_DB_SERVER));
+    		}
+
+    		if (!ValidationUtils.isNotBlank(getCsmDbPortField().getText())) {
+    			result.add(new SimpleValidationMessage(CSM_DB_SERVER_PORT + " must not be blank.", Severity.ERROR, CSM_DB_SERVER_PORT));
+    		}
+
+    		if (!ValidationUtils.isNotBlank(getCsmDbSchemaField().getText())) {
+    			result.add(new SimpleValidationMessage(CSM_DB_NAME + " must not be blank.", Severity.ERROR, CSM_DB_NAME));
+    		}
+
+    		if (!ValidationUtils.isNotBlank(this.getCsmDbUsernameField().getText())) {
+    			result.add(new SimpleValidationMessage(CSM_DB_USERNAME + " must not be blank.", Severity.ERROR, CSM_DB_USERNAME));
+    		} 
+
+    		if (!ValidationUtils.isNotBlank(this.getCsmDbPasswordField().getText())) {
+    			result.add(new SimpleValidationMessage(CSM_DB_PASSWORD + " must not be blank.", Severity.ERROR, CSM_DB_PASSWORD));
+    		} 
+    	}
+
     	return result;
     }
     
@@ -1109,6 +1173,7 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
         
         toggleCsmDbConnectionFields();
         parentContainer.toggleCsmDbJndiNameField();
+        parentContainer.toggleCsmTestConnectionButton();
         updateCsmDbFields();
     }
     

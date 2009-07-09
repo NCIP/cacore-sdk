@@ -1,5 +1,6 @@
 package gov.nih.nci.cacoresdk.workbench.portal.panel;
 
+import gov.nih.nci.cacoresdk.workbench.common.FileFilters;
 import gov.nih.nci.cacoresdk.workbench.common.LookAndFeel;
 import gov.nih.nci.cacoresdk.workbench.common.OptionsMapManager;
 import gov.nih.nci.cacoresdk.workbench.common.ResourceManager;
@@ -13,6 +14,7 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -46,9 +48,11 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
 	private static final String DB_NAME = "DB Schema";
 	private static final String DB_USERNAME = "DB Username";
 	private static final String DB_PASSWORD = "DB Password";
+	private static final String DB_SQL_FILE = "DB SQL File";
 	
-    //SDK Install Panel Buttons
+    //Buttons
     private JButton testConnectionButton = null;
+    private JButton dbSqlFilePathButton = null;
 	
 	public DbConnectionSettingsPanel(DeployPropertiesViewer parentContainer,TabbedPanePropertiesValidator mainPanelValidator){
 		this.parentContainer = parentContainer;
@@ -59,10 +63,11 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
 	private JPanel dbSettingsPanel = null;
 	private JPanel dbJndiSettingsSubPanel = null;
 	private JPanel dbConnectionSettingsSubPanel = null;
+	private JPanel dbCreationSettingsSubPanel = null;
 	private JPanel dbConnectionSettingsReviewPanel = null;
     
 	//DB Connection Settings Panel Component Definitions
-    private JComboBox dbTypeComboBox = null;
+    private JComboBox  dbTypeComboBox = null;
     private JCheckBox  useJndiBasedConnectionCheckBox = null;
     private JTextField dbJndiNameField = null;
     private JTextField dbUrlField = null;
@@ -71,6 +76,10 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
     private JTextField dbSchemaField = null;
     private JTextField dbUsernameField = null;
     private JTextField dbPasswordField = null;
+    
+    //Re-create DB Panel Component Definitions
+    private JCheckBox 	recreateDbCheckBox=null;
+    private JTextField 	dbSqlFileField=null;
 
     /**
      * This method initializes the Writable API Database Type Field
@@ -110,7 +119,7 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
         return dbTypeComboBox;
     }
     
-    public String getDatabaseType(){
+    public String getDbType(){
     	return getDbTypeComboBox().getSelectedItem().toString();
     }
     
@@ -419,7 +428,7 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
      * 
      * @return javax.swing.JButton
      */
-    public JButton getTestConnectionButton() {
+    private JButton getTestConnectionButton() {
         if (testConnectionButton == null) {
         	testConnectionButton = new JButton();
         	testConnectionButton.setText("Test Connection");
@@ -435,6 +444,133 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
 
         return testConnectionButton;
     }
+    
+    public void setTestConnectionButtonEnabled(boolean enabled){
+    	getTestConnectionButton().setEnabled(enabled);
+    }
+    
+    /**
+     * This method initializes jButton
+     * 
+     * @return javax.swing.JButton
+     */
+    private JButton getDbSqlFilePathButton() {
+        if (dbSqlFilePathButton == null) {
+        	dbSqlFilePathButton = new JButton();
+        	dbSqlFilePathButton.setText("Browse");
+        	dbSqlFilePathButton.setIcon(LookAndFeel.getBrowseIcon());
+        	dbSqlFilePathButton.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    try {
+                        String previous = getDbSqlFileField().getText();
+                        String location = ResourceManager.promptFile(previous, FileFilters.SQL_FILTER);
+                        if (location != null && location.length() > 0) {
+                        	getDbSqlFileField().setText(location);
+                        } else {
+                        	getDbSqlFileField().setText(previous);
+                        }
+                        mainPanelValidator.validateInput();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+        }
+        return dbSqlFilePathButton;
+    }
+        
+    public void enableDbSqlFileButton(boolean enable){
+    	getDbSqlFilePathButton().setEnabled(enable);
+    }
+    
+    /**
+     * This method initializes the Use JNDI Based Connection Check Box
+     * 
+     * @return javax.swing.JCheckBox
+     */
+    private JCheckBox getRecreateDbCheckBox() {
+        if (recreateDbCheckBox == null) {
+        	recreateDbCheckBox = new JCheckBox();
+        	recreateDbCheckBox.setToolTipText("Re-create Database?");
+        	recreateDbCheckBox.setHorizontalAlignment(SwingConstants.LEADING);
+        	recreateDbCheckBox.setSelected(Boolean.parseBoolean(parentContainer.getPropertiesManager().getDeployPropertyValue("database.re-create")));
+        	recreateDbCheckBox.setHorizontalTextPosition(SwingConstants.LEFT);
+			
+        	recreateDbCheckBox.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+                    mainPanelValidator.setDirty(true);
+                    mainPanelValidator.validateInput();
+				}
+        	});
+
+        	recreateDbCheckBox.addFocusListener(new FocusChangeHandler());
+        }
+        return recreateDbCheckBox;
+    }  
+    
+    public boolean isRecreateDbSelected() {
+    	return getRecreateDbCheckBox().isSelected();
+    }
+    
+    /**
+     * This method initializes the Database JNDI Name Field
+     * 
+     * @return javax.swing.JTextField
+     */
+    public JTextField getDbSqlFileField() {
+        if (dbSqlFileField == null) {
+        	dbSqlFileField = new JTextField();
+        	
+        	String dbType = getDbType();
+        	if ("oracle".equalsIgnoreCase(dbType)){
+        		dbSqlFileField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("db.install.create.oracle.file.list")); 
+        	} else if ("mysql".equalsIgnoreCase(dbType)){
+        		dbSqlFileField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("db.install.create.mysql.file.list"));
+        	} else {
+        		dbSqlFileField.setText("");
+        	}
+        	
+        	dbSqlFileField.getDocument().addDocumentListener(new DocumentListener() {
+                public void changedUpdate(DocumentEvent e) {
+                    mainPanelValidator.setDirty(true);
+                    mainPanelValidator.validateInput();
+                }
+
+                public void removeUpdate(DocumentEvent e) {
+                    mainPanelValidator.setDirty(true);
+                    mainPanelValidator.validateInput();
+                }
+
+                public void insertUpdate(DocumentEvent e) {
+                    mainPanelValidator.setDirty(true);
+                    mainPanelValidator.validateInput();
+                }
+            });
+        	dbSqlFileField.addFocusListener(new FocusChangeHandler());
+        	
+        	dbSqlFileField.setEditable(false); // Only allow changes via the DB SQL File Button
+        }
+        return dbSqlFileField;
+    }
+    
+    public String getDbSqlFile() {
+    	return getDbSqlFileField().getText();
+    }
+    
+    public String getDbSqlFilePath(){
+    	return getDbSqlFileField().getText().replace('\\', '/');
+    }
+    
+    public void setDbSqlFilePath(String filePath){
+    	getDbSqlFileField().setText(filePath);
+    }
+    
+    public String getDbSqlFileName(){
+    	String certFilePath = getDbSqlFileField().getText().replace('\\', '/');
+    	
+    	return certFilePath.substring(certFilePath.lastIndexOf('/')+1);
+    }
+
 
     private final class FocusChangeHandler implements FocusListener {
 
@@ -452,10 +588,10 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
     }
     
     private void updateDbFields(){
-    	String dbType = (String)dbTypeComboBox.getSelectedItem();
+    	String dbType = getDbType();
     	
     	//update using hostname, port, and schema values
-    	String dbConnectionUrlTemplate = OptionsMapManager.getDbUrlOptionsMap().get(dbType);
+    	String dbConnectionUrlTemplate = OptionsMapManager.getDbUrlOptionsMap().get(getDbType());
     	dbConnectionUrlTemplate = dbConnectionUrlTemplate.replace("@HOSTNAME@",dbHostnameField.getText());
     	dbConnectionUrlTemplate = dbConnectionUrlTemplate.replace("@PORT@",dbPortField.getText());
     	dbConnectionUrlTemplate = dbConnectionUrlTemplate.replace("@SCHEMA@",dbSchemaField.getText());
@@ -472,7 +608,6 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
 		if (dbSettingsPanel == null) {
 			
 		    //DB Connection Settings Panel Label Definitions
-		    JLabel useJndiBasedConnectionLabel = null;
 		    JLabel dbTypeLabel = null;
 			
 			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
@@ -490,22 +625,14 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
 			//gridBagConstraints11.weighty = 1.0D;
 			gridBagConstraints11.weightx = 1.0D;  
 			gridBagConstraints11.gridwidth = 2;
-			
+
 			GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
+			gridBagConstraints20.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints20.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints20.gridy = 2;
 			gridBagConstraints20.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints20.gridx = 0;
-
-			GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
-			gridBagConstraints21.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints21.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints21.gridx = 1;
-			gridBagConstraints21.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints21.gridy = 2;
-			//gridBagConstraints21.weighty = 1.0D;
-			gridBagConstraints21.weightx = 1.0D;  
-			gridBagConstraints21.gridwidth = 2;
+			gridBagConstraints20.gridwidth = 3;
 
 			GridBagConstraints gridBagConstraints30 = new GridBagConstraints();
 			gridBagConstraints30.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -514,7 +641,7 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
 			gridBagConstraints30.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints30.gridx = 0;
 			gridBagConstraints30.gridwidth = 3;
-
+			
 			GridBagConstraints gridBagConstraints40 = new GridBagConstraints();
 			gridBagConstraints40.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints40.anchor = java.awt.GridBagConstraints.WEST;
@@ -525,9 +652,6 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
 
 		    dbTypeLabel = new JLabel();
 		    dbTypeLabel.setText("Select Database Type:");
-		    
-		    useJndiBasedConnectionLabel = new JLabel();
-			useJndiBasedConnectionLabel.setText("Use a JNDI-based Connection?");
 
 		    dbSettingsPanel = new JPanel();
 		    dbSettingsPanel.setLayout(new GridBagLayout());
@@ -537,10 +661,9 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
 
 		    dbSettingsPanel.add(dbTypeLabel, gridBagConstraints10);
 		    dbSettingsPanel.add(getDbTypeComboBox(), gridBagConstraints11);
-		    dbSettingsPanel.add(useJndiBasedConnectionLabel, gridBagConstraints20);
-		    dbSettingsPanel.add(getUseJndiBasedConnectionCheckBox(), gridBagConstraints21);
-		    dbSettingsPanel.add(getDbJndiSettingsSubPanel(), gridBagConstraints30);
-		    dbSettingsPanel.add(getDbConnectionSettingsSubPanel(), gridBagConstraints40);
+		    dbSettingsPanel.add(getDbJndiSettingsSubPanel(), gridBagConstraints20);
+		    dbSettingsPanel.add(getDbConnectionSettingsSubPanel(), gridBagConstraints30);
+		    dbSettingsPanel.add(getDbCreationSettingsSubPanel(), gridBagConstraints40);
 			
 		    dbSettingsPanel.validate();
 		}
@@ -555,8 +678,9 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
 	private JPanel getDbJndiSettingsSubPanel() {
 		if (dbJndiSettingsSubPanel == null) {
 			
-		    //DB Connection Settings Panel Label Definitions
-		    JLabel dbJndiUrlLabel = null;
+		    //DB JNDI Settings Panel Label Definitions
+		    JLabel useJndiBasedConnectionLabel = null;
+		    JLabel dbJndiNameLabel = null;
 			
 			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
 			gridBagConstraints10.anchor = java.awt.GridBagConstraints.WEST;
@@ -573,23 +697,120 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
 			gridBagConstraints11.weighty = 1.0D;
 			gridBagConstraints11.weightx = 1.0D;  
 			gridBagConstraints11.gridwidth = 2;
+			
+			GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
+			gridBagConstraints20.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints20.gridy = 2;
+			gridBagConstraints20.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints20.gridx = 0;
 
-		    dbJndiUrlLabel = new JLabel();
-		    dbJndiUrlLabel.setText("JNDI Name:");
+			GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
+			gridBagConstraints21.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints21.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints21.gridx = 1;
+			gridBagConstraints21.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints21.gridy = 2;
+			gridBagConstraints21.weighty = 1.0D;
+			gridBagConstraints21.weightx = 1.0D;  
+			gridBagConstraints21.gridwidth = 2;
+		    
+		    useJndiBasedConnectionLabel = new JLabel();
+			useJndiBasedConnectionLabel.setText("Use a JNDI-based Connection?");
+
+		    dbJndiNameLabel = new JLabel();
+		    dbJndiNameLabel.setText("JNDI Name:");
 
 		    dbJndiSettingsSubPanel = new JPanel();
 		    dbJndiSettingsSubPanel.setLayout(new GridBagLayout());
 		    dbJndiSettingsSubPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "JNDI Options",
 					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
-			
-		    dbJndiSettingsSubPanel.add(dbJndiUrlLabel, gridBagConstraints10);
-		    dbJndiSettingsSubPanel.add(getDbJndiNameField(), gridBagConstraints11);
-
+		    
+		    dbJndiSettingsSubPanel.add(useJndiBasedConnectionLabel, gridBagConstraints10);
+		    dbJndiSettingsSubPanel.add(getUseJndiBasedConnectionCheckBox(), gridBagConstraints11);
+		    
+		    dbJndiSettingsSubPanel.add(dbJndiNameLabel, gridBagConstraints20);
+		    dbJndiSettingsSubPanel.add(getDbJndiNameField(), gridBagConstraints21);
 			
 		    dbJndiSettingsSubPanel.validate();
 		}
+		
 		return dbJndiSettingsSubPanel;
+	}
+	
+	/**
+	 * This method initializes dbConnectionJndiSettingsPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getDbCreationSettingsSubPanel() {
+		if (dbCreationSettingsSubPanel == null) {
+			
+		    //DB Creation Settings Panel Label Definitions
+		    JLabel reCreateDbLabel = null;
+		    JLabel dbSqlFileLabel = null;
+			
+			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
+			gridBagConstraints10.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints10.gridy = 1;
+			gridBagConstraints10.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints10.gridx = 0;
+
+			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+			gridBagConstraints11.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints11.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints11.gridx = 1;
+			gridBagConstraints11.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints11.gridy = 1;
+			gridBagConstraints11.weighty = 1.0D;
+			gridBagConstraints11.weightx = 1.0D;  
+			gridBagConstraints11.gridwidth = 2;
+			
+			GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
+			gridBagConstraints20.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints20.gridy = 2;
+			gridBagConstraints20.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints20.gridx = 0;
+
+            GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
+            gridBagConstraints21.fill = java.awt.GridBagConstraints.HORIZONTAL;
+            gridBagConstraints21.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints21.gridx = 1;
+            gridBagConstraints21.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints21.gridy = 2;
+            gridBagConstraints21.weighty = 1.0D;
+            gridBagConstraints21.weightx = 1.0;          
+            
+            GridBagConstraints gridBagConstraints22 = new GridBagConstraints();
+            gridBagConstraints22.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints22.gridy = 2;
+            gridBagConstraints22.gridx = 2;
+            gridBagConstraints22.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints22.gridwidth = 1;
+		    
+			reCreateDbLabel = new JLabel();
+			reCreateDbLabel.setText("Re-create Database?");
+
+			dbSqlFileLabel = new JLabel();
+			dbSqlFileLabel.setText("Database SQL File:");
+
+			dbCreationSettingsSubPanel = new JPanel();
+		    dbCreationSettingsSubPanel.setLayout(new GridBagLayout());
+		    dbCreationSettingsSubPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Re-create Database Options",
+					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
+		    
+		    dbCreationSettingsSubPanel.add(reCreateDbLabel, gridBagConstraints10);
+		    dbCreationSettingsSubPanel.add(getRecreateDbCheckBox(), gridBagConstraints11);
+		    
+		    dbCreationSettingsSubPanel.add(dbSqlFileLabel, gridBagConstraints20);
+		    dbCreationSettingsSubPanel.add(getDbSqlFileField(), gridBagConstraints21);
+		    dbCreationSettingsSubPanel.add(getDbSqlFilePathButton(), gridBagConstraints22);
+			
+		    dbCreationSettingsSubPanel.validate();
+		}
+		
+		return dbCreationSettingsSubPanel;
 	}
 	
 
@@ -780,6 +1001,10 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
 		    JLabel dbPasswordValueLabel = null;
 		    JLabel dbTypeLabel = null;
 		    JLabel dbTypeValueLabel = null;
+		    JLabel recreateDbLabel = null;
+		    JLabel recreateDbValueLabel = null;
+		    JLabel dbSqlFileLabel = null;
+		    JLabel dbSqlFileValueLabel = null;
         	
             GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
             gridBagConstraints10.anchor = java.awt.GridBagConstraints.WEST;
@@ -870,6 +1095,36 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
             gridBagConstraints61.insets = new java.awt.Insets(2, 2, 2, 2);
             gridBagConstraints61.weighty = 1.0D;
             gridBagConstraints61.weightx = 1.0;
+            
+            GridBagConstraints gridBagConstraints70 = new GridBagConstraints();
+            gridBagConstraints70.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints70.gridy = 7;
+            gridBagConstraints70.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints70.gridx = 0;            
+
+            GridBagConstraints gridBagConstraints71 = new GridBagConstraints();
+            gridBagConstraints71.fill = java.awt.GridBagConstraints.HORIZONTAL;
+            gridBagConstraints71.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints71.gridy = 7;
+            gridBagConstraints71.gridx = 1;
+            gridBagConstraints71.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints71.weighty = 1.0D;
+            gridBagConstraints71.weightx = 1.0;
+            
+            GridBagConstraints gridBagConstraints80 = new GridBagConstraints();
+            gridBagConstraints80.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints80.gridy = 8;
+            gridBagConstraints80.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints80.gridx = 0;            
+
+            GridBagConstraints gridBagConstraints81 = new GridBagConstraints();
+            gridBagConstraints81.fill = java.awt.GridBagConstraints.HORIZONTAL;
+            gridBagConstraints81.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints81.gridy = 8;
+            gridBagConstraints81.gridx = 1;
+            gridBagConstraints81.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints81.weighty = 1.0D;
+            gridBagConstraints81.weightx = 1.0;
                 
 		    useJndiBasedConnectionLabel = new JLabel();
 		    useJndiBasedConnectionLabel.setText("Use JNDI Based Connection?");
@@ -877,7 +1132,7 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
 		    useJndiBasedConnectionValueLabel.setText(Boolean.valueOf(getUseJndiBasedConnectionCheckBox().isSelected()).toString());
 		    
 		    dbJndiUrlLabel = new JLabel();
-		    dbJndiUrlLabel.setText("JNDI URL:");
+		    dbJndiUrlLabel.setText("JNDI Name:");
 		    dbJndiUrlValueLabel = new JLabel();
 		    dbJndiUrlValueLabel.setText(getDbJndiNameField().getText());
 		    
@@ -900,6 +1155,16 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
 		    dbTypeLabel.setText("Type:");
 		    dbTypeValueLabel = new JLabel();
 		    dbTypeValueLabel.setText(getDbTypeComboBox().getSelectedItem().toString());
+		    
+		    recreateDbLabel = new JLabel();
+		    recreateDbLabel.setText("Re-create Database?");
+		    recreateDbValueLabel = new JLabel();
+		    recreateDbValueLabel.setText(Boolean.valueOf(getRecreateDbCheckBox().isSelected()).toString());
+		    
+		    dbSqlFileLabel = new JLabel();
+		    dbSqlFileLabel.setText("Database SQL File:");
+		    dbSqlFileValueLabel = new JLabel();
+		    dbSqlFileValueLabel.setText(getDbSqlFileField().getText());
             
 		    dbConnectionSettingsReviewPanel = new JPanel();
 		    dbConnectionSettingsReviewPanel.setLayout(new GridBagLayout());
@@ -919,6 +1184,13 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
 		    dbConnectionSettingsReviewPanel.add(dbUsernameValueLabel, gridBagConstraints51);
 		    dbConnectionSettingsReviewPanel.add(dbPasswordLabel, gridBagConstraints60);
 		    dbConnectionSettingsReviewPanel.add(dbPasswordValueLabel, gridBagConstraints61);
+		    dbConnectionSettingsReviewPanel.add(recreateDbLabel, gridBagConstraints70);
+		    dbConnectionSettingsReviewPanel.add(recreateDbValueLabel, gridBagConstraints71);
+		    
+		    if (getRecreateDbCheckBox().isSelected()){
+			    dbConnectionSettingsReviewPanel.add(dbSqlFileValueLabel, gridBagConstraints80);
+			    dbConnectionSettingsReviewPanel.add(dbSqlFileValueLabel, gridBagConstraints81);
+		    }
             
 		    dbConnectionSettingsReviewPanel.validate();
         //}
@@ -927,35 +1199,57 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
     
     public ValidationResult validateInput() {
 
-    	ValidationResult result = new ValidationResult();
+    	ValidationResult result = validateDbConnectionInput();
     	
-       	//DB Connection Settings Validation
-    	if (!getUseJndiBasedConnectionCheckBox().isSelected()){
-    		
-    		if (!ValidationUtils.isNotBlank(getDbHostnameField().getText())) {
-    			result.add(new SimpleValidationMessage(DB_SERVER + " must not be blank.", Severity.ERROR, DB_SERVER));
-    		}
-    		
-    		if (!ValidationUtils.isNotBlank(getDbPortField().getText())) {
-    			result.add(new SimpleValidationMessage(DB_SERVER_PORT + " must not be blank.", Severity.ERROR, DB_SERVER_PORT));
-    		}
-    		
-    		if (!ValidationUtils.isNotBlank(getDbSchemaField().getText())) {
-    			result.add(new SimpleValidationMessage(DB_NAME + " must not be blank.", Severity.ERROR, DB_NAME));
-    		}
-
-    		if (!ValidationUtils.isNotBlank(this.getDbUsernameField().getText())) {
-    			result.add(new SimpleValidationMessage(DB_USERNAME + " must not be blank.", Severity.ERROR, DB_USERNAME));
-    		} 
-
-    		if (!ValidationUtils.isNotBlank(this.getDbPasswordField().getText())) {
-    			result.add(new SimpleValidationMessage(DB_PASSWORD + " must not be blank.", Severity.ERROR, DB_PASSWORD));
-    		} 
-    	} else {
+    	if (getUseJndiBasedConnectionCheckBox().isSelected()) {
     		if (!ValidationUtils.isNotBlank(this.getDbJndiNameField().getText())) {
     			result.add(new SimpleValidationMessage(DB_JNDI_NAME + " must not be blank.", Severity.ERROR, DB_JNDI_NAME));
     		}
     	}
+    	
+    	if (getRecreateDbCheckBox().isSelected()){
+			
+    		if (!ValidationUtils.isNotBlank(this.getDbSqlFileField().getText())) {
+    			result.add(new SimpleValidationMessage(DB_SQL_FILE + " must not be blank.", Severity.ERROR, DB_SQL_FILE));
+    		} else {
+        		File file = new File(this.getDbSqlFileField().getText());
+        		if(!file.exists()){
+        			result.add(new SimpleValidationMessage(DB_SQL_FILE + " does not exist.  Please select or enter a valid absolute path to the file.", Severity.ERROR, DB_SQL_FILE));
+        		}
+        		
+        		if (!this.getDbSqlFileField().getText().endsWith("sql")){
+        			result.add(new SimpleValidationMessage(DB_SQL_FILE + " must refer to a SQL (*.sql) file.", Severity.ERROR, DB_SQL_FILE));
+        		}
+        	}
+    	}
+    	
+    	return result;
+    }
+    
+    public ValidationResult validateDbConnectionInput() {
+
+    	ValidationResult result = new ValidationResult();
+    	
+       	//DB Connection Settings Validation
+		if (!ValidationUtils.isNotBlank(getDbHostnameField().getText())) {
+			result.add(new SimpleValidationMessage(DB_SERVER + " must not be blank.", Severity.ERROR, DB_SERVER));
+		}
+		
+		if (!ValidationUtils.isNotBlank(getDbPortField().getText())) {
+			result.add(new SimpleValidationMessage(DB_SERVER_PORT + " must not be blank.", Severity.ERROR, DB_SERVER_PORT));
+		}
+		
+		if (!ValidationUtils.isNotBlank(getDbSchemaField().getText())) {
+			result.add(new SimpleValidationMessage(DB_NAME + " must not be blank.", Severity.ERROR, DB_NAME));
+		}
+
+		if (!ValidationUtils.isNotBlank(this.getDbUsernameField().getText())) {
+			result.add(new SimpleValidationMessage(DB_USERNAME + " must not be blank.", Severity.ERROR, DB_USERNAME));
+		} 
+
+		if (!ValidationUtils.isNotBlank(this.getDbPasswordField().getText())) {
+			result.add(new SimpleValidationMessage(DB_PASSWORD + " must not be blank.", Severity.ERROR, DB_PASSWORD));
+		} 
     	
     	return result;
     }
@@ -976,9 +1270,12 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
         ValidationComponentUtils.setMandatory(getDbUsernameField(), true);
         ValidationComponentUtils.setMessageKey(getDbPasswordField(), DB_PASSWORD);
         ValidationComponentUtils.setMandatory(getDbPasswordField(), true);
+        ValidationComponentUtils.setMessageKey(getDbSqlFileField(), DB_SQL_FILE);
+        ValidationComponentUtils.setMandatory(getDbSqlFileField(), true);
         
         updateDbFields();
         parentContainer.toggleTestConnectionButton();
+        parentContainer.toggleDbSqlFileButton();
         parentContainer.toggleDbJndiNameField();
     }
     
@@ -987,7 +1284,7 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
     	
     	//DB Connection Settings
 		propsMap.put("DB_TYPE", OptionsMapManager.getDbTypeOptionsMap().get(getDbTypeComboBox().getSelectedItem().toString()));
-		propsMap.put("DB_USE_JNDI_BASED_CONNECTION", Boolean.valueOf(useJndiBasedConnectionCheckBox.isSelected()).toString() );
+		propsMap.put("DB_USE_JNDI_BASED_CONNECTION", Boolean.valueOf(getUseJndiBasedConnectionCheckBox().isSelected()).toString() );
 		propsMap.put("DB_JNDI_NAME", getDbJndiNameField().getText());
 		propsMap.put("DB_CONNECTION_URL", getDbUrlField().getText());
 		propsMap.put("DB_SERVER", getDbHostnameField().getText());
@@ -995,6 +1292,15 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
 		propsMap.put("DB_NAME", getDbSchemaField().getText());
 		propsMap.put("DB_USERNAME", getDbUsernameField().getText());
 		propsMap.put("DB_PASSWORD", getDbPasswordField().getText());
+		
+		propsMap.put("database.re-create", Boolean.valueOf(getRecreateDbCheckBox().isSelected()).toString() );
+		
+    	String dbType = getDbType();
+    	if ("oracle".equalsIgnoreCase(dbType)){
+    		propsMap.put("db.install.create.oracle.file.list", getDbSqlFileField().getText().replace('\\', '/')); 
+    	} else if ("mysql".equalsIgnoreCase(dbType)){
+    		propsMap.put("db.install.create.mysql.file.list", getDbSqlFileField().getText().replace('\\', '/'));
+    	}
     	
     	return propsMap;
     }

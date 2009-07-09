@@ -393,10 +393,15 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
                 	
             		String gridSecureCertFilePath="";
             		String gridSecurekeyFilePath="";
+            		String dbSqlFilePath="";
             		
             		if (securitySettingsPanel.isCaGridLoginModuleEnabled()){
             			gridSecureCertFilePath = caGridAuthSettingsPanel.getGridSecureCertFilePath();
             			gridSecurekeyFilePath = caGridAuthSettingsPanel.getGridSecureKeyFilePath();
+            		}
+            		
+            		if (dbConnectionSettingsPanel.isRecreateDbSelected()){
+            			dbSqlFilePath = dbConnectionSettingsPanel.getDbSqlFilePath();
             		}
 
             		boolean isSaveSuccessful = saveDeployProperties(
@@ -407,17 +412,20 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
             				TARGET_GRID_DIR + caGridAuthSettingsPanel.getCaGridTargetGrid(),
             				gridSecureCertFilePath,
             				gridSecurekeyFilePath,
-            				getDeployPropsMap()); 
+            				dbConnectionSettingsPanel.getDbType().toLowerCase(),
+            				dbSqlFilePath,
+            				getDeployPropsMap()
+            		); 
             		
             		log.debug("* * * isSaveSuccessful: " + isSaveSuccessful);
 
             		if (isSaveSuccessful){
+        				File deployPropsFile = ResourceManager.getDeployPropsFile(projectSettingsPanel.getProjectDir(),deployTypeSettingsPanel.getRemoteDeployEnvPrefix());
+        				Map<String,String>deployPropsMap = getDeployPropsMap();
+        				
             			if (securitySettingsPanel.isCaGridLoginModuleEnabled()){
 
             				// Certificate and Key files may have been renamed - synchronize names now
-            				File deployPropsFile = ResourceManager.getDeployPropsFile(projectSettingsPanel.getProjectDir(),deployTypeSettingsPanel.getRemoteDeployEnvPrefix());
-            				Map<String,String>deployPropsMap = getDeployPropsMap();
-
             				String certFilePath =  (projectSettingsPanel.getProjectDir()
             						+ TARGET_GRID_DIR
             						+ caGridAuthSettingsPanel.getCaGridTargetGrid()
@@ -446,6 +454,37 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
             				caGridAuthSettingsPanel.setGridSecureCertFilePath(certFilePath);
             				caGridAuthSettingsPanel.setGridSecureKeyFilePath(keyFilePath);
             			}
+            			
+            			if (dbConnectionSettingsPanel.isRecreateDbSelected()){
+            				
+            				String dbType = dbConnectionSettingsPanel.getDbType();
+
+            				// DB SQL file may has been copied - synchronize file path now
+            				// Override the DB Sql File property to point to the project generation 
+            				// build sub-directory, as we now copy the key file to this sub-directory
+            				File destDbSqlDir = ResourceManager.getDbSqlDir(projectSettingsPanel.getProjectDir(), dbType);
+            				dbSqlFilePath =  (destDbSqlDir
+            						+ "/"
+            						+ dbConnectionSettingsPanel.getDbSqlFileName()).replace('\\', '/');
+            		    	
+            		    	if ("oracle".equalsIgnoreCase(dbType)){
+            		    		deployPropsMap.put("db.install.create.oracle.file.list", dbSqlFilePath.replace('\\', '/'));
+                				log.debug("'db.install.create.oracle.file.list' prior to saving: "+deployPropsMap.get("db.install.create.oracle.file.list"));
+            		    	} else if ("mysql".equalsIgnoreCase(dbType)){
+            		    		deployPropsMap.put("db.install.create.mysql.file.list", dbSqlFilePath.replace('\\', '/'));
+            		    		log.debug("'db.install.create.mysql.file.list' prior to saving: "+deployPropsMap.get("db.install.create.mysql.file.list"));
+            		    	}	
+
+            				if (!saveProperties(deployPropsFile, deployPropsMap)){
+            					log.error("ERROR:  Unable to rename caGrid Certificate and Key and/or DB SQL file name(s).");
+            				}
+
+            		    	dbConnectionSettingsPanel.setDbSqlFilePath(dbSqlFilePath);
+            			}
+
+        				if (!saveProperties(deployPropsFile, deployPropsMap)){
+        					log.error("ERROR:  Unable to rename caGrid Certificate, Key and/or DB SQL file name(s).");
+        				}
 
             			setDirty(false);
             			validateInput();
@@ -491,7 +530,7 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
     
     public void syncDbCsmDbFields() {
     	if (csmDbConnectionSettingsPanel.isCsmUseDBConnectionSettings()){
-    		csmDbConnectionSettingsPanel.setCsmDatabaseType(dbConnectionSettingsPanel.getDatabaseType());
+    		csmDbConnectionSettingsPanel.setCsmDatabaseType(dbConnectionSettingsPanel.getDbType());
     		csmDbConnectionSettingsPanel.setCsmUseJndiBasedConnection(dbConnectionSettingsPanel.isUseJndiBasedConnection());
     		csmDbConnectionSettingsPanel.setCsmDbJndiUrl(dbConnectionSettingsPanel.getDbJndiName());
     		csmDbConnectionSettingsPanel.setCsmDbConnectionUrl(dbConnectionSettingsPanel.getDbUrl());
@@ -504,17 +543,47 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
     }
     
     public String getDatabaseType(){
-    	return dbConnectionSettingsPanel.getDatabaseType();
+    	return dbConnectionSettingsPanel.getDbType();
     }
     
     public void toggleTestConnectionButton() {
-    	boolean hasValidationErrors = dbConnectionSettingsPanel.validateInput().hasErrors();
+    	boolean hasValidationErrors = dbConnectionSettingsPanel.validateDbConnectionInput().hasErrors();
     	if (!hasValidationErrors){
-    		dbConnectionSettingsPanel.getTestConnectionButton().setEnabled(true);
+    		dbConnectionSettingsPanel.setTestConnectionButtonEnabled(true);
     		return;
         }
     	
-    	dbConnectionSettingsPanel.getTestConnectionButton().setEnabled(false);
+    	dbConnectionSettingsPanel.setTestConnectionButtonEnabled(false);
+
+    }
+    
+    public void toggleCsmTestConnectionButton() {
+    	boolean hasValidationErrors = csmDbConnectionSettingsPanel.validateDbConnectionInput().hasErrors();
+    	if (securitySettingsPanel.isSecurityEnabled() && !csmDbConnectionSettingsPanel.isCsmUseDBConnectionSettings() && !hasValidationErrors){
+    		csmDbConnectionSettingsPanel.setTestConnectionButtonEnabled(true); 
+    		return;
+        }
+    	
+    	csmDbConnectionSettingsPanel.setTestConnectionButtonEnabled(false);
+    }
+    
+    public void toggleClmTestConnectionButton() {
+    	boolean hasValidationErrors = clmSettingsPanel.validateInput().hasErrors();
+    	if (writableApiSettingsPanel.isCommonLoggingModuleEnabled() && clmSettingsPanel.isEnableCommonLoggingModuleSelected() && !hasValidationErrors){
+    		clmSettingsPanel.setTestConnectionButtonEnabled(true); 
+    		return;
+        }
+    	
+    	clmSettingsPanel.setTestConnectionButtonEnabled(false);
+    }
+    
+    public void toggleDbSqlFileButton() {
+    	if (dbConnectionSettingsPanel.isRecreateDbSelected()){
+    		dbConnectionSettingsPanel.enableDbSqlFileButton(true);
+    		return;
+        }
+    	
+    	dbConnectionSettingsPanel.enableDbSqlFileButton(false);
 
     }
     

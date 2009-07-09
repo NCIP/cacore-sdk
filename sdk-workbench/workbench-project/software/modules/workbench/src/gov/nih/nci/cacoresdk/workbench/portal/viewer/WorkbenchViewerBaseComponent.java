@@ -81,7 +81,8 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 
 		if (doIdeleteResult == JOptionPane.OK_OPTION) {
 			final File sdkDirFile = new File(sdkDirPath);
-			final File codegenPropsFile = ResourceManager.getCodegenPropsFile(projectDirPath);						
+			final File codegenPropsFile = ResourceManager.getCodegenPropsFile(projectDirPath);
+			final Object obj = new Object();
 
 			//WorkbenchViewerBaseComponent.this.setVisible(false);
 			//dispose();
@@ -124,12 +125,13 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 							setErrorMessage("IO error encountered saving code generation workbench properties to: "+codegenPropsFile.getAbsolutePath());
 							return;
 						}
-						
-						setProgressText("Properties Successfully Saved.");
+					
+						setErrorMessage("Properties Successfully Saved");
 
 					} catch (Exception e) {
 						log.error("ERROR: "+ e.getMessage(),e);
 						setErrorMessage("Error: " + e.getMessage());
+
 						return;
 					}
 				}
@@ -137,6 +139,7 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 
 			Thread th = new Thread(r);
 			th.start();
+
 		}
 	}
 
@@ -159,6 +162,8 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 			final String targetGridDirPath,
 			final String certFilePath,
 			final String keyFilePath,
+			final String dbType,
+			final String dbSqlFilePath,
 			final Map<String,String> workbenchPropsMap) {
 		
 		int doIdeleteResult = JOptionPane.OK_OPTION;
@@ -197,6 +202,8 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 			final File deployPropsFile = ResourceManager.getDeployPropsFile(projectDirPath,remoteDeployEnv);		
 			final File certFile = new File(certFilePath);
 			final File keyFile = new File(keyFilePath);
+			final File destDbSqlDir = ResourceManager.getDbSqlDir(projectDirPath, dbType);
+			final File dbSqlFile = new File(dbSqlFilePath);
 
 			//WorkbenchViewerBaseComponent.this.setVisible(false);
 			//dispose();
@@ -215,8 +222,6 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 							return;
 						}
 						
-						setProgressText("Configuring Project Directory");
-						
 						try {
 							AntTools.configureProject(projectTemplateDirPath, projectDirPath);
 						} catch (BuildException e) {
@@ -226,12 +231,21 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 						}
 
 						if (certFile.exists() && keyFile.exists()){
-							
 							try {
-								AntTools.copyCertKeyFiles(sdkDirPath, projectDirPath, targetGridDirPath, certFilePath, keyFilePath);
+								AntTools.copyCertKeyFiles(projectDirPath, targetGridDirPath, certFilePath, keyFilePath);
 							} catch (BuildException e) {
 								log.error("ERROR: "+ e.getMessage(),e);
 								setErrorMessage("Error copying the caGrid Security Certificate and Key files to the project generation " + targetGridDirPath +" directory!  Please check the console output for more details.");
+								return;
+							}
+						}
+
+						if (dbSqlFile.exists()){
+							try {
+								AntTools.copyDbSqlFile(projectDirPath, destDbSqlDir.getAbsolutePath(), dbSqlFilePath);
+							} catch (BuildException e) {
+								log.error("ERROR: "+ e.getMessage(),e);
+								setErrorMessage("Error copying the Database SQL file to the project generation " + targetGridDirPath +" directory!  Please check the console output for more details.");
 								return;
 							}
 						}
@@ -243,8 +257,8 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 							return;
 						}
 						
-						setProgressText("Properties Successfully Saved");
-
+						setErrorMessage("Properties Successfully Saved");
+						
 					} catch (Exception e) {
 						log.error("ERROR: "+ e.getMessage(),e);
 						setErrorMessage("Error: " + e.getMessage());
@@ -252,22 +266,14 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 					}
 				}
 			};
-				
-			try {
-				Thread th = new Thread(r);
-				th.start();
-				th.join();
-			} catch (InterruptedException e) {
-				log.error("ERROR: "+ e.getMessage(),e);
-				return false;
-			}
+
+			Thread th = new Thread(r);
+			th.start();
 
 		}
 
 		return true;
 	}
-	
-	;
 	
 	/**
 	 * Will call the generate application engine component to generate a caCORE
@@ -326,9 +332,7 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 							return;
 						}
 				
-						setProgressText("The SDK has been successfully Installed");
-						
-
+						setErrorMessage("The SDK has been Successfully Installed");
 
 					} catch (Exception e) {
 						log.error("ERROR: "+ e.getMessage(),e);
@@ -338,13 +342,8 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 				}
 			};
 			
-			r.run();
-			
-			JOptionPane.showMessageDialog(
-					this,
-					"The SDK has been successfully Installed");
-//			Thread th = new Thread(r);
-//			th.start();
+			Thread th = new Thread(r);
+			th.start();
 		}
 	}
 	
@@ -444,7 +443,7 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 							return;
 						}
 					
-						setProgressText("Application Successfully Generated");
+						setErrorMessage("Application Successfully Generated");
 
 					} catch (Exception e) {
 						log.error("ERROR: "+ e.getMessage(),e);
@@ -456,10 +455,7 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 
 			Thread th = new Thread(r);
 			th.start();
-			
-			JOptionPane.showMessageDialog(
-					this,
-					"The application has been successfully generated");
+
 		}
 	}
 	
@@ -557,7 +553,7 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 							return;
 						}
 					
-						setProgressText("Application Successfully Deployed");
+						setErrorMessage("Application Successfully Deployed");
 
 					} catch (Exception e) {
 						log.error("ERROR: "+ e.getMessage(),e);
@@ -569,10 +565,7 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 
 			Thread th = new Thread(r);
 			th.start();
-			
-			JOptionPane.showMessageDialog(
-					this,
-					"The application has been successfully deployed");
+
 		}
 	}
 	
