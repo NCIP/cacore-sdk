@@ -1,7 +1,6 @@
 package gov.nih.nci.system.webservice.util;
 
 import gov.nih.nci.system.applicationservice.ApplicationService;
-import gov.nih.nci.system.client.proxy.BeanProxy;
 import gov.nih.nci.system.client.proxy.ProxyHelperImpl;
 
 import java.lang.reflect.Field;
@@ -9,6 +8,7 @@ import java.lang.reflect.Method;
 import java.util.Date;
 
 import org.aopalliance.intercept.MethodInvocation;
+import org.springframework.aop.framework.Advised;
 
 public class WSUtils extends ProxyHelperImpl 
 {
@@ -19,7 +19,7 @@ public class WSUtils extends ProxyHelperImpl
     	if(obj instanceof Integer || obj instanceof Float || obj instanceof Double
     			|| obj instanceof Character || obj instanceof Long || obj instanceof Boolean
     			|| obj instanceof Byte ||  obj instanceof Short
-    			|| obj instanceof String || obj instanceof Date || obj instanceof BeanProxy)
+    			|| obj instanceof String || obj instanceof Date || obj instanceof Advised)
     		return obj;
 
     	setAssociationsToNull(obj);
