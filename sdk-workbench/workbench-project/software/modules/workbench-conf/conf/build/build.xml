@@ -70,6 +70,17 @@
 		</copy>
 	</target>
 
+	<!--***********************************************************************
+	*** Copies the caGrid Security certificate and key files to the  
+	*** build subdirectory of the project generation directory
+	*********************************************************************** -->
+	<target name="copyDbSqlFile" depends="prepareSkeleton">
+		<mkdir dir="${skeleton.destination.dir}" />
+		<copy toDir="${skeleton.destination.dir}">
+			<fileset file="${db.sql.file}"  />
+		</copy>
+	</target>
+
 	<target name="checkInputProps">
 		<condition property="noInputNeeded">
 			<and>
