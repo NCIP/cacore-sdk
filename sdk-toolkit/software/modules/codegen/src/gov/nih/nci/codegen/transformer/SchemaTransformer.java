@@ -410,7 +410,6 @@ public class SchemaTransformer implements Transformer {
 				addSequenceAssociationElement(sequence,klass,thisEnd,otherEnd,w3cNS);
 			}
 		}
-	//////////
 	}
 	
 	private void addCaDSRAnnotation(UMLTaggableElement tgElt, Element elt, Namespace w3cNS) {
