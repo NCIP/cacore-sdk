@@ -114,7 +114,7 @@
 	<!--***********************************************************************
 	*** Compiles the workbench classes
 	*********************************************************************** -->
-	<target name="build:all" depends="build:workspace-modules,ivy:package-workbench,dist:workbench:artifacts" description="Call modules build target to produce artifacts">
+	<target name="build:all" depends="package:sdk:src,build:workspace-modules,ivy:package-workbench,dist:workbench:artifacts" description="Call modules build target to produce artifacts">
 		<SDKecho message="${ant.project.name}: Building the workbench source"/>
 		<ant antfile="${software.modules.dir}/build.xml" target="build:all" inheritall="false" inheritrefs="false"/>
 	</target>
