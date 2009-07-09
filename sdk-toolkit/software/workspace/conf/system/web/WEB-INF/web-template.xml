@@ -69,6 +69,11 @@
     	<servlet-class>gov.nih.nci.system.web.HTTPQuery</servlet-class>        	
     </servlet>
     
+    <servlet>
+        <servlet-name>GetJSON</servlet-name>
+        <servlet-class>gov.nih.nci.system.web.HTTPQuery</servlet-class>        	
+    </servlet>
+    
     <servlet-mapping>
 		<servlet-name>httpinvoker</servlet-name>
 		<url-pattern>/http/*</url-pattern>
@@ -92,6 +97,11 @@
     <servlet-mapping>
     	<servlet-name>GetHTML</servlet-name>
       	<url-pattern>/GetHTML</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+    	<servlet-name>GetJSON</servlet-name>
+    	<url-pattern>/GetJSON</url-pattern>
     </servlet-mapping>
 
 	<mime-mapping>
