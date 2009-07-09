@@ -2,7 +2,7 @@
 ########### SDK Specific Properties #############################
 #################################################################
 exclude.database=true
-database.re-create=false
+#database.re-create=false
 
 ##############
 ### TOMCAT ###
