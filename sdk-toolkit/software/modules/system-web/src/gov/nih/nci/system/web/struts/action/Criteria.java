@@ -36,6 +36,10 @@ public class Criteria extends BaseActionSupport {
 
 		return SUCCESS;
 	}
+	
+	public String getJavaDocsClassName() {
+		return (getFullyQualClassName().replace('.','/')+".html");
+	}
 
 	public String getFullyQualClassName() {
 		return getPackage() + "." + getNodeName();
