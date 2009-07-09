@@ -673,7 +673,7 @@ public class HTTPUtils implements Serializable{
 			}
 
 			else{
-				String fieldValue = "-";
+				String fieldValue = " ";
 				Object value = null;
 
 				try{
@@ -692,7 +692,7 @@ public class HTTPUtils implements Serializable{
 							fieldElement.setText(fieldValue);
 						}
 						else{
-							fieldElement.setText("-");
+							fieldElement.setText(" ");
 						}
 
 					}
@@ -705,7 +705,7 @@ public class HTTPUtils implements Serializable{
 					}
 
 				}catch(Exception ex){
-					fieldValue = "-";
+					fieldValue = " ";
 					value = getFieldValue(field,result);
 					fieldValue = String.valueOf(value);
 					String temp = null;
