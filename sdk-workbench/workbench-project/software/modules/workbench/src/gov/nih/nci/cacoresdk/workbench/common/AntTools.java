@@ -57,7 +57,7 @@ public class AntTools {
 		executeAntProject(buildFileUrl,target,propsMap);
     }
     
-    public static void copyCertKeyFiles(String sdkDirPath,String projectDirPath,String targetGridDirPath,String certFilePath, String keyFilePath) throws BuildException {
+    public static void copyCertKeyFiles(String projectDirPath,String targetGridDirPath,String certFilePath, String keyFilePath) throws BuildException {
 		
 		URL buildFileUrl = ResourceManager.getWorkbenchBuildFileUrl();
 		
@@ -72,7 +72,22 @@ public class AntTools {
 		
 		executeAntProject(buildFileUrl,target,propsMap);
 
-    }   
+    }
+    
+    public static void copyDbSqlFile(String projectDirPath,String dbSqlDirPath, String dbSqlFilePath) throws BuildException {
+		
+		URL buildFileUrl = ResourceManager.getWorkbenchBuildFileUrl();
+		
+		String target = "copyDbSqlFile";
+
+		Map<String,String> propsMap=new TreeMap<String,String>();
+		
+		propsMap.put("skeleton.destination.dir", dbSqlDirPath);
+		propsMap.put("db.sql.file", dbSqlFilePath);
+		
+		executeAntProject(buildFileUrl,target,propsMap);
+
+    } 
     
     public static void generateApplication(String projectDirPath) throws BuildException {
 		
