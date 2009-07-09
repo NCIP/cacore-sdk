@@ -34,7 +34,7 @@ if(className != null)
 <s:form method="post" action="Result.action" target="_blank" name="form1" theme="simple">
 	<table summary="" cellpadding="3" cellspacing="0" border="0" align="center">
 		<tr>
-			<td class="formTitle" height="20" colspan="3"><s:property value="fullyQualClassName" /></td>
+			<td class="formTitle" height="20" colspan="3"><a href="docs/<s:property value="javaDocsClassName" />"><s:property value="fullyQualClassName" /></a></td>
 		</tr>
 		
 <!--  Sample Form Fields		
