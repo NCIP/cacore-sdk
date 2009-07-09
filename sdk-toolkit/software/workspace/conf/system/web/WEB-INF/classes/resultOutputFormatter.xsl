@@ -233,7 +233,14 @@
 								</xsl:when>
 								<xsl:otherwise>
 									<td class="dataCellText" nowrap="off">
-										<xsl:value-of select="."/>
+										<xsl:choose>
+											<xsl:when test=". = ' '">
+												-
+											</xsl:when>
+											<xsl:otherwise>
+												<xsl:value-of select="."/>
+											</xsl:otherwise>
+										</xsl:choose>
 									</td>
 								</xsl:otherwise>
 							</xsl:choose>
