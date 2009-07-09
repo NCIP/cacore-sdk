@@ -1,5 +1,6 @@
 package gov.nih.nci.cacoresdk.workbench.portal.panel;
 
+import gov.nih.nci.cacoresdk.workbench.common.LookAndFeel;
 import gov.nih.nci.cacoresdk.workbench.common.OptionsMapManager;
 import gov.nih.nci.cacoresdk.workbench.portal.validation.PanelValidator;
 import gov.nih.nci.cacoresdk.workbench.portal.validation.TabbedPanePropertiesValidator;
@@ -15,6 +16,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -62,12 +64,15 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
     //CLM (Logging) Settings Panel Component Definitions
     private JCheckBox  enableCommonLoggingModuleCheckBox = null;
     private JComboBox  clmDbTypeComboBox = null;
-    private JTextField clmDbConnectionUrlField = null;
-    private JTextField clmDbConnectionUrlHostnameField = null;
-    private JTextField clmDbConnectionUrlPortField = null;
-    private JTextField clmDbConnectionUrlSchemaField = null;
+    private JTextField clmDbUrlField = null;
+    private JTextField clmDbHostnameField = null;
+    private JTextField clmDbPortField = null;
+    private JTextField clmDbSchemaField = null;
     private JTextField clmDbUsernameField = null;
     private JTextField clmDbPasswordField = null;
+    
+    //Buttons
+    private JButton testConnectionButton = null;
  
     /**
      * This method initializes the Writable API Database Type Field
@@ -141,12 +146,12 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
      * 
      * @return javax.swing.JTextField
      */
-    private JTextField getClmDbConnectionUrlField() {
-        if (clmDbConnectionUrlField == null) {
-        	clmDbConnectionUrlField = new JTextField();
-        	clmDbConnectionUrlField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("CLM_DB_CONNECTION_URL"));
-        	clmDbConnectionUrlField.setEnabled(false);// use hostname, port, schema fields instead
-        	clmDbConnectionUrlField.getDocument().addDocumentListener(new DocumentListener() {
+    private JTextField getClmDbUrlField() {
+        if (clmDbUrlField == null) {
+        	clmDbUrlField = new JTextField();
+        	clmDbUrlField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("CLM_DB_CONNECTION_URL"));
+        	clmDbUrlField.setEnabled(false);// use hostname, port, schema fields instead
+        	clmDbUrlField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
@@ -162,9 +167,13 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
                     mainPanelValidator.validateInput();
                 }
             });
-        	clmDbConnectionUrlField.addFocusListener(new FocusChangeHandler());
+        	clmDbUrlField.addFocusListener(new FocusChangeHandler());
         }
-        return clmDbConnectionUrlField;
+        return clmDbUrlField;
+    }
+    
+    public String getClmDbUrl(){
+    	return getClmDbUrlField().getText();
     }
     
     /**
@@ -172,11 +181,11 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
      * 
      * @return javax.swing.JTextField
      */
-    private JTextField getClmDbConnectionUrlHostnameField() {
-        if (clmDbConnectionUrlHostnameField == null) {
-        	clmDbConnectionUrlHostnameField = new JTextField();
-        	clmDbConnectionUrlHostnameField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("CLM_DB_SERVER"));
-        	clmDbConnectionUrlHostnameField.getDocument().addDocumentListener(new DocumentListener() {
+    private JTextField getClmDbHostnameField() {
+        if (clmDbHostnameField == null) {
+        	clmDbHostnameField = new JTextField();
+        	clmDbHostnameField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("CLM_DB_SERVER"));
+        	clmDbHostnameField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
                 	updateClmDbFields();
                     mainPanelValidator.setDirty(true);
@@ -195,13 +204,13 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
                     mainPanelValidator.validateInput();
                 }
             });
-        	clmDbConnectionUrlHostnameField.addFocusListener(new FocusChangeHandler());
+        	clmDbHostnameField.addFocusListener(new FocusChangeHandler());
         }
-        return clmDbConnectionUrlHostnameField;
+        return clmDbHostnameField;
     }
     
     public String getClmDbConnectionUrlHostname(){
-    	return getClmDbConnectionUrlHostnameField().getText();
+    	return getClmDbHostnameField().getText();
     }
     
     /**
@@ -209,11 +218,11 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
      * 
      * @return javax.swing.JTextField
      */
-    private JTextField getClmDbConnectionUrlPortField() {
-        if (clmDbConnectionUrlPortField == null) {
-        	clmDbConnectionUrlPortField = new JTextField();
-        	clmDbConnectionUrlPortField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("CLM_DB_SERVER_PORT"));
-        	clmDbConnectionUrlPortField.getDocument().addDocumentListener(new DocumentListener() {
+    private JTextField getClmDbPortField() {
+        if (clmDbPortField == null) {
+        	clmDbPortField = new JTextField();
+        	clmDbPortField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("CLM_DB_SERVER_PORT"));
+        	clmDbPortField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
                 	updateClmDbFields();
                     mainPanelValidator.setDirty(true);
@@ -232,13 +241,13 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
                     mainPanelValidator.validateInput();
                 }
             });
-        	clmDbConnectionUrlPortField.addFocusListener(new FocusChangeHandler());
+        	clmDbPortField.addFocusListener(new FocusChangeHandler());
         }
-        return clmDbConnectionUrlPortField;
+        return clmDbPortField;
     }
     
     public String getClmDbConnectionUrlPort() {
-    	return getClmDbConnectionUrlPortField().getText();
+    	return getClmDbPortField().getText();
     }
     
     /**
@@ -246,11 +255,11 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
      * 
      * @return javax.swing.JTextField
      */
-    private JTextField getClmDbConnectionUrlSchemaField() {
-        if (clmDbConnectionUrlSchemaField == null) {
-        	clmDbConnectionUrlSchemaField = new JTextField();
-        	clmDbConnectionUrlSchemaField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("CLM_DB_NAME"));
-        	clmDbConnectionUrlSchemaField.getDocument().addDocumentListener(new DocumentListener() {
+    private JTextField getClmDbSchemaField() {
+        if (clmDbSchemaField == null) {
+        	clmDbSchemaField = new JTextField();
+        	clmDbSchemaField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("CLM_DB_NAME"));
+        	clmDbSchemaField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
                 	updateClmDbFields();
                     mainPanelValidator.setDirty(true);
@@ -269,13 +278,13 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
                     mainPanelValidator.validateInput();
                 }
             });
-        	clmDbConnectionUrlSchemaField.addFocusListener(new FocusChangeHandler());
+        	clmDbSchemaField.addFocusListener(new FocusChangeHandler());
         }
-        return clmDbConnectionUrlSchemaField;
+        return clmDbSchemaField;
     }
     
     public String getClmDbConnectionUrlSchema(){
-    	return getClmDbConnectionUrlSchemaField().getText();
+    	return getClmDbSchemaField().getText();
     }
     
     private void updateClmDbFields(){
@@ -283,11 +292,11 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
     	
     	//update using hostname, port, and schema values
     	String clmDbConnectionUrlTemplate = OptionsMapManager.getDbUrlOptionsMap().get(dbType);
-    	clmDbConnectionUrlTemplate = clmDbConnectionUrlTemplate.replace("@HOSTNAME@",clmDbConnectionUrlHostnameField.getText());
-    	clmDbConnectionUrlTemplate = clmDbConnectionUrlTemplate.replace("@PORT@",clmDbConnectionUrlPortField.getText());
-    	clmDbConnectionUrlTemplate = clmDbConnectionUrlTemplate.replace("@SCHEMA@",clmDbConnectionUrlSchemaField.getText());
+    	clmDbConnectionUrlTemplate = clmDbConnectionUrlTemplate.replace("@HOSTNAME@",clmDbHostnameField.getText());
+    	clmDbConnectionUrlTemplate = clmDbConnectionUrlTemplate.replace("@PORT@",clmDbPortField.getText());
+    	clmDbConnectionUrlTemplate = clmDbConnectionUrlTemplate.replace("@SCHEMA@",clmDbSchemaField.getText());
     	
-    	clmDbConnectionUrlField.setText(clmDbConnectionUrlTemplate);
+    	clmDbUrlField.setText(clmDbConnectionUrlTemplate);
     }    
     
     /**
@@ -318,6 +327,10 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
         	clmDbUsernameField.addFocusListener(new FocusChangeHandler());
         }
         return clmDbUsernameField;
+    }
+    
+    public String getClmDbUsername(){
+    	return getClmDbUsernameField().getText();
     }
     
     public void setClmDbUsernameEnabled(boolean isEnabled){
@@ -354,9 +367,38 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
         return clmDbPasswordField;
     }
     
+    public String getClmDbPassword() {
+    	return getClmDbPasswordField().getText();
+    }
     
     public void setClmDbPasswordEnabled(boolean isEnabled){
     	getClmDbPasswordField().setEnabled(isEnabled);
+    }
+    
+    /**
+     * This method initializes jButton
+     * 
+     * @return javax.swing.JButton
+     */
+    private JButton getTestConnectionButton() {
+        if (testConnectionButton == null) {
+        	testConnectionButton = new JButton();
+        	testConnectionButton.setText("Test Connection");
+        	testConnectionButton.setIcon(LookAndFeel.getGenerateApplicationIcon());
+        	testConnectionButton.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                	parentContainer.testDbConnection(OptionsMapManager.getDbTypeOptionsMap().get(getClmDbTypeComboBox().getSelectedItem().toString()), 
+                			getClmDbUrl(), getClmDbUsername(), getClmDbPassword());
+                    mainPanelValidator.validateInput();
+                }
+            });
+        }
+
+        return testConnectionButton;
+    }
+    
+    public void setTestConnectionButtonEnabled(boolean enabled){
+    	getTestConnectionButton().setEnabled(enabled);
     }
     
     private final class FocusChangeHandler implements FocusListener {
@@ -532,7 +574,17 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
 			gridBagConstraints71.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints71.gridwidth = 2;
 			gridBagConstraints71.weighty = 1.0D;
-			gridBagConstraints71.gridx = 1;			
+			gridBagConstraints71.gridx = 1;		
+			
+			GridBagConstraints gridBagConstraints80 = new GridBagConstraints();
+			//gridBagConstraints80.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints80.anchor = java.awt.GridBagConstraints.CENTER;
+			gridBagConstraints80.gridy = 8;
+			gridBagConstraints80.gridx = 0;
+			gridBagConstraints80.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints80.gridwidth = 3;
+			//gridBagConstraints80.weighty = 1.0D;
+			gridBagConstraints80.weightx = 1.0D;  
 			
 			clmDbTypeLabel = new JLabel();
 			clmDbTypeLabel.setText("Select Database Type:");
@@ -557,24 +609,26 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
 		    
 		    clmSettingsSubPanel = new JPanel();
 		    clmSettingsSubPanel.setLayout(new GridBagLayout());
-		    clmSettingsSubPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Logging Database Properties",
+		    clmSettingsSubPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Logging Database Options",
 					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 
 		    clmSettingsSubPanel.add(clmDbTypeLabel, gridBagConstraints10);
 		    clmSettingsSubPanel.add(getClmDbTypeComboBox(), gridBagConstraints11);
 		    clmSettingsSubPanel.add(clmDbConnectionUrlLabel, gridBagConstraints20);
-		    clmSettingsSubPanel.add(getClmDbConnectionUrlField(), gridBagConstraints21);
+		    clmSettingsSubPanel.add(getClmDbUrlField(), gridBagConstraints21);
 		    clmSettingsSubPanel.add(clmDbConnectionUrlHostnameLabel, gridBagConstraints30);
-		    clmSettingsSubPanel.add(getClmDbConnectionUrlHostnameField(), gridBagConstraints31);
+		    clmSettingsSubPanel.add(getClmDbHostnameField(), gridBagConstraints31);
 		    clmSettingsSubPanel.add(clmDbConnectionUrlPortLabel, gridBagConstraints40);
-		    clmSettingsSubPanel.add(getClmDbConnectionUrlPortField(), gridBagConstraints41);
+		    clmSettingsSubPanel.add(getClmDbPortField(), gridBagConstraints41);
 		    clmSettingsSubPanel.add(clmDbConnectionUrlSchemaLabel, gridBagConstraints50);
-		    clmSettingsSubPanel.add(getClmDbConnectionUrlSchemaField(), gridBagConstraints51);
+		    clmSettingsSubPanel.add(getClmDbSchemaField(), gridBagConstraints51);
 		    clmSettingsSubPanel.add(clmDbUsernameLabel, gridBagConstraints60);
 		    clmSettingsSubPanel.add(getClmDbUsernameField(), gridBagConstraints61);   
 		    clmSettingsSubPanel.add(clmDbPasswordLabel, gridBagConstraints70);
 		    clmSettingsSubPanel.add(getClmDbPasswordField(), gridBagConstraints71);
+		   
+		    clmSettingsSubPanel.add(getTestConnectionButton(), gridBagConstraints80);
 
 		    clmSettingsSubPanel.validate();
 		}
@@ -665,7 +719,7 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
 		    clmDbConnectionUrlLabel = new JLabel();
 		    clmDbConnectionUrlLabel.setText("Connection URL:");
 		    clmDbConnectionUrlValueLabel = new JLabel();
-		    clmDbConnectionUrlValueLabel.setText(getClmDbConnectionUrlField().getText());
+		    clmDbConnectionUrlValueLabel.setText(getClmDbUrlField().getText());
 		    
 		    clmDbUsernameLabel = new JLabel();
 		    clmDbUsernameLabel.setText("Username:");
@@ -707,7 +761,7 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
     		//CLM Setting Validation
     		if (getEnableCommonLoggingModuleCheckBox().isSelected()){
 
-    			String clmDbConnectionUrlField = this.getClmDbConnectionUrlField().getText();
+    			String clmDbConnectionUrlField = this.getClmDbUrlField().getText();
     			if (!ValidationUtils.isNotBlank(clmDbConnectionUrlField)) {
     				result.add(new SimpleValidationMessage(CLM_DB_CONNECTION_URL + " must not be blank.", Severity.ERROR, CLM_DB_CONNECTION_URL));
     			}
@@ -716,15 +770,15 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
         			result.add(new SimpleValidationMessage(CLM_DB_CONNECTION_URL + " information is incomplete.  Make sure hostname, port and schema information is correct.", Severity.ERROR, CLM_DB_CONNECTION_URL));
         		}
         		
-        		if (!ValidationUtils.isNotBlank(getClmDbConnectionUrlHostnameField().getText())) {
+        		if (!ValidationUtils.isNotBlank(getClmDbHostnameField().getText())) {
         			result.add(new SimpleValidationMessage(CLM_DB_SERVER + " must not be blank.", Severity.ERROR, CLM_DB_SERVER));
         		}
         		
-        		if (!ValidationUtils.isNotBlank(getClmDbConnectionUrlPortField().getText())) {
+        		if (!ValidationUtils.isNotBlank(getClmDbPortField().getText())) {
         			result.add(new SimpleValidationMessage(CLM_DB_SERVER_PORT + " must not be blank.", Severity.ERROR, CLM_DB_SERVER_PORT));
         		}
         		
-        		if (!ValidationUtils.isNotBlank(getClmDbConnectionUrlSchemaField().getText())) {
+        		if (!ValidationUtils.isNotBlank(getClmDbSchemaField().getText())) {
         			result.add(new SimpleValidationMessage(CLM_DB_NAME + " must not be blank.", Severity.ERROR, CLM_DB_NAME));
         		}
 
@@ -745,30 +799,31 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
 		// Common Logging Module DB Connection
         ValidationComponentUtils.setMessageKey(getClmDbTypeComboBox(), CLM_DB_TYPE);
         ValidationComponentUtils.setMandatory(getClmDbTypeComboBox(), true);
-        ValidationComponentUtils.setMessageKey(getClmDbConnectionUrlField(), CLM_DB_CONNECTION_URL);
-        ValidationComponentUtils.setMandatory(getClmDbConnectionUrlField(), true);
-        ValidationComponentUtils.setMessageKey(getClmDbConnectionUrlHostnameField(), CLM_DB_SERVER);
-        ValidationComponentUtils.setMandatory(getClmDbConnectionUrlHostnameField(), true);
-        ValidationComponentUtils.setMessageKey(getClmDbConnectionUrlPortField(), CLM_DB_SERVER_PORT);
-        ValidationComponentUtils.setMandatory(getClmDbConnectionUrlPortField(), true);
-        ValidationComponentUtils.setMessageKey(getClmDbConnectionUrlSchemaField(), CLM_DB_NAME);
-        ValidationComponentUtils.setMandatory(getClmDbConnectionUrlSchemaField(), true);
+        ValidationComponentUtils.setMessageKey(getClmDbUrlField(), CLM_DB_CONNECTION_URL);
+        ValidationComponentUtils.setMandatory(getClmDbUrlField(), true);
+        ValidationComponentUtils.setMessageKey(getClmDbHostnameField(), CLM_DB_SERVER);
+        ValidationComponentUtils.setMandatory(getClmDbHostnameField(), true);
+        ValidationComponentUtils.setMessageKey(getClmDbPortField(), CLM_DB_SERVER_PORT);
+        ValidationComponentUtils.setMandatory(getClmDbPortField(), true);
+        ValidationComponentUtils.setMessageKey(getClmDbSchemaField(), CLM_DB_NAME);
+        ValidationComponentUtils.setMandatory(getClmDbSchemaField(), true);
         ValidationComponentUtils.setMessageKey(getClmDbUsernameField(), CLM_DB_USERNAME);
         ValidationComponentUtils.setMandatory(getClmDbUsernameField(), true);
         ValidationComponentUtils.setMessageKey(getClmDbPasswordField(), CLM_DB_PASSWORD);
         ValidationComponentUtils.setMandatory(getClmDbPasswordField(), true);
         
         updateClmDbFields();
+        parentContainer.toggleClmTestConnectionButton();
     }
     
     public Map<String,String> getPropsMap(){
     	Map<String,String> propsMap = new HashMap<String,String>();
     		
 		propsMap.put("CLM_DB_TYPE", OptionsMapManager.getClmDbTypeOptionsMap().get(getClmDbTypeComboBox().getSelectedItem().toString()));
-		propsMap.put("CLM_DB_CONNECTION_URL", getClmDbConnectionUrlField().getText());
-		propsMap.put("CLM_DB_SERVER", getClmDbConnectionUrlHostnameField().getText());
-		propsMap.put("CLM_DB_SERVER_PORT", getClmDbConnectionUrlPortField().getText());
-		propsMap.put("CLM_DB_NAME", getClmDbConnectionUrlSchemaField().getText());
+		propsMap.put("CLM_DB_CONNECTION_URL", getClmDbUrlField().getText());
+		propsMap.put("CLM_DB_SERVER", getClmDbHostnameField().getText());
+		propsMap.put("CLM_DB_SERVER_PORT", getClmDbPortField().getText());
+		propsMap.put("CLM_DB_NAME", getClmDbSchemaField().getText());
 		propsMap.put("CLM_DB_USERNAME", getClmDbUsernameField().getText());
 		propsMap.put("CLM_DB_PASSWORD", getClmDbPasswordField().getText());
     	
