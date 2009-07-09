@@ -71,6 +71,10 @@
 
 	<target name="jar" depends="compile:application-code,ivy:setup-runtime">
 		<jar destfile="${module.lib.dir}/${jar.name}">
+			<manifest>
+				<attribute name="Generated-By" value="caCORE SDK Code Generator" />
+				<attribute name="Version" value="${VERSION}" />
+			</manifest>
 			<fileset dir="${build.classes.dir}" />
 			<fileset dir="${src.java.dir}" />
 		</jar>
