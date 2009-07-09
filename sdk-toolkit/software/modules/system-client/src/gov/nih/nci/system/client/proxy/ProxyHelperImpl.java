@@ -140,7 +140,7 @@ public class ProxyHelperImpl implements ProxyHelper
     	if(obj instanceof Integer || obj instanceof Float || obj instanceof Double
     			|| obj instanceof Character || obj instanceof Long || obj instanceof Boolean
     			|| obj instanceof Byte ||  obj instanceof Short  
-    			|| obj instanceof String || obj instanceof Date || obj instanceof BeanProxy)
+    			|| obj instanceof String || obj instanceof Date || obj instanceof Advised)
     		return obj;
 
     	org.springframework.aop.framework.ProxyFactory pf = new org.springframework.aop.framework.ProxyFactory();
