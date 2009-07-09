@@ -20,6 +20,7 @@
 	<bean name="WebSystemProperties" class="java.util.Properties">
 		<constructor-arg>
 			<props>
+				<prop key="jsonOutputFormatter">jsonOutputFormatter.xsl</prop>
 				<prop key="resultOutputFormatter">resultOutputFormatter.xsl</prop>
 				<prop key="rowCounter">200</prop>
 				<prop key="securityEnabled">@SECURITY_ENABLED@</prop>
