@@ -5,6 +5,7 @@ import gov.nih.nci.system.web.util.HTTPUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URLDecoder;
 import java.util.Properties;
 
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.log4j.Logger;
@@ -45,6 +47,7 @@ public class HTTPQuery extends HttpServlet {
 	private static Logger log = Logger.getLogger(HTTPQuery.class.getName());
 
 	private String cacoreStyleSheet;
+    private String jsonStyleSheet;
 
 	private int pageSize = 1000; //default
 
@@ -61,7 +64,9 @@ public class HTTPQuery extends HttpServlet {
 		Properties systemProperties = (Properties) ctx.getBean("WebSystemProperties");
 
 		cacoreStyleSheet = systemProperties.getProperty("resultOutputFormatter");
+		jsonStyleSheet = systemProperties.getProperty("jsonOutputFormatter");
 		log.debug("cacoreStylesheet: " + cacoreStyleSheet);
+        log.debug("jsonStyleSheet: " + jsonStyleSheet);
 
 		try {
 			String pageCount = systemProperties.getProperty("rowCounter");
@@ -100,9 +105,13 @@ public class HTTPQuery extends HttpServlet {
 
 		Object[] resultSet = null;
 		int pageNumber = 1;
+		
+		HTTPUtils httpUtils = new HTTPUtils(context);
+		String queryType = httpUtils.getQueryType(request.getRequestURL().toString());
+		
+		String query = null;
 
 		try {
-			String query = null;
 
 			if (URLDecoder.decode(request.getQueryString(), "ISO-8859-1") != null) {
 				query = URLDecoder.decode(request.getQueryString(),
@@ -113,10 +122,7 @@ public class HTTPQuery extends HttpServlet {
 			if (query.indexOf("&username") > 0)
 				query = query.substring(0, query.indexOf("&username"));
 
-			HTTPUtils httpUtils = new HTTPUtils(context);
 
-			String queryType = httpUtils.getQueryType(request.getRequestURL()
-					.toString());
 			validateQuery(query);
 			httpUtils.setQueryArguments(query);
 
@@ -146,21 +152,16 @@ public class HTTPQuery extends HttpServlet {
 				if (queryType.endsWith("XML")) {
 					response.setContentType("text/xml");
 					xout.output(domDoc, out);
+				} else if (queryType.endsWith("JSON")) {
+                    response.setContentType("application/x-javascript");
+                    if (httpUtils.getTargetPackageName() != null) {
+                        printDocument(domDoc, jsonStyleSheet, out);
+                        
+                    }
 				} else {
 					response.setContentType("text/html");
-					Document htmlDoc = null;
 					if (httpUtils.getTargetPackageName() != null) {
-
-						if (cacoreStyleSheet != null) {
-							htmlDoc = getHTMLDocument(domDoc, cacoreStyleSheet);
-						}
-
-						if (htmlDoc != null) {
-							xout = new XMLOutputter();
-							xout.output(htmlDoc, out);
-						} else {
-							httpUtils.printResults(response);
-						}
+					    printDocument(domDoc, cacoreStyleSheet, out);
 					}
 				}
 
@@ -170,25 +171,16 @@ public class HTTPQuery extends HttpServlet {
 			}
 		} catch (Exception ex) {
 			log.error("Exception: ", ex);
-			String msg = "<font size=6><b>caCORE HTTP Servlet Error:<hr></font>";
-
-			out.println(msg);
-
-			out.println("<pre class=\"autoOverflow\">");
-			out.println("<br><br><font size=4 color=red>");
-
-			msg = ex.getMessage();
-			Throwable tempEx = ex.getCause();
-			while (tempEx != null) {
-				msg += "<br><br>Caused by: " + tempEx.getMessage();
-				tempEx = tempEx.getCause();
+			
+			if (queryType.endsWith("XML")) {
+				response.setContentType("text/xml");
+				
+				out.println(getXMLErrorMsg(ex, query));
+			} else {
+				response.setContentType("text/html");
+				out.println(getHTMLErrorMsg(ex));
 			}
-
-			out.println(msg);
-
-			out.println("</b></font><br><br>");
-			out.println("</pre>");
-
+			// Need to add JSON error output???
 		}
 
 	}
@@ -216,6 +208,149 @@ public class HTTPQuery extends HttpServlet {
 			throw new ServletException(ex.getMessage());
 		}
 		return htmlDoc;
+	}
+	
+	/**
+	 * Generates an HTML Error message based upon a given Exception
+	 * @param 	Exception The exception that should be used to generate an HTML error message
+	 * @return	A string-based HTML error message containing the Exception message.
+	 */
+	private String getXMLErrorMsg(Exception ex, String query){
+		
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>")
+		  .append("<xlink:httpQuery xmlns:xlink=\"http://www.w3.org/1999/xlink\">")
+			.append("<queryRequest>")
+				.append("<query>")
+					.append("<queryString>" + query + "</queryString>")
+					.append("<class></class>")
+				.append("</query>")
+				.append("<criteria></criteria>")
+			.append("</queryRequest>")
+			.append("<queryResponse>");
+		
+		String msg = ex.getMessage();
+		Throwable tempEx = ex.getCause();
+		while (tempEx != null) {
+			msg += "\n\nCaused by: " + tempEx.getMessage();
+			tempEx = tempEx.getCause();
+		}
+		
+		sb.append(msg);
+		
+				sb.append("<error>" + msg + "</error>")
+			.append("</queryReponse>")
+		.append("</xlink:httpQuery>");
+
+		return sb.toString();
+	}
+	
+	/**
+	 * Generates an HTML Error message based upon a given Exception
+	 * @param 	Exception The exception that should be used to generate an HTML error message
+	 * @return	A string-based HTML error message containing the Exception message.
+	 */
+	private String getHTMLErrorMsg(Exception ex){
+		
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("<html>\n")
+		.append("<head>\n")
+		.append("<title>caCORE HTTP Servlet Error</title>\n")
+		.append("</head>\n")
+		.append("<body>\n")
+		.append("<table height=\"100%\" width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" >\n")
+				.append("<tr valign=\"top\" align=\"left\">\n")
+					.append("<td valign=\"top\" align=\"left\">\n")
+					
+		.append("<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" >\n")
+				.append("<tr valign=\"top\" align=\"left\">\n")
+					.append("<td valign=\"top\" align=\"left\">\n")
+						.append("<tr>\n")
+							.append("<td valign=\"top\" align=\"left\">\n")
+								.append("<b><font size=6>caCORE HTTP Servlet Error:</font></b>\n")
+							.append("</td>\n")
+						.append("</tr>\n")
+						.append("<tr>\n")
+							.append("<td valign=\"top\" align=\"left\">\n")
+								.append("<b><hr></b>\n")
+							.append("</td>\n")
+						.append("</tr>\n")
+						.append("<tr>\n")
+							.append("<td valign=\"top\" align=\"left\">\n")
+								.append("<pre class=\"autoOverflow\">\n")
+									.append("<font size=4 color=red><b><br><br>\n");
+		
+		String msg = ex.getMessage();
+		Throwable tempEx = ex.getCause();
+		while (tempEx != null) {
+			msg += "<br><br>Caused by: " + tempEx.getMessage();
+			tempEx = tempEx.getCause();
+		}
+		
+		sb.append(msg);
+		
+							sb.append("</b></font>\n")
+							.append("</pre>\n")
+						.append("</td>\n")
+					.append("</tr>\n")
+				.append("</td>\n")
+			.append("</tr>\n")
+		.append("</table>\n");
+
+		return sb.toString();
+	}
+	
+	/**
+	 * Generates an HTML Document for a given XML document with the given stylesheet specification
+	 * @param doc Specifies the XML document
+	 * @param styleSheet Specifies the stylesheet
+	 * @return
+	 * @throws Exception
+	 */
+	public void printDocument(Document doc, String styleSheet, OutputStream out)
+			throws Exception {
+
+		try {
+			InputStream styleIn = Thread.currentThread()
+					.getContextClassLoader().getResourceAsStream(styleSheet);
+			if (styleIn != null) {
+			    transform(doc, styleIn, out);
+			}
+
+		} catch (Exception ex) {
+			log.error(ex.getMessage());
+			throw new ServletException(ex.getMessage());
+		}
+	} 
+	
+	/**
+	 * Generates an XML or HTML document based on a given stylesheet
+	 * @param xmlDoc Specifies the xml document
+	 * @param styleIn specifies the stylesheet
+	 * @return
+	 * @throws Exception 
+	 */
+
+	public void transform(Document xmlDoc, InputStream styleIn, OutputStream out)
+			throws Exception {
+
+        if (styleIn == null) throw new ServletException("No stylesheet configued");
+        
+		JDOMSource source = new JDOMSource(xmlDoc);
+		StreamResult result = new StreamResult(out);
+		
+		try {
+			TransformerFactory tFactory = TransformerFactory.newInstance();
+			Templates stylesheet = tFactory.newTemplates(new StreamSource(styleIn));
+			Transformer processor = stylesheet.newTransformer();
+			processor.transform(source, result);
+
+		} catch (Exception ex) {
+			log.error(ex.getMessage());
+			throw new Exception("XSLTTransformer Exception: " + ex.getMessage());
+		}
 	}
 
 	/**
