@@ -417,7 +417,7 @@
 		<fileset dir="${codegen.runtime.lib.dir}">
 			<include name="*.jar" />
 		</fileset>
-		<pathelement path="${output.conf.dir}" />
+		<pathelement path="${output.codegen.config.dir}" />
 	</path>
 
 	<target name="-pre-clean">
@@ -495,9 +495,9 @@
 
 
 	<target name="-generate-codegen" depends="replacetoken-contents,ivy:setup:codegen" description="Runs the Code Generator">
-		<fail unless="IDENTITY_GENERATOR_TAG">IDENTITY_GENERATOR property must be set in deploy.properties</fail>
+		<fail unless="IDENTITY_GENERATOR_TAG">IDENTITY_GENERATOR property must be set in codegen.properties</fail>
 		<java classname="gov.nih.nci.codegen.Generator" failonerror="true" fork="true" >
-			<arg value="${codegen.dir}/${codegen.config.file}" />
+			<arg value="${codegen.config.file}" />
 			<jvmarg value="-Xms256M" />
 			<jvmarg value="-Xmx512M" />
 			<classpath refid="codegen.runtime.classpath" />
