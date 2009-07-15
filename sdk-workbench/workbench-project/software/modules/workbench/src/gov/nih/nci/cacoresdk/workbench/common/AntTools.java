@@ -102,30 +102,30 @@ public class AntTools {
     }
     
     
-    public static void deployLocalApplication(String projectDirPath, String deployPropsFilePath) throws BuildException {
+    public static void deployLocalApplication(String projectDirPath, String deployPropsFileName) throws BuildException {
 		
 		File buildFile = ResourceManager.getProjectBuildFile(projectDirPath);
 		
 		String target = "deploy:local:install";
 
 		Map<String,String> propsMap=new TreeMap<String,String>();
-		propsMap.put("properties.file", deployPropsFilePath.replace('\\', '/'));
-		propsMap.put("properties.file.name", deployPropsFilePath.replace('\\', '/'));
-		propsMap.put("install.properties", deployPropsFilePath.replace('\\', '/'));
+		propsMap.put("properties.file", deployPropsFileName); //deployPropsFilePath.replace('\\', '/'));
+		propsMap.put("properties.file.name", deployPropsFileName);
+		propsMap.put("install.properties", deployPropsFileName);
 		
 		executeAntProject(buildFile,target,propsMap);
     }
     
-    public static void deployRemoteApplication(String projectDirPath, String deployPropsFilePath) throws BuildException {
+    public static void deployRemoteApplication(String projectDirPath, String deployPropsFileName) throws BuildException {
 		
 		File buildFile = ResourceManager.getProjectBuildFile(projectDirPath);
 		
 		String target = "deploy:remote:install";
 
 		Map<String,String> propsMap=new TreeMap<String,String>();
-		propsMap.put("properties.file", deployPropsFilePath.replace('\\', '/'));
-		propsMap.put("properties.file.name", deployPropsFilePath.replace('\\', '/'));
-		propsMap.put("install.properties", deployPropsFilePath.replace('\\', '/'));
+		propsMap.put("properties.file", deployPropsFileName); //deployPropsFilePath.replace('\\', '/')
+		propsMap.put("properties.file.name", deployPropsFileName);
+		propsMap.put("install.properties", deployPropsFileName);
 		
 		executeAntProject(buildFile,target,propsMap);
 
@@ -182,18 +182,8 @@ public class AntTools {
 			
 			ProjectHelper helper = ProjectHelper.getProjectHelper();
 			proj.addReference("ant.projectHelper", helper);
-
-			helper.parse(proj, buildFile);
 			
-			//set properties
-			proj.setDefault(target);
-			
-			if (buildFile instanceof URL)
-				proj.setUserProperty("ant.file", ((URL)buildFile).getPath());
-			else
-				proj.setUserProperty("ant.file", ((File)buildFile).getPath());
-			
-			// set any properties
+			// set any project properties
 			if (propsMap != null)
 			{
 				Iterator<String> keys = propsMap.keySet().iterator();
@@ -204,6 +194,16 @@ public class AntTools {
 					proj.setUserProperty(key, value);
 				}
 			}
+
+			helper.parse(proj, buildFile);
+			
+			//set default target
+			proj.setDefault(target);
+			
+			if (buildFile instanceof URL)
+				proj.setUserProperty("ant.file", ((URL)buildFile).getPath());
+			else
+				proj.setUserProperty("ant.file", ((File)buildFile).getPath());
 			
 			//Debug properties
 			Iterator<String> keys = proj.getProperties().keySet().iterator();
