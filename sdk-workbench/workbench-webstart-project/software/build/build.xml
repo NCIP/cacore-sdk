@@ -130,13 +130,24 @@
 		clean,
 		init,
 		-copy-project-properties,
-		package:webstart,
-		dist:installer
+		package:webstart
 		" />
 	
-	<target name="deploy:local:install" depends="build:workbench-modules,build:all,dist:installer:prep" description="Installs and configures the application and required Webstart binaries on the local machine. Used for developer desktops and ci environments.">
+	<target name="deploy:local:install" depends="build:workbench-modules,build:all,dist:installer:prep,dist:installer" description="Installs and configures the application and required Webstart binaries on the local machine. Used for developer desktops and ci environments.">
 		<deploy-local target.name="${install.target}" />
 	</target> 
+	
+	<!-- ant -Dproperties.file=C:/devroot/scm-private/sdk/properties/dev-install.properties  deploy:remote:install 
+		https://wiki.nci.nih.gov/display/BuildandDeploymentAutomation/AHP+-+Testing+command+line+build   -->
+	<!-- In order to run this step, had to explicitly add jsch-0.1.34.jar to classpath via "External Tools" dialog in MyEclipse -->
+	<target name="deploy:remote:install" depends="build:workbench-modules,build:all,dist:installer:prep,dist:installer"
+		description="Installs and configures the web start version of the workbench on a remote machine. Used for NCI tiers (dev, qa, stg, prod)" >
+		
+		<!-- Call macro to deploy files on desired server -->
+		<deploy-files dist.file="${project-webapp.install.zip.file}" />
+		<!-- SSH to machine ant run ant command line to install application -->
+		<remote-ssh remotesshcommand=". .bash_profile;cd ${ssh.dir.temp}; ant -Dproperties.file=${properties.file.name} -Dforce.reinstall=true ${install.target}" />
+	</target>
 
 	<target name="build:workbench-modules" description="Call workbench modules build target to produce artifacts">
 		<SDKecho message="${ant.project.name}: Building the workbench source"/>
