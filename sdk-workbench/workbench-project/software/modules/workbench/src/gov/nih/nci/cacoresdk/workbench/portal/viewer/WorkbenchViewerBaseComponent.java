@@ -543,9 +543,9 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 						
 						try {
 							if (remoteDeployEnv == null || remoteDeployEnv.length()==0){//local deployment
-								AntTools.deployLocalApplication(projectDirPath, deployPropsFile.getAbsolutePath());
+								AntTools.deployLocalApplication(projectDirPath, deployPropsFile.getName());  //getAbsolutePath()
 							} else {
-								AntTools.deployRemoteApplication(projectDirPath, deployPropsFile.getAbsolutePath());
+								AntTools.deployRemoteApplication(projectDirPath, deployPropsFile.getName()); //getAbsolutePath()
 							}
 						} catch (BuildException e) {
 							log.error("ERROR: "+ e.getMessage(),e);
