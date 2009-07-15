@@ -30,6 +30,9 @@
 	<property file="${properties.file}" />
 	<!-- added for remote deployments since file is copied to root of install dir -->
 	<basename property="properties.file.name" file="${properties.file}"/>
+	
+	<echo message="* * * properties.file: ${properties.file}" />
+	<echo message="* * * properties.file.name: ${properties.file.name}" />
 
 	<import file="${software.dir}/build/build.xml"/>
 	
