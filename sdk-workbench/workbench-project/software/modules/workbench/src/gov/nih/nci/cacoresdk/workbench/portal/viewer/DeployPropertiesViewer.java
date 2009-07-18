@@ -126,8 +126,12 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
 
 		try {
 			projectDirPath = ResourceManager.promptDir("","Select the Project Generation Directory");
+			if (projectDirPath == null || projectDirPath.length() == 0){
+				// No Project Generation Directory selected - abort operation by generating Null Pointer Exception
+				File projectDir = new File(projectDirPath);
+			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.error("ERROR:  Not able to select the Project Generation Directory");
 			return;
 		}
 

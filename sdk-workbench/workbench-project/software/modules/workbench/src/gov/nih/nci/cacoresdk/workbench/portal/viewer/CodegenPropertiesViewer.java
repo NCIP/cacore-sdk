@@ -92,13 +92,17 @@ public class CodegenPropertiesViewer extends WorkbenchViewerBaseComponent {
 
 		try {
 			projectDirPath = ResourceManager.promptDir("","Select the Project Generation Directory");
+			if (projectDirPath == null || projectDirPath.length() == 0){
+				// No Project Generation Directory selected - abort operation by generating
+				File projectDir = new File(projectDirPath);
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 			return;
-		}
-        
+		}  
+		
 		// Initialize WorkbenchPropertiesManager
-		propsMgr = ResourceManager.getCodegenPropertiesManager(projectDirPath);   
+		propsMgr = ResourceManager.getCodegenPropertiesManager(projectDirPath); 
         
         //Initialize main tabbed panel validator
         propsValidator = new CodegenPropertiesValidator(this);
