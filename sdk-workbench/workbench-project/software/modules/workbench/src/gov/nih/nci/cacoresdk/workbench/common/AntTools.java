@@ -1,22 +1,22 @@
 package gov.nih.nci.cacoresdk.workbench.common;
 
-import gov.nih.nci.cacoresdk.workbench.common.ResourceManager;
-
 import java.io.File;
-import java.io.InputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.StringTokenizer;
 import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.BuildListener;
+import org.apache.tools.ant.DefaultLogger;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.ProjectHelper;
 import org.apache.tools.ant.listener.Log4jListener;
-
 
 /**
  * @author <A HREF="MAILTO:dumitrud@mail.nih.gov">Daniel Dumitru</A>
@@ -37,7 +37,7 @@ public class AntTools {
 		propsMap.put("skeleton.destination.dir", projectDirPath);
 		propsMap.put("skeleton.project.template.dir", projectTemplateDirPath);
 		
-		executeAntProject(buildFileUrl,target,propsMap);
+		executeAntProject(buildFileUrl,null,target,propsMap);
 
     }
     
@@ -54,7 +54,7 @@ public class AntTools {
 		propsMap.put("skeleton.model.file", modelFilePath);
 		propsMap.put("models.dir", "models");
 		
-		executeAntProject(buildFileUrl,target,propsMap);
+		executeAntProject(buildFileUrl,projectDirPath,target,propsMap);
     }
     
     public static void copyCertKeyFiles(String projectDirPath,String targetGridDirPath,String certFilePath, String keyFilePath) throws BuildException {
@@ -70,7 +70,7 @@ public class AntTools {
 		propsMap.put("skeleton.cert.file", certFilePath);
 		propsMap.put("skeleton.key.file", keyFilePath);
 		
-		executeAntProject(buildFileUrl,target,propsMap);
+		executeAntProject(buildFileUrl,projectDirPath,target,propsMap);
 
     }
     
@@ -85,7 +85,7 @@ public class AntTools {
 		propsMap.put("skeleton.destination.dir", dbSqlDirPath);
 		propsMap.put("db.sql.file", dbSqlFilePath);
 		
-		executeAntProject(buildFileUrl,target,propsMap);
+		executeAntProject(buildFileUrl,projectDirPath,target,propsMap);
 
     } 
     
@@ -98,7 +98,7 @@ public class AntTools {
 		Map<String,String> propsMap=new TreeMap<String,String>();
 		propsMap.put("install.properties", "");
 		
-		executeAntProject(buildFile,target,propsMap);
+		executeAntProject(buildFile,projectDirPath,target,propsMap);
     }
     
     
@@ -106,28 +106,28 @@ public class AntTools {
 		
 		File buildFile = ResourceManager.getProjectBuildFile(projectDirPath);
 		
-		String target = "deploy:local:install";
+		String target = "deploy:local:install:nocodegen";
 
 		Map<String,String> propsMap=new TreeMap<String,String>();
 		propsMap.put("properties.file", deployPropsFileName); //deployPropsFilePath.replace('\\', '/'));
 		propsMap.put("properties.file.name", deployPropsFileName);
 		propsMap.put("install.properties", deployPropsFileName);
 		
-		executeAntProject(buildFile,target,propsMap);
+		executeAntProject(buildFile,projectDirPath,target,propsMap);
     }
     
     public static void deployRemoteApplication(String projectDirPath, String deployPropsFileName) throws BuildException {
 		
 		File buildFile = ResourceManager.getProjectBuildFile(projectDirPath);
 		
-		String target = "deploy:remote:install";
+		String target = "deploy:remote:install:nocodegen";
 
 		Map<String,String> propsMap=new TreeMap<String,String>();
 		propsMap.put("properties.file", deployPropsFileName); //deployPropsFilePath.replace('\\', '/')
 		propsMap.put("properties.file.name", deployPropsFileName);
 		propsMap.put("install.properties", deployPropsFileName);
 		
-		executeAntProject(buildFile,target,propsMap);
+		executeAntProject(buildFile,projectDirPath,target,propsMap);
 
     }
     
@@ -155,10 +155,10 @@ public class AntTools {
 		
 		String target = "install:sdk";
 
-		executeAntProject(buildFileUrl,target,propsMap);
+		executeAntProject(buildFileUrl,null,target,propsMap);
     }
     
-    private static void executeAntProject(Object buildFile, String target, Map<String, String>propsMap) throws BuildException {
+    private static void executeAntProject(Object buildFile, String projectDirPath, String target, Map<String, String>propsMap) throws BuildException {
 		Project proj = new Project();
 		proj.init();
 		proj.setSystemProperties();
@@ -174,8 +174,38 @@ public class AntTools {
 	        proj.removeBuildListener(bl);
 	    } 
 	    
-	    //registering Log4j build listener 
-	    proj.addBuildListener(new Log4jListener());
+	    //Register Log4j build listener 
+	    Log4jListener log4jListener = new Log4jListener();
+	    proj.addBuildListener(log4jListener);
+	    
+	    //Register project XML Logger listener 
+	    if (projectDirPath != null){
+	    	File projectLogFile = null;
+	    	
+			try {
+				projectLogFile = ResourceManager.getProjectLogFile(projectDirPath);
+			} catch (IOException e) {
+				log.error("ERROR: Could not create project log file: "+projectLogFile.getAbsoluteFile(),e);
+				throw new BuildException(e);
+			}
+	    	log.debug("* * * projectLogFile path: "+projectLogFile.getAbsolutePath()+"; exists? "+(projectLogFile !=null && projectLogFile.exists()?true:false));
+	    	
+	    	PrintStream output = null;
+
+		    try {
+				output = new PrintStream(new FileOutputStream(projectLogFile));
+			} catch (FileNotFoundException e) {
+				log.error("ERROR:  Project log file not found: ",e);
+				throw new BuildException(e);
+			}
+		    
+//		    XmlLogger xmlLogger = new XmlLogger();
+//		    xmlLogger.setOutputPrintStream(output);
+		    DefaultLogger logFileLogger = new DefaultLogger();
+		    logFileLogger.setOutputPrintStream(output);	
+		    logFileLogger.setMessageOutputLevel(Project.MSG_INFO);
+		    proj.addBuildListener(logFileLogger);
+	    }
 
 		try {
 			proj.fireBuildStarted();
