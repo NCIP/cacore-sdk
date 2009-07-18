@@ -133,7 +133,7 @@
 		package:webstart
 		" />
 	
-	<target name="deploy:local:install" depends="build:workbench-modules,build:all,dist:installer:prep,dist:installer" description="Installs and configures the application and required Webstart binaries on the local machine. Used for developer desktops and ci environments.">
+	<target name="deploy:local:install" depends="build:workbench-modules,build:all,dist:installer,dist:installer:prep" description="Installs and configures the application and required Webstart binaries on the local machine. Used for developer desktops and ci environments.">
 		<deploy-local target.name="${install.target}" />
 	</target> 
 	
