@@ -15,11 +15,18 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 
 import org.apache.log4j.Logger;
+import org.apache.tools.ant.util.DateUtils;
 import org.cagrid.grape.GridApplication;
 
 public class ResourceManager {
 	
 	private static final Logger log = Logger.getLogger(ResourceManager.class);
+
+
+    /**
+     * Date format
+     */
+    public static final String DATE_FORMAT = "yyyy-MM-dd'T'HH.mm.ss.z";
 
 	public final static String STATE_FILE = "sdk.workbench.state.properties";
 	public final static String LAST_DIRECTORY = "sdk.workbench.lastdir";
@@ -28,6 +35,8 @@ public class ResourceManager {
 	//Property File Constants
 	private static final String WORKBENCH_DIR = "workbench-project/software";
 	private static final String BUILD_DIR = "build";
+	private static final String LOG_DIR = "logs";
+	private static final String LOG_FILE = "workbench";
 	private static final String BUILD_FILE = "build.xml";
 	private static final String DB_SQL_DIR = "db/db-install";
 	private static final String CODEGEN_PROPS_FILE = "codegen.properties";
@@ -132,6 +141,17 @@ public class ResourceManager {
 		log.debug("* * * projectBuildFile.getAbsolutePath(): " + buildFile.getAbsolutePath());
 		return buildFile;
 	}
+	
+	public static File getProjectLogFile(String projectDirPath) throws IOException {
+		File logFile = new File(projectDirPath + File.separator + LOG_DIR + File.separator + LOG_FILE +"_"+DateUtils.format(System.currentTimeMillis(), DATE_FORMAT)+".log");
+		log.debug("* * * projectLogFile.getAbsolutePath(): " + logFile.getAbsolutePath());
+		
+		logFile.createNewFile();
+		
+		return logFile;
+	}
+	
+	
 	
 	
 	public static File getDbSqlDir(String projectDirPath, String dbType){
