@@ -92,12 +92,12 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 				public void process() {
 					try {
 						if (!sdkDirFile.exists()) {
-							setErrorMessage("The specified SDK installation home directory does not exist: "+sdkDirPath);
+							setErrorMessage(generateErrorMsg("The specified SDK installation home directory does not exist: "+sdkDirPath));
 							return;
 						}
 						
 						if (!projectTemplateDir.exists()) {
-							setErrorMessage("The specified SDK installation home directory does not contain the required 'project-template' sub-directory: "+sdkDirPath);
+							setErrorMessage(generateErrorMsg("The specified SDK installation home directory does not contain the required 'project-template' sub-directory: "+sdkDirPath));
 							return;
 						}
 						
@@ -107,7 +107,7 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 							AntTools.configureProject(projectTemplateDirPath, projectDirPath);
 						} catch (BuildException e) {
 							log.error("ERROR: "+ e.getMessage(),e);
-							setErrorMessage("Error creating and configuring the project generation directory!  Please check the console output for more details.");
+							setErrorMessage(generateErrorMsg("Failed to create and configure the Project Generation Directory." + e.getMessage()));
 							return;
 						}
 						
@@ -115,14 +115,14 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 							AntTools.copyModelFile(projectDirPath, modelFilePath);
 						} catch (BuildException e) {
 							log.error("ERROR: "+ e.getMessage(),e);
-							setErrorMessage("Error copying the model file to the project generation /models directory!  Please check the console output for more details.");
+							setErrorMessage(generateErrorMsg(e,"Failed to copy the model file to the Project Generation 'models' sub-directory!"));
 							return;
 						}
 
 						setProgressText("Saving Properties");
 
 						if (!saveProperties(codegenPropsFile,workbenchPropsMap)){
-							setErrorMessage("IO error encountered saving code generation workbench properties to: "+codegenPropsFile.getAbsolutePath());
+							setErrorMessage(generateErrorMsg("Failed to save the code generation workbench properties to: "+codegenPropsFile.getAbsolutePath()));
 							return;
 						}
 					
@@ -130,7 +130,7 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 
 					} catch (Exception e) {
 						log.error("ERROR: "+ e.getMessage(),e);
-						setErrorMessage("Error: " + e.getMessage());
+						setErrorMessage(generateErrorMsg(e));
 
 						return;
 					}
@@ -213,12 +213,12 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 				public void process() {
 					try {
 						if (!sdkDirFile.exists()) {
-							setErrorMessage("The specified SDK installation home directory does not exist: "+sdkDirPath);
+							setErrorMessage(generateErrorMsg("The specified SDK installation home directory does not exist: "+sdkDirPath));
 							return;
 						}
 						
 						if (!projectTemplateDir.exists()) {
-							setErrorMessage("The specified SDK installation home directory does not contain the required 'project-template' sub-directory: "+sdkDirPath);
+							setErrorMessage(generateErrorMsg("The specified SDK installation home directory does not contain the required 'project-template' sub-directory: "+sdkDirPath));
 							return;
 						}
 						
@@ -226,7 +226,7 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 							AntTools.configureProject(projectTemplateDirPath, projectDirPath);
 						} catch (BuildException e) {
 							log.error("ERROR: "+ e.getMessage(),e);
-							setErrorMessage("Error creating and configuring the project generation directory!  Please check the console output for more details.");
+							setErrorMessage(generateErrorMsg("Failed to create and configure the Project Generation Directory." + e.getMessage()));
 							return;
 						}
 
@@ -235,7 +235,7 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 								AntTools.copyCertKeyFiles(projectDirPath, targetGridDirPath, certFilePath, keyFilePath);
 							} catch (BuildException e) {
 								log.error("ERROR: "+ e.getMessage(),e);
-								setErrorMessage("Error copying the caGrid Security Certificate and Key files to the project generation " + targetGridDirPath +" directory!  Please check the console output for more details.");
+								setErrorMessage(generateErrorMsg(e,"Failed to copy the caGrid Security Certificate and Key files to the Project Generation " + targetGridDirPath +" sub-directory!"));
 								return;
 							}
 						}
@@ -245,7 +245,7 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 								AntTools.copyDbSqlFile(projectDirPath, destDbSqlDir.getAbsolutePath(), dbSqlFilePath);
 							} catch (BuildException e) {
 								log.error("ERROR: "+ e.getMessage(),e);
-								setErrorMessage("Error copying the Database SQL file to the project generation " + targetGridDirPath +" directory!  Please check the console output for more details.");
+								setErrorMessage(generateErrorMsg(e,"Failed to copy the Database SQL file to the Project Generation " + destDbSqlDir.getAbsolutePath() +" sub-directory!"));								
 								return;
 							}
 						}
@@ -253,7 +253,7 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 						setProgressText("Saving Properties");
 
 						if (!saveProperties(deployPropsFile,workbenchPropsMap)){
-							setErrorMessage("IO error encountered saving deployment properties to: "+deployPropsFile.getAbsolutePath());
+							setErrorMessage(generateErrorMsg("Failed to save the deployment properties to: "+deployPropsFile.getAbsolutePath()));
 							return;
 						}
 						
@@ -261,7 +261,7 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 						
 					} catch (Exception e) {
 						log.error("ERROR: "+ e.getMessage(),e);
-						setErrorMessage("Error: " + e.getMessage());
+						setErrorMessage(generateErrorMsg(e));
 						return;
 					}
 				}
@@ -318,7 +318,7 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 					try {
 						
 						if (!sdkInstallDir.exists()) {
-							setErrorMessage("The specified SDK installation home directory (" + sdkInstallDirPath + ") does not exist.");
+							setErrorMessage(generateErrorMsg("The specified SDK installation home directory (" + sdkInstallDirPath + ") does not exist."));
 							return;
 						}
 						
@@ -328,7 +328,7 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 							AntTools.installSdk(sdkInstallDirPath);
 						} catch (BuildException e) {
 							log.error("ERROR: "+ e.getMessage(),e);
-							setErrorMessage("Error installing the SDK!  Please check the console output for more details.");
+							setErrorMessage(generateErrorMsg("Failed to install the SDK!"));
 							return;
 						}
 				
@@ -336,7 +336,7 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 
 					} catch (Exception e) {
 						log.error("ERROR: "+ e.getMessage(),e);
-						setErrorMessage("Error: " + e.getMessage());
+						setErrorMessage(generateErrorMsg(e));
 						return;
 					}
 				}
@@ -414,12 +414,12 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 				public void process() {
 					try {
 						if (!sdkDirFile.exists()) {
-							setErrorMessage("The specified SDK installation home directory does not exist: "+sdkDirPath);
+							setErrorMessage(generateErrorMsg("The specified SDK installation home directory does not exist: "+sdkDirPath));
 							return;
 						}
 						
 						if (!projectTemplateDir.exists()) {
-							setErrorMessage("The specified SDK installation home directory does not contain the required 'project-template' sub-directory: "+sdkDirPath);
+							setErrorMessage(generateErrorMsg("The specified SDK installation home directory does not contain the required 'project-template' sub-directory: "+sdkDirPath));
 							return;
 						}
 						
@@ -429,7 +429,7 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 							AntTools.configureProject(projectTemplateDirPath, projectDirPath);
 						} catch (BuildException e) {
 							log.error("ERROR: "+ e.getMessage(),e);
-							setErrorMessage("Error creating and configuring the project generation directory!  Please check the console output for more details.");
+							setErrorMessage(generateErrorMsg("Failed to create and configure the Project Generation Directory." + e.getMessage()));
 							return;
 						}
 
@@ -439,7 +439,7 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 							AntTools.generateApplication(projectDirPath);
 						} catch (BuildException e) {
 							log.error("ERROR: "+ e.getMessage(),e);
-							setErrorMessage("Error generating the application!  Please check the console output for more details.");
+							setErrorMessage(generateErrorMsg(e,"Failed to generate the application!"));
 							return;
 						}
 					
@@ -447,7 +447,7 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 
 					} catch (Exception e) {
 						log.error("ERROR: "+ e.getMessage(),e);
-						setErrorMessage("Error: " + e.getMessage());
+						setErrorMessage(generateErrorMsg(e));
 						return;
 					}
 				}
@@ -520,12 +520,12 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 				public void process() {
 					try {
 						if (!sdkDirFile.exists()) {
-							setErrorMessage("The specified SDK installation home directory does not exist: "+sdkDirPath);
+							setErrorMessage(generateErrorMsg("The specified SDK installation home directory does not exist: "+sdkDirPath));
 							return;
 						}
 						
 						if (!projectTemplateDir.exists()) {
-							setErrorMessage("The specified SDK installation home directory does not contain the required 'project-template' sub-directory: "+sdkDirPath);
+							setErrorMessage(generateErrorMsg("The specified SDK installation home directory does not contain the required 'project-template' sub-directory: "+sdkDirPath));
 							return;
 						}
 						
@@ -535,7 +535,7 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 							AntTools.configureProject(projectTemplateDirPath, projectDirPath);
 						} catch (BuildException e) {
 							log.error("ERROR: "+ e.getMessage(),e);
-							setErrorMessage("Error creating and configuring the project generation directory!  Please check the console output for more details.");
+							setErrorMessage(generateErrorMsg("Failed to create and configure the Project Generation Directory." + e.getMessage()));
 							return;
 						}
 
@@ -549,7 +549,7 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 							}
 						} catch (BuildException e) {
 							log.error("ERROR: "+ e.getMessage(),e);
-							setErrorMessage("Error deploying the application!  Please check the console output for more details.");
+							setErrorMessage(generateErrorMsg(e,"Failed to deploy the application."));
 							return;
 						}
 					
@@ -557,7 +557,7 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 
 					} catch (Exception e) {
 						log.error("ERROR: "+ e.getMessage(),e);
-						setErrorMessage("Error: " + e.getMessage());
+						setErrorMessage(generateErrorMsg(e));
 						return;
 					}
 				}
@@ -671,6 +671,18 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 					this,
 					"Database Connection Test failed: SQL Exception: " + e.getMessage());
 		}
+	}
+	
+	private String generateErrorMsg(Exception e){
+		return "Error: " + e.getMessage() +".\n  See log file(s) within 'logs' sub-directory of Project Generation directory for more details.";
+	}
+	
+	private String generateErrorMsg(Exception e, String errorMsg){
+		return "Error: " + errorMsg+ ": " + e.getMessage() +".\n  See log file(s) within 'logs' sub-directory of Project Generation directory for more details.";
+	}
+	
+	private String generateErrorMsg(String errorMsg){
+		return "Error: " + errorMsg;
 	}
 
 }
