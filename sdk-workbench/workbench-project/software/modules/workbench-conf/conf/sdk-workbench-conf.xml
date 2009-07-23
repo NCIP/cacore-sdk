@@ -21,7 +21,7 @@
                     <title>Install SDK</title>
                     <description>Install a Workbench Compatible Version of the SDK</description>
                     <classname>gov.nih.nci.cacoresdk.workbench.portal.viewer.SdkInstallPropertiesViewer</classname>
-                    <icon>/images/1.jpg</icon>
+                    <icon>/images/1.gif</icon>
                     <showOnToolBar>true</showOnToolBar>
                     <dimensions>
                     	<width>850</width>
@@ -35,7 +35,7 @@
                     <title>Create/Modify Application</title>
                     <description>Manage Code Generation Properties</description>
                     <classname>gov.nih.nci.cacoresdk.workbench.portal.viewer.CodegenPropertiesViewer</classname>
-                    <icon>/images/2.jpg</icon>
+                    <icon>/images/2.gif</icon>
                     <showOnToolBar>true</showOnToolBar>
                     <dimensions>
                     	<width>850</width>
@@ -49,7 +49,7 @@
                     <title>Deploy Application</title>
                     <description>Manage Deployment Properties</description>
                     <classname>gov.nih.nci.cacoresdk.workbench.portal.viewer.DeployPropertiesViewer</classname>
-                    <icon>/images/3.jpg</icon>
+                    <icon>/images/3.gif</icon>
                     <showOnToolBar>true</showOnToolBar>
                     <dimensions>
                     	<width>850</width>
