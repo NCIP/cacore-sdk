@@ -1,23 +1,19 @@
 package gov.nih.nci.cacoresdk.workbench.portal.viewer;
 
-import gov.nih.nci.cacoresdk.workbench.portal.panel.SdkInstallSettingsPanel;
-import gov.nih.nci.cacoresdk.workbench.portal.validation.PanelValidator;
-import gov.nih.nci.cacoresdk.workbench.portal.validation.SdkInstallPropertiesValidator;
+import gov.nih.nci.cacoresdk.workbench.common.LookAndFeel;
+import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.beans.PropertyVetoException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.List;
 
-import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
 
 import org.apache.log4j.Logger;
-
-import com.jgoodies.validation.ValidationResultModel;
-import com.jgoodies.validation.util.DefaultValidationResultModel;
 
 
 /**
@@ -26,41 +22,26 @@ import com.jgoodies.validation.util.DefaultValidationResultModel;
  * @author <A HREF="MAILTO:dumitrud@mail.nih.gov">Dan Dumitru</A> Based upon "Bare Bones Browser Launch" - See http://www.centerkey.com/java/browser/
  * @created June, 2008
  */
-
 public class HelpViewer extends WorkbenchViewerBaseComponent {
 	
 	private static final long serialVersionUID = 1L;
 	
 	private static final Logger log = Logger.getLogger(HelpViewer.class);
 	
-    
+	private String HELP_URL = "https://cabig.nci.nih.gov/tools/caCORE_SDK";
+	
 	private static final String[] browsers = { "firefox", "opera", "konqueror", "epiphany",
 		"seamonkey", "galeon", "kazehakase", "mozilla", "netscape" };
-	
-	// Validation 
-	private SdkInstallPropertiesValidator propsValidator = null;
-	private List<PanelValidator> panelValidators = null;
-    private ValidationResultModel validationModel = new DefaultValidationResultModel();
-
-    // Buttons
-    private JButton installButton = null;
-    private JButton closeButton = null;
 
 	/*
 	 * Primary Panel definitions
 	 */
-	private JTabbedPane mainTabbedPane = null;
     private JPanel mainPanel = null;
-    private JPanel buttonPanel = null;
-
-	// Tab panel definitions
-	private SdkInstallSettingsPanel sdkInstallSettingsPanel = null;
     
 	// Constructor
     public HelpViewer() {
-        super();
-
-        openURL("https://cabig.nci.nih.gov/tools/caCORE_SDK");
+    	super();
+        initialize();
         
         setVisible(false);
         dispose();
@@ -71,8 +52,54 @@ public class HelpViewer extends WorkbenchViewerBaseComponent {
 			log.error("Error trying to close HelpViewer: ", e);
 		}
     }
+    
+    /**
+     * This method initializes this Viewer
+     */
+    private void initialize() {
+     
+        setContentPane(getMainPanel());
+        setFrameIcon(LookAndFeel.getGenerateApplicationIcon());
+        setTitle("Workbench Help Viewer");
+        
+        openURL(HELP_URL);
 
-	public void openURL(String url) {
+    }
+    
+    /**
+     * This method initializes jPanel
+     * 
+     * @return javax.swing.JPanel
+     */
+    private JPanel getMainPanel() {
+        if (mainPanel == null) {
+            
+			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
+			gridBagConstraints10.anchor = java.awt.GridBagConstraints.CENTER;
+			gridBagConstraints10.gridy = 1;
+			gridBagConstraints10.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints10.gridx = 0;
+			gridBagConstraints10.gridwidth = 3;
+			gridBagConstraints10.weightx = 1.0D;
+
+            mainPanel = new JPanel();
+            mainPanel.setLayout(new GridBagLayout());
+            mainPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Workbench User Manual Viewer",
+                javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+                javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
+            
+            JLabel helpLabel = new JLabel();
+            helpLabel.setText("If the default browser does not automatically open to the workbench user manual, go to " + HELP_URL + " for more information.");
+            mainPanel.add(helpLabel, gridBagConstraints10);
+        }
+        return mainPanel;
+    }
+    
+    /**
+     * This method opens the default browser to the Workbench Help URL
+     * Based upon "Bare Bones Browser Launch" - See http://www.centerkey.com/java/browser/
+     */
+	private void openURL(String url) {
 		String osName = System.getProperty("os.name");
 		try {
 			if (osName.startsWith("Mac OS")) {
