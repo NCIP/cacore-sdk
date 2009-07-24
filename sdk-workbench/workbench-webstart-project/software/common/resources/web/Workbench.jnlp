@@ -43,7 +43,7 @@
 	
 	<j2se version="1.5+" href="http://java.sun.com/products/autodl/j2se"/>
    </resources>
-   <application-desc main-class="gov.nih.nci.cacoresdk.workbench.portal.SdkWorkbenchPortal">
+   <application-desc main-class="gov.nih.nci.cacore.workbench.portal.CacoreWorkbenchPortal">
    	<argument>webstart</argument>
    	<argument>http://@SERVER_HOSTNAME@:@SERVER_PORT@/@PROJECT_NAME@/@SDK_SRC_FILE@</argument>
    	<argument>@SDK_SRC_FILE@</argument>
