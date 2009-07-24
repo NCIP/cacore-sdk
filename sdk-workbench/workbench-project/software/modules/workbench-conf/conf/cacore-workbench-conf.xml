@@ -10,7 +10,7 @@
         <width>900</width>
         <height>700</height>
     </dimensions>
-    <initializerClass>gov.nih.nci.cacore.workbench.portal.init.SdkWorkbenchInitializer</initializerClass>
+    <initializerClass>gov.nih.nci.cacore.workbench.portal.init.CacoreWorkbenchInitializer</initializerClass>
     <menus>
            <menu>
             <title>File</title>
