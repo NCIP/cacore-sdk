@@ -307,35 +307,35 @@ public class ResourceManager {
 		}
 	}
 
-	public static File getSdkWorkbenchUserHome() {
+	public static File getCacoreWorkbenchUserHome() {
 		String userHome = System.getProperty("user.home");
 		File userHomeF = new File(userHome);
-		File sdkWorkbenchCache = new File(userHomeF.getAbsolutePath() + File.separator + ".cacore.workbench_"
-				+ getSdkWorkbenchVersion().replace(".", "_"));
-		if (!sdkWorkbenchCache.exists()) {
-			sdkWorkbenchCache.mkdirs();
+		File cacoreWorkbenchCache = new File(userHomeF.getAbsolutePath() + File.separator + ".cacore.workbench_"
+				+ getCacoreWorkbenchVersion().replace(".", "_"));
+		if (!cacoreWorkbenchCache.exists()) {
+			cacoreWorkbenchCache.mkdirs();
 		}
-		return sdkWorkbenchCache;
+		return cacoreWorkbenchCache;
 	}
 
 	public static String getResourcePath() {
-		File sdkWorkbenchCache = getSdkWorkbenchUserHome();
-		sdkWorkbenchCache.mkdir();
-		return sdkWorkbenchCache.getAbsolutePath();
+		File cacoreWorkbenchCache = getCacoreWorkbenchUserHome();
+		cacoreWorkbenchCache.mkdir();
+		return cacoreWorkbenchCache.getAbsolutePath();
 	}
 
-	public static String getSdkWorkbenchVersion() {
-		return getSdkWorkbenchPropertyValue(SdkWorkbenchConstants.WORKBENCH_VERSION_PROPERTY);
+	public static String getCacoreWorkbenchVersion() {
+		return getCacoreWorkbenchPropertyValue(CacoreWorkbenchConstants.WORKBENCH_VERSION_PROPERTY);
 	}
 	
 	public static String getWorkbenchHelpUrl() {
-		return getSdkWorkbenchPropertyValue(SdkWorkbenchConstants.WORKBENCH_HELP_URL);
+		return getCacoreWorkbenchPropertyValue(CacoreWorkbenchConstants.WORKBENCH_HELP_URL);
 	}
 
-	public static String getSdkWorkbenchPropertyValue(String propertyKey) {
+	public static String getCacoreWorkbenchPropertyValue(String propertyKey) {
 		Properties engineProps = new Properties();
 		try {
-			InputStream is=Thread.currentThread().getContextClassLoader().getResourceAsStream(SdkWorkbenchConstants.WORKBENCH_ENGINE_PROPERTIES);
+			InputStream is=Thread.currentThread().getContextClassLoader().getResourceAsStream(CacoreWorkbenchConstants.WORKBENCH_ENGINE_PROPERTIES);
 			
 			engineProps.load(is);
 			return engineProps.getProperty(propertyKey);
