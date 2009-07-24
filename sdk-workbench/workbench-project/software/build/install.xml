@@ -36,7 +36,7 @@
 	*********************************************************************** -->
 	<target name="run" description="Runs the Workbench">
 		<SDKecho message="${ant.project.name}: Running the caCORE Workbench"/>
-		<java classname="gov.nih.nci.cacoresdk.workbench.portal.SdkWorkbenchPortal" fork="true">
+		<java classname="gov.nih.nci.cacore.workbench.portal.CacoreWorkbenchPortal" fork="true">
 			<classpath refid="runtime" />
 			<arg value="standalone"/>
 			<arg value="null"/>
