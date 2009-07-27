@@ -61,7 +61,17 @@ public class HelpViewer extends WorkbenchViewerBaseComponent {
      
         setContentPane(getMainPanel());
         setFrameIcon(LookAndFeel.getGenerateApplicationIcon());
-        setTitle("Workbench Help Viewer");
+        setTitle("Workbench Help");
+
+//        URL workbenchManualUrl = HelpViewer.class.getResource("/SDKWorkbench.pdf");
+//        log.debug("* * * Workbench User Manual URL: " + workbenchManualUrl);
+//        log.debug("* * * Workbench User Manual URL file: " + workbenchManualUrl.getFile());
+//        
+//        openURL(workbenchManualUrl.getFile());
+//        
+//        if (workbenchManualUrl != null && workbenchManualUrl.getFile().length() >0){
+//        	openURL(workbenchManualUrl.getFile());
+//        }
         
         openURL(HELP_URL);
 
@@ -126,7 +136,7 @@ public class HelpViewer extends WorkbenchViewerBaseComponent {
 		}
 		catch (Exception e) {
 			JOptionPane.showMessageDialog(null,
-					"Error attempting to launch web browser\n" + e.toString());
+					"Error attempting to launch workbench help in web browser:\n" + e.toString());
 		}
 	}
 
