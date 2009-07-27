@@ -16220,7 +16220,7 @@
                                                     </UML:Multiplicity>
                                                   </UML:StructuralFeature.multiplicity>
                                                   <UML:StructuralFeature.type>
-                                                    <UML:Class xmi.idref = '-64--88-1-103-888e6c:118f3faa956:-8000:0000000000001560'/>
+                                                    <UML:Class xmi.idref = 'EAID_61D84993_837B_48c3_9F63_E3020F52FA13'/>
                                                   </UML:StructuralFeature.type>
                                                 </UML:Attribute>
                                               </UML:Classifier.feature>
@@ -19738,7 +19738,7 @@
                                                         </UML:TaggedValue>
                                                       </UML:ModelElement.taggedValue>
                                                       <UML:StructuralFeature.type>
-                                                        <UML:Class xmi.idref = '-64--88-1-103-888e6c:118f3faa956:-8000:0000000000001560'/>
+                                                        <UML:Class xmi.idref = 'EAID_61D84993_837B_48c3_9F63_E3020F52FA13'/>
                                                       </UML:StructuralFeature.type>
                                                     </UML:Attribute>
                                                     <UML:Attribute xmi.id = '-64--88-1-103-e020c9:119a2e238ef:-8000:00000000000015A5'
@@ -19830,7 +19830,7 @@
                                                     </UML:TaggedValue>
                                                   </UML:ModelElement.taggedValue>
                                                   <UML:StructuralFeature.type>
-                                                    <UML:Class xmi.idref = '-64--88-1-103-888e6c:118f3faa956:-8000:0000000000001560'/>
+                                                    <UML:Class xmi.idref = 'EAID_61D84993_837B_48c3_9F63_E3020F52FA13'/>
                                                   </UML:StructuralFeature.type>
                                                 </UML:Attribute>
                                               </UML:Classifier.feature>
@@ -19939,7 +19939,7 @@
                                                   name = 'id' visibility = 'private' isSpecification = 'false' ownerScope = 'instance'
                                                   changeability = 'changeable' targetScope = 'instance'>
                                                   <UML:StructuralFeature.type>
-                                                    <UML:Class xmi.idref = '-64--88-1-103-888e6c:118f3faa956:-8000:0000000000001560'/>
+                                                    <UML:Class xmi.idref = 'EAID_61D84993_837B_48c3_9F63_E3020F52FA13'/>
                                                   </UML:StructuralFeature.type>
                                                 </UML:Attribute>
                                                 <UML:Attribute xmi.id = '-64--88-1-103-888e6c:119ee0f3d29:-8000:0000000000001640'
@@ -19967,7 +19967,7 @@
                                                   name = 'maxNumeric' visibility = 'private' isSpecification = 'false' ownerScope = 'instance'
                                                   changeability = 'changeable' targetScope = 'instance'>
                                                   <UML:StructuralFeature.type>
-                                                    <UML:Class xmi.idref = '-64--88-1-103-888e6c:118f3faa956:-8000:0000000000001560'/>
+                                                    <UML:Class xmi.idref = 'EAID_61D84993_837B_48c3_9F63_E3020F52FA13'/>
                                                   </UML:StructuralFeature.type>
                                                 </UML:Attribute>
                                                 <UML:Attribute xmi.id = '-64--88-1-103-888e6c:119ee0f3d29:-8000:0000000000001654'
@@ -19981,7 +19981,7 @@
                                                   name = 'minNumeric' visibility = 'private' isSpecification = 'false' ownerScope = 'instance'
                                                   changeability = 'changeable' targetScope = 'instance'>
                                                   <UML:StructuralFeature.type>
-                                                    <UML:Class xmi.idref = '-64--88-1-103-888e6c:118f3faa956:-8000:0000000000001560'/>
+                                                    <UML:Class xmi.idref = 'EAID_61D84993_837B_48c3_9F63_E3020F52FA13'/>
                                                   </UML:StructuralFeature.type>
                                                 </UML:Attribute>
                                                 <UML:Attribute xmi.id = '-64--88-1-103-888e6c:119ee0f3d29:-8000:000000000000165F'
@@ -21411,21 +21411,6 @@
           isAbstract = 'false'>
           <UML:Stereotype.baseClass>Stereotype</UML:Stereotype.baseClass>
         </UML:Stereotype>
-        <UML:Package xmi.id = '-64--88-1-103-888e6c:118f3faa956:-8000:000000000000155E'
-          name = 'java' isSpecification = 'false' isRoot = 'false' isLeaf = 'false'
-          isAbstract = 'false'>
-          <UML:Namespace.ownedElement>
-            <UML:Package xmi.id = '-64--88-1-103-888e6c:118f3faa956:-8000:000000000000155F'
-              name = 'lang' isSpecification = 'false' isRoot = 'false' isLeaf = 'false'
-              isAbstract = 'false'>
-              <UML:Namespace.ownedElement>
-                <UML:Class xmi.id = '-64--88-1-103-888e6c:118f3faa956:-8000:0000000000001560'
-                  name = 'Integer' isSpecification = 'false' isRoot = 'false' isLeaf = 'false'
-                  isAbstract = 'false' isActive = 'false'/>
-              </UML:Namespace.ownedElement>
-            </UML:Package>
-          </UML:Namespace.ownedElement>
-        </UML:Package>
         <UML:TagDefinition xmi.id = '-64--88-1-103-888e6c:119a2a48fb8:-8000:0000000000001566'
           name = 'NCI_CASCADE_ASSOCIATION#gov.nih.nci.cacoresdk.domain.manytoone.unidirectional.Chef.restaurant'
           isSpecification = 'false' tagType = 'String'>
