@@ -76,7 +76,7 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
     private JButton closeButton = null;
 
 	/*
-	 * caCore SDK Panel definitions
+	 * caCORE SDK Panel definitions
 	 */
 	private JTabbedPane mainTabbedPane = null;
     private JPanel mainPanel = null;
