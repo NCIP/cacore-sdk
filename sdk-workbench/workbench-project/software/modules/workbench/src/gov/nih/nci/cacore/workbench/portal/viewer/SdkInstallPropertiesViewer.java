@@ -109,22 +109,22 @@ public class SdkInstallPropertiesViewer extends WorkbenchViewerBaseComponent {
      */
     private JPanel getMainPanel() {
         if (mainPanel == null) {
-            GridBagConstraints gridBagConstraints111 = new GridBagConstraints();
-            gridBagConstraints111.fill = GridBagConstraints.BOTH;
-            gridBagConstraints111.weighty = 1.0;
-            gridBagConstraints111.weightx = 1.0;
+            GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
+            gridBagConstraints10.fill = GridBagConstraints.BOTH;
+            gridBagConstraints10.weighty = 1.0;
+            gridBagConstraints10.weightx = 1.0;
             
-            GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-            gridBagConstraints1.insets = new java.awt.Insets(5, 5, 5, 5);
-            gridBagConstraints1.gridx = 0;
-            gridBagConstraints1.gridy = 2;
-            gridBagConstraints1.anchor = java.awt.GridBagConstraints.CENTER;
-            gridBagConstraints1.gridheight = 1;
+            GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
+            gridBagConstraints20.insets = new java.awt.Insets(5, 5, 5, 5);
+            gridBagConstraints20.gridx = 0;
+            gridBagConstraints20.gridy = 2;
+            gridBagConstraints20.anchor = java.awt.GridBagConstraints.CENTER;
+            gridBagConstraints20.gridheight = 1;
             
             mainPanel = new JPanel();
             mainPanel.setLayout(new GridBagLayout());
-            mainPanel.add(getButtonPanel(), gridBagConstraints1);
-            mainPanel.add(getMainTabbedPane(), gridBagConstraints111);
+            mainPanel.add(getMainTabbedPane(), gridBagConstraints10);
+            mainPanel.add(getButtonPanel(), gridBagConstraints20);
         }
         return mainPanel;
     }

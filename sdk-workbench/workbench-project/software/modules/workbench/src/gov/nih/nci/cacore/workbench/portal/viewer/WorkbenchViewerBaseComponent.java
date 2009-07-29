@@ -7,10 +7,12 @@ import gov.nih.nci.cacore.workbench.common.WorkbenchPropertiesManager;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.SQLWarning;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -31,6 +33,9 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 	private static final Logger log = Logger.getLogger(WorkbenchViewerBaseComponent.class);
 
 	protected WorkbenchPropertiesManager propsMgr = null;
+	
+	private static final String[] browsers = { "firefox", "opera", "konqueror", "epiphany",
+		"seamonkey", "galeon", "kazehakase", "mozilla", "netscape" };
 	
 	/**
 	 * Will save the code generation properties to be used during subsequent 
@@ -683,6 +688,40 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 	
 	private String generateErrorMsg(String errorMsg){
 		return "Error: " + errorMsg;
+	}
+	
+    /**
+     * This method opens the default browser to the Workbench Help URL
+     * Based upon "Bare Bones Browser Launch" - See http://www.centerkey.com/java/browser/
+     */
+	protected void openURL(String url) {
+		String osName = System.getProperty("os.name");
+		try {
+			if (osName.startsWith("Mac OS")) {
+				Class<?> fileMgr = Class.forName("com.apple.eio.FileManager");
+				Method openURL = fileMgr.getDeclaredMethod("openURL",
+						new Class[] {String.class});
+				openURL.invoke(null, new Object[] {url});
+			}
+			else if (osName.startsWith("Windows"))
+				Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler " + url);
+			else { //assume Unix or Linux
+				boolean found = false;
+				for (String browser : browsers)
+					if (!found) {
+						found = Runtime.getRuntime().exec(
+								new String[] {"which", browser}).waitFor() == 0;
+						if (found)
+							Runtime.getRuntime().exec(new String[] {browser, url});
+					}
+				if (!found)
+					throw new Exception(Arrays.toString(browsers));
+			}
+		}
+		catch (Exception e) {
+			JOptionPane.showMessageDialog(null,
+					"Error attempting to launch workbench help in web browser:\n" + e.toString());
+		}
 	}
 
 }
