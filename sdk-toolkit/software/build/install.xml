@@ -896,9 +896,6 @@
 			<case value="oracle">
 				<database-install db.install.create.file.list="${db.install.create.oracle.file.list}" sql.delimiter="/" sql.delimitertype="row" />
 			</case>
-			<case value="postgresql">
-				<database-install db.install.create.file.list="${db.install.create.postgresql.file.list}" sql.delimiter="/" sql.delimitertype="row" />
-			</case>
 			<case value="mysql">
 				<database-install db.install.create.file.list="${db.install.create.mysql.file.list}" />
 			</case>
