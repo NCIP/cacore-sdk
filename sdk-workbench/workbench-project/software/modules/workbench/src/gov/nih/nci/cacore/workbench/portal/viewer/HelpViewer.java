@@ -5,17 +5,24 @@ import gov.nih.nci.cacore.workbench.common.ResourceManager;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.validation.IconFeedbackPanel;
 
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.beans.PropertyVetoException;
+import java.io.IOException;
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Arrays;
 
 import javax.swing.JButton;
+import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.text.html.HTMLEditorKit;
 
 import org.apache.log4j.Logger;
 
@@ -33,6 +40,10 @@ public class HelpViewer extends WorkbenchViewerBaseComponent {
 	private static final Logger log = Logger.getLogger(HelpViewer.class);
 	
 	private static final String HELP_URL = ResourceManager.getWorkbenchHelpUrl();
+	private static final String HELP_HTML_FILE = "SDKWorkbench.html";
+	private static final String HELP_RTF_FILE = "SDKWorkbench.rtf";
+	private static final String HELP_RTF_FILE_URL = "/"+HELP_RTF_FILE;
+	private static final String HELP_HTML_FILE_URL = "/SDKWorkbench_files/"+HELP_HTML_FILE;
 	
     // Buttons
     private JButton openButton = null;
@@ -69,18 +80,6 @@ public class HelpViewer extends WorkbenchViewerBaseComponent {
         setFrameIcon(LookAndFeel.getGenerateApplicationIcon());
         setTitle("Workbench Help");
 
-//        URL workbenchManualUrl = HelpViewer.class.getResource("/SDKWorkbench.pdf");
-//        log.debug("* * * Workbench User Manual URL: " + workbenchManualUrl);
-//        log.debug("* * * Workbench User Manual URL file: " + workbenchManualUrl.getFile());
-//        
-//        openURL(workbenchManualUrl.getFile());
-//        
-//        if (workbenchManualUrl != null && workbenchManualUrl.getFile().length() >0){
-//        	openURL(workbenchManualUrl.getFile());
-//        }
-        
-//        openURL(HELP_URL);
-
     }
     
     /**
@@ -88,28 +87,71 @@ public class HelpViewer extends WorkbenchViewerBaseComponent {
      */
     public JPanel getHelpPanel() {
         if (helpPanel == null) {
-        	
-            JLabel helpLabel = new JLabel();
-            
+
 			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
-			//gridBagConstraints10.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints10.anchor = java.awt.GridBagConstraints.CENTER;
-			gridBagConstraints10.gridy = 3;
+			gridBagConstraints10.gridy = 1;
 			gridBagConstraints10.gridx = 0;
 			gridBagConstraints10.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints10.gridwidth = 3;
-			//gridBagConstraints10.weighty = 1.0D;
+			gridBagConstraints10.weighty = 1.0D;
 			gridBagConstraints10.weightx = 1.0D; 
-            
-            helpLabel.setText("To open the caCORE Workbench user manual in your default browser, click the 'Open' button below, or go to " + HELP_URL + ".");
 
+            JEditorPane helpEditorPane = new JEditorPane();
+            helpEditorPane.setEditable(false);
+            helpEditorPane.setEnabled(true);
+            helpEditorPane.setEditorKit(new HTMLEditorKit());
+            
+//            URL helpURL = null;
+//			try {
+//            	
+//                java.security.Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
+//				System.setProperty("java.protocol.handler.pkgs","com.sun.net.ssl.internal.www.protocol");
+//				System.setProperty("javax.net.ssl.trustStore","C:/dan/dev/caCore/sdk-trunk/sdk-workbench/workbench-project/software/modules/workbench-conf/conf/jssecacerts");
+//				System.setProperty("javax.net.ssl.trustStore","http://blueoctave.com/FTP/NCICB/jssecacerts");
+//				
+//				helpURL = new URL(HELP_URL);
+//				
+//			} catch (MalformedURLException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			} catch (Exception e){
+//				e.printStackTrace();
+//			}
+			
+            URL helpURL = HelpViewer.class.getResource(HELP_HTML_FILE_URL);
+            
+            if (helpURL != null) {
+                try {
+
+				helpEditorPane.setPage(helpURL);
+//                    helpEditorPane.setPage(HELP_URL);
+                } catch (IOException e) {
+                	// TODO ::
+                    System.err.println("Attempted to read a bad URL: " + HELP_URL);
+                    e.printStackTrace();
+                }
+            }
+//            } else {
+//            	// TODO ::
+//                System.err.println("Couldn't find file: "+HELP_RTF_FILE_URL);
+//            }
+
+            //Put the editor pane in a scroll pane.
+            JScrollPane editorScrollPane = new JScrollPane(helpEditorPane);
+            editorScrollPane.setVerticalScrollBarPolicy(
+                            JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+            editorScrollPane.setSize(new Dimension(900, 500));
+            editorScrollPane.setPreferredSize(new Dimension(900, 500));
+            editorScrollPane.setMinimumSize(new Dimension(900, 500));
+            
         	helpPanel = new JPanel();
         	helpPanel.setLayout(new GridBagLayout());
         	helpPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Workbench Help",
                 javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
                 javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
             
-        	helpPanel.add(helpLabel, gridBagConstraints10);
+        	helpPanel.add(editorScrollPane, gridBagConstraints10);
 
         }
         return helpPanel;
@@ -150,6 +192,12 @@ public class HelpViewer extends WorkbenchViewerBaseComponent {
      */
     private JPanel getButtonPanel() {
         if (buttonPanel == null) {
+        	
+            JLabel helpLabel = new JLabel();
+            helpLabel.setText("To open the caCORE Workbench user manual in your default browser, click the 'Open' button below, or go to " + HELP_URL + ".");
+            
+            // TODO :: add helpLabel
+        	
             buttonPanel = new JPanel();
             buttonPanel.add(getInstallButton(), null);
             buttonPanel.add(getCloseButton(), null);
