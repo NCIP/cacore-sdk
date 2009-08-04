@@ -17,6 +17,7 @@
             <description>File</description>
             <showIcons>true</showIcons>
             <components>
+            <!--  
                 <component>
                     <title>Install SDK</title>
                     <description>Install a Workbench Compatible Version of the SDK</description>
@@ -31,11 +32,12 @@
                     	<centered>true</centered>
                     </renderOptions>
                 </component> 
+             -->
                 <component>
                     <title>Create/Modify Application</title>
                     <description>Manage Code Generation Properties</description>
                     <classname>gov.nih.nci.cacore.workbench.portal.viewer.CodegenPropertiesViewer</classname>
-                    <icon>/images/2.gif</icon>
+                    <icon>/images/1.gif</icon>
                     <showOnToolBar>true</showOnToolBar>
                     <dimensions>
                     	<width>850</width>
@@ -49,6 +51,21 @@
                     <title>Deploy Application</title>
                     <description>Manage Deployment Properties</description>
                     <classname>gov.nih.nci.cacore.workbench.portal.viewer.DeployPropertiesViewer</classname>
+                    <icon>/images/2.gif</icon>
+                    <showOnToolBar>true</showOnToolBar>
+                    <dimensions>
+                    	<width>850</width>
+                    	<height>600</height>
+                    </dimensions>
+                    <renderOptions>
+                    	<centered>true</centered>
+                    </renderOptions>
+                </component>  
+                            <!--  
+                <component>
+                    <title>CSM Workflow</title>
+                    <description>Launch CSM Workflow</description>
+                    <classname>gov.nih.nci.cacore.workbench.portal.viewer.CsmLauncherViewer</classname>
                     <icon>/images/3.gif</icon>
                     <showOnToolBar>true</showOnToolBar>
                     <dimensions>
@@ -58,7 +75,8 @@
                     <renderOptions>
                     	<centered>true</centered>
                     </renderOptions>
-                </component>             
+                </component>  
+                -->            
              </components>
         </menu>
         <menu>
