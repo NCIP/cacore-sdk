@@ -37,6 +37,8 @@ import javax.swing.JTabbedPane;
 
 import org.apache.log4j.Logger;
 
+import com.jgoodies.validation.ValidationMessage;
+import com.jgoodies.validation.ValidationResult;
 import com.jgoodies.validation.ValidationResultModel;
 import com.jgoodies.validation.util.DefaultValidationResultModel;
 import com.jgoodies.validation.view.ValidationComponentUtils;
@@ -194,7 +196,7 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
         dbConnectionSettingsPanel=new DbConnectionSettingsPanel(this,propsValidator);
         csmDbConnectionSettingsPanel=new CsmDbConnectionSettingsPanel(this,propsValidator,securitySettingsPanel.isSecurityEnabled());
         clmSettingsPanel=new ClmSettingsPanel(this,propsValidator,writableApiSettingsPanel.isWritableApiExtensionEnabled());
-        caGridAuthSettingsPanel=new CaGridAuthSettingsPanel(this,propsValidator,securitySettingsPanel.isSecurityEnabled());
+        caGridAuthSettingsPanel=new CaGridAuthSettingsPanel(this,propsValidator,securitySettingsPanel.isSecurityEnabled(),securitySettingsPanel.isCaGridLoginModuleEnabled());
         advancedSettingsPanel=new AdvancedSettingsPanel(this,propsValidator);
         remoteSshSettingsPanel=new RemoteSshSettingsPanel(this, propsValidator);
         
@@ -247,8 +249,25 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
     
     public void toggleDeployButton() {
     	if (this.validationModel.hasErrors() || (this.isDirty) || (mainTabbedPane.getSelectedIndex() != DEPLOY_TAB_INDEX) || (!this.isPropsLoaded) ) {
+
+    		log.debug("Deploy Button is disabled; here's why: ");
+    		log.debug("* * * Validation model has errors? "+this.validationModel.hasErrors());
+    		if (this.validationModel.hasErrors()){
+    			ValidationResult results = validationModel.getResult();
+    			for (ValidationMessage errorMessage:results.getErrors()){
+    				log.debug("* * * * Validation Error Message key: "+errorMessage.key()+"; Validation Error Message: "  + errorMessage.formattedText());
+    			}
+    		}
+    		
+    		log.debug("* * * Viewer is 'Dirty' (properties need to be saved)? "+this.isDirty);
+    		log.debug("* * * Not on Deploy Tab? "+(mainTabbedPane.getSelectedIndex() != DEPLOY_TAB_INDEX));
+    		if (mainTabbedPane.getSelectedIndex() != DEPLOY_TAB_INDEX)
+    			log.debug("* * * Tabbed Panel Index: "+mainTabbedPane.getSelectedIndex() +";  DEPLOY_TAB_INDEX: " + DEPLOY_TAB_INDEX);
+    		log.debug("* * * Have the properties been loaded? " + this.isPropsLoaded);
+
     		deployButton.setEnabled(false);
     	} else {
+    		log.debug("Deploy Button is enabled; required conditions have been met");
     		deployButton.setEnabled(true);
     	}
     }
