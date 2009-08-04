@@ -1005,21 +1005,20 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
             gridBagConstraints111.gridx = 1;
             
             GridBagConstraints gridBagConstraints120 = new GridBagConstraints();
-            gridBagConstraints110.anchor = java.awt.GridBagConstraints.WEST;
-            gridBagConstraints110.gridy = 12;
-            gridBagConstraints110.insets = new java.awt.Insets(2, 2, 2, 2);
-            gridBagConstraints110.gridx = 0;
+            gridBagConstraints120.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints120.gridy = 12;
+            gridBagConstraints120.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints120.gridx = 0;
             
             GridBagConstraints gridBagConstraints121 = new GridBagConstraints();
-            gridBagConstraints111.fill = java.awt.GridBagConstraints.HORIZONTAL;
-            gridBagConstraints111.gridy = 12;
-            gridBagConstraints111.weightx = 1.0;
-            gridBagConstraints111.anchor = java.awt.GridBagConstraints.WEST;
-            gridBagConstraints111.insets = new java.awt.Insets(2, 2, 2, 2);
-            gridBagConstraints111.gridwidth = 2;
-            gridBagConstraints111.weighty = 1.0D;
-            gridBagConstraints111.gridx = 1;
-                        
+            gridBagConstraints121.fill = java.awt.GridBagConstraints.HORIZONTAL;
+            gridBagConstraints121.gridy = 12;
+            gridBagConstraints121.weightx = 1.0;
+            gridBagConstraints121.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints121.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints121.gridwidth = 2;
+            gridBagConstraints121.weighty = 1.0D;
+            gridBagConstraints121.gridx = 1;
                         
 		    validateLogicalModelLabel = new JLabel();
 		    validateLogicalModelLabel.setText("Validate Logical Model?");
