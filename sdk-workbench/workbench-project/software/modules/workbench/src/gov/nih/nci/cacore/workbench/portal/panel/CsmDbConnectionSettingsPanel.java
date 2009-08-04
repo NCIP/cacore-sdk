@@ -39,13 +39,13 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
 	
 	// Validation Message Constants
 	private static final String CSM_USE_DB_CONNECTION_SETTINGS = "Use DB Connection Settings";
-	private static final String CSM_JNDI_NAME = "JNDI Name";
-	private static final String CSM_DB_CONNECTION_URL = "DB Connection URL";
-	private static final String CSM_DB_SERVER = "DB Hostname";
-	private static final String CSM_DB_SERVER_PORT = "DB Port";
-	private static final String CSM_DB_NAME = "DB Schema";
-	private static final String CSM_DB_USERNAME = "DB Username";
-	private static final String CSM_DB_PASSWORD = "DB Password";
+	private static final String CSM_JNDI_NAME = "CSM JNDI Name";
+	private static final String CSM_DB_CONNECTION_URL = "CSM DB Connection URL";
+	private static final String CSM_DB_SERVER = "CSM DB Hostname";
+	private static final String CSM_DB_SERVER_PORT = "CSM DB Port";
+	private static final String CSM_DB_NAME = "CSM DB Schema";
+	private static final String CSM_DB_USERNAME = "CSM DB Username";
+	private static final String CSM_DB_PASSWORD = "CSM DB Password";
     
     // Cross-panel properties
     boolean isEnableSecuritySelected;
@@ -1116,15 +1116,6 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
     	ValidationResult result = new ValidationResult();
 
     	if (isEnableSecuritySelected && !getCsmUseDbConnectionSettingsCheckBox().isSelected()){
-
-    		String csmDbConnectionUrlField = this.getCsmDbConnectionUrlField().getText();
-    		if (!ValidationUtils.isNotBlank(csmDbConnectionUrlField)) {
-    			result.add(new SimpleValidationMessage(CSM_DB_CONNECTION_URL + " must not be blank.", Severity.ERROR, CSM_DB_CONNECTION_URL));
-    		}
-
-    		if (getCsmDbConnectionUrlField().getText().indexOf('<') > 1 || csmDbConnectionUrlField.indexOf('@') > 1) {
-    			result.add(new SimpleValidationMessage(CSM_DB_CONNECTION_URL + " information is incomplete.  Make sure hostname, port and schema information is correct.", Severity.ERROR, CSM_DB_CONNECTION_URL));
-    		}
 
     		if (!ValidationUtils.isNotBlank(getCsmDbHostnameField().getText())) {
     			result.add(new SimpleValidationMessage(CSM_DB_SERVER + " must not be blank.", Severity.ERROR, CSM_DB_SERVER));
