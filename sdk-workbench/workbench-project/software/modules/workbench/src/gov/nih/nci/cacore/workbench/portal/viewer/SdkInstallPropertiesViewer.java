@@ -156,7 +156,7 @@ public class SdkInstallPropertiesViewer extends WorkbenchViewerBaseComponent {
             installButton.setIcon(LookAndFeel.getGenerateApplicationIcon());
             installButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    installSdk(sdkInstallSettingsPanel.getSdkInstallDirValue());
+                    //installSdk(sdkInstallSettingsPanel.getSdkInstallDirValue());
                 }
             });
         }
