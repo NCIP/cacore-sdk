@@ -55,12 +55,12 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 			final String modelFilePath, 
 			final Map<String,String> workbenchPropsMap) {
 		
-		int doIdeleteResult = JOptionPane.OK_OPTION;
+		int doIProceedResult = JOptionPane.OK_OPTION;
 		final File projectTemplateDir = new File(projectTemplateDirPath);
 		final File projectDir = new File(projectDirPath);
 
 		if (projectDir.exists() && projectDir.list().length != 0) {
-			doIdeleteResult = JOptionPane.NO_OPTION;
+			doIProceedResult = JOptionPane.NO_OPTION;
 //			File buildScript = new File(projectDir.getAbsolutePath() + File.separator + "build.xml");
 			File codegenPropsFile = ResourceManager.getCodegenPropsFile(projectDirPath);
 			
@@ -69,22 +69,22 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 			
 			//if (buildScript.exists() && codegenPropsFile.exists()) {
 			if (codegenPropsFile.exists()) {
-				doIdeleteResult = JOptionPane
+				doIProceedResult = JOptionPane
 				.showConfirmDialog(
 						this,
 						"The project generation directory (" + projectDirPath + ") is not empty.\n"
-						+"All existing code generation property information in the directory will\n"
+						+"Any existing code generation property information in the directory will\n"
 						+"be overwritten.\n"
 						+"\n"
 						+"Proceed?",
 						"Confirm Overwrite", 
 						JOptionPane.YES_NO_OPTION);
 			} else {
-				doIdeleteResult = JOptionPane.OK_OPTION;
+				doIProceedResult = JOptionPane.OK_OPTION;
 			}
 		} 
 
-		if (doIdeleteResult == JOptionPane.OK_OPTION) {
+		if (doIProceedResult == JOptionPane.OK_OPTION) {
 			final File sdkDirFile = new File(sdkDirPath);
 			final File codegenPropsFile = ResourceManager.getCodegenPropsFile(projectDirPath);
 			final Object obj = new Object();
@@ -99,6 +99,8 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 						if (!sdkDirFile.exists()) {
 							setErrorMessage(generateErrorMsg("The specified SDK installation home directory does not exist: "+sdkDirPath));
 							return;
+						} else {
+							installSdk(sdkDirPath,this);
 						}
 						
 						if (!projectTemplateDir.exists()) {
@@ -171,38 +173,38 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 			final String dbSqlFilePath,
 			final Map<String,String> workbenchPropsMap) {
 		
-		int doIdeleteResult = JOptionPane.OK_OPTION;
+		int doIProceedResult = JOptionPane.OK_OPTION;
 		final File projectTemplateDir = new File(projectTemplateDirPath);
 		final File projectDir = new File(projectDirPath);
 
 		if (projectDir.exists() && projectDir.list().length != 0) {
-			doIdeleteResult = JOptionPane.NO_OPTION;
+			doIProceedResult = JOptionPane.NO_OPTION;
 //			File buildScript = new File(projectDir.getAbsolutePath() + File.separator + "build.xml");
 			
 			final File codegenPropsFile = ResourceManager.getCodegenPropsFile(projectDirPath);
 			
 			//if (buildScript.exists() && codegenPropsFile.exists()) {
 			if (codegenPropsFile.exists()) {
-				doIdeleteResult = JOptionPane
+				doIProceedResult = JOptionPane
 				.showConfirmDialog(
 						this,
 						"The project generation directory (" + projectDirPath + ") is not\n"
-						+"empty.  All existing deployment property information in the directory will\n"
+						+"empty.  Any existing deployment property information in the directory will\n"
 						+"be overwritten.\n"
 						+"\n"
 						+"Proceed?",
 						"Confirm Overwrite", 
 						JOptionPane.YES_NO_OPTION);
 			} else {
-				doIdeleteResult = JOptionPane.OK_OPTION;
+				doIProceedResult = JOptionPane.OK_OPTION;
 			}
 		} 
 
-		if (doIdeleteResult != JOptionPane.OK_OPTION) {
+		if (doIProceedResult != JOptionPane.OK_OPTION) {
 			return false;
 		} 
 		
-		if (doIdeleteResult == JOptionPane.OK_OPTION) {
+		if (doIProceedResult == JOptionPane.OK_OPTION) {
 			final File sdkDirFile = new File(sdkDirPath);
 			final File deployPropsFile = ResourceManager.getDeployPropsFile(projectDirPath,remoteDeployEnv);		
 			final File certFile = new File(certFilePath);
@@ -220,6 +222,8 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 						if (!sdkDirFile.exists()) {
 							setErrorMessage(generateErrorMsg("The specified SDK installation home directory does not exist: "+sdkDirPath));
 							return;
+						} else {
+							installSdk(sdkDirPath,this);
 						}
 						
 						if (!projectTemplateDir.exists()) {
@@ -293,62 +297,68 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 	 *            a map of the properties to be used during the 
 	 *            project application generation
 	 */
-	public void installSdk(final String sdkInstallDirPath) {
+	public void installSdk(final String sdkInstallDirPath, BusyDialogRunnable r) {
 		
-		int doIdeleteResult = JOptionPane.NO_OPTION;
+		int doIProceedResult = JOptionPane.NO_OPTION;
 		final File sdkInstallDir = new File(sdkInstallDirPath);
-
-		if (sdkInstallDir.exists() && sdkInstallDir.list().length > 0) {
-			doIdeleteResult = JOptionPane
-			.showConfirmDialog(
-					this,
-					"The SDK installation home directory (" + sdkInstallDirPath + ") is not empty.\n"
-					+"Any existing content within the directory may be overwritten.\n"
-					+"\n"
-					+"Proceed?",
-					"Confirm Overwrite", 
-					JOptionPane.YES_NO_OPTION);
-		} else{
-			doIdeleteResult = JOptionPane.OK_OPTION;
+		
+		if (!sdkInstallDir.exists()) {
+			log.error("The specified SDK installation home directory does not exist and needs to be created: "+sdkInstallDirPath+".  Unable to install an instance of the SDK.");
+			return;
 		}
 
-		if (doIdeleteResult == JOptionPane.OK_OPTION) {	
+		if (sdkInstallDir.list().length == 0) {
+			doIProceedResult = JOptionPane
+			.showConfirmDialog(
+					this,
+					"The SDK installation home directory (" + sdkInstallDirPath + ") exists but is empty.\n"
+					+"An SDK instance is needed by the Workbench and will be installed.\n"
+					+"\n"
+					+"Proceed?",
+					"Confirm SDK Installation", 
+					JOptionPane.YES_NO_OPTION);
+		} else{
+			log.info("The specified SDK installation home directory already exists and is not empty: "+sdkInstallDirPath+".  Skipping the 'Install SDK' step.");
+			return;
+		}
+
+		if (doIProceedResult == JOptionPane.OK_OPTION) {	
 
 			WorkbenchViewerBaseComponent.this.setVisible(false);
 			dispose();
 
-			BusyDialogRunnable r = new BusyDialogRunnable(GridApplication.getContext().getApplication(), "Installing") {
-				@Override
-				public void process() {
+//			BusyDialogRunnable r = new BusyDialogRunnable(GridApplication.getContext().getApplication(), "Installing") {
+//				@Override
+//				public void process() {
 					try {
 						
 						if (!sdkInstallDir.exists()) {
-							setErrorMessage(generateErrorMsg("The specified SDK installation home directory (" + sdkInstallDirPath + ") does not exist."));
+							r.setErrorMessage(generateErrorMsg("The specified SDK installation home directory (" + sdkInstallDirPath + ") does not exist."));
 							return;
 						}
 						
-						setProgressText("Installing the SDK");
+						r.setProgressText("Installing the SDK");
 						
 						try {
 							AntTools.installSdk(sdkInstallDirPath);
 						} catch (BuildException e) {
 							log.error("ERROR: "+ e.getMessage(),e);
-							setErrorMessage(generateErrorMsg("Failed to install the SDK!"));
+							r.setErrorMessage(generateErrorMsg("Failed to install the SDK!"));
 							return;
 						}
 				
-						setErrorMessage("The SDK has been Successfully Installed");
+						r.setErrorMessage("The SDK has been Successfully Installed");
 
 					} catch (Exception e) {
 						log.error("ERROR: "+ e.getMessage(),e);
-						setErrorMessage(generateErrorMsg(e));
+						r.setErrorMessage(generateErrorMsg(e));
 						return;
 					}
-				}
-			};
-			
-			Thread th = new Thread(r);
-			th.start();
+//				}
+//			};
+//			
+//			Thread th = new Thread(r);
+//			th.start();
 		}
 	}
 	
@@ -369,7 +379,7 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 			final String projectTemplateDirPath,
 			final String projectDirPath) {
 		
-		int doIdeleteResult = JOptionPane.NO_OPTION;
+		int doIProceedResult = JOptionPane.NO_OPTION;
 		final File projectTemplateDir = new File(projectTemplateDirPath);
 		final File projectDir = new File(projectDirPath);
 
@@ -381,7 +391,7 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 			
 //			if (buildScript.exists() && codegenPropsFile.exists()) {
 			if (codegenPropsFile.exists()) {
-				doIdeleteResult = JOptionPane
+				doIProceedResult = JOptionPane
 				.showConfirmDialog(
 						this,
 						"The project generation directory (" + projectDirPath + ") is not empty.\n"
@@ -408,7 +418,7 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 					+"contains the code generation properties.");
 		}
 
-		if (doIdeleteResult == JOptionPane.OK_OPTION) {
+		if (doIProceedResult == JOptionPane.OK_OPTION) {
 			final File sdkDirFile = new File(sdkDirPath);		
 
 			WorkbenchViewerBaseComponent.this.setVisible(false);
@@ -421,6 +431,8 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 						if (!sdkDirFile.exists()) {
 							setErrorMessage(generateErrorMsg("The specified SDK installation home directory does not exist: "+sdkDirPath));
 							return;
+						} else {
+							installSdk(sdkDirPath,this);
 						}
 						
 						if (!projectTemplateDir.exists()) {
@@ -482,7 +494,7 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 			final String projectDirPath,
 			final String remoteDeployEnv) {
 		
-		int doIdeleteResult = JOptionPane.NO_OPTION;
+		int doIProceedResult = JOptionPane.NO_OPTION;
 		final File projectTemplateDir = new File(projectTemplateDirPath);
 		final File projectDir = new File(projectDirPath);
 
@@ -502,7 +514,7 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 						+"must specify a directory that already contains both the code generation and\n"
 						+"deployment properties.");
 			} else {
-				doIdeleteResult = JOptionPane.OK_OPTION;
+				doIProceedResult = JOptionPane.OK_OPTION;
 			}
 		} else {
 			JOptionPane
@@ -513,7 +525,7 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 					+"contains the code generation properties.");
 		}
 
-		if (doIdeleteResult == JOptionPane.OK_OPTION) {
+		if (doIProceedResult == JOptionPane.OK_OPTION) {
 			final File sdkDirFile = new File(sdkDirPath);	
 			final File deployPropsFile = ResourceManager.getDeployPropsFile(projectDirPath,remoteDeployEnv);
 
@@ -527,6 +539,8 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 						if (!sdkDirFile.exists()) {
 							setErrorMessage(generateErrorMsg("The specified SDK installation home directory does not exist: "+sdkDirPath));
 							return;
+						} else {
+							installSdk(sdkDirPath,this);
 						}
 						
 						if (!projectTemplateDir.exists()) {
