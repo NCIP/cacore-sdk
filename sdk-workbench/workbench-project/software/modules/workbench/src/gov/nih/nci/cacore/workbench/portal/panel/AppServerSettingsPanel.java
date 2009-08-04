@@ -4,6 +4,7 @@ import gov.nih.nci.cacore.workbench.common.OptionsMapManager;
 import gov.nih.nci.cacore.workbench.portal.validation.PanelValidator;
 import gov.nih.nci.cacore.workbench.portal.validation.TabbedPanePropertiesValidator;
 import gov.nih.nci.cacore.workbench.portal.viewer.DeployPropertiesViewer;
+import gov.nih.nci.cacore.workbench.portal.viewer.HelpViewer;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 
 import java.awt.GridBagConstraints;
@@ -22,6 +23,8 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import org.apache.log4j.Logger;
+
 import com.jgoodies.validation.Severity;
 import com.jgoodies.validation.ValidationResult;
 import com.jgoodies.validation.message.SimpleValidationMessage;
@@ -29,6 +32,8 @@ import com.jgoodies.validation.util.ValidationUtils;
 import com.jgoodies.validation.view.ValidationComponentUtils;
 
 public final class AppServerSettingsPanel implements Panel, PanelValidator {
+	
+	private static final Logger log = Logger.getLogger(AppServerSettingsPanel.class);
 	
 	private TabbedPanePropertiesValidator mainPanelValidator = null;
 	private DeployPropertiesViewer parentContainer = null;
@@ -122,7 +127,13 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
     
     protected void toggleServerFields() {
     	String serverType = getServerTypeComboBox().getSelectedItem().toString();
+
+    	log.debug("Toggling Server Fields:  serverType: " + serverType);
 		if (serverType.equalsIgnoreCase(TOMCAT)){
+		    
+		    getTomcatSettingsSubPanel().setVisible(true);
+		    getJBossSettingsSubPanel().setVisible(false);
+		    
 		    getTomcatHostnameField().setEnabled(true);
 		    getTomcatPortAjpField().setEnabled(true);
 		    getTomcatPortHttpField().setEnabled(true);
@@ -137,6 +148,10 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
 		    getJbossServerSslPortField().setEnabled(false);
 		    
 		} else if (serverType.equalsIgnoreCase(JBOSS)){
+		    
+		    getTomcatSettingsSubPanel().setVisible(false);
+		    getJBossSettingsSubPanel().setVisible(true);
+		    
 		    getTomcatHostnameField().setEnabled(false);
 		    getTomcatPortAjpField().setEnabled(false);
 		    getTomcatPortHttpField().setEnabled(false);
@@ -149,7 +164,12 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
 		    getJbossServerJndiPortField().setEnabled(true);
 		    getJbossServerPortField().setEnabled(true);
 		    getJbossServerSslPortField().setEnabled(true);
+
 		} else {
+		    
+		    getTomcatSettingsSubPanel().setVisible(false);
+		    getJBossSettingsSubPanel().setVisible(false);
+		    
 		    getTomcatHostnameField().setEnabled(false);
 		    getTomcatPortAjpField().setEnabled(false);
 		    getTomcatPortHttpField().setEnabled(false);
@@ -162,7 +182,12 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
 		    getJbossServerJndiPortField().setEnabled(false);
 		    getJbossServerPortField().setEnabled(false);
 		    getJbossServerSslPortField().setEnabled(false);
+
+
 		}
+		
+		getSettingsPanel().validate();// in order to 'repaint' the panel
+		
     }
 
     /**
@@ -961,10 +986,10 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
 			
 			jbossServerSettingsSubPanel.add(jbossPortConfigurationLabel, gridBagConstraints20);
 			jbossServerSettingsSubPanel.add(getJbossPortConfigurationComboBox(), gridBagConstraints21);
-			jbossServerSettingsSubPanel.add(jbossServerAjpPortLabel, gridBagConstraints30);
-			jbossServerSettingsSubPanel.add(getJbossServerAjpPortField(), gridBagConstraints31);
-			jbossServerSettingsSubPanel.add(jbossServerHostnameLabel, gridBagConstraints40);
-			jbossServerSettingsSubPanel.add(getJbossServerHostnameField(), gridBagConstraints41);
+			jbossServerSettingsSubPanel.add(jbossServerHostnameLabel, gridBagConstraints30);
+			jbossServerSettingsSubPanel.add(getJbossServerHostnameField(), gridBagConstraints31);
+			jbossServerSettingsSubPanel.add(jbossServerAjpPortLabel, gridBagConstraints40);
+			jbossServerSettingsSubPanel.add(getJbossServerAjpPortField(), gridBagConstraints41);
 			jbossServerSettingsSubPanel.add(jbossServerJndiPortLabel, gridBagConstraints50);
 			jbossServerSettingsSubPanel.add(getJbossServerJndiPortField(), gridBagConstraints51);
 			jbossServerSettingsSubPanel.add(jbossServerPortLabel, gridBagConstraints60);
@@ -1144,7 +1169,6 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
         		
         	} else if (serverType.equalsIgnoreCase(JBOSS)){
     		    
-  		    
     		    jbossPortConfigurationLabel = new JLabel();
     		    jbossPortConfigurationLabel.setText("Port Configuration:");
     		    jbossPortConfigurationValueLabel = new JLabel();
@@ -1158,7 +1182,7 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
     		    jbossServerHostnameLabel= new JLabel();
     		    jbossServerHostnameLabel.setText("Server Hostname:");
     		    jbossServerHostnameValueLabel = new JLabel();
-    		    jbossServerHostnameValueLabel.setText(getJbossServerAjpPortField().getText());
+    		    jbossServerHostnameValueLabel.setText(getJbossServerHostnameField().getText());
     		    
     		    jbossServerJndiPortLabel = new JLabel();
     		    jbossServerJndiPortLabel.setText("Server JNDI Port:");
@@ -1195,11 +1219,11 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
                 appServerSettingsReviewPanel.add(tomcatPortSslValueLabel, gridBagConstraints61);
         	} else if (serverType.equalsIgnoreCase(JBOSS)){
                 appServerSettingsReviewPanel.add(jbossPortConfigurationLabel, gridBagConstraints20);
-                appServerSettingsReviewPanel.add(jbossPortConfigurationValueLabel, gridBagConstraints21);               
-                appServerSettingsReviewPanel.add(jbossServerAjpPortLabel, gridBagConstraints30);
-                appServerSettingsReviewPanel.add(jbossServerAjpPortValueLabel, gridBagConstraints31);
-                appServerSettingsReviewPanel.add(jbossServerHostnameLabel, gridBagConstraints40);
-                appServerSettingsReviewPanel.add(jbossServerHostnameValueLabel, gridBagConstraints41);
+                appServerSettingsReviewPanel.add(jbossPortConfigurationValueLabel, gridBagConstraints21);  
+                appServerSettingsReviewPanel.add(jbossServerHostnameLabel, gridBagConstraints30);
+                appServerSettingsReviewPanel.add(jbossServerHostnameValueLabel, gridBagConstraints31);
+                appServerSettingsReviewPanel.add(jbossServerAjpPortLabel, gridBagConstraints40);
+                appServerSettingsReviewPanel.add(jbossServerAjpPortValueLabel, gridBagConstraints41);
                 appServerSettingsReviewPanel.add(jbossServerJndiPortLabel, gridBagConstraints50);
                 appServerSettingsReviewPanel.add(jbossServerJndiPortValueLabel, gridBagConstraints51);
                 appServerSettingsReviewPanel.add(jbossServerPortLabel, gridBagConstraints60);
@@ -1231,20 +1255,40 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
     			result.add(new SimpleValidationMessage(TOMCAT_HOSTNAME + " must not be blank.", Severity.ERROR, TOMCAT_HOSTNAME));
     		} 
     		
-    		if (!ValidationUtils.isNotBlank(this.getTomcatPortAjpField().getText())) {
+    		String tomcatAjpPort = this.getTomcatPortAjpField().getText();
+    		if (!ValidationUtils.isNotBlank(tomcatAjpPort)) {
     			result.add(new SimpleValidationMessage(TOMCAT_PORT_AJP + " must not be blank.", Severity.ERROR, TOMCAT_PORT_AJP));
     		} 
     		
-    		if (!ValidationUtils.isNotBlank(this.getTomcatPortHttpField().getText())) {
+    		if (!ValidationUtils.isNumeric(tomcatAjpPort)){
+    			result.add(new SimpleValidationMessage(TOMCAT_PORT_AJP + " must be numeric.", Severity.ERROR, TOMCAT_PORT_AJP));
+    		}
+    		
+    		String tomcatHttpPort = this.getTomcatPortHttpField().getText();
+    		if (!ValidationUtils.isNotBlank(tomcatHttpPort)) {
     			result.add(new SimpleValidationMessage(TOMCAT_PORT_HTTP + " must not be blank.", Severity.ERROR, TOMCAT_PORT_HTTP));
     		}
     		
-    		if (!ValidationUtils.isNotBlank(this.getTomcatPortShutdownField().getText())) {
+    		if (!ValidationUtils.isNumeric(tomcatHttpPort)){
+    			result.add(new SimpleValidationMessage(TOMCAT_PORT_HTTP + " must be numeric.", Severity.ERROR, TOMCAT_PORT_HTTP));
+    		}
+    		
+    		String tomcatShutdownPort = this.getTomcatPortShutdownField().getText();
+    		if (!ValidationUtils.isNotBlank(tomcatShutdownPort)) {
     			result.add(new SimpleValidationMessage(TOMCAT_PORT_SHUTDOWN + " must not be blank.", Severity.ERROR, TOMCAT_PORT_SHUTDOWN));
     		} 
     		
-    		if (!ValidationUtils.isNotBlank(this.getTomcatPortSslField().getText())) {
+    		if (!ValidationUtils.isNumeric(tomcatShutdownPort)){
+    			result.add(new SimpleValidationMessage(TOMCAT_PORT_SHUTDOWN + " must be numeric.", Severity.ERROR, TOMCAT_PORT_SHUTDOWN));
+    		}
+    		
+    		String tomcatSslPort = this.getTomcatPortSslField().getText();
+    		if (!ValidationUtils.isNotBlank(tomcatSslPort)) {
     			result.add(new SimpleValidationMessage(TOMCAT_PORT_SSL + " must not be blank.", Severity.ERROR, TOMCAT_PORT_SSL));
+    		}
+    		
+    		if (!ValidationUtils.isNumeric(tomcatSslPort)){
+    			result.add(new SimpleValidationMessage(TOMCAT_PORT_SSL + " must be numeric.", Severity.ERROR, TOMCAT_PORT_SSL));
     		}
     		
     	} else if (serverType.equalsIgnoreCase(JBOSS)){
@@ -1253,25 +1297,45 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
     			result.add(new SimpleValidationMessage(JBOSS_PORT_CONFIGURATION + " must not be blank.", Severity.ERROR, JBOSS_PORT_CONFIGURATION));
     		} 
     		
-    		if (!ValidationUtils.isNotBlank(this.getJbossServerAjpPortField().getText())) {
-    			result.add(new SimpleValidationMessage(JBOSS_SERVER_AJP_PORT + " must not be blank.", Severity.ERROR, JBOSS_SERVER_AJP_PORT));
-    		} 
-    		
     		if (!ValidationUtils.isNotBlank(this.getJbossServerHostnameField().getText())) {
     			result.add(new SimpleValidationMessage(JBOSS_SERVER_HOSTNAME + " must not be blank.", Severity.ERROR, JBOSS_SERVER_HOSTNAME));
     		} 
     		
-    		if (!ValidationUtils.isNotBlank(this.getJbossServerJndiPortField().getText())) {
+    		String JbossAjpPort = this.getJbossServerAjpPortField().getText();
+    		if (!ValidationUtils.isNotBlank(JbossAjpPort)) {
+    			result.add(new SimpleValidationMessage(JBOSS_SERVER_AJP_PORT + " must not be blank.", Severity.ERROR, JBOSS_SERVER_AJP_PORT));
+    		} 
+    		
+    		if (!ValidationUtils.isNumeric(JbossAjpPort)){
+    			result.add(new SimpleValidationMessage(JBOSS_SERVER_AJP_PORT + " must be numeric.", Severity.ERROR, JBOSS_SERVER_AJP_PORT));
+    		}
+    		
+    		String jbossJndiPort = this.getJbossServerJndiPortField().getText();
+    		if (!ValidationUtils.isNotBlank(jbossJndiPort)) {
     			result.add(new SimpleValidationMessage(JBOSS_SERVER_JNDI_PORT + " must not be blank.", Severity.ERROR, JBOSS_SERVER_JNDI_PORT));
     		} 
     		
-    		if (!ValidationUtils.isNotBlank(this.getJbossServerPortField().getText())) {
+    		if (!ValidationUtils.isNumeric(jbossJndiPort)){
+    			result.add(new SimpleValidationMessage(JBOSS_SERVER_JNDI_PORT + " must be numeric.", Severity.ERROR, JBOSS_SERVER_JNDI_PORT));
+    		}
+    		
+    		String jbossPort = this.getJbossServerPortField().getText();
+    		if (!ValidationUtils.isNotBlank(jbossPort)) {
     			result.add(new SimpleValidationMessage(JBOSS_SERVER_PORT + " must not be blank.", Severity.ERROR, JBOSS_SERVER_PORT));
     		} 
+    		
+    		if (!ValidationUtils.isNumeric(jbossPort)){
+    			result.add(new SimpleValidationMessage(JBOSS_SERVER_PORT + " must be numeric.", Severity.ERROR, JBOSS_SERVER_PORT));
+    		}
 
-    		if (!ValidationUtils.isNotBlank(this.getJbossServerSslPortField().getText())) {
+    		String jbossSslPort = this.getJbossServerSslPortField().getText();
+    		if (!ValidationUtils.isNotBlank(jbossSslPort)) {
     			result.add(new SimpleValidationMessage(JBOSS_SERVER_SSL_PORT + " must not be blank.", Severity.ERROR, JBOSS_SERVER_SSL_PORT));
-    		}   		
+    		}
+    		
+    		if (!ValidationUtils.isNumeric(jbossSslPort)){
+    			result.add(new SimpleValidationMessage(JBOSS_SERVER_SSL_PORT + " must be numeric.", Severity.ERROR, JBOSS_SERVER_SSL_PORT));
+    		}
     	}
     	
     	return result;
@@ -1340,4 +1404,5 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
 		
     	return propsMap;
     }
+    
 }
