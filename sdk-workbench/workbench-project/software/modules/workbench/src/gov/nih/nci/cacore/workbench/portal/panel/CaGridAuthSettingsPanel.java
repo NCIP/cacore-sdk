@@ -45,10 +45,12 @@ public final class CaGridAuthSettingsPanel implements Panel, PanelValidator {
 
 	public CaGridAuthSettingsPanel(DeployPropertiesViewer parentContainer,
 			TabbedPanePropertiesValidator mainPanelValidator,
-			boolean isSecurityEnabled) {
+			boolean isSecurityEnabled,
+			boolean isCaGridLoginModuleEnabled) {
 		this.parentContainer=parentContainer;
 		this.mainPanelValidator = mainPanelValidator;
 		this.isSecurityEnabled = isSecurityEnabled;
+		this.isCaGridLoginModuleEnabled = isCaGridLoginModuleEnabled;
 	}
 
 	// caGrid Auth Settings Panel
@@ -67,6 +69,7 @@ public final class CaGridAuthSettingsPanel implements Panel, PanelValidator {
     
     // Cross-panel properties
     boolean isSecurityEnabled;
+    boolean isCaGridLoginModuleEnabled;
     
     /**
      * This method initializes the caGrid Security Certificate File Field
@@ -508,7 +511,7 @@ public final class CaGridAuthSettingsPanel implements Panel, PanelValidator {
     	ValidationResult result = new ValidationResult();
     	
         //Security setting Validation
-    	if (isSecurityEnabled){
+    	if (isSecurityEnabled && isCaGridLoginModuleEnabled){
     		
     		//caGrid Authentication Setting Validation		
     		if ( getCaGridTargetGridComboBox().getSelectedItem().toString()=="") {
