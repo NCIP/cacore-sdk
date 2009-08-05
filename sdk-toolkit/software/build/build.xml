@@ -9,7 +9,6 @@
 	<!-- The project.properties stores properties that are shared between both build.xml and install.xml. Typically properties that are related to the distribution directories, or files. -->
 
 	<!-- BDA standard structure -->
-	
 	<property name="software.dir" location=".." />
 	<property name="build.dir" location="${software.dir}/build" />
 	<property name="common.dir" location="${software.dir}/common" />
@@ -37,7 +36,6 @@
 	<property name="target.workspace.dir" location="${target.dir}/workspace" />
 
 	<property file="${build.dir}/project.properties" />
-
 	<!-- Set application.base.path based on platform -->
 	<condition property="application.base.path" value="${application.base.path.linux}">
 		<or>
@@ -45,19 +43,15 @@
 			<os family="mac" />
 		</or>
 	</condition>
-
 	<condition property="application.base.path" value="${application.base.path.windows}">
 		<os family="windows" />
 	</condition>
 	<property name="jboss.home" value="${application.base.path}/${jboss.relative.path}" />
 	<property name="tomcat.home" value="${application.base.path}/${tomcat.relative.path}" />
-
-
-
+	
 	<!-- added for remote deployments since file is copied to root of install dir -->
 	<basename property="properties.file.name" file="${properties.file}" />
-
-
+	
 	<!-- Ivy Related props -->
 	<property name="ivy.settings.file" value="ivysettings.xml" />
 	<property name="ivy.file" value="ivy-2.0.0-beta2.jar" />
@@ -203,9 +197,9 @@
 	<target name="build:all" description="Builds all the sub projects, putting artifacts in the project level target directory, used by distribution targets to make distributions" depends="
 		clean,
 		init,
+		build:workspace-modules,
 		build:project-webapp,
-		build:project-webapp:dist,
-		dist:installer
+		build:project-webapp:dist
 		" />
 
 	<target name="build:workspace-modules" description="Call modules build target to produce artifacts">
@@ -332,22 +326,32 @@
 	</target>
 
 	<target name="dist:upgrader" depends="dist:upgrader:prep" description="Produces zip file based on installer distribution area. Zip is used by deploy:remote:* or external installations">
-		<delete file="${dist.dir}/${bda-blueprints-webapp.upgrade.zip.file}" />
-		<obfuscate-properties-file properties.file="${dist.exploded.dir}/install.properties" required.property.list="application.base.path.linux,application.base.path.windows,database.system.user,database.system.password,database.server,database.port,database.name,database.user,database.password,mail.smtp.host,jboss.server.hostname" optional.property.list="ldap.url,ldap.basedn" delete.property.list="exclude.jboss.backup" />
+		<delete file="${dist.dir}/${project-webapp.install.zip.file}" />
+		<delete file="${dist.exploded.dir}/install.properties"/>
 		<copy todir="${dist.exploded.dir}" overwrite="true">
-			<fileset dir="${build.dir}">
+			<fileset dir="${project.build.home}">
 				<include name="upgrade.properties" />
+				<include name="codegen.properties" />
 			</fileset>
 		</copy>
+		<obfuscate-properties-file
+			properties.file="${dist.exploded.dir}/upgrade.properties"
+			comment.property.list="application.base.path.windows,application.base.path.linux,jboss.relative.path,tomcat.relative.path"
+			uncomment.property.list="application.base.path,tomcat.home,jboss.home"
+			required.property.list="application.base.path,jboss.home,jboss.server.name,tomcat.home"
+			optional.property.list=""
+			delete.property.list=""
+			/>
+		<replaceregexp file="${dist.exploded.dir}/upgrade.properties" byline="true" match="^(env.name)=.*" replace="\1=external" />
 		<replaceregexp file="${dist.exploded.dir}/build.xml" byline="true" match="(&lt;property name=&quot;properties.file&quot;\s+value=&quot;).*(&quot;\s*\/&gt;)" replace="\1upgrade.properties\2" />
-		<zip destfile="${dist.dir}/${bda-blueprints-webapp.upgrade.zip.file}" basedir="${dist.exploded.dir}" />
+		<zip destfile="${dist.dir}/${project-webapp.install.zip.file}" basedir="${dist.exploded.dir}" />
 	</target>
 
 	<target name="-copyProjectProperties">
 		<copy todir="${dist.exploded.dir}" overwrite="true">
 			<fileset dir="${project.build.home}" includes="*.properties" />
 		</copy>
-			<!-- copy common/resources folder to exploded folder -->
+		<!-- copy common/resources folder to exploded folder -->
 		<echo>Copying dir from ${project.common.resources.dir} .......</echo>
 		<copy todir="${dist.exploded.dir}/common">
 			<fileset dir="${project.common.dir}" />
@@ -363,11 +367,27 @@
 	</target>
 
 	<target name="deploy:local:upgrade:nocodegen" depends="-copyProjectProperties">
-		<deploy-local target.name="${upgrade.target}" />
+		<delete file="${dist.exploded.dir}/install.properties"/>
+		<copy todir="${dist.exploded.dir}" overwrite="true">
+			<fileset dir="${project.build.home}">
+				<include name="upgrade.properties" />
+				<include name="codegen.properties" />
+			</fileset>
+		</copy>
+		<obfuscate-properties-file
+			properties.file="${dist.exploded.dir}/upgrade.properties"
+			comment.property.list="application.base.path.windows,application.base.path.linux,jboss.relative.path,tomcat.relative.path"
+			uncomment.property.list="application.base.path,tomcat.home,jboss.home"
+			required.property.list="application.base.path,jboss.home,jboss.server.name,tomcat.home"
+			optional.property.list=""
+			delete.property.list=""
+			/>
+		<deploy-local target.name="${upgrade.target}"
+					properties.file="${upgrade.properties.file}" />
 	</target>
 
 	<!-- build:all,  -->
-	<target name="deploy:local:install" depends="build:workspace-modules,build:all,dist:installer:prep,-copyProjectProperties,deploy:local:install:nocodegen" description="Installs and configures the application and required binaries and re-creates the datbase  on the local machine. Used for developer desktops and ci environments.">
+	<target name="deploy:local:install" depends="build:all,dist:installer:prep,deploy:local:install:nocodegen" description="Installs and configures the application and required binaries and re-creates the datbase  on the local machine. Used for developer desktops and ci environments.">
 	</target>
 
 	<target name="deploy:local:upgrade" depends="build:all,dist:upgrader:prep,deploy:local:upgrade:nocodegen" description="Upgrades and configures the application and database  on the local machine. Used for developer desktops and ci environments.">
@@ -385,16 +405,18 @@
 		<remote-ssh remotesshcommand=". .bash_profile;cd ${ssh.dir.temp}; ant -Dproperties.file=${properties.file.name} -Dforce.reinstall=true ${install.target}" />
 	</target>
 
+	<!-- ant -Dproperties.file=C:/devroot/scm-private/sdk/properties/dev-upgrade.properties  deploy:remote:upgrade 
+		https://wiki.nci.nih.gov/display/BuildandDeploymentAutomation/AHP+-+Testing+command+line+build   -->
 	<target name="deploy:remote:upgrade" description="Installs and configures the application and required binaries and re-creates the datbase  on a remote machine. Used for NCI tiers (dev, qa, stg, prod)" depends="
 		build:all,
 		dist:upgrader
 		">
 		<!-- Call macro to deploy files on desired server -->
-		<deploy-files dist.file="${bda-blueprints-webapp.upgrade.zip.file}" />
+		<deploy-files dist.file="${project-webapp.install.zip.file}" />
 		<!-- SSH to machine ant run ant command line to install application -->
 		<remote-ssh remotesshcommand=". .bash_profile;cd ${ssh.dir.temp}; ant -Dproperties.file=${properties.file.name} -Dforce.reinstall=true ${upgrade.target}" />
 	</target>
-	
+
 	<target name="clean:software:target">
 		<delete dir="${target.dir}" failonerror="false"/>
 	</target>

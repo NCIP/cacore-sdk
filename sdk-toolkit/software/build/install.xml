@@ -853,10 +853,11 @@
 	</target>
 
 	<target name="install:re-configure" description="Configure example-webapp application, copies over externalized properties or configurations that are not part of the tomcat configuration">
-		<!--
-		<ant antfile="build-reconfigure.xml" target="package-system" ></ant>
-		-->
-		<antcall target="package-system"/>
+		<antcall target="package-install-system"/>
+	</target>
+	
+	<target name="upgrade:re-configure" description="Configure example-webapp application, copies over externalized properties or configurations that are not part of the tomcat configuration">
+		<antcall target="package-upgrade-system"/>
 	</target>
 
 
@@ -937,18 +938,18 @@
 	<!-- ###################### Unwanted targets ############################ -->
 	<!-- #################################################################### -->
 
-	<!-- Wrapper target to upgrade jboss container. Does not install or configure binaries -->
-
+	<!-- Wrapper target to upgrade jboss container. Does not install or configure binaries 
+	upgrade:database,-->
 	<target name="upgrade" description="Upgrades JBoss and Database" depends="
 		upgrade:init,
 		install:validation:pre-install,
 		install:server:stop,
 		install:validation:pre-install:ports,
-		upgrade:database,
-		install:re-configure,
+		upgrade:re-configure,
 		install:server:configure,
 		install:server:project-webapp,
 		install:server:grid-login-webapp,
+		upgrade:database,
 		install:post,
 		install:server:start,
 		install:validation:post-install

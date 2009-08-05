@@ -1,4 +1,4 @@
-<project name="caCORE SDK - Project Reconfiguration" default="package-system" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant" xmlns="antlib:org.apache.tools.ant" xmlns:cs="antlib:com.puppycrawl.tools.checkstyle">
+<project name="caCORE SDK - Project Reconfiguration" default="package-install-system" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant" xmlns="antlib:org.apache.tools.ant" xmlns:cs="antlib:com.puppycrawl.tools.checkstyle">
 
 
 	<property name="output.dir.location" value="."/>
@@ -338,34 +338,8 @@
 			<filter token="TOMCAT_END" value="${TOMCAT_END}" />
 		</filterset>
 	</target>
-	<target name="replacetoken-contents-reconfigure" depends="-replace-templates-filter-tokens-reconfigure">
-
-		<delete dir="${system.config.dir}"/>
-
-		<copy todir="${system.config.dir}" filtering="true">
-			<fileset dir="${system.config.template.dir}" />
-			<globmapper from="*-template.xml" to="*.xml" />
-			<filterset refid="filtertoken3" />
-			<filterset refid="filtertoken4" />
-		</copy>
-		<copy todir="${system.config.dir}" filtering="true">
-			<fileset dir="${system.config.template.dir}" />
-			<globmapper from="*-template.wsdd" to="*.wsdd" />
-			<filterset refid="filtertoken3" />
-			<filterset refid="filtertoken4" />
-		</copy>
-		<copy todir="${system.config.dir}" filtering="true">
-			<fileset dir="${system.config.template.dir}" />
-			<globmapper from="*-template.config" to="*.config" />
-			<filterset refid="filtertoken3" />
-			<filterset refid="filtertoken4" />
-		</copy>
-		<copy todir="${system.config.dir}" filtering="true">
-			<fileset dir="${system.config.template.dir}" />
-			<globmapper from="*-template.properties" to="*.properties" />
-			<filterset refid="filtertoken3" />
-			<filterset refid="filtertoken4" />
-		</copy>
+	
+	<target name="replacetoken-contents-install-database" depends="-replace-templates-filter-tokens-reconfigure">
 		<if>
 			<equals arg1="${DB_TYPE}" arg2="mysql" />
 			<then>
@@ -454,6 +428,36 @@
 				</if>
 			</sequential>
 		</outofdate>
+	</target>
+
+	<target name="replacetoken-contents-reconfigure" depends="-replace-templates-filter-tokens-reconfigure">
+
+		<delete dir="${system.config.dir}"/>
+
+		<copy todir="${system.config.dir}" filtering="true">
+			<fileset dir="${system.config.template.dir}" />
+			<globmapper from="*-template.xml" to="*.xml" />
+			<filterset refid="filtertoken3" />
+			<filterset refid="filtertoken4" />
+		</copy>
+		<copy todir="${system.config.dir}" filtering="true">
+			<fileset dir="${system.config.template.dir}" />
+			<globmapper from="*-template.wsdd" to="*.wsdd" />
+			<filterset refid="filtertoken3" />
+			<filterset refid="filtertoken4" />
+		</copy>
+		<copy todir="${system.config.dir}" filtering="true">
+			<fileset dir="${system.config.template.dir}" />
+			<globmapper from="*-template.config" to="*.config" />
+			<filterset refid="filtertoken3" />
+			<filterset refid="filtertoken4" />
+		</copy>
+		<copy todir="${system.config.dir}" filtering="true">
+			<fileset dir="${system.config.template.dir}" />
+			<globmapper from="*-template.properties" to="*.properties" />
+			<filterset refid="filtertoken3" />
+			<filterset refid="filtertoken4" />
+		</copy>
 		<copy todir="${system.config.dir}">
 			<fileset dir="${system.config.template.dir}">
 				<include name="**/*.*" />
@@ -466,7 +470,8 @@
 		<copy tofile="${output.src.dir}/${csm.security.config.file}" file="${system.config.security.dir}/${csm.security.config.original.file}" />
 	</target>
 
-	<target name="replacetoken-contents" depends="replacetoken-contents-reconfigure"/>
+	<target name="replace-install-token-contents" depends="replacetoken-contents-reconfigure,replacetoken-contents-install-database"/>
+	<target name="replace-upgrade-token-contents" depends="replacetoken-contents-reconfigure"/>
 
 
 
@@ -474,15 +479,25 @@
 	<!-- ######################### Main targets ############################# -->
 	<!-- #################################################################### -->
 
-	<target name="package-system" description="Packages the system" depends="
-		init,
+	<target name="package-install-system" description="Packages the system" depends="
+		init-install,
 		package-remote-client,
 		package-local-client,
 		package-ws-client,
 		package-server
 		"/>
-
-	<target name="init" depends="replacetoken-contents,-rejar-orm" description="initializes the packaging"/>
+	
+	<target name="package-upgrade-system" description="Packages the system" depends="
+		init-upgrade,
+		package-remote-client,
+		package-local-client,
+		package-ws-client,
+		package-server
+		"/>
+	
+	<target name="init-install" depends="replace-install-token-contents,-rejar-orm" description="initializes the packaging"/>
+	
+	<target name="init-upgrade" depends="replace-upgrade-token-contents,-rejar-orm" description="initializes the packaging"/>
 
 
 	<target name="-rejar-orm" depends="-replace-templates-filter-tokens-reconfigure">
@@ -519,7 +534,6 @@
 	<!-- #################################################################### -->
 
 	<target name="package-local-client" depends="
-		init,
 		-package-local-client-core,
 		-package-local-client-writable-api,
 		-package-local-client-security,
@@ -635,7 +649,6 @@
 	<!-- #################################################################### -->
 
 	<target name="package-remote-client" depends="
-		init,
 		-package-remote-client-core,
 		-package-remote-client-writable-api,
 		-package-remote-client-security,
@@ -730,7 +743,7 @@
 	<!-- ######################## WS Client targets ######################### -->
 	<!-- #################################################################### -->
 
-	<target name="package-ws-client" depends="init">
+	<target name="package-ws-client">
 		<mkdir dir="${package.client.ws.dir}" />
 		<copy todir="${package.client.ws.lib.dir}">
 			<fileset dir="${ws-client.lib.dir}" />
@@ -1089,10 +1102,8 @@
 		
 	</target>
 
-	<target name="package-server" depends="init">
-
+	<target name="package-server">
 		<delete dir="${package.client.server.dir}"/>
-
 		<if>
 			<equals arg1="${SERVER_TYPE}" arg2="jboss" />
 			<then>
