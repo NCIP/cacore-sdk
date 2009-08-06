@@ -27,6 +27,7 @@
 	<property name="workbench.common.sdk.dist.dir" value="${workbench.project.dir}/software/common/resources/sdk-dist" />
 
 	<import file="build-common.xml"/> 
+	<import file="build-util-macros.xml"/> 
 
 	<!-- Default install time targets passed by deploy targets to the installer, can be overridden by being set on the command line if different target is desitred.  -->
 	<property name="install.target" value="install" />
@@ -85,7 +86,7 @@
 	*********************************************************************** -->
 	<target name="-create-webstart-keystore">
 		<SDKecho message="${ant.project.name}: Creating Workbench WebStart Keystore; Required for Signing Jars"/>
-		<genkey alias="ncicb"  keystore="${keystore.dir}/workbench.jks" storepass="changeme" keypass="changeme" dname="cn=caCORE caCORE Workbench,ou=caCORE SDK,o=NCICB,c=US" validity="720" verbose="true" />
+		<generate-jar-signing-keystore />
 	</target>
 
 	<!--***********************************************************************
@@ -93,11 +94,18 @@
 	*********************************************************************** -->
 	<target name="-sign-webstart-jars">
 		<SDKecho message="${ant.project.name}: Sign Workbench WebStart Application jars; required for full client system access"/>
-		<signjar destDir="${keystore.lib.dir}" alias="ncicb" keystore="${keystore.dir}/workbench.jks" storepass="changeme" keypass="changeme" lazy="false">
-			<path>
-				<fileset dir="${keystore.lib.dir}" includes="**/*.jar" />
-			</path>
-		</signjar>
+		<echoproperties prefix="jar-signing"/>
+		<if>
+			<equals arg1="${jar-signing.execution.time}" arg2="build"/>
+			<then>
+				<echo message="jar-signing.execution.time set to build, signing jars"/>
+				<sign-jars jars.dir="${keystore.lib.dir}"
+				/>
+			</then>
+			<else>
+				<echo message="jar-signing.execution.time not set to build, not signing jars"/>
+			</else> 
+		</if>
 		<flattenmapper/>
 	</target>
 	
