@@ -948,8 +948,7 @@
 		upgrade:re-configure,
 		install:server:configure,
 		install:server:project-webapp,
-		install:server:grid-login-webapp,
-		upgrade:database,
+		install:server:grid-login-webapp,		
 		install:post,
 		install:server:start,
 		install:validation:post-install
