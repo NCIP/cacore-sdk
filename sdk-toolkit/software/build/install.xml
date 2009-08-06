@@ -938,8 +938,23 @@
 	<!-- ###################### Unwanted targets ############################ -->
 	<!-- #################################################################### -->
 
-	<!-- Wrapper target to upgrade jboss container. Does not install or configure binaries 
-	upgrade:database,-->
+	<!-- Wrapper target to upgrade jboss container. Does not install or configure binaries--> 
+	<target name="upgrade:with-dbinstall" description="Upgrades JBoss and Database" depends="
+		upgrade:init,
+		install:validation:pre-install,
+		install:server:stop,
+		install:validation:pre-install:ports,
+		upgrade:re-configure,
+		install:server:configure,
+		install:server:project-webapp,
+		install:server:grid-login-webapp,
+		install:database,
+		install:post,
+		install:server:start,
+		install:validation:post-install
+		" />
+
+	<!-- Wrapper target to upgrade jboss container. Does not install or configure binaries--> 
 	<target name="upgrade" description="Upgrades JBoss and Database" depends="
 		upgrade:init,
 		install:validation:pre-install,
@@ -948,12 +963,12 @@
 		upgrade:re-configure,
 		install:server:configure,
 		install:server:project-webapp,
-		install:server:grid-login-webapp,		
+		install:server:grid-login-webapp,
+		upgrade:database,
 		install:post,
 		install:server:start,
 		install:validation:post-install
 		" />
-
 	<target name="print">
 		<echoproperties destfile="antproperties.txt"/>
 	</target>
