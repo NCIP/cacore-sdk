@@ -63,7 +63,6 @@
 	<property name="db-install.src.dir" value="${db.src.dir}/db-install" />
 	<property name="db-upgrade.src.dir" value="${db.src.dir}/db-upgrade" />
 
-
 	<!-- Distribution Structure properties, used to copy files into the distribution area.
        		Use project.propertie relative dir names becasue they are used by install also-->
 	<property name="dist.exploded.dir" value="${dist.dir}/exploded" />
@@ -92,6 +91,7 @@
 	</tstamp>
 	<record name="${log.dir}/install-${install.time}.log" action="start" />
 	<!-- set some db variables -->
+	
 	<switch value="${database.type}">
 		<case value="oracle">
 			<property name="database.dialect" value="org.hibernate.dialect.OracleDialect" />
@@ -216,7 +216,6 @@
 		</ant>
 	</target>
 
-
 	<target name="build:project-webapp" depends="init" description="Call webapp sub-projects build target to produce artifiacts">
 		<echo>Project Name = ${PROJECT_NAME}.........</echo>
 		<ant inheritAll="true" inheritRefs="false" antfile="${codegen.build.file}" target="${codegen.build.target}" dir="${build.dir}">
@@ -226,18 +225,6 @@
 	<target name="build:project-webapp:dist" depends="init" description="Call webapp sub-projects build target to produce artifiacts">
 		<!-- setting the property in the ant call overrides the property in the sub-project allowing the artifact to be produced where needed -->
 		<ant inheritAll="true" inheritRefs="false" antfile="${codegen.build.file}" target="${package.build.target}" dir="${build.dir}">
-		</ant>
-	</target>
-
-	<target name="dist:gui-installer" description="Makes Gui-Installer distribution">
-		<delete>
-			<fileset dir="${dist.dir}">
-				<include name="*.jar" />
-			</fileset>
-		</delete>
-		<gui-installer-prep />
-		<ant inheritAll="false" inheritRefs="false" antfile="install.xml" target="build:installer" dir="${build.dir}/gui-installer">
-			<property name="compile.jar.dir" value="${target.dir}/izpack-4.0.1" />
 		</ant>
 	</target>
 
@@ -397,9 +384,6 @@
 	<target name="deploy:local:install" depends="build:all,dist:installer:prep,deploy:local:install:nocodegen" description="Installs and configures the application and required binaries and re-creates the datbase  on the local machine. Used for developer desktops and ci environments.">
 	</target>
 
-	<target name="deploy:local:upgrade" depends="build:all,dist:upgrader:prep,deploy:local:upgrade:nocodegen" description="Upgrades and configures the application and database  on the local machine. Used for developer desktops and ci environments.">
-	</target>
-
 	<!-- ant -Dproperties.file=C:/devroot/scm-private/sdk/properties/dev-install.properties  deploy:remote:install 
 		https://wiki.nci.nih.gov/display/BuildandDeploymentAutomation/AHP+-+Testing+command+line+build   -->
 	<target name="deploy:remote:install" description="Installs and configures the application and required binaries and re-creates the datbase  on a remote machine. Used for NCI tiers (dev, qa, stg, prod)" depends="
@@ -411,19 +395,7 @@
 		<!-- SSH to machine ant run ant command line to install application -->
 		<remote-ssh remotesshcommand=". .bash_profile;cd ${ssh.dir.temp}; ant -Dproperties.file=${properties.file.name} -Dforce.reinstall=true ${install.target}" />
 	</target>
-
-	<!-- ant -Dproperties.file=C:/devroot/scm-private/sdk/properties/dev-upgrade.properties  deploy:remote:upgrade 
-		https://wiki.nci.nih.gov/display/BuildandDeploymentAutomation/AHP+-+Testing+command+line+build   -->
-	<target name="deploy:remote:upgrade" description="Installs and configures the application and required binaries and re-creates the datbase  on a remote machine. Used for NCI tiers (dev, qa, stg, prod)" depends="
-		build:all,
-		dist:upgrader
-		">
-		<!-- Call macro to deploy files on desired server -->
-		<deploy-files dist.file="${project-webapp.install.zip.file}" />
-		<!-- SSH to machine ant run ant command line to install application -->
-		<remote-ssh remotesshcommand=". .bash_profile;cd ${ssh.dir.temp}; ant -Dproperties.file=${properties.file.name} -Dforce.reinstall=true ${upgrade.target}" />
-	</target>
-
+	
 	<target name="clean:software:target">
 		<delete dir="${target.dir}" failonerror="false"/>
 	</target>
