@@ -74,6 +74,7 @@
 			<property name="GENERATE_HIBERNATE_VALIDATOR" value="@{GENERATE.HIBERNATE.VALIDATOR}" />
 
 			<property name="TARGET_GRID" value="@{TARGET.GRID}" />
+			<property name="INSTALL_CONTAINER" value="true" />
 			<property name="generate.report" value="false" />
 
 			<if>
