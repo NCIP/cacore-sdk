@@ -316,7 +316,7 @@ CAGRID_LOGIN_MODULE_NAME=grid
 ### TOMCAT ###
 ##############
 exclude.tomcat.backup=true
-# tomcat.home will be generated as ${application.base.path}/${tomcat.relateive.path}
+# tomcat.home will be generated as ${application.base.path}/${tomcat.relative.path}
 tomcat.hostname=localhost
 tomcat.port.http=21080
 tomcat.port.ajp=21009
