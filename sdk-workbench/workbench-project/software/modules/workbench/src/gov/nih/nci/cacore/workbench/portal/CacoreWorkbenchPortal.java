@@ -2,12 +2,23 @@ package gov.nih.nci.cacore.workbench.portal;
 
 import gov.nih.nci.cacore.workbench.common.Utils;
 import gov.nih.nci.cacore.workbench.common.WorkbenchCmdLineArgsManager;
+import gov.nih.nci.cacore.workbench.portal.viewer.WorkbenchDesktopBackgroundViewer;
+import gov.nih.nci.cacore.workbench.portal.viewer.HelpViewer;
 import gov.nih.nci.cagrid.common.portal.SplashScreen;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import org.apache.log4j.Logger;
 import org.cagrid.grape.GridApplication;
@@ -17,14 +28,14 @@ public final class CacoreWorkbenchPortal {
 	
 	private static final Logger log = Logger.getLogger(CacoreWorkbenchPortal.class);
 
-	private static SplashScreen sdkSplash;
+	private static SplashScreen workbenchSplash;
 
 	private static void showSdkSplash() {
 		try {
-			sdkSplash = new SplashScreen("/images/sdkSplashScreen.gif");
+			workbenchSplash = new SplashScreen("/images/workbenchSplashScreen.gif");
 			// centers in screen
-			sdkSplash.setLocationRelativeTo(null);
-			sdkSplash.setVisible(true);
+			workbenchSplash.setLocationRelativeTo(null);
+			workbenchSplash.setVisible(true);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -72,6 +83,30 @@ public final class CacoreWorkbenchPortal {
 					.getInstance(app);
 			Dimension d = new Dimension(app.getDimensions().getWidth(), app
 					.getDimensions().getHeight());
+			
+            WorkbenchDesktopBackgroundViewer clv = new WorkbenchDesktopBackgroundViewer();
+            clv.setSize(new Dimension(app.getDimensions().getWidth()-18, app.getDimensions().getHeight()-88));
+            clv.setVisible(true);
+            
+//            HelpViewer hv = new HelpViewer();
+//            hv.setSize(d);
+//            hv.setVisible(true);
+            
+            log.debug("* * * " + applicationInstance.getContentPane().getLayout());
+            BorderLayout bl = (BorderLayout)applicationInstance.getContentPane().getLayout();
+            
+            log.debug("* * * Component count: "+applicationInstance.getContentPane().getComponentCount());
+            int i = 0;
+            for(Component comp:applicationInstance.getContentPane().getComponents()){
+            	log.debug("* * * Component["+i+"]"+comp);
+            	i++;
+            }
+            
+            javax.swing.JScrollPane jScrollPane = (JScrollPane)applicationInstance.getContentPane().getComponent(0);
+            
+            //applicationInstance.getMDIDesktopPane().add(comp, component.getDimensions(), component.getRenderOptions());
+            //applicationInstance.getMDIDesktopPane().add(hv);
+            applicationInstance.getMDIDesktopPane().add(clv);
 
 			try {
 				applicationInstance.pack();
@@ -82,16 +117,18 @@ public final class CacoreWorkbenchPortal {
 			applicationInstance.setSize(d);
 			applicationInstance.setVisible(true);
 			applicationInstance.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+			
+			applicationInstance.validate();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	private static final class SdkSplashCloser implements Runnable {
+	private static final class WorkbenchSplashCloser implements Runnable {
 		public void run() {
 			try {
-				sdkSplash.dispose();
+				workbenchSplash.dispose();
 			} catch (Exception e) {
 
 			}
@@ -101,7 +138,6 @@ public final class CacoreWorkbenchPortal {
 	public static void main(String[] args) {
 		showWorkbenchPortal(args);
 
-		EventQueue.invokeLater(new SdkSplashCloser());
+		EventQueue.invokeLater(new WorkbenchSplashCloser());
 	}
-
 }
