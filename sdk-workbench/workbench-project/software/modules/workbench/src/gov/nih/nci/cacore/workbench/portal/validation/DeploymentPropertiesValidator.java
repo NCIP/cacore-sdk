@@ -29,7 +29,6 @@ public class DeploymentPropertiesValidator implements TabbedPanePropertiesValida
     	parentContainer.toggleTestConnectionButton();
     	parentContainer.toggleClmTestConnectionButton();
     	parentContainer.toggleCsmTestConnectionButton();
-    	parentContainer.toggleDbSqlFileButton();
     	parentContainer.toggleDbJndiNameField();
     	parentContainer.toggleCsmDbJndiNameField();
     	
