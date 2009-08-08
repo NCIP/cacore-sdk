@@ -3,12 +3,12 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.cagrid.org/1/grape file:/C:/projects/cagrid-1-0/caGrid/projects/grape/schema/grape.xsd">
     <name>caCORE Workbench</name>
-    <icon>/images/applications-internet.png</icon>
-    <ApplicationLogo>/images/SDK.gif</ApplicationLogo>
+    <icon>/images/workbenchIcon.gif</icon>
+    <ApplicationLogo>/images/workbench.gif</ApplicationLogo>
     <AboutHTML><![CDATA[<html><center><h2>caCORE Workbench</h2></center><center><h3>Version 0.1</h3></center><br><center>This software is produced by<br>The caCORE SDK Team</center><br><center><a href="http://ncicb.nci.nih.gov/infrastructure/cacoresdk">http://ncicb.nci.nih.gov/infrastructure/cacoresdk</a></center><br>Authors:<br><a href="mailto:dumitrud@mail.nih.gov">Daniel Dumitru</a><br><a href="mailto:patelsat@mail.nih.gov">Satish Patel</a>]]></AboutHTML>
     <dimensions>
         <width>900</width>
-        <height>700</height>
+        <height>750</height>
     </dimensions>
     <initializerClass>gov.nih.nci.cacore.workbench.portal.init.CacoreWorkbenchInitializer</initializerClass>
     <menus>
@@ -26,7 +26,7 @@
                     <showOnToolBar>true</showOnToolBar>
                     <dimensions>
                     	<width>850</width>
-                    	<height>600</height>
+                    	<height>650</height>
                     </dimensions>
                     <renderOptions>
                     	<centered>true</centered>
@@ -41,7 +41,7 @@
                     <showOnToolBar>true</showOnToolBar>
                     <dimensions>
                     	<width>850</width>
-                    	<height>600</height>
+                    	<height>650</height>
                     </dimensions>
                     <renderOptions>
                     	<centered>true</centered>
@@ -55,7 +55,7 @@
                     <showOnToolBar>true</showOnToolBar>
                     <dimensions>
                     	<width>850</width>
-                    	<height>600</height>
+                    	<height>650</height>
                     </dimensions>
                     <renderOptions>
                     	<centered>true</centered>
@@ -65,12 +65,12 @@
                 <component>
                     <title>CSM Workflow</title>
                     <description>Launch CSM Workflow</description>
-                    <classname>gov.nih.nci.cacore.workbench.portal.viewer.CsmLauncherViewer</classname>
+                    <classname>gov.nih.nci.cacore.workbench.portal.viewer.WorkbenchDesktopBackgroundViewer</classname>
                     <icon>/images/3.gif</icon>
                     <showOnToolBar>true</showOnToolBar>
                     <dimensions>
                     	<width>850</width>
-                    	<height>600</height>
+                    	<height>650</height>
                     </dimensions>
                     <renderOptions>
                     	<centered>true</centered>
@@ -92,7 +92,7 @@
                     <showOnToolBar>true</showOnToolBar>
                     <dimensions>
                     	<width>850</width>
-                    	<height>600</height>
+                    	<height>650</height>
                     </dimensions>
                     <renderOptions>
                     	<centered>true</centered>
