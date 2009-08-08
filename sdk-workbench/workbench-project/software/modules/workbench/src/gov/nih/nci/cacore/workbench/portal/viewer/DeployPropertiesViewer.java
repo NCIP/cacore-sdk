@@ -423,7 +423,7 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
             			gridSecurekeyFilePath = caGridAuthSettingsPanel.getGridSecureKeyFilePath();
             		}
             		
-            		if (dbConnectionSettingsPanel.isRecreateDbSelected()){
+            		if (dbConnectionSettingsPanel.isDbDropSchemaSelected()){
             			dbSqlFilePath = dbConnectionSettingsPanel.getDbSqlFilePath();
             		}
 
@@ -478,7 +478,7 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
             				caGridAuthSettingsPanel.setGridSecureKeyFilePath(keyFilePath);
             			}
             			
-            			if (dbConnectionSettingsPanel.isRecreateDbSelected()){
+            			if (dbConnectionSettingsPanel.isDbDropSchemaSelected()){
             				
             				String dbType = dbConnectionSettingsPanel.getDbType();
 
@@ -598,16 +598,6 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
         }
     	
     	clmSettingsPanel.setTestConnectionButtonEnabled(false);
-    }
-    
-    public void toggleDbSqlFileButton() {
-    	if (dbConnectionSettingsPanel.isRecreateDbSelected()){
-    		dbConnectionSettingsPanel.enableDbSqlFileButton(true);
-    		return;
-        }
-    	
-    	dbConnectionSettingsPanel.enableDbSqlFileButton(false);
-
     }
     
     public void toggleDbJndiNameField() {

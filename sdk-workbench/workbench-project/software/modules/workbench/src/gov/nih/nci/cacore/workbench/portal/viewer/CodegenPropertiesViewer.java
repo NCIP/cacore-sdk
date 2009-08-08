@@ -298,15 +298,17 @@ public class CodegenPropertiesViewer extends WorkbenchViewerBaseComponent {
             saveButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                 	
-                    saveCodegenProperties(
+                   boolean saveSuccessful = saveCodegenProperties(
                     		projectSettingsPanel.getSdkInstallDirValue(), 
                     		projectSettingsPanel.getProjectTemplateDirValue(),
 							projectSettingsPanel.getProjectDir(), 
 							modelSettingsPanel.getModelFilePath(),
 							getPropsMap());
                     
-                   setDirty(false);
-                   validateInput();
+                   if (saveSuccessful){
+	                   setDirty(false);
+	                   validateInput();
+                   }
                 }
             });
         }

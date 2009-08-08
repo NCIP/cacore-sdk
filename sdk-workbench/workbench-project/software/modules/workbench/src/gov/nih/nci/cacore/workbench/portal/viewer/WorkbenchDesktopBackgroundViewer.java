@@ -3,41 +3,32 @@ package gov.nih.nci.cacore.workbench.portal.viewer;
 import gov.nih.nci.cacore.workbench.common.LookAndFeel;
 import gov.nih.nci.cacore.workbench.common.ResourceManager;
 import gov.nih.nci.cacore.workbench.common.Utils;
+import gov.nih.nci.cacore.workbench.portal.application.WorkbenchApplicationComponent;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.io.IOException;
-import java.net.URL;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.text.html.HTMLEditorKit;
 
 import org.apache.log4j.Logger;
 
-
 /**
- * Workbench Help Viewer
+ * Workbench CSM Launcher Viewer
  * 
  * @author <A HREF="MAILTO:dumitrud@mail.nih.gov">Dan Dumitru</A> Based upon "Bare Bones Browser Launch" - See http://www.centerkey.com/java/browser/
  * @created June, 2008
  */
-public class HelpViewer extends WorkbenchViewerBaseComponent {
+public class WorkbenchDesktopBackgroundViewer extends WorkbenchApplicationComponent {
 	
 	private static final long serialVersionUID = 1L;
 	
 	private static final Logger log = Logger.getLogger(HelpViewer.class);
 	
-	private static final String HELP_URL = ResourceManager.getWorkbenchHelpUrl();
-	private static final String HELP_HTML_FILE = "SDKWorkbench.html";
-	private static final String HELP_RTF_FILE = "SDKWorkbench.rtf";
-	private static final String HELP_RTF_FILE_URL = "/"+HELP_RTF_FILE;
-	private static final String HELP_HTML_FILE_URL = "/SDKWorkbench_files/"+HELP_HTML_FILE;
+	private static final String WORKFLOW_URL = ResourceManager.getWorkbenchHelpUrl();
 	
     // Buttons
     private JButton openButton = null;
@@ -48,10 +39,10 @@ public class HelpViewer extends WorkbenchViewerBaseComponent {
 	 */
     private JPanel mainPanel = null;
     private JPanel buttonPanel = null;
-	private JPanel helpPanel = null;
+	private JPanel contentPanel = null;
     
 	// Constructor
-    public HelpViewer() {
+    public WorkbenchDesktopBackgroundViewer() {
     	super();
         initialize();
     }
@@ -62,84 +53,42 @@ public class HelpViewer extends WorkbenchViewerBaseComponent {
     private void initialize() {
      
         setContentPane(getMainPanel());
-        setFrameIcon(LookAndFeel.getGenerateApplicationIcon());
-        setTitle("Workbench Help");
-
+        setFrameIcon(LookAndFeel.getWorkbenchIcon());
+//        setTitle("CSM Workflow Launcher");
     }
     
     /**
      * This method initializes the Project Settings jPanel
      */
-    public JPanel getHelpPanel() {
-        if (helpPanel == null) {
-
+    public JPanel getContentPanel() {
+        if (contentPanel == null) {
+        	
+        	ImageIcon icon = Utils.createImageIcon("/images/workbenchSplashScreen.gif","Workflow");
+//        	JLabel textLabel = new JLabel("Image and Text", icon, JLabel.CENTER);
+        	JLabel textLabel = new JLabel(icon);
+            
 			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
+			//gridBagConstraints10.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints10.anchor = java.awt.GridBagConstraints.CENTER;
-			gridBagConstraints10.gridy = 1;
+			gridBagConstraints10.gridy = 3;
 			gridBagConstraints10.gridx = 0;
 			gridBagConstraints10.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints10.gridwidth = 3;
-			gridBagConstraints10.weighty = 1.0D;
+			//gridBagConstraints10.weighty = 1.0D;
 			gridBagConstraints10.weightx = 1.0D; 
-
-            JEditorPane helpEditorPane = new JEditorPane();
-            helpEditorPane.setEditable(false);
-            helpEditorPane.setEnabled(true);
-            helpEditorPane.setEditorKit(new HTMLEditorKit());
             
-//            URL helpURL = null;
-//			try {
-//            	
-//                java.security.Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
-//				System.setProperty("java.protocol.handler.pkgs","com.sun.net.ssl.internal.www.protocol");
-//				System.setProperty("javax.net.ssl.trustStore","C:/dan/dev/caCore/sdk-trunk/sdk-workbench/workbench-project/software/modules/workbench-conf/conf/jssecacerts");
-//				System.setProperty("javax.net.ssl.trustStore","http://blueoctave.com/FTP/NCICB/jssecacerts");
-//				
-//				helpURL = new URL(HELP_URL);
-//				
-//			} catch (MalformedURLException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			} catch (Exception e){
-//				e.printStackTrace();
-//			}
-			
-            URL helpURL = HelpViewer.class.getResource(HELP_HTML_FILE_URL);
-            
-            if (helpURL != null) {
-                try {
+//            textLabel.setText("To launch the CSM Workflow, click the 'Open' button below.");
 
-				helpEditorPane.setPage(helpURL);
-//                    helpEditorPane.setPage(HELP_URL);
-                } catch (IOException e) {
-                	// TODO ::
-                    System.err.println("Attempted to read a bad URL: " + HELP_URL);
-                    e.printStackTrace();
-                }
-            }
-//            } else {
-//            	// TODO ::
-//                System.err.println("Couldn't find file: "+HELP_RTF_FILE_URL);
-//            }
-
-            //Put the editor pane in a scroll pane.
-            JScrollPane editorScrollPane = new JScrollPane(helpEditorPane);
-            editorScrollPane.setVerticalScrollBarPolicy(
-                            JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-            editorScrollPane.setSize(new Dimension(900, 500));
-            editorScrollPane.setPreferredSize(new Dimension(900, 500));
-            editorScrollPane.setMinimumSize(new Dimension(900, 500));
-            
-        	helpPanel = new JPanel();
-        	helpPanel.setLayout(new GridBagLayout());
-        	helpPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Workbench Help",
+        	contentPanel = new JPanel();
+        	contentPanel.setLayout(new GridBagLayout());
+        	contentPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Workflow Description",
                 javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
                 javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
             
-        	helpPanel.add(editorScrollPane, gridBagConstraints10);
+        	contentPanel.add(textLabel, gridBagConstraints10);
 
         }
-        return helpPanel;
+        return contentPanel;
     }
     
     /**
@@ -164,8 +113,8 @@ public class HelpViewer extends WorkbenchViewerBaseComponent {
 
             mainPanel = new JPanel();
             mainPanel.setLayout(new GridBagLayout());
-            mainPanel.add(getHelpPanel(), gridBagConstraints10);
-            mainPanel.add(getButtonPanel(), gridBagConstraints20);
+            mainPanel.add(getContentPanel(), gridBagConstraints10);
+//            mainPanel.add(getButtonPanel(), gridBagConstraints20);
         }
         return mainPanel;
     }
@@ -177,12 +126,6 @@ public class HelpViewer extends WorkbenchViewerBaseComponent {
      */
     private JPanel getButtonPanel() {
         if (buttonPanel == null) {
-        	
-            JLabel helpLabel = new JLabel();
-            helpLabel.setText("To open the caCORE Workbench user manual in your default browser, click the 'Open' button below, or go to " + HELP_URL + ".");
-            
-            // TODO :: add helpLabel
-        	
             buttonPanel = new JPanel();
             buttonPanel.add(getOpenButton(), null);
             buttonPanel.add(getCloseButton(), null);
@@ -222,7 +165,7 @@ public class HelpViewer extends WorkbenchViewerBaseComponent {
             openButton.setIcon(LookAndFeel.getGenerateApplicationIcon());
             openButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                	Utils.openURL(HELP_URL);
+                	Utils.openURL(WORKFLOW_URL);
                 }
             });
         }
