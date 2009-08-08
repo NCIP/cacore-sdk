@@ -241,5 +241,10 @@ public class LookAndFeel extends PortalLookAndFeel {
 		return new javax.swing.ImageIcon(LookAndFeel.class
 				.getResource("/images/go-up.png"));
 	}
+	
+	public static final Icon getWorkbenchIcon() {
+		return new javax.swing.ImageIcon(LookAndFeel.class
+				.getResource("/images/workbenchIcon.gif"));
+	}
 
 }
