@@ -7,12 +7,10 @@ import gov.nih.nci.cacore.workbench.common.WorkbenchPropertiesManager;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.SQLWarning;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -34,9 +32,6 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 
 	protected WorkbenchPropertiesManager propsMgr = null;
 	
-	private static final String[] browsers = { "firefox", "opera", "konqueror", "epiphany",
-		"seamonkey", "galeon", "kazehakase", "mozilla", "netscape" };
-	
 	/**
 	 * Will save the code generation properties to be used during subsequent 
 	 * application generation
@@ -49,14 +44,13 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 	 *            a map of the properties to be used during the 
 	 *            project application generation
 	 */
-	public void saveCodegenProperties(final String sdkDirPath,
+	public boolean saveCodegenProperties(final String sdkDirPath,
 			final String projectTemplateDirPath,
 			final String projectDirPath,
 			final String modelFilePath, 
 			final Map<String,String> workbenchPropsMap) {
 		
 		int doIProceedResult = JOptionPane.OK_OPTION;
-		final File projectTemplateDir = new File(projectTemplateDirPath);
 		final File projectDir = new File(projectDirPath);
 
 		if (projectDir.exists() && projectDir.list().length != 0) {
@@ -84,10 +78,13 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 			}
 		} 
 
+		if (doIProceedResult != JOptionPane.OK_OPTION) {
+			return false;
+		} 
+
 		if (doIProceedResult == JOptionPane.OK_OPTION) {
 			final File sdkDirFile = new File(sdkDirPath);
 			final File codegenPropsFile = ResourceManager.getCodegenPropsFile(projectDirPath);
-			final Object obj = new Object();
 
 			//WorkbenchViewerBaseComponent.this.setVisible(false);
 			//dispose();
@@ -100,12 +97,7 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 							setErrorMessage(generateErrorMsg("The specified SDK installation home directory does not exist: "+sdkDirPath));
 							return;
 						} else {
-							installSdk(sdkDirPath,this);
-						}
-						
-						if (!projectTemplateDir.exists()) {
-							setErrorMessage(generateErrorMsg("The specified SDK installation home directory does not contain the required 'project-template' sub-directory: "+sdkDirPath));
-							return;
+							installSdk(sdkDirPath,projectTemplateDirPath,this);
 						}
 						
 						setProgressText("Configuring Project Directory");
@@ -146,8 +138,10 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 
 			Thread th = new Thread(r);
 			th.start();
-
+			
+			log.debug("Completed saving codegen properties.");
 		}
+		return true;
 	}
 
 	/**
@@ -174,7 +168,6 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 			final Map<String,String> workbenchPropsMap) {
 		
 		int doIProceedResult = JOptionPane.OK_OPTION;
-		final File projectTemplateDir = new File(projectTemplateDirPath);
 		final File projectDir = new File(projectDirPath);
 
 		if (projectDir.exists() && projectDir.list().length != 0) {
@@ -223,12 +216,7 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 							setErrorMessage(generateErrorMsg("The specified SDK installation home directory does not exist: "+sdkDirPath));
 							return;
 						} else {
-							installSdk(sdkDirPath,this);
-						}
-						
-						if (!projectTemplateDir.exists()) {
-							setErrorMessage(generateErrorMsg("The specified SDK installation home directory does not contain the required 'project-template' sub-directory: "+sdkDirPath));
-							return;
+							installSdk(sdkDirPath,projectTemplateDirPath,this);
 						}
 						
 						try {
@@ -297,68 +285,34 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 	 *            a map of the properties to be used during the 
 	 *            project application generation
 	 */
-	public void installSdk(final String sdkInstallDirPath, BusyDialogRunnable r) {
+	public void installSdk(final String sdkInstallDirPath, final String projectTemplateDirPath, BusyDialogRunnable r) throws Exception {
 		
-		int doIProceedResult = JOptionPane.NO_OPTION;
 		final File sdkInstallDir = new File(sdkInstallDirPath);
+		final File projectTemplateDir = new File(projectTemplateDirPath);
 		
 		if (!sdkInstallDir.exists()) {
 			log.error("The specified SDK installation home directory does not exist and needs to be created: "+sdkInstallDirPath+".  Unable to install an instance of the SDK.");
 			return;
 		}
 
-		if (sdkInstallDir.list().length == 0) {
-			doIProceedResult = JOptionPane
-			.showConfirmDialog(
+		if (sdkInstallDir.list().length == 0 || !projectTemplateDir.exists()) {
+			JOptionPane.showMessageDialog(
 					this,
-					"The SDK installation home directory (" + sdkInstallDirPath + ") exists but is empty.\n"
-					+"An SDK instance is needed by the Workbench and will be installed.\n"
-					+"\n"
-					+"Proceed?",
-					"Confirm SDK Installation", 
-					JOptionPane.YES_NO_OPTION);
-		} else{
+					"The SDK installation home directory (" + sdkInstallDirPath + ") does not have a\n"
+					+ "valid SDK instance.  One will now be installed.\n");
+		} else {
 			log.info("The specified SDK installation home directory already exists and is not empty: "+sdkInstallDirPath+".  Skipping the 'Install SDK' step.");
 			return;
 		}
 
-		if (doIProceedResult == JOptionPane.OK_OPTION) {	
-
-			WorkbenchViewerBaseComponent.this.setVisible(false);
-			dispose();
-
-//			BusyDialogRunnable r = new BusyDialogRunnable(GridApplication.getContext().getApplication(), "Installing") {
-//				@Override
-//				public void process() {
-					try {
-						
-						if (!sdkInstallDir.exists()) {
-							r.setErrorMessage(generateErrorMsg("The specified SDK installation home directory (" + sdkInstallDirPath + ") does not exist."));
-							return;
-						}
-						
-						r.setProgressText("Installing the SDK");
-						
-						try {
-							AntTools.installSdk(sdkInstallDirPath);
-						} catch (BuildException e) {
-							log.error("ERROR: "+ e.getMessage(),e);
-							r.setErrorMessage(generateErrorMsg("Failed to install the SDK!"));
-							return;
-						}
-				
-						r.setErrorMessage("The SDK has been Successfully Installed");
-
-					} catch (Exception e) {
-						log.error("ERROR: "+ e.getMessage(),e);
-						r.setErrorMessage(generateErrorMsg(e));
-						return;
-					}
-//				}
-//			};
-//			
-//			Thread th = new Thread(r);
-//			th.start();
+		try {
+			r.setProgressText("Installing the SDK");
+			AntTools.installSdk(sdkInstallDirPath);
+			r.setErrorMessage("The SDK has been Successfully Installed");
+		} catch (Exception e) {
+			log.error("ERROR: "+ e.getMessage(),e);
+			r.setErrorMessage(generateErrorMsg("Failed to install the SDK!"));
+			throw e;
 		}
 	}
 	
@@ -380,7 +334,6 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 			final String projectDirPath) {
 		
 		int doIProceedResult = JOptionPane.NO_OPTION;
-		final File projectTemplateDir = new File(projectTemplateDirPath);
 		final File projectDir = new File(projectDirPath);
 
 		if (projectDir.exists()) {
@@ -432,12 +385,7 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 							setErrorMessage(generateErrorMsg("The specified SDK installation home directory does not exist: "+sdkDirPath));
 							return;
 						} else {
-							installSdk(sdkDirPath,this);
-						}
-						
-						if (!projectTemplateDir.exists()) {
-							setErrorMessage(generateErrorMsg("The specified SDK installation home directory does not contain the required 'project-template' sub-directory: "+sdkDirPath));
-							return;
+							installSdk(sdkDirPath,projectTemplateDirPath,this);
 						}
 						
 						setProgressText("Configuring Project Directory");
@@ -495,7 +443,6 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 			final String remoteDeployEnv) {
 		
 		int doIProceedResult = JOptionPane.NO_OPTION;
-		final File projectTemplateDir = new File(projectTemplateDirPath);
 		final File projectDir = new File(projectDirPath);
 
 		if (projectDir.exists()) {
@@ -510,9 +457,9 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 				.showMessageDialog(
 						this,
 						"The project generation directory ("+ projectDirPath+ ")\n"
-						+"does not appear to be a caCORE Workbench generated project directory.  You\n"
-						+"must specify a directory that already contains both the code generation and\n"
-						+"deployment properties.");
+						+"does not appear to be a caCORE Workbench generated project directory. \n"
+						+"Please specify a directory that already contains both the code generation\n"
+						+"and deployment properties.");
 			} else {
 				doIProceedResult = JOptionPane.OK_OPTION;
 			}
@@ -540,12 +487,7 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 							setErrorMessage(generateErrorMsg("The specified SDK installation home directory does not exist: "+sdkDirPath));
 							return;
 						} else {
-							installSdk(sdkDirPath,this);
-						}
-						
-						if (!projectTemplateDir.exists()) {
-							setErrorMessage(generateErrorMsg("The specified SDK installation home directory does not contain the required 'project-template' sub-directory: "+sdkDirPath));
-							return;
+							installSdk(sdkDirPath,projectTemplateDirPath,this);
 						}
 						
 						setProgressText("Configuring Project Directory");
@@ -702,40 +644,6 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 	
 	private String generateErrorMsg(String errorMsg){
 		return "Error: " + errorMsg;
-	}
-	
-    /**
-     * This method opens the default browser to the Workbench Help URL
-     * Based upon "Bare Bones Browser Launch" - See http://www.centerkey.com/java/browser/
-     */
-	protected void openURL(String url) {
-		String osName = System.getProperty("os.name");
-		try {
-			if (osName.startsWith("Mac OS")) {
-				Class<?> fileMgr = Class.forName("com.apple.eio.FileManager");
-				Method openURL = fileMgr.getDeclaredMethod("openURL",
-						new Class[] {String.class});
-				openURL.invoke(null, new Object[] {url});
-			}
-			else if (osName.startsWith("Windows"))
-				Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler " + url);
-			else { //assume Unix or Linux
-				boolean found = false;
-				for (String browser : browsers)
-					if (!found) {
-						found = Runtime.getRuntime().exec(
-								new String[] {"which", browser}).waitFor() == 0;
-						if (found)
-							Runtime.getRuntime().exec(new String[] {browser, url});
-					}
-				if (!found)
-					throw new Exception(Arrays.toString(browsers));
-			}
-		}
-		catch (Exception e) {
-			JOptionPane.showMessageDialog(null,
-					"Error attempting to launch workbench help in web browser:\n" + e.toString());
-		}
 	}
 
 }
