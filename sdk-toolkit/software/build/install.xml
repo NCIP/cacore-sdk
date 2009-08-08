@@ -922,23 +922,23 @@
 		</if>
 		<if>
 			<and>
-				<equals arg1="${CSM_DROP_SCHEMA}" arg2="true"/>
+				<equals arg1="${CSM_DB_DROP_SCHEMA}" arg2="true"/>
 				<equals arg1="${SECURITY_ENABLED}" arg2="true"/>
 			</and>
 			<then>
-				<database-clean database.driver="${CSM_DB_DRIVER}" database.url="${CSM_DB_CONNECTION_URL}" database.user="${CSM_DB_USERNAME}" database.password="${CSM_DB_PASSWORD}" database.schema="${CSM_DB_NAME}" database.re-create="false" database.drop-schema="${CSM_DROP_SCHEMA}" />
+				<database-clean database.driver="${CSM_DB_DRIVER}" database.url="${CSM_DB_CONNECTION_URL}" database.user="${CSM_DB_USERNAME}" database.password="${CSM_DB_PASSWORD}" database.schema="${CSM_DB_NAME}" database.re-create="false" database.drop-schema="${CSM_DB_DROP_SCHEMA}" />
 				<execute-database-install database.type="${CSM_DB_TYPE}" database.url="${CSM_DB_CONNECTION_URL}" database.user="${CSM_DB_USERNAME}" database.password="${CSM_DB_PASSWORD}" db.install.create.oracle.file.list="${csm.db.install.create.oracle.file.list}" db.install.create.mysql.file.list="${csm.db.install.create.mysql.file.list}"/>
 			</then>
 		</if>
 		<if>
 			<and>
-				<equals arg1="${CLM_DROP_SCHEMA}" arg2="true"/>
+				<equals arg1="${CLM_DB_DROP_SCHEMA}" arg2="true"/>
 				<equals arg1="${CLM_DB_TYPE}" arg2="mysql"/>
 				<equals arg1="${ENABLE_CLM_LOGGER_CFG_GENERATION}" arg2="true" />
 			</and>
 			<then>
 				<then>
-					<database-clean database.driver="${CLM_DB_DRIVER}" database.url="${CLM_DB_CONNECTION_URL}" database.user="${CLM_DB_USERNAME}" database.password="${CLM_DB_PASSWORD}" database.schema="${CLM_DB_NAME}" database.re-create="false" database.drop-schema="${CLM_DROP_SCHEMA}" />
+					<database-clean database.driver="${CLM_DB_DRIVER}" database.url="${CLM_DB_CONNECTION_URL}" database.user="${CLM_DB_USERNAME}" database.password="${CLM_DB_PASSWORD}" database.schema="${CLM_DB_NAME}" database.re-create="false" database.drop-schema="${CLM_DB_DROP_SCHEMA}" />
 					<execute-database-install database.type="${CLM_DB_TYPE}"  database.url="${CLM_DB_CONNECTION_URL}" database.user="${CLM_DB_USERNAME}" database.password="${CLM_DB_PASSWORD}" db.install.create.oracle.file.list="${clm.db.install.create.oracle.file.list}" db.install.create.mysql.file.list="${clm.db.install.create.oracle.file.list}"/>
 				</then>
 			</then>
