@@ -1,7 +1,10 @@
 package gov.nih.nci.cacore.workbench.portal.panel;
 
+import gov.nih.nci.cacore.workbench.common.FileFilters;
 import gov.nih.nci.cacore.workbench.common.LookAndFeel;
 import gov.nih.nci.cacore.workbench.common.OptionsMapManager;
+import gov.nih.nci.cacore.workbench.common.ResourceManager;
+import gov.nih.nci.cacore.workbench.common.Utils;
 import gov.nih.nci.cacore.workbench.portal.validation.PanelValidator;
 import gov.nih.nci.cacore.workbench.portal.validation.TabbedPanePropertiesValidator;
 import gov.nih.nci.cacore.workbench.portal.viewer.DeployPropertiesViewer;
@@ -12,6 +15,7 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -34,6 +38,8 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
 
 public final class ClmSettingsPanel implements Panel, PanelValidator {
 	
+	int SQL_FILE_DISPLAY_LENGTH = 42;
+	
 	private TabbedPanePropertiesValidator mainPanelValidator = null;
 	private DeployPropertiesViewer parentContainer = null;
 	
@@ -44,6 +50,8 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
 	private static final String CLM_DB_NAME = "CLM DB Schema";
 	private static final String CLM_DB_USERNAME = "CLM DB Username";
 	private static final String CLM_DB_PASSWORD = "CLM DB Password";
+	private static final String CLM_DB_DROP_SCHEMA = "CLM DB Drop Schema";
+	private static final String CLM_DB_SQL_FILE = "CLM DB SQL File";
 
     private boolean isWritableApiEnabled;
 	
@@ -58,7 +66,7 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
 	// Common Logging (CLM) 
 	private JPanel clmSettingsPanel = null;
 	private JPanel clmSettingsSubPanel = null;
-	
+	private JPanel clmDbCreationSettingsSubPanel = null;
 	private JPanel clmSettingsReviewPanel = null;
     
     //CLM (Logging) Settings Panel Component Definitions
@@ -71,8 +79,13 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
     private JTextField clmDbUsernameField = null;
     private JTextField clmDbPasswordField = null;
     
+    //DB Re-create DB Sub-Panel Component Definitions
+    private JCheckBox  clmDbDropSchemaCheckBox=null;
+    private JTextField clmDbSqlFileField=null;
+    
     //Buttons
     private JButton testConnectionButton = null;
+    private JButton clmDbSqlFilePathButton = null;
  
     /**
      * This method initializes the Writable API Database Type Field
@@ -401,6 +414,40 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
     	getTestConnectionButton().setEnabled(enabled);
     }
     
+    /**
+     * This method initializes jButton
+     * 
+     * @return javax.swing.JButton
+     */
+    private JButton getClmDbSqlFilePathButton() {
+        if (clmDbSqlFilePathButton == null) {
+        	clmDbSqlFilePathButton = new JButton();
+        	clmDbSqlFilePathButton.setText("Browse");
+        	clmDbSqlFilePathButton.setIcon(LookAndFeel.getBrowseIcon());
+        	clmDbSqlFilePathButton.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    try {
+                        String previous = getClmDbSqlFileField().getText();
+                        String location = ResourceManager.promptFile(previous, FileFilters.SQL_FILTER);
+                        if (location != null && location.length() > 0) {
+                        	getClmDbSqlFileField().setText(location);
+                        } else {
+                        	getClmDbSqlFileField().setText(previous);
+                        }
+                        mainPanelValidator.validateInput();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+        }
+        return clmDbSqlFilePathButton;
+    }
+        
+    public void enableClmDbSqlFileButton(boolean enable){
+    	getClmDbSqlFilePathButton().setEnabled(enable);
+    }
+    
     private final class FocusChangeHandler implements FocusListener {
 
         public void focusGained(FocusEvent e) {
@@ -414,6 +461,98 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
         private void update() {
             mainPanelValidator.validateInput();
         }
+    }
+    
+    /**
+     * This method initializes the Use JNDI Based Connection Check Box
+     * 
+     * @return javax.swing.JCheckBox
+     */
+    private JCheckBox getClmDbDropSchemaCheckBox() {
+        if (clmDbDropSchemaCheckBox == null) {
+        	clmDbDropSchemaCheckBox = new JCheckBox();
+        	clmDbDropSchemaCheckBox.setToolTipText("Drop all of the tables from the CLM Database Schema?");
+        	clmDbDropSchemaCheckBox.setHorizontalAlignment(SwingConstants.LEADING);
+        	clmDbDropSchemaCheckBox.setSelected(Boolean.parseBoolean(parentContainer.getPropertiesManager().getDeployPropertyValue("CLM_DB_DROP_SCHEMA")));
+        	clmDbDropSchemaCheckBox.setHorizontalTextPosition(SwingConstants.LEFT);
+			
+        	clmDbDropSchemaCheckBox.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+                    mainPanelValidator.setDirty(true);
+                    mainPanelValidator.validateInput();
+				}
+        	});
+
+        	clmDbDropSchemaCheckBox.addFocusListener(new FocusChangeHandler());
+        }
+        return clmDbDropSchemaCheckBox;
+    }  
+    
+    public boolean isDbDropSchemaSelected() {
+    	return getClmDbDropSchemaCheckBox().isSelected();
+    }
+    
+    /**
+     * This method initializes the Database JNDI Name Field
+     * 
+     * @return javax.swing.JTextField
+     */
+    public JTextField getClmDbSqlFileField() {
+        if (clmDbSqlFileField == null) {
+        	clmDbSqlFileField = new JTextField();
+        	
+        	String dbType = getClmDbType();
+        	if ("mysql".equalsIgnoreCase(dbType)){
+        		clmDbSqlFileField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("clm.db.install.create.mysql.file.list"));
+        	} else {
+        		clmDbSqlFileField.setText("");
+        	}
+        	
+        	clmDbSqlFileField.getDocument().addDocumentListener(new DocumentListener() {
+                public void changedUpdate(DocumentEvent e) {
+                    mainPanelValidator.setDirty(true);
+                    mainPanelValidator.validateInput();
+                }
+
+                public void removeUpdate(DocumentEvent e) {
+                    mainPanelValidator.setDirty(true);
+                    mainPanelValidator.validateInput();
+                }
+
+                public void insertUpdate(DocumentEvent e) {
+                    mainPanelValidator.setDirty(true);
+                    mainPanelValidator.validateInput();
+                }
+            });
+        	clmDbSqlFileField.addFocusListener(new FocusChangeHandler());
+        	
+        	clmDbSqlFileField.setEditable(true); // Allow changes directly or via the DB SQL File Button 
+        }
+        return clmDbSqlFileField;
+    }
+   
+    
+    public String getDbSqlFile() {
+    	return getClmDbSqlFileField().getText();
+    }
+    
+    public String getDbSqlFilePath(){
+    	return getClmDbSqlFileField().getText().replace('\\', '/');
+    }
+    
+    public void setDbSqlFilePath(String filePath){
+    	getClmDbSqlFileField().setText(filePath);
+    }
+    
+    public String getDbSqlFileName(){
+    	String certFilePath = getClmDbSqlFileField().getText().replace('\\', '/');
+    	
+    	return certFilePath.substring(certFilePath.lastIndexOf('/')+1);
+    }
+    
+    public String getClmDbType(){
+    	//Currently, MySql is the only DB type supported by CLM
+    	return "MySQL";
     }
     
 	/**
@@ -433,6 +572,16 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
 			gridBagConstraints10.gridwidth = 3;
 			//gridBagConstraints10.weighty = 1.0D;
 			gridBagConstraints10.weightx = 1.0D;  
+	
+			GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
+			gridBagConstraints20.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints20.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints20.gridy = 2;
+			gridBagConstraints20.gridx = 0;
+			gridBagConstraints20.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints20.gridwidth = 3;
+			//gridBagConstraints20.weighty = 1.0D;
+			gridBagConstraints20.weightx = 1.0D; 
 		    
 		    clmSettingsPanel = new JPanel();
 			clmSettingsPanel.setLayout(new GridBagLayout());
@@ -441,6 +590,7 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
 					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 
 			clmSettingsPanel.add(getLoggingSettingsSubPanel(), gridBagConstraints10);
+			clmSettingsPanel.add(getClmDbCreationSettingsSubPanel(), gridBagConstraints20);
 
 			clmSettingsPanel.validate();
 		}
@@ -634,6 +784,81 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
 		}
 		return clmSettingsSubPanel;
 	}
+	
+	/**
+	 * This method initializes dbConnectionJndiSettingsPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getClmDbCreationSettingsSubPanel() {
+		if (clmDbCreationSettingsSubPanel == null) {
+			
+		    //DB Creation Settings Panel Label Definitions
+		    JLabel clmDbDropSchemaLabel = null;
+		    JLabel clmDbSqlFileLabel = null;
+			
+			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
+			gridBagConstraints10.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints10.gridy = 1;
+			gridBagConstraints10.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints10.gridx = 0;
+
+			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+			gridBagConstraints11.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints11.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints11.gridx = 1;
+			gridBagConstraints11.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints11.gridy = 1;
+			gridBagConstraints11.weighty = 1.0D;
+			gridBagConstraints11.weightx = 1.0D;  
+			gridBagConstraints11.gridwidth = 2;
+			
+			GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
+			gridBagConstraints20.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints20.gridy = 2;
+			gridBagConstraints20.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints20.gridx = 0;
+
+            GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
+            gridBagConstraints21.fill = java.awt.GridBagConstraints.HORIZONTAL;
+            gridBagConstraints21.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints21.gridx = 1;
+            gridBagConstraints21.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints21.gridy = 2;
+            gridBagConstraints21.weighty = 1.0D;
+            gridBagConstraints21.weightx = 1.0;          
+            
+            GridBagConstraints gridBagConstraints22 = new GridBagConstraints();
+            gridBagConstraints22.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints22.gridy = 2;
+            gridBagConstraints22.gridx = 2;
+            gridBagConstraints22.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints22.gridwidth = 1;
+		    
+			clmDbDropSchemaLabel = new JLabel();
+			clmDbDropSchemaLabel.setText("Drop CLM Database Schema?");
+
+			clmDbSqlFileLabel = new JLabel();
+			clmDbSqlFileLabel.setText("Database SQL File:");
+
+			clmDbCreationSettingsSubPanel = new JPanel();
+		    clmDbCreationSettingsSubPanel.setLayout(new GridBagLayout());
+		    clmDbCreationSettingsSubPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Re-create CLM Database Options",
+					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
+		    
+		    clmDbCreationSettingsSubPanel.add(clmDbDropSchemaLabel, gridBagConstraints10);
+		    clmDbCreationSettingsSubPanel.add(getClmDbDropSchemaCheckBox(), gridBagConstraints11);
+		    
+		    clmDbCreationSettingsSubPanel.add(clmDbSqlFileLabel, gridBagConstraints20);
+		    clmDbCreationSettingsSubPanel.add(getClmDbSqlFileField(), gridBagConstraints21);
+		    clmDbCreationSettingsSubPanel.add(getClmDbSqlFilePathButton(), gridBagConstraints22);
+			
+		    clmDbCreationSettingsSubPanel.validate();
+		}
+		
+		return clmDbCreationSettingsSubPanel;
+	}
     
     /**
      * This method initializes the Common Logging Module Settings jPanel
@@ -650,6 +875,11 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
 		    JLabel clmDbUsernameValueLabel = null;
 		    JLabel clmDbPasswordLabel = null;
 		    JLabel clmDbPasswordValueLabel = null;
+		    
+		    JLabel clmDbDropSchemaLabel = null;
+		    JLabel clmDbDropSchemaValueLabel = null;
+		    JLabel clmDbSqlFileLabel = null;
+		    JLabel clmDbSqlFileValueLabel = null;
         	
             GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
             gridBagConstraints10.anchor = java.awt.GridBagConstraints.WEST;
@@ -710,11 +940,41 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
             gridBagConstraints41.insets = new java.awt.Insets(2, 2, 2, 2);
             gridBagConstraints41.weighty = 1.0D;
             gridBagConstraints41.weightx = 1.0;
+            
+            GridBagConstraints gridBagConstraints50 = new GridBagConstraints();
+            gridBagConstraints50.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints50.gridy = 5;
+            gridBagConstraints50.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints50.gridx = 0;            
+
+            GridBagConstraints gridBagConstraints51 = new GridBagConstraints();
+            gridBagConstraints51.fill = java.awt.GridBagConstraints.HORIZONTAL;
+            gridBagConstraints51.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints51.gridy = 5;
+            gridBagConstraints51.gridx = 1;
+            gridBagConstraints51.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints51.weighty = 1.0D;
+            gridBagConstraints51.weightx = 1.0;
+            
+            GridBagConstraints gridBagConstraints60 = new GridBagConstraints();
+            gridBagConstraints60.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints60.gridy = 6;
+            gridBagConstraints60.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints60.gridx = 0;            
+
+            GridBagConstraints gridBagConstraints61 = new GridBagConstraints();
+            gridBagConstraints61.fill = java.awt.GridBagConstraints.HORIZONTAL;
+            gridBagConstraints61.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints61.gridy = 6;
+            gridBagConstraints61.gridx = 1;
+            gridBagConstraints61.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints61.weighty = 1.0D;
+            gridBagConstraints61.weightx = 1.0;
         	
         	clmDbTypeLabel = new JLabel();
         	clmDbTypeLabel.setText("Type:");
         	clmDbTypeValueLabel = new JLabel();
-        	clmDbTypeValueLabel.setText(OptionsMapManager.getClmDbTypeOptionsMap().get(getClmDbTypeComboBox().getSelectedItem().toString()));
+        	clmDbTypeValueLabel.setText(getClmDbType());
 		    
 		    clmDbConnectionUrlLabel = new JLabel();
 		    clmDbConnectionUrlLabel.setText("Connection URL:");
@@ -730,6 +990,11 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
 		    clmDbPasswordLabel.setText("Password:");
 		    clmDbPasswordValueLabel = new JLabel();
 		    clmDbPasswordValueLabel.setText(getClmDbPasswordField().getText());
+		    
+		    clmDbDropSchemaLabel = new JLabel();
+		    clmDbDropSchemaLabel.setText("Drop Database Schema?");
+		    clmDbDropSchemaValueLabel = new JLabel();
+		    clmDbDropSchemaValueLabel.setText(Utils.convertToYesNo(getClmDbDropSchemaCheckBox()));
             
 		    clmSettingsReviewPanel = new JPanel();
 		    clmSettingsReviewPanel.setLayout(new GridBagLayout());
@@ -745,6 +1010,23 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
 		    clmSettingsReviewPanel.add(clmDbUsernameValueLabel, gridBagConstraints31);
 		    clmSettingsReviewPanel.add(clmDbPasswordLabel, gridBagConstraints40);
 		    clmSettingsReviewPanel.add(clmDbPasswordValueLabel, gridBagConstraints41);
+		    clmSettingsReviewPanel.add(clmDbDropSchemaLabel, gridBagConstraints50);
+		    clmSettingsReviewPanel.add(clmDbDropSchemaValueLabel, gridBagConstraints51);
+		    
+		    if (ValidationUtils.isNotBlank(this.getClmDbSqlFileField().getText())){
+
+			    clmDbSqlFileLabel = new JLabel();
+			    clmDbSqlFileLabel.setText("Database SQL File:");
+			    
+			    clmDbSqlFileValueLabel = new JLabel();
+			    String clmDbSqlFile = getClmDbSqlFileField().getText();
+			    if (clmDbSqlFile != null && clmDbSqlFile.length() > SQL_FILE_DISPLAY_LENGTH)
+			    	clmDbSqlFile = "..."+clmDbSqlFile.substring(clmDbSqlFile.length() - SQL_FILE_DISPLAY_LENGTH);
+			    clmDbSqlFileValueLabel.setText(clmDbSqlFile);
+			    
+		    	clmSettingsReviewPanel.add(clmDbSqlFileLabel, gridBagConstraints60);
+		    	clmSettingsReviewPanel.add(clmDbSqlFileValueLabel, gridBagConstraints61);
+		    }
             
 		    clmSettingsReviewPanel.validate();
         //}
@@ -762,7 +1044,7 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
     		if (getEnableCommonLoggingModuleCheckBox().isSelected()){
 
     			String clmDbConnectionUrlField = this.getClmDbUrlField().getText();
-    			if (!ValidationUtils.isNotBlank(clmDbConnectionUrlField)) {
+    			if (ValidationUtils.isBlank(clmDbConnectionUrlField)) {
     				result.add(new SimpleValidationMessage(CLM_DB_CONNECTION_URL + " must not be blank.", Severity.ERROR, CLM_DB_CONNECTION_URL));
     			}
         		
@@ -770,25 +1052,48 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
         			result.add(new SimpleValidationMessage(CLM_DB_CONNECTION_URL + " information is incomplete.  Make sure hostname, port and schema information is correct.", Severity.ERROR, CLM_DB_CONNECTION_URL));
         		}
         		
-        		if (!ValidationUtils.isNotBlank(getClmDbHostnameField().getText())) {
+        		if (ValidationUtils.isBlank(getClmDbHostnameField().getText())) {
         			result.add(new SimpleValidationMessage(CLM_DB_SERVER + " must not be blank.", Severity.ERROR, CLM_DB_SERVER));
         		}
         		
-        		if (!ValidationUtils.isNotBlank(getClmDbPortField().getText())) {
+        		String clmDbPort = getClmDbPortField().getText();
+        		if (ValidationUtils.isBlank(clmDbPort)) {
         			result.add(new SimpleValidationMessage(CLM_DB_SERVER_PORT + " must not be blank.", Severity.ERROR, CLM_DB_SERVER_PORT));
         		}
         		
-        		if (!ValidationUtils.isNotBlank(getClmDbSchemaField().getText())) {
+        		if (!ValidationUtils.isNumeric(clmDbPort)){
+        			result.add(new SimpleValidationMessage(CLM_DB_SERVER_PORT + " must be numeric.", Severity.ERROR, CLM_DB_SERVER_PORT));
+        		}
+        		
+        		if (ValidationUtils.isBlank(getClmDbSchemaField().getText())) {
         			result.add(new SimpleValidationMessage(CLM_DB_NAME + " must not be blank.", Severity.ERROR, CLM_DB_NAME));
         		}
 
-    			if (!ValidationUtils.isNotBlank(this.getClmDbUsernameField().getText())) {
+    			if (ValidationUtils.isBlank(this.getClmDbUsernameField().getText())) {
     				result.add(new SimpleValidationMessage(CLM_DB_USERNAME + " must not be blank.", Severity.ERROR, CLM_DB_USERNAME));
     			}
 
-    			if (!ValidationUtils.isNotBlank(this.getClmDbPasswordField().getText())) {
+    			if (ValidationUtils.isBlank(this.getClmDbPasswordField().getText())) {
     				result.add(new SimpleValidationMessage(CLM_DB_PASSWORD + " must not be blank.", Severity.ERROR, CLM_DB_PASSWORD));
     			}
+    			
+    	    	
+    	    	if (getClmDbDropSchemaCheckBox().isSelected()){
+    	    		if (ValidationUtils.isBlank(this.getClmDbSqlFileField().getText())) {
+    	    			result.add(new SimpleValidationMessage(CLM_DB_SQL_FILE + " must not be blank when "+CLM_DB_DROP_SCHEMA+" is selected.", Severity.ERROR, CLM_DB_SQL_FILE));
+    	    		}
+    	    	}
+    	    	
+    			if (ValidationUtils.isNotBlank(this.getClmDbSqlFileField().getText())) {
+    	    		File file = new File(this.getClmDbSqlFileField().getText());
+    	    		if(!file.exists()){
+    	    			result.add(new SimpleValidationMessage(CLM_DB_SQL_FILE + " does not exist.  Please select or enter a valid absolute path to the file.", Severity.ERROR, CLM_DB_SQL_FILE));
+    	    		}
+    	    		
+    	    		if (!this.getClmDbSqlFileField().getText().endsWith("sql")){
+    	    			result.add(new SimpleValidationMessage(CLM_DB_SQL_FILE + " must refer to a SQL (*.sql) file.", Severity.ERROR, CLM_DB_SQL_FILE));
+    	    		}
+    	    	}
     		}
     	}
     	
@@ -812,6 +1117,11 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
         ValidationComponentUtils.setMessageKey(getClmDbPasswordField(), CLM_DB_PASSWORD);
         ValidationComponentUtils.setMandatory(getClmDbPasswordField(), true);
         
+        ValidationComponentUtils.setMessageKey(getClmDbDropSchemaCheckBox(), CLM_DB_DROP_SCHEMA);
+        ValidationComponentUtils.setMandatory(getClmDbDropSchemaCheckBox(), true);
+        ValidationComponentUtils.setMessageKey(getClmDbSqlFileField(), CLM_DB_SQL_FILE);
+        ValidationComponentUtils.setMandatory(getClmDbSqlFileField(), true);
+        
         updateClmDbFields();
         parentContainer.toggleClmTestConnectionButton();
     }
@@ -826,6 +1136,14 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
 		propsMap.put("CLM_DB_NAME", getClmDbSchemaField().getText());
 		propsMap.put("CLM_DB_USERNAME", getClmDbUsernameField().getText());
 		propsMap.put("CLM_DB_PASSWORD", getClmDbPasswordField().getText());
+		
+		
+		propsMap.put("CLM_DB_DROP_SCHEMA", Boolean.valueOf(getClmDbDropSchemaCheckBox().isSelected()).toString() );
+		
+    	String dbType = getClmDbType();
+    	if ("mysql".equalsIgnoreCase(dbType)){
+    		propsMap.put("clm.db.install.create.mysql.file.list", getClmDbSqlFileField().getText().replace('\\', '/'));
+    	}
     	
     	return propsMap;
     }

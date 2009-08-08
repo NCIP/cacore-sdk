@@ -4,6 +4,7 @@ import gov.nih.nci.cacore.workbench.common.FileFilters;
 import gov.nih.nci.cacore.workbench.common.LookAndFeel;
 import gov.nih.nci.cacore.workbench.common.OptionsMapManager;
 import gov.nih.nci.cacore.workbench.common.ResourceManager;
+import gov.nih.nci.cacore.workbench.common.Utils;
 import gov.nih.nci.cacore.workbench.portal.validation.PanelValidator;
 import gov.nih.nci.cacore.workbench.portal.validation.TabbedPanePropertiesValidator;
 import gov.nih.nci.cacore.workbench.portal.viewer.DeployPropertiesViewer;
@@ -37,6 +38,8 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
 
 public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
 	
+	int SQL_FILE_DISPLAY_LENGTH = 42;
+	
 	private TabbedPanePropertiesValidator mainPanelValidator = null;
 	private DeployPropertiesViewer parentContainer = null;
 	
@@ -48,6 +51,7 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
 	private static final String DB_NAME = "DB Schema";
 	private static final String DB_USERNAME = "DB Username";
 	private static final String DB_PASSWORD = "DB Password";
+	private static final String DB_DROP_SCHEMA = "DB Drop Schema";
 	private static final String DB_SQL_FILE = "DB SQL File";
 	
     //Buttons
@@ -77,8 +81,8 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
     private JTextField dbUsernameField = null;
     private JTextField dbPasswordField = null;
     
-    //Re-create DB Panel Component Definitions
-    private JCheckBox 	recreateDbCheckBox=null;
+    //DB Drop Schema Sub-Panel Component Definitions
+    private JCheckBox 	dbDropSchemaCheckBox=null;
     private JTextField 	dbSqlFileField=null;
 
     /**
@@ -488,28 +492,28 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
      * 
      * @return javax.swing.JCheckBox
      */
-    private JCheckBox getRecreateDbCheckBox() {
-        if (recreateDbCheckBox == null) {
-        	recreateDbCheckBox = new JCheckBox();
-        	recreateDbCheckBox.setToolTipText("Re-create Database?");
-        	recreateDbCheckBox.setHorizontalAlignment(SwingConstants.LEADING);
-        	recreateDbCheckBox.setSelected(Boolean.parseBoolean(parentContainer.getPropertiesManager().getDeployPropertyValue("database.re-create")));
-        	recreateDbCheckBox.setHorizontalTextPosition(SwingConstants.LEFT);
+    private JCheckBox getDbDropSchemaCheckBox() {
+        if (dbDropSchemaCheckBox == null) {
+        	dbDropSchemaCheckBox = new JCheckBox();
+        	dbDropSchemaCheckBox.setToolTipText("Drop all of the tables from the application Database Schema?");
+        	dbDropSchemaCheckBox.setHorizontalAlignment(SwingConstants.LEADING);
+        	dbDropSchemaCheckBox.setSelected(Boolean.parseBoolean(parentContainer.getPropertiesManager().getDeployPropertyValue("DB_DROP_SCHEMA")));
+        	dbDropSchemaCheckBox.setHorizontalTextPosition(SwingConstants.LEFT);
 			
-        	recreateDbCheckBox.addActionListener(new java.awt.event.ActionListener() {
+        	dbDropSchemaCheckBox.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
 				}
         	});
 
-        	recreateDbCheckBox.addFocusListener(new FocusChangeHandler());
+        	dbDropSchemaCheckBox.addFocusListener(new FocusChangeHandler());
         }
-        return recreateDbCheckBox;
+        return dbDropSchemaCheckBox;
     }  
     
-    public boolean isRecreateDbSelected() {
-    	return getRecreateDbCheckBox().isSelected();
+    public boolean isDbDropSchemaSelected() {
+    	return getDbDropSchemaCheckBox().isSelected();
     }
     
     /**
@@ -548,7 +552,7 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
             });
         	dbSqlFileField.addFocusListener(new FocusChangeHandler());
         	
-        	dbSqlFileField.setEditable(false); // Only allow changes via the DB SQL File Button
+        	dbSqlFileField.setEditable(true); // Allow changes directly or via the DB SQL File Button 
         }
         return dbSqlFileField;
     }
@@ -570,7 +574,6 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
     	
     	return certFilePath.substring(certFilePath.lastIndexOf('/')+1);
     }
-
 
     private final class FocusChangeHandler implements FocusListener {
 
@@ -747,7 +750,7 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
 		if (dbCreationSettingsSubPanel == null) {
 			
 		    //DB Creation Settings Panel Label Definitions
-		    JLabel reCreateDbLabel = null;
+		    JLabel dbDropSchemaLabel = null;
 		    JLabel dbSqlFileLabel = null;
 			
 			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
@@ -788,8 +791,8 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
             gridBagConstraints22.insets = new java.awt.Insets(2, 2, 2, 2);
             gridBagConstraints22.gridwidth = 1;
 		    
-			reCreateDbLabel = new JLabel();
-			reCreateDbLabel.setText("Re-create Database?");
+			dbDropSchemaLabel = new JLabel();
+			dbDropSchemaLabel.setText("Drop Database Schema?");
 
 			dbSqlFileLabel = new JLabel();
 			dbSqlFileLabel.setText("Database SQL File:");
@@ -800,8 +803,8 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
 					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 		    
-		    dbCreationSettingsSubPanel.add(reCreateDbLabel, gridBagConstraints10);
-		    dbCreationSettingsSubPanel.add(getRecreateDbCheckBox(), gridBagConstraints11);
+		    dbCreationSettingsSubPanel.add(dbDropSchemaLabel, gridBagConstraints10);
+		    dbCreationSettingsSubPanel.add(getDbDropSchemaCheckBox(), gridBagConstraints11);
 		    
 		    dbCreationSettingsSubPanel.add(dbSqlFileLabel, gridBagConstraints20);
 		    dbCreationSettingsSubPanel.add(getDbSqlFileField(), gridBagConstraints21);
@@ -1001,8 +1004,8 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
 		    JLabel dbPasswordValueLabel = null;
 		    JLabel dbTypeLabel = null;
 		    JLabel dbTypeValueLabel = null;
-		    JLabel recreateDbLabel = null;
-		    JLabel recreateDbValueLabel = null;
+		    JLabel dbDropSchemaLabel = null;
+		    JLabel dbDropSchemaValueLabel = null;
 		    JLabel dbSqlFileLabel = null;
 		    JLabel dbSqlFileValueLabel = null;
         	
@@ -1129,7 +1132,7 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
 		    useJndiBasedConnectionLabel = new JLabel();
 		    useJndiBasedConnectionLabel.setText("Use JNDI Based Connection?");
 		    useJndiBasedConnectionValueLabel = new JLabel();
-		    useJndiBasedConnectionValueLabel.setText(Boolean.valueOf(getUseJndiBasedConnectionCheckBox().isSelected()).toString());
+		    useJndiBasedConnectionValueLabel.setText(Utils.convertToYesNo(getUseJndiBasedConnectionCheckBox()));
 		    
 		    dbJndiUrlLabel = new JLabel();
 		    dbJndiUrlLabel.setText("JNDI Name:");
@@ -1156,15 +1159,10 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
 		    dbTypeValueLabel = new JLabel();
 		    dbTypeValueLabel.setText(getDbTypeComboBox().getSelectedItem().toString());
 		    
-		    recreateDbLabel = new JLabel();
-		    recreateDbLabel.setText("Re-create Database?");
-		    recreateDbValueLabel = new JLabel();
-		    recreateDbValueLabel.setText(Boolean.valueOf(getRecreateDbCheckBox().isSelected()).toString());
-		    
-		    dbSqlFileLabel = new JLabel();
-		    dbSqlFileLabel.setText("Database SQL File:");
-		    dbSqlFileValueLabel = new JLabel();
-		    dbSqlFileValueLabel.setText(getDbSqlFileField().getText());
+		    dbDropSchemaLabel = new JLabel();
+		    dbDropSchemaLabel.setText("Drop Database Schema?");
+		    dbDropSchemaValueLabel = new JLabel();
+		    dbDropSchemaValueLabel.setText(Utils.convertToYesNo(getDbDropSchemaCheckBox()));
             
 		    dbConnectionSettingsReviewPanel = new JPanel();
 		    dbConnectionSettingsReviewPanel.setLayout(new GridBagLayout());
@@ -1184,11 +1182,20 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
 		    dbConnectionSettingsReviewPanel.add(dbUsernameValueLabel, gridBagConstraints51);
 		    dbConnectionSettingsReviewPanel.add(dbPasswordLabel, gridBagConstraints60);
 		    dbConnectionSettingsReviewPanel.add(dbPasswordValueLabel, gridBagConstraints61);
-		    dbConnectionSettingsReviewPanel.add(recreateDbLabel, gridBagConstraints70);
-		    dbConnectionSettingsReviewPanel.add(recreateDbValueLabel, gridBagConstraints71);
+		    dbConnectionSettingsReviewPanel.add(dbDropSchemaLabel, gridBagConstraints70);
+		    dbConnectionSettingsReviewPanel.add(dbDropSchemaValueLabel, gridBagConstraints71);
 		    
-		    if (getRecreateDbCheckBox().isSelected()){
-			    dbConnectionSettingsReviewPanel.add(dbSqlFileValueLabel, gridBagConstraints80);
+		    if (ValidationUtils.isNotBlank(this.getDbSqlFileField().getText())){
+			    dbSqlFileLabel = new JLabel();
+			    dbSqlFileLabel.setText("Database SQL File:");
+			    
+			    dbSqlFileValueLabel = new JLabel();
+			    String dbSqlFile = getDbSqlFileField().getText();
+			    if (dbSqlFile != null && dbSqlFile.length() > SQL_FILE_DISPLAY_LENGTH)
+			    	dbSqlFile = "..."+dbSqlFile.substring(dbSqlFile.length() - SQL_FILE_DISPLAY_LENGTH);
+			    dbSqlFileValueLabel.setText(dbSqlFile);
+		    	
+			    dbConnectionSettingsReviewPanel.add(dbSqlFileLabel, gridBagConstraints80);
 			    dbConnectionSettingsReviewPanel.add(dbSqlFileValueLabel, gridBagConstraints81);
 		    }
             
@@ -1202,25 +1209,26 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
     	ValidationResult result = validateDbConnectionInput();
     	
     	if (getUseJndiBasedConnectionCheckBox().isSelected()) {
-    		if (!ValidationUtils.isNotBlank(this.getDbJndiNameField().getText())) {
+    		if (ValidationUtils.isBlank(this.getDbJndiNameField().getText())) {
     			result.add(new SimpleValidationMessage(DB_JNDI_NAME + " must not be blank.", Severity.ERROR, DB_JNDI_NAME));
     		}
     	}
     	
-    	if (getRecreateDbCheckBox().isSelected()){
-			
-    		if (!ValidationUtils.isNotBlank(this.getDbSqlFileField().getText())) {
-    			result.add(new SimpleValidationMessage(DB_SQL_FILE + " must not be blank.", Severity.ERROR, DB_SQL_FILE));
-    		} else {
-        		File file = new File(this.getDbSqlFileField().getText());
-        		if(!file.exists()){
-        			result.add(new SimpleValidationMessage(DB_SQL_FILE + " does not exist.  Please select or enter a valid absolute path to the file.", Severity.ERROR, DB_SQL_FILE));
-        		}
-        		
-        		if (!this.getDbSqlFileField().getText().endsWith("sql")){
-        			result.add(new SimpleValidationMessage(DB_SQL_FILE + " must refer to a SQL (*.sql) file.", Severity.ERROR, DB_SQL_FILE));
-        		}
-        	}
+    	if (getDbDropSchemaCheckBox().isSelected()){
+    		if (ValidationUtils.isBlank(this.getDbSqlFileField().getText())) {
+    			result.add(new SimpleValidationMessage(DB_SQL_FILE + " must not be blank when "+DB_DROP_SCHEMA+" is selected.", Severity.ERROR, DB_SQL_FILE));
+    		}
+    	}
+    	
+		if (ValidationUtils.isNotBlank(this.getDbSqlFileField().getText())) {
+    		File file = new File(this.getDbSqlFileField().getText());
+    		if(!file.exists()){
+    			result.add(new SimpleValidationMessage(DB_SQL_FILE + " does not exist.  Please select or enter a valid absolute path to the file.", Severity.ERROR, DB_SQL_FILE));
+    		}
+    		
+    		if (!this.getDbSqlFileField().getText().endsWith("sql")){
+    			result.add(new SimpleValidationMessage(DB_SQL_FILE + " must refer to a SQL (*.sql) file.", Severity.ERROR, DB_SQL_FILE));
+    		}
     	}
     	
     	return result;
@@ -1231,23 +1239,28 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
     	ValidationResult result = new ValidationResult();
     	
        	//DB Connection Settings Validation
-		if (!ValidationUtils.isNotBlank(getDbHostnameField().getText())) {
+		if (ValidationUtils.isBlank(getDbHostnameField().getText())) {
 			result.add(new SimpleValidationMessage(DB_SERVER + " must not be blank.", Severity.ERROR, DB_SERVER));
 		}
 		
-		if (!ValidationUtils.isNotBlank(getDbPortField().getText())) {
+		String dbPort = getDbPortField().getText();
+		if (ValidationUtils.isBlank(dbPort)) {
 			result.add(new SimpleValidationMessage(DB_SERVER_PORT + " must not be blank.", Severity.ERROR, DB_SERVER_PORT));
 		}
 		
-		if (!ValidationUtils.isNotBlank(getDbSchemaField().getText())) {
+		if (!ValidationUtils.isNumeric(dbPort)){
+			result.add(new SimpleValidationMessage(DB_SERVER_PORT + " must be numeric.", Severity.ERROR, DB_SERVER_PORT));
+		}
+		
+		if (ValidationUtils.isBlank(getDbSchemaField().getText())) {
 			result.add(new SimpleValidationMessage(DB_NAME + " must not be blank.", Severity.ERROR, DB_NAME));
 		}
 
-		if (!ValidationUtils.isNotBlank(this.getDbUsernameField().getText())) {
+		if (ValidationUtils.isBlank(this.getDbUsernameField().getText())) {
 			result.add(new SimpleValidationMessage(DB_USERNAME + " must not be blank.", Severity.ERROR, DB_USERNAME));
 		} 
 
-		if (!ValidationUtils.isNotBlank(this.getDbPasswordField().getText())) {
+		if (ValidationUtils.isBlank(this.getDbPasswordField().getText())) {
 			result.add(new SimpleValidationMessage(DB_PASSWORD + " must not be blank.", Severity.ERROR, DB_PASSWORD));
 		} 
     	
@@ -1270,12 +1283,13 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
         ValidationComponentUtils.setMandatory(getDbUsernameField(), true);
         ValidationComponentUtils.setMessageKey(getDbPasswordField(), DB_PASSWORD);
         ValidationComponentUtils.setMandatory(getDbPasswordField(), true);
+        ValidationComponentUtils.setMessageKey(getDbDropSchemaCheckBox(), DB_DROP_SCHEMA);
+        ValidationComponentUtils.setMandatory(getDbDropSchemaCheckBox(), true);
         ValidationComponentUtils.setMessageKey(getDbSqlFileField(), DB_SQL_FILE);
         ValidationComponentUtils.setMandatory(getDbSqlFileField(), true);
         
         updateDbFields();
         parentContainer.toggleTestConnectionButton();
-        parentContainer.toggleDbSqlFileButton();
         parentContainer.toggleDbJndiNameField();
     }
     
@@ -1293,7 +1307,7 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
 		propsMap.put("DB_USERNAME", getDbUsernameField().getText());
 		propsMap.put("DB_PASSWORD", getDbPasswordField().getText());
 		
-		propsMap.put("database.re-create", Boolean.valueOf(getRecreateDbCheckBox().isSelected()).toString() );
+		propsMap.put("DB_DROP_SCHEMA", Boolean.valueOf(getDbDropSchemaCheckBox().isSelected()).toString() );
 		
     	String dbType = getDbType();
     	if ("oracle".equalsIgnoreCase(dbType)){

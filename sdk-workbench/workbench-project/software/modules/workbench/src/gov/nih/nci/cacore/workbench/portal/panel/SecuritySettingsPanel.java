@@ -1,5 +1,6 @@
 package gov.nih.nci.cacore.workbench.portal.panel;
 
+import gov.nih.nci.cacore.workbench.common.Utils;
 import gov.nih.nci.cacore.workbench.common.WorkbenchPropertiesManager;
 import gov.nih.nci.cacore.workbench.portal.validation.PanelValidator;
 import gov.nih.nci.cacore.workbench.portal.validation.TabbedPanePropertiesValidator;
@@ -786,17 +787,17 @@ public final class SecuritySettingsPanel implements Panel, PanelValidator {
         	enableSecurityLabel = new JLabel();
         	enableSecurityLabel.setText("Enable Security?");
         	enableSecurityValueLabel = new JLabel();
-        	enableSecurityValueLabel.setText(Boolean.valueOf(getEnableSecurityCheckBox().isSelected()).toString());
+        	enableSecurityValueLabel.setText(Utils.convertToYesNo(getEnableSecurityCheckBox()));
 		               
 		    enableInstanceLevelSecurityLabel = new JLabel();
 		    enableInstanceLevelSecurityLabel.setText("Enable Instance Level Security?");
 		    enableInstanceLevelSecurityValueLabel = new JLabel();
-		    enableInstanceLevelSecurityValueLabel.setText(Boolean.valueOf(getEnableInstanceLevelSecurityCheckBox().isSelected()).toString());
+		    enableInstanceLevelSecurityValueLabel.setText(Utils.convertToYesNo(getEnableInstanceLevelSecurityCheckBox()));
             
 		    enableAttributeLevelSecurityLabel = new JLabel();
 		    enableAttributeLevelSecurityLabel.setText("Enable Attribute Level Security?");
 		    enableAttributeLevelSecurityValueLabel = new JLabel();
-		    enableAttributeLevelSecurityValueLabel.setText(Boolean.valueOf(getEnableAttributeLevelSecurityCheckBox().isSelected()).toString());
+		    enableAttributeLevelSecurityValueLabel.setText(Utils.convertToYesNo(getEnableAttributeLevelSecurityCheckBox()));
             
 		    csmProjectNameLabel = new JLabel();
 		    csmProjectNameLabel.setText("CSM Project Name");
@@ -806,12 +807,12 @@ public final class SecuritySettingsPanel implements Panel, PanelValidator {
 		    cacheProtectionElementsLabel = new JLabel();
 		    cacheProtectionElementsLabel.setText("Cache Protection Elements?");
 		    cacheProtectionElementsValueLabel = new JLabel();
-		    cacheProtectionElementsValueLabel.setText(Boolean.valueOf(getCacheProtectionElementsCheckBox().isSelected()).toString());
+		    cacheProtectionElementsValueLabel.setText(Utils.convertToYesNo(getCacheProtectionElementsCheckBox()));
 		    
 		    enableCaGridLoginModuleLabel = new JLabel();
 		    enableCaGridLoginModuleLabel.setText("Enable caGrid Login Module?");
 		    enableCaGridLoginModuleValueLabel = new JLabel();
-		    enableCaGridLoginModuleValueLabel.setText(Boolean.valueOf(getEnableCaGridLoginModuleCheckBox().isSelected()).toString());
+		    enableCaGridLoginModuleValueLabel.setText(Utils.convertToYesNo(getEnableCaGridLoginModuleCheckBox()));
            
 		    sdkGridLoginSvcNameLabel = new JLabel();
 		    sdkGridLoginSvcNameLabel.setText("SDK Grid Login Service Name:");
@@ -865,18 +866,18 @@ public final class SecuritySettingsPanel implements Panel, PanelValidator {
     	//Security setting Validation
     	if (getEnableSecurityCheckBox().isSelected()){
 
-    		if (!ValidationUtils.isNotBlank(this.getCsmProjectNameField().getText())) {
+    		if (ValidationUtils.isBlank(this.getCsmProjectNameField().getText())) {
     			result.add(new SimpleValidationMessage(CSM_PROJECT_NAME + " must not be blank.", Severity.ERROR, CSM_PROJECT_NAME));
     		}
 
     		//caGrid Auth Setting Validation
     		if (getEnableCaGridLoginModuleCheckBox().isSelected()){
    
-    			if (!ValidationUtils.isNotBlank(this.getCaGridLoginModuleNameField().getText())) {
+    			if (ValidationUtils.isBlank(this.getCaGridLoginModuleNameField().getText())) {
     				result.add(new SimpleValidationMessage(CAGRID_LOGIN_MODULE_NAME + " must not be blank.", Severity.ERROR, CAGRID_LOGIN_MODULE_NAME));
     			}
 
-    			if (!ValidationUtils.isNotBlank(this.getSdkGridLoginSvcNameField().getText())) {
+    			if (ValidationUtils.isBlank(this.getSdkGridLoginSvcNameField().getText())) {
     				result.add(new SimpleValidationMessage(SDK_GRID_LOGIN_SERVICE_NAME + " must not be blank.", Severity.ERROR, SDK_GRID_LOGIN_SERVICE_NAME));
     			}
     		}

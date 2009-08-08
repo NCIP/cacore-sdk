@@ -256,7 +256,7 @@ public final class SdkInstallSettingsPanel implements Panel, PanelValidator {
     	
     	//Sdk Install Panel Settings Validation
    	
-    	if (!ValidationUtils.isNotBlank(this.getSdkInstallDirField().getText())) {
+    	if (ValidationUtils.isBlank(this.getSdkInstallDirField().getText())) {
     		result.add(new SimpleValidationMessage(SDK_INSTALL_DIR + " must not be blank.", Severity.ERROR, SDK_INSTALL_DIR));
     	} else {
     		File file = new File(this.getSdkInstallDirField().getText());

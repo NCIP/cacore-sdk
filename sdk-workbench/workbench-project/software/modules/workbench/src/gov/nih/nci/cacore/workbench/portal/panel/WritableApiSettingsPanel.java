@@ -1,6 +1,7 @@
 package gov.nih.nci.cacore.workbench.portal.panel;
 
 import gov.nih.nci.cacore.workbench.common.OptionsMapManager;
+import gov.nih.nci.cacore.workbench.common.Utils;
 import gov.nih.nci.cacore.workbench.common.WorkbenchPropertiesManager;
 import gov.nih.nci.cacore.workbench.portal.validation.PanelValidator;
 import gov.nih.nci.cacore.workbench.portal.validation.TabbedPanePropertiesValidator;
@@ -561,7 +562,7 @@ public final class WritableApiSettingsPanel implements Panel, PanelValidator {
 		    enableWritableApiExtensionLabel = new JLabel();
 		    enableWritableApiExtensionLabel.setText("Enable Writable API?");
 		    enableWritableApiExtensionValueLabel = new JLabel();
-		    enableWritableApiExtensionValueLabel.setText(Boolean.valueOf(getEnableWritableApiExtensionCheckBox().isSelected()).toString());
+		    enableWritableApiExtensionValueLabel.setText(Utils.convertToYesNo(getEnableWritableApiExtensionCheckBox()));
             
 		    databaseTypeLabel = new JLabel();
 		    databaseTypeLabel.setText("Database Type:");
@@ -581,7 +582,7 @@ public final class WritableApiSettingsPanel implements Panel, PanelValidator {
 		    enableCommonLoggingModuleLabel = new JLabel();
 		    enableCommonLoggingModuleLabel.setText("Enable Common Logging Module?");
 		    enableCommonLoggingModuleValueLabel = new JLabel();
-		    enableCommonLoggingModuleValueLabel.setText(Boolean.valueOf(getEnableCommonLoggingModuleCheckBox().isSelected()).toString());
+		    enableCommonLoggingModuleValueLabel.setText(Utils.convertToYesNo(getEnableCommonLoggingModuleCheckBox()));
             
             writableApiSettingsReviewPanel = new JPanel();
             writableApiSettingsReviewPanel.setLayout(new GridBagLayout());
@@ -615,12 +616,12 @@ public final class WritableApiSettingsPanel implements Panel, PanelValidator {
     	//Writable API Settings Validation
     	if (getEnableWritableApiExtensionCheckBox().isSelected()){
 
-    		if (!ValidationUtils.isNotBlank(this.getIdentityGeneratorTagField().getText())) {
+    		if (ValidationUtils.isBlank(this.getIdentityGeneratorTagField().getText())) {
     			result.add(new SimpleValidationMessage(IDENTITY_GENERATOR_TAG + " must not be blank.", Severity.ERROR, IDENTITY_GENERATOR_TAG));
     		} 
     		
         	if (getEnableCommonLoggingModuleCheckBox().isSelected()){
-    			if (!ValidationUtils.isNotBlank(this.getClmProjectNameField().getText())) {
+    			if (ValidationUtils.isBlank(this.getClmProjectNameField().getText())) {
     				result.add(new SimpleValidationMessage(CLM_PROJECT_NAME + " must not be blank.", Severity.ERROR, CLM_PROJECT_NAME));
     			}
         	}

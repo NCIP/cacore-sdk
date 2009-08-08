@@ -1,7 +1,10 @@
 package gov.nih.nci.cacore.workbench.portal.panel;
 
+import gov.nih.nci.cacore.workbench.common.FileFilters;
 import gov.nih.nci.cacore.workbench.common.LookAndFeel;
 import gov.nih.nci.cacore.workbench.common.OptionsMapManager;
+import gov.nih.nci.cacore.workbench.common.ResourceManager;
+import gov.nih.nci.cacore.workbench.common.Utils;
 import gov.nih.nci.cacore.workbench.portal.validation.PanelValidator;
 import gov.nih.nci.cacore.workbench.portal.validation.TabbedPanePropertiesValidator;
 import gov.nih.nci.cacore.workbench.portal.viewer.DeployPropertiesViewer;
@@ -12,6 +15,7 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -34,6 +38,8 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
 
 public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator {
 	
+	int SQL_FILE_DISPLAY_LENGTH = 42;
+	
 	private TabbedPanePropertiesValidator mainPanelValidator = null;
 	private DeployPropertiesViewer parentContainer = null;
 	
@@ -46,6 +52,8 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
 	private static final String CSM_DB_NAME = "CSM DB Schema";
 	private static final String CSM_DB_USERNAME = "CSM DB Username";
 	private static final String CSM_DB_PASSWORD = "CSM DB Password";
+	private static final String CSM_DB_DROP_SCHEMA = "CSM DB Drop Schema";
+	private static final String CSM_DB_SQL_FILE = "CSM DB SQL File";
     
     // Cross-panel properties
     boolean isEnableSecuritySelected;
@@ -62,7 +70,7 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
 	private JPanel csmDbConnectionSettingsPanel = null;
 	private JPanel csmDbJndiSettingsSubPanel = null;
 	private JPanel csmDbConnectionSettingsSubPanel = null;
-	
+	private JPanel csmDbCreationSettingsSubPanel = null;
 	private JPanel csmDbConnectionSettingsReviewPanel = null;
     
 	//CSM DB Connection Settings Panel Component Definitions
@@ -77,8 +85,13 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
     private JTextField csmDbUsernameField = null;
     private JTextField csmDbPasswordField = null;
     
+    //DB Re-create DB Sub-Panel Component Definitions
+    private JCheckBox  csmDbDropSchemaCheckBox=null;
+    private JTextField csmDbSqlFileField=null;
+    
     //Buttons
     private JButton testConnectionButton = null;
+    private JButton csmDbSqlFilePathButton = null;
     
     /**
      * This method initializes the CSM 'Use DB Connection Settings?' Check Box
@@ -154,6 +167,10 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
         	csmDbTypeComboBox.addFocusListener(new FocusChangeHandler());
         }
         return csmDbTypeComboBox;
+    }
+    
+    public String getCsmDbType(){
+    	return getCsmDbTypeComboBox().getSelectedItem().toString();
     }
     
     public void setCsmDatabaseType(String selectedItemValue){
@@ -539,6 +556,128 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
     	getTestConnectionButton().setEnabled(enabled);
     }
     
+    /**
+     * This method initializes jButton
+     * 
+     * @return javax.swing.JButton
+     */
+    private JButton getCsmDbSqlFilePathButton() {
+        if (csmDbSqlFilePathButton == null) {
+        	csmDbSqlFilePathButton = new JButton();
+        	csmDbSqlFilePathButton.setText("Browse");
+        	csmDbSqlFilePathButton.setIcon(LookAndFeel.getBrowseIcon());
+        	csmDbSqlFilePathButton.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    try {
+                        String previous = getCsmDbSqlFileField().getText();
+                        String location = ResourceManager.promptFile(previous, FileFilters.SQL_FILTER);
+                        if (location != null && location.length() > 0) {
+                        	getCsmDbSqlFileField().setText(location);
+                        } else {
+                        	getCsmDbSqlFileField().setText(previous);
+                        }
+                        mainPanelValidator.validateInput();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+        }
+        return csmDbSqlFilePathButton;
+    }
+        
+    public void enableCsmDbSqlFileButton(boolean enable){
+    	getCsmDbSqlFilePathButton().setEnabled(enable);
+    }
+    
+    /**
+     * This method initializes the Use JNDI Based Connection Check Box
+     * 
+     * @return javax.swing.JCheckBox
+     */
+    private JCheckBox getCsmDbDropSchemaCheckBox() {
+        if (csmDbDropSchemaCheckBox == null) {
+        	csmDbDropSchemaCheckBox = new JCheckBox();
+        	csmDbDropSchemaCheckBox.setToolTipText("Drop all of the tables from the CSM Database Schema?");
+        	csmDbDropSchemaCheckBox.setHorizontalAlignment(SwingConstants.LEADING);
+        	csmDbDropSchemaCheckBox.setSelected(Boolean.parseBoolean(parentContainer.getPropertiesManager().getDeployPropertyValue("CSM_DB_DROP_SCHEMA")));
+        	csmDbDropSchemaCheckBox.setHorizontalTextPosition(SwingConstants.LEFT);
+			
+        	csmDbDropSchemaCheckBox.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+                    mainPanelValidator.setDirty(true);
+                    mainPanelValidator.validateInput();
+				}
+        	});
+
+        	csmDbDropSchemaCheckBox.addFocusListener(new FocusChangeHandler());
+        }
+        return csmDbDropSchemaCheckBox;
+    }  
+    
+    public boolean isDbDropSchemaSelected() {
+    	return getCsmDbDropSchemaCheckBox().isSelected();
+    }
+    
+    /**
+     * This method initializes the Database JNDI Name Field
+     * 
+     * @return javax.swing.JTextField
+     */
+    public JTextField getCsmDbSqlFileField() {
+        if (csmDbSqlFileField == null) {
+        	csmDbSqlFileField = new JTextField();
+        	
+        	String dbType = getCsmDbType();
+        	if ("oracle".equalsIgnoreCase(dbType)){
+        		csmDbSqlFileField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("csm.db.install.create.oracle.file.list")); 
+        	} else if ("mysql".equalsIgnoreCase(dbType)){
+        		csmDbSqlFileField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("csm.db.install.create.mysql.file.list"));
+        	} else {
+        		csmDbSqlFileField.setText("");
+        	}
+        	
+        	csmDbSqlFileField.getDocument().addDocumentListener(new DocumentListener() {
+                public void changedUpdate(DocumentEvent e) {
+                    mainPanelValidator.setDirty(true);
+                    mainPanelValidator.validateInput();
+                }
+
+                public void removeUpdate(DocumentEvent e) {
+                    mainPanelValidator.setDirty(true);
+                    mainPanelValidator.validateInput();
+                }
+
+                public void insertUpdate(DocumentEvent e) {
+                    mainPanelValidator.setDirty(true);
+                    mainPanelValidator.validateInput();
+                }
+            });
+        	csmDbSqlFileField.addFocusListener(new FocusChangeHandler());
+        	
+        	csmDbSqlFileField.setEditable(true); // Allow changes directly or via the DB SQL File Button 
+        }
+        return csmDbSqlFileField;
+    }
+    
+    public String getDbSqlFile() {
+    	return getCsmDbSqlFileField().getText();
+    }
+    
+    public String getDbSqlFilePath(){
+    	return getCsmDbSqlFileField().getText().replace('\\', '/');
+    }
+    
+    public void setDbSqlFilePath(String filePath){
+    	getCsmDbSqlFileField().setText(filePath);
+    }
+    
+    public String getDbSqlFileName(){
+    	String certFilePath = getCsmDbSqlFileField().getText().replace('\\', '/');
+    	
+    	return certFilePath.substring(certFilePath.lastIndexOf('/')+1);
+    }
+    
 	/**
 	 * This method initializes dbConnectionSettingsPanel	
 	 * 	
@@ -599,6 +738,15 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
 			gridBagConstraints40.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints40.gridx = 0;
 			gridBagConstraints40.gridwidth = 3;
+			
+
+			GridBagConstraints gridBagConstraints50 = new GridBagConstraints();
+			gridBagConstraints50.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints50.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints50.gridy = 5;
+			gridBagConstraints50.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints50.gridx = 0;
+			gridBagConstraints50.gridwidth = 3;
 		    
 		    csmUseDbConnectionSettingsLabel = new JLabel();
 		    csmUseDbConnectionSettingsLabel.setText("Use DB connection Settings?");
@@ -621,6 +769,7 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
 		    csmDbConnectionSettingsPanel.add(getCsmDbTypeComboBox(), gridBagConstraints21);
 		    csmDbConnectionSettingsPanel.add(getCsmDbJndiSettingsSubPanel(), gridBagConstraints30);
 		    csmDbConnectionSettingsPanel.add(getCsmDbConnectionSettingsSubPanel(), gridBagConstraints40);
+		    csmDbConnectionSettingsPanel.add(getCsmDbCreationSettingsSubPanel(), gridBagConstraints50);
 			
 		    csmDbConnectionSettingsPanel.validate();
 		}
@@ -855,6 +1004,81 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
 		}
 		return csmDbConnectionSettingsSubPanel;
 	}
+	
+	/**
+	 * This method initializes dbConnectionJndiSettingsPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getCsmDbCreationSettingsSubPanel() {
+		if (csmDbCreationSettingsSubPanel == null) {
+			
+		    //DB Creation Settings Panel Label Definitions
+		    JLabel csmDbDropSchemaLabel = null;
+		    JLabel csmDbSqlFileLabel = null;
+			
+			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
+			gridBagConstraints10.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints10.gridy = 1;
+			gridBagConstraints10.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints10.gridx = 0;
+
+			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+			gridBagConstraints11.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints11.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints11.gridx = 1;
+			gridBagConstraints11.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints11.gridy = 1;
+			gridBagConstraints11.weighty = 1.0D;
+			gridBagConstraints11.weightx = 1.0D;  
+			gridBagConstraints11.gridwidth = 2;
+			
+			GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
+			gridBagConstraints20.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints20.gridy = 2;
+			gridBagConstraints20.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints20.gridx = 0;
+
+            GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
+            gridBagConstraints21.fill = java.awt.GridBagConstraints.HORIZONTAL;
+            gridBagConstraints21.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints21.gridx = 1;
+            gridBagConstraints21.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints21.gridy = 2;
+            gridBagConstraints21.weighty = 1.0D;
+            gridBagConstraints21.weightx = 1.0;          
+            
+            GridBagConstraints gridBagConstraints22 = new GridBagConstraints();
+            gridBagConstraints22.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints22.gridy = 2;
+            gridBagConstraints22.gridx = 2;
+            gridBagConstraints22.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints22.gridwidth = 1;
+		    
+			csmDbDropSchemaLabel = new JLabel();
+			csmDbDropSchemaLabel.setText("Drop CSM Database Schema?");
+
+			csmDbSqlFileLabel = new JLabel();
+			csmDbSqlFileLabel.setText("Database SQL File:");
+
+			csmDbCreationSettingsSubPanel = new JPanel();
+		    csmDbCreationSettingsSubPanel.setLayout(new GridBagLayout());
+		    csmDbCreationSettingsSubPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Re-create CSM Database Options",
+					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
+		    
+		    csmDbCreationSettingsSubPanel.add(csmDbDropSchemaLabel, gridBagConstraints10);
+		    csmDbCreationSettingsSubPanel.add(getCsmDbDropSchemaCheckBox(), gridBagConstraints11);
+		    
+		    csmDbCreationSettingsSubPanel.add(csmDbSqlFileLabel, gridBagConstraints20);
+		    csmDbCreationSettingsSubPanel.add(getCsmDbSqlFileField(), gridBagConstraints21);
+		    csmDbCreationSettingsSubPanel.add(getCsmDbSqlFilePathButton(), gridBagConstraints22);
+			
+		    csmDbCreationSettingsSubPanel.validate();
+		}
+		
+		return csmDbCreationSettingsSubPanel;
+	}
     
     /**
      * This method initializes the Project Settings jPanel
@@ -875,6 +1099,10 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
 		    JLabel csmDbUsernameValueLabel = null;
 		    JLabel csmDbPasswordLabel = null;
 		    JLabel csmDbPasswordValueLabel = null;
+		    JLabel csmDbDropSchemaLabel = null;
+		    JLabel csmDbDropSchemaValueLabel = null;
+		    JLabel csmDbSqlFileLabel = null;
+		    JLabel csmDbSqlFileValueLabel = null;
         	
             GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
             gridBagConstraints10.anchor = java.awt.GridBagConstraints.WEST;
@@ -1044,12 +1272,12 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
 		    csmDatabaseTypeLabel = new JLabel();
 		    csmDatabaseTypeLabel.setText("Type:");
 		    csmDatabaseTypeValueLabel = new JLabel();
-		    csmDatabaseTypeValueLabel.setText(OptionsMapManager.getDbTypeOptionsMap().get(getCsmDbTypeComboBox().getSelectedItem().toString()));
-		    
+		    csmDatabaseTypeValueLabel.setText(getCsmDbTypeComboBox().getSelectedItem().toString());
+	    
 		    csmUseJndiBasedConnectionLabel = new JLabel();
 		    csmUseJndiBasedConnectionLabel.setText("Use CSM JNDI Based Connection?");
 		    csmUseJndiBasedConnectionValueLabel = new JLabel();
-		    csmUseJndiBasedConnectionValueLabel.setText(Boolean.valueOf(getCsmUseJndiBasedConnectionCheckBox().isSelected()).toString());
+		    csmUseJndiBasedConnectionValueLabel.setText(Utils.convertToYesNo(getCsmUseJndiBasedConnectionCheckBox()));
 		    
 		    csmDbJndiUrlLabel = new JLabel();
 		    csmDbJndiUrlLabel.setText("JNDI URL:");
@@ -1071,6 +1299,11 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
 		    csmDbPasswordValueLabel = new JLabel();
 		    csmDbPasswordValueLabel.setText(getCsmDbPasswordField().getText());
 		    
+		    csmDbDropSchemaLabel = new JLabel();
+		    csmDbDropSchemaLabel.setText("Drop CSM Database Schema?");
+		    csmDbDropSchemaValueLabel = new JLabel();
+		    csmDbDropSchemaValueLabel.setText(Utils.convertToYesNo(getCsmDbDropSchemaCheckBox()));
+		    
 		    csmDbConnectionSettingsReviewPanel = new JPanel();
 		    csmDbConnectionSettingsReviewPanel.setLayout(new GridBagLayout());
 		    csmDbConnectionSettingsReviewPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "CSM Database Connection Settings",
@@ -1089,6 +1322,22 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
 		    csmDbConnectionSettingsReviewPanel.add(csmDbUsernameValueLabel, gridBagConstraints51);
 		    csmDbConnectionSettingsReviewPanel.add(csmDbPasswordLabel, gridBagConstraints60);
 		    csmDbConnectionSettingsReviewPanel.add(csmDbPasswordValueLabel, gridBagConstraints61);
+		    csmDbConnectionSettingsReviewPanel.add(csmDbDropSchemaLabel, gridBagConstraints70);
+		    csmDbConnectionSettingsReviewPanel.add(csmDbDropSchemaValueLabel, gridBagConstraints71);
+		    
+		    if (ValidationUtils.isNotBlank(this.getCsmDbSqlFileField().getText())){
+			    csmDbSqlFileLabel = new JLabel();
+			    csmDbSqlFileLabel.setText("Database SQL File:");
+			    
+			    csmDbSqlFileValueLabel = new JLabel();
+			    String csmDbSqlFile = getCsmDbSqlFileField().getText();
+			    if (csmDbSqlFile != null && csmDbSqlFile.length() > SQL_FILE_DISPLAY_LENGTH)
+			    	csmDbSqlFile = "..."+csmDbSqlFile.substring(csmDbSqlFile.length() - SQL_FILE_DISPLAY_LENGTH);
+			    csmDbSqlFileValueLabel.setText(csmDbSqlFile);
+			    
+		    	csmDbConnectionSettingsReviewPanel.add(csmDbSqlFileLabel, gridBagConstraints80);
+		    	csmDbConnectionSettingsReviewPanel.add(csmDbSqlFileValueLabel, gridBagConstraints81);
+		    }
             
 		    csmDbConnectionSettingsReviewPanel.validate();
         //}
@@ -1099,15 +1348,32 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
 
     	ValidationResult result = validateDbConnectionInput();
     	
-    	if (isEnableSecuritySelected && !getCsmUseDbConnectionSettingsCheckBox().isSelected()){
-    		
-    		if (getCsmUseJndiBasedConnectionCheckBox().isSelected() ){
-    			if (!ValidationUtils.isNotBlank(this.getCsmDbJndiNameField().getText())) {
+    	if (isEnableSecuritySelected){
+
+    		if (!getCsmUseDbConnectionSettingsCheckBox().isSelected() && getCsmUseJndiBasedConnectionCheckBox().isSelected() ){
+    			if (ValidationUtils.isBlank(this.getCsmDbJndiNameField().getText())) {
     				result.add(new SimpleValidationMessage(CSM_JNDI_NAME + " must not be blank.", Severity.ERROR, CSM_JNDI_NAME));
     			}
     		}
+    		
+    		if (getCsmDbDropSchemaCheckBox().isSelected()){
+    			if (ValidationUtils.isBlank(this.getCsmDbSqlFileField().getText())) {
+    				result.add(new SimpleValidationMessage(CSM_DB_SQL_FILE + " must not be blank when "+CSM_DB_DROP_SCHEMA+" is selected.", Severity.ERROR, CSM_DB_SQL_FILE));
+    			}
+    		}
+
+    		if (ValidationUtils.isNotBlank(this.getCsmDbSqlFileField().getText())) {
+    			File file = new File(this.getCsmDbSqlFileField().getText());
+    			if(!file.exists()){
+    				result.add(new SimpleValidationMessage(CSM_DB_SQL_FILE + " does not exist.  Please select or enter a valid absolute path to the file.", Severity.ERROR, CSM_DB_SQL_FILE));
+    			}
+
+    			if (!this.getCsmDbSqlFileField().getText().endsWith("sql")){
+    				result.add(new SimpleValidationMessage(CSM_DB_SQL_FILE + " must refer to a SQL (*.sql) file.", Severity.ERROR, CSM_DB_SQL_FILE));
+    			}
+    		}
     	}
-    	
+   	
     	return result;
     }
     
@@ -1117,23 +1383,28 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
 
     	if (isEnableSecuritySelected && !getCsmUseDbConnectionSettingsCheckBox().isSelected()){
 
-    		if (!ValidationUtils.isNotBlank(getCsmDbHostnameField().getText())) {
+    		if (ValidationUtils.isBlank(getCsmDbHostnameField().getText())) {
     			result.add(new SimpleValidationMessage(CSM_DB_SERVER + " must not be blank.", Severity.ERROR, CSM_DB_SERVER));
     		}
 
-    		if (!ValidationUtils.isNotBlank(getCsmDbPortField().getText())) {
+    		String csmDbPort = getCsmDbPortField().getText();
+    		if (ValidationUtils.isBlank(csmDbPort)) {
     			result.add(new SimpleValidationMessage(CSM_DB_SERVER_PORT + " must not be blank.", Severity.ERROR, CSM_DB_SERVER_PORT));
     		}
+    		
+    		if (!ValidationUtils.isNumeric(csmDbPort)){
+    			result.add(new SimpleValidationMessage(CSM_DB_SERVER_PORT + " must be numeric.", Severity.ERROR, CSM_DB_SERVER_PORT));
+    		}
 
-    		if (!ValidationUtils.isNotBlank(getCsmDbSchemaField().getText())) {
+    		if (ValidationUtils.isBlank(getCsmDbSchemaField().getText())) {
     			result.add(new SimpleValidationMessage(CSM_DB_NAME + " must not be blank.", Severity.ERROR, CSM_DB_NAME));
     		}
 
-    		if (!ValidationUtils.isNotBlank(this.getCsmDbUsernameField().getText())) {
+    		if (ValidationUtils.isBlank(this.getCsmDbUsernameField().getText())) {
     			result.add(new SimpleValidationMessage(CSM_DB_USERNAME + " must not be blank.", Severity.ERROR, CSM_DB_USERNAME));
     		} 
 
-    		if (!ValidationUtils.isNotBlank(this.getCsmDbPasswordField().getText())) {
+    		if (ValidationUtils.isBlank(this.getCsmDbPasswordField().getText())) {
     			result.add(new SimpleValidationMessage(CSM_DB_PASSWORD + " must not be blank.", Severity.ERROR, CSM_DB_PASSWORD));
     		} 
     	}
@@ -1162,6 +1433,11 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
         ValidationComponentUtils.setMessageKey(getCsmDbPasswordField(), CSM_DB_PASSWORD);
         ValidationComponentUtils.setMandatory(getCsmDbPasswordField(), true);
         
+        ValidationComponentUtils.setMessageKey(getCsmDbDropSchemaCheckBox(), CSM_DB_DROP_SCHEMA);
+        ValidationComponentUtils.setMandatory(getCsmDbDropSchemaCheckBox(), true);
+        ValidationComponentUtils.setMessageKey(getCsmDbSqlFileField(), CSM_DB_SQL_FILE);
+        ValidationComponentUtils.setMandatory(getCsmDbSqlFileField(), true);
+        
         toggleCsmDbConnectionFields();
         parentContainer.toggleCsmDbJndiNameField();
         parentContainer.toggleCsmTestConnectionButton();
@@ -1182,6 +1458,15 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
 		propsMap.put("CSM_DB_NAME", getCsmDbSchemaField().getText());
 		propsMap.put("CSM_DB_USERNAME", getCsmDbUsernameField().getText());
 		propsMap.put("CSM_DB_PASSWORD", getCsmDbPasswordField().getText());
+		
+		propsMap.put("CSM_DB_DROP_SCHEMA", Boolean.valueOf(getCsmDbDropSchemaCheckBox().isSelected()).toString() );
+		
+    	String dbType = getCsmDbType();
+    	if ("oracle".equalsIgnoreCase(dbType)){
+    		propsMap.put("csm.db.install.create.oracle.file.list", getCsmDbSqlFileField().getText().replace('\\', '/')); 
+    	} else if ("mysql".equalsIgnoreCase(dbType)){
+    		propsMap.put("csm.db.install.create.mysql.file.list", getCsmDbSqlFileField().getText().replace('\\', '/'));
+    	}
     	
     	return propsMap;
     }
