@@ -3,6 +3,7 @@ package gov.nih.nci.cacore.workbench.portal.panel;
 import gov.nih.nci.cacore.workbench.common.WorkbenchPropertiesManager;
 import gov.nih.nci.cacore.workbench.portal.validation.PanelValidator;
 import gov.nih.nci.cacore.workbench.portal.validation.TabbedPanePropertiesValidator;
+import gov.nih.nci.cacore.workbench.common.Utils;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 
 import java.awt.GridBagConstraints;
@@ -1023,57 +1024,57 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
 		    validateLogicalModelLabel = new JLabel();
 		    validateLogicalModelLabel.setText("Validate Logical Model?");
 		    validateLogicalModelValueLabel = new JLabel();
-		    validateLogicalModelValueLabel.setText(Boolean.valueOf(getValidateLogicalModelCheckBox().isSelected()).toString());
+		    validateLogicalModelValueLabel.setText(Utils.convertToYesNo(getValidateLogicalModelCheckBox()));
             
 		    validateModelMappingLabel = new JLabel();
 		    validateModelMappingLabel.setText("Validate Model Mapping?");
             validateModelMappingValueLabel = new JLabel();
-            validateModelMappingValueLabel.setText(Boolean.valueOf(getValidateModelMappingCheckBox().isSelected()).toString());
+            validateModelMappingValueLabel.setText(Utils.convertToYesNo(getValidateModelMappingCheckBox()));
             
             validateGmeTagsLabel = new JLabel();
             validateGmeTagsLabel.setText("Validate GME Tags?");
             validateGmeTagsValueLabel = new JLabel();
-            validateGmeTagsValueLabel.setText(Boolean.valueOf(getValidateGmeTagsCheckBox().isSelected()).toString());
+            validateGmeTagsValueLabel.setText(Utils.convertToYesNo(getValidateGmeTagsCheckBox()));
             
             generateHibernateMappingLabel = new JLabel();
             generateHibernateMappingLabel.setText("Generate Hibernate Mapping?");
             generateHibernateMappingValueLabel = new JLabel();
-            generateHibernateMappingValueLabel.setText(Boolean.valueOf(getGenerateHibernateMappingCheckBox().isSelected()).toString());
+            generateHibernateMappingValueLabel.setText(Utils.convertToYesNo(getGenerateHibernateMappingCheckBox()));
             
             generateBeansLabel = new JLabel();
             generateBeansLabel.setText("Generate Beans?");
             generateBeansValueLabel = new JLabel();
-            generateBeansValueLabel.setText(Boolean.valueOf(getGenerateBeansCheckBox().isSelected()).toString());
+            generateBeansValueLabel.setText(Utils.convertToYesNo(getGenerateBeansCheckBox()));
             
             generateCastorMappingLabel = new JLabel();
             generateCastorMappingLabel.setText("Generate Castor Mapping?");
             generateCastorMappingValueLabel = new JLabel();
-            generateCastorMappingValueLabel.setText(Boolean.valueOf(getGenerateCastorMappingCheckBox().isSelected()).toString());
+            generateCastorMappingValueLabel.setText(Utils.convertToYesNo(getGenerateCastorMappingCheckBox()));
             
             generateXsdLabel = new JLabel();
             generateXsdLabel.setText("Generate XSD's?");
             generateXsdValueLabel = new JLabel();
-            generateXsdValueLabel.setText(Boolean.valueOf(getGenerateXsdCheckBox().isSelected()).toString());
+            generateXsdValueLabel.setText(Utils.convertToYesNo(getGenerateXsdCheckBox()));
             
             generateXsdWithGmeTagsLabel = new JLabel();
             generateXsdWithGmeTagsLabel.setText("Generate XSD's w/ GME Tags?");
             generateXsdWithGmeTagsValueLabel = new JLabel();
-            generateXsdWithGmeTagsValueLabel.setText(Boolean.valueOf(getGenerateXsdWithGmeTagsCheckBox().isSelected()).toString());
+            generateXsdWithGmeTagsValueLabel.setText(Utils.convertToYesNo(getGenerateXsdWithGmeTagsCheckBox()));
             
             generateXsdWithPermissibleValuesLabel = new JLabel();
             generateXsdWithPermissibleValuesLabel.setText("Generate XSD's w/ Permissible Values?");
             generateXsdWithPermissibleValuesValueLabel = new JLabel();
-            generateXsdWithPermissibleValuesValueLabel.setText(Boolean.valueOf(getGenerateXsdWithPermissibleValuesCheckBox().isSelected()).toString());
+            generateXsdWithPermissibleValuesValueLabel.setText(Utils.convertToYesNo(getGenerateXsdWithPermissibleValuesCheckBox()));
             
 		    generateWsddLabel = new JLabel();
 		    generateWsddLabel.setText("Generate WSDD?");
 		    generateWsddValueLabel = new JLabel();
-		    generateWsddValueLabel.setText(Boolean.valueOf(getGenerateWsddCheckBox().isSelected()).toString());
+		    generateWsddValueLabel.setText(Utils.convertToYesNo(getGenerateWsddCheckBox()));
             
 		    generateHibernateValidatorLabel = new JLabel();
 		    generateHibernateValidatorLabel.setText("Generate Hibernate Validator?");
 		    generateHibernateValidatorValueLabel = new JLabel();
-		    generateHibernateValidatorValueLabel.setText(Boolean.valueOf(getGenerateHibernateValidatorCheckBox().isSelected()).toString());
+		    generateHibernateValidatorValueLabel.setText(Utils.convertToYesNo(getGenerateHibernateValidatorCheckBox()));
 		    
 		    caDsrConnectionUrlLabel = new JLabel();
 		    caDsrConnectionUrlLabel.setText("caDSR Connection URL:");
@@ -1129,7 +1130,7 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
     	ValidationResult result = new ValidationResult();
     	
         if (getGenerateXsdWithPermissibleValuesCheckBox().isSelected() || getGenerateHibernateValidatorCheckBox().isSelected()){
-    		if (!ValidationUtils.isNotBlank(this.getCaDsrConnectionUrlField().getText())) {
+    		if (ValidationUtils.isBlank(this.getCaDsrConnectionUrlField().getText())) {
     			result.add(new SimpleValidationMessage(CADSR_CONNECTION_URL + " must not be blank.", Severity.ERROR, CADSR_CONNECTION_URL));
     		} 
         }
@@ -1165,4 +1166,5 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
     	
     	return propsMap;
     }
+
 }

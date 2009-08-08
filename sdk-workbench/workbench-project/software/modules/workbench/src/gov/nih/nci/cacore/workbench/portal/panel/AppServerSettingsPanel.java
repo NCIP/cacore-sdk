@@ -39,6 +39,7 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
 	private DeployPropertiesViewer parentContainer = null;
 	
 	// Validation Message Constants
+	public static final String SERVER_HTTP_URL = "External Server HTTP URL";
     public static final String SERVER_TYPE = "Server Type";
     
     // Tomcat Validation Message Constants
@@ -64,14 +65,15 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
 		this.mainPanelValidator=mainPanelValidator;
 	}
 	
-	// App Server Panel
+	// App Server Tab Panels
 	private JPanel appServerSettingsPanel = null;
 	private JPanel tomcatServerSettingsSubPanel = null;
 	private JPanel jbossServerSettingsSubPanel = null;
 	private JPanel appServerSettingsReviewPanel = null;
     
 	//Application Server Settings Panel Component Definitions
-    private JComboBox serverTypeComboBox = null;
+    private JTextField externalServerHttpUrlField = null;
+    private JComboBox  serverTypeComboBox = null;
     
     // Tomcat component Definitions
     private JTextField tomcatHostnameField = null;
@@ -87,6 +89,40 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
     private JTextField jbossServerJndiPortField = null;
     private JTextField jbossServerPortField = null;
     private JTextField jbossServerSslPortField = null;
+    
+    /**
+     * This method initializes the tomcat Server Hostname Field
+     * 
+     * @return javax.swing.JTextField
+     */         
+    private JTextField getExternalServerHttpUrlField() {
+    	if (externalServerHttpUrlField == null) {
+    		externalServerHttpUrlField = new JTextField();
+   		
+    		externalServerHttpUrlField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("SERVER_HTTP_URL"));
+    		externalServerHttpUrlField.setToolTipText("Enter the complete external server HTTP URL.  The format is \"http://<<SERVER_HOST_NAME>>:<<SERVER_HTTP_PORT>>/<<PROJECT_NAME>>");
+    		
+    		externalServerHttpUrlField.getDocument().addDocumentListener(new DocumentListener() {
+    			public void changedUpdate(DocumentEvent e) {
+                    mainPanelValidator.setDirty(true);
+                    mainPanelValidator.validateInput();
+    			}
+
+    			public void removeUpdate(DocumentEvent e) {
+                    mainPanelValidator.setDirty(true);
+                    mainPanelValidator.validateInput();
+    			}
+
+    			public void insertUpdate(DocumentEvent e) {
+                    mainPanelValidator.setDirty(true);
+                    mainPanelValidator.validateInput();
+    			}
+    		});
+    		externalServerHttpUrlField.addFocusListener(new FocusChangeHandler());
+    	}
+    	return externalServerHttpUrlField;
+    }
+    
     
     /**
      * This method initializes the Server Type Combo Box
@@ -569,6 +605,7 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
 		if (appServerSettingsPanel == null) {
 			
 		    //Application Server Settings Panel Label Definitions
+		    JLabel externalServerHostnameLabel = null;
 		    JLabel serverTypeLabel = null;
 		    
 			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
@@ -582,29 +619,49 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
 			gridBagConstraints11.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints11.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints11.gridx = 1;
-			gridBagConstraints11.insets = new java.awt.Insets(10, 4, 10, 4);
+			gridBagConstraints11.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints11.gridy = 1;
 			//gridBagConstraints11.weighty = 1.0D;
 			gridBagConstraints11.weightx = 1.0D;  
 			gridBagConstraints11.gridwidth = 1;
-
+		    
 			GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
-			gridBagConstraints20.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints20.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints20.gridy = 2;
-			gridBagConstraints20.insets = new java.awt.Insets(1, 1, 1, 1);
+			gridBagConstraints20.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints20.gridx = 0;
-			gridBagConstraints20.gridwidth = 3;
-			gridBagConstraints20.weightx = 1.0D;
-			
+			gridBagConstraints20.gridwidth = 1;
+
+			GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
+			gridBagConstraints21.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints21.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints21.gridx = 1;
+			gridBagConstraints21.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints21.gridy = 2;
+			//gridBagConstraints11.weighty = 1.0D;
+			gridBagConstraints21.weightx = 1.0D;  
+			gridBagConstraints21.gridwidth = 1;
+
 			GridBagConstraints gridBagConstraints30 = new GridBagConstraints();
 			gridBagConstraints30.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints30.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints30.gridy = 3;
+			gridBagConstraints30.gridy = 2;
 			gridBagConstraints30.insets = new java.awt.Insets(1, 1, 1, 1);
 			gridBagConstraints30.gridx = 0;
 			gridBagConstraints30.gridwidth = 3;
 			gridBagConstraints30.weightx = 1.0D;
+			
+			GridBagConstraints gridBagConstraints40 = new GridBagConstraints();
+			gridBagConstraints40.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints40.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints40.gridy = 3;
+			gridBagConstraints40.insets = new java.awt.Insets(1, 1, 1, 1);
+			gridBagConstraints40.gridx = 0;
+			gridBagConstraints40.gridwidth = 3;
+			gridBagConstraints40.weightx = 1.0D;
+			
+			externalServerHostnameLabel = new JLabel();
+			externalServerHostnameLabel.setText("External Server Hostname:");
 	
 			serverTypeLabel = new JLabel();
 			serverTypeLabel.setText("Select Server Type:");
@@ -615,10 +672,12 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
 					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 		    
-			appServerSettingsPanel.add(serverTypeLabel, gridBagConstraints10);
-			appServerSettingsPanel.add(getServerTypeComboBox(), gridBagConstraints11);
-			appServerSettingsPanel.add(getTomcatSettingsSubPanel(), gridBagConstraints20);
-			appServerSettingsPanel.add(getJBossSettingsSubPanel(), gridBagConstraints30);
+			appServerSettingsPanel.add(externalServerHostnameLabel, gridBagConstraints10);
+			appServerSettingsPanel.add(getExternalServerHttpUrlField(), gridBagConstraints11);
+			appServerSettingsPanel.add(serverTypeLabel, gridBagConstraints20);
+			appServerSettingsPanel.add(getServerTypeComboBox(), gridBagConstraints21);
+			appServerSettingsPanel.add(getTomcatSettingsSubPanel(), gridBagConstraints30);
+			appServerSettingsPanel.add(getJBossSettingsSubPanel(), gridBagConstraints40);
 			
 			appServerSettingsPanel.validate();
 		}
@@ -1241,22 +1300,25 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
 
     	ValidationResult result = new ValidationResult();
     	
-    	String serverType = getServerTypeComboBox().getSelectedItem().toString();
+    	// Turns out that the External Server HTTP URL is not a required field
+//		if (ValidationUtils.isBlank(getExternalServerHttpUrlField().getText())) {
+//			result.add(new SimpleValidationMessage(SERVER_HTTP_URL + " must not be blank.", Severity.ERROR, SERVER_HTTP_URL));
+//		} 
     	
-		//if ("".equalsIgnoreCase(serverType)) {
-		if (!ValidationUtils.isNotBlank(this.getServerTypeComboBox().getSelectedItem().toString())) {
+    	String serverType = getServerTypeComboBox().getSelectedItem().toString();
+		if (ValidationUtils.isBlank(serverType)) {
 			result.add(new SimpleValidationMessage(SERVER_TYPE + " must not be blank.", Severity.ERROR, SERVER_TYPE));
 		} 
 		
         //Tomcat Server Components
     	if (serverType.equalsIgnoreCase(TOMCAT)){
     	    
-    		if (!ValidationUtils.isNotBlank(this.getTomcatHostnameField().getText())) {
+    		if (ValidationUtils.isBlank(this.getTomcatHostnameField().getText())) {
     			result.add(new SimpleValidationMessage(TOMCAT_HOSTNAME + " must not be blank.", Severity.ERROR, TOMCAT_HOSTNAME));
     		} 
     		
     		String tomcatAjpPort = this.getTomcatPortAjpField().getText();
-    		if (!ValidationUtils.isNotBlank(tomcatAjpPort)) {
+    		if (ValidationUtils.isBlank(tomcatAjpPort)) {
     			result.add(new SimpleValidationMessage(TOMCAT_PORT_AJP + " must not be blank.", Severity.ERROR, TOMCAT_PORT_AJP));
     		} 
     		
@@ -1265,7 +1327,7 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
     		}
     		
     		String tomcatHttpPort = this.getTomcatPortHttpField().getText();
-    		if (!ValidationUtils.isNotBlank(tomcatHttpPort)) {
+    		if (ValidationUtils.isBlank(tomcatHttpPort)) {
     			result.add(new SimpleValidationMessage(TOMCAT_PORT_HTTP + " must not be blank.", Severity.ERROR, TOMCAT_PORT_HTTP));
     		}
     		
@@ -1274,7 +1336,7 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
     		}
     		
     		String tomcatShutdownPort = this.getTomcatPortShutdownField().getText();
-    		if (!ValidationUtils.isNotBlank(tomcatShutdownPort)) {
+    		if (ValidationUtils.isBlank(tomcatShutdownPort)) {
     			result.add(new SimpleValidationMessage(TOMCAT_PORT_SHUTDOWN + " must not be blank.", Severity.ERROR, TOMCAT_PORT_SHUTDOWN));
     		} 
     		
@@ -1283,7 +1345,7 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
     		}
     		
     		String tomcatSslPort = this.getTomcatPortSslField().getText();
-    		if (!ValidationUtils.isNotBlank(tomcatSslPort)) {
+    		if (ValidationUtils.isBlank(tomcatSslPort)) {
     			result.add(new SimpleValidationMessage(TOMCAT_PORT_SSL + " must not be blank.", Severity.ERROR, TOMCAT_PORT_SSL));
     		}
     		
@@ -1293,16 +1355,16 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
     		
     	} else if (serverType.equalsIgnoreCase(JBOSS)){
 
-    		if (!ValidationUtils.isNotBlank(this.getJbossPortConfigurationComboBox().getSelectedItem().toString())) {
+    		if (ValidationUtils.isBlank(this.getJbossPortConfigurationComboBox().getSelectedItem().toString())) {
     			result.add(new SimpleValidationMessage(JBOSS_PORT_CONFIGURATION + " must not be blank.", Severity.ERROR, JBOSS_PORT_CONFIGURATION));
     		} 
     		
-    		if (!ValidationUtils.isNotBlank(this.getJbossServerHostnameField().getText())) {
+    		if (ValidationUtils.isBlank(this.getJbossServerHostnameField().getText())) {
     			result.add(new SimpleValidationMessage(JBOSS_SERVER_HOSTNAME + " must not be blank.", Severity.ERROR, JBOSS_SERVER_HOSTNAME));
     		} 
     		
     		String JbossAjpPort = this.getJbossServerAjpPortField().getText();
-    		if (!ValidationUtils.isNotBlank(JbossAjpPort)) {
+    		if (ValidationUtils.isBlank(JbossAjpPort)) {
     			result.add(new SimpleValidationMessage(JBOSS_SERVER_AJP_PORT + " must not be blank.", Severity.ERROR, JBOSS_SERVER_AJP_PORT));
     		} 
     		
@@ -1311,7 +1373,7 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
     		}
     		
     		String jbossJndiPort = this.getJbossServerJndiPortField().getText();
-    		if (!ValidationUtils.isNotBlank(jbossJndiPort)) {
+    		if (ValidationUtils.isBlank(jbossJndiPort)) {
     			result.add(new SimpleValidationMessage(JBOSS_SERVER_JNDI_PORT + " must not be blank.", Severity.ERROR, JBOSS_SERVER_JNDI_PORT));
     		} 
     		
@@ -1320,7 +1382,7 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
     		}
     		
     		String jbossPort = this.getJbossServerPortField().getText();
-    		if (!ValidationUtils.isNotBlank(jbossPort)) {
+    		if (ValidationUtils.isBlank(jbossPort)) {
     			result.add(new SimpleValidationMessage(JBOSS_SERVER_PORT + " must not be blank.", Severity.ERROR, JBOSS_SERVER_PORT));
     		} 
     		
@@ -1329,7 +1391,7 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
     		}
 
     		String jbossSslPort = this.getJbossServerSslPortField().getText();
-    		if (!ValidationUtils.isNotBlank(jbossSslPort)) {
+    		if (ValidationUtils.isBlank(jbossSslPort)) {
     			result.add(new SimpleValidationMessage(JBOSS_SERVER_SSL_PORT + " must not be blank.", Severity.ERROR, JBOSS_SERVER_SSL_PORT));
     		}
     		
@@ -1343,7 +1405,9 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
     
     public void initValidation() {
 
-    	//App Server 
+    	//App Server
+    	ValidationComponentUtils.setMessageKey(getExternalServerHttpUrlField(), SERVER_HTTP_URL);
+        ValidationComponentUtils.setMandatory(getExternalServerHttpUrlField(), true);
     	ValidationComponentUtils.setMessageKey(getServerTypeComboBox(), SERVER_TYPE);
         ValidationComponentUtils.setMandatory(getServerTypeComboBox(), true);
     	
@@ -1382,6 +1446,11 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
     	String serverType = getServerTypeComboBox().getSelectedItem().toString();
     	
 		// Application Server Properties
+    	
+    	if (ValidationUtils.isNotBlank(getExternalServerHttpUrlField().getText())) {
+    		propsMap.put("SERVER_HTTP_URL", getExternalServerHttpUrlField().getText());
+    	} 
+    	
 		propsMap.put("SERVER_TYPE", OptionsMapManager.getServerTypeOptionsMap().get(serverType));
 		
 		if (serverType.equalsIgnoreCase(TOMCAT)){

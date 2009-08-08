@@ -611,7 +611,7 @@ public final class ProjectSettingsPanel implements Panel, PanelValidator {
     	ValidationResult result = new ValidationResult();
     	
     	//Panel Settings Validation
-    	if (!ValidationUtils.isNotBlank(this.getProjectDirField().getText())) {
+    	if (ValidationUtils.isBlank(this.getProjectDirField().getText())) {
     		result.add(new SimpleValidationMessage(PROJECT_DIR + " must not be blank.", Severity.ERROR, PROJECT_DIR));
     	} else {
     		File file = new File(this.getProjectDirField().getText());
@@ -620,7 +620,7 @@ public final class ProjectSettingsPanel implements Panel, PanelValidator {
     		}
     	}
     	
-    	if (!ValidationUtils.isNotBlank(this.getSdkInstallDirField().getText())) {
+    	if (ValidationUtils.isBlank(this.getSdkInstallDirField().getText())) {
     		result.add(new SimpleValidationMessage(SDK_INSTALL_DIR + " must not be blank.", Severity.ERROR, SDK_INSTALL_DIR));
     	} else {
     		File file = new File(this.getSdkInstallDirField().getText());
@@ -636,15 +636,15 @@ public final class ProjectSettingsPanel implements Panel, PanelValidator {
     		result.add(new SimpleValidationMessage(PROJECT_DIR + " and " + SDK_INSTALL_DIR + " must be different.", Severity.ERROR, SDK_INSTALL_DIR));
     	} 
 
-    	if (!ValidationUtils.isNotBlank(this.getProjectNameField().getText())) {
+    	if (ValidationUtils.isBlank(this.getProjectNameField().getText())) {
     		result.add(new SimpleValidationMessage(PROJECT_NAME + " must not be blank.", Severity.ERROR, PROJECT_NAME));
     	}
 
-    	if (!ValidationUtils.isNotBlank(this.getNamespacePrefixField().getText())) {
+    	if (ValidationUtils.isBlank(this.getNamespacePrefixField().getText())) {
     		result.add(new SimpleValidationMessage(NAMESPACE_PREFIX + " must not be blank.", Severity.ERROR, NAMESPACE_PREFIX));
     	}
 
-    	if (!ValidationUtils.isNotBlank(this.getWebServiceNameField().getText())) {
+    	if (ValidationUtils.isBlank(this.getWebServiceNameField().getText())) {
     		result.add(new SimpleValidationMessage(WEBSERVICE_NAME + " must not be blank.", Severity.ERROR, WEBSERVICE_NAME));
     	}
     	

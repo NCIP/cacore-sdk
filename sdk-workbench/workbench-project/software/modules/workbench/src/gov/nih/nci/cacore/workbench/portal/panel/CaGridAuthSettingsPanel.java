@@ -518,7 +518,7 @@ public final class CaGridAuthSettingsPanel implements Panel, PanelValidator {
 				result.add(new SimpleValidationMessage(TARGET_GRID + " must be selected.", Severity.ERROR, TARGET_GRID));
 			} 
 			
-			if (!ValidationUtils.isNotBlank(this.getGridSecureCertFileField().getText())) {
+			if (ValidationUtils.isBlank(this.getGridSecureCertFileField().getText())) {
 				result.add(new SimpleValidationMessage(GRID_SECURE_CERT_FILE + " must not be blank.", Severity.ERROR, GRID_SECURE_CERT_FILE));
 			} else {
         		File file = new File(this.getGridSecureCertFileField().getText());
@@ -531,7 +531,7 @@ public final class CaGridAuthSettingsPanel implements Panel, PanelValidator {
         		}
         	}
 
-			if (!ValidationUtils.isNotBlank(this.getGridSecureKeyFileField().getText())) {
+			if (ValidationUtils.isBlank(this.getGridSecureKeyFileField().getText())) {
 				result.add(new SimpleValidationMessage(GRID_SECURE_KEY_FILE + " must not be blank.", Severity.ERROR, GRID_SECURE_KEY_FILE));
 			} else {
         		File file = new File(this.getGridSecureKeyFileField().getText());

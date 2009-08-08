@@ -797,7 +797,7 @@ public final class ModelSettingsPanel implements Panel, PanelValidator {
     	ValidationResult result = new ValidationResult();
     	
     	//Model Settings Validation
-    	if (!ValidationUtils.isNotBlank(this.getModelFileField().getText())) {
+    	if (ValidationUtils.isBlank(this.getModelFileField().getText())) {
     		result.add(new SimpleValidationMessage(MODEL_FILE_PATH + " path must not be blank.", Severity.ERROR, MODEL_FILE_PATH));
     	} else {
     		File file = new File(this.getModelFileField().getText());
@@ -810,15 +810,15 @@ public final class ModelSettingsPanel implements Panel, PanelValidator {
     		}
     	}
 
-    	if (!ValidationUtils.isNotBlank(this.getLogicalModelField().getText())) {
+    	if (ValidationUtils.isBlank(this.getLogicalModelField().getText())) {
     		result.add(new SimpleValidationMessage(LOGICAL_MODEL_PACKAGE_NAME + " must not be blank.", Severity.ERROR, LOGICAL_MODEL_PACKAGE_NAME));
     	}
 
-    	if (!ValidationUtils.isNotBlank(this.getDataModelField().getText())) {
+    	if (ValidationUtils.isBlank(this.getDataModelField().getText())) {
     		result.add(new SimpleValidationMessage(DATA_MODEL_PACKAGE_NAME + " must not be blank.", Severity.ERROR, DATA_MODEL_PACKAGE_NAME));
     	}
 
-    	if (!ValidationUtils.isNotBlank(this.getIncludePackageField().getText())) {
+    	if (ValidationUtils.isBlank(this.getIncludePackageField().getText())) {
     		result.add(new SimpleValidationMessage(INCLUDE_PACKAGE_REGEX + " must not be blank.", Severity.ERROR, INCLUDE_PACKAGE_REGEX));
     	}
     	

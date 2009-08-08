@@ -346,15 +346,15 @@ public final class AdvancedSettingsPanel implements Panel, PanelValidator {
     	ValidationResult result = new ValidationResult();
     	
 		//Advanced Settings components
-		if (!ValidationUtils.isNotBlank(this.getAppBasePathLinuxField().getText())) {
+		if (ValidationUtils.isBlank(this.getAppBasePathLinuxField().getText())) {
 			result.add(new SimpleValidationMessage(APP_BASE_PATH_LINUX + " must not be blank.", Severity.ERROR, APP_BASE_PATH_LINUX));
 		}
 
-		if (!ValidationUtils.isNotBlank(this.getAppBasePathWindowsField().getText())) {
+		if (ValidationUtils.isBlank(this.getAppBasePathWindowsField().getText())) {
 			result.add(new SimpleValidationMessage(APP_BASE_PATH_WINDOWS + " must not be blank.", Severity.ERROR, APP_BASE_PATH_WINDOWS));
 		}
 		
-		if (!ValidationUtils.isNotBlank(this.getCachePathField().getText())) {
+		if (ValidationUtils.isBlank(this.getCachePathField().getText())) {
 			result.add(new SimpleValidationMessage(CACHE_PATH + " must not be blank.", Severity.ERROR, CACHE_PATH));
 		}
     	

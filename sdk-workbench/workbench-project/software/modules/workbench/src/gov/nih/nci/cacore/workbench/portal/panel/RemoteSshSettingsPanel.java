@@ -710,19 +710,24 @@ public final class RemoteSshSettingsPanel implements Panel, PanelValidator {
 
     	if (parentContainer.isRemoteDeployment()){
     		
-    		if (!ValidationUtils.isNotBlank(this.getSshServerUsernameField().getText())) {
+    		if (ValidationUtils.isBlank(this.getSshServerUsernameField().getText())) {
     			result.add(new SimpleValidationMessage(SSH_SERVER_USERNAME + " must not be blank.", Severity.ERROR, SSH_SERVER_USERNAME));
     		}
     		
-    		if (!ValidationUtils.isNotBlank(this.getSshServerHostnameField().getText())) {
+    		if (ValidationUtils.isBlank(this.getSshServerHostnameField().getText())) {
     			result.add(new SimpleValidationMessage(SSH_SERVER_HOSTNAME + " must not be blank.", Severity.ERROR, SSH_SERVER_HOSTNAME));
     		}
     		
-    		if (!ValidationUtils.isNotBlank(this.getSshPortField().getText())) {
+    		String sshPort = getSshPortField().getText();
+    		if (ValidationUtils.isBlank(this.getSshPortField().getText())) {
     			result.add(new SimpleValidationMessage(SSH_PORT + " must not be blank.", Severity.ERROR, SSH_PORT));
     		}
+    		
+    		if (!ValidationUtils.isNumeric(sshPort)){
+    			result.add(new SimpleValidationMessage(SSH_PORT + " must be numeric.", Severity.ERROR, SSH_PORT));
+    		}
 
-    		if (!ValidationUtils.isNotBlank(this.getSshKeyFileField().getText())) {
+    		if (ValidationUtils.isBlank(this.getSshKeyFileField().getText())) {
     			result.add(new SimpleValidationMessage(SSH_KEY_FILE + " must not be blank.", Severity.ERROR, SSH_KEY_FILE));
     		} else {
     			File file = new File(this.getSshKeyFileField().getText());
@@ -731,7 +736,7 @@ public final class RemoteSshSettingsPanel implements Panel, PanelValidator {
     			}
     		}
     		
-    		if (!ValidationUtils.isNotBlank(this.getSshTempDirField().getText())) {
+    		if (ValidationUtils.isBlank(this.getSshTempDirField().getText())) {
     			result.add(new SimpleValidationMessage(SSH_TEMP_DIR + " must not be blank.", Severity.ERROR, SSH_TEMP_DIR));
     		} else {
     			// Cannot validate if it is a valid directory as it is remote.
