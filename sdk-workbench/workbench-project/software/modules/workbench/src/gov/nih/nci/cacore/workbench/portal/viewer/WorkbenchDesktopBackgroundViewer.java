@@ -3,7 +3,6 @@ package gov.nih.nci.cacore.workbench.portal.viewer;
 import gov.nih.nci.cacore.workbench.common.LookAndFeel;
 import gov.nih.nci.cacore.workbench.common.ResourceManager;
 import gov.nih.nci.cacore.workbench.common.Utils;
-import gov.nih.nci.cacore.workbench.portal.application.WorkbenchApplicationComponent;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 
 import java.awt.GridBagConstraints;
@@ -11,6 +10,7 @@ import java.awt.GridBagLayout;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -22,11 +22,11 @@ import org.apache.log4j.Logger;
  * @author <A HREF="MAILTO:dumitrud@mail.nih.gov">Dan Dumitru</A> Based upon "Bare Bones Browser Launch" - See http://www.centerkey.com/java/browser/
  * @created June, 2008
  */
-public class WorkbenchDesktopBackgroundViewer extends WorkbenchApplicationComponent {
+public class WorkbenchDesktopBackgroundViewer extends JInternalFrame {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private static final Logger log = Logger.getLogger(HelpViewer.class);
+	private static final Logger log = Logger.getLogger(WorkbenchDesktopBackgroundViewer.class);
 	
 	private static final String WORKFLOW_URL = ResourceManager.getWorkbenchHelpUrl();
 	
@@ -51,10 +51,16 @@ public class WorkbenchDesktopBackgroundViewer extends WorkbenchApplicationCompon
      * This method initializes this Viewer
      */
     private void initialize() {
+    	
+		setSize(600, 700);
+		setMaximizable(false);
+		setIconifiable(false);
+		setClosable(true);
+		setResizable(false);
      
         setContentPane(getMainPanel());
         setFrameIcon(LookAndFeel.getWorkbenchIcon());
-//        setTitle("CSM Workflow Launcher");
+//      setTitle("");
     }
     
     /**
