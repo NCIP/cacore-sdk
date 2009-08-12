@@ -1,0 +1,29 @@
+##############################
+###  APPLICATION SETTINGS  ###
+##############################
+application.base.path=
+authentication.type=
+application.url=
+
+###########################
+###  DATABASE SETTINGS  ###
+###########################
+database.type=
+database.server=
+database.port=
+
+########################
+###  JBOSS SETTINGS  ###
+########################
+jboss.home=
+jboss.server.hostname=
+jboss.server.jndi.port=
+jboss.server.name=
+jboss.server.port=
+
+###################################
+#  PRE-POST VALIDATION PROPERTIES #
+###################################
+validation.pre.port.list=
+validation.post.http.list=
+validation.post.socket.list=

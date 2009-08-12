@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<project name="caCORE Workbench - Installer" default="install" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
+
+	<property file="project.properties" />
+	<property name="properties.template.file" value="${basedir}/properties.template" />
+	<property name="bda-blueprints-webapp.name" value="${PROJECT_NAME}" />
+	
+	<import file="bda-master-install.xml" />
+
+	<property name="SERVER_HOST_NAME" value="${tomcat.hostname}"/>
+	<property name="SERVER_HTTP_PORT" value="${tomcat.port.http}"/>
+	<property name="SERVER_URL" value="http://${SERVER_HOST_NAME}:${SERVER_HTTP_PORT}/${PROJECT_NAME}"/>	
+	<property name="application.url" value="${SERVER_URL}" />
+
+	<target name="install:tomcat:project-webapp" description="Deploy example-webapp and common libraries to tomcat installation" unless="exclude.tomcat">
+		<copy file="${package.client.tomcat.webapps.dir}/${PROJECT_NAME}.war" todir="${tomcat.home}/webapps" overwrite="true" />
+	</target>
+	
+	<target name="install" description="Installs and configures JBOSS, creates database, and deploys application" 
+		depends="
+		common:init,
+		install:common:validation:pre-install,
+		install:tomcat:validation:pre-install,
+		install:tomcat:stop,
+		install:tomcat:validation:pre-install:ports,
+		install:common:clean,
+		install:tomcat,
+		install:common:post,
+		install:common:validation:post-install
+		">
+	</target>
+	
+	<target name="install:tomcat" description="Wrapper scripts that calls all required targets to install the tomcat container" unless="exclude.tomcat"
+		depends="
+		common:tomcat:init,
+		common:init,
+		install:tomcat:validation:pre-install,
+		install:tomcat:stop,
+		install:tomcat:validation:pre-install:ports,
+		install:tomcat:clean,
+		install:tomcat:binaries,
+		install:tomcat:configure,
+		install:tomcat:project-webapp,
+		install:post:tomcat,
+		install:tomcat:start,
+		install:tomcat:validation:post-install
+		">
+	</target>
+	
+	<target name="common:init" depends="common:init:pre">
+	</target>
+	
+	<!-- Clean up destination directory -->
+	<target name="install:common:clean" description="Removes all files from the local filesystem" depends="common:init,install:tomcat:clean">
+	</target>
+	
+</project>
