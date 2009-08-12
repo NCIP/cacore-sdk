@@ -54,7 +54,7 @@
 
 	<target name="ivy:init">
 		<property name="ivy.dep.file" value="${ivy.def.file}" />
-		<ivy:settings file="${ivy.settings.dir}/${ivy.settings.file}" override="true" />
+		<ivy:settings file="${ivy.settings.dir}/${ivy.settings.file}"  />
 	</target>
 
 	<target name="clean:dependencies">
