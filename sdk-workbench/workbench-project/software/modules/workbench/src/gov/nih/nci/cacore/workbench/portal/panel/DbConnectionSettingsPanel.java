@@ -816,7 +816,6 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
 		return dbCreationSettingsSubPanel;
 	}
 	
-
 	/**
 	 * This method initializes dbSettingsPanel	
 	 * 	

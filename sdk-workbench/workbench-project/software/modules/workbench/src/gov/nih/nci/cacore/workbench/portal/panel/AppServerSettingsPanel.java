@@ -4,7 +4,6 @@ import gov.nih.nci.cacore.workbench.common.OptionsMapManager;
 import gov.nih.nci.cacore.workbench.portal.validation.PanelValidator;
 import gov.nih.nci.cacore.workbench.portal.validation.TabbedPanePropertiesValidator;
 import gov.nih.nci.cacore.workbench.portal.viewer.DeployPropertiesViewer;
-import gov.nih.nci.cacore.workbench.portal.viewer.HelpViewer;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 
 import java.awt.GridBagConstraints;
@@ -16,10 +15,12 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -70,6 +71,7 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
 	private JPanel tomcatServerSettingsSubPanel = null;
 	private JPanel jbossServerSettingsSubPanel = null;
 	private JPanel appServerSettingsReviewPanel = null;
+	private JPanel configureServerSubPanel = null;
     
 	//Application Server Settings Panel Component Definitions
     private JTextField externalServerHttpUrlField = null;
@@ -89,6 +91,10 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
     private JTextField jbossServerJndiPortField = null;
     private JTextField jbossServerPortField = null;
     private JTextField jbossServerSslPortField = null;
+    
+    //Configure Server Sub-Panel Component Definitions
+    private JCheckBox installServerCheckBox=null;
+    private JCheckBox updateServerPortsCheckBox=null;
     
     /**
      * This method initializes the tomcat Server Hostname Field
@@ -219,11 +225,20 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
 		    getJbossServerPortField().setEnabled(false);
 		    getJbossServerSslPortField().setEnabled(false);
 
-
 		}
 		
 		getSettingsPanel().validate();// in order to 'repaint' the panel
 		
+    }
+    
+    protected void toggleConfigureServerFields() {
+    	
+    	if (getInstallServerCheckBox().isSelected()){
+    		getUpdateServerPortsCheckBox().setSelected(false);
+    		getUpdateServerPortsCheckBox().setEnabled(false);
+    	} else {
+    		getUpdateServerPortsCheckBox().setEnabled(true);
+    	}	
     }
 
     /**
@@ -582,6 +597,58 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
     	}
     	return jbossServerSslPortField;
     }
+    
+    /**
+     * This method initializes the Use JNDI Based Connection Check Box
+     * 
+     * @return javax.swing.JCheckBox
+     */
+    private JCheckBox getInstallServerCheckBox() {
+        if (installServerCheckBox == null) {
+        	installServerCheckBox = new JCheckBox();
+        	installServerCheckBox.setToolTipText("Install a new instance of the Application Server?");
+        	installServerCheckBox.setHorizontalAlignment(SwingConstants.LEADING);
+        	installServerCheckBox.setSelected(Boolean.parseBoolean(parentContainer.getPropertiesManager().getDeployPropertyValue("INSTALL_CONTAINER")));
+        	installServerCheckBox.setHorizontalTextPosition(SwingConstants.LEFT);
+			
+        	installServerCheckBox.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					toggleConfigureServerFields();
+                    mainPanelValidator.setDirty(true);
+                    mainPanelValidator.validateInput();
+				}
+        	});
+
+        	installServerCheckBox.addFocusListener(new FocusChangeHandler());
+        }
+        return installServerCheckBox;
+    }
+    
+    
+    /**
+     * This method initializes the Use JNDI Based Connection Check Box
+     * 
+     * @return javax.swing.JCheckBox
+     */
+    private JCheckBox getUpdateServerPortsCheckBox() {
+        if (updateServerPortsCheckBox == null) {
+        	updateServerPortsCheckBox = new JCheckBox();
+        	updateServerPortsCheckBox.setToolTipText("Install a new instance of the Application Server?");
+        	updateServerPortsCheckBox.setHorizontalAlignment(SwingConstants.LEADING);
+        	updateServerPortsCheckBox.setSelected(Boolean.parseBoolean(parentContainer.getPropertiesManager().getDeployPropertyValue("RE_CONFIGURE_CONTAINER_PORTS")));
+        	updateServerPortsCheckBox.setHorizontalTextPosition(SwingConstants.LEFT);
+			
+        	updateServerPortsCheckBox.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+                    mainPanelValidator.setDirty(true);
+                    mainPanelValidator.validateInput();
+				}
+        	});
+
+        	updateServerPortsCheckBox.addFocusListener(new FocusChangeHandler());
+        }
+        return updateServerPortsCheckBox;
+    } 
 
     private final class FocusChangeHandler implements FocusListener {
 
@@ -645,20 +712,29 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
 			GridBagConstraints gridBagConstraints30 = new GridBagConstraints();
 			gridBagConstraints30.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints30.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints30.gridy = 2;
+			gridBagConstraints30.gridy = 3;
 			gridBagConstraints30.insets = new java.awt.Insets(1, 1, 1, 1);
 			gridBagConstraints30.gridx = 0;
-			gridBagConstraints30.gridwidth = 3;
+			gridBagConstraints30.gridwidth = 2;
 			gridBagConstraints30.weightx = 1.0D;
 			
 			GridBagConstraints gridBagConstraints40 = new GridBagConstraints();
 			gridBagConstraints40.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints40.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints40.gridy = 3;
+			gridBagConstraints40.gridy = 4;
 			gridBagConstraints40.insets = new java.awt.Insets(1, 1, 1, 1);
 			gridBagConstraints40.gridx = 0;
-			gridBagConstraints40.gridwidth = 3;
+			gridBagConstraints40.gridwidth = 2;
 			gridBagConstraints40.weightx = 1.0D;
+			
+			GridBagConstraints gridBagConstraints50 = new GridBagConstraints();
+			gridBagConstraints50.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints50.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints50.gridy = 5;
+			gridBagConstraints50.insets = new java.awt.Insets(1, 1, 1, 1);
+			gridBagConstraints50.gridx = 0;
+			gridBagConstraints50.gridwidth = 2;
+			gridBagConstraints50.weightx = 1.0D;
 			
 			externalServerHostnameLabel = new JLabel();
 			externalServerHostnameLabel.setText("External Server Hostname:");
@@ -678,6 +754,7 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
 			appServerSettingsPanel.add(getServerTypeComboBox(), gridBagConstraints21);
 			appServerSettingsPanel.add(getTomcatSettingsSubPanel(), gridBagConstraints30);
 			appServerSettingsPanel.add(getJBossSettingsSubPanel(), gridBagConstraints40);
+			appServerSettingsPanel.add(getConfigureServerSubPanel(), gridBagConstraints50);
 			
 			appServerSettingsPanel.validate();
 		}
@@ -1060,6 +1137,74 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
 		}
 		return jbossServerSettingsSubPanel;
 	}
+	
+	/**
+	 * This method initializes dbConnectionJndiSettingsPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getConfigureServerSubPanel() {
+		if (configureServerSubPanel == null) {
+			
+		    //DB Creation Settings Panel Label Definitions
+		    JLabel installServerLabel = null;
+		    JLabel updateServerPortsLabel = null;
+			
+			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
+			gridBagConstraints10.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints10.gridy = 1;
+			gridBagConstraints10.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints10.gridx = 0;
+
+			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+			gridBagConstraints11.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints11.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints11.gridx = 1;
+			gridBagConstraints11.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints11.gridy = 1;
+			gridBagConstraints11.weighty = 1.0D;
+			gridBagConstraints11.weightx = 1.0D;  
+			gridBagConstraints11.gridwidth = 2;
+			
+			GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
+			gridBagConstraints20.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints20.gridy = 2;
+			gridBagConstraints20.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints20.gridx = 0;
+
+			GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
+			gridBagConstraints21.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints21.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints21.gridx = 1;
+			gridBagConstraints21.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints21.gridy = 2;
+			gridBagConstraints21.weighty = 1.0D;
+			gridBagConstraints21.weightx = 1.0D;  
+			gridBagConstraints21.gridwidth = 2;
+			
+			installServerLabel = new JLabel();
+			installServerLabel.setText("Install Server?");
+
+			updateServerPortsLabel = new JLabel();
+			updateServerPortsLabel.setText("Update Server Ports?");
+
+			configureServerSubPanel = new JPanel();
+		    configureServerSubPanel.setLayout(new GridBagLayout());
+		    configureServerSubPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Configure Server Options",
+					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
+		    
+		    configureServerSubPanel.add(installServerLabel, gridBagConstraints10);
+		    configureServerSubPanel.add(getInstallServerCheckBox(), gridBagConstraints11);
+		    
+		    configureServerSubPanel.add(updateServerPortsLabel, gridBagConstraints20);
+		    configureServerSubPanel.add(getUpdateServerPortsCheckBox(), gridBagConstraints21);
+			
+		    configureServerSubPanel.validate();
+		}
+		
+		return configureServerSubPanel;
+	}
     
     /**
      * This method initializes the Project Settings jPanel
@@ -1438,6 +1583,7 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
         ValidationComponentUtils.setMandatory(getJbossServerSslPortField(), true);
         
     	toggleServerFields();
+    	toggleConfigureServerFields();
     }
     
     public Map<String,String> getPropsMap(){
@@ -1470,6 +1616,9 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
 			propsMap.put("jboss.server.port", getJbossServerPortField().getText());
 			propsMap.put("jboss.server.ssl.port", getJbossServerSslPortField().getText());
 		}
+		
+		propsMap.put("INSTALL_CONTAINER", Boolean.valueOf(getInstallServerCheckBox().isSelected()).toString() );
+		propsMap.put("RE_CONFIGURE_CONTAINER_PORTS", Boolean.valueOf(getUpdateServerPortsCheckBox().isSelected()).toString() );
 		
     	return propsMap;
     }
