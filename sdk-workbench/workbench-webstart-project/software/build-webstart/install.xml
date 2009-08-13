@@ -25,9 +25,7 @@
 		install:tomcat:stop,
 		install:tomcat:validation:pre-install:ports,
 		install:common:clean,
-		install:tomcat,
-		install:common:post,
-		install:common:validation:post-install
+		install:tomcat
 		">
 	</target>
 
@@ -66,8 +64,7 @@
 		install:common:validation:pre-install,
 		install:tomcat:validation:pre-install,
 		install:tomcat:stop,
-		upgrade-ncm:tomcat,
-		install:common:validation:post-install
+		upgrade-ncm:tomcat
 		">
 	</target>
 
