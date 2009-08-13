@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- JNLP File for the caCORE Workbench -->
 <jnlp spec="1.0+"
-      codebase="http://@SERVER_HOSTNAME@:@SERVER_PORT@/@PROJECT_NAME@/" 
+      codebase="http://@TOMCAT_EXTERNAL_HTTP_HOST@:@SERVER_PORT@/@PROJECT_NAME@/" 
       href="Workbench.jnlp">
    <information>
       <title>caCORE Workbench Web Start JNLP File</title>
@@ -45,7 +45,7 @@
    </resources>
    <application-desc main-class="gov.nih.nci.cacore.workbench.portal.CacoreWorkbenchPortal">
    	<argument>webstart</argument>
-   	<argument>http://@SERVER_HOSTNAME@:@SERVER_PORT@/@PROJECT_NAME@/@SDK_SRC_FILE@</argument>
+   	<argument>http://@TOMCAT_EXTERNAL_HTTP_HOST@:@SERVER_PORT@/@PROJECT_NAME@/@SDK_SRC_FILE@</argument>
    	<argument>@SDK_SRC_FILE@</argument>
    </application-desc>
 </jnlp>
