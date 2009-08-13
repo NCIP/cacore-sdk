@@ -14,10 +14,14 @@
 
 	<property file="project.properties" />
 	<property file="build.properties" />
+
+	<property name="software.dir" location=".." />
+	<property name="target.dir" location="${software.dir}/target" />
 	<property name="shared.local.repo.dir" location="${target.dir}/shared-local-ivy-repo" />
 	<property name="bda-blueprints-webapp.install.zip.file" value="${project-webapp.install.name}"/>
 	<property name="bda-blueprints-webapp.upgrade.zip.file" value="${project-webapp.upgrade.name}"/>
-
+	<property name="bda-download.dir" location="${target.dir}/bda-download" />
+	
 	<property name="ivy.settings.dir" value="${basedir}/../common" />
 	<property name="ivy.settings.file" value="ivysettings.xml" />
 
