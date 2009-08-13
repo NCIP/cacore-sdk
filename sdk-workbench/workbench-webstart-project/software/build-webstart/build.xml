@@ -21,7 +21,7 @@
 	<property name="bda-blueprints-webapp.install.zip.file" value="${project-webapp.install.name}"/>
 	<property name="bda-blueprints-webapp.upgrade.zip.file" value="${project-webapp.upgrade.name}"/>
 	<property name="bda-download.dir" location="${target.dir}/bda-download" />
-	
+
 	<property name="ivy.settings.dir" value="${basedir}/../common" />
 	<property name="ivy.settings.file" value="ivysettings.xml" />
 
@@ -164,6 +164,7 @@
 			<replacefilter token="@SERVER_HOSTNAME@" value="${tomcat.hostname}" />
 			<replacefilter token="@SERVER_PORT@" value="${tomcat.port.http}" />
 			<replacefilter token="@SDK_SRC_FILE@" value="${sdk.src.file}" />
+			<replacefilter token="@TOMCAT_EXTERNAL_HTTP_HOST@" value="${tomcat.external.http.host}" />
 		</replace>
 	</target>
 
