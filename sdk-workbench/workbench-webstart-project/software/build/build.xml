@@ -264,6 +264,7 @@
 			<replacefilter token="@SERVER_HOSTNAME@" value="${tomcat.hostname}" />
 			<replacefilter token="@SERVER_PORT@" value="${tomcat.port.http}" />
 			<replacefilter token="@SDK_SRC_FILE@" value="${sdk.src.file}" />
+			<replacefilter token="@TOMCAT_EXTERNAL_HTTP_HOST@" value="${tomcat.external.http.host}" />
 		</replace>
 	</target>
 
