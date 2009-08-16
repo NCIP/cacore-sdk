@@ -16,9 +16,6 @@
 	<property file="${properties.file}" />
 
 	<!-- Databases build/install.properties -->
-	<property name="db.install.create.oracle.file.list" value="SDKTestSchema-oracle.sql,SDKTestCSMSchema-oracle.sql" />
-	<property name="db.install.create.mysql.file.list" value="SDKTestSchema-mysql.sql,SDKTestCSMSchema-mysql.sql" />
-
 	<condition property="exclude.database" value="true">
 		<isset property="exclude.database"/>
 	</condition>
@@ -410,10 +407,7 @@
 
 	<target name="install:jboss:configure:bindings" unless="exclude.jboss">
 		<if>
-			<or>
-				<equals arg1="${INSTALL_CONTAINER}" arg2="true" casesensitive="false"/>
-				<equals arg1="${RE_CONFIGURE_CONTAINER_PORTS}" arg2="true" casesensitive="false"/>
-			</or>
+			<equals arg1="${INSTALL_CONTAINER}" arg2="true" casesensitive="false"/>
 			<then>
 				<jboss-bindings jboss.server.bindingfile.location="${jboss.home}/server/${jboss.server.name}/conf/bindings.xml" jboss.server.binding.template.location="${jboss-bindings.file}" jboss.server.ports.name="${jboss.port.configuration}" />
 				<echo message="Updating JBoss shutdown.jar to allow shutdown without command line args"/>
@@ -428,10 +422,7 @@
 
 	<target name="install:jboss:configure:ports" unless="exclude.jboss" >
 		<if>
-			<or>
-				<equals arg1="${INSTALL_CONTAINER}" arg2="true" casesensitive="false"/>
-				<equals arg1="${RE_CONFIGURE_CONTAINER_PORTS}" arg2="true" casesensitive="false"/>
-			</or>
+			<equals arg1="${INSTALL_CONTAINER}" arg2="true" casesensitive="false"/>
 			<then>
 				<xmlconfig in="${jboss.home}/server/${jboss.server.name}/deploy/jbossweb-tomcat55.sar/server.xml" verbose="false">
 					<update path="(//Connector)[@port=8080]/@port" value="${jboss.server.port}" />
@@ -482,8 +473,28 @@
 		<if>
 			<equals arg1="${CSM_LOGIN_MODULE_ENABLED}" arg2="true" casesensitive="false" trim="true" />
 			<then>
-				<echo message="Inserting ${login-config.block.file} into ${jboss.home}/server/${jboss.server.name}/conf/login-config.xml" />
-				<jboss-login-config authentication.type="db" login-config.db.file="${package.client.jboss.default.conf.dir}/${login-config.block.file}" login-config.ldap.file="${package.client.jboss.default.conf.dir}/${login-config.block.file}" jboss.server.name="${jboss.server.name}"/>
+			<switch value="${database.type}">
+				<case value="oracle">
+					<property name="csm.database.driver.file" value="${bda-utils.dir}/ojdbc14-10.2.0.3.0.jar "/>
+				</case>
+				<case value="mysql">
+					<property name="csm.database.driver.file" value="${bda-utils.dir}/mysql-connector-java-5.0.5.jar"/>
+				</case>
+				<case value="postgresql">
+					<property name="csm.database.driver.file" value="${bda-utils.dir}/postgresql-jdbc3-8.3-603.jar"/>
+				</case>
+				<case value="hsqldb">
+					<property name="csm.database.driver.file" value="${bda-utils.dir}/hsqldb-1.8.0.7.jar"/>
+				</case>
+				<default>
+					<fail message="Invalid or unsupported database type ${database.type}"/>
+				</default>
+			</switch>
+			<echo message="${csm.database.driver.file}"/>
+			<echo message="${jboss.home}/server/${jboss.server.name}/lib"/>	
+			<copy file="${csm.database.driver.file}" todir="${jboss.home}/server/${jboss.server.name}/lib" overwrite="true" failonerror="false"/>
+			<echo message="Inserting ${login-config.block.file} into ${jboss.home}/server/${jboss.server.name}/conf/login-config.xml" />
+			<jboss-login-config authentication.type="db" login-config.db.file="${package.client.jboss.default.conf.dir}/${login-config.block.file}" login-config.ldap.file="${package.client.jboss.default.conf.dir}/${login-config.block.file}" jboss.server.name="${jboss.server.name}"/>
 			</then>
 		</if>
 	</target>
@@ -517,6 +528,34 @@
 			<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true" casesensitive="false" trim="true" />
 			<then>
 				<echo message="Copying libraries to JBoss" />
+				<copy todir="${jboss.home}/server/${jboss.server.name}/lib">
+					<fileset dir="${package.client.jboss.default.lib.dir}">
+					</fileset>
+				</copy>
+			</then>
+		</if>		
+		<if>
+			<equals arg1="${ENABLE_CLM_LOGGER_CFG_GENERATION}" arg2="true" casesensitive="false" trim="true" />
+			<then>
+				<echo message="Copying libraries to JBoss" />
+				<switch value="${database.type}">
+					<case value="oracle">
+						<property name="clm.database.driver.file" value="${bda-utils.dir}/ojdbc14-10.2.0.3.0.jar "/>
+					</case>
+					<case value="mysql">
+						<property name="clm.database.driver.file" value="${bda-utils.dir}/mysql-connector-java-5.0.5.jar"/>
+					</case>
+					<case value="postgresql">
+						<property name="clm.database.driver.file" value="${bda-utils.dir}/postgresql-jdbc3-8.3-603.jar"/>
+					</case>
+					<case value="hsqldb">
+						<property name="clm.database.driver.file" value="${bda-utils.dir}/hsqldb-1.8.0.7.jar"/>
+					</case>
+					<default>
+						<fail message="Invalid or unsupported database type ${database.type}"/>
+					</default>
+				</switch>
+				<copy file="${clm.database.driver.file}" todir="${jboss.home}/server/${jboss.server.name}/lib" overwrite="true" failonerror="false" />
 				<copy todir="${jboss.home}/server/${jboss.server.name}/lib">
 					<fileset dir="${package.client.jboss.default.lib.dir}">
 					</fileset>
@@ -681,14 +720,19 @@
 	</target>
 
 	<target name="install:tomcat:configure:ports" unless="exclude.tomcat" >
-		<echo message="Updating Tomcat Ports" />
-		<xmlconfig in="${deploy.tomcat.home}/conf/server.xml" verbose="false">
-			<update path="(//Connector)[@port=8080]/@port" value="${tomcat.port.http}" />
-			<update path="(//Connector)[@redirectPort=8443]/@redirectPort" value="${tomcat.port.ssl}" />
-			<update path="(//Connector)[@port=8009]/@port" value="${tomcat.port.ajp}" />
-			<update path="(//Connector)[@port=8443]/@port" value="${tomcat.port.ssl}" />
-			<update path="(//Server)[@port=8005]/@port" value="${tomcat.port.shutdown}" />
-		</xmlconfig>
+		<if>
+			<equals arg1="${INSTALL_CONTAINER}" arg2="true" casesensitive="false"/>
+			<then>
+				<echo message="Updating Tomcat Ports" />
+				<xmlconfig in="${deploy.tomcat.home}/conf/server.xml" verbose="false">
+					<update path="(//Connector)[@port=8080]/@port" value="${tomcat.port.http}" />
+					<update path="(//Connector)[@redirectPort=8443]/@redirectPort" value="${tomcat.port.ssl}" />
+					<update path="(//Connector)[@port=8009]/@port" value="${tomcat.port.ajp}" />
+					<update path="(//Connector)[@port=8443]/@port" value="${tomcat.port.ssl}" />
+					<update path="(//Server)[@port=8005]/@port" value="${tomcat.port.shutdown}" />
+				</xmlconfig>
+			</then>
+		 </if>
 	</target>
 
 	<target name="install:tomcat:configure:grid-ports" unless="exclude.tomcat" >
@@ -725,6 +769,24 @@
 		<if>
 			<equals arg1="${SECURITY_ENABLED}" arg2="true" casesensitive="false" trim="true" />
 			<then>
+				<switch value="${database.type}">
+					<case value="oracle">
+						<property name="csm.database.driver.file" value="${bda-utils.dir}/ojdbc14-10.2.0.3.0.jar "/>
+					</case>
+					<case value="mysql">
+						<property name="csm.database.driver.file" value="${bda-utils.dir}/mysql-connector-java-5.0.5.jar"/>
+					</case>
+					<case value="postgresql">
+						<property name="csm.database.driver.file" value="${bda-utils.dir}/postgresql-jdbc3-8.3-603.jar"/>
+					</case>
+					<case value="hsqldb">
+						<property name="csm.database.driver.file" value="${bda-utils.dir}/hsqldb-1.8.0.7.jar"/>
+					</case>
+					<default>
+						<fail message="Invalid or unsupported database type ${database.type}"/>
+					</default>
+				</switch>
+				<copy file="${csm.database.driver.file}" todir="${catalina.home}/server/lib" overwrite="true" failonerror="false"/>
 				<copyfile src="${package.client.tomcat.serverxml.dir}/login.config" dest="${deploy.tomcat.home}/conf/login.config" />
 				<propertyfile file="${deploy.tomcat.home}/conf/catalina.properties" comment="append login.config file path">
 					<entry key="java.security.auth.login.config" value="${catalina.home}/conf/login.config" />
@@ -911,8 +973,6 @@
 		install:init,
 		install:database:prep
 		">
-		<echo message="${CSM_DB_CONNECTION_URL}"/>
-		<echo message="${CSM_DB_DRIVER}"/>
 		<if>
 			<equals arg1="${DB_DROP_SCHEMA}" arg2="true"/>
 			<then>
@@ -937,10 +997,8 @@
 				<equals arg1="${ENABLE_CLM_LOGGER_CFG_GENERATION}" arg2="true" />
 			</and>
 			<then>
-				<then>
 					<database-clean database.driver="${CLM_DB_DRIVER}" database.url="${CLM_DB_CONNECTION_URL}" database.user="${CLM_DB_USERNAME}" database.password="${CLM_DB_PASSWORD}" database.schema="${CLM_DB_NAME}" database.re-create="false" database.drop-schema="${CLM_DB_DROP_SCHEMA}" />
-					<execute-database-install database.type="${CLM_DB_TYPE}"  database.url="${CLM_DB_CONNECTION_URL}" database.user="${CLM_DB_USERNAME}" database.password="${CLM_DB_PASSWORD}" db.install.create.oracle.file.list="${clm.db.install.create.oracle.file.list}" db.install.create.mysql.file.list="${clm.db.install.create.oracle.file.list}"/>
-				</then>
+					<execute-database-install database.type="${CLM_DB_TYPE}"  database.url="${CLM_DB_CONNECTION_URL}" database.user="${CLM_DB_USERNAME}" database.password="${CLM_DB_PASSWORD}" db.install.create.oracle.file.list="${clm.db.install.create.oracle.file.list}" db.install.create.mysql.file.list="${clm.db.install.create.mysql.file.list}"/>
 			</then>
 		</if>
 	</target>
