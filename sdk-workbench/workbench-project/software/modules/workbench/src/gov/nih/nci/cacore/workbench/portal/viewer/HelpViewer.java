@@ -87,16 +87,9 @@ public class HelpViewer extends WorkbenchViewerBaseComponent {
             helpEditorPane.setEnabled(true);
             helpEditorPane.setEditorKit(new HTMLEditorKit());
             
-//            URL helpURL = null;
+//          URL helpURL = null;
 //			try {
-//            	
-//                java.security.Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
-//				System.setProperty("java.protocol.handler.pkgs","com.sun.net.ssl.internal.www.protocol");
-//				System.setProperty("javax.net.ssl.trustStore","C:/dan/dev/caCore/sdk-trunk/sdk-workbench/workbench-project/software/modules/workbench-conf/conf/jssecacerts");
-//				System.setProperty("javax.net.ssl.trustStore","http://blueoctave.com/FTP/NCICB/jssecacerts");
-//				
 //				helpURL = new URL(HELP_URL);
-//				
 //			} catch (MalformedURLException e) {
 //				// TODO Auto-generated catch block
 //				e.printStackTrace();
