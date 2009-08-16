@@ -2,7 +2,7 @@ package gov.nih.nci.cacore.workbench.portal;
 
 import gov.nih.nci.cacore.workbench.common.Utils;
 import gov.nih.nci.cacore.workbench.common.WorkbenchCmdLineArgsManager;
-import gov.nih.nci.cacore.workbench.portal.viewer.WorkbenchDesktopBackgroundViewer;
+import gov.nih.nci.cacore.workbench.portal.viewer.WorkbenchOverviewViewer;
 import gov.nih.nci.cacore.workbench.portal.viewer.HelpViewer;
 import gov.nih.nci.cagrid.common.portal.SplashScreen;
 
@@ -84,13 +84,9 @@ public final class CacoreWorkbenchPortal {
 			Dimension d = new Dimension(app.getDimensions().getWidth(), app
 					.getDimensions().getHeight());
 			
-            WorkbenchDesktopBackgroundViewer clv = new WorkbenchDesktopBackgroundViewer();
-            clv.setSize(new Dimension(app.getDimensions().getWidth()-18, app.getDimensions().getHeight()-88));
-            clv.setVisible(true);
-            
-//            HelpViewer hv = new HelpViewer();
-//            hv.setSize(d);
-//            hv.setVisible(true);
+            WorkbenchOverviewViewer overviewViewer = new WorkbenchOverviewViewer();
+            overviewViewer.setSize(new Dimension(app.getDimensions().getWidth()-18, app.getDimensions().getHeight()-88));
+            overviewViewer.setVisible(true);
             
             log.debug("* * * " + applicationInstance.getContentPane().getLayout());
             BorderLayout bl = (BorderLayout)applicationInstance.getContentPane().getLayout();
@@ -106,7 +102,7 @@ public final class CacoreWorkbenchPortal {
             
             //applicationInstance.getMDIDesktopPane().add(comp, component.getDimensions(), component.getRenderOptions());
             //applicationInstance.getMDIDesktopPane().add(hv);
-            applicationInstance.getMDIDesktopPane().add(clv);
+            applicationInstance.getMDIDesktopPane().add(overviewViewer);
 
 			try {
 				applicationInstance.pack();
