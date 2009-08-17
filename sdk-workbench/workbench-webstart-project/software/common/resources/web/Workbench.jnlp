@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- JNLP File for the caCORE Workbench -->
 <jnlp spec="1.0+"
-      codebase="http://@TOMCAT_EXTERNAL_HTTP_HOST@:@SERVER_PORT@/@PROJECT_NAME@/" 
+      codebase="http://@TOMCAT_EXTERNAL_HTTP_HOST@/@PROJECT_NAME@/" 
       href="Workbench.jnlp">
    <information>
       <title>caCORE Workbench Web Start JNLP File</title>
