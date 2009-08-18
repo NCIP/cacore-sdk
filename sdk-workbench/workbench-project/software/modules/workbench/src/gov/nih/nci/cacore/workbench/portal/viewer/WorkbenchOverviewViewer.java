@@ -69,6 +69,7 @@ public class WorkbenchOverviewViewer extends JInternalFrame {
         	
             JEditorPane overviewTextPane = getTextPane(getOverviewText());
             JEditorPane supportedWorkflowTextPane = getTextPane(getSupportedWorkflowText());
+            JEditorPane implementationPlanTextPane = getTextPane(getImplementationPlanText());
             
             URL imageURL = WorkbenchOverviewViewer.class.getResource("/images/caCORE_Workbench_App_Dev_Environment.jpg");
             log.debug("image URL: "+imageURL.getFile());
@@ -85,6 +86,7 @@ public class WorkbenchOverviewViewer extends JInternalFrame {
 			//gridBagConstraints10.insets = new java.awt.Insets(2, 2, 2, 2);
 			//gridBagConstraints10.weighty = 1.0D;
 			gridBagConstraints10.weightx = 1.0D; 
+			gridBagConstraints10.gridwidth = 2;
 			
 			GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
 			gridBagConstraints20.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -94,6 +96,7 @@ public class WorkbenchOverviewViewer extends JInternalFrame {
 			//gridBagConstraints20.insets = new java.awt.Insets(5, 5, 5, 5);
 			//gridBagConstraints20.weighty = 1.0D;
 			gridBagConstraints20.weightx = 1.0D; 
+			gridBagConstraints20.gridwidth = 2;
 			
 			GridBagConstraints gridBagConstraints30 = new GridBagConstraints();
 			gridBagConstraints30.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -103,6 +106,17 @@ public class WorkbenchOverviewViewer extends JInternalFrame {
 			//gridBagConstraints30.insets = new java.awt.Insets(5, 5, 5, 5);
 			gridBagConstraints30.weighty = 1.0D;
 			gridBagConstraints30.weightx = 1.0D; 
+			gridBagConstraints30.gridwidth = 1;
+			
+			GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
+			gridBagConstraints31.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints31.anchor = java.awt.GridBagConstraints.NORTHWEST;
+			gridBagConstraints31.gridy = 3;
+			gridBagConstraints31.gridx = 1;
+			//gridBagConstraints31.insets = new java.awt.Insets(5, 5, 5, 5);
+			gridBagConstraints31.weighty = 1.0D;
+			gridBagConstraints31.weightx = 1.0D; 
+			gridBagConstraints31.gridwidth = 1;
 			
         	contentPanel = new JPanel();
         	contentPanel.setLayout(new GridBagLayout());
@@ -113,6 +127,7 @@ public class WorkbenchOverviewViewer extends JInternalFrame {
         	contentPanel.add(overviewTextPane, gridBagConstraints10);
         	contentPanel.add(workbenchEnvImage, gridBagConstraints20);
         	contentPanel.add(supportedWorkflowTextPane, gridBagConstraints30);
+        	contentPanel.add(implementationPlanTextPane, gridBagConstraints31);
         	contentPanel.setBackground(defaultBackgroundColor);
 //        	
 //			//Put the editor pane in a scroll pane.
@@ -169,7 +184,7 @@ public class WorkbenchOverviewViewer extends JInternalFrame {
     private String getSupportedWorkflowText() {
 
     	return "<html>"
-    	+ "Supported caBIG processes in this version of the Workbench include:<br>"
+    	+ "Supported caBIG processes in this Workbench version include:<br>"
     	+ "<UL>"
     	+ "<LI>Create UML Model (Link Only)"
     	+ "<LI>Semantic Integration (Link Only)"
@@ -178,8 +193,22 @@ public class WorkbenchOverviewViewer extends JInternalFrame {
     	+ "<LI>Deploy Application (Integrated)"
     	+ "<LI>Create Grid Service (Link Only)"
     	+ "</UL>"
-    	//+ "<img align=\"center\" valign=\"middle\" src=\"images/caCORE_Workbench_App_Dev_Environment.jpg\" >"
-    	//+ "<img align=\"center\" valign=\"middle\" src=\"" + imageURL.get+"\" >"
+    	+ "</html>";
+    }
+    
+    private String getImplementationPlanText() {
+
+    	return "<html>"
+    	+ "Phase II:<br>"
+    	+ "<UL>"
+    	+ "<LI>Integrate existing tools and their workflows"
+    	+ "<LI>Maintain boundaries between individual tools"
+    	+ "</UL>"
+    	+ "Phase III:<br>"
+    	+ "<UL>"
+    	+ "<LI>Harmonize the workflows between the individual tools"
+    	+ "<LI>Eliminate boundaries between tools to provide a unified view"
+    	+ "</UL>"
     	+ "</html>";
     }
     
