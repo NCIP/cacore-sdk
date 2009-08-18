@@ -172,7 +172,7 @@ public class HelpViewer extends WorkbenchViewerBaseComponent {
         if (buttonPanel == null) {
         	
             JLabel helpLabel = new JLabel();
-            helpLabel.setText("To open the caCORE Workbench user manual in your default browser, click the 'Open' button below, or go to " + HELP_URL + ".");
+            helpLabel.setText("To open the caCORE Workbench Tool site, click the 'Open' button below, or go to " + HELP_URL + ".");
             
             // TODO :: add helpLabel
         	
