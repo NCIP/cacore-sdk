@@ -51,14 +51,14 @@ public class WorkbenchOverviewViewer extends JInternalFrame {
     private void initialize() {
     	
 		setSize(600, 700);
-		setMaximizable(false);
+		setMaximizable(true);
 		setIconifiable(false);
 		setClosable(true);
 		setResizable(false);
      
         setContentPane(getMainPanel());
         setFrameIcon(LookAndFeel.getWorkbenchIcon());
-//      setTitle("");
+        setTitle("Workbench Overview");
     }
     
     /**
@@ -120,7 +120,7 @@ public class WorkbenchOverviewViewer extends JInternalFrame {
 			
         	contentPanel = new JPanel();
         	contentPanel.setLayout(new GridBagLayout());
-        	contentPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Workbench Overview",
+        	contentPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "",
                 javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
                 javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
             
