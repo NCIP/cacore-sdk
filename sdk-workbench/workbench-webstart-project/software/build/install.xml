@@ -14,6 +14,7 @@
 	<property name="application.url" value="${SERVER_URL}" />
 
 	<target name="install:tomcat:project-webapp" description="Deploy example-webapp and common libraries to tomcat installation" unless="exclude.tomcat">
+		<delete dir="${tomcat.home}//webapps/${PROJECT_NAME}" quiet="true"/>
 		<copy file="${package.client.tomcat.webapps.dir}/${PROJECT_NAME}.war" todir="${tomcat.home}/webapps" overwrite="true" />
 	</target>
 
