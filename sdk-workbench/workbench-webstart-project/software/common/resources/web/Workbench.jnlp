@@ -32,6 +32,8 @@
 	<jar href="lib/jaxrpc-1.1.jar" download="eager" />
 	<jar href="lib/jsch-0.1.34.jar" download="eager" />
 	<jar href="lib/log4j-1.2.13.jar" download="eager" />
+	<jar href="lib/mysql-connector-java-5.1.5.jar" download="eager" />
+	<jar href="lib/ojdbc14-10.2.0.3.0.jar" download="eager" />
 	<jar href="lib/saaj-1.2.jar" download="eager" /> 
 	<jar href="lib/sdk-workbench-4.2-beta.jar" main="true" download="eager" />
 	<jar href="lib/sdk-workbench-conf-4.2-beta.jar" download="eager" />
