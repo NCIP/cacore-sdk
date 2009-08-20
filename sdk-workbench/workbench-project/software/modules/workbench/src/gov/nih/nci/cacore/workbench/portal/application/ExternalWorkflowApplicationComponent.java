@@ -2,16 +2,24 @@ package gov.nih.nci.cacore.workbench.portal.application;
 
 import gov.nih.nci.cacore.workbench.portal.viewer.SemanticIntegrationViewer;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import javax.swing.JButton;
+import javax.swing.JEditorPane;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.text.html.HTMLEditorKit;
 
 import org.apache.log4j.Logger;
 
@@ -21,12 +29,14 @@ public abstract class ExternalWorkflowApplicationComponent extends JInternalFram
 	
 	private static final long serialVersionUID = 1L;
 	
+	private Color defaultBackgroundColor = Color.WHITE;
+	
 	/*
 	 * Primary Panel definitions
 	 */
-    private JPanel mainPanel = null;
+	private JPanel mainPanel = null;
 	protected JPanel contentPanel = null;
-    private JPanel buttonPanel = null;
+	private JPanel buttonPanel = null;
     
 	private JSplitPane mainSplitPane = null;
 	
@@ -78,11 +88,11 @@ public abstract class ExternalWorkflowApplicationComponent extends JInternalFram
         return gridBagConstraints;
     }
     
-    protected JSplitPane getMainSplitPanel(JLabel descriptionLabel,JButton[] buttons){
+    protected JSplitPane getMainSplitPanel(String description,JButton[] buttons){
     	
     	if (mainSplitPane == null){
 
-            JScrollPane descriptionScrollPane = new JScrollPane(descriptionLabel);
+            JScrollPane descriptionScrollPane = new JScrollPane(getTextPane(description));
             
             JScrollPane buttonPanelScrollPane = new JScrollPane(getButtonPanel(buttons));
 
@@ -118,6 +128,47 @@ public abstract class ExternalWorkflowApplicationComponent extends JInternalFram
 
         }
         return mainPanel;
+    }
+    
+    private JEditorPane getTextPane(String text){
+    	JEditorPane textPane = new JEditorPane();
+    	textPane.setEditable(false);
+    	textPane.setEnabled(true);
+    	textPane.setMargin(new Insets(10, 10, 10, 10));
+
+    	HTMLEditorKit htmlEditorKit = new HTMLEditorKit();
+    	//htmlEditorKit.setStyleSheet();
+    	textPane.setEditorKit(htmlEditorKit);
+    	textPane.setBackground(defaultBackgroundColor);
+    	textPane.setText(text);
+    	
+    	return textPane;
+    }
+    
+    public String convertStreamToString(InputStream is) {
+
+    	BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+    	StringBuilder sb = new StringBuilder();
+
+    	String line = null;
+    	try {
+    		while ((line = reader.readLine()) != null) {
+    			sb.append(line + "\n");
+    		}
+    		
+    		log.debug("* * * converted input stream[length=" + sb.length() + "]: " + sb.toString());
+    	} catch (IOException e) {
+    		log.error("Error reading external workflow description: ",e);
+    		return "Error reading external workflow description: " + e.getMessage();
+    	} finally {
+    		try {
+    			is.close();
+    		} catch (IOException e) {
+    			log.error("Error closing input stream while reading external workflow description: ",e);
+    		}
+    	}
+
+    	return sb.toString();
     }
 
 }
