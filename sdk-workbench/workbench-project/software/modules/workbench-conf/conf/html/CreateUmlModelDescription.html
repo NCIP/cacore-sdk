@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<body>
+
+<h1>Create UML Model</h1>
+
+<p style="margin-left: 0.5in;" class="MsoNormal">The caCORE software development
+process follows a Model Driven Architecture (MDA) paradigm. In MDA, the
+application development starts with creating a UML model for the underlying
+system. Creation of a UML model provides, essentially, a software blueprint of
+the system.</p>
+
+<p style="margin-left: 0.5in;" class="MsoNormal">UML provides a generic mechanism to
+represent the various parts of a software system and its lifecycle. When the UML
+model is constructed in the UML modeling tool, the information about the model
+is stored in the modeling tool's proprietary formatted file.</p>
+
+<h1>UML Modeling for caCORE</h1>
+
+<p style="margin-left: 0.5in;" class="MsoNormal">In the caCORE process, all the caCORE
+tools interpret the Logical Model portion of the UML Model. In addition, the
+caCORE SDK and caAdapter tool, also interprets the Data Model portion of the
+UML Model. caCORE tools are capable of processing most of the common elements
+of the UML class diagrams. Developers should check the caCORE UML Modeling wiki
+site at https://wiki.nci.nih.gov/display/caCORE/UML+Modeling for more details
+on the modeling rules supported by the caCORE tools to avoid any setbacks.</p>
+
+<p style="margin-left: 0.5in;" class="MsoNormal">UML by itself is unable to describe
+how the complete system works after implementation. To efficiently generate
+code from a UML model, the caCORE tools specifies additional information (in
+the form of tag values) that needs to be embedded inside the model. This
+additional information allows the caCORE to determine how the semantic
+integration and code generation process should proceed. In order for the caCORE
+tools to read the model, the model information needs to be translated into a
+standard format that can be interpreted by other modeling tools.</p>
+
+<p style="margin-left: 0.5in;" class="MsoNormal">Currently the caCORE tools use a
+UML model reader, also known as the XMI Handler, which can interpret model
+information created by either Enterprise Architect or ArgoUML. Enterprise
+Architect (EA) and ArgoUML (v0.24 and v0.26) are the officially supported UML
+modeling tools for use with the caCORE suite of products.</p>
+
+<p style="margin-left: 0.5in;" class="MsoNormal">More details on how to create UML
+model can be found in the &quot;Creating the UML Model for caCORE SDK&quot; of the SDK
+4.x Programmer's Guide, which is available for download from the SDK GForge
+site at:</p>
+
+<p style="margin-left: 0.5in;" class="MsoNormal">https://gforge.nci.nih.gov/docman/view.php/148/18801/caCORE_SDK_v42_ProgrammersGuide.pdf.</p>
+
+</body>
+</html>
