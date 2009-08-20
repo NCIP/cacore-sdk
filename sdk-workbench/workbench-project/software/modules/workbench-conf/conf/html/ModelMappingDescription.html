@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<body>
+<h1>Model Mapping</h1>
+
+<p style="margin-left: 0.5in; " class="MsoNormal"><span style="">Model mapping is the process of linking
+Logical Model of the system with the Data Model. This step is required by the
+caCORE SDK to generate a caCORE-like system from a UML model. If the developer
+intends to create any other type of system then this workflow can be ignored. <O:P></O:P></span></p>
+
+<p style="margin-left: 0.5in; " class="MsoNormal"><span style="">The specific mapping between the Logical 
+Model and the Data Model is done by adding additional information to the UML 
+Model using UML Tagged Values. This task can be accomplished by one of the two 
+tools:<O:P></O:P></span></p><br>
+
+<p style="margin: 0in 0in 0.0001pt 1in; text-indent: -0.25in;" class="MsoNormal"><!--[if !supportLists]--><span style="font-family: Symbol;"><span style="">-<span style='font-family: "Times New Roman"; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><!--[endif]-->UML Modeling tool (i.e. Enterprise Architect or ArgoUML)</p>
+
+<p style="margin: 0in 0in 0.0001pt 1in; text-indent: -0.25in;" class="MsoNormal"><!--[if !supportLists]--><span style="font-family: Symbol;"><span style="">-<span style='font-family: "Times New Roman"; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><!--[endif]-->caAdapter MMS (recommended)</p>
+
+<h2>UML Modeling Tool</h2>
+
+<p style="margin-left: 0.5in;" class="MsoNormal">Developers can
+use a UML modeling tool to specify the mapping information between the logical
+and the data model. In the UML model, the mapping information can be specified
+by using the UML Dependency association and Tag Values.  Here's a brief outline of the process:</p><br>
+
+<p style="margin: 0in 0in 0.0001pt 1in; text-indent: -0.25in;" class="MsoNormal"><!--[if !supportLists]--><span style="font-family: Symbol;"><span style="">-<span style='font-family: "Times New Roman"; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><!--[endif]-->Create a new class diagram</p>
+
+<p style="margin: 0in 0in 0.0001pt 1in; text-indent: -0.25in;" class="MsoNormal"><!--[if !supportLists]--><span style="font-family: Symbol;"><span style="">-<span style='font-family: "Times New Roman"; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><!--[endif]-->Add the Data Model class representing the table
+to the diagram</p>
+
+<p style="margin: 0in 0in 0.0001pt 1in; text-indent: -0.25in;" class="MsoNormal"><!--[if !supportLists]--><span style="font-family: Symbol;"><span style="">-<span style='font-family: "Times New Roman"; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><!--[endif]-->Add the Logical Model class representing the
+domain object to the diagram</p>
+
+<p style="margin: 0in 0in 0.0001pt 1in; text-indent: -0.25in;" class="MsoNormal"><!--[if !supportLists]--><span style="font-family: Symbol;"><span style="">-<span style='font-family: "Times New Roman"; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><!--[endif]-->Using a UML Dependency association, draw unidirectional
+link from the table (source) to the domain object (target)</p>
+
+<p style="margin: 0in 0in 0.0001pt 1in; text-indent: -0.25in;" class="MsoNormal"><!--[if !supportLists]--><span style="font-family: Symbol;"><span style="">-<span style='font-family: "Times New Roman"; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><!--[endif]-->To the UML Dependency association link, add a
+stereotype named 'DataSource'.</p>
+
+<p style="margin: 0in 0in 0.0001pt 1in; text-indent: -0.25in;" class="MsoNormal"><!--[if !supportLists]--><span style="font-family: Symbol;"><span style="">-<span style='font-family: "Times New Roman"; font-style: normal; font-variant: normal; font-weight: normal; font-size: 7pt; line-height: normal; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><!--[endif]-->For each of the table attributes, add a 'mapped-attributes'
+tag with a value of &lt;fully qualified domain object class
+name&gt;.&lt;attribute name&gt;.</p>
+
+<p style="margin-left: 0.5in; " class="MsoNormal"> class="MsoNormal">Once the mapping
+is complete, you can save the changes, export the newly tagged XMI file from
+your UML Modeling tool (Enterprise Architect only), and use it in the 'Create Application'
+workflow. This workflow will generate various artifacts by reading the
+information from the UML model.</p>
+
+<h2>caAdapter MMS</h2>
+
+<p style="margin-left: 0.5in; " class="MsoNormal">caAdapter Model
+Mapping Service (MMS) allows users to map an object to a data model. The tool
+provides a rich user interface with drag and drop capability to perform this
+mapping. Subsequently, the tool annotates the XMI file containing the object
+and data models with the proper mapping tags. </p>
+
+<p style="margin-left: 0.5in; " class="MsoNormal">Once
+the mapping is complete, you can save the newly tagged XMI file from caAdapter and
+use it in the Create application/ code generation workflow. The create
+application workflow will generate various artifacts by reading the information
+from the UML model.</p>
+
+</body>
+</html>

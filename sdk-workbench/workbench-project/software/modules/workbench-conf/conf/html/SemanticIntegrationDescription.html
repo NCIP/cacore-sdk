@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<body>
+<h1>Semantic Integration</h1>
+
+<p style="margin-left: 0.5in; " class="MsoNormal">Semantic
+Integration is the process of taking the elements of a systems and binding
+those elements&rsquo; terms to a common vocabulary. This process ensures that while
+the structure and purpose of the systems might be different, they are speaking
+the same language and can therefore more easily exchange the information
+contained within them.</p>
+
+<p style="margin-left: 0.5in; " class="MsoNormal">The process of
+Semantic Integration involves first annotating a UML model with terms from a
+common vocabulary (called &ldquo;concepts&rdquo;) and then using those terms to bind the
+UML model elements to standardized metadata elements called Common Data
+Elements or CDEs. These CDEs are located in a metadata registry called the
+Cancer Data Standards Repository, or caDSR.</p>
+
+<p style="margin-left: 0.5in; " class="MsoNormal">So the first
+thing is to delineate the difference between semantic annotation and semantic
+integration, as they are two different steps toward the same goal.</p>
+
+<p style="margin-left: 0.5in; " class="MsoNormal"><b style="">Semantic Annotation</b> is the process of
+adding tagged values to a UML model that describe the semantics of the elements
+in the model. These semantics are described using terms from a common
+vocabulary. Basically, semantics are the language you use. You annotate your
+terms with definitions, so that if you use the term "agent" it is
+clear that you mean "a medication or other item used to produce an
+effect" and not "a real-estate representative" or "a
+government spy". If everyone using the term "agent" in the same
+way also uses the same definition from the common vocabulary, then we are all
+clear that we are using the same language (semantics). </p>
+
+<p style="margin-left: 0.5in; " class="MsoNormal"><b style="">Semantic Integration</b> is the process of
+loading these annotated models into a centralized registry and equating the
+elements in the models with common data elements, bringing together all of the
+annotated representations of data into a single, accessible location. When the
+elements in your model become represented as caDSR metadata, your model is
+considered to be semantically integrated.</p>
+
+<p style="margin-left: 0.5in; " class="MsoNormal">NCI CBIIT
+provides a variety of tools to assist you in both semantically annotating and
+semantically integrating your system. In addition, there are caDSR tools that
+allow you to manage the metadata associated with your system, a process called
+&ldquo;curation.&rdquo;</p>
+
+<h2>caDSR Toolset</h2>
+
+<p style="margin-left: 0.5in; " class="MsoNormal"><b style="">Semantic Integration Workbench (SIW) - </b>The
+Semantic Integration Workbench (SIW) is a tool to help automate the semantic
+annotation process. As stated above, semantic annotation involves mapping the
+elements in a UML model to definitions in a common vocabulary. The SIW performs
+this association using an XMI file exported/saved from the UML modeling program
+used to create the model.</p>
+
+<p style="margin-left: 0.5in; " class="MsoNormal"><span style="">&nbsp;</span>While you can manually annotate the UML model
+to achieve semantic integration (by adding all of the necessary tagged values
+yourself), the SIW streamlines and partially automates the process of semantic annotation,
+and requires detailed review and approval of each element before a model can be
+registered into caDSR. Manual annotation has the potential to introduce human
+errors that can cripple metadata registration and the UML Loader.</p>
+
+<p style="margin-left: 0.5in; " class="MsoNormal">Once the model
+owner and the EVS curation team have approved the annotated version of the
+model, the annotated XMI file is sent to the caDSR team to be transformed into
+caDSR metadata via the UML Loader.</p>
+
+<p style="margin-left: 0.5in; " class="MsoNormal"><b style="">UML Model Loader - </b>The UML Loader or
+UML Model Loader is a Java application that transforms UML domain models into
+caDSR metadata, reusing existing caDSR administered items or creating new ones
+as needed. This process is also referred to as registering the UML model in
+caDSR.</p>
+
+<p style="margin-left: 0.5in; " class="MsoNormal">The UML Loader
+transforms the UML model information from an annotated XMI file into caDSR
+metadata while also mapping the registered metadata back to the UML model that
+uses it. This metadata registration into the caDSR is performed ONLY by a team
+at CBIIT, working with model owners to be sure that the information from their
+model is registered properly.</p>
+
+<p style="margin-left: 0.5in; " class="MsoNormal"><b style="">UML Model Browser</b> - As its name
+implies, this tool allows you to browse the caDSR for data elements based on
+the UML Model to which they are registered. You can search for specific pieces
+of metadata and see what models use them, or you can select a model from the
+tree view of the browser and see all the metadata elements resident in the
+selected model.</p>
+
+<p style="margin-left: 0.5in; " class="MsoNormal"><b style="">CDE Browser </b>- Again the name of the
+tool describes what it does. You can use the CDE Browser to look through the
+caDSR and view the data elements contained there. You can search for data
+elements, value domains, data element concepts, and properties, among many
+others. The search capability of the CDE browser is very powerful and can help
+you find just about anything in the caDSR you may be searching for.</p>
+
+<p style="margin-left: 0.5in; " class="MsoNormal"><b style="">Forms Builder</b> - This tool lets you
+search the caDSR for data elements and then use those elements to build forms
+for use by your organization (and by other organizations if they find them
+useful). This tool works in conjunction with the CDE Browser to provide a
+complete tool for building and maintaining informational forms.</p>
+
+<p style="margin-left: 0.5in; " class="MsoNormal"><b style="">Sentinel Tool</b> - The Sentinel tool
+allows you to set alerts on items in the caDSR, so that if an item changes, you
+can be immediately notified of the change.</p>
+
+<p style="margin-left: 0.5in; " class="MsoNormal"><b style="">CDE Curation Tool</b> - This tool allows
+you to both search for caDSR metadata but also allows you to edit metadata that
+you own. If your model introduced a new data element into caDSR, that item
+belongs to you and your context, and you may need to make changes to that item
+at some point.</p>
+
+</body>
+</html>
