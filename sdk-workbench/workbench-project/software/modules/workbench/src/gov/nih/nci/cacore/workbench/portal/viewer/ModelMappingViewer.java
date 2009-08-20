@@ -8,6 +8,7 @@ import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.io.InputStream;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -46,7 +47,7 @@ public class ModelMappingViewer extends ExternalWorkflowApplicationComponent {
      
         setContentPane(getMainPanel());
         //setFrameIcon(LookAndFeel.getWorkbenchIcon());
-        setTitle("Create UML Model");
+        setTitle("Model Mapping (caAdapter) Process");
     }
     
     /**
@@ -63,20 +64,22 @@ public class ModelMappingViewer extends ExternalWorkflowApplicationComponent {
 			gridBagConstraints10.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints10.weighty = 1.0D;
 			gridBagConstraints10.weightx = 1.0D;
+			
+			InputStream is = ModelMappingViewer.class.getResourceAsStream("/html/ModelMappingDescription.html");
         	
-        	JLabel descriptionLabel = new JLabel("Add 'Model Mapping (caAdapter)' process description here", JLabel.CENTER);
-            descriptionLabel.setFont(descriptionLabel.getFont().deriveFont(Font.ITALIC));
-            descriptionLabel.setHorizontalAlignment(JLabel.CENTER);
+//        	JLabel descriptionLabel = new JLabel("Add 'Model Mapping (caAdapter)' process description here", JLabel.CENTER);
+//            descriptionLabel.setFont(descriptionLabel.getFont().deriveFont(Font.ITALIC));
+//            descriptionLabel.setHorizontalAlignment(JLabel.CENTER);
             
             JButton[] buttons = {getLaunchCaAdapterButton(),getCloseButton()};
 
         	contentPanel = new JPanel();
         	contentPanel.setLayout(new GridBagLayout());
-        	contentPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Model Mapping (caAdapter) Process",
+        	contentPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "",
                 javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
                 javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
             
-        	contentPanel.add(getMainSplitPanel(descriptionLabel,buttons), gridBagConstraints10);
+        	contentPanel.add(getMainSplitPanel(convertStreamToString(is),buttons), gridBagConstraints10);
         	contentPanel.validate();
         	
         }

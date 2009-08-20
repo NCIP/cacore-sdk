@@ -99,17 +99,20 @@ public class HelpViewer extends WorkbenchViewerBaseComponent {
 			
             URL helpURL = HelpViewer.class.getResource(HELP_HTML_FILE_URL);
             
-            if (helpURL != null) {
-                try {
-
-				helpEditorPane.setPage(helpURL);
-//                    helpEditorPane.setPage(HELP_URL);
-                } catch (IOException e) {
-                	// TODO ::
-                    System.err.println("Attempted to read a bad URL: " + HELP_URL);
-                    e.printStackTrace();
-                }
-            }
+//            if (helpURL != null) {
+//                try {
+//
+//				helpEditorPane.setPage(helpURL);
+////                    helpEditorPane.setPage(HELP_URL);
+//                } catch (IOException e) {
+//                	// TODO ::
+//                    System.err.println("Attempted to read a bad URL: " + HELP_URL);
+//                    e.printStackTrace();
+//                }
+//            }
+            
+            helpEditorPane.setText("<html><i>Add Help content here.</i></html>");
+            
 //            } else {
 //            	// TODO ::
 //                System.err.println("Couldn't find file: "+HELP_RTF_FILE_URL);

@@ -8,6 +8,8 @@ import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.io.InputStream;
+import java.net.URL;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -52,7 +54,7 @@ public class SemanticIntegrationViewer extends ExternalWorkflowApplicationCompon
      
         setContentPane(getMainPanel());
         //setFrameIcon(LookAndFeel.getWorkbenchIcon());
-        setTitle("Create UML Model");
+        setTitle("Semantic Integration Process");
     }
     
     /**
@@ -69,21 +71,23 @@ public class SemanticIntegrationViewer extends ExternalWorkflowApplicationCompon
 			gridBagConstraints10.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints10.weighty = 1.0D;
 			gridBagConstraints10.weightx = 1.0D;
+			
+			InputStream is = SemanticIntegrationViewer.class.getResourceAsStream("/html/SemanticIntegrationDescription.html");
         	
-        	JLabel descriptionLabel = new JLabel("Add 'Semantic Integration' process description here.  ", JLabel.CENTER);
-            descriptionLabel.setFont(descriptionLabel.getFont().deriveFont(Font.ITALIC));
-            descriptionLabel.setHorizontalAlignment(JLabel.CENTER);
+//        	JLabel descriptionLabel = new JLabel("Add 'Semantic Integration' process description here.  ", JLabel.CENTER);
+//          descriptionLabel.setFont(descriptionLabel.getFont().deriveFont(Font.ITALIC));
+//          descriptionLabel.setHorizontalAlignment(JLabel.CENTER);
             
             JButton[] buttons = {getLaunchSIWButton(),getLaunchCDEBrowserButton(),getLaunchUMLModelBrowserButton(),
             		getLaunchCurationToolButton(),getCloseButton()};
 
         	contentPanel = new JPanel();
         	contentPanel.setLayout(new GridBagLayout());
-        	contentPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Semantic Integration Process",
+        	contentPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "",
                 javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
                 javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
             
-        	contentPanel.add(getMainSplitPanel(descriptionLabel,buttons), gridBagConstraints10);
+        	contentPanel.add(getMainSplitPanel(convertStreamToString(is),buttons), gridBagConstraints10);
         	contentPanel.validate();
         	
         }
