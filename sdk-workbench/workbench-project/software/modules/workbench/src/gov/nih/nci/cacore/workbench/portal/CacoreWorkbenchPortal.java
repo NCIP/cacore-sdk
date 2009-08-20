@@ -86,19 +86,21 @@ public final class CacoreWorkbenchPortal {
 			
             WorkbenchOverviewViewer overviewViewer = new WorkbenchOverviewViewer();
             overviewViewer.setSize(new Dimension(app.getDimensions().getWidth()-18, app.getDimensions().getHeight()-88));
+            overviewViewer.setPreferredSize(new Dimension(app.getDimensions().getWidth()-18, app.getDimensions().getHeight()-88));
             overviewViewer.setVisible(true);
+            //overviewViewer.setMaximum(true);
             
-            log.debug("* * * " + applicationInstance.getContentPane().getLayout());
-            BorderLayout bl = (BorderLayout)applicationInstance.getContentPane().getLayout();
+//            log.debug("* * * " + applicationInstance.getContentPane().getLayout());
+//            BorderLayout bl = (BorderLayout)applicationInstance.getContentPane().getLayout();
             
-            log.debug("* * * Component count: "+applicationInstance.getContentPane().getComponentCount());
-            int i = 0;
-            for(Component comp:applicationInstance.getContentPane().getComponents()){
-            	log.debug("* * * Component["+i+"]"+comp);
-            	i++;
-            }
+//            log.debug("* * * Component count: "+applicationInstance.getContentPane().getComponentCount());
+//            int i = 0;
+//            for(Component comp:applicationInstance.getContentPane().getComponents()){
+//            	log.debug("* * * Component["+i+"]"+comp);
+//            	i++;
+//            }
             
-            javax.swing.JScrollPane jScrollPane = (JScrollPane)applicationInstance.getContentPane().getComponent(0);
+//            javax.swing.JScrollPane jScrollPane = (JScrollPane)applicationInstance.getContentPane().getComponent(0);
             
             //applicationInstance.getMDIDesktopPane().add(comp, component.getDimensions(), component.getRenderOptions());
             //applicationInstance.getMDIDesktopPane().add(hv);
