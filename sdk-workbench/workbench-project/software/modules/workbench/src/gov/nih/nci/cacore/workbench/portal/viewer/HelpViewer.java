@@ -214,7 +214,7 @@ public class HelpViewer extends WorkbenchViewerBaseComponent {
     private JButton getOpenButton() {
         if (openButton == null) {
             openButton = new JButton();
-            openButton.setText("Open");
+            openButton.setText("Learn More");
             openButton.setIcon(LookAndFeel.getGenerateApplicationIcon());
             openButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
