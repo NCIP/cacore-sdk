@@ -17,7 +17,7 @@ import javax.swing.JPanel;
 import org.apache.log4j.Logger;
 
 /**
- * Workbench Model Mapping (caAdapter) Viewer
+ * Workbench Create Grid Service (Introduce) Viewer
  * 
  * @author <A HREF="MAILTO:dumitrud@mail.nih.gov">Dan Dumitru</A>
  * @created June, 2008
@@ -28,7 +28,7 @@ public class CreateGridServiceViewer extends ExternalWorkflowApplicationComponen
 	
 	private static final Logger log = Logger.getLogger(CreateGridServiceViewer.class);
 	
-	private static final String CREATE_GRID_SERVICE_URL = "http://caadapter.nci.nih.gov/caadapter/caadapter.jnlp";
+	private static final String CREATE_GRID_SERVICE_URL = "https://cabig-kc.nci.nih.gov/CaGrid/KC/index.php/Introduce";
 	
     // Buttons
     private JButton launchIntroduceButton = null;
