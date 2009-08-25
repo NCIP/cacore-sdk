@@ -120,7 +120,7 @@ public class AntTools {
 		
 		File buildFile = ResourceManager.getProjectBuildFile(projectDirPath);
 		
-		String target = "deploy:remote:install:nocodegen";
+		String target = "deploy:remote:install";
 
 		Map<String,String> propsMap=new TreeMap<String,String>();
 		propsMap.put("properties.file", deployPropsFileName); //deployPropsFilePath.replace('\\', '/')
