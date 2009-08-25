@@ -14,7 +14,7 @@
 	
 	<property file="${build.dir}/project.properties"/>
 	
-	<property name="sdk.src.file" value="SDK-${sdk.version}.zip"/>
+	<property name="sdk.src.file" value="SDK-${sdk.version}-src.zip"/>
 
 	<target name="init">
 		<mkdir dir="${dist.dir}"/>
@@ -48,6 +48,7 @@
 			<zipfileset dir="${sdk.toolkit.dir}">
 				<exclude name="**/bin/**/*.*"/>
 				<exclude name="**/target/**/*.*"/>
+				<exclude name="**/local-ivy-repo/**/*.*"/>
 				<exclude name="${dist.dir}/**/*"/>
 				<exclude name=".project"/>
 				<exclude name=".classpath"/>
