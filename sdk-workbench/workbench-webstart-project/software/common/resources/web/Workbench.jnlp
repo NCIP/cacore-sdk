@@ -35,8 +35,8 @@
 	<jar href="lib/mysql-connector-java-5.1.5.jar" download="eager" />
 	<jar href="lib/ojdbc14-10.2.0.3.0.jar" download="eager" />
 	<jar href="lib/saaj-1.2.jar" download="eager" /> 
-	<jar href="lib/sdk-workbench-4.2-beta.jar" main="true" download="eager" />
-	<jar href="lib/sdk-workbench-conf-4.2-beta.jar" download="eager" />
+	<jar href="lib/sdk-workbench-4.2.jar" main="true" download="eager" />
+	<jar href="lib/sdk-workbench-conf-4.2.jar" download="eager" />
 	<jar href="lib/spring-2.0.2.jar" download="eager" />
 	<jar href="lib/tools-1.5.0.jar" download="eager" />		
 	<jar href="lib/validation-2.0.0.jar" download="eager" />
