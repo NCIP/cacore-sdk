@@ -1,17 +1,16 @@
 package gov.nih.nci.cacore.workbench.portal.viewer;
 
 import gov.nih.nci.cacore.workbench.common.LookAndFeel;
+import gov.nih.nci.cacore.workbench.common.ResourceManager;
 import gov.nih.nci.cacore.workbench.common.Utils;
 import gov.nih.nci.cacore.workbench.portal.application.ExternalWorkflowApplicationComponent;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 
-import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.io.InputStream;
 
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
@@ -28,8 +27,8 @@ public class CreateUmlModelViewer extends ExternalWorkflowApplicationComponent {
 	
 	private static final Logger log = Logger.getLogger(CreateUmlModelViewer.class);
 	
-	private static final String ARGOUML_WEB_START_URL = "http://argouml-downloads.tigris.org/jws/argouml-0.24.jnlp";
-	private static final String EA_DOWNLOAD_URL = "http://www.sparxsystems.com.au/products/ea/index.html";
+	private static final String ARGOUML_WEB_START_URL = ResourceManager.getArgoUmlWebStartUrl();
+	private static final String EA_DOWNLOAD_URL = ResourceManager.getEaDownloadUrl();
 	
     // Buttons
     private JButton downloadArgoButton = null;
@@ -117,7 +116,7 @@ public class CreateUmlModelViewer extends ExternalWorkflowApplicationComponent {
     private JButton getDownloadArgoButton() {
         if (downloadArgoButton == null) {
         	downloadArgoButton = new JButton();
-        	downloadArgoButton.setText("Open ArgoUML");
+        	downloadArgoButton.setText("Launch ArgoUML");
         	downloadArgoButton.setIcon(LookAndFeel.getGenerateApplicationIcon());
         	downloadArgoButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {

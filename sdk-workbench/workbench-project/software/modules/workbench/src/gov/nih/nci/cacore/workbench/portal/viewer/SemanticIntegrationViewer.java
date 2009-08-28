@@ -1,6 +1,7 @@
 package gov.nih.nci.cacore.workbench.portal.viewer;
 
 import gov.nih.nci.cacore.workbench.common.LookAndFeel;
+import gov.nih.nci.cacore.workbench.common.ResourceManager;
 import gov.nih.nci.cacore.workbench.common.Utils;
 import gov.nih.nci.cacore.workbench.portal.application.ExternalWorkflowApplicationComponent;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
@@ -29,10 +30,10 @@ public class SemanticIntegrationViewer extends ExternalWorkflowApplicationCompon
 	
 	private static final Logger log = Logger.getLogger(SemanticIntegrationViewer.class);
 	
-	private static final String LAUNCH_SIW_URL = "http://cadsrsiw.nci.nih.gov/";
-	private static final String LAUNCH_CDE_BROWSER_URL = "https://cdebrowser.nci.nih.gov/CDEBrowser/";
-	private static final String LAUNCH_UML_MODEL_BROWSER_URL = "http://umlmodelbrowser.nci.nih.gov/umlmodelbrowser/";
-	private static final String LAUNCH_CURATION_TOOL_URL = "http://cdecurate.nci.nih.gov/cdecurate/";
+	private static final String LAUNCH_SIW_URL = ResourceManager.getLaunchSiwUrl();
+	private static final String LAUNCH_CDE_BROWSER_URL = ResourceManager.getLaunchCdeBrowserUrl();
+	private static final String LAUNCH_UML_MODEL_BROWSER_URL = ResourceManager.getLaunchUmlModelBrowserUrl();
+	private static final String LAUNCH_CURATION_TOOL_URL = ResourceManager.getLaunchCdeCurationToolBrowserUrl();
 	
     // Buttons
     private JButton launchSIWButton = null;
@@ -122,7 +123,7 @@ public class SemanticIntegrationViewer extends ExternalWorkflowApplicationCompon
     private JButton getLaunchSIWButton() {
         if (launchSIWButton == null) {
         	launchSIWButton = new JButton();
-        	launchSIWButton.setText("SIW");
+        	launchSIWButton.setText("Launch SIW");
         	launchSIWButton.setIcon(LookAndFeel.getGenerateApplicationIcon());
         	launchSIWButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
