@@ -21,8 +21,7 @@ import org.cagrid.grape.GridApplication;
 public class ResourceManager {
 	
 	private static final Logger log = Logger.getLogger(ResourceManager.class);
-
-
+	
     /**
      * Date format
      */
@@ -331,8 +330,41 @@ public class ResourceManager {
 	public static String getWorkbenchHelpUrl() {
 		return getCacoreWorkbenchPropertyValue(CacoreWorkbenchConstants.WORKBENCH_HELP_URL);
 	}
-
+	
+	public static String getLaunchIntroduceUrl() {
+		return getCacoreWorkbenchPropertyValue(CacoreWorkbenchConstants.LAUNCH_INTRODUCE_URL);
+	}
+	
+	public static String getArgoUmlWebStartUrl() {
+		return getCacoreWorkbenchPropertyValue(CacoreWorkbenchConstants.LAUNCH_ARGO_UML_WEB_START_URL);
+	}
+	
+	public static String getEaDownloadUrl() {
+		return getCacoreWorkbenchPropertyValue(CacoreWorkbenchConstants.DOWNLOAD_ENTERPRISE_ARCHITECT_URL);
+	}
+	
+	public static String getLaunchSiwUrl() {
+		return getCacoreWorkbenchPropertyValue(CacoreWorkbenchConstants.LAUNCH_SIW_URL);
+	}
+	
+	public static String getLaunchCdeBrowserUrl() {
+		return getCacoreWorkbenchPropertyValue(CacoreWorkbenchConstants.LAUNCH_CDE_BROWSER_URL);
+	}
+	
+	public static String getLaunchUmlModelBrowserUrl() {
+		return getCacoreWorkbenchPropertyValue(CacoreWorkbenchConstants.LAUNCH_UML_MODEL_BROWSER_URL);
+	}
+	
+	public static String getLaunchCdeCurationToolBrowserUrl() {
+		return getCacoreWorkbenchPropertyValue(CacoreWorkbenchConstants.LAUNCH_CDE_CURATION_TOOL_URL);
+	}
+	
+	public static String getLaunchCaAdapterUrl() {
+		return getCacoreWorkbenchPropertyValue(CacoreWorkbenchConstants.LAUNCH_CAADAPTER_URL);
+	}
+	
 	public static String getCacoreWorkbenchPropertyValue(String propertyKey) {
+		//purposely always reload properties so that any changes are loaded as well
 		Properties engineProps = new Properties();
 		try {
 			InputStream is=Thread.currentThread().getContextClassLoader().getResourceAsStream(CacoreWorkbenchConstants.WORKBENCH_ENGINE_PROPERTIES);
