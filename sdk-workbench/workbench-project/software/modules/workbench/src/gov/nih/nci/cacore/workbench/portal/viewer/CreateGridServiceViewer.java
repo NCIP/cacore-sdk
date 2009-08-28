@@ -1,17 +1,16 @@
 package gov.nih.nci.cacore.workbench.portal.viewer;
 
 import gov.nih.nci.cacore.workbench.common.LookAndFeel;
+import gov.nih.nci.cacore.workbench.common.ResourceManager;
 import gov.nih.nci.cacore.workbench.common.Utils;
 import gov.nih.nci.cacore.workbench.portal.application.ExternalWorkflowApplicationComponent;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 
-import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.io.InputStream;
 
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
@@ -28,7 +27,7 @@ public class CreateGridServiceViewer extends ExternalWorkflowApplicationComponen
 	
 	private static final Logger log = Logger.getLogger(CreateGridServiceViewer.class);
 	
-	private static final String CREATE_GRID_SERVICE_URL = "https://cabig-kc.nci.nih.gov/CaGrid/KC/index.php/Introduce";
+	private static final String CREATE_GRID_SERVICE_URL = ResourceManager.getLaunchIntroduceUrl();
 	
     // Buttons
     private JButton launchIntroduceButton = null;

@@ -8,8 +8,6 @@ import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.io.IOException;
-import java.net.URL;
 
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
@@ -24,7 +22,7 @@ import org.apache.log4j.Logger;
 /**
  * Workbench Help Viewer
  * 
- * @author <A HREF="MAILTO:dumitrud@mail.nih.gov">Dan Dumitru</A> Based upon "Bare Bones Browser Launch" - See http://www.centerkey.com/java/browser/
+ * @author <A HREF="MAILTO:dumitrud@mail.nih.gov">Dan Dumitru</A>
  * @created June, 2008
  */
 public class HelpViewer extends WorkbenchViewerBaseComponent {
@@ -34,10 +32,10 @@ public class HelpViewer extends WorkbenchViewerBaseComponent {
 	private static final Logger log = Logger.getLogger(HelpViewer.class);
 	
 	private static final String HELP_URL = ResourceManager.getWorkbenchHelpUrl();
-	private static final String HELP_HTML_FILE = "SDKWorkbench.html";
-	private static final String HELP_RTF_FILE = "SDKWorkbench.rtf";
-	private static final String HELP_RTF_FILE_URL = "/"+HELP_RTF_FILE;
-	private static final String HELP_HTML_FILE_URL = "/SDKWorkbench_files/"+HELP_HTML_FILE;
+//	private static final String HELP_HTML_FILE = "SDKWorkbench.html";
+//	private static final String HELP_RTF_FILE = "SDKWorkbench.rtf";
+//	private static final String HELP_RTF_FILE_URL = "/"+HELP_RTF_FILE;
+//	private static final String HELP_HTML_FILE_URL = "/SDKWorkbench_files/"+HELP_HTML_FILE;
 	
     // Buttons
     private JButton openButton = null;
@@ -97,7 +95,7 @@ public class HelpViewer extends WorkbenchViewerBaseComponent {
 //				e.printStackTrace();
 //			}
 			
-            URL helpURL = HelpViewer.class.getResource(HELP_HTML_FILE_URL);
+//            URL helpURL = HelpViewer.class.getResource(HELP_HTML_FILE_URL);
             
 //            if (helpURL != null) {
 //                try {
@@ -214,6 +212,7 @@ public class HelpViewer extends WorkbenchViewerBaseComponent {
     private JButton getOpenButton() {
         if (openButton == null) {
             openButton = new JButton();
+            openButton.setText("Click the 'Learn More' button to open the caCORE Workbench Tool site, or go to " + HELP_URL + ".");
             openButton.setText("Learn More");
             openButton.setIcon(LookAndFeel.getGenerateApplicationIcon());
             openButton.addActionListener(new java.awt.event.ActionListener() {

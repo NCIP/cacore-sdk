@@ -1,6 +1,7 @@
 package gov.nih.nci.cacore.workbench.portal.viewer;
 
 import gov.nih.nci.cacore.workbench.common.LookAndFeel;
+import gov.nih.nci.cacore.workbench.common.ResourceManager;
 import gov.nih.nci.cacore.workbench.common.Utils;
 import gov.nih.nci.cacore.workbench.portal.application.ExternalWorkflowApplicationComponent;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
@@ -28,7 +29,7 @@ public class ModelMappingViewer extends ExternalWorkflowApplicationComponent {
 	
 	private static final Logger log = Logger.getLogger(ModelMappingViewer.class);
 	
-	private static final String CAADAPTER_URL = "http://caadapter.nci.nih.gov/caadapter/caadapter.jnlp";
+	private static final String CAADAPTER_URL = ResourceManager.getLaunchCaAdapterUrl();
 	
     // Buttons
     private JButton launchCaAdapterButton = null;
