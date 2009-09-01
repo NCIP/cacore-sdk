@@ -8,6 +8,12 @@ import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
@@ -32,10 +38,6 @@ public class HelpViewer extends WorkbenchViewerBaseComponent {
 	private static final Logger log = Logger.getLogger(HelpViewer.class);
 	
 	private static final String HELP_URL = ResourceManager.getWorkbenchHelpUrl();
-//	private static final String HELP_HTML_FILE = "SDKWorkbench.html";
-//	private static final String HELP_RTF_FILE = "SDKWorkbench.rtf";
-//	private static final String HELP_RTF_FILE_URL = "/"+HELP_RTF_FILE;
-//	private static final String HELP_HTML_FILE_URL = "/SDKWorkbench_files/"+HELP_HTML_FILE;
 	
     // Buttons
     private JButton openButton = null;
@@ -69,7 +71,8 @@ public class HelpViewer extends WorkbenchViewerBaseComponent {
      * This method initializes the Project Settings jPanel
      */
     public JPanel getHelpPanel() {
-        if (helpPanel == null) {
+    	// Always refresh help content from URL; this allows for dynamic update of help information
+        //if (helpPanel == null) {
 
 			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
 			gridBagConstraints10.anchor = java.awt.GridBagConstraints.CENTER;
@@ -85,36 +88,49 @@ public class HelpViewer extends WorkbenchViewerBaseComponent {
             helpEditorPane.setEnabled(true);
             helpEditorPane.setEditorKit(new HTMLEditorKit());
             
-//          URL helpURL = null;
-//			try {
-//				helpURL = new URL(HELP_URL);
-//			} catch (MalformedURLException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			} catch (Exception e){
-//				e.printStackTrace();
-//			}
-			
+            log.debug("* * * javax.net.ssl.trustStore: " +System.getProperty("javax.net.ssl.trustStore"));
+
+            
+// The following code is left here for future reference:            
+//            URL helpURL = null;
+//            try {
+//            	helpURL = new URL(HELP_URL);
+//            } catch (MalformedURLException e) {
+//            	// TODO Auto-generated catch block
+//            	e.printStackTrace();
+//            } catch (Exception e){
+//            	e.printStackTrace();
+//            }		
 //            URL helpURL = HelpViewer.class.getResource(HELP_HTML_FILE_URL);
-            
-//            if (helpURL != null) {
-//                try {
 //
-//				helpEditorPane.setPage(helpURL);
-////                    helpEditorPane.setPage(HELP_URL);
-//                } catch (IOException e) {
-//                	// TODO ::
-//                    System.err.println("Attempted to read a bad URL: " + HELP_URL);
-//                    e.printStackTrace();
-//                }
+//            if (helpURL != null) {
+//            	try {
+//
+//            		helpEditorPane.setPage(helpURL);
+//            		helpEditorPane.setPage(HELP_URL);
+//            	} catch (IOException e) {
+//            		// TODO ::
+//            		System.err.println("Attempted to read a bad URL: " + HELP_URL);
+//            		e.printStackTrace();
+//            	}
 //            }
             
-            helpEditorPane.setText("<html><i>Add Help content here.</i></html>");
-            
-//            } else {
-//            	// TODO ::
-//                System.err.println("Couldn't find file: "+HELP_RTF_FILE_URL);
-//            }
+            try {
+            	log.debug("Attempting to read help file from  URL: " + HELP_URL);
+            	helpEditorPane.setPage(new URL(HELP_URL));
+//                InputStream is = HelpViewer.class.getResourceAsStream(HELP_URL);
+//				helpEditorPane.setText(convertStreamToString(is));
+			} catch (Exception e) {
+				// Attempt to read packaged help file instead
+				log.error("Error:  Unable to read help file from URL for the following reason:", e);
+				log.debug("Attempting to read packaged help file instead");
+				InputStream is = CreateGridServiceViewer.class.getResourceAsStream("/html/Help.html");
+				try {
+					helpEditorPane.setText(convertStreamToString(is));
+				} catch (Exception e1) {
+					helpEditorPane.setText("<html><i>Unable to display Workbench Help information at this time.</i></html>");
+				}
+			}
 
             //Put the editor pane in a scroll pane.
             JScrollPane editorScrollPane = new JScrollPane(helpEditorPane);
@@ -132,7 +148,7 @@ public class HelpViewer extends WorkbenchViewerBaseComponent {
             
         	helpPanel.add(editorScrollPane, gridBagConstraints10);
 
-        }
+        //}
         return helpPanel;
     }
     
@@ -223,6 +239,33 @@ public class HelpViewer extends WorkbenchViewerBaseComponent {
         }
 
         return openButton;
+    }
+    
+    public String convertStreamToString(InputStream is) throws Exception {
+
+    	BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+    	StringBuilder sb = new StringBuilder();
+
+    	String line = null;
+    	try {
+    		while ((line = reader.readLine()) != null) {
+    			sb.append(line + "\n");
+    		}
+    		
+    		log.debug("* * * converted input stream[length=" + sb.length() + "]: " + sb.toString());
+    	} catch (IOException e) {
+    		log.error("Error reading 'Help' HTML file: ",e);
+    		throw e;
+    	} finally {
+    		try {
+    			is.close();
+    		} catch (IOException e) {
+    			log.error("Error closing input stream after reading 'Help' HTML file:: ",e);
+    			throw e;
+    		}
+    	}
+
+    	return sb.toString();
     }
 
 } 

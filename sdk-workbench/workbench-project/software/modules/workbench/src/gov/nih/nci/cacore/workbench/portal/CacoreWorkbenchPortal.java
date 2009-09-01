@@ -3,22 +3,12 @@ package gov.nih.nci.cacore.workbench.portal;
 import gov.nih.nci.cacore.workbench.common.Utils;
 import gov.nih.nci.cacore.workbench.common.WorkbenchCmdLineArgsManager;
 import gov.nih.nci.cacore.workbench.portal.viewer.WorkbenchOverviewViewer;
-import gov.nih.nci.cacore.workbench.portal.viewer.HelpViewer;
 import gov.nih.nci.cagrid.common.portal.SplashScreen;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 
 import org.apache.log4j.Logger;
 import org.cagrid.grape.GridApplication;
@@ -42,7 +32,10 @@ public final class CacoreWorkbenchPortal {
 	}
 
 	private static void initialize() {
-
+		//needed for opening self-signed https sites from within the Workbench
+		//todo :: unfortunately, when packaged in a jar file, the jssecacerts file is not found
+		//        workaround still needed.
+		System.setProperty("javax.net.ssl.trustStore","jssecacerts");
 	}
 	
 	private static void showWorkbenchPortal(String[] args) {
