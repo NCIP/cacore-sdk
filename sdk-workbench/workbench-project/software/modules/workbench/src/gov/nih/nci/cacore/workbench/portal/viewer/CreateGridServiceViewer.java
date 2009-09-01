@@ -64,7 +64,7 @@ public class CreateGridServiceViewer extends ExternalWorkflowApplicationComponen
 			gridBagConstraints10.weighty = 1.0D;
 			gridBagConstraints10.weightx = 1.0D;
 			
-			InputStream is = ModelMappingViewer.class.getResourceAsStream("/html/CreateGridServiceDescription.html");
+			InputStream is = CreateGridServiceViewer.class.getResourceAsStream("/html/CreateGridServiceDescription.html");
 
 //        	
 //        	JLabel descriptionLabel = new JLabel("Add 'Create Grid Service (Introduce)' process description here", JLabel.CENTER);
