@@ -38,6 +38,7 @@ public class HelpViewer extends WorkbenchViewerBaseComponent {
 	private static final Logger log = Logger.getLogger(HelpViewer.class);
 	
 	private static final String HELP_URL = ResourceManager.getWorkbenchHelpUrl();
+	private static final String TOOLS_SITE_URL = ResourceManager.getWorkbenchToolsSiteUrl();
 	
     // Buttons
     private JButton openButton = null;
@@ -72,7 +73,7 @@ public class HelpViewer extends WorkbenchViewerBaseComponent {
      */
     public JPanel getHelpPanel() {
     	// Always refresh help content from URL; this allows for dynamic update of help information
-        //if (helpPanel == null) {
+        // if (helpPanel == null) {
 
 			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
 			gridBagConstraints10.anchor = java.awt.GridBagConstraints.CENTER;
@@ -189,7 +190,7 @@ public class HelpViewer extends WorkbenchViewerBaseComponent {
         if (buttonPanel == null) {
         	
             JLabel helpLabel = new JLabel();
-            helpLabel.setText("To open the caCORE Workbench Tool site, click the 'Open' button below, or go to " + HELP_URL + ".");
+            helpLabel.setText("To open the caCORE Workbench Tools site, click the 'Learn More' button below, or go to " + TOOLS_SITE_URL + ".");
             
             // TODO :: add helpLabel
         	
@@ -228,12 +229,12 @@ public class HelpViewer extends WorkbenchViewerBaseComponent {
     private JButton getOpenButton() {
         if (openButton == null) {
             openButton = new JButton();
-            openButton.setText("Click the 'Learn More' button to open the caCORE Workbench Tool site, or go to " + HELP_URL + ".");
+            openButton.setText("Click the 'Learn More' button to open the caCORE Workbench Tool site, or go to " + TOOLS_SITE_URL + ".");
             openButton.setText("Learn More");
             openButton.setIcon(LookAndFeel.getGenerateApplicationIcon());
             openButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                	Utils.openURL(HELP_URL);
+                	Utils.openURL(TOOLS_SITE_URL);
                 }
             });
         }

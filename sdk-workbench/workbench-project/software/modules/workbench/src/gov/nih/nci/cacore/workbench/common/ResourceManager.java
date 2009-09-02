@@ -331,6 +331,10 @@ public class ResourceManager {
 		return getCacoreWorkbenchPropertyValue(CacoreWorkbenchConstants.WORKBENCH_HELP_URL);
 	}
 	
+	public static String getWorkbenchToolsSiteUrl() {
+		return getCacoreWorkbenchPropertyValue(CacoreWorkbenchConstants.WORKBENCH_TOOLS_SITE_URL);
+	}
+	
 	public static String getLaunchIntroduceUrl() {
 		return getCacoreWorkbenchPropertyValue(CacoreWorkbenchConstants.LAUNCH_INTRODUCE_URL);
 	}
