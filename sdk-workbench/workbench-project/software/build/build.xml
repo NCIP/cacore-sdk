@@ -173,10 +173,22 @@
 	</target>
 	
 	<target name="package:sdk:src" description="Packages SDK Source Distribution, and Copies to Local Resource Folder ">
-		<ant antfile="${package.sdk.home}/build.xml" target="package" inheritall="false" inheritrefs="false">
-			<property name="sdk.src.file" value="${sdk.src.file}" />
-		</ant>
-		<copy file="${package.sdk.home}/dist/${sdk.src.file}" todir="${project.sdk.dist.dir}" />
+		<available file="${project.sdk.dist.dir}/${sdk.src.file}" property="sdk.src.file.exists"/>
+		<if>
+			<isset property="sdk.src.file.exists"/>
+			<then>
+				<echo message="SDK source file already exists; skipping SDK package step"/>
+			</then>
+			<else>
+				<echo message="SDK source file does not exist; packaging now"/>
+				
+				<ant antfile="${package.sdk.home}/build.xml" target="package" inheritall="false" inheritrefs="false">
+					<property name="sdk.src.file" value="${sdk.src.file}" />
+				</ant>
+				<copy file="${package.sdk.home}/dist/${sdk.src.file}" todir="${project.sdk.dist.dir}" />
+
+			</else>
+		</if>
 	</target>
 
 </project>
