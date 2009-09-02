@@ -5,7 +5,7 @@
     <name>caCORE Workbench</name>
     <icon>/images/workbenchIcon.gif</icon>
     <ApplicationLogo>/images/workbench.gif</ApplicationLogo>
-    <AboutHTML><![CDATA[<html><center><h2>caCORE Workbench</h2></center><center><h3>Version 0.1</h3></center><br><center>This software is produced by<br>The caCORE SDK Team</center><br><center><a href="http://ncicb.nci.nih.gov/infrastructure/cacoresdk">http://ncicb.nci.nih.gov/infrastructure/cacoresdk</a></center><br>Authors:<br><a href="mailto:dumitrud@mail.nih.gov">Daniel Dumitru</a><br><a href="mailto:patelsat@mail.nih.gov">Satish Patel</a>]]></AboutHTML>
+    <AboutHTML><![CDATA[<html><center><h2>caCORE Workbench</h2></center><center><h3>Version 0.1</h3></center><br><center>This software is produced by<br>The caCORE Workbench Team</center><br><center><a href="http://cabig.nci.nih.gov/tools/caCOREWorkbench">http://cabig.nci.nih.gov/tools/caCOREWorkbench</a></center><br>Authors:<br><a href="mailto:dumitrud@mail.nih.gov">Daniel Dumitru</a><br><a href="mailto:patelsat@mail.nih.gov">Satish Patel</a>]]></AboutHTML>
     <dimensions>
         <width>900</width>
         <height>750</height>

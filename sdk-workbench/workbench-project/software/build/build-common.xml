@@ -69,7 +69,7 @@
 		<tstamp>
 			<format property="now" pattern="yyyyMMddHHmmss" />
 		</tstamp>
-		<property name="version" value="${sdk.version}" />
+		<property name="version" value="${workbench.version}" />
 		<ivy:publish artifactspattern="${target.module.dir}/${module.name}/lib/[artifact].[ext]" resolver="shared-local-repo"  
 			pubrevision="${version}" status="release" forcedeliver="true" pubdate="${now}" update="true" overwrite="true"/>
 	</target>
