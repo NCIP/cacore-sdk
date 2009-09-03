@@ -123,7 +123,7 @@
 		<dependency org="globus" name="jcogtomcat" rev="noversion" conf="server-jboss->runtime;server-tomcat->runtime" />
 		<dependency org="globus" name="jcogfx" rev="noversion" conf="server-jboss->runtime;server-tomcat->runtime" />
 		<dependency org="globus" name="puretls" rev="0.9b5" conf="server-jboss->runtime;server-tomcat->runtime" />
-		<dependency org="apache" name="xml-apis" rev="1.2.01" conf="server-jboss->runtime;server-tomcat->runtime" />
+		<dependency org="apache" name="xml-apis" rev="1.3.04" conf="server-jboss->runtime;server-tomcat->runtime" />
 		<dependency org="mysql" name="mysql-connector-java" rev="5.1.5" conf="server-jboss->runtime;server-tomcat->runtime;drivers->runtime" />
 		<dependency org="oracle" name="ojdbc14" rev="10.2.0.3.0" conf="server-jboss->runtime;server-tomcat->runtime;drivers->runtime" />
 		
