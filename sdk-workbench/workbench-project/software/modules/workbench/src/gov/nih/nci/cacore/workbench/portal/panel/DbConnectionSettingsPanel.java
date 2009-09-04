@@ -527,9 +527,9 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
         	
         	String dbType = getDbType();
         	if ("oracle".equalsIgnoreCase(dbType)){
-        		dbSqlFileField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("db.install.create.oracle.file.list")); 
+        		dbSqlFileField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("db.install.create.oracle.file.list.ui")); 
         	} else if ("mysql".equalsIgnoreCase(dbType)){
-        		dbSqlFileField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("db.install.create.mysql.file.list"));
+        		dbSqlFileField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("db.install.create.mysql.file.list.ui"));
         	} else {
         		dbSqlFileField.setText("");
         	}
@@ -570,9 +570,9 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
     }
     
     public String getDbSqlFileName(){
-    	String certFilePath = getDbSqlFileField().getText().replace('\\', '/');
+    	String dbSqlFilePath = getDbSqlFileField().getText().replace('\\', '/');
     	
-    	return certFilePath.substring(certFilePath.lastIndexOf('/')+1);
+    	return dbSqlFilePath.substring(dbSqlFilePath.lastIndexOf('/')+1);
     }
 
     private final class FocusChangeHandler implements FocusListener {
@@ -1310,9 +1310,11 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
 		
     	String dbType = getDbType();
     	if ("oracle".equalsIgnoreCase(dbType)){
-    		propsMap.put("db.install.create.oracle.file.list", getDbSqlFileField().getText().replace('\\', '/')); 
+    		propsMap.put("db.install.create.oracle.file.list", getDbSqlFileName()); 
+    		propsMap.put("db.install.create.oracle.file.list.ui", getDbSqlFileField().getText().replace('\\', '/')); 
     	} else if ("mysql".equalsIgnoreCase(dbType)){
-    		propsMap.put("db.install.create.mysql.file.list", getDbSqlFileField().getText().replace('\\', '/'));
+    		propsMap.put("db.install.create.mysql.file.list", getDbSqlFileName());
+    		propsMap.put("db.install.create.mysql.file.list.ui", getDbSqlFileField().getText().replace('\\', '/'));
     	}
     	
     	return propsMap;

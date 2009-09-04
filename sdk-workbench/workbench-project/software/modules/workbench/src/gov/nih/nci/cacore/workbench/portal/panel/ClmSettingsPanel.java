@@ -503,7 +503,7 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
         	
         	String dbType = getClmDbType();
         	if ("mysql".equalsIgnoreCase(dbType)){
-        		clmDbSqlFileField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("clm.db.install.create.mysql.file.list"));
+        		clmDbSqlFileField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("clm.db.install.create.mysql.file.list.ui"));
         	} else {
         		clmDbSqlFileField.setText("");
         	}
@@ -544,10 +544,10 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
     	getClmDbSqlFileField().setText(filePath);
     }
     
-    public String getDbSqlFileName(){
-    	String certFilePath = getClmDbSqlFileField().getText().replace('\\', '/');
+    public String getClmDbSqlFileName(){
+    	String dbSqlFilePath = getClmDbSqlFileField().getText().replace('\\', '/');
     	
-    	return certFilePath.substring(certFilePath.lastIndexOf('/')+1);
+    	return dbSqlFilePath.substring(dbSqlFilePath.lastIndexOf('/')+1);
     }
     
     public String getClmDbType(){
@@ -1142,7 +1142,8 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
 		
     	String dbType = getClmDbType();
     	if ("mysql".equalsIgnoreCase(dbType)){
-    		propsMap.put("clm.db.install.create.mysql.file.list", getClmDbSqlFileField().getText().replace('\\', '/'));
+    		propsMap.put("clm.db.install.create.mysql.file.list", getClmDbSqlFileName());
+    		propsMap.put("clm.db.install.create.mysql.file.list.ui", getClmDbSqlFileField().getText().replace('\\', '/'));
     	}
     	
     	return propsMap;

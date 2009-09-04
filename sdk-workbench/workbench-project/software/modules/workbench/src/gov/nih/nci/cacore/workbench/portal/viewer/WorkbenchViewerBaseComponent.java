@@ -14,12 +14,15 @@ import java.sql.SQLWarning;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 import org.apache.log4j.Logger;
 import org.apache.tools.ant.BuildException;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.utils.BusyDialog;
 import org.cagrid.grape.utils.BusyDialogRunnable;
 
 /** 
@@ -29,6 +32,8 @@ import org.cagrid.grape.utils.BusyDialogRunnable;
 public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent {
 	
 	private static final Logger log = Logger.getLogger(WorkbenchViewerBaseComponent.class);
+	
+	final private BusyDialog dialog = new BusyDialog(GridApplication.getContext().getApplication(), "");
 
 	protected WorkbenchPropertiesManager propsMgr = null;
 	
@@ -88,56 +93,98 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 
 			//WorkbenchViewerBaseComponent.this.setVisible(false);
 			//dispose();
-
-			BusyDialogRunnable r = new BusyDialogRunnable(GridApplication.getContext().getApplication(), "Saving Code Generation Properties") {
-				@Override
-				public void process() {
-					try {
-						if (!sdkDirFile.exists()) {
-							setErrorMessage(generateErrorMsg("The specified SDK installation home directory does not exist: "+sdkDirPath));
-							return;
-						} else {
-							installSdk(sdkDirPath,projectTemplateDirPath,this);
-						}
-						
-						setProgressText("Configuring Project Directory");
-						
-						try {
-							AntTools.configureProject(projectTemplateDirPath, projectDirPath);
-						} catch (BuildException e) {
-							log.error("ERROR: "+ e.getMessage(),e);
-							setErrorMessage(generateErrorMsg("Failed to create and configure the Project Generation Directory." + e.getMessage()));
-							return;
-						}
-						
-						try {
-							AntTools.copyModelFile(projectDirPath, modelFilePath);
-						} catch (BuildException e) {
-							log.error("ERROR: "+ e.getMessage(),e);
-							setErrorMessage(generateErrorMsg(e,"Failed to copy the model file to the Project Generation 'models' sub-directory!"));
-							return;
-						}
-
-						setProgressText("Saving Properties");
-
-						if (!saveProperties(codegenPropsFile,workbenchPropsMap)){
-							setErrorMessage(generateErrorMsg("Failed to save the code generation workbench properties to: "+codegenPropsFile.getAbsolutePath()));
-							return;
-						}
-					
-						setErrorMessage("Properties Successfully Saved");
-
-					} catch (Exception e) {
-						log.error("ERROR: "+ e.getMessage(),e);
-						setErrorMessage(generateErrorMsg(e));
-
-						return;
-					}
+			
+			try {
+				if (!sdkDirFile.exists()) {
+					setErrorMessage(generateErrorMsg("The specified SDK installation home directory does not exist: "+sdkDirPath));
+					return false;
+				} else {
+					installSdk(sdkDirPath,projectTemplateDirPath);
 				}
-			};
+				
+				//setProgressText("Configuring Project Directory");
+				
+				try {
+					AntTools.configureProject(projectTemplateDirPath, projectDirPath);
+				} catch (BuildException e) {
+					log.error("ERROR: "+ e.getMessage(),e);
+					setErrorMessage(generateErrorMsg("Failed to create and configure the Project Generation Directory." + e.getMessage()));
+					return false;
+				}
+				
+				try {
+					AntTools.copyModelFile(projectDirPath, modelFilePath);
+				} catch (BuildException e) {
+					log.error("ERROR: "+ e.getMessage(),e);
+					setErrorMessage(generateErrorMsg(e,"Failed to copy the model file to the Project Generation 'models' sub-directory!"));
+					return false;
+				}
 
-			Thread th = new Thread(r);
-			th.start();
+				//setProgressText("Saving Properties");
+
+				if (!saveProperties(codegenPropsFile,workbenchPropsMap)){
+					setErrorMessage(generateErrorMsg("Failed to save the code generation workbench properties to: "+codegenPropsFile.getAbsolutePath()));
+					return false;
+				}
+			
+				setErrorMessage("Properties Successfully Saved");
+
+			} catch (Exception e) {
+				log.error("ERROR: "+ e.getMessage(),e);
+				setErrorMessage(generateErrorMsg(e));
+
+				return false;
+			}
+
+//			BusyDialogRunnable r = new BusyDialogRunnable(GridApplication.getContext().getApplication(), "Saving Code Generation Properties") {
+//				@Override
+//				public void process() {
+//					try {
+//						if (!sdkDirFile.exists()) {
+//							setErrorMessage(generateErrorMsg("The specified SDK installation home directory does not exist: "+sdkDirPath));
+//							return;
+//						} else {
+//							installSdk(sdkDirPath,projectTemplateDirPath);
+//						}
+//						
+//						setProgressText("Configuring Project Directory");
+//						
+//						try {
+//							AntTools.configureProject(projectTemplateDirPath, projectDirPath);
+//						} catch (BuildException e) {
+//							log.error("ERROR: "+ e.getMessage(),e);
+//							setErrorMessage(generateErrorMsg("Failed to create and configure the Project Generation Directory." + e.getMessage()));
+//							return;
+//						}
+//						
+//						try {
+//							AntTools.copyModelFile(projectDirPath, modelFilePath);
+//						} catch (BuildException e) {
+//							log.error("ERROR: "+ e.getMessage(),e);
+//							setErrorMessage(generateErrorMsg(e,"Failed to copy the model file to the Project Generation 'models' sub-directory!"));
+//							return;
+//						}
+//
+//						setProgressText("Saving Properties");
+//
+//						if (!saveProperties(codegenPropsFile,workbenchPropsMap)){
+//							setErrorMessage(generateErrorMsg("Failed to save the code generation workbench properties to: "+codegenPropsFile.getAbsolutePath()));
+//							return;
+//						}
+//					
+//						setErrorMessage("Properties Successfully Saved");
+//
+//					} catch (Exception e) {
+//						log.error("ERROR: "+ e.getMessage(),e);
+//						setErrorMessage(generateErrorMsg(e));
+//
+//						return;
+//					}
+//				}
+//			};
+//
+//			Thread th = new Thread(r);
+//			th.start();
 			
 			log.debug("Completed saving codegen properties.");
 		}
@@ -165,6 +212,8 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 			final String keyFilePath,
 			final String dbType,
 			final String dbSqlFilePath,
+			final String csmDbSqlFilePath,
+			final String clmDbSqlFilePath,
 			final Map<String,String> workbenchPropsMap) {
 		
 		int doIProceedResult = JOptionPane.OK_OPTION;
@@ -204,70 +253,172 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 			final File keyFile = new File(keyFilePath);
 			final File destDbSqlDir = ResourceManager.getDbSqlDir(projectDirPath, dbType);
 			final File dbSqlFile = new File(dbSqlFilePath);
+			final File csmDbSqlFile = new File(csmDbSqlFilePath);
+			final File clmDbSqlFile = new File(clmDbSqlFilePath);
 
 			//WorkbenchViewerBaseComponent.this.setVisible(false);
 			//dispose();
+			
+			try {
+				if (!sdkDirFile.exists()) {
+					setErrorMessage(generateErrorMsg("The specified SDK installation home directory does not exist: "+sdkDirPath));
+					return false;
+				} else {
+					//setProgressText("Installing SDK Instance");
+					installSdk(sdkDirPath,projectTemplateDirPath);
+				}
+				
+				try {
+					//setProgressText("Configuring Project");
+					AntTools.configureProject(projectTemplateDirPath, projectDirPath);
+				} catch (BuildException e) {
+					log.error("ERROR: "+ e.getMessage(),e);
+					setErrorMessage(generateErrorMsg("Failed to create and configure the Project Generation Directory." + e.getMessage()));
+					return false;
+				}
 
-			BusyDialogRunnable r = new BusyDialogRunnable(GridApplication.getContext().getApplication(), "Saving Deployment Properties") {
-				@Override
-				public void process() {
+				if (certFile.exists() && keyFile.exists()){
 					try {
-						if (!sdkDirFile.exists()) {
-							setErrorMessage(generateErrorMsg("The specified SDK installation home directory does not exist: "+sdkDirPath));
-							return;
-						} else {
-							installSdk(sdkDirPath,projectTemplateDirPath,this);
-						}
-						
-						try {
-							AntTools.configureProject(projectTemplateDirPath, projectDirPath);
-						} catch (BuildException e) {
-							log.error("ERROR: "+ e.getMessage(),e);
-							setErrorMessage(generateErrorMsg("Failed to create and configure the Project Generation Directory." + e.getMessage()));
-							return;
-						}
-
-						if (certFile.exists() && keyFile.exists()){
-							try {
-								AntTools.copyCertKeyFiles(projectDirPath, targetGridDirPath, certFilePath, keyFilePath);
-							} catch (BuildException e) {
-								log.error("ERROR: "+ e.getMessage(),e);
-								setErrorMessage(generateErrorMsg(e,"Failed to copy the caGrid Security Certificate and Key files to the Project Generation " + targetGridDirPath +" sub-directory!"));
-								return;
-							}
-						}
-
-						if (dbSqlFile.exists()){
-							try {
-								AntTools.copyDbSqlFile(projectDirPath, destDbSqlDir.getAbsolutePath(), dbSqlFilePath);
-							} catch (BuildException e) {
-								log.error("ERROR: "+ e.getMessage(),e);
-								setErrorMessage(generateErrorMsg(e,"Failed to copy the Database SQL file to the Project Generation " + destDbSqlDir.getAbsolutePath() +" sub-directory!"));								
-								return;
-							}
-						}
-
-						setProgressText("Saving Properties");
-
-						if (!saveProperties(deployPropsFile,workbenchPropsMap)){
-							setErrorMessage(generateErrorMsg("Failed to save the deployment properties to: "+deployPropsFile.getAbsolutePath()));
-							return;
-						}
-						
-						setErrorMessage("Properties Successfully Saved");
-						
-					} catch (Exception e) {
+						//setProgressText("Copying certificate files to default project directories");
+						AntTools.copyCertKeyFiles(projectDirPath, targetGridDirPath, certFilePath, keyFilePath);
+					} catch (BuildException e) {
 						log.error("ERROR: "+ e.getMessage(),e);
-						setErrorMessage(generateErrorMsg(e));
-						return;
+						setErrorMessage(generateErrorMsg(e,"Failed to copy the caGrid Security Certificate and Key files to the Project Generation " + targetGridDirPath +" sub-directory!"));
+						return false;
 					}
 				}
-			};
 
-			Thread th = new Thread(r);
-			th.start();
+				if (dbSqlFile.exists()){
+					try {
+						//setProgressText("Copying Application DB SQL file to default project directories");
+						AntTools.copyDbSqlFile(projectDirPath, destDbSqlDir.getAbsolutePath(), dbSqlFilePath);
+					} catch (BuildException e) {
+						log.error("ERROR: "+ e.getMessage(),e);
+						setErrorMessage(generateErrorMsg(e,"Failed to copy the Database SQL file to the Project Generation " + destDbSqlDir.getAbsolutePath() +" sub-directory!"));								
+						return false;
+					}
+				}
+				
+				if (csmDbSqlFile.exists()){
+					try {
+						//setProgressText("Copying CSM DB SQL file to default project directories");
+						AntTools.copyDbSqlFile(projectDirPath, destDbSqlDir.getAbsolutePath(), csmDbSqlFilePath);
+					} catch (BuildException e) {
+						log.error("ERROR: "+ e.getMessage(),e);
+						setErrorMessage(generateErrorMsg(e,"Failed to copy the CSM Database SQL file to the Project Generation " + destDbSqlDir.getAbsolutePath() +" sub-directory!"));								
+						return false;
+					}
+				}
+				
+				if (clmDbSqlFile.exists()){
+					try {
+						//setProgressText("Copying CLM DB SQL file to default project directories");
+						AntTools.copyDbSqlFile(projectDirPath, destDbSqlDir.getAbsolutePath(), clmDbSqlFilePath);
+					} catch (BuildException e) {
+						log.error("ERROR: "+ e.getMessage(),e);
+						setErrorMessage(generateErrorMsg(e,"Failed to copy the CLM Database SQL file to the Project Generation " + destDbSqlDir.getAbsolutePath() +" sub-directory!"));								
+						return false;
+					}
+				}
 
+				//setProgressText("Saving Properties");
+				if (!saveProperties(deployPropsFile,workbenchPropsMap)){
+					setErrorMessage(generateErrorMsg("Failed to save the deployment properties to: "+deployPropsFile.getAbsolutePath()));
+					return false;
+				}
+				
+				setErrorMessage("Properties Successfully Saved");
+				
+			} catch (Exception e) {
+				log.error("ERROR: "+ e.getMessage(),e);
+				setErrorMessage(generateErrorMsg(e));
+				return false;
+			}
 		}
+
+
+//			===========
+
+//			BusyDialogRunnable r = new BusyDialogRunnable(GridApplication.getContext().getApplication(), "Saving Deployment Properties") {
+//				@Override
+//				public void process() {
+//					try {
+//						if (!sdkDirFile.exists()) {
+//							setErrorMessage(generateErrorMsg("The specified SDK installation home directory does not exist: "+sdkDirPath));
+//							return;
+//						} else {
+//							installSdk(sdkDirPath,projectTemplateDirPath,this);
+//						}
+//						
+//						try {
+//							AntTools.configureProject(projectTemplateDirPath, projectDirPath);
+//						} catch (BuildException e) {
+//							log.error("ERROR: "+ e.getMessage(),e);
+//							setErrorMessage(generateErrorMsg("Failed to create and configure the Project Generation Directory." + e.getMessage()));
+//							return;
+//						}
+//
+//						if (certFile.exists() && keyFile.exists()){
+//							try {
+//								AntTools.copyCertKeyFiles(projectDirPath, targetGridDirPath, certFilePath, keyFilePath);
+//							} catch (BuildException e) {
+//								log.error("ERROR: "+ e.getMessage(),e);
+//								setErrorMessage(generateErrorMsg(e,"Failed to copy the caGrid Security Certificate and Key files to the Project Generation " + targetGridDirPath +" sub-directory!"));
+//								return;
+//							}
+//						}
+//
+//						if (dbSqlFile.exists()){
+//							try {
+//								AntTools.copyDbSqlFile(projectDirPath, destDbSqlDir.getAbsolutePath(), dbSqlFilePath);
+//							} catch (BuildException e) {
+//								log.error("ERROR: "+ e.getMessage(),e);
+//								setErrorMessage(generateErrorMsg(e,"Failed to copy the Database SQL file to the Project Generation " + destDbSqlDir.getAbsolutePath() +" sub-directory!"));								
+//								return;
+//							}
+//						}
+//						
+//						if (csmDbSqlFile.exists()){
+//							try {
+//								AntTools.copyDbSqlFile(projectDirPath, destDbSqlDir.getAbsolutePath(), csmDbSqlFilePath);
+//							} catch (BuildException e) {
+//								log.error("ERROR: "+ e.getMessage(),e);
+//								setErrorMessage(generateErrorMsg(e,"Failed to copy the CSM Database SQL file to the Project Generation " + destDbSqlDir.getAbsolutePath() +" sub-directory!"));								
+//								return;
+//							}
+//						}
+//						
+//						if (clmDbSqlFile.exists()){
+//							try {
+//								AntTools.copyDbSqlFile(projectDirPath, destDbSqlDir.getAbsolutePath(), clmDbSqlFilePath);
+//							} catch (BuildException e) {
+//								log.error("ERROR: "+ e.getMessage(),e);
+//								setErrorMessage(generateErrorMsg(e,"Failed to copy the CLM Database SQL file to the Project Generation " + destDbSqlDir.getAbsolutePath() +" sub-directory!"));								
+//								return;
+//							}
+//						}
+//
+//						setProgressText("Saving Properties");
+//
+//						if (!saveProperties(deployPropsFile,workbenchPropsMap)){
+//							setErrorMessage(generateErrorMsg("Failed to save the deployment properties to: "+deployPropsFile.getAbsolutePath()));
+//							return;
+//						}
+//						
+//						setErrorMessage("Properties Successfully Saved");
+//						
+//					} catch (Exception e) {
+//						log.error("ERROR: "+ e.getMessage(),e);
+//						setErrorMessage(generateErrorMsg(e));
+//						return;
+//					}
+//				}
+//			};
+//
+//			Thread th = new Thread(r);
+//			th.start();
+//
+//		}
 
 		return true;
 	}
@@ -285,7 +436,7 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 	 *            a map of the properties to be used during the 
 	 *            project application generation
 	 */
-	public void installSdk(final String sdkInstallDirPath, final String projectTemplateDirPath, BusyDialogRunnable r) throws Exception {
+	public void installSdk(final String sdkInstallDirPath, final String projectTemplateDirPath) throws Exception {
 		
 		final File sdkInstallDir = new File(sdkInstallDirPath);
 		final File projectTemplateDir = new File(projectTemplateDirPath);
@@ -306,12 +457,12 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 		}
 
 		try {
-			r.setProgressText("Installing the SDK");
+			setProgressText("Installing the SDK");
 			AntTools.installSdk(sdkInstallDirPath);
-			r.setErrorMessage("The SDK has been Successfully Installed");
+			setErrorMessage("The SDK has been Successfully Installed");
 		} catch (Exception e) {
 			log.error("ERROR: "+ e.getMessage(),e);
-			r.setErrorMessage(generateErrorMsg("Failed to install the SDK!"));
+			setErrorMessage(generateErrorMsg("Failed to install the SDK!"));
 			throw e;
 		}
 	}
@@ -376,7 +527,43 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 
 			WorkbenchViewerBaseComponent.this.setVisible(false);
 			dispose();
-
+//			
+//			try {
+//				if (!sdkDirFile.exists()) {
+//					setErrorMessage(generateErrorMsg("The specified SDK installation home directory does not exist: "+sdkDirPath));
+//					return;
+//				} else {
+//					installSdk(sdkDirPath,projectTemplateDirPath);
+//				}
+//				
+//				//setProgressText("Configuring Project Directory");
+//				
+//				try {
+//					AntTools.configureProject(projectTemplateDirPath, projectDirPath);
+//				} catch (BuildException e) {
+//					log.error("ERROR: "+ e.getMessage(),e);
+//					setErrorMessage(generateErrorMsg("Failed to create and configure the Project Generation Directory." + e.getMessage()));
+//					return;
+//				}
+//
+//				setProgressText("Generating the Application");
+//				
+//				try {
+//					AntTools.generateApplication(projectDirPath);
+//				} catch (BuildException e) {
+//					log.error("ERROR: "+ e.getMessage(),e);
+//					setErrorMessage(generateErrorMsg(e,"Failed to generate the application!"));
+//					return;
+//				}
+//			
+//				setErrorMessage("Application Successfully Generated");
+//
+//			} catch (Exception e) {
+//				log.error("ERROR: "+ e.getMessage(),e);
+//				setErrorMessage(generateErrorMsg(e));
+//				return;
+//			}			
+			
 			BusyDialogRunnable r = new BusyDialogRunnable(GridApplication.getContext().getApplication(), "Generating") {
 				@Override
 				public void process() {
@@ -385,7 +572,7 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 							setErrorMessage(generateErrorMsg("The specified SDK installation home directory does not exist: "+sdkDirPath));
 							return;
 						} else {
-							installSdk(sdkDirPath,projectTemplateDirPath,this);
+							installSdk(sdkDirPath,projectTemplateDirPath);
 						}
 						
 						setProgressText("Configuring Project Directory");
@@ -487,7 +674,7 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 							setErrorMessage(generateErrorMsg("The specified SDK installation home directory does not exist: "+sdkDirPath));
 							return;
 						} else {
-							installSdk(sdkDirPath,projectTemplateDirPath,this);
+							installSdk(sdkDirPath,projectTemplateDirPath);
 						}
 						
 						setProgressText("Configuring Project Directory");
@@ -533,6 +720,7 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 	public boolean saveProperties(File workbenchPropsFile, Map<String,String>workbenchPropsMap){
 		
 		try {
+			log.debug("* * * About to save properties to: " + workbenchPropsFile.getAbsolutePath());
 			FileWriter workbenchPropsWriter = new FileWriter(workbenchPropsFile);
 			
 			if (workbenchPropsMap != null)
@@ -644,6 +832,93 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 	
 	private String generateErrorMsg(String errorMsg){
 		return "Error: " + errorMsg;
+	}
+	
+	private void setProgressText(String text){
+		final String displayText = text;
+		
+//        Thread thread = new Thread(new Runnable() {
+//            public void run() {
+//        		dialog.getProgress().setIndeterminate(true);
+//        		dialog.getProgress().setString(displayText);
+//        		dialog.setVisible(true);
+//            }
+//        });
+//        thread.start();
+//		
+//        Thread thread = new Thread(new Runnable() {
+//            public void run() {
+//            	dialog.getProgress().setIndeterminate(true);
+//        		dialog.getProgress().setString(displayText);
+//        		dialog.setVisible(true);
+//            }
+//        });
+//        thread.start();
+//        
+//        SwingUtilities.invokeLater(new Runnable() {
+//        	public void run() {
+//            	dialog.getProgress().setIndeterminate(true);
+//        		dialog.getProgress().setString(displayText);
+//        	}
+//        });
+//
+//		try {
+//			Thread.sleep(2000);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			log.error(e);
+//		}
+		
+//        dialog.validate();
+//        this.validate();
+//        this.dialog.getOwner().validate();
+//        
+//        SwingUtilities.invokeLater(new Runnable() {
+//            public void run() {
+//            	dialog.getProgress().setIndeterminate(true);
+//            }
+//        });
+//        
+//        SwingUtilities.invokeLater(new Runnable() {
+//            public void run() {
+//        		dialog.getProgress().setString(displayText);
+//            }
+//        });
+		
+		
+		BusyDialogRunnable r = new BusyDialogRunnable(GridApplication.getContext().getApplication(), "") {
+			
+			@Override
+			public void process() {
+				setProgressText(displayText);
+				try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {
+					log.error(e);
+				}
+			}
+		};
+
+		Thread th = new Thread(r);
+		th.start();
+	}
+	
+	private void setErrorMessage(String message){
+//        SwingUtilities.invokeLater(new Runnable() {
+//            public void run() {
+//        		dialog.getProgress().setIndeterminate(false);
+//        		dialog.dispose();
+//            }
+//        });
+		
+		JOptionPane.showMessageDialog(this, message);
+		
+//		
+//        SwingUtilities.invokeLater(new Runnable() {
+//            public void run() {
+//                dialog.dispose();
+//            }
+//        });
 	}
 
 }
