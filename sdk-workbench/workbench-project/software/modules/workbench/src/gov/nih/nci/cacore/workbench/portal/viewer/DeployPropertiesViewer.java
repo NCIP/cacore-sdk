@@ -425,17 +425,17 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
             			gridSecurekeyFilePath = caGridAuthSettingsPanel.getGridSecureKeyFilePath();
             		}
             		
-            		if (dbConnectionSettingsPanel.isDbDropSchemaSelected()){
+            		//if (dbConnectionSettingsPanel.isDbDropSchemaSelected()){
             			dbSqlFilePath = dbConnectionSettingsPanel.getDbSqlFilePath();
-            		}
+            		//}
             		
-            		if (csmDbConnectionSettingsPanel.isDbDropSchemaSelected()){
+            		//if (csmDbConnectionSettingsPanel.isDbDropSchemaSelected()){
             			csmDbSqlFilePath = csmDbConnectionSettingsPanel.getDbSqlFilePath();
-            		}
+            		//}
             		
-            		if (clmSettingsPanel.isDbDropSchemaSelected()){
+            		//if (clmSettingsPanel.isDbDropSchemaSelected()){
             			clmDbSqlFilePath = clmSettingsPanel.getDbSqlFilePath();
-            		}
+            		//}
 
             		boolean isSaveSuccessful = saveDeployProperties(
             				projectSettingsPanel.getSdkInstallDirValue(),
@@ -490,7 +490,9 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
             				caGridAuthSettingsPanel.setGridSecureKeyFilePath(keyFilePath);
             			}
             			
-            			if (dbConnectionSettingsPanel.isDbDropSchemaSelected()){
+            			//if (dbConnectionSettingsPanel.isDbDropSchemaSelected()){
+            			if (dbSqlFilePath!=null && dbSqlFilePath.length()>0){
+            				
             				
             				String dbType = dbConnectionSettingsPanel.getDbType();
 
@@ -518,7 +520,8 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
             		    	dbConnectionSettingsPanel.setDbSqlFilePath(dbSqlFilePath);
             			}
             			
-            			if (csmDbConnectionSettingsPanel.isDbDropSchemaSelected()){
+            			//if (csmDbConnectionSettingsPanel.isDbDropSchemaSelected()){
+            			if (csmDbSqlFilePath!=null && csmDbSqlFilePath.length()>0){
             				
             				String dbType = csmDbConnectionSettingsPanel.getCsmDbType();
 
@@ -546,8 +549,8 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
             				csmDbConnectionSettingsPanel.setDbSqlFilePath(csmDbSqlFilePath);
             			}
             			
-            			
-            			if (clmSettingsPanel.isDbDropSchemaSelected()){
+            			//if (clmSettingsPanel.isDbDropSchemaSelected()){
+            			if (clmDbSqlFilePath!=null && clmDbSqlFilePath.length()>0){
             				
             				String dbType = clmSettingsPanel.getClmDbType();
 
