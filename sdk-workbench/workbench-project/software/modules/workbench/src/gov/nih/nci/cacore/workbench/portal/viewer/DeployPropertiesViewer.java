@@ -417,6 +417,8 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
             		String gridSecureCertFilePath="";
             		String gridSecurekeyFilePath="";
             		String dbSqlFilePath="";
+            		String csmDbSqlFilePath="";
+            		String clmDbSqlFilePath="";
             		
             		if (securitySettingsPanel.isCaGridLoginModuleEnabled()){
             			gridSecureCertFilePath = caGridAuthSettingsPanel.getGridSecureCertFilePath();
@@ -425,6 +427,14 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
             		
             		if (dbConnectionSettingsPanel.isDbDropSchemaSelected()){
             			dbSqlFilePath = dbConnectionSettingsPanel.getDbSqlFilePath();
+            		}
+            		
+            		if (csmDbConnectionSettingsPanel.isDbDropSchemaSelected()){
+            			csmDbSqlFilePath = csmDbConnectionSettingsPanel.getDbSqlFilePath();
+            		}
+            		
+            		if (clmSettingsPanel.isDbDropSchemaSelected()){
+            			clmDbSqlFilePath = clmSettingsPanel.getDbSqlFilePath();
             		}
 
             		boolean isSaveSuccessful = saveDeployProperties(
@@ -437,6 +447,8 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
             				gridSecurekeyFilePath,
             				dbConnectionSettingsPanel.getDbType().toLowerCase(),
             				dbSqlFilePath,
+            				csmDbSqlFilePath,
+            				clmDbSqlFilePath,
             				getDeployPropsMap()
             		); 
             		
@@ -470,9 +482,9 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
             				log.debug("'grid.secure.cert.file' prior to saving: "+deployPropsMap.get("grid.secure.cert.file"));
             				log.debug("'grid.secure.key.file' prior to saving: "+deployPropsMap.get("grid.secure.key.file"));
 
-            				if (!saveProperties(deployPropsFile, deployPropsMap)){
-            					log.error("ERROR:  Unable to rename caGrid Certificate and Key file names.");
-            				}
+//            				if (!saveProperties(deployPropsFile, deployPropsMap)){
+//            					log.error("ERROR:  Unable to rename caGrid Certificate and Key file names.");
+//            				}
 
             				caGridAuthSettingsPanel.setGridSecureCertFilePath(certFilePath);
             				caGridAuthSettingsPanel.setGridSecureKeyFilePath(keyFilePath);
@@ -483,28 +495,84 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
             				String dbType = dbConnectionSettingsPanel.getDbType();
 
             				// DB SQL file may has been copied - synchronize file path now
-            				// Override the DB Sql File property to point to the project generation 
-            				// build sub-directory, as we now copy the key file to this sub-directory
+            				// Override the DB SQL File property to point to the project generation 
+            				// db sub-directory, as we now copy the db sql file to this standard sub-directory
             				File destDbSqlDir = ResourceManager.getDbSqlDir(projectSettingsPanel.getProjectDir(), dbType);
             				dbSqlFilePath =  (destDbSqlDir
             						+ "/"
             						+ dbConnectionSettingsPanel.getDbSqlFileName()).replace('\\', '/');
             		    	
+            				log.debug("* * * dbSqlFilePath: " +csmDbSqlFilePath);
             		    	if ("oracle".equalsIgnoreCase(dbType)){
-            		    		deployPropsMap.put("db.install.create.oracle.file.list", dbSqlFilePath.replace('\\', '/'));
-                				log.debug("'db.install.create.oracle.file.list' prior to saving: "+deployPropsMap.get("db.install.create.oracle.file.list"));
+            		    		deployPropsMap.put("db.install.create.oracle.file.list.ui", dbSqlFilePath.replace('\\', '/'));
+                				log.debug("'db.install.create.oracle.file.list.ui' prior to saving: "+deployPropsMap.get("db.install.create.oracle.file.list.ui"));
             		    	} else if ("mysql".equalsIgnoreCase(dbType)){
-            		    		deployPropsMap.put("db.install.create.mysql.file.list", dbSqlFilePath.replace('\\', '/'));
-            		    		log.debug("'db.install.create.mysql.file.list' prior to saving: "+deployPropsMap.get("db.install.create.mysql.file.list"));
+            		    		deployPropsMap.put("db.install.create.mysql.file.list.ui", dbSqlFilePath.replace('\\', '/'));
+            		    		log.debug("'db.install.create.mysql.file.list.ui' prior to saving: "+deployPropsMap.get("db.install.create.mysql.file.list.ui"));
             		    	}	
 
-            				if (!saveProperties(deployPropsFile, deployPropsMap)){
-            					log.error("ERROR:  Unable to rename caGrid Certificate and Key and/or DB SQL file name(s).");
-            				}
+//            				if (!saveProperties(deployPropsFile, deployPropsMap)){
+//            					log.error("ERROR:  Unable to rename DB SQL file path to standard project generation db path.");
+//            				}
 
             		    	dbConnectionSettingsPanel.setDbSqlFilePath(dbSqlFilePath);
             			}
+            			
+            			if (csmDbConnectionSettingsPanel.isDbDropSchemaSelected()){
+            				
+            				String dbType = csmDbConnectionSettingsPanel.getCsmDbType();
 
+            				// CSM DB SQL file has been copied - synchronize file path now
+            				// Override the CSM DB SQL File property to point to the project generation 
+            				// db sub-directory, as we now copy the db sql file to this standard sub-directory
+            				File destDbSqlDir = ResourceManager.getDbSqlDir(projectSettingsPanel.getProjectDir(), dbType);
+            				csmDbSqlFilePath =  (destDbSqlDir
+            						+ "/"
+            						+ csmDbConnectionSettingsPanel.getCsmDbSqlFileName()).replace('\\', '/');
+            		    	
+            				log.debug("* * * csmDbSqlFilePath: " +csmDbSqlFilePath);
+            		    	if ("oracle".equalsIgnoreCase(dbType)){
+            		    		deployPropsMap.put("csm.db.install.create.oracle.file.list.ui", csmDbSqlFilePath.replace('\\', '/'));
+                				log.debug("'csm.db.install.create.oracle.file.list.ui' prior to saving: "+deployPropsMap.get("csm.db.install.create.oracle.file.list.ui"));
+            		    	} else if ("mysql".equalsIgnoreCase(dbType)){
+            		    		deployPropsMap.put("csm.db.install.create.mysql.file.list.ui", csmDbSqlFilePath.replace('\\', '/'));
+            		    		log.debug("'csm.db.install.create.mysql.file.list.ui' prior to saving: "+deployPropsMap.get("csm.db.install.create.mysql.file.list.ui"));
+            		    	}	
+
+//            				if (!saveProperties(deployPropsFile, deployPropsMap)){
+//            					log.error("ERROR:  Unable to rename CSM DB SQL file path to standard project generation db path.");
+//            				}
+
+            				csmDbConnectionSettingsPanel.setDbSqlFilePath(csmDbSqlFilePath);
+            			}
+            			
+            			
+            			if (clmSettingsPanel.isDbDropSchemaSelected()){
+            				
+            				String dbType = clmSettingsPanel.getClmDbType();
+
+            				// CLM DB SQL file has been copied - synchronize file path now
+            				// Override the CLM DB SQL File property to point to the project generation 
+            				// db sub-directory, as we now copy the db sql file to this standard sub-directory
+            				File destDbSqlDir = ResourceManager.getDbSqlDir(projectSettingsPanel.getProjectDir(), dbType);
+            				clmDbSqlFilePath =  (destDbSqlDir
+            						+ "/"
+            						+ clmSettingsPanel.getClmDbSqlFileName()).replace('\\', '/');
+            		    	
+            				log.debug("* * * clmDbSqlFilePath: " +clmDbSqlFilePath);
+            				if ("mysql".equalsIgnoreCase(dbType)){
+            		    		deployPropsMap.put("clm.db.install.create.mysql.file.list.ui", clmDbSqlFilePath.replace('\\', '/'));
+            		    		log.debug("'clm.db.install.create.mysql.file.list' prior to saving: "+deployPropsMap.get("clm.db.install.create.mysql.file.list.ui"));
+            		    	}	
+
+//            				if (!saveProperties(deployPropsFile, deployPropsMap)){
+//            					log.error("ERROR:  Unable to rename CSM DB SQL file path to standard project generation db path.");
+//            				}
+
+            				clmSettingsPanel.setDbSqlFilePath(clmDbSqlFilePath);
+            			}
+
+            			log.debug("* * * About to override caGrid Certificate, Key and/or DB SQL file name(s)");
         				if (!saveProperties(deployPropsFile, deployPropsMap)){
         					log.error("ERROR:  Unable to rename caGrid Certificate, Key and/or DB SQL file name(s).");
         				}
@@ -987,6 +1055,14 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
 			String key = (String) keys.next();
 			String value = (String) addlProps.get(key);
 			propsMap.put(key, value);
+		}
+		
+		//Determine whether or not to add exclude.database=true property, which should only be set 
+		//if not dropping any DB schemas
+		if (!dbConnectionSettingsPanel.isDbDropSchemaSelected() && 
+				!csmDbConnectionSettingsPanel.isDbDropSchemaSelected() &&
+				!clmSettingsPanel.isDbDropSchemaSelected()){
+			propsMap.put("exclude.database", "true");
 		}
 		
 		return propsMap;

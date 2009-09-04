@@ -630,9 +630,9 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
         	
         	String dbType = getCsmDbType();
         	if ("oracle".equalsIgnoreCase(dbType)){
-        		csmDbSqlFileField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("csm.db.install.create.oracle.file.list")); 
+        		csmDbSqlFileField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("csm.db.install.create.oracle.file.list.ui")); 
         	} else if ("mysql".equalsIgnoreCase(dbType)){
-        		csmDbSqlFileField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("csm.db.install.create.mysql.file.list"));
+        		csmDbSqlFileField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("csm.db.install.create.mysql.file.list.ui"));
         	} else {
         		csmDbSqlFileField.setText("");
         	}
@@ -672,10 +672,10 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
     	getCsmDbSqlFileField().setText(filePath);
     }
     
-    public String getDbSqlFileName(){
-    	String certFilePath = getCsmDbSqlFileField().getText().replace('\\', '/');
+    public String getCsmDbSqlFileName(){
+    	String dbSqlFilePath = getCsmDbSqlFileField().getText().replace('\\', '/');
     	
-    	return certFilePath.substring(certFilePath.lastIndexOf('/')+1);
+    	return dbSqlFilePath.substring(dbSqlFilePath.lastIndexOf('/')+1);
     }
     
 	/**
@@ -1463,9 +1463,11 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
 		
     	String dbType = getCsmDbType();
     	if ("oracle".equalsIgnoreCase(dbType)){
-    		propsMap.put("csm.db.install.create.oracle.file.list", getCsmDbSqlFileField().getText().replace('\\', '/')); 
+    		propsMap.put("csm.db.install.create.oracle.file.list", getCsmDbSqlFileName());
+    		propsMap.put("csm.db.install.create.oracle.file.list.ui", getCsmDbSqlFileField().getText().replace('\\', '/'));  
     	} else if ("mysql".equalsIgnoreCase(dbType)){
-    		propsMap.put("csm.db.install.create.mysql.file.list", getCsmDbSqlFileField().getText().replace('\\', '/'));
+    		propsMap.put("csm.db.install.create.mysql.file.list", getCsmDbSqlFileName());
+    		propsMap.put("csm.db.install.create.mysql.file.list.ui", getCsmDbSqlFileField().getText().replace('\\', '/'));
     	}
     	
     	return propsMap;
