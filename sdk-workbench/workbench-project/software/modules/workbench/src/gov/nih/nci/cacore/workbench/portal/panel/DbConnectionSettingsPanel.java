@@ -269,7 +269,7 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
         return dbHostnameField;
     }
     
-    public String getDbConnectionUrlHostname(){
+    public String getDbHostname(){
     	return getDbHostnameField().getText();
     }
     
@@ -309,7 +309,7 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
         return dbPortField;
     }
     
-    public String getDbConnectionUrlPort() {
+    public String getDbPort() {
     	return getDbPortField().getText();
     }
     
@@ -349,7 +349,7 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
         return dbSchemaField;
     }
     
-    public String getDbConnectionUrlSchema(){
+    public String getDbSchema(){
     	return getDbSchemaField().getText();
     }
     
@@ -826,9 +826,9 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
 			
 		    //DB Connection Settings Panel Label Definitions
 		    JLabel dbConnectionUrlLabel = null;
-		    JLabel dbConnectionUrlHostnameLabel = null;
-		    JLabel dbConnectionUrlPortLabel = null;
-		    JLabel dbConnectionUrlSchemaLabel = null;
+		    JLabel dbHostnameLabel = null;
+		    JLabel dbPortLabel = null;
+		    JLabel dbSchemaLabel = null;
 		    JLabel dbUsernameLabel = null;
 		    JLabel dbPasswordLabel = null;
 			
@@ -941,14 +941,14 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
 		    dbConnectionUrlLabel = new JLabel();
 		    dbConnectionUrlLabel.setText("Connection URL:");
 		    
-		    dbConnectionUrlHostnameLabel = new JLabel();
-		    dbConnectionUrlHostnameLabel.setText("Hostname:");
+		    dbHostnameLabel = new JLabel();
+		    dbHostnameLabel.setText("Hostname:");
 		    
-		    dbConnectionUrlPortLabel = new JLabel();
-		    dbConnectionUrlPortLabel.setText("Port:");
+		    dbPortLabel = new JLabel();
+		    dbPortLabel.setText("Port:");
 		    
-		    dbConnectionUrlSchemaLabel = new JLabel();
-		    dbConnectionUrlSchemaLabel.setText("Schema:");
+		    dbSchemaLabel = new JLabel();
+		    dbSchemaLabel.setText("Schema:");
 		    
 		    dbUsernameLabel = new JLabel();
 		    dbUsernameLabel.setText("Username:");
@@ -965,11 +965,11 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
 		    dbConnectionSettingsSubPanel.add(dbConnectionUrlLabel, gridBagConstraints10);
 		    dbConnectionSettingsSubPanel.add(getDbUrlField(), gridBagConstraints11);
 		    
-		    dbConnectionSettingsSubPanel.add(dbConnectionUrlHostnameLabel, gridBagConstraints20);
+		    dbConnectionSettingsSubPanel.add(dbHostnameLabel, gridBagConstraints20);
 		    dbConnectionSettingsSubPanel.add(getDbHostnameField(), gridBagConstraints21);
-		    dbConnectionSettingsSubPanel.add(dbConnectionUrlPortLabel, gridBagConstraints30);
+		    dbConnectionSettingsSubPanel.add(dbPortLabel, gridBagConstraints30);
 		    dbConnectionSettingsSubPanel.add(getDbPortField(), gridBagConstraints31);
-		    dbConnectionSettingsSubPanel.add(dbConnectionUrlSchemaLabel, gridBagConstraints40);
+		    dbConnectionSettingsSubPanel.add(dbSchemaLabel, gridBagConstraints40);
 		    dbConnectionSettingsSubPanel.add(getDbSchemaField(), gridBagConstraints41);
 		    
 		    dbConnectionSettingsSubPanel.add(dbUsernameLabel, gridBagConstraints50);
@@ -1310,13 +1310,31 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
 		
     	String dbType = getDbType();
     	if ("oracle".equalsIgnoreCase(dbType)){
-    		propsMap.put("db.install.create.oracle.file.list", getDbSqlFileName()); 
+    		propsMap.put("db.install.create.oracle.file.list", getDbSqlFileList()); 
     		propsMap.put("db.install.create.oracle.file.list.ui", getDbSqlFileField().getText().replace('\\', '/')); 
     	} else if ("mysql".equalsIgnoreCase(dbType)){
-    		propsMap.put("db.install.create.mysql.file.list", getDbSqlFileName());
+    		propsMap.put("db.install.create.mysql.file.list", getDbSqlFileList());
     		propsMap.put("db.install.create.mysql.file.list.ui", getDbSqlFileField().getText().replace('\\', '/'));
     	}
     	
     	return propsMap;
+    }
+    
+    private String getDbSqlFileList(){
+    	StringBuffer sb = new StringBuffer();
+
+    	String dbSqlFileName = getDbSqlFileName();
+    	if (dbSqlFileName != null && dbSqlFileName.length() > 0) {
+    		sb.append(dbSqlFileName);
+
+    		if (parentContainer.isAppDbAndCsmSchemaSame()){
+    			String csmDbSqlFileName = parentContainer.getCsmDbSqlFileName();
+    			if (csmDbSqlFileName != null && csmDbSqlFileName.length() > 0) {
+    				sb.append(",").append(csmDbSqlFileName);
+    			}
+    		}
+    	}
+
+    	return sb.toString();
     }
 }

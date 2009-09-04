@@ -30,6 +30,8 @@ import javax.swing.SwingConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import org.apache.log4j.Logger;
+
 import com.jgoodies.validation.Severity;
 import com.jgoodies.validation.ValidationResult;
 import com.jgoodies.validation.message.SimpleValidationMessage;
@@ -37,6 +39,8 @@ import com.jgoodies.validation.util.ValidationUtils;
 import com.jgoodies.validation.view.ValidationComponentUtils;
 
 public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator {
+	
+	private static final Logger log = Logger.getLogger(CsmDbConnectionSettingsPanel.class);
 	
 	int SQL_FILE_DISPLAY_LENGTH = 42;
 	
@@ -110,6 +114,7 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					parentContainer.syncDbCsmDbFields();
 					toggleCsmDbConnectionFields();
+					toggleReCreateCsmDBFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
 				}
@@ -193,6 +198,7 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
         	csmUseJndiBasedConnectionCheckBox.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					toggleCsmDbConnectionFields();
+					toggleReCreateCsmDBFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
 				}
@@ -318,7 +324,7 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
         return csmDbHostnameField;
     }
     
-    public void setCsmDbConnectionUrlHostname(String csmDbConnectionUrlHostName){
+    public void setCsmDbHostname(String csmDbConnectionUrlHostName){
     	getCsmDbHostnameField().setText(csmDbConnectionUrlHostName);
     }
     
@@ -356,7 +362,7 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
         return csmDbPortField;
     }
     
-    public void setCsmDbConnectionUrlPort(String csmDbConnectionUrlPort){
+    public void setCsmDbPort(String csmDbConnectionUrlPort){
     	getCsmDbPortField().setText(csmDbConnectionUrlPort);
     }
     
@@ -395,7 +401,11 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
         return csmDbSchemaField;
     }
     
-    public void setCsmDbConnectionUrlSchema(String setCsmDbConnectionUrlSchema){
+    public String getCsmDbSchema(){
+    	return getCsmDbSchemaField().getText();
+    }
+    
+    public void setCsmDbSchema(String setCsmDbConnectionUrlSchema){
     	getCsmDbSchemaField().setText(setCsmDbConnectionUrlSchema);
     }
     
@@ -528,6 +538,15 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
 			csmDbUsernameField.setEnabled(true);
 			csmDbPasswordField.setEnabled(true);
     	}
+    }
+    
+    public void toggleReCreateCsmDBFields() {
+		if (ValidationUtils.isNotBlank(getCsmDbSchema()) && parentContainer.isAppDbAndCsmSchemaSame() ) {
+			csmDbDropSchemaCheckBox.setSelected(false);
+			csmDbDropSchemaCheckBox.setEnabled(false);
+		} else {
+			csmDbDropSchemaCheckBox.setEnabled(true);
+		}
     }
     
     /**
@@ -1356,9 +1375,24 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
     			}
     		}
     		
-    		if (getCsmDbDropSchemaCheckBox().isSelected()){
+    		if (getCsmDbDropSchemaCheckBox().isSelected() && !parentContainer.isAppDbAndCsmSchemaSame()){
     			if (ValidationUtils.isBlank(this.getCsmDbSqlFileField().getText())) {
     				result.add(new SimpleValidationMessage(CSM_DB_SQL_FILE + " must not be blank when "+CSM_DB_DROP_SCHEMA+" is selected.", Severity.ERROR, CSM_DB_SQL_FILE));
+    			}
+    		}
+    		
+    		String csmDbSchema = getCsmDbSchemaField().getText();
+    		if (ValidationUtils.isNotBlank(csmDbSchema) && parentContainer.isAppDbAndCsmSchemaSame() && parentContainer.isAppDbDropSchemaSelected() ) {
+    			//TODO :: investigate if there is a way to visually signal that a CheckBox has a validtion error.
+    			//        Currently, creating a validation error for the CheckBox has no effect.  As a result,
+    			//        using toggleReCreateCsmDBFields() instead to enforce rule
+//    			if (getCsmDbDropSchemaCheckBox().isSelected()){
+//    				log.debug("* * * Validation error: App DB and CSM are the same, and CSM Drop Schema CheckBox is selected.");
+//    				result.add(new SimpleValidationMessage(CSM_DB_DROP_SCHEMA + " must not selected when both the App DB and CSM schema are the same.", Severity.ERROR, CSM_DB_DROP_SCHEMA));
+//    			}
+    			
+    			if (ValidationUtils.isBlank(this.getCsmDbSqlFileField().getText())) {
+    				result.add(new SimpleValidationMessage(CSM_DB_SQL_FILE + " must not be blank when both the App DB and CSM schema are the same.", Severity.ERROR, CSM_DB_SQL_FILE));
     			}
     		}
 
@@ -1439,6 +1473,7 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
         ValidationComponentUtils.setMandatory(getCsmDbSqlFileField(), true);
         
         toggleCsmDbConnectionFields();
+        toggleReCreateCsmDBFields();
         parentContainer.toggleCsmDbJndiNameField();
         parentContainer.toggleCsmTestConnectionButton();
         updateCsmDbFields();

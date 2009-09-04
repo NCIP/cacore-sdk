@@ -625,9 +625,9 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
     		csmDbConnectionSettingsPanel.setCsmUseJndiBasedConnection(dbConnectionSettingsPanel.isUseJndiBasedConnection());
     		csmDbConnectionSettingsPanel.setCsmDbJndiUrl(dbConnectionSettingsPanel.getDbJndiName());
     		csmDbConnectionSettingsPanel.setCsmDbConnectionUrl(dbConnectionSettingsPanel.getDbUrl());
-    		csmDbConnectionSettingsPanel.setCsmDbConnectionUrlHostname(dbConnectionSettingsPanel.getDbConnectionUrlHostname());
-    		csmDbConnectionSettingsPanel.setCsmDbConnectionUrlPort(dbConnectionSettingsPanel.getDbConnectionUrlPort());
-    		csmDbConnectionSettingsPanel.setCsmDbConnectionUrlSchema(dbConnectionSettingsPanel.getDbConnectionUrlSchema());
+    		csmDbConnectionSettingsPanel.setCsmDbHostname(dbConnectionSettingsPanel.getDbHostname());
+    		csmDbConnectionSettingsPanel.setCsmDbPort(dbConnectionSettingsPanel.getDbPort());
+    		csmDbConnectionSettingsPanel.setCsmDbSchema(dbConnectionSettingsPanel.getDbSchema());
     		csmDbConnectionSettingsPanel.setCsmDbUsername(dbConnectionSettingsPanel.getDbUsername());
     		csmDbConnectionSettingsPanel.setCsmDbPassword(dbConnectionSettingsPanel.getDbPassword());
     	}
@@ -770,6 +770,19 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
     
     public boolean isSecurityEnabled(){
     	return securitySettingsPanel.isSecurityEnabled();
+    }
+    
+    public boolean isAppDbAndCsmSchemaSame(){
+    	return (csmDbConnectionSettingsPanel.getCsmDbSchema().length() > 0 &&
+    	csmDbConnectionSettingsPanel.getCsmDbSchema().equalsIgnoreCase(dbConnectionSettingsPanel.getDbSchema()));
+    }
+    
+    public boolean isAppDbDropSchemaSelected(){
+    	return dbConnectionSettingsPanel.isDbDropSchemaSelected();
+    }
+    
+    public String getCsmDbSqlFileName(){
+    	return csmDbConnectionSettingsPanel.getCsmDbSqlFileName();
     }
     
     public boolean isEnableWritableApiExtensionSelected(){
