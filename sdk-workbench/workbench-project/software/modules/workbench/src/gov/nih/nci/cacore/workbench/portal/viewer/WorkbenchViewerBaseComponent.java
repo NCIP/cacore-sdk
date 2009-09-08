@@ -457,9 +457,9 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 		}
 
 		try {
-			setProgressText("Installing the SDK");
+			//setProgressText("Installing the SDK");
 			AntTools.installSdk(sdkInstallDirPath);
-			setErrorMessage("The SDK has been Successfully Installed");
+			setErrorMessage("The SDK has been successfully installed");
 		} catch (Exception e) {
 			log.error("ERROR: "+ e.getMessage(),e);
 			setErrorMessage(generateErrorMsg("Failed to install the SDK!"));
