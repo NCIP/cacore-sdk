@@ -47,7 +47,7 @@
    </resources>
    <application-desc main-class="gov.nih.nci.cacore.workbench.portal.CacoreWorkbenchPortal">
    	<argument>webstart</argument>
-   	<argument>http://@TOMCAT_EXTERNAL_HTTP_HOST@:@SERVER_PORT@/@PROJECT_NAME@/@SDK_SRC_FILE@</argument>
+   	<argument>http://@TOMCAT_EXTERNAL_HTTP_HOST@/@PROJECT_NAME@/@SDK_SRC_FILE@</argument>
    	<argument>@SDK_SRC_FILE@</argument>
    </application-desc>
 </jnlp>
