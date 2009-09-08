@@ -21,11 +21,9 @@
 		</fileset>
 	</path>
 
-
 	<!-- Task definitions -->
 	<taskdef name="xmltask" classname="com.oopsconsultancy.xmltask.ant.XmlTask" classpathref="taskdef.cp" onerror="ignore"/>
-	<taskdef resource="net/sf/antcontrib/antlib.xml" classpathref="taskdef.cp" onerror="ignore"/>
-	<taskdef name="xmlconfig" classname="com.xmlconfig.anttask.XmlConfig" classpathref="bda-utils.classpath" />
+	<taskdef resource="net/sf/antcontrib/antlib.xml" classpathref="taskdef.cp" onerror="ignore"/>	
 	<taskdef resource="liquibasetasks.properties" classpathref="bda-utils.classpath" />
 	<taskdef name="groovy" classname="org.codehaus.groovy.ant.Groovy" classpathref="bda-utils.classpath" />
 	<taskdef resource="org/apache/ant/antunit/antlib.xml" uri="antlib:org.apache.ant.antunit" classpathref="bda-utils.classpath" />
