@@ -1,0 +1,345 @@
+                        Release Notes
+    
+            caCORE Software Development Toolkit (SDK)
+                         Version 4.2
+                        August, 2009
+
+       National Cancer Institute Center for Bioinformatics
+
+================================================================
+                            Contents
+================================================================
+
+
+    1.0 caCORE SDK Introduction
+    2.0 Features and Updates
+    3.0 Bug Fixes
+    4.0 Known Issues
+    5.0 Bug Reports and Support
+    6.0 caCORE Open Development
+    7.0 Documentation
+    8.0 NCICB and caBIG Web Pages
+
+
+================================================================
+	1.0 caCORE SDK Introduction and History
+================================================================
+
+    
+    caCORE SDK 4.2
+
+    --  21 August 2009
+    
+    caCORE SDK 4.1.1
+
+    --  15 January 2009
+	
+    caCORE SDK 4.1 
+
+    --  07 November 2008
+
+    caCORE SDK 4.0.1
+
+    --  15 April 2008
+
+    caCORE SDK 4.0
+
+    --  11 October 2007
+
+    caCORE SDK 3.2.1
+
+    --  22 March 2007
+
+    caCORE SDK 3.2
+
+    --  22 December 2006
+
+    caCORE SDK 1.1
+
+    --  27 March 2006
+
+    caCORE SDK 1.0.3
+
+    --  28 July 2005
+
+    caCORE SDK 1.0.2
+
+    --  12 April 2005
+
+    caCORE SDK 1.0.1
+
+    --  16 February 2005
+
+    caCORE SDK 1.0
+
+    --  31 January 2005
+
+    The caCORE Software Development Kit (SDK) is a set of tools
+    that can be used by an intermediate Java developer to create
+    a 'caCORE-like' system. Such systems are constructed using
+    certain design principles:
+
+    --  UML Modeling
+
+    --  n-tier architecture with open APIs
+
+    --  controlled vocabularies
+
+    --  registered metadata
+
+    A system built along these lines is said to be 'semantically
+    integrated', that is, there exists runtime metadata that
+    describes every class and class attribute in the API.
+
+
+================================================================
+	2.0 Features and Updates
+================================================================
+
+    +---------------------------------------+
+    | Features:  caCORE SDK Components      |
+    +---------------------------------------+
+
+    The caCORE SDK includes the following components:
+
+    --  Sample UML object/data models to use with the development
+	    kit:
+
+	--  SDKTestModel.EAP (Enterprise Architect)
+	--  sdk.uml (ArgoUML)
+
+    --  XML Metadata Interchange (XMI) or XML Version of the sample
+	    models:
+
+        --  sdk.xmi (Enterprise Architect)
+        --  sdk.uml (ArgoUML)
+
+    --  Framework packages
+
+        --  gov.nih.nci.system
+        --  gov.nih.nci.common
+        --  org.hibernate
+        --  org.springframework
+        --  org.acegisecurity
+
+    --  Configuration file to enable you to customize your 
+        installation to meet your specific database, server,
+        and other network needs.
+
+        --  codegen.properties (configure code generation)
+		--  deploy.properties (configure local & remote deployment)
+
+    --  Ant buildfile
+
+	--  build.xml
+
+    --  Code generator package
+
+        --  gov.nih.nci.codegen.core
+        --  gov.nih.nci.codegen.framework
+        --  Java JET templates for generating caCORE like APIs
+
+    Please read the caCORE SDK Programmer's Guide before
+    downloading the SDK.  
+
+
+    +---------------------------------------+
+    | Updates / New Features                |
+    +---------------------------------------+
+
+    caCORE SDK 4.2 is a minor release with several bug fixes and a handful
+	of new features.  A list highlighting the functionality and 
+	performance enhancements and improvements introduced in the caCORE SDK 
+	4.2 release is provided below:
+
+    -- Integration with the Automatic Build and Deploy Process (BDA)
+	
+	-- Integration with the caCORE Workbench, a new GUI-driven tool
+	   which facilitates the creation of Data and Analytical Services   
+	   on the Grid.  Supported caBIG process workflows include the 
+	   creation of a UML Model, Semantic Integration, Model Mapping,  
+	   Application Creation and Deployment, and creation of a Grid Service.
+		
+	-- REST API Error Handling. See GForge Feature Request[#15469].
+	
+	-- JSON output for REST API.  See GForge Feature Request [#15470].
+	
+	-- Change INCLUDE_PACKAGE code generation property value so that all classes in the domain 
+	   model are selected by default.  See GForge Feature Request [#19446].
+	   
+	-- Provide link to Javadocs in the Domain Model Browser.  See GForge Suggestion Tracker [#16845].
+	
+	-- Include SDK version in the sdk-client-framework.jar Manifest.
+
+================================================================
+	3.0 Bug Fixes Since Last Release
+================================================================
+
+	-- [#18261] Possible Discrepancy between caAdapter and SDK API's is causing "No table found for <fqcn>" error.
+	-- [#19565] Recursive proxying
+	-- [#21256] GetXML represents nulls as dashes
+
+================================================================
+	4.0 Known Issues
+================================================================
+
+	-- [#18620] CACHE_PROTECTION_ELEMENT not working as desired
+
+	-- [#16327] Pagination of result set causes incorrect construction of the result list
+
+    -- [#13168] Polymorphic Implicit Inheritance queries fail if 
+	firstResult/maxResult is set prior to executing query
+
+    -- The SDK will not generate both ends of bi-directional 
+	 associations within the Java Beans.
+
+    -- The caCORE Castor-based Marshaller does not currently handle 
+	 recursive bi-directional associations.	
+
+    -- The SDK purposely ignores the lower-bound multiplicity
+       value from the UML model when generating the Schemas.  A
+       deployment option/property will be provided in a future 
+       release that will force the SDK to honor the value placed
+       within the model.
+
+    -- When building a system, an error will be generated if
+       Java keywords are used as class and/or attribute names in
+       the UML logical model.  Similarly, SQL keywords in the
+       data model will generate errors.
+   
+    -- If you use multiple datasources from different databases
+       servers, the toolkit will not be able to generate
+       multiple orm*.cfg.xml files automatically. You will need
+       to generate a single ORM, then manually split that file
+       into however many ORM's you are using.
+
+    -- The HTTP interface has reserved characters like % and #.
+       If the reserved characters are part of the query, the
+       HTTP parser will not work correctly.
+	
+	 Example:  "test%122".  
+
+	 A workaround is to use the wild card character '*':
+
+	 Example:  "test*122"
+
+       More detailed information is available in the caCORE
+       4.2 SDK Programmer's Guide, available at:
+
+       https://gforge.nci.nih.gov/docman/index.php?group_id=148&selected_doc_group_id=4183&language_id=1
+	   
+	-- The criteria query page is not displayed for implicit classes. See
+	   [#15722] No Criteria page for the implicit class Tank.
+	
+================================================================
+	5.0 Bug Reports and Support
+================================================================
+
+    -- The NCICB Application Support group can be contacted at:
+
+	 http://ncicb.nci.nih.gov/NCICB/support
+	 Telephone: 301-451-4384 	
+	 Toll free: 888-478-4423
+
+    -- A GForge Support tracker group, which is actively monitored by caCORE SDK 
+       developers, has been created to track any support requests. If you believe 
+       there is a bug/issue in the caCORE SDK software itself, or have a technical 
+       issue that cannot be resolved by contacting the NCICB Application Support group, 
+       please submit a new support tracker using the following link: 
+
+       https://gforge.nci.nih.gov/tracker/?group_id=148&atid=731. 
+
+    -- Prior to submitting a new tracker, review any existing support request trackers 
+       in order to help avoid duplicate submissions.
+
+    -- A list summarizing the online SDK resources is provided below:
+
+	 Mailing List:			  CACORESDK_USERS-L@mail.nih.gov
+	 Mailing List Archive:		https://list.nih.gov/archives/cacore_sdk_users-l.html
+	 Project Home (GForge):		https://gforge.nci.nih.gov/projects/cacoresdk/
+	 Support Tracker (GForge): 	https://gforge.nci.nih.gov/tracker/?group_id=148&atid=731
+	 caCORE SDK users:		https://list.nih.gov/archives/cacore_sdk_users-l.html       
+
+
+================================================================
+	6.0 caCORE Open Development
+================================================================
+
+    -- 	cacoresdk: The NCICB caCORE Software Development Kit is part of
+		a suite of tools designed to aid in the design and creation 
+		of a 'caCORE-like' software system.
+		
+	https://cabig.nci.nih.gov/tools/caCORE_SDK
+     
+	http://gforge.nci.nih.gov/projects/cacoresdk/
+     
+
+================================================================
+	7.0 Documentation
+================================================================
+    
+    -- The caCORE SDK 4.2 provides three guides.  The first, the "caCORE
+       4.2 SDK Programmer's Guide", combines information formerly 
+       contained within the caCORE SDK Programmer's, Technical, and 
+       Basic Installation and Test guides.  The second, the "caCORE SDK 
+       4.0 Migration Guide", contains information on migrating to the 4.0
+       domain model from previous versions of the SDK.
+
+    -- The caCORE SDK 4.2 Programmer's Guide can be downloaded via
+       HTTP from:
+
+       https://gforge.nci.nih.gov/docman/index.php?group_id=148&selected_doc_group_id=4183&language_id=1
+
+    -- The caCORE SDK 4.0 Migration Guide can be downloaded via
+       HTTP from:
+
+       https://gforge.nci.nih.gov/docman/index.php?group_id=148&selected_doc_group_id=1389&language_id=1
+
+    -- JavaDocs are also available for the generated domain classes.  
+       To view them, first build the system for your model using the 
+       instructions contained in "Chapter 11: Configuring and Running 
+       the SDK" of the caCORE 4.2 Programmer's Guide.  The JavaDocs 
+       are generated within the /target/dist/exploded/output/<project_name>
+       /codegen/docs folder, and also included in the project ZIP file  
+       located in /target/dist/ directory. Once the application is   
+       deployed, the JavaDocs are also viewable online via the "JavaDocs" 
+	   link on the SDK Home page.
+
+
+================================================================
+	8.0 NCICB and caBIG Web Pages
+================================================================
+
+    The NCI Center for Bioinformatics
+
+    --  http://ncicb.nci.nih.gov/
+    
+    NCICB Application Support
+     
+    -- http://ncicbsupport.nci.nih.gov/sw/
+    -- http://ncicb.nci.nih.gov/NCICB/support
+
+    NCICB Download Center
+
+    -- http://ncicb.nci.nih.gov/download/
+
+    caBIG Community Website
+
+    -- https://cabig.nci.nih.gov/
+
+    caCORE Overview
+
+    -- https://cabig.nci.nih.gov/adopt/concepts/caCORE_overview
+
+    caCORE SDK
+
+    -- https://cabig.nci.nih.gov/tools/caCORE_SDK
+    -- http://ncicb.nci.nih.gov/NCICB/infrastructure/cacoresdk
+    -- http://gforge.nci.nih.gov/projects/cacoresdk/
+
+    Common Security Module (CSM)
+
+    -- https://cabig.nci.nih.gov/tools/CSM    
+    -- http://ncicb.nci.nih.gov/NCICB/infrastructure/cacore_overview/csm
+
+//end
