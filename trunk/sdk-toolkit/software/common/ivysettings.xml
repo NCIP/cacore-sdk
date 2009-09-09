@@ -1,0 +1,30 @@
+<ivysettings>
+	<property name="nci.ivy.repo" value="http://gforge.nci.nih.gov/svnroot/commonlibrary/trunk/ivy-repo" />
+	<property name="nci.cagrid.ivy.repo" value="http://software.cagrid.org/repository-1.2" />
+	
+	<settings defaultResolver="nci-chain" />
+	<caches defaultCacheDir="${user.home}/.ivy2-sdk" useOrigin="true"/>
+	<resolvers>
+		<chain name="nci-chain" returnFirst="true">
+			<!-- this is where you can publish to, either your own code or for testing new thirdparty files -->
+			<filesystem name="shared-local-repo" local="true">
+				<ivy pattern="${shared.local.repo.dir}/[organisation]/[module]/[revision]/ivy.xml" />
+				<artifact pattern="${shared.local.repo.dir}/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
+			</filesystem>
+			<filesystem name="local-repo" local="true">
+				<ivy pattern="${local.repo.dir}/[organisation]/[module]/[revision]/ivy.xml" />
+				<artifact pattern="${local.repo.dir}/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
+			</filesystem> 
+			<url name="ncicb-ivy-repo">
+				<artifact pattern="http://gforge.nci.nih.gov/svnroot/commonlibrary/trunk/ivy-repo/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
+				<ivy pattern="http://gforge.nci.nih.gov/svnroot/commonlibrary/trunk/ivy-repo/[organisation]/[module]/[revision]/ivy.xml" />
+			</url>  
+			<url name="ncicb-cagrid-ivy-repo" m2compatible="false">
+				<ivy pattern="${nci.cagrid.ivy.repo}/[organisation]/[module]/ivy-[revision].xml" />
+				<artifact pattern="${nci.cagrid.ivy.repo}/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
+				<artifact pattern="${nci.cagrid.ivy.repo}/[organisation]/[module]/[revision]/[artifact].[ext]" />				
+			</url>
+			
+		</chain>
+	</resolvers>
+</ivysettings>

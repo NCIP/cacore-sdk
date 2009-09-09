@@ -1,0 +1,486 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ****************************************************************************************************-->
+<!--                                     caCORE ToolKit Demo Build Script					             -->
+<!-- ****************************************************************************************************-->
+
+
+<project name="caCORE SDK Test" default="readThickClientTest" basedir=".">
+
+	<!-- load properties files -->
+	<property name="project.home" location="${basedir}/.." />
+	<property name="project.build.home" location="${project.home}/build" />
+
+	<property file="${project.build.home}/codegen.properties" />
+	<property file="${project.build.home}/install.properties" />
+	<property file="${SDK_INSTALL_DIR}/software/build/project.properties"/>
+
+	<property name="junit.home" location="${project.home}/junit" />
+	<property name="src.dir" value="${junit.home}/src"/>
+	<property name="lib.dir" value="${junit.home}/lib"/>
+	<property name="classes.dir" value="${junit.home}/classes"/>
+
+	<!-- load properties files -->
+
+	<property name="project.target.dir" value="${project.home}/target"/>
+	<property name="dist.dir" value="${project.target.dir}/dist"/>
+	<property name="dist.exploded.dir" value="${dist.dir}/exploded"/>
+
+	<property name="junit.report.dir" value="${junit.home}/report"/>
+	<property name="aggregate.report.dir" value="${junit.report.dir}/aggregate-report"/>
+
+	<property name="report.project.dir" value="${junit.report.dir}/defaultTest" />
+	<property name="build.report.dir" value="${report.project.dir}/build-report" />
+
+	<property name="report.dir" value="${report.project.dir}" />
+	<property name="report.dir.app.service" value="${report.dir}/appservice" />
+	<property name="report.dir.thick-client.cql.query" value="${report.dir}/thick-client-cql" />
+	<property name="report.dir.remote-client.cql.query" value="${report.dir}/remote-client-cql" />
+	<property name="report.dir.thick-client" value="${report.dir}/thick-client" />
+	<property name="report.dir.remote-client" value="${report.dir}/remote-client" />
+	<property name="report.dir.hv-client" value="${report.dir}/hibernate-validator-client" />
+	<property name="report.dir.ws-client" value="${report.dir}/ws-client" />
+	<property name="report.dir.xsd-client" value="${report.dir}/xsd-client" />
+	<property name="report.dir.xml-mapping-client" value="${report.dir}/xml-mapping-client" />
+	<property name="report.dir.xml-thick-data-client" value="${report.dir}/xml-local-data-client" />
+	<property name="report.dir.xml-remote-data-client" value="${report.dir}/xml-remote-data-client" />
+	<property name="report.dir.security-thick-client" value="${report.dir}/security-thick-client" />
+	<property name="report.dir.security-group-thick-client" value="${report.dir}/security-group-thick-client" />
+	<property name="report.dir.security-remote-client" value="${report.dir}/security-remote-client" />
+	<property name="report.dir.hbm-mapping-client" value="${report.dir}/hbm-mapping-client" />
+	<property name="report.dir.thickclient-writableapi" value="${report.dir}/writable-api-thick-client" />
+	<property name="report.dir.thickclient-writableapi-cleanup" value="${report.dir}/writable-api-thick-client-cleanup" />
+	<property name="report.dir.remoteclient-writableapi" value="${report.dir}/writable-api-remote-client" />
+	<property name="report.dir.codegen" value="${report.dir}/codegen" />
+
+	<property name="generate.report" value="true" />
+
+	<!-- load ant contrib -->
+	<path id="taskdef.cp">
+		<fileset dir="lib">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="taskdef.cp" />
+
+	<!--RESOLVE SERVER_URL property *************************************************** -->
+	<condition property="SERVER_PROTOCOL" value="https" else="http">
+		<equals arg1="${ENABLE_GRID_LOGIN_MODULE}" arg2="true" />
+	</condition>
+	<switch value="${SERVER_TYPE}">
+		<case value="jboss">
+			<property name="SERVER_HOST_NAME" value="${jboss.server.hostname}"/>
+			<property name="SERVER_HTTP_PORT" value="${jboss.server.port}"/>
+			<property name="SERVER_SSL_PORT" value="${jboss.server.ssl.port}"/>
+			<property name="exclude.tomcat" value="true"/>
+		</case>
+		<case value="tomcat">
+			<property name="exclude.jboss" value="true"/>
+			<property name="SERVER_HOST_NAME" value="${tomcat.hostname}"/>
+			<property name="SERVER_SSL_PORT" value="${tomcat.port.ssl}"/>
+			<property name="SERVER_HTTP_PORT" value="${tomcat.port.http}"/>
+		</case>
+		<default>
+			<fail message="Invalid server type ${SERVER_TYPE}" />
+		</default>
+	</switch>
+	<condition property="SERVER_PORT" value="${SERVER_SSL_PORT}" else="${SERVER_HTTP_PORT}">
+		<equals arg1="${ENABLE_GRID_LOGIN_MODULE}" arg2="true" />
+	</condition>
+	<property name="SERVER_URL" value="${SERVER_PROTOCOL}://${SERVER_HOST_NAME}:${SERVER_PORT}/${PROJECT_NAME}" />
+	<property name="SDK_GRID_LOGIN_SERVICE_URL" value="${SERVER_PROTOCOL}://${SERVER_HOST_NAME}:${SERVER_PORT}/${SDK_GRID_LOGIN_SERVICE_NAME}" />
+	<condition property="SERVER_URL" value="${SDK_GRID_LOGIN_SERVICE_URL}" else="${SERVER_URL}">
+		<equals arg1="${ENABLE_GRID_LOGIN_MODULE}" arg2="true" />
+	</condition>
+	<!--***********************************************************************
+	*** Classpath entries
+	*********************************************************************** -->
+	<path id="local-client-cp">
+		<fileset dir="${dist.exploded.dir}/${package.client.local.lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="lib">
+			<include name="**/*.jar" />
+		</fileset>
+		<pathelement path="${classes.dir}" />
+		<pathelement path="${dist.exploded.dir}/${package.client.local.conf.dir}" />
+	</path>
+
+	<path id="remote-client-cp">
+		<fileset dir="${dist.exploded.dir}/${package.client.remote.lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${dist.exploded.dir}/${package.client.ws.lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="lib">
+			<include name="**/*.jar" />
+		</fileset>
+		<pathelement path="${classes.dir}" />
+		<pathelement path="${dist.exploded.dir}/${package.client.remote.conf.dir}" />
+	</path>
+
+	<path id="ws-client-cp">
+		<fileset dir="${dist.exploded.dir}/${package.client.ws.lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="lib">
+			<include name="**/*.jar" />
+		</fileset>
+		<pathelement path="${classes.dir}" />
+		<pathelement path="${dist.exploded.dir}/${package.client.ws.conf.dir}" />
+	</path>
+
+	<!--***********************************************************************
+	*** Macro definitions to run JUnits
+	*********************************************************************** -->
+
+	<macrodef name="SDKecho">
+		<attribute name="message" default="..." />
+		<sequential>
+			<echo>*****************************************************************</echo>
+			<echo>***  @{message}</echo>
+			<echo>*****************************************************************</echo>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="SDKGenerateReport">
+		<attribute name="junitOutputDir" />
+		<attribute name="junitInputDir" default="@{junitOutputDir}"/>
+		<attribute name="generateReport" default="${generate.report}" />
+		<attribute name="includePattern" default="TEST-*.xml" />
+		<sequential>
+			<if>
+				<equals arg1="@{generateReport}" arg2="true"/>
+				<then>
+					<mkdir dir="@{junitOutputDir}/report" />
+					<junitreport todir="@{junitOutputDir}/report">
+						<fileset dir="@{junitInputDir}" includes="@{includePattern}" />
+						<report format="frames" todir="@{junitOutputDir}/report" />
+					</junitreport>
+				</then>
+			</if>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="SDKRunJUnit">
+		<attribute name="junitClasspath" />
+		<attribute name="junitOutputDir" default="${junit.home}/output"/>
+		<attribute name="includePattern" />
+		<attribute name="junitreportfile" />
+		<attribute name="excludePattern" />
+		<attribute name="loginConfig.location" default="${dist.exploded.dir}/${package.client.local.conf.dir}"/>
+		<sequential>
+			<delete dir="@{junitOutputDir}" />
+			<mkdir dir="@{junitOutputDir}" />
+			<delete dir="${junit.home}/output"/>
+			<mkdir dir="${junit.home}/output"/>
+			<mkdir dir="${build.report.dir}" />
+			<junit printsummary="yes" maxmemory="512m" showoutput="false" failureproperty="fail-prop" errorproperty="error-prop">
+				<sysproperty key="java.security.auth.login.config" value="@{loginConfig.location}/login.config" />
+				<sysproperty key="webservice.url" value="${SERVER_URL}/services/${WEBSERVICE_NAME}" />
+				<sysproperty key="log4j.configuration" value="./conf/log4j.xml"/>
+				<sysproperty key="useGMETags" value="${GENERATE_XSD_WITH_GME_TAGS}"/>
+				<sysproperty key="usePermissibleValues" value="${GENERATE_XSD_WITH_PERMISSIBLE_VALUES}"/>
+				<sysproperty key="namespaceUriPrefix" value="${NAMESPACE_PREFIX}"/>
+				<sysproperty key="enableAttributeLevelSecurity" value="${ENABLE_ATTRIBUTE_LEVEL_SECURITY}"/>
+				<sysproperty key="enableInstanceLevelSecurity" value="${ENABLE_INSTANCE_LEVEL_SECURITY}"/>
+				<sysproperty key="enableCaGridLoginModule" value="${ENABLE_GRID_LOGIN_MODULE}"/>
+				<sysproperty key="outputDir" value="${junit.home}/output/"/>
+				<sysproperty key="serverURL" value="http://${SERVER_HOST_NAME}:${SERVER_HTTP_PORT}/${PROJECT_NAME}"/>
+				
+				<classpath>
+					<path refid="@{junitClasspath}" />
+				</classpath>
+				<formatter type="xml" />
+				<batchtest haltonfailure="no" todir="@{junitOutputDir}" fork="true">
+					<fileset dir="${classes.dir}">
+						<include name="@{includePattern}" />
+						<exclude name="@{excludePattern}" />
+					</fileset>
+				</batchtest>
+			</junit>
+			<java classname="test.junit.report.JunitReportHelper">
+				<arg  value="@{junitOutputDir}" />
+				<arg  value="${build.report.dir}/@{junitreportfile}" />
+				<jvmarg value="-Xms256M" />
+				<jvmarg value="-Xmx512M" />
+				<classpath>
+					<path refid="@{junitClasspath}" />
+				</classpath>
+			</java>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="SDKCompileJUnit">
+		<attribute name="compileClasspath" />
+		<attribute name="includePattern" />
+		<attribute name="excludePattern" />
+		<sequential>
+			<javac srcdir="${src.dir}" destdir="${classes.dir}" debug="true" debuglevel="lines,vars,source">
+				<include name="@{includePattern}" />
+				<exclude name="@{excludePattern}" />
+				<classpath refid="@{compileClasspath}" />
+			</javac>
+			<javac srcdir="${src.dir}" destdir="${classes.dir}" debug="true" debuglevel="lines,vars,source">
+				<include name="**/test/junit/report/*.java" />
+				<classpath refid="@{compileClasspath}" />
+			</javac>
+		</sequential>
+	</macrodef>
+
+	<!--***********************************************************************
+	*** Creates new directories
+	*********************************************************************** -->
+	<target name="createDir" depends="clean-classes">
+		<mkdir dir="${report.dir}" />
+		<mkdir dir="${classes.dir}" />
+	</target>
+	
+	<!--***********************************************************************
+	*** Cleans the generated directories and files
+	*********************************************************************** -->
+	<target name="clean" description="Cleans the generated directories and files">
+		<SDKecho message="${ant.project.name}: Cleaning directories and files" />
+		<delete dir="${classes.dir}" />
+		<delete dir="${report.dir}" />
+	</target>
+
+	<target name="clean-classes" description="Cleans the classes directory">
+		<SDKecho message="${ant.project.name}: Cleaning the classes directory" />
+		<delete dir="${classes.dir}" />
+	</target>
+
+	<!-- ************************************************************************************************-->
+	<!--                                Run JUnits for Thick client            	                         -->
+	<!-- ************************************************************************************************-->
+
+	<target name="readThickClientTest" depends="createDir">
+		<SDKCompileJUnit compileClasspath="local-client-cp" includePattern="**/cacoresdk/**/*Test.java" excludePattern="" />
+		<SDKRunJUnit junitClasspath="local-client-cp" junitOutputDir="${report.dir.thick-client}" includePattern="**/cacoresdk/**/*Test.class" excludePattern="" junitreportfile="TEST-readThickClient.xml" />
+		<SDKGenerateReport junitOutputDir="${report.dir.thick-client}" />
+	</target>
+
+	<!-- ************************************************************************************************-->
+	<!--                                Run JUnits for Schema (XSD) client 	                             -->
+	<!-- ************************************************************************************************-->
+
+	<target name="xsdTest" depends="createDir">
+		<SDKCompileJUnit compileClasspath="remote-client-cp" includePattern="**/*XSD*.java" excludePattern="" />
+		<SDKRunJUnit junitClasspath="remote-client-cp" junitOutputDir="${report.dir.xsd-client}" includePattern="**/*XSD*Test.class" excludePattern="" junitreportfile="TEST-xsd.xml" />
+		<SDKGenerateReport junitOutputDir="${report.dir.xsd-client}" />
+	</target>
+
+	<!-- ************************************************************************************************-->
+	<!--                                Run JUnits for XML Mapping (Castor) client 	                     -->
+	<!-- ************************************************************************************************-->
+
+	<target name="xmlMappingTest" depends="createDir">
+		<SDKCompileJUnit compileClasspath="remote-client-cp" includePattern="**/*XMLMapping*.java" excludePattern="" />
+		<SDKRunJUnit junitClasspath="remote-client-cp" junitOutputDir="${report.dir.xml-mapping-client}" includePattern="**/*XMLMapping*Test.class" excludePattern="" junitreportfile="TEST-xmlMapping.xml"/>
+		<SDKGenerateReport junitOutputDir="${report.dir.xml-mapping-client}" />
+	</target>
+
+	<!-- ************************************************************************************************-->
+	<!--                                Run JUnits for CQL Query        	                                                                            -->
+	<!-- ************************************************************************************************-->
+
+	<target name="cqlQueryThickClientTest" depends="createDir">
+		<SDKCompileJUnit compileClasspath="local-client-cp" includePattern="**/*CQL*.java" excludePattern="" />
+		<SDKRunJUnit junitClasspath="local-client-cp" junitOutputDir="${report.dir.thick-client.cql.query}" includePattern="**/*CQL*Test.class" excludePattern="" junitreportfile="TEST-cqlQueryThickClient.xml"/>
+		<SDKGenerateReport junitOutputDir="${report.dir.thick-client.cql.query}" />
+	</target>
+
+	<target name="cqlQueryRemoteClientTest" depends="createDir">
+		<SDKCompileJUnit compileClasspath="remote-client-cp" includePattern="**/*CQL*.java" excludePattern="" />
+		<SDKRunJUnit junitClasspath="remote-client-cp" junitOutputDir="${report.dir.remote-client.cql.query}" includePattern="**/*CQL*Test.class" excludePattern="" junitreportfile="TEST-cqlQueryRemoteClient.xml"/>
+		<SDKGenerateReport junitOutputDir="${report.dir.remote-client.cql.query}" />
+	</target>
+
+	<!-- ************************************************************************************************-->
+	<!--                                Run JUnits for ApplicationService Tests                             	                            -->
+	<!-- ************************************************************************************************-->
+
+	<target name="appServiceTest" depends="createDir">
+		<SDKCompileJUnit compileClasspath="remote-client-cp" includePattern="**/*AppService*.java" excludePattern="" />
+		<SDKRunJUnit junitClasspath="remote-client-cp" junitOutputDir="${report.dir.app.service}" includePattern="**/*AppService*Test.class" excludePattern="" junitreportfile="TEST-appService.xml" />
+		<SDKGenerateReport junitOutputDir="${report.dir.app.service}" />
+	</target>
+
+	<!-- ************************************************************************************************-->
+	<!--                                Run JUnits for XML Data client   	                             -->
+	<!-- ************************************************************************************************-->
+
+	<target name="xmlDataThickClientTest" depends="createDir">
+		<SDKCompileJUnit compileClasspath="local-client-cp" includePattern="**/*XMLData*.java" excludePattern="" />
+		<SDKRunJUnit junitClasspath="local-client-cp" junitOutputDir="${report.dir.xml-thick-data-client}" includePattern="**/*XMLData*Test.class" excludePattern="" junitreportfile="TEST-xmlDataThickClient.xml"/>
+		<SDKGenerateReport junitOutputDir="${report.dir.xml-thick-data-client}" />
+	</target>
+
+	<target name="xmlDataRemoteClientTest" depends="createDir">
+		<SDKCompileJUnit compileClasspath="remote-client-cp" includePattern="**/*XMLData*.java" excludePattern="" />
+		<SDKRunJUnit junitClasspath="remote-client-cp" junitOutputDir="${report.dir.xml-remote-data-client}" includePattern="**/*XMLData*Test.class" excludePattern="" junitreportfile="TEST-xmlDataRemoteClient.xml"/>
+		<SDKGenerateReport junitOutputDir="${report.dir.xml-remote-data-client}" />
+	</target>
+
+	<!-- ************************************************************************************************-->
+	<!--                                Run JUnits for Hibernate Validator client 	                     -->
+	<!-- ************************************************************************************************-->
+
+	<!--
+		The following deploy.properties (or local.properties) values need to be set in order for this test
+		to execute properly:
+		
+			NAMESPACE_PREFIX=gme://SDK Example Project.caCORE/1/
+			CADSR_CONNECTION_URL=http://cadsrapi-dev.nci.nih.gov/cadsrapi40
+	-->
+	<target name="hibernateValidatorTest" depends="createDir">
+		<SDKCompileJUnit compileClasspath="local-client-cp" includePattern="**/*HibernateValidator*.java" excludePattern="" />
+		<SDKRunJUnit junitClasspath="local-client-cp" junitOutputDir="${report.dir.hv-client}" includePattern="**/*HibernateValidatorTest.class" excludePattern="" junitreportfile="TEST-hibernateValidator.xml"/>
+		<SDKGenerateReport junitOutputDir="${report.dir.hv-client}" />
+	</target>
+
+	<!-- ************************************************************************************************-->
+	<!--                                Run JUnits for Web Service (WS) client 	                         -->
+	<!-- ************************************************************************************************-->
+
+	<target name="webServicesTest" depends="createDir">
+		<SDKCompileJUnit compileClasspath="ws-client-cp" includePattern="**/*WS*.java" excludePattern="" />
+		<SDKRunJUnit junitClasspath="ws-client-cp" junitOutputDir="${report.dir.ws-client}" includePattern="**/*WS*Test.class" excludePattern="" junitreportfile="TEST-webServices.xml"/>
+		<SDKGenerateReport junitOutputDir="${report.dir.ws-client}" />
+	</target>
+
+	<!-- ************************************************************************************************-->
+	<!--                                Run JUnit for Remote Client           	                         -->
+	<!-- ************************************************************************************************-->
+
+	<target name="readRemoteClientTest" depends="createDir">
+		<SDKCompileJUnit compileClasspath="remote-client-cp" includePattern="**/cacoresdk/**/*Test.java" excludePattern="" />
+		<SDKRunJUnit junitClasspath="remote-client-cp" junitOutputDir="${report.dir.remote-client}" includePattern="**/cacoresdk/**/*Test.class" excludePattern="" junitreportfile="TEST-readRemoteClient.xml"/>
+		<SDKGenerateReport junitOutputDir="${report.dir.remote-client}" />
+	</target>
+
+	<!-- ************************************************************************************************-->
+	<!--                                Run JUnit for HBM Mapping Client                                                                    -->
+	<!-- ************************************************************************************************-->
+
+	<target name="hbmMappingTest" depends="createDir">
+		<SDKCompileJUnit compileClasspath="local-client-cp" includePattern="**/*HBM*.java" excludePattern="" />
+		<SDKRunJUnit junitClasspath="local-client-cp" junitOutputDir="${report.dir.hbm-mapping-client}" includePattern="**/*HBM*Test.class" excludePattern="" junitreportfile="TEST-hbmMapping.xml"/>
+		<SDKGenerateReport junitOutputDir="${report.dir.hbm-mapping-client}" />
+	</target>
+
+	<!-- ************************************************************************************************-->
+	<!--                                Run JUnits for Security client using the Thick Client            -->
+	<!-- ************************************************************************************************-->
+
+	<target name="securityThickClientTest" depends="createDir">
+		<SDKCompileJUnit compileClasspath="local-client-cp" includePattern="**/security/*SecurityTest*.java" excludePattern="**/Writable*.java" />
+		<SDKCompileJUnit compileClasspath="local-client-cp" includePattern="**/security/GridApplicationServiceProvider.java" excludePattern="" />
+		<if>
+			<equals arg1="${ENABLE_GRID_LOGIN_MODULE}" arg2="true"/>
+			<then>
+				<SDKCompileJUnit compileClasspath="local-client-cp" includePattern="**/security/GridApplicationServiceImpl.java" excludePattern="" />
+			</then>
+		</if>
+		<SDKRunJUnit junitClasspath="local-client-cp" junitOutputDir="${report.dir.security-thick-client}" includePattern="**/security/*SecurityTest.class" excludePattern="**/security/Writable*.class" loginConfig.location="${dist.exploded.dir}/${package.client.local.conf.dir}" junitreportfile="TEST-securityThickClient.xml"/>
+		<SDKGenerateReport junitOutputDir="${report.dir.security-thick-client}" />
+	</target>
+
+	<!-- ************************************************************************************************-->
+	<!--                                Run JUnits for Security client using the Thick Client            -->
+	<!-- ************************************************************************************************-->
+
+	<target name="securityGroupThickClientTest" depends="createDir">
+		<SDKCompileJUnit compileClasspath="local-client-cp" includePattern="**/security/*SecurityGroupTest*.java" excludePattern="**/Writable*.java" />
+		<SDKRunJUnit junitClasspath="local-client-cp" junitOutputDir="${report.dir.security-group-thick-client}" includePattern="**/security/*SecurityGroup*Test.class" excludePattern="**/security/Writable*.class" junitreportfile="TEST-securityGroupThickClient.xml"/>
+		<SDKGenerateReport junitOutputDir="${report.dir.security-group-thick-client}" />
+	</target>
+
+	<!-- ************************************************************************************************-->
+	<!--                                Run JUnits for Security client using the Remote Client           -->
+	<!-- ************************************************************************************************-->
+
+	<target name="securityRemoteClientTest" depends="createDir">
+		<SDKCompileJUnit compileClasspath="remote-client-cp" includePattern="**/security/*SecurityTest*.java" excludePattern="**/Writable*.java" />
+		<SDKCompileJUnit compileClasspath="remote-client-cp" includePattern="**/security/GridApplicationServiceProvider.java" excludePattern="" />
+		<if>
+			<equals arg1="${ENABLE_GRID_LOGIN_MODULE}" arg2="true"/>
+			<then>
+				<SDKCompileJUnit compileClasspath="remote-client-cp" includePattern="**/security/GridApplicationServiceImpl.java" excludePattern="" />
+			</then>
+		</if>
+		<SDKRunJUnit junitClasspath="remote-client-cp" junitOutputDir="${report.dir.security-remote-client}" includePattern="**/security/*SecurityTest.class" excludePattern="**/security/Writable*.class" loginConfig.location="${dist.exploded.dir}/${package.client.remote.conf.dir}" junitreportfile="TEST-securityRemoteClient.xml"/>
+		<SDKGenerateReport junitOutputDir="${report.dir.security-remote-client}" />
+	</target>
+
+	<!-- ************************************************************************************************-->
+	<!--                                Run JUnits for Database clean-up for Writable API             	 -->
+	<!-- ************************************************************************************************-->
+
+	<target name="writeDatabaseCleanUpTest" depends="createDir">
+		<SDKCompileJUnit compileClasspath="local-client-cp" includePattern="**/*Writable*.java" excludePattern="" />
+		<copy todir="${dist.exploded.dir}/${package.client.local.conf.dir}" overwrite="true">
+			<fileset dir="conf">
+				<include name="**/*-writableapi-test.xml" />
+			</fileset>
+			<fileset dir=".">
+				<include name="**/*db-mysql.properties" />
+			</fileset>
+		</copy>
+		<SDKRunJUnit junitClasspath="local-client-cp" junitOutputDir="${report.dir.thickclient-writableapi-cleanup}" includePattern="**/*SDKWritableCleanUpTest.class" excludePattern="**/security/*" junitreportfile="TEST-writeDatabaseCleanUp.xml" />
+		<SDKGenerateReport junitOutputDir="${report.dir.thickclient-writableapi-cleanup}" />
+	</target>
+
+	<!-- ************************************************************************************************-->
+	<!--                                Run JUnits for thick-client Writable API             	         -->
+	<!-- ************************************************************************************************-->
+
+	<target name="writeThickClientTest" depends="createDir">
+		<SDKCompileJUnit compileClasspath="local-client-cp" includePattern="**/*Writable*.java" excludePattern="" />
+		<SDKRunJUnit junitClasspath="local-client-cp" junitOutputDir="${report.dir.thickclient-writableapi}" includePattern="**/*WritableApi*Test.class" excludePattern="**/security/*"  junitreportfile="TEST-writeThickClient.xml"/>
+		<SDKGenerateReport junitOutputDir="${report.dir.thickclient-writableapi}" />
+	</target>
+	
+	<target name="writeSecureThickClientTest" depends="createDir">
+		<SDKCompileJUnit compileClasspath="local-client-cp" includePattern="**/*Writable*.java" excludePattern="" />
+		<SDKRunJUnit junitClasspath="local-client-cp" junitOutputDir="${report.dir.thickclient-writableapi}" includePattern="**/*WritableSecurityTest.class" excludePattern=""  junitreportfile="TEST-writeSecureThickClient.xml"/>
+		<SDKGenerateReport junitOutputDir="${report.dir.thickclient-writableapi}" />
+	</target>
+
+	<!-- ************************************************************************************************-->
+	<!--                                Run JUnits for remote-client Writable API             	                                        -->
+	<!-- ************************************************************************************************-->
+
+	<target name="writeRemoteClientTest" depends="createDir">
+		<SDKCompileJUnit compileClasspath="remote-client-cp" includePattern="**/*Writable*.java" excludePattern="" />
+		<SDKRunJUnit junitClasspath="remote-client-cp" junitOutputDir="${report.dir.remoteclient-writableapi}" includePattern="**/*WritableApi*Test.class" excludePattern="**/security/*" junitreportfile="TEST-writeRemoteClient.xml" />
+		<SDKGenerateReport junitOutputDir="${report.dir.remoteclient-writableapi}" />
+	</target>
+	
+	<target name="writeSecureRemoteClientTest" depends="createDir">
+		<SDKCompileJUnit compileClasspath="remote-client-cp" includePattern="**/*Writable*.java" excludePattern="" />
+		<SDKRunJUnit junitClasspath="remote-client-cp" junitOutputDir="${report.dir.remoteclient-writableapi}" includePattern="**/*WritableSecurityTest.class" excludePattern="" junitreportfile="TEST-writeSecureRemoteClient.xml" />
+		<SDKGenerateReport junitOutputDir="${report.dir.remoteclient-writableapi}" />
+	</target>
+
+	<!-- ************************************************************************************************-->
+	<!--                                Run JUnit for CodeGen package classes                            -->
+	<!-- ************************************************************************************************-->
+
+	<target name="pkGeneratorValidationTest" depends="createDir">
+		<SDKCompileJUnit compileClasspath="local-client-cp" includePattern="**/codegen/*.java" excludePattern="" />
+		<SDKRunJUnit junitClasspath="local-client-cp" junitOutputDir="${report.dir.codegen}" includePattern="**/codegen/*Test.class" excludePattern="" junitreportfile="TEST-pkGeneratorValidation.xml"/>
+		<SDKGenerateReport junitOutputDir="${report.dir.codegen}" />
+	</target>
+
+	<target name="builldTestAggregateReport" depends="createDir">
+		<delete dir="${build.report.dir}/report" />
+		<SDKGenerateReport junitOutputDir="${report.dir}" generateReport="true" />
+	</target>
+
+	<target name="buildAggregateReport" depends="createDir">
+		<delete dir="${aggregate.report.dir}" />
+		<SDKGenerateReport junitOutputDir="${aggregate.report.dir}" junitInputDir="${junit.report.dir}" includepattern="**/build-report/*.xml" generateReport="true"/>
+	</target>
+</project>

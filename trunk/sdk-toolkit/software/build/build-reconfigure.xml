@@ -1,0 +1,1132 @@
+<project name="caCORE SDK - Project Reconfiguration" default="package-install-system" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant" xmlns="antlib:org.apache.tools.ant" xmlns:cs="antlib:com.puppycrawl.tools.checkstyle">
+
+
+	<property name="output.dir.location" value="."/>
+
+	<property file="codegen.properties"/>
+	<property file="project.properties"/>
+	<property file="install.properties"/>
+	<property name="tools.dir" location="${basedir}/tools" />
+	<property name="tools.lib.dir" location="${tools.dir}/lib" />
+	<property name="lib.dir" location="${output.project.dir}/lib" />
+
+
+	<condition property="taskdef-file" value="build-load-taskdef.xml" else="build-no-taskdef.xml">
+		<not>
+			<typefound name="xmltask"/>
+		</not>
+	</condition>
+	
+	<import file="${basedir}/${taskdef-file}"/>
+
+	<property name="remoteclient.lib.dir" location="${lib.dir}/remote-client" />
+	<property name="localclient.lib.dir" location="${lib.dir}/local-client" />
+	<property name="writable.api.lib.dir" location="${lib.dir}/writable-api" />
+	<property name="writable.api.client.lib.dir" location="${lib.dir}/writable-api-client" />
+	<property name="grid.jaas.api.lib.dir" location="${lib.dir}/grid-jaas" />
+	<property name="grid.jaas.api.client.lib.dir" location="${lib.dir}/grid-jaas-client" />
+	<property name="security.api.lib.dir" location="${lib.dir}/security-api" />
+	<property name="security.api.client.lib.dir" location="${lib.dir}/security-api-client" />
+	<property name="system.logging.lib.dir" location="${lib.dir}/system-logging" />
+	<property name="server-tomcat.lib.dir" location="${lib.dir}/server-tomcat" />
+	<property name="server-jboss.lib.dir" location="${lib.dir}/server-jboss" />
+	<property name="ws-client.lib.dir" location="${lib.dir}/ws-client" />
+	<property name="grid-login-service.lib.dir" location="${lib.dir}/grid-login-service" />
+	<property name="temp.dir" location="${basedir}/temp/webapp" />
+	<property name="temp.orm.dir" location="${basedir}/temp/orm-jar" />
+	<property name="temp.webapp.staging.dir" location="${basedir}/temp/webapp" />
+	<property name="temp.webapp.staging.classes.dir" location="${temp.webapp.staging.dir}/classes" />
+	<property name="temp.webapp.staging.lib.dir" location="${temp.webapp.staging.dir}/lib" />
+	<property name="webapp.lib.dir" location="${lib.dir}/webapp" />
+	<property name="drivers.lib.dir" location="${lib.dir}/drivers" />
+
+	<condition property="JNDI_START" value="" else="${xml.comment.start}">
+		<or>
+			<equals arg1="${DB_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${DB_USE_JNDI_BASED_CONNECTION}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
+	</condition>
+	<condition property="JNDI_END" value="" else="${xml.comment.end}">
+		<or>
+			<equals arg1="${DB_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${DB_USE_JNDI_BASED_CONNECTION}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
+	</condition>
+	<condition property="DB_CONNECTION_START" value="${xml.comment.start}" else="">
+		<or>
+			<equals arg1="${DB_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${DB_USE_JNDI_BASED_CONNECTION}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
+	</condition>
+	<condition property="DB_CONNECTION_END" value="${xml.comment.end}" else="">
+		<or>
+			<equals arg1="${DB_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${DB_USE_JNDI_BASED_CONNECTION}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
+	</condition>
+
+	<condition property="SECURITY_ENABLED" value="true" else="false">
+		<or>
+			<equals arg1="${ENABLE_SECURITY}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${ENABLE_SECURITY}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
+	</condition>
+
+	<condition property="CSM_JNDI_START" value="" else="${xml.comment.start}">
+		<and>
+			<or>
+				<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
+				<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="yes" casesensitive="false" trim="true" />
+			</or>
+			<equals arg1="${SECURITY_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+		</and>
+	</condition>
+	<condition property="CSM_JNDI_END" value="" else="${xml.comment.end}">
+		<and>
+			<or>
+				<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
+				<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="yes" casesensitive="false" trim="true" />
+			</or>
+			<equals arg1="${SECURITY_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+		</and>
+	</condition>
+
+	
+	<condition property="CSM_JNDI_SERVER_START" value="" else="${xml.comment.start}">
+		<or>
+			<and>
+				<and>
+					<or>
+						<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
+						<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="yes" casesensitive="false" trim="true" />
+					</or>
+					<equals arg1="${SECURITY_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+				</and>
+				<not>
+					<or>
+						<equals arg1="${DB_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
+						<equals arg1="${DB_USE_JNDI_BASED_CONNECTION}" arg2="yes" casesensitive="false" trim="true" />
+					</or>
+				</not>
+			</and>
+			<and>
+				<and>
+					<or>
+						<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
+						<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="yes" casesensitive="false" trim="true" />
+					</or>
+					<equals arg1="${SECURITY_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+				</and>
+				<or>
+					<equals arg1="${DB_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
+					<equals arg1="${DB_USE_JNDI_BASED_CONNECTION}" arg2="yes" casesensitive="false" trim="true" />
+				</or>
+				<not>
+					<equals arg1="${CSM_JNDI_NAME}" arg2="${DB_JNDI_NAME}" casesensitive="false" trim="true" />
+				</not>
+			</and>
+		</or>
+	</condition>
+	<condition property="CSM_JNDI_SERVER_END" value="" else="${xml.comment.end}">
+		<or>
+			<and>
+				<and>
+					<or>
+						<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
+						<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="yes" casesensitive="false" trim="true" />
+					</or>
+					<equals arg1="${SECURITY_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+				</and>
+					
+				<not>
+					<or>
+						<equals arg1="${DB_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
+						<equals arg1="${DB_USE_JNDI_BASED_CONNECTION}" arg2="yes" casesensitive="false" trim="true" />
+					</or>
+				</not>
+			</and>
+			<and>
+				<and>
+					<or>
+						<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
+						<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="yes" casesensitive="false" trim="true" />
+					</or>
+					<equals arg1="${SECURITY_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+				</and>
+					
+				<or>
+					<equals arg1="${DB_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
+					<equals arg1="${DB_USE_JNDI_BASED_CONNECTION}" arg2="yes" casesensitive="false" trim="true" />
+				</or>
+				<not>
+					<equals arg1="${CSM_JNDI_NAME}" arg2="${DB_JNDI_NAME}" casesensitive="false" trim="true" />
+				</not>
+			</and>
+		</or>
+	</condition>
+	
+	<condition property="CSM_DB_CONNECTION_START" value="${xml.comment.start}" else="">
+		<or>
+			<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
+	</condition>
+	<condition property="CSM_DB_CONNECTION_END" value="${xml.comment.end}" else="">
+		<or>
+			<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
+	</condition>
+	<condition property="server-exclude-list" value="log4j*.jar" else="">
+		<equals arg1="${SERVER_TYPE}" arg2="jboss" casesensitive="false" trim="true" />
+	</condition>
+	<condition property="server-exclude-classes-list" value="**/log4j*.*" else="">
+		<equals arg1="${SERVER_TYPE}" arg2="jboss" casesensitive="false" trim="true" />
+	</condition>
+	<condition property="WRITABLE_API_EXTENSION_ENABLED" value="true" else="false">
+		<or>
+			<equals arg1="${ENABLE_WRITABLE_API_EXTENSION}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${ENABLE_WRITABLE_API_EXTENSION}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
+	</condition>
+	<condition property="read-api-exclude-list" value="" else="*.jar">
+		<equals arg1="${WRITABLE_API_EXTENSION_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+	</condition>
+	<condition property="read-api-exclude-list-remote-client" value="${writable-api.file.output.core.writable.name}" else="*.jar">
+		<equals arg1="${WRITABLE_API_EXTENSION_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+	</condition>
+	<condition property="ENABLE_CLM_LOGGER_CFG_GENERATION" value="true" else="false">
+		<and>
+			<or>
+				<equals arg1="${ENABLE_COMMON_LOGGING_MODULE}" arg2="true" casesensitive="false" trim="true" />
+				<equals arg1="${ENABLE_COMMON_LOGGING_MODULE}" arg2="yes" casesensitive="false" trim="true" />
+			</or>
+			<equals arg1="${WRITABLE_API_EXTENSION_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${SECURITY_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+		</and>
+	</condition>
+
+
+	<condition property="CSM_LOGIN_MODULE_ENABLED" value="true" else="false">
+		<and>
+			<or>
+				<equals arg1="${ENABLE_CSM_LOGIN_MODULE}" arg2="true" casesensitive="false" trim="true" />
+				<equals arg1="${ENABLE_CSM_LOGIN_MODULE}" arg2="yes" casesensitive="false" trim="true" />
+			</or>
+			<equals arg1="${SECURITY_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+		</and>
+	</condition>
+
+	<condition property="GRID_LOGIN_MODULE_ENABLED" value="true" else="false">
+		<and>
+			<or>
+				<equals arg1="${ENABLE_GRID_LOGIN_MODULE}" arg2="true" casesensitive="false" trim="true" />
+				<equals arg1="${ENABLE_GRID_LOGIN_MODULE}" arg2="yes" casesensitive="false" trim="true" />
+			</or>
+			<equals arg1="${SECURITY_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+		</and>
+	</condition>
+
+	<condition property="USE_CSM_DATA_SOURCE" value="true" else="false">
+		<and>
+			<or>
+				<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
+				<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="yes" casesensitive="false" trim="true" />
+			</or>
+			<equals arg1="${CSM_LOGIN_MODULE_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+		</and>
+	</condition>
+
+	<condition property="USE_DATA_SOURCE" value="true" else="false">
+		<or>
+			<equals arg1="${USE_CSM_DATA_SOURCE}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${DB_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
+		</or>
+	</condition>
+
+	<condition property="USE_CONNECTION_POOL" value="true" else="false">
+		<or>
+			<not>
+				<equals arg1="${USE_CSM_DATA_SOURCE}" arg2="true" casesensitive="false" trim="true" />
+			</not>
+			<equals arg1="${DB_USE_JNDI_BASED_CONNECTION}" arg2="false" casesensitive="false" trim="true" />
+		</or>
+	</condition>
+
+	<condition property="TOMCAT_START" value="${xml.comment.start}" else="">
+		<equals arg1="${SERVER_TYPE}" arg2="jboss" casesensitive="false" trim="true" />
+	</condition>
+	<condition property="TOMCAT_END" value="${xml.comment.end}" else="">
+		<equals arg1="${SERVER_TYPE}" arg2="jboss" casesensitive="false" trim="true" />
+	</condition>
+	<condition property="JBOSS_START" value="${xml.comment.start}" else="">
+		<not>
+			<equals arg1="${SERVER_TYPE}" arg2="jboss" casesensitive="false" trim="true" />
+		</not>
+	</condition>
+	<condition property="JBOSS_END" value="${xml.comment.end}" else="">
+		<not>
+			<equals arg1="${SERVER_TYPE}" arg2="jboss" casesensitive="false" trim="true" />
+		</not>
+	</condition>
+
+	<condition property="JNDI_PREFIX" value="${jboss.jndi.prefix}" else="${tomcat.jndi.prefix}">
+		<equals arg1="${SERVER_TYPE}" arg2="jboss" casesensitive="false" trim="true" />
+	</condition>
+
+	<condition property="SERVER_PROTOCOL" value="https" else="http">
+		<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true" />
+	</condition>
+
+	<condition property="SERVER_PORT" value="${SERVER_SSL_PORT}" else="${SERVER_HTTP_PORT}">
+		<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true" />
+	</condition>
+
+	<property name="SERVER_URL" value="${SERVER_PROTOCOL}://${SERVER_HOST_NAME}:${SERVER_PORT}/${PROJECT_NAME}"/>
+	<property name="SERVER_HTTP_URL" value="http://${SERVER_HOST_NAME}:${SERVER_HTTP_PORT}/${PROJECT_NAME}"/>
+	<property name="SDK_GRID_LOGIN_SERVICE_URL" value="http://localhost:${SERVER_HTTP_PORT}/${SDK_GRID_LOGIN_SERVICE_NAME}"/>
+
+	<target name="-replace-templates-filter-tokens-reconfigure">
+		<filterset id="filtertoken3" begintoken="@" endtoken="@" onmissingfiltersfile="fail">
+			<filter token="CACHE_PATH" value="${CACHE_PATH}" />
+			<filter token="DB_JNDI_NAME" value="${DB_JNDI_NAME}" />
+			<filter token="DB_JNDI_URL" value="${JNDI_PREFIX}/${DB_JNDI_NAME}" />
+			<filter token="DB_DRIVER" value="${DB_DRIVER}" />
+			<filter token="DB_CONNECTION_URL" value="${DB_CONNECTION_URL}" />
+			<filter token="DB_USERNAME" value="${DB_USERNAME}" />
+			<filter token="DB_PASSWORD" value="${DB_PASSWORD}" />
+			<filter token="DB_DIALECT" value="${DB_DIALECT}" />
+
+			<filter token="SERVER_URL" value="${SERVER_URL}" />
+			<filter token="SERVER_HTTP_URL" value="${SERVER_HTTP_URL}" />			
+			<filter token="CSM_JNDI_NAME" value="${CSM_JNDI_NAME}" />
+			<filter token="CSM_DB_JNDI_URL" value="${JNDI_PREFIX}/${CSM_JNDI_NAME}" />
+			<filter token="CSM_DB_DRIVER" value="${CSM_DB_DRIVER}" />
+			<filter token="CSM_DB_CONNECTION_URL" value="${CSM_DB_CONNECTION_URL}" />
+			<filter token="CSM_DB_USERNAME" value="${CSM_DB_USERNAME}" />
+			<filter token="CSM_DB_PASSWORD" value="${CSM_DB_PASSWORD}" />
+			<filter token="CSM_DB_DIALECT" value="${CSM_DB_DIALECT}" />
+			<filter token="ENABLE_SECURITY" value="${ENABLE_SECURITY}" />
+
+			<filter token="CLM_DB_DRIVER" value="${CLM_DB_DRIVER}" />
+			<filter token="CLM_DB_CONNECTION_URL" value="${CLM_DB_CONNECTION_URL}" />
+			<filter token="CLM_DB_USERNAME" value="${CLM_DB_USERNAME}" />
+			<filter token="CLM_DB_PASSWORD" value="${CLM_DB_PASSWORD}" />
+			<filter token="CLM_PROJECT_NAME" value="${CLM_PROJECT_NAME}" />
+
+			<filter token="CAGRID_AUTHENTICATION_SERVICE_URL" value="${CAGRID_AUTHENTICATION_SERVICE_URL}" />
+			<filter token="CAGRID_DORIAN_SERVICE_URL" value="${CAGRID_DORIAN_SERVICE_URL}" />
+			<filter token="SDK_GRID_LOGIN_SERVICE_URL" value="${SDK_GRID_LOGIN_SERVICE_URL}" />
+			<filter token="GRID_JNDI_NAME" value="${GRID_JNDI_NAME}" />
+
+		</filterset>
+		<filterset id="filtertoken4" begintoken="${xml.comment.start}@" endtoken="@${xml.comment.end}" onmissingfiltersfile="fail">
+			<filter token="DB_JNDI_URL_START" value="${JNDI_START}" />
+			<filter token="DB_JNDI_URL_END" value="${JNDI_END}" />
+			<filter token="DB_CONNECTION_POOL_START" value="${DB_CONNECTION_START}" />
+			<filter token="DB_CONNECTION_POOL_END" value="${DB_CONNECTION_END}" />
+			<filter token="CSM_DB_JNDI_URL_START" value="${CSM_JNDI_START}" />
+			<filter token="CSM_DB_JNDI_URL_END" value="${CSM_JNDI_END}" />
+			<filter token="CSM_DB_JNDI_SERVER_START" value="${CSM_JNDI_SERVER_START}" />
+			<filter token="CSM_DB_JNDI_SERVER_END" value="${CSM_JNDI_SERVER_END}" />
+			<filter token="CSM_DB_CONNECTION_POOL_START" value="${CSM_DB_CONNECTION_START}" />
+			<filter token="CSM_DB_CONNECTION_POOL_END" value="${CSM_DB_CONNECTION_END}" />
+
+			<filter token="JBOSS_START" value="${JBOSS_START}" />
+			<filter token="JBOSS_END" value="${JBOSS_END}" />
+			<filter token="TOMCAT_START" value="${TOMCAT_START}" />
+			<filter token="TOMCAT_END" value="${TOMCAT_END}" />
+		</filterset>
+	</target>
+	
+	<target name="replacetoken-contents-install-database" depends="-replace-templates-filter-tokens-reconfigure">
+		<if>
+			<equals arg1="${DB_TYPE}" arg2="mysql" />
+			<then>
+				<copy todir="${db-install.dist.mysql.relative.dir}" filtering="true">
+					<fileset dir="${db-install.dist.mysql.relative.dir}" />
+					<globmapper from="*-template.sql" to="*.sql" />
+					<filterset refid="filtertoken3" />
+					<filterset refid="filtertoken4" />
+				</copy>
+			</then>
+			<elseif>
+				<equals arg1="${DB_TYPE}" arg2="oracle" />
+				<then>
+					<copy todir="${db-install.dist.oracle.relative.dir}" filtering="true">
+						<fileset dir="${db-install.dist.oracle.relative.dir}" />
+						<globmapper from="*-template.sql" to="*.sql" />
+						<filterset refid="filtertoken3" />
+						<filterset refid="filtertoken4" />
+					</copy>
+				</then>
+			</elseif>
+		</if>
+		<outofdate>
+			<sourcefiles>
+				<fileset dir="${system.config.dir}" includes="**/*.xml" />
+				<fileset dir="${system.config.dir}" includes="**/*.wsdd" />
+				<fileset dir="${system.config.dir}" includes="**/*.config" />
+				<fileset dir="${system.config.dir}" includes="**/*.properties" />
+				<fileset dir="${db-install.dist.mysql.relative.dir}" includes="**/*.sql" />
+				<fileset dir="${db-install.dist.oracle.relative.dir}" includes="**/*.sql" />
+			</sourcefiles>
+			<targetfiles>
+				<fileset dir="${system.config.dir}" includes="**/*.xml" />
+				<fileset dir="${system.config.dir}" includes="**/*.wsdd" />
+				<fileset dir="${system.config.dir}" includes="**/*.config" />
+				<fileset dir="${system.config.dir}" includes="**/*.properties" />
+				<fileset dir="${db-install.dist.mysql.relative.dir}" includes="**/*.sql" />
+				<fileset dir="${db-install.dist.oracle.relative.dir}" includes="**/*.sql" />
+			</targetfiles>
+			<sequential>
+				<copy todir="${system.config.dir}" overwrite="true">
+					<fileset dir="${system.config.template.dir}" />
+					<globmapper from="*-template.xml" to="*.xml" />
+					<filterset refid="filtertoken3" />
+					<filterset refid="filtertoken4" />
+				</copy>
+				<copy todir="${system.config.dir}" overwrite="true">
+					<fileset dir="${system.config.template.dir}" />
+					<globmapper from="*-template.wsdd" to="*.wsdd" />
+					<filterset refid="filtertoken3" />
+					<filterset refid="filtertoken4" />
+				</copy>
+				<copy todir="${system.config.dir}" overwrite="true">
+					<fileset dir="${system.config.template.dir}" />
+					<globmapper from="*-template.config" to="*.config" />
+					<filterset refid="filtertoken3" />
+					<filterset refid="filtertoken4" />
+				</copy>
+				<copy todir="${system.config.dir}" overwrite="true">
+					<fileset dir="${system.config.template.dir}" />
+					<globmapper from="*-template.properties" to="*.properties" />
+					<filterset refid="filtertoken3" />
+					<filterset refid="filtertoken4" />
+				</copy>
+				<if>
+					<equals arg1="${DB_TYPE}" arg2="mysql" />
+					<then>
+						<copy todir="${db-install.dist.mysql.relative.dir}" filtering="true">
+							<fileset dir="${db-install.dist.mysql.relative.dir}" />
+							<globmapper from="*-template.sql" to="*.sql" />
+							<filterset refid="filtertoken3" />
+							<filterset refid="filtertoken4" />
+						</copy>
+					</then>
+					<elseif>
+						<equals arg1="${DB_TYPE}" arg2="oracle" />
+						<then>
+							<copy todir="${db-install.dist.oracle.relative.dir}" filtering="true">
+								<fileset dir="${db-install.dist.oracle.relative.dir}" />
+								<globmapper from="*-template.sql" to="*.sql" />
+								<filterset refid="filtertoken3" />
+								<filterset refid="filtertoken4" />
+							</copy>
+						</then>
+					</elseif>
+				</if>
+			</sequential>
+		</outofdate>
+	</target>
+
+	<target name="replacetoken-contents-reconfigure" depends="-replace-templates-filter-tokens-reconfigure">
+
+		<delete dir="${system.config.dir}"/>
+
+		<copy todir="${system.config.dir}" filtering="true">
+			<fileset dir="${system.config.template.dir}" />
+			<globmapper from="*-template.xml" to="*.xml" />
+			<filterset refid="filtertoken3" />
+			<filterset refid="filtertoken4" />
+		</copy>
+		<copy todir="${system.config.dir}" filtering="true">
+			<fileset dir="${system.config.template.dir}" />
+			<globmapper from="*-template.wsdd" to="*.wsdd" />
+			<filterset refid="filtertoken3" />
+			<filterset refid="filtertoken4" />
+		</copy>
+		<copy todir="${system.config.dir}" filtering="true">
+			<fileset dir="${system.config.template.dir}" />
+			<globmapper from="*-template.config" to="*.config" />
+			<filterset refid="filtertoken3" />
+			<filterset refid="filtertoken4" />
+		</copy>
+		<copy todir="${system.config.dir}" filtering="true">
+			<fileset dir="${system.config.template.dir}" />
+			<globmapper from="*-template.properties" to="*.properties" />
+			<filterset refid="filtertoken3" />
+			<filterset refid="filtertoken4" />
+		</copy>
+		<copy todir="${system.config.dir}">
+			<fileset dir="${system.config.template.dir}">
+				<include name="**/*.*" />
+				<exclude name="**/*-template*.*" />
+				<exclude name="${system.config.security.dir}/${csm.ehcache.file}" />
+				<exclude name="${system.config.security.dir}/${csm.security.config.original.file}" />
+			</fileset>
+		</copy>
+		<copy todir="${output.src.dir}" file="${system.config.security.dir}/${csm.ehcache.file}" />
+		<copy tofile="${output.src.dir}/${csm.security.config.file}" file="${system.config.security.dir}/${csm.security.config.original.file}" />
+	</target>
+
+	<target name="replace-install-token-contents" depends="replacetoken-contents-reconfigure,replacetoken-contents-install-database"/>
+	<target name="replace-upgrade-token-contents" depends="replacetoken-contents-reconfigure"/>
+
+
+
+	<!-- #################################################################### -->
+	<!-- ######################### Main targets ############################# -->
+	<!-- #################################################################### -->
+
+	<target name="package-install-system" description="Packages the system" depends="
+		init-install,
+		package-remote-client,
+		package-local-client,
+		package-ws-client,
+		package-server
+		"/>
+	
+	<target name="package-upgrade-system" description="Packages the system" depends="
+		init-upgrade,
+		package-remote-client,
+		package-local-client,
+		package-ws-client,
+		package-server
+		"/>
+	
+	<target name="init-install" depends="replace-install-token-contents,-rejar-orm" description="initializes the packaging"/>
+	
+	<target name="init-upgrade" depends="replace-upgrade-token-contents,-rejar-orm" description="initializes the packaging"/>
+
+
+	<target name="-rejar-orm" depends="-replace-templates-filter-tokens-reconfigure">
+		<mkdir dir="${output.target.dir}" />
+		<delete dir="${temp.orm.dir}"/>
+		<mkdir dir="${temp.orm.dir}"/>
+		<delete file="${output.target.dir}/${orm.file}"/>
+
+		<copy todir="${temp.orm.dir}">
+			<fileset dir="${output.src.dir}">
+				<include name="**/*.hbm.xml" />
+				<include name="*.cfg.xml" />
+				<include name="ehcache.xml" />
+				<exclude name="${csm.ehcache.file}" />
+				<exclude name="${csm.security.config.file}" />
+			</fileset>
+			<filterset refid="filtertoken3" />
+			<filterset refid="filtertoken4" />
+		</copy>
+
+		<jar destfile="${output.target.dir}\${orm.file}" basedir="${temp.orm.dir}">
+			<manifest>
+				<attribute name="Generated-By" value="caCORE SDK Code Generator" />
+				<attribute name="Version" value="${VERSION}" />
+			</manifest>
+			<include name="**/*.*" />
+		</jar>
+		<delete dir="${temp.orm.dir}"/>
+	</target>
+
+
+	<!-- #################################################################### -->
+	<!-- ##################### Local Client targets ######################### -->
+	<!-- #################################################################### -->
+
+	<target name="package-local-client" depends="
+		-package-local-client-core,
+		-package-local-client-writable-api,
+		-package-local-client-security,
+		-package-local-client-grid-security,
+		-package-local-client-logging
+		"/>
+
+	<target name="-package-local-client-core" depends="">
+		<delete includeemptydirs="true" failonerror="false">
+			<fileset dir="${package.client.local.dir}" includes="**/*.*" />
+		</delete>
+		<copy todir="${package.client.local.lib.dir}">
+			<fileset dir="${localclient.lib.dir}" />
+			<fileset dir="${output.target.dir}" />
+		</copy>
+		<copy todir="${package.client.local.dir}">
+			<fileset dir="${system.config.client.local.dir}">
+				<exclude name="**/*template*" />
+			</fileset>
+		</copy>
+		<copy todir="${package.client.local.conf.dir}">
+			<fileset dir="${system.config.web.classes.dir}">
+				<include name="${application.config.file}" />
+				<include name="${application.config.security.file}" />
+			</fileset>
+		</copy>
+		<copy todir="${package.client.local.lib.dir}">
+			<fileset dir="${drivers.lib.dir}">
+				<include name="**/*.jar" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="-package-local-client-writable-api" depends="">
+		<if>
+			<equals arg1="${WRITABLE_API_EXTENSION_ENABLED}" arg2="true" />
+			<then>
+				<echo message="writable api enabled" />
+				<copy todir="${package.client.local.lib.dir}">
+					<fileset dir="${writable.api.lib.dir}" />
+				</copy>
+			</then>
+		</if>
+	</target>
+
+	<target name="-package-local-client-logging" depends="">
+		<if>
+			<equals arg1="${ENABLE_CLM_LOGGER_CFG_GENERATION}" arg2="true" />
+			<then>
+				<echo message="system logging enabled" />
+				<copy todir="${package.client.local.lib.dir}">
+					<fileset dir="${system.logging.lib.dir}" />
+				</copy>
+				<copy todir="${package.client.local.conf.dir}">
+					<fileset dir="${output.src.dir}">
+						<include name="${clm.object.state.logger.config}" />
+					</fileset>
+				</copy>
+			</then>
+		</if>
+	</target>
+
+	<target name="-package-local-client-security" depends="">
+		<if>
+			<equals arg1="${SECURITY_ENABLED}" arg2="true" />
+			<then>
+				<echo message="security enabled" />
+				<copy todir="${package.client.local.lib.dir}" overwrite="true">
+					<fileset dir="${security.api.lib.dir}" />
+				</copy>
+				<copy todir="${package.client.local.dir}" overwrite="true">
+					<fileset dir="${system.config.client.csm-security.dir}" />
+				</copy>
+				<copy todir="${package.client.local.conf.dir}" overwrite="true">
+					<fileset dir="${system.config.security.dir}" includes="${csm.ehcache.file}" />
+				</copy>
+				<copy tofile="${package.client.local.conf.dir}/${csm.security.config.file}" file="${system.config.security.dir}/${csm.security.config.original.file}" overwrite="true" />
+			</then>
+		</if>
+	</target>
+
+	<target name="-package-local-client-grid-security" depends="">
+		<if>
+			<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true" />
+			<then>
+				<echo message="Grid Jaas enabled" />
+				<copy todir="${package.client.local.lib.dir}" overwrite="true">
+					<fileset dir="${grid.jaas.api.lib.dir}" />
+					<fileset dir="${grid-login-service.lib.dir}"/>
+					<fileset dir="${server-tomcat.lib.dir}" excludes="xercesImpl*.*"/>
+				</copy>
+				<copy todir="${package.client.local.dir}" overwrite="true">
+					<fileset dir="${system.config.client.grid-jaas.dir}" />
+				</copy>
+				<copy todir="${package.client.local.conf.dir}" overwrite="true">
+					<fileset dir="${system.config.security.dir}" includes="${csm.ehcache.file}" />
+					<fileset dir="${system.config.web.classes.dir}">
+						<include name="${application.config.security.file}" />
+					</fileset>
+					<fileset dir="${system.config.grid.loginService.webinf.dir}/classes">
+						<include name="grid-login-service-config.xml" />
+					</fileset>
+					<fileset dir="${grid.dist.relative.dir}/${TARGET_GRID}" includes="sync-description.xml"/>
+				</copy>
+				<copy tofile="${package.client.local.conf.dir}/${csm.security.config.file}" file="${system.config.security.dir}/${csm.security.config.original.file}" overwrite="true" />
+			</then>
+		</if>
+	</target>
+
+
+	<!-- #################################################################### -->
+	<!-- ##################### Remote Client targets ######################## -->
+	<!-- #################################################################### -->
+
+	<target name="package-remote-client" depends="
+		-package-remote-client-core,
+		-package-remote-client-writable-api,
+		-package-remote-client-security,
+		-package-remote-client-grid-security
+		" />
+
+	<target name="-package-remote-client-core" depends="">
+		<delete includeemptydirs="true" failonerror="false">
+			<fileset dir="${package.client.remote.dir}" includes="**/*.*" />
+		</delete>
+		<echo>=================================</echo>
+		<echo>
+		${package.client.remote.lib.dir}
+		${remoteclient.lib.dir}
+		${output.target.dir}
+		</echo>
+		<copy todir="${package.client.remote.lib.dir}">
+			<fileset dir="${remoteclient.lib.dir}" />
+			<fileset dir="${output.target.dir}">
+				<include name="${bean.file}" />
+				<include name="${schema.file}" />
+			</fileset>
+		</copy>
+		<copy todir="${package.client.remote.dir}">
+			<fileset dir="${system.config.client.remote.dir}">
+				<exclude name="**/*template*" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="-package-remote-client-writable-api" depends="">
+		<if>
+			<equals arg1="${WRITABLE_API_EXTENSION_ENABLED}" arg2="true" />
+			<then>
+				<echo message="writable api enabled" />
+				<copy todir="${package.client.remote.lib.dir}">
+					<fileset dir="${writable.api.client.lib.dir}" />
+				</copy>
+			</then>
+		</if>
+	</target>
+
+	<target name="-package-remote-client-security" depends="">
+		<if>
+			<equals arg1="${SECURITY_ENABLED}" arg2="true" />
+			<then>
+				<echo message="security enabled" />
+				<copy todir="${package.client.remote.lib.dir}" overwrite="true">
+					<fileset dir="${security.api.client.lib.dir}" />
+				</copy>
+				<copy todir="${package.client.remote.dir}" overwrite="true">
+					<fileset dir="${system.config.client.csm-security.dir}" includes="**/*.java" />
+				</copy>
+			</then>
+		</if>
+	</target>
+
+	<target name="-package-remote-client-grid-security" depends="">
+		<copy todir="${package.client.remote.lib.dir}" overwrite="true">
+			<fileset dir="${grid-login-service.lib.dir}">
+				<include name="sdk-grid-remoting*.*"/>
+				<include name="axis*.*"/>
+				<include name="jaxrpc*.*"/>
+			</fileset>
+		</copy>
+
+		<if>
+			<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true" />
+			<then>
+				<echo message="Grid Jaas enabled" />
+				<copy todir="${package.client.remote.lib.dir}" overwrite="true">
+					<fileset dir="${grid.jaas.api.client.lib.dir}" />
+					<fileset dir="${grid.jaas.api.lib.dir}" />
+					<fileset dir="${grid-login-service.lib.dir}"/>
+					<fileset dir="${server-tomcat.lib.dir}" excludes="xercesImpl*.*"/>
+				</copy>
+				<copy todir="${package.client.remote.dir}" overwrite="true">
+					<fileset dir="${system.config.client.grid-jaas.dir}" />
+				</copy>
+				<copy todir="${package.client.remote.conf.dir}" overwrite="true">
+					<fileset dir="${system.config.grid.loginService.webinf.dir}/classes">
+						<include name="grid-login-service-config.xml" />
+					</fileset>
+					<fileset dir="${grid.dist.relative.dir}/${TARGET_GRID}" includes="sync-description.xml"/>
+				</copy>
+			</then>
+		</if>
+	</target>
+
+
+	<!-- #################################################################### -->
+	<!-- ######################## WS Client targets ######################### -->
+	<!-- #################################################################### -->
+
+	<target name="package-ws-client">
+		<mkdir dir="${package.client.ws.dir}" />
+		<copy todir="${package.client.ws.lib.dir}">
+			<fileset dir="${ws-client.lib.dir}" />
+			<fileset dir="${output.target.dir}">
+				<include name="${bean.file}" />
+			</fileset>
+		</copy>
+
+		<copy todir="${package.client.ws.dir}">
+			<fileset dir="${system.config.client.ws.dir}">
+				<exclude name="**/*template*" />
+			</fileset>
+		</copy>
+	</target>
+
+
+	<!-- #################################################################### -->
+	<!-- ##################### Package war targets ########################## -->
+	<!-- #################################################################### -->
+
+	<target name="-staging-war" depends="">
+		<mkdir dir="${temp.webapp.staging.lib.dir}" />
+		<mkdir dir="${temp.webapp.staging.classes.dir}" />
+
+		<copy todir="${temp.webapp.staging.lib.dir}" overwrite="true">
+			<fileset dir="${webapp.lib.dir}" excludes="cog*.*" />
+			<fileset dir="${output.target.dir}" excludes="cog*.*">
+				<include name="${bean.file}" />
+				<include name="${orm.file}" />
+			</fileset>
+		</copy>
+
+		<if>
+			<equals arg1="${USE_CONNECTION_POOL}" arg2="true" />
+			<then>
+				<echo message="using c3p connection pooling database" />
+				<copy todir="${temp.webapp.staging.lib.dir}" overwrite="true">
+					<fileset dir="${drivers.lib.dir}">
+						<include name="**/*.jar" />
+					</fileset>
+				</copy>
+			</then>
+		</if>
+
+		<if>
+			<equals arg1="${WRITABLE_API_EXTENSION_ENABLED}" arg2="true" />
+			<then>
+				<echo message="writable api enabled" />
+				<copy todir="${temp.webapp.staging.lib.dir}" overwrite="true">
+					<fileset dir="${writable.api.lib.dir}" />
+				</copy>
+			</then>
+		</if>
+
+		<if>
+			<equals arg1="${ENABLE_CLM_LOGGER_CFG_GENERATION}" arg2="true" />
+			<then>
+				<echo message="system logging enabled" />
+				<copy todir="${temp.webapp.staging.lib.dir}" overwrite="true">
+					<fileset dir="${system.logging.lib.dir}" />
+				</copy>
+				<copy todir="${temp.webapp.staging.classes.dir}" overwrite="true">
+					<fileset dir="${output.src.dir}">
+						<include name="${clm.object.state.logger.config}" />
+					</fileset>
+				</copy>
+			</then>
+		</if>
+
+		<if>
+			<equals arg1="${SECURITY_ENABLED}" arg2="true" />
+			<then>
+				<echo message="security enabled" />
+				<copy todir="${temp.webapp.staging.lib.dir}" overwrite="true">
+					<fileset dir="${security.api.lib.dir}" />
+				</copy>
+				<copy todir="${temp.webapp.staging.classes.dir}" overwrite="true">
+					<fileset dir="${system.config.client.csm-security.dir}/conf">
+						<include name="login.config" />
+					</fileset>
+				</copy>
+				<copy todir="${temp.webapp.staging.classes.dir}" overwrite="true">
+					<fileset dir="${system.config.security.dir}" includes="${csm.ehcache.file}" />
+					<fileset dir="${system.config.web.classes.dir}">
+						<include name="${application.config.security.file}" />
+					</fileset>
+				</copy>
+				<copy tofile="${temp.webapp.staging.classes.dir}/${csm.security.config.file}" file="${system.config.security.dir}/${csm.security.config.original.file}" overwrite="true" />
+			</then>
+		</if>
+
+		<if>
+			<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true" />
+			<then>
+				<echo message="Grid Jaas enabled" />
+				<copy todir="${temp.webapp.staging.lib.dir}" overwrite="true">
+					<fileset dir="${grid.jaas.api.client.lib.dir}" excludes="cog*.*" />
+				</copy>
+				<copy todir="${temp.webapp.staging.classes.dir}" overwrite="true">
+					<fileset dir="${system.config.security.dir}" includes="${csm.ehcache.file}" />
+					<fileset dir="${system.config.web.classes.dir}">
+						<include name="${application.config.security.file}" />
+					</fileset>
+				</copy>
+				<copy tofile="${temp.webapp.staging.classes.dir}/${csm.security.config.file}" file="${system.config.security.dir}/${csm.security.config.original.file}" overwrite="true" />
+			</then>
+		</if>
+
+		<if>
+			<not>
+				<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true" />
+			</not>
+			<then>
+				<copy todir="${temp.webapp.staging.lib.dir}" overwrite="true">
+					<fileset dir="${server-tomcat.lib.dir}">
+						<include name="xalan*.*" />
+					</fileset>
+				</copy>
+			</then>
+		</if>
+	</target>
+
+	<target name="-build-project-war" depends="-staging-war">
+		<echo message="building war in dir ${param.server.webapps.dir}\${PROJECT_NAME}.war" />
+		<war destfile="${param.server.webapps.dir}\${PROJECT_NAME}.war" webxml="${system.config.client.webapp.dir}/WEB-INF/web.xml">
+			<manifest>
+				<attribute name="Generated-By" value="caCORE SDK Code Generator" />
+				<attribute name="Version" value="${VERSION}" />
+			</manifest>
+			<lib dir="${temp.webapp.staging.lib.dir}">
+				<exclude name="cog*.*"/>
+				<exclude name="${server-exclude-list}" />
+			</lib>
+			<fileset dir="${output.project.dir}/web">
+				<include name="**/*" />
+			</fileset>
+			<fileset dir="${output.codegen.dir}">
+				<include name="${javadoc.relative.dir}/**/*.*" />
+			</fileset>
+			<fileset dir="${system.config.client.webapp.dir}">
+				<include name="**/*" />
+				<exclude name="**/web.xml" />
+				<exclude name="**/*template*.xml" />
+
+				<exclude name="${server-exclude-classes-list}" />
+			</fileset>
+			<webinf dir="${output.src.dir}">
+				<include name="server-config.wsdd" />
+			</webinf>
+
+			<classes dir="${temp.webapp.staging.classes.dir}" />
+		</war>
+		<delete dir="${temp.webapp.staging.dir}" includeemptydirs="true">
+		</delete>
+	</target>
+
+	<target name="-build-grid-login-service-war" depends="">
+		<war destfile="${param.server.webapps.dir}\${SDK_GRID_LOGIN_SERVICE_NAME}.war" webxml="${system.config.grid.loginService.webinf.dir}/web.xml">
+			<manifest>
+				<attribute name="Generated-By" value="caCORE SDK Code Generator" />
+				<attribute name="Version" value="${VERSION}" />
+			</manifest>
+			<lib dir="${grid-login-service.lib.dir}" includes="*.jar">
+				<exclude name="${server-exclude-list}" />
+				<exclude name="commons-logging*.*" />
+				<exclude name="cog-jglobus*.*" />
+				<exclude name="cryptix*.*" />
+				<exclude name="jce-jdk*.*" />
+				<exclude name="puretls*.*" />
+				<exclude name="xml-api*.*" />
+				<exclude name="xercesImpl*.*" />
+				<exclude name="jgss*.*" />
+			</lib>
+			<fileset dir="${system.config.grid.loginService.dir}">
+				<include name="**/*" />
+				<exclude name="**/web.xml" />
+				<exclude name="**/*template*" />
+			</fileset>
+			<classes dir="${grid.dist.relative.dir}/${TARGET_GRID}" includes="sync-description.xml"/>
+
+		</war>
+	</target>
+
+	<!-- #################################################################### -->
+	<!-- ########################## Server targets ########################## -->
+	<!-- #################################################################### -->
+
+	<target name="-package-tomcat-server" depends="">
+		<if>
+			<or>
+				<equals arg1="${DB_USE_JNDI_BASED_CONNECTION}" arg2="true" />
+				<and>
+					<equals arg1="${SECURITY_ENABLED}" arg2="true" />
+					<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="true" />
+				</and>
+				<and>
+					<equals arg1="${SECURITY_ENABLED}" arg2="true" />
+					<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true" />
+				</and>
+			</or>
+			<then>
+				<copy tofile="${package.client.tomcat.context.dir}/${PROJECT_NAME}.xml" file="${system.config.server.context.dir}/${file.project.Context}" />
+				<copy todir="${package.client.tomcat.common.lib.dir}">
+					<fileset dir="${drivers.lib.dir}">
+						<include name="**/*.jar" />
+						<exclude name="**/*c3p*.jar" />
+					</fileset>
+				</copy>
+			</then>
+			<else>
+				<echo message="USE_JNDI_BASED_CONNECTION or SECURITY_ENABLED and CSM_USE_JNDI_BASED_CONNECTION set to false" />
+			</else>
+		</if>
+
+		<if>
+			<equals arg1="${SECURITY_ENABLED}" arg2="true" />
+			<then>
+				<copy todir="${package.client.tomcat.serverxml.dir}">
+					<fileset dir="${system.config.server.serverxml.dir}">
+						<include name="**/login.config" />
+					</fileset>
+				</copy>
+			</then>
+			<else />
+		</if>
+
+		<if>
+			<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true" />
+			<then>
+				<echo message="Grid Login Module Enabled" />
+				<mkdir dir="${package.client.tomcat.dir}/common/endorsed" />
+				<mkdir dir="${package.client.tomcat.dir}/common/lib" />
+				<mkdir dir="${package.client.tomcat.dir}/server/lib" />
+				<mkdir dir="${package.client.tomcat.dir}/conf" />
+				<mkdir dir="${package.client.tomcat.dir}/conf/Catalina" />
+				<mkdir dir="${package.client.tomcat.dir}/conf/Catalina/localhost" />
+				<copy todir="${package.client.tomcat.dir}/common/endorsed">
+					<fileset dir="${server-tomcat.lib.dir}">
+						<include name="xalan*.*" />
+						<include name="xml-apis*.*" />
+						<include name="xercesImpl*.*" />
+					</fileset>
+				</copy>
+
+				<copy todir="${package.client.tomcat.serverxml.dir}">
+					<fileset dir="${system.config.server.serverxml.dir}">
+						<include name="**/server*.xml" />
+					</fileset>
+				</copy>
+				<copy todir="${package.client.tomcat.dir}/common/lib">
+					<fileset dir="${server-tomcat.lib.dir}">
+						<include name="cog-jglobus*.*" />
+						<include name="cog-axis*.*" />
+						<include name="cryptix*.*" />
+						<include name="jce-jdk*.*" />
+						<include name="puretls*.*" />
+						<include name="xml-apis*.*" />
+						<include name="jgss*.*" />
+						<include name="log4j*.*" />
+						<include name="ojdbc*.*" />
+						<include name="mysql*.*" />
+						<include name="sdk-grid-jaas-jndi-binder*.*" />
+					</fileset>
+				</copy>
+				<copy todir="${package.client.tomcat.dir}/server/lib">
+					<fileset dir="${server-tomcat.lib.dir}">
+						<include name="cog-tomcat*.*" />
+					</fileset>
+				</copy>
+				<copy tofile="${package.client.tomcat.context.dir}/${SDK_GRID_LOGIN_SERVICE_NAME}.xml" file="${system.config.server.context.dir}/${file.grid.loginService.Context}" />
+			</then>
+			<else>
+				<echo message="SECURITY_ENABLED or ENABLE_GRID_LOGIN_MODULE set to false" />
+			</else>
+		</if>
+	</target>
+
+	<target name="-package-jboss-server" depends="">
+		<if>
+			<or>
+				<equals arg1="${DB_USE_JNDI_BASED_CONNECTION}" arg2="true" />
+				<and>
+					<equals arg1="${SECURITY_ENABLED}" arg2="true" />
+					<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="true" />
+				</and>
+				<and>
+					<equals arg1="${SECURITY_ENABLED}" arg2="true" />
+					<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true" />
+				</and>
+			</or>
+			<then>
+				<copy tofile="${package.client.jboss.default.deploy.dir}/${PROJECT_NAME}-ds.xml"
+					file="${system.config.jboss.server.default.deploy.dir}/${file.project.Context}" />
+
+				<copy todir="${package.client.jboss.default.lib.dir}">
+					<fileset dir="${drivers.lib.dir}">
+						<include name="**/*.jar" />
+					</fileset>
+				</copy>
+			</then>
+			<else>
+				<echo
+					message="USE_JNDI_BASED_CONNECTION or SECURITY_ENABLED and CSM_USE_JNDI_BASED_CONNECTION set to false" />
+			</else>
+		</if>
+
+		<if>
+			<equals arg1="${SECURITY_ENABLED}" arg2="true" />
+			<then>
+				<copy todir="${package.client.jboss.default.conf.dir}">
+					<fileset dir="${system.config.jboss.server.default.conf.dir}">
+						<include name="${login-config.block.file}" />
+					</fileset>
+				</copy>
+			</then>
+			<else />
+		</if>
+
+		<if>
+			<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true" />
+			<then>
+				<echo message="Grid Login Module Enabled" />
+				<mkdir dir="${package.client.jboss.default.lib.dir}" />
+				<copy todir="${package.client.jboss.default.conf.dir}">
+					<fileset dir="${system.config.jboss.server.default.conf.dir}">
+						<include name="${login-config.grid.block.file}" />
+					</fileset>
+				</copy>
+				<copy todir="${package.client.jboss.default.lib.dir}">
+					<fileset dir="${server-jboss.lib.dir}">
+						<include name="cog-jglobus*.*" />
+						<include name="cog-tomcat*.*" />
+						<include name="cog-axis*.*" />
+						<include name="cryptix*.*" />
+						<include name="jce-jdk*.*" />
+						<include name="puretls*.*" />
+						<include name="xml-apis*.*" />
+					</fileset>
+				</copy>
+			</then>
+			<else>
+				<echo message="SECURITY_ENABLED or ENABLE_GRID_LOGIN_MODULE set to false" />
+			</else>
+		</if>
+
+		<if>
+			<equals arg1="${ENABLE_CLM_LOGGER_CFG_GENERATION}" arg2="true" />
+			<then>
+				<echo message="system logging enabled" />
+				<mkdir dir="${package.client.jboss.default.lib.dir}" />
+				<copy todir="${package.client.jboss.default.lib.dir}">
+					<fileset dir="${system.logging.lib.dir}" includes="**/clm*.jar"/>
+				</copy>
+			</then>
+		</if>
+		
+	</target>
+
+	<target name="package-server">
+		<delete dir="${package.client.server.dir}"/>
+		<if>
+			<equals arg1="${SERVER_TYPE}" arg2="jboss" />
+			<then>
+				<antcall target="-package-jboss-server" />
+				<property name="param.server.webapps.dir" location="${package.client.jboss.dir}/server/default/deploy"/>
+			</then>
+			<else>
+				<antcall target="-package-tomcat-server" />
+				<property name="param.server.webapps.dir" location="${package.client.tomcat.dir}/webapps"/>
+			</else>
+		</if>
+
+		<mkdir dir="${param.server.webapps.dir}" />
+		<antcall target="-build-project-war">
+			<param name="param.server.webapps.dir" value="${param.server.webapps.dir}" />
+		</antcall>
+		<if>
+			<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true" />
+			<then>
+				<antcall target="-build-grid-login-service-war">
+					<param name="param.server.webapps.dir" value="${param.server.webapps.dir}" />
+				</antcall>
+			</then>
+		</if>
+	</target>
+</project>
