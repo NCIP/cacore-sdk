@@ -22,7 +22,7 @@
 	</target>
 
 	<target name="clean" description="cleans the dist folder">
-		<mkdir dir="${temp.dir}"/>
+		<delete dir="${temp.dir}"/>
 	</target>
 
 	<target name="package" depends="clean,init,-systemdocs,-package-software">
@@ -46,10 +46,10 @@
 	<target name="-package-software" description="Packages the entire system">
 		<zip destfile="${dist.dir}/${workbench.src.file}" whenempty="skip">
 			<zipfileset dir="${workbench.base.dir}">
-				<exclude name="**/bin/**/*.*"/>
-				<exclude name="**/target/**/*.*"/>
-				<exclude name="**/local-ivy-repo/**/*.*"/>
-				<exclude name="${dist.dir}/**/*"/>
+				<exclude name="**/bin/**"/>
+				<exclude name="**/target/**"/>
+				<exclude name="**/local-ivy-repo/**"/>
+				<exclude name="**/dist/**"/>
 				<exclude name=".project"/>
 				<exclude name=".classpath"/>
 				<exclude name="build.xml"/>
