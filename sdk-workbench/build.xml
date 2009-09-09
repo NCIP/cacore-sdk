@@ -25,7 +25,12 @@
 		<delete dir="${temp.dir}"/>
 	</target>
 
-	<target name="package" depends="clean,init,-systemdocs,-package-software">
+	<target name="package" depends="clean,init,-systemdocs,-package:sdk:src,-package-software">
+	</target>
+	
+	<target name="-package:sdk:src" description="Packages the SDK Toolkit for inclusion with the Workbench">
+		<ant antfile="build.xml" target="package:sdk:src" dir="workbench-project/software/build" inheritall="false" inheritrefs="false">
+		</ant>
 	</target>
 
 	<!--***********************************************************************
@@ -48,6 +53,7 @@
 			<zipfileset dir="${workbench.base.dir}">
 				<exclude name="**/bin/**"/>
 				<exclude name="**/target/**"/>
+				<exclude name="**/bda-local-ivy-repo/**"/>
 				<exclude name="**/local-ivy-repo/**"/>
 				<exclude name="**/dist/**"/>
 				<exclude name=".project"/>

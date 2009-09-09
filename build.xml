@@ -18,15 +18,9 @@
 		</ant>
 	</target>
 	
-	<target name="package-software-sdk-workbench" depends="-package-software-sdk-within-workbench" description="Packages the entire workbench system">
+	<target name="package-software-sdk-workbench" depends="" description="Packages the entire workbench system">
 		<ant antfile="build.xml" target="package" dir="sdk-workbench" inheritall="true">
 			<property name="dist.dir" value="../dist"/>
-		</ant>
-	</target>
-	
-	<target name="-package-software-sdk-within-workbench" description="Packages the entire workbench system">
-		<ant antfile="build.xml" target="package" dir="sdk-toolkit" inheritall="true">
-			<property name="dist.dir" value="${basedir}/sdk-workbench/workbench-project/software/common/resources/sdk-dist"/>
 		</ant>
 	</target>
 	
