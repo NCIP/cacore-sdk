@@ -1,3 +1,6 @@
-Build and Depolyment
-===========================
-For build and deployment instructions please refer to the  BDA Project WIKI at https://wiki.nci.nih.gov/x/OZx8.
+The SDK now supports both code generation and automated deployment.
+
+To build and deploy the SDK 'example' project:
+*  Open /example-project/build directory;
+*  Modify the code generation (codegen.properties) and deployment (install.properties) property files as desired for your environment
+*  Open the build.xml file and execute the 'deploy:local:install' target
