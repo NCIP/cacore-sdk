@@ -1,0 +1,25 @@
+<!-- *********************************************************************** -->
+<!-- ** PROJECT:   BDA Blueprints Web Application                         ** -->
+<!-- *********************************************************************** -->
+
+<project name="sdk-workbench-module" default="build:all" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant" xmlns="antlib:org.apache.tools.ant" xmlns:cs="antlib:com.puppycrawl.tools.checkstyle">
+
+	<property file="build.properties"/>
+	<property name="root.dir" value="${basedir}/../../.."/>
+	<property name="software.dir" value="${root.dir}/software"/>
+	<property name="modules.dir" value="${software.dir}/modules"/>
+	
+	<property name="conf.dir" value="${basedir}/conf" />
+
+	<import file="${modules.dir}/build-module.xml" />
+	
+	<target name="jar" depends="ivy:setup-runtime" >
+		<mkdir dir="${module.lib.dir}" />
+		<jar destfile="${module.lib.dir}/${jar.name}">
+			<fileset dir="${conf.dir}" excludes="**/SDK*.zip" />
+		</jar>
+	</target>
+	
+	<target name="build:all" depends="jar,ivy:publish" description="Default target" ></target>
+
+</project>

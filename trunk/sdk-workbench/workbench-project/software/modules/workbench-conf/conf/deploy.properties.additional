@@ -1,0 +1,22 @@
+#################################################################
+########### SDK Specific Properties #############################
+#################################################################
+#exclude.database=true
+#database.re-create=false
+
+##############
+### TOMCAT ###
+##############
+exclude.tomcat.backup=true
+
+########################
+###  JBOSS SETTINGS  ###
+########################
+exclude.jboss.backup=true
+
+###################################
+#  PRE-POST VALIDATION PROPERTIES #
+###################################
+validation.pre.port.list=${jboss.server.port},${jboss.server.jndi.port}
+validation.post.http.list=${jboss.server.port}
+validation.post.socket.list=${jboss.server.jndi.port}

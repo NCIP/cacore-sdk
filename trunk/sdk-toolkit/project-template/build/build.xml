@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="caCore SDK - Example Project" basedir="." default="">
+
+	<description>Build script for caCORE SDK Generator</description>
+
+	<!--***********************************************************************
+	*** Load the build properties from the file
+	*********************************************************************** -->
+	<property file="codegen.properties"  />
+
+	<property name="project.home" location="${basedir}/.." />
+	<property name="project.build.home" location="${project.home}/build" />
+	<property name="project.common.dir" location="${project.home}/common" />
+
+	<property name="root.dir" location="${SDK_INSTALL_DIR}" />
+	<property name="software.dir" location="${root.dir}/software" />
+	<property name="common.dir" value="${software.dir}/common" />
+
+	<property name="project.target.dir" value="${project.home}/target"/>
+	<property name="dist.dir" value="${project.target.dir}/dist"/>
+	<property name="dist.exploded.dir" value="${dist.dir}/exploded"/>
+	<property name="output.dir.location" value="${dist.exploded.dir}"/>
+	<property name="output.dir" value="${output.dir.location}/output"/>
+	<property name="db.src.dir" value="${project.home}/db"/>
+	<property name="MODEL_FILE_PATH" value="${project.home}/models/${MODEL_FILE}"/>
+	
+	<property name="properties.file" value="${project.build.home}/install.properties"/>
+	<replaceregexp file="${properties.file}" byline="true" match="^([\w\d.]+)=(.*[\w\d\/\{\}\\]+)[ \t]+\r*$" replace="\1=\2"/>
+	<replaceregexp file="${properties.file}" byline="true" match="^([\w\d.]+)=[ \t]+(.*[\w\d\/\{\}\\]+)\r*$" replace="\1=\2"/>
+	<property file="${properties.file}" />
+	<!-- added for remote deployments since file is copied to root of install dir -->
+	<basename property="properties.file.name" file="${properties.file}"/>
+	
+	<echo message="* * * properties.file: ${properties.file}" />
+	<echo message="* * * properties.file.name: ${properties.file.name}" />
+
+	<import file="${software.dir}/build/build.xml"/>
+	
+	<target name="clean:project" description="cleans this project">
+		<delete dir="${project.target.dir}" failonerror="false"/>
+	</target>
+
+	<target name="clean:all" description="cleans everything" depends="clean:project,ivy:clean,clean:target"/>
+
+</project>
