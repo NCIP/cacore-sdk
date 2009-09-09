@@ -13,7 +13,7 @@
 	*********************************************************************** -->
 	
 	<!-- Set the path to the SDK installation home (trunk) directory prior to running !!!-->
-	<property name="package.sdk.home" value="../../../.."  />
+	<property name="package.sdk.home" value="${basedir}/../../../../sdk-toolkit"  />
 	
 	<property file="build.properties" />
 	
@@ -172,7 +172,7 @@
 		</copy>
 	</target>
 	
-	<target name="package:sdk:src" description="Packages SDK Source Distribution, and Copies to Local Resource Folder ">
+	<target name="package:sdk:src" description="Packages SDK Source Distribution, and copies to local resource folder ">
 		<available file="${project.sdk.dist.dir}/${sdk.src.file}" property="sdk.src.file.exists"/>
 		<if>
 			<isset property="sdk.src.file.exists"/>
@@ -184,6 +184,8 @@
 				
 				<ant antfile="${package.sdk.home}/build.xml" target="package" inheritall="false" inheritrefs="false">
 					<property name="sdk.src.file" value="${sdk.src.file}" />
+					<property name="dist.dir" value="${package.sdk.home}/dist" />
+					<property name="software.dir" value="${package.sdk.home}/software" />
 				</ant>
 				<copy file="${package.sdk.home}/dist/${sdk.src.file}" todir="${project.sdk.dist.dir}" />
 
