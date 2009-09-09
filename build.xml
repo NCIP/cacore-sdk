@@ -5,7 +5,7 @@
 	</description>
 	
 
-	<target name="package" description="Packages the entire workbench system" depends="package-software-sdk,package-software-sdk-workbench">
+	<target name="package" description="Packages the SDK and Workbench applications for distribution" depends="package-software-sdk,package-software-sdk-workbench">
 	</target>
 	
 	<target name="package-software-sdk" description="Packages the entire workbench system">
