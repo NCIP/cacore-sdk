@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <project name="caCORE SDK - Packaging" default="package" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:cs="antlib:com.puppycrawl.tools.checkstyle">
 	<description>
-		
 	</description>
 	
+	<property name="dist.dir" value="dist"/>
+	
+	<target name="clean" description="cleans the dist folder">
+		<delete dir="${dist.dir}"/>
+	</target>
 
-	<target name="package" description="Packages the SDK and Workbench applications for distribution" depends="package-software-sdk,package-software-sdk-workbench">
+	<target name="package" description="Packages the SDK and Workbench applications for distribution" depends="clean,package-software-sdk,package-software-sdk-workbench">
 	</target>
 	
 	<target name="package-software-sdk" description="Packages the entire workbench system">
