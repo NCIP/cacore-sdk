@@ -1,8 +1,0 @@
-<ResourceParams name="GlobalSDKGridSecurityMap">
-	<parameter>
-		<name>factory</name>
-		<value>
-			gov.nih.nci.system.security.authentication.cagrid.executor.tomcat.TomcatJNDIBinderFactory
-		</value>
-	</parameter>
-</ResourceParams>
