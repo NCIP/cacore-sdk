@@ -1383,7 +1383,7 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
     		
     		String csmDbSchema = getCsmDbSchemaField().getText();
     		if (ValidationUtils.isNotBlank(csmDbSchema) && parentContainer.isAppDbAndCsmSchemaSame() && parentContainer.isAppDbDropSchemaSelected() ) {
-    			//TODO :: investigate if there is a way to visually signal that a CheckBox has a validtion error.
+    			//TODO :: investigate if there is a way to visually signal that a CheckBox has a validation error.
     			//        Currently, creating a validation error for the CheckBox has no effect.  As a result,
     			//        using toggleReCreateCsmDBFields() instead to enforce rule
 //    			if (getCsmDbDropSchemaCheckBox().isSelected()){
@@ -1392,7 +1392,7 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
 //    			}
     			
     			if (ValidationUtils.isBlank(this.getCsmDbSqlFileField().getText())) {
-    				result.add(new SimpleValidationMessage(CSM_DB_SQL_FILE + " must not be blank when both the App DB and CSM schema are the same.", Severity.ERROR, CSM_DB_SQL_FILE));
+    				result.add(new SimpleValidationMessage(CSM_DB_SQL_FILE + " must not be blank when the application DB is being dropped, and both the App DB and CSM schema are the same.", Severity.ERROR, CSM_DB_SQL_FILE));
     			}
     		}
 
