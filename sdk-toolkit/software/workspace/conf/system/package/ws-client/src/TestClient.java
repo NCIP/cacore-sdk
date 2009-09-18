@@ -44,12 +44,20 @@ public class TestClient
 		String url = properties.get("SERVER_URL")+ "/services/" +properties.get("WEBSERVICE_NAME");
 		Service  service = new Service();
 		Call call = null;
-
 		Boolean securityEnabled = false;
 		if (properties.get("SECURITY_ENABLED").equals("true")
-				|| properties.get("SECURITY_ENABLED").equals("yes")) 
+				|| properties.get("SECURITY_ENABLED").equals("yes")){ 
 			securityEnabled = true;	
-
+		}
+		
+		String username="/O=caBIG/OU=caGrid/OU=NCICB DEV LOA1/OU=Dorian/CN=SDKUser1";
+		
+		if(properties.get("GRID_LOGIN_MODULE_ENABLED").equals("true")
+				|| properties.get("GRID_LOGIN_MODULE_ENABLED").equals("yes")){
+			
+			username="SDKUser1";
+		}
+		
 		for(Class klass:classList)
 		{
 			if (!Modifier.isAbstract(klass.getModifiers())){
@@ -83,7 +91,7 @@ public class TestClient
 						headerElement.setPrefix("security");
 						headerElement.setMustUnderstand(false);
 						SOAPElement usernameElement = headerElement.addChildElement("username");
-						usernameElement.addTextNode("/O=caBIG/OU=caGrid/OU=NCICB DEV LOA1/OU=Dorian/CN=SDKUser1");
+						usernameElement.addTextNode(username);
 						SOAPElement passwordElement = headerElement.addChildElement("password");
 						passwordElement.addTextNode("Psat123!@#");
 						call.addHeader(headerElement);				
@@ -116,7 +124,7 @@ public class TestClient
 											field = getField(obj, rolename);
 										}
 										rolename = field.getName();
-										testGetAssociation(url, service, obj, method.getReturnType(), rolename, securityEnabled);
+										testGetAssociation(url, service, obj, method.getReturnType(), rolename, securityEnabled,username);
 									}
 								}
 							}
@@ -133,7 +141,7 @@ public class TestClient
 	}
 
 
-	private void testGetAssociation(String url, Service service, Object containingObj, Class associationClass, String rolename, Boolean securityEnabled) throws Exception {
+	private void testGetAssociation(String url, Service service, Object containingObj, Class associationClass, String rolename, Boolean securityEnabled,String username) throws Exception {
 		//Sample Scenario:  http://localhost:8080/example/GetHTML?query=Bank&Credit[@id=3]&roleName=issuingBank
 
 		Call call = (Call) service.createCall();
@@ -156,11 +164,12 @@ public class TestClient
 		call.setReturnType(org.apache.axis.encoding.XMLType.SOAP_ARRAY);
 
 		if (securityEnabled == true){
+				
 			SOAPHeaderElement headerElement = new SOAPHeaderElement(call.getOperationName().getNamespaceURI(),"SecurityHeader");
 			headerElement.setPrefix("security");
 			headerElement.setMustUnderstand(false);
 			SOAPElement usernameElement = headerElement.addChildElement("username");
-			usernameElement.addTextNode("/O=caBIG/OU=caGrid/OU=NCICB DEV LOA1/OU=Dorian/CN=SDKUser1");
+			usernameElement.addTextNode(username);
 			SOAPElement passwordElement = headerElement.addChildElement("password");
 			passwordElement.addTextNode("Psat123!@#");
 			call.addHeader(headerElement);				

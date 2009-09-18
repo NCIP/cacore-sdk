@@ -307,6 +307,7 @@
 			<filter token="CSM_DB_PASSWORD" value="${CSM_DB_PASSWORD}" />
 			<filter token="CSM_DB_DIALECT" value="${CSM_DB_DIALECT}" />
 			<filter token="ENABLE_SECURITY" value="${ENABLE_SECURITY}" />
+			<filter token="GRID_LOGIN_MODULE_ENABLED" value="${GRID_LOGIN_MODULE_ENABLED}" />
 
 			<filter token="CLM_DB_DRIVER" value="${CLM_DB_DRIVER}" />
 			<filter token="CLM_DB_CONNECTION_URL" value="${CLM_DB_CONNECTION_URL}" />
