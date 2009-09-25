@@ -975,8 +975,17 @@
 		">
 		<if>
 			<equals arg1="${DB_DROP_SCHEMA}" arg2="true"/>
-			<then>
-				<database-clean database.driver="${DB_DRIVER}" database.url="${DB_CONNECTION_URL}" database.user="${DB_USERNAME}" database.password="${DB_PASSWORD}" database.schema="${DB_NAME}" database.re-create="false" database.drop-schema="${DB_DROP_SCHEMA}" />
+			<then>				
+				<if>
+					<equals arg1="${DB_TYPE}" arg2="oracle"/>
+					<then>
+						<property name="TEMP_DB_SCHEMA" value="${DB_USERNAME}"/>
+					</then>
+					<else>
+						<property name="TEMP_DB_SCHEMA" value="${DB_NAME}"/>	
+					</else>
+				</if>
+				<database-clean database.driver="${DB_DRIVER}" database.url="${DB_CONNECTION_URL}" database.user="${DB_USERNAME}" database.password="${DB_PASSWORD}" database.schema="${TEMP_DB_SCHEMA}" database.re-create="false" database.drop-schema="${DB_DROP_SCHEMA}" />
 				<execute-database-install database.type="${DB_TYPE}" database.url="${DB_CONNECTION_URL}" database.user="${DB_USERNAME}" database.password="${DB_PASSWORD}" db.install.create.oracle.file.list="${db.install.create.oracle.file.list}" db.install.create.mysql.file.list="${db.install.create.mysql.file.list}"/>
 			</then>
 		</if>
@@ -986,7 +995,16 @@
 				<equals arg1="${SECURITY_ENABLED}" arg2="true"/>
 			</and>
 			<then>
-				<database-clean database.driver="${CSM_DB_DRIVER}" database.url="${CSM_DB_CONNECTION_URL}" database.user="${CSM_DB_USERNAME}" database.password="${CSM_DB_PASSWORD}" database.schema="${CSM_DB_NAME}" database.re-create="false" database.drop-schema="${CSM_DB_DROP_SCHEMA}" />
+				<if>
+					<equals arg1="${DB_TYPE}" arg2="oracle"/>
+					<then>
+						<property name="TEMP_DB_SCHEMA" value="${DB_USERNAME}"/>
+					</then>
+					<else>
+						<property name="TEMP_DB_SCHEMA" value="${DB_NAME}"/>	
+					</else>
+				</if>
+				<database-clean database.driver="${CSM_DB_DRIVER}" database.url="${CSM_DB_CONNECTION_URL}" database.user="${CSM_DB_USERNAME}" database.password="${CSM_DB_PASSWORD}" database.schema="${TEMP_DB_SCHEMA}" database.re-create="false" database.drop-schema="${CSM_DB_DROP_SCHEMA}" />
 				<execute-database-install database.type="${CSM_DB_TYPE}" database.url="${CSM_DB_CONNECTION_URL}" database.user="${CSM_DB_USERNAME}" database.password="${CSM_DB_PASSWORD}" db.install.create.oracle.file.list="${csm.db.install.create.oracle.file.list}" db.install.create.mysql.file.list="${csm.db.install.create.mysql.file.list}"/>
 			</then>
 		</if>
