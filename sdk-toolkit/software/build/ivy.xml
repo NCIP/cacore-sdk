@@ -78,8 +78,8 @@
 
 		<!-- security enabled jars -->
 		<dependency org="ncicb" name="sdk-security-module" rev="latest.integration" conf="security-api->compile"/>		
-		<dependency org="ncicb" name="clm" rev="4.0" conf="security-api->compile" />
-		<dependency org="ncicb" name="csm" rev="4.1.beta" conf="security-api->compile" />
+		<dependency org="ncicb" name="clm" rev="4.1" conf="security-api->compile" />
+		<dependency org="ncicb" name="csm" rev="4.2" conf="security-api->compile" />
 		
 		<dependency org="ncicb" name="sdk-security-client-module" rev="latest.integration" conf="security-api-client->compile"/>
 		<dependency org="ncicb" name="sdk-security-client-module" rev="latest.integration" conf="security-api-client->compile"/>
