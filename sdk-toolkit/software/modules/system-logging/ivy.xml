@@ -23,7 +23,7 @@
 
 	<dependencies>
 		<!-- local shared-repository jars -->
-		<dependency org="ncicb" name="clm" rev="4.0" conf="compile" />
+		<dependency org="ncicb" name="clm" rev="4.1" conf="compile" />
 		<dependency org="springsource" name="spring" rev="2.0.2" conf="compile"/>
 		<dependency org="jakarta" name="commons-logging" rev="1.1" conf="compile" />
 		<dependency org="apache" name="log4j" rev="1.2.13" conf="compile" />

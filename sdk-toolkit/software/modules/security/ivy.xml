@@ -25,8 +25,8 @@
 		<!-- local shared-repository jars -->
 		<dependency org="ncicb" name="sdk-grid-jaas-client-module" rev="latest.integration" conf="compile" />
 		<dependency org="ncicb" name="sdk-security-client-module" rev="latest.integration" conf="compile" />
-		
-		<dependency org="ncicb" name="csm" rev="4.1.beta" conf="compile" />
+		 
+		<dependency org="ncicb" name="csm" rev="4.2" conf="compile" />
 		<dependency org="javax.servlet" name="servlet" rev="2.3.1" conf="compile" />
 		<dependency org="springsource" name="acegi-security" rev="1.0.4" conf="compile"/>
 		<dependency org="globus" name="jcog" rev="1.2" conf="compile" />
