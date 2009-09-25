@@ -110,4 +110,27 @@
 		<tomcat-read-ports tomcat.home="${read.tomcat.home}" />
 		<tomcat-read-external-hostname tomcat.home="${read.tomcat.home}" />
 	</target>
+	
+	<!-- override the validation:pre-install targets due to the JDK 1.5 vs 1.6 issue -->
+	<target name="install:common:validation:pre-install" description="Runs pre-install validation checks bda-utils" depends="common:init">
+	<!--
+		<validate-pre-install-common
+			ant.check.version="${ant.minimum.version}"
+			java.check.version.major="${java.major.version}"
+			java.check.version.minor="${java.minor.version}"
+			/>
+	-->
+	</target>
+	
+	<!-- override the validation:pre-install targets due to the JDK 1.5 vs 1.6 issue -->
+	<target name="install:tomcat:validation:pre-install" description="Runs pre-install validation checks bda-utils" 
+		depends="
+		common:tomcat:init,
+		common:init,
+		install:common:validation:pre-install
+		">
+		<!--
+		<validate-pre-install-tomcat />
+		-->
+	</target>
 </project>
