@@ -600,8 +600,7 @@ public class ClassSecurityTest extends SDKSecurityTestBase
 			URL url = new URL(searchUrl);
 			URLConnection conn = url.openConnection();
 
-//			String base64 = "userId" + ":" + "password";
-			String base64 = "user1" + ":" + "password";
+			String base64 = "/O=caBIG/OU=caGrid/OU=NCICB DEV LOA1/OU=Dorian/CN=SDKUser1" + ":" + "Psat123!@#";
 			conn.setRequestProperty("Authorization", "Basic " + new String(Base64.encodeBase64(base64.getBytes())));
 
 			File myFile = new File("./output/" + bankKlass.getName() + "_test-getxml.xml");						
@@ -645,7 +644,7 @@ public class ClassSecurityTest extends SDKSecurityTestBase
 			URL url = new URL(searchUrl);
 			URLConnection conn = url.openConnection();
 
-			String base64 = "user2" + ":" + "password"; //user2 does not have access to the Cash class
+			String base64 = "/O=caBIG/OU=caGrid/OU=NCICB DEV LOA1/OU=Dorian/CN=SDKUser2" + ":" + "Psat123!@#"; //user2 does not have access to the Cash class
 			conn.setRequestProperty("Authorization", "Basic " + new String(Base64.encodeBase64(base64.getBytes())));
 
 			File myFile = new File("./output/" + cashKlass.getName() + "_test-getxml.xml");						
