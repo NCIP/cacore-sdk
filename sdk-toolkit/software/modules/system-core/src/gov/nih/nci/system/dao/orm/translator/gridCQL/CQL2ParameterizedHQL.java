@@ -1,6 +1,5 @@
 package gov.nih.nci.system.dao.orm.translator.gridCQL;
 
-import gov.nih.nci.cagrid.sdkquery4.processor.RoleNameResolver;
 import gov.nih.nci.system.util.ClassCache;
 
 import java.io.IOException;
@@ -11,9 +10,12 @@ public class CQL2ParameterizedHQL extends gov.nih.nci.cagrid.sdkquery4.processor
 
 	ClassCache cache;
 	
-	public CQL2ParameterizedHQL(ClassCache cache, RoleNameResolver roleNameResolver, boolean caseInsensitive) throws IOException, ClassNotFoundException
+	public CQL2ParameterizedHQL(ClassCache cache, boolean caseInsensitive) throws IOException, ClassNotFoundException
 	{
-		super(null, roleNameResolver, caseInsensitive);
+		super(null, 
+				new gov.nih.nci.system.dao.orm.translator.gridCQL.RoleNameResolver(cache),
+				new gov.nih.nci.system.dao.orm.translator.gridCQL.ClassDiscriminatorResolver(cache), 
+				caseInsensitive);
 		this.cache = cache;
 		replaceFields();
 	}

@@ -4,12 +4,12 @@ import gov.nih.nci.cagrid.authentication.bean.BasicAuthenticationCredential;
 import gov.nih.nci.cagrid.authentication.bean.Credential;
 import gov.nih.nci.cagrid.authentication.client.AuthenticationClient;
 import gov.nih.nci.cagrid.authentication.stubs.types.InvalidCredentialFault;
-import gov.nih.nci.cagrid.dorian.client.IFSUserClient;
-import gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 
 import javax.security.auth.login.CredentialNotFoundException;
 
+import org.cagrid.gaards.dorian.client.GridUserClient;
+import org.cagrid.gaards.dorian.federation.CertificateLifetime;
 import org.globus.gsi.GlobusCredential;
 
 public class GridAuthenticationServiceImpl implements GridAuthenticationService {
@@ -47,7 +47,7 @@ public class GridAuthenticationServiceImpl implements GridAuthenticationService 
 			cred.setBasicAuthenticationCredential(bac);
 	
 			//Requested Grid Credential lifetime (12 hours)
-			ProxyLifetime lifetime = new ProxyLifetime();
+			CertificateLifetime lifetime = new CertificateLifetime();
 			lifetime.setHours(proxyLifetime.intValue());
 	
 			//Authenticate to the IdP (DorianIdP) using credential
@@ -55,8 +55,8 @@ public class GridAuthenticationServiceImpl implements GridAuthenticationService 
 			SAMLAssertion saml = authClient.authenticate();
 	
 			//Request Grid Credential
-			IFSUserClient dorian = new IFSUserClient(dorianServiceURL);
-			GlobusCredential proxy = dorian.createProxy(saml, lifetime,delegationPathLength.intValue());
+			GridUserClient dorian = new GridUserClient(dorianServiceURL);
+			GlobusCredential proxy = dorian.requestUserCertificate(saml, lifetime);
 	
 			return proxy;
 		}
