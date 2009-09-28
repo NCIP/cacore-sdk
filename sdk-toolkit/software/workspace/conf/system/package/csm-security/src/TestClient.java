@@ -28,7 +28,7 @@ public class TestClient
 	}
 	public ApplicationService getApplicationService() throws Exception
 	{
-		return ApplicationServiceProvider.getApplicationService("/O=caBIG/OU=caGrid/OU=NCICB DEV LOA1/OU=Dorian/CN=SDKUser1","Psat123!@#");
+		return ApplicationServiceProvider.getApplicationService("/O=caBIG/OU=caGrid/OU=Training/OU=Dorian/CN=SDKUser1","Psat123!@#");
 	}
 	
 	public void testSearch() throws Exception

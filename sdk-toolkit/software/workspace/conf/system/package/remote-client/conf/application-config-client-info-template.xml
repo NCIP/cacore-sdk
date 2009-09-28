@@ -45,6 +45,7 @@
 				</bean>
 				<bean class="gov.nih.nci.system.security.acegi.authentication.NullGroupNameAuthenticationProvider"/>
 				<bean class="gov.nih.nci.system.security.acegi.authentication.NullX509AuthenticationProvider"/>
+				<bean class="gov.nih.nci.system.security.acegi.authentication.NullUsernameAuthenticationProvider"/>
 			</list>
 		</property>
 	</bean>
@@ -96,6 +97,7 @@
 							&lt;/bean&gt;
 							&lt;bean class=&quot;gov.nih.nci.system.security.acegi.authentication.NullGroupNameAuthenticationProvider&quot;/&gt;
 							&lt;bean class=&quot;gov.nih.nci.system.security.acegi.authentication.NullX509AuthenticationProvider&quot;/&gt;
+							&lt;bean class=&quot;gov.nih.nci.system.security.acegi.authentication.NullUsernameAuthenticationProvider&quot;/&gt;							
 						&lt;/list&gt;
 					&lt;/property&gt;
 				&lt;/bean&gt;

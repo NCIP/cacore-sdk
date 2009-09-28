@@ -50,7 +50,7 @@ public class TestClient
 			securityEnabled = true;	
 		}
 		
-		String username="/O=caBIG/OU=caGrid/OU=NCICB DEV LOA1/OU=Dorian/CN=SDKUser1";
+		String username="/O=caBIG/OU=caGrid/OU=Training/OU=Dorian/CN=SDKUser1";
 		
 		if(properties.get("GRID_LOGIN_MODULE_ENABLED").equals("true")
 				|| properties.get("GRID_LOGIN_MODULE_ENABLED").equals("yes")){
