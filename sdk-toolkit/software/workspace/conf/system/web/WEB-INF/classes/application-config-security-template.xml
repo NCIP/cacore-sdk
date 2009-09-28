@@ -13,6 +13,7 @@
 				<!--@GRID_LOGIN_MODULE_START@-->
 				<ref bean="gridAuthenticationProvider"/>
 				<!--@GRID_LOGIN_MODULE_END@-->
+				<ref bean="csmUsernameAuthenticationProvider"/>
 				<ref bean="x509AuthenticationProvider"/>
 				<bean class="gov.nih.nci.system.security.acegi.authentication.NullGroupNameAuthenticationProvider"/>
 			</list>
@@ -81,6 +82,27 @@
 			</bean>
 		</property>
 	</bean>
+
+	<bean id="csmUsernameAuthenticationProvider" class="gov.nih.nci.system.security.acegi.authentication.CSMUsernameAuthenticationProvider">
+		<property name="userDetailsService">
+			<ref bean="userDetailsService"/>
+		</property>
+		<property name="userCache">
+			<bean class="org.acegisecurity.providers.dao.cache.EhCacheBasedUserCache">
+				<property name="cache">
+					<bean class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+						<property name="cacheManager">
+							<bean class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean" />
+						</property>
+						<property name="timeToLive" value="100000" />
+						<property name="timeToIdle" value="1800" />
+						<property name="cacheName" value="userCache" />
+					</bean>
+				</property>
+			</bean>
+		</property>
+	</bean>
+
 
 	<bean name="userDetailsService" class="gov.nih.nci.system.security.acegi.authentication.CSMUserDetailsService">
 		<property name="csmApplicationContext" value="@CSM_PROJECT_NAME@" />
