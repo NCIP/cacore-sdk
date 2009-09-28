@@ -18,6 +18,10 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.mapping.PersistentClass;
+import org.hibernate.mapping.RootClass;
+import org.hibernate.mapping.Subclass;
 
 /** 
  *  ClassCache
@@ -47,6 +51,7 @@ public class ClassCache {
 	private Map<String,List<Field>> nonPrimitiveFieldsCache = new HashMap<String,List<Field>>();
 
 	private Map<String,List<String>> subClassCache = new HashMap<String,List<String>>();	
+	private Map<String,Object> discriminatorMap = new HashMap<String,Object>();
 	
 	private List<DAO> daoList;
 
@@ -747,6 +752,38 @@ public class ClassCache {
 					log.error("Exception caught while initializing ClassCache for class: " + klassName, e);
 				}
 			}
+			
+			if(dao instanceof ORMDAOImpl)
+			{
+				Configuration cfg = ((ORMDAOImpl)dao).getConfig();
+				
+				Iterator iter = cfg.getClassMappings();
+				while(iter.hasNext())
+				{
+					PersistentClass pklass = (PersistentClass)iter.next();
+					Object identifier = null;
+					log.debug("Getting discriminator details for : "+pklass.getClassName()+":");
+					if (pklass instanceof Subclass)
+					{
+						Subclass subklass = (Subclass) pklass;
+						if(subklass.isJoinedSubclass())
+							identifier = subklass.getSubclassId();
+						else
+							identifier = getShortClassName(subklass.getClassName());
+					}
+					else if (pklass instanceof RootClass)
+					{
+						
+						RootClass rootklass = (RootClass)pklass;
+						if(rootklass.getDiscriminator()==null)
+							identifier = rootklass.getSubclassId();
+						else
+							identifier = getShortClassName(rootklass.getClassName());
+					}
+					log.debug(identifier);
+					discriminatorMap.put(pklass.getClassName(), identifier);
+				}				
+			}
 		}
 
 		allPackageNamesCache = new ArrayList<String>(tmpPackageNames);
@@ -755,7 +792,18 @@ public class ClassCache {
 		Collections.sort(allQualClassNames);		
 		Collections.sort(allUnqualClassNames);
 	}	
-
+	
+	private String getShortClassName(String className) 
+	{
+		int dotIndex = className.lastIndexOf('.');
+		return className.substring(dotIndex + 1);
+	}
+	 
+	public Object getDiscriminatorObject(String classname)
+	{
+		return discriminatorMap.get(classname);
+	}
+	
 	public String toString(){
 		StringBuffer sb = new StringBuffer();
 		sb.append("[\n" + ClassCache.class.getName()+"[\n");

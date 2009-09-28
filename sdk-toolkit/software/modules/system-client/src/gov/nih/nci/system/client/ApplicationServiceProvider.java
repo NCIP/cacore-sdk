@@ -4,6 +4,7 @@ import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 import gov.nih.nci.system.client.proxy.ApplicationServiceProxy;
 import gov.nih.nci.system.security.acegi.providers.GroupNameAuthenticationToken;
+import gov.nih.nci.system.security.acegi.providers.UsernameAuthenticationToken;
 
 import java.io.ByteArrayInputStream;
 import java.util.Collection;
@@ -96,6 +97,22 @@ public class ApplicationServiceProvider
 		ApplicationService as = getApplicationServiceForGroups(service,url, groups);
 		return as;
 	}
+
+	public static ApplicationService getApplicationServiceForUser(String username) throws Exception {
+		ApplicationService as = getApplicationServiceForUsername(DEFAULT_SERVICE,null,username);
+		return as;
+	}
+
+	public static ApplicationService getApplicationServiceForUser(String service,String username) throws Exception {
+		ApplicationService as = getApplicationServiceForUsername(service,null, username);
+		return as;	
+
+	}
+
+	public static ApplicationService getApplicationServiceForUserFromUrl(String service,String url, String username) throws Exception {
+		ApplicationService as = getApplicationServiceForUsername(service,url, username);
+		return as;
+	}
 	
 	public static ApplicationService getApplicationService(GlobusCredential cred) throws Exception 
 	{
@@ -129,6 +146,18 @@ public class ApplicationServiceProvider
 		return getApplicationService(service, url, auth);
 	}
 
+	private static ApplicationService getApplicationServiceForUsername(String service, String url, String username) throws Exception {
+		if (url != null) {
+			throw new Exception("Url security feature for username is not supported");
+		}		
+		if (username == null || username.trim().length() == 0) {
+			throw new Exception("Username cannot be empty");
+		}		
+
+		Authentication auth = new UsernameAuthenticationToken(username.trim());
+		return getApplicationService(service, url, auth);
+	}
+	
 	@SuppressWarnings("unchecked")
 	public static ApplicationService getApplicationService(String service, String url, String username, String password) throws Exception
 	{

@@ -10,7 +10,6 @@ import gov.nih.nci.system.dao.Request;
 import gov.nih.nci.system.dao.Response;
 import gov.nih.nci.system.dao.orm.ORMDAOImpl;
 import gov.nih.nci.system.dao.orm.translator.gridCQL.CQL2ParameterizedHQL;
-import gov.nih.nci.system.dao.orm.translator.gridCQL.RoleNameResolver;
 import gov.nih.nci.system.query.cql.CQLQuery;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
 import gov.nih.nci.system.query.nestedcriteria.NestedCriteriaPath;
@@ -311,7 +310,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 	{
 		try
 		{
-			CQL2ParameterizedHQL converter = new CQL2ParameterizedHQL(classCache,new RoleNameResolver(classCache),false);
+			CQL2ParameterizedHQL converter = new CQL2ParameterizedHQL(classCache,false);
 			ParameterizedHqlQuery query = converter.convertToHql(cqlQuery);
 			HQLCriteria hqlCriteria = new HQLCriteria(query.getHql(), query.getParameters());
 			return query(hqlCriteria);
