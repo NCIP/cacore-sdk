@@ -1,6 +1,6 @@
 <ivysettings>
 	<property name="nci.ivy.repo" value="http://gforge.nci.nih.gov/svnroot/commonlibrary/trunk/ivy-repo" />
-	<property name="nci.cagrid.ivy.repo" value="http://software.cagrid.org/repository-1.2" />
+	<property name="nci.cagrid.ivy.repo" value="http://software.cagrid.org/repository-1.3.0.1" />
 	
 	<settings defaultResolver="nci-chain" />
 	<caches defaultCacheDir="${user.home}/.ivy2-sdk" useOrigin="true"/>
@@ -12,8 +12,9 @@
 				<artifact pattern="${shared.local.repo.dir}/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
 			</filesystem>
 			<filesystem name="local-repo" local="true">
-				<ivy pattern="${local.repo.dir}/[organisation]/[module]/[revision]/ivy.xml" />
+				<ivy pattern="${local.repo.dir}/[organisation]/[module]/ivy-[revision].xml" />
 				<artifact pattern="${local.repo.dir}/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
+				<artifact pattern="${local.repo.dir}/[organisation]/[module]/[revision]/[artifact].[ext]" />				
 			</filesystem> 
 			<url name="ncicb-ivy-repo">
 				<artifact pattern="http://gforge.nci.nih.gov/svnroot/commonlibrary/trunk/ivy-repo/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
@@ -24,7 +25,6 @@
 				<artifact pattern="${nci.cagrid.ivy.repo}/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
 				<artifact pattern="${nci.cagrid.ivy.repo}/[organisation]/[module]/[revision]/[artifact].[ext]" />				
 			</url>
-			
 		</chain>
 	</resolvers>
 </ivysettings>
