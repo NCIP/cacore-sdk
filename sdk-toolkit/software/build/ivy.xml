@@ -51,7 +51,7 @@
 		<dependency org="springsource" name="spring" rev="2.0.2" conf="common->compile"/>
 		<dependency org="org.antlr" name="antlr" rev="2.7.6" conf="common->compile"/>
 		<dependency org="objectweb" name="asm" rev="1.5.3" conf="common->compile"/>
-		<dependency org="caGrid" name="cql" rev="1.2" conf="common->cql"/>
+		<dependency org="caGrid" name="cql" rev="1.3" conf="common->cql"/>
 		<dependency org="org.codehaus.castor" name="castor" rev="1.0.2" conf="common->compile"/>
 		<dependency org="cglib" name="cglib" rev="2.1_3" conf="common->compile" />
 		<dependency org="globus" name="jcog" rev="1.2" conf="common->compile" />
@@ -67,6 +67,7 @@
 		<dependency org="apache" name="xerces" rev="2.7.1" conf="common->master" />
 		
 		<dependency org="jakarta" name="commons-collections" rev="3.2" conf="local-client->compile" />
+		<dependency org="jakarta" name="commons-lang" rev="1.0.1" conf="local-client->compile" />
 		<dependency org="javax.transaction" name="jta" rev="1.0.1B" conf="local-client->compile" />
 		<dependency org="mysql" name="mysql-connector-java" rev="5.1.5" conf="local-client->compile" />
 		<dependency org="oracle" name="ojdbc14" rev="10.2.0.3.0" conf="local-client->compile" />
