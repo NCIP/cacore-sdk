@@ -205,6 +205,7 @@
 		<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true" />
 		<then>
 			<switch value="${TARGET_GRID}">
+				<!--  
 				<case value="training-1.2">
 					<property name="CAGRID_AUTHENTICATION_SERVICE_URL" value="https://dorian.training.cagrid.org:8443/wsrf/services/cagrid/Dorian" />
 					<property name="CAGRID_DORIAN_SERVICE_URL" value="${CAGRID_AUTHENTICATION_SERVICE_URL}" />
@@ -225,7 +226,23 @@
 					<property name="CAGRID_AUTHENTICATION_SERVICE_URL" value="https://cagrid-dorian.nci.nih.gov:8443/wsrf/services/cagrid/Dorian" />
 					<property name="CAGRID_DORIAN_SERVICE_URL" value="${CAGRID_AUTHENTICATION_SERVICE_URL}" />
 				</case>
-
+				-->
+				<case value="training-1.3">
+					<property name="CAGRID_AUTHENTICATION_SERVICE_URL" value="https://dorian.training.cagrid.org:8443/wsrf/services/cagrid/Dorian" />
+					<property name="CAGRID_DORIAN_SERVICE_URL" value="${CAGRID_AUTHENTICATION_SERVICE_URL}" />
+				</case>
+				<case value="nci_qa-1.3">
+					<property name="CAGRID_AUTHENTICATION_SERVICE_URL" value="https://cagrid-dorian-qa.nci.nih.gov:8443/wsrf/services/cagrid/Dorian" />
+					<property name="CAGRID_DORIAN_SERVICE_URL" value="${CAGRID_AUTHENTICATION_SERVICE_URL}" />
+				</case>
+				<case value="nci_stage-1.3">
+					<property name="CAGRID_AUTHENTICATION_SERVICE_URL" value="https://cagrid-dorian-stage.nci.nih.gov:8443/wsrf/services/cagrid/Dorian" />
+					<property name="CAGRID_DORIAN_SERVICE_URL" value="${CAGRID_AUTHENTICATION_SERVICE_URL}" />
+				</case>
+				<case value="nci_prod-1.3">
+					<property name="CAGRID_AUTHENTICATION_SERVICE_URL" value="https://cagrid-dorian.nci.nih.gov:8443/wsrf/services/cagrid/Dorian" />
+					<property name="CAGRID_DORIAN_SERVICE_URL" value="${CAGRID_AUTHENTICATION_SERVICE_URL}" />
+				</case>
 				<default>
 					<fail message="Invalid target grid ${TARGET_GRID}." />
 				</default>
@@ -996,15 +1013,15 @@
 			</and>
 			<then>
 				<if>
-					<equals arg1="${DB_TYPE}" arg2="oracle"/>
+					<equals arg1="${CSM_DB_TYPE}" arg2="oracle"/>
 					<then>
-						<property name="TEMP_DB_SCHEMA" value="${DB_USERNAME}"/>
+						<property name="TEMP_CSM_DB_SCHEMA" value="${DB_USERNAME}"/>
 					</then>
 					<else>
-						<property name="TEMP_DB_SCHEMA" value="${DB_NAME}"/>	
+						<property name="TEMP_CSM_DB_SCHEMA" value="${DB_NAME}"/>	
 					</else>
 				</if>
-				<database-clean database.driver="${CSM_DB_DRIVER}" database.url="${CSM_DB_CONNECTION_URL}" database.user="${CSM_DB_USERNAME}" database.password="${CSM_DB_PASSWORD}" database.schema="${TEMP_DB_SCHEMA}" database.re-create="false" database.drop-schema="${CSM_DB_DROP_SCHEMA}" />
+				<database-clean database.driver="${CSM_DB_DRIVER}" database.url="${CSM_DB_CONNECTION_URL}" database.user="${CSM_DB_USERNAME}" database.password="${CSM_DB_PASSWORD}" database.schema="${TEMP_CSM_DB_SCHEMA}" database.re-create="false" database.drop-schema="${CSM_DB_DROP_SCHEMA}" />
 				<execute-database-install database.type="${CSM_DB_TYPE}" database.url="${CSM_DB_CONNECTION_URL}" database.user="${CSM_DB_USERNAME}" database.password="${CSM_DB_PASSWORD}" db.install.create.oracle.file.list="${csm.db.install.create.oracle.file.list}" db.install.create.mysql.file.list="${csm.db.install.create.mysql.file.list}"/>
 			</then>
 		</if>
@@ -1022,7 +1039,6 @@
 	</target>
 
 	<macrodef name="execute-database-install">
-
 		<attribute name="database.url"/>
 		<attribute name="database.user"/>
 		<attribute name="database.password"/>
