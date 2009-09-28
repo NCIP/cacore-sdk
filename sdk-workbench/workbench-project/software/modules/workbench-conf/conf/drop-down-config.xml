@@ -8,11 +8,10 @@
 			<map>
 				<entry key=""  value=""/>
 				
-				<entry key="nci_dev-1.2" value="Development 1.2"/>
-				<entry key="nci_prod-1.2" value="Production 1.2"/>
-				<entry key="nci_qa-1.2" value="QA 1.2"/>
-				<entry key="nci_stage-1.2" value="Stage 1.2"/>
-				<entry key="training-1.2" value="Training 1.2"/>
+				<entry key="nci_prod-1.3" value="Production 1.3"/>
+				<entry key="nci_qa-1.3" value="QA 1.3"/>
+				<entry key="nci_stage-1.3" value="Stage 1.3"/>
+				<entry key="training-1.3" value="Training 1.3"/>
 				
 				<entry key="dev" value="Development"/>
 				<entry key="prod" value="Production"/>
@@ -85,11 +84,10 @@
 		<constructor-arg>
 			<map>
 				<entry key=""  value=""/>
-				<entry key="Development 1.2" value="nci_dev-1.2"/>
-				<entry key="Production 1.2" value="nci_prod-1.2"/>
-				<entry key="QA 1.2" value="nci_qa-1.2"/>
-				<entry key="Stage 1.2" value="nci_stage-1.2"/>
-				<entry key="Training 1.2" value="training-1.2"/>
+				<entry key="Production 1.3" value="nci_prod-1.3"/>
+				<entry key="QA 1.3" value="nci_qa-1.3"/>
+				<entry key="Stage 1.3" value="nci_stage-1.3"/>
+				<entry key="Training 1.3" value="training-1.3"/>
 			</map>
 		</constructor-arg>
 	</bean>
