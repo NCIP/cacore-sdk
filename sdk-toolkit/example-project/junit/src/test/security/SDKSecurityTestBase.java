@@ -47,7 +47,7 @@ public abstract class SDKSecurityTestBase extends TestCase {
 			GridApplicationServiceProvider initializer = (GridApplicationServiceProvider)(Class.forName("test.security.GridApplicationServiceImpl")).newInstance();
 			return initializer.getApplicationService("SDKUser1","Psat123!@#");
 		}			
-		return ApplicationServiceProvider.getApplicationService("/O=caBIG/OU=caGrid/OU=NCICB DEV LOA1/OU=Dorian/CN=SDKUser1","Psat123!@#");
+		return ApplicationServiceProvider.getApplicationService("/O=caBIG/OU=caGrid/OU=Training/OU=Dorian/CN=SDKUser1","Psat123!@#");
 	}
 	
 	protected ApplicationService getAppSvcUser2() throws Exception {
@@ -55,7 +55,7 @@ public abstract class SDKSecurityTestBase extends TestCase {
 			GridApplicationServiceProvider initializer = (GridApplicationServiceProvider)(Class.forName("test.security.GridApplicationServiceImpl")).newInstance();
 			return initializer.getApplicationService("SDKUser2","Psat123!@#");
 		}		
-		return ApplicationServiceProvider.getApplicationService("/O=caBIG/OU=caGrid/OU=NCICB DEV LOA1/OU=Dorian/CN=SDKUser2","Psat123!@#");
+		return ApplicationServiceProvider.getApplicationService("/O=caBIG/OU=caGrid/OU=Training/OU=Dorian/CN=SDKUser2","Psat123!@#");
 	}
 	
 	
