@@ -38,7 +38,7 @@
 		<dependency org="edu.oswego" name="concurrent" rev="1.3.4" conf="workbench-runtime->default"/>
 			
 		<!-- caGrid Resources -->
-		<dependency org="caGrid" name="grape" rev="1.2" conf="workbench-runtime->default"/>
+		<dependency org="caGrid" name="grape" rev="1.3" conf="workbench-runtime->default"/>
 		
 	</dependencies>
 </ivy-module>
