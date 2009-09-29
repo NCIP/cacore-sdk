@@ -5,13 +5,13 @@ import java.net.URL;
 import org.apache.log4j.PropertyConfigurator;
 import org.cagrid.grape.ApplicationInitializer;
 
-public class CacoreWorkbenchInitializer implements ApplicationInitializer {
+public class CacoreWorkbenchPreInitializer implements ApplicationInitializer {
 //	private static final int HELP_MENU = 4;
 //	private static final int CONFIG_MENU = 3;
 
-	public void intialize() throws Exception {
+	public void intialize(org.cagrid.grape.model.Application app) throws Exception {
 		
-		URL url = CacoreWorkbenchInitializer.class.getResource("/log4j.properties");
+		URL url = CacoreWorkbenchPreInitializer.class.getResource("/log4j.properties");
 		
 		System.out.println("* * * " + url.getFile());
 		
