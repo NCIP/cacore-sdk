@@ -1,9 +1,6 @@
 <project name="static-analysis-build-module" default="static-analysis:init" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant" xmlns="antlib:org.apache.tools.ant" xmlns:cs="antlib:com.puppycrawl.tools.checkstyle">
 
-	<import file="${build.dir}\build-common.xml" />
-	
 	<property name="checkstyle.config" value="${common.dir}/checkstyle/checkstyle_minimal.xml"/>
-
 	<property name="reports.simian.dir" value="${reports.dir}/${module.name}/simian" />
 	<property name="reports.pmd.dir" value="${reports.dir}/${module.name}/pmd" />
 	<property name="reports.checkstyle.dir" value="${reports.dir}/${module.name}/checkstyle/all" />
