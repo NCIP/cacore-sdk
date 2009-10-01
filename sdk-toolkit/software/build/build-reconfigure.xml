@@ -1,6 +1,5 @@
 <project name="caCORE SDK - Project Reconfiguration" default="package-install-system" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant" xmlns="antlib:org.apache.tools.ant" xmlns:cs="antlib:com.puppycrawl.tools.checkstyle">
 
-
 	<property name="output.dir.location" value="."/>
 
 	<property file="codegen.properties"/>
@@ -9,15 +8,6 @@
 	<property name="tools.dir" location="${basedir}/tools" />
 	<property name="tools.lib.dir" location="${tools.dir}/lib" />
 	<property name="lib.dir" location="${output.project.dir}/lib" />
-
-
-	<condition property="taskdef-file" value="build-load-taskdef.xml" else="build-no-taskdef.xml">
-		<not>
-			<typefound name="xmltask"/>
-		</not>
-	</condition>
-	
-	<import file="${basedir}/${taskdef-file}"/>
 
 	<property name="remoteclient.lib.dir" location="${lib.dir}/remote-client" />
 	<property name="localclient.lib.dir" location="${lib.dir}/local-client" />
@@ -472,9 +462,6 @@
 	</target>
 
 	<target name="replace-install-token-contents" depends="replacetoken-contents-reconfigure,replacetoken-contents-install-database"/>
-	<target name="replace-upgrade-token-contents" depends="replacetoken-contents-reconfigure"/>
-
-
 
 	<!-- #################################################################### -->
 	<!-- ######################### Main targets ############################# -->
@@ -487,20 +474,9 @@
 		package-ws-client,
 		package-server
 		"/>
-	
-	<target name="package-upgrade-system" description="Packages the system" depends="
-		init-upgrade,
-		package-remote-client,
-		package-local-client,
-		package-ws-client,
-		package-server
-		"/>
-	
+		
 	<target name="init-install" depends="replace-install-token-contents,-rejar-orm" description="initializes the packaging"/>
 	
-	<target name="init-upgrade" depends="replace-upgrade-token-contents,-rejar-orm" description="initializes the packaging"/>
-
-
 	<target name="-rejar-orm" depends="-replace-templates-filter-tokens-reconfigure">
 		<mkdir dir="${output.target.dir}" />
 		<delete dir="${temp.orm.dir}"/>

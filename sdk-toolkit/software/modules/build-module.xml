@@ -13,15 +13,28 @@
 
 	<property name="module.lib.dir" location="${target.module.dir}/${module.name}/lib" />
 
-	<import file="${build.dir}\build-common.xml" />
-
 	<property name="ivy.def.file" location="ivy.xml" />
 
 	<property name="runtime.lib.dir" location="${module.lib.dir}/runtime" />
 	<property name="compile.lib.dir" location="${module.lib.dir}/compile" />
 	<property name="src.java.dir" value="${basedir}/src" />
 	<property name="build.classes.dir" value="${target.dir}/modules/${module.name}/classes" />
+	<property name="target.module.dir" location="${target.dir}/modules" />
+	
+	<target name="ivy:init">
+		<property name="ivy.dep.file" value="${ivy.def.file}" />
+		<ivy:settings file="${ivy.settings.dir}/${ivy.settings.file}"/>
+	</target>
 
+	<target name="ivy:publish" description="--> publish this project in the ivy repository">
+		<tstamp>
+			<format property="now" pattern="yyyyMMddHHmmss" />
+		</tstamp>
+		<property name="version" value="${sdk.version}" />
+		<ivy:publish artifactspattern="${target.module.dir}/${module.name}/lib/[artifact].[ext]" resolver="shared-local-repo"  
+			pubrevision="${version}" status="release" forcedeliver="true" pubdate="${now}" update="true" overwrite="true" />
+	</target>
+		
 	<target name="clean:dependencies">
 		<delete dir="${compile.lib.dir}" />
 		<delete dir="${runtime.lib.dir}" />
