@@ -52,7 +52,8 @@
 		<zip destfile="${dist.dir}/${workbench.src.file}" whenempty="skip">
 			<zipfileset dir="${workbench.base.dir}">
 				<exclude name="**/bin/**"/>
-				<exclude name="**/target/**"/>
+				<exclude name="target/**"/>
+				<exclude name="tools/**"/>
 				<exclude name="**/bda-local-ivy-repo/**"/>
 				<exclude name="**/local-ivy-repo/**"/>
 				<exclude name="**/dist/**"/>
