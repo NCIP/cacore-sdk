@@ -140,6 +140,13 @@
 	<target name="deploy:local:install:no-build" depends="dist:installer:prep">
 		<deploy-local target.name="${install.target}" />
 	</target>
+	
+	<target name="deploy:remote:install:no-build" description="Installs and configures the application and required binaries and re-creates the datbase  on a remote machine. Used for NCI tiers (dev, qa, stg, prod)" depends="
+		dist:installer
+		">
+		<deploy-files dist.file="${bda-blueprints-webapp.install.zip.file}" />
+		<remote-ssh remotesshcommand=". .bash_profile;cd ${ssh.dir.temp}; ant -Dproperties.file=${properties.file.name} -Dforce.reinstall=true ${install.target}" />
+	</target>
 
 	<target name="clean:software:target">
 		<delete dir="${target.dir}" failonerror="false"/>
