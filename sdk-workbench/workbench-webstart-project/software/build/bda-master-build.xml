@@ -19,8 +19,11 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 	<property name="upgrade.properties.file" value="upgrade.properties"/>
 	<echo message="Using properties file of ${properties.file}." />
 	<available file="${properties.file}" property="properties.file.exists" />
+	<!---
+	https://wiki.nci.nih.gov/display/BuildandDeploymentAutomation/Anthill+Pro+3+BDA+Requirements
 	<fail unless="properties.file.exists" message="The properties.file ${properties.file} does not exist, please make sure that you pass in an accurate file name with the 'ant -Dproperties.file=somepath/somefile', otherwise the build will fail." />
-
+	-->
+	
 	<replaceregexp file="${properties.file}" byline="true" match="^([\w\d.]+)=(.*[\w\d\/\{\}\\]+)[ \t]+\r*$" replace="\1=\2" />
 	<replaceregexp file="${properties.file}" byline="true" match="^([\w\d.]+)=[ \t]+(.*[\w\d\/\{\}\\]+)\r*$" replace="\1=\2" />
 	<property file="${properties.file}" />
