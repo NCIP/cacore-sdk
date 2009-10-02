@@ -11,6 +11,7 @@
 	<property name="workspace.dir" location="${software.dir}/workspace" />
 	<property name="target.dir" location="${software.dir}/target" />
 	<property name="target.workspace.dir" location="${target.dir}/workspace" />
+	<property name="target.module.dir" location="${target.dir}/modules" />
 
 	<property name="output.dir.location" value="../target/workspace"/>
 
