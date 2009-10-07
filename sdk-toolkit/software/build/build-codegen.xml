@@ -419,6 +419,7 @@
 			<include name="*.jar" />
 		</fileset>
 		<pathelement path="${output.codegen.config.dir}" />
+		<pathelement path="${output.codegen.validator.config.dir}" />
 	</path>
 
 	<target name="-pre-clean">
@@ -495,10 +496,21 @@
 	</target>
 
 
-	<target name="-generate-codegen" depends="replacetoken-contents,ivy:setup:codegen" description="Runs the Code Generator">
+	<target name="-generate-codegen" depends="replacetoken-contents,ivy:setup:codegen,-generate-codegen-validator" description="Runs the Code Generator">
+		<echo>${ant.project.name}: Running the Code Generator</echo>
 		<fail unless="IDENTITY_GENERATOR_TAG">IDENTITY_GENERATOR property must be set in codegen.properties</fail>
 		<java classname="gov.nih.nci.codegen.Generator" failonerror="true" fork="true" >
 			<arg value="${codegen.config.file}" />
+			<jvmarg value="-Xms256M" />
+			<jvmarg value="-Xmx512M" />
+			<classpath refid="codegen.runtime.classpath" />
+		</java>
+	</target>
+	
+	<target name="-generate-codegen-validator" description="Runs the Hibernate Validator Code Generator">
+		<echo>${ant.project.name}: Running the Hibernate Validator Code Generator</echo>
+		<java classname="gov.nih.nci.codegen.Generator" failonerror="true" fork="true" >
+			<arg value="${codegen.config.validator.file}" />
 			<jvmarg value="-Xms256M" />
 			<jvmarg value="-Xmx512M" />
 			<classpath refid="codegen.runtime.classpath" />

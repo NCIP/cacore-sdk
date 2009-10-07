@@ -7,7 +7,7 @@
 
 	<configurations>
 		<conf name="codegen-compile" />
-		<conf name="codegen-runtime" />
+		<conf name="codegen-runtime" extends="common" />
 
 		<conf name="common" />
 		<conf name="remote-client" extends="common" />
