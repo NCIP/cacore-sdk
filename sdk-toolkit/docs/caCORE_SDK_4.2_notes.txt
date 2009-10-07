@@ -127,7 +127,7 @@
         and other network needs.
 
         --  codegen.properties (configure code generation)
-		--  deploy.properties (configure local & remote deployment)
+		--  install.properties (configure local & remote deployment)
 
     --  Ant buildfile
 
@@ -153,6 +153,8 @@
 	4.2 release is provided below:
 
     -- Integration with the Automatic Build and Deploy Process (BDA)
+    
+    -- Integration with caGRID 1.3
 	
 	-- Integration with the caCORE Workbench, a new GUI-driven tool
 	   which facilitates the creation of Data and Analytical Services   
@@ -230,6 +232,9 @@
 	   
 	-- The criteria query page is not displayed for implicit classes. See
 	   [#15722] No Criteria page for the implicit class Tank.
+	   
+	-- [#23554] CSM Attribute Level Security does not Work as Expected 
+	   Following SDK 4.2 Integration with CSM 4.2 
 	
 ================================================================
 	5.0 Bug Reports and Support
