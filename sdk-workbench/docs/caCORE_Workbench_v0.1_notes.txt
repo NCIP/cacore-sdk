@@ -112,10 +112,10 @@
 	4.0 Known Issues
 ================================================================
 
-	-- GForge #[23269] Inconsistent Java version support for caCORE SDK Workbench.  caCORE SDK 
-	Workbench has a standalone version and a Web Start version. The standalone version can be used 
-	via JDK1.6 and JDK1.5. For the Web Start version, only JDK1.5 is supported.
+	-- [#23269] Inconsistent Java version support for caCORE SDK Workbench.
 	
+	-- [#23425] BDA Scripts Do Not Generate a BuildException When DB SQL Script Errors 
+	   are Encountered
 	
 ================================================================
 	5.0 Bug Reports and Support
