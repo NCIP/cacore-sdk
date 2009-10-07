@@ -106,7 +106,7 @@ public class AntTools {
 		
 		File buildFile = ResourceManager.getProjectBuildFile(projectDirPath);
 		
-		String target = "deploy:local:install";
+		String target = "deploy:local:install:no-build";
 
 		Map<String,String> propsMap=new TreeMap<String,String>();
 		propsMap.put("properties.file", deployPropsFileName); //deployPropsFilePath.replace('\\', '/'));
@@ -120,7 +120,7 @@ public class AntTools {
 		
 		File buildFile = ResourceManager.getProjectBuildFile(projectDirPath);
 		
-		String target = "deploy:remote:install";
+		String target = "deploy:remote:install:no-build";
 
 		Map<String,String> propsMap=new TreeMap<String,String>();
 		propsMap.put("properties.file", deployPropsFileName); //deployPropsFilePath.replace('\\', '/')
