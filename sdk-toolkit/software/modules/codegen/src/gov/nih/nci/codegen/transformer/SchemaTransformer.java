@@ -595,7 +595,7 @@ public class SchemaTransformer implements Transformer {
 	}
 	
 	private void setModelNamespace(UMLModel model, String basePkgLogicalModel){
-		//override deploy.properties NAMESPACE_PREFIX property with GME namespace tag value, if it exists
+		//override codegen.properties NAMESPACE_PREFIX property with GME namespace tag value, if it exists
 
 		StringTokenizer tokenizer = new StringTokenizer(basePkgLogicalModel, ".");
 		UMLPackage pkg=null;

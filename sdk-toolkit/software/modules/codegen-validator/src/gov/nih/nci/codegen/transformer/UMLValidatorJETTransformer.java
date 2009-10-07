@@ -142,7 +142,7 @@ public abstract class UMLValidatorJETTransformer implements Transformer
 			String version = criteriaProps.get(PROJECT_VERSION);
 			
 			if (projectShortName == null || !(projectShortName.length()>0) || version == null || !(version.length()>0))
-				throw new GenerationException("Error parsing NAMESPACE_PREFIX property set in deploy.properties file. Parsed Classification Scheme (UML Project shortname) is: [" + projectShortName +"]; parsed Classification Scheme Version is: [" + version + "].");
+				throw new GenerationException("Error parsing NAMESPACE_PREFIX property set in codegen.properties file. Parsed Classification Scheme (UML Project shortname) is: [" + projectShortName +"]; parsed Classification Scheme Version is: [" + version + "].");
 			
 			Project proj = new Project();
 			proj.setShortName(projectShortName);
@@ -248,8 +248,8 @@ public abstract class UMLValidatorJETTransformer implements Transformer
 		
 		//Check that the namespacePrefix property has been set
 		if (namespacePrefix == null){
-			log.error("NAMESPACE_PREFIX property has not been set in deploy.properties.  Use format:  gme://<<Classification Scheme (UML Project ShortName)>>.<<Context>>/<<Classification Scheme Version>>/<<<Classification Scheme Item> (Optional)>>");
-			throw new GenerationException("NAMESPACE_PREFIX property has not been set in deploy.properties.  Use format:  gme://<<Classification Scheme (UML Project ShortName)>>.<<Context>>/<<Classification Scheme Version>>/<<<Classification Scheme Item> (Optional)>>");				
+			log.error("NAMESPACE_PREFIX property has not been set in codegen.properties.  Use format:  gme://<<Classification Scheme (UML Project ShortName)>>.<<Context>>/<<Classification Scheme Version>>/<<<Classification Scheme Item> (Optional)>>");
+			throw new GenerationException("NAMESPACE_PREFIX property has not been set in codegen.properties.  Use format:  gme://<<Classification Scheme (UML Project ShortName)>>.<<Context>>/<<Classification Scheme Version>>/<<<Classification Scheme Item> (Optional)>>");				
 		}
 
 		//Check that the NAMESPACE_PREFIX property format is correct
@@ -257,8 +257,8 @@ public abstract class UMLValidatorJETTransformer implements Transformer
 		log.debug("Namespace prefix ('/') tokenizer count: " + tokens.countTokens());
 		
 		if (!tokens.hasMoreTokens() || tokens.countTokens() < 3){
-			log.error("Format of NAMESPACE_PREFIX property in deploy.properties is invalid.  Use format:  gme://<<Classification Scheme (UML Project ShortName)>>.<<Context>>/<<Classification Scheme Version>>/<<<Classification Scheme Item> (Optional)>>");
-			throw new GenerationException("Format of NAMESPACE_PREFIX property in deploy.properties is invalid.  Use format:  gme://<<Classification Scheme (UML Project ShortName)>>.<<Context>>/<<Classification Scheme Version>>/<<<Classification Scheme Item> (Optional)>>");				
+			log.error("Format of NAMESPACE_PREFIX property in codegen.properties is invalid.  Use format:  gme://<<Classification Scheme (UML Project ShortName)>>.<<Context>>/<<Classification Scheme Version>>/<<<Classification Scheme Item> (Optional)>>");
+			throw new GenerationException("Format of NAMESPACE_PREFIX property in codegen.properties is invalid.  Use format:  gme://<<Classification Scheme (UML Project ShortName)>>.<<Context>>/<<Classification Scheme Version>>/<<<Classification Scheme Item> (Optional)>>");				
 		}
 		
 		String gmePrefix = tokens.nextToken().trim();
