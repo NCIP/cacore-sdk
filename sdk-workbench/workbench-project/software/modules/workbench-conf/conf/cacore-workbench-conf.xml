@@ -10,8 +10,8 @@
         <width>900</width>
         <height>750</height>
     </dimensions>
-    <PreInitializerClass>gov.nih.nci.cacore.workbench.portal.init.CacoreWorkbenchInitializerPre</PreInitializerClass>
-    <PostInitializerClass>gov.nih.nci.cacore.workbench.portal.init.CacoreWorkbenchInitializerPost</PostInitializerClass>
+    <PreInitializerClass>gov.nih.nci.cacore.workbench.portal.init.CacoreWorkbenchPreInitializer</PreInitializerClass>
+    <PostInitializerClass>gov.nih.nci.cacore.workbench.portal.init.CacoreWorkbenchPostInitializer</PostInitializerClass>
     <menus>
            <menu>
             <title>File</title>
