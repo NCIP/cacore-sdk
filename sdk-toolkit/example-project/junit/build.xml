@@ -328,7 +328,7 @@
 	<!-- ************************************************************************************************-->
 
 	<!--
-		The following deploy.properties (or local.properties) values need to be set in order for this test
+		The following codegen.properties (or local.properties) values need to be set in order for this test
 		to execute properly:
 		
 			NAMESPACE_PREFIX=gme://SDK Example Project.caCORE/1/

@@ -151,7 +151,7 @@ public class AllValidationTypeHibernateValidatorTest extends SDKHibernateValidat
 //	}
 	
 	// The following test is only valid if connecting to the caDSR DEV environment  
-	// using the following deploy.properties setting:
+	// using the following codegen.properties setting:
 	//
 	//	NAMESPACE_PREFIX=gme://Satish Project.caCORE/1/
 	//
