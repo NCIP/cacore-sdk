@@ -445,7 +445,7 @@ public class UMLGMETagValidator implements Validator
 	}
 	
 	private void setModelNamespace(UMLModel model, String basePkgLogicalModel,GeneratorErrors errors){
-			//override deploy.properties NAMESPACE_PREFIX property with GME namespace tag value, if it exists
+			//override codegen.properties NAMESPACE_PREFIX property with GME namespace tag value, if it exists
 
 			StringTokenizer tokenizer = new StringTokenizer(basePkgLogicalModel, ".");
 			UMLPackage pkg=null;
