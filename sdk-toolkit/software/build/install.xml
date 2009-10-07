@@ -3,6 +3,8 @@
 <project name="caCORE SDK - Installer" default="install" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
 
 	<property file="codegen.properties" />	
+	<property name="project.name" value="${PROJECT_NAME}"/>
+	
 	<import file="bda-master-install.xml"/>
 	
 	<!-- Grid related properties -->
