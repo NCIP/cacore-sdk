@@ -7,7 +7,7 @@
 
 	<configurations>
 		<conf name="codegen-compile" />
-		<conf name="codegen-runtime" extends="common" />
+		<conf name="codegen-runtime" />
 
 		<conf name="common" />
 		<conf name="remote-client" extends="common" />
@@ -47,7 +47,7 @@
 		<!--  jars required to package local client -->
 		<dependency org="ncicb" name="sdk-system-core-module" rev="latest.integration" conf="local-client->compile"/>	
 		
-		<dependency org="springsource" name="acegi-security" rev="1.0.4" conf="common->compile"/>
+		<dependency org="springsource" name="acegi-security" rev="1.0.4" conf="common->compile;codegen-runtime->compile"/>
 		<dependency org="springsource" name="spring" rev="2.0.2" conf="common->compile"/>
 		<dependency org="org.antlr" name="antlr" rev="2.7.6" conf="common->compile"/>
 		<dependency org="objectweb" name="asm" rev="1.5.3" conf="common->compile"/>
