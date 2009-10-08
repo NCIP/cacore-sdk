@@ -81,7 +81,7 @@
 		</and>
 	</condition>
 
-	
+
 	<condition property="CSM_JNDI_SERVER_START" value="" else="${xml.comment.start}">
 		<or>
 			<and>
@@ -127,7 +127,7 @@
 					</or>
 					<equals arg1="${SECURITY_ENABLED}" arg2="true" casesensitive="false" trim="true" />
 				</and>
-					
+
 				<not>
 					<or>
 						<equals arg1="${DB_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
@@ -143,7 +143,7 @@
 					</or>
 					<equals arg1="${SECURITY_ENABLED}" arg2="true" casesensitive="false" trim="true" />
 				</and>
-					
+
 				<or>
 					<equals arg1="${DB_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
 					<equals arg1="${DB_USE_JNDI_BASED_CONNECTION}" arg2="yes" casesensitive="false" trim="true" />
@@ -154,7 +154,7 @@
 			</and>
 		</or>
 	</condition>
-	
+
 	<condition property="CSM_DB_CONNECTION_START" value="${xml.comment.start}" else="">
 		<or>
 			<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
@@ -288,7 +288,7 @@
 			<filter token="DB_DIALECT" value="${DB_DIALECT}" />
 
 			<filter token="SERVER_URL" value="${SERVER_URL}" />
-			<filter token="SERVER_HTTP_URL" value="${SERVER_HTTP_URL}" />			
+			<filter token="SERVER_HTTP_URL" value="${SERVER_HTTP_URL}" />
 			<filter token="CSM_JNDI_NAME" value="${CSM_JNDI_NAME}" />
 			<filter token="CSM_DB_JNDI_URL" value="${JNDI_PREFIX}/${CSM_JNDI_NAME}" />
 			<filter token="CSM_DB_DRIVER" value="${CSM_DB_DRIVER}" />
@@ -329,7 +329,7 @@
 			<filter token="TOMCAT_END" value="${TOMCAT_END}" />
 		</filterset>
 	</target>
-	
+
 	<target name="replacetoken-contents-install-database" depends="-replace-templates-filter-tokens-reconfigure">
 		<if>
 			<equals arg1="${DB_TYPE}" arg2="mysql" />
@@ -474,9 +474,9 @@
 		package-ws-client,
 		package-server
 		"/>
-		
+
 	<target name="init-install" depends="replace-install-token-contents,-rejar-orm" description="initializes the packaging"/>
-	
+
 	<target name="-rejar-orm" depends="-replace-templates-filter-tokens-reconfigure">
 		<mkdir dir="${output.target.dir}" />
 		<delete dir="${temp.orm.dir}"/>
@@ -600,8 +600,24 @@
 				<copy todir="${package.client.local.lib.dir}" overwrite="true">
 					<fileset dir="${grid.jaas.api.lib.dir}" />
 					<fileset dir="${grid-login-service.lib.dir}"/>
-					<fileset dir="${server-tomcat.lib.dir}" excludes="xercesImpl*.*"/>
+					<fileset dir="${server-tomcat.lib.dir}" excludes="xercesImpl*.*" />
 				</copy>
+				<delete>
+				    <fileset dir="${package.client.local.lib.dir}">
+				        <include name="axis-1.4.jar" />
+						<include name="caGrid-data-*.jar" />
+				    	<include name="caGrid-Introduce-serviceTools*.jar" />
+				    	<include name="caGrid-metadata-data*.jar" />
+				    	<include name="caGrid-metadatautils*.jar" />
+						<include name="commons-discovery-*-dev.jar" />
+						<include name="globus_wsrf_*.jar" />
+				    	<include name="wsrf_core_registry*.jar" />
+						<include name="jdom-1.0.jar" />
+						<include name="commons-logging-1.0.3.jar" />
+						<include name="mysql-connector-java-3.0.16-ga-bin.jar" />
+				    </fileset> 
+				</delete>
+				
 				<copy todir="${package.client.local.dir}" overwrite="true">
 					<fileset dir="${system.config.client.grid-jaas.dir}" />
 				</copy>
@@ -702,6 +718,20 @@
 					<fileset dir="${grid-login-service.lib.dir}"/>
 					<fileset dir="${server-tomcat.lib.dir}" excludes="xercesImpl*.*"/>
 				</copy>
+				<delete>
+				    <fileset dir="${package.client.remote.lib.dir}">
+						<include name="caGrid-data-*.jar" />
+				    	<include name="caGrid-Introduce-serviceTools*.jar" />
+				    	<include name="caGrid-metadata-data*.jar" />
+				    	<include name="caGrid-metadatautils*.jar" />
+						<include name="globus_wsrf_*.jar" />
+				    	<include name="wsrf_core_registry*.jar" />
+						<include name="jdom-1.0.jar" />
+						<include name="commons-logging-1.0.3.jar" />
+						<include name="mysql-connector-java-3.0.16-ga-bin.jar" />
+				    </fileset>
+				</delete>
+				
 				<copy todir="${package.client.remote.dir}" overwrite="true">
 					<fileset dir="${system.config.client.grid-jaas.dir}" />
 				</copy>
@@ -819,6 +849,13 @@
 				<copy todir="${temp.webapp.staging.lib.dir}" overwrite="true">
 					<fileset dir="${grid.jaas.api.client.lib.dir}" excludes="cog*.*" />
 				</copy>
+				<delete>
+				    <fileset dir="${temp.webapp.staging.lib.dir}">
+				       	<include name="caGrid-data-*.jar" />
+				    	<include name="caGrid-metadata-data*.jar" />				    	
+				    </fileset>
+				</delete>
+				
 				<copy todir="${temp.webapp.staging.classes.dir}" overwrite="true">
 					<fileset dir="${system.config.security.dir}" includes="${csm.ehcache.file}" />
 					<fileset dir="${system.config.web.classes.dir}">
@@ -893,6 +930,13 @@
 				<exclude name="xml-api*.*" />
 				<exclude name="xercesImpl*.*" />
 				<exclude name="jgss*.*" />
+				
+				<exclude name="caGrid-data-*.jar" />
+				<exclude name="caGrid-Introduce-serviceTools*.jar" />
+		    	<exclude name="caGrid-metadata-data*.jar" />
+		    	<exclude name="caGrid-metadatautils*.jar" />
+				<exclude name="globus_wsrf_*.jar" />
+				<exclude name="wsrf_core_registry*.jar" />		
 			</lib>
 			<fileset dir="${system.config.grid.loginService.dir}">
 				<include name="**/*" />
@@ -1076,7 +1120,7 @@
 				</copy>
 			</then>
 		</if>
-		
+
 	</target>
 
 	<target name="package-server">
