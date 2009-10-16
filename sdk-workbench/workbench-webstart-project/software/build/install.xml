@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 
-<project name="caCORE Workbench - Installer" default="install" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
+<project name="caCORE Workbench - Installer" default="upgrade" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
 
 	<property file="project.properties" />
 	<property name="properties.template.file" value="${basedir}/properties.template" />
@@ -40,6 +40,7 @@
 		install:tomcat:clean,
 		install:tomcat:binaries,
 		install:tomcat:configure,
+		install:tomcat:project-webapp:re-configure,
 		install:tomcat:project-webapp,
 		install:post:tomcat,
 		install:tomcat:start,
@@ -77,6 +78,7 @@
 		install:tomcat:validation:pre-install,
 		install:tomcat:stop,
 		install:tomcat:validation:pre-install:ports,
+		install:tomcat:project-webapp:re-configure,
 		install:tomcat:project-webapp,
 		install:post:tomcat,
 		install:tomcat:start,
@@ -132,5 +134,23 @@
 		<!--
 		<validate-pre-install-tomcat />
 		-->
+	</target>
+		
+	<target name="install:tomcat:project-webapp:re-configure" description="Configure bda-blueprints-webapp application, copies over externalized properties or configurations that are not part of the tomcat configuration" unless="exclude.tomcat" depends="common:init">
+		<property name="workbench.temp.dir" value="${working.dir}/workbench-webapp"/>
+		<delete dir="${workbench.temp.dir}"/>
+		<unzip src="${package.client.tomcat.webapps.dir}/${PROJECT_NAME}.war" dest="${workbench.temp.dir}"/>
+		
+		<replace dir="${workbench.temp.dir}">
+			<replacefilter token="@SERVER_HOSTNAME@" value="${tomcat.hostname}" />
+			<replacefilter token="@SERVER_PORT@" value="${tomcat.port.http}" />
+			<replacefilter token="@TOMCAT_EXTERNAL_HTTP_HOST@" value="${tomcat.external.http.host}" />
+		</replace>
+		<delete dir="${package.client.tomcat.webapps.dir}/${PROJECT_NAME}.war"/>
+		<war destfile="${package.client.tomcat.webapps.dir}/${PROJECT_NAME}.war" compress="false" webxml="${workbench.temp.dir}/WEB-INF/web.xml" >
+			<fileset dir="${workbench.temp.dir}">
+				<include name="*/**" />
+			</fileset>
+		</war>  
 	</target>
 </project>
