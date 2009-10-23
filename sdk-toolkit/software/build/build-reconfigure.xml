@@ -825,7 +825,7 @@
 			<then>
 				<echo message="security enabled" />
 				<copy todir="${temp.webapp.staging.lib.dir}" overwrite="true">
-					<fileset dir="${security.api.lib.dir}" />
+					<fileset dir="${security.api.lib.dir}"/>
 				</copy>
 				<copy todir="${temp.webapp.staging.classes.dir}" overwrite="true">
 					<fileset dir="${system.config.client.csm-security.dir}/conf">
@@ -889,6 +889,7 @@
 			</manifest>
 			<lib dir="${temp.webapp.staging.lib.dir}">
 				<exclude name="cog*.*"/>
+				<exclude name="servlet*.*"/>
 				<exclude name="${server-exclude-list}" />
 			</lib>
 			<fileset dir="${output.project.dir}/web">
