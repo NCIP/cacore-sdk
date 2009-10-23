@@ -122,6 +122,32 @@
 	</switch>
 	
 	<import file="build-reconfigure.xml" />
+	
+	<target name="install" description="Installs and configures JBOSS, creates database, and deploys application" 
+		depends="
+		common:jboss:init,
+		common:tomcat:init,
+		
+		common:init,
+		install:jboss:init,
+		install:common:validation:pre-install,
+		install:jboss:validation:pre-install,
+		install:tomcat:validation:pre-install,
+		install:database:validation:pre-install,
+		install:jboss:stop,
+		install:tomcat:stop,
+		install:jboss:validation:pre-install:ports,
+		install:tomcat:validation:pre-install:ports,
+		install:common:clean,
+		install:re-configure,
+		install:database,
+		install:tomcat,
+		install:jboss,
+		install:common:post,
+		install:jboss:start,
+		install:common:validation:post-install
+		">
+	</target>
 
 	<target name="install:jboss" description="Wrapper scripts that calls all required targets to install the jboss container" unless="exclude.jboss"
 		depends="
@@ -133,7 +159,6 @@
 		install:jboss:validation:pre-install:ports,
 		install:jboss:clean,
 		install:jboss:binaries,
-		install:re-configure,
 		install:jboss:project-webapp,
 		install:jboss:grid-login-webapp,
 		install:server:root-certs,
@@ -170,7 +195,6 @@
 		install:tomcat:validation:pre-install:ports,
 		install:tomcat:clean,
 		install:tomcat:binaries,
-		install:re-configure,
 		install:tomcat:project-webapp,		
 		install:tomcat:grid-login-webapp,
 		install:server:root-certs,
