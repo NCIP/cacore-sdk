@@ -18,7 +18,27 @@
 	<property name="database.type" value="${DB_TYPE}"/>
 	<property name="jboss.application.url" value="http://${jboss.server.hostname}:${jboss.server.port}/${PROJECT_NAME}"/>
 	<property name="tomcat.application.url" value="http://${tomcat.hostname}:${tomcat.port.http}/${PROJECT_NAME}"/>
-
+	
+	<switch value="${SERVER_TYPE}">
+		<case value="jboss">
+			<property name="SERVER_HOST_NAME" value="${jboss.server.hostname}"/>
+			<property name="SERVER_HTTP_PORT" value="${jboss.server.port}"/>
+			<property name="SERVER_SSL_PORT" value="${jboss.server.ssl.port}"/>
+			<property name="exclude.tomcat" value="true"/>
+		</case>
+		<case value="tomcat">
+			<property name="SERVER_HOST_NAME" value="${tomcat.hostname}"/>
+			<property name="SERVER_SSL_PORT" value="${tomcat.port.ssl}"/>
+			<property name="SERVER_HTTP_PORT" value="${tomcat.port.http}"/>
+			<property name="exclude.jboss" value="true"/>
+		</case>
+		<default>
+			<fail message="Invalid server type ${SERVER_TYPE}" />
+		</default>
+	</switch>
+	
+	<import file="build-reconfigure.xml" />
+	
 	<echo message="${SERVER_URL}"/>
 	<property name="application.url" value="${SERVER_URL}" />
 
@@ -103,26 +123,7 @@
 		</then>
 	</if>
 	
-	<switch value="${SERVER_TYPE}">
-		<case value="jboss">
-			<property name="SERVER_HOST_NAME" value="${jboss.server.hostname}"/>
-			<property name="SERVER_HTTP_PORT" value="${jboss.server.port}"/>
-			<property name="SERVER_SSL_PORT" value="${jboss.server.ssl.port}"/>
-			<property name="exclude.tomcat" value="true"/>
-		</case>
-		<case value="tomcat">
-			<property name="SERVER_HOST_NAME" value="${tomcat.hostname}"/>
-			<property name="SERVER_SSL_PORT" value="${tomcat.port.ssl}"/>
-			<property name="SERVER_HTTP_PORT" value="${tomcat.port.http}"/>
-			<property name="exclude.jboss" value="true"/>
-		</case>
-		<default>
-			<fail message="Invalid server type ${SERVER_TYPE}" />
-		</default>
-	</switch>
-	
-	<import file="build-reconfigure.xml" />
-	
+		
 	<target name="install" description="Installs and configures JBOSS, creates database, and deploys application" 
 		depends="
 		common:jboss:init,
@@ -695,6 +696,16 @@
 			</then>
 		</if>-->
 	</target>
+	
+	<target name="install:common:validation:pre-install" description="Runs pre-install validation checks bda-utils" depends="common:init">		
+		<!-- Removed JDK version check
+		<validate-pre-install-common
+			ant.check.version="${ant.minimum.version}"
+			java.check.version.major="${java.major.version}"
+			java.check.version.minor="${java.minor.version}"
+			/>
+		-->
+	</target>
 
 	<macrodef name="execute-database-install">
 		<attribute name="database.url"/>
@@ -707,7 +718,7 @@
 			<echo message="@{database.type}"/>
 			<switch value="@{database.type}">
 				<case value="oracle">
-					<database-install db.install.create.file.list="@{db.install.create.oracle.file.list}"  database.url="@{database.url}" database.user="@{database.user}" database.password="@{database.password}" sql.delimiter="/" sql.delimitertype="row" />
+					<database-install db.install.create.file.list="@{db.install.create.oracle.file.list}"  database.url="@{database.url}" database.user="@{database.user}" database.password="@{database.password}" sql.delimiter="/" sql.delimitertype="row"/>
 				</case>
 				<case value="mysql">
 					<database-install db.install.create.file.list="@{db.install.create.mysql.file.list}" database.url="@{database.url}" database.user="@{database.user}" database.password="@{database.password}"/>
