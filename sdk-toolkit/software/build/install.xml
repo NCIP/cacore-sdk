@@ -2,11 +2,11 @@
 
 <project name="caCORE SDK - Installer" default="install" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
 
-	<property file="codegen.properties" />	
+	<property file="codegen.properties" />
 	<property name="project.name" value="${PROJECT_NAME}"/>
-	
+
 	<import file="bda-master-install.xml"/>
-	
+
 	<!-- Grid related properties -->
 	<property name="grid.secure.key.file.location" value="${security.dir.src}/${grid.secure.key.file}" />
 	<property name="grid.secure.cert.file.location" value="${security.dir.src}/${grid.secure.cert.file}" />
@@ -18,7 +18,7 @@
 	<property name="database.type" value="${DB_TYPE}"/>
 	<property name="jboss.application.url" value="http://${jboss.server.hostname}:${jboss.server.port}/${PROJECT_NAME}"/>
 	<property name="tomcat.application.url" value="http://${tomcat.hostname}:${tomcat.port.http}/${PROJECT_NAME}"/>
-	
+
 	<switch value="${SERVER_TYPE}">
 		<case value="jboss">
 			<property name="SERVER_HOST_NAME" value="${jboss.server.hostname}"/>
@@ -36,9 +36,9 @@
 			<fail message="Invalid server type ${SERVER_TYPE}" />
 		</default>
 	</switch>
-	
+
 	<import file="build-reconfigure.xml" />
-	
+
 	<echo message="${SERVER_URL}"/>
 	<property name="application.url" value="${SERVER_URL}" />
 
@@ -122,8 +122,8 @@
 			</switch>
 		</then>
 	</if>
-	
-		
+
+
 	<target name="install" description="Installs and configures JBOSS, creates database, and deploys application" 
 		depends="
 		common:jboss:init,
@@ -185,7 +185,7 @@
 			</then>
 		</if>
 	</target>
-		
+
 	<target name="install:tomcat" description="Wrapper scripts that calls all required targets to install the tomcat container" unless="exclude.tomcat"
 		depends="
 		
@@ -204,6 +204,74 @@
 		install:tomcat:start,
 		install:tomcat:validation:post-install
 		">
+	</target>
+
+	<target name="install:jboss:clean" unless="exclude.jboss" depends="common:jboss:init,common:init">
+		<if>
+			<equals arg1="${INSTALL_CONTAINER}" arg2="true" casesensitive="false" />
+			<then>
+				<sleep seconds="5" />
+				<property name="backup.count" value="5" />
+				<if>
+					<not>
+						<equals arg1="${exclude.jboss.backup}" arg2="true" />
+					</not>
+					<then>
+						<!-- Jboss backup, do not compress until install is finished -->
+						<property name="backup.jboss.base.dir" location="${application.base.path}/backup/jboss" />
+
+						<!-- So these directories won't be included in the backup, they are not needed to use jboss -->
+						<delete dir="${jboss.home}/server/${jboss.server.name}/work" />
+						<delete dir="${jboss.home}/server/${jboss.server.name}/tmp" />
+
+						<backup-dir src.dir="${jboss.home}" backup.base.dir="${backup.jboss.base.dir}" backup.count="${backup.count}" />
+					</then>
+				</if>
+				<delete dir="${jboss.home}" />
+			</then>
+		</if>
+	</target>
+
+	<target name="install:tomcat:binaries" description="Install tomcat binaries" unless="exclude.tomcat" depends="common:init">
+		<if>
+			<equals arg1="${INSTALL_CONTAINER}" arg2="true" casesensitive="false" />
+			<then>
+				<delete dir="${tomcat.home}" />
+				<dirname file="${tomcat.home}" property="tomcat.base.dir" />
+				<unzip dest="${tomcat.base.dir}" src="${tools.dir}/${tomcat.binaries.file}" />
+				<if>
+					<os family="unix" />
+					<then>
+						<chmod dir="${tomcat.home}/bin" perm="ugo+rx" includes="**/*.sh" />
+					</then>
+				</if>
+			</then>
+		</if>
+	</target>
+
+	<target name="install:tomcat:clean" unless="exclude.tomcat" depends="common:tomcat:init">
+		<if>
+			<equals arg1="${INSTALL_CONTAINER}" arg2="true" casesensitive="false"/>
+			<then>
+				<sleep seconds="5" />
+				<property name="backup.count" value="5"/>
+				<if>
+					<not>
+						<equals arg1="${exclude.tomcat.backup}" arg2="true"/>
+					</not>
+					<then>
+						<property name="backup.tomcat.base.dir" location="${application.base.path}/backup/tomcat"/>
+
+						<backup-dir
+							src.dir="${tomcat.home}"
+							backup.base.dir="${backup.tomcat.base.dir}"
+							backup.count="${backup.count}"
+							/>
+					</then>
+				</if>
+				<delete dir="${tomcat.home}"/>
+			</then>
+		</if>
 	</target>
 
 	<target name="install:re-configure" description="Configure example-webapp application, copies over externalized properties or configurations that are not part of the tomcat configuration">
