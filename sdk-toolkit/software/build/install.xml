@@ -524,6 +524,8 @@
 				<grid-secure-configure-valve 
 					appserver.server-xml.file="${tomcat.home}/conf/server.xml" 
 					appserver.server-xml.service.name="Catalina" />
+					
+				<!-- 	
 				<xmltask source="${tomcat.home}/conf/server.xml"
 					dest="${tomcat.home}/conf/server.xml">
 					<remove path="/Server/Service[@name='Catalina']/ConnenctorEngine[@name='Catalina']/Valve[@className='org.globus.tomcat.coyote.valves.HTTPSValve']" />
@@ -533,6 +535,7 @@
 						]]>                                     
 					</insert>
 				</xmltask>
+				 -->
 			</then>
 		</if>
 	</target>
@@ -611,7 +614,8 @@
 					<xmlcatalog refid="bda.xml.catalog" />
 					<insert path="//GlobalNamingResources/Resource" file="${naming.resource.server.xml}" position="after" />
 				</xmltask>
-
+				
+				<!-- 
 				<echo message="Inserting ${naming.resource.param.server.xml} into ${tomcat.home}/conf/server.xml" />
 				<xmltask preservetype="true" source="${tomcat.home}/conf/server.xml">
 					<xmlcatalog refid="bda.xml.catalog"/>
@@ -623,6 +627,7 @@
 					<xmlcatalog refid="bda.xml.catalog"/>
 					<insert path="//GlobalNamingResources/ResourceParams" file="${naming.resource.param.server.xml}" position="after"/>
 				</xmltask>
+				 -->
 			</then>
 		</if>
 	</target>
