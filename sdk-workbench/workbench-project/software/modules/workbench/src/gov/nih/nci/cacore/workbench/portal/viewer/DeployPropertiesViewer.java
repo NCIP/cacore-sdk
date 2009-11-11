@@ -106,7 +106,7 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
 	private AppServerSettingsPanel appServerSettingsPanel = null;
 	private DbConnectionSettingsPanel dbConnectionSettingsPanel = null;
 	private CsmDbConnectionSettingsPanel csmDbConnectionSettingsPanel = null;
-	private ClmSettingsPanel clmSettingsPanel = null;
+	private ClmSettingsPanel clmDbConnectionSettingsPanel = null;
 	private CaGridAuthSettingsPanel caGridAuthSettingsPanel = null;
 	private AdvancedSettingsPanel advancedSettingsPanel = null;
 	private RemoteSshSettingsPanel remoteSshSettingsPanel = null;
@@ -195,7 +195,7 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
         appServerSettingsPanel=new AppServerSettingsPanel(this,propsValidator);
         dbConnectionSettingsPanel=new DbConnectionSettingsPanel(this,propsValidator);
         csmDbConnectionSettingsPanel=new CsmDbConnectionSettingsPanel(this,propsValidator,securitySettingsPanel.isSecurityEnabled());
-        clmSettingsPanel=new ClmSettingsPanel(this,propsValidator,writableApiSettingsPanel.isWritableApiExtensionEnabled());
+        clmDbConnectionSettingsPanel=new ClmSettingsPanel(this,propsValidator); 
         caGridAuthSettingsPanel=new CaGridAuthSettingsPanel(this,propsValidator,securitySettingsPanel.isSecurityEnabled(),securitySettingsPanel.isCaGridLoginModuleEnabled());
         advancedSettingsPanel=new AdvancedSettingsPanel(this,propsValidator);
         remoteSshSettingsPanel=new RemoteSshSettingsPanel(this, propsValidator);
@@ -209,7 +209,7 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
         panelValidators.add((PanelValidator)appServerSettingsPanel);
         panelValidators.add((PanelValidator)dbConnectionSettingsPanel);
         panelValidators.add((PanelValidator)csmDbConnectionSettingsPanel);
-        panelValidators.add((PanelValidator)clmSettingsPanel);
+        panelValidators.add((PanelValidator)clmDbConnectionSettingsPanel);
         panelValidators.add((PanelValidator)caGridAuthSettingsPanel);
         panelValidators.add((PanelValidator)advancedSettingsPanel);
         panelValidators.add((PanelValidator)remoteSshSettingsPanel);
@@ -218,7 +218,7 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
     private void resetMainTabbedPaneComponents(){
     	mainTabbedPane.setComponentAt(APP_SERVER_TAB_INDEX, new IconFeedbackPanel(this.validationModel, appServerSettingsPanel.getSettingsPanel()));
     	mainTabbedPane.setComponentAt(DB_TAB_INDEX, new IconFeedbackPanel(this.validationModel, dbConnectionSettingsPanel.getSettingsPanel()));
-    	mainTabbedPane.setComponentAt(LOGGING_TAB_INDEX, new IconFeedbackPanel(this.validationModel, clmSettingsPanel.getSettingsPanel()));
+    	mainTabbedPane.setComponentAt(LOGGING_TAB_INDEX, new IconFeedbackPanel(this.validationModel, clmDbConnectionSettingsPanel.getSettingsPanel()));
     	mainTabbedPane.setComponentAt(CSM_TAB_INDEX, new IconFeedbackPanel(this.validationModel, csmDbConnectionSettingsPanel.getSettingsPanel()));
     	mainTabbedPane.setComponentAt(CAGRID_AUTH_TAB_INDEX, new IconFeedbackPanel(this.validationModel, caGridAuthSettingsPanel.getSettingsPanel()));
     	mainTabbedPane.setComponentAt(ADVANCED_TAB_INDEX, new IconFeedbackPanel(this.validationModel, advancedSettingsPanel.getSettingsPanel()));
@@ -433,8 +433,8 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
             			csmDbSqlFilePath = csmDbConnectionSettingsPanel.getDbSqlFilePath();
             		//}
             		
-            		//if (clmSettingsPanel.isDbDropSchemaSelected()){
-            			clmDbSqlFilePath = clmSettingsPanel.getDbSqlFilePath();
+            		//if (clmDbConnectionSettingsPanel.isDbDropSchemaSelected()){
+            			clmDbSqlFilePath = clmDbConnectionSettingsPanel.getDbSqlFilePath();
             		//}
 
             		boolean isSaveSuccessful = saveDeployProperties(
@@ -521,7 +521,7 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
             			}
             			
             			//if (csmDbConnectionSettingsPanel.isDbDropSchemaSelected()){
-            			if (csmDbSqlFilePath!=null && csmDbSqlFilePath.length()>0){
+            			if (isCsmEnabled() && csmDbSqlFilePath!=null && csmDbSqlFilePath.length()>0){
             				
             				String dbType = csmDbConnectionSettingsPanel.getCsmDbType();
 
@@ -549,10 +549,10 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
             				csmDbConnectionSettingsPanel.setDbSqlFilePath(csmDbSqlFilePath);
             			}
             			
-            			//if (clmSettingsPanel.isDbDropSchemaSelected()){
-            			if (clmDbSqlFilePath!=null && clmDbSqlFilePath.length()>0){
+            			//if (clmDbConnectionSettingsPanel.isDbDropSchemaSelected()){
+            			if (isClmEnabled() && clmDbSqlFilePath!=null && clmDbSqlFilePath.length()>0){
             				
-            				String dbType = clmSettingsPanel.getClmDbType();
+            				String dbType = clmDbConnectionSettingsPanel.getClmDbType();
 
             				// CLM DB SQL file has been copied - synchronize file path now
             				// Override the CLM DB SQL File property to point to the project generation 
@@ -560,7 +560,7 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
             				File destDbSqlDir = ResourceManager.getDbSqlDir(projectSettingsPanel.getProjectDir(), dbType);
             				clmDbSqlFilePath =  (destDbSqlDir
             						+ "/"
-            						+ clmSettingsPanel.getClmDbSqlFileName()).replace('\\', '/');
+            						+ clmDbConnectionSettingsPanel.getClmDbSqlFileName()).replace('\\', '/');
             		    	
             				log.debug("* * * clmDbSqlFilePath: " +clmDbSqlFilePath);
             				if ("mysql".equalsIgnoreCase(dbType)){
@@ -572,7 +572,7 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
 //            					log.error("ERROR:  Unable to rename CSM DB SQL file path to standard project generation db path.");
 //            				}
 
-            				clmSettingsPanel.setDbSqlFilePath(clmDbSqlFilePath);
+            				clmDbConnectionSettingsPanel.setDbSqlFilePath(clmDbSqlFilePath);
             			}
 
             			log.debug("* * * About to override caGrid Certificate, Key and/or DB SQL file name(s)");
@@ -662,13 +662,13 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
     }
     
     public void toggleClmTestConnectionButton() {
-    	boolean hasValidationErrors = clmSettingsPanel.validateInput().hasErrors();
-    	if (writableApiSettingsPanel.isCommonLoggingModuleEnabled() && clmSettingsPanel.isEnableCommonLoggingModuleSelected() && !hasValidationErrors){
-    		clmSettingsPanel.setTestConnectionButtonEnabled(true); 
+    	boolean hasValidationErrors = clmDbConnectionSettingsPanel.validateInput().hasErrors();
+    	if (writableApiSettingsPanel.isCommonLoggingModuleEnabled() && !hasValidationErrors){
+    		clmDbConnectionSettingsPanel.setTestConnectionButtonEnabled(true); 
     		return;
         }
     	
-    	clmSettingsPanel.setTestConnectionButtonEnabled(false);
+    	clmDbConnectionSettingsPanel.setTestConnectionButtonEnabled(false);
     }
     
     public void toggleDbJndiNameField() {
@@ -692,30 +692,24 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
     }
     
     public void toggleWritableApiFields() {
-		if (writableApiSettingsPanel.isWritableApiExtensionEnabled()){
-			
-			if (clmSettingsPanel.isEnableCommonLoggingModuleSelected()){
-				mainTabbedPane.setEnabledAt(LOGGING_TAB_INDEX, true); // CLM Panel
-				//clmSettingsPanel.setClmDbConnectionUrlEnabled(true); currently not editable
-				clmSettingsPanel.setClmDbUsernameEnabled(true);
-				clmSettingsPanel.setClmDbPasswordEnabled(true);
-				//clmDbDriverField.setEnabled(true); //currently not editable
-			} else {
-				mainTabbedPane.setEnabledAt(LOGGING_TAB_INDEX, false); // CLM Panel
-				//clmSettingsPanel.setClmDbConnectionUrlEnabled(false); // currently not editable
-				clmSettingsPanel.setClmDbUsernameEnabled(false);
-				clmSettingsPanel.setClmDbPasswordEnabled(false);
-				//clmSettingsPanel.setClmDbDriver(false); //currently not editable
-			}
-			
-		} else{
-			
-			mainTabbedPane.setEnabledAt(LOGGING_TAB_INDEX, false); // CLM Panel
-			//clmSettingsPanel.setClmDbConnectionUrlEnabled(false); // currently not editable
-			clmSettingsPanel.setClmDbUsernameEnabled(false);
-			clmSettingsPanel.setClmDbPasswordEnabled(false);
-			//clmDbDriverField.setEnabled(false); //currently not editable
-		}
+    	if (isClmEnabled() ){
+    		mainTabbedPane.setEnabledAt(LOGGING_TAB_INDEX, true); // CLM Panel
+    		//clmDbConnectionSettingsPanel.setClmDbConnectionUrlEnabled(true); currently not editable
+    		clmDbConnectionSettingsPanel.setClmDbUsernameEnabled(true);
+    		clmDbConnectionSettingsPanel.setClmDbPasswordEnabled(true);
+    		//clmDbDriverField.setEnabled(true); //currently not editable
+    	} else{
+    		mainTabbedPane.setEnabledAt(LOGGING_TAB_INDEX, false); // CLM Panel
+    		//clmDbConnectionSettingsPanel.setClmDbConnectionUrlEnabled(false); // currently not editable
+    		clmDbConnectionSettingsPanel.setClmDbUsernameEnabled(false);
+    		clmDbConnectionSettingsPanel.setClmDbPasswordEnabled(false);
+    		//clmDbDriverField.setEnabled(false); //currently not editable
+    	}
+    }
+    
+    // CLM Panel should only be enabled if dbType and clmDbType are MySql
+    public boolean isDbTypeMySQL(){
+    	return (dbConnectionSettingsPanel.isDbTypeMySql() && (!isSecurityEnabled() || (isSecurityEnabled() && csmDbConnectionSettingsPanel.isCsmDbTypeMySql())));
     }
     
     public void toggleSecurityFields() {
@@ -780,6 +774,11 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
     	csmDbConnectionSettingsPanel.getCsmDbSchema().equalsIgnoreCase(dbConnectionSettingsPanel.getDbSchema()));
     }
     
+    public boolean isAppDbAndClmSchemaSame(){
+    	return (clmDbConnectionSettingsPanel.getClmDbSchema().length() > 0 &&
+    			clmDbConnectionSettingsPanel.getClmDbSchema().equalsIgnoreCase(dbConnectionSettingsPanel.getDbSchema()));
+    }
+    
     public boolean isAppDbDropSchemaSelected(){
     	return dbConnectionSettingsPanel.isDbDropSchemaSelected();
     }
@@ -788,8 +787,24 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
     	return csmDbConnectionSettingsPanel.getCsmDbSqlFileName();
     }
     
-    public boolean isEnableWritableApiExtensionSelected(){
+    public String getClmDbSqlFileName(){
+    	return clmDbConnectionSettingsPanel.getClmDbSqlFileName();
+    }
+    
+    public boolean isWritableApiExtensionEnabled(){
     	return writableApiSettingsPanel.isWritableApiExtensionEnabled();
+    }
+    
+    public boolean isCommonLoggingModuleEnabled(){
+    	return writableApiSettingsPanel.isCommonLoggingModuleEnabled();
+    }
+    
+    public boolean isCsmEnabled() {
+    	return (isSecurityEnabled());
+    }    
+    
+    public boolean isClmEnabled() {
+    	return (isWritableApiExtensionEnabled() && isCommonLoggingModuleEnabled() && isDbTypeMySQL());
     }
     
     protected void toggleUseDbConnectionsCheckBox() {
@@ -935,9 +950,9 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
 				}
 			}
 
-			if (writableApiSettingsPanel.isWritableApiExtensionEnabled()){
+			if (isClmEnabled()){
 				if (writableApiSettingsPanel.isCommonLoggingModuleEnabled()){
-					summarySettingsPanel.add(clmSettingsPanel.getSummaryPanel(), gridBagConstraints40);
+					summarySettingsPanel.add(clmDbConnectionSettingsPanel.getSummaryPanel(), gridBagConstraints40);
 				}
 			}
 
@@ -959,7 +974,7 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
 			mainTabbedPane.addTab("App Server", null, new IconFeedbackPanel(this.validationModel, appServerSettingsPanel.getSettingsPanel()), null);
 			mainTabbedPane.addTab("App DB", null, new IconFeedbackPanel(this.validationModel, dbConnectionSettingsPanel.getSettingsPanel()), null);
 			
-			mainTabbedPane.addTab("Logging", null, new IconFeedbackPanel(this.validationModel, clmSettingsPanel.getSettingsPanel()), null);
+			mainTabbedPane.addTab("Logging", null, new IconFeedbackPanel(this.validationModel, clmDbConnectionSettingsPanel.getSettingsPanel()), null);
 			
 			mainTabbedPane.addTab("CSM DB", null, new IconFeedbackPanel(this.validationModel, csmDbConnectionSettingsPanel.getSettingsPanel()), null);
 			mainTabbedPane.addTab("caGrid Auth", null, new IconFeedbackPanel(this.validationModel, caGridAuthSettingsPanel.getSettingsPanel()), null);
@@ -1017,7 +1032,9 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
 		propsMap.putAll(dbConnectionSettingsPanel.getPropsMap());
 		
 		// Common Logging Module DB Connection properties
-		propsMap.putAll(clmSettingsPanel.getPropsMap());
+		if (isClmEnabled()){
+			propsMap.putAll(clmDbConnectionSettingsPanel.getPropsMap());
+		}
 		
 		if (securitySettingsPanel.isSecurityEnabled()){
 			// CSM DB Connection properties
@@ -1077,7 +1094,7 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
 		//if not dropping any DB schemas
 		if (!dbConnectionSettingsPanel.isDbDropSchemaSelected() && 
 				!csmDbConnectionSettingsPanel.isDbDropSchemaSelected() &&
-				!clmSettingsPanel.isDbDropSchemaSelected()){
+				!clmDbConnectionSettingsPanel.isDbDropSchemaSelected()){
 			propsMap.put("exclude.database", "true");
 		}
 		
