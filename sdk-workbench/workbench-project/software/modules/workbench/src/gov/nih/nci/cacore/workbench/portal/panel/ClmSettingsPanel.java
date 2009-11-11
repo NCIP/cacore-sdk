@@ -52,15 +52,11 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
 	private static final String CLM_DB_PASSWORD = "CLM DB Password";
 	private static final String CLM_DB_DROP_SCHEMA = "CLM DB Drop Schema";
 	private static final String CLM_DB_SQL_FILE = "CLM DB SQL File";
-
-    private boolean isWritableApiEnabled;
 	
 	public ClmSettingsPanel(DeployPropertiesViewer parentContainer,
-			TabbedPanePropertiesValidator mainPanelValidator,
-			boolean isEnableWritableApiExtensionSelected) {
+			TabbedPanePropertiesValidator mainPanelValidator) {
 		this.parentContainer = parentContainer;
 		this.mainPanelValidator = mainPanelValidator;
-		this.isWritableApiEnabled = isEnableWritableApiExtensionSelected;
 	}
 	
 	// Common Logging (CLM) 
@@ -123,36 +119,6 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
         }
         return clmDbTypeComboBox;
     }    
-    
-    /**
-     * This method initializes the Enable Common Logging Module CheckBox
-     * 
-     * @return javax.swing.JCheckBox
-     */
-    private JCheckBox getEnableCommonLoggingModuleCheckBox() {
-        if (enableCommonLoggingModuleCheckBox == null) {
-        	enableCommonLoggingModuleCheckBox = new JCheckBox();
-        	enableCommonLoggingModuleCheckBox.setToolTipText("Enable Logging?");
-        	enableCommonLoggingModuleCheckBox.setHorizontalAlignment(SwingConstants.LEADING);
-        	enableCommonLoggingModuleCheckBox.setSelected(Boolean.parseBoolean(parentContainer.getPropertiesManager().getDeployPropertyValue("ENABLE_COMMON_LOGGING_MODULE")));
-        	enableCommonLoggingModuleCheckBox.setHorizontalTextPosition(SwingConstants.LEFT);
-			
-        	enableCommonLoggingModuleCheckBox.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					parentContainer.toggleWritableApiFields();
-                    mainPanelValidator.setDirty(true);
-                    mainPanelValidator.validateInput();
-				}
-        	});
-
-        	enableCommonLoggingModuleCheckBox.addFocusListener(new FocusChangeHandler());
-        }
-        return enableCommonLoggingModuleCheckBox;
-    }
-    
-    public boolean isEnableCommonLoggingModuleSelected(){
-    	return getEnableCommonLoggingModuleCheckBox().isSelected();
-    }
 
     /**
      * This method initializes the CLM Database Connection URL Field
@@ -275,18 +241,21 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
         	clmDbSchemaField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
                 	updateClmDbFields();
+                	toggleReCreateClmDBFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
 
                 public void removeUpdate(DocumentEvent e) {
                 	updateClmDbFields();
+                	toggleReCreateClmDBFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
 
                 public void insertUpdate(DocumentEvent e) {
                 	updateClmDbFields();
+                	toggleReCreateClmDBFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
@@ -296,7 +265,7 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
         return clmDbSchemaField;
     }
     
-    public String getClmDbConnectionUrlSchema(){
+    public String getClmDbSchema(){
     	return getClmDbSchemaField().getText();
     }
     
@@ -386,6 +355,15 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
     
     public void setClmDbPasswordEnabled(boolean isEnabled){
     	getClmDbPasswordField().setEnabled(isEnabled);
+    }
+    
+    public void toggleReCreateClmDBFields() {
+		if (ValidationUtils.isNotBlank(getClmDbSchema()) && parentContainer.isAppDbAndClmSchemaSame() ) {
+			clmDbDropSchemaCheckBox.setSelected(false);
+			clmDbDropSchemaCheckBox.setEnabled(false);
+		} else {
+			clmDbDropSchemaCheckBox.setEnabled(true);
+		}
     }
     
     /**
@@ -1036,67 +1014,77 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
     public ValidationResult validateInput() {
 
     	ValidationResult result = new ValidationResult();
-    	
-    	//Writable API Setting Validation
-    	if (isWritableApiEnabled){
-    		
-    		//CLM Setting Validation
-    		if (getEnableCommonLoggingModuleCheckBox().isSelected()){
 
-    			String clmDbConnectionUrlField = this.getClmDbUrlField().getText();
-    			if (ValidationUtils.isBlank(clmDbConnectionUrlField)) {
-    				result.add(new SimpleValidationMessage(CLM_DB_CONNECTION_URL + " must not be blank.", Severity.ERROR, CLM_DB_CONNECTION_URL));
-    			}
-        		
-        		if (clmDbConnectionUrlField.indexOf('<') > 1 || clmDbConnectionUrlField.indexOf('@') > 1) {
-        			result.add(new SimpleValidationMessage(CLM_DB_CONNECTION_URL + " information is incomplete.  Make sure hostname, port and schema information is correct.", Severity.ERROR, CLM_DB_CONNECTION_URL));
-        		}
-        		
-        		if (ValidationUtils.isBlank(getClmDbHostnameField().getText())) {
-        			result.add(new SimpleValidationMessage(CLM_DB_SERVER + " must not be blank.", Severity.ERROR, CLM_DB_SERVER));
-        		}
-        		
-        		String clmDbPort = getClmDbPortField().getText();
-        		if (ValidationUtils.isBlank(clmDbPort)) {
-        			result.add(new SimpleValidationMessage(CLM_DB_SERVER_PORT + " must not be blank.", Severity.ERROR, CLM_DB_SERVER_PORT));
-        		}
-        		
-        		if (!ValidationUtils.isNumeric(clmDbPort)){
-        			result.add(new SimpleValidationMessage(CLM_DB_SERVER_PORT + " must be numeric.", Severity.ERROR, CLM_DB_SERVER_PORT));
-        		}
-        		
-        		if (ValidationUtils.isBlank(getClmDbSchemaField().getText())) {
-        			result.add(new SimpleValidationMessage(CLM_DB_NAME + " must not be blank.", Severity.ERROR, CLM_DB_NAME));
-        		}
+    	//CLM Settings Validation
+    	if (parentContainer.isClmEnabled()){
 
-    			if (ValidationUtils.isBlank(this.getClmDbUsernameField().getText())) {
-    				result.add(new SimpleValidationMessage(CLM_DB_USERNAME + " must not be blank.", Severity.ERROR, CLM_DB_USERNAME));
+    		String clmDbConnectionUrlField = this.getClmDbUrlField().getText();
+    		if (ValidationUtils.isBlank(clmDbConnectionUrlField)) {
+    			result.add(new SimpleValidationMessage(CLM_DB_CONNECTION_URL + " must not be blank.", Severity.ERROR, CLM_DB_CONNECTION_URL));
+    		}
+
+    		if (clmDbConnectionUrlField.indexOf('<') > 1 || clmDbConnectionUrlField.indexOf('@') > 1) {
+    			result.add(new SimpleValidationMessage(CLM_DB_CONNECTION_URL + " information is incomplete.  Make sure hostname, port and schema information is correct.", Severity.ERROR, CLM_DB_CONNECTION_URL));
+    		}
+
+    		if (ValidationUtils.isBlank(getClmDbHostnameField().getText())) {
+    			result.add(new SimpleValidationMessage(CLM_DB_SERVER + " must not be blank.", Severity.ERROR, CLM_DB_SERVER));
+    		}
+
+    		String clmDbPort = getClmDbPortField().getText();
+    		if (ValidationUtils.isBlank(clmDbPort)) {
+    			result.add(new SimpleValidationMessage(CLM_DB_SERVER_PORT + " must not be blank.", Severity.ERROR, CLM_DB_SERVER_PORT));
+    		}
+
+    		if (!ValidationUtils.isNumeric(clmDbPort)){
+    			result.add(new SimpleValidationMessage(CLM_DB_SERVER_PORT + " must be numeric.", Severity.ERROR, CLM_DB_SERVER_PORT));
+    		}
+
+    		if (ValidationUtils.isBlank(getClmDbSchemaField().getText())) {
+    			result.add(new SimpleValidationMessage(CLM_DB_NAME + " must not be blank.", Severity.ERROR, CLM_DB_NAME));
+    		}
+
+    		if (ValidationUtils.isBlank(this.getClmDbUsernameField().getText())) {
+    			result.add(new SimpleValidationMessage(CLM_DB_USERNAME + " must not be blank.", Severity.ERROR, CLM_DB_USERNAME));
+    		}
+
+    		if (ValidationUtils.isBlank(this.getClmDbPasswordField().getText())) {
+    			result.add(new SimpleValidationMessage(CLM_DB_PASSWORD + " must not be blank.", Severity.ERROR, CLM_DB_PASSWORD));
+    		}
+
+    		if (getClmDbDropSchemaCheckBox().isSelected() && !parentContainer.isAppDbAndClmSchemaSame()){
+    			if (ValidationUtils.isBlank(this.getClmDbSqlFileField().getText())) {
+    				result.add(new SimpleValidationMessage(CLM_DB_SQL_FILE + " must not be blank when "+CLM_DB_DROP_SCHEMA+" is selected.", Severity.ERROR, CLM_DB_SQL_FILE));
+    			}
+    		}
+
+    		String clmDbSchema = getClmDbSchemaField().getText();
+    		if (ValidationUtils.isNotBlank(clmDbSchema) && parentContainer.isAppDbAndClmSchemaSame() && parentContainer.isAppDbDropSchemaSelected() ) {
+    			//TODO :: investigate if there is a way to visually signal that a CheckBox has a validation error.
+    			//        Currently, creating a validation error for the CheckBox has no effect.  As a result,
+    			//        using toggleReCreateClmDBFields() instead to enforce rule
+//  			if (getClmDbDropSchemaCheckBox().isSelected()){
+//  			log.debug("* * * Validation error: App DB and CLM Schema are the same, and CLM Drop Schema CheckBox is selected.");
+//  			result.add(new SimpleValidationMessage(CLM_DB_DROP_SCHEMA + " must not selected when both the App DB and CLM schema are the same.", Severity.ERROR, CLM_DB_DROP_SCHEMA));
+//  			}
+
+    			if (ValidationUtils.isBlank(this.getClmDbSqlFileField().getText())) {
+    				result.add(new SimpleValidationMessage(CLM_DB_SQL_FILE + " must not be blank when the application DB is being dropped, and both the App DB and CLM DB schema are the same.", Severity.ERROR, CLM_DB_SQL_FILE));
+    			}
+    		}
+
+    		if (ValidationUtils.isNotBlank(this.getClmDbSqlFileField().getText())) {
+    			File file = new File(this.getClmDbSqlFileField().getText());
+    			if(!file.exists()){
+    				result.add(new SimpleValidationMessage(CLM_DB_SQL_FILE + " does not exist.  Please select or enter a valid absolute path to the file.", Severity.ERROR, CLM_DB_SQL_FILE));
     			}
 
-    			if (ValidationUtils.isBlank(this.getClmDbPasswordField().getText())) {
-    				result.add(new SimpleValidationMessage(CLM_DB_PASSWORD + " must not be blank.", Severity.ERROR, CLM_DB_PASSWORD));
+    			if (!this.getClmDbSqlFileField().getText().endsWith("sql")){
+    				result.add(new SimpleValidationMessage(CLM_DB_SQL_FILE + " must refer to a SQL (*.sql) file.", Severity.ERROR, CLM_DB_SQL_FILE));
     			}
-    			
-    	    	
-    	    	if (getClmDbDropSchemaCheckBox().isSelected()){
-    	    		if (ValidationUtils.isBlank(this.getClmDbSqlFileField().getText())) {
-    	    			result.add(new SimpleValidationMessage(CLM_DB_SQL_FILE + " must not be blank when "+CLM_DB_DROP_SCHEMA+" is selected.", Severity.ERROR, CLM_DB_SQL_FILE));
-    	    		}
-    	    	}
-    	    	
-    			if (ValidationUtils.isNotBlank(this.getClmDbSqlFileField().getText())) {
-    	    		File file = new File(this.getClmDbSqlFileField().getText());
-    	    		if(!file.exists()){
-    	    			result.add(new SimpleValidationMessage(CLM_DB_SQL_FILE + " does not exist.  Please select or enter a valid absolute path to the file.", Severity.ERROR, CLM_DB_SQL_FILE));
-    	    		}
-    	    		
-    	    		if (!this.getClmDbSqlFileField().getText().endsWith("sql")){
-    	    			result.add(new SimpleValidationMessage(CLM_DB_SQL_FILE + " must refer to a SQL (*.sql) file.", Severity.ERROR, CLM_DB_SQL_FILE));
-    	    		}
-    	    	}
     		}
     	}
-    	
+
     	return result;
     }
     
@@ -1123,6 +1111,7 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
         ValidationComponentUtils.setMandatory(getClmDbSqlFileField(), true);
         
         updateClmDbFields();
+        toggleReCreateClmDBFields();
         parentContainer.toggleClmTestConnectionButton();
     }
     
@@ -1136,7 +1125,6 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
 		propsMap.put("CLM_DB_NAME", getClmDbSchemaField().getText());
 		propsMap.put("CLM_DB_USERNAME", getClmDbUsernameField().getText());
 		propsMap.put("CLM_DB_PASSWORD", getClmDbPasswordField().getText());
-		
 		
 		propsMap.put("CLM_DB_DROP_SCHEMA", Boolean.valueOf(getClmDbDropSchemaCheckBox().isSelected()).toString() );
 		

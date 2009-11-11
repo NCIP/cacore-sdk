@@ -181,6 +181,10 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
     public void setCsmDatabaseType(String selectedItemValue){
     	getCsmDbTypeComboBox().setSelectedItem(selectedItemValue);
     }
+    
+    public boolean isCsmDbTypeMySql(){
+    	return ("mysql".equalsIgnoreCase(getCsmDbType()));
+    }
 
     /**
      * This method initializes the CSM Use JNDI Based Connection Check Box
@@ -380,18 +384,21 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
         	csmDbSchemaField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
                 	updateCsmDbFields();
+                	toggleReCreateCsmDBFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
 
                 public void removeUpdate(DocumentEvent e) {
                 	updateCsmDbFields();
+                	toggleReCreateCsmDBFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
 
                 public void insertUpdate(DocumentEvent e) {
                 	updateCsmDbFields();
+                	toggleReCreateCsmDBFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
@@ -1392,7 +1399,7 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
 //    			}
     			
     			if (ValidationUtils.isBlank(this.getCsmDbSqlFileField().getText())) {
-    				result.add(new SimpleValidationMessage(CSM_DB_SQL_FILE + " must not be blank when the application DB is being dropped, and both the App DB and CSM schema are the same.", Severity.ERROR, CSM_DB_SQL_FILE));
+    				result.add(new SimpleValidationMessage(CSM_DB_SQL_FILE + " must not be blank when the application DB is being dropped, and both the App DB and CSM DB schema are the same.", Severity.ERROR, CSM_DB_SQL_FILE));
     			}
     		}
 
