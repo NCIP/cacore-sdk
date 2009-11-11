@@ -127,6 +127,10 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
     	return getDbTypeComboBox().getSelectedItem().toString();
     }
     
+    public boolean isDbTypeMySql(){
+    	return ("mysql".equalsIgnoreCase(getDbType()));
+    }
+    
     
     /**
      * This method initializes the Use JNDI Based Connection Check Box
@@ -1327,10 +1331,17 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
     	if (dbSqlFileName != null && dbSqlFileName.length() > 0) {
     		sb.append(dbSqlFileName);
 
-    		if (parentContainer.isAppDbAndCsmSchemaSame()){
+    		if (parentContainer.isAppDbAndCsmSchemaSame() && parentContainer.isCsmEnabled()){
     			String csmDbSqlFileName = parentContainer.getCsmDbSqlFileName();
     			if (csmDbSqlFileName != null && csmDbSqlFileName.length() > 0) {
     				sb.append(",").append(csmDbSqlFileName);
+    			}
+    		}
+    		
+    		if (parentContainer.isAppDbAndClmSchemaSame() && parentContainer.isClmEnabled()){
+    			String clmDbSqlFileName = parentContainer.getClmDbSqlFileName();
+    			if (clmDbSqlFileName != null && clmDbSqlFileName.length() > 0) {
+    				sb.append(",").append(clmDbSqlFileName);
     			}
     		}
     	}
