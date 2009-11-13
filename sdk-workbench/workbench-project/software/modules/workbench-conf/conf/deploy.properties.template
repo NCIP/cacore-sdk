@@ -335,7 +335,7 @@ exclude.jboss.backup=true
 jboss.ncicb-standard.port-config=true
 jboss.server.ports.name=config19280
 
-# you still have to have thes two ports because they are used by the build process, make sure they match the configuration you chose, refer to https://wiki.nci.nih.gov/x/0gqy for further details
+# you still have to have these two ports because they are used by the build process, make sure they match the configuration you chose, refer to https://wiki.nci.nih.gov/x/0gqy for further details
 
 #port numbers 
 jboss.server.hostname=localhost

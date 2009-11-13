@@ -16,7 +16,6 @@ tomcat.relative.path=${tomcat.binaries.relative.dir}
 exclude.jboss.backup=true
 
 jboss.ncicb-standard.port-config=true
-jboss.server.ports.name=config19280
 
 ###################################
 #  PRE-POST VALIDATION PROPERTIES #
