@@ -54,7 +54,7 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
     // JBoss Validation Message Constants
     public static final String JBOSS = "jboss";
 
-    public static final String JBOSS_PORT_CONFIGURATION="JBoss Port Configuration";
+    public static final String JBOSS_PORT_NAME="JBoss Port Name";
     public static final String JBOSS_SERVER_AJP_PORT="JBoss Server AJP Port";
     public static final String JBOSS_SERVER_HOSTNAME="JBoss Server Hostname";
     public static final String JBOSS_SERVER_JNDI_PORT="JBoss Server JNDI Port";
@@ -85,7 +85,7 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
     private JTextField tomcatPortSslField=null;
     
     // JBoss
-    private JComboBox  jbossPortConfigurationComboBox = null;
+    private JComboBox  jbossPortNameComboBox = null;
     private JTextField jbossServerAjpPortField = null;
     private JTextField jbossServerHostnameField = null;
     private JTextField jbossServerJndiPortField = null;
@@ -181,7 +181,7 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
 		    getTomcatPortShutdownField().setEnabled(true);
 		    getTomcatPortSslField().setEnabled(true);
 		    
-		    getJbossPortConfigurationComboBox().setEnabled(false);
+		    getJbossPortNameComboBox().setEnabled(false);
 		    getJbossServerAjpPortField().setEnabled(false);
 		    getJbossServerHostnameField().setEnabled(false);
 		    getJbossServerJndiPortField().setEnabled(false);
@@ -199,7 +199,7 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
 		    getTomcatPortShutdownField().setEnabled(false);
 		    getTomcatPortSslField().setEnabled(false);
 		    
-		    getJbossPortConfigurationComboBox().setEnabled(true);
+		    getJbossPortNameComboBox().setEnabled(true);
 		    getJbossServerAjpPortField().setEnabled(true);
 		    getJbossServerHostnameField().setEnabled(true);
 		    getJbossServerJndiPortField().setEnabled(true);
@@ -217,7 +217,7 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
 		    getTomcatPortShutdownField().setEnabled(false);
 		    getTomcatPortSslField().setEnabled(false);
 		    
-		    getJbossPortConfigurationComboBox().setEnabled(false);
+		    getJbossPortNameComboBox().setEnabled(false);
 		    getJbossServerAjpPortField().setEnabled(false);
 		    getJbossServerHostnameField().setEnabled(false);
 		    getJbossServerJndiPortField().setEnabled(false);
@@ -391,30 +391,30 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
     }
     
     /**
-     * This method initializes the Jboss Port Configuration Combo Box
+     * This method initializes the Jboss Port Name Combo Box
      * 
      * @return javax.swing.JTextField
      */         
-    private JComboBox getJbossPortConfigurationComboBox() {
-    	if (jbossPortConfigurationComboBox == null) {
-    		jbossPortConfigurationComboBox = new JComboBox();
+    private JComboBox getJbossPortNameComboBox() {
+    	if (jbossPortNameComboBox == null) {
+    		jbossPortNameComboBox = new JComboBox();
     		
-    		Map<String,String> jbossPortConfigurationOptionsMap = OptionsMapManager.getJbossPortConfigurationOptionsMap();
-        	if (jbossPortConfigurationOptionsMap!=null){
-            	Iterator<String> iter = jbossPortConfigurationOptionsMap.keySet().iterator();
+    		Map<String,String> jbossPortNameOptionsMap = OptionsMapManager.getJbossPortNameOptionsMap();
+        	if (jbossPortNameOptionsMap!=null){
+            	Iterator<String> iter = jbossPortNameOptionsMap.keySet().iterator();
             	
             	while (iter.hasNext()){
-            		jbossPortConfigurationComboBox.addItem((String)iter.next());
+            		jbossPortNameComboBox.addItem((String)iter.next());
             	}
 
-            	String jbossPortConfigurationValue = parentContainer.getPropertiesManager().getDeployPropertyValue("jboss.port.configuration");
-            	String jbossPortConfigurationKey = OptionsMapManager.getValueToKeyMap().get(jbossPortConfigurationValue);
+            	String jbossPortNameValue = parentContainer.getPropertiesManager().getDeployPropertyValue("jboss.server.ports.name");
+            	String jbossPortNameKey = OptionsMapManager.getValueToKeyMap().get(jbossPortNameValue);
             	
-            	if (jbossPortConfigurationKey != null && jbossPortConfigurationKey.length()>0)
-            		jbossPortConfigurationComboBox.setSelectedItem(jbossPortConfigurationKey);
+            	if (jbossPortNameKey != null && jbossPortNameKey.length()>0)
+            		jbossPortNameComboBox.setSelectedItem(jbossPortNameKey);
         	}
         	
-        	jbossPortConfigurationComboBox.addActionListener(new ActionListener() {
+        	jbossPortNameComboBox.addActionListener(new ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                 	toggleServerFields();
                     mainPanelValidator.setDirty(true);
@@ -422,9 +422,9 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
                 }
             });
 
-        	jbossPortConfigurationComboBox.addFocusListener(new FocusChangeHandler());
+        	jbossPortNameComboBox.addFocusListener(new FocusChangeHandler());
     	}
-    	return jbossPortConfigurationComboBox; 
+    	return jbossPortNameComboBox; 
     }
     
     /**
@@ -865,7 +865,7 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
 		if (jbossServerSettingsSubPanel == null) {
 			
 		    //JBoss Settings SubPanel Labels
-			JLabel jbossPortConfigurationLabel = null;
+			JLabel jbossPortNameLabel = null;
 		    JLabel jbossServerAjpPortLabel = null;
 		    JLabel jbossServerHostnameLabel = null;
 		    JLabel jbossServerJndiPortLabel = null;
@@ -1064,8 +1064,8 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
 			gridBagConstraints121.weightx = 1.0D;  
 			gridBagConstraints121.gridwidth = 2;		
 		
-			jbossPortConfigurationLabel = new JLabel();
-			jbossPortConfigurationLabel.setText("Port Configuration:");
+			jbossPortNameLabel = new JLabel();
+			jbossPortNameLabel.setText("Port Name:");
 			jbossServerAjpPortLabel = new JLabel();
 			jbossServerAjpPortLabel.setText("Server AJP Port:");
 			jbossServerHostnameLabel = new JLabel();
@@ -1083,8 +1083,8 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
 					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 			
-			jbossServerSettingsSubPanel.add(jbossPortConfigurationLabel, gridBagConstraints20);
-			jbossServerSettingsSubPanel.add(getJbossPortConfigurationComboBox(), gridBagConstraints21);
+			jbossServerSettingsSubPanel.add(jbossPortNameLabel, gridBagConstraints20);
+			jbossServerSettingsSubPanel.add(getJbossPortNameComboBox(), gridBagConstraints21);
 			jbossServerSettingsSubPanel.add(jbossServerHostnameLabel, gridBagConstraints30);
 			jbossServerSettingsSubPanel.add(getJbossServerHostnameField(), gridBagConstraints31);
 			jbossServerSettingsSubPanel.add(jbossServerAjpPortLabel, gridBagConstraints40);
@@ -1181,8 +1181,8 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
 			JLabel tomcatPortSslValueLabel=null;
 			
 			// JBoss Server Labels
-		    JLabel jbossPortConfigurationLabel = null;
-		    JLabel jbossPortConfigurationValueLabel = null;
+		    JLabel jbossPortNameLabel = null;
+		    JLabel jbossPortNameValueLabel = null;
 		    JLabel jbossServerAjpPortLabel = null;
 		    JLabel jbossServerAjpPortValueLabel = null;
 		    JLabel jbossServerHostnameLabel = null;
@@ -1329,10 +1329,10 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
         		
         	} else if (serverType.equalsIgnoreCase(JBOSS)){
     		    
-    		    jbossPortConfigurationLabel = new JLabel();
-    		    jbossPortConfigurationLabel.setText("Port Configuration:");
-    		    jbossPortConfigurationValueLabel = new JLabel();
-    		    jbossPortConfigurationValueLabel.setText(getJbossPortConfigurationComboBox().getSelectedItem().toString());
+    		    jbossPortNameLabel = new JLabel();
+    		    jbossPortNameLabel.setText("Port Name:");
+    		    jbossPortNameValueLabel = new JLabel();
+    		    jbossPortNameValueLabel.setText(getJbossPortNameComboBox().getSelectedItem().toString());
     		    
     		    jbossServerAjpPortLabel = new JLabel();
     		    jbossServerAjpPortLabel.setText("Server AJP Port:");
@@ -1378,8 +1378,8 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
                 appServerSettingsReviewPanel.add(tomcatPortSslLabel, gridBagConstraints60);
                 appServerSettingsReviewPanel.add(tomcatPortSslValueLabel, gridBagConstraints61);
         	} else if (serverType.equalsIgnoreCase(JBOSS)){
-                appServerSettingsReviewPanel.add(jbossPortConfigurationLabel, gridBagConstraints20);
-                appServerSettingsReviewPanel.add(jbossPortConfigurationValueLabel, gridBagConstraints21);  
+                appServerSettingsReviewPanel.add(jbossPortNameLabel, gridBagConstraints20);
+                appServerSettingsReviewPanel.add(jbossPortNameValueLabel, gridBagConstraints21);  
                 appServerSettingsReviewPanel.add(jbossServerHostnameLabel, gridBagConstraints30);
                 appServerSettingsReviewPanel.add(jbossServerHostnameValueLabel, gridBagConstraints31);
                 appServerSettingsReviewPanel.add(jbossServerAjpPortLabel, gridBagConstraints40);
@@ -1456,8 +1456,8 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
     		
     	} else if (serverType.equalsIgnoreCase(JBOSS)){
 
-    		if (ValidationUtils.isBlank(this.getJbossPortConfigurationComboBox().getSelectedItem().toString())) {
-    			result.add(new SimpleValidationMessage(JBOSS_PORT_CONFIGURATION + " must not be blank.", Severity.ERROR, JBOSS_PORT_CONFIGURATION));
+    		if (ValidationUtils.isBlank(this.getJbossPortNameComboBox().getSelectedItem().toString())) {
+    			result.add(new SimpleValidationMessage(JBOSS_PORT_NAME + " must not be blank.", Severity.ERROR, JBOSS_PORT_NAME));
     		} 
     		
     		if (ValidationUtils.isBlank(this.getJbossServerHostnameField().getText())) {
@@ -1525,8 +1525,8 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
         ValidationComponentUtils.setMandatory(getTomcatPortSslField(), true);
         
         //JBoss Server
-        ValidationComponentUtils.setMessageKey(getJbossPortConfigurationComboBox(), JBOSS_PORT_CONFIGURATION);
-        ValidationComponentUtils.setMandatory(getJbossPortConfigurationComboBox(), true);       
+        ValidationComponentUtils.setMessageKey(getJbossPortNameComboBox(), JBOSS_PORT_NAME);
+        ValidationComponentUtils.setMandatory(getJbossPortNameComboBox(), true);       
         ValidationComponentUtils.setMessageKey(getJbossServerAjpPortField(), JBOSS_SERVER_AJP_PORT);
         ValidationComponentUtils.setMandatory(getJbossServerAjpPortField(), true);
         ValidationComponentUtils.setMessageKey(getJbossServerHostnameField(), JBOSS_SERVER_HOSTNAME);
@@ -1564,7 +1564,7 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
 
 		} else if (serverType.equalsIgnoreCase(JBOSS)){
 			// JBoss
-			propsMap.put("jboss.port.configuration", OptionsMapManager.getJbossPortConfigurationOptionsMap().get(getJbossPortConfigurationComboBox().getSelectedItem().toString()));
+			propsMap.put("jboss.server.ports.name", OptionsMapManager.getJbossPortNameOptionsMap().get(getJbossPortNameComboBox().getSelectedItem().toString()));
 			propsMap.put("jboss.server.ajp.port", getJbossServerAjpPortField().getText());
 			propsMap.put("jboss.server.hostname", getJbossServerHostnameField().getText());
 			propsMap.put("jboss.server.jndi.port", getJbossServerJndiPortField().getText());

@@ -17,7 +17,7 @@ public class OptionsMapManager {
     private static TreeMap<String,String> dbUrlOptionsMap = null;
     private static TreeMap<String,String> dbTypeOptionsMap = null;
     private static TreeMap<String,String> deployTypeOptionsMap = null;
-    private static TreeMap<String,String> jbossPortConfigurationOptionsMap = null;
+    private static TreeMap<String,String> jbossPortNameOptionsMap = null;
     private static TreeMap<String,String> modelFileTypeOptionsMap = null;    
     private static TreeMap<String,String> remoteDeployEnvOptionsMap = null;
 	private static TreeMap<String,String> serverTypeOptionsMap = null;
@@ -46,8 +46,8 @@ public class OptionsMapManager {
     	return deployTypeOptionsMap;
     }
     
-    public static Map<String,String> getJbossPortConfigurationOptionsMap(){
-    	return jbossPortConfigurationOptionsMap;
+    public static Map<String,String> getJbossPortNameOptionsMap(){
+    	return jbossPortNameOptionsMap;
     }
     
     public static Map<String,String> getModelFileTypeOptionsMap(){
@@ -120,8 +120,8 @@ public class OptionsMapManager {
     	
     	//JBoss Port Configuration Options Mapping
     	try {
-    		HashMap<String,String> tempJbossPortConfigurationOptionsMap = (HashMap<String,String>)ObjectFactory.getObject("jbossPortConfigMap");
-    		jbossPortConfigurationOptionsMap = new TreeMap<String, String>(tempJbossPortConfigurationOptionsMap);
+    		HashMap<String,String> tempJbossPortNameOptionsMap = (HashMap<String,String>)ObjectFactory.getObject("jbossPortNameMap");
+    		jbossPortNameOptionsMap = new TreeMap<String, String>(tempJbossPortNameOptionsMap);
     	} catch (Exception e) {
     		log.error("ERROR:  Unable to load the JBoss Port Configuration mappings");
     		e.printStackTrace();

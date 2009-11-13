@@ -31,51 +31,51 @@
 				<entry key="local" value="Local"/>
 				<entry key="remote" value="Remote"/>
 				
-				<entry key="config19080"  value="Port Configuration 19080"/>
-				<entry key="config19180"  value="Port Configuration 19180"/>
-				<entry key="config19280"  value="Port Configuration 19280"/>
-				<entry key="config19380"  value="Port Configuration 19380"/>
-				<entry key="config19480"  value="Port Configuration 19480"/>
-				<entry key="config19580"  value="Port Configuration 19580"/>
-				<entry key="config19680"  value="Port Configuration 19680"/>
-				<entry key="config29080"  value="Port Configuration 29080"/>
-				<entry key="config39080"  value="Port Configuration 39080"/>
-				<entry key="config49080"  value="Port Configuration 49080"/>
-				<entry key="config29180"  value="Port Configuration 29180"/>
-				<entry key="config39180"  value="Port Configuration 39180"/>
-				<entry key="config49180"  value="Port Configuration 49180"/>
-				<entry key="config59080"  value="Port Configuration 59080"/>
-				<entry key="config59180"  value="Port Configuration 59180"/>
-				<entry key="config59280"  value="Port Configuration 59280"/>
-				<entry key="config59380"  value="Port Configuration 59380"/>
-				<entry key="config59480"  value="Port Configuration 59480"/>
-				<entry key="config59580"  value="Port Configuration 59580"/>
+				<entry key="config19080"  value="Port Name 19080"/>
+				<entry key="config19180"  value="Port Name 19180"/>
+				<entry key="config19280"  value="Port Name 19280"/>
+				<entry key="config19380"  value="Port Name 19380"/>
+				<entry key="config19480"  value="Port Name 19480"/>
+				<entry key="config19580"  value="Port Name 19580"/>
+				<entry key="config19680"  value="Port Name 19680"/>
+				<entry key="config29080"  value="Port Name 29080"/>
+				<entry key="config39080"  value="Port Name 39080"/>
+				<entry key="config49080"  value="Port Name 49080"/>
+				<entry key="config29180"  value="Port Name 29180"/>
+				<entry key="config39180"  value="Port Name 39180"/>
+				<entry key="config49180"  value="Port Name 49180"/>
+				<entry key="config59080"  value="Port Name 59080"/>
+				<entry key="config59180"  value="Port Name 59180"/>
+				<entry key="config59280"  value="Port Name 59280"/>
+				<entry key="config59380"  value="Port Name 59380"/>
+				<entry key="config59480"  value="Port Name 59480"/>
+				<entry key="config59580"  value="Port Name 59580"/>
 			</map>
 		</constructor-arg>
 	</bean>
 	
-	<bean id="jbossPortConfigMap" class="java.util.HashMap">
+	<bean id="jbossPortNameMap" class="java.util.HashMap">
 		<constructor-arg>
 			<map>
-				<entry key="Port Configuration 19080"  value="config19080"/>
-				<entry key="Port Configuration 19180"  value="config19180"/>
-				<entry key="Port Configuration 19280"  value="config19280"/>
-				<entry key="Port Configuration 19380"  value="config19380"/>
-				<entry key="Port Configuration 19480"  value="config19480"/>
-				<entry key="Port Configuration 19580"  value="config19580"/>
-				<entry key="Port Configuration 19680"  value="config19680"/>
-				<entry key="Port Configuration 29080"  value="config29080"/>
-				<entry key="Port Configuration 39080"  value="config39080"/>
-				<entry key="Port Configuration 49080"  value="config49080"/>
-				<entry key="Port Configuration 29180"  value="config29180"/>
-				<entry key="Port Configuration 39180"  value="config39180"/>
-				<entry key="Port Configuration 49180"  value="config49180"/>
-				<entry key="Port Configuration 59080"  value="config59080"/>
-				<entry key="Port Configuration 59180"  value="config59180"/>
-				<entry key="Port Configuration 59280"  value="config59280"/>
-				<entry key="Port Configuration 59380"  value="config59380"/>
-				<entry key="Port Configuration 59480"  value="config59480"/>
-				<entry key="Port Configuration 59580"  value="config59580"/>
+				<entry key="Port Name 19080"  value="config19080"/>
+				<entry key="Port Name 19180"  value="config19180"/>
+				<entry key="Port Name 19280"  value="config19280"/>
+				<entry key="Port Name 19380"  value="config19380"/>
+				<entry key="Port Name 19480"  value="config19480"/>
+				<entry key="Port Name 19580"  value="config19580"/>
+				<entry key="Port Name 19680"  value="config19680"/>
+				<entry key="Port Name 29080"  value="config29080"/>
+				<entry key="Port Name 39080"  value="config39080"/>
+				<entry key="Port Name 49080"  value="config49080"/>
+				<entry key="Port Name 29180"  value="config29180"/>
+				<entry key="Port Name 39180"  value="config39180"/>
+				<entry key="Port Name 49180"  value="config49180"/>
+				<entry key="Port Name 59080"  value="config59080"/>
+				<entry key="Port Name 59180"  value="config59180"/>
+				<entry key="Port Name 59280"  value="config59280"/>
+				<entry key="Port Name 59380"  value="config59380"/>
+				<entry key="Port Name 59480"  value="config59480"/>
+				<entry key="Port Name 59580"  value="config59580"/>
 			</map>
 		</constructor-arg>
 	</bean>
