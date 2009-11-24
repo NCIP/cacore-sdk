@@ -686,13 +686,13 @@
 				<if>
 					<equals arg1="${DB_TYPE}" arg2="oracle" />
 					<then>
-						<property name="TEMP_DB_SCHEMA" value="${DB_USERNAME}" />
+						<property name="CSM_TEMP_DB_SCHEMA" value="${CSM_DB_USERNAME}" />
 					</then>
 					<else>
-						<property name="TEMP_DB_SCHEMA" value="${DB_NAME}" />
+						<property name="CSM_TEMP_DB_SCHEMA" value="${CSM_DB_NAME}" />
 					</else>
 				</if>
-				<database-clean database.driver="${CSM_DB_DRIVER}" database.url="${CSM_DB_CONNECTION_URL}" database.user="${CSM_DB_USERNAME}" database.password="${CSM_DB_PASSWORD}" database.schema="${TEMP_DB_SCHEMA}" database.re-create="false" database.drop-schema="${CSM_DB_DROP_SCHEMA}" />
+				<database-clean database.driver="${CSM_DB_DRIVER}" database.url="${CSM_DB_CONNECTION_URL}" database.user="${CSM_DB_USERNAME}" database.password="${CSM_DB_PASSWORD}" database.schema="${CSM_TEMP_DB_SCHEMA}" database.re-create="false" database.drop-schema="${CSM_DB_DROP_SCHEMA}" />
 				<execute-database-install database.type="${CSM_DB_TYPE}" database.url="${CSM_DB_CONNECTION_URL}" database.user="${CSM_DB_USERNAME}" database.password="${CSM_DB_PASSWORD}" db.install.create.oracle.file.list="${csm.db.install.create.oracle.file.list}" db.install.create.mysql.file.list="${csm.db.install.create.mysql.file.list}" />
 			</then>
 		</if>
