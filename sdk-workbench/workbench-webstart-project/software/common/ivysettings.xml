@@ -1,6 +1,6 @@
 <ivysettings>
 	<property name="nci.ivy.repo" value="http://gforge.nci.nih.gov/svnroot/commonlibrary/trunk/ivy-repo" />
-	<property name="nci.cagrid.ivy.repo" value="http://software.cagrid.org/repository-1.3.0.1" />
+	<property name="nci.cagrid.ivy.repo" value="http://software.cagrid.org/repository-1.3.0.2" />
 	
 	<settings defaultResolver="nci-chain" />
 	<caches defaultCacheDir="${user.home}/.ivy2-sdk" useOrigin="true"/>
