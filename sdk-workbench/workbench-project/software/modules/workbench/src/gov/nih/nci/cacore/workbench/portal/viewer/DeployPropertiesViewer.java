@@ -339,17 +339,42 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
      * @return javax.swing.JButton
      */
     private JButton getPreviousButton() {
-        if (previousButton == null) {
-        	previousButton = new JButton();
-        	previousButton.setText("Previous");
-        	previousButton.setIcon(LookAndFeel.getPreviousIcon());
-        	previousButton.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    mainTabbedPane.setSelectedIndex(getPreviousIndex());
-                    validateInput();
-                }
-            });
-        }
+    	if (previousButton == null) {
+    		previousButton = new JButton();
+    		previousButton.setText("Previous");
+    		previousButton.setIcon(LookAndFeel.getPreviousIcon());
+    		previousButton.addActionListener(new java.awt.event.ActionListener() {
+    			public void actionPerformed(java.awt.event.ActionEvent e) {
+    				mainTabbedPane.setSelectedIndex(getPreviousIndex());
+    				validateInput();
+    			}
+    		});
+
+    		previousButton.addMouseListener(new java.awt.event.MouseListener() {
+    			public void mouseEntered(java.awt.event.MouseEvent e) {
+    				log.debug("mouseEntered");//do nothing
+    			}
+    			public void mouseReleased(java.awt.event.MouseEvent e) {
+    				log.debug("mouseReleased");//do nothing
+    			}
+    			public void mouseExited(java.awt.event.MouseEvent e) {
+    				log.debug("mouseExited");//do nothing
+    			}
+    			public void mousePressed(java.awt.event.MouseEvent e) {
+    				log.debug("mousePressed");
+    				validateInput();
+    			}
+    			public void mouseClicked(java.awt.event.MouseEvent e) {
+    				try {
+    					log.debug("mouseClicked");
+    					toggleUseDbConnectionsCheckBox();
+    					validateInput();
+    				} catch (Exception ex) {
+    					ex.printStackTrace();
+    				}
+    			}
+    		});
+    	}
 
         return previousButton;
     }
@@ -370,6 +395,31 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
                 	 validateInput();
                 }
             });
+        	
+        	nextButton.addMouseListener(new java.awt.event.MouseListener() {
+    			public void mouseEntered(java.awt.event.MouseEvent e) {
+    				log.debug("mouseEntered");//do nothing
+    			}
+    			public void mouseReleased(java.awt.event.MouseEvent e) {
+    				log.debug("mouseReleased");//do nothing
+    			}
+    			public void mouseExited(java.awt.event.MouseEvent e) {
+    				log.debug("mouseExited");//do nothing
+    			}
+    			public void mousePressed(java.awt.event.MouseEvent e) {
+    				log.debug("mousePressed");
+    				validateInput();
+    			}
+    			public void mouseClicked(java.awt.event.MouseEvent e) {
+    				try {
+    					log.debug("mouseClicked");
+    					toggleUseDbConnectionsCheckBox();
+    					validateInput();
+    				} catch (Exception ex) {
+    					ex.printStackTrace();
+    				}
+    			}
+        	});
         }
 
         return nextButton;
@@ -623,6 +673,7 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
     }
     
     public void syncDbCsmDbFields() {
+    	log.debug("* * * isCsmUseDBConnectionSettings? " + csmDbConnectionSettingsPanel.isCsmUseDBConnectionSettings());
     	if (csmDbConnectionSettingsPanel.isCsmUseDBConnectionSettings()){
     		csmDbConnectionSettingsPanel.setCsmDatabaseType(dbConnectionSettingsPanel.getDbType());
     		csmDbConnectionSettingsPanel.setCsmUseJndiBasedConnection(dbConnectionSettingsPanel.isUseJndiBasedConnection());
@@ -633,6 +684,9 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
     		csmDbConnectionSettingsPanel.setCsmDbSchema(dbConnectionSettingsPanel.getDbSchema());
     		csmDbConnectionSettingsPanel.setCsmDbUsername(dbConnectionSettingsPanel.getDbUsername());
     		csmDbConnectionSettingsPanel.setCsmDbPassword(dbConnectionSettingsPanel.getDbPassword());
+    		
+    		csmDbConnectionSettingsPanel.toggleCsmDbConnectionFields();
+    		csmDbConnectionSettingsPanel.toggleReCreateCsmDBFields();
     	}
     }
     
@@ -808,12 +862,18 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
     }
     
     protected void toggleUseDbConnectionsCheckBox() {
+    	log.debug("* * * mainTabbedPane.getSelectedIndex()==CSM_TAB_INDEX: " + (mainTabbedPane.getSelectedIndex()==CSM_TAB_INDEX  && 
+				securitySettingsPanel.isSecurityEnabled() &&
+				securitySettingsPanel.isInstanceLevelSecurityEnabled()));
+    	
 		if (mainTabbedPane.getSelectedIndex()==CSM_TAB_INDEX  && 
 				securitySettingsPanel.isSecurityEnabled() &&
 				securitySettingsPanel.isInstanceLevelSecurityEnabled()){
 			
 			csmDbConnectionSettingsPanel.setCsmUseDbConnectionSettings(true);
 			csmDbConnectionSettingsPanel.setCsmUseDbConnectionSettingsEnabled(false);
+			
+			syncDbCsmDbFields();
 			
 			JOptionPane.showMessageDialog(
 					this,
@@ -999,14 +1059,14 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
                 	validateInput();
                 }
                 public void mouseClicked(java.awt.event.MouseEvent e) {
-                    try {
-                    	toggleUseDbConnectionsCheckBox();
-                        validateInput();
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
+                	try {
+                		toggleUseDbConnectionsCheckBox();
+                		validateInput();
+                	} catch (Exception ex) {
+                		ex.printStackTrace();
+                	}
                 }
-            });
+			});
 		}
 		return mainTabbedPane;
 	}

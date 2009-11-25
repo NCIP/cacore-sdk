@@ -522,7 +522,8 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
     }
     
     public void toggleCsmDbConnectionFields() {
-    	if (getCsmUseDbConnectionSettingsCheckBox().isSelected()){
+    	log.debug("* * * isCsmUseDBConnectionSettings: "+isCsmUseDBConnectionSettings());
+    	if (isCsmUseDBConnectionSettings()){
     		csmDbTypeComboBox.setEnabled(false);
     		csmUseJndiBasedConnectionCheckBox.setEnabled(false);
 			csmDbJndiUrlField.setEnabled(false);
