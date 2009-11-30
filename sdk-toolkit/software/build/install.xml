@@ -128,7 +128,6 @@
 		common:init,
 		install:common:validation:pre-install,
 		install:database:validation:pre-install,
-		install:common:clean,
 		install:re-configure,
 		install:database,
 		install:tomcat,
@@ -159,8 +158,7 @@
 	</target>
 
 	<target name="install:tomcat" description="Wrapper scripts that calls all required targets to install the tomcat container" unless="exclude.tomcat"
-		depends="
-		
+		depends="		
 		common:tomcat:init,
 		common:init,
 		install:tomcat:validation:pre-install,
@@ -182,7 +180,7 @@
 		<if>
 			<equals arg1="${INSTALL_CONTAINER}" arg2="true" casesensitive="false" />
 			<then>
-				<sleep seconds="5" />
+				<sleep seconds="15" />
 				<property name="backup.count" value="5" />
 				<if>
 					<not>
@@ -225,7 +223,7 @@
 		<if>
 			<equals arg1="${INSTALL_CONTAINER}" arg2="true" casesensitive="false"/>
 			<then>
-				<sleep seconds="5" />
+				<sleep seconds="15" />
 				<property name="backup.count" value="5"/>
 				<if>
 					<not>
