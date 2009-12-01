@@ -403,22 +403,26 @@
 				<echo message="Copying libraries to JBoss" />
 				<switch value="${database.type}">
 					<case value="oracle">
-						<property name="clm.database.driver.file" value="${bda-utils.dir}/ojdbc14-10.2.0.3.0.jar "/>
+						<property name="clm.database.driver.file" value="ojdbc14-*.jar "/>
 					</case>
 					<case value="mysql">
-						<property name="clm.database.driver.file" value="${bda-utils.dir}/mysql-connector-java-5.0.5.jar"/>
+						<property name="clm.database.driver.file" value="mysql-connector-java-*.jar"/>
 					</case>
 					<case value="postgresql">
-						<property name="clm.database.driver.file" value="${bda-utils.dir}/postgresql-jdbc3-8.3-603.jar"/>
+						<property name="clm.database.driver.file" value="postgresql-jdbc3-*.jar"/>
 					</case>
 					<case value="hsqldb">
-						<property name="clm.database.driver.file" value="${bda-utils.dir}/hsqldb-1.8.0.7.jar"/>
+						<property name="clm.database.driver.file" value="hsqldb-*.jar"/>
 					</case>
 					<default>
 						<fail message="Invalid or unsupported database type ${database.type}"/>
 					</default>
 				</switch>
-				<copy file="${clm.database.driver.file}" todir="${jboss.home}/server/${jboss.server.name}/lib" overwrite="true" failonerror="false" />
+				<copy todir="${jboss.home}/server/${jboss.server.name}/lib" overwrite="true" failonerror="false">
+					<fileset dir="${bda-utils.dir}">
+						<include name="${clm.database.driver.file}" />
+					</fileset>
+				</copy>
 				<copy todir="${jboss.home}/server/${jboss.server.name}/lib">
 					<fileset dir="${package.client.jboss.default.lib.dir}">
 					</fileset>
