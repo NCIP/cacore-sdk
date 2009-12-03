@@ -223,7 +223,7 @@
 		<if>
 			<equals arg1="${INSTALL_CONTAINER}" arg2="true" casesensitive="false"/>
 			<then>
-				<sleep seconds="5" />
+				<sleep seconds="20" />
 				<property name="backup.count" value="5"/>
 				<if>
 					<not>
