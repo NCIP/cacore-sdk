@@ -7,6 +7,9 @@
 	<property name="bda-blueprints-webapp.name" value="${PROJECT_NAME}" />
 
 	<import file="bda-master-install.xml" />
+	<import file="build-util-macros.xml"/>
+
+	<property name="jar-signing.keystore.abs-location" location="${jar-signing.keystore.location}"/>
 
 	<property name="SERVER_HOST_NAME" value="${tomcat.hostname}"/>
 	<property name="SERVER_HTTP_PORT" value="${tomcat.port.http}"/>
@@ -152,5 +155,21 @@
 				<include name="*/**" />
 			</fileset>
 		</war>  
+
+		<if>
+			<equals arg1="${jar-signing.execution.time}" arg2="install"/>
+			<then>
+				<SDKecho message="${ant.project.name}: Creating Workbench WebStart Keystore; Required for Signing Jars"/>
+				<generate-jar-signing-keystore />
+				<echo message="jar-signing.execution.time set to install, signing jars"/>
+				<sign-jars
+                                jars.archive.file="${package.client.tomcat.webapps.dir}/${PROJECT_NAME}.war"
+                                jars.archive.relative.dir="lib"
+                                />
+			</then>
+			<else>
+				<echo message="jar-signing.execution.time not set to install, not signing jars"/>
+			</else>
+		</if>
 	</target>
 </project>
