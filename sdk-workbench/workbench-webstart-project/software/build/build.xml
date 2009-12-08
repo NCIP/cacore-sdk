@@ -32,6 +32,9 @@
 	<property name="project.build.home" location="${project.home}/build" />
 	<property name="project.common.dir" location="${project.home}/common" />
 
+
+	<property name="jar-signing.keystore.abs-location" location="${jar-signing.keystore.location}"/>
+
 	<property name="workbench.project.dir" value="../../../workbench-project" />
 	<property name="workbench.software.build.dir" location="${workbench.project.dir}/software/build" />
 	<property name="workbench.dist.dir" value="${workbench.project.dir}/software/target/dist/exploded" />
@@ -56,7 +59,7 @@
 	<!--***********************************************************************
 	*** Packages the caCORE Workbench into a WebStart application
 	*********************************************************************** -->
-	<target name="package:webstart" depends="build:workbench-modules,-copy-webstart-jars,-create-webstart-keystore,-sign-webstart-jars,-package-webstart-webapp">
+	<target name="package:webstart" depends="build:workbench-modules,-copy-webstart-jars,-sign-webstart-jars,-package-webstart-webapp">
 		<SDKecho message="${ant.project.name}: Completed Packaging the caCORE Workbench into a WebStart application"/>
 	</target>
 
@@ -72,14 +75,6 @@
 	</target>
 
 	<!--***********************************************************************
-	*** Make Workbench Workbench WebStart Application jars; required for full access
-	*********************************************************************** -->
-	<target name="-create-webstart-keystore">
-		<SDKecho message="${ant.project.name}: Creating Workbench WebStart Keystore; Required for Signing Jars"/>
-		<generate-jar-signing-keystore />
-	</target>
-
-	<!--***********************************************************************
 	*** Sign Workbench WebStart Application jars; required for full access
 	*********************************************************************** -->
 	<target name="-sign-webstart-jars">
@@ -88,6 +83,8 @@
 		<if>
 			<equals arg1="${jar-signing.execution.time}" arg2="build"/>
 			<then>
+				<SDKecho message="${ant.project.name}: Creating Workbench WebStart Keystore; Required for Signing Jars"/>
+				<generate-jar-signing-keystore />
 				<echo message="jar-signing.execution.time set to build, signing jars"/>
 				<sign-jars jars.dir="${keystore.lib.dir}"
 				/>
@@ -181,7 +178,7 @@
 		<copy todir="${dist.exploded.dir}">
 			<fileset dir="${build.dir}">
 				<include name="bda-master-install.xml" />
-				<include name="bda-util-macros.xml" />
+				<include name="build-util-macros.xml" />
 			</fileset>
 		</copy>
 		<copy todir="${tools.dist.dir}">
@@ -189,6 +186,16 @@
 				<include name="cagrid*"/>
 			</fileset>
 		</copy>
+
+		<if>
+			<and>
+				<equals arg1="${jar-signing.generate-selfsigned}" arg2="false" />
+				<equals arg1="${jar-signing.execution.time}" arg2="install" />
+			</and>
+			<then>
+				<copy file="${jar-signing.keystore.abs-location}" todir="${dist.exploded.dir}" failonerror="false"/>
+			</then>		
+		</if>
 	</target>
 
 	<target name="dist:tools:retrieve:jboss-bindings"  description="Downloads JBOSS bindings filefrom binary repository and verifies checksum">
@@ -198,9 +205,18 @@
 		<copy todir="${dist.exploded.dir}">
 			<fileset dir="${build.dir}">
 				<include name="bda-master-install.xml" />
-				<include name="bda-util-macros.xml" />
+				<include name="build-util-macros.xml" />
 			</fileset>
 		</copy>
+		<if>
+			<and>
+				<equals arg1="${jar-signing.generate-selfsigned}" arg2="false" />
+				<equals arg1="${jar-signing.execution.time}" arg2="install" />
+			</and>
+			<then>
+				<copy file="${jar-signing.keystore.abs-location}" todir="${dist.exploded.dir}" failonerror="true"/>
+			</then>		
+		</if>
 		<!-- For non DAC upgrades
 		<dist-prep
 			copy.tools.flag="N"
