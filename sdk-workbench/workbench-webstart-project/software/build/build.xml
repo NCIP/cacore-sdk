@@ -104,7 +104,7 @@
 		<mkdir dir="${output.war.dir}" />
 		<war destfile="${output.war.dir}\${workbench.webstart.war.file}" webxml="${webstart.webinf.dir}\web.xml">
 			<manifest>
-				<attribute name="Generated-By" value="caCORE caCORE Workbench" />
+				<attribute name="Generated-By" value="caCORE Workbench" />
 				<attribute name="Version" value="${VERSION}" />
 			</manifest>
 			<fileset dir="${keystore.dir}">

@@ -72,7 +72,7 @@
 		<constructor-arg>
 			<list>
 				<value>db2</value>
-				<value>postgressql</value>
+				<value>postgresql</value>
 				<value>oracle</value>
 				<value>sapdb</value>
 				<value>mckoi</value>
@@ -94,7 +94,7 @@
 		<constructor-arg>
 			<list>
 				<value>db2</value>
-				<value>postgressql</value>
+				<value>postgresql</value>
 				<value>oracle</value>
 				<value>sapdb</value>
 				<value>mckoi</value>

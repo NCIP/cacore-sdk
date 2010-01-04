@@ -760,12 +760,14 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 			} else if ("Oracle".equalsIgnoreCase(dbType)){
 				// Load the Oracle driver
 				Class.forName("oracle.jdbc.driver.OracleDriver");
-				
+			} else if ("PostgreSQL".equalsIgnoreCase(dbType)){
+				// Load the PostgreSQL driver
+				Class.forName("org.postgresql.Driver");				
 			} else {
 				// report error
 				JOptionPane.showMessageDialog(
 						this,
-						"Database Connection Test failed: invalid Database Type selected (must be 'Oracle' or 'MySql')\n"+
+						"Database Connection Test failed: invalid Database Type selected (must be 'Oracle', 'MySql', or 'PostgreSQL')\n"+
 						dbType);
 			}
 

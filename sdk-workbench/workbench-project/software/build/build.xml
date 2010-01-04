@@ -149,6 +149,7 @@
 			<fileset dir="${project.dist.workbench.runtime.dir}" includes="**/log4j*.jar" />
 			<fileset dir="${project.dist.workbench.runtime.dir}" includes="**/ojdbc14*.jar" />
 			<fileset dir="${project.dist.workbench.runtime.dir}" includes="**/mysql-connector-java*.jar" />
+			<fileset dir="${project.dist.workbench.runtime.dir}" includes="**/postgresql-jdbc*.jar" />
 			<fileset dir="${project.dist.workbench.runtime.dir}" includes="**/saaj*.jar" />
 			<fileset dir="${project.dist.workbench.runtime.dir}" includes="**/sdk*.jar" />
 			<fileset dir="${project.dist.workbench.runtime.dir}" includes="**/spring*.jar" />
