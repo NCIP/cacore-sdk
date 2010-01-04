@@ -21,7 +21,7 @@
 
 	<target name="build:all" depends="build:dependency-sub-projects" description="Default target" />
 
-	<target name="build:dependency-sub-projects" description="Call api sub-projects build target to produce artifiacts">
+	<target name="build:dependency-sub-projects" description="Call api sub-projects build target to produce artifacts">
 		<echo>Starting 1..................</echo>
 		<ant inheritAll="true" inheritRefs="false" antfile="${workspace-api-projects.build.file}" target="${workspace-api.build.target}" dir="${modules.dir}/workbench">
 		</ant>

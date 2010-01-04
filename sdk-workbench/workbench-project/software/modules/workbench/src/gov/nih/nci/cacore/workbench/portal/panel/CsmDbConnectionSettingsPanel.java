@@ -114,7 +114,7 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					parentContainer.syncDbCsmDbFields();
 					toggleCsmDbConnectionFields();
-					toggleReCreateCsmDBFields();
+					toggleRecreateCsmDBFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
 				}
@@ -170,6 +170,8 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
                 });
         	
         	csmDbTypeComboBox.addFocusListener(new FocusChangeHandler());
+        	
+        	csmDbTypeComboBox.setEnabled(false); // Value is driven by App Db Type
         }
         return csmDbTypeComboBox;
     }
@@ -180,10 +182,6 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
     
     public void setCsmDatabaseType(String selectedItemValue){
     	getCsmDbTypeComboBox().setSelectedItem(selectedItemValue);
-    }
-    
-    public boolean isCsmDbTypeMySql(){
-    	return ("mysql".equalsIgnoreCase(getCsmDbType()));
     }
 
     /**
@@ -202,7 +200,7 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
         	csmUseJndiBasedConnectionCheckBox.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					toggleCsmDbConnectionFields();
-					toggleReCreateCsmDBFields();
+					toggleRecreateCsmDBFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
 				}
@@ -328,8 +326,8 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
         return csmDbHostnameField;
     }
     
-    public void setCsmDbHostname(String csmDbConnectionUrlHostName){
-    	getCsmDbHostnameField().setText(csmDbConnectionUrlHostName);
+    public void setCsmDbHostname(String csmDbHostName){
+    	getCsmDbHostnameField().setText(csmDbHostName);
     }
     
     /**
@@ -366,8 +364,8 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
         return csmDbPortField;
     }
     
-    public void setCsmDbPort(String csmDbConnectionUrlPort){
-    	getCsmDbPortField().setText(csmDbConnectionUrlPort);
+    public void setCsmDbPort(String csmDbPort){
+    	getCsmDbPortField().setText(csmDbPort);
     }
     
     
@@ -384,21 +382,21 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
         	csmDbSchemaField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
                 	updateCsmDbFields();
-                	toggleReCreateCsmDBFields();
+                	toggleRecreateCsmDBFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
 
                 public void removeUpdate(DocumentEvent e) {
                 	updateCsmDbFields();
-                	toggleReCreateCsmDBFields();
+                	toggleRecreateCsmDBFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
 
                 public void insertUpdate(DocumentEvent e) {
                 	updateCsmDbFields();
-                	toggleReCreateCsmDBFields();
+                	toggleRecreateCsmDBFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
@@ -484,7 +482,6 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
         return csmDbPasswordField;
     }
     
-    
     public String getCsmDbPassword(){
     	return getCsmDbPasswordField().getText();
     }
@@ -524,22 +521,22 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
     public void toggleCsmDbConnectionFields() {
     	log.debug("* * * isCsmUseDBConnectionSettings: "+isCsmUseDBConnectionSettings());
     	if (isCsmUseDBConnectionSettings()){
-    		csmDbTypeComboBox.setEnabled(false);
+    		//csmDbTypeComboBox.setEnabled(false);
+			//csmDbConnectionUrlField.setEnabled(false);
+    		
     		csmUseJndiBasedConnectionCheckBox.setEnabled(false);
 			csmDbJndiUrlField.setEnabled(false);
-
-			//csmDbConnectionUrlField.setEnabled(false);
 			csmDbHostnameField.setEnabled(false);
 			csmDbPortField.setEnabled(false);
 			csmDbSchemaField.setEnabled(false);
 			csmDbUsernameField.setEnabled(false);
 			csmDbPasswordField.setEnabled(false);
     	} else {
-    		csmDbTypeComboBox.setEnabled(true);
-    		csmUseJndiBasedConnectionCheckBox.setEnabled(true);
-    		
-			csmDbJndiUrlField.setEnabled(true);
+    		//csmDbTypeComboBox.setEnabled(true);
 			//csmDbConnectionUrlField.setEnabled(true);
+    		
+    		csmUseJndiBasedConnectionCheckBox.setEnabled(true);
+			csmDbJndiUrlField.setEnabled(true);
 			csmDbHostnameField.setEnabled(true);
 			csmDbPortField.setEnabled(true);
 			csmDbSchemaField.setEnabled(true);
@@ -548,7 +545,7 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
     	}
     }
     
-    public void toggleReCreateCsmDBFields() {
+    public void toggleRecreateCsmDBFields() {
 		if (ValidationUtils.isNotBlank(getCsmDbSchema()) && parentContainer.isAppDbAndCsmSchemaSame() ) {
 			csmDbDropSchemaCheckBox.setSelected(false);
 			csmDbDropSchemaCheckBox.setEnabled(false);
@@ -660,6 +657,8 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
         		csmDbSqlFileField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("csm.db.install.create.oracle.file.list.ui")); 
         	} else if ("mysql".equalsIgnoreCase(dbType)){
         		csmDbSqlFileField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("csm.db.install.create.mysql.file.list.ui"));
+        	} else if ("postgresql".equalsIgnoreCase(dbType)){
+        		csmDbSqlFileField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("csm.db.install.create.postgresql.file.list.ui"));        		
         	} else {
         		csmDbSqlFileField.setText("");
         	}
@@ -1481,7 +1480,7 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
         ValidationComponentUtils.setMandatory(getCsmDbSqlFileField(), true);
         
         toggleCsmDbConnectionFields();
-        toggleReCreateCsmDBFields();
+        toggleRecreateCsmDBFields();
         parentContainer.toggleCsmDbJndiNameField();
         parentContainer.toggleCsmTestConnectionButton();
         updateCsmDbFields();
@@ -1511,6 +1510,9 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
     	} else if ("mysql".equalsIgnoreCase(dbType)){
     		propsMap.put("csm.db.install.create.mysql.file.list", getCsmDbSqlFileName());
     		propsMap.put("csm.db.install.create.mysql.file.list.ui", getCsmDbSqlFileField().getText().replace('\\', '/'));
+    	} else if ("postgresql".equalsIgnoreCase(dbType)){
+    		propsMap.put("csm.db.install.create.postgresql.file.list", getCsmDbSqlFileName());
+    		propsMap.put("csm.db.install.create.postgresql.file.list.ui", getCsmDbSqlFileField().getText().replace('\\', '/'));
     	}
     	
     	return propsMap;

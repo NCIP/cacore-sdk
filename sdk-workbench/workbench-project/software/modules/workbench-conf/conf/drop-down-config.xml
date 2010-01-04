@@ -24,6 +24,7 @@
 				
 				<entry key="mysql" value="MySQL"/>
 				<entry key="oracle"  value="Oracle"/>
+				<entry key="postgresql"  value="PostgreSQL"/>
 				
 				<entry key="jboss" value="JBoss"/>
 				<entry key="tomcat" value="Tomcat"/>
@@ -104,20 +105,13 @@
 			</map>
 		</constructor-arg>
 	</bean>
-		
-	<bean id="clmDbTypeMap" class="java.util.HashMap">
-		<constructor-arg>
-			<map>
-				<entry key="MySQL" value="mysql"/>
-			</map>
-		</constructor-arg>
-	</bean>
 
 	<bean id="dbTypeMap" class="java.util.HashMap">
 		<constructor-arg>
 			<map>
 				<entry key="MySQL" value="mysql"/>
-				<entry key="Oracle"  value="oracle"/>
+				<entry key="Oracle" value="oracle"/>
+				<entry key="PostgreSQL" value="postgresql"/>
 			</map>
 		</constructor-arg>
 	</bean>
@@ -127,6 +121,7 @@
 			<map>
 				<entry key="MySQL" value="jdbc:mysql://@HOSTNAME@:@PORT@/@SCHEMA@"/>
 				<entry key="Oracle"  value="jdbc:oracle:thin:@@HOSTNAME@:@PORT@:@SCHEMA@"/>
+				<entry key="PostgreSQL" value="jdbc:postgresql://@HOSTNAME@:@PORT@/@SCHEMA@"/>
 			</map>
 		</constructor-arg>
 	</bean>

@@ -561,7 +561,10 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
             		    	} else if ("mysql".equalsIgnoreCase(dbType)){
             		    		deployPropsMap.put("db.install.create.mysql.file.list.ui", dbSqlFilePath.replace('\\', '/'));
             		    		log.debug("'db.install.create.mysql.file.list.ui' prior to saving: "+deployPropsMap.get("db.install.create.mysql.file.list.ui"));
-            		    	}	
+            		    	} else if ("postgresql".equalsIgnoreCase(dbType)){
+            		    		deployPropsMap.put("db.install.create.postgresql.file.list.ui", dbSqlFilePath.replace('\\', '/'));
+            		    		log.debug("'db.install.create.postgresql.file.list.ui' prior to saving: "+deployPropsMap.get("db.install.create.postgresql.file.list.ui"));
+            		    	}
 
 //            				if (!saveProperties(deployPropsFile, deployPropsMap)){
 //            					log.error("ERROR:  Unable to rename DB SQL file path to standard project generation db path.");
@@ -590,6 +593,9 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
             		    	} else if ("mysql".equalsIgnoreCase(dbType)){
             		    		deployPropsMap.put("csm.db.install.create.mysql.file.list.ui", csmDbSqlFilePath.replace('\\', '/'));
             		    		log.debug("'csm.db.install.create.mysql.file.list.ui' prior to saving: "+deployPropsMap.get("csm.db.install.create.mysql.file.list.ui"));
+            		    	} else if ("postgresql".equalsIgnoreCase(dbType)){
+            		    		deployPropsMap.put("csm.db.install.create.postgresql.file.list.ui", csmDbSqlFilePath.replace('\\', '/'));
+            		    		log.debug("'csm.db.install.create.postgresql.file.list.ui' prior to saving: "+deployPropsMap.get("csm.db.install.create.postgresql.file.list.ui"));
             		    	}	
 
 //            				if (!saveProperties(deployPropsFile, deployPropsMap)){
@@ -613,9 +619,15 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
             						+ clmDbConnectionSettingsPanel.getClmDbSqlFileName()).replace('\\', '/');
             		    	
             				log.debug("* * * clmDbSqlFilePath: " +clmDbSqlFilePath);
-            				if ("mysql".equalsIgnoreCase(dbType)){
+            				if ("oracle".equalsIgnoreCase(dbType)){
+            		    		deployPropsMap.put("clm.db.install.create.oracle.file.list.ui", clmDbSqlFilePath.replace('\\', '/'));
+            		    		log.debug("'clm.db.install.create.oracle.file.list' prior to saving: "+deployPropsMap.get("clm.db.install.create.oracle.file.list.ui"));
+            				} else if ("mysql".equalsIgnoreCase(dbType)){
             		    		deployPropsMap.put("clm.db.install.create.mysql.file.list.ui", clmDbSqlFilePath.replace('\\', '/'));
             		    		log.debug("'clm.db.install.create.mysql.file.list' prior to saving: "+deployPropsMap.get("clm.db.install.create.mysql.file.list.ui"));
+            				} else if ("postgresql".equalsIgnoreCase(dbType)){
+            		    		deployPropsMap.put("clm.db.install.create.postgresql.file.list.ui", clmDbSqlFilePath.replace('\\', '/'));
+            		    		log.debug("'clm.db.install.create.postgresql.file.list' prior to saving: "+deployPropsMap.get("clm.db.install.create.postgresql.file.list.ui"));
             		    	}	
 
 //            				if (!saveProperties(deployPropsFile, deployPropsMap)){
@@ -673,9 +685,11 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
     }
     
     public void syncDbCsmDbFields() {
+    	
+    	csmDbConnectionSettingsPanel.setCsmDatabaseType(dbConnectionSettingsPanel.getDbType());
+    	
     	log.debug("* * * isCsmUseDBConnectionSettings? " + csmDbConnectionSettingsPanel.isCsmUseDBConnectionSettings());
     	if (csmDbConnectionSettingsPanel.isCsmUseDBConnectionSettings()){
-    		csmDbConnectionSettingsPanel.setCsmDatabaseType(dbConnectionSettingsPanel.getDbType());
     		csmDbConnectionSettingsPanel.setCsmUseJndiBasedConnection(dbConnectionSettingsPanel.isUseJndiBasedConnection());
     		csmDbConnectionSettingsPanel.setCsmDbJndiUrl(dbConnectionSettingsPanel.getDbJndiName());
     		csmDbConnectionSettingsPanel.setCsmDbConnectionUrl(dbConnectionSettingsPanel.getDbUrl());
@@ -686,7 +700,28 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
     		csmDbConnectionSettingsPanel.setCsmDbPassword(dbConnectionSettingsPanel.getDbPassword());
     		
     		csmDbConnectionSettingsPanel.toggleCsmDbConnectionFields();
-    		csmDbConnectionSettingsPanel.toggleReCreateCsmDBFields();
+    		csmDbConnectionSettingsPanel.toggleRecreateCsmDBFields();
+    	}
+    }
+    
+    public void syncDbClmDbFields() {
+		
+    	clmDbConnectionSettingsPanel.setClmDatabaseType(dbConnectionSettingsPanel.getDbType());
+		
+    	log.debug("* * * isClmUseDBConnectionSettings? " + clmDbConnectionSettingsPanel.isClmUseDBConnectionSettings());
+    	if (clmDbConnectionSettingsPanel.isClmUseDBConnectionSettings()){
+
+    		//clmDbConnectionSettingsPanel.setClmUseJndiBasedConnection(dbConnectionSettingsPanel.isUseJndiBasedConnection());
+    		//clmDbConnectionSettingsPanel.setClmDbJndiUrl(dbConnectionSettingsPanel.getDbJndiName());
+    		clmDbConnectionSettingsPanel.setClmDbConnectionUrl(dbConnectionSettingsPanel.getDbUrl());
+    		clmDbConnectionSettingsPanel.setClmDbHostname(dbConnectionSettingsPanel.getDbHostname());
+    		clmDbConnectionSettingsPanel.setClmDbPort(dbConnectionSettingsPanel.getDbPort());
+    		clmDbConnectionSettingsPanel.setClmDbSchema(dbConnectionSettingsPanel.getDbSchema());
+    		clmDbConnectionSettingsPanel.setClmDbUsername(dbConnectionSettingsPanel.getDbUsername());
+    		clmDbConnectionSettingsPanel.setClmDbPassword(dbConnectionSettingsPanel.getDbPassword());
+    		
+    		clmDbConnectionSettingsPanel.toggleClmDbConnectionFields();
+    		clmDbConnectionSettingsPanel.toggleRecreateClmDBFields();
     	}
     }
     
@@ -717,7 +752,7 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
     
     public void toggleClmTestConnectionButton() {
     	boolean hasValidationErrors = clmDbConnectionSettingsPanel.validateInput().hasErrors();
-    	if (writableApiSettingsPanel.isCommonLoggingModuleEnabled() && !hasValidationErrors){
+    	if (writableApiSettingsPanel.isCommonLoggingModuleEnabled() && !clmDbConnectionSettingsPanel.isClmUseDBConnectionSettings() && !hasValidationErrors){
     		clmDbConnectionSettingsPanel.setTestConnectionButtonEnabled(true); 
     		return;
         }
@@ -748,22 +783,9 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
     public void toggleWritableApiFields() {
     	if (isClmEnabled() ){
     		mainTabbedPane.setEnabledAt(LOGGING_TAB_INDEX, true); // CLM Panel
-    		//clmDbConnectionSettingsPanel.setClmDbConnectionUrlEnabled(true); currently not editable
-    		clmDbConnectionSettingsPanel.setClmDbUsernameEnabled(true);
-    		clmDbConnectionSettingsPanel.setClmDbPasswordEnabled(true);
-    		//clmDbDriverField.setEnabled(true); //currently not editable
     	} else{
     		mainTabbedPane.setEnabledAt(LOGGING_TAB_INDEX, false); // CLM Panel
-    		//clmDbConnectionSettingsPanel.setClmDbConnectionUrlEnabled(false); // currently not editable
-    		clmDbConnectionSettingsPanel.setClmDbUsernameEnabled(false);
-    		clmDbConnectionSettingsPanel.setClmDbPasswordEnabled(false);
-    		//clmDbDriverField.setEnabled(false); //currently not editable
     	}
-    }
-    
-    // CLM Panel should only be enabled if dbType and clmDbType are MySql
-    public boolean isDbTypeMySQL(){
-    	return (dbConnectionSettingsPanel.isDbTypeMySql() && (!isSecurityEnabled() || (isSecurityEnabled() && csmDbConnectionSettingsPanel.isCsmDbTypeMySql())));
     }
     
     public void toggleSecurityFields() {
@@ -858,7 +880,7 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
     }    
     
     public boolean isClmEnabled() {
-    	return (isWritableApiExtensionEnabled() && isCommonLoggingModuleEnabled() && isDbTypeMySQL());
+    	return (isWritableApiExtensionEnabled() && isCommonLoggingModuleEnabled());
     }
     
     protected void toggleUseDbConnectionsCheckBox() {
@@ -870,10 +892,14 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
 				securitySettingsPanel.isSecurityEnabled() &&
 				securitySettingsPanel.isInstanceLevelSecurityEnabled()){
 			
-			csmDbConnectionSettingsPanel.setCsmUseDbConnectionSettings(true);
-			csmDbConnectionSettingsPanel.setCsmUseDbConnectionSettingsEnabled(false);
+			if (!csmDbConnectionSettingsPanel.isCsmUseDBConnectionSettings()){
+				
+				csmDbConnectionSettingsPanel.setCsmUseDbConnectionSettings(true);
+
+				syncDbCsmDbFields();
+			}
 			
-			syncDbCsmDbFields();
+			csmDbConnectionSettingsPanel.setCsmUseDbConnectionSettingsEnabled(false);
 			
 			JOptionPane.showMessageDialog(
 					this,

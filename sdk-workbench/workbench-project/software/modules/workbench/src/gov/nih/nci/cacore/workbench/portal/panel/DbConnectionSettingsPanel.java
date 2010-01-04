@@ -113,6 +113,7 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
                     public void actionPerformed(java.awt.event.ActionEvent e) {
                     	updateDbFields();
                     	parentContainer.syncDbCsmDbFields();
+                    	parentContainer.syncDbClmDbFields();
                         mainPanelValidator.setDirty(true);
                         mainPanelValidator.validateInput();
                     }
@@ -126,11 +127,6 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
     public String getDbType(){
     	return getDbTypeComboBox().getSelectedItem().toString();
     }
-    
-    public boolean isDbTypeMySql(){
-    	return ("mysql".equalsIgnoreCase(getDbType()));
-    }
-    
     
     /**
      * This method initializes the Use JNDI Based Connection Check Box
@@ -148,6 +144,7 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
         	useJndiBasedConnectionCheckBox.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
                 	parentContainer.syncDbCsmDbFields();
+                	parentContainer.syncDbClmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
 				}
@@ -174,18 +171,21 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
         	dbJndiNameField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
                 	parentContainer.syncDbCsmDbFields();
+                	parentContainer.syncDbClmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
 
                 public void removeUpdate(DocumentEvent e) {
                 	parentContainer.syncDbCsmDbFields();
+                	parentContainer.syncDbClmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
 
                 public void insertUpdate(DocumentEvent e) {
                 	parentContainer.syncDbCsmDbFields();
+                	parentContainer.syncDbClmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
@@ -250,6 +250,7 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
                 public void changedUpdate(DocumentEvent e) {
                 	updateDbFields();
                 	parentContainer.syncDbCsmDbFields();
+                	parentContainer.syncDbClmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
@@ -257,6 +258,7 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
                 public void removeUpdate(DocumentEvent e) {
                 	updateDbFields();
                 	parentContainer.syncDbCsmDbFields();
+                	parentContainer.syncDbClmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
@@ -264,6 +266,7 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
                 public void insertUpdate(DocumentEvent e) {
                 	updateDbFields();
                 	parentContainer.syncDbCsmDbFields();
+                	parentContainer.syncDbClmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
@@ -290,6 +293,7 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
                 public void changedUpdate(DocumentEvent e) {
                 	updateDbFields();
                 	parentContainer.syncDbCsmDbFields();
+                	parentContainer.syncDbClmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
@@ -297,6 +301,7 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
                 public void removeUpdate(DocumentEvent e) {
                 	updateDbFields();
                 	parentContainer.syncDbCsmDbFields();
+                	parentContainer.syncDbClmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
@@ -304,6 +309,7 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
                 public void insertUpdate(DocumentEvent e) {
                 	updateDbFields();
                 	parentContainer.syncDbCsmDbFields();
+                	parentContainer.syncDbClmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
@@ -330,6 +336,7 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
                 public void changedUpdate(DocumentEvent e) {
                 	updateDbFields();
                 	parentContainer.syncDbCsmDbFields();
+                	parentContainer.syncDbClmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
@@ -337,6 +344,7 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
                 public void removeUpdate(DocumentEvent e) {
                 	updateDbFields();
                 	parentContainer.syncDbCsmDbFields();
+                	parentContainer.syncDbClmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
@@ -344,6 +352,7 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
                 public void insertUpdate(DocumentEvent e) {
                 	updateDbFields();
                 	parentContainer.syncDbCsmDbFields();
+                	parentContainer.syncDbClmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
@@ -369,18 +378,21 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
         	dbUsernameField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
                 	parentContainer.syncDbCsmDbFields();
+                	parentContainer.syncDbClmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
 
                 public void removeUpdate(DocumentEvent e) {
                 	parentContainer.syncDbCsmDbFields();
+                	parentContainer.syncDbClmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
 
                 public void insertUpdate(DocumentEvent e) {
                 	parentContainer.syncDbCsmDbFields();
+                	parentContainer.syncDbClmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
@@ -406,18 +418,21 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
         	dbPasswordField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
                 	parentContainer.syncDbCsmDbFields();
+                	parentContainer.syncDbClmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
 
                 public void removeUpdate(DocumentEvent e) {
                 	parentContainer.syncDbCsmDbFields();
+                	parentContainer.syncDbClmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
 
                 public void insertUpdate(DocumentEvent e) {
                 	parentContainer.syncDbCsmDbFields();
+                	parentContainer.syncDbClmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
@@ -534,6 +549,8 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
         		dbSqlFileField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("db.install.create.oracle.file.list.ui")); 
         	} else if ("mysql".equalsIgnoreCase(dbType)){
         		dbSqlFileField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("db.install.create.mysql.file.list.ui"));
+        	} else if ("postgresql".equalsIgnoreCase(dbType)){
+        		dbSqlFileField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("db.install.create.postgresql.file.list.ui"));
         	} else {
         		dbSqlFileField.setText("");
         	}
@@ -1319,6 +1336,9 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
     	} else if ("mysql".equalsIgnoreCase(dbType)){
     		propsMap.put("db.install.create.mysql.file.list", getDbSqlFileList());
     		propsMap.put("db.install.create.mysql.file.list.ui", getDbSqlFileField().getText().replace('\\', '/'));
+    	} else if ("postgresql".equalsIgnoreCase(dbType)){
+    		propsMap.put("db.install.create.postgresql.file.list", getDbSqlFileList());
+    		propsMap.put("db.install.create.postgresql.file.list.ui", getDbSqlFileField().getText().replace('\\', '/'));
     	}
     	
     	return propsMap;
@@ -1344,6 +1364,7 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
     				sb.append(",").append(clmDbSqlFileName);
     			}
     		}
+
     	}
 
     	return sb.toString();

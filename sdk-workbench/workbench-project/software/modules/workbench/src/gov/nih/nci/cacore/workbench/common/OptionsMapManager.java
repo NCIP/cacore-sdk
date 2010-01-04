@@ -13,7 +13,6 @@ public class OptionsMapManager {
 	private static Map<String,String> valueToKeyMap = null;
 	
     private static TreeMap<String,String> caGridTargetGridOptionsMap = null;
-    private static TreeMap<String,String> clmDbTypeOptionsMap = null;
     private static TreeMap<String,String> dbUrlOptionsMap = null;
     private static TreeMap<String,String> dbTypeOptionsMap = null;
     private static TreeMap<String,String> deployTypeOptionsMap = null;
@@ -28,10 +27,6 @@ public class OptionsMapManager {
 
     public static Map<String,String> getCaGridTargetGridOptionsMap(){
     	return caGridTargetGridOptionsMap;
-    }
-    
-    public static Map<String,String> getClmDbTypeOptionsMap(){
-    	return clmDbTypeOptionsMap;
     }
 
     public static Map<String,String> getDbUrlOptionsMap(){
@@ -81,15 +76,6 @@ public class OptionsMapManager {
 			log.error("ERROR:  Unable to load the caGrid Environment drop-down mappings");
 			e.printStackTrace();
 		}
-		
-    	//CLM DB Type Options Mappings
-    	try {
-    		HashMap<String,String> tempClmDbTypeOptionsMap = (HashMap<String,String>)ObjectFactory.getObject("clmDbTypeMap");
-    		clmDbTypeOptionsMap = new TreeMap<String,String>(tempClmDbTypeOptionsMap);
-    	} catch (Exception e) {
-    		log.error("ERROR:  Unable to load the CLM Database Type drop-down information");
-    		e.printStackTrace();
-    	}
     	
     	//DB Type Options Mappings
     	try {
