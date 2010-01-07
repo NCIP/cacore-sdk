@@ -17,13 +17,16 @@ import javax.security.auth.login.LoginException;
 import javax.security.auth.spi.LoginModule;
 
 import org.acegisecurity.providers.x509.X509AuthenticationToken;
+import org.apache.log4j.Logger;
 import org.globus.gsi.GlobusCredential;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class GridJAASLoginModule implements  LoginModule 
 {
-
+	private static Logger log = Logger.getLogger(GridJAASLoginModule.class);
+	private static Logger auditLog = Logger.getLogger("CSM.Audit.Logging.Event.Authentication");
+	
 	private static ApplicationContext ctx = new ClassPathXmlApplicationContext("grid-login-service-config.xml");
 	
 	private Subject 		subject;
@@ -43,9 +46,10 @@ public class GridJAASLoginModule implements  LoginModule
 	
 	public boolean login() throws LoginException
 	{
-		if (callbackHandler == null)
+		if (callbackHandler == null){		
+			log.debug("Authentication|||login|Failure| Error in obtaining the CallBack Handler |" );
 			throw new LoginException("Error in obtaining Callback Handler");
-
+		}
 		String 		userID;
 		char[]		password;
 		String authenticationServiceURL;
@@ -73,11 +77,13 @@ public class GridJAASLoginModule implements  LoginModule
 		}
 		catch (java.io.IOException e)
 		{
-			throw new LoginException("Error in Creating the CallBack Handler");
+			log.debug("Authentication|||login|Failure| Error in accessing the CallBack Handler |" + e.getMessage());
+			throw new LoginException("Error in accessing the CallBack Handler");
 		}
 		catch (UnsupportedCallbackException e)
 		{
-			throw new LoginException("Error in Creating the CallBack Handler");
+			log.debug("Authentication|||login|Failure| Error in accessing the CallBack Handler |" + e.getMessage());
+			throw new LoginException("Error in accessing the CallBack Handler");
 		}
 	
 		return performAuthentication(userID, password, authenticationServiceURL,dorianServiceURL);
@@ -96,6 +102,7 @@ public class GridJAASLoginModule implements  LoginModule
 
 	public boolean logout() throws LoginException
 	{
+		auditLog.info("Successful log out for user "+ subject.getPrincipals());
 		subject.getPrincipals().clear();
 		return true;
 	}
@@ -116,18 +123,25 @@ public class GridJAASLoginModule implements  LoginModule
 				X509AuthenticationToken auth = new X509AuthenticationToken(credential.getIdentityCertificate());
 				auth.setDetails(credential);
 				subject.getPrincipals().add(auth);
+
+				log.debug("Authentication|||login|Success| Authentication is true |");
+				auditLog.info("Successful Login attempt for user "+ userID);
 				return true;
 			}
 		}
 		catch(CredentialNotFoundException cnfe)
 		{
+			log.debug("Authentication|||login|Failure| Credential not found |" ,cnfe);
+			auditLog.info("Unsuccessful Login attempt for user "+ userID);
 			throw cnfe;
 		}
 		catch (Exception e) 
 		{
+			log.debug("Authentication|||login|Failure| General exception in authenticating |" ,e);
+			auditLog.info("Unsuccessful Login attempt for user "+ userID);
 			throw new LoginException(e.getMessage());
-		} 
-
+		}
+		auditLog.info("Unsuccessful Login attempt for user "+ userID);
 		throw new FailedLoginException("Invalid Login Credentials");
 	}
 	
