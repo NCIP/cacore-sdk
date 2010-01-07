@@ -275,7 +275,7 @@ CREATE SEQUENCE CSM_USER_USER_ID_SEQ
 CREATE TABLE CSM_USER ( 
 USER_ID int8 default nextval('CSM_USER_USER_ID_SEQ'), 
 PREMGRT_LOGIN_NAME character varying(100),
-MIGRATED_FLAG character varying(1) DEFAULT 0,
+MIGRATED_FLAG smallint DEFAULT 0 NOT NULL,
 LOGIN_NAME character varying(500) NOT NULL,
 FIRST_NAME character varying(100) NOT NULL,
 LAST_NAME character varying(100) NOT NULL,
