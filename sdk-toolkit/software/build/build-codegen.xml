@@ -673,6 +673,19 @@
 		<ivy:retrieve pattern="${project.lib.dir}/[conf]/[artifact]-[revision].[ext]" conf="grid-login-service" />
 	</target>
 
+	<target name="ivy:package-target_grid" depends="ivy:init">
+		<ivy:resolve refresh="true" conf="target_grid_training" />
+		<ivy:resolve refresh="true" conf="target_grid_prod" />
+		<ivy:resolve refresh="true" conf="target_grid_qa" />
+		<ivy:resolve refresh="true" conf="target_grid_stage" />
+
+		<ivy:retrieve pattern="${common.dir}/resources/target_grid/${TRAINING_TARGET_GRID}/[artifact].[ext]" conf="target_grid_training" />
+		<ivy:retrieve pattern="${common.dir}/resources/target_grid/${NCI_PROD_TARGET_GRID}/[artifact].[ext]" conf="target_grid_prod" />
+		<ivy:retrieve pattern="${common.dir}/resources/target_grid/${NCI_QA_TARGET_GRID}/[artifact].[ext]" conf="target_grid_qa" />
+		<ivy:retrieve pattern="${common.dir}/resources/target_grid/${NCI_STAGE_TARGET_GRID}/[artifact].[ext]" conf="target_grid_stage" />
+		
+	</target>
+	
 	<!-- ******************************************************************* -->
 	<!-- ** MAIN TARGETS                                                  ** -->
 	<!-- ******************************************************************* -->
@@ -723,7 +736,7 @@
 	<target name="package-ws-client" depends="ivy:package-ws-client"/>
 	<target name="-package-tomcat-server" depends="ivy:package-server-tomcat"/>
 	<target name="-package-jboss-server" depends="ivy:package-server-jboss"/>
-	<target name="package-server" depends="ivy:package-webapp,-package-tomcat-server,-package-jboss-server">
+	<target name="package-server" depends="ivy:package-webapp,-package-tomcat-server,-package-jboss-server,ivy:package-target_grid">		
 	</target>	
 
 	<target name="-package-web">
