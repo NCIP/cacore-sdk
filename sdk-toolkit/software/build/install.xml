@@ -85,7 +85,7 @@
 					<property name="CSM_DB_DRIVER" value="org.postgresql.Driver" />
 					<property name="CSM_DB_CONNECTION_URL" value="jdbc:postgresql://${CSM_DB_SERVER}:${CSM_DB_SERVER_PORT}/${CSM_DB_NAME}" />
 					<echo message="${CSM_DB_DRIVER}  driver"/>
-				</case>		
+				</case>
 				<default>
 					<fail message="Invalid database type ${CSM_DB_TYPE}" />
 				</default>
@@ -111,7 +111,7 @@
 					<property name="CLM_DB_DIALECT" value="org.hibernate.dialect.PostgreSQLDialect" />
 					<property name="CLM_DB_DRIVER" value="org.postgresql.Driver" />
 					<property name="CLM_DB_CONNECTION_URL" value="jdbc:postgresql://${CLM_DB_SERVER}:${CLM_DB_SERVER_PORT}/${CLM_DB_NAME}" />
-				</case>	
+				</case>
 				<default>
 					<fail message="Invalid database type ${CLM_DB_TYPE}" />
 				</default>
@@ -122,27 +122,22 @@
 	<if>
 		<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true" />
 		<then>
-			<switch value="${TARGET_GRID}">
-				<case value="training-1.3">
-					<property name="CAGRID_AUTHENTICATION_SERVICE_URL" value="https://dorian.training.cagrid.org:8443/wsrf/services/cagrid/Dorian" />
+			<if>
+				<or>
+					<equals arg1="${TARGET_GRID}" arg2="${TRAINING_TARGET_GRID}" />
+					<equals arg1="${TARGET_GRID}" arg2="${NCI_QA_TARGET_GRID}" />
+					<equals arg1="${TARGET_GRID}" arg2="${NCI_STAGE_TARGET_GRID}" />
+					<equals arg1="${TARGET_GRID}" arg2="${NCI_PROD_TARGET_GRID}" />
+				</or>
+				<then>
+					<property file="${grid.dist.relative.dir}/${TARGET_GRID}/service_urls.properties" />
+					<property name="CAGRID_AUTHENTICATION_SERVICE_URL" value="${cagrid.master.dorian.service.url}" />
 					<property name="CAGRID_DORIAN_SERVICE_URL" value="${CAGRID_AUTHENTICATION_SERVICE_URL}" />
-				</case>
-				<case value="nci_qa-1.3">
-					<property name="CAGRID_AUTHENTICATION_SERVICE_URL" value="https://cagrid-dorian-qa.nci.nih.gov:8443/wsrf/services/cagrid/Dorian" />
-					<property name="CAGRID_DORIAN_SERVICE_URL" value="${CAGRID_AUTHENTICATION_SERVICE_URL}" />
-				</case>
-				<case value="nci_stage-1.3">
-					<property name="CAGRID_AUTHENTICATION_SERVICE_URL" value="https://cagrid-dorian-stage.nci.nih.gov:8443/wsrf/services/cagrid/Dorian" />
-					<property name="CAGRID_DORIAN_SERVICE_URL" value="${CAGRID_AUTHENTICATION_SERVICE_URL}" />
-				</case>
-				<case value="nci_prod-1.3">
-					<property name="CAGRID_AUTHENTICATION_SERVICE_URL" value="https://cagrid-dorian.nci.nih.gov:8443/wsrf/services/cagrid/Dorian" />
-					<property name="CAGRID_DORIAN_SERVICE_URL" value="${CAGRID_AUTHENTICATION_SERVICE_URL}" />
-				</case>
-				<default>
+				</then>
+				<else>
 					<fail message="Invalid target grid ${TARGET_GRID}." />
-				</default>
-			</switch>
+				</else>				
+			</if>
 		</then>
 	</if>
 
@@ -318,7 +313,7 @@
 				jboss.server.jndi.port="${jboss.server.jndi.port}"
 		/>
 	</target>
-	
+
 	<target name="install:jboss:configure:grid-ports" unless="exclude.jboss" >
 		<echo message="Configuring secure grid in JBoss"/>
 		<if>
@@ -516,7 +511,7 @@
 				<grid-secure-configure-valve 
 					appserver.server-xml.file="${tomcat.home}/conf/server.xml" 
 					appserver.server-xml.service.name="Catalina" />
-					
+
 				<!-- 	
 				<xmltask source="${tomcat.home}/conf/server.xml"
 					dest="${tomcat.home}/conf/server.xml">
@@ -606,7 +601,7 @@
 					<xmlcatalog refid="bda.xml.catalog" />
 					<insert path="//GlobalNamingResources/Resource" file="${naming.resource.server.xml}" position="after" />
 				</xmltask>
-				
+
 				<!-- 
 				<echo message="Inserting ${naming.resource.param.server.xml} into ${tomcat.home}/conf/server.xml" />
 				<xmltask preservetype="true" source="${tomcat.home}/conf/server.xml">
@@ -670,7 +665,7 @@
 					</case>
 					<case value="postgresql">
 						<property name="TEMP_DB_SCHEMA" value="public" />
-					</case>			
+					</case>
 					<default>
 						<fail message="Invalid database type ${DB_TYPE}" />
 					</default>
@@ -694,7 +689,7 @@
 					</case>
 					<case value="postgresql">
 						<property name="CSM_TEMP_DB_SCHEMA" value="public" />
-					</case>			
+					</case>
 					<default>
 						<fail message="Invalid database type ${DB_TYPE}" />
 					</default>
@@ -769,8 +764,8 @@
 			</then>
 		</if>-->
 	</target>
-	
-	<target name="install:common:validation:pre-install" description="Runs pre-install validation checks bda-utils" depends="common:init">		
+
+	<target name="install:common:validation:pre-install" description="Runs pre-install validation checks bda-utils" depends="common:init">
 		<!-- Removed JDK version check
 		<validate-pre-install-common
 			ant.check.version="${ant.minimum.version}"
@@ -799,7 +794,7 @@
 				</case>
 				<case value="postgresql">
 					<database-install db.install.create.file.list="@{db.install.create.postgresql.file.list}" database.url="@{database.url}" database.user="@{database.user}" database.password="@{database.password}"/>
-				</case>				
+				</case>
 			</switch>
 		</sequential>
 	</macrodef>

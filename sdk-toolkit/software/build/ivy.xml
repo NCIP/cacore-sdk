@@ -28,6 +28,11 @@
 		<conf name="server-tomcat" />
 		<conf name="server-jboss" />
 		<conf name="drivers" />
+		
+		<conf name="target_grid_training" visibility="private"/>
+		<conf name="target_grid_prod" visibility="private"/>
+		<conf name="target_grid_qa" visibility="private"/>
+		<conf name="target_grid_stage" visibility="private"/>
 	</configurations>
 
 	<publications>
@@ -154,5 +159,10 @@
 		<dependency org="ncicb" name="sdk-grid-jaas-module" rev="latest.integration" conf="grid-login-service->runtime" />
 		<dependency org="ncicb" name="sdk-grid-jaas-jndi-binder-module" rev="latest.integration" conf="grid-login-service->compile" />
 		<dependency org="apache" name="xerces" rev="2.7.1" conf="grid-login-service->master;grid-jaas->master" />
+		
+		<dependency rev="${TRAINING_TARGET_GRID}" org="caGrid" name="target_grid" conf="target_grid_training->urls,trust,syncdesc" />
+		<dependency rev="${NCI_PROD_TARGET_GRID}" org="caGrid" name="target_grid" conf="target_grid_prod->urls,trust,syncdesc" />
+		<dependency rev="${NCI_QA_TARGET_GRID}" org="caGrid" name="target_grid" conf="target_grid_qa->urls,trust,syncdesc" />
+		<dependency rev="${NCI_STAGE_TARGET_GRID}" org="caGrid" name="target_grid" conf="target_grid_stage->urls,trust,syncdesc" />		
 	</dependencies>
 </ivy-module>
