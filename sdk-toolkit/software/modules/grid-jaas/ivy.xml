@@ -21,7 +21,7 @@
 		<dependency org="ncicb" name="sdk-grid-jaas-client-module" rev="latest.integration" conf="compile" />
 		<dependency org="springsource" name="acegi-security" rev="1.0.4" conf="compile"/>
 		<dependency org="globus" name="jcog" rev="1.2" conf="compile" />
-		<dependency org="springsource" name="spring" rev="2.0.2" conf="compile"/>
+		<dependency org="springsource" name="spring" rev="2.0.8" conf="compile"/>
 		<dependency org="apache" name="log4j" rev="1.2.13" conf="compile" />
 		<dependency org="caGrid" name="authentication-service" rev="1.3" conf="compile->client"/>
 		<dependency org="caGrid" name="dorian" rev="1.3" conf="compile->client"/>

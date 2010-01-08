@@ -28,7 +28,7 @@
 		<dependency org="org.jdom" name="jdom" rev="1.1" conf="compile" />
 		<dependency org="jakarta" name="commons-lang" rev="1.0.1" conf="compile" />
 		<dependency org="jakarta" name="commons-logging" rev="1.1" conf="compile" />
-		<dependency org="springsource" name="spring" rev="2.0.2" conf="compile"/>
+		<dependency org="springsource" name="spring" rev="2.0.8" conf="compile"/>
 		<dependency org="ncicb" name="xmi.in.out" rev="1.0" conf="compile"/>	
 		<dependency org="mmbase" name="mmbase" rev="1.8.4" conf="compile"/>
 		<dependency org="junit" name="junit" rev="3.8.1" conf="compile"/>

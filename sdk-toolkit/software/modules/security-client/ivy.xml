@@ -24,7 +24,7 @@
 	<dependencies>
 		<!-- local shared-repository jars -->
 		<dependency org="springsource" name="acegi-security" rev="1.0.4" conf="compile"/>
-		<dependency org="springsource" name="spring" rev="2.0.2" conf="compile"/>
+		<dependency org="springsource" name="spring" rev="2.0.8" conf="compile"/>
 
 		<dependency org="cobertura" name="cobertura" rev="1.9" conf="test-cobertura->runtime" />
 		<dependency org="javancss" name="javancss" rev="29.50" conf="test-javancss->runtime" />
