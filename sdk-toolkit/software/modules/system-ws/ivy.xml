@@ -31,7 +31,7 @@
 		<dependency org="apache" name="axis" rev="1.4" conf="compile" />
 		<dependency org="springsource" name="acegi-security" rev="1.0.4" conf="compile"/>
 		<dependency org="apache" name="log4j" rev="1.2.13" conf="compile" />
-		<dependency org="springsource" name="spring" rev="2.0.2" conf="compile"/>
+		<dependency org="springsource" name="spring" rev="2.0.8" conf="compile"/>
 		<dependency org="javax.servlet" name="servlet" rev="2.3.1" conf="compile" />
 
 		<dependency org="cobertura" name="cobertura" rev="1.9" conf="test-cobertura->runtime" />
