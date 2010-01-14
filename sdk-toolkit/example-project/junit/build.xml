@@ -444,6 +444,12 @@
 	
 	<target name="writeSecureThickClientTest" depends="createDir">
 		<SDKCompileJUnit compileClasspath="local-client-cp" includePattern="**/*Writable*.java" excludePattern="" />
+		<if>
+			<equals arg1="${ENABLE_GRID_LOGIN_MODULE}" arg2="true"/>
+			<then>
+				<SDKCompileJUnit compileClasspath="local-client-cp" includePattern="**/security/GridApplicationServiceImpl.java" excludePattern="" />
+			</then>
+		</if>
 		<SDKRunJUnit junitClasspath="local-client-cp" junitOutputDir="${report.dir.thickclient-writableapi}" includePattern="**/*WritableSecurityTest.class" excludePattern=""  junitreportfile="TEST-writeSecureThickClient.xml"/>
 		<SDKGenerateReport junitOutputDir="${report.dir.thickclient-writableapi}" />
 	</target>
@@ -460,6 +466,12 @@
 	
 	<target name="writeSecureRemoteClientTest" depends="createDir">
 		<SDKCompileJUnit compileClasspath="remote-client-cp" includePattern="**/*Writable*.java" excludePattern="" />
+		<if>
+			<equals arg1="${ENABLE_GRID_LOGIN_MODULE}" arg2="true"/>
+			<then>
+				<SDKCompileJUnit compileClasspath="remote-client-cp" includePattern="**/security/GridApplicationServiceImpl.java" excludePattern="" />
+			</then>
+		</if>
 		<SDKRunJUnit junitClasspath="remote-client-cp" junitOutputDir="${report.dir.remoteclient-writableapi}" includePattern="**/*WritableSecurityTest.class" excludePattern="" junitreportfile="TEST-writeSecureRemoteClient.xml" />
 		<SDKGenerateReport junitOutputDir="${report.dir.remoteclient-writableapi}" />
 	</target>

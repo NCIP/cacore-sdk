@@ -66,7 +66,8 @@ public class SecurityInitializationHelper
 			if(auth !=null && auth instanceof GroupNameAuthenticationToken)
 			{
 				GroupNameAuthenticationToken groupAuth = (GroupNameAuthenticationToken)auth;		
-				UserClassAttributeMapCache.setAttributeMapForGroup((String[])(groupAuth.getGroups().toArray()), sessionFactory, authorizationManager);	
+				String[] groupNames = groupAuth.getGroups().toArray(new String[groupAuth.getGroups().size()]);
+				UserClassAttributeMapCache.setAttributeMapForGroup(groupNames, sessionFactory, authorizationManager);	
 			}
 			else if (auth!=null)
 			{

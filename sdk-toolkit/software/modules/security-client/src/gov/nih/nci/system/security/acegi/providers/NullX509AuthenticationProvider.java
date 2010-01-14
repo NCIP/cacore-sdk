@@ -1,4 +1,4 @@
-package gov.nih.nci.system.security.acegi.authentication;
+package gov.nih.nci.system.security.acegi.providers;
 
 import org.acegisecurity.Authentication;
 import org.acegisecurity.AuthenticationException;

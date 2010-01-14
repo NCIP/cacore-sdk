@@ -1,4 +1,4 @@
-import gov.nih.nci.system.security.authentication.cagrid.GridAuthenticationHelper;
+import gov.nih.nci.system.security.authentication.cagrid.client.GridAuthenticationHelper;
 import org.globus.gsi.GlobusCredential;
 
 import java.io.File;

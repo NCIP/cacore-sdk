@@ -69,7 +69,12 @@ public class ClassSecurityGroupTest extends SDKSecurityTestBase
 			Bank result = (Bank)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
-			assertNotNull(result.getName());
+			System.out.println(enableInstanceLevelSecurity);
+			if(enableInstanceLevelSecurity || enableAttributeLevelSecurity){
+				assertNull(result.getName());
+			}else{
+				assertNotNull(result.getName());
+			}
 		}
 	}	
 
@@ -142,7 +147,11 @@ public class ClassSecurityGroupTest extends SDKSecurityTestBase
 			Bank result = (Bank)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
-			assertNotNull(result.getName());
+			if(enableInstanceLevelSecurity || enableAttributeLevelSecurity){
+				assertNull(result.getName());
+			}else{
+				assertNotNull(result.getName());
+			}
 		}
 	}
 	
@@ -201,7 +210,11 @@ public class ClassSecurityGroupTest extends SDKSecurityTestBase
 			Bank result = (Bank)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
-			assertNotNull(result.getName());
+			if(enableInstanceLevelSecurity || enableAttributeLevelSecurity){
+				assertNull(result.getName());
+			}else{
+				assertNotNull(result.getName());
+			}
 		}
 	}	
 
@@ -251,7 +264,11 @@ public class ClassSecurityGroupTest extends SDKSecurityTestBase
 			Bank result = (Bank)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
-			assertNotNull(result.getName());
+			if(enableInstanceLevelSecurity || enableAttributeLevelSecurity){
+				assertNull(result.getName());
+			}else{
+				assertNotNull(result.getName());
+			}
 		}
 	}	
 	
@@ -301,7 +318,11 @@ public class ClassSecurityGroupTest extends SDKSecurityTestBase
 			Bank result = (Bank)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
-			assertNotNull(result.getName());
+			if(enableInstanceLevelSecurity || enableAttributeLevelSecurity){
+				assertNull(result.getName());
+			}else{
+				assertNotNull(result.getName());
+			}
 		}
 	}	
 	
@@ -411,13 +432,21 @@ public class ClassSecurityGroupTest extends SDKSecurityTestBase
 			Credit credit = (Credit)i.next();
 			assertNotNull(credit);
 			assertNotNull(credit.getId());
-			assertNotNull(credit.getAmount());
-			assertNotNull(credit.getCardNumber());
-
+			if(enableAttributeLevelSecurity){
+				assertNull(credit.getAmount());
+				assertNull(credit.getCardNumber());
+			}else{
+				assertNotNull(credit.getAmount());
+				assertNotNull(credit.getCardNumber());
+			}
 			bank = credit.getIssuingBank();
 			assertNotNull(bank);
 			assertNotNull(bank.getId());
-			assertNotNull(bank.getName());
+			if(enableInstanceLevelSecurity || enableAttributeLevelSecurity){
+				assertNull(bank.getName());
+			}else{
+				assertNotNull(bank.getName());
+			}
 		}
 	}	
 	
@@ -449,7 +478,11 @@ public class ClassSecurityGroupTest extends SDKSecurityTestBase
 			Bank result = (Bank)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
-			assertNotNull(result.getName());
+			if(enableInstanceLevelSecurity || enableAttributeLevelSecurity){
+				assertNull(result.getName());
+			}else{
+				assertNotNull(result.getName());
+			}
 		}
 	}
 	
@@ -503,7 +536,11 @@ public class ClassSecurityGroupTest extends SDKSecurityTestBase
 			Bank result = (Bank)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
-			assertNotNull(result.getName());
+			if(enableInstanceLevelSecurity || enableAttributeLevelSecurity){
+				assertNull(result.getName());
+			}else{
+				assertNotNull(result.getName());
+			}
 		}
 	}
 	
@@ -553,7 +590,11 @@ public class ClassSecurityGroupTest extends SDKSecurityTestBase
 			Bank result = (Bank)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
-			assertNotNull(result.getName());
+			if(enableInstanceLevelSecurity || enableAttributeLevelSecurity){
+				assertNull(result.getName());
+			}else{
+				assertNotNull(result.getName());
+			}
 		}
 	}
 	

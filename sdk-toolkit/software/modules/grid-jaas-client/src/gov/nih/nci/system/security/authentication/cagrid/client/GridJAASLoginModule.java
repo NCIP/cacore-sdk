@@ -1,7 +1,9 @@
-package gov.nih.nci.system.security.authentication.cagrid;
+package gov.nih.nci.system.security.authentication.cagrid.client;
 
-import gov.nih.nci.system.security.authentication.cagrid.executor.GridAuthenticationService;
+import gov.nih.nci.system.security.authentication.cagrid.client.executor.GridAuthenticationService;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.Map;
 
 import javax.security.auth.Subject;

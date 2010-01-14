@@ -53,7 +53,7 @@ public class LongKeyTest extends SDKTestBase
 	public void testPrimaryKeyNestedSearch() throws ApplicationException
 	{
 		LongKey searchObject = new LongKey();
-		searchObject.setId(new Long("1234"));
+		searchObject.setId(new Long("1234567890987650000"));
 		Collection results = getApplicationService().search(LongKey.class,searchObject );
 
 		assertNotNull(results);
@@ -73,7 +73,7 @@ public class LongKeyTest extends SDKTestBase
 
 		CQLObject object = new CQLObject();
 		object.setName("gov.nih.nci.cacoresdk.domain.other.primarykey.LongKey");
-		object.setAttribute(new CQLAttribute("id",CQLPredicate.EQUAL_TO,"1234"));
+		object.setAttribute(new CQLAttribute("id",CQLPredicate.EQUAL_TO,"1234567890987650000"));
 		criteria.setTarget(object);
 		
 		Collection results = getApplicationService().query(criteria);

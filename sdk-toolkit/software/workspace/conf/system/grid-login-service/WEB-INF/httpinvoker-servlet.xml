@@ -7,7 +7,7 @@
 	<!-- Exposed services -->
 	<!--                  -->
 	<bean name="/authenticationService" class="org.springframework.remoting.httpinvoker.HttpInvokerServiceExporter">
-		<property name="serviceInterface" value="gov.nih.nci.system.security.authentication.cagrid.executor.GridAuthenticationRemoteService" />
+		<property name="serviceInterface" value="gov.nih.nci.system.security.authentication.cagrid.client.executor.GridAuthenticationRemoteService" />
 		<property name="service" ref="RemoteAuthenticationService" />
 	</bean>
 	

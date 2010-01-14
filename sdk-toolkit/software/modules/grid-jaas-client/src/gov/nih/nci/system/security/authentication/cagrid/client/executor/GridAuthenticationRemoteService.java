@@ -1,4 +1,4 @@
-package gov.nih.nci.system.security.authentication.cagrid.executor;
+package gov.nih.nci.system.security.authentication.cagrid.client.executor;
 
 import javax.security.auth.login.CredentialNotFoundException;
 

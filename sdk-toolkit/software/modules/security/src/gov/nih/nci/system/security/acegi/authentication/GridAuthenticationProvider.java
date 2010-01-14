@@ -1,7 +1,7 @@
 package gov.nih.nci.system.security.acegi.authentication;
 
 import gov.nih.nci.system.security.SecurityConstants;
-import gov.nih.nci.system.security.authentication.cagrid.GridAuthenticationHelper;
+import gov.nih.nci.system.security.authentication.cagrid.client.GridAuthenticationHelper;
 
 import java.security.cert.X509Certificate;
 

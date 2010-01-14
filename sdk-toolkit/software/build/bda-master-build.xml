@@ -143,18 +143,7 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 	<property name="commonlibrary.dir" value="" />
 	<property name="bda-download.file" value="bda-ivy-2.0.0-build.xml" />
 	
-	<mkdir dir="${bda-download.dir}" />
-	<property name="bda-download.src.url" value="http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-download/${bda-download.file}" />
-	<get src="${bda-download.src.url}" dest="${bda-download.dir}/${bda-download.file}" />
-	
-	<ant inheritAll="false" inheritRefs="false" antfile="${bda-download.file}" target="retrieve-bda" dir="${bda-download.dir}">
-		<property name="bda.version" value="${bda.version}" />
-		<property name="bda-utils.dir" location="${bda-utils.dir}" />
-		<property name="lib.dir" location="${lib.dir}" />
-		<property name="software.dir" location="${software.dir}" />
-		<property name="commonlibrary.dir" location="${commonlibrary.dir}" />
-		<property name="target.dir" location="${target.dir}"/>
-	</ant>
+	<property name="tools.lib.dir" value="${build.dir}/tools/lib" />
 	
 	<!-- Paths -->
 	<path id="bda-utils.classpath">
@@ -168,6 +157,35 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 		</fileset>
 	</path>
 
+	<path id="tools.classpath">
+		<fileset dir="${tools.lib.dir}">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+	
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="tools.classpath"/>
+	<available file="${bda-download.dir}/${bda-download.file}" type="file" property="bda.download.file.present"/>
+
+	<echo message="${bda.download.file.present}"/>
+	<if>	
+		<not>
+			<equals arg1="${bda.download.file.present}" arg2="true"/>
+		</not>
+		<then>
+			<mkdir dir="${bda-download.dir}" />
+			<property name="bda-download.src.url" value="http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-download/${bda-download.file}" />
+			<get src="${bda-download.src.url}" dest="${bda-download.dir}/${bda-download.file}" />
+			<ant inheritAll="false" inheritRefs="false" antfile="${bda-download.file}" target="retrieve-bda" dir="${bda-download.dir}">
+				<property name="bda.version" value="${bda.version}" />
+				<property name="bda-utils.dir" location="${bda-utils.dir}" />
+				<property name="lib.dir" location="${lib.dir}" />
+				<property name="software.dir" location="${software.dir}" />
+				<property name="commonlibrary.dir" location="${commonlibrary.dir}" />
+				<property name="target.dir" location="${target.dir}"/>
+			</ant>
+		</then>
+	</if>
+	
 	<!-- Task definitions -->
 	<taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpathref="ivy.classpath" />
 	<taskdef name="for" classname="net.sf.antcontrib.logic.ForTask" classpathref="bda-utils.classpath"/>

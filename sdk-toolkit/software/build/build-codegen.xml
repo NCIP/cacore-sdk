@@ -17,27 +17,10 @@
 
 	<property name="ivy.def.file" location="ivy.xml" />
 
-	
 	<property file="project.properties" />
-
-	<property name="project.lib.dir" location="${output.project.dir}/lib" />
-	<property name="codegen.compile.lib.dir" location="${project.lib.dir}/codegen-compile" />
-	<property name="codegen.runtime.lib.dir" location="${project.lib.dir}/codegen-runtime" />
-	<property name="remoteclient.lib.dir" location="${project.lib.dir}/remote-client" />
-	<property name="localclient.lib.dir" location="${project.lib.dir}/local-client" />
-	<property name="writable.api.lib.dir" location="${project.lib.dir}/writable-api" />
-	<property name="writable.api.client.lib.dir" location="${project.lib.dir}/writable-api-client" />
-	<property name="grid.jaas.api.lib.dir" location="${project.lib.dir}/grid-jaas" />
-	<property name="grid.jaas.api.client.lib.dir" location="${project.lib.dir}/grid-jaas-client" />
-	<property name="security.api.lib.dir" location="${project.lib.dir}/security-api" />
-	<property name="security.api.client.lib.dir" location="${project.lib.dir}/security-api-client" />
-	<property name="system.logging.lib.dir" location="${project.lib.dir}/system-logging" />
-	<property name="server-tomcat.lib.dir" location="${project.lib.dir}/server-tomcat" />
-	<property name="server-jboss.lib.dir" location="${project.lib.dir}/server-jboss" />
-	<property name="ws-client.lib.dir" location="${project.lib.dir}/ws-client" />
-	<property name="grid-login-service.lib.dir" location="${project.lib.dir}/grid-login-service" />
-	<property name="webapp.lib.dir" location="${project.lib.dir}/webapp" />
-		
+	
+	<property name="codegen.runtime.lib.dir" location="${target.module.dir}/lib/runtime" />
+	
 	<property name="src.java.dir" value="${output.src.dir}" />
 	<property name="src.javadoc.dir" value="${output.javadoc.dir}" />
 	<property name="systemdoc.dir" value="${src.javadoc.dir}/system" />
@@ -407,16 +390,12 @@
 	<!-- ** CODEGEN TARGETS                                                  ** -->
 	<!-- ******************************************************************* -->
 
-	<path id="project.compile.classpath">
-		<fileset dir="${codegen.compile.lib.dir}">
-			<include name="*.jar" />
-		</fileset>
-		<pathelement path="${output.conf.dir}" />
-	</path>
-
 	<path id="codegen.runtime.classpath">
 		<fileset dir="${codegen.runtime.lib.dir}">
 			<include name="*.jar" />
+		</fileset>
+		<fileset dir="${target.module.dir}/lib">
+			<include name="sdk-codegen-*.jar" />
 		</fileset>
 		<pathelement path="${output.codegen.config.dir}" />
 		<pathelement path="${output.codegen.validator.config.dir}" />
@@ -432,24 +411,10 @@
 		<mkdir dir="${src.javadoc.dir}" />
 	</target>
 
-	<target name="ivy:setup:codegen" depends="ivy:setup:codegen:runtime, 
-		ivy:setup:codegen:compile" description="Updates the local ivy repository for all build and test dependencies." />
-
-	<target name="ivy:setup:codegen:runtime" depends="ivy:init">
-		<ivy:resolve refresh="true" conf="codegen-runtime" />
-		<ivy:retrieve pattern="${project.lib.dir}/[conf]/[artifact]-[revision].[ext]" conf="codegen-runtime" />
-	</target>
-
-	<target name="ivy:setup:codegen:compile" depends="ivy:init">
-		<ivy:resolve refresh="true" conf="codegen-compile" />
-		<ivy:retrieve pattern="${project.lib.dir}/[conf]/[artifact]-[revision].[ext]" conf="codegen-compile" />
-	</target>
-
-	<target name="-compile:application-code" depends="-init, ivy:setup:codegen:compile,-generate-codegen" description="Compiles all subproject code">
+	<target name="-compile:application-code" depends="-init,-generate-codegen" description="Compiles all subproject code">
 		<mkdir dir="${build.classes.dir}" />
-		<mkdir dir="${codegen.compile.lib.dir}" />
 		<javac srcdir="${src.java.dir}" destdir="${build.classes.dir}" debug="true">
-			<classpath refid="project.compile.classpath" />
+			<classpath refid="codegen.runtime.classpath" />
 		</javac>
 	</target>
 
@@ -496,7 +461,7 @@
 	</target>
 
 
-	<target name="-generate-codegen" depends="replacetoken-contents,ivy:setup:codegen,-generate-codegen-validator" description="Runs the Code Generator">
+	<target name="-generate-codegen" depends="replacetoken-contents,-generate-codegen-validator" description="Runs the Code Generator">
 		<echo>${ant.project.name}: Running the Code Generator</echo>
 		<fail unless="IDENTITY_GENERATOR_TAG">IDENTITY_GENERATOR property must be set in codegen.properties</fail>
 		<java classname="gov.nih.nci.codegen.Generator" failonerror="true" fork="true" >
@@ -541,202 +506,16 @@
 	</target>
 
 	
-	<target name="build:all" depends="-pre-clean,-init,-generate-codegen,-package-codegen-artifacts,-codegen-doc,-system-doc,ivy:publish,post-clean" description="Default target">
-	</target>
-
-	
-	<!-- ******************************************************************* -->
-	<!-- ** PACKAGING TARGETS                                                  ** -->
-	<!-- ******************************************************************* -->
-	<target name="ivy:init">
-		<property name="ivy.dep.file" value="${ivy.def.file}" />
-		<ivy:settings file="${ivy.settings.dir}/${ivy.settings.file}"/>
-	</target>
-
-	<target name="ivy:publish" description="--> publish this project in the ivy repository">
-		<tstamp>
-			<format property="now" pattern="yyyyMMddHHmmss" />
-		</tstamp>
-		<property name="version" value="${sdk.version}" />
-		<ivy:publish artifactspattern="${target.module.dir}/${module.name}/lib/[artifact].[ext]" resolver="shared-local-repo"  
-			pubrevision="${version}" status="release" forcedeliver="true" pubdate="${now}" update="true" overwrite="true" />
+	<target name="build:all" depends="-pre-clean,-init,-generate-codegen,-package-codegen-artifacts,-codegen-doc,-system-doc,post-clean" description="Default target">
 	</target>
 	
-	<target name="ivy:package-drivers" depends="ivy:init">
-		<ivy:resolve refresh="true" conf="drivers" />
-		<ivy:retrieve pattern="${project.lib.dir}/[conf]/[artifact]-[revision].[ext]" conf="drivers" />
-	</target>
-
-	
-	<target name="ivy:package-remote-client" depends="ivy:init,ivy:package-writable-api">
-		<ivy:resolve refresh="true" conf="remote-client" />
-		<ivy:retrieve pattern="${project.lib.dir}/[conf]/[artifact]-[revision].[ext]" conf="remote-client" />
-	</target>
-
-	<target name="ivy:package-local-client" depends="ivy:init,ivy:package-writable-api">
-		<ivy:resolve refresh="true" conf="local-client" />
-		<ivy:retrieve pattern="${project.lib.dir}/[conf]/[artifact]-[revision].[ext]" conf="local-client" />
-	</target>
-
-	<target name="ivy:package-writable-api" depends="ivy:init">
-		<if>
-			<equals arg1="${WRITABLE_API_EXTENSION_ENABLED}" arg2="true" />
-			<then>
-				<ivy:resolve refresh="true" conf="writable-api" />
-				<ivy:retrieve pattern="${project.lib.dir}/[conf]/[artifact]-[revision].[ext]" conf="writable-api" />
-			</then>
-		</if>
-	</target>
-
-	<target name="ivy:package-system-logging" depends="ivy:init">
-		<if>
-			<equals arg1="${ENABLE_CLM_LOGGER_CFG_GENERATION}" arg2="true" />
-			<then>
-				<ivy:resolve refresh="true" conf="system-logging" />
-				<ivy:retrieve pattern="${project.lib.dir}/[conf]/[artifact]-[revision].[ext]" conf="system-logging" />
-			</then>
-		</if>
-	</target>
-
-	<target name="ivy:package-writable-client-api" depends="ivy:init">
-		<if>
-			<equals arg1="${WRITABLE_API_EXTENSION_ENABLED}" arg2="true" />
-			<then>
-				<ivy:resolve refresh="true" conf="writable-api-client" />
-				<ivy:retrieve pattern="${project.lib.dir}/[conf]/[artifact]-[revision].[ext]" conf="writable-api-client" />
-			</then>
-		</if>
-	</target>
-
-	<target name="ivy:package-security-api" depends="ivy:init">
-		<if>
-			<equals arg1="${SECURITY_ENABLED}" arg2="true" />
-			<then>
-				<ivy:resolve refresh="true" conf="security-api" />
-				<ivy:retrieve pattern="${project.lib.dir}/[conf]/[artifact]-[revision].[ext]" conf="security-api" />
-			</then>
-		</if>
-	</target>
-
-	<target name="ivy:package-security-client-api" depends="ivy:init">
-		<if>
-			<equals arg1="${SECURITY_ENABLED}" arg2="true" />
-			<then>
-				<ivy:resolve refresh="true" conf="security-api-client" />
-				<ivy:retrieve pattern="${project.lib.dir}/[conf]/[artifact]-[revision].[ext]" conf="security-api-client" />
-			</then>
-		</if>
-	</target>
-
-	<target name="ivy:package-grid-jaas-client-api" depends="ivy:init">
-		<if>
-			<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true" />
-			<then>
-				<ivy:resolve refresh="true" conf="grid-jaas-client" />
-				<ivy:retrieve pattern="${project.lib.dir}/[conf]/[artifact]-[revision].[ext]" conf="grid-jaas-client" />
-			</then>
-		</if>
-	</target>
-
-	<target name="ivy:package-grid-jaas-api" depends="ivy:init">
-		<if>
-			<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true" />
-			<then>
-				<ivy:resolve refresh="true" conf="grid-jaas" />
-				<ivy:retrieve pattern="${project.lib.dir}/[conf]/[artifact]-[revision].[ext]" conf="grid-jaas" />
-			</then>
-		</if>
-	</target>
-
-	<target name="ivy:package-webapp" depends="ivy:init">
-		<ivy:resolve refresh="true" conf="webapp" />
-		<ivy:retrieve pattern="${project.lib.dir}/[conf]/[artifact]-[revision].[ext]" conf="webapp" />
-	</target>
-
-	<target name="ivy:package-server-tomcat" depends="ivy:init">
-		<ivy:resolve refresh="true" conf="server-tomcat" />
-		<ivy:retrieve pattern="${project.lib.dir}/[conf]/[artifact]-[revision].[ext]" conf="server-tomcat" />
-	</target>
-
-	<target name="ivy:package-server-jboss" depends="ivy:init">
-		<ivy:resolve refresh="true" conf="server-jboss" />
-		<ivy:retrieve pattern="${project.lib.dir}/[conf]/[artifact]-[revision].[ext]" conf="server-jboss" />
-	</target>
-
-	<target name="ivy:package-ws-client" depends="ivy:init">
-		<ivy:resolve refresh="true" conf="ws-client" />
-		<ivy:retrieve pattern="${project.lib.dir}/[conf]/[artifact]-[revision].[ext]" conf="ws-client" />
-	</target>
-
-	<target name="ivy:package-grid-login-service" depends="ivy:init">
-		<ivy:resolve refresh="true" conf="grid-login-service" />
-		<ivy:retrieve pattern="${project.lib.dir}/[conf]/[artifact]-[revision].[ext]" conf="grid-login-service" />
-	</target>
-
-	<target name="ivy:package-target_grid" depends="ivy:init">
-		<ivy:resolve refresh="true" conf="target_grid_training" />
-		<ivy:resolve refresh="true" conf="target_grid_prod" />
-		<ivy:resolve refresh="true" conf="target_grid_qa" />
-		<ivy:resolve refresh="true" conf="target_grid_stage" />
-
-		<ivy:retrieve pattern="${common.dir}/resources/target_grid/${TRAINING_TARGET_GRID}/[artifact].[ext]" conf="target_grid_training" />
-		<ivy:retrieve pattern="${common.dir}/resources/target_grid/${NCI_PROD_TARGET_GRID}/[artifact].[ext]" conf="target_grid_prod" />
-		<ivy:retrieve pattern="${common.dir}/resources/target_grid/${NCI_QA_TARGET_GRID}/[artifact].[ext]" conf="target_grid_qa" />
-		<ivy:retrieve pattern="${common.dir}/resources/target_grid/${NCI_STAGE_TARGET_GRID}/[artifact].[ext]" conf="target_grid_stage" />
-		
-	</target>
-	
-	<!-- ******************************************************************* -->
-	<!-- ** MAIN TARGETS                                                  ** -->
-	<!-- ******************************************************************* -->
-
-	<target name="clean:dependencies">
-		<delete dir="${localclient.lib.dir}" />
-		<delete dir="${remoteclient.lib.dir}" />
-		<delete dir="${writable.api.lib.dir}" />
-		<delete dir="${writable.api.client.lib.dir}" />
-		<delete dir="${grid.jaas.api.lib.dir}" />
-		<delete dir="${grid.jaas.api.client.lib.dir}" />
-		<delete dir="${security.api.lib.dir}" />
-		<delete dir="${security.api.client.lib.dir}" />
-		<delete dir="${webapp.lib.dir}" />
-		<delete dir="${ws-client.lib.dir}" />
-		<delete dir="${system.logging.lib.dir}" />
-		<delete dir="${grid-login-service.lib.dir}" />
-		<delete dir="${server-tomcat.lib.dir}" />
-		<delete dir="${server-jboss.lib.dir}" />
-	</target>
-
-	<target name="dist" description="target to package-system">
-		<copy todir="${dist.exploded.dir}">
-			<fileset dir="${basedir}" >
-				<include name="*-reconfigure.xml"/>
-				<include name="*-taskdef.xml"/>
-				<include name="*.properties"/>
-				<include name="tools/**/*"/>
+	<target name="package-system" depends="-package-web,dist" description="Packages the system" >
+		<mkdir dir="${output.project.dir}/lib"/>
+		<copy todir="${output.project.dir}/lib">
+			<fileset dir="${target.module.dir}/lib">
+				<exclude name="**/compile/**"/>
 			</fileset>
-		</copy>
-	</target>
-
-	<target name="package-system" depends="package-drivers,package-remote-client,package-local-client,package-ws-client,package-server,-package-web,-build-grid-login-service-war,dist" description="Packages the system"/>
-	<target name="package-drivers" depends="ivy:package-drivers"/>
-	<target name="package-local-client" depends="-package-local-client-core,-package-local-client-writable-api,-package-local-client-security,-package-local-client-grid-security,-package-system-logging" />
-	<target name="-package-local-client-core" depends="ivy:package-local-client"/>
-	<target name="-package-local-client-writable-api" depends="ivy:package-writable-api"/>
-	<target name="-package-system-logging" depends="ivy:package-system-logging"/>
-	<target name="-package-local-client-security" depends="ivy:package-security-api"/>
-	<target name="-package-local-client-grid-security" depends="ivy:package-grid-jaas-api"/>
-	<target name="package-remote-client" depends="-package-remote-client-core,-package-remote-client-writable-api,-package-remote-client-security,-package-remote-client-grid-security" />
-	<target name="-package-remote-client-core" depends="ivy:package-remote-client"/>
-	<target name="-package-remote-client-writable-api" depends="ivy:package-writable-client-api"/>
-	<target name="-package-remote-client-security" depends="ivy:package-security-client-api"/>
-	<target name="-package-remote-client-grid-security" depends="ivy:package-grid-jaas-client-api"/>
-	<target name="-staging-war" depends="ivy:package-writable-api,ivy:package-system-logging,ivy:package-security-api,ivy:package-grid-jaas-client-api"/>
-	<target name="-build-project-war" depends="ivy:package-webapp,-staging-war"/>
-	<target name="package-ws-client" depends="ivy:package-ws-client"/>
-	<target name="-package-tomcat-server" depends="ivy:package-server-tomcat"/>
-	<target name="-package-jboss-server" depends="ivy:package-server-jboss"/>
-	<target name="package-server" depends="ivy:package-webapp,-package-tomcat-server,-package-jboss-server,ivy:package-target_grid">		
+		</copy>		
 	</target>	
 
 	<target name="-package-web">
@@ -746,8 +525,20 @@
 				<include name="**/*"/>
 			</fileset>
 		</copy>
-	</target>
+	</target>	
 
-	<target name="-build-grid-login-service-war" depends="ivy:package-grid-login-service"/>
+	<target name="dist" description="target to package-system">
+		<copy todir="${dist.exploded.dir}">
+			<fileset dir="${basedir}" >
+				<include name="*-reconfigure.xml"/>
+				<include name="*-taskdef.xml"/>
+				<include name="*.properties"/>
+				<include name="tools/**/*"/>
+			</fileset>
+			<fileset dir="${target.dir}/dist/exploded" >
+				<include name="ncicb-jboss*.xml"/>
+			</fileset>
+		</copy>
+	</target>
 
 </project>

@@ -2,11 +2,11 @@
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 <beans>
 
-	<bean name="AuthenticationService" class="gov.nih.nci.system.security.authentication.cagrid.executor.GridAuthenticationLocalServiceImpl">
+	<bean name="AuthenticationService" class="gov.nih.nci.system.security.authentication.cagrid.client.executor.GridAuthenticationLocalServiceImpl">
 		<constructor-arg index="0">
 			<bean class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
 			    <property name="serviceUrl" value="@SDK_GRID_LOGIN_SERVICE_URL@/http/authenticationService"/>
-			    <property name="serviceInterface" value="gov.nih.nci.system.security.authentication.cagrid.executor.GridAuthenticationRemoteService"/>
+			    <property name="serviceInterface" value="gov.nih.nci.system.security.authentication.cagrid.client.executor.GridAuthenticationRemoteService"/>
 			</bean>
 		</constructor-arg>
 		<constructor-arg index="1">

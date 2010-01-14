@@ -1,4 +1,4 @@
-package gov.nih.nci.system.security.authentication.cagrid;
+package gov.nih.nci.system.security.authentication.cagrid.client;
 import java.io.IOException;
 
 import javax.security.auth.callback.Callback;

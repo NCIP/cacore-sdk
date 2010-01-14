@@ -4,7 +4,7 @@ import org.globus.gsi.GlobusCredential;
 
 import gov.nih.nci.system.applicationservice.ApplicationService;
 import gov.nih.nci.system.client.ApplicationServiceProvider;
-import gov.nih.nci.system.security.authentication.cagrid.GridAuthenticationHelper;
+import gov.nih.nci.system.security.authentication.cagrid.client.GridAuthenticationHelper;
 
 public class GridApplicationServiceImpl implements GridApplicationServiceProvider{
 
