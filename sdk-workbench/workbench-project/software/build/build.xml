@@ -13,7 +13,7 @@
 	*********************************************************************** -->
 	
 	<!-- Set the path to the SDK installation home (trunk) directory prior to running !!!-->
-	<property name="package.sdk.home" value="${basedir}/../../../../sdk-toolkit"  />
+	<property name="package.sdk.home" value="${basedir}/../../../.."  />
 	
 	<property file="build.properties" />
 	
@@ -183,13 +183,12 @@
 			<else>
 				<echo message="SDK source file does not exist; packaging now"/>
 				
-				<ant antfile="${package.sdk.home}/build.xml" target="package" inheritall="false" inheritrefs="false">
-					<property name="sdk.src.file" value="${sdk.src.file}" />
-					<property name="dist.dir" value="${package.sdk.home}/dist" />
-					<property name="software.dir" value="${package.sdk.home}/software" />
+				<ant antfile="${package.sdk.home}/build.xml" target="package-software-sdk" inheritall="false" inheritrefs="false">
+					<property name="package.sdk.home" value="${package.sdk.home}"/>
 				</ant>
-				<copy file="${package.sdk.home}/dist/${sdk.src.file}" todir="${project.sdk.dist.dir}" />
-
+				<property file="${package.sdk.home}/sdk-toolkit/software/build/project.properties" prefix="sdk-toolkit"/>
+				<echo message="SDK version :${sdk-toolkit.sdk.version}"/>
+				<copy file="${package.sdk.home}/dist/SDK-${sdk-toolkit.sdk.version}-src.zip" tofile="${project.sdk.dist.dir}/${sdk.src.file}" />
 			</else>
 		</if>
 	</target>

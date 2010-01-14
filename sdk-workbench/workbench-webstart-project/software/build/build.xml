@@ -42,7 +42,6 @@
 
 	<property name="dist.exploded.dir" value="${dist.dir}/exploded"/>
 	<property name="dist.exploded.common.dir" value="${dist.exploded.dir}/common"/>
-	<property name="dist.exploded.common.sdk.dist.dir" value="${dist.exploded.common.dir}/resources/sdk-dist"/>
 
 	<property name="keystore.dir" value="${dist.exploded.dir}/keystore"/>
 	<property name="keystore.lib.dir" value="${keystore.dir}/lib"/>
@@ -113,7 +112,7 @@
 			<fileset dir="${webstart.dir}">
 				<include name="*" />
 			</fileset>
-			<fileset dir="${dist.exploded.common.sdk.dist.dir}">
+			<fileset dir="${workbench.common.sdk.dist.dir}">
 				<include name="*" />
 			</fileset>
 		</war>
@@ -121,7 +120,6 @@
 
 
 	<target name="init" description="Sets up build are and initalizes variables">
-		<echo message=" ______   ______   _______ " />
 		<mkdir dir="${target.dir}" />
 		<mkdir dir="${dist.dir}" />
 		<mkdir dir="${dist.exploded.dir}" />
@@ -143,7 +141,8 @@
 
 	<target name="build:workbench-modules" description="Call workbench modules build target to produce artifacts">
 		<SDKecho message="${ant.project.name}: Building the workbench source"/>
-		<ant antfile="${workbench.software.build.dir}/build.xml" target="build:all" inheritall="false" inheritrefs="false"/>
+		<ant antfile="build.xml" dir="${workbench.software.build.dir}" target="build:all" inheritall="false" inheritrefs="false">
+		</ant>
 	</target>
 
 	<target name="-copy-project-properties">
@@ -152,9 +151,6 @@
 		</copy>
 		<copy todir="${dist.exploded.dir}/common">
 			<fileset dir="${project.common.dir}" />
-		</copy>
-		<copy todir="${dist.exploded.common.sdk.dist.dir}">
-			<fileset dir="${workbench.common.sdk.dist.dir}" />
 		</copy>
 		<replace dir="${dist.exploded.dir}/common">
 			<replacefilter token="@PROJECT_NAME@" value="${PROJECT_NAME}" />
@@ -243,4 +239,12 @@
 		<!-- SSH to machine ant run ant command line to install application -->
 		<remote-ssh remotesshcommand=". .bash_profile;cd ${ssh.dir.temp}; ant -Dproperties.file=${properties.file.name} -Dforce.reinstall=true ${override.properties.string} ${upgrade.target}" />
 	</target>
+	
+	<target name="dist" description="Makes all distributions: installer, upgrader and source" depends="
+		build:all,
+		dist:installer,
+		dist:upgrader
+		">
+	</target>
+
 </project>
