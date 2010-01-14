@@ -1,19 +1,26 @@
 package gov.nih.nci.system.security.authentication.cagrid.executor;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
 import gov.nih.nci.cagrid.authentication.bean.BasicAuthenticationCredential;
 import gov.nih.nci.cagrid.authentication.bean.Credential;
 import gov.nih.nci.cagrid.authentication.client.AuthenticationClient;
 import gov.nih.nci.cagrid.authentication.stubs.types.InvalidCredentialFault;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
+import gov.nih.nci.system.security.authentication.cagrid.client.executor.GridAuthenticationService;
 
 import javax.security.auth.login.CredentialNotFoundException;
 
+import org.apache.log4j.Logger;
 import org.cagrid.gaards.dorian.client.GridUserClient;
 import org.cagrid.gaards.dorian.federation.CertificateLifetime;
 import org.globus.gsi.GlobusCredential;
 
 public class GridAuthenticationServiceImpl implements GridAuthenticationService {
 
+	protected static Logger log = Logger.getLogger(GridAuthenticationServiceImpl.class.getName());
+	
 	String authenticationServiceURL;
 	String dorianServiceURL;
 	Integer proxyLifetime;
@@ -62,11 +69,21 @@ public class GridAuthenticationServiceImpl implements GridAuthenticationService 
 		}
 		catch(InvalidCredentialFault icf)
 		{
+			log.error(printStackTrace(icf));
 			throw new CredentialNotFoundException("Invalid credentials");
 		}
 		catch(Exception e)
 		{
+			log.error(printStackTrace(e));
 			throw new Exception(e.getMessage());
 		}
+	}
+
+	private String printStackTrace(Exception e) {
+		ByteArrayOutputStream b = new ByteArrayOutputStream();
+		PrintStream p = new PrintStream( b);
+		e.printStackTrace( p );
+		p.flush();
+		return b.toString();
 	}
 }

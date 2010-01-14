@@ -1,5 +1,8 @@
 package gov.nih.nci.system.security.authentication.cagrid.executor;
 
+import gov.nih.nci.system.security.authentication.cagrid.client.executor.GridAuthenticationRemoteService;
+import gov.nih.nci.system.security.authentication.cagrid.client.executor.GridAuthenticationService;
+
 import java.util.Map;
 
 import javax.security.auth.login.CredentialNotFoundException;

@@ -77,11 +77,11 @@ public class WritableSecurityTest extends SDKSecurityTestBase{
 		Card resultCard=(Card)queryResult.getObjectResult();
 		assertEquals(card.getName(), resultCard.getName());
 
-		card.setName("cardUpdate");
-		UpdateExampleQuery updateExample=new UpdateExampleQuery(card);
+		resultCard.setName("cardUpdate");
+		UpdateExampleQuery updateExample=new UpdateExampleQuery(resultCard);
 		SDKQueryResult updateQueryResult=applicationService.executeQuery(updateExample);
 		Card updateResultCard=(Card)updateQueryResult.getObjectResult();
-		assertEquals(card.getName(), updateResultCard.getName());
+		assertEquals(resultCard.getName(), updateResultCard.getName());
 	}
 
 	public void testUpdateCardFailure() throws Exception {
@@ -126,8 +126,7 @@ public class WritableSecurityTest extends SDKSecurityTestBase{
 		Card resultCard=(Card)queryResult.getObjectResult();
 		assertEquals(card.getName(), resultCard.getName());
 
-		card.setName("cardUpdate");
-		DeleteExampleQuery deleteExample=new DeleteExampleQuery(card);
+		DeleteExampleQuery deleteExample=new DeleteExampleQuery(resultCard);
 		SDKQueryResult deleteQueryResult=applicationService.executeQuery(deleteExample);
 		assertEquals(true,deleteQueryResult.getObjectResult());
 	}

@@ -44,6 +44,6 @@
 		<delete dir="${project.target.dir}" failonerror="false"/>
 	</target>
 
-	<target name="clean:all" description="cleans everything" depends="clean:project,ivy:clean,clean:target"/>
+	<target name="clean:all" description="cleans everything" depends="clean:project"/>
 
 </project>

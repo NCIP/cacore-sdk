@@ -15,7 +15,7 @@
 				<!--@GRID_LOGIN_MODULE_END@-->
 				<ref bean="csmUsernameAuthenticationProvider"/>
 				<ref bean="x509AuthenticationProvider"/>
-				<bean class="gov.nih.nci.system.security.acegi.authentication.NullGroupNameAuthenticationProvider"/>
+				<bean class="gov.nih.nci.system.security.acegi.providers.NullGroupNameAuthenticationProvider"/>
 			</list>
 		</property>
 	</bean>

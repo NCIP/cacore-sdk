@@ -356,13 +356,13 @@
 			<then>
 				<switch value="${database.type}">
 					<case value="oracle">
-						<property name="csm.database.driver.file" value="${bda-utils.dir}/ojdbc14-10.2.0.3.0.jar "/>
+						<property name="csm.database.driver.file" value="${bda-utils.dir}/ojdbc14-10.2.0.4.0.jar "/>
 					</case>
 					<case value="mysql">
-						<property name="csm.database.driver.file" value="${bda-utils.dir}/mysql-connector-java-5.0.5.jar"/>
+						<property name="csm.database.driver.file" value="${bda-utils.dir}/mysql-connector-java-5.0.8.jar"/>
 					</case>
 					<case value="postgresql">
-						<property name="csm.database.driver.file" value="${bda-utils.dir}/postgresql-jdbc3-8.3-603.jar"/>
+						<property name="csm.database.driver.file" value="${bda-utils.dir}/postgresql-jdbc3-8.3-604.jar"/>
 					</case>
 					<case value="hsqldb">
 						<property name="csm.database.driver.file" value="${bda-utils.dir}/hsqldb-1.8.0.7.jar"/>
@@ -421,29 +421,24 @@
 				<echo message="Copying libraries to JBoss" />
 				<switch value="${database.type}">
 					<case value="oracle">
-						<property name="clm.database.driver.file" value="ojdbc14-*.jar "/>
+						<property name="clm.database.driver.file" value="${bda-utils.dir}/ojdbc14-10.2.0.4.0.jar "/>
 					</case>
 					<case value="mysql">
-						<property name="clm.database.driver.file" value="mysql-connector-java-*.jar"/>
+						<property name="clm.database.driver.file" value="${bda-utils.dir}/mysql-connector-java-5.0.8.jar"/>
 					</case>
 					<case value="postgresql">
-						<property name="clm.database.driver.file" value="postgresql-jdbc3-*.jar"/>
-					</case>
-					<case value="hsqldb">
-						<property name="clm.database.driver.file" value="hsqldb-*.jar"/>
+						<property name="clm.database.driver.file" value="${bda-utils.dir}/postgresql-jdbc3-8.3-604.jar"/>
 					</case>
 					<default>
 						<fail message="Invalid or unsupported database type ${database.type}"/>
 					</default>
 				</switch>
-				<copy todir="${jboss.home}/server/${jboss.server.name}/lib" overwrite="true" failonerror="false">
-					<fileset dir="${bda-utils.dir}">
-						<include name="${clm.database.driver.file}" />
-					</fileset>
-				</copy>
+				<echo message="${clm.database.driver.file}"/>
+				<echo message="${jboss.home}/server/${jboss.server.name}/lib"/>
+				<copy file="${clm.database.driver.file}" todir="${jboss.home}/server/${jboss.server.name}/lib" overwrite="true" failonerror="true"/>
+							
 				<copy todir="${jboss.home}/server/${jboss.server.name}/lib">
-					<fileset dir="${package.client.jboss.default.lib.dir}">
-					</fileset>
+					<fileset dir="${package.client.jboss.default.lib.dir}"/>
 				</copy>
 			</then>
 		</if>
@@ -533,10 +528,10 @@
 			<then>
 				<switch value="${database.type}">
 					<case value="oracle">
-						<property name="csm.database.driver.file" value="${bda-utils.dir}/ojdbc14-10.2.0.3.0.jar "/>
+						<property name="csm.database.driver.file" value="${bda-utils.dir}/ojdbc14-10.2.0.4.0.jar "/>
 					</case>
 					<case value="mysql">
-						<property name="csm.database.driver.file" value="${bda-utils.dir}/mysql-connector-java-5.0.5.jar"/>
+						<property name="csm.database.driver.file" value="${bda-utils.dir}/mysql-connector-java-5.0.8.jar"/>
 					</case>
 					<case value="postgresql">
 						<property name="csm.database.driver.file" value="${bda-utils.dir}/postgresql-jdbc3-8.3-603.jar"/>
@@ -648,6 +643,74 @@
 			</then>
 		</if>
 	</target>
+	
+	<target name="install:jboss:validation:post-install" description="Run post-install checks from bda-utils" unless="exclude.jboss"
+		depends="
+		common:jboss:init,
+		common:init,
+		install:jboss:start
+		">
+		<if>
+			<not>
+				<isset property="exclude.start.servers"/>
+			</not>
+			<then>
+				<validate-post-jboss />
+			</then>
+		</if>
+	</target>
+	
+	<target name="install:jboss:init" depends="common:init:pre" unless="exclude.jboss">
+		<!-- determine if port configurations or port lists are being called -->
+		<if>
+			<isset property="jboss.ncicb-standard.port-config"/>
+			<then>
+				<!-- Read some port properties from standard bindings file -->
+				<echo message="Using JBoss NCICB Standard port configurations"/>
+				<property name="jboss.server.binding.template.location" value="${basedir}/${jboss-bindings.file}"/>
+				<jboss-read-ports
+					jboss.server.bindingfile.location="${jboss.server.binding.template.location}"
+					/>
+				<echo message="http -${jboss.server.port} "/>
+				<echo message="http -${jboss.server.jndi.port} "/>
+				<properties-exist
+					properties.list="jboss.server.jndi.port,jboss.server.port,jboss.server.ports.name"
+					/>
+				<!-- Make sure there are not unexpanded tokens and that the jboss.server.ports.name is a configuration in the bindings file. -->
+				<jboss-bindings-validate
+					jboss.server.bindingfile.location="${jboss.server.binding.template.location}"
+					/>
+
+			</then>
+			<else>
+				<!-- else ensure that all ports are set, since these will be removed from install-properties.template we will verify here.  They have to be removed so the validator works with or without the properties or we have to change the format of the file. -->
+				<echo message="Using custom JBoss port configurations"/>
+				<property name="jboss.server.binding.template.location" value="${bda-utils.dir}/resource/${jboss.binaries.relative.dir}/bindings.xml"/>
+				<properties-exist
+					properties.list="jboss.server.jndi.port,jboss.server.port,jboss.cobraorb.port,jboss.ejbinvoker.port,jboss.hajndi.port,jboss.hajrmi.port,jboss.jms.port,jboss.jmx-rmi.port,jboss.messaging.port,jboss.pooledha.port,jboss.remoting.port,jboss.server.bind.port,jboss.server.rmi.port,jboss.service.rmiobject.port,jboss.snmp.port,jboss.snmp-trapd.port,jboss.web.service.port"
+					/>
+			</else>
+		</if>
+	</target>
+	
+	<target name="install:jboss:validation:pre-install:ports" description="Checks to see if configured ports are listenting and fails buld, meant to be run after jboss:stop" unless="exclude.jboss"
+		depends="
+		common:init,
+		install:jboss:stop
+		">
+		<validate-pre-jboss-ports
+			/>
+	</target>
+	
+	<target name="install:jboss:validation:pre-install" description="Runs pre-install validation checks bda-utils"  unless="exclude.jboss"
+		depends="
+		common:jboss:init,common:init,
+		install:common:validation:pre-install
+		">
+		<validate-pre-install-jboss
+			/>
+	</target>
+
 
 	<target name="install:database" description="Runs datbase creation scripts then calls uprade database." unless="exclude.database" depends="		
 		common:init,
@@ -757,6 +820,7 @@
 		<if>
 			<and>
 				<equals arg1="${CLM_DB_DROP_SCHEMA}" arg2="true" />
+				<equals arg1="${CLM_DB_TYPE}" arg2="mysql" />
 				<equals arg1="${ENABLE_CLM_LOGGER_CFG_GENERATION}" arg2="true" />
 			</and>
 			<then>

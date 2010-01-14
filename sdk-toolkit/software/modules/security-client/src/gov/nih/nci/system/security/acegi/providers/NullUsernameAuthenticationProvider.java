@@ -1,4 +1,4 @@
-package gov.nih.nci.system.security.acegi.authentication;
+package gov.nih.nci.system.security.acegi.providers;
 
 import gov.nih.nci.system.security.acegi.providers.UsernameAuthenticationToken;
 

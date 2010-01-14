@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<project name="caCORE SDK - target Build" default="build:all" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:cs="antlib:com.puppycrawl.tools.checkstyle">
+	<description>
+		This build file used to generate SDK target directory 
+	</description>
+
+	<property name="software.dir" location=".." />
+	<property name="build.dir" location="${software.dir}/build" />
+	<property name="modules.dir" value="${software.dir}/modules"/>
+	<property name="common.dir" location="${software.dir}/common" />
+	<property name="target.dir" location="${software.dir}/target" />
+	<property name="shared.local.repo.dir" location="${target.dir}/shared-local-ivy-repo" />
+	<property name="local.repo.dir" location="${software.dir}/local-ivy-repo" />
+
+	<property name="ivy.settings.dir" value="${common.dir}"/>
+	<property name="ivy.settings.file" value="ivysettings.xml" />
+
+	<property name="modules.build.file" value="build.xml" />
+	<property name="modules.build.target" value="build:all" />
+	<property name="workspace.dir" location="${software.dir}/workspace" />
+	<property name="codegen.build.file" value="build-codegen.xml" />
+	<property name="target.workspace.dir" location="${target.dir}/workspace" />
+
+	<property file="${build.dir}/project.properties" />
+
+	<property name="bda-download.dir" location="${target.dir}/bda-download" />
+	<property name="ivy.build.def.file" location="ivy.xml" />
+
+	<import file="${build.dir}/bda-master-build.xml"/>
+	
+	<target name="ivy:init">
+		<property name="ivy.dep.file" value="${ivy.build.def.file}" />
+		<ivy:settings file="${ivy.settings.dir}/${ivy.settings.file}"/>
+	</target>
+
+	<target name="ivy:package-target_grid" depends="ivy:init">
+		<ivy:resolve refresh="true" conf="target_grid_training" />
+		<ivy:resolve refresh="true" conf="target_grid_prod" />
+		<ivy:resolve refresh="true" conf="target_grid_qa" />
+		<ivy:resolve refresh="true" conf="target_grid_stage" />
+
+		<ivy:retrieve pattern="${common.dir}/resources/target_grid/${TRAINING_TARGET_GRID}/[artifact].[ext]" conf="target_grid_training" />
+		<ivy:retrieve pattern="${common.dir}/resources/target_grid/${NCI_PROD_TARGET_GRID}/[artifact].[ext]" conf="target_grid_prod" />
+		<ivy:retrieve pattern="${common.dir}/resources/target_grid/${NCI_QA_TARGET_GRID}/[artifact].[ext]" conf="target_grid_qa" />
+		<ivy:retrieve pattern="${common.dir}/resources/target_grid/${NCI_STAGE_TARGET_GRID}/[artifact].[ext]" conf="target_grid_stage" />
+		
+	</target>
+
+
+	<target name="init" description="Sets up build are and initalizes variables">
+		<mkdir dir="${target.dir}" />
+		<mkdir dir="${temp.dir}" />
+		<mkdir dir="${download.dir}" />
+		<mkdir dir="${dist.dir}" />
+		<mkdir dir="${dist.exploded.dir}" />
+
+		<available file="${jboss.dest.file}" property="jboss.tools.exists" />
+		<available file="${tomcat.dest.file}" property="tomcat.tools.exists" />
+	</target>
+
+	<target name="build:all" description="Builds all the sub projects, putting artifacts in the project level target directory, used by distribution targets to make distributions" depends="
+		init,
+		build:workspace-modules,
+		dist:tools:retrieve,
+		dist:tools:retrieve:jboss-bindings,
+		ivy:package-target_grid
+		" />
+
+	<target name="dist:tools:retrieve" description="Downloads binary applications from commonlibrary repository" depends="
+		init,
+		dist:tools:retrieve:jboss,
+		dist:tools:retrieve:tomcat
+		" >
+	</target>
+
+	<target name="build:workspace-modules" description="Call modules build target to produce artifacts">
+		<echo>Build Workspace Modules .........</echo>
+		<echo>target DIR = ${target.dir}</echo>
+		<echo>modules DIR = ${modules.dir}</echo>
+		<ant inheritAll="true" inheritRefs="false" antfile="${modules.build.file}" target="${modules.build.target}" dir="${modules.dir}">
+		</ant>
+	</target>
+	
+	<target name="clean:all" depends="ivy:clean" description="cleans this project">
+			<delete dir="${target.dir}/bda-download" failonerror="true"/>
+			<delete dir="${target.dir}" failonerror="false"/>		
+	</target>
+</project>

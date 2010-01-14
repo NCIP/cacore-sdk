@@ -462,7 +462,7 @@ public class AllDataTypeWSTest extends SDKWSTestBase
 	public void testGetVersion() throws Exception
 	{
 		String version = getVersion();
-		assertEquals("4.0",version);
+		assertEquals("4.2.1",version);
 	}
 	
 	

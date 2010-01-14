@@ -1,4 +1,4 @@
-package gov.nih.nci.system.security.authentication.cagrid;
+package gov.nih.nci.system.security.authentication.cagrid.client;
 
 import javax.security.auth.Subject;
 import javax.security.auth.login.LoginContext;
