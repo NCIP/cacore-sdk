@@ -24,9 +24,9 @@
 	</target>
 	
 	<target name="package-software-sdk-workbench" depends="init" description="Packages the entire workbench system">
-		<!--<ant antfile="build.xml" target="dist" dir="${package.sdk.home}/sdk-workbench/workbench-webstart-project/software/build" inheritall="true">
+		<ant antfile="build.xml" target="dist" dir="${package.sdk.home}/sdk-workbench/workbench-webstart-project/software/build" inheritall="true">
 			<property name="output.dir" value="../dist"/>
-		</ant>-->
+		</ant>
 		<copy todir="${output.dir}">
 			<fileset dir="sdk-workbench/workbench-webstart-project/software/target/dist">
 				<include name="workbench*.zip"/>
