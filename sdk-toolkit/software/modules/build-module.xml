@@ -15,7 +15,8 @@
 	<property name="module.lib.dir" location="${target.module.dir}/lib" />
 
 	<property name="compile.lib.dir" location="${module.lib.dir}/compile" />
-	<property name="src.java.dir" value="${basedir}/src" />
+	<property name="runtime.lib.dir" location="${module.lib.dir}/runtime" />
+	<property name="src.java.dir" value="${basedir}" />
 	<property name="build.classes.dir" value="${target.dir}/modules/classes" />
 	
 	<property name="sdk-jar-prefix" value="sdk" />
@@ -66,7 +67,13 @@
 			<include name="*.jar" />
 		</fileset>
 	</path>
-
+	
+	<fileset dir="${module.lib.dir}" id="project.compile.classpath2">
+		<patternset>
+			<include name="**/*.jar" />
+		</patternset>
+	</fileset>
+	
 	<!-- ******************************************************************* -->
 	<!-- ** MAIN TARGETS                                                  ** -->
 	<!-- ******************************************************************* -->
@@ -218,7 +225,7 @@
 	<import file="static-analysis-build-module.xml" />
 	
 	<!--static-analysis:diff:pmd,
-	static-analysis:diff:checkstyle-->
+	static-analysis:diff:checkstyle -->
 	<target name="static-analysis" description="Performs static analysis" depends="
 			static-analysis:ivy-init,
 			static-analysis:init,
@@ -241,15 +248,14 @@
 			http://www.redhillconsulting.com.au/products/simian/installation.html
 			-->
 		<target name="static-analysis:simian" depends="static-analysis:init" description="Performs code duplication analysis">
-			<static-analysis-simian simian.src.dir="${src.java.dir}" simian.rpt.dir="${reports.simian.dir}" simian.report-xsl.file="${common.dir}/simian/simian.xsl" simian.xml.name="simian-blueprints-webapp.xml" simian.html.name="simian-blueprints-webapp.html" />
-
+			<static-analysis-simian simian.src.dir="${src.java.dir}" simian.rpt.dir="${reports.simian.dir}" simian.report-xsl.file="${common.dir}/simian/simian.xsl" simian.xml.name="simian-sdk-modules.xml" simian.html.name="simian-sdk-modules.html" />
 		</target>
 
 		<target name="static-analysis:pmd" depends="
 			static-analysis:ivy-init,
 			static-analysis:init
 			" description="PMD scans Java source code and looks for Possible bugs,Dead code,Overcomplicated expressions and Duplicate code">
-			<static-analysis-pmd pmd.src.dir="${src.java.dir}" pmd.rpt.dir="${reports.pmd.dir}" pmd.root-dir.name="software" pmd.sub-project.name="blueprints-webapp" pmd.report-xsl.file="${common.dir}/pmd/pmd-report.xslt" pmd.report-preprocessor.file="${common.dir}/pmd/pmd-hudson-preprocessor.xlst" pmd.rule-set.file="${common.dir}/pmd/pmd-ruleset-basic.xml" pmd.xml.name="pmd-report.xml" pmd.html.name="pmd-report.html" />
+			<static-analysis-pmd pmd.src.dir="${src.java.dir}" pmd.rpt.dir="${reports.pmd.dir}" pmd.root-dir.name="software" pmd.sub-project.name="sdk-modules" pmd.report-xsl.file="${common.dir}/pmd/pmd-report.xslt" pmd.report-preprocessor.file="${common.dir}/pmd/pmd-hudson-preprocessor.xlst" pmd.rule-set.file="${common.dir}/pmd/pmd-ruleset-basic.xml" pmd.xml.name="pmd-report.xml" pmd.html.name="pmd-report.html" />
 		</target>
 
 		<target name="static-analysis:diff:pmd" depends="
@@ -268,7 +274,7 @@
 			static-analysis:ivy-init,
 			static-analysis:init
 			" description="Runs JavaNCSS a tool that identifies code Cyclomatic Complexity.">
-			<static-analysis-javancss javancss.src.dir="${src.java.dir}" javancss.rpt.dir="${reports.javancss.dir}" javancss.report-xsl.file="${common.dir}/javancss/javancss2methodhtml.xsl" javancss.xml.name="javancss_metrics_blueprints-webapp.xml" javancss.html.name="javancss_report_blueprints-webapp.html" />
+			<static-analysis-javancss javancss.src.dir="${src.java.dir}" javancss.rpt.dir="${reports.javancss.dir}" javancss.report-xsl.file="${common.dir}/javancss/javancss2methodhtml.xsl" javancss.xml.name="javancss_metrics_sdk-modules.xml" javancss.html.name="javancss_report_sdk-modules.html" />
 		</target>
 
 		<!-- Runs Findbugs a tool that attempts to find bugs.
@@ -281,9 +287,8 @@
 			static-analysis:findbugs-init,
 			static-analysis:init
 			" description="static analysis to look for bugs in Java code">
-			<mkdir dir="${reports.findbugs.dir}/bda-blueprints-webapp" />
-
-			<static-analysis-findbugs findbugs.home.dir="${findbugs.home.dir}" findbugs.src.dir="${src.java.dir}" findbugs.classes.dir="${build.classes.dir}" findbugs.rpt.dir="${reports.findbugs.dir}/bda-blueprints-webapp" findbugs.report-xsl.file="${findbugs.home.dir}/src/xsl/fancy.xsl" findbugs.app.classpath.ref="project.compile.classpath" findbugs.xml.name="findbugs.xml" findbugs.html.name="findbugs.html" />
+			<mkdir dir="${reports.findbugs.dir}/sdk-modules" />
+			<static-analysis-findbugs findbugs.home.dir="${findbugs.home.dir}" findbugs.src.dir="${src.java.dir}" findbugs.classes.dir="${build.classes.dir}" findbugs.rpt.dir="${reports.findbugs.dir}/sdk-modules" findbugs.report-xsl.file="${findbugs.home.dir}/src/xsl/fancy.xsl" findbugs.app.classpath.ref="project.compile.classpath2" findbugs.xml.name="findbugs.xml" findbugs.html.name="findbugs.html" />
 		</target>
 
 		<!-- Runs CheckStyle is a codeing standard violation reporter.  
