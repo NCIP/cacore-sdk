@@ -29,56 +29,7 @@
 	</target>
 
 	<target name="static-analysis:sub-projects" description="Call api sub-projects build target to produce artifiacts">
-		<echo>Starting 1..................</echo>
-		<ant inheritAll="true" inheritRefs="false" antfile="${workspace-api-projects.build.file}" target="${workspace-api.static-analysis.target}" dir="${modules.dir}/codegen">
-		</ant>
-		<echo>Starting 2..................</echo>
-		<ant inheritAll="true" inheritRefs="false" antfile="${workspace-api-projects.build.file}" target="${workspace-api.static-analysis.target}" dir="${modules.dir}/codegen-templates">
-		</ant>
-		<echo>Starting 3..................</echo>
-		<ant inheritAll="true" inheritRefs="false" antfile="${workspace-api-projects.build.file}" target="${workspace-api.static-analysis.target}" dir="${modules.dir}/codegen-validator">
-		</ant>
-		<echo>Starting 4..................</echo>
-		<ant inheritAll="true" inheritRefs="false" antfile="${workspace-api-projects.build.file}" target="${workspace-api.static-analysis.target}" dir="${modules.dir}/codegen-validator-templates">
-		</ant>
-		<echo>Starting 5..................</echo>
-		<ant inheritAll="true" inheritRefs="false" antfile="${workspace-api-projects.build.file}" target="${workspace-api.static-analysis.target}" dir="${modules.dir}/grid-remoting">
-		</ant>
-		<echo>Starting 6..................</echo>
-		<ant inheritAll="true" inheritRefs="false" antfile="${workspace-api-projects.build.file}" target="${workspace-api.static-analysis.target}" dir="${modules.dir}/grid-jaas-client">
-		</ant>
-		<echo>Starting 7..................</echo>
-		<ant inheritAll="true" inheritRefs="false" antfile="${workspace-api-projects.build.file}" target="${workspace-api.static-analysis.target}" dir="${modules.dir}/grid-jaas">
-		</ant>
-		<echo>Starting 8..................</echo>
-		<ant inheritAll="true" inheritRefs="false" antfile="${workspace-api-projects.build.file}" target="${workspace-api.static-analysis.target}" dir="${modules.dir}/grid-jaas-jndi-binder">
-		</ant>
-		<echo>Starting 9..................</echo>
-		<ant inheritAll="true" inheritRefs="false" antfile="${workspace-api-projects.build.file}" target="${workspace-api.static-analysis.target}" dir="${modules.dir}/security-client">
-		</ant>
-		<echo>Starting 10..................</echo>
-		<ant inheritAll="true" inheritRefs="false" antfile="${workspace-api-projects.build.file}" target="${workspace-api.static-analysis.target}" dir="${modules.dir}/security">
-		</ant>
-		<echo>Starting 11..................</echo>
-		<ant inheritAll="true" inheritRefs="false" antfile="${workspace-api-projects.build.file}" target="${workspace-api.static-analysis.target}" dir="${modules.dir}/system-logging">
-		</ant>
-		<echo>Starting 12..................</echo>
-		<ant inheritAll="true" inheritRefs="false" antfile="${workspace-api-projects.build.file}" target="${workspace-api.static-analysis.target}" dir="${modules.dir}/system-client">
-		</ant>
-		<echo>Starting 13..................</echo>
-		<ant inheritAll="true" inheritRefs="false" antfile="${workspace-api-projects.build.file}" target="${workspace-api.static-analysis.target}" dir="${modules.dir}/system-core">
-		</ant>
-		<echo>Starting 14..................</echo>
-		<ant inheritAll="true" inheritRefs="false" antfile="${workspace-api-projects.build.file}" target="${workspace-api.static-analysis.target}" dir="${modules.dir}/system-web">
-		</ant>
-		<echo>Starting 15..................</echo>
-		<ant inheritAll="true" inheritRefs="false" antfile="${workspace-api-projects.build.file}" target="${workspace-api.static-analysis.target}" dir="${modules.dir}/system-ws">
-		</ant>
-		<echo>Starting 16..................</echo>
-		<ant inheritAll="true" inheritRefs="false" antfile="${workspace-api-projects.build.file}" target="${workspace-api.static-analysis.target}" dir="${modules.dir}/writable-api-client" >
-		</ant>
-		<echo>Starting 17..................</echo>
-		<ant inheritAll="true" inheritRefs="false" antfile="${workspace-api-projects.build.file}" target="${workspace-api.static-analysis.target}" dir="${modules.dir}/writable-api">
+		<ant inheritAll="true" inheritRefs="false" antfile="${workspace-api-projects.build.file}" target="${workspace-api.static-analysis.target}" dir="${modules.dir}">
 		</ant>
 	</target>
 
