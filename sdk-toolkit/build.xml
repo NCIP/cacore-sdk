@@ -9,6 +9,7 @@
 	<property name="docs.temp.dir" value="${temp.dir}/docs"/>
 	<property name="sdk.toolkit.dir" value="."/>
 	<property name="software.dir" value="${sdk.toolkit.dir}/software"/>
+	<property name="target.dir" location="${software.dir}/target" />
 	<property name="build.dir" value="${software.dir}/build"/>
 	<property name="modules.dir" value="${software.dir}/modules"/>
 	<property name="master.build.file" value="build-sdk-dist.xml"/>
@@ -71,6 +72,7 @@
 
 	<target name="clean:all" description="cleans the dist folder">
 		<delete dir="${temp.dir}"/>
+		<delete dir="${target.dir}/bda-download" failonerror="true"/>
 		<ant antfile="${master.build.file}" dir="${build.dir}" inheritall="false" inheritrefs="false" target="clean:all"/>
 	</target>
 
