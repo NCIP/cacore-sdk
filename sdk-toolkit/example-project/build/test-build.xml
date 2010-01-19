@@ -228,7 +228,7 @@
 					<ant antfile="build.xml" dir="${junit.dir}" target="writeDatabaseCleanUpTest" inheritAll="true" />
 				</then>
 			</if>
-			<!--
+			
 			<if>
 				<equals arg1="${SERVER_TYPE}" arg2="tomcat" />
 				<then>
@@ -239,7 +239,7 @@
 				</else>
 			</if>
 			
-			<delete dir="${project.target.dir}" failonerror="false"/>-->
+			<delete dir="${project.target.dir}" failonerror="false"/>
 		</sequential>
 	</macrodef>
 
