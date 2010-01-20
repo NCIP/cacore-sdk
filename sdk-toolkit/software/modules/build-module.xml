@@ -106,6 +106,9 @@
 		<jetc destDir="${codegen-templates.module.name}/src">
 			<fileset dir="${codegen-templates.module.name}/templates" includes="**/*.javajet"/>
 		</jetc>
+		<jetc destDir="${codegen-validator-templates.module.name}/src">
+			<fileset dir="${codegen-validator-templates.module.name}/templates" includes="**/*.javajet"/>
+		</jetc>
 	</target>
 
 	<target name="compile:application-code" depends="-init, ivy:setup,-compile:templates" description="Compiles all subproject code">
