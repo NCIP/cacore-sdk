@@ -42,6 +42,7 @@
 
 	<property name="jar.name" value="test-jar.jar" />
 	<property name="ivy.module.def.file" location="ivy.xml" />
+	<property name="project.properties.file" value="${build.dir}/project.properties" />
 
 		
 	<target name="ivy:init">
@@ -227,17 +228,17 @@
 	<!-- This is a wrapper target for all static analysis targets -->
 	<import file="static-analysis-build-module.xml" />
 	
-	<!--static-analysis:diff:pmd,
-		static-analysis:diff:checkstyle -->
+	<!-- -->
 	<target name="static-analysis" description="Performs static analysis" depends="
 			static-analysis:ivy-init,
 			static-analysis:init,
 			static-analysis:findbugs-init,
 			static-analysis:simian,
 			static-analysis:pmd,
+			static-analysis:diff:pmd,
 			static-analysis:checkstyle,
+			static-analysis:diff:checkstyle,
 			static-analysis:javancss,
-			static-analysis:findbugs,
 			static-analysis:cobertura
 			">
 		<!-- 
@@ -266,7 +267,7 @@
 			static-analysis:ivy-init,
 			static-analysis:init
 			">
-			<static-analysis-diff-pmd differential.file.name="diff_list.txt" pmd.src.dir="${src.java.dir}" pmd.rpt.dir="${reports.pmd.dir}" pmd.root-dir.name="software" pmd.sub-project.name="blueprints-webapp" pmd.report-xsl.file="${common.dir}/pmd/pmd-report.xslt" pmd.report-preprocessor.file="${common.dir}/pmd/pmd-hudson-preprocessor.xlst" pmd.rule-set.file="${common.dir}/pmd/pmd-ruleset-basic.xml" pmd.xml.name="pmd-report.xml" pmd.html.name="pmd-report.html" />
+			<static-analysis-diff-pmd differential.file.name="diff_list.txt" pmd.src.dir="${src.java.dir}" pmd.rpt.dir="${reports.pmd.dir}" pmd.root-dir.name="software" pmd.sub-project.name="sdk-modules" pmd.report-xsl.file="${common.dir}/pmd/pmd-report.xslt" pmd.report-preprocessor.file="${common.dir}/pmd/pmd-hudson-preprocessor.xlst" pmd.rule-set.file="${common.dir}/pmd/pmd-ruleset-basic.xml" pmd.xml.name="pmd-report.xml" pmd.html.name="pmd-report.html" />
 			<replaceregexp file="${project.properties.file}" byline="true" match="^(pmd.revision.number)=(.*)" replace="\1=${build.svn.revision}" />
 		</target>
 
