@@ -16,7 +16,7 @@
 
 	<property name="compile.lib.dir" location="${module.lib.dir}/compile" />
 	<property name="runtime.lib.dir" location="${module.lib.dir}/runtime" />
-	<property name="src.java.dir" value="${basedir}" />
+	<property name="src.java.dir" value="${target.module.dir}/java-src" />
 	<property name="build.classes.dir" value="${target.dir}/modules/classes" />
 	
 	<property name="sdk-jar-prefix" value="sdk" />
@@ -228,17 +228,16 @@
 	<import file="static-analysis-build-module.xml" />
 	
 	<!--static-analysis:diff:pmd,
-	static-analysis:diff:checkstyle 
-	,
+		static-analysis:diff:checkstyle -->
+	<target name="static-analysis" description="Performs static analysis" depends="
+			static-analysis:ivy-init,
+			static-analysis:init,
 			static-analysis:findbugs-init,
 			static-analysis:simian,
 			static-analysis:pmd,
 			static-analysis:checkstyle,
 			static-analysis:javancss,
-			static-analysis:findbugs,-->
-	<target name="static-analysis" description="Performs static analysis" depends="
-			static-analysis:ivy-init,
-			static-analysis:init,
+			static-analysis:findbugs,
 			static-analysis:cobertura
 			">
 		<!-- 
@@ -325,6 +324,6 @@
 			static-analysis:init
 			" description="Cobertura is a free Java tool that calculates the percentage of code accessed by tests.">
 			<mkdir dir="${cobertura.module.lib.dir}/instrumented/sdk" />
-			<static-analysis-cobertura cobertura.src.dir="${src.java.dir}" cobertura.classes.dir="${module.lib.dir}" cobertura.rpt.dir="${reports.cobertura.dir}/sdk" cobertura.instrumented.dir="${cobertura.module.lib.dir}/instrumented/sdk" cobertura.report-xsl.file="${common.dir}/cobertura/cobertura-simple.xsl" cobertura.ser.file="cobertura.ser" cobertura.config.file="${common.dir}/cobertura/cobertura.xml" />
+			<static-analysis-cobertura cobertura.classes.dir="${module.lib.dir}" cobertura.rpt.dir="${reports.cobertura.dir}/sdk" cobertura.instrumented.dir="${cobertura.module.lib.dir}/instrumented/sdk" cobertura.report-xsl.file="${common.dir}/cobertura/cobertura-simple.xsl" cobertura.ser.file="cobertura.ser" cobertura.config.file="${common.dir}/cobertura/cobertura.xml" />
 		</target>
 </project>

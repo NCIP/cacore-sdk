@@ -4,7 +4,7 @@
 
 	<property file="codegen.properties" />
 	<property name="project.name" value="${PROJECT_NAME}"/>
-
+	
 	<import file="bda-master-install.xml"/>
 
 	<!-- Grid related properties -->
@@ -890,4 +890,31 @@
 			</switch>
 		</sequential>
 	</macrodef>
+	
+	<!--
+	tomcat-stop macro stops the tomcat instance and can be used in both linux and windows platforms
+	usage: <tomcat-stop tomcat.home="${tomcat.home}"/>
+		The tomcat.home must be set and passed when calling this macro
+	-->
+	<macrodef name="tomcat-stop" description="Stops a local tomcat instance">
+		<attribute name="tomcat.home" />
+		<sequential>
+			<echo message="Overriding bda-master-util tomcat-stop"/>
+			<echo message="Stopping Tomcat instance at @{tomcat.home}" />
+			<exec executable="sh" osfamily="unix" dir="@{tomcat.home}/bin" spawn="true">
+				<env key="NOPAUSE" value="true" />
+				<arg line="shutdown.sh" />
+			</exec>
+			<exec osfamily="windows" executable="cmd" dir="@{tomcat.home}/bin" spawn="true" >
+				<env key="NOPAUSE" value="true" />
+				<env key="CATALINA_BASE" value=""/>
+				<env key="CATALINA_HOME" value=""/>
+				<env key="CATALINA_TMPDIR" value=""/>
+
+				<arg line="/c shutdown.bat" />
+			</exec>
+			<sleep seconds="5" />
+		</sequential>
+	</macrodef>
+
 </project>
