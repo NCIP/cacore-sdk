@@ -139,6 +139,11 @@
 		<copy todir="${dist.exploded.dir}/common">
 			<fileset dir="${project.common.dir}" />
 		</copy>
+		<copy todir="${dist.exploded.dir}/common">
+			<fileset dir="${common.dir}">
+				<include name="**/cobertura/*"/>
+			</fileset>
+		</copy>
 		<copy todir="${tools.dist.dir}">
 			<fileset dir="${download.dir}">
 				<exclude name="cagrid*"/>

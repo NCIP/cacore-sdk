@@ -30,6 +30,7 @@
 		<mkdir dir="${reports.checkstyle.dir.diff}" />
 		<mkdir dir="${reports.javancss.dir}" />
 		<mkdir dir="${reports.findbugs.dir}" />
+		<mkdir dir="${reports.cobertura.dir}" />
 	</target>
 
 	<target name="static-analysis:ivy-init" depends="
@@ -302,20 +303,14 @@
 		<attribute name="cobertura.ser.file" />
 		<attribute name="cobertura.config.file" />
 		<sequential>
-			<taskdef classpathref="cobertura.classpath" resource="tasks.properties" />
-			<cobertura-instrument todir="@{cobertura.instrumented.dir}" datafile="@{cobertura.instrumented.dir}/@{cobertura.ser.file}">
+			<taskdef classpathref="project.test.cobertura.classpath" resource="tasks.properties" />
+			<delete dir="@{cobertura.instrumented.dir}"/>
+			<mkdir dir="@{cobertura.instrumented.dir}" />
+			<cobertura-instrument datafile="@{cobertura.instrumented.dir}/@{cobertura.ser.file}">
 				<fileset dir="@{cobertura.classes.dir}">
-					<include name="**" />
+					<include name="*.jar" />
 				</fileset>
 			</cobertura-instrument>
-
-			<cobertura-report datafile="@{cobertura.instrumented.dir}/@{cobertura.ser.file}" format="html" destdir="@{cobertura.rpt.dir}">
-				<fileset dir="@{cobertura.src.dir}">
-					<include name="**/*.java" />
-				</fileset>
-			</cobertura-report>
-
-			<cobertura-check failureproperty="cobertura.failure" datafile="@{cobertura.instrumented.dir}/@{cobertura.ser.file}" haltonfailure="false" linerate="0" packagebranchrate="0" packagelinerate="0" totalbranchrate="25" totallinerate="30" />
 		</sequential>
 	</macrodef>
 </project>

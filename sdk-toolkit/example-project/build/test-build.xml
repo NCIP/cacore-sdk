@@ -99,28 +99,23 @@
 				<else>
 						<property file="${junit.dir}/db-postgres.properties" />
 				</else>
-			</if>
-
-			<property name="report.project.dir" value="${junit.dir}/report/@{REPORT.PROJECT.DIR}" />
-
-
+			</if>			
+			
 			<ant antfile="build.xml" dir="." target="build-system" inheritAll="true"/>
-
+			
 			<copy todir="${dist.exploded.dir}" overwrite="true">
 				<fileset dir="." includes="*.properties" />
 			</copy>
-
+			
 			<ant antfile="build.xml" dir="${dist.exploded.dir}" target="install" inheritAll="true">
 				<property name="bda-utils.dir" value="${dist.exploded.dir}/bda-utils" />
 				<property name="force.reinstall" value="true" />
 			</ant>
-
+			
 			<delete dir="${report.project.dir}/build-report" />
 
-			
 			<ant antfile="build.xml" dir="${junit.dir}" target="xmlMappingTest" inheritAll="true"/>
 			<ant antfile="build.xml" dir="${junit.dir}" target="hbmMappingTest" inheritAll="true"/>
-
 
 			<!-- @TODO different setup stop jboss rename war run testcase 
 			<ant antfile="build.xml" dir="${junit.dir}" target="appServiceTest" inheritAll="true"/>-->
@@ -228,18 +223,45 @@
 					<ant antfile="build.xml" dir="${junit.dir}" target="writeDatabaseCleanUpTest" inheritAll="true" />
 				</then>
 			</if>
+
+			<property name="report.project.dir" value="${junit.dir}/report/@{REPORT.PROJECT.DIR}" />
+			<delete dir="${report.project.dir}" />
+			<mkdir dir="${report.project.dir}" />
+			<property file="${project.home}/build/codegen.properties" />
+			<property file="${SDK_INSTALL_DIR}/software/build/project.properties"/>
+			<property file="${project.home}/build/install.properties" />
 			
+			<copy file="${SDK_INSTALL_DIR}/software/build/cobertura.ser" todir="${junit.dir}/report/@{REPORT.PROJECT.DIR}/codegen-cobertura.ser" overwrite="true" failonerror="false"/>
+			<delete file="${SDK_INSTALL_DIR}/software/build/cobertura.ser"  failonerror="false"/>
+
+			<condition property="application.base.path" value="${application.base.path.linux}">
+				<or>
+				<os family="unix" />
+					<os family="mac" />
+				</or>
+			</condition>
+			<condition property="application.base.path" value="${application.base.path.windows}">
+				<os family="windows" />
+			</condition>
+			<property name="jboss.home" value="${application.base.path}/${jboss.relative.path}"/>
+			<property name="tomcat.home" value="${application.base.path}/${tomcat.relative.path}"/>
+
 			<if>
 				<equals arg1="${SERVER_TYPE}" arg2="tomcat" />
 				<then>
-					<ant antfile="build.xml" dir="${dist.exploded.dir}" target="install:tomcat:stop" inheritAll="true" />
+					<post to="http://${tomcat.hostname}:${tomcat.port.http}/coberturaFlush/flushCobertura" verbose="true"/>
+
+					<copy file="${tomcat.home}/bin/cobertura.ser" todir="${junit.dir}/report/@{REPORT.PROJECT.DIR}/tomcat-cobertura.ser" overwrite="true" />
 				</then>
 				<else>
-					<ant antfile="build.xml" dir="${dist.exploded.dir}" target="install:jboss:stop" inheritAll="true" />
+					<post to="http://${jboss.server.hostname}:${jboss.server.port}/coberturaFlush/flushCobertura"  verbose="true"/>
+					<ant antfile="build.xml" dir="${dist.exploded.dir}" target="install:jboss:stop" inheritAll="true" />					
+					
+					<copy file="${jboss.home}/bin/cobertura.ser" todir="${junit.dir}/report/@{REPORT.PROJECT.DIR}/jboss-cobertura.ser" overwrite="true" />
 				</else>
 			</if>
-			
-			<delete dir="${project.target.dir}" failonerror="false"/>
+			<!--
+			<delete dir="${project.target.dir}" failonerror="false"/>-->
 		</sequential>
 	</macrodef>
 
@@ -339,7 +361,7 @@
 	</target>
 	
 	<target name="build18Test">
-		<run-test SERVER.TYPE="tomcat" DB.TYPE="postgresql" REPORT.PROJECT.DIR="build17Test"  />
+		<run-test SERVER.TYPE="tomcat" DB.TYPE="postgresql" REPORT.PROJECT.DIR="build18Test"  />
 	</target>
 
 	<target name="buildAggregateReport">

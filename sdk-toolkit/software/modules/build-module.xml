@@ -228,16 +228,18 @@
 	<import file="static-analysis-build-module.xml" />
 	
 	<!--static-analysis:diff:pmd,
-	static-analysis:diff:checkstyle -->
-	<target name="static-analysis" description="Performs static analysis" depends="
-			static-analysis:ivy-init,
-			static-analysis:init,
+	static-analysis:diff:checkstyle 
+	,
 			static-analysis:findbugs-init,
 			static-analysis:simian,
 			static-analysis:pmd,
 			static-analysis:checkstyle,
 			static-analysis:javancss,
-			static-analysis:findbugs
+			static-analysis:findbugs,-->
+	<target name="static-analysis" description="Performs static analysis" depends="
+			static-analysis:ivy-init,
+			static-analysis:init,
+			static-analysis:cobertura
 			">
 		<!-- 
 		<fail if="checkstyle.failure" message="There were Checkstyle failures." />
@@ -322,11 +324,7 @@
 			static-analysis:ivy-init,
 			static-analysis:init
 			" description="Cobertura is a free Java tool that calculates the percentage of code accessed by tests.">
-			<mkdir dir="${basedir}/instrumented/generic-api" />
-			<mkdir dir="${basedir}/instrumented/blueprints-webapp" />
-			<static-analysis-cobertura cobertura.src.dir="${src.java.dir}" cobertura.classes.dir="${build.classes.dir}" cobertura.rpt.dir="${reports.cobertura.dir}/blueprints-webapp" cobertura.instrumented.dir="${basedir}/instrumented/blueprints-webapp" cobertura.report-xsl.file="${common.dir}/cobertura/cobertura-simple.xsl" cobertura.ser.file="cobertura.ser" cobertura.config.file="${common.dir}/cobertura/cobertura.xml" />
-			<!--
-			<static-analysis-cobertura cobertura.src.dir="${generic-api.java.dir}" cobertura.classes.dir="${generic-api.classes.dir}" cobertura.rpt.dir="${reports.cobertura.dir}/generic-api" cobertura.instrumented.dir="${basedir}/instrumented/generic-api" cobertura.report-xsl.file="${common.dir}/cobertura/cobertura-simple.xsl" cobertura.ser.file="cobertura.ser" cobertura.config.file="${common.dir}/cobertura/cobertura.xml" />
-			-->
+			<mkdir dir="${cobertura.module.lib.dir}/instrumented/sdk" />
+			<static-analysis-cobertura cobertura.src.dir="${src.java.dir}" cobertura.classes.dir="${module.lib.dir}" cobertura.rpt.dir="${reports.cobertura.dir}/sdk" cobertura.instrumented.dir="${cobertura.module.lib.dir}/instrumented/sdk" cobertura.report-xsl.file="${common.dir}/cobertura/cobertura-simple.xsl" cobertura.ser.file="cobertura.ser" cobertura.config.file="${common.dir}/cobertura/cobertura.xml" />
 		</target>
 </project>
