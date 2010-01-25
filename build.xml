@@ -24,6 +24,7 @@
 	</target>
 	
 	<target name="package-software-sdk-workbench" depends="init" description="Packages the entire workbench system">
+		<delete file="sdk-workbench/workbench-project/software/common/resources/sdk-dist/SDK-src.zip"/>
 		<ant antfile="build.xml" target="dist" dir="${package.sdk.home}/sdk-workbench/workbench-webstart-project/software/build" inheritall="true">
 			<property name="output.dir" value="../dist"/>
 		</ant>

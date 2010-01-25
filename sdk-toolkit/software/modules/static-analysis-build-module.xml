@@ -27,10 +27,14 @@
 		<mkdir dir="${reports.simian.dir}" />
 		<mkdir dir="${reports.pmd.dir}" />
 		<mkdir dir="${reports.checkstyle.dir}" />
-		<mkdir dir="${reports.checkstyle.dir.diff}" />
 		<mkdir dir="${reports.javancss.dir}" />
 		<mkdir dir="${reports.findbugs.dir}" />
-		<mkdir dir="${reports.cobertura.dir}" />
+		
+		<copy todir="${src.java.dir}">
+			<regexpmapper from="(.*)src(.*)" to="\2"/>
+			<fileset dir="${modules.dir}">
+			</fileset>
+		</copy>
 	</target>
 
 	<target name="static-analysis:ivy-init" depends="
@@ -223,11 +227,6 @@
 
 			<findbugs home="@{findbugs.home.dir}" output="xml:withMessages" outputFile="@{findbugs.rpt.dir}/@{findbugs.xml.name}" jvmargs="-Xms128m -Xmx512m">
 				<auxClasspath>
-					<!--
-					<fileset dir="@{findbugs.app.classpath.dir}">
-						<include name="**/*.jar" />
-					</fileset>
-					-->
 					<fileset refid="@{findbugs.app.classpath.ref}" />
 				</auxClasspath>
 
@@ -294,8 +293,8 @@
 		</sequential>
 	</macrodef>
 
+
 	<macrodef name="static-analysis-cobertura">
-		<attribute name="cobertura.src.dir" />
 		<attribute name="cobertura.rpt.dir" />
 		<attribute name="cobertura.classes.dir" />
 		<attribute name="cobertura.instrumented.dir" />
