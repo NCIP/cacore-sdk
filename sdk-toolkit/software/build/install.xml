@@ -58,7 +58,7 @@
 			<property name="DB_DIALECT" value="org.hibernate.dialect.PostgreSQLDialect" />
 			<property name="DB_DRIVER" value="org.postgresql.Driver" />
 			<property name="DB_CONNECTION_URL" value="jdbc:postgresql://${DB_SERVER}:${DB_SERVER_PORT}/${DB_NAME}" />
-		</case>			
+		</case>
 		<default>
 			<fail message="Invalid database type ${DB_TYPE}" />
 		</default>
@@ -136,7 +136,7 @@
 				</then>
 				<else>
 					<fail message="Invalid target grid ${TARGET_GRID}." />
-				</else>				
+				</else>
 			</if>
 		</then>
 	</if>
@@ -166,6 +166,7 @@
 		install:jboss:clean,
 		install:jboss:binaries,
 		install:jboss:project-webapp,
+		install:jboss:coberturaflush-webapp,
 		install:jboss:grid-login-webapp,
 		install:server:root-certs,
 		install:jboss:configure,
@@ -184,7 +185,8 @@
 		install:tomcat:validation:pre-install:ports,
 		install:tomcat:clean,
 		install:tomcat:binaries,
-		install:tomcat:project-webapp,		
+		install:tomcat:project-webapp,
+		install:tomcat:coberturaflush-webapp,
 		install:tomcat:grid-login-webapp,
 		install:server:root-certs,
 		install:tomcat:configure,
@@ -436,7 +438,7 @@
 				<echo message="${clm.database.driver.file}"/>
 				<echo message="${jboss.home}/server/${jboss.server.name}/lib"/>
 				<copy file="${clm.database.driver.file}" todir="${jboss.home}/server/${jboss.server.name}/lib" overwrite="true" failonerror="true"/>
-							
+
 				<copy todir="${jboss.home}/server/${jboss.server.name}/lib">
 					<fileset dir="${package.client.jboss.default.lib.dir}"/>
 				</copy>
@@ -449,6 +451,15 @@
 		<delete dir="${jboss.home}/server/${jboss.server.name}/tmp" />
 		<delete dir="${jboss.home}/server/${jboss.server.name}/work" />
 		<copy file="${package.client.jboss.default.deploy.dir}/${PROJECT_NAME}.war" todir="${jboss.home}/server/${jboss.server.name}/deploy" overwrite="true" />
+	</target>
+	
+	<target name="install:jboss:coberturaflush-webapp" description="Deploy example-webapp and common libraries to tomcat installation" unless="exclude.tomcat">
+		<if>
+			<equals arg1="${test.cobertura.lib.exist}" arg2="true" />
+			<then>
+				<copy file="${common.dist.relative.dir}/cobertura/coberturaFlush.war" todir="${jboss.home}/server/${jboss.server.name}/deploy" overwrite="true" />
+			</then>
+		</if>
 	</target>
 
 	<target name="install:jboss:grid-login-webapp" description="Deploy grid-webapp and default/lib libraries to jboss installation" unless="exclude.jboss">
@@ -632,6 +643,23 @@
 	<target name="install:tomcat:project-webapp" description="Deploy example-webapp and common libraries to tomcat installation" unless="exclude.tomcat">
 		<delete dir="${tomcat.home}//webapps/${PROJECT_NAME}" quiet="true"/>
 		<copy file="${package.client.tomcat.webapps.dir}/${PROJECT_NAME}.war" todir="${tomcat.home}/webapps" overwrite="true" />
+
+		<if>
+			<equals arg1="${test.cobertura.lib.exist}" arg2="true"/>
+			<then>
+				<copy file="${common.dist.relative.dir}/cobertura/coberturaFlush.war" todir="${tomcat.home}/webapps" overwrite="true" />
+			</then>
+		</if>
+	</target>
+
+	<target name="install:tomcat:coberturaflush-webapp" description="Deploy example-webapp and common libraries to tomcat installation" unless="exclude.tomcat">
+		<delete dir="${tomcat.home}//webapps/coberturaFlush" quiet="true"/>
+		<if>
+			<equals arg1="${test.cobertura.lib.exist}" arg2="true"/>
+			<then>
+				<copy file="${common.dist.relative.dir}/cobertura/coberturaFlush.war" todir="${tomcat.home}/webapps" overwrite="true" />
+			</then>
+		</if>
 	</target>
 
 	<target name="install:tomcat:grid-login-webapp" description="Deploy grid-webapp and common libraries to tomcat installation" unless="exclude.tomcat">
@@ -643,7 +671,7 @@
 			</then>
 		</if>
 	</target>
-	
+
 	<target name="install:jboss:validation:post-install" description="Run post-install checks from bda-utils" unless="exclude.jboss"
 		depends="
 		common:jboss:init,
@@ -659,7 +687,7 @@
 			</then>
 		</if>
 	</target>
-	
+
 	<target name="install:jboss:init" depends="common:init:pre" unless="exclude.jboss">
 		<!-- determine if port configurations or port lists are being called -->
 		<if>
@@ -692,7 +720,7 @@
 			</else>
 		</if>
 	</target>
-	
+
 	<target name="install:jboss:validation:pre-install:ports" description="Checks to see if configured ports are listenting and fails buld, meant to be run after jboss:stop" unless="exclude.jboss"
 		depends="
 		common:init,
@@ -701,7 +729,7 @@
 		<validate-pre-jboss-ports
 			/>
 	</target>
-	
+
 	<target name="install:jboss:validation:pre-install" description="Runs pre-install validation checks bda-utils"  unless="exclude.jboss"
 		depends="
 		common:jboss:init,common:init,

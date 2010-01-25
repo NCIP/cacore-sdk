@@ -18,15 +18,15 @@
 	<property name="ivy.def.file" location="ivy.xml" />
 
 	<property file="project.properties" />
-	
+
 	<property name="codegen.runtime.lib.dir" location="${target.module.dir}/lib/runtime" />
-	
+
 	<property name="src.java.dir" value="${output.src.dir}" />
 	<property name="src.javadoc.dir" value="${output.javadoc.dir}" />
 	<property name="systemdoc.dir" value="${src.javadoc.dir}/system" />
 	<property name="build.classes.dir" value="${output.classes.dir}" />
 
-	
+
 	<!--
 		***********************************************************************
 		*** HIDE/SHOW DB CONNECTION PROPERTIES TO BE USED IN HIBERNATE
@@ -261,7 +261,7 @@
 			<equals arg1="${SECURITY_ENABLED}" arg2="true" casesensitive="false" trim="true" />
 		</and>
 	</condition>
-	
+
 	<condition property="CSM_LOGIN_MODULE_START" value="${xml.comment.start}" else="">
 		<and>
 			<not>
@@ -283,7 +283,7 @@
 		<isset property="MODEL_FILE_PATH" />
 	</condition>
 
-	
+
 	<target name="-replace-templates-filter-tokens" depends="">
 		<echo>path == ${MODEL_FILE_PATH} ${MODEL_FILE_IN_DIRECTORY}</echo>
 		<filterset id="filtertoken1" begintoken="@" endtoken="@" onmissingfiltersfile="fail">
@@ -300,7 +300,7 @@
 			<filter token="EXCLUDE_NAME" value="${EXCLUDE_NAME}" />
 			<filter token="EXCLUDE_NAMESPACE" value="${EXCLUDE_NAMESPACE}" />
 			<filter token="NAMESPACE_PREFIX" value="${NAMESPACE_PREFIX}" />
-			
+
 			<filter token="WEBSERVICE_NAME" value="${WEBSERVICE_NAME}" />
 			<filter token="VALIDATE_LOGICAL_MODEL" value="${ENABLE_LOGICAL_MODEL_VALIDATOR}" />
 			<filter token="VALIDATE_MODEL_MAPPING" value="${ENABLE_MODEL_MAPPING_VALIDATOR}" />
@@ -340,11 +340,11 @@
 			<filter token="ATTRIBUTE_LEVEL_SECURITY_END" value="${ATTRIBUTE_LEVEL_SECURITY_END}" />
 			<filter token="ENABLE_CLM_LOGGER_CFG_GENERATION_START" value="${ENABLE_CLM_LOGGER_CFG_GENERATION_START}" />
 			<filter token="ENABLE_CLM_LOGGER_CFG_GENERATION_END" value="${ENABLE_CLM_LOGGER_CFG_GENERATION_END}" />
-			
+
 			<filter token="HIBERNATE_SHOW_SQL" value="${HIBERNATE_SHOW_SQL}" />
-			
+
 			<filter token="CAGRID_LOGIN_MODULE_NAME" value="${CAGRID_LOGIN_MODULE_NAME}" />
-			
+
 		</filterset>
 		<filterset id="filtertoken2" begintoken="${xml.comment.start}@" endtoken="@${xml.comment.end}" onmissingfiltersfile="fail">
 			<filter token="SECURITY_START" value="${SECURITY_START}" />
@@ -356,7 +356,7 @@
 			<filter token="CSM_LOGIN_MODULE_START" value="${CSM_LOGIN_MODULE_START}" />
 			<filter token="CSM_LOGIN_MODULE_END" value="${CSM_LOGIN_MODULE_END}" />
 		</filterset>
-	</target>	
+	</target>
 	<target name="replacetoken-contents-preconfigure" depends="-replace-templates-filter-tokens">
 
 		<delete dir="${output.codegen.config.dir}"/>
@@ -374,18 +374,18 @@
 				<exclude name="**/*-template*.*" />
 			</fileset>
 		</copy>
-		
+
 		<copy todir="${system.config.template.dir}" filtering="true">
 			<fileset dir="${system.orig.config.dir}" />
 			<filterset refid="filtertoken1" />
 			<filterset refid="filtertoken2" />
 		</copy>
 	</target>
-		
+
 
 	<target name="replacetoken-contents" depends="replacetoken-contents-preconfigure"/>
-	
-	
+
+
 	<!-- ******************************************************************* -->
 	<!-- ** CODEGEN TARGETS                                                  ** -->
 	<!-- ******************************************************************* -->
@@ -397,9 +397,29 @@
 		<fileset dir="${target.module.dir}/lib">
 			<include name="sdk-codegen-*.jar" />
 		</fileset>
+		<fileset dir="${target.module.dir}/lib/test-cobertura">
+			<include name="*.jar" />
+		</fileset>
 		<pathelement path="${output.codegen.config.dir}" />
 		<pathelement path="${output.codegen.validator.config.dir}" />
 	</path>
+
+	<available file="${test.cobertura.lib.dir}" property="test.cobertura.lib.exist" />
+	<if>
+		<equals arg1="${test.cobertura.lib.exist}" arg2="true" />
+		<then>
+			<path id="cobertura.runtime.classpath">
+				<fileset dir="${target.module.dir}/lib/test-cobertura">
+					<include name="*.jar" />
+				</fileset>
+			</path>
+
+		</then>
+		<else>
+			<path id="cobertura.runtime.classpath">
+			</path>
+		</else>
+	</if>
 
 	<target name="-pre-clean">
 		<delete dir="${build.classes.dir}" quiet="true" />
@@ -415,6 +435,7 @@
 		<mkdir dir="${build.classes.dir}" />
 		<javac srcdir="${src.java.dir}" destdir="${build.classes.dir}" debug="true">
 			<classpath refid="codegen.runtime.classpath" />
+			<classpath refid="cobertura.runtime.classpath" />
 		</javac>
 	</target>
 
@@ -469,9 +490,10 @@
 			<jvmarg value="-Xms256M" />
 			<jvmarg value="-Xmx512M" />
 			<classpath refid="codegen.runtime.classpath" />
+			<classpath refid="cobertura.runtime.classpath" />
 		</java>
 	</target>
-	
+
 	<target name="-generate-codegen-validator" description="Runs the Hibernate Validator Code Generator">
 		<echo>${ant.project.name}: Running the Hibernate Validator Code Generator</echo>
 		<java classname="gov.nih.nci.codegen.Generator" failonerror="true" fork="true" >
@@ -479,66 +501,70 @@
 			<jvmarg value="-Xms256M" />
 			<jvmarg value="-Xmx512M" />
 			<classpath refid="codegen.runtime.classpath" />
+			<classpath refid="cobertura.runtime.classpath" />
 		</java>
 	</target>
-	
+
 	<target name="-codegen-doc" description="Generates javadocs for the domain Java beans">
 		<javadoc packagenames="*" destdir="${src.javadoc.dir}" author="true"
 			private="true" version="true" use="true" windowtitle="${PROJECT_NAME} API Documentation"
 			doctitle="${PROJECT_NAME} API Documentation" useexternalfile="yes" verbose="false">
 			<classpath refid="codegen.runtime.classpath" />
-		    <bottom><![CDATA[<i>This API was generated by the <a href='http://ncicb.nci.nih.gov/NCICB/infrastructure/cacoresdk'>caCORE Software Development Kit</a>.</i>]]></bottom>
-			<fileset dir="${src.java.dir}" includes="**/*.java"/>
-		</javadoc>
-	</target>
-	
-	<target name="-system-doc" description="Generates javadocs for the entire system">
-		<javadoc packagenames="*" destdir="${systemdoc.dir}" author="true"
+			<classpath refid="cobertura.runtime.classpath" />
+			<bottom>
+				<![CDATA[<i>This API was generated by the <a href='http://ncicb.nci.nih.gov/NCICB/infrastructure/cacoresdk'>caCORE Software Development Kit</a>.</i>]]></bottom>
+		<fileset dir="${src.java.dir}" includes="**/*.java"/>
+	</javadoc>
+</target>
+
+<target name="-system-doc" description="Generates javadocs for the entire system">
+	<javadoc packagenames="*" destdir="${systemdoc.dir}" author="true"
 			private="true" version="true" use="true" windowtitle="${VERSION} API Documentation"
 			doctitle="${VERSION} API Documentation" useexternalfile="yes" verbose="false" failonerror="false">
-		    <bottom><![CDATA[<i>This System API was generated by the <a href='http://ncicb.nci.nih.gov/NCICB/infrastructure/cacoresdk'>caCORE Software Development Kit</a>.</i>]]></bottom>
-			<fileset dir="${modules.dir}" includes="**/*.java"/>
-		</javadoc>
-	</target>
+		<bottom>
+			<![CDATA[<i>This System API was generated by the <a href='http://ncicb.nci.nih.gov/NCICB/infrastructure/cacoresdk'>caCORE Software Development Kit</a>.</i>]]></bottom>
+	<fileset dir="${modules.dir}" includes="**/*.java"/>
+</javadoc>
+</target>
 
-	<target name="post-clean">
-		<delete dir="${build.classes.dir}" quiet="false" />
-	</target>
+<target name="post-clean">
+<delete dir="${build.classes.dir}" quiet="false" />
+</target>
 
-	
-	<target name="build:all" depends="-pre-clean,-init,-generate-codegen,-package-codegen-artifacts,-codegen-doc,-system-doc,post-clean" description="Default target">
-	</target>
-	
-	<target name="package-system" depends="-package-web,dist" description="Packages the system" >
-		<mkdir dir="${output.project.dir}/lib"/>
-		<copy todir="${output.project.dir}/lib">
-			<fileset dir="${target.module.dir}/lib">
-				<exclude name="**/compile/**"/>
-			</fileset>
-		</copy>		
-	</target>	
 
-	<target name="-package-web">
-		<mkdir dir="${output.project.dir}/web"/>
-		<copy todir="${output.project.dir}/web">
-			<fileset dir="${workspace.dir}/web">
-				<include name="**/*"/>
-			</fileset>
-		</copy>
-	</target>	
+<target name="build:all" depends="-pre-clean,-init,-generate-codegen,-package-codegen-artifacts,-codegen-doc,-system-doc,post-clean" description="Default target">
+</target>
 
-	<target name="dist" description="target to package-system">
-		<copy todir="${dist.exploded.dir}">
-			<fileset dir="${basedir}" >
-				<include name="*-reconfigure.xml"/>
-				<include name="*-taskdef.xml"/>
-				<include name="*.properties"/>
-				<include name="tools/**/*"/>
-			</fileset>
-			<fileset dir="${target.dir}/dist/exploded" >
-				<include name="ncicb-jboss*.xml"/>
-			</fileset>
-		</copy>
-	</target>
+<target name="package-system" depends="-package-web,dist" description="Packages the system" >
+<mkdir dir="${output.project.dir}/lib"/>
+<copy todir="${output.project.dir}/lib">
+	<fileset dir="${target.module.dir}/lib">
+		<exclude name="**/compile/**"/>
+	</fileset>
+</copy>
+</target>
+
+<target name="-package-web">
+<mkdir dir="${output.project.dir}/web"/>
+<copy todir="${output.project.dir}/web">
+	<fileset dir="${workspace.dir}/web">
+		<include name="**/*"/>
+	</fileset>
+</copy>
+</target>
+
+<target name="dist" description="target to package-system">
+<copy todir="${dist.exploded.dir}">
+	<fileset dir="${basedir}" >
+		<include name="*-reconfigure.xml"/>
+		<include name="*-taskdef.xml"/>
+		<include name="*.properties"/>
+		<include name="tools/**/*"/>
+	</fileset>
+	<fileset dir="${target.dir}/dist/exploded" >
+		<include name="ncicb-jboss*.xml"/>
+	</fileset>
+</copy>
+</target>
 
 </project>

@@ -10,6 +10,7 @@
 	<property name="lib.dir" location="${output.project.dir}/lib" />
 
 	<property name="runtime.lib.dir" location="${lib.dir}/runtime" />
+	<property name="test.cobertura.lib.dir" location="${lib.dir}/test-cobertura" />
 
 	<property name="temp.dir" location="${basedir}/temp/webapp" />
 	<property name="temp.orm.dir" location="${basedir}/temp/orm-jar" />
@@ -17,6 +18,8 @@
 	<property name="temp.webapp.staging.classes.dir" location="${temp.webapp.staging.dir}/classes" />
 	<property name="temp.webapp.staging.lib.dir" location="${temp.webapp.staging.dir}/lib" />
 
+	<available file="${test.cobertura.lib.dir}" property="test.cobertura.lib.exist" />
+	
 	<condition property="JNDI_START" value="" else="${xml.comment.start}">
 		<or>
 			<equals arg1="${DB_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
@@ -1010,7 +1013,6 @@
 				<include name="${orm.file}" />
 			</fileset>
 		</copy>
-
 		<if>
 			<equals arg1="${USE_CONNECTION_POOL}" arg2="true" />
 			<then>
@@ -1244,6 +1246,18 @@
 
 	<target name="-package-tomcat-server" depends="">
 		<if>
+			<equals arg1="${test.cobertura.lib.exist}" arg2="true"/>
+			<then>
+				<copy todir="${package.client.tomcat.common.lib.dir}" overwrite="true">
+					<fileset dir="${test.cobertura.lib.dir}">
+						<include name="asm-tree-*" />
+						<include name="cobertura-*" />
+						<include name="jakarta-oro-*" />
+					</fileset>
+				</copy>
+			</then>
+		</if>
+		<if>
 			<or>
 				<equals arg1="${DB_USE_JNDI_BASED_CONNECTION}" arg2="true" />
 				<and>
@@ -1344,6 +1358,20 @@
 	</target>
 
 	<target name="-package-jboss-server" depends="">
+		
+		<if>
+			<equals arg1="${test.cobertura.lib.exist}" arg2="true"/>
+			<then>
+				<copy todir="${package.client.jboss.default.lib.dir}" overwrite="true">
+					<fileset dir="${test.cobertura.lib.dir}">
+						<include name="asm-tree-*" />
+						<include name="cobertura-*" />
+						<include name="jakarta-oro-*" />
+					</fileset>
+				</copy>
+			</then>
+		</if>
+
 		<if>
 			<or>
 				<equals arg1="${DB_USE_JNDI_BASED_CONNECTION}" arg2="true" />
