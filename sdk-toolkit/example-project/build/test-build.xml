@@ -225,13 +225,12 @@
 			</if>
 
 			<property name="report.project.dir" value="${junit.dir}/report/@{REPORT.PROJECT.DIR}" />
-			<delete dir="${report.project.dir}" />
 			<mkdir dir="${report.project.dir}" />
 			<property file="${project.home}/build/codegen.properties" />
 			<property file="${SDK_INSTALL_DIR}/software/build/project.properties"/>
 			<property file="${project.home}/build/install.properties" />
 			
-			<copy file="${SDK_INSTALL_DIR}/software/build/cobertura.ser" todir="${junit.dir}/report/@{REPORT.PROJECT.DIR}/codegen-cobertura.ser" overwrite="true" failonerror="false"/>
+			<copy file="${SDK_INSTALL_DIR}/software/build/cobertura.ser" tofile="${junit.dir}/report/@{REPORT.PROJECT.DIR}/codegen-cobertura.ser" overwrite="true" failonerror="false"/>
 			<delete file="${SDK_INSTALL_DIR}/software/build/cobertura.ser"  failonerror="false"/>
 
 			<condition property="application.base.path" value="${application.base.path.linux}">
@@ -251,13 +250,13 @@
 				<then>
 					<post to="http://${tomcat.hostname}:${tomcat.port.http}/coberturaFlush/flushCobertura" verbose="true"/>
 
-					<copy file="${tomcat.home}/bin/cobertura.ser" todir="${junit.dir}/report/@{REPORT.PROJECT.DIR}/tomcat-cobertura.ser" overwrite="true" />
+					<copy file="${tomcat.home}/bin/cobertura.ser" tofile="${junit.dir}/report/@{REPORT.PROJECT.DIR}/tomcat-cobertura.ser" overwrite="true" />
 				</then>
 				<else>
 					<post to="http://${jboss.server.hostname}:${jboss.server.port}/coberturaFlush/flushCobertura"  verbose="true"/>
 					<ant antfile="build.xml" dir="${dist.exploded.dir}" target="install:jboss:stop" inheritAll="true" />					
 					
-					<copy file="${jboss.home}/bin/cobertura.ser" todir="${junit.dir}/report/@{REPORT.PROJECT.DIR}/jboss-cobertura.ser" overwrite="true" />
+					<copy file="${jboss.home}/bin/cobertura.ser" tofile="${junit.dir}/report/@{REPORT.PROJECT.DIR}/jboss-cobertura.ser" overwrite="true" />
 				</else>
 			</if>
 			<!--

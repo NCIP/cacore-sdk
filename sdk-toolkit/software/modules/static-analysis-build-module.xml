@@ -32,8 +32,7 @@
 		
 		<copy todir="${src.java.dir}">
 			<regexpmapper from="(.*)src(.*)" to="\2"/>
-			<fileset dir="${modules.dir}">
-			</fileset>
+			<fileset dir="${modules.dir}"/>
 		</copy>
 	</target>
 
@@ -155,10 +154,11 @@
 				</fileset>
 			</pmd>
 			<move file="${pmd.sub-project.rpt.dir}/@{pmd.xml.name}" tofile="${pmd.sub-project.rpt.dir}/@{pmd.xml.name}.bak" />
+			<property name="my-home" location="@{pmd.src.dir}"/>
 			<xslt taskname="pmd" in="${pmd.sub-project.rpt.dir}/@{pmd.xml.name}.bak" out="${pmd.sub-project.rpt.dir}/@{pmd.xml.name}" style="@{pmd.report-preprocessor.file}">
-				<param name="relative.path" expression="@{pmd.root-dir.name}/@{pmd.sub-project.name}" />
+				<param name="relative.path" expression="${my-home}" />
 			</xslt>
-
+			
 			<xslt taskname="pmd" in="${pmd.sub-project.rpt.dir}/@{pmd.xml.name}.bak" out="${pmd.sub-project.rpt.dir}/@{pmd.html.name}" style="@{pmd.report-xsl.file}" />
 		</sequential>
 	</macrodef>
@@ -192,8 +192,9 @@
 				</fileset>
 			</pmd>
 			<move file="${pmd.sub-project.rpt.dir.diff}/@{pmd.xml.name}" tofile="${pmd.sub-project.rpt.dir.diff}/@{pmd.xml.name}.bak" />
+			<property name="my-home" location="@{pmd.src.dir}"/>
 			<xslt taskname="pmd" in="${pmd.sub-project.rpt.dir.diff}/@{pmd.xml.name}.bak" out="${pmd.sub-project.rpt.dir.diff}/@{pmd.xml.name}" style="@{pmd.report-preprocessor.file}">
-				<param name="relative.path" expression="@{pmd.root-dir.name}/@{pmd.sub-project.name}" />
+				<param name="relative.path" expression="${my-home}" />				
 			</xslt>
 
 			<xslt taskname="pmd" in="${pmd.sub-project.rpt.dir.diff}/@{pmd.xml.name}.bak" out="${pmd.sub-project.rpt.dir.diff}/@{pmd.html.name}" style="@{pmd.report-xsl.file}" />
