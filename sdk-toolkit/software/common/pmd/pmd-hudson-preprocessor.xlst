@@ -12,7 +12,7 @@
 </xsl:template>
 
 <xsl:template match="@name">
-  <xsl:attribute name="name"><xsl:value-of select="$relative.path" />/src/<xsl:value-of select="."/></xsl:attribute>
+  <xsl:attribute name="name"><xsl:value-of select="$relative.path" />/<xsl:value-of select="."/></xsl:attribute>
 </xsl:template>
 
 

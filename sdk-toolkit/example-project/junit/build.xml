@@ -252,31 +252,21 @@
 			<delete dir="@{cobertura.rpt.dir}"/>
 			<mkdir dir="@{cobertura.rpt.dir}"/>
 			<taskdef classpathref="project.test.cobertura.classpath" resource="tasks.properties" />
-			<cobertura-merge datafile="@{cobertura.rpt.dir}/aggregate-cobertura-report.ser">			
-			    <fileset dir="${test.cobertura.dir}">
-			        <include name="**/cobertura.ser" />
+			<echo message="Hello   ${test.cobertura.dir}"/>
+			<cobertura-merge datafile="@{cobertura.rpt.dir}/aggregate-cobertura-report.ser">
+				<fileset dir="${test.cobertura.dir}">
+			        <include name="**/*cobertura.ser" />
 			    </fileset>
 				<fileset dir="${junit.report.dir}">
-			        <include name="**/cobertura.ser" />
+			        <include name="**/*cobertura.ser" />
 			    </fileset>
 			</cobertura-merge>			
-			
-			<delete dir="@{cobertura.rpt.dir}/java-src" failonerror="false"/>
-			<mkdir dir="@{cobertura.rpt.dir}/java-src"/>
-
-			<copy todir="@{cobertura.rpt.dir}/java-src">
-				<regexpmapper from="(.*)src(.*)" to="\2"/>
-				<fileset dir="@{cobertura.src.dir}">
-				</fileset>
-			</copy>
-			
-			<cobertura-report datafile="@{cobertura.rpt.dir}/aggregate-cobertura-report.ser" format="xml" destdir="@{cobertura.rpt.dir}">
-				<fileset dir="@{cobertura.rpt.dir}/java-src">
-					<include name="**/*.java" />
-				</fileset>
-			</cobertura-report>
+			<property name="abs.cobertura-src-dir" location="@{cobertura.src.dir}"/>
+			<cobertura-report datafile="@{cobertura.rpt.dir}/aggregate-cobertura-report.ser" format="xml"  srcdir="${abs.cobertura-src-dir}" destdir="@{cobertura.rpt.dir}"/>
+			<cobertura-report datafile="@{cobertura.rpt.dir}/aggregate-cobertura-report.ser" format="html"  srcdir="${abs.cobertura-src-dir}" destdir="@{cobertura.rpt.dir}"/>
 			<!--
-			<cobertura-check failureproperty="cobertura.failure" datafile="@{cobertura.instrumented.dir}/@{cobertura.ser.file}" haltonfailure="false" linerate="0" packagebranchrate="0" packagelinerate="0" totalbranchrate="25" totallinerate="30" />-->
+			<cobertura-check failureproperty="cobertura.failure" datafile="@{cobertura.instrumented.dir}/@{cobertura.ser.file}" haltonfailure="false" linerate="0" packagebranchrate="0" packagelinerate="0" totalbranchrate="25" totallinerate="30" />
+			-->
 		</sequential>
 	</macrodef>
 
@@ -545,9 +535,7 @@
 
 	<target name="buildAggregateReport" depends="createDir">
 		<delete dir="${aggregate.report.dir}" />
-		<!--<SDKGenerateReport junitOutputDir="${aggregate.report.dir}" junitInputDir="${junit.report.dir}" includepattern="**/build-report/*.xml" generateReport="true"/>
-		-->
-		<echo message="Hello ${SDK_INSTALL_DIR}/software/modules/codegen/src"/>
-		<generate-report-cobertura cobertura.src.dir="${SDK_INSTALL_DIR}/software/modules" cobertura.rpt.dir="${cobertura.report.dir}" />
+		<SDKGenerateReport junitOutputDir="${aggregate.report.dir}" junitInputDir="${junit.report.dir}" includepattern="**/build-report/*.xml" generateReport="true"/>
+		<generate-report-cobertura cobertura.src.dir="${SDK_INSTALL_DIR}/software/target/modules/java-src" cobertura.rpt.dir="${cobertura.report.dir}" />
 	</target>
 </project>
