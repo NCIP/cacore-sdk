@@ -128,7 +128,7 @@ public class ImplicitParentWithAssociationWSTest extends SDKWSTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void testEntireObjectNestedSearch4() throws Exception
+	public void xtestEntireObjectNestedSearch4() throws Exception
 	{
 
 		Class targetClass = FishTank.class;
@@ -241,7 +241,7 @@ public class ImplicitParentWithAssociationWSTest extends SDKWSTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void testEntireObjectNestedSearch8() throws Exception
+	public void xtestEntireObjectNestedSearch8() throws Exception
 	{
 
 		Class targetClass = Tank.class;
@@ -365,7 +365,7 @@ public class ImplicitParentWithAssociationWSTest extends SDKWSTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void testAssociationNestedSearch3() throws Exception
+	public void xtestAssociationNestedSearch3() throws Exception
 	{
 		Class targetClass = Tank.class;
 		FishTank criteria = new FishTank();
@@ -388,7 +388,7 @@ public class ImplicitParentWithAssociationWSTest extends SDKWSTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void testAssociationNestedSearch4() throws Exception
+	public void xtestAssociationNestedSearch4() throws Exception
 	{
 		Class targetClass = FishTank.class;
 		Tank criteria = new Tank();
@@ -413,7 +413,7 @@ public class ImplicitParentWithAssociationWSTest extends SDKWSTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void testAssociationNestedSearch5() throws Exception
+	public void xtestAssociationNestedSearch5() throws Exception
 	{
 		Class targetClass = FishTank.class;
 		SaltwaterFishTank criteria = new SaltwaterFishTank();
@@ -440,7 +440,7 @@ public class ImplicitParentWithAssociationWSTest extends SDKWSTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void testAssociationNestedSearch6() throws Exception
+	public void xtestAssociationNestedSearch6() throws Exception
 	{
 		Class targetClass = SaltwaterFishTank.class;
 		FishTank criteria = new FishTank();
@@ -468,7 +468,7 @@ public class ImplicitParentWithAssociationWSTest extends SDKWSTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void testAssociationNestedSearch7() throws Exception
+	public void xtestAssociationNestedSearch7() throws Exception
 	{
 		Class targetClass = Tank.class;
 		Fish criteria = new Fish();
@@ -491,7 +491,7 @@ public class ImplicitParentWithAssociationWSTest extends SDKWSTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void testAssociationNestedSearch9() throws Exception
+	public void xtestAssociationNestedSearch9() throws Exception
 	{
 		Class targetClass = Tank.class;
 		TankAccessory criteria = new TankAccessory();
@@ -517,7 +517,7 @@ public class ImplicitParentWithAssociationWSTest extends SDKWSTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void testAssociationNestedSearch11() throws Exception
+	public void xtestAssociationNestedSearch11() throws Exception
 	{
 		Class targetClass = Substrate.class;
 		SaltwaterFishTank criteria = new SaltwaterFishTank();
@@ -543,7 +543,7 @@ public class ImplicitParentWithAssociationWSTest extends SDKWSTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void testGetAssociation1() throws Exception
+	public void xtestGetAssociation1() throws Exception
 	{
 		Class targetClass = Tank.class;
 		Object criteria = targetClass.newInstance();
@@ -610,7 +610,7 @@ public class ImplicitParentWithAssociationWSTest extends SDKWSTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void testGetAssociation3() throws Exception
+	public void xtestGetAssociation3() throws Exception
 	{
 		Class targetClass = Tank.class;
 		Object criteria = targetClass.newInstance();

@@ -177,7 +177,7 @@ public class O2OMultipleAssociationWJoinWSTest extends SDKWSTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void testOneAssociatedObjectNestedSearch() throws Exception
+	public void xtestOneAssociatedObjectNestedSearch() throws Exception
 	{
 		Class targetClass = InLaw.class;
 		Bride criteria = new Bride();

@@ -162,7 +162,7 @@ public class O2OMultipleAssociationWJoinTest extends SDKTestBase
 	 * 
 	 * @throws ApplicationException
 	 */
-	public void testOneAssociatedObjectNestedSearch() throws ApplicationException
+	public void xtestOneAssociatedObjectNestedSearch() throws ApplicationException
 	{
 		boolean flag = true;
 

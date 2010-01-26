@@ -114,7 +114,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 	 * 
 	 * @throws ApplicationException
 	 */
-	public void testEntireObjectNestedSearch4() throws ApplicationException
+	public void xtestEntireObjectNestedSearch4() throws ApplicationException
 	{
 		FishTank searchObject = new FishTank();
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.inheritance.implicit.FishTank",searchObject );
@@ -219,7 +219,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 	 * 
 	 * @throws ApplicationException
 	 */
-	public void testEntireObjectNestedSearch8() throws ApplicationException
+	public void xtestEntireObjectNestedSearch8() throws ApplicationException
 	{
 		Tank searchObject = new Tank();
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.inheritance.implicit.Tank",searchObject );
@@ -360,7 +360,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 	 * 
 	 * @throws ApplicationException
 	 */
-	public void testEntireObjectCQL4() throws ApplicationException
+	public void xtestEntireObjectCQL4() throws ApplicationException
 	{
 		CQLQuery cqlQuery = new CQLQuery();
 		CQLObject target = new CQLObject();
@@ -485,7 +485,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 	 * 
 	 * @throws ApplicationException
 	 */
-	public void testEntireObjectCQL8() throws ApplicationException
+	public void xtestEntireObjectCQL8() throws ApplicationException
 	{
 		CQLQuery cqlQuery = new CQLQuery();
 		CQLObject target = new CQLObject();
@@ -635,7 +635,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 	 * 
 	 * @throws ApplicationException
 	 */
-	public void testAssociationNestedSearch3() throws ApplicationException
+	public void xtestAssociationNestedSearch3() throws ApplicationException
 	{
 		Tank searchObject = new Tank();
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.inheritance.implicit.FishTank",searchObject );
@@ -658,7 +658,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 	 * 
 	 * @throws ApplicationException
 	 */
-	public void testAssociationNestedSearch4() throws ApplicationException
+	public void xtestAssociationNestedSearch4() throws ApplicationException
 	{
 		FishTank searchObject = new FishTank();
 		searchObject.setId(new Integer(1));
@@ -679,7 +679,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 	 * 
 	 * @throws ApplicationException
 	 */
-	public void testAssociationNestedSearch5() throws ApplicationException
+	public void xtestAssociationNestedSearch5() throws ApplicationException
 	{
 		FishTank searchObject = new FishTank();
 		searchObject.setId(new Integer(1));
@@ -705,7 +705,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 	 * 
 	 * @throws ApplicationException
 	 */
-	public void testAssociationNestedSearch6() throws ApplicationException
+	public void xtestAssociationNestedSearch6() throws ApplicationException
 	{
 		FreshwaterFishTank searchObject = new FreshwaterFishTank();
 		searchObject.setId(new Integer(1));
@@ -731,7 +731,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 	 * 
 	 * @throws ApplicationException
 	 */
-	public void testAssociationNestedSearch7() throws ApplicationException
+	public void xtestAssociationNestedSearch7() throws ApplicationException
 	{
 		Fish searchObject = new Fish();
 		searchObject.setId(new Integer(4));
@@ -753,7 +753,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 	 * 
 	 * @throws ApplicationException
 	 */
-	public void testAssociationNestedSearch9() throws ApplicationException
+	public void xtestAssociationNestedSearch9() throws ApplicationException
 	{
 		TankAccessory searchObject = new TankAccessory();
 		searchObject.setId(new Integer(4));
@@ -893,7 +893,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 	 * 
 	 * @throws ApplicationException
 	 */
-	public void testAssociationCQL3() throws ApplicationException
+	public void xtestAssociationCQL3() throws ApplicationException
 	{
 		CQLQuery cqlQuery = new CQLQuery();
 		CQLObject target = new CQLObject();
@@ -928,7 +928,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 	 * 
 	 * @throws ApplicationException
 	 */
-	public void testAssociationCQL4() throws ApplicationException
+	public void xtestAssociationCQL4() throws ApplicationException
 	{
 		CQLQuery cqlQuery = new CQLQuery();
 		CQLObject target = new CQLObject();
@@ -958,7 +958,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 	 * 
 	 * @throws ApplicationException
 	 */
-	public void testAssociationCQL5() throws ApplicationException
+	public void xtestAssociationCQL5() throws ApplicationException
 	{
 		CQLQuery cqlQuery = new CQLQuery();
 		CQLObject target = new CQLObject();
@@ -993,7 +993,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 	 * 
 	 * @throws ApplicationException
 	 */
-	public void testAssociationCQL6() throws ApplicationException
+	public void xtestAssociationCQL6() throws ApplicationException
 	{
 		CQLQuery cqlQuery = new CQLQuery();
 		CQLObject target = new CQLObject();
@@ -1026,7 +1026,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 	 * 
 	 * @throws ApplicationException
 	 */
-	public void testAssociationCQL8() throws ApplicationException
+	public void xtestAssociationCQL8() throws ApplicationException
 	{
 		CQLQuery cqlQuery = new CQLQuery();
 		CQLObject target = new CQLObject();
@@ -1121,7 +1121,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 		assertEquals(new Integer(4), result.getId());
 	}	
 	
-	public void testGetAssociation1() throws ApplicationException
+	public void xtestGetAssociation1() throws ApplicationException
 	{
 		Tank searchObject = new Tank();
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.inheritance.implicit.Tank",searchObject );
@@ -1137,7 +1137,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 		}
 	}	
 
-	public void testGetAssociation2() throws ApplicationException
+	public void xtestGetAssociation2() throws ApplicationException
 	{
 		Tank searchObject = new Tank();
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.inheritance.implicit.Tank",searchObject );
