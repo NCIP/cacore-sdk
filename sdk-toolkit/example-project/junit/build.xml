@@ -262,7 +262,7 @@
 			    </fileset>
 			</cobertura-merge>			
 			<property name="abs.cobertura-src-dir" location="@{cobertura.src.dir}"/>
-			<cobertura-report datafile="@{cobertura.rpt.dir}/aggregate-cobertura-report.ser" format="xml"  srcdir="${abs.cobertura-src-dir}" destdir="@{cobertura.rpt.dir}"/>
+			<cobertura-report datafile="@{cobertura.rpt.dir}/aggregate-cobertura-report.ser" format="xml"  srcdir="${abs.cobertura-src-dir}/" destdir="@{cobertura.rpt.dir}"/>
 			<cobertura-report datafile="@{cobertura.rpt.dir}/aggregate-cobertura-report.ser" format="html"  srcdir="${abs.cobertura-src-dir}" destdir="@{cobertura.rpt.dir}"/>
 			<!--
 			<cobertura-check failureproperty="cobertura.failure" datafile="@{cobertura.instrumented.dir}/@{cobertura.ser.file}" haltonfailure="false" linerate="0" packagebranchrate="0" packagelinerate="0" totalbranchrate="25" totallinerate="30" />
