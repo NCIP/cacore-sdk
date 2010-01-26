@@ -53,7 +53,7 @@ public class LongPrimitiveKeyTest extends SDKTestBase
 	public void testPrimaryKeyNestedSearch() throws ApplicationException
 	{
 		LongPrimitiveKey searchObject = new LongPrimitiveKey();
-		searchObject.setId(new Long("9876"));
+		searchObject.setId(new Long("987654321234568000"));
 		Collection results = getApplicationService().search(LongPrimitiveKey.class,searchObject );
 
 		assertNotNull(results);
@@ -73,7 +73,7 @@ public class LongPrimitiveKeyTest extends SDKTestBase
 
 		CQLObject object = new CQLObject();
 		object.setName("gov.nih.nci.cacoresdk.domain.other.primarykey.LongPrimitiveKey");
-		object.setAttribute(new CQLAttribute("id",CQLPredicate.EQUAL_TO,"9876"));
+		object.setAttribute(new CQLAttribute("id",CQLPredicate.EQUAL_TO,"987654321234568000"));
 		criteria.setTarget(object);
 		
 		Collection results = getApplicationService().query(criteria);
