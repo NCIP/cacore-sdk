@@ -89,7 +89,6 @@ public class CharacterPrimitiveKeyWSTest extends SDKWSTestBase
 		assertEquals(1,results.length);			
 	}
 	
-	public void testFixCharacterDataTypeSupportForWS(){
-		assert(true,true);
+	public void testFixCharacterDataTypeSupportForWS(){		
 	}
 }
