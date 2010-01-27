@@ -31,7 +31,7 @@ public class CharacterPrimitiveKeyWSTest extends SDKWSTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void testEntireObjectNestedSearch() throws Exception
+	public void ctestEntireObjectNestedSearch() throws Exception
 	{
 //		CharacterPrimitiveKey searchObject = new CharacterPrimitiveKey();
 //		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.other.primarykey.CharacterPrimitiveKey",searchObject );
@@ -70,7 +70,7 @@ public class CharacterPrimitiveKeyWSTest extends SDKWSTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void testPrimaryKeyNestedSearch() throws Exception
+	public void xtestPrimaryKeyNestedSearch() throws Exception
 	{
 //		CharacterPrimitiveKey searchObject = new CharacterPrimitiveKey();
 //		searchObject.setId('6');
