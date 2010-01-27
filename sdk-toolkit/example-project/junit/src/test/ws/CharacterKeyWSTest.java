@@ -90,4 +90,6 @@ public class CharacterKeyWSTest extends SDKWSTestBase
 		
 	}
 	
+	public void testFixCharacterDataTypeSupportForWS(){		
+	}	
 }
