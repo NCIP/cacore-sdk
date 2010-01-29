@@ -711,7 +711,7 @@
 
 			</then>
 			<else>
-				<!-- else ensure that all ports are set, since these will be removed from install-properties.template we will verify here.  They have to be removed so the validator works with or without the properties or we have to change the format of the file. -->
+				<!-- else ensure that all ports are set, since these will be removed from install.properties.template we will verify here.  They have to be removed so the validator works with or without the properties or we have to change the format of the file. -->
 				<echo message="Using custom JBoss port configurations"/>
 				<property name="jboss.server.binding.template.location" value="${bda-utils.dir}/resource/${jboss.binaries.relative.dir}/bindings.xml"/>
 				<properties-exist
@@ -767,16 +767,70 @@
 		</if>
 		<if>
 			<and>
+				<equals arg1="${SECURITY_ENABLED}" arg2="true" />
+				<equals arg1="${ENABLE_INSTANCE_LEVEL_SECURITY}" arg2="true"/>
+				<not>
+					<and>
+						<equals arg1="${DB_SERVER}" arg2="${CSM_DB_SERVER}"/>
+						<equals arg1="${DB_SERVER_PORT}" arg2="${CSM_DB_SERVER_PORT}"/>
+						<equals arg1="${DB_NAME}" arg2="${CSM_DB_NAME}"/>
+						<equals arg1="${DB_USERNAME}" arg2="${CSM_DB_USERNAME}"/>
+					</and>
+				</not>
+			</and>
+			<then>
+				<fail message="if ENABLE_INSTANCE_LEVEL_SECURITY=true in codegen.properties then app database and csm database schema tables must be present in the app database schema.
+					Please make sure the properties DB_SERVER and CSM_DB_SERVER, DB_SERVER_PORT and CSM_DB_SERVER_PORT, DB_NAME and CSM_DB_NAME, DB_USERNAME and CSM_DB_USERNAME have same property value in install.properties"/>
+			</then>
+		</if>			
+
+		<if>
+			<and>
 				<equals arg1="${CSM_DB_DROP_SCHEMA}" arg2="true" />
 				<equals arg1="${SECURITY_ENABLED}" arg2="true" />
 			</and>
 			<then>
+				<if>
+					<not>
+						<and>
+							<equals arg1="${DB_TYPE}" arg2="${CSM_DB_TYPE}" />
+						</and>
+					</not>
+					<then>
+						<fail message="invalid database type configuration. Please make sure DB_TYPE and CSM_DB_TYPE properties are same in install.properties" />
+					</then>
+				</if>
+				<if>
+					<and>
+						<equals arg1="${DB_DROP_SCHEMA}" arg2="true" />
+						<equals arg1="${DB_SERVER}" arg2="${CSM_DB_SERVER}" />
+						<equals arg1="${DB_SERVER_PORT}" arg2="${CSM_DB_SERVER_PORT}" />
+						<equals arg1="${DB_NAME}" arg2="${CSM_DB_NAME}" />
+						<equals arg1="${DB_USERNAME}" arg2="${CSM_DB_USERNAME}" />
+					</and>
+					<then>
+						<fail message="if DB_DROP_SCHEMA=true and CSM_DB_DROP_SCHEMA=true then app db and csm db must have different database server configurations. Please make sure the properties 1.)DB_SERVER and CSM_DB_SERVER 2.) DB_SERVER_PORT and CSM_DB_SERVER_PORT 3.)DB_NAME and CSM_DB_NAME 4.)DB_USERNAME and CSM_DB_USERNAME have different properties in install.properties" />
+					</then>
+				</if>
+				<if>
+					<and>
+						<equals arg1="${CLM_DB_DROP_SCHEMA}" arg2="true" />
+						<equals arg1="${CLM_DB_SERVER}" arg2="${CSM_DB_SERVER}" />
+						<equals arg1="${CLM_DB_SERVER_PORT}" arg2="${CSM_DB_SERVER_PORT}" />
+						<equals arg1="${CLM_DB_NAME}" arg2="${CSM_DB_NAME}" />
+						<equals arg1="${CLM_DB_USERNAME}" arg2="${CSM_DB_USERNAME}" />
+					</and>
+					<then>
+						<fail message="if CLM_DB_DROP_SCHEMA=true and CSM_DB_DROP_SCHEMA=true then clm db and csm db must have different database server configurations. 
+							Please make sure the properties 1.)CSM_DB_SERVER and CLM_DB_SERVER 2.) CSM_DB_SERVER_PORT and CLM_DB_SERVER_PORT 3.)CSM_DB_NAME and CLM_DB_NAME 4.)CSM_DB_USERNAME and CLM_DB_USERNAME have different properties in install.properties"/>
+					</then>
+				</if>
 				<switch value="${DB_TYPE}">
 					<case value="oracle">
 						<property name="CSM_TEMP_DB_SCHEMA" value="${CSM_DB_USERNAME}" />
 					</case>
 					<case value="mysql">
-						<property name="CSM_TEMP_DB_SCHEMA" value="${DB_NAME}" />
+						<property name="CSM_TEMP_DB_SCHEMA" value="${CSM_DB_NAME}" />
 					</case>
 					<case value="postgresql">
 						<property name="CSM_TEMP_DB_SCHEMA" value="public" />
@@ -785,6 +839,7 @@
 						<fail message="Invalid database type ${DB_TYPE}" />
 					</default>
 				</switch>
+
 				<database-clean database.driver="${CSM_DB_DRIVER}" database.url="${CSM_DB_CONNECTION_URL}" database.user="${CSM_DB_USERNAME}" database.password="${CSM_DB_PASSWORD}" database.schema="${CSM_TEMP_DB_SCHEMA}" database.re-create="false" database.drop-schema="${CSM_DB_DROP_SCHEMA}" />
 				<execute-database-install database.type="${CSM_DB_TYPE}" database.url="${CSM_DB_CONNECTION_URL}" database.user="${CSM_DB_USERNAME}" database.password="${CSM_DB_PASSWORD}" db.install.create.oracle.file.list="${csm.db.install.create.oracle.file.list}" db.install.create.mysql.file.list="${csm.db.install.create.mysql.file.list}" db.install.create.postgresql.file.list="${db.install.create.postgresql.file.list}" />
 			</then>
@@ -795,7 +850,57 @@
 				<equals arg1="${ENABLE_CLM_LOGGER_CFG_GENERATION}" arg2="true" />
 			</and>
 			<then>
-				<database-clean database.driver="${CLM_DB_DRIVER}" database.url="${CLM_DB_CONNECTION_URL}" database.user="${CLM_DB_USERNAME}" database.password="${CLM_DB_PASSWORD}" database.schema="${CLM_DB_NAME}" database.re-create="false" database.drop-schema="${CLM_DB_DROP_SCHEMA}" />
+				<if>
+					<not>
+						<and>
+							<equals arg1="${DB_TYPE}" arg2="${CLM_DB_TYPE}" />
+						</and>
+					</not>
+					<then>
+						<fail message="invalid database type configuration. Please make sure DB_TYPE and CLM_DB_TYPE properties are same in install.properties" />
+					</then>
+				</if>
+				<if>
+					<and>
+						<equals arg1="${DB_DROP_SCHEMA}" arg2="true" />
+						<equals arg1="${DB_SERVER}" arg2="${CLM_DB_SERVER}" />
+						<equals arg1="${DB_SERVER_PORT}" arg2="${CLM_DB_SERVER_PORT}" />
+						<equals arg1="${DB_NAME}" arg2="${CLM_DB_NAME}" />
+						<equals arg1="${DB_USERNAME}" arg2="${CLM_DB_USERNAME}" />
+					</and>
+					<then>
+						<fail message="if DB_DROP_SCHEMA=true and CLM_DB_DROP_SCHEMA=true then app db and clm db must have different database server configurations. 
+							Please make sure the properties 1.)DB_SERVER and CLM_DB_SERVER 2.) DB_SERVER_PORT and CLM_DB_SERVER_PORT 3.)DB_NAME and CLM_DB_NAME 4.)DB_USERNAME and CLM_DB_USERNAME have different properties in install.properties"/>
+					</then>
+				</if>
+				<if>
+					<equals arg1="${CSM_DB_DROP_SCHEMA}" arg2="true" />
+					<and>
+						<equals arg1="${CSM_DB_SERVER}" arg2="${CLM_DB_SERVER}" />
+						<equals arg1="${CSM_DB_SERVER_PORT}" arg2="${CLM_DB_SERVER_PORT}" />
+						<equals arg1="${CSM_DB_NAME}" arg2="${CLM_DB_NAME}" />
+						<equals arg1="${CSM_DB_USERNAME}" arg2="${CLM_DB_USERNAME}" />
+					</and>
+					<then>
+						<fail message="if CLM_DB_DROP_SCHEMA=true and CSM_DB_DROP_SCHEMA=true then clm db and csm db must have different database server configurations. 
+							Please make sure the properties 1.)CSM_DB_SERVER and CLM_DB_SERVER 2.) CSM_DB_SERVER_PORT and CLM_DB_SERVER_PORT 3.)CSM_DB_NAME and CLM_DB_NAME 4.)CSM_DB_USERNAME and CLM_DB_USERNAME have different properties in install.properties"/>
+					</then>
+				</if>
+				<switch value="${DB_TYPE}">
+					<case value="oracle">
+						<property name="CLM_TEMP_DB_SCHEMA" value="${CLM_DB_USERNAME}" />
+					</case>
+					<case value="mysql">
+						<property name="CLM_TEMP_DB_SCHEMA" value="${CLM_DB_NAME}" />
+					</case>
+					<case value="postgresql">
+						<property name="CLM_TEMP_DB_SCHEMA" value="public" />
+					</case>
+					<default>
+						<fail message="Invalid database type ${DB_TYPE}" />
+					</default>
+				</switch>
+				<database-clean database.driver="${CLM_DB_DRIVER}" database.url="${CLM_DB_CONNECTION_URL}" database.user="${CLM_DB_USERNAME}" database.password="${CLM_DB_PASSWORD}" database.schema="${CLM_TEMP_DB_SCHEMA}" database.re-create="false" database.drop-schema="${CLM_DB_DROP_SCHEMA}" />
 				<execute-database-install database.type="${CLM_DB_TYPE}" database.url="${CLM_DB_CONNECTION_URL}" database.user="${CLM_DB_USERNAME}" database.password="${CLM_DB_PASSWORD}" db.install.create.oracle.file.list="${clm.db.install.create.oracle.file.list}" db.install.create.mysql.file.list="${clm.db.install.create.mysql.file.list}" />
 			</then>
 		</if>
@@ -890,7 +995,7 @@
 			</switch>
 		</sequential>
 	</macrodef>
-	
+
 	<!--
 	tomcat-stop macro stops the tomcat instance and can be used in both linux and windows platforms
 	usage: <tomcat-stop tomcat.home="${tomcat.home}"/>
