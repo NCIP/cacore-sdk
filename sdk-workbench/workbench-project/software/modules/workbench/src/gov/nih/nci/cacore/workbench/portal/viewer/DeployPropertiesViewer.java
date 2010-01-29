@@ -847,12 +847,20 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
     
     public boolean isAppDbAndCsmSchemaSame(){
     	return (csmDbConnectionSettingsPanel.getCsmDbSchema().length() > 0 &&
-    	csmDbConnectionSettingsPanel.getCsmDbSchema().equalsIgnoreCase(dbConnectionSettingsPanel.getDbSchema()));
+    	csmDbConnectionSettingsPanel.getCsmDbSchema().equalsIgnoreCase(dbConnectionSettingsPanel.getDbSchema()) &&
+    	csmDbConnectionSettingsPanel.getCsmDbHostname().equalsIgnoreCase(dbConnectionSettingsPanel.getDbHostname()) &&
+    	csmDbConnectionSettingsPanel.getCsmDbPort().equalsIgnoreCase(dbConnectionSettingsPanel.getDbPort()) &&
+    	csmDbConnectionSettingsPanel.getCsmDbUsername().equalsIgnoreCase(dbConnectionSettingsPanel.getDbUsername())
+    	);
     }
     
     public boolean isAppDbAndClmSchemaSame(){
     	return (clmDbConnectionSettingsPanel.getClmDbSchema().length() > 0 &&
-    			clmDbConnectionSettingsPanel.getClmDbSchema().equalsIgnoreCase(dbConnectionSettingsPanel.getDbSchema()));
+    			clmDbConnectionSettingsPanel.getClmDbSchema().equalsIgnoreCase(dbConnectionSettingsPanel.getDbSchema()) &&
+    			clmDbConnectionSettingsPanel.getClmDbHostname().equalsIgnoreCase(dbConnectionSettingsPanel.getDbHostname()) &&
+    			clmDbConnectionSettingsPanel.getClmDbPort().equalsIgnoreCase(dbConnectionSettingsPanel.getDbPort()) &&
+    			clmDbConnectionSettingsPanel.getClmDbUsername().equalsIgnoreCase(dbConnectionSettingsPanel.getDbUsername())
+    	);
     }
     
     public boolean isAppDbDropSchemaSelected(){
@@ -908,6 +916,17 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
 					+ "Connection Settings' checkbox will remain selected and disabled\n"
 					+ "as a result.");
 		}
+		
+    	log.debug("* * * mainTabbedPane.getSelectedIndex()==LOGGING_TAB_INDEX: " + (mainTabbedPane.getSelectedIndex()==LOGGING_TAB_INDEX  && 
+				writableApiSettingsPanel.isCommonLoggingModuleEnabled()));	
+    	
+		if (mainTabbedPane.getSelectedIndex()==LOGGING_TAB_INDEX  && 
+				isClmEnabled()){
+			
+			if (clmDbConnectionSettingsPanel.isClmUseDBConnectionSettings()){
+				syncDbClmDbFields();
+			}
+		}		
     }
 
     /**

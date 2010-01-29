@@ -223,18 +223,21 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
         	clmDbHostnameField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
                 	updateClmDbFields();
+                	toggleReCreateClmDBFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
 
                 public void removeUpdate(DocumentEvent e) {
                 	updateClmDbFields();
+                	toggleReCreateClmDBFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
 
                 public void insertUpdate(DocumentEvent e) {
                 	updateClmDbFields();
+                	toggleReCreateClmDBFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
@@ -244,7 +247,7 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
         return clmDbHostnameField;
     }
     
-    public String getClmDbConnectionUrlHostname(){
+    public String getClmDbHostname(){
     	return getClmDbHostnameField().getText();
     }
     
@@ -264,18 +267,21 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
         	clmDbPortField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
                 	updateClmDbFields();
+                	toggleReCreateClmDBFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
 
                 public void removeUpdate(DocumentEvent e) {
                 	updateClmDbFields();
+                	toggleReCreateClmDBFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
 
                 public void insertUpdate(DocumentEvent e) {
                 	updateClmDbFields();
+                	toggleReCreateClmDBFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
@@ -285,7 +291,7 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
         return clmDbPortField;
     }
     
-    public String getClmDbConnectionUrlPort() {
+    public String getClmDbPort() {
     	return getClmDbPortField().getText();
     }
     
@@ -360,16 +366,19 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
         	clmDbUsernameField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("CLM_DB_USERNAME"));
         	clmDbUsernameField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
+                	toggleReCreateClmDBFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
 
                 public void removeUpdate(DocumentEvent e) {
+                	toggleReCreateClmDBFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
 
                 public void insertUpdate(DocumentEvent e) {
+                	toggleReCreateClmDBFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
@@ -1241,6 +1250,7 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
         ValidationComponentUtils.setMandatory(getClmDbSqlFileField(), true);
         
         updateClmDbFields();
+        toggleClmDbConnectionFields();
         toggleReCreateClmDBFields();
         parentContainer.toggleClmTestConnectionButton();
     }
