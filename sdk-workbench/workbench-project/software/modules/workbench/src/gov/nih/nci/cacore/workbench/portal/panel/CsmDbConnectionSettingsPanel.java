@@ -305,18 +305,21 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
         	csmDbHostnameField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
                 	updateCsmDbFields();
+                	toggleRecreateCsmDBFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
 
                 public void removeUpdate(DocumentEvent e) {
                 	updateCsmDbFields();
+                	toggleRecreateCsmDBFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
 
                 public void insertUpdate(DocumentEvent e) {
                 	updateCsmDbFields();
+                	toggleRecreateCsmDBFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
@@ -324,6 +327,10 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
         	csmDbHostnameField.addFocusListener(new FocusChangeHandler());
         }
         return csmDbHostnameField;
+    }
+    
+    public String getCsmDbHostname() {
+    	return getCsmDbHostnameField().getText();
     }
     
     public void setCsmDbHostname(String csmDbHostName){
@@ -335,7 +342,7 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
      * 
      * @return javax.swing.JTextField
      */
-    private JTextField getCsmDbPortField() {
+    public JTextField getCsmDbPortField() {
         if (csmDbPortField == null) {
         	csmDbPortField = new JTextField();
         	csmDbPortField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("CSM_DB_SERVER_PORT"));
@@ -343,18 +350,21 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
         	csmDbPortField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
                 	updateCsmDbFields();
+                	toggleRecreateCsmDBFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
 
                 public void removeUpdate(DocumentEvent e) {
                 	updateCsmDbFields();
+                	toggleRecreateCsmDBFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
 
                 public void insertUpdate(DocumentEvent e) {
                 	updateCsmDbFields();
+                	toggleRecreateCsmDBFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
@@ -362,6 +372,10 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
         	csmDbPortField.addFocusListener(new FocusChangeHandler());
         }
         return csmDbPortField;
+    }
+    
+    public String getCsmDbPort() {
+    	return getCsmDbPortField().getText();
     }
     
     public void setCsmDbPort(String csmDbPort){
@@ -425,16 +439,19 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
         	csmDbUsernameField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("CSM_DB_USERNAME"));
         	csmDbUsernameField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
+                	toggleRecreateCsmDBFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
 
                 public void removeUpdate(DocumentEvent e) {
+                	toggleRecreateCsmDBFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
 
                 public void insertUpdate(DocumentEvent e) {
+                	toggleRecreateCsmDBFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
