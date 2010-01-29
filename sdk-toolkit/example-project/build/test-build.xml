@@ -160,7 +160,10 @@
 			</if>
 
 			<if>
-				<equals arg1="${ENABLE_WRITABLE_API_EXTENSION}" arg2="true" />
+				<and>
+					<equals arg1="${ENABLE_WRITABLE_API_EXTENSION}" arg2="true" />
+					<equals arg1="${GENERATE_HIBERNATE_VALIDATOR}" arg2="true" />
+				</and>
 				<then>
 					<ant antfile="build.xml" dir="${junit.dir}" target="hibernateValidatorTest" inheritAll="true" />
 				</then>
