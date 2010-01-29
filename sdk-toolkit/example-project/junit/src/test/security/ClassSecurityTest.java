@@ -592,6 +592,9 @@ public class ClassSecurityTest extends SDKSecurityTestBase
 	 */		
 	public void testBasicAuthenticationGetXML() throws Exception
 	{
+		if(enableCaGridLoginModule){
+			return;
+		}
 		Class bankKlass = Bank.class;
 
 		try
@@ -639,7 +642,11 @@ public class ClassSecurityTest extends SDKSecurityTestBase
 	public void testAccessDeniedBasicAuthenticationGetXML() throws Exception
 	{
 		Class cashKlass = Cash.class;
-		
+
+		if(enableCaGridLoginModule){
+			return;
+		}
+
 		try
 		{
 			String searchUrl = getServerURL()+"/GetXML?query="+cashKlass.getName()+"&"+cashKlass.getName();
