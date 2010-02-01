@@ -12,7 +12,7 @@
 	<property name="target.dir" location="${software.dir}/target" />
 	<property name="target.workspace.dir" location="${target.dir}/workspace" />
 	<property name="target.module.dir" location="${target.dir}/modules" />
-
+	<property name="test.cobertura.lib.dir" location="${target.module.dir}/lib/test-cobertura" />
 	<property name="output.dir.location" value="../target/workspace"/>
 
 	<property name="ivy.def.file" location="ivy.xml" />
@@ -397,9 +397,6 @@
 		<fileset dir="${target.module.dir}/lib">
 			<include name="sdk-codegen-*.jar" />
 		</fileset>
-		<fileset dir="${target.module.dir}/lib/test-cobertura">
-			<include name="*.jar" />
-		</fileset>
 		<pathelement path="${output.codegen.config.dir}" />
 		<pathelement path="${output.codegen.validator.config.dir}" />
 	</path>
@@ -409,11 +406,10 @@
 		<equals arg1="${test.cobertura.lib.exist}" arg2="true" />
 		<then>
 			<path id="cobertura.runtime.classpath">
-				<fileset dir="${target.module.dir}/lib/test-cobertura">
+				<fileset dir="${test.cobertura.lib.dir}">
 					<include name="*.jar" />
 				</fileset>
 			</path>
-
 		</then>
 		<else>
 			<path id="cobertura.runtime.classpath">
