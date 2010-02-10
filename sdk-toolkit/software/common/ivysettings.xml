@@ -12,7 +12,7 @@
 				<artifact pattern="${shared.local.repo.dir}/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
 			</filesystem>
 			<filesystem name="local-repo" local="true">
-				<ivy pattern="${local.repo.dir}/[organisation]/[module]/ivy-[revision].xml" />
+				<ivy pattern="${local.repo.dir}/[organisation]/[module]/[revision]/ivy.xml" />
 				<artifact pattern="${local.repo.dir}/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
 				<artifact pattern="${local.repo.dir}/[organisation]/[module]/[revision]/[artifact].[ext]" />				
 			</filesystem> 
