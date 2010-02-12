@@ -38,6 +38,8 @@
 	<echo message="* * * properties.file: ${properties.file}" />
 	<echo message="* * * properties.file.name: ${properties.file.name}" />
 
+	<property name="master.build.file" value="${software.dir}/build/build-sdk-dist.xml"/>
+
 	<import file="${software.dir}/build/build.xml"/>
 
 	<target name="clean:project" description="cleans this project">
@@ -46,4 +48,8 @@
 
 	<target name="clean:all" description="cleans everything" depends="clean:project"/>
 
+	<target name="build:SDK" description="Builds the entire system. This is used mostly by development team or BDA certification team">
+		<ant antfile="${master.build.file}" dir="${build.dir}" inheritall="false" inheritrefs="false" target="build:all" />
+		<antcall target="build-system" />
+	</target>
 </project>
