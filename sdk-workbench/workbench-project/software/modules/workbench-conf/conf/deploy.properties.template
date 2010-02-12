@@ -101,7 +101,7 @@ CACHE_PROTECTION_ELEMENTS=false
 #  application column. Only valid if CLM and the Writable API are both enabled.
 ##################################################################################
 ENABLE_WRITABLE_API_EXTENSION=false
-DATABASE_TYPE=mysql
+DATABASE_TYPE=oracle
 IDENTITY_GENERATOR_TAG=<generator class="assigned"/>
 CADSR_CONNECTION_URL=http://cadsrapi.nci.nih.gov/cadsrapi40
 ENABLE_COMMON_LOGGING_MODULE=true
@@ -122,7 +122,7 @@ CLM_PROJECT_NAME=example
 #  deployed Web Service.  I.e., the following pattern is used when undeploying the 
 #  Web Service from the server: ${SERVER_URL}/services/${WEBSERVICE_NAME}Service
 ##################################################################################
-SERVER_TYPE=other
+SERVER_TYPE=jboss
 SERVER_URL=http://localhost:8080/example
 
 ################################################################################## 
@@ -192,7 +192,7 @@ MODEL_FILE_TYPE=EA
 LOGICAL_MODEL=Logical View.Logical Model
 DATA_MODEL=Logical View.Data Model
 INCLUDE_PACKAGE=.*
-EXCLUDE_PACKAGE=.*?java.*,.*?[V|v]alue.?domain.*
+EXCLUDE_PACKAGE=.*?java.*,.*?[V|v]alue.?[D|d]omain.*
 EXCLUDE_NAME=
 EXCLUDE_NAMESPACE=
 
@@ -207,10 +207,11 @@ EXCLUDE_NAMESPACE=
 #
 #  DB_DIALECT: used by Hibernate to prepare database specific queries
 ##################################################################################
-DB_USE_JNDI_BASED_CONNECTION=true
+DB_USE_JNDI_BASED_CONNECTION=false
 DB_JNDI_NAME=SDK
 DB_CONNECTION_URL=jdbc:mysql://<<hostname>>:<<port>>/<<schema>>
 DB_USERNAME=
+DB_SERVER_PORT=
 DB_PASSWORD=
 
 ##################################################################################
@@ -230,8 +231,12 @@ DB_PASSWORD=
 ##################################################################################
 CSM_USE_JNDI_BASED_CONNECTION=true
 CSM_DB_JNDI_NAME=SDK
-
 CSM_DB_CONNECTION_URL=jdbc:mysql://<<hostname>>:<<port>>/<<schema>>
+CSM_DB_DROP_SCHEMA=false
+CSM_DB_TYPE=
+CSM_DB_SERVER=
+CSM_DB_SERVER_PORT=
+CSM_DB_NAME=
 CSM_DB_USERNAME=
 CSM_DB_PASSWORD=
 
@@ -239,6 +244,11 @@ CSM_DB_PASSWORD=
 # COMMON LOGGING MODULE (CLM) DATABASE CONNECTION PROPERTIES
 ##################################################################################
 CLM_DB_CONNECTION_URL=jdbc:mysql://<<hostname>>:<<port>>/<<schema>>
+CLM_DB_DROP_SCHEMA=false
+CLM_DB_TYPE=
+CLM_DB_SERVER=
+CLM_DB_SERVER_PORT=
+CLM_DB_NAME=
 CLM_DB_USERNAME=
 CLM_DB_PASSWORD=
 
