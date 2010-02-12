@@ -23,23 +23,33 @@
 	<property name="output.dir" value="${output.dir.location}/output"/>
 	<property name="db.src.dir" value="${project.home}/db"/>
 	<property name="MODEL_FILE_PATH" value="${project.home}/models/${MODEL_FILE}"/>
-	
-	<property name="properties.file" value="${project.build.home}/install.properties"/>
-	<replaceregexp file="${properties.file}" byline="true" match="^([\w\d.]+)=(.*[\w\d\/\{\}\\]+)[ \t]+\r*$" replace="\1=\2"/>
-	<replaceregexp file="${properties.file}" byline="true" match="^([\w\d.]+)=[ \t]+(.*[\w\d\/\{\}\\]+)\r*$" replace="\1=\2"/>
+
+	<property name="properties.file" value="${project.build.home}/install.properties" />
+	<property name="upgrade.properties.file" value="${project.build.home}/install.properties" />
+	<echo message="Using properties file of ${properties.file}." />
+	<available file="${properties.file}" property="properties.file.exists" />
+	<fail unless="properties.file.exists" message="The properties.file ${properties.file} does not exist, please make sure that you pass in an accurate file name with the 'ant -Dproperties.file=somepath/somefile', otherwise the build will fail." />
+	<replaceregexp file="${properties.file}" byline="true" match="^([\w\d.]+)=(.*[\w\d\/\{\}\\]+)[ \t]+\r*$" replace="\1=\2" />
+	<replaceregexp file="${properties.file}" byline="true" match="^([\w\d.]+)=[ \t]+(.*[\w\d\/\{\}\\]+)\r*$" replace="\1=\2" />
 	<property file="${properties.file}" />
 	<!-- added for remote deployments since file is copied to root of install dir -->
 	<basename property="properties.file.name" file="${properties.file}"/>
-	
+
 	<echo message="* * * properties.file: ${properties.file}" />
 	<echo message="* * * properties.file.name: ${properties.file.name}" />
 
+	<property name="master.build.file" value="${software.dir}/build/build-sdk-dist.xml"/>
+
 	<import file="${software.dir}/build/build.xml"/>
-	
+
 	<target name="clean:project" description="cleans this project">
 		<delete dir="${project.target.dir}" failonerror="false"/>
 	</target>
 
-	<target name="clean:all" description="cleans everything" depends="clean:project,ivy:clean,clean:target"/>
+	<target name="clean:all" description="cleans everything" depends="clean:project"/>
 
+	<target name="build:SDK" description="Builds the entire system. This is used mostly by development team or BDA certification team">
+		<ant antfile="${master.build.file}" dir="${build.dir}" inheritall="false" inheritrefs="false" target="build:all" />
+		<antcall target="build-system" />
+	</target>
 </project>
