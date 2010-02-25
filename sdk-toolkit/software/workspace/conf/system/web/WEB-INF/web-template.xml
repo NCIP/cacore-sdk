@@ -73,37 +73,41 @@
         <servlet-name>GetJSON</servlet-name>
         <servlet-class>gov.nih.nci.system.web.HTTPQuery</servlet-class>        	
     </servlet>
-    
-    <servlet-mapping>
+	<!--@REMOTE_JAVA_INTERFACE_START@-->
+	<servlet-mapping>
 		<servlet-name>httpinvoker</servlet-name>
 		<url-pattern>/http/*</url-pattern>
 	</servlet-mapping>
-
-    <servlet-mapping>
+	<!--@REMOTE_JAVA_INTERFACE_END@-->
+	<!--@WEB_SERVICE_INTERFACE_START@-->
+	<servlet-mapping>
 		<servlet-name>AxisServlet</servlet-name>
 		<url-pattern>/services/*</url-pattern>
 	</servlet-mapping>
-    
-    <servlet-mapping>
-        <servlet-name>AxisServlet</servlet-name>
-        <url-pattern>*.jws</url-pattern>
-    </servlet-mapping>
-    
-    <servlet-mapping>
-    	<servlet-name>GetXML</servlet-name>
-    	<url-pattern>/GetXML</url-pattern>
-    </servlet-mapping>
-    
-    <servlet-mapping>
-    	<servlet-name>GetHTML</servlet-name>
-      	<url-pattern>/GetHTML</url-pattern>
-    </servlet-mapping>
-    
-    <servlet-mapping>
-    	<servlet-name>GetJSON</servlet-name>
-    	<url-pattern>/GetJSON</url-pattern>
-    </servlet-mapping>
 
+	<servlet-mapping>
+		<servlet-name>AxisServlet</servlet-name>
+		<url-pattern>*.jws</url-pattern>
+	</servlet-mapping>
+	<!--@WEB_SERVICE_INTERFACE_END@-->
+	<!--@RESTFUL_XML_INTERFACE_START@-->
+	<servlet-mapping>
+		<servlet-name>GetXML</servlet-name>
+		<url-pattern>/GetXML</url-pattern>
+	</servlet-mapping>
+	<!--@RESTFUL_XML_INTERFACE_END@-->
+	<!--@RESTFUL_HTML_INTERFACE_START@-->
+	<servlet-mapping>
+		<servlet-name>GetHTML</servlet-name>
+		<url-pattern>/GetHTML</url-pattern>
+	</servlet-mapping>
+	<!--@RESTFUL_HTML_INTERFACE_END@-->
+	<!--@RESTFUL_JSON_INTERFACE_START@-->
+	<servlet-mapping>
+		<servlet-name>GetJSON</servlet-name>
+		<url-pattern>/GetJSON</url-pattern>
+	</servlet-mapping>
+	<!--@RESTFUL_JSON_INTERFACE_END@-->
 	<mime-mapping>
 		<extension>wsdl</extension>
 		<mime-type>text/xml</mime-type>

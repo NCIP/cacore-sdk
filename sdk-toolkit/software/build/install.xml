@@ -4,7 +4,7 @@
 
 	<property file="codegen.properties" />
 	<property name="project.name" value="${PROJECT_NAME}"/>
-	
+
 	<import file="bda-master-install.xml"/>
 
 	<!-- Grid related properties -->
@@ -147,12 +147,25 @@
 		install:common:validation:pre-install,
 		install:database:validation:pre-install,
 		install:re-configure,
-		install:database,
-		install:tomcat,
-		install:jboss,
-		install:common:post,
-		install:common:validation:post-install
+		install:database
 		">
+		<if>
+			<not>
+				<and>
+					<equals arg1="${ENABLE_REMOTE_JAVA_INTERFACE}" arg2="false" />
+					<equals arg1="${ENABLE_WEBSERVICE_INTERFACE}" arg2="false" />
+					<equals arg1="${ENABLE_RESTFUL_XML_INTERFACE}" arg2="false" />
+					<equals arg1="${ENABLE_RESTFUL_HTML_INTERFACE}" arg2="false" />
+					<equals arg1="${ENABLE_RESTFUL_JSON_INTERFACE}" arg2="false" />
+				</and>
+			</not>
+			<then>
+				<antcall target="install:tomcat" />
+				<antcall target="install:jboss" />
+				<antcall target="install:common:post" />
+				<antcall target="install:common:validation:post-install" />
+			</then>
+		</if>
 	</target>
 
 	<target name="install:jboss" description="Wrapper scripts that calls all required targets to install the jboss container" unless="exclude.jboss"
@@ -198,13 +211,13 @@
 
 	<target name="install:jboss:clean" unless="exclude.jboss" depends="common:jboss:init,common:init">
 		<if>
-			<equals arg1="${INSTALL_CONTAINER}" arg2="true" casesensitive="false" />
+			<equals arg1="${INSTALL_CONTAINER}" arg2="true" casesensitive="false" trim="true" />
 			<then>
 				<sleep seconds="5" />
 				<property name="backup.count" value="5" />
 				<if>
 					<not>
-						<equals arg1="${exclude.jboss.backup}" arg2="true" />
+						<equals arg1="${exclude.jboss.backup}" arg2="true" casesensitive="false" trim="true" />
 					</not>
 					<then>
 						<!-- Jboss backup, do not compress until install is finished -->
@@ -224,7 +237,7 @@
 
 	<target name="install:tomcat:binaries" description="Install tomcat binaries" unless="exclude.tomcat" depends="common:init">
 		<if>
-			<equals arg1="${INSTALL_CONTAINER}" arg2="true" casesensitive="false" />
+			<equals arg1="${INSTALL_CONTAINER}" arg2="true" casesensitive="false" trim="true"  />
 			<then>
 				<delete dir="${tomcat.home}" />
 				<dirname file="${tomcat.home}" property="tomcat.base.dir" />
@@ -241,13 +254,13 @@
 
 	<target name="install:tomcat:clean" unless="exclude.tomcat" depends="common:tomcat:init">
 		<if>
-			<equals arg1="${INSTALL_CONTAINER}" arg2="true" casesensitive="false"/>
+			<equals arg1="${INSTALL_CONTAINER}" arg2="true" casesensitive="false" trim="true" />
 			<then>
 				<sleep seconds="20" />
 				<property name="backup.count" value="5"/>
 				<if>
 					<not>
-						<equals arg1="${exclude.tomcat.backup}" arg2="true"/>
+						<equals arg1="${exclude.tomcat.backup}" arg2="true" casesensitive="false" trim="true" />
 					</not>
 					<then>
 						<property name="backup.tomcat.base.dir" location="${application.base.path}/backup/tomcat"/>
@@ -398,21 +411,20 @@
 			<then>
 				<copy file="${package.client.jboss.default.deploy.dir}/${PROJECT_NAME}-ds.xml" todir="${jboss.home}/server/${jboss.server.name}/deploy" overwrite="true" />
 				<echo message="Copying libraries to JBoss" />
-				<copy todir="${jboss.home}/server/${jboss.server.name}/lib">
-					<fileset dir="${package.client.jboss.default.lib.dir}">
-					</fileset>
-				</copy>
 			</then>
 		</if>
 	</target>
 
 	<target name="install:jboss:configure:libraries" unless="exclude.jboss">
+		<available file="${package.client.jboss.default.lib.dir}" type="dir" property="package.client.jboss.default.lib.dir.present"/>
+
 		<if>
-			<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${package.client.jboss.default.lib.dir.present}" arg2="true"/>
 			<then>
 				<echo message="Copying libraries to JBoss" />
 				<copy todir="${jboss.home}/server/${jboss.server.name}/lib">
 					<fileset dir="${package.client.jboss.default.lib.dir}">
+						<include name="**/*.*"/>
 					</fileset>
 				</copy>
 			</then>
@@ -438,10 +450,6 @@
 				<echo message="${clm.database.driver.file}"/>
 				<echo message="${jboss.home}/server/${jboss.server.name}/lib"/>
 				<copy file="${clm.database.driver.file}" todir="${jboss.home}/server/${jboss.server.name}/lib" overwrite="true" failonerror="true"/>
-
-				<copy todir="${jboss.home}/server/${jboss.server.name}/lib">
-					<fileset dir="${package.client.jboss.default.lib.dir}"/>
-				</copy>
 			</then>
 		</if>
 	</target>
@@ -452,8 +460,8 @@
 		<delete dir="${jboss.home}/server/${jboss.server.name}/work" />
 		<copy file="${package.client.jboss.default.deploy.dir}/${PROJECT_NAME}.war" todir="${jboss.home}/server/${jboss.server.name}/deploy" overwrite="true" />
 	</target>
-	
-	<target name="install:jboss:coberturaflush-webapp" description="Deploy example-webapp and common libraries to tomcat installation" unless="exclude.tomcat">
+
+	<target name="install:jboss:coberturaflush-webapp" description="Deploy example-webapp and common libraries to tomcat installation" unless="exclude.jboss">
 		<if>
 			<equals arg1="${test.cobertura.lib.exist}" arg2="true" />
 			<then>
@@ -643,17 +651,10 @@
 	<target name="install:tomcat:project-webapp" description="Deploy example-webapp and common libraries to tomcat installation" unless="exclude.tomcat">
 		<delete dir="${tomcat.home}//webapps/${PROJECT_NAME}" quiet="true"/>
 		<copy file="${package.client.tomcat.webapps.dir}/${PROJECT_NAME}.war" todir="${tomcat.home}/webapps" overwrite="true" />
-
-		<if>
-			<equals arg1="${test.cobertura.lib.exist}" arg2="true"/>
-			<then>
-				<copy file="${common.dist.relative.dir}/cobertura/coberturaFlush.war" todir="${tomcat.home}/webapps" overwrite="true" />
-			</then>
-		</if>
 	</target>
 
 	<target name="install:tomcat:coberturaflush-webapp" description="Deploy example-webapp and common libraries to tomcat installation" unless="exclude.tomcat">
-		<delete dir="${tomcat.home}//webapps/coberturaFlush" quiet="true"/>
+		<delete dir="${tomcat.home}/webapps/coberturaFlush" quiet="true"/>
 		<if>
 			<equals arg1="${test.cobertura.lib.exist}" arg2="true"/>
 			<then>
@@ -782,7 +783,7 @@
 				<fail message="if ENABLE_INSTANCE_LEVEL_SECURITY=true in codegen.properties then app database and csm database schema tables must be present in the app database schema.
 					Please make sure the properties DB_SERVER and CSM_DB_SERVER, DB_SERVER_PORT and CSM_DB_SERVER_PORT, DB_NAME and CSM_DB_NAME, DB_USERNAME and CSM_DB_USERNAME have same property value in install.properties"/>
 			</then>
-		</if>			
+		</if>
 
 		<if>
 			<and>
