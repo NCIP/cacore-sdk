@@ -42,6 +42,8 @@ public class WritableSecurityTest extends SDKSecurityTestBase{
 		SDKQueryResult queryResult=applicationService.executeQuery(exampleQuery);
 		Card resultCard=(Card)queryResult.getObjectResult();
 		assertEquals(card.getName(), resultCard.getName());
+		
+		cleanUPInsertedCard(applicationService,resultCard);
 	}
 
 	public void testCreateCardSuccessUser2() throws Exception {
@@ -59,6 +61,9 @@ public class WritableSecurityTest extends SDKSecurityTestBase{
 		SDKQueryResult queryResult=applicationService.executeQuery(exampleQuery);
 		Card resultCard=(Card)queryResult.getObjectResult();
 		assertEquals(card.getName(), resultCard.getName());
+		
+		WritableApplicationService applicationService1 = (WritableApplicationService) getAppSvcUser1();
+		cleanUPInsertedCard(applicationService1,resultCard);
 	}
 
 	public void testUpdateCardSuccess() throws Exception {
@@ -82,6 +87,8 @@ public class WritableSecurityTest extends SDKSecurityTestBase{
 		SDKQueryResult updateQueryResult=applicationService.executeQuery(updateExample);
 		Card updateResultCard=(Card)updateQueryResult.getObjectResult();
 		assertEquals(resultCard.getName(), updateResultCard.getName());
+		
+		cleanUPInsertedCard(applicationService,resultCard);
 	}
 
 	public void testUpdateCardFailure() throws Exception {
@@ -108,6 +115,8 @@ public class WritableSecurityTest extends SDKSecurityTestBase{
 		}catch (AccessDeniedException e) {
 			assertEquals("Access is denied", e.getMessage());
 		}
+		WritableApplicationService applicationService1 = (WritableApplicationService) getAppSvcUser1();
+		cleanUPInsertedCard(applicationService1,resultCard);
 	}
 
 	public void testDeleteCardSuccess() throws Exception {
@@ -154,5 +163,11 @@ public class WritableSecurityTest extends SDKSecurityTestBase{
 		} catch (AccessDeniedException e) {
 			assertEquals("Access is denied", e.getMessage());
 		}
+	}
+	
+	private void cleanUPInsertedCard(WritableApplicationService applicationService,Card resultCard) throws Exception{
+		DeleteExampleQuery deleteExample=new DeleteExampleQuery(resultCard);
+		SDKQueryResult deleteQueryResult=applicationService.executeQuery(deleteExample);
+		assertEquals(true,deleteQueryResult.getObjectResult());
 	}
 }
