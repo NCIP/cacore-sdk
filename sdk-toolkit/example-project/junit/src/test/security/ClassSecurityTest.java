@@ -607,8 +607,7 @@ public class ClassSecurityTest extends SDKSecurityTestBase
 			String base64 = "SDKUser1" + ":" + "Psat123!@#";
 			conn.setRequestProperty("Authorization", "Basic " + new String(Base64.encodeBase64(base64.getBytes())));
 
-			File myFile = new File("./output/" + bankKlass.getName() + "_test-getxml.xml");						
-
+			File myFile = new File(bankKlass.getName() + "_test-getxml.xml");						
 			FileWriter myWriter = new FileWriter(myFile);
 			DataInputStream dis = new DataInputStream(conn.getInputStream());
 
@@ -633,10 +632,11 @@ public class ClassSecurityTest extends SDKSecurityTestBase
 				}
 				
 			}
+			myFile.delete();
 		} catch(Exception e)
 		{
 			fail("Exception caught: " + e.getMessage());
-		}
+		}	
 	}
 	
 	public void testAccessDeniedBasicAuthenticationGetXML() throws Exception
@@ -657,7 +657,7 @@ public class ClassSecurityTest extends SDKSecurityTestBase
 			String base64 = "SKUser2" + ":" + "Psat123!@#"; //user2 does not have access to the Cash class
 			conn.setRequestProperty("Authorization", "Basic " + new String(Base64.encodeBase64(base64.getBytes())));
 
-			File myFile = new File("./output/" + cashKlass.getName() + "_test-getxml.xml");						
+			File myFile = new File(cashKlass.getName() + "_test-getxml.xml");						
 
 			FileWriter myWriter = new FileWriter(myFile);
 			DataInputStream dis = new DataInputStream(conn.getInputStream());
@@ -671,6 +671,7 @@ public class ClassSecurityTest extends SDKSecurityTestBase
 			myWriter.close();
 			
 			assertTrue(buffer.indexOf("Access is denied") > 0);
+			myFile.delete();
 
 		} catch(Exception e) {
 			System.out.println("Exception caught: " + e.getMessage());
