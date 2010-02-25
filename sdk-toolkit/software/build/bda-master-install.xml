@@ -277,7 +277,7 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 
 		<if>
 			<not>
-				<equals arg1="${exclude.jboss.backup}" arg2="true"/>
+				<equals arg1="${exclude.jboss.backup}" arg2="true" casesensitive="false" trim="true" />
 			</not>
 			<then>
 				<!-- Jboss backup, do not compress until install is finished -->
@@ -302,7 +302,7 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 		<property name="backup.count" value="5"/>
 		<if>
 			<not>
-				<equals arg1="${exclude.tomcat.backup}" arg2="true"/>
+				<equals arg1="${exclude.tomcat.backup}" arg2="true" trim="true" />
 			</not>
 			<then>
 				<property name="backup.tomcat.base.dir" location="${application.base.path}/backup/tomcat"/>
@@ -1098,7 +1098,7 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 	<target name="install:post:jboss" unless="exclude.jboss" depends="common:init">
 		<if>
 			<not>
-				<equals arg1="${exclude.jboss.backup}" arg2="true"/>
+				<equals arg1="${exclude.jboss.backup}" arg2="true" casesensitive="false" trim="true" />
 			</not>
 			<then>
 				<property name="changelogFile" location="${install-logs.dir}/chagneLog-${install.time}.txt"/>
@@ -1130,7 +1130,7 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 	<target name="install:post:tomcat" unless="exclude.tomcat" depends="common:init">
 		<if>
 			<not>
-				<equals arg1="${exclude.tomcat.backup}" arg2="true"/>
+				<equals arg1="${exclude.tomcat.backup}" arg2="true" casesensitive="false" trim="true" />
 			</not>
 			<then>
 				<property name="changelogFile" location="${install-logs.dir}/changeLog-${install.time}.txt"/>
@@ -1239,7 +1239,7 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 	<target name="upgrade:jboss:init:prep" depends="upgrade:common:init:prep" unless="install.running">
 		<property name="jboss.home" value="${application.base.path}/${jboss.relative.path}"/>
 		<if>
-			<equals arg1="${jboss.ncicb-standard.port-config}" arg2="true"/>
+			<equals arg1="${jboss.ncicb-standard.port-config}" arg2="true" casesensitive="false" trim="true" />
 			<then>
 				<property name="jboss.server.binding.template.location" value="${basedir}/${jboss-bindings.file}"/>
 			</then>
