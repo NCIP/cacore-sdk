@@ -20,8 +20,6 @@
 	<property name="classes.dir" value="${junit.home}/classes"/>
 	<property name="test.cobertura.dir" value="${SDK_INSTALL_DIR}/software/target/modules/lib/test-cobertura"/>
 
-	<!-- load properties files -->
-
 	<property name="project.target.dir" value="${project.home}/target"/>
 	<property name="dist.dir" value="${project.target.dir}/dist"/>
 	<property name="dist.exploded.dir" value="${dist.dir}/exploded"/>
@@ -53,7 +51,7 @@
 	<property name="report.dir.thickclient-writableapi-cleanup" value="${report.dir}/writable-api-thick-client-cleanup" />
 	<property name="report.dir.remoteclient-writableapi" value="${report.dir}/writable-api-remote-client" />
 	<property name="report.dir.codegen" value="${report.dir}/codegen" />
-
+	
 	<property name="generate.report" value="true" />
 
 	<!-- load ant contrib -->
@@ -101,11 +99,15 @@
 		<fileset dir="${dist.exploded.dir}/${package.client.local.lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
+		<path refid="junit-lib" />
+		<pathelement path="${classes.dir}" />
+		<pathelement path="${dist.exploded.dir}/${package.client.local.conf.dir}" />
+	</path>
+
+	<path id="junit-lib">
 		<fileset dir="lib">
 			<include name="**/*.jar" />
 		</fileset>
-		<pathelement path="${classes.dir}" />
-		<pathelement path="${dist.exploded.dir}/${package.client.local.conf.dir}" />
 	</path>
 
 	<path id="remote-client-cp">
@@ -115,9 +117,7 @@
 		<fileset dir="${dist.exploded.dir}/${package.client.ws.lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
-		<fileset dir="lib">
-			<include name="**/*.jar" />
-		</fileset>
+		<path refid="junit-lib" />
 		<pathelement path="${classes.dir}" />
 		<pathelement path="${dist.exploded.dir}/${package.client.remote.conf.dir}" />
 	</path>
@@ -135,12 +135,12 @@
 
 	<path id="instrumented.classpath">
 		<fileset dir="${test.cobertura.dir}/instrumented/sdk">
-				<include name="**/*.jar" />
+			<include name="**/*.jar" />
 		</fileset>
 	</path>
 	<path id="project.test.cobertura.classpath">
 		<fileset dir="${test.cobertura.dir}">
-				<include name="**/*.jar" />
+			<include name="**/*.jar" />
 		</fileset>
 	</path>
 	<!--***********************************************************************
@@ -233,6 +233,7 @@
 		<attribute name="includePattern" />
 		<attribute name="excludePattern" />
 		<sequential>
+			<mkdir dir="${classes.dir}"/>
 			<javac srcdir="${src.dir}" destdir="${classes.dir}" debug="true" debuglevel="lines,vars,source">
 				<include name="@{includePattern}" />
 				<exclude name="@{excludePattern}" />
@@ -255,12 +256,12 @@
 			<echo message="Hello   ${test.cobertura.dir}"/>
 			<cobertura-merge datafile="@{cobertura.rpt.dir}/aggregate-cobertura-report.ser">
 				<fileset dir="${test.cobertura.dir}">
-			        <include name="**/*cobertura.ser" />
-			    </fileset>
+					<include name="**/*cobertura.ser" />
+				</fileset>
 				<fileset dir="${junit.report.dir}">
-			        <include name="**/*cobertura.ser" />
-			    </fileset>
-			</cobertura-merge>			
+					<include name="**/*cobertura.ser" />
+				</fileset>
+			</cobertura-merge>
 			<property name="abs.cobertura-src-dir" location="@{cobertura.src.dir}"/>
 			<cobertura-report datafile="@{cobertura.rpt.dir}/aggregate-cobertura-report.ser" format="xml"  srcdir="${abs.cobertura-src-dir}/" destdir="@{cobertura.rpt.dir}"/>
 			<cobertura-report datafile="@{cobertura.rpt.dir}/aggregate-cobertura-report.ser" format="html"  srcdir="${abs.cobertura-src-dir}" destdir="@{cobertura.rpt.dir}"/>
