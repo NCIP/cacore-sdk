@@ -27,7 +27,7 @@ public class WritableSecurityTest extends SDKSecurityTestBase{
 		return "WritableApi Security Test Case";
 	}
 
-	public void testCreateCardSuccess() throws Exception {
+	public void xtestCreateCardSuccess() throws Exception {
 		WritableApplicationService applicationService = (WritableApplicationService) getAppSvcUser1();
 		
 		Suit suit=new Suit();
@@ -46,7 +46,7 @@ public class WritableSecurityTest extends SDKSecurityTestBase{
 		cleanUPInsertedCard(applicationService,resultCard);
 	}
 
-	public void testCreateCardSuccessUser2() throws Exception {
+	public void xtestCreateCardSuccessUser2() throws Exception {
 		WritableApplicationService applicationService = (WritableApplicationService) getAppSvcUser2();
 		
 		Suit suit=new Suit();
@@ -66,7 +66,7 @@ public class WritableSecurityTest extends SDKSecurityTestBase{
 		cleanUPInsertedCard(applicationService1,resultCard);
 	}
 
-	public void testUpdateCardSuccess() throws Exception {
+	public void xtestUpdateCardSuccess() throws Exception {
 		WritableApplicationService applicationService = (WritableApplicationService) getAppSvcUser1();
 		
 		Suit suit=new Suit();
@@ -91,7 +91,7 @@ public class WritableSecurityTest extends SDKSecurityTestBase{
 		cleanUPInsertedCard(applicationService,resultCard);
 	}
 
-	public void testUpdateCardFailure() throws Exception {
+	public void xtestUpdateCardFailure() throws Exception {
 		WritableApplicationService applicationService = (WritableApplicationService) getAppSvcUser2();
 		
 		Suit suit=new Suit();
@@ -119,7 +119,7 @@ public class WritableSecurityTest extends SDKSecurityTestBase{
 		cleanUPInsertedCard(applicationService1,resultCard);
 	}
 
-	public void testDeleteCardSuccess() throws Exception {
+	public void xtestDeleteCardSuccess() throws Exception {
 		WritableApplicationService applicationService = (WritableApplicationService) getAppSvcUser1();
 		
 		Suit suit=new Suit();
@@ -161,6 +161,8 @@ public class WritableSecurityTest extends SDKSecurityTestBase{
 			 applicationService.executeQuery(deleteExample);
 			fail("must through access denied exception");
 		} catch (AccessDeniedException e) {
+			WritableApplicationService applicationService1 = (WritableApplicationService) getAppSvcUser1();
+			cleanUPInsertedCard(applicationService1,resultCard);
 			assertEquals("Access is denied", e.getMessage());
 		}
 	}
