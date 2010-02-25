@@ -149,6 +149,11 @@
 				<exclude name="cagrid*"/>
 			</fileset>
 		</copy>
+		<copy todir="${dist.exploded.dir}">
+			<fileset dir="${target.dir}/dist/exploded">
+				<include name="${jboss-bindings.file}" />
+			</fileset>
+		</copy>
 	</target>
 
 	<target name="deploy:local:install:re-configure" depends="dist:installer:prep">

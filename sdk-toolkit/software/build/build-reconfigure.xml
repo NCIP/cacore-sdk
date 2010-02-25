@@ -45,10 +45,97 @@
 		</or>
 	</condition>
 
+	<condition property="REMOTE_JAVA_INTERFACE_START" value="" else="${xml.comment.start}">
+		<or>
+			<equals arg1="${ENABLE_REMOTE_JAVA_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${ENABLE_REMOTE_JAVA_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
+	</condition>
+	<condition property="REMOTE_JAVA_INTERFACE_END" value="" else="${xml.comment.end}">
+		<or>
+			<equals arg1="${ENABLE_REMOTE_JAVA_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${ENABLE_REMOTE_JAVA_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
+	</condition>
+
+	<condition property="WEB_SERVICE_INTERFACE_START" value="" else="${xml.comment.start}">
+		<or>
+			<equals arg1="${ENABLE_WEBSERVICE_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${ENABLE_WEBSERVICE_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
+	</condition>
+	<condition property="WEB_SERVICE_INTERFACE_END" value="" else="${xml.comment.end}">
+		<or>
+			<equals arg1="${ENABLE_WEBSERVICE_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${ENABLE_WEBSERVICE_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
+	</condition>
+
+	<condition property="RESTFUL_XML_INTERFACE_START" value="" else="${xml.comment.start}">
+		<or>
+			<equals arg1="${ENABLE_RESTFUL_XML_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${ENABLE_RESTFUL_XML_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
+	</condition>
+	<condition property="RESTFUL_XML_INTERFACE_END" value="" else="${xml.comment.end}">
+		<or>
+			<equals arg1="${ENABLE_RESTFUL_XML_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${ENABLE_RESTFUL_XML_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
+	</condition>
+	<condition property="RESTFUL_HTML_INTERFACE_START" value="" else="${xml.comment.start}">
+		<or>
+			<equals arg1="${ENABLE_RESTFUL_HTML_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${ENABLE_RESTFUL_HTML_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
+	</condition>
+
+	<condition property="RESTFUL_HTML_INTERFACE_END" value="" else="${xml.comment.end}">
+		<or>
+			<equals arg1="${ENABLE_RESTFUL_HTML_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${ENABLE_RESTFUL_HTML_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
+	</condition>
+
+	<condition property="RESTFUL_JSON_INTERFACE_START" value="" else="${xml.comment.start}">
+		<or>
+			<equals arg1="${ENABLE_RESTFUL_JSON_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${ENABLE_RESTFUL_JSON_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
+	</condition>
+
+	<condition property="RESTFUL_JSON_INTERFACE_END" value="" else="${xml.comment.end}">
+		<or>
+			<equals arg1="${ENABLE_RESTFUL_JSON_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${ENABLE_RESTFUL_JSON_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
+	</condition>
+
 	<condition property="SECURITY_ENABLED" value="true" else="false">
 		<or>
 			<equals arg1="${ENABLE_SECURITY}" arg2="true" casesensitive="false" trim="true" />
 			<equals arg1="${ENABLE_SECURITY}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
+	</condition>
+
+	<condition property="PACKAGE_LOCAL_CLIENT">
+		<or>
+			<equals arg1="${ENABLE_LOCAL_JAVA_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${ENABLE_LOCAL_JAVA_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
+	</condition>
+
+	<condition property="PACKAGE_REMOTE_CLIENT">
+		<or>
+			<equals arg1="${ENABLE_REMOTE_JAVA_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${ENABLE_REMOTE_JAVA_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
+	</condition>
+
+	<condition property="PACKAGE_WEBSERVICE_INTERFACE">
+		<or>
+			<equals arg1="${ENABLE_WEBSERVICE_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${ENABLE_WEBSERVICE_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
 		</or>
 	</condition>
 
@@ -321,6 +408,17 @@
 			<filter token="JBOSS_END" value="${JBOSS_END}" />
 			<filter token="TOMCAT_START" value="${TOMCAT_START}" />
 			<filter token="TOMCAT_END" value="${TOMCAT_END}" />
+
+			<filter token="REMOTE_JAVA_INTERFACE_START" value="${REMOTE_JAVA_INTERFACE_START}" />
+			<filter token="REMOTE_JAVA_INTERFACE_END" value="${REMOTE_JAVA_INTERFACE_END}" />
+			<filter token="WEB_SERVICE_INTERFACE_START" value="${WEB_SERVICE_INTERFACE_START}" />
+			<filter token="WEB_SERVICE_INTERFACE_END" value="${WEB_SERVICE_INTERFACE_END}" />
+			<filter token="RESTFUL_XML_INTERFACE_START" value="${RESTFUL_XML_INTERFACE_START}" />
+			<filter token="RESTFUL_XML_INTERFACE_END" value="${RESTFUL_XML_INTERFACE_END}" />
+			<filter token="RESTFUL_HTML_INTERFACE_START" value="${RESTFUL_HTML_INTERFACE_START}" />
+			<filter token="RESTFUL_HTML_INTERFACE_END" value="${RESTFUL_HTML_INTERFACE_END}" />
+			<filter token="RESTFUL_JSON_INTERFACE_START" value="${RESTFUL_JSON_INTERFACE_START}" />
+			<filter token="RESTFUL_JSON_INTERFACE_END" value="${RESTFUL_JSON_INTERFACE_END}" />
 		</filterset>
 	</target>
 
@@ -493,7 +591,10 @@
 		package-server
 		"/>
 
-	<target name="init-install" depends="replace-install-token-contents,-rejar-orm" description="initializes the packaging"/>
+	<target name="init-install" depends="replace-install-token-contents,-rejar-orm" description="initializes the packaging">
+		<echo message="deleting directory ${package.dir}"/>
+		<delete dir="${package.dir}"/>
+	</target>
 
 	<target name="-rejar-orm" depends="-replace-templates-filter-tokens-reconfigure">
 		<mkdir dir="${output.target.dir}" />
@@ -528,21 +629,25 @@
 	<!-- ##################### Local Client targets ######################### -->
 	<!-- #################################################################### -->
 
-	<target name="package-local-client" depends="
-		-package-local-client-core,
-		-package-local-client-writable-api,
-		-package-local-client-security,
-		-package-local-client-grid-security,
-		-package-local-client-logging
-		">
+	<target name="package-local-client" depends="">
+		<if>
+			<equals arg1="${PACKAGE_LOCAL_CLIENT}" arg2="true" />
+			<then>
+				<antcall target="-package-local-client-core" />
+				<antcall target="-package-local-client-writable-api" />
+				<antcall target="-package-local-client-security" />
+				<antcall target="-package-local-client-grid-security" />
+				<antcall target="-package-local-client-logging" />
 
-		<include-db-jar target.lib.directory="${package.client.local.lib.dir}"/>
-		<!-- delete if present as duplicate mysql jar was added from Grid Services-->
-		<delete>
-			<fileset dir="${package.client.local.lib.dir}">
-				<include name="mysql-connector-java-3.0.16-ga-bin.jar" />
-			</fileset>
-		</delete>
+				<include-db-jar target.lib.directory="${package.client.local.lib.dir}" />
+				<!-- delete if present as duplicate mysql jar was added from Grid Services-->
+				<delete>
+					<fileset dir="${package.client.local.lib.dir}">
+						<include name="mysql-connector-java-3.0.16-ga-bin.jar" />
+					</fileset>
+				</delete>
+			</then>
+		</if>
 	</target>
 
 
@@ -754,12 +859,17 @@
 	<!-- ##################### Remote Client targets ######################## -->
 	<!-- #################################################################### -->
 
-	<target name="package-remote-client" depends="
-		-package-remote-client-core,
-		-package-remote-client-writable-api,
-		-package-remote-client-security,
-		-package-remote-client-grid-security
-		"/>
+	<target name="package-remote-client" depends="">
+		<if>
+			<equals arg1="${PACKAGE_REMOTE_CLIENT}" arg2="true" />
+			<then>
+				<antcall target="-package-remote-client-core" />
+				<antcall target="-package-remote-client-writable-api" />
+				<antcall target="-package-remote-client-security" />
+				<antcall target="-package-remote-client-grid-security" />
+			</then>
+		</if>
+	</target>
 
 	<target name="-package-remote-client-core" depends="">
 		<delete includeemptydirs="true" failonerror="false">
@@ -928,7 +1038,7 @@
 	<!-- ######################## WS Client targets ######################### -->
 	<!-- #################################################################### -->
 
-	<target name="package-ws-client">
+	<target name="package-ws-client" if="PACKAGE_WEBSERVICE_INTERFACE">
 		<mkdir dir="${package.client.ws.dir}" />
 		<copy todir="${package.client.ws.lib.dir}">
 			<fileset dir="${runtime.lib.dir}">
