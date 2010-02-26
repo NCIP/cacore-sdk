@@ -30,7 +30,8 @@
 			
 			<delete dir="${project.target.dir}" failonerror="false"/>
 			<ant antfile="build.xml" dir="." target="build-system" inheritAll="true"/>
-
+			<ant antfile="build.xml" dir="." target="dist:installer:prep" inheritAll="true"/>
+			
 			<copy todir="${dist.exploded.dir}" overwrite="true">
 				<fileset dir="${output.property.file.dir}/@{REPORT.PROJECT.DIR}" includes="*.properties" />
 			</copy>
@@ -152,10 +153,9 @@
 					<ant antfile="build.xml" dir="${junit.dir}" target="writeDatabaseCleanUpTest" inheritAll="true" />
 				</then>
 			</if>
-
+			
 			<copy file="${SDK_INSTALL_DIR}/software/build/cobertura.ser" tofile="${junit.dir}/report/@{REPORT.PROJECT.DIR}/codegen-cobertura.ser" overwrite="true" failonerror="false"/>
 			<delete file="${SDK_INSTALL_DIR}/software/build/cobertura.ser"  failonerror="false"/>
-			<property file="${SDK_INSTALL_DIR}/software/build/project.properties"/>
 			<condition property="application.base.path" value="${application.base.path.linux}">
 				<or>
 					<os family="unix" />
@@ -233,8 +233,11 @@
 				<equals arg1="${property.file.location}" arg2="invalid" />
 			</not>
 			<then>
-				<property file="${property.file.location}install.properties" />
 				<property file="${property.file.location}codegen.properties" />
+				<property name="workspace.dir" value="${SDK_INSTALL_DIR}/software/workspace"/>
+				<property name="output.dir.location" value="${dist.exploded.dir}"/>
+				<property file="${SDK_INSTALL_DIR}/software/build/project.properties"/>
+				<property file="${property.file.location}install.properties" />
 
 				<propertyregex property="temp.report.dir" input="${property.file.location}" regexp="example-usecases\\([^\.]*)\\" select="\1" casesensitive="false" />
 				<echo message="report.dir ${temp.report.dir}" />
@@ -253,9 +256,11 @@
 		<if>
 			<equals arg1="${property.file.present}" arg2="true"/>
 			<then>
-				<property file="${property.file.location}/install.properties" />
 				<property file="${property.file.location}/codegen.properties" />
-				<echo message="report.dir ${testcase.name} ${SERVER_TYPE}" />
+				<property name="workspace.dir" value="${SDK_INSTALL_DIR}/software/workspace"/>
+				<property name="output.dir.location" value="${dist.exploded.dir}"/>
+				<property file="${SDK_INSTALL_DIR}/software/build/project.properties"/>
+				<property file="${property.file.location}/install.properties" />
 				<run-test REPORT.PROJECT.DIR="${testcase.name}" />
 			</then>
 			<else>
