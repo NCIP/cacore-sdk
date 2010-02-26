@@ -96,12 +96,12 @@
 	*** Classpath entries
 	*********************************************************************** -->
 	<path id="local-client-cp">
-		<fileset dir="${dist.exploded.dir}/${package.client.local.lib.dir}">
+		<fileset dir="${package.client.local.lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
 		<path refid="junit-lib" />
 		<pathelement path="${classes.dir}" />
-		<pathelement path="${dist.exploded.dir}/${package.client.local.conf.dir}" />
+		<pathelement path="${package.client.local.conf.dir}" />
 	</path>
 
 	<path id="junit-lib">
@@ -111,26 +111,26 @@
 	</path>
 
 	<path id="remote-client-cp">
-		<fileset dir="${dist.exploded.dir}/${package.client.remote.lib.dir}">
+		<fileset dir="${package.client.remote.lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
-		<fileset dir="${dist.exploded.dir}/${package.client.ws.lib.dir}">
+		<fileset dir="${package.client.ws.lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
 		<path refid="junit-lib" />
 		<pathelement path="${classes.dir}" />
-		<pathelement path="${dist.exploded.dir}/${package.client.remote.conf.dir}" />
+		<pathelement path="${package.client.remote.conf.dir}" />
 	</path>
 
 	<path id="ws-client-cp">
-		<fileset dir="${dist.exploded.dir}/${package.client.ws.lib.dir}">
+		<fileset dir="${package.client.ws.lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
 		<fileset dir="lib">
 			<include name="**/*.jar" />
 		</fileset>
 		<pathelement path="${classes.dir}" />
-		<pathelement path="${dist.exploded.dir}/${package.client.ws.conf.dir}" />
+		<pathelement path="${package.client.ws.conf.dir}" />
 	</path>
 
 	<path id="instrumented.classpath">
@@ -181,7 +181,7 @@
 		<attribute name="includePattern" />
 		<attribute name="junitreportfile" />
 		<attribute name="excludePattern" />
-		<attribute name="loginConfig.location" default="${dist.exploded.dir}/${package.client.local.conf.dir}"/>
+		<attribute name="loginConfig.location" default="${package.client.local.conf.dir}"/>
 		<sequential>
 			<delete dir="@{junitOutputDir}" />
 			<mkdir dir="@{junitOutputDir}" />
@@ -426,7 +426,7 @@
 				<SDKCompileJUnit compileClasspath="local-client-cp" includePattern="**/security/GridApplicationServiceImpl.java" excludePattern="" />
 			</then>
 		</if>
-		<SDKRunJUnit junitClasspath="local-client-cp" junitOutputDir="${report.dir.security-thick-client}" includePattern="**/security/*SecurityTest.class" excludePattern="**/security/Writable*.class" loginConfig.location="${dist.exploded.dir}/${package.client.local.conf.dir}" junitreportfile="TEST-securityThickClient.xml"/>
+		<SDKRunJUnit junitClasspath="local-client-cp" junitOutputDir="${report.dir.security-thick-client}" includePattern="**/security/*SecurityTest.class" excludePattern="**/security/Writable*.class" loginConfig.location="${package.client.local.conf.dir}" junitreportfile="TEST-securityThickClient.xml"/>
 		<SDKGenerateReport junitOutputDir="${report.dir.security-thick-client}" />
 	</target>
 
@@ -453,7 +453,7 @@
 				<SDKCompileJUnit compileClasspath="remote-client-cp" includePattern="**/security/GridApplicationServiceImpl.java" excludePattern="" />
 			</then>
 		</if>
-		<SDKRunJUnit junitClasspath="remote-client-cp" junitOutputDir="${report.dir.security-remote-client}" includePattern="**/security/*SecurityTest.class" excludePattern="**/security/Writable*.class" loginConfig.location="${dist.exploded.dir}/${package.client.remote.conf.dir}" junitreportfile="TEST-securityRemoteClient.xml"/>
+		<SDKRunJUnit junitClasspath="remote-client-cp" junitOutputDir="${report.dir.security-remote-client}" includePattern="**/security/*SecurityTest.class" excludePattern="**/security/Writable*.class" loginConfig.location="${package.client.remote.conf.dir}" junitreportfile="TEST-securityRemoteClient.xml"/>
 		<SDKGenerateReport junitOutputDir="${report.dir.security-remote-client}" />
 	</target>
 
@@ -463,7 +463,7 @@
 
 	<target name="writeDatabaseCleanUpTest" depends="createDir">
 		<SDKCompileJUnit compileClasspath="local-client-cp" includePattern="**/*Writable*.java" excludePattern="" />
-		<copy todir="${dist.exploded.dir}/${package.client.local.conf.dir}" overwrite="true">
+		<copy todir="${package.client.local.conf.dir}" overwrite="true">
 			<fileset dir="conf">
 				<include name="**/*-writableapi-test.xml" />
 			</fileset>
