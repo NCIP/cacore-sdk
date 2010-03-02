@@ -24,6 +24,8 @@
 				<prop key="resultOutputFormatter">resultOutputFormatter.xsl</prop>
 				<prop key="rowCounter">200</prop>
 				<prop key="securityEnabled">@SECURITY_ENABLED@</prop>
+				<prop key="enableISO21090DataTypes">@ENABLE_ISO21090_DATATYPES@</prop>
+				<prop key="enableRestfulHtmlInterface">@ENABLE_RESTFUL_HTML_INTERFACE@</prop>
 			</props>
 		</constructor-arg>
 	</bean>
