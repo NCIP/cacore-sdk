@@ -97,6 +97,7 @@ public final class WritableApiSettingsPanel implements Panel, PanelValidator {
     private JComboBox getDatabaseTypeComboBox() {
         if (databaseTypeComboBox == null) {
         	databaseTypeComboBox = new JComboBox();
+        	databaseTypeComboBox.setToolTipText("Select the database type to be appended to certain tag value keys (e.g., NCI_GENERATOR.<database-type>, NCI_GENERATOR_PROPERTY.<database-type>). Used to generate primary key settings for a given class.");
         	
         	Map<String,String> dbTypeOptionsMap = OptionsMapManager.getDbTypeOptionsMap();
         	if (dbTypeOptionsMap!=null){
@@ -133,6 +134,7 @@ public final class WritableApiSettingsPanel implements Panel, PanelValidator {
     private JTextField getClmProjectNameField() {
         if (clmProjectNameField == null) {
         	clmProjectNameField = new JTextField();
+        	clmProjectNameField.setToolTipText("Enter the name to be used to populate the Common Logging Module (CLM) logging table (LOG_MESSAGE) application column.");
         	clmProjectNameField.setText(propsMgr.getDeployPropertyValue("CLM_PROJECT_NAME"));
         	clmProjectNameField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
@@ -163,6 +165,7 @@ public final class WritableApiSettingsPanel implements Panel, PanelValidator {
     private JTextField getIdentityGeneratorTagField() {
         if (identityGeneratorTagField == null) {
         	identityGeneratorTagField = new JTextField();
+        	identityGeneratorTagField.setToolTipText("If using system-wide primary key generator settings, enter the value for the primary key generator class.");        	
         	identityGeneratorTagField.setText(propsMgr.getDeployPropertyValue("IDENTITY_GENERATOR_TAG"));
         	identityGeneratorTagField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {

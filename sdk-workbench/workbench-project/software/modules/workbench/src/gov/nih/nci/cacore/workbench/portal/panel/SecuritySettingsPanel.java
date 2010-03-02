@@ -55,7 +55,7 @@ public final class SecuritySettingsPanel implements Panel, PanelValidator {
     private JTextField csmProjectNameField = null;
     private JCheckBox  cacheProtectionElementsCheckBox = null;
     
-    private JCheckBox enableCaGridLoginModuleCheckBox = null;
+    private JCheckBox  enableCaGridLoginModuleCheckBox = null;
     private JTextField caGridLoginModuleNameField = null;
     private JTextField sdkGridLoginSvcNameField = null;
 	
@@ -90,7 +90,7 @@ public final class SecuritySettingsPanel implements Panel, PanelValidator {
     private JCheckBox getEnableSecurityCheckBox() {
         if (enableSecurityCheckBox == null) {
         	enableSecurityCheckBox = new JCheckBox();
-        	enableSecurityCheckBox.setToolTipText("Enable Security Extension?");
+        	enableSecurityCheckBox.setToolTipText("Toggle to enable/disable Security within the generated system. Applies to all of the SDK interfaces.");
         	enableSecurityCheckBox.setHorizontalAlignment(SwingConstants.LEADING);
         	enableSecurityCheckBox.setSelected(Boolean.parseBoolean(propsMgr.getDeployPropertyValue("ENABLE_SECURITY")));
         	enableSecurityCheckBox.setHorizontalTextPosition(SwingConstants.LEFT);
@@ -120,7 +120,7 @@ public final class SecuritySettingsPanel implements Panel, PanelValidator {
     private JCheckBox getEnableInstanceLevelSecurityCheckBox() {
         if (enableInstanceLevelSecurityCheckBox == null) {
         	enableInstanceLevelSecurityCheckBox = new JCheckBox();
-        	enableInstanceLevelSecurityCheckBox.setToolTipText("Enable Instance Level Security?");
+        	enableInstanceLevelSecurityCheckBox.setToolTipText("Toggle to enable/disable CSM Instance Level Security. Only relevant if Security is enabled.");
         	enableInstanceLevelSecurityCheckBox.setHorizontalAlignment(SwingConstants.LEADING);
         	enableInstanceLevelSecurityCheckBox.setSelected(Boolean.parseBoolean(propsMgr.getDeployPropertyValue("ENABLE_INSTANCE_LEVEL_SECURITY")));
         	enableInstanceLevelSecurityCheckBox.setHorizontalTextPosition(SwingConstants.LEFT);
@@ -154,7 +154,7 @@ public final class SecuritySettingsPanel implements Panel, PanelValidator {
     private JCheckBox getEnableAttributeLevelSecurityCheckBox() {
         if (enableAttributeLevelSecurityCheckBox == null) {
         	enableAttributeLevelSecurityCheckBox = new JCheckBox();
-        	enableAttributeLevelSecurityCheckBox.setToolTipText("Enable Attribute Level Security?");
+        	enableAttributeLevelSecurityCheckBox.setToolTipText("Toggle to enable/disable CSM Attribute Level Security. Only relevant if Security is enabled.");
         	enableAttributeLevelSecurityCheckBox.setHorizontalAlignment(SwingConstants.LEADING);
         	enableAttributeLevelSecurityCheckBox.setSelected(Boolean.parseBoolean(propsMgr.getDeployPropertyValue("ENABLE_ATTRIBUTE_LEVEL_SECURITY")));
         	enableAttributeLevelSecurityCheckBox.setHorizontalTextPosition(SwingConstants.LEFT);
@@ -180,6 +180,7 @@ public final class SecuritySettingsPanel implements Panel, PanelValidator {
     private JTextField getCsmProjectNameField() {
         if (csmProjectNameField == null) {
         	csmProjectNameField = new JTextField();
+        	csmProjectNameField.setToolTipText("Enter the CSM project name.  Will be used as a prefix when creating the CSM security configuration file name.");
         	csmProjectNameField.setText(propsMgr.getDeployPropertyValue("CSM_PROJECT_NAME"));
         	csmProjectNameField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
@@ -210,7 +211,7 @@ public final class SecuritySettingsPanel implements Panel, PanelValidator {
     private JCheckBox getCacheProtectionElementsCheckBox() {
         if (cacheProtectionElementsCheckBox == null) {
         	cacheProtectionElementsCheckBox = new JCheckBox();
-        	cacheProtectionElementsCheckBox.setToolTipText("Cache Protection Elements?");
+        	cacheProtectionElementsCheckBox.setToolTipText("Toggle to enable/disable caching of CSM Protection Elements.");
         	cacheProtectionElementsCheckBox.setHorizontalAlignment(SwingConstants.LEADING);
         	cacheProtectionElementsCheckBox.setSelected(Boolean.parseBoolean(propsMgr.getDeployPropertyValue("CACHE_PROTECTION_ELEMENTS")));
         	cacheProtectionElementsCheckBox.setHorizontalTextPosition(SwingConstants.LEFT);
@@ -236,7 +237,7 @@ public final class SecuritySettingsPanel implements Panel, PanelValidator {
     private JCheckBox getEnableCaGridLoginModuleCheckBox() {
         if (enableCaGridLoginModuleCheckBox == null) {
         	enableCaGridLoginModuleCheckBox = new JCheckBox();
-        	enableCaGridLoginModuleCheckBox.setToolTipText("Enable caGrid Authorization Login Module?");
+        	enableCaGridLoginModuleCheckBox.setToolTipText("Toggle to enable/disable the caGrid Login Module. Only relevant if Security is enabled.");
         	enableCaGridLoginModuleCheckBox.setHorizontalAlignment(SwingConstants.LEADING);
         	enableCaGridLoginModuleCheckBox.setSelected(Boolean.parseBoolean(propsMgr.getDeployPropertyValue("ENABLE_GRID_LOGIN_MODULE")));
         	enableCaGridLoginModuleCheckBox.setHorizontalTextPosition(SwingConstants.LEFT);
@@ -266,6 +267,7 @@ public final class SecuritySettingsPanel implements Panel, PanelValidator {
     private JTextField getCaGridLoginModuleNameField() {
     	if (caGridLoginModuleNameField == null) {
     		caGridLoginModuleNameField = new JTextField();
+    		caGridLoginModuleNameField.setToolTipText("Enter the caGrid Login Module name. Only relevant if Security and the caGrid Login Module are both enabled."); 
     		caGridLoginModuleNameField.setText(propsMgr.getDeployPropertyValue("CAGRID_LOGIN_MODULE_NAME"));
     		caGridLoginModuleNameField.getDocument().addDocumentListener(new DocumentListener() {
     			public void changedUpdate(DocumentEvent e) {
@@ -296,6 +298,7 @@ public final class SecuritySettingsPanel implements Panel, PanelValidator {
     private JTextField getSdkGridLoginSvcNameField() {
     	if (sdkGridLoginSvcNameField == null) {
     		sdkGridLoginSvcNameField = new JTextField();
+    		sdkGridLoginSvcNameField.setToolTipText("Enter the SDK GRID Login Service name. Only relevant if Security and the caGrid Login Module are both enabled.");
     		sdkGridLoginSvcNameField.setText(propsMgr.getDeployPropertyValue("SDK_GRID_LOGIN_SERVICE_NAME"));
     		sdkGridLoginSvcNameField.getDocument().addDocumentListener(new DocumentListener() {
     			public void changedUpdate(DocumentEvent e) {

@@ -104,7 +104,7 @@ public final class ModelSettingsPanel implements Panel, PanelValidator {
     private JTextField getModelFileField() {
         if (modelFileField == null) {
         	modelFileField = new JTextField();
-        	
+        	modelFileField.setToolTipText("Enter the absolute path of the file containing the object/data model");
         	modelFileField.setText(propsMgr.getDeployPropertyValue("MODEL_FILE_PATH"));
 
         	modelFileField.getDocument().addDocumentListener(new DocumentListener() {
@@ -167,6 +167,7 @@ public final class ModelSettingsPanel implements Panel, PanelValidator {
     private JComboBox getModelFileTypeComboBox() {
         if (modelFileTypeComboBox == null) {
         	modelFileTypeComboBox = new JComboBox();
+        	modelFileTypeComboBox.setToolTipText("Specify whether the object/data model file was created using Enterprise Architect (EA) or ArgoUML (ARGO)");
         	
             Map<String,String> modelFileTypeOptionsMap = OptionsMapManager.getModelFileTypeOptionsMap();
         	if (modelFileTypeOptionsMap != null){
@@ -185,6 +186,7 @@ public final class ModelSettingsPanel implements Panel, PanelValidator {
  
         	modelFileTypeComboBox.addFocusListener(new FocusChangeHandler());
         	
+        	modelFileTypeComboBox.setEditable(false);
         	modelFileTypeComboBox.setEnabled(false);
         }
         return modelFileTypeComboBox;
@@ -198,6 +200,7 @@ public final class ModelSettingsPanel implements Panel, PanelValidator {
     private JTextField getLogicalModelField() {
         if (logicalModelField == null) {
         	logicalModelField = new JTextField();
+        	logicalModelField.setToolTipText("Enter the name of the base package within the object/data model that contains the logical model data");
         	logicalModelField.setText(propsMgr.getDeployPropertyValue("LOGICAL_MODEL"));
         	logicalModelField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
@@ -228,6 +231,7 @@ public final class ModelSettingsPanel implements Panel, PanelValidator {
     private JTextField getDataModelField() {
         if (dataModelField == null) {
         	dataModelField = new JTextField();
+        	dataModelField.setToolTipText("Enter the name of the base package within the object/data model that contains the data model data");
         	dataModelField.setText(propsMgr.getDeployPropertyValue("DATA_MODEL"));
         	dataModelField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
@@ -258,6 +262,7 @@ public final class ModelSettingsPanel implements Panel, PanelValidator {
     private JTextField getIncludePackageField() {
         if (includePackageField == null) {
         	includePackageField = new JTextField();
+        	includePackageField.setToolTipText("Enter the regular expression (java.util.regex) pattern(s) of any fully qualified package names within the object/data model that should be processed by the code generator.");
         	includePackageField.setText(propsMgr.getDeployPropertyValue("INCLUDE_PACKAGE"));
         	includePackageField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
@@ -288,6 +293,7 @@ public final class ModelSettingsPanel implements Panel, PanelValidator {
     private JTextField getExcludePackageField() {
         if (excludePackageField == null) {
         	excludePackageField = new JTextField();
+        	excludePackageField.setToolTipText("Enter the regular expression (java.util.regex) pattern(s) of the fully qualified package name(s) within the object/data model that should be ignored by the code generator.");
         	excludePackageField.setText(propsMgr.getDeployPropertyValue("EXCLUDE_PACKAGE"));
         	excludePackageField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
@@ -318,6 +324,7 @@ public final class ModelSettingsPanel implements Panel, PanelValidator {
     private JTextField getExcludeNameField() {
         if (excludeNameField == null) {
         	excludeNameField = new JTextField();
+        	excludeNameField.setToolTipText("Enter the regular expression (java.util.regex) pattern(s) of the fully qualified class name(s) within the object/data model that should be ignored by the code generator.");
         	excludeNameField.setText(propsMgr.getDeployPropertyValue("EXCLUDE_NAME"));
         	excludeNameField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
@@ -348,6 +355,7 @@ public final class ModelSettingsPanel implements Panel, PanelValidator {
     private JTextField getExcludeNamespaceField() {
         if (excludeNamespaceField == null) {
         	excludeNamespaceField = new JTextField();
+        	excludeNamespaceField.setToolTipText("Enter the regular expression (java.util.regex) namespace pattern of the fully qualified package name(s) within the object/data model that should be ignored by the code generator.");
         	excludeNamespaceField.setText(propsMgr.getDeployPropertyValue("EXCLUDE_NAMESPACE"));
         	excludeNamespaceField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
