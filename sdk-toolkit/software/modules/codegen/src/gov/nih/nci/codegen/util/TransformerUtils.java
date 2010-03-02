@@ -16,6 +16,7 @@ import gov.nih.nci.ncicb.xmiinout.domain.UMLModel;
 import gov.nih.nci.ncicb.xmiinout.domain.UMLPackage;
 import gov.nih.nci.ncicb.xmiinout.domain.UMLTaggableElement;
 import gov.nih.nci.ncicb.xmiinout.domain.UMLTaggedValue;
+import gov.nih.nci.ncicb.xmiinout.domain.bean.UMLAssociationEndBean;
 import gov.nih.nci.ncicb.xmiinout.util.ModelUtil;
 
 import java.util.ArrayList;
@@ -33,6 +34,7 @@ import java.util.Vector;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
+import org.jdom.Element;
 
 public class TransformerUtils
 {
@@ -720,7 +722,7 @@ public class TransformerUtils
 	}	
 	
 	public String getLowerBound(UMLAssociationEnd otherEnd) {
-
+		
 		int multiplicity = otherEnd.getLowMultiplicity();
 		String finalMultiplicity = new String();
 		if (multiplicity == -1) {
@@ -732,6 +734,26 @@ public class TransformerUtils
 		}
 		return finalMultiplicity;
 	}	
+	
+	public String getMultiplicityValue(UMLAssociationEnd assocEnd){
+		Element element = ((UMLAssociationEndBean)assocEnd).getJDomElement();
+		
+		org.jdom.Attribute multAtt = element.getAttribute("multiplicity");
+		log.debug("associationEnd: " + assocEnd.getRoleName() + "; multiplicity: " + multAtt.getValue());	
+		
+		return multAtt.getValue();
+
+	}
+	
+	public boolean isMultiplicityValid(UMLAssociationEnd assocEnd){
+		String multValue = getMultiplicityValue(assocEnd);
+		
+		if(multValue == null || "".equalsIgnoreCase(multValue) || multValue.startsWith(".") || multValue.endsWith(".")) 
+			return false;
+		
+		return true;
+	}
+		
 	
 	/**
 	 * @param thisEnd
