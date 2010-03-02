@@ -144,17 +144,34 @@
 			<equals arg1="${GENERATE_BEANS}" arg2="yes" casesensitive="false" trim="true" />
 		</or>
 	</condition>
-	<condition property="ENABLE_CASTOR_MAPPING_GENERATION" value="true" else="false">
+	<condition property="ISO21090_DATATYPES_ENABLED" value="true" else="false">
 		<or>
-			<equals arg1="${GENERATE_CASTOR_MAPPING}" arg2="true" casesensitive="false" trim="true" />
-			<equals arg1="${GENERATE_CASTOR_MAPPING}" arg2="yes" casesensitive="false" trim="true" />
+			<equals arg1="${ENABLE_ISO21090_DATATYPES}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${ENABLE_ISO21090_DATATYPES}" arg2="yes" casesensitive="false" trim="true" />
 		</or>
 	</condition>
+
+	<condition property="ENABLE_CASTOR_MAPPING_GENERATION" value="true" else="false">
+		<and>
+			<or>
+				<equals arg1="${GENERATE_CASTOR_MAPPING}" arg2="true" casesensitive="false" trim="true" />
+				<equals arg1="${GENERATE_CASTOR_MAPPING}" arg2="yes" casesensitive="false" trim="true" />
+			</or>
+			<not>
+				<equals arg1="${ISO21090_DATATYPES_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+			</not>
+		</and>
+	</condition>
 	<condition property="ENABLE_XSD_GENERATION" value="true" else="false">
-		<or>
-			<equals arg1="${GENERATE_XSD}" arg2="true" casesensitive="false" trim="true" />
-			<equals arg1="${GENERATE_XSD}" arg2="yes" casesensitive="false" trim="true" />
-		</or>
+		<and>
+			<or>
+				<equals arg1="${GENERATE_XSD}" arg2="true" casesensitive="false" trim="true" />
+				<equals arg1="${GENERATE_XSD}" arg2="yes" casesensitive="false" trim="true" />
+			</or>
+			<not>
+				<equals arg1="${ISO21090_DATATYPES_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+			</not>
+		</and>
 	</condition>
 	<condition property="ENABLE_GENERATE_XSD_WITH_GME_TAGS" value="true" else="false">
 		<and>
@@ -191,10 +208,15 @@
 		</or>
 	</condition>
 	<condition property="ENABLE_WSDD_GENERATION" value="true" else="false">
-		<or>
-			<equals arg1="${GENERATE_WSDD}" arg2="true" casesensitive="false" trim="true" />
-			<equals arg1="${GENERATE_WSDD}" arg2="yes" casesensitive="false" trim="true" />
-		</or>
+		<and>
+			<or>
+				<equals arg1="${GENERATE_WSDD}" arg2="true" casesensitive="false" trim="true" />
+				<equals arg1="${GENERATE_WSDD}" arg2="yes" casesensitive="false" trim="true" />
+			</or>
+			<not>
+				<equals arg1="${ISO21090_DATATYPES_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+			</not>
+		</and>
 	</condition>
 	<condition property="ENABLE_CLM_LOGGER_CFG_GENERATION" value="true" else="false">
 		<and>
@@ -344,7 +366,7 @@
 			<filter token="HIBERNATE_SHOW_SQL" value="${HIBERNATE_SHOW_SQL}" />
 
 			<filter token="CAGRID_LOGIN_MODULE_NAME" value="${CAGRID_LOGIN_MODULE_NAME}" />
-
+			<filter token="ENABLE_ISO21090_DATATYPES" value="${ENABLE_ISO21090_DATATYPES}" />
 		</filterset>
 		<filterset id="filtertoken2" begintoken="${xml.comment.start}@" endtoken="@${xml.comment.end}" onmissingfiltersfile="fail">
 			<filter token="SECURITY_START" value="${SECURITY_START}" />
