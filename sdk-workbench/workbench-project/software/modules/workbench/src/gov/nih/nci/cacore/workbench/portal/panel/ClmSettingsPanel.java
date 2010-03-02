@@ -96,7 +96,7 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
     private JCheckBox getClmUseDbConnectionSettingsCheckBox() {
         if (clmUseDbConnectionSettingsCheckBox == null) {
         	clmUseDbConnectionSettingsCheckBox = new JCheckBox();
-        	clmUseDbConnectionSettingsCheckBox.setToolTipText("Use DB Connection Settings?");
+        	clmUseDbConnectionSettingsCheckBox.setToolTipText("Toggle to enable/disable using the same database options settings as specified on the Application Database tab");
         	clmUseDbConnectionSettingsCheckBox.setHorizontalAlignment(SwingConstants.LEADING);
         	clmUseDbConnectionSettingsCheckBox.setSelected(Boolean.parseBoolean(parentContainer.getPropertiesManager().getDeployPropertyValue("CLM_USE_DB_CONNECTION_SETTINGS")));
         	clmUseDbConnectionSettingsCheckBox.setHorizontalTextPosition(SwingConstants.LEFT);
@@ -105,7 +105,7 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					parentContainer.syncDbClmDbFields();
 					toggleClmDbConnectionFields();
-					toggleRecreateClmDBFields();
+					toggleRecreateClmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
 				}
@@ -136,6 +136,7 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
     private JComboBox getClmDbTypeComboBox() {
         if (clmDbTypeComboBox == null) {
         	clmDbTypeComboBox = new JComboBox();
+        	clmDbTypeComboBox.setToolTipText("The Database Type is automatically synchronized with the Database Type property selected on the App DB tab");
         	
         	Map<String,String> clmDbTypeOptionsMap = OptionsMapManager.getDbTypeOptionsMap();
         	if (clmDbTypeOptionsMap!=null){
@@ -180,6 +181,7 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
     private JTextField getClmDbConnectionUrlField() {
         if (clmDbConnectionUrlField == null) {
         	clmDbConnectionUrlField = new JTextField();
+        	clmDbConnectionUrlField.setToolTipText("This is a read-only compound property composed of the DB Hostname, Port, and Schema properties");
         	clmDbConnectionUrlField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("CLM_DB_CONNECTION_URL"));
         	clmDbConnectionUrlField.setEnabled(false);// use hostname, port, schema fields instead
         	clmDbConnectionUrlField.getDocument().addDocumentListener(new DocumentListener() {
@@ -219,25 +221,26 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
     private JTextField getClmDbHostnameField() {
         if (clmDbHostnameField == null) {
         	clmDbHostnameField = new JTextField();
+        	clmDbHostnameField.setToolTipText("Enter the hostname (or sitename) that uniquely identifies the database instance on the network");
         	clmDbHostnameField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("CLM_DB_SERVER"));
         	clmDbHostnameField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
                 	updateClmDbFields();
-                	toggleReCreateClmDBFields();
+                	toggleRecreateClmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
 
                 public void removeUpdate(DocumentEvent e) {
                 	updateClmDbFields();
-                	toggleReCreateClmDBFields();
+                	toggleRecreateClmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
 
                 public void insertUpdate(DocumentEvent e) {
                 	updateClmDbFields();
-                	toggleReCreateClmDBFields();
+                	toggleRecreateClmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
@@ -263,25 +266,26 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
     private JTextField getClmDbPortField() {
         if (clmDbPortField == null) {
         	clmDbPortField = new JTextField();
+        	clmDbPortField.setToolTipText("Enter the port number the database instance is listening to for data requests");
         	clmDbPortField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("CLM_DB_SERVER_PORT"));
         	clmDbPortField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
                 	updateClmDbFields();
-                	toggleReCreateClmDBFields();
+                	toggleRecreateClmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
 
                 public void removeUpdate(DocumentEvent e) {
                 	updateClmDbFields();
-                	toggleReCreateClmDBFields();
+                	toggleRecreateClmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
 
                 public void insertUpdate(DocumentEvent e) {
                 	updateClmDbFields();
-                	toggleReCreateClmDBFields();
+                	toggleRecreateClmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
@@ -307,25 +311,26 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
     private JTextField getClmDbSchemaField() {
         if (clmDbSchemaField == null) {
         	clmDbSchemaField = new JTextField();
+        	clmDbSchemaField.setToolTipText("Enter the database schema name");
         	clmDbSchemaField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("CLM_DB_NAME"));
         	clmDbSchemaField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
                 	updateClmDbFields();
-                	toggleReCreateClmDBFields();
+                	toggleRecreateClmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
 
                 public void removeUpdate(DocumentEvent e) {
                 	updateClmDbFields();
-                	toggleReCreateClmDBFields();
+                	toggleRecreateClmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
 
                 public void insertUpdate(DocumentEvent e) {
                 	updateClmDbFields();
-                	toggleReCreateClmDBFields();
+                	toggleRecreateClmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
@@ -363,22 +368,23 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
     private JTextField getClmDbUsernameField() {
         if (clmDbUsernameField == null) {
         	clmDbUsernameField = new JTextField();
+        	clmDbUsernameField.setToolTipText("Enter the username used to authenticate database requests");
         	clmDbUsernameField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("CLM_DB_USERNAME"));
         	clmDbUsernameField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
-                	toggleReCreateClmDBFields();
+                	toggleRecreateClmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
 
                 public void removeUpdate(DocumentEvent e) {
-                	toggleReCreateClmDBFields();
+                	toggleRecreateClmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
 
                 public void insertUpdate(DocumentEvent e) {
-                	toggleReCreateClmDBFields();
+                	toggleRecreateClmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
@@ -408,6 +414,7 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
     private JTextField getClmDbPasswordField() {
         if (clmDbPasswordField == null) {
         	clmDbPasswordField = new JTextField();
+        	clmDbPasswordField.setToolTipText("Enter the password used to authenticate database requests");
         	clmDbPasswordField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("CLM_DB_PASSWORD"));
         	clmDbPasswordField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
@@ -442,8 +449,8 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
     	getClmDbPasswordField().setEnabled(isEnabled);
     }
     
-    public void toggleReCreateClmDBFields() {
-		if (ValidationUtils.isNotBlank(getClmDbSchema()) && parentContainer.isAppDbAndClmSchemaSame() ) {
+    public void toggleRecreateClmDbFields() {
+		if (ValidationUtils.isNotBlank(getClmDbSchema()) && (parentContainer.isAppDbAndClmSchemaSame() || parentContainer.isCsmDbAndClmSchemaSame() )) {
 			clmDbDropSchemaCheckBox.setSelected(false);
 			clmDbDropSchemaCheckBox.setEnabled(false);
 		} else {
@@ -473,15 +480,6 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
     	}
     }
     
-    public void toggleRecreateClmDBFields() {
-		if (ValidationUtils.isNotBlank(getClmDbSchema()) && parentContainer.isAppDbAndClmSchemaSame() ) {
-			clmDbDropSchemaCheckBox.setSelected(false);
-			clmDbDropSchemaCheckBox.setEnabled(false);
-		} else {
-			clmDbDropSchemaCheckBox.setEnabled(true);
-		}
-    }
-    
     /**
      * This method initializes jButton
      * 
@@ -490,6 +488,7 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
     private JButton getTestConnectionButton() {
         if (testConnectionButton == null) {
         	testConnectionButton = new JButton();
+        	testConnectionButton.setToolTipText("Click to test a connection to the CLM database using the specified properties");
         	testConnectionButton.setText("Test Connection");
         	testConnectionButton.setIcon(LookAndFeel.getGenerateApplicationIcon());
         	testConnectionButton.addActionListener(new java.awt.event.ActionListener() {
@@ -516,6 +515,7 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
     private JButton getClmDbSqlFilePathButton() {
         if (clmDbSqlFilePathButton == null) {
         	clmDbSqlFilePathButton = new JButton();
+        	clmDbSqlFilePathButton.setToolTipText("Click to select the SQL file to use when recreating the CLM database objects such as schema, tables, and views.");
         	clmDbSqlFilePathButton.setText("Browse");
         	clmDbSqlFilePathButton.setIcon(LookAndFeel.getBrowseIcon());
         	clmDbSqlFilePathButton.addActionListener(new java.awt.event.ActionListener() {
@@ -565,6 +565,7 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
     private JCheckBox getClmDbDropSchemaCheckBox() {
         if (clmDbDropSchemaCheckBox == null) {
         	clmDbDropSchemaCheckBox = new JCheckBox();
+        	clmDbDropSchemaCheckBox.setToolTipText("If checked, all CLM database objects like tables, views, and sequences will be dropped at deployment time");
         	clmDbDropSchemaCheckBox.setToolTipText("Drop all of the tables from the CLM Database Schema?");
         	clmDbDropSchemaCheckBox.setHorizontalAlignment(SwingConstants.LEADING);
         	clmDbDropSchemaCheckBox.setSelected(Boolean.parseBoolean(parentContainer.getPropertiesManager().getDeployPropertyValue("CLM_DB_DROP_SCHEMA")));
@@ -594,6 +595,7 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
     public JTextField getClmDbSqlFileField() {
         if (clmDbSqlFileField == null) {
         	clmDbSqlFileField = new JTextField();
+        	clmDbSqlFileField.setToolTipText("Enter the absolute path to the CLM SQL file to be executed at the deployment time. Alternatively, use the Browse button");
         	
         	String dbType = getClmDbType();
         	if ("oracle".equalsIgnoreCase(dbType)){
@@ -1197,6 +1199,12 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
     			}
     		}
 
+    		if (getClmDbDropSchemaCheckBox().isSelected() && !parentContainer.isCsmDbAndClmSchemaSame()){
+    			if (ValidationUtils.isBlank(this.getClmDbSqlFileField().getText())) {
+    				result.add(new SimpleValidationMessage(CLM_DB_SQL_FILE + " must not be blank when "+CLM_DB_DROP_SCHEMA+" is selected.", Severity.ERROR, CLM_DB_SQL_FILE));
+    			}
+    		}    		
+
     		String clmDbSchema = getClmDbSchemaField().getText();
     		if (ValidationUtils.isNotBlank(clmDbSchema) && parentContainer.isAppDbAndClmSchemaSame() && parentContainer.isAppDbDropSchemaSelected() ) {
     			//TODO :: investigate if there is a way to visually signal that a CheckBox has a validation error.
@@ -1211,6 +1219,20 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
     				result.add(new SimpleValidationMessage(CLM_DB_SQL_FILE + " must not be blank when the application DB is being dropped, and both the App DB and CLM DB schema are the same.", Severity.ERROR, CLM_DB_SQL_FILE));
     			}
     		}
+    		
+    		if (ValidationUtils.isNotBlank(clmDbSchema) && parentContainer.isCsmDbAndClmSchemaSame() && parentContainer.isCsmDbDropSchemaSelected() ) {
+    			//TODO :: investigate if there is a way to visually signal that a CheckBox has a validation error.
+    			//        Currently, creating a validation error for the CheckBox has no effect.  As a result,
+    			//        using toggleReCreateClmDBFields() instead to enforce rule
+//  			if (getClmDbDropSchemaCheckBox().isSelected()){
+//  			log.debug("* * * Validation error: App DB and CLM Schema are the same, and CLM Drop Schema CheckBox is selected.");
+//  			result.add(new SimpleValidationMessage(CLM_DB_DROP_SCHEMA + " must not selected when both the App DB and CLM schema are the same.", Severity.ERROR, CLM_DB_DROP_SCHEMA));
+//  			}
+
+    			if (ValidationUtils.isBlank(this.getClmDbSqlFileField().getText())) {
+    				result.add(new SimpleValidationMessage(CLM_DB_SQL_FILE + " must not be blank when the CSM DB is being dropped, and both the CSM DB and CLM DB schema are the same.", Severity.ERROR, CLM_DB_SQL_FILE));
+    			}
+    		}    		
 
     		if (ValidationUtils.isNotBlank(this.getClmDbSqlFileField().getText())) {
     			File file = new File(this.getClmDbSqlFileField().getText());
@@ -1251,7 +1273,7 @@ public final class ClmSettingsPanel implements Panel, PanelValidator {
         
         updateClmDbFields();
         toggleClmDbConnectionFields();
-        toggleReCreateClmDBFields();
+        toggleRecreateClmDbFields();
         parentContainer.toggleClmTestConnectionButton();
     }
     
