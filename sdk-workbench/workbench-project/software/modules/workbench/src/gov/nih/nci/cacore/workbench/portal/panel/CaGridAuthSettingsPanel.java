@@ -79,6 +79,7 @@ public final class CaGridAuthSettingsPanel implements Panel, PanelValidator {
     private JTextField getGridSecureCertFileField() {
     	if (gridSecureCertFileField == null) {
     		gridSecureCertFileField = new JTextField();
+    		gridSecureCertFileField.setToolTipText("Enter the absolute path to the caGrid Security Certificate file used to configure the caGrid SSL port to authenticate the user when logging into caGrid.  Alternatively, use the 'Browse' button");
     		gridSecureCertFileField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("grid.secure.cert.file"));
     		
     		gridSecureCertFileField.getDocument().addDocumentListener(new DocumentListener() {
@@ -127,6 +128,7 @@ public final class CaGridAuthSettingsPanel implements Panel, PanelValidator {
     private JTextField getGridSecureKeyFileField() {
     	if (gridSecureKeyFileField == null) {
     		gridSecureKeyFileField = new JTextField();
+    		gridSecureKeyFileField.setToolTipText("Enter the absolute path to the caGrid Security Key file used to configure the caGrid SSL port to authenticate the user when logging into caGrid.  Alternatively, use the 'Browse' button");
     		gridSecureKeyFileField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("grid.secure.key.file"));
     		gridSecureKeyFileField.getDocument().addDocumentListener(new DocumentListener() {
     			public void changedUpdate(DocumentEvent e) {
@@ -174,6 +176,7 @@ public final class CaGridAuthSettingsPanel implements Panel, PanelValidator {
     private JButton getGridSecureKeyFilePathButton() {
         if (gridSecureKeyFilePathButton == null) {
         	gridSecureKeyFilePathButton = new JButton();
+        	gridSecureKeyFilePathButton.setToolTipText("Click to select the caGrid Security Key file used to configure the caGrid SSL port to authenticate the user when logging into caGrid");
         	gridSecureKeyFilePathButton.setText("Browse");
         	gridSecureKeyFilePathButton.setIcon(LookAndFeel.getBrowseIcon());
         	gridSecureKeyFilePathButton.addActionListener(new java.awt.event.ActionListener() {
@@ -204,6 +207,7 @@ public final class CaGridAuthSettingsPanel implements Panel, PanelValidator {
     private JButton getGridSecureCertFilePathButton() {
         if (gridSecureCertFilePathButton == null) {
         	gridSecureCertFilePathButton = new JButton();
+        	gridSecureCertFilePathButton.setToolTipText("Click to select the caGrid Security Certificate file used to configure the caGrid SSL port to authenticate the user when logging into caGrid");
         	gridSecureCertFilePathButton.setText("Browse");
         	gridSecureCertFilePathButton.setIcon(LookAndFeel.getBrowseIcon());
         	gridSecureCertFilePathButton.addActionListener(new java.awt.event.ActionListener() {
@@ -234,6 +238,7 @@ public final class CaGridAuthSettingsPanel implements Panel, PanelValidator {
     private JComboBox getCaGridTargetGridComboBox() {
     	if (caGridTargetGridComboBox == null) {
     		caGridTargetGridComboBox = new JComboBox(); 
+    		caGridTargetGridComboBox.setToolTipText("Specify the target caGrid v1.3 environment that the generated application should connect to");
     		
     		Map<String,String> caGridTargetGridOptionsMap = OptionsMapManager.getCaGridTargetGridOptionsMap();
         	if (caGridTargetGridOptionsMap != null){

@@ -57,6 +57,7 @@ public final class AdvancedSettingsPanel implements Panel, PanelValidator {
     private JTextField getCachePathField() {
     	if (cachePathField == null) {
     		cachePathField = new JTextField();
+    		cachePathField.setToolTipText("Enter the absolute directory path of the EHCache");
     		cachePathField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("CACHE_PATH"));
     		
     		cachePathField.getDocument().addDocumentListener(new DocumentListener() {
@@ -88,6 +89,7 @@ public final class AdvancedSettingsPanel implements Panel, PanelValidator {
     private JTextField getAppBasePathLinuxField() {
     	if (appBasePathLinuxField == null) {
     		appBasePathLinuxField = new JTextField();
+    		appBasePathLinuxField.setToolTipText("Enter the base Linux path where the application server and generated application artifacts will be deployed. Only relevant if the deployment Operating System (OS) is UNIX-based");
     		appBasePathLinuxField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("application.base.path.linux"));
     		
     		appBasePathLinuxField.getDocument().addDocumentListener(new DocumentListener() {
@@ -119,6 +121,7 @@ public final class AdvancedSettingsPanel implements Panel, PanelValidator {
     private JTextField getAppBasePathWindowsField() {
     	if (appBasePathWindowsField == null) {
     		appBasePathWindowsField = new JTextField();
+    		appBasePathWindowsField.setToolTipText("Enter the base Windows path where the application server and generated application artifacts will be deployed. Only relevant if the deployment Operating System (OS) is Windows-based.");
     		appBasePathWindowsField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("application.base.path.windows"));
     		
     		appBasePathWindowsField.getDocument().addDocumentListener(new DocumentListener() {
@@ -219,13 +222,13 @@ public final class AdvancedSettingsPanel implements Panel, PanelValidator {
 			gridBagConstraints31.gridwidth = 2;
 
 			appBasePathLinuxLabel = new JLabel();
-			appBasePathLinuxLabel.setText("Enter Application Base Linux Path:");
+			appBasePathLinuxLabel.setText("Linux Application Base Path:");
 			
 			appBasePathWindowsLabel = new JLabel();
-			appBasePathWindowsLabel.setText("Enter Application Base Windows Path:");
+			appBasePathWindowsLabel.setText("Windows Application Base Path:");
 			
 			cachePathLabel = new JLabel();
-			cachePathLabel.setText("Enter EHCache Path:");
+			cachePathLabel.setText("EHCache Path:");
 
 			advancedSettingsPanel = new JPanel();
 			advancedSettingsPanel.setLayout(new GridBagLayout());

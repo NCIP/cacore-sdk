@@ -93,6 +93,7 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
     private JComboBox getDbTypeComboBox() {
         if (dbTypeComboBox == null) {
         	dbTypeComboBox = new JComboBox();
+        	dbTypeComboBox.setToolTipText("Select the application database type");
         	
         	Map<String,String> dbTypeOptionsMap = OptionsMapManager.getDbTypeOptionsMap();
         	if (dbTypeOptionsMap!=null){
@@ -136,7 +137,7 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
     private JCheckBox getUseJndiBasedConnectionCheckBox() {
         if (useJndiBasedConnectionCheckBox == null) {
         	useJndiBasedConnectionCheckBox = new JCheckBox();
-        	useJndiBasedConnectionCheckBox.setToolTipText("Use a JNDI-based Connection?");
+        	useJndiBasedConnectionCheckBox.setToolTipText("Toggle to enable/disable using a JNDI-based Connection");
         	useJndiBasedConnectionCheckBox.setHorizontalAlignment(SwingConstants.LEADING);
         	useJndiBasedConnectionCheckBox.setSelected(Boolean.parseBoolean(parentContainer.getPropertiesManager().getDeployPropertyValue("DB_USE_JNDI_BASED_CONNECTION")));
         	useJndiBasedConnectionCheckBox.setHorizontalTextPosition(SwingConstants.LEFT);
@@ -167,6 +168,7 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
     public JTextField getDbJndiNameField() {
         if (dbJndiNameField == null) {
         	dbJndiNameField = new JTextField();
+        	dbJndiNameField.setToolTipText("Enter the JNDI name used in the server JNDI configuration file to lookup and identify the database configuration properties.");
         	dbJndiNameField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("DB_JNDI_NAME"));
         	dbJndiNameField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
@@ -207,6 +209,7 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
     private JTextField getDbUrlField() {
         if (dbUrlField == null) {
         	dbUrlField = new JTextField();
+        	dbUrlField.setToolTipText("This is a read-only  property composed of the DB Hostname, Port, and Schema properties");
         	dbUrlField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("DB_CONNECTION_URL"));
         	dbUrlField.setEnabled(false);// use hostname, port, schema fields instead
         	dbUrlField.getDocument().addDocumentListener(new DocumentListener() {
@@ -245,7 +248,9 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
     private JTextField getDbHostnameField() {
         if (dbHostnameField == null) {
         	dbHostnameField = new JTextField();
+        	dbHostnameField.setToolTipText("Enter the hostname (or sitename) that uniquely identifies the database instance on the network");
         	dbHostnameField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("DB_SERVER"));
+        	
         	dbHostnameField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
                 	updateDbFields();
@@ -288,6 +293,7 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
     private JTextField getDbPortField() {
         if (dbPortField == null) {
         	dbPortField = new JTextField();
+        	dbPortField.setToolTipText("Enter the port number the database instance is listening to for data requests");
         	dbPortField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("DB_SERVER_PORT"));
         	dbPortField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
@@ -331,6 +337,7 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
     private JTextField getDbSchemaField() {
         if (dbSchemaField == null) {
         	dbSchemaField = new JTextField();
+        	dbSchemaField.setToolTipText("Enter the database schema name");
         	dbSchemaField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("DB_NAME"));
         	dbSchemaField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
@@ -374,6 +381,7 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
     private JTextField getDbUsernameField() {
         if (dbUsernameField == null) {
         	dbUsernameField = new JTextField();
+        	dbUsernameField.setToolTipText("Enter the username used to authenticate database requests");
         	dbUsernameField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("DB_USERNAME"));
         	dbUsernameField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
@@ -414,6 +422,7 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
     private JTextField getDbPasswordField() {
         if (dbPasswordField == null) {
         	dbPasswordField = new JTextField();
+        	dbPasswordField.setToolTipText("Enter the password used to authenticate database requests");
         	dbPasswordField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("DB_PASSWORD"));
         	dbPasswordField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
@@ -454,6 +463,7 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
     private JButton getTestConnectionButton() {
         if (testConnectionButton == null) {
         	testConnectionButton = new JButton();
+        	testConnectionButton.setToolTipText("Click to test a connection to the application database using the specified properties");
         	testConnectionButton.setText("Test Connection");
         	testConnectionButton.setIcon(LookAndFeel.getGenerateApplicationIcon());
         	testConnectionButton.addActionListener(new java.awt.event.ActionListener() {
@@ -480,6 +490,7 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
     private JButton getDbSqlFilePathButton() {
         if (dbSqlFilePathButton == null) {
         	dbSqlFilePathButton = new JButton();
+        	dbSqlFilePathButton.setToolTipText("Click to select the SQL file to use when recreating the database objects such as schema, tables, and views.");
         	dbSqlFilePathButton.setText("Browse");
         	dbSqlFilePathButton.setIcon(LookAndFeel.getBrowseIcon());
         	dbSqlFilePathButton.addActionListener(new java.awt.event.ActionListener() {
@@ -514,7 +525,7 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
     private JCheckBox getDbDropSchemaCheckBox() {
         if (dbDropSchemaCheckBox == null) {
         	dbDropSchemaCheckBox = new JCheckBox();
-        	dbDropSchemaCheckBox.setToolTipText("Drop all of the tables from the application Database Schema?");
+        	dbDropSchemaCheckBox.setToolTipText("If checked, all application database objects like tables, views, and sequences will be dropped at deployment time");
         	dbDropSchemaCheckBox.setHorizontalAlignment(SwingConstants.LEADING);
         	dbDropSchemaCheckBox.setSelected(Boolean.parseBoolean(parentContainer.getPropertiesManager().getDeployPropertyValue("DB_DROP_SCHEMA")));
         	dbDropSchemaCheckBox.setHorizontalTextPosition(SwingConstants.LEFT);
@@ -543,6 +554,7 @@ public final class DbConnectionSettingsPanel implements Panel, PanelValidator {
     public JTextField getDbSqlFileField() {
         if (dbSqlFileField == null) {
         	dbSqlFileField = new JTextField();
+        	dbSqlFileField.setToolTipText("Enter the absolute path to the SQL file to be executed at the deployment time. Alternatively, use the Browse button");
         	
         	String dbType = getDbType();
         	if ("oracle".equalsIgnoreCase(dbType)){

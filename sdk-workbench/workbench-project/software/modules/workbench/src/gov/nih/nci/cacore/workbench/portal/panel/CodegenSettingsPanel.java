@@ -38,17 +38,29 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
 	// Code Generation Settings Panel
 	private JPanel codeGenSettingsPanel = null;
 	private JPanel codeGenSettingsReviewPanel = null;
+	private JPanel codeGenSettingsReviewLeftPanel = null;
+	private JPanel codeGenSettingsReviewRightPanel = null;	
 	
 	//private JPanel codeGenSettingsPanel = null;
+	private JPanel interfaceGenSettingsSubPanel = null;
+	private JPanel interfaceGenSettingsSubLeftPanel = null;
+	private JPanel interfaceGenSettingsSubRightPanel = null;	
 	private JPanel ormCodeGenSettingsSubPanel = null;
 	private JPanel xsdCodeGenSettingsSubPanel = null;
 	private JPanel caDsrCodeGenSettingsSubPanel = null;
-	
     
 	//Code Generation Settings Panel Component Definitions
     private JCheckBox validateLogicalModelCheckBox = null;
     private JCheckBox validateModelMappingCheckBox = null;
     private JCheckBox validateGmeTagsCheckBox = null;
+    
+    private JCheckBox enableLocalJavaInterfaceCheckBox = null;
+    private JCheckBox enableRemoteJavaInterfaceCheckBox = null;
+    private JCheckBox enableWebServiceInterfaceCheckBox = null;
+    private JCheckBox enableRestfulXmlInterfaceCheckBox = null;
+    private JCheckBox enableRestfulHtmlInterfaceCheckBox = null;
+    private JCheckBox enableRestfulJsonInterfaceCheckBox = null;
+    
     private JCheckBox generateHibernateMappingCheckBox = null;
     private JCheckBox generateBeansCheckBox = null;
     private JCheckBox generateCastorMappingCheckBox = null;
@@ -98,6 +110,7 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
     private JTextField getCaDsrConnectionUrlField() {
         if (caDsrConnectionUrlField == null) {
         	caDsrConnectionUrlField = new JTextField();
+        	caDsrConnectionUrlField.setToolTipText("Enter the caDSR Connection URL the Hibernate Validator should use when retrieving caDSR Permissible values.");
         	caDsrConnectionUrlField.setText(propsMgr.getDeployPropertyValue("CADSR_CONNECTION_URL"));
         	caDsrConnectionUrlField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
@@ -193,6 +206,156 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
         	validateGmeTagsCheckBox.addFocusListener(new FocusChangeHandler());
         }
         return validateGmeTagsCheckBox;
+    } 
+    
+    /**
+     * This method initializes the Validate Model Mapping Check Box
+     * 
+     * @return javax.swing.JCheckBox
+     */
+    private JCheckBox getEnableLocalJavaInterfaceCheckBox() {
+        if (enableLocalJavaInterfaceCheckBox == null) {
+        	enableLocalJavaInterfaceCheckBox = new JCheckBox();
+        	enableLocalJavaInterfaceCheckBox.setToolTipText("Toggle to enable/disable local Java interface");
+        	enableLocalJavaInterfaceCheckBox.setHorizontalAlignment(SwingConstants.LEADING);
+        	enableLocalJavaInterfaceCheckBox.setSelected(Boolean.parseBoolean(propsMgr.getDeployPropertyValue("ENABLE_LOCAL_JAVA_INTERFACE")));
+        	enableLocalJavaInterfaceCheckBox.setHorizontalTextPosition(SwingConstants.LEFT);
+			
+        	enableLocalJavaInterfaceCheckBox.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+                    mainPanelValidator.setDirty(true);
+                    mainPanelValidator.validateInput();
+				}
+        	});
+
+        	enableLocalJavaInterfaceCheckBox.addFocusListener(new FocusChangeHandler());
+        }
+        return enableLocalJavaInterfaceCheckBox;
+    } 
+    
+    /**
+     * This method initializes the Validate Model Mapping Check Box
+     * 
+     * @return javax.swing.JCheckBox
+     */
+    private JCheckBox getEnableRemoteJavaInterfaceCheckBox() {
+        if (enableRemoteJavaInterfaceCheckBox == null) {
+        	enableRemoteJavaInterfaceCheckBox = new JCheckBox();
+        	enableRemoteJavaInterfaceCheckBox.setToolTipText("Toggle to enable/disable remote Java interface");
+        	enableRemoteJavaInterfaceCheckBox.setHorizontalAlignment(SwingConstants.LEADING);
+        	enableRemoteJavaInterfaceCheckBox.setSelected(Boolean.parseBoolean(propsMgr.getDeployPropertyValue("ENABLE_REMOTE_JAVA_INTERFACE")));
+        	enableRemoteJavaInterfaceCheckBox.setHorizontalTextPosition(SwingConstants.LEFT);
+			
+        	enableRemoteJavaInterfaceCheckBox.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+                    mainPanelValidator.setDirty(true);
+                    mainPanelValidator.validateInput();
+				}
+        	});
+
+        	enableRemoteJavaInterfaceCheckBox.addFocusListener(new FocusChangeHandler());
+        }
+        return enableRemoteJavaInterfaceCheckBox;
+    } 
+    
+    /**
+     * This method initializes the Validate Model Mapping Check Box
+     * 
+     * @return javax.swing.JCheckBox
+     */
+    private JCheckBox getEnableWebServiceInterfaceCheckBox() {
+        if (enableWebServiceInterfaceCheckBox == null) {
+        	enableWebServiceInterfaceCheckBox = new JCheckBox();
+        	enableWebServiceInterfaceCheckBox.setToolTipText("Toggle to enable/disable Web Service interface");
+        	enableWebServiceInterfaceCheckBox.setHorizontalAlignment(SwingConstants.LEADING);
+        	enableWebServiceInterfaceCheckBox.setSelected(Boolean.parseBoolean(propsMgr.getDeployPropertyValue("ENABLE_WEBSERVICE_INTERFACE")));
+        	enableWebServiceInterfaceCheckBox.setHorizontalTextPosition(SwingConstants.LEFT);
+			
+        	enableWebServiceInterfaceCheckBox.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+                    mainPanelValidator.setDirty(true);
+                    mainPanelValidator.validateInput();
+				}
+        	});
+
+        	enableWebServiceInterfaceCheckBox.addFocusListener(new FocusChangeHandler());
+        }
+        return enableWebServiceInterfaceCheckBox;
+    } 
+    
+    /**
+     * This method initializes the Validate Model Mapping Check Box
+     * 
+     * @return javax.swing.JCheckBox
+     */
+    private JCheckBox getEnableRestfulXmlInterfaceCheckBox() {
+        if (enableRestfulXmlInterfaceCheckBox == null) {
+        	enableRestfulXmlInterfaceCheckBox = new JCheckBox();
+        	enableRestfulXmlInterfaceCheckBox.setToolTipText("Toggle to enable/disable RESTful XML interface");
+        	enableRestfulXmlInterfaceCheckBox.setHorizontalAlignment(SwingConstants.LEADING);
+        	enableRestfulXmlInterfaceCheckBox.setSelected(Boolean.parseBoolean(propsMgr.getDeployPropertyValue("ENABLE_RESTFUL_XML_INTERFACE")));
+        	enableRestfulXmlInterfaceCheckBox.setHorizontalTextPosition(SwingConstants.LEFT);
+			
+        	enableRestfulXmlInterfaceCheckBox.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+                    mainPanelValidator.setDirty(true);
+                    mainPanelValidator.validateInput();
+				}
+        	});
+
+        	enableRestfulXmlInterfaceCheckBox.addFocusListener(new FocusChangeHandler());
+        }
+        return enableRestfulXmlInterfaceCheckBox;
+    } 
+    
+    /**
+     * This method initializes the Validate Model Mapping Check Box
+     * 
+     * @return javax.swing.JCheckBox
+     */
+    private JCheckBox getEnableRestfulHtmlInterfaceCheckBox() {
+        if (enableRestfulHtmlInterfaceCheckBox == null) {
+        	enableRestfulHtmlInterfaceCheckBox = new JCheckBox();
+        	enableRestfulHtmlInterfaceCheckBox.setToolTipText("Toggle to enable/disable RESTful HTML interface");
+        	enableRestfulHtmlInterfaceCheckBox.setHorizontalAlignment(SwingConstants.LEADING);
+        	enableRestfulHtmlInterfaceCheckBox.setSelected(Boolean.parseBoolean(propsMgr.getDeployPropertyValue("ENABLE_RESTFUL_HTML_INTERFACE")));
+        	enableRestfulHtmlInterfaceCheckBox.setHorizontalTextPosition(SwingConstants.LEFT);
+			
+        	enableRestfulHtmlInterfaceCheckBox.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+                    mainPanelValidator.setDirty(true);
+                    mainPanelValidator.validateInput();
+				}
+        	});
+
+        	enableRestfulHtmlInterfaceCheckBox.addFocusListener(new FocusChangeHandler());
+        }
+        return enableRestfulHtmlInterfaceCheckBox;
+    } 
+    
+    /**
+     * This method initializes the Validate Model Mapping Check Box
+     * 
+     * @return javax.swing.JCheckBox
+     */
+    private JCheckBox getEnableRestfulJsonInterfaceCheckBox() {
+        if (enableRestfulJsonInterfaceCheckBox == null) {
+        	enableRestfulJsonInterfaceCheckBox = new JCheckBox();
+        	enableRestfulJsonInterfaceCheckBox.setToolTipText("Toggle to enable/disable RESTful JSON interface");
+        	enableRestfulJsonInterfaceCheckBox.setHorizontalAlignment(SwingConstants.LEADING);
+        	enableRestfulJsonInterfaceCheckBox.setSelected(Boolean.parseBoolean(propsMgr.getDeployPropertyValue("ENABLE_RESTFUL_JSON_INTERFACE")));
+        	enableRestfulJsonInterfaceCheckBox.setHorizontalTextPosition(SwingConstants.LEFT);
+			
+        	enableRestfulJsonInterfaceCheckBox.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+                    mainPanelValidator.setDirty(true);
+                    mainPanelValidator.validateInput();
+				}
+        	});
+
+        	enableRestfulJsonInterfaceCheckBox.addFocusListener(new FocusChangeHandler());
+        }
+        return enableRestfulJsonInterfaceCheckBox;
     } 
     
     /**
@@ -508,6 +671,16 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
 			//gridBagConstraints60.weighty = 1.0D;
 			gridBagConstraints60.gridx = 0;
 
+			GridBagConstraints gridBagConstraints70 = new GridBagConstraints();
+			gridBagConstraints70.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints70.gridy = 7;
+			gridBagConstraints70.weightx = 1.0;
+			gridBagConstraints70.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints70.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints70.gridwidth = 3;
+			//gridBagConstraints70.weighty = 1.0D;
+			gridBagConstraints70.gridx = 0;
+			
 		    validateLogicalModelLabel = new JLabel();
 		    validateLogicalModelLabel.setText("Validate Logical Model?");
 		    
@@ -529,14 +702,214 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
 			codeGenSettingsPanel.add(getGenerateBeansCheckBox(), gridBagConstraints21);
 			codeGenSettingsPanel.add(generateWsddLabel, gridBagConstraints30);
 			codeGenSettingsPanel.add(getGenerateWsddCheckBox(), gridBagConstraints31);
-			codeGenSettingsPanel.add(getOrmCodeGenSettingsPanel(), gridBagConstraints40);
-			codeGenSettingsPanel.add(getXsdCodeGenSettingsSubPanel(), gridBagConstraints50);
-			codeGenSettingsPanel.add(getCaDsrCodeGenSettingsSubPanel(), gridBagConstraints60);
+			codeGenSettingsPanel.add(getInterfaceSettingsSubPanel(), gridBagConstraints40);
+			codeGenSettingsPanel.add(getOrmCodeGenSettingsPanel(), gridBagConstraints50);
+			codeGenSettingsPanel.add(getXsdCodeGenSettingsSubPanel(), gridBagConstraints60);
+			codeGenSettingsPanel.add(getCaDsrCodeGenSettingsSubPanel(), gridBagConstraints70);
             
             codeGenSettingsPanel.validate();
 		}
 		return codeGenSettingsPanel;
 	}
+	
+	private JPanel getInterfaceSettingsSubPanel() {
+		if (interfaceGenSettingsSubPanel == null) {
+
+			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
+			gridBagConstraints10.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints10.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints10.gridy = 1;
+			gridBagConstraints10.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints10.weighty = 1.0D;
+			gridBagConstraints10.weightx = 1.0D;
+			gridBagConstraints10.gridx = 0;
+
+			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+			gridBagConstraints11.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints11.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints11.gridx = 1;
+			gridBagConstraints11.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints11.gridy = 1;
+			gridBagConstraints11.weighty = 1.0D;
+			gridBagConstraints11.weightx = 1.0D;  
+       
+		    interfaceGenSettingsSubPanel = new JPanel();
+		    interfaceGenSettingsSubPanel.setLayout(new GridBagLayout());
+		    interfaceGenSettingsSubPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Interface Generation Options",
+					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
+
+		    interfaceGenSettingsSubPanel.add(getInterfaceGenSettingsSubLeftPanel(), gridBagConstraints10);
+		    interfaceGenSettingsSubPanel.add(getInterfaceGenSettingsSubRightPanel(), gridBagConstraints11);		    
+			
+		    interfaceGenSettingsSubPanel.validate();
+		}
+		return interfaceGenSettingsSubPanel;
+	}
+	
+	private JPanel getInterfaceGenSettingsSubLeftPanel() {
+		if (interfaceGenSettingsSubLeftPanel == null) {
+			
+		    JLabel enableLocalJavaInterfaceLabel = null;
+		    JLabel enableRemoteJavaInterfaceLabel = null;
+		    JLabel enableWebServiceInterfaceLabel = null;
+
+			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
+			gridBagConstraints10.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints10.gridy = 1;
+			gridBagConstraints10.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints10.gridx = 0;
+
+			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+			gridBagConstraints11.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints11.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints11.gridx = 1;
+			gridBagConstraints11.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints11.gridy = 1;
+			gridBagConstraints11.weighty = 1.0D;
+			gridBagConstraints11.weightx = 1.0D;  
+			gridBagConstraints11.gridwidth = 2;
+
+			GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
+			gridBagConstraints20.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints20.gridy = 2;
+			gridBagConstraints20.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints20.gridx = 0;            
+
+			GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
+			gridBagConstraints21.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints21.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints21.gridy = 2;
+			gridBagConstraints21.gridx = 1;
+			gridBagConstraints21.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints21.gridwidth = 2;
+			gridBagConstraints21.weighty = 1.0D;
+			gridBagConstraints21.weightx = 1.0D;  
+
+			GridBagConstraints gridBagConstraints30 = new GridBagConstraints();
+			gridBagConstraints30.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints30.gridy = 3;
+			gridBagConstraints30.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints30.gridx = 0;
+
+			GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
+			gridBagConstraints31.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints31.gridy = 3;
+			gridBagConstraints31.weightx = 1.0;
+			gridBagConstraints31.gridwidth = 2;
+			gridBagConstraints31.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints31.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints31.weighty = 1.0D;
+			gridBagConstraints31.gridx = 1;
+			
+		    enableLocalJavaInterfaceLabel = new JLabel();
+		    enableLocalJavaInterfaceLabel.setText("Enable Local Java Interface?");
+
+		    enableRemoteJavaInterfaceLabel = new JLabel();
+		    enableRemoteJavaInterfaceLabel.setText("Enable Remote Java Interface?");
+
+		    enableWebServiceInterfaceLabel = new JLabel();
+		    enableWebServiceInterfaceLabel.setText("Enable Web Services Interface?");
+
+		    interfaceGenSettingsSubLeftPanel = new JPanel();
+		    interfaceGenSettingsSubLeftPanel.setLayout(new GridBagLayout());
+//		    interfaceGenSettingsSubLeftPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Interface Generation Options",
+//					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+//					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
+
+		    interfaceGenSettingsSubLeftPanel.add(enableLocalJavaInterfaceLabel, gridBagConstraints10);
+		    interfaceGenSettingsSubLeftPanel.add(getEnableLocalJavaInterfaceCheckBox(), gridBagConstraints11);
+		    interfaceGenSettingsSubLeftPanel.add(enableRemoteJavaInterfaceLabel, gridBagConstraints20);
+		    interfaceGenSettingsSubLeftPanel.add(getEnableRemoteJavaInterfaceCheckBox(), gridBagConstraints21);
+		    interfaceGenSettingsSubLeftPanel.add(enableWebServiceInterfaceLabel, gridBagConstraints30);
+		    interfaceGenSettingsSubLeftPanel.add(getEnableWebServiceInterfaceCheckBox(), gridBagConstraints31);	    
+			
+		    interfaceGenSettingsSubLeftPanel.validate();
+		}
+		return interfaceGenSettingsSubLeftPanel;
+	}	
+	
+	private JPanel getInterfaceGenSettingsSubRightPanel() {
+		if (interfaceGenSettingsSubRightPanel == null) {
+			
+		    JLabel enableRestfulXmlInterfaceLabel = null;
+		    JLabel enableRestfulHtmlInterfaceLabel = null;
+		    JLabel enableRestfulJsonInterfaceLabel = null;
+
+			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
+			gridBagConstraints10.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints10.gridy = 1;
+			gridBagConstraints10.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints10.gridx = 0;
+
+			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+			gridBagConstraints11.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints11.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints11.gridx = 1;
+			gridBagConstraints11.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints11.gridy = 1;
+			gridBagConstraints11.weighty = 1.0D;
+			gridBagConstraints11.weightx = 1.0D;  
+			gridBagConstraints11.gridwidth = 2;
+
+			GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
+			gridBagConstraints20.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints20.gridy = 2;
+			gridBagConstraints20.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints20.gridx = 0;            
+
+			GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
+			gridBagConstraints21.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints21.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints21.gridy = 2;
+			gridBagConstraints21.gridx = 1;
+			gridBagConstraints21.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints21.gridwidth = 2;
+			gridBagConstraints21.weighty = 1.0D;
+			gridBagConstraints21.weightx = 1.0D;  
+
+			GridBagConstraints gridBagConstraints30 = new GridBagConstraints();
+			gridBagConstraints30.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints30.gridy = 3;
+			gridBagConstraints30.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints30.gridx = 0;
+
+			GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
+			gridBagConstraints31.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints31.gridy = 3;
+			gridBagConstraints31.weightx = 1.0;
+			gridBagConstraints31.gridwidth = 2;
+			gridBagConstraints31.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints31.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints31.weighty = 1.0D;
+			gridBagConstraints31.gridx = 1;
+		    
+		    enableRestfulXmlInterfaceLabel = new JLabel();
+		    enableRestfulXmlInterfaceLabel.setText("Enable RESTful XML Interface?");
+
+		    enableRestfulHtmlInterfaceLabel = new JLabel();
+		    enableRestfulHtmlInterfaceLabel.setText("Enable RESTful HTML Interface?");
+
+		    enableRestfulJsonInterfaceLabel = new JLabel();
+		    enableRestfulJsonInterfaceLabel.setText("Enable RESTful JSON Interface?");
+
+		    interfaceGenSettingsSubRightPanel = new JPanel();
+		    interfaceGenSettingsSubRightPanel.setLayout(new GridBagLayout());
+//		    interfaceGenSettingsSubRightPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Interface Generation Options",
+//					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+//					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
+
+		    interfaceGenSettingsSubRightPanel.add(enableRestfulXmlInterfaceLabel, gridBagConstraints10);
+		    interfaceGenSettingsSubRightPanel.add(getEnableRestfulXmlInterfaceCheckBox(), gridBagConstraints11);
+		    interfaceGenSettingsSubRightPanel.add(enableRestfulHtmlInterfaceLabel, gridBagConstraints20);
+		    interfaceGenSettingsSubRightPanel.add(getEnableRestfulHtmlInterfaceCheckBox(), gridBagConstraints21);
+		    interfaceGenSettingsSubRightPanel.add(enableRestfulJsonInterfaceLabel, gridBagConstraints30);
+		    interfaceGenSettingsSubRightPanel.add(getEnableRestfulJsonInterfaceCheckBox(), gridBagConstraints31);		    
+			
+		    interfaceGenSettingsSubRightPanel.validate();
+		}
+		return interfaceGenSettingsSubRightPanel;
+	}	
 	
 	/**
 	 * This method initializes the Code Generation settings panel	
@@ -804,18 +1177,298 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
      */
     public JPanel getSummaryPanel() {
         //if (codeGenSettingsReviewPanel == null) {
+
+            GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
+            gridBagConstraints10.fill = java.awt.GridBagConstraints.HORIZONTAL;
+            gridBagConstraints10.anchor = java.awt.GridBagConstraints.NORTHWEST;
+            gridBagConstraints10.gridy = 1;
+            gridBagConstraints10.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints10.gridx = 0;
+            gridBagConstraints10.weighty = 1.0D;
+            gridBagConstraints10.weightx = 1.0;            
+            
+            GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+            gridBagConstraints11.fill = java.awt.GridBagConstraints.HORIZONTAL;
+            gridBagConstraints11.anchor = java.awt.GridBagConstraints.NORTHWEST;
+            gridBagConstraints11.gridy = 1;
+            gridBagConstraints11.gridx = 1;
+            gridBagConstraints11.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints11.weighty = 1.0D;
+            gridBagConstraints11.weightx = 1.0;
+            
+            codeGenSettingsReviewPanel = new JPanel();
+            codeGenSettingsReviewPanel.setLayout(new GridBagLayout());
+            codeGenSettingsReviewPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Code Generation Properties",
+                javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+                javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
+            
+            codeGenSettingsReviewPanel.add(getSummaryLeftPanel(), gridBagConstraints10);
+            codeGenSettingsReviewPanel.add(getSummaryRightPanel(), gridBagConstraints11);
+            
+            codeGenSettingsReviewPanel.validate();
+        //}
+        return codeGenSettingsReviewPanel;
+    }
+    
+    /**
+     * This method initializes the Project Settings jPanel
+     */
+    public JPanel getSummaryLeftPanel() {
+        //if (codeGenSettingsReviewLeftPanel == null) {
         	
 		    //Code Generation Settings Panel Label Definitions
 		    JLabel validateLogicalModelLabel = null;
 		    JLabel validateLogicalModelValueLabel = null;
+		    JLabel generateBeansLabel = null;
+		    JLabel generateBeansValueLabel = null;
+		    JLabel generateWsddLabel = null;
+		    JLabel generateWsddValueLabel = null;
+		    
+		    JLabel enableLocalJavaInterfaceLabel = null;
+		    JLabel enableLocalJavaInterfaceValueLabel = null;
+		    JLabel enableRemoteJavaInterfaceLabel = null;
+		    JLabel enableRemoteJavaInterfaceValueLabel = null;
+		    JLabel enableWebServiceInterfaceLabel = null;
+		    JLabel enableWebServiceInterfaceValueLabel = null;		    
+		    JLabel enableRestfulXmlInterfaceLabel = null;
+		    JLabel enableRestfulXmlInterfaceValueLabel = null;		    
+		    JLabel enableRestfulHtmlInterfaceLabel = null;
+		    JLabel enableRestfulHtmlInterfaceValueLabel = null;		    
+		    JLabel enableRestfulJsonInterfaceLabel = null;
+		    JLabel enableRestfulJsonInterfaceValueLabel = null;
+        	
+            GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
+            gridBagConstraints10.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints10.gridy = 1;
+            gridBagConstraints10.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints10.gridx = 0;
+            
+            GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+            gridBagConstraints11.fill = java.awt.GridBagConstraints.HORIZONTAL;
+            gridBagConstraints11.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints11.gridy = 1;
+            gridBagConstraints11.gridx = 1;
+            gridBagConstraints11.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints11.weighty = 1.0D;
+            gridBagConstraints11.weightx = 1.0;
+            
+            GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
+            gridBagConstraints20.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints20.gridy = 2;
+            gridBagConstraints20.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints20.gridx = 0;            
+
+            GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
+            gridBagConstraints21.fill = java.awt.GridBagConstraints.HORIZONTAL;
+            gridBagConstraints21.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints21.gridy = 2;
+            gridBagConstraints21.gridx = 1;
+            gridBagConstraints21.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints21.weighty = 1.0D;
+            gridBagConstraints21.weightx = 1.0;
+            
+            GridBagConstraints gridBagConstraints30 = new GridBagConstraints();
+            gridBagConstraints30.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints30.gridy = 3;
+            gridBagConstraints30.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints30.gridx = 0;
+            
+            GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
+            gridBagConstraints31.fill = java.awt.GridBagConstraints.HORIZONTAL;
+            gridBagConstraints31.gridy = 3;
+            gridBagConstraints31.weightx = 1.0;
+            gridBagConstraints31.gridwidth = 2;
+            gridBagConstraints31.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints31.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints31.weighty = 1.0D;
+            gridBagConstraints31.gridx = 1;
+     
+            GridBagConstraints gridBagConstraints40 = new GridBagConstraints();
+            gridBagConstraints40.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints40.gridy = 4;
+            gridBagConstraints40.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints40.gridx = 0;
+            
+            GridBagConstraints gridBagConstraints41 = new GridBagConstraints();
+            gridBagConstraints41.fill = java.awt.GridBagConstraints.HORIZONTAL;
+            gridBagConstraints41.gridy = 4;
+            gridBagConstraints41.weightx = 1.0;
+            gridBagConstraints41.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints41.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints41.gridwidth = 2;
+            gridBagConstraints41.weighty = 1.0D;
+            gridBagConstraints41.gridx = 1;
+            
+            GridBagConstraints gridBagConstraints50 = new GridBagConstraints();
+            gridBagConstraints50.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints50.gridy = 5;
+            gridBagConstraints50.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints50.gridx = 0;
+            
+            GridBagConstraints gridBagConstraints51 = new GridBagConstraints();
+            gridBagConstraints51.fill = java.awt.GridBagConstraints.HORIZONTAL;
+            gridBagConstraints51.gridy = 5;
+            gridBagConstraints51.weightx = 1.0;
+            gridBagConstraints51.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints51.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints51.gridwidth = 2;
+            gridBagConstraints51.weighty = 1.0D;
+            gridBagConstraints51.gridx = 1;
+            
+            GridBagConstraints gridBagConstraints60 = new GridBagConstraints();
+            gridBagConstraints60.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints60.gridy = 6;
+            gridBagConstraints60.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints60.gridx = 0;
+            
+            GridBagConstraints gridBagConstraints61 = new GridBagConstraints();
+            gridBagConstraints61.fill = java.awt.GridBagConstraints.HORIZONTAL;
+            gridBagConstraints61.gridy = 6;
+            gridBagConstraints61.weightx = 1.0;
+            gridBagConstraints61.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints61.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints61.gridwidth = 2;
+            gridBagConstraints61.weighty = 1.0D;
+            gridBagConstraints61.gridx = 1;
+            
+            GridBagConstraints gridBagConstraints70 = new GridBagConstraints();
+            gridBagConstraints70.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints70.gridy = 7;
+            gridBagConstraints70.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints70.gridx = 0;
+            
+            GridBagConstraints gridBagConstraints71 = new GridBagConstraints();
+            gridBagConstraints71.fill = java.awt.GridBagConstraints.HORIZONTAL;
+            gridBagConstraints71.gridy = 7;
+            gridBagConstraints71.weightx = 1.0;
+            gridBagConstraints71.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints71.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints71.gridwidth = 2;
+            gridBagConstraints71.weighty = 1.0D;
+            gridBagConstraints71.gridx = 1;
+            
+            GridBagConstraints gridBagConstraints80 = new GridBagConstraints();
+            gridBagConstraints80.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints80.gridy = 8;
+            gridBagConstraints80.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints80.gridx = 0;
+            
+            GridBagConstraints gridBagConstraints81 = new GridBagConstraints();
+            gridBagConstraints81.fill = java.awt.GridBagConstraints.HORIZONTAL;
+            gridBagConstraints81.gridy = 8;
+            gridBagConstraints81.weightx = 1.0;
+            gridBagConstraints81.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints81.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints81.gridwidth = 2;
+            gridBagConstraints81.weighty = 1.0D;
+            gridBagConstraints81.gridx = 1;
+            
+            GridBagConstraints gridBagConstraints90 = new GridBagConstraints();
+            gridBagConstraints90.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints90.gridy = 9;
+            gridBagConstraints90.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints90.gridx = 0;
+            
+            GridBagConstraints gridBagConstraints91 = new GridBagConstraints();
+            gridBagConstraints91.fill = java.awt.GridBagConstraints.HORIZONTAL;
+            gridBagConstraints91.gridy = 9;
+            gridBagConstraints91.weightx = 1.0;
+            gridBagConstraints91.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints91.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints91.gridwidth = 2;
+            gridBagConstraints91.weighty = 1.0D;
+            gridBagConstraints91.gridx = 1;
+                        
+		    validateLogicalModelLabel = new JLabel();
+		    validateLogicalModelLabel.setText("Validate Logical Model?");
+		    validateLogicalModelValueLabel = new JLabel();
+		    validateLogicalModelValueLabel.setText(Utils.convertToYesNo(getValidateLogicalModelCheckBox()));
+		    
+            generateBeansLabel = new JLabel();
+            generateBeansLabel.setText("Generate Beans?");
+            generateBeansValueLabel = new JLabel();
+            generateBeansValueLabel.setText(Utils.convertToYesNo(getGenerateBeansCheckBox()));		    
+            
+		    generateWsddLabel = new JLabel();
+		    generateWsddLabel.setText("Generate WSDD?");
+		    generateWsddValueLabel = new JLabel();
+		    generateWsddValueLabel.setText(Utils.convertToYesNo(getGenerateWsddCheckBox()));		
+
+		    enableLocalJavaInterfaceLabel = new JLabel();
+		    enableLocalJavaInterfaceLabel.setText("Enable Local Java Interface?");
+		    enableLocalJavaInterfaceValueLabel = new JLabel();
+		    enableLocalJavaInterfaceValueLabel.setText(Utils.convertToYesNo(getEnableLocalJavaInterfaceCheckBox()));
+            
+		    enableRemoteJavaInterfaceLabel = new JLabel();
+		    enableRemoteJavaInterfaceLabel.setText("Enable Remote Java Interface?");
+		    enableRemoteJavaInterfaceValueLabel = new JLabel();
+		    enableRemoteJavaInterfaceValueLabel.setText(Utils.convertToYesNo(getEnableRemoteJavaInterfaceCheckBox()));
+            
+		    enableWebServiceInterfaceLabel = new JLabel();
+		    enableWebServiceInterfaceLabel.setText("Enable Web Service Interface?");
+		    enableWebServiceInterfaceValueLabel = new JLabel();
+		    enableWebServiceInterfaceValueLabel.setText(Utils.convertToYesNo(getEnableWebServiceInterfaceCheckBox()));
+
+		    enableRestfulXmlInterfaceLabel = new JLabel();
+		    enableRestfulXmlInterfaceLabel.setText("Enable RESTful XML Interface?");
+		    enableRestfulXmlInterfaceValueLabel = new JLabel();
+		    enableRestfulXmlInterfaceValueLabel.setText(Utils.convertToYesNo(getEnableRestfulXmlInterfaceCheckBox()));
+            
+		    enableRestfulHtmlInterfaceLabel = new JLabel();
+		    enableRestfulHtmlInterfaceLabel.setText("Enable RESTful HTML Interface?");
+		    enableRestfulHtmlInterfaceValueLabel = new JLabel();
+		    enableRestfulHtmlInterfaceValueLabel.setText(Utils.convertToYesNo(getEnableRestfulHtmlInterfaceCheckBox()));
+            
+		    enableRestfulJsonInterfaceLabel = new JLabel();
+		    enableRestfulJsonInterfaceLabel.setText("Enable RESTful JSON Interface?");
+		    enableRestfulJsonInterfaceValueLabel = new JLabel();
+		    enableRestfulJsonInterfaceValueLabel.setText(Utils.convertToYesNo(getEnableRestfulJsonInterfaceCheckBox()));
+            
+		    codeGenSettingsReviewLeftPanel = new JPanel();
+		    codeGenSettingsReviewLeftPanel.setLayout(new GridBagLayout());
+//		    codeGenSettingsReviewLeftPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Code Generation Properties",
+//                javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+//                javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
+            
+            codeGenSettingsReviewLeftPanel.add(validateLogicalModelLabel, gridBagConstraints10);
+            codeGenSettingsReviewLeftPanel.add(validateLogicalModelValueLabel, gridBagConstraints11);
+            codeGenSettingsReviewLeftPanel.add(generateBeansLabel, gridBagConstraints20);
+            codeGenSettingsReviewLeftPanel.add(generateBeansValueLabel, gridBagConstraints21);
+            codeGenSettingsReviewLeftPanel.add(generateWsddLabel, gridBagConstraints30);
+            codeGenSettingsReviewLeftPanel.add(generateWsddValueLabel, gridBagConstraints31);
+    
+            codeGenSettingsReviewLeftPanel.add(enableLocalJavaInterfaceLabel, gridBagConstraints40);
+            codeGenSettingsReviewLeftPanel.add(enableLocalJavaInterfaceValueLabel, gridBagConstraints41);
+            codeGenSettingsReviewLeftPanel.add(enableRemoteJavaInterfaceLabel, gridBagConstraints50);
+            codeGenSettingsReviewLeftPanel.add(enableRemoteJavaInterfaceValueLabel, gridBagConstraints51);
+            codeGenSettingsReviewLeftPanel.add(enableWebServiceInterfaceLabel, gridBagConstraints60);
+            codeGenSettingsReviewLeftPanel.add(enableWebServiceInterfaceValueLabel, gridBagConstraints61);
+            
+            codeGenSettingsReviewLeftPanel.add(enableRestfulXmlInterfaceLabel, gridBagConstraints70);
+            codeGenSettingsReviewLeftPanel.add(enableRestfulXmlInterfaceValueLabel, gridBagConstraints71);
+            codeGenSettingsReviewLeftPanel.add(enableRestfulHtmlInterfaceLabel, gridBagConstraints80);
+            codeGenSettingsReviewLeftPanel.add(enableRestfulHtmlInterfaceValueLabel, gridBagConstraints81);
+            codeGenSettingsReviewLeftPanel.add(enableRestfulJsonInterfaceLabel, gridBagConstraints90);
+            codeGenSettingsReviewLeftPanel.add(enableRestfulJsonInterfaceValueLabel, gridBagConstraints91); 
+            
+            codeGenSettingsReviewLeftPanel.validate();
+        //}
+        return codeGenSettingsReviewLeftPanel;
+    }    
+    
+    /**
+     * This method initializes the Project Settings jPanel
+     */
+    public JPanel getSummaryRightPanel() {
+        //if (codeGenSettingsReviewRightPanel == null) {
+        	
+		    //Code Generation Settings Panel Label Definitions
 		    JLabel validateModelMappingLabel = null;
 		    JLabel validateModelMappingValueLabel = null;
 		    JLabel validateGmeTagsLabel = null;
 		    JLabel validateGmeTagsValueLabel = null;
 		    JLabel generateHibernateMappingLabel = null;
 		    JLabel generateHibernateMappingValueLabel = null;
-		    JLabel generateBeansLabel = null;
-		    JLabel generateBeansValueLabel = null;
 		    JLabel generateCastorMappingLabel = null;
 		    JLabel generateCastorMappingValueLabel = null;
 		    JLabel generateXsdLabel = null;
@@ -824,8 +1477,6 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
 		    JLabel generateXsdWithGmeTagsValueLabel = null;
 		    JLabel generateXsdWithPermissibleValuesLabel = null;
 		    JLabel generateXsdWithPermissibleValuesValueLabel = null;
-		    JLabel generateWsddLabel = null;
-		    JLabel generateWsddValueLabel = null;
 		    JLabel generateHibernateValidatorLabel = null;
 		    JLabel generateHibernateValidatorValueLabel = null;
 		    JLabel caDsrConnectionUrlLabel = null;
@@ -973,59 +1624,6 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
             gridBagConstraints91.weighty = 1.0D;
             gridBagConstraints91.gridx = 1;
             
-            GridBagConstraints gridBagConstraints100 = new GridBagConstraints();
-            gridBagConstraints100.anchor = java.awt.GridBagConstraints.WEST;
-            gridBagConstraints100.gridy = 10;
-            gridBagConstraints100.insets = new java.awt.Insets(2, 2, 2, 2);
-            gridBagConstraints100.gridx = 0;
-            
-            GridBagConstraints gridBagConstraints101 = new GridBagConstraints();
-            gridBagConstraints101.fill = java.awt.GridBagConstraints.HORIZONTAL;
-            gridBagConstraints101.gridy = 10;
-            gridBagConstraints101.weightx = 1.0;
-            gridBagConstraints101.anchor = java.awt.GridBagConstraints.WEST;
-            gridBagConstraints101.insets = new java.awt.Insets(2, 2, 2, 2);
-            gridBagConstraints101.gridwidth = 2;
-            gridBagConstraints101.weighty = 1.0D;
-            gridBagConstraints101.gridx = 1;
-            
-            GridBagConstraints gridBagConstraints110 = new GridBagConstraints();
-            gridBagConstraints110.anchor = java.awt.GridBagConstraints.WEST;
-            gridBagConstraints110.gridy = 11;
-            gridBagConstraints110.insets = new java.awt.Insets(2, 2, 2, 2);
-            gridBagConstraints110.gridx = 0;
-            
-            GridBagConstraints gridBagConstraints111 = new GridBagConstraints();
-            gridBagConstraints111.fill = java.awt.GridBagConstraints.HORIZONTAL;
-            gridBagConstraints111.gridy = 11;
-            gridBagConstraints111.weightx = 1.0;
-            gridBagConstraints111.anchor = java.awt.GridBagConstraints.WEST;
-            gridBagConstraints111.insets = new java.awt.Insets(2, 2, 2, 2);
-            gridBagConstraints111.gridwidth = 2;
-            gridBagConstraints111.weighty = 1.0D;
-            gridBagConstraints111.gridx = 1;
-            
-            GridBagConstraints gridBagConstraints120 = new GridBagConstraints();
-            gridBagConstraints120.anchor = java.awt.GridBagConstraints.WEST;
-            gridBagConstraints120.gridy = 12;
-            gridBagConstraints120.insets = new java.awt.Insets(2, 2, 2, 2);
-            gridBagConstraints120.gridx = 0;
-            
-            GridBagConstraints gridBagConstraints121 = new GridBagConstraints();
-            gridBagConstraints121.fill = java.awt.GridBagConstraints.HORIZONTAL;
-            gridBagConstraints121.gridy = 12;
-            gridBagConstraints121.weightx = 1.0;
-            gridBagConstraints121.anchor = java.awt.GridBagConstraints.WEST;
-            gridBagConstraints121.insets = new java.awt.Insets(2, 2, 2, 2);
-            gridBagConstraints121.gridwidth = 2;
-            gridBagConstraints121.weighty = 1.0D;
-            gridBagConstraints121.gridx = 1;
-                        
-		    validateLogicalModelLabel = new JLabel();
-		    validateLogicalModelLabel.setText("Validate Logical Model?");
-		    validateLogicalModelValueLabel = new JLabel();
-		    validateLogicalModelValueLabel.setText(Utils.convertToYesNo(getValidateLogicalModelCheckBox()));
-            
 		    validateModelMappingLabel = new JLabel();
 		    validateModelMappingLabel.setText("Validate Model Mapping?");
             validateModelMappingValueLabel = new JLabel();
@@ -1040,11 +1638,6 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
             generateHibernateMappingLabel.setText("Generate Hibernate Mapping?");
             generateHibernateMappingValueLabel = new JLabel();
             generateHibernateMappingValueLabel.setText(Utils.convertToYesNo(getGenerateHibernateMappingCheckBox()));
-            
-            generateBeansLabel = new JLabel();
-            generateBeansLabel.setText("Generate Beans?");
-            generateBeansValueLabel = new JLabel();
-            generateBeansValueLabel.setText(Utils.convertToYesNo(getGenerateBeansCheckBox()));
             
             generateCastorMappingLabel = new JLabel();
             generateCastorMappingLabel.setText("Generate Castor Mapping?");
@@ -1066,11 +1659,6 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
             generateXsdWithPermissibleValuesValueLabel = new JLabel();
             generateXsdWithPermissibleValuesValueLabel.setText(Utils.convertToYesNo(getGenerateXsdWithPermissibleValuesCheckBox()));
             
-		    generateWsddLabel = new JLabel();
-		    generateWsddLabel.setText("Generate WSDD?");
-		    generateWsddValueLabel = new JLabel();
-		    generateWsddValueLabel.setText(Utils.convertToYesNo(getGenerateWsddCheckBox()));
-            
 		    generateHibernateValidatorLabel = new JLabel();
 		    generateHibernateValidatorLabel.setText("Generate Hibernate Validator?");
 		    generateHibernateValidatorValueLabel = new JLabel();
@@ -1081,50 +1669,43 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
 		    caDsrConnectionUrlValueLabel = new JLabel();
 		    caDsrConnectionUrlValueLabel.setText(getCaDsrConnectionUrlField().getText());
             
-            codeGenSettingsReviewPanel = new JPanel();
-            codeGenSettingsReviewPanel.setLayout(new GridBagLayout());
-            codeGenSettingsReviewPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Code Generation Properties",
-                javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-                javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
-            
-            codeGenSettingsReviewPanel.add(validateLogicalModelLabel, gridBagConstraints10);
-            codeGenSettingsReviewPanel.add(validateLogicalModelValueLabel, gridBagConstraints11);
-            codeGenSettingsReviewPanel.add(generateBeansLabel, gridBagConstraints20);
-            codeGenSettingsReviewPanel.add(generateBeansValueLabel, gridBagConstraints21);
-            codeGenSettingsReviewPanel.add(generateWsddLabel, gridBagConstraints30);
-            codeGenSettingsReviewPanel.add(generateWsddValueLabel, gridBagConstraints31);
+		    codeGenSettingsReviewRightPanel = new JPanel();
+		    codeGenSettingsReviewRightPanel.setLayout(new GridBagLayout());
+//		    codeGenSettingsReviewRightPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Code Generation Properties",
+//                javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+//                javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
     
-            codeGenSettingsReviewPanel.add(validateModelMappingLabel, gridBagConstraints40);
-            codeGenSettingsReviewPanel.add(validateModelMappingValueLabel, gridBagConstraints41);
-            codeGenSettingsReviewPanel.add(generateHibernateMappingLabel, gridBagConstraints50);
-            codeGenSettingsReviewPanel.add(generateHibernateMappingValueLabel, gridBagConstraints51);
-            codeGenSettingsReviewPanel.add(generateHibernateValidatorLabel, gridBagConstraints60);
-            codeGenSettingsReviewPanel.add(generateHibernateValidatorValueLabel, gridBagConstraints61);
+            codeGenSettingsReviewRightPanel.add(validateModelMappingLabel, gridBagConstraints10);
+            codeGenSettingsReviewRightPanel.add(validateModelMappingValueLabel, gridBagConstraints11);
+            codeGenSettingsReviewRightPanel.add(generateHibernateMappingLabel, gridBagConstraints20);
+            codeGenSettingsReviewRightPanel.add(generateHibernateMappingValueLabel, gridBagConstraints21);
+            codeGenSettingsReviewRightPanel.add(generateHibernateValidatorLabel, gridBagConstraints30);
+            codeGenSettingsReviewRightPanel.add(generateHibernateValidatorValueLabel, gridBagConstraints31);
             
-            codeGenSettingsReviewPanel.add(generateXsdLabel, gridBagConstraints70);
-            codeGenSettingsReviewPanel.add(generateXsdValueLabel, gridBagConstraints71);
+            codeGenSettingsReviewRightPanel.add(generateXsdLabel, gridBagConstraints40);
+            codeGenSettingsReviewRightPanel.add(generateXsdValueLabel, gridBagConstraints41);
             
             if (getGenerateXsdCheckBox().isSelected()){
-            	codeGenSettingsReviewPanel.add(generateCastorMappingLabel, gridBagConstraints80);
-            	codeGenSettingsReviewPanel.add(generateCastorMappingValueLabel, gridBagConstraints81);
-            	codeGenSettingsReviewPanel.add(generateXsdWithGmeTagsLabel, gridBagConstraints90);
-            	codeGenSettingsReviewPanel.add(generateXsdWithGmeTagsValueLabel, gridBagConstraints91); 
-            	codeGenSettingsReviewPanel.add(validateGmeTagsLabel, gridBagConstraints100);
-            	codeGenSettingsReviewPanel.add(validateGmeTagsValueLabel, gridBagConstraints101);
-            	codeGenSettingsReviewPanel.add(generateXsdWithPermissibleValuesLabel, gridBagConstraints110);
-            	codeGenSettingsReviewPanel.add(generateXsdWithPermissibleValuesValueLabel, gridBagConstraints111);
+            	codeGenSettingsReviewRightPanel.add(generateCastorMappingLabel, gridBagConstraints50);
+            	codeGenSettingsReviewRightPanel.add(generateCastorMappingValueLabel, gridBagConstraints51);
+            	codeGenSettingsReviewRightPanel.add(generateXsdWithGmeTagsLabel, gridBagConstraints60);
+            	codeGenSettingsReviewRightPanel.add(generateXsdWithGmeTagsValueLabel, gridBagConstraints61); 
+            	codeGenSettingsReviewRightPanel.add(validateGmeTagsLabel, gridBagConstraints70);
+            	codeGenSettingsReviewRightPanel.add(validateGmeTagsValueLabel, gridBagConstraints71);
+            	codeGenSettingsReviewRightPanel.add(generateXsdWithPermissibleValuesLabel, gridBagConstraints80);
+            	codeGenSettingsReviewRightPanel.add(generateXsdWithPermissibleValuesValueLabel, gridBagConstraints81);
             }
             
             if (getGenerateXsdWithPermissibleValuesCheckBox().isSelected() || getGenerateHibernateValidatorCheckBox().isSelected()){
-            	codeGenSettingsReviewPanel.add(caDsrConnectionUrlLabel, gridBagConstraints120);
-            	codeGenSettingsReviewPanel.add(caDsrConnectionUrlValueLabel, gridBagConstraints121);
+            	codeGenSettingsReviewRightPanel.add(caDsrConnectionUrlLabel, gridBagConstraints90);
+            	codeGenSettingsReviewRightPanel.add(caDsrConnectionUrlValueLabel, gridBagConstraints91);
             }
             
-            codeGenSettingsReviewPanel.validate();
+            codeGenSettingsReviewRightPanel.validate();
         //}
-        return codeGenSettingsReviewPanel;
-    }
-    
+        return codeGenSettingsReviewRightPanel;
+    }    
+        
     public ValidationResult validateInput() {
 
     	ValidationResult result = new ValidationResult();
@@ -1154,6 +1735,14 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
 		propsMap.put("VALIDATE_LOGICAL_MODEL", Boolean.valueOf(validateLogicalModelCheckBox.isSelected()).toString() );
 		propsMap.put("VALIDATE_MODEL_MAPPING", Boolean.valueOf(validateModelMappingCheckBox.isSelected()).toString() );
 		propsMap.put("VALIDATE_GME_TAGS", Boolean.valueOf(validateGmeTagsCheckBox.isSelected()).toString() );
+		
+		propsMap.put("ENABLE_LOCAL_JAVA_INTERFACE", Boolean.valueOf(enableLocalJavaInterfaceCheckBox.isSelected()).toString() );
+		propsMap.put("ENABLE_REMOTE_JAVA_INTERFACE", Boolean.valueOf(enableRemoteJavaInterfaceCheckBox.isSelected()).toString() );
+		propsMap.put("ENABLE_WEBSERVICE_INTERFACE", Boolean.valueOf(enableWebServiceInterfaceCheckBox.isSelected()).toString() );
+		propsMap.put("ENABLE_RESTFUL_XML_INTERFACE", Boolean.valueOf(enableRestfulXmlInterfaceCheckBox.isSelected()).toString() );
+		propsMap.put("ENABLE_RESTFUL_HTML_INTERFACE", Boolean.valueOf(enableRestfulHtmlInterfaceCheckBox.isSelected()).toString() );
+		propsMap.put("ENABLE_RESTFUL_JSON_INTERFACE", Boolean.valueOf(enableRestfulJsonInterfaceCheckBox.isSelected()).toString() );
+	
 		propsMap.put("GENERATE_HIBERNATE_MAPPING", Boolean.valueOf(generateHibernateMappingCheckBox.isSelected()).toString() );
 		propsMap.put("GENERATE_BEANS", Boolean.valueOf(generateBeansCheckBox.isSelected()).toString() );
 		propsMap.put("GENERATE_CASTOR_MAPPING", Boolean.valueOf(generateCastorMappingCheckBox.isSelected()).toString() );
