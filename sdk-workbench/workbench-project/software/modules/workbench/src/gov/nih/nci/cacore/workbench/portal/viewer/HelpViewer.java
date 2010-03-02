@@ -39,9 +39,13 @@ public class HelpViewer extends WorkbenchViewerBaseComponent {
 	
 	private static final String HELP_URL = ResourceManager.getWorkbenchHelpUrl();
 	private static final String TOOLS_SITE_URL = ResourceManager.getWorkbenchToolsSiteUrl();
+	private static final String SDK_GUIDE_URL = ResourceManager.getSdkGuideUrl();	
+	private static final String WORKBENCH_GUIDE_URL = ResourceManager.getWorkbenchGuideUrl();
 	
     // Buttons
-    private JButton openButton = null;
+    private JButton learnMoreButton = null;
+    private JButton sdkGuideButton = null;    
+    private JButton workbenchGuideButton = null;
     private JButton closeButton = null;
 
 	/*
@@ -106,7 +110,6 @@ public class HelpViewer extends WorkbenchViewerBaseComponent {
 //
 //            if (helpURL != null) {
 //            	try {
-//
 //            		helpEditorPane.setPage(helpURL);
 //            		helpEditorPane.setPage(HELP_URL);
 //            	} catch (IOException e) {
@@ -119,7 +122,7 @@ public class HelpViewer extends WorkbenchViewerBaseComponent {
             try {
             	log.debug("Attempting to read help file from  URL: " + HELP_URL);
             	helpEditorPane.setPage(new URL(HELP_URL));
-//                InputStream is = HelpViewer.class.getResourceAsStream(HELP_URL);
+//              InputStream is = HelpViewer.class.getResourceAsStream(HELP_URL);
 //				helpEditorPane.setText(convertStreamToString(is));
 			} catch (Exception e) {
 				// Attempt to read packaged help file instead
@@ -195,7 +198,9 @@ public class HelpViewer extends WorkbenchViewerBaseComponent {
             // TODO :: add helpLabel
         	
             buttonPanel = new JPanel();
-            buttonPanel.add(getOpenButton(), null);
+            buttonPanel.add(getLearnMoreButton(), null);
+            buttonPanel.add(getSdkGuideButton(), null);
+            buttonPanel.add(getWorkbenchGuideButton(), null);
             buttonPanel.add(getCloseButton(), null);
         }
         return buttonPanel;
@@ -226,21 +231,64 @@ public class HelpViewer extends WorkbenchViewerBaseComponent {
      * 
      * @return javax.swing.JButton
      */
-    private JButton getOpenButton() {
-        if (openButton == null) {
-            openButton = new JButton();
-            openButton.setText("Click the 'Learn More' button to open the caCORE Workbench Tool site, or go to " + TOOLS_SITE_URL + ".");
-            openButton.setText("Learn More");
-            openButton.setIcon(LookAndFeel.getGenerateApplicationIcon());
-            openButton.addActionListener(new java.awt.event.ActionListener() {
+    private JButton getLearnMoreButton() {
+        if (learnMoreButton == null) {
+            learnMoreButton = new JButton();
+            learnMoreButton.setToolTipText("Click the 'Learn More' button to open the caCORE Workbench Tool site, or go to " + TOOLS_SITE_URL + ".");
+            learnMoreButton.setText("Learn More");
+            learnMoreButton.setIcon(LookAndFeel.getGenerateApplicationIcon());
+            learnMoreButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                 	Utils.openURL(TOOLS_SITE_URL);
                 }
             });
         }
 
-        return openButton;
+        return learnMoreButton;
     }
+    
+    
+    /**
+     * This method initializes jButton
+     * 
+     * @return javax.swing.JButton
+     */
+    private JButton getSdkGuideButton() {
+        if (sdkGuideButton == null) {
+        	sdkGuideButton = new JButton();
+        	sdkGuideButton.setToolTipText("Click the 'SDK Guide' button to open the caCORE SDK Programmer's Guide, or go to " + SDK_GUIDE_URL + ".");
+        	sdkGuideButton.setText("SDK Guide");
+        	sdkGuideButton.setIcon(LookAndFeel.getGenerateApplicationIcon());
+        	sdkGuideButton.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                	Utils.openURL(SDK_GUIDE_URL);
+                }
+            });
+        }
+
+        return sdkGuideButton;
+    }    
+    
+    /**
+     * This method initializes jButton
+     * 
+     * @return javax.swing.JButton
+     */
+    private JButton getWorkbenchGuideButton() {
+        if (workbenchGuideButton == null) {
+        	workbenchGuideButton = new JButton();
+        	workbenchGuideButton.setToolTipText("Click the 'Workbench Guide' button to open the caCORE Workbench User's Guide, or go to " + WORKBENCH_GUIDE_URL + ".");
+        	workbenchGuideButton.setText("Workbench Guide");
+        	workbenchGuideButton.setIcon(LookAndFeel.getGenerateApplicationIcon());
+        	workbenchGuideButton.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                	Utils.openURL(WORKBENCH_GUIDE_URL);
+                }
+            });
+        }
+
+        return workbenchGuideButton;
+    }    
     
     public String convertStreamToString(InputStream is) throws Exception {
 
