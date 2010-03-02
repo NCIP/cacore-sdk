@@ -7,6 +7,7 @@ import javax.swing.filechooser.FileFilter;
 public interface FileFilters extends gov.nih.nci.cagrid.introduce.common.FileFilters {
 
 	public static final FileFilter ALL_FILTER = new AllFilter();
+	public static final FileFilter LOG_FILTER = new LogFileFilter();	
 	public static final FileFilter PEM_FILTER = new PEMFileFilter();
 	public static final FileFilter SQL_FILTER = new SQLFileFilter();
 	public static final FileFilter XMI_UML_FILTER = new XMIandUMLFileFilter();
@@ -33,7 +34,6 @@ public interface FileFilters extends gov.nih.nci.cagrid.introduce.common.FileFil
 		}
 	}
 	
-	
 	public class SQLFileFilter extends javax.swing.filechooser.FileFilter implements java.io.FileFilter {
 		public boolean accept(File file) {
 			String filename = file.getName();
@@ -44,6 +44,17 @@ public interface FileFilters extends gov.nih.nci.cagrid.introduce.common.FileFil
 			return "Database SQL Files (*.sql)";
 		}
 	}
+	
+	public class LogFileFilter extends javax.swing.filechooser.FileFilter implements java.io.FileFilter {
+		public boolean accept(File file) {
+			String filename = file.getName();
+			return filename.endsWith(".log");
+		}
+
+		public String getDescription() {
+			return "Workbench Log Files (*.log)";
+		}
+	}	
 	
 	public class AllFilter extends javax.swing.filechooser.FileFilter implements java.io.FileFilter {
 		public boolean accept(File file) {
