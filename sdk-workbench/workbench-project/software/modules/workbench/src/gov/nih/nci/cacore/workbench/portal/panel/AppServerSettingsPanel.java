@@ -137,6 +137,7 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
     private JComboBox getServerTypeComboBox() {
     	if (serverTypeComboBox == null) {
     		serverTypeComboBox = new JComboBox();
+    		serverTypeComboBox.setToolTipText("Specify whether deploying to a JBoss or Tomcat Application Server instance.");
     		
     		Map<String,String> serverTypeOptionsMap = OptionsMapManager.getServerTypeOptionsMap();
         	if (serverTypeOptionsMap!=null){
@@ -238,6 +239,7 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
     private JTextField getTomcatHostnameField() {
     	if (tomcatHostnameField == null) {
     		tomcatHostnameField = new JTextField();
+    		tomcatHostnameField.setToolTipText("Enter the hostname (or site name) that uniquely identifies the Tomcat instance on the network.");
    		
     		tomcatHostnameField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("tomcat.hostname"));
     		
@@ -270,7 +272,8 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
     private JTextField getTomcatPortAjpField() {
     	if (tomcatPortAjpField == null) {
     		tomcatPortAjpField = new JTextField();
-   		
+    		tomcatPortAjpField.setToolTipText("Enter the Tomcat Apache JServ Protocol (AJP) Port Number.");
+    		
     		tomcatPortAjpField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("tomcat.port.ajp"));
     		
     		tomcatPortAjpField.getDocument().addDocumentListener(new DocumentListener() {
@@ -302,7 +305,7 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
     private JTextField getTomcatPortHttpField() {
     	if (tomcatPortHttpField == null) {
     		tomcatPortHttpField = new JTextField();
-   		
+    		tomcatPortHttpField.setToolTipText("Enter the port number Tomcat will listen to for HTTP requests");
     		tomcatPortHttpField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("tomcat.port.http"));
     		
     		tomcatPortHttpField.getDocument().addDocumentListener(new DocumentListener() {
@@ -334,7 +337,8 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
     private JTextField getTomcatPortShutdownField() {
     	if (tomcatPortShutdownField == null) {
     		tomcatPortShutdownField = new JTextField();
-   		
+    		tomcatPortShutdownField.setToolTipText("Enter the port number Tomcat will listen to for application server shutdown requests");
+    		
     		tomcatPortShutdownField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("tomcat.port.shutdown"));
     		
     		tomcatPortShutdownField.getDocument().addDocumentListener(new DocumentListener() {
@@ -366,7 +370,7 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
     private JTextField getTomcatPortSslField() {
     	if (tomcatPortSslField == null) {
     		tomcatPortSslField = new JTextField();
-   		
+   		    tomcatPortSslField.setToolTipText("Enter the port number the Tomcat server will listen to for SSL requests");
     		tomcatPortSslField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("tomcat.port.ssl"));
     		
     		tomcatPortSslField.getDocument().addDocumentListener(new DocumentListener() {
@@ -398,6 +402,7 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
     private JComboBox getJbossPortNameComboBox() {
     	if (jbossPortNameComboBox == null) {
     		jbossPortNameComboBox = new JComboBox();
+    		jbossPortNameComboBox.setToolTipText("Select the JBoss Port Name corresponding to the server port that JBoss will use to manage its services");
     		
     		Map<String,String> jbossPortNameOptionsMap = OptionsMapManager.getJbossPortNameOptionsMap();
         	if (jbossPortNameOptionsMap!=null){
@@ -435,7 +440,7 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
     private JTextField getJbossServerAjpPortField() {
     	if (jbossServerAjpPortField == null) {
     		jbossServerAjpPortField = new JTextField();
-   		
+    		jbossServerAjpPortField.setToolTipText("Enter the JBoss Apache JServ Protocol (AJP) Port Number.");
     		jbossServerAjpPortField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("jboss.server.ajp.port"));
     		
     		jbossServerAjpPortField.getDocument().addDocumentListener(new DocumentListener() {
@@ -467,6 +472,7 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
     private JTextField getJbossServerHostnameField() {
     	if (jbossServerHostnameField == null) {
     		jbossServerHostnameField = new JTextField();
+    		jbossServerHostnameField.setToolTipText("Enter the hostname (or site name) that uniquely identifies the JBoss instance on the network.");
    		
     		jbossServerHostnameField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("jboss.server.hostname"));
     		
@@ -499,7 +505,7 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
     private JTextField getJbossServerJndiPortField() {
     	if (jbossServerJndiPortField == null) {
     		jbossServerJndiPortField = new JTextField();
-   		
+    		jbossServerJndiPortField.setToolTipText("Enter the port number the JBoss server will listen to for JNDI requests");
     		jbossServerJndiPortField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("jboss.server.jndi.port"));
     		
     		jbossServerJndiPortField.getDocument().addDocumentListener(new DocumentListener() {
@@ -531,7 +537,7 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
     private JTextField getJbossServerPortField() {
     	if (jbossServerPortField == null) {
     		jbossServerPortField = new JTextField();
-   		
+    		jbossServerPortField.setToolTipText("Enter the port number JBoss will listen to for HTTP requests");
     		jbossServerPortField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("jboss.server.port"));
     		
     		jbossServerPortField.getDocument().addDocumentListener(new DocumentListener() {
@@ -563,7 +569,7 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
     private JTextField getJbossServerSslPortField() {
     	if (jbossServerSslPortField == null) {
     		jbossServerSslPortField = new JTextField();
-   		
+    		jbossServerSslPortField.setToolTipText("Enter the port number the JBoss server will listen to for SSL requests");
     		jbossServerSslPortField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("jboss.server.ssl.port"));
     		
     		jbossServerSslPortField.getDocument().addDocumentListener(new DocumentListener() {
@@ -595,7 +601,7 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
     private JCheckBox getInstallServerCheckBox() {
         if (installServerCheckBox == null) {
         	installServerCheckBox = new JCheckBox();
-        	installServerCheckBox.setToolTipText("Install a new instance of the Application Server?");
+        	installServerCheckBox.setToolTipText("Toggle to enable/disable the installation of a new instance of the Application Server");
         	installServerCheckBox.setHorizontalAlignment(SwingConstants.LEADING);
         	installServerCheckBox.setSelected(Boolean.parseBoolean(parentContainer.getPropertiesManager().getDeployPropertyValue("INSTALL_CONTAINER")));
         	installServerCheckBox.setHorizontalTextPosition(SwingConstants.LEFT);
