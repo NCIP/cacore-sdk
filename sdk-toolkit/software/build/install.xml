@@ -150,15 +150,13 @@
 		install:database
 		">
 		<if>
-			<not>
-				<and>
-					<equals arg1="${ENABLE_REMOTE_JAVA_INTERFACE}" arg2="false" />
-					<equals arg1="${ENABLE_WEBSERVICE_INTERFACE}" arg2="false" />
-					<equals arg1="${ENABLE_RESTFUL_XML_INTERFACE}" arg2="false" />
-					<equals arg1="${ENABLE_RESTFUL_HTML_INTERFACE}" arg2="false" />
-					<equals arg1="${ENABLE_RESTFUL_JSON_INTERFACE}" arg2="false" />
-				</and>
-			</not>
+			<or>
+				<equals arg1="${REMOTE_JAVA_INTERFACE_ENABLED}" arg2="true" />
+				<equals arg1="${WEBSERVICE_INTERFACE_ENABLED}" arg2="true" />
+				<equals arg1="${RESTFUL_XML_INTERFACE_ENABLED}" arg2="true" />
+				<equals arg1="${RESTFUL_HTML_INTERFACE_ENABLED}" arg2="true" />
+				<equals arg1="${ENABLE_RESTFUL_JSON_INTERFACE_ENABLED}" arg2="true" />
+			</or>
 			<then>
 				<antcall target="install:tomcat" />
 				<antcall target="install:jboss" />

@@ -44,142 +44,11 @@
 			<equals arg1="${DB_USE_JNDI_BASED_CONNECTION}" arg2="yes" casesensitive="false" trim="true" />
 		</or>
 	</condition>
-
-	<condition property="REMOTE_JAVA_INTERFACE_START" value="" else="${xml.comment.start}">
-		<or>
-			<equals arg1="${ENABLE_REMOTE_JAVA_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
-			<equals arg1="${ENABLE_REMOTE_JAVA_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
-		</or>
-	</condition>
-	<condition property="REMOTE_JAVA_INTERFACE_END" value="" else="${xml.comment.end}">
-		<or>
-			<equals arg1="${ENABLE_REMOTE_JAVA_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
-			<equals arg1="${ENABLE_REMOTE_JAVA_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
-		</or>
-	</condition>
-	<condition property="WEB_SERVICE_INTERFACE_START" value="" else="${xml.comment.start}">
-		<and>
-			<not>
-				<equals arg1="${ISO21090_DATATYPES_ENABLED}" arg2="true" casesensitive="false" trim="true" />
-			</not>
-			<or>
-				<equals arg1="${ENABLE_WEBSERVICE_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
-				<equals arg1="${ENABLE_WEBSERVICE_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
-			</or>
-		</and>
-	</condition>
-	<condition property="WEB_SERVICE_INTERFACE_END" value="" else="${xml.comment.end}">
-		<and>
-			<not>
-				<equals arg1="${ISO21090_DATATYPES_ENABLED}" arg2="true" casesensitive="false" trim="true" />
-			</not>
-			<or>
-				<equals arg1="${ENABLE_WEBSERVICE_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
-				<equals arg1="${ENABLE_WEBSERVICE_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
-			</or>
-		</and>
-	</condition>
-
-	<condition property="RESTFUL_XML_INTERFACE_START" value="" else="${xml.comment.start}">
-		<and>
-			<not>
-				<equals arg1="${ISO21090_DATATYPES_ENABLED}" arg2="true" casesensitive="false" trim="true" />
-			</not>
-			<or>
-				<equals arg1="${ENABLE_RESTFUL_XML_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
-				<equals arg1="${ENABLE_RESTFUL_XML_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
-			</or>
-		</and>
-	</condition>
-	<condition property="RESTFUL_XML_INTERFACE_END" value="" else="${xml.comment.end}">
-		<and>
-			<not>
-				<equals arg1="${ISO21090_DATATYPES_ENABLED}" arg2="true" casesensitive="false" trim="true" />
-			</not>
-			<or>
-				<equals arg1="${ENABLE_RESTFUL_XML_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
-				<equals arg1="${ENABLE_RESTFUL_XML_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
-			</or>
-		</and>
-	</condition>
-	<condition property="RESTFUL_HTML_INTERFACE_START" value="" else="${xml.comment.start}">
-		<and>
-			<not>
-				<equals arg1="${ISO21090_DATATYPES_ENABLED}" arg2="true" casesensitive="false" trim="true" />
-			</not>
-			<or>
-				<equals arg1="${ENABLE_RESTFUL_HTML_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
-				<equals arg1="${ENABLE_RESTFUL_HTML_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
-			</or>
-		</and>
-	</condition>
-
-	<condition property="RESTFUL_HTML_INTERFACE_END" value="" else="${xml.comment.end}">
-		<and>
-			<not>
-				<equals arg1="${ISO21090_DATATYPES_ENABLED}" arg2="true" casesensitive="false" trim="true" />
-			</not>
-			<or>
-				<equals arg1="${ENABLE_RESTFUL_HTML_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
-				<equals arg1="${ENABLE_RESTFUL_HTML_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
-			</or>
-		</and>
-	</condition>
-
-	<condition property="RESTFUL_JSON_INTERFACE_START" value="" else="${xml.comment.start}">
-		<and>
-			<not>
-				<equals arg1="${ISO21090_DATATYPES_ENABLED}" arg2="true" casesensitive="false" trim="true" />
-			</not>
-			<or>
-				<equals arg1="${ENABLE_RESTFUL_JSON_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
-				<equals arg1="${ENABLE_RESTFUL_JSON_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
-			</or>
-		</and>
-	</condition>
-
-	<condition property="RESTFUL_JSON_INTERFACE_END" value="" else="${xml.comment.end}">
-		<and>
-			<not>
-				<equals arg1="${ISO21090_DATATYPES_ENABLED}" arg2="true" casesensitive="false" trim="true" />
-			</not>
-			<or>
-				<equals arg1="${ENABLE_RESTFUL_JSON_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
-				<equals arg1="${ENABLE_RESTFUL_JSON_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
-			</or>
-		</and>
-	</condition>
 	<condition property="SECURITY_ENABLED" value="true" else="false">
 		<or>
 			<equals arg1="${ENABLE_SECURITY}" arg2="true" casesensitive="false" trim="true" />
 			<equals arg1="${ENABLE_SECURITY}" arg2="yes" casesensitive="false" trim="true" />
 		</or>
-	</condition>
-
-	<condition property="PACKAGE_LOCAL_CLIENT">
-		<or>
-			<equals arg1="${ENABLE_LOCAL_JAVA_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
-			<equals arg1="${ENABLE_LOCAL_JAVA_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
-		</or>
-	</condition>
-
-	<condition property="PACKAGE_REMOTE_CLIENT">
-		<or>
-			<equals arg1="${ENABLE_REMOTE_JAVA_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
-			<equals arg1="${ENABLE_REMOTE_JAVA_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
-		</or>
-	</condition>
-
-	<condition property="PACKAGE_WEBSERVICE_INTERFACE">
-		<and>
-			<not>
-				<equals arg1="${ISO21090_DATATYPES_ENABLED}" arg2="true" casesensitive="false" trim="true" />
-			</not>
-			<or>
-				<equals arg1="${ENABLE_WEBSERVICE_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
-				<equals arg1="${ENABLE_WEBSERVICE_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
-			</or>
-		</and>
 	</condition>
 
 	<condition property="CSM_JNDI_START" value="" else="${xml.comment.start}">
@@ -384,6 +253,113 @@
 		</not>
 	</condition>
 
+	<condition property="ISO21090_DATATYPES_ENABLED" value="true" else="false">
+		<or>
+			<equals arg1="${ENABLE_ISO21090_DATATYPES}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${ENABLE_ISO21090_DATATYPES}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
+	</condition>
+	
+	<condition property="LOCAL_JAVA_INTERFACE_ENABLED" value="true">
+		<or>
+			<equals arg1="${ENABLE_LOCAL_JAVA_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${ENABLE_LOCAL_JAVA_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
+	</condition>
+
+	<condition property="REMOTE_JAVA_INTERFACE_ENABLED" value="true">
+		<or>
+			<equals arg1="${ENABLE_REMOTE_JAVA_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${ENABLE_REMOTE_JAVA_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
+	</condition>
+
+	<condition property="WEBSERVICE_INTERFACE_ENABLED" value="true">
+		<and>
+			<not>
+				<equals arg1="${ISO21090_DATATYPES_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+			</not>
+			<or>
+				<equals arg1="${ENABLE_WEBSERVICE_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
+				<equals arg1="${ENABLE_WEBSERVICE_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
+			</or>
+		</and>
+	</condition>
+
+	<condition property="RESTFUL_XML_INTERFACE_ENABLED" value="true">
+		<and>
+			<not>
+				<equals arg1="${ISO21090_DATATYPES_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+			</not>
+			<or>
+				<equals arg1="${ENABLE_RESTFUL_XML_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
+				<equals arg1="${ENABLE_RESTFUL_XML_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
+			</or>
+		</and>
+	</condition>
+
+	<condition property="RESTFUL_HTML_INTERFACE_ENABLED" value="true">
+		<and>
+			<not>
+				<equals arg1="${ISO21090_DATATYPES_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+			</not>
+			<or>
+				<equals arg1="${ENABLE_RESTFUL_HTML_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
+				<equals arg1="${ENABLE_RESTFUL_HTML_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
+			</or>
+		</and>
+	</condition>
+
+	<condition property="RESTFUL_JSON_INTERFACE_ENABLED" value="true">
+		<and>
+			<not>
+				<equals arg1="${ISO21090_DATATYPES_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+			</not>
+			<or>
+				<equals arg1="${ENABLE_RESTFUL_JSON_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
+				<equals arg1="${ENABLE_RESTFUL_JSON_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
+			</or>
+		</and>
+	</condition>
+
+	<condition property="REMOTE_JAVA_INTERFACE_START" value="" else="${xml.comment.start}">
+		<equals arg1="${REMOTE_JAVA_INTERFACE_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+	</condition>
+
+	<condition property="REMOTE_JAVA_INTERFACE_END" value="" else="${xml.comment.end}">
+		<equals arg1="${REMOTE_JAVA_INTERFACE_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+	</condition>
+
+	<condition property="WEB_SERVICE_INTERFACE_START" value="" else="${xml.comment.start}">
+		<equals arg1="${WEBSERVICE_INTERFACE_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+	</condition>
+
+	<condition property="WEB_SERVICE_INTERFACE_END" value="" else="${xml.comment.end}">
+		<equals arg1="${WEBSERVICE_INTERFACE_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+	</condition>
+
+	<condition property="RESTFUL_XML_INTERFACE_START" value="" else="${xml.comment.start}">
+		<equals arg1="${RESTFUL_XML_INTERFACE_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+	</condition>
+	<condition property="RESTFUL_XML_INTERFACE_END" value="" else="${xml.comment.end}">
+		<equals arg1="${RESTFUL_XML_INTERFACE_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+	</condition>
+	<condition property="RESTFUL_HTML_INTERFACE_START" value="" else="${xml.comment.start}">
+		<equals arg1="${RESTFUL_HTML_INTERFACE_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+	</condition>
+
+	<condition property="RESTFUL_HTML_INTERFACE_END" value="" else="${xml.comment.end}">
+		<equals arg1="${RESTFUL_HTML_INTERFACE_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+	</condition>
+
+	<condition property="RESTFUL_JSON_INTERFACE_START" value="" else="${xml.comment.start}">
+		<equals arg1="${RESTFUL_JSON_INTERFACE_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+	</condition>
+
+	<condition property="RESTFUL_JSON_INTERFACE_END" value="" else="${xml.comment.end}">
+		<equals arg1="${RESTFUL_JSON_INTERFACE_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+	</condition>
+	
 	<condition property="JNDI_PREFIX" value="${jboss.jndi.prefix}" else="${tomcat.jndi.prefix}">
 		<equals arg1="${SERVER_TYPE}" arg2="jboss" casesensitive="false" trim="true" />
 	</condition>
@@ -433,7 +409,8 @@
 			<filter token="CAGRID_DORIAN_SERVICE_URL" value="${CAGRID_DORIAN_SERVICE_URL}" />
 			<filter token="SDK_GRID_LOGIN_SERVICE_URL" value="${SDK_GRID_LOGIN_SERVICE_URL}" />
 			<filter token="GRID_JNDI_NAME" value="${GRID_JNDI_NAME}" />
-
+			<filter token="ENABLE_ISO21090_DATATYPES" value="${ISO21090_DATATYPES_ENABLED}" />
+			<filter token="ENABLE_RESTFUL_HTML_INTERFACE" value="${RESTFUL_HTML_INTERFACE_ENABLED}" />
 		</filterset>
 		<filterset id="filtertoken4" begintoken="${xml.comment.start}@" endtoken="@${xml.comment.end}" onmissingfiltersfile="fail">
 			<filter token="DB_JNDI_URL_START" value="${JNDI_START}" />
@@ -673,8 +650,9 @@
 	<!-- #################################################################### -->
 
 	<target name="package-local-client" depends="">
+		<echo message="Hello ${LOCAL_JAVA_INTERFACE_ENABLED}"/>
 		<if>
-			<equals arg1="${PACKAGE_LOCAL_CLIENT}" arg2="true" />
+			<equals arg1="${LOCAL_JAVA_INTERFACE_ENABLED}" arg2="true" />
 			<then>
 				<antcall target="-package-local-client-core" />
 				<antcall target="-package-local-client-writable-api" />
@@ -904,7 +882,7 @@
 
 	<target name="package-remote-client" depends="">
 		<if>
-			<equals arg1="${PACKAGE_REMOTE_CLIENT}" arg2="true" />
+			<equals arg1="${REMOTE_JAVA_INTERFACE_ENABLED}" arg2="true" />
 			<then>
 				<antcall target="-package-remote-client-core" />
 				<antcall target="-package-remote-client-writable-api" />
@@ -1081,7 +1059,7 @@
 	<!-- ######################## WS Client targets ######################### -->
 	<!-- #################################################################### -->
 
-	<target name="package-ws-client" if="PACKAGE_WEBSERVICE_INTERFACE">
+	<target name="package-ws-client" if="WEBSERVICE_INTERFACE_ENABLED">
 		<mkdir dir="${package.client.ws.dir}" />
 		<copy todir="${package.client.ws.lib.dir}">
 			<fileset dir="${runtime.lib.dir}">

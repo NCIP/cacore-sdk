@@ -366,7 +366,6 @@
 			<filter token="HIBERNATE_SHOW_SQL" value="${HIBERNATE_SHOW_SQL}" />
 
 			<filter token="CAGRID_LOGIN_MODULE_NAME" value="${CAGRID_LOGIN_MODULE_NAME}" />
-			<filter token="ENABLE_ISO21090_DATATYPES" value="${ENABLE_ISO21090_DATATYPES}" />
 		</filterset>
 		<filterset id="filtertoken2" begintoken="${xml.comment.start}@" endtoken="@${xml.comment.end}" onmissingfiltersfile="fail">
 			<filter token="SECURITY_START" value="${SECURITY_START}" />
