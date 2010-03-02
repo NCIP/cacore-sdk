@@ -2,9 +2,19 @@ package gov.nih.nci.cacore.workbench.portal.viewer;
 
 import gov.nih.nci.cacore.workbench.common.LookAndFeel;
 import gov.nih.nci.cacore.workbench.common.ResourceManager;
+import gov.nih.nci.cacore.workbench.common.WorkbenchPropertiesManager;
+import gov.nih.nci.cacore.workbench.portal.panel.AdvancedSettingsPanel;
+import gov.nih.nci.cacore.workbench.portal.panel.AppServerSettingsPanel;
+import gov.nih.nci.cacore.workbench.portal.panel.CaGridAuthSettingsPanel;
+import gov.nih.nci.cacore.workbench.portal.panel.ClmSettingsPanel;
 import gov.nih.nci.cacore.workbench.portal.panel.CodegenSettingsPanel;
+import gov.nih.nci.cacore.workbench.portal.panel.CsmDbConnectionSettingsPanel;
+import gov.nih.nci.cacore.workbench.portal.panel.DbConnectionSettingsPanel;
+import gov.nih.nci.cacore.workbench.portal.panel.LogViewerPanel;
 import gov.nih.nci.cacore.workbench.portal.panel.ModelSettingsPanel;
+import gov.nih.nci.cacore.workbench.portal.panel.ProjectDirSettingsPanel;
 import gov.nih.nci.cacore.workbench.portal.panel.ProjectSettingsPanel;
+import gov.nih.nci.cacore.workbench.portal.panel.RemoteSshSettingsPanel;
 import gov.nih.nci.cacore.workbench.portal.panel.SecuritySettingsPanel;
 import gov.nih.nci.cacore.workbench.portal.panel.WritableApiSettingsPanel;
 import gov.nih.nci.cacore.workbench.portal.validation.CodegenPropertiesValidator;
@@ -42,8 +52,16 @@ public class CodegenPropertiesViewer extends WorkbenchViewerBaseComponent {
 	
 	private static final String MODELS_DIR = "models";
 	
-	private int GENERATE_TAB_INDEX = 5;
+    // Tab panel indexes - used to enable/disable entire tab
+	private int PROJECT_TAB_INDEX = 1;
+	private int MODEL_TAB_INDEX = 2;	
+	private int CODEGEN_TAB_INDEX = 3;
+	private int WRITABLE_API_TAB_INDEX = 4;
+	private int SECURITY_TAB_INDEX = 5;
+	private int GENERATE_TAB_INDEX = 6;
+	private int LOG_VIEWER_TAB_INDEX = 7;
 	
+	private boolean isPropsLoaded=false;
 	private boolean isDirty=false;
 	
 	// Validation 
@@ -66,11 +84,13 @@ public class CodegenPropertiesViewer extends WorkbenchViewerBaseComponent {
     private JPanel buttonPanel = null;
 
 	// Tab panel definitions
-	private ProjectSettingsPanel projectSettingsPanel = null;
+	private ProjectDirSettingsPanel projectDirSettingsPanel = null;
+	private ProjectSettingsPanel projectSettingsPanel = null;	
 	private ModelSettingsPanel modelSettingsPanel = null;
 	private CodegenSettingsPanel codegenSettingsPanel = null;
 	private WritableApiSettingsPanel writableApiSettingsPanel = null;
 	private SecuritySettingsPanel securitySettingsPanel = null;
+	private LogViewerPanel logViewerPanel = null;
 	
 	private JPanel summarySettingsPanel = null;
     
@@ -84,44 +104,19 @@ public class CodegenPropertiesViewer extends WorkbenchViewerBaseComponent {
      * This method initializes this Viewer
      */
     private void initialize() {
-
-    	//Request Project Directory value up front.  Used to determine whether
-        //to load deploy settings from either workbench template or existing project 
-        //properties file
-        String projectDirPath=null;
-
-		try {
-			projectDirPath = ResourceManager.promptDir("","Select the Project Generation Directory");
-			if (projectDirPath == null || projectDirPath.length() == 0){
-				// No Project Generation Directory selected - abort operation by generating
-				File projectDir = new File(projectDirPath);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-			return;
-		}  
-		
-		// Initialize WorkbenchPropertiesManager
-		propsMgr = ResourceManager.getCodegenPropertiesManager(projectDirPath); 
+    	
+		// Initialize to an empty properties manager. User will
+		// later choose which set of deployment properties to load
+		// i.e., local or remote (e.g., dev, training, qa, prod)
+		propsMgr = new WorkbenchPropertiesManager(new String[]{});    	
         
         //Initialize main tabbed panel validator
         propsValidator = new CodegenPropertiesValidator(this);
         
-        //Initialize Panels
-        projectSettingsPanel=new ProjectSettingsPanel(propsMgr, propsValidator);
-        modelSettingsPanel=new ModelSettingsPanel(propsMgr, propsValidator);
-        codegenSettingsPanel=new CodegenSettingsPanel(propsMgr, propsValidator);
-        writableApiSettingsPanel=new WritableApiSettingsPanel(propsMgr, propsValidator);
-        securitySettingsPanel=new SecuritySettingsPanel(propsMgr, propsValidator);
-        
-        panelValidators = new ArrayList<PanelValidator>();
-        panelValidators.add((PanelValidator)projectSettingsPanel);
-        panelValidators.add((PanelValidator)modelSettingsPanel);
-        panelValidators.add((PanelValidator)codegenSettingsPanel);
-        panelValidators.add((PanelValidator)writableApiSettingsPanel);
-        panelValidators.add((PanelValidator)securitySettingsPanel);
-        
-        securitySettingsPanel.setParentContainer(this);
+    	projectDirSettingsPanel=new ProjectDirSettingsPanel(this, propsValidator);
+
+        //Initialize Panels       
+        initPanels();
         
         this.setContentPane(getMainPanel());
         this.setFrameIcon(LookAndFeel.getGenerateApplicationIcon());
@@ -129,8 +124,9 @@ public class CodegenPropertiesViewer extends WorkbenchViewerBaseComponent {
 
         initValidation();
         
-        projectSettingsPanel.setProjectDirValue(projectDirPath);
+//        projectSettingsPanel.setProjectDirValue(projectDirPath);
         
+        setPropsLoaded(false);
         setDirty(false);
         validateInput();
     }
@@ -325,7 +321,7 @@ public class CodegenPropertiesViewer extends WorkbenchViewerBaseComponent {
     
     public void toggleGenerateButton() {
     	//if (this.validationModel.hasErrors() || (this.isDirty) || (mainTabbedPane.getSelectedIndex() != GENERATE_TAB_INDEX) ) {
-    	if (this.isDirty || (mainTabbedPane.getSelectedIndex() != GENERATE_TAB_INDEX) ) {
+    	if (this.isDirty || (mainTabbedPane.getSelectedIndex() != GENERATE_TAB_INDEX)|| (!this.isPropsLoaded) ) {
     		generateButton.setEnabled(false);
     	} else {
     		generateButton.setEnabled(true);
@@ -333,7 +329,8 @@ public class CodegenPropertiesViewer extends WorkbenchViewerBaseComponent {
     }
     
     public void toggleSaveButton() {
-    	if (this.validationModel.hasErrors() || !this.isDirty) {
+    	//if (this.validationModel.hasErrors() || !this.isDirty || (!this.isPropsLoaded)) {
+    	if ( (!this.isDirty) || (!this.isPropsLoaded)) {
     		saveButton.setEnabled(false);
     	} else {
     		saveButton.setEnabled(true);
@@ -341,7 +338,7 @@ public class CodegenPropertiesViewer extends WorkbenchViewerBaseComponent {
     }
 
     public void togglePreviousButton() {
-    	if (mainTabbedPane.getSelectedIndex() <= 0){
+    	if (mainTabbedPane.getSelectedIndex() <= 0 || (!this.isPropsLoaded) ){
     		previousButton.setEnabled(false);
     	} else {
     		previousButton.setEnabled(true);
@@ -349,7 +346,7 @@ public class CodegenPropertiesViewer extends WorkbenchViewerBaseComponent {
     }
 
     public void toggleNextButton() {
-    	if (mainTabbedPane.getSelectedIndex() >= mainTabbedPane.getTabCount()-1){
+    	if (mainTabbedPane.getSelectedIndex() >= mainTabbedPane.getTabCount()-1 || (!this.isPropsLoaded)){
     		nextButton.setEnabled(false);
     	} else {
     		nextButton.setEnabled(true);
@@ -392,6 +389,7 @@ public class CodegenPropertiesViewer extends WorkbenchViewerBaseComponent {
     public JTabbedPane getMainTabbedPane() {
 		if (mainTabbedPane == null) {
 			mainTabbedPane = new JTabbedPane();
+			mainTabbedPane.addTab("Project Dir", null, new IconFeedbackPanel(this.validationModel, projectDirSettingsPanel.getSettingsPanel()), null);			
 			mainTabbedPane.addTab("Project", null, new IconFeedbackPanel(this.validationModel, projectSettingsPanel.getSettingsPanel()), null);
 			mainTabbedPane.addTab("Model", null, new IconFeedbackPanel(this.validationModel, modelSettingsPanel.getSettingsPanel()), null);
 			mainTabbedPane.addTab("Code Generation", null, new IconFeedbackPanel(this.validationModel, codegenSettingsPanel.getSettingsPanel()), null);
@@ -401,6 +399,8 @@ public class CodegenPropertiesViewer extends WorkbenchViewerBaseComponent {
 			mainTabbedPane.addTab("Security", null, new IconFeedbackPanel(this.validationModel, securitySettingsPanel.getSettingsPanel()), null);
 			
 			mainTabbedPane.addTab("Generate Application", null, getSummarySettingsPanel(), null);
+			
+			mainTabbedPane.addTab("View Log", null, new IconFeedbackPanel(this.validationModel, logViewerPanel.getSettingsPanel()), null);
 			
 			mainTabbedPane.addMouseListener(new java.awt.event.MouseListener() {
                 public void mouseEntered(java.awt.event.MouseEvent e) {
@@ -481,7 +481,7 @@ public class CodegenPropertiesViewer extends WorkbenchViewerBaseComponent {
 			gridBagConstraints30.weightx = 1.0;
 			gridBagConstraints30.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints30.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints30.gridwidth = 1;
+			gridBagConstraints30.gridwidth = 2;
 			gridBagConstraints30.weighty = 1.0D;
 			gridBagConstraints30.gridx = 0;
 			
@@ -553,4 +553,90 @@ public class CodegenPropertiesViewer extends WorkbenchViewerBaseComponent {
 	public void setDirty(boolean isDirty){
 		this.isDirty = isDirty;
 	}
+	
+	private void setPropsLoaded(boolean isPropsLoaded){
+		this.isPropsLoaded = isPropsLoaded;
+	}	
+	
+    public void setProjectDir(String projectDirPath){
+    	projectSettingsPanel.setProjectDir(projectDirPath);
+    }
+    
+    public void loadCodegenProperties(){
+    	
+		// Initialize WorkbenchPropertiesManager
+		propsMgr = ResourceManager.getCodegenPropertiesManager(projectSettingsPanel.getProjectDir()); 
+        
+		initPanels();
+		resetMainTabbedPaneComponents();
+    	
+		initValidation();
+		
+        setDirty(false);
+        setPropsLoaded(true);
+        
+		validateInput();
+		
+		// Provide confirmation to user that the properties have been successfully loaded
+		JOptionPane.showMessageDialog(this,"The codegen properties have been successfully loaded");
+    }    
+    
+    private void initPanels(){
+    	
+        //Initialize Panels
+        projectSettingsPanel=new ProjectSettingsPanel(propsMgr, propsValidator);
+        modelSettingsPanel=new ModelSettingsPanel(propsMgr, propsValidator);
+        codegenSettingsPanel=new CodegenSettingsPanel(propsMgr, propsValidator);
+        writableApiSettingsPanel=new WritableApiSettingsPanel(propsMgr, propsValidator);
+        securitySettingsPanel=new SecuritySettingsPanel(propsMgr, propsValidator);
+        logViewerPanel=new LogViewerPanel(propsValidator,projectSettingsPanel.getProjectDir());
+        
+        panelValidators = new ArrayList<PanelValidator>();
+        panelValidators.add((PanelValidator)projectDirSettingsPanel);
+        panelValidators.add((PanelValidator)projectSettingsPanel);
+        panelValidators.add((PanelValidator)modelSettingsPanel);
+        panelValidators.add((PanelValidator)codegenSettingsPanel);
+        panelValidators.add((PanelValidator)writableApiSettingsPanel);
+        panelValidators.add((PanelValidator)securitySettingsPanel);
+        panelValidators.add((PanelValidator)logViewerPanel);
+        
+        securitySettingsPanel.setParentContainer(this);
+    }
+    
+    private void resetMainTabbedPaneComponents(){
+    	
+    	mainTabbedPane.setComponentAt(PROJECT_TAB_INDEX, new IconFeedbackPanel(this.validationModel, projectSettingsPanel.getSettingsPanel()));
+    	mainTabbedPane.setComponentAt(MODEL_TAB_INDEX, new IconFeedbackPanel(this.validationModel, modelSettingsPanel.getSettingsPanel()));
+    	mainTabbedPane.setComponentAt(CODEGEN_TAB_INDEX, new IconFeedbackPanel(this.validationModel, codegenSettingsPanel.getSettingsPanel()));
+    	mainTabbedPane.setComponentAt(WRITABLE_API_TAB_INDEX, new IconFeedbackPanel(this.validationModel, writableApiSettingsPanel.getSettingsPanel()));
+    	mainTabbedPane.setComponentAt(SECURITY_TAB_INDEX, new IconFeedbackPanel(this.validationModel, securitySettingsPanel.getSettingsPanel()));
+    	mainTabbedPane.setComponentAt(LOG_VIEWER_TAB_INDEX, new IconFeedbackPanel(this.validationModel, logViewerPanel.getSettingsPanel()));    	
+
+    }  
+    
+    public void togglePanels(){
+	    if (!isPropsLoaded){
+	    	mainTabbedPane.setEnabledAt(PROJECT_TAB_INDEX, false);
+	    	mainTabbedPane.setEnabledAt(MODEL_TAB_INDEX, false);
+	    	mainTabbedPane.setEnabledAt(CODEGEN_TAB_INDEX, false);
+	    	mainTabbedPane.setEnabledAt(WRITABLE_API_TAB_INDEX, false);
+	    	mainTabbedPane.setEnabledAt(SECURITY_TAB_INDEX, false);
+	    	mainTabbedPane.setEnabledAt(GENERATE_TAB_INDEX, false);
+	    	mainTabbedPane.setEnabledAt(LOG_VIEWER_TAB_INDEX, false);
+	    } else {
+	    	mainTabbedPane.setEnabledAt(PROJECT_TAB_INDEX, true);
+	    	mainTabbedPane.setEnabledAt(MODEL_TAB_INDEX, true);
+	    	mainTabbedPane.setEnabledAt(CODEGEN_TAB_INDEX, true);
+	    	
+	    	// The following tabs are enabled/disabled based upon
+	    	// Security and Writable API settings and so should not 
+	    	// be enabled here
+	    	
+	    	//mainTabbedPane.setEnabledAt(WRITABLE_API_TAB_INDEX, true);
+	    	//mainTabbedPane.setEnabledAt(SECURITY_TAB_INDEX, true);
+	    	
+	    	mainTabbedPane.setEnabledAt(GENERATE_TAB_INDEX, true);
+	    	mainTabbedPane.setEnabledAt(LOG_VIEWER_TAB_INDEX, true);
+	    }
+    }    
 } 
