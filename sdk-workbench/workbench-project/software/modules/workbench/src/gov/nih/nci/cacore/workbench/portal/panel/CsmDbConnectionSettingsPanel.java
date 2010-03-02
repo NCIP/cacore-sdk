@@ -105,7 +105,7 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
     private JCheckBox getCsmUseDbConnectionSettingsCheckBox() {
         if (csmUseDbConnectionSettingsCheckBox == null) {
         	csmUseDbConnectionSettingsCheckBox = new JCheckBox();
-        	csmUseDbConnectionSettingsCheckBox.setToolTipText("Use DB Connection Settings?");
+        	csmUseDbConnectionSettingsCheckBox.setToolTipText("Toggle to enable/disable using the same database options settings as specified on the Application Database tab");
         	csmUseDbConnectionSettingsCheckBox.setHorizontalAlignment(SwingConstants.LEADING);
         	csmUseDbConnectionSettingsCheckBox.setSelected(Boolean.parseBoolean(parentContainer.getPropertiesManager().getDeployPropertyValue("CSM_USE_DB_CONNECTION_SETTINGS")));
         	csmUseDbConnectionSettingsCheckBox.setHorizontalTextPosition(SwingConstants.LEFT);
@@ -145,6 +145,7 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
     private JComboBox getCsmDbTypeComboBox() {
         if (csmDbTypeComboBox == null) {
         	csmDbTypeComboBox = new JComboBox();
+        	csmDbTypeComboBox.setToolTipText("The Database Type is automatically synchronized with the Database Type property selected on the App DB tab");
         	
         	Map<String,String> dbTypeOptionsMap = OptionsMapManager.getDbTypeOptionsMap();
         	if (dbTypeOptionsMap!=null){
@@ -192,7 +193,7 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
     private JCheckBox getCsmUseJndiBasedConnectionCheckBox() {
         if (csmUseJndiBasedConnectionCheckBox == null) {
         	csmUseJndiBasedConnectionCheckBox = new JCheckBox();
-        	csmUseJndiBasedConnectionCheckBox.setToolTipText("Use a JNDI-based CSM Connection?");
+        	csmUseJndiBasedConnectionCheckBox.setToolTipText("Toggle to enable/disable using a JNDI-based Connection");
         	csmUseJndiBasedConnectionCheckBox.setHorizontalAlignment(SwingConstants.LEADING);
         	csmUseJndiBasedConnectionCheckBox.setSelected(Boolean.parseBoolean(parentContainer.getPropertiesManager().getDeployPropertyValue("CSM_USE_JNDI_BASED_CONNECTION")));
         	csmUseJndiBasedConnectionCheckBox.setHorizontalTextPosition(SwingConstants.LEFT);
@@ -227,6 +228,7 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
     public JTextField getCsmDbJndiNameField() {
         if (csmDbJndiUrlField == null) {
         	csmDbJndiUrlField = new JTextField();
+        	csmDbJndiUrlField.setToolTipText("Enter the JNDI name used in the server JNDI configuration file to lookup and identify the database configuration properties.");
         	csmDbJndiUrlField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("CSM_JNDI_NAME"));
         	csmDbJndiUrlField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
@@ -261,6 +263,7 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
     private JTextField getCsmDbConnectionUrlField() {
         if (csmDbConnectionUrlField == null) {
         	csmDbConnectionUrlField = new JTextField();
+        	csmDbConnectionUrlField.setToolTipText("This is a read-only compound property composed of the DB Hostname, Port, and Schema properties");
         	csmDbConnectionUrlField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("CSM_DB_CONNECTION_URL"));
         	csmDbConnectionUrlField.setEnabled(false);
         	csmDbConnectionUrlField.getDocument().addDocumentListener(new DocumentListener() {
@@ -300,12 +303,14 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
     private JTextField getCsmDbHostnameField() {
         if (csmDbHostnameField == null) {
         	csmDbHostnameField = new JTextField();
+        	csmDbHostnameField.setToolTipText("Enter the hostname (or sitename) that uniquely identifies the database instance on the network");
         	csmDbHostnameField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("CSM_DB_SERVER"));
      
         	csmDbHostnameField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
                 	updateCsmDbFields();
                 	toggleRecreateCsmDBFields();
+                	parentContainer.toggleRecreateClmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
@@ -313,6 +318,7 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
                 public void removeUpdate(DocumentEvent e) {
                 	updateCsmDbFields();
                 	toggleRecreateCsmDBFields();
+                	parentContainer.toggleRecreateClmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
@@ -320,6 +326,7 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
                 public void insertUpdate(DocumentEvent e) {
                 	updateCsmDbFields();
                 	toggleRecreateCsmDBFields();
+                	parentContainer.toggleRecreateClmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
@@ -345,12 +352,14 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
     public JTextField getCsmDbPortField() {
         if (csmDbPortField == null) {
         	csmDbPortField = new JTextField();
+        	csmDbPortField.setToolTipText("Enter the port number the database instance is listening to for data requests");
         	csmDbPortField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("CSM_DB_SERVER_PORT"));
 
         	csmDbPortField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
                 	updateCsmDbFields();
                 	toggleRecreateCsmDBFields();
+                	parentContainer.toggleRecreateClmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
@@ -358,6 +367,7 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
                 public void removeUpdate(DocumentEvent e) {
                 	updateCsmDbFields();
                 	toggleRecreateCsmDBFields();
+                	parentContainer.toggleRecreateClmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
@@ -365,6 +375,7 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
                 public void insertUpdate(DocumentEvent e) {
                 	updateCsmDbFields();
                 	toggleRecreateCsmDBFields();
+                	parentContainer.toggleRecreateClmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
@@ -391,12 +402,14 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
     private JTextField getCsmDbSchemaField() {
         if (csmDbSchemaField == null) {
         	csmDbSchemaField = new JTextField();
+        	csmDbSchemaField.setToolTipText("Enter the database schema name");
         	csmDbSchemaField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("CSM_DB_NAME"));
 
         	csmDbSchemaField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
                 	updateCsmDbFields();
                 	toggleRecreateCsmDBFields();
+                	parentContainer.toggleRecreateClmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
@@ -404,6 +417,7 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
                 public void removeUpdate(DocumentEvent e) {
                 	updateCsmDbFields();
                 	toggleRecreateCsmDBFields();
+                	parentContainer.toggleRecreateClmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
@@ -411,6 +425,7 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
                 public void insertUpdate(DocumentEvent e) {
                 	updateCsmDbFields();
                 	toggleRecreateCsmDBFields();
+                	parentContainer.toggleRecreateClmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
@@ -436,22 +451,26 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
     private JTextField getCsmDbUsernameField() {
         if (csmDbUsernameField == null) {
         	csmDbUsernameField = new JTextField();
+        	csmDbUsernameField.setToolTipText("Enter the username used to authenticate database requests");
         	csmDbUsernameField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("CSM_DB_USERNAME"));
         	csmDbUsernameField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
                 	toggleRecreateCsmDBFields();
+                	parentContainer.toggleRecreateClmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
 
                 public void removeUpdate(DocumentEvent e) {
                 	toggleRecreateCsmDBFields();
+                	parentContainer.toggleRecreateClmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
 
                 public void insertUpdate(DocumentEvent e) {
                 	toggleRecreateCsmDBFields();
+                	parentContainer.toggleRecreateClmDbFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
                 }
@@ -477,6 +496,7 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
     private JTextField getCsmDbPasswordField() {
         if (csmDbPasswordField == null) {
         	csmDbPasswordField = new JTextField();
+        	csmDbPasswordField.setToolTipText("Enter the password used to authenticate database requests");
         	csmDbPasswordField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("CSM_DB_PASSWORD"));
         	csmDbPasswordField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
@@ -579,6 +599,7 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
     private JButton getTestConnectionButton() {
         if (testConnectionButton == null) {
         	testConnectionButton = new JButton();
+        	testConnectionButton.setToolTipText("Click to test a connection to the CSM database using the specified properties");
         	testConnectionButton.setText("Test Connection");
         	testConnectionButton.setIcon(LookAndFeel.getGenerateApplicationIcon());
         	testConnectionButton.addActionListener(new java.awt.event.ActionListener() {
@@ -605,6 +626,7 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
     private JButton getCsmDbSqlFilePathButton() {
         if (csmDbSqlFilePathButton == null) {
         	csmDbSqlFilePathButton = new JButton();
+        	csmDbSqlFilePathButton.setToolTipText("Click to select the SQL file to use when recreating the CSM database objects such as schema, tables, and views.");
         	csmDbSqlFilePathButton.setText("Browse");
         	csmDbSqlFilePathButton.setIcon(LookAndFeel.getBrowseIcon());
         	csmDbSqlFilePathButton.addActionListener(new java.awt.event.ActionListener() {
@@ -639,7 +661,7 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
     private JCheckBox getCsmDbDropSchemaCheckBox() {
         if (csmDbDropSchemaCheckBox == null) {
         	csmDbDropSchemaCheckBox = new JCheckBox();
-        	csmDbDropSchemaCheckBox.setToolTipText("Drop all of the tables from the CSM Database Schema?");
+        	csmDbDropSchemaCheckBox.setToolTipText("If checked, all CLM database objects like tables, views, and sequences will be dropped at deployment time");
         	csmDbDropSchemaCheckBox.setHorizontalAlignment(SwingConstants.LEADING);
         	csmDbDropSchemaCheckBox.setSelected(Boolean.parseBoolean(parentContainer.getPropertiesManager().getDeployPropertyValue("CSM_DB_DROP_SCHEMA")));
         	csmDbDropSchemaCheckBox.setHorizontalTextPosition(SwingConstants.LEFT);
@@ -656,7 +678,7 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
         return csmDbDropSchemaCheckBox;
     }  
     
-    public boolean isDbDropSchemaSelected() {
+    public boolean isCsmDbDropSchemaSelected() {
     	return getCsmDbDropSchemaCheckBox().isSelected();
     }
     
@@ -668,6 +690,7 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
     public JTextField getCsmDbSqlFileField() {
         if (csmDbSqlFileField == null) {
         	csmDbSqlFileField = new JTextField();
+        	csmDbSqlFileField.setToolTipText("Enter the absolute path to the CSM SQL file to be executed at the deployment time. Alternatively, use the Browse button");
         	
         	String dbType = getCsmDbType();
         	if ("oracle".equalsIgnoreCase(dbType)){
@@ -1522,16 +1545,34 @@ public final class CsmDbConnectionSettingsPanel implements Panel, PanelValidator
 		
     	String dbType = getCsmDbType();
     	if ("oracle".equalsIgnoreCase(dbType)){
-    		propsMap.put("csm.db.install.create.oracle.file.list", getCsmDbSqlFileName());
+    		propsMap.put("csm.db.install.create.oracle.file.list", getCsmDbSqlFileList());
     		propsMap.put("csm.db.install.create.oracle.file.list.ui", getCsmDbSqlFileField().getText().replace('\\', '/'));  
     	} else if ("mysql".equalsIgnoreCase(dbType)){
-    		propsMap.put("csm.db.install.create.mysql.file.list", getCsmDbSqlFileName());
+    		propsMap.put("csm.db.install.create.mysql.file.list", getCsmDbSqlFileList());
     		propsMap.put("csm.db.install.create.mysql.file.list.ui", getCsmDbSqlFileField().getText().replace('\\', '/'));
     	} else if ("postgresql".equalsIgnoreCase(dbType)){
-    		propsMap.put("csm.db.install.create.postgresql.file.list", getCsmDbSqlFileName());
+    		propsMap.put("csm.db.install.create.postgresql.file.list", getCsmDbSqlFileList());
     		propsMap.put("csm.db.install.create.postgresql.file.list.ui", getCsmDbSqlFileField().getText().replace('\\', '/'));
     	}
     	
     	return propsMap;
     }
+    
+    private String getCsmDbSqlFileList(){
+    	StringBuffer sb = new StringBuffer();
+
+    	String csmDbSqlFileName = getCsmDbSqlFileName();
+    	if (csmDbSqlFileName != null && csmDbSqlFileName.length() > 0) {
+    		sb.append(csmDbSqlFileName);
+
+    		if (parentContainer.isCsmDbAndClmSchemaSame() && parentContainer.isClmEnabled()){
+    			String clmDbSqlFileName = parentContainer.getClmDbSqlFileName();
+    			if (clmDbSqlFileName != null && clmDbSqlFileName.length() > 0) {
+    				sb.append(",").append(clmDbSqlFileName);
+    			}
+    		}
+    	}
+
+    	return sb.toString();
+    }    
 }
