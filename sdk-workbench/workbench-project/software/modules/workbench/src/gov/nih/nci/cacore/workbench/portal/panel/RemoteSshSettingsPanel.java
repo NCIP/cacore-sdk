@@ -78,6 +78,7 @@ public final class RemoteSshSettingsPanel implements Panel, PanelValidator {
     private JTextField getSshServerUsernameField() {
     	if (sshServerUsernameField == null) {
     		sshServerUsernameField = new JTextField();
+    		sshServerUsernameField.setToolTipText("Enter the authentication username when connecting via the SSH protocol");
     		sshServerUsernameField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("ssh.server.username"));
     		sshServerUsernameField.getDocument().addDocumentListener(new DocumentListener() {
     			public void changedUpdate(DocumentEvent e) {
@@ -109,6 +110,7 @@ public final class RemoteSshSettingsPanel implements Panel, PanelValidator {
     private JTextField getSshServerHostnameField() {
     	if (sshServerHostnameField == null) {
     		sshServerHostnameField = new JTextField();
+    		sshServerHostnameField.setToolTipText("Enter the hostname (or sitename) that uniquely identifies the remote server instance on the network");
     		sshServerHostnameField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("ssh.server.hostname"));
     		sshServerHostnameField.getDocument().addDocumentListener(new DocumentListener() {
     			public void changedUpdate(DocumentEvent e) {
@@ -140,6 +142,7 @@ public final class RemoteSshSettingsPanel implements Panel, PanelValidator {
      private JTextField getSshPortField() {
      	if (sshPortField == null) {
      		sshPortField = new JTextField();
+     		sshPortField.setToolTipText("Enter the SSH Port configured on the remote server");
      		sshPortField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("ssh.port"));
      		sshPortField.getDocument().addDocumentListener(new DocumentListener() {
      			public void changedUpdate(DocumentEvent e) {
@@ -172,6 +175,7 @@ public final class RemoteSshSettingsPanel implements Panel, PanelValidator {
     private JTextField getSshTempDirField() {
     	if (sshTempDirField == null) {
     		sshTempDirField = new JTextField();
+    		sshTempDirField.setToolTipText("Enter the absolute path to a temporary directory on the remote server that can be used while deploying the application server and generated application artifacts");
     		sshTempDirField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("ssh.dir.temp"));
     		
     		sshTempDirField.getDocument().addDocumentListener(new DocumentListener() {
@@ -209,6 +213,7 @@ public final class RemoteSshSettingsPanel implements Panel, PanelValidator {
     private JTextField getSshKeyFileField() {
     	if (sshKeyFileField == null) {
     		sshKeyFileField = new JTextField();
+    		sshKeyFileField.setToolTipText("Enter the absolute path to the SSH protocol Key file, or select it using the 'Browse' button to the right of the property");
     		sshKeyFileField.setText(parentContainer.getPropertiesManager().getDeployPropertyValue("ssh.key.file"));
     		sshKeyFileField.getDocument().addDocumentListener(new DocumentListener() {
     			public void changedUpdate(DocumentEvent e) {
@@ -253,6 +258,7 @@ public final class RemoteSshSettingsPanel implements Panel, PanelValidator {
     private JButton getSshKeyFilePathButton() {
         if (sshKeyFilePathButton == null) {
         	sshKeyFilePathButton = new JButton();
+        	sshKeyFilePathButton.setToolTipText("Click to select the SSH protocol Key file");
         	sshKeyFilePathButton.setText("Browse");
         	sshKeyFilePathButton.setIcon(LookAndFeel.getBrowseIcon());
         	sshKeyFilePathButton.addActionListener(new java.awt.event.ActionListener() {
