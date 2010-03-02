@@ -10,6 +10,7 @@ import gov.nih.nci.cacore.workbench.portal.panel.ClmSettingsPanel;
 import gov.nih.nci.cacore.workbench.portal.panel.CsmDbConnectionSettingsPanel;
 import gov.nih.nci.cacore.workbench.portal.panel.DbConnectionSettingsPanel;
 import gov.nih.nci.cacore.workbench.portal.panel.DeployTypeSettingsPanel;
+import gov.nih.nci.cacore.workbench.portal.panel.LogViewerPanel;
 import gov.nih.nci.cacore.workbench.portal.panel.ProjectSettingsPanel;
 import gov.nih.nci.cacore.workbench.portal.panel.RemoteSshSettingsPanel;
 import gov.nih.nci.cacore.workbench.portal.panel.SecuritySettingsPanel;
@@ -96,6 +97,7 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
 	private int ADVANCED_TAB_INDEX = 6;
 	private int REMOTE_SSH_TAB_INDEX = 7;
 	private int DEPLOY_TAB_INDEX = 8;
+	private int LOG_VIEWER_TAB_INDEX = 9;
 	
 	// Tab panel definitions
 	private ProjectSettingsPanel projectSettingsPanel = null;
@@ -110,6 +112,7 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
 	private CaGridAuthSettingsPanel caGridAuthSettingsPanel = null;
 	private AdvancedSettingsPanel advancedSettingsPanel = null;
 	private RemoteSshSettingsPanel remoteSshSettingsPanel = null;
+	private LogViewerPanel logViewerPanel = null;
     
     public DeployPropertiesViewer() {
         super();
@@ -120,22 +123,6 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
      * This method initializes this Viewer
      */
     private void initialize() {
-
-    	//Request Project Directory value up front.  Used to determine whether
-        //to load deploy settings from either workbench template or existing project 
-        //properties file
-        String projectDirPath=null;
-
-		try {
-			projectDirPath = ResourceManager.promptDir("","Select the Project Generation Directory");
-			if (projectDirPath == null || projectDirPath.length() == 0){
-				// No Project Generation Directory selected - abort operation by generating Null Pointer Exception
-				File projectDir = new File(projectDirPath);
-			}
-		} catch (IOException e) {
-			log.error("ERROR:  Not able to select the Project Generation Directory");
-			return;
-		}
 
 		// Initialize to an empty properties manager. User will
 		// later choose which set of deployment properties to load
@@ -153,14 +140,16 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
         setFrameIcon(LookAndFeel.getGenerateApplicationIcon());
         setTitle("Manage Deployment Properties");
         
-        projectSettingsPanel.setProjectDir(projectDirPath); 
-        
 		initValidation();
 		
         setDirty(false);
         setPropsLoaded(false);
         
 		validateInput();
+    }
+    
+    public void setProjectDir(String projectDirPath){
+    	projectSettingsPanel.setProjectDir(projectDirPath);
     }
     
     public void loadDeployProperties(){
@@ -199,12 +188,13 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
         caGridAuthSettingsPanel=new CaGridAuthSettingsPanel(this,propsValidator,securitySettingsPanel.isSecurityEnabled(),securitySettingsPanel.isCaGridLoginModuleEnabled());
         advancedSettingsPanel=new AdvancedSettingsPanel(this,propsValidator);
         remoteSshSettingsPanel=new RemoteSshSettingsPanel(this, propsValidator);
+        logViewerPanel=new LogViewerPanel(propsValidator,projectSettingsPanel.getProjectDir());
         
         panelValidators = new ArrayList<PanelValidator>();
         // Uncomment the following as needed to include in validation
-//        panelValidators.add((PanelValidator)projectSettingsPanel);
-//        panelValidators.add((PanelValidator)writableApiSettingsPanel);
-//        panelValidators.add((PanelValidator)securitySettingsPanel);
+//      panelValidators.add((PanelValidator)projectSettingsPanel);
+//      panelValidators.add((PanelValidator)writableApiSettingsPanel);
+//      panelValidators.add((PanelValidator)securitySettingsPanel);
         panelValidators.add((PanelValidator)deployTypeSettingsPanel);
         panelValidators.add((PanelValidator)appServerSettingsPanel);
         panelValidators.add((PanelValidator)dbConnectionSettingsPanel);
@@ -213,6 +203,7 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
         panelValidators.add((PanelValidator)caGridAuthSettingsPanel);
         panelValidators.add((PanelValidator)advancedSettingsPanel);
         panelValidators.add((PanelValidator)remoteSshSettingsPanel);
+        panelValidators.add((PanelValidator)logViewerPanel);
     }
     
     private void resetMainTabbedPaneComponents(){
@@ -223,6 +214,7 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
     	mainTabbedPane.setComponentAt(CAGRID_AUTH_TAB_INDEX, new IconFeedbackPanel(this.validationModel, caGridAuthSettingsPanel.getSettingsPanel()));
     	mainTabbedPane.setComponentAt(ADVANCED_TAB_INDEX, new IconFeedbackPanel(this.validationModel, advancedSettingsPanel.getSettingsPanel()));
     	mainTabbedPane.setComponentAt(REMOTE_SSH_TAB_INDEX, new IconFeedbackPanel(this.validationModel, remoteSshSettingsPanel.getSettingsPanel()));
+    	mainTabbedPane.setComponentAt(LOG_VIEWER_TAB_INDEX, new IconFeedbackPanel(this.validationModel, logViewerPanel.getSettingsPanel()));    	
     }
 
     private void initValidation() {
@@ -721,8 +713,12 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
     		clmDbConnectionSettingsPanel.setClmDbPassword(dbConnectionSettingsPanel.getDbPassword());
     		
     		clmDbConnectionSettingsPanel.toggleClmDbConnectionFields();
-    		clmDbConnectionSettingsPanel.toggleRecreateClmDBFields();
+    		clmDbConnectionSettingsPanel.toggleRecreateClmDbFields();
     	}
+    }
+    
+    public void toggleRecreateClmDbFields(){
+		clmDbConnectionSettingsPanel.toggleRecreateClmDbFields();
     }
     
     public String getDatabaseType(){
@@ -822,6 +818,7 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
 	    	mainTabbedPane.setEnabledAt(ADVANCED_TAB_INDEX, false);
 	    	mainTabbedPane.setEnabledAt(REMOTE_SSH_TAB_INDEX, false);
 	    	mainTabbedPane.setEnabledAt(DEPLOY_TAB_INDEX, false);
+	    	mainTabbedPane.setEnabledAt(LOG_VIEWER_TAB_INDEX, false);
 	    } else {
 	    	mainTabbedPane.setEnabledAt(APP_SERVER_TAB_INDEX, true);
 	    	mainTabbedPane.setEnabledAt(DB_TAB_INDEX, true);
@@ -838,6 +835,7 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
 	    	//mainTabbedPane.setEnabledAt(REMOTE_SSH_TAB_INDEX, true);
 	    	
 	    	mainTabbedPane.setEnabledAt(DEPLOY_TAB_INDEX, true);
+	    	mainTabbedPane.setEnabledAt(LOG_VIEWER_TAB_INDEX, true);
 	    }
     }
     
@@ -847,10 +845,10 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
     
     public boolean isAppDbAndCsmSchemaSame(){
     	return (csmDbConnectionSettingsPanel.getCsmDbSchema().length() > 0 &&
-    	csmDbConnectionSettingsPanel.getCsmDbSchema().equalsIgnoreCase(dbConnectionSettingsPanel.getDbSchema()) &&
-    	csmDbConnectionSettingsPanel.getCsmDbHostname().equalsIgnoreCase(dbConnectionSettingsPanel.getDbHostname()) &&
-    	csmDbConnectionSettingsPanel.getCsmDbPort().equalsIgnoreCase(dbConnectionSettingsPanel.getDbPort()) &&
-    	csmDbConnectionSettingsPanel.getCsmDbUsername().equalsIgnoreCase(dbConnectionSettingsPanel.getDbUsername())
+    			csmDbConnectionSettingsPanel.getCsmDbSchema().equalsIgnoreCase(dbConnectionSettingsPanel.getDbSchema()) &&
+    			csmDbConnectionSettingsPanel.getCsmDbHostname().equalsIgnoreCase(dbConnectionSettingsPanel.getDbHostname()) &&
+    			csmDbConnectionSettingsPanel.getCsmDbPort().equalsIgnoreCase(dbConnectionSettingsPanel.getDbPort()) &&
+    			csmDbConnectionSettingsPanel.getCsmDbUsername().equalsIgnoreCase(dbConnectionSettingsPanel.getDbUsername())
     	);
     }
     
@@ -863,9 +861,22 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
     	);
     }
     
+    public boolean isCsmDbAndClmSchemaSame(){
+    	return (clmDbConnectionSettingsPanel.getClmDbSchema().length() > 0 &&
+    			clmDbConnectionSettingsPanel.getClmDbSchema().equalsIgnoreCase(csmDbConnectionSettingsPanel.getCsmDbSchema()) &&
+    			clmDbConnectionSettingsPanel.getClmDbHostname().equalsIgnoreCase(csmDbConnectionSettingsPanel.getCsmDbHostname()) &&
+    			clmDbConnectionSettingsPanel.getClmDbPort().equalsIgnoreCase(csmDbConnectionSettingsPanel.getCsmDbPort()) &&
+    			clmDbConnectionSettingsPanel.getClmDbUsername().equalsIgnoreCase(csmDbConnectionSettingsPanel.getCsmDbUsername())
+    	);
+    }
+    
     public boolean isAppDbDropSchemaSelected(){
     	return dbConnectionSettingsPanel.isDbDropSchemaSelected();
     }
+    
+    public boolean isCsmDbDropSchemaSelected(){
+    	return csmDbConnectionSettingsPanel.isCsmDbDropSchemaSelected();
+    }    
     
     public String getCsmDbSqlFileName(){
     	return csmDbConnectionSettingsPanel.getCsmDbSqlFileName();
@@ -917,16 +928,16 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
 					+ "as a result.");
 		}
 		
-    	log.debug("* * * mainTabbedPane.getSelectedIndex()==LOGGING_TAB_INDEX: " + (mainTabbedPane.getSelectedIndex()==LOGGING_TAB_INDEX  && 
-				writableApiSettingsPanel.isCommonLoggingModuleEnabled()));	
-    	
-		if (mainTabbedPane.getSelectedIndex()==LOGGING_TAB_INDEX  && 
-				isClmEnabled()){
-			
-			if (clmDbConnectionSettingsPanel.isClmUseDBConnectionSettings()){
-				syncDbClmDbFields();
-			}
-		}		
+//    	log.debug("* * * mainTabbedPane.getSelectedIndex()==LOGGING_TAB_INDEX: " + (mainTabbedPane.getSelectedIndex()==LOGGING_TAB_INDEX  && 
+//				writableApiSettingsPanel.isCommonLoggingModuleEnabled()));	
+//    	
+//		if (mainTabbedPane.getSelectedIndex()==LOGGING_TAB_INDEX  && 
+//				isClmEnabled()){
+//			
+//			if (clmDbConnectionSettingsPanel.isClmUseDBConnectionSettings()){
+//				syncDbClmDbFields();
+//			}
+//		}		
     }
 
     /**
@@ -1090,6 +1101,8 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
 			
 			mainTabbedPane.addTab("Deploy Application", null, getSummarySettingsPanel(), null);
 			
+			mainTabbedPane.addTab("View Log", null, new IconFeedbackPanel(this.validationModel, logViewerPanel.getSettingsPanel()), null);
+			
 			mainTabbedPane.addMouseListener(new java.awt.event.MouseListener() {
                 public void mouseEntered(java.awt.event.MouseEvent e) {
                 	;//do nothing
@@ -1198,7 +1211,7 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
 		//Determine whether or not to add exclude.database=true property, which should only be set 
 		//if not dropping any DB schemas
 		if (!dbConnectionSettingsPanel.isDbDropSchemaSelected() && 
-				!csmDbConnectionSettingsPanel.isDbDropSchemaSelected() &&
+				!csmDbConnectionSettingsPanel.isCsmDbDropSchemaSelected() &&
 				!clmDbConnectionSettingsPanel.isDbDropSchemaSelected()){
 			propsMap.put("exclude.database", "true");
 		}
