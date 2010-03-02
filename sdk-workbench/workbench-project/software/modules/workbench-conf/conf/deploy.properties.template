@@ -252,6 +252,17 @@ CLM_DB_NAME=
 CLM_DB_USERNAME=
 CLM_DB_PASSWORD=
 
+
+##################################################################################
+# SDK Interface Generation Setting
+##################################################################################
+ENABLE_LOCAL_JAVA_INTERFACE=true
+ENABLE_REMOTE_JAVA_INTERFACE=true
+ENABLE_WEBSERVICE_INTERFACE=true
+ENABLE_RESTFUL_XML_INTERFACE =true
+ENABLE_RESTFUL_HTML_INTERFACE=true
+ENABLE_RESTFUL_JSON_INTERFACE=true
+
 ##################################################################################
 #  CODE GENERATION OPTIONS
 #
