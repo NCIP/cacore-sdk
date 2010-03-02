@@ -52,8 +52,8 @@ public final class ProjectSettingsPanel implements Panel, PanelValidator {
 	private JPanel projectSettingsReviewPanel = null;
     
 	//Project Settings Panel Component Definitions
-	private JTextField sdkInstallDirField = null;
 	private JTextField projectDirField = null;
+	private JTextField sdkInstallDirField = null;
     private JTextField projectNameField = null;
 	private JTextField namespacePrefixField = null;
     private JTextField webserviceNameField = null;
@@ -66,6 +66,15 @@ public final class ProjectSettingsPanel implements Panel, PanelValidator {
     private JTextField getProjectNameField() {
         if (projectNameField == null) {
             projectNameField = new JTextField();
+            projectNameField.setToolTipText("Enter the project name, which is used to create (name):\n" +
+				" Output project directory folder name;\n" +
+				" Beans JAR file name;\n" +
+				" ORM JAR file name;" +
+				" Client JAR file name;" +
+				" WAR file name;" +
+				" Web Service Namespace;" +
+				" Documentation title in the generated API (Javadocs)");
+            
             projectNameField.setText(propsMgr.getDeployPropertyValue("PROJECT_NAME"));
             projectNameField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
@@ -99,6 +108,11 @@ public final class ProjectSettingsPanel implements Panel, PanelValidator {
     private JTextField getNamespacePrefixField() {
         if (namespacePrefixField == null) {
             namespacePrefixField = new JTextField();
+            namespacePrefixField.setToolTipText("Enter the Namespace Prefix, which is used to create:\n" +
+            		" XSD's (Schema's);\n" +
+            		" XML Mapping and Un-mapping files;\n" +
+            		" Locate the UML Project in caDSR when adding Hibernate Validator annotations in generated domain objects.");
+            
             namespacePrefixField.setText(propsMgr.getDeployPropertyValue("NAMESPACE_PREFIX"));
             namespacePrefixField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
@@ -130,6 +144,10 @@ public final class ProjectSettingsPanel implements Panel, PanelValidator {
     private JTextField getWebServiceNameField() {
         if (webserviceNameField == null) {
             webserviceNameField = new JTextField();
+            webserviceNameField.setToolTipText("Enter the Project Web Service name, which is used to create the:\n" +
+            	" Web service name in the Web Services deployment descriptor (WSDD);\n" +
+            	" Web service URL, which uses the Web service name as a suffix");
+            
             webserviceNameField.setText(propsMgr.getDeployPropertyValue("WEBSERVICE_NAME"));
 
             webserviceNameField.getDocument().addDocumentListener(new DocumentListener() {
@@ -184,6 +202,7 @@ public final class ProjectSettingsPanel implements Panel, PanelValidator {
             sdkInstallDirField = new JTextField();
 
             sdkInstallDirField.setText(propsMgr.getDeployPropertyValue("SDK_INSTALL_DIR"));
+            sdkInstallDirField.setToolTipText("Enter the directory containing an SDK Toolkit instance. If the SDK is not already installed in the selected directory, the Workbench will install the SDK in the selected directory. This directory must be different from the Project directory");
             sdkInstallDirField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
                 	mainPanelValidator.setDirty(true);
@@ -223,6 +242,7 @@ public final class ProjectSettingsPanel implements Panel, PanelValidator {
         	projectDirField = new JTextField();
         	
         	projectDirField.setText(propsMgr.getDeployPropertyValue("PROJECT_DIR"));
+        	projectDirField.setToolTipText("The Project Directory is set on the Project Dir tab, and is provided here as a convenience.");
         	projectDirField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
                 	mainPanelValidator.setDirty(true);
@@ -240,6 +260,9 @@ public final class ProjectSettingsPanel implements Panel, PanelValidator {
                     mainPanelValidator.validateInput();
                 }
             });
+        	projectDirField.setEditable(false);
+        	projectDirField.setEnabled(false);
+        	
         	projectDirField.addFocusListener(new FocusChangeHandler());
         }
         return projectDirField;
@@ -287,35 +310,35 @@ public final class ProjectSettingsPanel implements Panel, PanelValidator {
         return sdkInstallDirButton;
     }
     
-    /**
-     * This method initializes jButton
-     * 
-     * @return javax.swing.JButton
-     */
-    private JButton getProjectDirButton() {
-        if (projectDirButton == null) {
-        	projectDirButton = new JButton();
-        	projectDirButton.setText("Browse");
-        	projectDirButton.setIcon(LookAndFeel.getBrowseIcon());
-        	projectDirButton.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    try {
-                        String previous = getProjectDirField().getText();
-                        String location = ResourceManager.promptDir(previous);
-                        if (location != null && location.length() > 0) {
-                        	getProjectDirField().setText(location);
-                        } else {
-                        	getProjectDirField().setText(previous);
-                        }
-                        mainPanelValidator.validateInput();
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-            });
-        }
-        return projectDirButton;
-    }
+//    /**
+//     * This method initializes jButton
+//     * 
+//     * @return javax.swing.JButton
+//     */
+//    private JButton getProjectDirButton() {
+//        if (projectDirButton == null) {
+//        	projectDirButton = new JButton();
+//        	projectDirButton.setText("Browse");
+//        	projectDirButton.setIcon(LookAndFeel.getBrowseIcon());
+//        	projectDirButton.addActionListener(new java.awt.event.ActionListener() {
+//                public void actionPerformed(java.awt.event.ActionEvent e) {
+//                    try {
+//                        String previous = getProjectDirField().getText();
+//                        String location = ResourceManager.promptDir(previous);
+//                        if (location != null && location.length() > 0) {
+//                        	getProjectDirField().setText(location);
+//                        } else {
+//                        	getProjectDirField().setText(previous);
+//                        }
+//                        mainPanelValidator.validateInput();
+//                    } catch (Exception ex) {
+//                        ex.printStackTrace();
+//                    }
+//                }
+//            });
+//        }
+//        return projectDirButton;
+//    }
     
     /**
      * This method initializes the Project Settings jPanel
@@ -343,14 +366,15 @@ public final class ProjectSettingsPanel implements Panel, PanelValidator {
             gridBagConstraints11.insets = new java.awt.Insets(2, 2, 2, 2);
             gridBagConstraints11.gridy = 1;
             gridBagConstraints11.weighty = 1.0D;
-            gridBagConstraints11.weightx = 1.0;          
+            gridBagConstraints11.weightx = 1.0;  
+            gridBagConstraints11.gridwidth = 2;
             
-            GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
-            gridBagConstraints12.anchor = java.awt.GridBagConstraints.WEST;
-            gridBagConstraints12.gridy = 1;
-            gridBagConstraints12.gridx = 2;
-            gridBagConstraints12.insets = new java.awt.Insets(2, 2, 2, 2);
-            gridBagConstraints12.gridwidth = 1;
+//            GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
+//            gridBagConstraints12.anchor = java.awt.GridBagConstraints.WEST;
+//            gridBagConstraints12.gridy = 1;
+//            gridBagConstraints12.gridx = 2;
+//            gridBagConstraints12.insets = new java.awt.Insets(2, 2, 2, 2);
+//            gridBagConstraints12.gridwidth = 1;
             
             GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
             gridBagConstraints20.anchor = java.awt.GridBagConstraints.WEST;
@@ -427,7 +451,7 @@ public final class ProjectSettingsPanel implements Panel, PanelValidator {
             sdkInstallDirLabel.setName("SDK Install Directory");
             
             projectDirLabel = new JLabel();
-            projectDirLabel.setText("Enter the project directory:");
+            projectDirLabel.setText("Confirm the project directory:");
             projectDirLabel.setName("Project Directory");
             
             projectNameLabel = new JLabel();
@@ -447,7 +471,7 @@ public final class ProjectSettingsPanel implements Panel, PanelValidator {
             
             projectSettingsPanel.add(projectDirLabel, gridBagConstraints10);
             projectSettingsPanel.add(getProjectDirField(), gridBagConstraints11);
-            projectSettingsPanel.add(getProjectDirButton(), gridBagConstraints12);
+//            projectSettingsPanel.add(getProjectDirButton(), gridBagConstraints12);
             projectSettingsPanel.add(sdkInstallDirLabel, gridBagConstraints20);
             projectSettingsPanel.add(getSdkInstallDirField(), gridBagConstraints21);
             projectSettingsPanel.add(getSdkInstallDirButton(), gridBagConstraints22);
