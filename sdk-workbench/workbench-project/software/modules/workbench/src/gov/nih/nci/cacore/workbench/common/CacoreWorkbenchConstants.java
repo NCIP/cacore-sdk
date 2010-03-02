@@ -15,6 +15,8 @@ public abstract class CacoreWorkbenchConstants {
 	
 	public static final String WORKBENCH_HELP_URL = "cacore.workbench.help.url";
 	public static final String WORKBENCH_TOOLS_SITE_URL = "cacore.workbench.tools.site.url";
+	public static final String SDK_GUIDE_URL = "cacore.sdk.programmers.guide";		
+	public static final String WORKBENCH_GUIDE_URL = "cacore.workbench.user.guide";	
 	
 	//Create Grid Service Workflow
 	public static final String LAUNCH_INTRODUCE_URL = "cacore.workbench.launch.introduce.url";
