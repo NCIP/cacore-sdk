@@ -27,6 +27,8 @@ public class CodegenPropertiesValidator implements TabbedPanePropertiesValidator
     	parentContainer.toggleNextButton();
     	parentContainer.toggleGenerateButton();
     	
+    	parentContainer.togglePanels();
+    	
     	parentContainer.updateGenerateApplicationTabContents();
     	
     	parentContainer.updateComponentTreeSeverity();
