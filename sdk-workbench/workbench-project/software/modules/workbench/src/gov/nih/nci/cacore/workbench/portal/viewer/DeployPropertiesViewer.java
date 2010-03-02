@@ -926,18 +926,7 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
 					+ "match the Database Connection settings.  The CSM 'Use DB \n"
 					+ "Connection Settings' checkbox will remain selected and disabled\n"
 					+ "as a result.");
-		}
-		
-//    	log.debug("* * * mainTabbedPane.getSelectedIndex()==LOGGING_TAB_INDEX: " + (mainTabbedPane.getSelectedIndex()==LOGGING_TAB_INDEX  && 
-//				writableApiSettingsPanel.isCommonLoggingModuleEnabled()));	
-//    	
-//		if (mainTabbedPane.getSelectedIndex()==LOGGING_TAB_INDEX  && 
-//				isClmEnabled()){
-//			
-//			if (clmDbConnectionSettingsPanel.isClmUseDBConnectionSettings()){
-//				syncDbClmDbFields();
-//			}
-//		}		
+		}	
     }
 
     /**
