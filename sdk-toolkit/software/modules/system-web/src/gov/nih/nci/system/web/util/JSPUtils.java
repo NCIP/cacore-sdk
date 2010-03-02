@@ -42,10 +42,10 @@ public class JSPUtils {
 
 		String enableISO21090DataTypes = (String)systemProperties.getProperty("enableISO21090DataTypes");
 		String enableRestfulHtmlInterface = (String)systemProperties.getProperty("enableRestfulHtmlInterface");
-		disableWebinterface = !("yes".equalsIgnoreCase(enableISO21090DataTypes)
+		disableWebinterface = "yes".equalsIgnoreCase(enableISO21090DataTypes)
 							 || "true".equalsIgnoreCase(enableISO21090DataTypes)
 							 || "yes".equalsIgnoreCase(enableRestfulHtmlInterface)
-							 || "true".equalsIgnoreCase(enableRestfulHtmlInterface));
+							 || "true".equalsIgnoreCase(enableRestfulHtmlInterface);
 	}
 
 	/**
