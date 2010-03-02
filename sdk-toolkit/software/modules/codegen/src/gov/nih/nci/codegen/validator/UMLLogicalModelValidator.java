@@ -266,6 +266,14 @@ public class UMLLogicalModelValidator implements Validator
 				if(otherClassName.startsWith("java.lang") || otherClassName.startsWith("java.util"))
 					errors.addError(new GeneratorError(getName() + ": Association to the wrapper class not allowed for association between "+thisClassName +" and "+ otherClassName));
 
+				//validate multiplicity
+				if (thisEnd.isNavigable())
+				{
+					if (!transformerUtils.isMultiplicityValid(thisEnd)){
+						errors.addError(new GeneratorError(getName() + ": The association multiplicity value of "+ transformerUtils.getMultiplicityValue(thisEnd) + " between " + thisClassName +" and "+ otherClassName + " is invalid."));
+					}
+				}				
+				
 				if (otherEnd.isNavigable())
 				{
 					for(UMLAssociation assoc: klass.getAssociations())
