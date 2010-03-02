@@ -41,7 +41,8 @@
 			isAuthenticated = true;
 		}
 	}
-	//out.println("userName: " + userName);	
+	//out.println("userName: " + userName);
+	boolean webinterfaceDisabled=jspUtils.isWebInterfaceDisabled();
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -131,10 +132,24 @@
 																				<!-- login/continue form begins -->
 																				<tr>
 																					<td valign="top">
-
-
 																						<%
-																						if (isSecurityEnabled && !isAuthenticated) {
+																						if (webinterfaceDisabled) {
+																						%>
+																						<table summary="" cellpadding="2" cellspacing="0"
+																							border="0" width="100%" class="sidebarSection">
+																							<tr>
+																								<td class="sidebarTitle" height="20">
+																									SELECT CRITERIA
+																								</td>
+																							</tr>
+																							<tr>
+																								<td class="sidebarContent" align="center">
+																									WebInterface is Disabled
+																								</td>
+																							</tr>
+																						</table>
+																						<%
+																						} else if (isSecurityEnabled && !isAuthenticated) {
 																						%>
 
 																						<table summary="" cellpadding="2" cellspacing="0"
