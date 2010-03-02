@@ -38,6 +38,7 @@ public class ResourceManager {
 	private static final String LOG_FILE = "workbench";
 	private static final String BUILD_FILE = "build.xml";
 	private static final String DB_SQL_DIR = "db/db-install";
+	private static final String LOGS_DIR = "logs";	
 	private static final String CODEGEN_PROPS_FILE = "codegen.properties";
 	private static final String DEPLOY_PROPS_FILE = "install.properties";
 	
@@ -149,14 +150,17 @@ public class ResourceManager {
 		
 		return logFile;
 	}
-	
-	
-	
-	
+
 	public static File getDbSqlDir(String projectDirPath, String dbType){
 		File dbSqlDir = new File(projectDirPath + File.separator + DB_SQL_DIR + File.separator + dbType.toLowerCase());
 		log.debug("* * * dbSqlDir.getAbsolutePath(): " + dbSqlDir.getAbsolutePath());
 		return dbSqlDir;
+	}
+	
+	public static File getLogsDir(String projectDirPath){
+		File logsDir = new File(projectDirPath + File.separator + LOGS_DIR +File.separator);
+		
+		return logsDir;
 	}
 
 	public static File getDeployPropsFile(String projectDirPath,String remoteDeployEnv){
@@ -334,6 +338,14 @@ public class ResourceManager {
 	public static String getWorkbenchToolsSiteUrl() {
 		return getCacoreWorkbenchPropertyValue(CacoreWorkbenchConstants.WORKBENCH_TOOLS_SITE_URL);
 	}
+	
+	public static String getSdkGuideUrl() {
+		return getCacoreWorkbenchPropertyValue(CacoreWorkbenchConstants.SDK_GUIDE_URL);
+	}	
+	
+	public static String getWorkbenchGuideUrl() {
+		return getCacoreWorkbenchPropertyValue(CacoreWorkbenchConstants.WORKBENCH_GUIDE_URL);
+	}	
 	
 	public static String getLaunchIntroduceUrl() {
 		return getCacoreWorkbenchPropertyValue(CacoreWorkbenchConstants.LAUNCH_INTRODUCE_URL);
