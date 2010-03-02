@@ -57,60 +57,98 @@
 			<equals arg1="${ENABLE_REMOTE_JAVA_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
 		</or>
 	</condition>
-
 	<condition property="WEB_SERVICE_INTERFACE_START" value="" else="${xml.comment.start}">
-		<or>
-			<equals arg1="${ENABLE_WEBSERVICE_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
-			<equals arg1="${ENABLE_WEBSERVICE_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
-		</or>
+		<and>
+			<not>
+				<equals arg1="${ISO21090_DATATYPES_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+			</not>
+			<or>
+				<equals arg1="${ENABLE_WEBSERVICE_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
+				<equals arg1="${ENABLE_WEBSERVICE_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
+			</or>
+		</and>
 	</condition>
 	<condition property="WEB_SERVICE_INTERFACE_END" value="" else="${xml.comment.end}">
-		<or>
-			<equals arg1="${ENABLE_WEBSERVICE_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
-			<equals arg1="${ENABLE_WEBSERVICE_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
-		</or>
+		<and>
+			<not>
+				<equals arg1="${ISO21090_DATATYPES_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+			</not>
+			<or>
+				<equals arg1="${ENABLE_WEBSERVICE_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
+				<equals arg1="${ENABLE_WEBSERVICE_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
+			</or>
+		</and>
 	</condition>
 
 	<condition property="RESTFUL_XML_INTERFACE_START" value="" else="${xml.comment.start}">
-		<or>
-			<equals arg1="${ENABLE_RESTFUL_XML_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
-			<equals arg1="${ENABLE_RESTFUL_XML_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
-		</or>
+		<and>
+			<not>
+				<equals arg1="${ISO21090_DATATYPES_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+			</not>
+			<or>
+				<equals arg1="${ENABLE_RESTFUL_XML_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
+				<equals arg1="${ENABLE_RESTFUL_XML_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
+			</or>
+		</and>
 	</condition>
 	<condition property="RESTFUL_XML_INTERFACE_END" value="" else="${xml.comment.end}">
-		<or>
-			<equals arg1="${ENABLE_RESTFUL_XML_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
-			<equals arg1="${ENABLE_RESTFUL_XML_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
-		</or>
+		<and>
+			<not>
+				<equals arg1="${ISO21090_DATATYPES_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+			</not>
+			<or>
+				<equals arg1="${ENABLE_RESTFUL_XML_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
+				<equals arg1="${ENABLE_RESTFUL_XML_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
+			</or>
+		</and>
 	</condition>
 	<condition property="RESTFUL_HTML_INTERFACE_START" value="" else="${xml.comment.start}">
-		<or>
-			<equals arg1="${ENABLE_RESTFUL_HTML_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
-			<equals arg1="${ENABLE_RESTFUL_HTML_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
-		</or>
+		<and>
+			<not>
+				<equals arg1="${ISO21090_DATATYPES_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+			</not>
+			<or>
+				<equals arg1="${ENABLE_RESTFUL_HTML_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
+				<equals arg1="${ENABLE_RESTFUL_HTML_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
+			</or>
+		</and>
 	</condition>
 
 	<condition property="RESTFUL_HTML_INTERFACE_END" value="" else="${xml.comment.end}">
-		<or>
-			<equals arg1="${ENABLE_RESTFUL_HTML_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
-			<equals arg1="${ENABLE_RESTFUL_HTML_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
-		</or>
+		<and>
+			<not>
+				<equals arg1="${ISO21090_DATATYPES_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+			</not>
+			<or>
+				<equals arg1="${ENABLE_RESTFUL_HTML_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
+				<equals arg1="${ENABLE_RESTFUL_HTML_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
+			</or>
+		</and>
 	</condition>
 
 	<condition property="RESTFUL_JSON_INTERFACE_START" value="" else="${xml.comment.start}">
-		<or>
-			<equals arg1="${ENABLE_RESTFUL_JSON_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
-			<equals arg1="${ENABLE_RESTFUL_JSON_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
-		</or>
+		<and>
+			<not>
+				<equals arg1="${ISO21090_DATATYPES_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+			</not>
+			<or>
+				<equals arg1="${ENABLE_RESTFUL_JSON_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
+				<equals arg1="${ENABLE_RESTFUL_JSON_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
+			</or>
+		</and>
 	</condition>
 
 	<condition property="RESTFUL_JSON_INTERFACE_END" value="" else="${xml.comment.end}">
-		<or>
-			<equals arg1="${ENABLE_RESTFUL_JSON_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
-			<equals arg1="${ENABLE_RESTFUL_JSON_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
-		</or>
+		<and>
+			<not>
+				<equals arg1="${ISO21090_DATATYPES_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+			</not>
+			<or>
+				<equals arg1="${ENABLE_RESTFUL_JSON_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
+				<equals arg1="${ENABLE_RESTFUL_JSON_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
+			</or>
+		</and>
 	</condition>
-
 	<condition property="SECURITY_ENABLED" value="true" else="false">
 		<or>
 			<equals arg1="${ENABLE_SECURITY}" arg2="true" casesensitive="false" trim="true" />
@@ -133,10 +171,15 @@
 	</condition>
 
 	<condition property="PACKAGE_WEBSERVICE_INTERFACE">
-		<or>
-			<equals arg1="${ENABLE_WEBSERVICE_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
-			<equals arg1="${ENABLE_WEBSERVICE_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
-		</or>
+		<and>
+			<not>
+				<equals arg1="${ISO21090_DATATYPES_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+			</not>
+			<or>
+				<equals arg1="${ENABLE_WEBSERVICE_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
+				<equals arg1="${ENABLE_WEBSERVICE_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
+			</or>
+		</and>
 	</condition>
 
 	<condition property="CSM_JNDI_START" value="" else="${xml.comment.start}">
@@ -1451,7 +1494,7 @@
 						<include name="postgresql-jdbc3-*.jar"/>
 					</fileset>
 					<fileset dir="${lib.dir}">
-						<include name="grid-jaas-jndi-binder.jar" />
+						<include name="sdk-grid-jaas-jndi-binder-*.jar" />
 					</fileset>
 				</copy>
 				<copy todir="${package.client.tomcat.dir}/server/lib">

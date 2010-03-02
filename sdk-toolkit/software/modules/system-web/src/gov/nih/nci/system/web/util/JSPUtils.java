@@ -27,6 +27,8 @@ public class JSPUtils {
 
 	private static JSPUtils jspUtils;
 	private static boolean secured;
+	private static boolean disableWebinterface;
+		
 
 	private ClassCache classCache;
 
@@ -37,6 +39,13 @@ public class JSPUtils {
 		Properties systemProperties = (Properties)ctx.getBean("WebSystemProperties");
 		String securityEnabled = (String)systemProperties.getProperty("securityEnabled");
 		secured = "yes".equalsIgnoreCase(securityEnabled) || "true".equalsIgnoreCase(securityEnabled);
+
+		String enableISO21090DataTypes = (String)systemProperties.getProperty("enableISO21090DataTypes");
+		String enableRestfulHtmlInterface = (String)systemProperties.getProperty("enableRestfulHtmlInterface");
+		disableWebinterface = !("yes".equalsIgnoreCase(enableISO21090DataTypes)
+							 || "true".equalsIgnoreCase(enableISO21090DataTypes)
+							 || "yes".equalsIgnoreCase(enableRestfulHtmlInterface)
+							 || "true".equalsIgnoreCase(enableRestfulHtmlInterface));
 	}
 
 	/**
@@ -138,8 +147,11 @@ public class JSPUtils {
 		return classCache.getAssociations(className);
 	}
 	
-	public boolean isSecurityEnabled()
-	{
+	public boolean isSecurityEnabled() {
 		return secured;
+	}
+	
+	public boolean isWebInterfaceDisabled() {
+		return disableWebinterface;
 	}
 }
