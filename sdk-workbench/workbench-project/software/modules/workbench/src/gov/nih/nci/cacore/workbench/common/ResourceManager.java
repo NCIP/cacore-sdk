@@ -42,8 +42,9 @@ public class ResourceManager {
 	private static final String CODEGEN_PROPS_FILE = "codegen.properties";
 	private static final String DEPLOY_PROPS_FILE = "install.properties";
 	
-	private static final String DEFAULT_PROPS_FILE = "deploy.properties.template";
-	private static final String DEFAULT_PROPS_ADDITIONAL_FILE = "deploy.properties.additional";
+	private static final String DEFAULT_CODEGEN_ADDITIONAL_PROPS_FILE = "codegen.properties.additional";
+	private static final String DEFAULT_DEPLOY_PROPS_FILE = "deploy.properties.template";
+	private static final String DEFAULT_DEPLOY_ADDITIONAL_PROPS_FILE = "deploy.properties.additional";
 	
 	public static WorkbenchPropertiesManager getCodegenPropertiesManager(String projectDirPath){
 		WorkbenchPropertiesManager propsMgr=null;
@@ -59,7 +60,7 @@ public class ResourceManager {
 		
         //if project properties file does not exist, use default workbench template properties
         if (propsMgr==null){
-        	propsMgr = new WorkbenchPropertiesManager(DEFAULT_PROPS_FILE);
+        	propsMgr = new WorkbenchPropertiesManager(DEFAULT_DEPLOY_PROPS_FILE);
         }
         
         return propsMgr;
@@ -78,7 +79,7 @@ public class ResourceManager {
 		if (projectDir.exists()){
 			
 			List<String> propsFiles = new ArrayList<String>();
-			propsFiles.add(DEFAULT_PROPS_FILE);
+			propsFiles.add(DEFAULT_DEPLOY_PROPS_FILE);
 
 			File codegenPropsFile = getCodegenPropsFile(projectDirPath);
 			File deployPropsFile = getDeployPropsFile(projectDirPath,remoteDeployEnv);
@@ -99,7 +100,19 @@ public class ResourceManager {
 		WorkbenchPropertiesManager propsMgr=null;
 
 		List<String> propsFiles = new ArrayList<String>();
-		propsFiles.add(DEFAULT_PROPS_ADDITIONAL_FILE);
+		propsFiles.add(DEFAULT_DEPLOY_ADDITIONAL_PROPS_FILE);
+
+		propsMgr = new WorkbenchPropertiesManager((String[]) propsFiles.toArray(new String[propsFiles.size()]));
+
+		return propsMgr;
+	}
+	
+	
+	public static WorkbenchPropertiesManager getAdditionalCodegenPropertiesManager(){
+		WorkbenchPropertiesManager propsMgr=null;
+
+		List<String> propsFiles = new ArrayList<String>();
+		propsFiles.add(DEFAULT_CODEGEN_ADDITIONAL_PROPS_FILE);
 
 		propsMgr = new WorkbenchPropertiesManager((String[]) propsFiles.toArray(new String[propsFiles.size()]));
 
