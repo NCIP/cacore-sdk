@@ -1,5 +1,6 @@
 package gov.nih.nci.cacore.workbench.portal.panel;
 
+import gov.nih.nci.cacore.workbench.common.CacoreWorkbenchConstants;
 import gov.nih.nci.cacore.workbench.common.FileFilters;
 import gov.nih.nci.cacore.workbench.common.LookAndFeel;
 import gov.nih.nci.cacore.workbench.common.OptionsMapManager;
@@ -49,11 +50,10 @@ public final class LogViewerPanel implements Panel, PanelValidator {
 	private static final Logger log = Logger.getLogger(LogViewerPanel.class);
 	
 	private TabbedPanePropertiesValidator mainPanelValidator = null;
-	private DeployPropertiesViewer parentContainer = null;
 	private String projectDirPath = null;
 	
 	// Validation Message Constants
-	private static final String LOG_FILE = "Log file path";	
+	private static final String LOG_FILE = CacoreWorkbenchConstants.LOG_FILE_VALIDATION_KEY;	
 
 	public LogViewerPanel(TabbedPanePropertiesValidator mainPanelValidator,
 			String projectDirPath) {
@@ -293,8 +293,8 @@ public final class LogViewerPanel implements Panel, PanelValidator {
     		result.add(new SimpleValidationMessage(LOG_FILE + " must not be blank.", Severity.ERROR, LOG_FILE));
     	} else {
     		File file = new File(this.getLogFileField().getText());
-    		if(file.exists()){
-    			result.add(new SimpleValidationMessage(LOG_FILE + " already exists.  The output directory will be overwritten.", Severity.WARNING, LOG_FILE));
+    		if(!file.exists()){
+    			result.add(new SimpleValidationMessage(LOG_FILE + " does not exist.  Please select an existing log file", Severity.WARNING, LOG_FILE));
     		}
     	}
     	
@@ -320,11 +320,10 @@ public final class LogViewerPanel implements Panel, PanelValidator {
     	String logFilePath = getLogFileField().getText();
     	
 		log.debug("Attempting to load log file: " + logFilePath);
-//		InputStream is = CreateGridServiceViewer.class.getResourceAsStream("/html/Help.html");
 		try {
 			FileInputStream fstream = new FileInputStream(logFilePath);
 			BufferedInputStream in = new BufferedInputStream(fstream);			
-			logEditorPane.setText(Utils.convertStreamToHtmlString(in));
+			logEditorPane.setText(Utils.convertStreamToString(in,true));
 		} catch (Exception e) {
 			log.error("Error encountered while trying to load log file "+logFilePath+":",e);
 			logEditorPane.setText("<html><i>Unable to display Workbench Log information at this time.</i></html>");
