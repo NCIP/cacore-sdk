@@ -28,8 +28,10 @@ import java.awt.GridBagLayout;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.TreeMap;
 
 import javax.swing.JButton;
@@ -582,6 +584,18 @@ public class CodegenPropertiesViewer extends WorkbenchViewerBaseComponent {
 		
 		// Writable API properties
 		propsMap.putAll(securitySettingsPanel.getPropsMap());
+		
+		// Retrieve and add 'Additional' codegen properties not managed by the Workbench but 
+		// still required by the SDK Codegen process
+		Properties addlProps = ResourceManager.getAdditionalCodegenPropertiesManager().getDeployProperties();
+
+		Iterator<Object> keys = addlProps.keySet().iterator();
+		while (keys.hasNext())
+		{
+			String key = (String) keys.next();
+			String value = (String) addlProps.get(key);
+			propsMap.put(key, value);
+		}
 
 		return propsMap;
 	}
