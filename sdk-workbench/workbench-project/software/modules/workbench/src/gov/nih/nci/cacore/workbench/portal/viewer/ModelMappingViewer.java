@@ -80,7 +80,7 @@ public class ModelMappingViewer extends ExternalWorkflowApplicationComponent {
                 javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
                 javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
             
-        	contentPanel.add(getMainSplitPanel(convertStreamToString(is),buttons), gridBagConstraints10);
+        	contentPanel.add(getMainSplitPanel(Utils.convertStreamToString(is),buttons), gridBagConstraints10);
         	contentPanel.validate();
         	
         }
