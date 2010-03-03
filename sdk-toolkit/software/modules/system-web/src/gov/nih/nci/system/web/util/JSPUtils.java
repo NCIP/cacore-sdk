@@ -44,7 +44,7 @@ public class JSPUtils {
 		String enableRestfulHtmlInterface = (String)systemProperties.getProperty("enableRestfulHtmlInterface");
 		
 		disableWebinterface =   "true".equalsIgnoreCase(enableISO21090DataTypes)
-					 		 || "false".equalsIgnoreCase(enableRestfulHtmlInterface)?true:false;
+					 		 || "false".equalsIgnoreCase(enableRestfulHtmlInterface)?false:true;
 	}
 
 	/**
