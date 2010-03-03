@@ -1208,7 +1208,7 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
 		if (isRemoteDeployment())
 			propsMap.putAll(remoteSshSettingsPanel.getPropsMap());
 		
-		// Retrieve and add 'Additional' properties not managed by the Workbench but 
+		// Retrieve and add 'Additional' deploy properties not managed by the Workbench but 
 		// still required by the SDK deploy process
 		Properties addlProps = ResourceManager.getAdditionalDeployPropertiesManager().getDeployProperties();
 
