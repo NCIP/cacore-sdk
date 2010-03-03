@@ -144,31 +144,4 @@ public abstract class ExternalWorkflowApplicationComponent extends JInternalFram
     	
     	return textPane;
     }
-    
-    public String convertStreamToString(InputStream is) {
-
-    	BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-    	StringBuilder sb = new StringBuilder();
-
-    	String line = null;
-    	try {
-    		while ((line = reader.readLine()) != null) {
-    			sb.append(line + "\n");
-    		}
-    		
-    		log.debug("* * * converted input stream[length=" + sb.length() + "]: " + sb.toString());
-    	} catch (IOException e) {
-    		log.error("Error reading external workflow description: ",e);
-    		return "Error reading external workflow description: " + e.getMessage();
-    	} finally {
-    		try {
-    			is.close();
-    		} catch (IOException e) {
-    			log.error("Error closing input stream while reading external workflow description: ",e);
-    		}
-    	}
-
-    	return sb.toString();
-    }
-
 }
