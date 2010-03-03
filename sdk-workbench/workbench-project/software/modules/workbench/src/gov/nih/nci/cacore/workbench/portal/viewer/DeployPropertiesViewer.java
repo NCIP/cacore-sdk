@@ -1,5 +1,6 @@
 package gov.nih.nci.cacore.workbench.portal.viewer;
 
+import gov.nih.nci.cacore.workbench.common.CacoreWorkbenchConstants;
 import gov.nih.nci.cacore.workbench.common.LookAndFeel;
 import gov.nih.nci.cacore.workbench.common.ResourceManager;
 import gov.nih.nci.cacore.workbench.common.WorkbenchPropertiesManager;
@@ -23,7 +24,6 @@ import gov.nih.nci.cagrid.common.portal.validation.IconFeedbackPanel;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -240,25 +240,43 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
     }
     
     public void toggleDeployButton() {
-    	if (this.validationModel.hasErrors() || (this.isDirty) || (mainTabbedPane.getSelectedIndex() != DEPLOY_TAB_INDEX) || (!this.isPropsLoaded) ) {
+    	if ((this.isDirty) || (mainTabbedPane.getSelectedIndex() != DEPLOY_TAB_INDEX) || (!this.isPropsLoaded) ) {
 
     		log.debug("Deploy Button is disabled; here's why: ");
-    		log.debug("* * * Validation model has errors? "+this.validationModel.hasErrors());
-    		if (this.validationModel.hasErrors()){
-    			ValidationResult results = validationModel.getResult();
-    			for (ValidationMessage errorMessage:results.getErrors()){
-    				log.debug("* * * * Validation Error Message key: "+errorMessage.key()+"; Validation Error Message: "  + errorMessage.formattedText());
-    			}
-    		}
-    		
     		log.debug("* * * Viewer is 'Dirty' (properties need to be saved)? "+this.isDirty);
     		log.debug("* * * Not on Deploy Tab? "+(mainTabbedPane.getSelectedIndex() != DEPLOY_TAB_INDEX));
+    		
     		if (mainTabbedPane.getSelectedIndex() != DEPLOY_TAB_INDEX)
     			log.debug("* * * Tabbed Panel Index: "+mainTabbedPane.getSelectedIndex() +";  DEPLOY_TAB_INDEX: " + DEPLOY_TAB_INDEX);
     		log.debug("* * * Have the properties been loaded? " + this.isPropsLoaded);
 
     		deployButton.setEnabled(false);
     	} else {
+    		log.debug("* * * Validation model has errors? "+this.validationModel.hasErrors());
+    		if (this.validationModel.hasErrors()){
+
+    			ValidationResult results = validationModel.getResult();
+    			List<com.jgoodies.validation.ValidationMessage> errors = results.getErrors();
+    			
+    			//debug error results
+    			for (ValidationMessage errorMessage:results.getErrors()){
+    				log.debug("* * * * Validation Error Message key: "+errorMessage.key()+"; Validation Error Message: "  + errorMessage.formattedText());
+    			}
+    			
+    			if (errors !=null && errors.size() == 1){
+        			for (ValidationMessage errorMessage:results.getErrors()){
+        				if ( ((String)(errorMessage.key())).equalsIgnoreCase(CacoreWorkbenchConstants.LOG_FILE_VALIDATION_KEY)){
+        					log.debug("Deploy Button is enabled; required conditions have been met");
+        					deployButton.setEnabled(true);
+        	    			return;
+        				}
+        			}
+
+    			}
+    			deployButton.setEnabled(false);
+    			return;
+    		}
+
     		log.debug("Deploy Button is enabled; required conditions have been met");
     		deployButton.setEnabled(true);
     	}

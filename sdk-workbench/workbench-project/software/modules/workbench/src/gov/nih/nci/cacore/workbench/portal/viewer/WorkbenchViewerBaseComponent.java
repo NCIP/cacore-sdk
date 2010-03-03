@@ -2,9 +2,12 @@ package gov.nih.nci.cacore.workbench.portal.viewer;
 
 import gov.nih.nci.cacore.workbench.common.AntTools;
 import gov.nih.nci.cacore.workbench.common.ResourceManager;
+import gov.nih.nci.cacore.workbench.common.Utils;
 import gov.nih.nci.cacore.workbench.common.WorkbenchPropertiesManager;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Connection;
@@ -14,9 +17,7 @@ import java.sql.SQLWarning;
 import java.util.Iterator;
 import java.util.Map;
 
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
 
 import org.apache.log4j.Logger;
 import org.apache.tools.ant.BuildException;
@@ -135,56 +136,6 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 
 				return false;
 			}
-
-//			BusyDialogRunnable r = new BusyDialogRunnable(GridApplication.getContext().getApplication(), "Saving Code Generation Properties") {
-//				@Override
-//				public void process() {
-//					try {
-//						if (!sdkDirFile.exists()) {
-//							setErrorMessage(generateErrorMsg("The specified SDK installation home directory does not exist: "+sdkDirPath));
-//							return;
-//						} else {
-//							installSdk(sdkDirPath,projectTemplateDirPath);
-//						}
-//						
-//						setProgressText("Configuring Project Directory");
-//						
-//						try {
-//							AntTools.configureProject(projectTemplateDirPath, projectDirPath);
-//						} catch (BuildException e) {
-//							log.error("ERROR: "+ e.getMessage(),e);
-//							setErrorMessage(generateErrorMsg("Failed to create and configure the Project Generation Directory." + e.getMessage()));
-//							return;
-//						}
-//						
-//						try {
-//							AntTools.copyModelFile(projectDirPath, modelFilePath);
-//						} catch (BuildException e) {
-//							log.error("ERROR: "+ e.getMessage(),e);
-//							setErrorMessage(generateErrorMsg(e,"Failed to copy the model file to the Project Generation 'models' sub-directory!"));
-//							return;
-//						}
-//
-//						setProgressText("Saving Properties");
-//
-//						if (!saveProperties(codegenPropsFile,workbenchPropsMap)){
-//							setErrorMessage(generateErrorMsg("Failed to save the code generation workbench properties to: "+codegenPropsFile.getAbsolutePath()));
-//							return;
-//						}
-//					
-//						setErrorMessage("Properties Successfully Saved");
-//
-//					} catch (Exception e) {
-//						log.error("ERROR: "+ e.getMessage(),e);
-//						setErrorMessage(generateErrorMsg(e));
-//
-//						return;
-//					}
-//				}
-//			};
-//
-//			Thread th = new Thread(r);
-//			th.start();
 			
 			log.debug("Completed saving codegen properties.");
 		}
@@ -337,89 +288,6 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 		}
 
 
-//			===========
-
-//			BusyDialogRunnable r = new BusyDialogRunnable(GridApplication.getContext().getApplication(), "Saving Deployment Properties") {
-//				@Override
-//				public void process() {
-//					try {
-//						if (!sdkDirFile.exists()) {
-//							setErrorMessage(generateErrorMsg("The specified SDK installation home directory does not exist: "+sdkDirPath));
-//							return;
-//						} else {
-//							installSdk(sdkDirPath,projectTemplateDirPath,this);
-//						}
-//						
-//						try {
-//							AntTools.configureProject(projectTemplateDirPath, projectDirPath);
-//						} catch (BuildException e) {
-//							log.error("ERROR: "+ e.getMessage(),e);
-//							setErrorMessage(generateErrorMsg("Failed to create and configure the Project Generation Directory." + e.getMessage()));
-//							return;
-//						}
-//
-//						if (certFile.exists() && keyFile.exists()){
-//							try {
-//								AntTools.copyCertKeyFiles(projectDirPath, targetGridDirPath, certFilePath, keyFilePath);
-//							} catch (BuildException e) {
-//								log.error("ERROR: "+ e.getMessage(),e);
-//								setErrorMessage(generateErrorMsg(e,"Failed to copy the caGrid Security Certificate and Key files to the Project Generation " + targetGridDirPath +" sub-directory!"));
-//								return;
-//							}
-//						}
-//
-//						if (dbSqlFile.exists()){
-//							try {
-//								AntTools.copyDbSqlFile(projectDirPath, destDbSqlDir.getAbsolutePath(), dbSqlFilePath);
-//							} catch (BuildException e) {
-//								log.error("ERROR: "+ e.getMessage(),e);
-//								setErrorMessage(generateErrorMsg(e,"Failed to copy the Database SQL file to the Project Generation " + destDbSqlDir.getAbsolutePath() +" sub-directory!"));								
-//								return;
-//							}
-//						}
-//						
-//						if (csmDbSqlFile.exists()){
-//							try {
-//								AntTools.copyDbSqlFile(projectDirPath, destDbSqlDir.getAbsolutePath(), csmDbSqlFilePath);
-//							} catch (BuildException e) {
-//								log.error("ERROR: "+ e.getMessage(),e);
-//								setErrorMessage(generateErrorMsg(e,"Failed to copy the CSM Database SQL file to the Project Generation " + destDbSqlDir.getAbsolutePath() +" sub-directory!"));								
-//								return;
-//							}
-//						}
-//						
-//						if (clmDbSqlFile.exists()){
-//							try {
-//								AntTools.copyDbSqlFile(projectDirPath, destDbSqlDir.getAbsolutePath(), clmDbSqlFilePath);
-//							} catch (BuildException e) {
-//								log.error("ERROR: "+ e.getMessage(),e);
-//								setErrorMessage(generateErrorMsg(e,"Failed to copy the CLM Database SQL file to the Project Generation " + destDbSqlDir.getAbsolutePath() +" sub-directory!"));								
-//								return;
-//							}
-//						}
-//
-//						setProgressText("Saving Properties");
-//
-//						if (!saveProperties(deployPropsFile,workbenchPropsMap)){
-//							setErrorMessage(generateErrorMsg("Failed to save the deployment properties to: "+deployPropsFile.getAbsolutePath()));
-//							return;
-//						}
-//						
-//						setErrorMessage("Properties Successfully Saved");
-//						
-//					} catch (Exception e) {
-//						log.error("ERROR: "+ e.getMessage(),e);
-//						setErrorMessage(generateErrorMsg(e));
-//						return;
-//					}
-//				}
-//			};
-//
-//			Thread th = new Thread(r);
-//			th.start();
-//
-//		}
-
 		return true;
 	}
 	
@@ -526,43 +394,7 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 			final File sdkDirFile = new File(sdkDirPath);		
 
 			WorkbenchViewerBaseComponent.this.setVisible(false);
-			dispose();
-//			
-//			try {
-//				if (!sdkDirFile.exists()) {
-//					setErrorMessage(generateErrorMsg("The specified SDK installation home directory does not exist: "+sdkDirPath));
-//					return;
-//				} else {
-//					installSdk(sdkDirPath,projectTemplateDirPath);
-//				}
-//				
-//				//setProgressText("Configuring Project Directory");
-//				
-//				try {
-//					AntTools.configureProject(projectTemplateDirPath, projectDirPath);
-//				} catch (BuildException e) {
-//					log.error("ERROR: "+ e.getMessage(),e);
-//					setErrorMessage(generateErrorMsg("Failed to create and configure the Project Generation Directory." + e.getMessage()));
-//					return;
-//				}
-//
-//				setProgressText("Generating the Application");
-//				
-//				try {
-//					AntTools.generateApplication(projectDirPath);
-//				} catch (BuildException e) {
-//					log.error("ERROR: "+ e.getMessage(),e);
-//					setErrorMessage(generateErrorMsg(e,"Failed to generate the application!"));
-//					return;
-//				}
-//			
-//				setErrorMessage("Application Successfully Generated");
-//
-//			} catch (Exception e) {
-//				log.error("ERROR: "+ e.getMessage(),e);
-//				setErrorMessage(generateErrorMsg(e));
-//				return;
-//			}			
+			dispose();		
 			
 			BusyDialogRunnable r = new BusyDialogRunnable(GridApplication.getContext().getApplication(), "Generating") {
 				@Override
@@ -594,8 +426,13 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 							setErrorMessage(generateErrorMsg(e,"Failed to generate the application!"));
 							return;
 						}
-					
-						setErrorMessage("Application Successfully Generated");
+						
+						if (!logFileContainsBuildException(projectDirPath)){
+							log.debug("BUILD SUCCESSFUL");
+							setErrorMessage("Application Successfully Generated");
+						} else {
+							setErrorMessage(generateErrorMsg("Application Generation Failed.  Use the 'View Log' tab to see details."));
+						}
 
 					} catch (Exception e) {
 						log.error("ERROR: "+ e.getMessage(),e);
@@ -662,7 +499,7 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 		if (doIProceedResult == JOptionPane.OK_OPTION) {
 			final File sdkDirFile = new File(sdkDirPath);	
 			final File deployPropsFile = ResourceManager.getDeployPropsFile(projectDirPath,remoteDeployEnv);
-
+			
 			WorkbenchViewerBaseComponent.this.setVisible(false);
 			dispose();
 
@@ -700,8 +537,14 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 							setErrorMessage(generateErrorMsg(e,"Failed to deploy the application."));
 							return;
 						}
-					
-						setErrorMessage("Application Successfully Deployed");
+						
+						// Check the last modified log files for any "Build Failed" messages
+						if (!logFileContainsBuildException(projectDirPath)){
+							log.debug("BUILD SUCCESSFUL");
+							setErrorMessage("Application Successfully Deployed");
+						} else {
+							setErrorMessage(generateErrorMsg("Application Deployment Failed.  Use the 'View Log' tab to see details."));
+						}
 
 					} catch (Exception e) {
 						log.error("ERROR: "+ e.getMessage(),e);
@@ -715,6 +558,50 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 			th.start();
 
 		}
+	}
+	
+	private boolean logFileContainsBuildException(String projectDirPath){
+		boolean buildFailed = false;
+		File logsDirFile =  ResourceManager.getLogsDir(projectDirPath);
+		
+		if (logsDirFile.exists()){
+			log.debug("* * * Logs directory: " + logsDirFile.getName());
+			log.debug("logsDirFile.listFiles() count: " + logsDirFile.listFiles().length);
+
+			long lastModified = 0;
+			File logFile = null;
+			for(File f:logsDirFile.listFiles())
+			{
+				log.debug("log file name: " + f.getName());
+				if (f.lastModified() > lastModified){
+					lastModified = f.lastModified();
+					logFile = f;
+				}
+			}
+			
+			// read last modified log file
+			if (logFile != null && logFile.exists()){
+				log.debug("* * * last modified log file: " + logFile.getName());
+				
+				try{
+					FileInputStream fstream = new FileInputStream(logFile);
+					BufferedInputStream in = new BufferedInputStream(fstream);
+					String logFileContents = Utils.convertStreamToString(in);
+					
+					if (logFileContents.contains("BUILD FAILED")){
+						buildFailed = true;
+						log.debug("BUILD FAILED");
+					}
+
+					//Close the input stream
+					in.close();
+				} catch (Exception e){//Catch exception if any
+					log.error("Error encountered while trying to read log file: " + e.getMessage());
+				}
+			}
+		}
+		
+		return buildFailed;
 	}
 	
 	public boolean saveProperties(File workbenchPropsFile, Map<String,String>workbenchPropsMap){
@@ -770,9 +657,6 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 						"Database Connection Test failed: invalid Database Type selected (must be 'Oracle', 'MySql', or 'PostgreSQL')\n"+
 						dbType);
 			}
-
-//			// Enable logging
-//			DriverManager.setLogWriter(new PrintWriter((System.err)));
 
 			log.debug("Getting Connection");
 			Connection conn = DriverManager.getConnection(dbURL, username, password);
@@ -836,6 +720,7 @@ public abstract class WorkbenchViewerBaseComponent extends ApplicationComponent 
 		return "Error: " + errorMsg;
 	}
 	
+	//Kept here for reference purposes
 	private void setProgressText(String text){
 		final String displayText = text;
 		
