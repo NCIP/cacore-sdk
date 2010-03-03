@@ -1,6 +1,11 @@
 package gov.nih.nci.cacore.workbench.common;
 
+import gov.nih.nci.cacore.workbench.portal.panel.LogViewerPanel;
+
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
@@ -9,9 +14,12 @@ import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 
 import org.apache.axis.utils.XMLUtils;
+import org.apache.log4j.Logger;
 import org.globus.wsrf.encoding.ObjectDeserializer;
 
 public class Utils {
+	
+	private static final Logger log = Logger.getLogger(Utils.class);
 	
 	private static final String[] browsers = { "firefox", "opera", "konqueror", "epiphany",
 		"seamonkey", "galeon", "kazehakase", "mozilla", "netscape" };
@@ -80,5 +88,43 @@ public class Utils {
 					"Error attempting to launch workbench help in web browser:\n" + e.toString());
 		}
 	}
+	
+    public static String convertStreamToString(InputStream is) {
+    	return convertStreamToString(is,false);
+    }
+    
+    public static String convertStreamToString(InputStream is, boolean insertBreak) {
+
+    	BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+    	StringBuilder sb = new StringBuilder();
+
+    	String line = null;
+    	try {
+    		if (insertBreak){
+        		while ((line = reader.readLine()) != null) {
+        			sb.append(line + "<br>");
+        		}
+    		} else{
+        		while ((line = reader.readLine()) != null) {
+        			sb.append(line + "\n");
+        		}
+    		}
+
+    		
+    		log.debug("* * * converted input stream[length=" + sb.length() + "]: " + sb.toString());
+    	} catch (IOException e) {
+    		log.error("Error reading file: ",e);
+    		return "Error reading file: " + e.getMessage();
+    	} finally {
+    		try {
+    			is.close();
+    		} catch (IOException e) {
+    			log.error("Error closing input stream after reading file: ",e);
+    			return "Error reading file: " + e.getMessage();
+    		}
+    	}
+
+    	return sb.toString();
+    }
 
 }
