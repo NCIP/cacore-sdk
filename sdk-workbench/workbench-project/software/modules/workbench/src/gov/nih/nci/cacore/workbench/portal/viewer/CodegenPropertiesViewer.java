@@ -1,5 +1,6 @@
 package gov.nih.nci.cacore.workbench.portal.viewer;
 
+import gov.nih.nci.cacore.workbench.common.CacoreWorkbenchConstants;
 import gov.nih.nci.cacore.workbench.common.LookAndFeel;
 import gov.nih.nci.cacore.workbench.common.ResourceManager;
 import gov.nih.nci.cacore.workbench.common.WorkbenchPropertiesManager;
@@ -36,6 +37,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
+import org.apache.log4j.Logger;
+
+import com.jgoodies.validation.ValidationMessage;
+import com.jgoodies.validation.ValidationResult;
 import com.jgoodies.validation.ValidationResultModel;
 import com.jgoodies.validation.util.DefaultValidationResultModel;
 import com.jgoodies.validation.view.ValidationComponentUtils;
@@ -48,6 +53,8 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
  */
 public class CodegenPropertiesViewer extends WorkbenchViewerBaseComponent {
 	
+	private static final Logger log = Logger.getLogger(CodegenPropertiesViewer.class);
+
 	private static final long serialVersionUID = 1L;
 	
 	private static final String MODELS_DIR = "models";
@@ -322,9 +329,38 @@ public class CodegenPropertiesViewer extends WorkbenchViewerBaseComponent {
     public void toggleGenerateButton() {
     	//if (this.validationModel.hasErrors() || (this.isDirty) || (mainTabbedPane.getSelectedIndex() != GENERATE_TAB_INDEX) ) {
     	if (this.isDirty || (mainTabbedPane.getSelectedIndex() != GENERATE_TAB_INDEX)|| (!this.isPropsLoaded) ) {
+    		log.debug("Generate Button is disabled; required conditions have not been met");
     		generateButton.setEnabled(false);
     	} else {
+    		log.debug("* * * Validation model has errors? "+this.validationModel.hasErrors());
+    		if (this.validationModel.hasErrors()){
+
+    			ValidationResult results = validationModel.getResult();
+    			List<com.jgoodies.validation.ValidationMessage> errors = results.getErrors();
+    			
+    			//debug error results
+    			for (ValidationMessage errorMessage:results.getErrors()){
+    				log.debug("* * * * Validation Error Message key: "+errorMessage.key()+"; Validation Error Message: "  + errorMessage.formattedText());
+    			}
+    			
+    			if (errors !=null && errors.size() == 1){
+        			for (ValidationMessage errorMessage:results.getErrors()){
+        				if ( ((String)(errorMessage.key())).equalsIgnoreCase(CacoreWorkbenchConstants.LOG_FILE_VALIDATION_KEY)){
+        					log.debug("Generate Button is enabled; required conditions have been met");
+        					generateButton.setEnabled(true);
+        	    			return;
+        				}
+        			}
+
+    			}
+    			log.debug("Generate Button is disabled; Validation errors have been found");
+    			generateButton.setEnabled(false);
+    			return;
+    		}
+
+    		log.debug("Generate Button is enabled; required conditions have been met");
     		generateButton.setEnabled(true);
+    		
     	}
     }
     
@@ -627,14 +663,8 @@ public class CodegenPropertiesViewer extends WorkbenchViewerBaseComponent {
 	    	mainTabbedPane.setEnabledAt(PROJECT_TAB_INDEX, true);
 	    	mainTabbedPane.setEnabledAt(MODEL_TAB_INDEX, true);
 	    	mainTabbedPane.setEnabledAt(CODEGEN_TAB_INDEX, true);
-	    	
-	    	// The following tabs are enabled/disabled based upon
-	    	// Security and Writable API settings and so should not 
-	    	// be enabled here
-	    	
-	    	//mainTabbedPane.setEnabledAt(WRITABLE_API_TAB_INDEX, true);
-	    	//mainTabbedPane.setEnabledAt(SECURITY_TAB_INDEX, true);
-	    	
+	    	mainTabbedPane.setEnabledAt(WRITABLE_API_TAB_INDEX, true);
+	    	mainTabbedPane.setEnabledAt(SECURITY_TAB_INDEX, true);
 	    	mainTabbedPane.setEnabledAt(GENERATE_TAB_INDEX, true);
 	    	mainTabbedPane.setEnabledAt(LOG_VIEWER_TAB_INDEX, true);
 	    }
