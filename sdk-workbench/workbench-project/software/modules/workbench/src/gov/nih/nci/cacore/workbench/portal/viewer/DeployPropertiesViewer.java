@@ -154,15 +154,20 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
     
     public void loadDeployProperties(){
     	
+    	String projectDir = projectSettingsPanel.getProjectDir();
+    	
     	if (deployTypeSettingsPanel.isLocalDeployment())
-    		propsMgr = ResourceManager.getDeployPropertiesManager(projectSettingsPanel.getProjectDir()); 
+    		propsMgr = ResourceManager.getDeployPropertiesManager(projectDir); 
     	else if (deployTypeSettingsPanel.isRemoteDeployment()){
     		String remoteDeployEnv = deployTypeSettingsPanel.getRemoteDeployEnvPrefix();
-    		propsMgr = ResourceManager.getDeployPropertiesManager(projectSettingsPanel.getProjectDir(),remoteDeployEnv);
+    		propsMgr = ResourceManager.getDeployPropertiesManager(projectDir,remoteDeployEnv);
     	}
         
 		initPanels();
 		resetMainTabbedPaneComponents();
+		
+		//Restore projectDir - necessary in case an empty (initial) project dir was selected
+		projectSettingsPanel.setProjectDir(projectDir);
     	
 		initValidation();
 		

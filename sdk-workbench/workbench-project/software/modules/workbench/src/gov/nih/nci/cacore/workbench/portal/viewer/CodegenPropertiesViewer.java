@@ -600,11 +600,16 @@ public class CodegenPropertiesViewer extends WorkbenchViewerBaseComponent {
     
     public void loadCodegenProperties(){
     	
+    	String projectDir = projectSettingsPanel.getProjectDir();
+    	
 		// Initialize WorkbenchPropertiesManager
-		propsMgr = ResourceManager.getCodegenPropertiesManager(projectSettingsPanel.getProjectDir()); 
+		propsMgr = ResourceManager.getCodegenPropertiesManager(projectDir); 
         
 		initPanels();
 		resetMainTabbedPaneComponents();
+		
+		//Restore projectDir - necessary in case an empty (initial) project dir was selected
+		projectSettingsPanel.setProjectDir(projectDir);
     	
 		initValidation();
 		
