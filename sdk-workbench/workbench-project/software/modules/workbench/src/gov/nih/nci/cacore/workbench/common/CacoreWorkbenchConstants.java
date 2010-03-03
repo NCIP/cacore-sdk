@@ -33,6 +33,8 @@ public abstract class CacoreWorkbenchConstants {
 	
 	//Model Mapping Workflow
 	public static final String LAUNCH_CAADAPTER_URL = "cacore.workbench.launch.caadapter.url";
+	
+	public static String LOG_FILE_VALIDATION_KEY = "Log file path";
 
 	private CacoreWorkbenchConstants() {
 		// prevents instantiation
