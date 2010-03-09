@@ -73,7 +73,7 @@ public final class ProjectDirSettingsPanel implements Panel, PanelValidator {
         	projectGenDirField = new JTextField();
         	
         	//projectGenDirField.setText(propsMgr.getDeployPropertyValue("PROJECT_GEN_DIR"));
-        	projectGenDirField.setToolTipText("Enter the directory where the project will be generated2");
+        	projectGenDirField.setToolTipText("Enter the directory where the project will be generated");
         	projectGenDirField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
                 	toggleLoadPropertiesButton();
