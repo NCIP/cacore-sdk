@@ -35,7 +35,10 @@
 			<fileset dir="${modules.dir}"/>
 		</copy>
 	</target>
-
+	
+	<target name="ivy:init">
+	</target>
+	
 	<target name="static-analysis:ivy-init" depends="
 		ivy:init,
 		static-analysis:ivy-test-javancss,
