@@ -440,6 +440,8 @@ public class TransformerUtils
 			return "Boolean";
 		if("byte".equalsIgnoreCase(name) )
 			return "Byte";
+		if("byte[]".equalsIgnoreCase(name) )
+			return "byte[]";
 		if("short".equalsIgnoreCase(name) )
 			return "Short";
 
@@ -504,6 +506,7 @@ public class TransformerUtils
 		UMLAttribute col = getMappedColumn(table,fqcn+"."+attr.getName());
 		
 		Boolean isClob = "CLOB".equalsIgnoreCase(getTagValue(col.getTaggedValues(),TV_TYPE, 1));
+		Boolean isBlob = "BLOB".equalsIgnoreCase(getTagValue(col.getTaggedValues(),TV_TYPE, 1));
 		
 		UMLDatatype dataType = attr.getDatatype();
 		String name = dataType.getName();
@@ -517,6 +520,10 @@ public class TransformerUtils
 			return "text";
 		if(isClob && !"string".equalsIgnoreCase(name))
 			throw new GenerationException("Can not map CLOB to anything other than String");
+		if(isBlob && "byte[]".equalsIgnoreCase(name))
+			return "org.springframework.orm.hibernate3.support.BlobByteArrayType";
+		if(isBlob && !"byte[]".equalsIgnoreCase(name))
+			throw new GenerationException("Can not map BLOB to anything other than byte[]");
 		if("int".equalsIgnoreCase(name) || "integer".equalsIgnoreCase(name))
 			return "integer";
 		if("double".equalsIgnoreCase(name))
@@ -2210,6 +2217,16 @@ public class TransformerUtils
 			getTagValue(te,TV_NCI_GME_TARGET_XML_LOC_REF,null,0,0);
 		} catch (GenerationException e) {
 			return true;
+		}
+		return false;
+	}
+
+	public boolean containsIncludedClass(UMLPackage pkg)
+			throws GenerationException {
+		for (UMLClass klass : pkg.getClasses()) {
+			if (isIncluded(klass) && !STEREO_TYPE_TABLE.equalsIgnoreCase(klass.getStereotype())){
+				return true;
+			}
 		}
 		return false;
 	}

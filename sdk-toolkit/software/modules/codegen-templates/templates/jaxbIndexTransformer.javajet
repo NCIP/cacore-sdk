@@ -1,0 +1,7 @@
+<%@ jet package="gov.nih.nci.codegen.transformer.jet" 
+        class="JAXBIndexTransformer"
+        skeleton="JAXBTransformerBase.skeleton" %><%
+for(UMLClass klass:pkg.getClasses()){%>
+<%=klass.getName()%>
+
+<%}%>
