@@ -30,7 +30,8 @@
 				<ref bean="XmlMappingUnmarshallerTransformer"/>
 				<ref bean="SchemaTransformer"/>	
 				<ref bean="WSDDTransformer"/>
-				<ref bean="CLMLoggerCfgTransformer"/>							
+				<ref bean="CLMLoggerCfgTransformer"/>
+				<ref bean="jaxbIndexTransformer"/>											
 			</list>
 		</constructor-arg>
 	</bean>
@@ -134,11 +135,28 @@
 				<property name="suffix" value=".java"/>									
 			</bean>
 		</property>
+		<property name="configurationParams">
+			<map>
+				<entry key="JAXB_ENABLED" value="@GENERATE_JAXB_MAPPING@" />
+			</map>
+		</property>
 		<property name="enabled" value="@GENERATE_BEANS@"/>
 		<property name="name" value="Bean Transformer"/>
 		<property name="transformerUtils" ref="TransformerUtils"></property>
 	</bean>
 	
+	<bean name="jaxbIndexTransformer" class="gov.nih.nci.codegen.transformer.jet.JAXBIndexTransformer">
+		<property name="artifactHandler">
+			<bean class="gov.nih.nci.codegen.handler.FileHandler">
+				<property name="useArtifactSource" value="true"/>
+				<property name="outputDir" value="@OUTPUTDIR@"/>
+			</bean>
+		</property>
+		<property name="enabled" value="@GENERATE_JAXB_MAPPING@"/>
+		<property name="name" value="Jaxb Index Transformer" />
+		<property name="fileName" value="jaxb.index"/>				
+		<property name="transformerUtils" ref="TransformerUtils"/>
+	</bean>
 	<bean name="InterfaceTransformer" class="gov.nih.nci.codegen.transformer.jet.InterfaceTransformer">
 		<property name="artifactHandler">
 			<bean class="gov.nih.nci.codegen.handler.FileHandler">

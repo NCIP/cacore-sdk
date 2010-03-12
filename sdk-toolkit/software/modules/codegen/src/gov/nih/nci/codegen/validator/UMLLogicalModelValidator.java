@@ -339,6 +339,7 @@ public class UMLLogicalModelValidator implements Validator
 					"char".equalsIgnoreCase(name) || "character".equalsIgnoreCase(name) ||
 					"boolean".equalsIgnoreCase(name) ||
 					"byte".equalsIgnoreCase(name) ||
+					"byte[]".equalsIgnoreCase(name) ||
 					"short".equalsIgnoreCase(name) ||
 					"date".equalsIgnoreCase(name) || "java.util.date".equalsIgnoreCase(name)||
 					"collection<int>".equalsIgnoreCase(name) || "collection<integer>".equalsIgnoreCase(name)||

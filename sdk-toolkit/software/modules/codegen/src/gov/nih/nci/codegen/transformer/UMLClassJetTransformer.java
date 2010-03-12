@@ -11,6 +11,7 @@ import gov.nih.nci.ncicb.xmiinout.domain.UMLClass;
 import gov.nih.nci.ncicb.xmiinout.domain.UMLModel;
 
 import java.util.Collection;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -24,7 +25,7 @@ public abstract class UMLClassJetTransformer implements Transformer
 	private static Logger log = Logger.getLogger(UMLClassJetTransformer.class);
 	
 	private ArtifactHandler artifactHandler;
-
+	private Map<String, Object> configurationParams;
 	private boolean enabled = true;
 	
 	private String name = UMLClassJetTransformer.class.getName();
@@ -42,7 +43,14 @@ public abstract class UMLClassJetTransformer implements Transformer
 	{
 		this.artifactHandler = artifactHandler;
 	}
-
+	
+	public void setConfigurationParams(Map<String, Object> configurationParams) {
+		this.configurationParams = configurationParams;
+	}
+	
+	public Map<String, Object> getConfigurationParams() {
+		return configurationParams;
+	}
 
 	public GeneratorErrors execute(UMLModel model)
 	{
