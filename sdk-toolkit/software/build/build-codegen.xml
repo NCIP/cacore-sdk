@@ -39,12 +39,31 @@
 			<equals arg1="${ENABLE_SECURITY}" arg2="yes" casesensitive="false" trim="true" />
 		</or>
 	</condition>
+
+	<condition property="CLASS_LEVEL_SECURITY_ENABLED" value="true" else="false">
+		<and>
+			<or>
+				<equals arg1="${ENABLE_CLASS_LEVEL_SECURITY}" arg2="true" casesensitive="false" trim="true" />
+				<equals arg1="${ENABLE_CLASS_LEVEL_SECURITY}" arg2="yes" casesensitive="false" trim="true" />
+			</or>
+			<equals arg1="${SECURITY_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+		</and>
+	</condition>
+
 	<condition property="SECURITY_START" value="" else="${xml.comment.start}">
 		<equals arg1="${SECURITY_ENABLED}" arg2="true" casesensitive="false" trim="true" />
 	</condition>
 	<condition property="SECURITY_END" value="" else="${xml.comment.end}">
 		<equals arg1="${SECURITY_ENABLED}" arg2="true" casesensitive="false" trim="true" />
 	</condition>
+
+	<condition property="CLASS_LEVEL_SECURITY_START" value="" else="${xml.comment.start}">
+		<equals arg1="${CLASS_LEVEL_SECURITY_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+	</condition>
+	<condition property="CLASS_LEVEL_SECURITY_END" value="" else="${xml.comment.end}">
+		<equals arg1="${CLASS_LEVEL_SECURITY_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+	</condition>
+
 	<condition property="INSTANCE_LEVEL_SECURITY_ENABLED" value="true" else="false">
 		<and>
 			<or>
@@ -152,26 +171,24 @@
 	</condition>
 
 	<condition property="ENABLE_CASTOR_MAPPING_GENERATION" value="true" else="false">
-		<and>
-			<or>
-				<equals arg1="${GENERATE_CASTOR_MAPPING}" arg2="true" casesensitive="false" trim="true" />
-				<equals arg1="${GENERATE_CASTOR_MAPPING}" arg2="yes" casesensitive="false" trim="true" />
-			</or>
-			<not>
-				<equals arg1="${ISO21090_DATATYPES_ENABLED}" arg2="true" casesensitive="false" trim="true" />
-			</not>
-		</and>
+		<or>
+			<equals arg1="${GENERATE_CASTOR_MAPPING}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${GENERATE_CASTOR_MAPPING}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
 	</condition>
+
+	<condition property="ENABLE_JAXB_MAPPING_GENERATION" value="true" else="false">
+		<or>
+			<equals arg1="${GENERATE_JAXB_MAPPING}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${GENERATE_JAXB_MAPPING}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
+	</condition>
+
 	<condition property="ENABLE_XSD_GENERATION" value="true" else="false">
-		<and>
-			<or>
-				<equals arg1="${GENERATE_XSD}" arg2="true" casesensitive="false" trim="true" />
-				<equals arg1="${GENERATE_XSD}" arg2="yes" casesensitive="false" trim="true" />
-			</or>
-			<not>
-				<equals arg1="${ISO21090_DATATYPES_ENABLED}" arg2="true" casesensitive="false" trim="true" />
-			</not>
-		</and>
+		<or>
+			<equals arg1="${GENERATE_XSD}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${GENERATE_XSD}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
 	</condition>
 	<condition property="ENABLE_GENERATE_XSD_WITH_GME_TAGS" value="true" else="false">
 		<and>
@@ -331,6 +348,7 @@
 			<filter token="GENERATE_HIBERNATE_MAPPING" value="${ENABLE_HIBERNATE_MAPPING_GENERATION}" />
 			<filter token="GENERATE_BEANS" value="${ENABLE_BEANS_GENERATION}" />
 			<filter token="GENERATE_CASTOR_MAPPING" value="${ENABLE_CASTOR_MAPPING_GENERATION}" />
+			<filter token="GENERATE_JAXB_MAPPING" value="${ENABLE_JAXB_MAPPING_GENERATION}" />
 			<filter token="GENERATE_XSD" value="${ENABLE_XSD_GENERATION}" />
 			<filter token="GENERATE_XSD_WITH_GME_TAGS" value="${ENABLE_GENERATE_XSD_WITH_GME_TAGS}" />
 			<filter token="GENERATE_XSD_WITH_PERMISSIBLE_VALUES" value="${ENABLE_GENERATE_XSD_WITH_PERMISSIBLE_VALUES}" />
@@ -376,6 +394,8 @@
 			<filter token="GRID_LOGIN_MODULE_END" value="${GRID_LOGIN_MODULE_END}" />
 			<filter token="CSM_LOGIN_MODULE_START" value="${CSM_LOGIN_MODULE_START}" />
 			<filter token="CSM_LOGIN_MODULE_END" value="${CSM_LOGIN_MODULE_END}" />
+			<filter token="CLASS_LEVEL_SECURITY_START" value="${CLASS_LEVEL_SECURITY_START}" />
+			<filter token="CLASS_LEVEL_SECURITY_END" value="${CLASS_LEVEL_SECURITY_END}" />
 		</filterset>
 	</target>
 	<target name="replacetoken-contents-preconfigure" depends="-replace-templates-filter-tokens">
@@ -489,9 +509,9 @@
 				<attribute name="Version" value="${VERSION}" />
 			</manifest>
 			<include name="**/*.xsd" />
+			<include name="**/jaxb.index" />
 			<include name="unmarshaller-xml-mapping.xml" />
 			<include name="xml-mapping.xml" />
-			<exclude name="server-config.wsdd" />
 		</jar>
 	</target>
 
