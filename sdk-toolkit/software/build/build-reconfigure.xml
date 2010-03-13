@@ -679,6 +679,7 @@
 		<copy todir="${package.client.local.lib.dir}">
 			<fileset dir="${runtime.lib.dir}">
 				<include name="acegi-security-*.jar"/>
+				<include name="activation-*.jar"/>
 				<include name="antlr-*.jar"/>
 				<include name="asm-*.jar"/>
 				<include name="axis-1.4.jar"/>
@@ -702,6 +703,7 @@
 				<include name="dom4j-*.jar"/>
 				<include name="ehcache-*.jar"/>
 				<include name="hibernate-*.jar"/>
+				<include name="jaxb-*.jar"/>
 				<include name="jaxen-*.jar"/>
 				<include name="jaxrpc-*.jar"/>
 				<include name="jdom-1.1.jar"/>
@@ -709,6 +711,7 @@
 				<include name="log4j-*.jar"/>
 				<include name="spring-*.jar"/>
 				<include name="xercesImpl-*.jar"/>
+				<include name="stax-*.jar"/>
 			</fileset>
 			<fileset dir="${lib.dir}">
 				<include name="sdk-security-client-*.jar" />

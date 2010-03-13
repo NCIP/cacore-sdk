@@ -1,5 +1,6 @@
 package gov.nih.nci.system.client.util.xml;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
@@ -39,7 +40,7 @@ public class caCOREMarshaller implements gov.nih.nci.system.client.util.xml.Mars
 	public Mapping getMapping() throws XMLUtilityException {
 		/* if no mapping file explicity specified then load the default */
 		if(mapping == null){
-			//log.debug("mappingFileName: " + mappingFileName);
+			log.info("mappingFileName: " + mappingFileName);
 			try {
 				EntityResolver resolver = new EntityResolver() {
 					public InputSource resolveEntity(String publicId, String systemId) {
@@ -85,9 +86,9 @@ public class caCOREMarshaller implements gov.nih.nci.system.client.util.xml.Mars
 		return mapping;
 	}
 
-	public String toXML(Object beanObject) throws XMLUtilityException {
+	public String toXML(Object object) throws XMLUtilityException {
 		StringWriter strWriter = new StringWriter();
-		this.toXML(beanObject, strWriter);
+		this.toXML(object, strWriter);
 		return strWriter.toString();
 	}
 
@@ -95,7 +96,6 @@ public class caCOREMarshaller implements gov.nih.nci.system.client.util.xml.Mars
 
 		org.exolab.castor.xml.Marshaller marshaller = null;
 		try {
-
 			marshaller = new org.exolab.castor.xml.Marshaller(stream);
 		} catch (IOException e) {
 			System.out.println("Output stream invalid: " + e.getMessage());

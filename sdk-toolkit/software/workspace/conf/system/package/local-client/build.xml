@@ -79,6 +79,16 @@
 		</java>
 	</target>
 	
+	<!-- *******************************************************************-->
+	<!-- Run XML Utility Demo                                               -->
+	<!-- *******************************************************************-->
+	<target name="runXML" depends="compile" description="Runs the XML Utility test">
+		<SDKecho message="${ant.project.name}: Running the XML Utility test"/>
+		<mkdir dir="./output"/>
+		<java classname="TestXMLClient" fork="true" maxmemory="512m">
+			<classpath refid="runtime" />
+		</java>
+	</target>	
 	<!--***********************************************************************
 	*** Dumps the properties of the build script
 	*********************************************************************** -->

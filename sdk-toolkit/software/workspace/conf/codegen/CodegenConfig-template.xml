@@ -30,7 +30,7 @@
 				<ref bean="XmlMappingUnmarshallerTransformer"/>
 				<ref bean="SchemaTransformer"/>	
 				<ref bean="WSDDTransformer"/>
-				<ref bean="CLMLoggerCfgTransformer"/>
+				<ref bean="CLMLoggerCfgTransformer"/>							
 				<ref bean="jaxbIndexTransformer"/>											
 			</list>
 		</constructor-arg>
@@ -56,16 +56,29 @@
 				<prop key="Exclude Namespace">@EXCLUDE_NAMESPACE@</prop>
 				<prop key="Identity Generator Tag"><![CDATA[@IDENTITY_GENERATOR_TAG@]]></prop>
 				<prop key="Database Type">@DATABASE_TYPE@</prop>
+				<prop key="useGMETags">@GENERATE_XSD_WITH_GME_TAGS@</prop>
+				<prop key="namespaceUriPrefix">@NAMESPACE_PREFIX@</prop>
 			</props>
 		</constructor-arg>
 	</bean>
 	
+	<bean name="TransformerProperties" class="java.util.Properties">
+		<constructor-arg>
+			<props>
+				<prop key="isJaxbEnabled">@GENERATE_JAXB_MAPPING@</prop>
+				<prop key="useGMETags">@GENERATE_XSD_WITH_GME_TAGS@</prop>
+				<prop key="namespaceUriPrefix">@NAMESPACE_PREFIX@</prop>
+			</props>
+		</constructor-arg>
+	</bean>	
+	
 	
 	<bean name="TransformerUtils" class="gov.nih.nci.codegen.util.TransformerUtils">
 		<constructor-arg ref="UMLModelFileProperties"></constructor-arg>
-		<constructor-arg ref="CascadeStyles" index="1"></constructor-arg>
-		<constructor-arg ref="ValidatorModel" index="2"></constructor-arg>
-		<constructor-arg ref="ValidatorModelExtension" index="3"></constructor-arg>
+		<constructor-arg ref="TransformerProperties" index="1"></constructor-arg>
+		<constructor-arg ref="CascadeStyles" index="2"></constructor-arg>
+		<constructor-arg ref="ValidatorModel" index="3"></constructor-arg>
+		<constructor-arg ref="ValidatorModelExtension" index="4"></constructor-arg>
 	</bean>
 
 	<bean name="CascadeStyles" class="java.util.ArrayList">
@@ -134,11 +147,6 @@
 				<property name="outputDir" value="@OUTPUTDIR@"/>				
 				<property name="suffix" value=".java"/>									
 			</bean>
-		</property>
-		<property name="configurationParams">
-			<map>
-				<entry key="JAXB_ENABLED" value="@GENERATE_JAXB_MAPPING@" />
-			</map>
 		</property>
 		<property name="enabled" value="@GENERATE_BEANS@"/>
 		<property name="name" value="Bean Transformer"/>
@@ -249,9 +257,9 @@
 
 	<bean name="XmlMappingMarshallerTransformer" class="gov.nih.nci.codegen.transformer.XmlMappingTransformer" singleton="false">
 		<property name="useGMETags" value="@GENERATE_XSD_WITH_GME_TAGS@" />
+		<property name="namespaceUriPrefix" value="@NAMESPACE_PREFIX@" />
 		<property name="includeAssociations" value="true"/>
-		<property name="includeFieldHandler" value="true"/>
-		<property name="namespaceUriPrefix" value="@NAMESPACE_PREFIX@" />		
+		<property name="includeFieldHandler" value="true"/>		
 		<property name="artifactHandler">
 			<bean class="gov.nih.nci.codegen.handler.FileHandler">
 				<property name="useArtifactSource" value="false"/>
@@ -266,9 +274,9 @@
 
 	<bean name="XmlMappingUnmarshallerTransformer" class="gov.nih.nci.codegen.transformer.XmlMappingTransformer" singleton="false">
 		<property name="useGMETags" value="@GENERATE_XSD_WITH_GME_TAGS@" />
+		<property name="namespaceUriPrefix" value="@NAMESPACE_PREFIX@" />
 		<property name="includeAssociations" value="true"/>
 		<property name="includeFieldHandler" value="false"/>
-		<property name="namespaceUriPrefix" value="@NAMESPACE_PREFIX@" />
 		<property name="artifactHandler">
 			<bean class="gov.nih.nci.codegen.handler.FileHandler">
 				<property name="useArtifactSource" value="false"/>

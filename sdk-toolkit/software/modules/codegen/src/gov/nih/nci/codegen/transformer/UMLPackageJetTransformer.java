@@ -20,7 +20,7 @@ import org.apache.log4j.Logger;
  */
 public abstract class UMLPackageJetTransformer implements Transformer {
 
-	private static Logger log = Logger.getLogger(UMLClassJetTransformer.class);
+	private static Logger log = Logger.getLogger(UMLPackageJetTransformer.class);
 	private ArtifactHandler artifactHandler;
 	private boolean enabled = true;
 	private String name = UMLClassJetTransformer.class.getName();

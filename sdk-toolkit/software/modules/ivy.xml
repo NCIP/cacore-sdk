@@ -21,6 +21,7 @@
 		<artifact name="security" type="jar" conf="compile" />
 		<artifact name="security-client" type="jar" conf="compile" />
 		<artifact name="system-client" type="jar" conf="compile" />
+		<artifact name="system-client" type="jar" conf="runtime" />
 		<artifact name="system-core" type="jar" conf="compile" />
 		<artifact name="system-logging" type="jar" conf="compile" />
 		<artifact name="system-web" type="jar" conf="compile" />
@@ -87,8 +88,13 @@
 		<dependency org="jakarta" name="commons-discovery" rev="0.2" conf="runtime->compile" />
 		<dependency org="jakarta" name="commons-logging" rev="1.1" conf="runtime->compile" />
 		<dependency org="jakarta" name="commons-collections" rev="3.2" conf="runtime->compile" />
-		<dependency org="jakarta" name="commons-lang" rev="1.0.1" conf="runtime->compile" />
-		<dependency org="javax.transaction" name="jta" rev="1.0.1B" conf="runtime->compile" />
+		<dependency org="jakarta" name="commons-lang" rev="1.0.1" conf="runtime->compile" />	
+		<dependency org="javax.activation" name="activation" rev="1.0.2" conf="runtime->compile" />
+		<dependency org="javax.transaction" name="jta" rev="1.0.1B" conf="runtime->compile" />		
+		<dependency org="javax.xml.bind" name="jaxb-api" rev="2.1" conf="compile" />
+		<dependency org="javax.xml.bind" name="jaxb-api" rev="2.1" conf="runtime->compile" />
+		<dependency org="javax.xml.bind" name="jaxb-impl" rev="2.1.4" conf="runtime->compile" />
+		<dependency org="javax.xml.bind" name="jaxb-xjc" rev="2.1.4" conf="runtime->compile" />		 
 		<dependency org="jaxen" name="jaxen" rev="1.1.1" conf="runtime->compile" />		
 
 		<dependency org="jcp" name="jaxrpc" rev="1.1" conf="runtime->compile" />
@@ -114,6 +120,7 @@
 
 		<dependency org="springsource" name="acegi-security" rev="1.0.4" conf="compile"/>
 		<dependency org="springsource" name="spring" rev="2.0.2" conf="compile"/>
+		<dependency org="stax" name="stax-api" rev="1.0-2" />
 
 		<dependency org="cobertura" name="cobertura" rev="1.9.1" conf="test-cobertura->runtime" />
 		<dependency org="javancss" name="javancss" rev="29.50" conf="test-javancss->runtime" />

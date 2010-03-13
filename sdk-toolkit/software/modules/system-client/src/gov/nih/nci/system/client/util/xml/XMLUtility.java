@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.Collection;
 
 import org.apache.log4j.Logger;
 
@@ -40,16 +41,38 @@ public class XMLUtility {
 
 	public void toXML(Object beanObject, Writer stream)
 			throws XMLUtilityException {
+		marshaller.toXML(beanObject, stream);
+	}
+	
+	static public Object convertFromProxy(Object obj, boolean getAssociation) throws XMLUtilityException {
 		
+		Object convertedObject = null;
 		try {
-			beanObject = CastorDomainObjectFieldHandler.convertObject(beanObject,true);
+			CastorDomainObjectFieldHandler handler = new CastorDomainObjectFieldHandler();
+			convertedObject = handler.convertObject(obj,getAssociation);
 		} catch(Exception e){
 			log.error("Exception caught trying to convert from proxy to domain object: ", e);
 			throw new XMLUtilityException("Exception caught trying to convert from proxy to domain object: ", e);
 		}
-		marshaller.toXML(beanObject, stream);
+		
+		return convertedObject;
 	}
 
+	
+	static public Collection convertFromProxy(Object obj) throws XMLUtilityException {
+		
+		Collection convertedCollection = null;
+		//todo :: see if conversion is still necessary
+		try {
+			CastorCollectionFieldHandler handler = new CastorCollectionFieldHandler();
+			convertedCollection = (Collection)handler.convertUponGet(obj);
+		} catch(Exception e){
+			log.error("Exception caught trying to convert from proxy to domain object: ", e);
+			throw new XMLUtilityException("Exception caught trying to convert from proxy to domain object: ", e);
+		}
+		
+		return convertedCollection;
+	}
 	/**
 	 * Instantiates an object from an XML File that contains the serialized output
 	 * of that object.
@@ -63,6 +86,44 @@ public class XMLUtility {
 		beanObject = unmarshaller.fromXML(xmlFile);
 		return beanObject;
 	}
+	
+	/**
+	 * Instantiates an object from an XML File that contains the serialized output
+	 * of that object. This method should only be used with a JAXBUnmarshaller instance
+	 * 
+	 * @param xmlFile
+	 * @return
+	 * @throws XMLUtilityException
+	 */	
+	public Object fromXML(Class klazz, File xmlFile) throws XMLUtilityException {
+		
+		if (!(unmarshaller instanceof JAXBUnmarshaller)){
+			throw new XMLUtilityException("Invalid method usage.  This method is only valid when the Marshaller is a JAXBUnmarshaller instance");
+		}
+		
+		Object beanObject = null;
+		beanObject = ((JAXBUnmarshaller)unmarshaller).fromXML(klazz,xmlFile);
+		return beanObject;
+	}
+	
+	/**
+	 * Instantiates an object from an XML File that contains the serialized output
+	 * of that object. This method should only be used with a JAXBUnmarshaller instance
+	 * 
+	 * @param xmlFile
+	 * @return
+	 * @throws XMLUtilityException
+	 */	
+	public Object fromXML(String packageName, File xmlFile) throws XMLUtilityException {
+		
+		if (!(unmarshaller instanceof JAXBUnmarshaller)){
+			throw new XMLUtilityException("Invalid method usage.  This method is only valid when the Marshaller is a JAXBUnmarshaller instance");
+		}
+		
+		Object beanObject = null;
+		beanObject = ((JAXBUnmarshaller)unmarshaller).fromXML(packageName,xmlFile);
+		return beanObject;
+	}	
 
 	/**
 	 * Instantiates an object from xml input that contains the serialized output
