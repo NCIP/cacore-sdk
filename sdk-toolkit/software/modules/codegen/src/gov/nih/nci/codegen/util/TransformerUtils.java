@@ -54,6 +54,9 @@ public class TransformerUtils
 	private Map<String,String> CASCADE_STYLES = new HashMap<String,String>();
 	private ValidatorModel vModel;
 	private ValidatorModel vModelExtension;
+	private String namespaceUriPrefix;
+	private boolean useGMETags = false;
+	private boolean isJaxbEnabled = false;
 	
 	private static final String TV_ID_ATTR_COLUMN = "id-attribute";
 	private static final String TV_MAPPED_ATTR_COLUMN = "mapped-attributes";
@@ -87,7 +90,7 @@ public class TransformerUtils
 	public static final String  PK_GENERATOR_SYSTEMWIDE = "NCI_GENERATOR_SYSTEMWIDE.";
 
 	
-	public TransformerUtils(Properties umlModelFileProperties,List cascadeStyles, ValidatorModel vModel, ValidatorModel vModelExtension) {
+	public TransformerUtils(Properties umlModelFileProperties,Properties transformerProperties,List cascadeStyles, ValidatorModel vModel, ValidatorModel vModelExtension) {
 			BASE_PKG_LOGICAL_MODEL = umlModelFileProperties.getProperty("Logical Model") == null ? "" :umlModelFileProperties.getProperty("Logical Model").trim();
 			BASE_PKG_DATA_MODEL = umlModelFileProperties.getProperty("Data Model")==null ? "" : umlModelFileProperties.getProperty("Data Model").trim();
 			
@@ -95,6 +98,10 @@ public class TransformerUtils
 			INCLUDE_PACKAGE = umlModelFileProperties.getProperty("Include Package")==null ? "" : umlModelFileProperties.getProperty("Include Package").trim();
 			EXCLUDE_NAME = umlModelFileProperties.getProperty("Exclude Name")==null ? "" : umlModelFileProperties.getProperty("Exclude Name").trim();
 			EXCLUDE_NAMESPACE = umlModelFileProperties.getProperty("Exclude Namespace")==null ? "" : umlModelFileProperties.getProperty("Exclude Namespace").trim();
+			
+			namespaceUriPrefix = transformerProperties.getProperty("namespaceUriPrefix")==null ? "" : transformerProperties.getProperty("namespaceUriPrefix").trim().replace(" ", "_");
+			useGMETags = transformerProperties.getProperty("useGMETags")==null ? false : Boolean.parseBoolean(transformerProperties.getProperty("useGMETags"));	
+			isJaxbEnabled = transformerProperties.getProperty("isJaxbEnabled")==null ? false : Boolean.parseBoolean(transformerProperties.getProperty("isJaxbEnabled"));					
 			
 			for(String excludeToken:EXCLUDE_PACKAGE.split(","))
 				EXCLUDE_PACKAGE_PATTERNS.add(excludeToken.trim());
@@ -277,8 +284,12 @@ public class TransformerUtils
 	public String getSuperClassString(UMLClass klass) throws GenerationException
 	{
 		UMLClass superClass = getSuperClass(klass);
-		if(superClass == null) 
-			return "";
+		if(superClass == null)
+			if (isJaxbEnabled()){
+				return "extends gov.nih.nci.system.client.util.xml.JAXBGenericPOJO";
+			} else {
+				return "";
+			}
 		else 
 			return "extends " + superClass.getName();
 	}
@@ -2229,5 +2240,18 @@ public class TransformerUtils
 			}
 		}
 		return false;
+	}
+
+
+	public String getNamespaceUriPrefix() {
+		return namespaceUriPrefix;
+	}
+
+	public boolean isUseGMETags() {
+		return useGMETags;
+	}
+
+	public boolean isJaxbEnabled() {
+		return isJaxbEnabled;
 	}
 }

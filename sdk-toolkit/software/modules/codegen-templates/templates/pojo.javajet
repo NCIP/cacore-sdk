@@ -5,9 +5,31 @@ package <%=transformerUtils.getFullPackageName(klass)%>;
 
 <%=transformerUtils.getImports(klass)%>
 import java.io.Serializable;
+
+<% 
+	boolean jaxbEnabled = transformerUtils.isJaxbEnabled();
+	if (jaxbEnabled) { %>
+import com.sun.xml.bind.CycleRecoverable;
+
+import gov.nih.nci.system.client.util.xml.JAXBDomainObjectAdapter;
+import gov.nih.nci.system.client.util.xml.JAXBCollectionObjectAdapter;
+
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+<%} %>
 <%=transformerUtils.getJavaDocs(klass)%>
 <%=transformerUtils.getHibernateValidatorConstraints(klass)%>
-public<%=transformerUtils.isAbstract(klass)? " abstract" : "" %> class <%=klass.getName()%> <%=transformerUtils.getSuperClassString(klass)%> implements Serializable<%=transformerUtils.getInterfaceString(klass)%>
+<% if (jaxbEnabled) { %>
+@XmlRootElement(
+	name="<%=klass.getName()%>", 
+	namespace = "<%=transformerUtils.getNamespaceUriPrefix() +transformerUtils.getFullPackageName(klass)%>"
+)
+<%} %>
+public<%=transformerUtils.isAbstract(klass)? " abstract" : "" %> class <%=klass.getName()%> <%=transformerUtils.getSuperClassString(klass)%> implements Serializable<% if (jaxbEnabled) { %>, CycleRecoverable<%} %><%=transformerUtils.getInterfaceString(klass)%>
 {
 	/**
 	* An attribute to allow serialization of the domain objects
@@ -19,6 +41,7 @@ public<%=transformerUtils.isAbstract(klass)? " abstract" : "" %> class <%=klass.
 	<%=transformerUtils.getHibernateValidatorConstraints(klass,attr)%>
 	<%=attr.getVisibility().getName()%> <%=transformerUtils.getDataType(attr)%> <%=attr.getName()%>;
 	<%=transformerUtils.getGetterMethodJavaDocs(attr)%>
+<% if (jaxbEnabled) { %>	@XmlAttribute  <%} %>
 	public <%=transformerUtils.getDataType(attr)%> <%=transformerUtils.getGetterMethodName(attr)%>(){
 		return <%=attr.getName()%>;
 	}
@@ -38,9 +61,14 @@ public<%=transformerUtils.isAbstract(klass)? " abstract" : "" %> class <%=klass.
 			UMLClass assocKlass = (UMLClass)otherEnd.getUMLElement();
 			if(transformerUtils.isAssociationEndMany(otherEnd))
 			{%>
-	<%=transformerUtils.getJavaDocs(klass, assoc)%>			
+	<%=transformerUtils.getJavaDocs(klass, assoc)%>
+<% if (jaxbEnabled) { %>
+	@XmlElement(name="<%=otherEnd.getRoleName()%>")	
+	@XmlJavaTypeAdapter(JAXBCollectionObjectAdapter.class)	
+<%} %>	
 	private Collection<<%=assocKlass.getName()%>> <%=otherEnd.getRoleName()%>;
 	<%=transformerUtils.getGetterMethodJavaDocs(klass, assoc)%>
+<% if (jaxbEnabled) { %>	@XmlTransient  <%} %>
 	public Collection<<%=assocKlass.getName()%>> <%=transformerUtils.getGetterMethodName(otherEnd)%>(){
 		return <%=otherEnd.getRoleName()%>;
 	}
@@ -50,9 +78,14 @@ public<%=transformerUtils.isAbstract(klass)? " abstract" : "" %> class <%=klass.
 		this.<%=otherEnd.getRoleName()%> = <%=otherEnd.getRoleName()%>;
 	}
 		<%}else{%>
-	<%=transformerUtils.getJavaDocs(klass, assoc)%>			
+	<%=transformerUtils.getJavaDocs(klass, assoc)%>	
+<% if (jaxbEnabled) { %>
+	@XmlElement(name="<%=assocKlass.getName()%>")
+	@XmlJavaTypeAdapter(JAXBDomainObjectAdapter.class)	
+<%} %>
 	private <%=assocKlass.getName()%> <%=otherEnd.getRoleName()%>;
-	<%=transformerUtils.getGetterMethodJavaDocs(klass, assoc)%>	
+	<%=transformerUtils.getGetterMethodJavaDocs(klass, assoc)%>
+<% if (jaxbEnabled) { %>	@XmlTransient  <%} %>
 	public <%=assocKlass.getName()%> <%=transformerUtils.getGetterMethodName(otherEnd)%>(){
 		return <%=otherEnd.getRoleName()%>;
 	}
@@ -67,7 +100,7 @@ public<%=transformerUtils.isAbstract(klass)? " abstract" : "" %> class <%=klass.
 	String idGetter = transformerUtils.getClassIdGetterMthod(klass); 
 	if(idGetter!=null){%>
 	/**
-	* Compares <code>obj</code> to it self and returns true if they both are same
+	* Compares <code>obj</code> to itself and returns true if they both are same
 	*
 	* @param obj
 	**/
@@ -92,4 +125,10 @@ public<%=transformerUtils.isAbstract(klass)? " abstract" : "" %> class <%=klass.
 		return 0;
 	}
 	<%}%>
+<% if (jaxbEnabled) { %>
+    public Object onCycleDetected(Context arg0) {
+		return null;
+	}
+<%} %>
+	
 }

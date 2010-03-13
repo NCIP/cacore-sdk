@@ -8,6 +8,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.Iterator;
 
 import org.apache.log4j.Logger;
@@ -48,7 +49,7 @@ extends BaseCastorFieldHandler
 		Object tempObject = null;
 
 		java.util.Collection<Object> tempCollection = new ArrayList<Object>();
-		ArrayList<Object> tempList = new ArrayList<Object>();
+		HashSet<Object> tempList = new HashSet<Object>();
 		Object[] args = {tempList};
 		Class[] parameterTypes = {Collection.class};
 //		log.debug("args array initialized: " + args[0].getClass().getName());       

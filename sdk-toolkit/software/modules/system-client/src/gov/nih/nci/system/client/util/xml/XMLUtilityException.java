@@ -12,6 +12,11 @@ public class XMLUtilityException extends Exception {
         super(message);
         rootException = (Exception)cause;
     }
+    
+    public XMLUtilityException(String message) {
+        super(message);
+        rootException = null;
+    }
 
     /**
      * Returns the root exception that caused the exception

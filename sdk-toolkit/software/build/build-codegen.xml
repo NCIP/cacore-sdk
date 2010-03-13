@@ -19,6 +19,7 @@
 
 	<property file="project.properties" />
 
+	<property name="codegen.lib.dir" location="${target.module.dir}/lib" />
 	<property name="codegen.runtime.lib.dir" location="${target.module.dir}/lib/runtime" />
 
 	<property name="src.java.dir" value="${output.src.dir}" />
@@ -171,9 +172,9 @@
 	</condition>
 
 	<condition property="ENABLE_CASTOR_MAPPING_GENERATION" value="true" else="false">
-		<or>
-			<equals arg1="${GENERATE_CASTOR_MAPPING}" arg2="true" casesensitive="false" trim="true" />
-			<equals arg1="${GENERATE_CASTOR_MAPPING}" arg2="yes" casesensitive="false" trim="true" />
+			<or>
+				<equals arg1="${GENERATE_CASTOR_MAPPING}" arg2="true" casesensitive="false" trim="true" />
+				<equals arg1="${GENERATE_CASTOR_MAPPING}" arg2="yes" casesensitive="false" trim="true" />
 		</or>
 	</condition>
 
@@ -181,14 +182,13 @@
 		<or>
 			<equals arg1="${GENERATE_JAXB_MAPPING}" arg2="true" casesensitive="false" trim="true" />
 			<equals arg1="${GENERATE_JAXB_MAPPING}" arg2="yes" casesensitive="false" trim="true" />
-		</or>
+			</or>
 	</condition>
-
 	<condition property="ENABLE_XSD_GENERATION" value="true" else="false">
-		<or>
-			<equals arg1="${GENERATE_XSD}" arg2="true" casesensitive="false" trim="true" />
-			<equals arg1="${GENERATE_XSD}" arg2="yes" casesensitive="false" trim="true" />
-		</or>
+			<or>
+				<equals arg1="${GENERATE_XSD}" arg2="true" casesensitive="false" trim="true" />
+				<equals arg1="${GENERATE_XSD}" arg2="yes" casesensitive="false" trim="true" />
+			</or>
 	</condition>
 	<condition property="ENABLE_GENERATE_XSD_WITH_GME_TAGS" value="true" else="false">
 		<and>
@@ -432,6 +432,9 @@
 	<!-- ******************************************************************* -->
 
 	<path id="codegen.runtime.classpath">
+		<fileset dir="${codegen.lib.dir}">
+			<include name="*.jar" />
+		</fileset>
 		<fileset dir="${codegen.runtime.lib.dir}">
 			<include name="*.jar" />
 		</fileset>
