@@ -15,14 +15,15 @@ public class AllDataTypeWritableApiTest  extends SDKWritableBaseTest{
 	public static String getTestCaseName() {
 		return "All DataType WritableApi Test Case";
 	}
-	
-	public void testSaveObjectAllDataType() {
+
+	public void testSaveObjectAllDataType() throws Exception{
 		log.debug("\n------------saveObjectAllDataType-----------\n");
 		AllDataType allDataType = new AllDataType();
-		allDataType.setBooleanPrimitiveValue(new Boolean(true));
-		allDataType.setBooleanValue(new Boolean(true));
+		//allDataType.setBooleanPrimitiveValue(new Boolean(true));
+		//allDataType.setBooleanValue(new Boolean(true));
 		allDataType.setCharacterPrimitiveValue(new Character('c'));
 		allDataType.setClobValue("clobValue");
+		allDataType.setBlobValue("bytearray".getBytes());
 		allDataType.setDatePrimitiveValue(new Date());
 		allDataType.setDoublePrimitiveValue(new Double(10.2));
 		allDataType.setDoubleValue(new Double(12));
@@ -45,7 +46,8 @@ public class AllDataTypeWritableApiTest  extends SDKWritableBaseTest{
 		Assert.assertEquals(allDataType.getCharacterPrimitiveValue(), result.getCharacterPrimitiveValue());
 		Assert.assertEquals(allDataType.getCharacterValue(), result.getCharacterValue());
 		Assert.assertEquals(allDataType.getClobValue(), result.getClobValue());
-		//Assert.assertEquals(allDataType.getDatePrimitiveValue(), result.getDatePrimitiveValue());
+		Assert.assertEquals(new String(allDataType.getBlobValue()), new String(result.getBlobValue()));
+		Assert.assertEquals(allDataType.getDatePrimitiveValue(), result.getDatePrimitiveValue());
 		Assert.assertEquals(allDataType.getDateValue(), result.getDateValue());
 		Assert.assertEquals(allDataType.getDoublePrimitiveValue(), result.getDoublePrimitiveValue());
 		Assert.assertEquals(allDataType.getDoubleValue(), result.getDoubleValue());

@@ -119,6 +119,7 @@ CREATE TABLE `ALL_DATA_TYPE` (
   `DATE_VALUE` datetime default NULL,
   `BOOLEAN_VALUE` varchar(1) default NULL,
   `CLOB_VALUE` longtext,
+  `BLOB_VALUE` blob,
   `CHARACTER_VALUE` char(1) default NULL,
   `LONG_VALUE` decimal(38,0) default NULL,
   `DOUBLE_PRIMITIVE_VALUE` decimal(8,2) default NULL,

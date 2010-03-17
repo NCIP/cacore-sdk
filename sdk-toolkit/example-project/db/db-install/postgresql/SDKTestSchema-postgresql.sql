@@ -43,8 +43,9 @@ CREATE TABLE all_data_type (
     DOUBLE_VALUE numeric,
     FLOAT_VALUE numeric,
     DATE_VALUE timestamp without time zone,
-    BOOLEAN_VALUE character varying(1),
+    BOOLEAN_VALUE character(1),
     CLOB_VALUE text,
+    BLOB_VALUE bytea,
     CHARACTER_VALUE character(1),
     LONG_VALUE numeric,
     DOUBLE_PRIMITIVE_VALUE numeric,
@@ -52,7 +53,7 @@ CREATE TABLE all_data_type (
     DATE_PRIMITIVE_VALUE timestamp without time zone,
     STRING_PRIMITIVE_VALUE character varying(50),
     FLOAT_PRIMITIVE_VALUE numeric,
-    BOOLEAN_PRIMITIVE_VALUE character varying(1),
+    BOOLEAN_PRIMITIVE_VALUE character(1),
     CHARACTER_PRIMITIVE_VALUE character(1),
     LONG_PRIMITIVE_VALUE numeric
 );
