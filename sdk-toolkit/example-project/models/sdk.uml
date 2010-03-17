@@ -97,7 +97,7 @@
             name="sdk.todo" />
     <historyfile name="" />
   </argo>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Fri Jun 26 16:57:58 GMT 2009'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Wed Mar 17 13:54:25 EDT 2010'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.24(5) revised on $Date: 2006-11-06 19:55:22 +0100 (Mon, 06 Nov 2006) $ </XMI.exporterVersion>
@@ -2258,6 +2258,30 @@
                       </UML:ModelElement.taggedValue>
                       <UML:StructuralFeature.type>
                         <UML:DataType xmi.idref = 'eaxmiid0'/>
+                      </UML:StructuralFeature.type>
+                    </UML:Attribute>
+                    <UML:Attribute xmi.id = '-91-112--123-48-57692cd7:1276d2e85e5:-8000:0000000000002406'
+                      name = 'BLOB_VALUE' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                      changeability = 'changeable' targetScope = 'instance'>
+                      <UML:StructuralFeature.multiplicity>
+                        <UML:Multiplicity xmi.id = '-91-112--123-48-57692cd7:1276d2e85e5:-8000:000000000000240A'>
+                          <UML:Multiplicity.range>
+                            <UML:MultiplicityRange xmi.id = '-91-112--123-48-57692cd7:1276d2e85e5:-8000:0000000000002409'
+                              lower = '1' upper = '1'/>
+                          </UML:Multiplicity.range>
+                        </UML:Multiplicity>
+                      </UML:StructuralFeature.multiplicity>
+                      <UML:ModelElement.taggedValue>
+                        <UML:TaggedValue xmi.id = '-91-112--123-48-57692cd7:1276d2e85e5:-8000:000000000000240B'
+                          isSpecification = 'false'>
+                          <UML:TaggedValue.dataValue>gov.nih.nci.cacoresdk.domain.other.datatype.AllDataType.blobValue</UML:TaggedValue.dataValue>
+                          <UML:TaggedValue.type>
+                            <UML:TagDefinition xmi.idref = '-64--88-1-107-8238f4:1121acba21f:-8000:0000000000003190'/>
+                          </UML:TaggedValue.type>
+                        </UML:TaggedValue>
+                      </UML:ModelElement.taggedValue>
+                      <UML:StructuralFeature.type>
+                        <UML:DataType xmi.idref = '-64--88-0-1-8238f4:115247119d9:-8000:0000000000000FF2'/>
                       </UML:StructuralFeature.type>
                     </UML:Attribute>
                   </UML:Classifier.feature>
@@ -18718,9 +18742,9 @@
                                                   name = 'floatPrimitiveValue' visibility = 'private' isSpecification = 'false'
                                                   ownerScope = 'instance' changeability = 'changeable' targetScope = 'instance'>
                                                   <UML:StructuralFeature.multiplicity>
-                                                    <UML:Multiplicity xmi.id = '-100-40--108-45-8238f4:1153925e4c7:-8000:0000000000001023'>
+                                                    <UML:Multiplicity xmi.id = '-91-112--123-48-57692cd7:1276d2e85e5:-8000:0000000000002413'>
                                                       <UML:Multiplicity.range>
-                                                        <UML:MultiplicityRange xmi.id = '-100-40--108-45-8238f4:1153925e4c7:-8000:0000000000001022'
+                                                        <UML:MultiplicityRange xmi.id = '-91-112--123-48-57692cd7:1276d2e85e5:-8000:0000000000002412'
                                                           lower = '1' upper = '1'/>
                                                       </UML:Multiplicity.range>
                                                     </UML:Multiplicity>
@@ -18733,9 +18757,9 @@
                                                   name = 'booleanPrimitiveValue' visibility = 'private' isSpecification = 'false'
                                                   ownerScope = 'instance' changeability = 'changeable' targetScope = 'instance'>
                                                   <UML:StructuralFeature.multiplicity>
-                                                    <UML:Multiplicity xmi.id = '-100-40--108-45-8238f4:1153925e4c7:-8000:0000000000001028'>
+                                                    <UML:Multiplicity xmi.id = '-91-112--123-48-57692cd7:1276d2e85e5:-8000:0000000000002415'>
                                                       <UML:Multiplicity.range>
-                                                        <UML:MultiplicityRange xmi.id = '-100-40--108-45-8238f4:1153925e4c7:-8000:0000000000001027'
+                                                        <UML:MultiplicityRange xmi.id = '-91-112--123-48-57692cd7:1276d2e85e5:-8000:0000000000002414'
                                                           lower = '1' upper = '1'/>
                                                       </UML:Multiplicity.range>
                                                     </UML:Multiplicity>
@@ -18772,6 +18796,21 @@
                                                   </UML:StructuralFeature.multiplicity>
                                                   <UML:StructuralFeature.type>
                                                     <UML:DataType xmi.idref = '-100-40--108-45-8238f4:1153925e4c7:-8000:0000000000001033'/>
+                                                  </UML:StructuralFeature.type>
+                                                </UML:Attribute>
+                                                <UML:Attribute xmi.id = '-91-112--123-48-57692cd7:1276d2e85e5:-8000:000000000000240C'
+                                                  name = 'blobValue' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                                                  changeability = 'changeable' targetScope = 'instance'>
+                                                  <UML:StructuralFeature.multiplicity>
+                                                    <UML:Multiplicity xmi.id = '-91-112--123-48-57692cd7:1276d2e85e5:-8000:0000000000002421'>
+                                                      <UML:Multiplicity.range>
+                                                        <UML:MultiplicityRange xmi.id = '-91-112--123-48-57692cd7:1276d2e85e5:-8000:0000000000002420'
+                                                          lower = '1' upper = '1'/>
+                                                      </UML:Multiplicity.range>
+                                                    </UML:Multiplicity>
+                                                  </UML:StructuralFeature.multiplicity>
+                                                  <UML:StructuralFeature.type>
+                                                    <UML:DataType xmi.idref = '-91-112--123-48-57692cd7:1276d2e85e5:-8000:0000000000002405'/>
                                                   </UML:StructuralFeature.type>
                                                 </UML:Attribute>
                                                 <UML:Attribute xmi.id = '-100-40--108-45-8238f4:1153925e4c7:-8000:0000000000001035'
@@ -21584,6 +21623,12 @@
             </UML:Multiplicity>
           </UML:TagDefinition.multiplicity>
         </UML:TagDefinition>
+        <UML:DataType xmi.id = '-91-112--123-48-57692cd7:1276d2e85e5:-8000:0000000000002404'
+          name = 'BLOB' isSpecification = 'false' isRoot = 'false' isLeaf = 'false'
+          isAbstract = 'false'/>
+        <UML:DataType xmi.id = '-91-112--123-48-57692cd7:1276d2e85e5:-8000:0000000000002405'
+          name = 'byte[]' isSpecification = 'false' isRoot = 'false' isLeaf = 'false'
+          isAbstract = 'false'/>
       </UML:Namespace.ownedElement>
     </UML:Model>
   </XMI.content>
@@ -30140,6 +30185,336 @@
       <lineto x="888"
               y="667" />
     </path>
+  </group>
+  <group name="Fig93"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[648, 1640, 179, 333]pathVisible=false;operationsVisible=true;attributesVisible=true"
+       href="EAID_4AF03E59_978D_4fa5_BE90_B671B9C4DF99"
+       fill="1"
+       fillcolor="white"
+       stroke="1"
+       strokecolor="black"
+  >
+    <private>
+    </private>
+    
+    <rectangle name="Fig93.0"
+      x="648"
+      y="1640"
+      width="179"
+      height="333"
+      fill="1"
+      fillcolor="white"
+      stroke="0"
+      strokecolor="0 255 255"
+    />
+    <group name="Fig93.1"
+         description="org.argouml.uml.diagram.ui.FigStereotypesCompartment[648, 1640, 179, 2]"
+         href="EAID_4AF03E59_978D_4fa5_BE90_B671B9C4DF99"
+         fill="1"
+         fillcolor="white"
+         stroke="1"
+         strokecolor="black"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig93.1.0"
+        x="648"
+        y="1640"
+        width="179"
+        height="2"
+        fill="1"
+        fillcolor="white"
+        stroke="1"
+        strokecolor="black"
+      />
+    </group>
+    <text name="Fig93.2"
+      x="648"
+      y="1642"
+      fill="1"
+      fillcolor="white"
+      stroke="0"
+      strokecolor="red"
+      font="Dialog"
+      textsize="10"
+    >AllDataType</text>
+    <group name="Fig93.3"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[649, 1953, 178, 20]"
+         fill="1"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig93.3.0"
+        x="649"
+        y="1953"
+        width="178"
+        height="20"
+        fill="1"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+      />
+      <path name="Fig93.3.1"
+        description="org.argouml.uml.diagram.ui.FigFeaturesCompartment$FigSeperator"
+        fill="1"
+        fillcolor="white"
+        stroke="1"
+        strokecolor="black"
+      >
+        <moveto x="649"
+                y="1953" />
+        <lineto x="827"
+                y="1953" />
+      </path>
+    </group>
+    <group name="Fig93.4"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[649, 1664, 178, 288]"
+         fill="1"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig93.4.0"
+        x="649"
+        y="1664"
+        width="178"
+        height="288"
+        fill="1"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+      />
+      <path name="Fig93.4.1"
+        description="org.argouml.uml.diagram.ui.FigFeaturesCompartment$FigSeperator"
+        fill="1"
+        fillcolor="white"
+        stroke="1"
+        strokecolor="black"
+      >
+        <moveto x="649"
+                y="1664" />
+        <lineto x="827"
+                y="1664" />
+      </path>
+      <text name="Fig93.4.2"
+        x="649"
+        y="1665"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        font="Dialog"
+        textsize="10"
+      >id : Integer</text>
+      <text name="Fig93.4.3"
+        x="649"
+        y="1679"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        font="Dialog"
+        textsize="10"
+      >intValue : Integer</text>
+      <text name="Fig93.4.4"
+        x="649"
+        y="1693"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        font="Dialog"
+        textsize="10"
+      >doubleValue : Double</text>
+      <text name="Fig93.4.5"
+        x="649"
+        y="1707"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        font="Dialog"
+        textsize="10"
+      >stringValue : String</text>
+      <text name="Fig93.4.6"
+        x="649"
+        y="1721"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        font="Dialog"
+        textsize="10"
+      >dateValue : Date</text>
+      <text name="Fig93.4.7"
+        x="649"
+        y="1735"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        font="Dialog"
+        textsize="10"
+      >floatValue : Float</text>
+      <text name="Fig93.4.8"
+        x="649"
+        y="1749"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        font="Dialog"
+        textsize="10"
+      >booleanValue : Boolean</text>
+      <text name="Fig93.4.9"
+        x="649"
+        y="1763"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        font="Dialog"
+        textsize="10"
+      >clobValue : String</text>
+      <text name="Fig93.4.10"
+        x="649"
+        y="1777"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        font="Dialog"
+        textsize="10"
+      >characterValue : Character</text>
+      <text name="Fig93.4.11"
+        x="649"
+        y="1791"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        font="Dialog"
+        textsize="10"
+      >longValue : Long</text>
+      <text name="Fig93.4.12"
+        x="649"
+        y="1805"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        font="Dialog"
+        textsize="10"
+      >doublePrimitiveValue : double</text>
+      <text name="Fig93.4.13"
+        x="649"
+        y="1819"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        font="Dialog"
+        textsize="10"
+      >intPrimitiveValue : int</text>
+      <text name="Fig93.4.14"
+        x="649"
+        y="1833"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        font="Dialog"
+        textsize="10"
+      >datePrimitiveValue : DATE</text>
+      <text name="Fig93.4.15"
+        x="649"
+        y="1847"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        font="Dialog"
+        textsize="10"
+      >stringPrimitiveValue : string</text>
+      <text name="Fig93.4.16"
+        x="649"
+        y="1861"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        font="Dialog"
+        textsize="10"
+      >floatPrimitiveValue : float</text>
+      <text name="Fig93.4.17"
+        x="649"
+        y="1875"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        font="Dialog"
+        textsize="10"
+      >booleanPrimitiveValue : boolean</text>
+      <text name="Fig93.4.18"
+        x="649"
+        y="1889"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        font="Dialog"
+        textsize="10"
+      >characterPrimitiveValue : char</text>
+      <text name="Fig93.4.19"
+        x="649"
+        y="1903"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        font="Dialog"
+        textsize="10"
+      >longPrimitiveValue : long</text>
+      <text name="Fig93.4.20"
+        x="649"
+        y="1917"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        font="Dialog"
+        textsize="10"
+      >blobValue : byte[]</text>
+      <text name="Fig93.4.21"
+        x="649"
+        y="1931"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        font="Dialog"
+        textsize="10"
+      >stringCollection : Collection&lt;String&gt;</text>
+    </group>
+    <rectangle name="Fig93.5"
+      x="648"
+      y="1640"
+      width="179"
+      height="333"
+      fill="0"
+      fillcolor="white"
+      stroke="1"
+      strokecolor="black"
+    />
   </group>
 </pgml>
 <pgml description="org.argouml.uml.diagram.static_structure.ui.UMLClassDiagram|EAPK_CB699A04_2FDB_43de_9F15_2FBB5DA90527"
@@ -49158,7 +49533,7 @@
       textsize="10"
     >ALL_DATA_TYPE</text>
     <group name="Fig0.3"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[305, 322, 396, 28]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[305, 329, 396, 22]"
          fill="1"
          fillcolor="white"
          stroke="0"
@@ -49169,9 +49544,9 @@
       
       <rectangle name="Fig0.3.0"
         x="305"
-        y="322"
+        y="329"
         width="396"
-        height="28"
+        height="22"
         fill="1"
         fillcolor="white"
         stroke="0"
@@ -49185,13 +49560,13 @@
         strokecolor="black"
       >
         <moveto x="305"
-                y="322" />
+                y="329" />
         <lineto x="701"
-                y="322" />
+                y="329" />
       </path>
       <text name="Fig0.3.2"
         x="305"
-        y="323"
+        y="330"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -49201,7 +49576,7 @@
       >&lt;&lt;PK&gt;&gt; PK_ALL_DATA_TYPE(ID : NUMBER) :</text>
     </group>
     <group name="Fig0.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[305, 54, 396, 267]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[305, 54, 396, 274]"
          fill="1"
          fillcolor="white"
          stroke="0"
@@ -49214,7 +49589,7 @@
         x="305"
         y="54"
         width="396"
-        height="267"
+        height="274"
         fill="1"
         fillcolor="white"
         stroke="0"
@@ -49412,6 +49787,16 @@
         font="Dialog"
         textsize="10"
       >&lt;&lt;column&gt;&gt; LONG_VALUE : NUMBER</text>
+      <text name="Fig0.4.20"
+        x="305"
+        y="307"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        font="Dialog"
+        textsize="10"
+      >BLOB_VALUE : int</text>
     </group>
     <rectangle name="Fig0.5"
       x="304"
@@ -52594,7 +52979,7 @@
     />
   </group>
   <group name="Fig4"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[840, 48, 179, 319]pathVisible=false;operationsVisible=true;attributesVisible=true"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[840, 48, 179, 333]pathVisible=false;operationsVisible=true;attributesVisible=true"
        href="EAID_4AF03E59_978D_4fa5_BE90_B671B9C4DF99"
        fill="1"
        fillcolor="white"
@@ -52608,7 +52993,7 @@
       x="840"
       y="48"
       width="179"
-      height="319"
+      height="333"
       fill="1"
       fillcolor="white"
       stroke="0"
@@ -52647,7 +53032,7 @@
       textsize="10"
     >AllDataType</text>
     <group name="Fig4.3"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[841, 347, 178, 20]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[841, 361, 178, 20]"
          fill="1"
          fillcolor="white"
          stroke="0"
@@ -52658,7 +53043,7 @@
       
       <rectangle name="Fig4.3.0"
         x="841"
-        y="347"
+        y="361"
         width="178"
         height="20"
         fill="1"
@@ -52674,13 +53059,13 @@
         strokecolor="black"
       >
         <moveto x="841"
-                y="347" />
+                y="361" />
         <lineto x="1019"
-                y="347" />
+                y="361" />
       </path>
     </group>
     <group name="Fig4.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[841, 72, 178, 274]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[841, 72, 178, 288]"
          fill="1"
          fillcolor="white"
          stroke="0"
@@ -52693,7 +53078,7 @@
         x="841"
         y="72"
         width="178"
-        height="274"
+        height="288"
         fill="1"
         fillcolor="white"
         stroke="0"
@@ -52900,13 +53285,23 @@
         strokecolor="black"
         font="Dialog"
         textsize="10"
+      >blobValue : byte[]</text>
+      <text name="Fig4.4.21"
+        x="841"
+        y="339"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        font="Dialog"
+        textsize="10"
       >stringCollection : Collection&lt;String&gt;</text>
     </group>
     <rectangle name="Fig4.5"
       x="840"
       y="48"
       width="179"
-      height="319"
+      height="333"
       fill="0"
       fillcolor="white"
       stroke="1"
