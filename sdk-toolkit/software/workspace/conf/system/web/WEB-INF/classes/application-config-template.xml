@@ -44,10 +44,13 @@
 
 	<bean name="HibernateConfigHolder" class="gov.nih.nci.system.dao.orm.HibernateConfigurationHolder" />
 
+	<bean id="defaultLobHandler" class="org.springframework.jdbc.support.lob.DefaultLobHandler" />
+	
 	<bean name="SessionFactory" class="gov.nih.nci.system.dao.orm.SessionFactoryBean">
 		<property name="configLocation" value="classpath:hibernate.cfg.xml" />
 		<property name="configHolder" ref="HibernateConfigHolder" />
 		<property name="securityHelper" ref="SecurityInitializationHelper"/>
+		<property name="lobHandler" ref="defaultLobHandler"/>
 		<property name="entityInterceptor">
 			<bean class="gov.nih.nci.security.authorization.attributeLevel.GenericSecurityInterceptor">
 				<constructor-arg>
