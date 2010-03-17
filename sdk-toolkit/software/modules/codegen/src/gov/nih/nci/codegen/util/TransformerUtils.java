@@ -517,8 +517,7 @@ public class TransformerUtils
 		UMLAttribute col = getMappedColumn(table,fqcn+"."+attr.getName());
 		
 		Boolean isClob = "CLOB".equalsIgnoreCase(getTagValue(col.getTaggedValues(),TV_TYPE, 1));
-		Boolean isBlob = "BLOB".equalsIgnoreCase(getTagValue(col.getTaggedValues(),TV_TYPE, 1));
-		
+				
 		UMLDatatype dataType = attr.getDatatype();
 		String name = dataType.getName();
 		if(dataType instanceof UMLClass)
@@ -531,9 +530,9 @@ public class TransformerUtils
 			return "text";
 		if(isClob && !"string".equalsIgnoreCase(name))
 			throw new GenerationException("Can not map CLOB to anything other than String");
-		if(isBlob && "byte[]".equalsIgnoreCase(name))
+		if("byte[]".equalsIgnoreCase(name))
 			return "org.springframework.orm.hibernate3.support.BlobByteArrayType";
-		if(isBlob && !"byte[]".equalsIgnoreCase(name))
+		if(!"byte[]".equalsIgnoreCase(name))
 			throw new GenerationException("Can not map BLOB to anything other than byte[]");
 		if("int".equalsIgnoreCase(name) || "integer".equalsIgnoreCase(name))
 			return "integer";
