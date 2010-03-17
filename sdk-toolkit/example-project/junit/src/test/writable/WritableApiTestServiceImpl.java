@@ -20,7 +20,7 @@ public class WritableApiTestServiceImpl implements WritableApiTestDAO {
 	
 	public WritableApiTestServiceImpl(){
 		try {
-			appService = (WritableApplicationService) ApplicationServiceProvider.getApplicationService();
+			appService = (WritableApplicationService)ApplicationServiceProvider.getApplicationService("/O=caBIG/OU=caGrid/OU=Training/OU=Dorian/CN=SDKUser1","Psat123!@#");
 		} catch (Exception e) {
 			throw new RuntimeException("error loading application service", e);
 		}
