@@ -103,24 +103,46 @@
 		</property>
 	</bean>
 
-
 	<bean name="userDetailsService" class="gov.nih.nci.system.security.acegi.authentication.CSMUserDetailsService">
 		<property name="csmApplicationContext" value="@CSM_PROJECT_NAME@" />
 		<property name="cacheProtectionElementsFlag" value="@CACHE_PROTECTION_ELEMENTS_ENABLED@" />
 	</bean>
 
 	<bean id="loggerListener" class="org.acegisecurity.event.authentication.LoggerListener"/>
+
+	<bean id='authenticationSecurityInterceptor' class="org.acegisecurity.intercept.method.aopalliance.MethodSecurityInterceptor">		
+		<property name='authenticationManager' ref='authenticationManager'/>
+		<property name='accessDecisionManager' ref='authenticationAccessDecisionManager'/>
+		<property name='objectDefinitionSource'>
+			<value>
+				gov.nih.nci.system.applicationservice.ApplicationService.*=IS_AUTHENTICATED_FULLY
+				gov.nih.nci.system.applicationservice.WritableApplicationService.*=IS_AUTHENTICATED_FULLY
+			</value>
+		</property>
+	</bean>
+
+	<bean id='authenticationAccessDecisionManager' class='org.acegisecurity.vote.AffirmativeBased'>
+		<property name='decisionVoters'>
+			<list>
+				<bean class="org.acegisecurity.vote.AuthenticatedVoter"/>
+			</list>
+		</property>
+	</bean>
  
 	<bean id='autoProxyCreator' class='org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator'>
 		<property name='interceptorNames'>
-			<list><value>securityInterceptor</value></list>
+			<list>
+				<value>authenticationSecurityInterceptor</value>
+				@CLASS_LEVEL_SECURITY_START@<value>classLevelSecurityInterceptor</value>@CLASS_LEVEL_SECURITY_END@
+			</list>
 		</property>
 		<property name='beanNames'>
 			<list><value>ApplicationServiceImpl</value></list>
 		</property>
 	</bean>
 	
-	<bean id='securityInterceptor' class="org.acegisecurity.intercept.method.aopalliance.MethodSecurityInterceptor">		
+	@CLASS_LEVEL_SECURITY_START@
+	<bean id='classLevelSecurityInterceptor' class="org.acegisecurity.intercept.method.aopalliance.MethodSecurityInterceptor">		
 		<property name='authenticationManager' ref='authenticationManager'/>
 		<property name='accessDecisionManager' ref='accessDecisionManager'/>
 		<property name='objectDefinitionSource'>
@@ -141,5 +163,6 @@
 			</list>
 		</property>
 	</bean>
+	@CLASS_LEVEL_SECURITY_END@
 	<!--@SECURITY_END@-->
 </beans>

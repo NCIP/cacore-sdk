@@ -42,13 +42,10 @@
 	</condition>
 
 	<condition property="CLASS_LEVEL_SECURITY_ENABLED" value="true" else="false">
-		<and>
-			<or>
-				<equals arg1="${ENABLE_CLASS_LEVEL_SECURITY}" arg2="true" casesensitive="false" trim="true" />
-				<equals arg1="${ENABLE_CLASS_LEVEL_SECURITY}" arg2="yes" casesensitive="false" trim="true" />
-			</or>
-			<equals arg1="${SECURITY_ENABLED}" arg2="true" casesensitive="false" trim="true" />
-		</and>
+		<or>
+			<equals arg1="${ENABLE_CLASS_LEVEL_SECURITY}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${ENABLE_CLASS_LEVEL_SECURITY}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
 	</condition>
 
 	<condition property="SECURITY_START" value="" else="${xml.comment.start}">
@@ -58,11 +55,17 @@
 		<equals arg1="${SECURITY_ENABLED}" arg2="true" casesensitive="false" trim="true" />
 	</condition>
 
-	<condition property="CLASS_LEVEL_SECURITY_START" value="" else="${xml.comment.start}">
-		<equals arg1="${CLASS_LEVEL_SECURITY_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+	<condition property="CLASS_LEVEL_SECURITY_START" value="${xml.comment.start}" else="">
+		<and>
+			<equals arg1="${SECURITY_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${CLASS_LEVEL_SECURITY_ENABLED}" arg2="false" casesensitive="false" trim="true" />
+		</and>
 	</condition>
-	<condition property="CLASS_LEVEL_SECURITY_END" value="" else="${xml.comment.end}">
-		<equals arg1="${CLASS_LEVEL_SECURITY_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+	<condition property="CLASS_LEVEL_SECURITY_END" value="${xml.comment.end}" else="">
+		<and>
+			<equals arg1="${SECURITY_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${CLASS_LEVEL_SECURITY_ENABLED}" arg2="false" casesensitive="false" trim="true" />
+		</and>
 	</condition>
 
 	<condition property="INSTANCE_LEVEL_SECURITY_ENABLED" value="true" else="false">
@@ -382,8 +385,9 @@
 			<filter token="ENABLE_CLM_LOGGER_CFG_GENERATION_END" value="${ENABLE_CLM_LOGGER_CFG_GENERATION_END}" />
 
 			<filter token="HIBERNATE_SHOW_SQL" value="${HIBERNATE_SHOW_SQL}" />
-
 			<filter token="CAGRID_LOGIN_MODULE_NAME" value="${CAGRID_LOGIN_MODULE_NAME}" />
+			<filter token="CLASS_LEVEL_SECURITY_START" value="${CLASS_LEVEL_SECURITY_START}" />
+			<filter token="CLASS_LEVEL_SECURITY_END" value="${CLASS_LEVEL_SECURITY_END}" />
 		</filterset>
 		<filterset id="filtertoken2" begintoken="${xml.comment.start}@" endtoken="@${xml.comment.end}" onmissingfiltersfile="fail">
 			<filter token="SECURITY_START" value="${SECURITY_START}" />
@@ -394,8 +398,6 @@
 			<filter token="GRID_LOGIN_MODULE_END" value="${GRID_LOGIN_MODULE_END}" />
 			<filter token="CSM_LOGIN_MODULE_START" value="${CSM_LOGIN_MODULE_START}" />
 			<filter token="CSM_LOGIN_MODULE_END" value="${CSM_LOGIN_MODULE_END}" />
-			<filter token="CLASS_LEVEL_SECURITY_START" value="${CLASS_LEVEL_SECURITY_START}" />
-			<filter token="CLASS_LEVEL_SECURITY_END" value="${CLASS_LEVEL_SECURITY_END}" />
 		</filterset>
 	</target>
 	<target name="replacetoken-contents-preconfigure" depends="-replace-templates-filter-tokens">
@@ -486,7 +488,10 @@
 				<attribute name="Generated-By" value="caCORE SDK Code Generator" />
 				<attribute name="Version" value="${VERSION}" />
 			</manifest>
-			<fileset dir="${src.java.dir}" includes="**/*.java" />
+			<fileset dir="${src.java.dir}">
+				<include name="**/*.java" />
+				<include name="**/jaxb.index" />
+			</fileset>
 		</jar>
 	</target>
 
@@ -512,7 +517,6 @@
 				<attribute name="Version" value="${VERSION}" />
 			</manifest>
 			<include name="**/*.xsd" />
-			<include name="**/jaxb.index" />
 			<include name="unmarshaller-xml-mapping.xml" />
 			<include name="xml-mapping.xml" />
 		</jar>
