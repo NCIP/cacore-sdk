@@ -532,8 +532,6 @@ public class TransformerUtils
 			throw new GenerationException("Can not map CLOB to anything other than String");
 		if("byte[]".equalsIgnoreCase(name))
 			return "org.springframework.orm.hibernate3.support.BlobByteArrayType";
-		if(!"byte[]".equalsIgnoreCase(name))
-			throw new GenerationException("Can not map BLOB to anything other than byte[]");
 		if("int".equalsIgnoreCase(name) || "integer".equalsIgnoreCase(name))
 			return "integer";
 		if("double".equalsIgnoreCase(name))
@@ -756,10 +754,23 @@ public class TransformerUtils
 		Element element = ((UMLAssociationEndBean)assocEnd).getJDomElement();
 		
 		org.jdom.Attribute multAtt = element.getAttribute("multiplicity");
-		log.debug("associationEnd: " + assocEnd.getRoleName() + "; multiplicity: " + multAtt.getValue());	
+		//log.debug("associationEnd: " + assocEnd.getRoleName() + "; multiplicity: " + multAtt.getValue());
+		if (multAtt!=null) 
+			return multAtt.getValue();
 		
-		return multAtt.getValue();
+		
+		int low = assocEnd.getLowMultiplicity();
+		int high = assocEnd.getHighMultiplicity();
+		if(low <0 && high<0)
+			return "";
+		
+		if(low >=0 && high>=0)
+			return low+".."+high;
 
+		if(low<0)
+			return high+"";
+		
+		return low+"";
 	}
 	
 	public boolean isMultiplicityValid(UMLAssociationEnd assocEnd){
