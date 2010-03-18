@@ -1122,6 +1122,8 @@
 				<include name="hibernate-*.jar"/>
 				<include name="hibernate-annotations-*.jar"/>
 				<include name="hibernate-validator-*.jar"/>
+				<include name="jaxb-*.jar"/>
+				<include name="stax-*.jar"/>
 				<include name="jaxrpc-*.jar"/>
 				<include name="jdom-1.1.jar"/>
 				<include name="jta-*.jar"/>
@@ -1130,6 +1132,7 @@
 				<include name="ognl-*.jar"/>
 				<include name="saaj-*.jar"/>
 				<include name="spring-*.jar"/>
+				<include name="stax-*.jar"/>
 				<include name="struts2-api-*.jar"/>
 				<include name="struts2-core-*.jar"/>
 				<include name="wsdl4j-*.jar"/>
