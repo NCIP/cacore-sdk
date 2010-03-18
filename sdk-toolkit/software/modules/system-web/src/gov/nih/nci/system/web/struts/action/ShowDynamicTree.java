@@ -157,7 +157,8 @@ public class ShowDynamicTree extends BaseActionSupport {
 			
 			Class superInterfaze = interfaze;
 			do {
-				if (!(superInterfaze.getSimpleName().equalsIgnoreCase("Serializable"))){
+				if (!(superInterfaze.getSimpleName().equalsIgnoreCase("Serializable"))
+						&& !(superInterfaze.getSimpleName().equalsIgnoreCase("CycleRecoverable"))){
 					String interfacePackageName = superInterfaze.getPackage().getName();
 					tmpInterfaceCat = new Category(categoryId++, superInterfaze.getSimpleName() + " (interface)", interfacePackageName, new Category[0]);
 					log.debug("About to add Category: " + tmpInterfaceCat);
