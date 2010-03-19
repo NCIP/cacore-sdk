@@ -56,8 +56,6 @@
 				<prop key="Exclude Namespace">@EXCLUDE_NAMESPACE@</prop>
 				<prop key="Identity Generator Tag"><![CDATA[@IDENTITY_GENERATOR_TAG@]]></prop>
 				<prop key="Database Type">@DATABASE_TYPE@</prop>
-				<prop key="useGMETags">@GENERATE_XSD_WITH_GME_TAGS@</prop>
-				<prop key="namespaceUriPrefix">@NAMESPACE_PREFIX@</prop>
 			</props>
 		</constructor-arg>
 	</bean>
@@ -79,6 +77,7 @@
 		<constructor-arg ref="CascadeStyles" index="2"></constructor-arg>
 		<constructor-arg ref="ValidatorModel" index="3"></constructor-arg>
 		<constructor-arg ref="ValidatorModelExtension" index="4"></constructor-arg>
+		<constructor-arg ref="UMLModel" index="5"></constructor-arg>
 	</bean>
 
 	<bean name="CascadeStyles" class="java.util.ArrayList">

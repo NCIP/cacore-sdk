@@ -11,12 +11,14 @@ import java.io.Serializable;
 	if (jaxbEnabled) { %>
 import com.sun.xml.bind.CycleRecoverable;
 
-import gov.nih.nci.system.client.util.xml.JAXBDomainObjectAdapter;
-import gov.nih.nci.system.client.util.xml.JAXBCollectionObjectAdapter;
+//import gov.nih.nci.system.client.util.xml.JAXBDomainObjectAdapter;
+//import gov.nih.nci.system.client.util.xml.JAXBCollectionObjectAdapter;
 
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
@@ -24,6 +26,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 <%=transformerUtils.getJavaDocs(klass)%>
 <%=transformerUtils.getHibernateValidatorConstraints(klass)%>
 <% if (jaxbEnabled) { %>
+<%=transformerUtils.getJaxbXmlSeeAlsoAnnotation(klass)%>
 @XmlRootElement(
 	name="<%=klass.getName()%>", 
 	namespace = "<%=transformerUtils.getNamespaceUriPrefix() +transformerUtils.getFullPackageName(klass)%>"
@@ -41,7 +44,7 @@ public<%=transformerUtils.isAbstract(klass)? " abstract" : "" %> class <%=klass.
 	<%=transformerUtils.getHibernateValidatorConstraints(klass,attr)%>
 	<%=attr.getVisibility().getName()%> <%=transformerUtils.getDataType(attr)%> <%=attr.getName()%>;
 	<%=transformerUtils.getGetterMethodJavaDocs(attr)%>
-<% if (jaxbEnabled) { %>	@XmlAttribute  <%} %>
+<% if (jaxbEnabled) { %><%=transformerUtils.getJaxbXmlAttributeAnnotation(klass, attr)%><%}%>
 	public <%=transformerUtils.getDataType(attr)%> <%=transformerUtils.getGetterMethodName(attr)%>(){
 		return <%=attr.getName()%>;
 	}
@@ -63,8 +66,10 @@ public<%=transformerUtils.isAbstract(klass)? " abstract" : "" %> class <%=klass.
 			{%>
 	<%=transformerUtils.getJavaDocs(klass, assoc)%>
 <% if (jaxbEnabled) { %>
-	@XmlElement(name="<%=otherEnd.getRoleName()%>")	
-	@XmlJavaTypeAdapter(JAXBCollectionObjectAdapter.class)	
+	@XmlElementWrapper(name="<%=otherEnd.getRoleName()%>",
+				namespace="<%=transformerUtils.getNamespaceUriPrefix() +transformerUtils.getFullPackageName(assocKlass)%>") 
+	@XmlElement(name="<%=assocKlass.getName()%>",
+				namespace="<%=transformerUtils.getNamespaceUriPrefix() +transformerUtils.getFullPackageName(assocKlass)%>") 	
 <%} %>	
 	private Collection<<%=assocKlass.getName()%>> <%=otherEnd.getRoleName()%>;
 	<%=transformerUtils.getGetterMethodJavaDocs(klass, assoc)%>
@@ -80,8 +85,9 @@ public<%=transformerUtils.isAbstract(klass)? " abstract" : "" %> class <%=klass.
 		<%}else{%>
 	<%=transformerUtils.getJavaDocs(klass, assoc)%>	
 <% if (jaxbEnabled) { %>
-	@XmlElement(name="<%=assocKlass.getName()%>")
-	@XmlJavaTypeAdapter(JAXBDomainObjectAdapter.class)	
+	@XmlElement(name="<%=assocKlass.getName()%>", 
+				namespace="<%=transformerUtils.getNamespaceUriPrefix() +transformerUtils.getFullPackageName(assocKlass)%>")
+	//@ XmlJavaTypeAdapter(JAXBDomainObjectAdapter.class)	
 <%} %>
 	private <%=assocKlass.getName()%> <%=otherEnd.getRoleName()%>;
 	<%=transformerUtils.getGetterMethodJavaDocs(klass, assoc)%>
