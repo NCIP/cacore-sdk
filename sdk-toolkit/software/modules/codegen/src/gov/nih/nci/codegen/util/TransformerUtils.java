@@ -39,6 +39,7 @@ import org.jdom.Element;
 public class TransformerUtils
 {
 	private static Logger log = Logger.getLogger(TransformerUtils.class);
+	
 	private String BASE_PKG_LOGICAL_MODEL;
 	private String BASE_PKG_DATA_MODEL;
 	private String INCLUDE_PACKAGE;
@@ -54,9 +55,15 @@ public class TransformerUtils
 	private Map<String,String> CASCADE_STYLES = new HashMap<String,String>();
 	private ValidatorModel vModel;
 	private ValidatorModel vModelExtension;
+	
 	private String namespaceUriPrefix;
 	private boolean useGMETags = false;
 	private boolean isJaxbEnabled = false;
+	
+	/**
+	 * UMLModel from which the code is to be generated
+	 */
+	private UMLModel model;
 	
 	private static final String TV_ID_ATTR_COLUMN = "id-attribute";
 	private static final String TV_MAPPED_ATTR_COLUMN = "mapped-attributes";
@@ -88,9 +95,8 @@ public class TransformerUtils
 	private static final String STEREO_TYPE_DATASOURCE_DEPENDENCY = "DataSource";
 	
 	public static final String  PK_GENERATOR_SYSTEMWIDE = "NCI_GENERATOR_SYSTEMWIDE.";
-
 	
-	public TransformerUtils(Properties umlModelFileProperties,Properties transformerProperties,List cascadeStyles, ValidatorModel vModel, ValidatorModel vModelExtension) {
+	public TransformerUtils(Properties umlModelFileProperties,Properties transformerProperties,List cascadeStyles, ValidatorModel vModel, ValidatorModel vModelExtension, UMLModel model) {
 			BASE_PKG_LOGICAL_MODEL = umlModelFileProperties.getProperty("Logical Model") == null ? "" :umlModelFileProperties.getProperty("Logical Model").trim();
 			BASE_PKG_DATA_MODEL = umlModelFileProperties.getProperty("Data Model")==null ? "" : umlModelFileProperties.getProperty("Data Model").trim();
 			
@@ -101,7 +107,12 @@ public class TransformerUtils
 			
 			namespaceUriPrefix = transformerProperties.getProperty("namespaceUriPrefix")==null ? "" : transformerProperties.getProperty("namespaceUriPrefix").trim().replace(" ", "_");
 			useGMETags = transformerProperties.getProperty("useGMETags")==null ? false : Boolean.parseBoolean(transformerProperties.getProperty("useGMETags"));	
-			isJaxbEnabled = transformerProperties.getProperty("isJaxbEnabled")==null ? false : Boolean.parseBoolean(transformerProperties.getProperty("isJaxbEnabled"));					
+			isJaxbEnabled = transformerProperties.getProperty("isJaxbEnabled")==null ? false : Boolean.parseBoolean(transformerProperties.getProperty("isJaxbEnabled"));	
+			this.model = model;
+			
+			if (useGMETags){
+				setModelNamespace(model,this.getBasePkgLogicalModel());
+			}
 			
 			for(String excludeToken:EXCLUDE_PACKAGE.split(","))
 				EXCLUDE_PACKAGE_PATTERNS.add(excludeToken.trim());
@@ -126,6 +137,19 @@ public class TransformerUtils
 			log.debug("ValidatorModel Extension: " + vModelExtension);
 
 		}
+	
+	private void setModelNamespace(UMLModel model, String basePkgLogicalModel){
+		//override codegen.properties NAMESPACE_PREFIX property with GME namespace tag value, if it exists
+		
+		try {
+			String namespaceUriPrefix = this.getModelNamespace(model, basePkgLogicalModel);
+			if (namespaceUriPrefix != null) {
+				this.namespaceUriPrefix = namespaceUriPrefix;
+			}
+		} catch (GenerationException e) {
+			log.error("Exception caught trying to set GME model namespace URI Prefix: ", e);
+		}
+	}
 	
 	public String getDatabaseType() {
 		return DATABASE_TYPE;
@@ -286,7 +310,7 @@ public class TransformerUtils
 		UMLClass superClass = getSuperClass(klass);
 		if(superClass == null)
 			if (isJaxbEnabled()){
-				return "extends gov.nih.nci.system.client.util.xml.JAXBGenericPOJO";
+				return "";
 			} else {
 				return "";
 			}
@@ -517,7 +541,7 @@ public class TransformerUtils
 		UMLAttribute col = getMappedColumn(table,fqcn+"."+attr.getName());
 		
 		Boolean isClob = "CLOB".equalsIgnoreCase(getTagValue(col.getTaggedValues(),TV_TYPE, 1));
-				
+		
 		UMLDatatype dataType = attr.getDatatype();
 		String name = dataType.getName();
 		if(dataType instanceof UMLClass)
@@ -766,10 +790,10 @@ public class TransformerUtils
 		
 		if(low >=0 && high>=0)
 			return low+".."+high;
-
+		
 		if(low<0)
 			return high+"";
-		
+
 		return low+"";
 	}
 	
@@ -1801,6 +1825,98 @@ public class TransformerUtils
 		return name;
 	}
 	
+	public String getJaxbXmlAttributeAnnotation(UMLClass klass, UMLAttribute attr){
+		String type = this.getDataType(attr);
+		String collectionType = "";
+		if (type.startsWith("Collection")){ 
+			collectionType = type.substring(type.indexOf("<")+1,type.indexOf(">"));
+			
+			StringBuffer sb = new StringBuffer("    @XmlElementWrapper(name=\"");
+			sb.append(attr.getName()).append("\", ");
+			sb.append("namespace=\"").append(this.getNamespaceUriPrefix() + this.getFullPackageName(klass)).append("\")"); 
+			
+			sb.append("    @XmlElement(name=\"");
+			sb.append(collectionType.toLowerCase()).append("\", ");
+			sb.append("namespace=\"").append(this.getNamespaceUriPrefix() + this.getFullPackageName(klass)).append("\")"); 
+			
+			log.debug("Collection Attribute @XmlElement annotation: "+sb.toString());
+			
+			return sb.toString();
+		}  
+
+		return "    @XmlAttribute";
+	}
+	
+	public String getJaxbXmlSeeAlsoAnnotation(UMLClass klass){
+		List<UMLClass> subClasses = getNonImplicitSubclasses(klass);
+		List<UMLClass> superClasses = getNonImplicitSuperclasses(klass);
+
+		StringBuffer sb = new StringBuffer();
+		boolean found = false;
+		if (!subClasses.isEmpty()){
+			int counter = 0;
+			int totalCount = subClasses.size();
+			for (UMLClass subKlass:subClasses){
+				counter++;
+				found = true;
+				sb.append(getFullPackageName(subKlass)+"."+subKlass.getName()+".class");
+				if (counter < totalCount){
+					sb.append(", ");
+				}
+			}
+		}
+		if (!superClasses.isEmpty()){
+			int counter = 0;
+			int totalCount = superClasses.size();
+			if(found)
+				sb.append(",");
+			for (UMLClass superKlass:superClasses){
+				counter++;
+				found = true;
+				sb.append(getFullPackageName(superKlass)+"."+superKlass.getName()+".class");
+				if (counter < totalCount){
+					sb.append(", ");
+				}
+			}
+		}
+
+		if(found)
+		{
+			StringBuffer sbreturn = new StringBuffer("@XmlSeeAlso({");
+			sbreturn.append(sb.toString());
+			sbreturn.append("})");
+			log.debug("@XMLSeeAlso string for class " + klass.getName() + sb.toString() );
+
+			return sbreturn.toString();
+		}
+
+		return "";
+	}
+
+
+	public List<UMLClass> getNonImplicitSuperclasses(UMLClass implicitKlass){
+		ArrayList<UMLClass> nonImplicitSuperclasses = new ArrayList<UMLClass>();
+		getNonImplicitSuperclasses(implicitKlass, nonImplicitSuperclasses);
+
+		return nonImplicitSuperclasses;
+	}
+
+
+	private void getNonImplicitSuperclasses(UMLClass klass, ArrayList<UMLClass> nonImplicitSuperclasses){
+		for(UMLGeneralization gen:klass.getGeneralizations()){
+			UMLClass superKlass = (UMLClass)gen.getSupertype();
+			if(superKlass!=klass && isSuperclass(superKlass)){
+				if(!nonImplicitSuperclasses.contains(superKlass)){
+					nonImplicitSuperclasses.add(superKlass);
+				}
+			}
+
+			if(superKlass!=klass)
+				getNonImplicitSuperclasses(superKlass, nonImplicitSuperclasses);
+		}
+	}
+
+	
 	public List<UMLClass> getNonImplicitSubclasses(UMLClass implicitKlass){
 		
 		ArrayList<UMLClass> nonImplicitSubclasses = new ArrayList<UMLClass>();
@@ -2120,6 +2236,41 @@ public class TransformerUtils
 			return gmeNamespace.substring(gmeNamespace.lastIndexOf('/')+1, gmeNamespace.length());
 		}
 		
+		return null;
+	}
+	
+	public String getModelNamespace(UMLModel model, String basePkgLogicalModel) throws GenerationException {
+		//override codegen.properties NAMESPACE_PREFIX property with GME namespace tag value, if it exists
+
+		StringTokenizer tokenizer = new StringTokenizer(basePkgLogicalModel, ".");
+		UMLPackage pkg=null;
+		if(tokenizer.hasMoreTokens()){
+			pkg = model.getPackage(tokenizer.nextToken());
+			
+			while(pkg!=null && tokenizer.hasMoreTokens()){
+				pkg = pkg.getPackage(tokenizer.nextToken());
+			}
+		}
+
+		if (pkg==null){
+			throw new GenerationException("Error getting the Logical Model package for model: " + pkg.getName()+". Make sure the LOGICAL_MODEL property in codegen.properties file is valid.");
+		}
+		
+		if (pkg!=null){
+			log.debug("* * * pkgName: " + pkg.getName());
+			try {
+				String modelNamespacePrefix = this.getNamespace(pkg);
+				log.debug("* * * modelNamespacePrefix: " + modelNamespacePrefix);
+				if (modelNamespacePrefix != null) {
+					if (!modelNamespacePrefix.endsWith("/"))
+						modelNamespacePrefix=modelNamespacePrefix+"/";
+					return modelNamespacePrefix.replace(" ", "_");
+				}
+			} catch (GenerationException ge) {
+				log.error("ERROR: ", ge);
+				 throw new GenerationException("Error getting the GME Namespace value for model: " + pkg.getName() + ge.getMessage());
+			}
+		}
 		return null;
 	}
 	
