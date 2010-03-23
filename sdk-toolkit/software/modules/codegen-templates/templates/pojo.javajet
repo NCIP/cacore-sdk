@@ -20,6 +20,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 <%} %>
@@ -27,6 +28,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 <%=transformerUtils.getHibernateValidatorConstraints(klass)%>
 <% if (jaxbEnabled) { %>
 <%=transformerUtils.getJaxbXmlSeeAlsoAnnotation(klass)%>
+<%=transformerUtils.getJaxbXmlTypeAnnotation(klass)%>
 @XmlRootElement(
 	name="<%=klass.getName()%>", 
 	namespace = "<%=transformerUtils.getNamespaceUriPrefix() +transformerUtils.getFullPackageName(klass)%>"
@@ -67,7 +69,7 @@ public<%=transformerUtils.isAbstract(klass)? " abstract" : "" %> class <%=klass.
 	<%=transformerUtils.getJavaDocs(klass, assoc)%>
 <% if (jaxbEnabled) { %>
 	@XmlElementWrapper(name="<%=otherEnd.getRoleName()%>",
-				namespace="<%=transformerUtils.getNamespaceUriPrefix() +transformerUtils.getFullPackageName(assocKlass)%>") 
+				namespace="<%=transformerUtils.getNamespaceUriPrefix() +transformerUtils.getFullPackageName(klass)%>") 
 	@XmlElement(name="<%=assocKlass.getName()%>",
 				namespace="<%=transformerUtils.getNamespaceUriPrefix() +transformerUtils.getFullPackageName(assocKlass)%>") 	
 <%} %>	
@@ -85,7 +87,8 @@ public<%=transformerUtils.isAbstract(klass)? " abstract" : "" %> class <%=klass.
 		<%}else{%>
 	<%=transformerUtils.getJavaDocs(klass, assoc)%>	
 <% if (jaxbEnabled) { %>
-	@XmlElement(name="<%=assocKlass.getName()%>", 
+	@XmlElement(name="<%=otherEnd.getRoleName()%>", 
+				type=<%=assocKlass.getName()%>.class,
 				namespace="<%=transformerUtils.getNamespaceUriPrefix() +transformerUtils.getFullPackageName(assocKlass)%>")
 	//@ XmlJavaTypeAdapter(JAXBDomainObjectAdapter.class)	
 <%} %>

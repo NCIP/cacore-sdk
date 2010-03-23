@@ -650,7 +650,6 @@
 	<!-- #################################################################### -->
 
 	<target name="package-local-client" depends="">
-		<echo message="Hello ${LOCAL_JAVA_INTERFACE_ENABLED}"/>
 		<if>
 			<equals arg1="${LOCAL_JAVA_INTERFACE_ENABLED}" arg2="true" />
 			<then>
