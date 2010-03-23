@@ -15,20 +15,15 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.Source;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
-import javax.xml.validation.Validator;
-
-import org.w3c.dom.Document;
 
 
 public class TestXMLClient extends TestClient
@@ -61,9 +56,11 @@ public class TestXMLClient extends TestClient
 				"unmarshaller-xml-mapping.xml", false);
 
 		// JAXB
-		boolean validate = false;
-		Marshaller marshaller2 = new JAXBMarshaller(validate);
-		Unmarshaller unmarshaller2 = new JAXBUnmarshaller(validate);		
+		boolean validate = true;
+		boolean includeXmlDeclaration = true;
+		String jaxbContextName = getJaxbContextName();
+		Marshaller marshaller2 = new JAXBMarshaller(false,includeXmlDeclaration,jaxbContextName);
+		Unmarshaller unmarshaller2 = new JAXBUnmarshaller(validate,jaxbContextName);		
 
 		// Castor
 		// XMLUtility myUtil = new XMLUtility(marshaller, unmarshaller);
@@ -169,6 +166,7 @@ public class TestXMLClient extends TestClient
 	public Collection<Class> getClasses() throws Exception
 	{
 		Collection<Class> list = new ArrayList<Class>();
+
 		JarFile file = null;
 		int count = 0;
 		for(File f:new File("lib").listFiles())
@@ -198,5 +196,37 @@ public class TestXMLClient extends TestClient
 		}
 		return list;
 	}
+	
+	public String getJaxbContextName() throws Exception
+	{
+		Collection<Class> classList = getClasses();
+		Map<String,String> packageNames = new HashMap<String,String>();
+		
+		for (Class klass : classList){
+			String packageName = klass.getPackage().getName();
+			System.out.println("package name: " + packageName);
+			if (!packageName.equalsIgnoreCase("gov.nih.nci.cacoresdk.domain.interfaze.differentpackage") &&
+					!packageName.equalsIgnoreCase("gov.nih.nci.cacoresdk.domain.other.differentpackage.associations")){
+				packageNames.put(packageName, packageName);
+			}
+		}
+		
+		SortedSet<String> sortedset= new TreeSet<String>(packageNames.keySet());
+		
+		StringBuffer jaxbContextName = new StringBuffer("gov.nih.nci.cacoresdk.domain.other.differentpackage.associations:");
+		int totalCount = sortedset.size();
+		int counter = 0;
+		for (String packageName : sortedset){
+			counter++;
+			jaxbContextName.append(packageName);
+			if (counter < totalCount)
+				jaxbContextName.append(":");
+		}
+		
+		System.out.println("jaxbContextName: "+jaxbContextName.toString());
+		
+		return jaxbContextName.toString();
+
+	}	
 
 }

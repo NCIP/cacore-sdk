@@ -1,22 +1,24 @@
 package gov.nih.nci.system.client.util.xml;
 
-import gov.nih.nci.system.client.util.xml.XMLUtilityException;
-
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
-import javax.xml.bind.Marshaller;
 
 import org.apache.log4j.Logger;
+import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 
 public class JAXBMarshaller implements gov.nih.nci.system.client.util.xml.Marshaller {
@@ -24,14 +26,48 @@ public class JAXBMarshaller implements gov.nih.nci.system.client.util.xml.Marsha
 	private static Logger log = Logger.getLogger(JAXBMarshaller.class.getName());
 
 	public static Map<String, JAXBContext> jaxbContextMap = new HashMap<String, JAXBContext>();
+	public static Schema schemaObj;
 
 	private boolean validate = true;
+	private boolean includeXmlDeclaration = true;
+	private String contextName;
+	private SchemaFactory sf;
+
 	
-	public JAXBMarshaller(boolean validate)
+	public JAXBMarshaller(boolean validate, boolean includeXmlDeclaration)
 	{
 		this.validate = validate;
+		this.includeXmlDeclaration = validate;
 	}
 	
+	
+	public JAXBMarshaller(boolean validate, boolean includeXmlDeclaration, String contextName)
+	{
+		this.validate = validate;
+		this.includeXmlDeclaration = validate;
+		this.contextName = contextName;
+		
+		//Initialize JAXB Context
+		try {
+			JAXBMarshaller.getJAXBContext(contextName);
+		} catch (JAXBException e) {
+			log.error("Unable to initialize JAXB Context using contextName: " + contextName,e);
+		}
+		
+		//Initialize Schemas
+		initializeSchemaFactory();
+	}
+	
+	public JAXBContext getJAXBContext() throws JAXBException{
+		log.debug("Getting JAXB context using contextName: " + contextName);
+		return jaxbContextMap.get(contextName);	
+	}
+	
+	public static Schema getJAXBSchema() {
+		log.debug("Getting JAXB Schema" );
+		return schemaObj;	
+	}
+
 	public static JAXBContext getJAXBContext(String contextName) throws JAXBException{
 		JAXBContext context;
 		if(!jaxbContextMap.containsKey(contextName))
@@ -55,14 +91,22 @@ public class JAXBMarshaller implements gov.nih.nci.system.client.util.xml.Marsha
 	}
 
 	public void toXML(Object object, Writer writer) throws XMLUtilityException{
+		JAXBContext context = null;
 		try{
-			JAXBContext context = getJAXBContext(object.getClass().getPackage().getName());
+			//JAXBContext context = getJAXBContext(object.getClass().getPackage().getName());
+			context = getJAXBContext();
 			Marshaller m = context.createMarshaller();
 			m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-	        if(validate){
-	        	SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-	    		Source schemaFile = new StreamSource(Thread.currentThread().getContextClassLoader().getResourceAsStream(object.getClass().getPackage().getName() + ".xsd"));
-	    		Schema schemaObj = sf.newSchema(schemaFile);
+			if (!includeXmlDeclaration){
+				m.setProperty(Marshaller.JAXB_FRAGMENT, true);
+			}
+	        if (validate){
+//	        	SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+//	        	String schemaFileName = object.getClass().getPackage().getName() + ".xsd";
+//	        	log.debug("Marshalling using schema file name: " + schemaFileName);
+//	    		Source schemaFile = new StreamSource(Thread.currentThread().getContextClassLoader().getResourceAsStream(schemaFileName));
+//	    		Schema schemaObj = sf.newSchema(schemaFile);
+	        	log.debug("Validation is enabled.  Setting Schema to: "+schemaObj);
 	    		m.setSchema(schemaObj);
 	        }
 			m.marshal(object, writer);
@@ -70,13 +114,66 @@ public class JAXBMarshaller implements gov.nih.nci.system.client.util.xml.Marsha
 		catch(JAXBException e)
 		{
 			log.error("JAXBException caught marshalling " + object.getClass().getName(), e);
+			log.debug("Marshalling using context: " + context);
 			throw new XMLUtilityException(e.getMessage(), e);
 		}
-		catch(SAXException e)
+		catch(Exception e)
 		{
 			log.error("SAXException caught marshalling " + object.getClass().getName(), e);
 			throw new XMLUtilityException(e.getMessage(), e);
 		}
 		
+	}
+	
+	private void initializeSchemaFactory() {
+		this.sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+		
+		List<Source> sourceList = new ArrayList<Source>();
+		
+		String schemaFileName=null;		
+		
+		StringTokenizer st = new StringTokenizer(contextName, ":");
+		while (st.hasMoreTokens()) {
+			schemaFileName = st.nextToken() + ".xsd";
+			log.debug("schemaFileName: " + schemaFileName);
+			
+			//todo :: remove 
+			//|| schemaFileName.endsWith("datatype.xsd")
+//			if (!(schemaFileName.endsWith("differentpackage.xsd") || 
+//					schemaFileName.endsWith("differentpackage.associations.xsd") )) {
+
+				sourceList.add(new StreamSource(Thread.currentThread().getContextClassLoader().getResourceAsStream(schemaFileName)));
+//			}
+		}
+
+
+		try {
+			sf.setErrorHandler(new SchemaErrorHandler());
+			Source[] tempSourceList = (Source[]) sourceList.toArray(new Source[sourceList.size()]);
+			if (tempSourceList != null) {
+				log.debug("Number of Sources found: " + tempSourceList.length);
+			}
+			schemaObj = sf.newSchema((Source[]) sourceList.toArray(new Source[sourceList.size()]));
+			log.debug("JAXB Validation Schema has been initialized: " + schemaObj);
+		} catch (SAXException e) {
+			log.error("Error initializing Schema Factory",e);
+		}
+		
+		log.debug("JAXB Validation Schema: " + JAXBMarshaller.getJAXBSchema());
+	}
+	
+	class SchemaErrorHandler implements ErrorHandler {
+		
+		public void fatalError(org.xml.sax.SAXParseException e) throws SAXException {
+			log.error("Fatal Error while initializing Schema Factory: ",e);
+		}
+		
+		public void error(org.xml.sax.SAXParseException e) throws SAXException {
+			log.error("Error while initializing Schema Factory: ",e);
+		}
+		
+		public void warning(org.xml.sax.SAXParseException e) throws SAXException {
+			log.error("Warning while initializing Schema Factory: ",e);
+		}		
 	}
 }

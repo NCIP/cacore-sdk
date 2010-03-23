@@ -429,35 +429,15 @@ public class XmlMappingTransformer implements Transformer {
 	
 	private void setModelNamespace(UMLModel model, String basePkgLogicalModel){
 		//override codegen.properties NAMESPACE_PREFIX property with GME namespace tag value, if it exists
-
-		StringTokenizer tokenizer = new StringTokenizer(basePkgLogicalModel, ".");
-		UMLPackage pkg=null;
-		if(tokenizer.hasMoreTokens()){
-			pkg = model.getPackage(tokenizer.nextToken());
-			
-			while(pkg!=null && tokenizer.hasMoreTokens()){
-				pkg = pkg.getPackage(tokenizer.nextToken());
-			}
-		}
-
-		if (pkg==null){
-			generatorErrors.addError(new GeneratorError(getName() + ": Error getting the Logical Model package for model: " + pkg.getName()+". Make sure the LOGICAL_MODEL property in deploy.property is valid."));
-		}
 		
-		if (pkg!=null){
-			log.debug("* * * pkgName: " + pkg.getName());
-			try {
-				String modelNamespacePrefix = transformerUtils.getNamespace(pkg);
-				log.debug("* * * modelNamespacePrefix: " + modelNamespacePrefix);
-				if (modelNamespacePrefix != null) {
-					if (!modelNamespacePrefix.endsWith("/"))
-						modelNamespacePrefix=modelNamespacePrefix+"/";
-					this.namespaceUriPrefix = modelNamespacePrefix.replace(" ", "_");
-				}
-			} catch (GenerationException ge) {
-				log.error("ERROR: ", ge);
-				generatorErrors.addError(new GeneratorError(getName() + ": Error getting the GME Namespace value for model: " + pkg.getName(), ge));
+		try {
+			String namespaceUriPrefix = transformerUtils.getModelNamespace(model, basePkgLogicalModel);
+			if (namespaceUriPrefix != null) {
+				this.namespaceUriPrefix = namespaceUriPrefix;
 			}
+		} catch (GenerationException e) {
+			log.error("Generation Exception: ", e);
+			generatorErrors.addError(new GeneratorError(getName() + ":" + e.getMessage()));
 		}
 	}
 			

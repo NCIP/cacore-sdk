@@ -1846,6 +1846,62 @@ public class TransformerUtils
 
 		return "    @XmlAttribute";
 	}
+
+	public String getJaxbXmlTypeAnnotation(UMLClass klass){
+		
+		StringBuffer sb = new StringBuffer("@XmlType(name = \"").append(klass.getName());
+		sb.append("\", propOrder = {");
+		
+		int counter = 0;
+		int totalAttrCount = klass.getAttributes().size();
+		for(UMLAttribute attr:klass.getAttributes()){
+			counter++;
+			sb.append("\"").append(attr.getName()).append("\"");
+			if (counter < totalAttrCount){
+				sb.append(", ");
+			}
+		}
+		
+		counter = 0;
+		int totalAssocCount = klass.getAssociations().size();
+		if ((totalAttrCount > 0) && (totalAssocCount > 0)){
+			sb.append(", ");
+		}
+		for(UMLAssociation assoc:klass.getAssociations()){
+			List<UMLAssociationEnd> assocEnds = assoc.getAssociationEnds();
+
+			try {
+//				UMLAssociationEnd thisEnd = this.getThisEnd(klass,assocEnds);
+				UMLAssociationEnd otherEnd = this.getOtherEnd(klass,assocEnds);
+				
+				counter++;
+				if(otherEnd.isNavigable())
+				{
+					sb.append("\"").append(otherEnd.getRoleName()).append("\"");
+					if (counter < totalAssocCount){
+						sb.append(", ");
+					}
+				}
+			} catch (GenerationException e) {
+				log.error("Error generating XML Type Property order for association role name: "+assoc.getRoleName(),e);
+			}
+		}
+		
+
+		char c = sb.charAt(sb.length()-2);
+		log.debug("Last propOrder char: " +c);
+		
+		if ( c==',' ){
+			sb.deleteCharAt(sb.length()-2);
+		}
+
+		sb.append("})");
+		
+		log.debug("@XMLType string for class " + klass.getName() + sb.toString() );
+		
+		return sb.toString();
+	}
+
 	
 	public String getJaxbXmlSeeAlsoAnnotation(UMLClass klass){
 		List<UMLClass> subClasses = getNonImplicitSubclasses(klass);

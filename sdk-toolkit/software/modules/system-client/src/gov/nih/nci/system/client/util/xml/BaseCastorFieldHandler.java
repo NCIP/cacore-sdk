@@ -1,14 +1,19 @@
 package gov.nih.nci.system.client.util.xml;
 
+import gov.nih.nci.system.client.proxy.ListProxy;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 
 import org.apache.log4j.Logger;
 import org.exolab.castor.mapping.GeneralizedFieldHandler;
+import org.hibernate.Hibernate;
 import org.springframework.aop.framework.Advised;
 
 /**
@@ -55,9 +60,31 @@ extends GeneralizedFieldHandler
 					log.debug("***  setterMethod Name: " + setterMethod.getName() + "; parameter type: " + method.getReturnType());
 		    		Object value = null;
 		    		Class type = setterMethod.getParameterTypes()[0];
-					if(getAssociations || ((!type.getName().equals("java.util.Collection")) && (type.getName().startsWith("java"))) || type.isPrimitive())
+					if (getAssociations
+							|| ((!type.getName().equals("java.util.Collection")) && (type
+									.getName().startsWith("java")))
+							|| type.isPrimitive())
 						value = method.invoke(obj, (Object[])null);
 						
+					if (!Hibernate.isInitialized(value)){
+						value = null;
+					} else {
+						if (value != null){
+							log.debug("Value is not null: "+value.getClass().getName());
+
+							if (value instanceof ListProxy) {
+								log.debug("Value is an instance of ListProxy; leaving unmodified");
+								//value = new HashSet((ArrayList)value);
+							} else {
+								String className = value.getClass().getName();
+								if (className.indexOf('$') > 0) {
+									log.debug(value.getClass().getName() + " is a proxy object; converting now");
+									boolean includeAssociations = false;
+									value = convertObject(value,includeAssociations);
+								}
+							}
+						}
+					}
 					
 					Object[] parameters = new Object[1];
 					parameters[0] = value;
