@@ -465,11 +465,14 @@ public class SchemaTransformer implements Transformer {
 			System.out.println("associationPackage.equals(thisPackage): " + associationPackage.equals(thisPackage));
 
 			String type = (associationPackage.equals(thisPackage)) ? otherEndTypeName : associationPackage + ":" + otherEndTypeName;
-
-			associatedObjElement.setAttribute("name", getRoleName(otherEnd,otherEndTypeName));
-			associatedObjElement.setAttribute("type", type);
 			
-//			associatedObjElement.setAttribute("ref", type);
+			if ("1".equalsIgnoreCase(maxOccurs)){
+				associatedObjElement.setAttribute("name", getRoleName(otherEnd,otherEndTypeName));
+				associatedObjElement.setAttribute("type", type);
+			} else { // Collection - leave wrapping element
+				associatedObjElement.setAttribute("ref", type);
+			}
+
 			associatedObjElement.setAttribute("minOccurs","0");   
 			associatedObjElement.setAttribute("maxOccurs",maxOccurs);  
 
