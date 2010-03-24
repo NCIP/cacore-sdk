@@ -25,14 +25,13 @@ public class JAXBMarshaller implements gov.nih.nci.system.client.util.xml.Marsha
 	
 	private static Logger log = Logger.getLogger(JAXBMarshaller.class.getName());
 
-	public static Map<String, JAXBContext> jaxbContextMap = new HashMap<String, JAXBContext>();
-	public static Schema schemaObj;
+	private Map<String, JAXBContext> jaxbContextMap = new HashMap<String, JAXBContext>();
+	private Schema schemaObj;
+	private SchemaFactory sf;
 
 	private boolean validate = true;
 	private boolean includeXmlDeclaration = true;
 	private String contextName;
-	private SchemaFactory sf;
-
 	
 	public JAXBMarshaller(boolean validate, boolean includeXmlDeclaration)
 	{
@@ -49,26 +48,29 @@ public class JAXBMarshaller implements gov.nih.nci.system.client.util.xml.Marsha
 		
 		//Initialize JAXB Context
 		try {
-			JAXBMarshaller.getJAXBContext(contextName);
+			getJAXBContext(contextName);
 		} catch (JAXBException e) {
 			log.error("Unable to initialize JAXB Context using contextName: " + contextName,e);
 		}
 		
 		//Initialize Schemas
 		initializeSchemaFactory();
+		
+		log.debug("Marshaller has been initialized using context: " + jaxbContextMap.get(contextName));
 	}
 	
 	public JAXBContext getJAXBContext() throws JAXBException{
 		log.debug("Getting JAXB context using contextName: " + contextName);
 		return jaxbContextMap.get(contextName);	
-	}
+	}		
 	
-	public static Schema getJAXBSchema() {
+	public Schema getJAXBSchema() {
 		log.debug("Getting JAXB Schema" );
 		return schemaObj;	
 	}
 
-	public static JAXBContext getJAXBContext(String contextName) throws JAXBException{
+	public JAXBContext getJAXBContext(String contextName) throws JAXBException{
+		log.debug("Getting JAXB context using contextName: " + contextName);
 		JAXBContext context;
 		if(!jaxbContextMap.containsKey(contextName))
 		{
@@ -105,7 +107,7 @@ public class JAXBMarshaller implements gov.nih.nci.system.client.util.xml.Marsha
 //	        	String schemaFileName = object.getClass().getPackage().getName() + ".xsd";
 //	        	log.debug("Marshalling using schema file name: " + schemaFileName);
 //	    		Source schemaFile = new StreamSource(Thread.currentThread().getContextClassLoader().getResourceAsStream(schemaFileName));
-//	    		Schema schemaObj = sf.newSchema(schemaFile);
+//	    		schemaObj = sf.newSchema(schemaFile);
 	        	log.debug("Validation is enabled.  Setting Schema to: "+schemaObj);
 	    		m.setSchema(schemaObj);
 	        }
@@ -119,7 +121,7 @@ public class JAXBMarshaller implements gov.nih.nci.system.client.util.xml.Marsha
 		}
 		catch(Exception e)
 		{
-			log.error("SAXException caught marshalling " + object.getClass().getName(), e);
+			log.error("Exception caught marshalling " + object.getClass().getName(), e);
 			throw new XMLUtilityException(e.getMessage(), e);
 		}
 		
@@ -136,14 +138,7 @@ public class JAXBMarshaller implements gov.nih.nci.system.client.util.xml.Marsha
 		while (st.hasMoreTokens()) {
 			schemaFileName = st.nextToken() + ".xsd";
 			log.debug("schemaFileName: " + schemaFileName);
-			
-			//todo :: remove 
-			//|| schemaFileName.endsWith("datatype.xsd")
-//			if (!(schemaFileName.endsWith("differentpackage.xsd") || 
-//					schemaFileName.endsWith("differentpackage.associations.xsd") )) {
-
-				sourceList.add(new StreamSource(Thread.currentThread().getContextClassLoader().getResourceAsStream(schemaFileName)));
-//			}
+			sourceList.add(new StreamSource(Thread.currentThread().getContextClassLoader().getResourceAsStream(schemaFileName)));
 		}
 
 
@@ -159,7 +154,7 @@ public class JAXBMarshaller implements gov.nih.nci.system.client.util.xml.Marsha
 			log.error("Error initializing Schema Factory",e);
 		}
 		
-		log.debug("JAXB Validation Schema: " + JAXBMarshaller.getJAXBSchema());
+		log.debug("JAXB Validation Schema: " + getJAXBSchema());
 	}
 	
 	class SchemaErrorHandler implements ErrorHandler {
