@@ -1,7 +1,12 @@
 <%@ jet package="gov.nih.nci.codegen.transformer.jet" 
         class="JAXBIndexTransformer"
         skeleton="JAXBTransformerBase.skeleton" %><%
-for(UMLClass klass:pkg.getClasses()){%>
+int counter = 0;
+int totalClassCount = pkg.getClasses().size();        
+for(UMLClass klass:pkg.getClasses()){
+	counter++; %>
 <%=klass.getName()%>
-
+<%	if (counter < totalClassCount){%>
+<%=""%>
+<%	} %>
 <%}%>
