@@ -1267,7 +1267,7 @@ public class TransformerUtils
 	}
 	
 	/**
-	 * Determines whether the input class is a superclass
+	 * Determines whether the input class is missing a table mapping
 	 * @param klass
 	 * @return
 	 */
@@ -1846,6 +1846,31 @@ public class TransformerUtils
 
 		return "    @XmlAttribute";
 	}
+	
+	
+	public String getJaxbXmlRootElementAnnotation(UMLClass klass){
+		
+		// todo :: remove commented code
+//		List<UMLClass> subClasses = getNonImplicitSubclasses(klass);
+//		List<UMLClass> superClasses = getNonImplicitSuperclasses(klass);
+		
+		StringBuffer sb = new StringBuffer();
+
+	
+//		if (isSuperclass(klass) || !getNonImplicitSubclasses(klass).isEmpty() || !getNonImplicitSuperclasses(klass).isEmpty()){ 
+//
+//		}
+		
+		//Default - use klass name as XML Root Element
+		sb.append("@XmlRootElement(name=\"");
+		sb.append(klass.getName()).append("\", ");
+		sb.append("namespace=\"").append(this.getNamespaceUriPrefix() + this.getFullPackageName(klass)).append("\")"); 
+
+		log.debug("@XmlRootElement annotation for class "+klass.getName()+": "+sb.toString());
+
+		return sb.toString();
+
+	}	
 
 	public String getJaxbXmlTypeAnnotation(UMLClass klass){
 		
@@ -1915,7 +1940,7 @@ public class TransformerUtils
 			for (UMLClass subKlass:subClasses){
 				counter++;
 				found = true;
-				sb.append(getFullPackageName(subKlass)+"."+subKlass.getName()+".class");
+				sb.append(subKlass.getName()+".class");
 				if (counter < totalCount){
 					sb.append(", ");
 				}
@@ -1929,7 +1954,7 @@ public class TransformerUtils
 			for (UMLClass superKlass:superClasses){
 				counter++;
 				found = true;
-				sb.append(getFullPackageName(superKlass)+"."+superKlass.getName()+".class");
+				sb.append(superKlass.getName()+".class");
 				if (counter < totalCount){
 					sb.append(", ");
 				}
