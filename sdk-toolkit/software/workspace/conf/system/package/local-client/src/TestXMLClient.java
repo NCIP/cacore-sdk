@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.Map;
@@ -59,7 +60,7 @@ public class TestXMLClient extends TestClient
 		boolean validate = true;
 		boolean includeXmlDeclaration = true;
 		String jaxbContextName = getJaxbContextName();
-		Marshaller marshaller2 = new JAXBMarshaller(false,includeXmlDeclaration,jaxbContextName);
+		Marshaller marshaller2 = new JAXBMarshaller(validate,includeXmlDeclaration,jaxbContextName);
 		Unmarshaller unmarshaller2 = new JAXBUnmarshaller(validate,jaxbContextName);		
 
 		// Castor
@@ -79,6 +80,9 @@ public class TestXMLClient extends TestClient
 						
 						boolean includeAssociations = true;
 						Object convertedObj = XMLUtility.convertFromProxy(obj, includeAssociations);
+						System.out.println("Printing Object prior to marshalling...");
+						printObject(convertedObj, convertedObj.getClass());
+						
 //						File myFile = new File("./output/" + klass.getName()
 //								+ "_test.xml");
 						File myFile = new File("./output/" + convertedObj.getClass().getName()
@@ -88,7 +92,8 @@ public class TestXMLClient extends TestClient
 
 						myUtil.toXML(convertedObj, myWriter);
 						myWriter.close();
-						// printObject(obj, klass);
+						
+
 						DocumentBuilder parser = DocumentBuilderFactory
 								.newInstance().newDocumentBuilder();
 
@@ -144,9 +149,9 @@ public class TestXMLClient extends TestClient
 			}
 		}
 	}
-	
-	public void printObject(Object obj, Class klass) throws Exception {
-		System.out.println("Printing "+ klass.getName());
+
+	public static void printObject(Object obj, Class klass) throws Exception {
+		System.out.println("\nPrinting "+ klass.getName());
 		Method[] methods = klass.getMethods();
 		for(Method method:methods)
 		{
@@ -154,13 +159,33 @@ public class TestXMLClient extends TestClient
 			{
 				System.out.print("\t"+method.getName().substring(3)+":");
 				Object val = method.invoke(obj, (Object[])null);
-				if(val instanceof java.util.Set)
-					System.out.println("size="+((Collection)val).size());
+				if (val instanceof java.util.Set) {
+					Collection list = (Collection)val;
+					for(Object object: list){
+						System.out.println(object.getClass().getName()+":");
+						printObject(object, object.getClass());
+					}	
+					//System.out.println("size="+((Collection)val).size());
+				}
+				else if(val instanceof ArrayList)
+				{
+					Collection list = (ArrayList) val;
+					System.out.println("\nPrinting Collection.....");
+					for(Object object: list){
+						System.out.println(object.getClass().getName()+":");
+						printObject(object, object.getClass());
+					}
+				}
+				else if(val != null && val.getClass().getName().startsWith("gov.nih.nci"))
+				{
+					printObject(val, val.getClass());
+				}
 				else
 					System.out.println(val);
 			}
 		}
 	}
+
 
 
 	public Collection<Class> getClasses() throws Exception

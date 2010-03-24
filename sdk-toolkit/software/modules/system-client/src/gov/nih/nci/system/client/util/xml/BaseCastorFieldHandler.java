@@ -8,8 +8,12 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.exolab.castor.mapping.GeneralizedFieldHandler;
@@ -73,8 +77,8 @@ extends GeneralizedFieldHandler
 							log.debug("Value is not null: "+value.getClass().getName());
 
 							if (value instanceof ListProxy) {
-								log.debug("Value is an instance of ListProxy; leaving unmodified");
-								//value = new HashSet((ArrayList)value);
+								log.debug("Value is an instance of ListProxy");
+								value = convertListProxy(value);
 							} else {
 								String className = value.getClass().getName();
 								if (className.indexOf('$') > 0) {
@@ -100,4 +104,79 @@ extends GeneralizedFieldHandler
 
 		return convertedObject;
 	}   
+	
+	private static Object convertListProxy(Object value) {
+//		log.debug("*** convertUponGet(Object value) called ***");
+//		log.debug("Value: " + value);
+//		log.debug("Value.class: " + value.getClass().getName());
+
+		if (value == null) return null;
+
+		String setMethodName, getMethodName;
+
+		Class klass;
+		Method[] methods;
+		Method tempMethod;
+		Object tempObject = null;
+
+		java.util.Collection<Object> tempCollection = new ArrayList<Object>();
+		HashSet<Object> tempList = new HashSet<Object>();
+		Object[] args = {tempList};
+		Class[] parameterTypes = {Collection.class};
+//		log.debug("args array initialized: " + args[0].getClass().getName());       
+
+//		Enumeration collIterator = (Enumeration)value;
+		List list = (ArrayList)value;
+
+		// convert the collection objects from proxy to domain objects
+//		while (collIterator.hasMoreElements()){
+		for(Object obj : list){
+			try {
+				tempCollection.add(convertObject(obj, false));
+			} catch (Exception e) {
+				log.error("Exception caught trying to convert proxy object to domain object: " + e.getMessage());
+				e.printStackTrace();
+			}
+		}
+
+		Iterator iter = tempCollection.iterator();
+		while (iter.hasNext()){  
+			tempObject = iter.next();
+			klass = tempObject.getClass();
+			methods = klass.getMethods();
+
+//			log.debug("Number of methods: " + methods.length);
+
+			for (int i=0; i < methods.length; i++){
+
+				tempMethod = methods[i];
+
+//				log.debug("tempMethod[" + i + "].getName(): " + tempMethod.getName());
+//				log.debug("tempMethod[" + i + "].getReturnType().getName(): " + tempMethod.getReturnType().getName());
+
+				// 'Erase' any collection attributes in order to prevent recursion 
+				if ("java.util.Collection".equalsIgnoreCase(tempMethod.getReturnType().getName())){
+					try {
+
+						getMethodName = tempMethod.getName();
+//						log.debug("getMethodName: " + getMethodName);
+						setMethodName = 's' + getMethodName.substring(1);
+//						log.debug("setMethodName: " + setMethodName);
+
+						tempMethod = klass.getMethod(setMethodName, parameterTypes);
+						tempMethod.invoke(tempObject, args);
+//						log.debug("Successful: Collection Attribute set to empty ArrayList for method " + tempMethod.getName());
+
+					} catch (Exception e) {
+						log.error("Exception: " + e.getMessage());
+						log.error("Unsuccessful:  Collection Attribute NOT set to empty ArrayList for method " + tempMethod.getName());
+					}
+				}
+			}
+		}
+
+//		log.debug("*** final tempCollection.size(): " + tempCollection.size());
+		if (tempCollection.size() == 0){return null;}
+		return tempCollection;
+	}
 }
