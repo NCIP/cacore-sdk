@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.Reader;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,11 +22,6 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
 import org.apache.log4j.Logger;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.Namespace;
-import org.jdom.input.SAXBuilder;
-import org.jdom.transform.JDOMSource;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 
@@ -70,24 +64,22 @@ public class JAXBUnmarshaller implements gov.nih.nci.system.client.util.xml.Unma
 	
 	public Object fromXML(Reader reader) throws XMLUtilityException {
 		JAXBContext context=null;
-		Source source = null;
 		try
 		{
 			if (contextName == null){
-				throw new XMLUtilityException("JAXB Context package name has not been set");
+				throw new XMLUtilityException("JAXB context name has not been set");
 			}
 
 			context = getJAXBContext();
 //			context = getJAXBContext(contextName);
 //			context = getJAXBContext(packageName);
-			log.debug("Unmarshalling using context: " + context.toString());
 	        Unmarshaller unmarshaller = context.createUnmarshaller();
 	
 	        if(validate){
 	        	Schema schemaObj = getJAXBSchema();
 				if (schemaObj == null){
 //					log.warn("JAXB Validation Schema has not been set within the JAXB Marshaller.  Will attempt to create Schema based upon class package name."); 
-					throw new XMLUtilityException("JAXB Validation Schema has not been set within the JAXB Marshaller");
+					throw new XMLUtilityException("JAXB Validation Schema has not been set within the JAXB Unmarshaller");
 				}
 //	        	SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 //	        	String schemaFileName = packageName + ".xsd";
@@ -95,17 +87,11 @@ public class JAXBUnmarshaller implements gov.nih.nci.system.client.util.xml.Unma
 //	    		Source schemaFile = new StreamSource(Thread.currentThread().getContextClassLoader().getResourceAsStream(schemaFileName));
 //	    		schemaObj = sf.newSchema(schemaFile);
 	        	log.debug("Unmarshalling using Validation Schema");
-	    		unmarshaller.setSchema(schemaObj);
-	    		
-	    		SAXBuilder sb = new SAXBuilder(false);
-                Document doc = sb.build(reader);
-                setNamespace(doc.getRootElement(), Namespace.getNamespace("gme://caCORE.caCORE/3.2/gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.sametable"), true);
-                source = new JDOMSource(doc);
-	    		
+	    		unmarshaller.setSchema(schemaObj);	    		
 	        }
 	        unmarshaller.setEventHandler(new ValidationHandler());
 	        
-	        return unmarshaller.unmarshal(source);
+	        return unmarshaller.unmarshal(reader);
 		}
 		catch(JAXBException e)
 		{
@@ -120,14 +106,7 @@ public class JAXBUnmarshaller implements gov.nih.nci.system.client.util.xml.Unma
 			throw new XMLUtilityException(e.getMessage(), e);
 		}
 	}
-	
-//	private Object unmarshall(Class klazz, java.io.Reader reader) throws JAXBException
-//	{
-//        JAXBContext context = JAXBContext.newInstance(klazz);
-//        Unmarshaller u = context.createUnmarshaller();
-//        return u.unmarshal(reader);
-//	}
-	
+
 	public synchronized Object fromXML(Class klazz, java.io.Reader reader) throws XMLUtilityException {
 		this.klazz = klazz;
 		
@@ -188,32 +167,8 @@ public class JAXBUnmarshaller implements gov.nih.nci.system.client.util.xml.Unma
 		else
 			return jaxbContextMap.get(contextName);	
 	}
-	
-	private void setNamespace(Element elem, Namespace ns, boolean recurse) {
-        //elem.setNamespace(ns);
-        String name = elem.getName();
-        System.out.println("name: "+name);
-        
-        Collection<Namespace> names = elem.getAdditionalNamespaces();
-        //Collection<Namespace> newNames = new ArrayList();
-        System.out.println("names: "+names);
-        
-        for(Namespace nspace : names)
-        {
-        	if(nspace.getURI().trim().length() == 0)
-        		continue;
-        		//elem.removeNamespaceDeclaration(nspace);
-        }
-        //elem.setaetNamespace(newNames);
-        
-        if (recurse) {
-                for (Object o : elem.getChildren()) {
-                        setNamespace((Element) o, ns, recurse);
-                }
-        }
-    }
-	
-	
+
+	// todo :: refactor to a "utils" class
 	private void initializeSchemaFactory() {
 		this.sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 		
@@ -227,7 +182,6 @@ public class JAXBUnmarshaller implements gov.nih.nci.system.client.util.xml.Unma
 			log.debug("schemaFileName: " + schemaFileName);
 			sourceList.add(new StreamSource(Thread.currentThread().getContextClassLoader().getResourceAsStream(schemaFileName)));
 		}
-
 
 		try {
 			sf.setErrorHandler(new SchemaErrorHandler());
@@ -243,7 +197,6 @@ public class JAXBUnmarshaller implements gov.nih.nci.system.client.util.xml.Unma
 		
 		log.debug("JAXB Validation Schema: " + getJAXBSchema());
 	}
-	
 	
 	class ValidationHandler implements ValidationEventHandler {
 		
