@@ -55,11 +55,9 @@ public class ClassCache {
 	
 	private List<DAO> daoList;
 
-	//TODO :: Redo Original Below 
 	private Map<String,List<String>> fieldCache = new HashMap<String,List<String>>();	
 
-	//TODO :: Complete Type Safety changes
-	private Map setterMethodCache;
+	private Map<String,Method[]> setterMethodCache;
 
 	public List<String>getPkgClassNames(String packageName){
 		return (List<String>)pkgClassNamesCache.get(packageName);
@@ -134,7 +132,7 @@ public class ClassCache {
 	public Method[] getSettersForTypeFromCache(Class klass, String name)
 	{
 		String key = klass.getName()+","+name;
-		if(setterMethodCache == null) setterMethodCache = new HashMap();
+		if(setterMethodCache == null) setterMethodCache = new HashMap<String,Method[]>();
 		Method[] methodCollection = (Method[])setterMethodCache.get(name);
 		if(methodCollection==null)
 		{
