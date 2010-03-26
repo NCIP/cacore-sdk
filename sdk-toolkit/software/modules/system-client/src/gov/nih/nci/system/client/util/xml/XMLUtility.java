@@ -62,7 +62,6 @@ public class XMLUtility {
 	static public Collection convertFromProxy(Object obj) throws XMLUtilityException {
 		
 		Collection convertedCollection = null;
-		//todo :: see if conversion is still necessary
 		try {
 			CastorCollectionFieldHandler handler = new CastorCollectionFieldHandler();
 			convertedCollection = (Collection)handler.convertUponGet(obj);
