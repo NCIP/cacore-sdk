@@ -575,7 +575,7 @@ public class TransformerUtils
 		if(name.startsWith("java.lang."))
 			name = name.substring("java.lang.".length());
 
-		String returnValue = javaDatatypeMap.get(name);
+		String returnValue = javaDatatypeMap.get(name.toLowerCase());
 
 		if(returnValue == null && isISO21090Enabled)
 			returnValue = isoDatatypeMap.get(name);
