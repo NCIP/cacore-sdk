@@ -59,7 +59,7 @@ public class TransformerUtils
 	private String namespaceUriPrefix;
 	private boolean useGMETags = false;
 	private boolean isJaxbEnabled = false;
-	
+	private boolean isISO21090Enabled = false;
 	/**
 	 * UMLModel from which the code is to be generated
 	 */
@@ -96,6 +96,75 @@ public class TransformerUtils
 	
 	public static final String  PK_GENERATOR_SYSTEMWIDE = "NCI_GENERATOR_SYSTEMWIDE.";
 	
+	
+	public static final Map<String, String> javaDatatypeMap = new HashMap<String, String>()
+	{
+		{
+			put("int", "Integer");
+			put("integer", "Integer");
+			put("double", "Double");
+			put("float", "Float");
+			put("long", "Long");
+			put("string", "String");
+			put("char", "Character");
+			put("character", "Character");
+			put("boolean", "Boolean");
+			put("byte", "Byte");
+			put("byte[]", "Byte[]");
+			put("short", "Short");
+			put("date", "java.util.Date");
+			put("java.util.date", "java.util.Date");
+			put("collection<int>", "Collection<Integer>");
+			put("collection<integer>", "Collection<Integer>");
+			put("collection<double>", "Collection<Double>");
+			put("collection<float>", "Collection<Float>");
+			put("collection<long>", "Collection<Long>");
+			put("collection<string>", "Collection<String>");
+			put("collection<boolean>", "Collection<Boolean>");
+			put("collection<byte>", "Collection<Byte>");
+			put("collection<short>", "Collection<Short>");
+			put("collection<char>", "Collection<Character>");
+			put("collection<character>", "Collection<Character>");
+		}
+	};	
+
+	public static final Map<String, String> isoDatatypeMap = new HashMap<String, String>()
+	{
+		{
+			put("BL", "Bl");
+			put("BL.NONNULL", "BlNonNull");
+			put("ST", "St");
+			put("ST.NT", "StNt");
+			put("II", "Ii");
+			put("TEL", "Tel");
+			put("TEL.PERSON", "TelPerson");
+			put("TEL.URL", "TelUrl");
+			put("TEL.PHONE", "TelPhone");
+			put("TEL.EMAIL", "TelEmail");
+			put("ED", "Ed");
+			put("ED.TEXT", "EdText");
+			put("CD", "Cd");
+			put("SC", "Sc");
+			put("INT", "Int");
+			put("REAL", "Real");
+			put("TS", "Ts");
+			put("PQV", "Pqv");
+			put("PQ", "Pq");
+			put("IVL<INT>", "Ivl<Int>");
+			put("IVL<REAL>", "Ivl<Real>");
+			put("IVL<TS>", "Ivl<Ts>");
+			put("IVL<PQV>", "Ivl<Pqv>");
+			put("IVL<PQ>", "Ivl<Pq>");
+			put("AD", "Ad");
+			put("EN.PN", "EnPn");
+			put("EN.ON", "EnOn");
+			put("DSET<II>", "Dset<Ii>");
+			put("DSET<TEL>", "DSet<Tel>");
+			put("DSET<CD>", "DSet<Cd>");
+			put("DSET<AD>", "DSet<Ad>");
+		}
+	};		
+		
 	public TransformerUtils(Properties umlModelFileProperties,Properties transformerProperties,List cascadeStyles, ValidatorModel vModel, ValidatorModel vModelExtension, UMLModel model) {
 			BASE_PKG_LOGICAL_MODEL = umlModelFileProperties.getProperty("Logical Model") == null ? "" :umlModelFileProperties.getProperty("Logical Model").trim();
 			BASE_PKG_DATA_MODEL = umlModelFileProperties.getProperty("Data Model")==null ? "" : umlModelFileProperties.getProperty("Data Model").trim();
@@ -107,7 +176,9 @@ public class TransformerUtils
 			
 			namespaceUriPrefix = transformerProperties.getProperty("namespaceUriPrefix")==null ? "" : transformerProperties.getProperty("namespaceUriPrefix").trim().replace(" ", "_");
 			useGMETags = transformerProperties.getProperty("useGMETags")==null ? false : Boolean.parseBoolean(transformerProperties.getProperty("useGMETags"));	
-			isJaxbEnabled = transformerProperties.getProperty("isJaxbEnabled")==null ? false : Boolean.parseBoolean(transformerProperties.getProperty("isJaxbEnabled"));	
+			isJaxbEnabled = transformerProperties.getProperty("isJaxbEnabled")==null ? false : Boolean.parseBoolean(transformerProperties.getProperty("isJaxbEnabled"));
+			isISO21090Enabled = transformerProperties.getProperty("isISO21090Enabled")==null ? false : Boolean.parseBoolean(transformerProperties.getProperty("isISO21090Enabled"));
+			
 			this.model = model;
 			
 			if (useGMETags){
@@ -429,6 +500,19 @@ public class TransformerUtils
 				break;
 			}
 		}
+		if(isISO21090Enabled)
+		{
+			for(UMLAttribute attr: klass.getAttributes())
+			{
+				String javaName = isoDatatypeMap.get(attr.getDatatype().getName());
+				if(javaName!=null && !importList.contains("gov.nih.nci.iso21090."+javaName))
+				{
+					importList.add("gov.nih.nci.iso21090."+javaName);
+					break;
+				}
+			}
+		}
+
 		for(UMLAssociation association: klass.getAssociations())
 		{
 			List<UMLAssociationEnd> assocEnds = association.getAssociationEnds();
@@ -459,53 +543,12 @@ public class TransformerUtils
 		if(name.startsWith("java.lang."))
 			name = name.substring("java.lang.".length());
 
-		if("int".equalsIgnoreCase(name) || "integer".equalsIgnoreCase(name))
-			return "Integer";
-		if("double".equalsIgnoreCase(name))
-			return "Double";
-		if("float".equalsIgnoreCase(name))
-			return "Float";
-		if("long".equalsIgnoreCase(name))
-			return "Long";
-		if("string".equalsIgnoreCase(name))
-			return "String";
-		if("char".equalsIgnoreCase(name) || "character".equalsIgnoreCase(name))
-			return "Character";
-		if("boolean".equalsIgnoreCase(name) )
-			return "Boolean";
-		if("byte".equalsIgnoreCase(name) )
-			return "Byte";
-		if("byte[]".equalsIgnoreCase(name) )
-			return "byte[]";
-		if("short".equalsIgnoreCase(name) )
-			return "Short";
-
-		if("date".equalsIgnoreCase(name) || "java.util.date".equalsIgnoreCase(name))
-			return "java.util.Date";
-
+		String returnValue = javaDatatypeMap.get(name);
 		
-		if("collection<int>".equalsIgnoreCase(name) || "collection<integer>".equalsIgnoreCase(name))
-			return "Collection<Integer>";
-		if("collection<double>".equalsIgnoreCase(name))
-			return "Collection<Double>";
-		if("collection<float>".equalsIgnoreCase(name))
-			return "Collection<Float>";
-		if("collection<long>".equalsIgnoreCase(name))
-			return "Collection<Long>";
-		if("collection<string>".equalsIgnoreCase(name))
-			return "Collection<String>";
-		if("collection<boolean>".equalsIgnoreCase(name))
-			return "Collection<Boolean>";
-		if("collection<byte>".equalsIgnoreCase(name))
-			return "Collection<Byte>";
-		if("collection<short>".equalsIgnoreCase(name))
-			return "Collection<Short>";
-		if("collection<char>".equalsIgnoreCase(name) || "collection<character>".equalsIgnoreCase(name))
-			return "Collection<Character>";
+		if(returnValue == null && isISO21090Enabled)
+			returnValue = isoDatatypeMap.get(name);
 		
-		log.error("Unknown data type = "+name);
-		
-		return name;
+		return returnValue == null ? "" : returnValue;
 	}
 
 	public HashMap<String, String> getPKGeneratorTags(UMLClass table,String fqcn,UMLAttribute classIdAttr) throws GenerationException {
@@ -2496,4 +2539,10 @@ public class TransformerUtils
 	public boolean isJaxbEnabled() {
 		return isJaxbEnabled;
 	}
+
+	public boolean isISO21090Enabled()
+	{
+		return isISO21090Enabled;
+	}
+	
 }
