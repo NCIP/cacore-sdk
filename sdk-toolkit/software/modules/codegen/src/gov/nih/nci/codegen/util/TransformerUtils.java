@@ -164,7 +164,7 @@ public class TransformerUtils
 			put("DSET<AD>", "DSet<Ad>");
 		}
 	};		
-		
+	
 	public TransformerUtils(Properties umlModelFileProperties,Properties transformerProperties,List cascadeStyles, ValidatorModel vModel, ValidatorModel vModelExtension, UMLModel model) {
 			BASE_PKG_LOGICAL_MODEL = umlModelFileProperties.getProperty("Logical Model") == null ? "" :umlModelFileProperties.getProperty("Logical Model").trim();
 			BASE_PKG_DATA_MODEL = umlModelFileProperties.getProperty("Data Model")==null ? "" : umlModelFileProperties.getProperty("Data Model").trim();
@@ -176,7 +176,7 @@ public class TransformerUtils
 			
 			namespaceUriPrefix = transformerProperties.getProperty("namespaceUriPrefix")==null ? "" : transformerProperties.getProperty("namespaceUriPrefix").trim().replace(" ", "_");
 			useGMETags = transformerProperties.getProperty("useGMETags")==null ? false : Boolean.parseBoolean(transformerProperties.getProperty("useGMETags"));	
-			isJaxbEnabled = transformerProperties.getProperty("isJaxbEnabled")==null ? false : Boolean.parseBoolean(transformerProperties.getProperty("isJaxbEnabled"));
+			isJaxbEnabled = transformerProperties.getProperty("isJaxbEnabled")==null ? false : Boolean.parseBoolean(transformerProperties.getProperty("isJaxbEnabled"));	
 			isISO21090Enabled = transformerProperties.getProperty("isISO21090Enabled")==null ? false : Boolean.parseBoolean(transformerProperties.getProperty("isISO21090Enabled"));
 			
 			this.model = model;
@@ -508,11 +508,10 @@ public class TransformerUtils
 				if(javaName!=null && !importList.contains("gov.nih.nci.iso21090."+javaName))
 				{
 					importList.add("gov.nih.nci.iso21090."+javaName);
-					break;
+				break;
 				}
 			}
 		}
-
 		for(UMLAssociation association: klass.getAssociations())
 		{
 			List<UMLAssociationEnd> assocEnds = association.getAssociationEnds();
@@ -529,7 +528,40 @@ public class TransformerUtils
 		
 		for(String importClass:importList)
 			sb.append("import ").append(importClass).append(";\n");
+		
+		if (isJaxbEnabled){
+			sb.append("\n");
+			sb.append("import com.sun.xml.bind.CycleRecoverable;\n");
+			sb.append("import javax.xml.bind.annotation.XmlAccessType;\n");
+			sb.append("import javax.xml.bind.annotation.XmlAccessorType;\n");
+			sb.append("import javax.xml.bind.annotation.XmlAttribute;\n");
+			sb.append("import javax.xml.bind.annotation.XmlElementWrapper;\n");
+			sb.append("import javax.xml.bind.annotation.XmlElement;\n");
+			sb.append("import javax.xml.bind.annotation.XmlRootElement;\n");
+			sb.append("import javax.xml.bind.annotation.XmlSeeAlso;\n");
+			sb.append("import javax.xml.bind.annotation.XmlTransient;\n");
+			sb.append("import javax.xml.bind.annotation.XmlType;\n");
+			sb.append("import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;\n");
+			sb.append("\n");
+		}
+		
+		sb.append("import java.io.Serializable;\n");
 
+		return sb.toString();
+	}
+	
+	public String getJaxbXmlTransientAnnotation(){
+		return "	@XmlTransient";
+	}
+	
+	public String getJaxbCollectionAnnotations(UMLClass klass, UMLClass assocKlass, String rolename){
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("	@XmlElementWrapper(name=\"").append(rolename).append("\",\n");
+		sb.append("		namespace=\"").append(getNamespaceUriPrefix()).append(getFullPackageName(klass)).append("\")"); 
+		sb.append("	@XmlElement(name=\"").append(assocKlass.getName()).append("\",\n");
+		sb.append("		namespace=\"").append(getNamespaceUriPrefix()).append(getFullPackageName(assocKlass)).append("\")"); 
+		
 		return sb.toString();
 	}
 
@@ -544,10 +576,10 @@ public class TransformerUtils
 			name = name.substring("java.lang.".length());
 
 		String returnValue = javaDatatypeMap.get(name);
-		
+
 		if(returnValue == null && isISO21090Enabled)
 			returnValue = isoDatatypeMap.get(name);
-		
+
 		return returnValue == null ? "" : returnValue;
 	}
 
@@ -1892,19 +1924,9 @@ public class TransformerUtils
 	
 	
 	public String getJaxbXmlRootElementAnnotation(UMLClass klass){
-		
-		// todo :: remove commented code
-//		List<UMLClass> subClasses = getNonImplicitSubclasses(klass);
-//		List<UMLClass> superClasses = getNonImplicitSuperclasses(klass);
-		
+
 		StringBuffer sb = new StringBuffer();
 
-	
-//		if (isSuperclass(klass) || !getNonImplicitSubclasses(klass).isEmpty() || !getNonImplicitSuperclasses(klass).isEmpty()){ 
-//
-//		}
-		
-		//Default - use klass name as XML Root Element
 		sb.append("@XmlRootElement(name=\"");
 		sb.append(klass.getName()).append("\", ");
 		sb.append("namespace=\"").append(this.getNamespaceUriPrefix() + this.getFullPackageName(klass)).append("\")"); 
@@ -1918,6 +1940,8 @@ public class TransformerUtils
 	public String getJaxbXmlTypeAnnotation(UMLClass klass){
 		
 		StringBuffer sb = new StringBuffer("@XmlType(name = \"").append(klass.getName());
+		sb.append("\", namespace=\"");
+		sb.append(this.getNamespaceUriPrefix() + this.getFullPackageName(klass));
 		sb.append("\", propOrder = {");
 		
 		int counter = 0;
@@ -1939,7 +1963,6 @@ public class TransformerUtils
 			List<UMLAssociationEnd> assocEnds = assoc.getAssociationEnds();
 
 			try {
-//				UMLAssociationEnd thisEnd = this.getThisEnd(klass,assocEnds);
 				UMLAssociationEnd otherEnd = this.getOtherEnd(klass,assocEnds);
 				
 				counter++;
@@ -1969,7 +1992,18 @@ public class TransformerUtils
 		
 		return sb.toString();
 	}
-
+	
+	public String getJaxbXmlAccessorTypeAnnotation(){
+		return "@XmlAccessorType(XmlAccessType.NONE)";
+	}
+	
+	public String getJaxbOnCycleDetectedMethod() {
+		StringBuffer sb = new StringBuffer("    public Object onCycleDetected(Context arg0) {\n");
+		sb.append("		return null;\n");
+		sb.append("	}\n");
+		
+		return sb.toString();
+	}
 	
 	public String getJaxbXmlSeeAlsoAnnotation(UMLClass klass){
 		List<UMLClass> subClasses = getNonImplicitSubclasses(klass);
@@ -2539,10 +2573,4 @@ public class TransformerUtils
 	public boolean isJaxbEnabled() {
 		return isJaxbEnabled;
 	}
-
-	public boolean isISO21090Enabled()
-	{
-		return isISO21090Enabled;
-	}
-	
 }
