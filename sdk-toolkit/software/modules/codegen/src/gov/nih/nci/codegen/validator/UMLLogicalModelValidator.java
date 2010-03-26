@@ -62,6 +62,7 @@ public class UMLLogicalModelValidator implements Validator
 	
 	private TransformerUtils transformerUtils;
 	
+	
 	public void setTransformerUtils(TransformerUtils transformerUtils) {
 		this.transformerUtils = transformerUtils;
 	}
@@ -331,26 +332,13 @@ public class UMLLogicalModelValidator implements Validator
 			if(name.startsWith("java.lang."))
 				name = name.substring("java.lang.".length());
 
-			if(!("int".equalsIgnoreCase(name) || "integer".equalsIgnoreCase(name) ||
-					"double".equalsIgnoreCase(name) ||
-					"float".equalsIgnoreCase(name) ||
-					"long".equalsIgnoreCase(name) ||
-					"string".equalsIgnoreCase(name) ||
-					"char".equalsIgnoreCase(name) || "character".equalsIgnoreCase(name) ||
-					"boolean".equalsIgnoreCase(name) ||
-					"byte".equalsIgnoreCase(name) ||
-					"byte[]".equalsIgnoreCase(name) ||
-					"short".equalsIgnoreCase(name) ||
-					"date".equalsIgnoreCase(name) || "java.util.date".equalsIgnoreCase(name)||
-					"collection<int>".equalsIgnoreCase(name) || "collection<integer>".equalsIgnoreCase(name)||
-					"collection<double>".equalsIgnoreCase(name)||
-					"collection<float>".equalsIgnoreCase(name)||
-					"collection<long>".equalsIgnoreCase(name)||
-					"collection<string>".equalsIgnoreCase(name)||
-					"collection<boolean>".equalsIgnoreCase(name)||
-					"collection<byte>".equalsIgnoreCase(name)||
-					"collection<short>".equalsIgnoreCase(name)||
-					"collection<char>".equalsIgnoreCase(name) || "collection<character>".equalsIgnoreCase(name)))
+/*			if( !transformerUtils.javaDatatypeMap.containsKey(name))
+			{
+				if(transformerUtils.isISO21090Enabled() && !transformerUtils.isoDatatypeMap.containsKey(name))
+					errors.addError(new GeneratorError(getName() + ": Invalid datatype for the "+attribute.getName()+" attribute in the "+thisClassName+" class"));
+			}
+*/
+			if(transformerUtils.getDataType(attribute) == null || "".equals(transformerUtils.getDataType(attribute)))
 				errors.addError(new GeneratorError(getName() + ": Invalid datatype for the "+attribute.getName()+" attribute in the "+thisClassName+" class"));
 			
 			for(UMLAttribute attr: klass.getAttributes())
