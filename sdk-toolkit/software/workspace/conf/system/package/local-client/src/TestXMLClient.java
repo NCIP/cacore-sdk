@@ -80,8 +80,10 @@ public class TestXMLClient extends TestClient
 						
 						boolean includeAssociations = true;
 						Object convertedObj = XMLUtility.convertFromProxy(obj, includeAssociations);
+						
 						System.out.println("Printing Object prior to marshalling...");
-						printObject(convertedObj, convertedObj.getClass());
+						boolean includeAssocation = true;
+						printObject(convertedObj, convertedObj.getClass(), includeAssocation);
 						
 //						File myFile = new File("./output/" + klass.getName()
 //								+ "_test.xml");
@@ -137,7 +139,7 @@ public class TestXMLClient extends TestClient
 						//Object myObj = (Object) myUtil.fromXML(obj.getClass(), myFile);						// using class name
 						Object myObj = (Object) myUtil.fromXML(convertedObj.getClass().getPackage().getName(), myFile);  // using jaxb.index context file
 
-						printObject(myObj, convertedObj.getClass());
+						printObject(myObj, convertedObj.getClass(), includeAssocation);
 						break;
 					}
 				} catch (Exception e) {
@@ -150,7 +152,7 @@ public class TestXMLClient extends TestClient
 		}
 	}
 
-	public static void printObject(Object obj, Class klass) throws Exception {
+	public static void printObject(Object obj, Class klass, boolean includeAssociation) throws Exception {
 		System.out.println("\nPrinting "+ klass.getName());
 		Method[] methods = klass.getMethods();
 		for(Method method:methods)
@@ -163,7 +165,11 @@ public class TestXMLClient extends TestClient
 					Collection list = (Collection)val;
 					for(Object object: list){
 						System.out.println(object.getClass().getName()+":");
-						printObject(object, object.getClass());
+						if (includeAssociation){
+							printObject(object, object.getClass(), false);
+						} else {
+							System.out.println(" -- association has been excluded");
+						}
 					}	
 					//System.out.println("size="+((Collection)val).size());
 				}
@@ -173,12 +179,20 @@ public class TestXMLClient extends TestClient
 					System.out.println("\nPrinting Collection.....");
 					for(Object object: list){
 						System.out.println(object.getClass().getName()+":");
-						printObject(object, object.getClass());
+						if (includeAssociation){
+							printObject(object, object.getClass(), false);
+						} else {
+							System.out.println(" -- association has been excluded");
+						}
 					}
 				}
 				else if(val != null && val.getClass().getName().startsWith("gov.nih.nci"))
 				{
-					printObject(val, val.getClass());
+					if (includeAssociation){
+						printObject(val, val.getClass(), false);
+					} else {
+						System.out.println(" -- association has been excluded");
+					}
 				}
 				else
 					System.out.println(val);
