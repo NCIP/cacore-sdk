@@ -200,7 +200,6 @@ public class GSIHttpURLConnection extends GSIURLConnection
 	@Override
 	public boolean usingProxy() 
 	{
-		// TODO Auto-generated method stub
 		return false;
 	}
 

@@ -101,7 +101,6 @@ public class HelpViewer extends WorkbenchViewerBaseComponent {
 //            try {
 //            	helpURL = new URL(HELP_URL);
 //            } catch (MalformedURLException e) {
-//            	// TODO Auto-generated catch block
 //            	e.printStackTrace();
 //            } catch (Exception e){
 //            	e.printStackTrace();
