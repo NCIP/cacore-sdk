@@ -26,32 +26,26 @@ public class GroupNameAuthenticationToken implements Authentication {
    }
 
 	public GrantedAuthority[] getAuthorities() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public Object getCredentials() {
-		// TODO Auto-generated method stub
 		return "dummy";
 	}
 
 	public Object getDetails() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public Object getPrincipal() {
-		// TODO Auto-generated method stub
 		return "dummy";
 	}
 
 	public boolean isAuthenticated() {
-		// TODO Auto-generated method stub
 		return authenticated;
 	}
 
 	public String getName() {
-		// TODO Auto-generated method stub
 		return "dummy";
 	}
 	
