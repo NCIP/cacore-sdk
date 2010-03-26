@@ -388,6 +388,8 @@
 			<filter token="CAGRID_LOGIN_MODULE_NAME" value="${CAGRID_LOGIN_MODULE_NAME}" />
 			<filter token="CLASS_LEVEL_SECURITY_START" value="${CLASS_LEVEL_SECURITY_START}" />
 			<filter token="CLASS_LEVEL_SECURITY_END" value="${CLASS_LEVEL_SECURITY_END}" />
+			<filter token="ISO21090_DATATYPES_ENABLED" value="${ISO21090_DATATYPES_ENABLED}" />
+			
 		</filterset>
 		<filterset id="filtertoken2" begintoken="${xml.comment.start}@" endtoken="@${xml.comment.end}" onmissingfiltersfile="fail">
 			<filter token="SECURITY_START" value="${SECURITY_START}" />
