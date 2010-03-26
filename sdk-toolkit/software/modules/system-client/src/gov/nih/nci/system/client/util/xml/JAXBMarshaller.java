@@ -127,6 +127,7 @@ public class JAXBMarshaller implements gov.nih.nci.system.client.util.xml.Marsha
 		
 	}
 	
+	// todo :: refactor to a common "utils" class
 	private void initializeSchemaFactory() {
 		this.sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 		
