@@ -73,7 +73,7 @@
 		" >
 	</target>
 
-	<target name="build:workspace-modules" description="Call modules build target to produce artifacts">
+	<target name="build:workspace-modules" depends="init" description="Call modules build target to produce artifacts">
 		<echo>Build Workspace Modules .........</echo>
 		<echo>target DIR = ${target.dir}</echo>
 		<echo>modules DIR = ${modules.dir}</echo>
