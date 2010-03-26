@@ -66,6 +66,7 @@
 				<prop key="isJaxbEnabled">@GENERATE_JAXB_MAPPING@</prop>
 				<prop key="useGMETags">@GENERATE_XSD_WITH_GME_TAGS@</prop>
 				<prop key="namespaceUriPrefix">@NAMESPACE_PREFIX@</prop>
+				<prop key="isISO21090Enabled">@ISO21090_DATATYPES_ENABLED@</prop>
 			</props>
 		</constructor-arg>
 	</bean>	
