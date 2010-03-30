@@ -558,7 +558,7 @@ public class TransformerUtils
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append("	@XmlElementWrapper(name=\"").append(rolename).append("\",\n");
-		sb.append("		namespace=\"").append(getNamespaceUriPrefix()).append(getFullPackageName(klass)).append("\")"); 
+		sb.append("		namespace=\"").append(getNamespaceUriPrefix()).append(getFullPackageName(klass)).append("\")\n"); 
 		sb.append("	@XmlElement(name=\"").append(assocKlass.getName()).append("\",\n");
 		sb.append("		namespace=\"").append(getNamespaceUriPrefix()).append(getFullPackageName(assocKlass)).append("\")"); 
 		
@@ -2017,7 +2017,7 @@ public class TransformerUtils
 			for (UMLClass subKlass:subClasses){
 				counter++;
 				found = true;
-				sb.append(subKlass.getName()+".class");
+				sb.append(getFullPackageName(subKlass)+"."+subKlass.getName()+".class");
 				if (counter < totalCount){
 					sb.append(", ");
 				}
@@ -2031,7 +2031,7 @@ public class TransformerUtils
 			for (UMLClass superKlass:superClasses){
 				counter++;
 				found = true;
-				sb.append(superKlass.getName()+".class");
+				sb.append(getFullPackageName(superKlass)+"."+superKlass.getName()+".class");
 				if (counter < totalCount){
 					sb.append(", ");
 				}
