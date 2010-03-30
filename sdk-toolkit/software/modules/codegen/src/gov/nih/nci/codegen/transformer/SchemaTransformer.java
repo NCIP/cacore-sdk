@@ -429,23 +429,21 @@ public class SchemaTransformer implements Transformer {
 
 	private void addSequenceAssociationElement(Element sequence, UMLClass klass, UMLAssociationEnd thisEnd, UMLAssociationEnd otherEnd,Namespace w3cNS) {
 		if (otherEnd.isNavigable()) {
-			System.out.println("sequence name: " + sequence.getName());
-			System.out.println("otherEnd getRoleName: " + otherEnd.getRoleName());
+			log.debug("sequence name: " + sequence.getName());
+			log.debug("otherEnd getRoleName: " + otherEnd.getRoleName());
 			String otherEndTypeName = getClassName((UMLClass)(otherEnd.getUMLElement()));
-			System.out.println("otherEnd type: " + otherEndTypeName);
+			log.debug("otherEnd type: " + otherEndTypeName);
 			String thisEndType = getClassName((UMLClass)(thisEnd.getUMLElement()));
-			System.out.println("thisEnd type: " + thisEndType);
+			log.debug("thisEnd type: " + thisEndType);
 
 			Element associationElement = new Element("element", w3cNS);
 //			sequence.addContent(associationElement);
 
-			System.out.println("otherEndTypeName: "+otherEndTypeName);
+			log.debug("otherEndTypeName: "+otherEndTypeName);
 			associationElement.setAttribute("name", getRoleName(otherEnd,otherEndTypeName)); 
 
 			String maxOccurs = transformerUtils.getUpperBound(otherEnd);
-			System.out.println("maxOccurs: " + maxOccurs);
-			
-
+			log.debug("maxOccurs: " + maxOccurs);
 
 			// A collection - model association as an element with the association name that 
 			// has a sequence of the associated type.  See GForge #1311.
@@ -462,7 +460,7 @@ public class SchemaTransformer implements Transformer {
 			thisPackage = getPackageName((UMLClass)(thisEnd.getUMLElement()));
 			associationPackage = getPackageName((UMLClass)(otherEnd.getUMLElement()));
 
-			System.out.println("associationPackage.equals(thisPackage): " + associationPackage.equals(thisPackage));
+			log.debug("associationPackage.equals(thisPackage): " + associationPackage.equals(thisPackage));
 
 			String type = (associationPackage.equals(thisPackage)) ? otherEndTypeName : associationPackage + ":" + otherEndTypeName;
 			
