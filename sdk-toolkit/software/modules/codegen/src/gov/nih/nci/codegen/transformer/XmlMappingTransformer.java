@@ -357,12 +357,13 @@ public class XmlMappingTransformer implements Transformer {
 					field.setAttribute("handler", "gov.nih.nci.system.client.util.xml.CastorDomainObjectFieldHandler" );
 				}
 				Element bind = new Element("bind-xml");
-				bind.setAttribute("name", getClassName((UMLClass)(otherEnd.getUMLElement())) );
+//				bind.setAttribute("name", getClassName((UMLClass)(otherEnd.getUMLElement())) );
+				bind.setAttribute("name", otherEnd.getRoleName());
 				bind.setAttribute("type", associationPackage + Constant.DOT + otherEndTypeName );
 				
 				String roleName = getRoleName(otherEnd,getClassName((UMLClass)(otherEnd.getUMLElement())));
 				log.debug("otherEndTypeName: "+otherEndTypeName+"; roleName: "+roleName);
-				bind.setAttribute("location",(otherEndTypeName.equals(roleName)) ? otherEndTypeName.toLowerCase(): roleName );                  
+//				bind.setAttribute("location",(otherEndTypeName.equals(roleName)) ? otherEndTypeName.toLowerCase(): roleName );                  
 				bind.setAttribute("node", "element");
 				field.addContent(bind);
 
@@ -409,6 +410,10 @@ public class XmlMappingTransformer implements Transformer {
 		if (type.indexOf('.') > 0){//java.util.Long, etc.
 			//type = type.substring(type.lastIndexOf('.')+1);
 			return type;
+		}
+		
+		if ("byte[]".equalsIgnoreCase(type)){
+			return "byte";
 		}
 		
 		if ("Character".equalsIgnoreCase(type) || "char".equalsIgnoreCase(type)) {
