@@ -921,6 +921,7 @@
 		<copy todir="${package.client.remote.lib.dir}">
 			<fileset dir="${runtime.lib.dir}">
 				<include name="acegi-security-*.jar"/>
+				<include name="activation-*.jar"/>
 				<include name="antlr-*.jar"/>
 				<include name="asm-*.jar"/>
 				<include name="caGrid-CQL-cql.*.jar"/>
