@@ -55,7 +55,7 @@ public class caCOREMarshaller implements gov.nih.nci.system.client.util.xml.Mars
 				
 				InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(mappingFileName);
 				
-				// Uncomment the following if you wish to see the contents of the mapping file
+//				// Uncomment the following if you wish to see the contents of the mapping file
 //				ByteArrayOutputStream baos = new ByteArrayOutputStream();
 //				int n, result = 0;
 //				byte[] b;
@@ -76,13 +76,14 @@ public class caCOREMarshaller implements gov.nih.nci.system.client.util.xml.Mars
 				Mapping localMapping = new Mapping();
 				localMapping.setEntityResolver(resolver);
 				localMapping.loadMapping(mappIS);
+				log.debug("Returning local mapping: "+localMapping);
 				return localMapping;
-			} catch (Exception e) {
-				System.out.println("Error reading default xml mapping file " + e.getMessage());
-				log.error("Error reading default xml mapping file ", e); 
+			} 	catch (Exception e) {
+				log.error("Error reading default xml mapping file " + e.getMessage());
 				throw new XMLUtilityException("Error reading default xml mapping file " + e.getMessage(), e);
 			}
 		}
+		log.debug("Returning default mapping");
 		return mapping;
 	}
 
@@ -102,15 +103,14 @@ public class caCOREMarshaller implements gov.nih.nci.system.client.util.xml.Mars
 			log.error("Output stream invalid: ", e);
 			throw new XMLUtilityException("Output stream invalid "  + e.getMessage(), e);
 		}
-		try{
+		try {
 			Mapping mapping = this.getMapping();
-			//log.debug("mapping: " + mapping);
+			log.debug("mapping: " + mapping);
 		
 			marshaller.setMapping(mapping);
-		}catch (MappingException e) {
-			System.out.println("The mapping file is invalid: " + e.getMessage());
-			log.error("The mapping file is invalid: ", e);
-			throw new XMLUtilityException("The mapping file is invalid "  + e.getMessage(), e);
+		} catch (MappingException e) {
+			log.error("Exception caught while trying to set the mapping file: " + e.getException(),e);
+			throw new XMLUtilityException("Exception caught while trying to set the mapping file: " + e.getMessage(),e);
 		}
 
 		try {
