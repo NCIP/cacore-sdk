@@ -482,6 +482,7 @@
 				<fileset dir="${system.config.dir}" includes="**/*.wsdd" />
 				<fileset dir="${system.config.dir}" includes="**/*.config" />
 				<fileset dir="${system.config.dir}" includes="**/*.properties" />
+				<fileset dir="${system.config.dir}" includes="**/*.java" />
 				<fileset dir="${db-install.dist.mysql.relative.dir}" includes="**/*.sql" />
 				<fileset dir="${db-install.dist.oracle.relative.dir}" includes="**/*.sql" />
 				<fileset dir="${db-install.dist.postgresql.relative.dir}" includes="**/*.sql" />
@@ -491,6 +492,7 @@
 				<fileset dir="${system.config.dir}" includes="**/*.wsdd" />
 				<fileset dir="${system.config.dir}" includes="**/*.config" />
 				<fileset dir="${system.config.dir}" includes="**/*.properties" />
+				<fileset dir="${system.config.dir}" includes="**/*.java" />
 				<fileset dir="${db-install.dist.mysql.relative.dir}" includes="**/*.sql" />
 				<fileset dir="${db-install.dist.oracle.relative.dir}" includes="**/*.sql" />
 				<fileset dir="${db-install.dist.postgresql.relative.dir}" includes="**/*.sql" />
@@ -511,6 +513,12 @@
 				<copy todir="${system.config.dir}" overwrite="true">
 					<fileset dir="${system.config.template.dir}" />
 					<globmapper from="*-template.config" to="*.config" />
+					<filterset refid="filtertoken3" />
+					<filterset refid="filtertoken4" />
+				</copy>
+				<copy todir="${system.config.dir}" filtering="true">
+					<fileset dir="${system.config.template.dir}" />
+					<globmapper from="*.java" to="*.java" />
 					<filterset refid="filtertoken3" />
 					<filterset refid="filtertoken4" />
 				</copy>
@@ -585,6 +593,12 @@
 			<filterset refid="filtertoken3" />
 			<filterset refid="filtertoken4" />
 		</copy>
+		<copy todir="${system.config.dir}" filtering="true">
+			<fileset dir="${system.config.template.dir}" />
+			<globmapper from="*.java" to="*.java" />
+			<filterset refid="filtertoken3" />
+			<filterset refid="filtertoken4" />
+		</copy>		
 		<copy todir="${system.config.dir}">
 			<fileset dir="${system.config.template.dir}">
 				<include name="**/*.*" />
@@ -920,10 +934,12 @@
 				<include name="hibernate-*.jar"/>
 				<include name="hibernate-annotations-*.jar"/>
 				<include name="hibernate-validator-*.jar"/>
+				<include name="jaxb-*.jar"/>
 				<include name="jaxen-*.jar"/>
 				<include name="jdom-1.1.jar"/>
 				<include name="log4j-*.jar"/>
 				<include name="spring-*.jar"/>
+				<include name="stax-*.jar"/>
 				<include name="xercesImpl-*.jar"/>
 			</fileset>
 			<fileset dir="${lib.dir}">
