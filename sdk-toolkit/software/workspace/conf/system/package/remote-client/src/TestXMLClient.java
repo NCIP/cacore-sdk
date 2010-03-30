@@ -69,14 +69,14 @@ public class TestXMLClient extends TestClient
 		boolean validate = true;
 		boolean includeXmlDeclaration = true;
 		String jaxbContextName = getJaxbContextName();
-		Marshaller marshaller2 = new JAXBMarshaller(true,includeXmlDeclaration,jaxbContextName);
+		Marshaller marshaller2 = new JAXBMarshaller(validate,includeXmlDeclaration,jaxbContextName);
 		Unmarshaller unmarshaller2 = new JAXBUnmarshaller(validate,jaxbContextName);		
 
 		// Castor
-		XMLUtility myUtil = new XMLUtility(marshaller, unmarshaller);
+//		XMLUtility myUtil = new XMLUtility(marshaller, unmarshaller);
 
 		// JAXB
-//		XMLUtility myUtil = new XMLUtility(marshaller2, unmarshaller2);
+		XMLUtility myUtil = new XMLUtility(marshaller2, unmarshaller2);
 
 		for (Class klass : classList) {
 			if (!Modifier.isAbstract(klass.getModifiers())) {
