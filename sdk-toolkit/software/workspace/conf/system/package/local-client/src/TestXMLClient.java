@@ -23,8 +23,17 @@ import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Source;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
+
+import org.w3c.dom.Document;
 
 
 public class TestXMLClient extends TestClient
@@ -60,14 +69,14 @@ public class TestXMLClient extends TestClient
 		boolean validate = true;
 		boolean includeXmlDeclaration = true;
 		String jaxbContextName = getJaxbContextName();
-		Marshaller marshaller2 = new JAXBMarshaller(validate,includeXmlDeclaration,jaxbContextName);
+		Marshaller marshaller2 = new JAXBMarshaller(true,includeXmlDeclaration,jaxbContextName);
 		Unmarshaller unmarshaller2 = new JAXBUnmarshaller(validate,jaxbContextName);		
 
 		// Castor
-		// XMLUtility myUtil = new XMLUtility(marshaller, unmarshaller);
+		XMLUtility myUtil = new XMLUtility(marshaller, unmarshaller);
 
 		// JAXB
-		XMLUtility myUtil = new XMLUtility(marshaller2, unmarshaller2);
+//		XMLUtility myUtil = new XMLUtility(marshaller2, unmarshaller2);
 
 		for (Class klass : classList) {
 			if (!Modifier.isAbstract(klass.getModifiers())) {
@@ -102,25 +111,24 @@ public class TestXMLClient extends TestClient
 						System.out.println("Can read " + myFile.getName()
 								+ "? " + myFile.canRead());
 
-						//Uncomment for independent validation
+						//Uncomment for independent validation when using Castor
 //						Document document = parser.parse(myFile);
 //						SchemaFactory factory = SchemaFactory
 //								.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-//						
 //
 //						try {
-//							System.out.println("Validating " + obj.getClass().getName()
+//							System.out.println("Validating " + convertedObj.getClass().getName()
 //									+ " against the schema......\n\n");
 //							Source schemaFile = new StreamSource(Thread
 //									.currentThread().getContextClassLoader()
 //									.getResourceAsStream(
-//											obj.getClass().getPackage().getName()
+//											convertedObj.getClass().getPackage().getName()
 //													+ ".xsd"));
 //							Schema schema = factory.newSchema(schemaFile);
 //							Validator validator = schema.newValidator();
 //
 //							validator.validate(new DOMSource(document));
-//							System.out.println(obj.getClass().getName()
+//							System.out.println(convertedObj.getClass().getName()
 //									+ " has been validated!!!\n\n");
 //						} catch (Exception e) {
 //							System.out
@@ -132,12 +140,12 @@ public class TestXMLClient extends TestClient
 						System.out.println("Un-marshalling " + convertedObj.getClass().getName()
 								+ " from " + myFile.getName() + "......\n\n");
 
-						// Castor Object myObj = (Object)
-						// myUtil.fromXML(myFile);
+						// Castor 
+						 Object myObj = (Object)myUtil.fromXML(myFile);
 
 						// JAXB
-						//Object myObj = (Object) myUtil.fromXML(obj.getClass(), myFile);						// using class name
-						Object myObj = (Object) myUtil.fromXML(convertedObj.getClass().getPackage().getName(), myFile);  // using jaxb.index context file
+						// Object myObj = (Object) myUtil.fromXML(obj.getClass(), myFile);						// using class name
+						// Object myObj = (Object) myUtil.fromXML(convertedObj.getClass().getPackage().getName(), myFile);  // using jaxb.index context file
 
 						printObject(myObj, convertedObj.getClass(), includeAssocation);
 						break;
@@ -160,7 +168,13 @@ public class TestXMLClient extends TestClient
 			if(method.getName().startsWith("get") && !method.getName().equals("getClass"))
 			{
 				System.out.print("\t"+method.getName().substring(3)+":");
-				Object val = method.invoke(obj, (Object[])null);
+				Object val = null;
+				try {
+				val = method.invoke(obj, (Object[])null);
+				} catch(Exception e){
+					val = "ERROR - unable to determine value"; 
+						
+				}
 				if (val instanceof java.util.Set) {
 					Collection list = (Collection)val;
 					for(Object object: list){
