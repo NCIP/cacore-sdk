@@ -141,11 +141,12 @@ public class TestXMLClient extends TestClient
 								+ " from " + myFile.getName() + "......\n\n");
 
 						// Castor 
-						 Object myObj = (Object)myUtil.fromXML(myFile);
+//						 Object myObj = (Object)myUtil.fromXML(myFile);
 
 						// JAXB
-						// Object myObj = (Object) myUtil.fromXML(obj.getClass(), myFile);						// using class name
-						// Object myObj = (Object) myUtil.fromXML(convertedObj.getClass().getPackage().getName(), myFile);  // using jaxb.index context file
+//						 Object myObj = (Object) myUtil.fromXML(convertedObj.getClass(), myFile);						// using class package name as a context
+//						 Object myObj = (Object) myUtil.fromXML(convertedObj.getClass().getPackage().getName(), myFile);  // using package name as a context
+						 Object myObj = (Object) myUtil.fromXML(myFile);  // using context name supplied during Unmarshaller instantiation
 
 						printObject(myObj, convertedObj.getClass(), includeAssocation);
 						break;
@@ -257,7 +258,7 @@ public class TestXMLClient extends TestClient
 		
 		for (Class klass : classList){
 			String packageName = klass.getPackage().getName();
-			System.out.println("package name: " + packageName);
+			//System.out.println("package name: " + packageName);
 			if (!packageName.equalsIgnoreCase("gov.nih.nci.cacoresdk.domain.interfaze.differentpackage") &&
 					!packageName.equalsIgnoreCase("gov.nih.nci.cacoresdk.domain.other.differentpackage.associations")){
 				packageNames.put(packageName, packageName);
