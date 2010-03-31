@@ -31,72 +31,113 @@ public class JAXBUnmarshaller implements gov.nih.nci.system.client.util.xml.Unma
 
 	private Map<String, JAXBContext> jaxbContextMap = new HashMap<String, JAXBContext>();
 	private Schema schemaObj;
-	private SchemaFactory sf;
+	private SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 	
 	private boolean validate = true;
 	private String contextName;
 	private String packageName;
 	private Class klazz;
 	
+	private boolean useContextName = false;
+	private boolean usePackageName = false;
+	private boolean useClassPackageName = false;
+	
+	private boolean hasBeenInvokedWithoutContext = true;
+	
 	public JAXBUnmarshaller(boolean validate, String contextName)
 	{
 		this.validate = validate;
-		this.contextName = contextName;
-		
-		//Initialize JAXB Context
-		try {
-			getJAXBContext(contextName);
-		} catch (JAXBException e) {
-			log.error("Unable to initialize JAXB Context using contextName: " + contextName,e);
+		if (contextName != null && contextName.length() >0) {
+			this.contextName = contextName;
+			useContextName = true;
+			hasBeenInvokedWithoutContext = false;
+			
+			//Initialize JAXB Context
+			try {
+				getJAXBContext(contextName);
+			} catch (JAXBException e) {
+				log.error("Unable to initialize Unmarshaller's JAXB Context using contextName: " + contextName,e);
+			}
+
+			//Initialize Schemas
+			initializeSchemaFactory();
+			
+			log.debug("Unmarshaller has been initialized using context: " + jaxbContextMap.get(contextName));
+		} else {
+			hasBeenInvokedWithoutContext = true;
+			log.warn("A valid JAXB context name has not been supplied during Unmarshaller instantiation.  Make sure to supply either a valid package name or template object during subsequent calls to fromXml() methods");
 		}
-		
-		//Initialize Schemas
-		initializeSchemaFactory();
-		
-		log.debug("Marshaller has been initialized using context: " + jaxbContextMap.get(contextName));
+
 	}
 	
 	public JAXBUnmarshaller(boolean validate)
 	{
 		this.validate = validate;
 		this.contextName = "";
+
+		hasBeenInvokedWithoutContext = true;
 	}
 	
 	public Object fromXML(Reader reader) throws XMLUtilityException {
 		JAXBContext context=null;
 		try
 		{
-			if (contextName == null){
-				throw new XMLUtilityException("JAXB context name has not been set");
+			if (!useContextName && hasBeenInvokedWithoutContext) {
+				throw new XMLUtilityException("No context name was supplied during Unmarshaller instantiation.  Consequently, you must use one of the fromXML() methods that supplies either the template object class or ojbect package name.");
+			}
+			
+			if (useContextName){
+				log.debug("Getting JAXB Context using Context name: " + contextName);
+				if ( (contextName == null || !(contextName.length() >0)) ){
+					throw new XMLUtilityException("Supplied context name seems invalid.  Ensure a non-null, non-empty context name.");
+				}
+				context = getJAXBContext(contextName);
+			} else if (usePackageName){
+				log.debug("Getting JAXB Context using Package name: " + packageName);
+				if ( (packageName == null || !(packageName.length() >0)) ){
+					throw new XMLUtilityException("Supplied Package name seems invalid.  Ensure a non-null, non-empty package name.");
+				}
+				context = getJAXBContext(packageName);
+			} else if (useClassPackageName){
+				if ( (klazz == null) ){
+					throw new XMLUtilityException("Supplied Class template seems invalid while getting JAXB context using the class package name derived from the template object passed in.  Ensure a non-null, non-empty class has been set.");
+				}
+				log.debug("Getting JAXB Context using template object's package name: " + klazz.getPackage().getName());
+				context = getJAXBContext(klazz.getPackage().getName());
+			} else {
+				log.error("Attempts to set the JAXB Context using either a context name, package name, or class package name derived from the template object have failed. Ensure a non-null, non-empty context name, package name, or template object has been supplied." );
+				throw new XMLUtilityException("Attempts to set the JAXB Context using either a context name, package name, or class package name derived from the template object have failed. Ensure a non-null, non-empty context name, package name, or template object has been supplied.");
+			}
+			
+			if (context == null) {
+				log.error("Attempts to set the JAXB Context using either a context name, package name, or class package name derived from the template object have failed. Ensure a non-null, non-empty context name, package name, or template object has been supplied." );
+				throw new XMLUtilityException("Attempts to set the JAXB Context using either a context name, package name, or class package name derived from the template object have failed. Ensure a non-null, non-empty context name, package name, or template object has been supplied.");
 			}
 
-			context = getJAXBContext();
-//			context = getJAXBContext(contextName);
-//			context = getJAXBContext(packageName);
 	        Unmarshaller unmarshaller = context.createUnmarshaller();
 	
 	        if(validate){
-	        	Schema schemaObj = getJAXBSchema();
-				if (schemaObj == null){
-//					log.warn("JAXB Validation Schema has not been set within the JAXB Marshaller.  Will attempt to create Schema based upon class package name."); 
+	        	Schema tempSchemaObj = getJAXBSchema();
+				if (tempSchemaObj == null){
 					throw new XMLUtilityException("JAXB Validation Schema has not been set within the JAXB Unmarshaller");
 				}
-//	        	SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-//	        	String schemaFileName = packageName + ".xsd";
-//	        	log.debug("Unmarshalling using schema file name: " + schemaFileName);
-//	    		Source schemaFile = new StreamSource(Thread.currentThread().getContextClassLoader().getResourceAsStream(schemaFileName));
-//	    		schemaObj = sf.newSchema(schemaFile);
 	        	log.debug("Unmarshalling using Validation Schema");
-	    		unmarshaller.setSchema(schemaObj);	    		
+	    		unmarshaller.setSchema(tempSchemaObj);	    		
 	        }
 	        unmarshaller.setEventHandler(new ValidationHandler());
+	        
+	        hasBeenInvokedWithoutContext = true;
 	        
 	        return unmarshaller.unmarshal(reader);
 		}
 		catch(JAXBException e)
 		{
 			log.error("JAXBException caught Unmarshalling from: " + reader, e);
-			log.debug("Unmarshalling using context: " + context.toString());
+			if (context == null){
+				log.debug("Unmarshalling using null context");
+			} else {
+				log.debug("Unmarshalling using context: " + context.toString());
+			}
 
 			throw new XMLUtilityException(e.getMessage(), e);
 		}	
@@ -108,30 +149,55 @@ public class JAXBUnmarshaller implements gov.nih.nci.system.client.util.xml.Unma
 	}
 
 	public synchronized Object fromXML(Class klazz, java.io.Reader reader) throws XMLUtilityException {
+		useContextName = false;
+		usePackageName = false;
+		useClassPackageName = true;
+		
+		hasBeenInvokedWithoutContext = false;
+		
 		this.klazz = klazz;
 		
 		return fromXML(reader);
 	}
 	
 	public synchronized Object fromXML(Class klazz, java.io.File xmlFile) throws XMLUtilityException {
+		useContextName = false;
+		usePackageName = false;
+		useClassPackageName = true;
+		
+		hasBeenInvokedWithoutContext = false;
+		
 		this.klazz = klazz;
 		
 		return fromXML(xmlFile);
 	}	
 
 	public synchronized Object fromXML(String packageName, java.io.File xmlFile) throws XMLUtilityException {
+		useContextName = false;
+		usePackageName = true;
+		useClassPackageName = false;
+		
+		hasBeenInvokedWithoutContext = false;
+		
 		this.packageName = packageName;
 		
 		return fromXML(xmlFile);
 	}		
 	
 	public synchronized Object fromXML(String packageName, Reader reader) throws XMLUtilityException {
+		useContextName = false;
+		usePackageName = true;
+		useClassPackageName = false;
+		
+		hasBeenInvokedWithoutContext = false;
+		
 		this.packageName = packageName;
 		
 		return fromXML(reader);
 	}	
 
-	public Object fromXML(File file) throws XMLUtilityException {
+	public synchronized Object fromXML(File file) throws XMLUtilityException {
+		// hasBeenInvokedWithoutContext will be set to true by default if this method is called directly without a context class or package name
 		try {
 			FileReader fRead = new FileReader(file);
 			return fromXML(fRead);
@@ -145,18 +211,69 @@ public class JAXBUnmarshaller implements gov.nih.nci.system.client.util.xml.Unma
 		return this;
 	}	
 	
-	public Schema getJAXBSchema() {
-		log.debug("Getting JAXB Schema" );
-		return schemaObj;	
+	public Schema getJAXBSchema() throws XMLUtilityException {	
+		String schemaFileName;
+		Source schemaFile;
+		
+		if (useContextName){
+			log.debug("Getting JAXB Schema using Context name: " + contextName);
+			if ( (contextName == null || !(contextName.length() >0)) ){
+				throw new XMLUtilityException("Supplied context name seems invalid.  Ensure a non-null, non-empty context name.");
+			}
+			
+			// schema object was set during Unmarshaller instantiation
+			return schemaObj;
+		} else if (usePackageName){
+			log.debug("Getting JAXB Schema using Package name: " + packageName);
+			if ( (packageName == null || !(packageName.length() >0)) ){
+				throw new XMLUtilityException("Supplied Package name seems invalid.  Ensure a non-null, non-empty package name.");
+			}
+        	schemaFileName = packageName + ".xsd";
+        	log.debug("Unmarshalling using schema file name: " + schemaFileName);
+    		schemaFile = new StreamSource(Thread.currentThread().getContextClassLoader().getResourceAsStream(schemaFileName));
+    		
+    		Schema tempSchemaObj=null;
+    		try {
+				tempSchemaObj = sf.newSchema(schemaFile);
+			} catch (SAXException e) {
+				log.error("Error trying to get a JAXB Schema using the supplied package name: " + packageName);
+				throw new XMLUtilityException("Error trying to get a JAXB Schema using the supplied package name: " + packageName, e);
+			}
+    		return(tempSchemaObj);
+		} else if (useClassPackageName){
+			if ( (klazz == null) ){
+				throw new XMLUtilityException("Supplied Class template seems invalid while getting JAXB context using the class package name derived from the template object passed in.  Ensure a non-null, non-empty class has been set.");
+			}
+			
+			String klazzPackageName = klazz.getPackage().getName();
+			log.debug("Getting JAXB Schema using template object: " + klazzPackageName);
+        	schemaFileName = klazz.getPackage().getName() + ".xsd";
+        	log.debug("Unmarshalling using schema file name: " + schemaFileName);
+    		schemaFile = new StreamSource(Thread.currentThread().getContextClassLoader().getResourceAsStream(schemaFileName));
+
+    		Schema tempSchemaObj=null;
+    		try {
+				tempSchemaObj = sf.newSchema(schemaFile);
+			} catch (SAXException e) {
+				log.error("Error trying to get a JAXB Schema using the supplied class package name derived from the template object passed in: " + klazzPackageName);
+				throw new XMLUtilityException("Error trying to get a JAXB Schema using the supplied class package name derived from the template object passed in: " + klazzPackageName, e);
+			}
+    		return(tempSchemaObj);
+		} 
+
+		// default
+		log.error("Attempts to set the JAXB Schema using either a context name, package name, or class package name derived from the template object have failed. Ensure a non-null, non-empty context name, package name, or template object has been supplied." );
+		throw new XMLUtilityException("Attempts to set the JAXB Context using either a context name, package name, or class package name derived from the template object have failed. Ensure a non-null, non-empty context name, package name, or template object has been supplied.");
+
 	}	
 	
 	public JAXBContext getJAXBContext() throws JAXBException{
-		log.debug("Getting JAXB context using contextName: " + contextName);
+		log.debug("Getting JAXB context using Context name: " + contextName);
 		return jaxbContextMap.get(contextName);	
 	}	
 	
 	public JAXBContext getJAXBContext(String contextName) throws JAXBException{
-		log.debug("Getting JAXB context using contextName: " + contextName);
+		log.debug("Getting JAXB context using context name: " + contextName);
 		JAXBContext context;
 		if(!jaxbContextMap.containsKey(contextName))
 		{
@@ -195,7 +312,7 @@ public class JAXBUnmarshaller implements gov.nih.nci.system.client.util.xml.Unma
 			log.error("Error initializing Schema Factory",e);
 		}
 		
-		log.debug("JAXB Validation Schema: " + getJAXBSchema());
+//		log.debug("JAXB Validation Schema: " + getJAXBSchema());
 	}
 	
 	class ValidationHandler implements ValidationEventHandler {
