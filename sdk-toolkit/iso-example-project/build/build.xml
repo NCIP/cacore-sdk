@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="caCore SDK - Example Project" basedir="." default="">
+
+	<description>Build script for caCORE SDK Generator</description>
+
+	<!--***********************************************************************
+	*** Load the build properties from the file
+	*********************************************************************** -->
+	<property file="codegen.properties"  />
+
+	<property name="project.home" location="${basedir}/.." />
+	<property name="project.build.home" location="${project.home}/build" />
+	<property name="project.common.dir" location="${project.home}/common" />
+
+	<property name="root.dir" location="${SDK_INSTALL_DIR}" />
+	<property name="software.dir" location="${root.dir}/software" />
+	<property name="common.dir" value="${software.dir}/common" />
+
+	<property name="project.target.dir" value="${project.home}/target"/>
+	<property name="dist.dir" value="${project.target.dir}/dist"/>
+	<property name="dist.exploded.dir" value="${dist.dir}/exploded"/>
+	<property name="output.dir.location" value="${dist.exploded.dir}"/>
+	<property name="output.dir" value="${output.dir.location}/output"/>
+	<property name="db.src.dir" value="${project.home}/db"/>
+	<property name="MODEL_FILE_PATH" value="${project.home}/models/${MODEL_FILE}"/>
+
+	<property name="properties.file" value="${project.build.home}/install.properties" />
+	<property name="upgrade.properties.file" value="${project.build.home}/install.properties" />
+	<echo message="Using properties file of ${properties.file}." />
+	<available file="${properties.file}" property="properties.file.exists" />
+	<fail unless="properties.file.exists" message="The properties.file ${properties.file} does not exist, please make sure that you pass in an accurate file name with the 'ant -Dproperties.file=somepath/somefile', otherwise the build will fail." />
+	<replaceregexp file="${properties.file}" byline="true" match="^([\w\d.]+)=(.*[\w\d\/\{\}\\]+)[ \t]+\r*$" replace="\1=\2" />
+	<replaceregexp file="${properties.file}" byline="true" match="^([\w\d.]+)=[ \t]+(.*[\w\d\/\{\}\\]+)\r*$" replace="\1=\2" />
+	<property file="${properties.file}" />
+	<!-- added for remote deployments since file is copied to root of install dir -->
+	<basename property="properties.file.name" file="${properties.file}"/>
+
+	<echo message="* * * properties.file: ${properties.file}" />
+	<echo message="* * * properties.file.name: ${properties.file.name}" />
+
+	<property name="master.build.file" value="${software.dir}/build/build-sdk-dist.xml"/>
+
+	<import file="${software.dir}/build/build.xml"/>
+
+	<target name="clean:project" description="cleans this project">
+		<delete dir="${project.target.dir}" failonerror="false"/>
+	</target>
+
+	<target name="clean:all" description="cleans everything" depends="clean:project"/>
+
+	<target name="build:SDK" description="Builds the entire system. This is used mostly by development team or BDA certification team">
+		<ant antfile="${master.build.file}" dir="${build.dir}" inheritall="false" inheritrefs="false" target="build:all" />
+		<antcall target="build-system" />
+	</target>
+	
+	<target name="build:sdk-workspace-modules" description="">
+		<ant antfile="${master.build.file}" dir="${build.dir}" inheritall="false" inheritrefs="false" target="build:workspace-modules" />
+	</target>
+	
+</project>
