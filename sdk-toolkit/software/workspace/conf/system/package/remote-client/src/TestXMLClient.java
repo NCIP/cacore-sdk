@@ -68,8 +68,10 @@ public class TestXMLClient extends TestClient
 		// JAXB
 		boolean validate = true;
 		boolean includeXmlDeclaration = true;
+		String namespacePrefix = "gme://caCORE.caCORE/3.2/";
 		String jaxbContextName = getJaxbContextName();
-		Marshaller marshaller2 = new JAXBMarshaller(validate,includeXmlDeclaration,jaxbContextName);
+		//Marshaller marshaller2 = new JAXBMarshaller(includeXmlDeclaration,jaxbContextName);  // Use this constructor if you plan to pass the namespace prefix with each call instead
+		Marshaller marshaller2 = new JAXBMarshaller(includeXmlDeclaration,jaxbContextName,namespacePrefix);
 		Unmarshaller unmarshaller2 = new JAXBUnmarshaller(validate,jaxbContextName);		
 
 		// Castor
@@ -101,6 +103,7 @@ public class TestXMLClient extends TestClient
 
 						FileWriter myWriter = new FileWriter(myFile);
 
+						//myUtil.toXML(convertedObj, myWriter, namespacePrefix);  // use this method to set the namespace prefix with each call
 						myUtil.toXML(convertedObj, myWriter);
 						myWriter.close();
 						
