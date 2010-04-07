@@ -2,6 +2,7 @@ import gov.nih.nci.codegen.transformer.UMLClassJetTransformer;
 import gov.nih.nci.codegen.Artifact;
 import gov.nih.nci.codegen.artifact.BaseArtifact;
 import gov.nih.nci.codegen.util.TransformerUtils;
+import gov.nih.nci.codegen.util.RootNode;
 import gov.nih.nci.codegen.GenerationException;
 
 import gov.nih.nci.ncicb.xmiinout.domain.UMLModel;
@@ -11,15 +12,14 @@ import gov.nih.nci.ncicb.xmiinout.domain.UMLAssociation;
 import gov.nih.nci.ncicb.xmiinout.domain.UMLAssociationEnd;
 import gov.nih.nci.ncicb.xmiinout.domain.UMLGeneralization;
 
-import java.util.Collection;
-import java.util.List;
-
+import java.util.*;
 
 public class CLASS extends UMLClassJetTransformer{
 	
 	public Artifact executeTemplate(UMLModel model, UMLClass klass) throws GenerationException{
 		BaseArtifact artifact = new BaseArtifact(transformerUtils);
-		String generatedContent = generate(model, klass, 0);
+		List<RootNode> nodeList = new ArrayList<RootNode>();
+		String generatedContent = generate(model, klass, 0, nodeList);
 		artifact.setContent(generatedContent);
 		artifact.createSourceName(klass);
 		return artifact;
@@ -29,7 +29,7 @@ public class CLASS extends UMLClassJetTransformer{
 		return transformerUtils.getAllHibernateClasses(model);	
 	}	
 
-	private String generate(UMLModel model, UMLClass klass, Integer level)  throws GenerationException{
+	private String generate(UMLModel model, UMLClass klass, Integer level, List nodeList)  throws GenerationException{
 		return "";
 	}
 	

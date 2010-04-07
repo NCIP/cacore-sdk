@@ -672,6 +672,7 @@
 				<antcall target="-package-local-client-security" />
 				<antcall target="-package-local-client-grid-security" />
 				<antcall target="-package-local-client-logging" />
+				<antcall target="-package-local-client-iso-datatype" />
 
 				<include-db-jar target.lib.directory="${package.client.local.lib.dir}" />
 				<!-- delete if present as duplicate mysql jar was added from Grid Services-->
@@ -891,6 +892,21 @@
 		</if>
 	</target>
 
+	<target name="-package-local-client-iso-datatype" depends="">
+		<if>
+			<equals arg1="${ISO21090_DATATYPES_ENABLED}" arg2="true" />
+			<then>
+				<echo message="ISO datatypes enabled" />
+
+				<copy todir="${package.client.local.lib.dir}">
+					<fileset dir="${runtime.lib.dir}">
+						<include name="iso-*.jar"/>
+					</fileset>
+				</copy>
+				<echo message="ISO datatypes enabled - Copy COmplete" />
+			</then>
+		</if>
+	</target>
 
 	<!-- #################################################################### -->
 	<!-- ##################### Remote Client targets ######################## -->

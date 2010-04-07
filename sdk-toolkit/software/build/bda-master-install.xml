@@ -194,7 +194,7 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 				<property name="database.dialect" value="org.hibernate.dialect.OracleDialect"/>
 				<property name="database.driver.file" value="${bda-utils.dir}/ojdbc14-10.2.0.4.0.jar"/>
 				<property name="database.driver" value="oracle.jdbc.driver.OracleDriver"/>
-				<property name="database.schema" value="${database.name}"/>
+				<property name="database.schema" value="${database.user}"/>
 			</case>
 			<case value="mysql">
 				<property name="database.dialect" value="org.hibernate.dialect.MySQLDialect"/>
