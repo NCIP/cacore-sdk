@@ -16,14 +16,20 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.ValidationEvent;
 import javax.xml.bind.ValidationEventHandler;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.Source;
+import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
 import org.apache.log4j.Logger;
+import org.xml.sax.EntityResolver;
 import org.xml.sax.ErrorHandler;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
 
 public class JAXBUnmarshaller implements gov.nih.nci.system.client.util.xml.Unmarshaller {
 	
@@ -60,7 +66,7 @@ public class JAXBUnmarshaller implements gov.nih.nci.system.client.util.xml.Unma
 			}
 
 			//Initialize Schemas
-			initializeSchemaFactory();
+			//initializeSchemaFactory();
 			
 			log.debug("Unmarshaller has been initialized using context: " + jaxbContextMap.get(contextName));
 		} else {
@@ -79,7 +85,8 @@ public class JAXBUnmarshaller implements gov.nih.nci.system.client.util.xml.Unma
 	}
 	
 	public Object fromXML(Reader reader) throws XMLUtilityException {
-		JAXBContext context=null;
+		JAXBContext context = null;
+		SAXSource saxSource = null;
 		try
 		{
 			if (!useContextName && hasBeenInvokedWithoutContext) {
@@ -117,18 +124,56 @@ public class JAXBUnmarshaller implements gov.nih.nci.system.client.util.xml.Unma
 	        Unmarshaller unmarshaller = context.createUnmarshaller();
 	
 	        if(validate){
-	        	Schema tempSchemaObj = getJAXBSchema();
-				if (tempSchemaObj == null){
-					throw new XMLUtilityException("JAXB Validation Schema has not been set within the JAXB Unmarshaller");
-				}
-	        	log.debug("Unmarshalling using Validation Schema");
-	    		unmarshaller.setSchema(tempSchemaObj);	    		
+	        	//Schema tempSchemaObj = getJAXBSchema();
+				//if (tempSchemaObj == null){
+				//	throw new XMLUtilityException("JAXB Validation Schema has not been set within the JAXB Unmarshaller");
+				//}
+	        	//log.debug("Unmarshalling using Validation Schema");
+	    		//unmarshaller.setSchema(tempSchemaObj);	 
+	    		
+	    		SAXParserFactory parserFactory = SAXParserFactory.newInstance();
+                parserFactory.setNamespaceAware(true);
+                parserFactory.setValidating(true);
+                SAXParser saxParser = parserFactory.newSAXParser();
+
+                XMLReader xmlReader = saxParser.getXMLReader();
+                xmlReader.setFeature("http://apache.org/xml/features/validation/schema", true);
+                xmlReader.setFeature("http://xml.org/sax/features/namespace-prefixes", true);
+                xmlReader.setFeature("http://xml.org/sax/features/xmlns-uris", true);
+                xmlReader.setFeature("http://apache.org/xml/features/honour-all-schemaLocations", true);
+
+                InputSource inSrc = new InputSource(reader);
+                EntityResolver entityResolver = new EntityResolver() {
+                    public InputSource resolveEntity(String publicId, String systemId) {
+                        String xsdPath = null;
+                        publicId = "gov.nih.nci.cacoresdk.domain.other.differentpackage.associations";
+                        if(systemId != null)
+                        {
+                        	xsdPath = systemId.substring(systemId.indexOf("gov.nih.nci")); 
+                        }
+                        
+                        System.out.println("Entity resolving publicId... " + publicId);
+                        System.out.println("Entity resolving systemID... " + systemId);
+                        System.out.println("Entity resolving to xsd... " + xsdPath);
+                        // InputSource source = new
+                        // InputSource(Thread.currentThread().getContextClassLoader()
+                        // .getResourceAsStream(xsdPath));
+                        InputSource source = new InputSource(Thread.currentThread().getContextClassLoader().getResourceAsStream(xsdPath));
+                        source.setSystemId(systemId);
+                        source.setPublicId(publicId);
+                        return source;
+                    }
+                };
+                xmlReader.setEntityResolver(entityResolver);
+
+                saxSource = new SAXSource(xmlReader, inSrc); 
+                log.debug("Entity resolver: " + entityResolver);  		
 	        }
 	        unmarshaller.setEventHandler(new ValidationHandler());
 	        
 	        hasBeenInvokedWithoutContext = true;
 	        
-	        return unmarshaller.unmarshal(reader);
+	        return unmarshaller.unmarshal(saxSource);
 		}
 		catch(JAXBException e)
 		{
