@@ -60,42 +60,49 @@ public class TransformerUtils
 	private boolean useGMETags = false;
 	private boolean isJaxbEnabled = false;
 	private boolean isISO21090Enabled = false;
+
+	private UMLPackage isoDataTypeRootPackage;
 	/**
 	 * UMLModel from which the code is to be generated
 	 */
 	private UMLModel model;
 	
-	private static final String TV_ID_ATTR_COLUMN = "id-attribute";
-	private static final String TV_MAPPED_ATTR_COLUMN = "mapped-attributes";
-	private static final String TV_ASSOC_COLUMN = "implements-association";
-	private static final String TV_INVERSE_ASSOC_COLUMN = "inverse-of";
-	private static final String TV_DISCR_COLUMN = "discriminator";
-	private static final String TV_CORRELATION_TABLE = "correlation-table";
-	private static final String TV_DOCUMENTATION = "documentation";
-	private static final String TV_DESCRIPTION = "description";
-	private static final String TV_LAZY_LOAD = "lazy-load";
-	private static final String TV_TYPE="type";
-	private static final String TV_MAPPED_COLLECTION_TABLE = "mapped-collection-table";
-	private static final String TV_MAPPED_ELEMENT_COLUMN = "mapped-element";
-	private static final String TV_CADSR_PUBLICID = "CADSR_ConceptualDomainPublicID";
-	private static final String TV_CADSR_VERSION = "CADSR_ConceptualDomainVersion";
-	private static final String TV_NCI_CASCADE_ASSOCIATION = "NCI_CASCADE_ASSOCIATION";
-	private static final String TV_NCI_EAGER_LOAD = "NCI_EAGER_LOAD";
-	public static final String  TV_PK_GENERATOR = "NCI_GENERATOR.";
-	public static final String  TV_PK_GENERATOR_PROPERTY = "NCI_GENERATOR_PROPERTY";
+	public static final String TV_ID_ATTR_COLUMN = "id-attribute";
+	public static final String TV_MAPPED_ATTR_COLUMN = "mapped-attributes";
+	public static final String TV_ASSOC_COLUMN = "implements-association";
+	public static final String TV_INVERSE_ASSOC_COLUMN = "inverse-of";
+	public static final String TV_DISCR_COLUMN = "discriminator";
+	public static final String TV_CORRELATION_TABLE = "correlation-table";
+	public static final String TV_DOCUMENTATION = "documentation";
+	public static final String TV_DESCRIPTION = "description";
+	public static final String TV_LAZY_LOAD = "lazy-load";
+	public static final String TV_TYPE="type";
+	public static final String TV_MAPPED_COLLECTION_TABLE = "mapped-collection-table";
+	public static final String TV_MAPPED_ELEMENT_COLUMN = "mapped-element";
+	public static final String TV_CADSR_PUBLICID = "CADSR_ConceptualDomainPublicID";
+	public static final String TV_CADSR_VERSION = "CADSR_ConceptualDomainVersion";
+	public static final String TV_NCI_CASCADE_ASSOCIATION = "NCI_CASCADE_ASSOCIATION";
+	public static final String TV_NCI_EAGER_LOAD = "NCI_EAGER_LOAD";
+	public static final String TV_PK_GENERATOR = "NCI_GENERATOR.";
+	public static final String TV_PK_GENERATOR_PROPERTY = "NCI_GENERATOR_PROPERTY";
+	public static final String TV_MAPPED_COLLECTION_ELEMENT_TYPE = "mapped-collection-element-type";
+
 	
 	//Global Model Exchange (GME) Project Tag Value Constants; see: https://wiki.nci.nih.gov/display/caCORE/GME+Namespace
-	public static final String  TV_NCI_GME_XML_NAMESPACE = "NCI_GME_XML_NAMESPACE"; //Used for projects, Packages, Classes
-	public static final String  TV_NCI_GME_XML_ELEMENT = "NCI_GME_XML_ELEMENT"; //Used for Classes
-	public static final String  TV_NCI_GME_XML_LOC_REF = "NCI_GME_XML_LOC_REF"; //Used for Attributes
-	public static final String  TV_NCI_GME_SOURCE_XML_LOC_REF = "NCI_GME_SOURCE_XML_LOC_REF"; //Used for Associations
-	public static final String  TV_NCI_GME_TARGET_XML_LOC_REF = "NCI_GME_TARGET_XML_LOC_REF"; //Used for Associations
+	public static final String TV_NCI_GME_XML_NAMESPACE = "NCI_GME_XML_NAMESPACE"; //Used for projects, Packages, Classes
+	public static final String TV_NCI_GME_XML_ELEMENT = "NCI_GME_XML_ELEMENT"; //Used for Classes
+	public static final String TV_NCI_GME_XML_LOC_REF = "NCI_GME_XML_LOC_REF"; //Used for Attributes
+	public static final String TV_NCI_GME_SOURCE_XML_LOC_REF = "NCI_GME_SOURCE_XML_LOC_REF"; //Used for Associations
+	public static final String TV_NCI_GME_TARGET_XML_LOC_REF = "NCI_GME_TARGET_XML_LOC_REF"; //Used for Associations
 	
-	private static final String STEREO_TYPE_TABLE = "table";
-	private static final String STEREO_TYPE_DATASOURCE_DEPENDENCY = "DataSource";
+	public static final String STEREO_TYPE_TABLE = "table";
+	public static final String STEREO_TYPE_DATASOURCE_DEPENDENCY = "DataSource";
 	
-	public static final String  PK_GENERATOR_SYSTEMWIDE = "NCI_GENERATOR_SYSTEMWIDE.";
+	public static final String PK_GENERATOR_SYSTEMWIDE = "NCI_GENERATOR_SYSTEMWIDE.";
+
+	public static final String ISO_ROOT_PACKAGE_NAME = "gov.nih.nci.iso21090";
 	
+
 	
 	public static final Map<String, String> javaDatatypeMap = new HashMap<String, String>()
 	{
@@ -155,15 +162,88 @@ public class TransformerUtils
 			put("IVL<TS>", "Ivl<Ts>");
 			put("IVL<PQV>", "Ivl<Pqv>");
 			put("IVL<PQ>", "Ivl<Pq>");
-			put("AD", "Ad");
+			put("EN", "En");
 			put("EN.PN", "EnPn");
 			put("EN.ON", "EnOn");
-			put("DSET<II>", "Dset<Ii>");
+			put("DSET<II>", "DSet<Ii>");
 			put("DSET<TEL>", "DSet<Tel>");
 			put("DSET<CD>", "DSet<Cd>");
 			put("DSET<AD>", "DSet<Ad>");
+			put("AD", "Ad");
 		}
 	};		
+
+	public static final Map<String, String> isoDatatypeCompleteMap = new HashMap<String, String>()
+	{
+		{
+			put("BL", "Bl");
+			put("BL.NONNULL", "BlNonNull");
+			put("ST", "St");
+			put("ST.NT", "StNt");
+			put("II", "Ii");
+			put("TEL", "Tel");
+			put("TEL.PERSON", "TelPerson");
+			put("TEL.URL", "TelUrl");
+			put("TEL.PHONE", "TelPhone");
+			put("TEL.EMAIL", "TelEmail");
+			put("ED", "Ed");
+			put("ED.TEXT", "EdText");
+			put("CD", "Cd");
+			put("SC", "Sc");
+			put("INT", "Int");
+			put("REAL", "Real");
+			put("TS", "Ts");
+			put("PQV", "Pqv");
+			put("PQ", "Pq");
+			put("IVL<INT>", "Ivl<Int>");
+			put("IVL<REAL>", "Ivl<Real>");
+			put("IVL<TS>", "Ivl<Ts>");
+			put("IVL<PQV>", "Ivl<Pqv>");
+			put("IVL<PQ>", "Ivl<Pq>");
+			put("EN", "En");
+			put("EN.PN", "EnPn");
+			put("EN.ON", "EnOn");
+			put("DSET<II>", "DSet<Ii>");
+			put("DSET<TEL>", "DSet<Tel>");
+			put("DSET<CD>", "DSet<Cd>");
+			put("DSET<AD>", "DSet<Ad>");
+			put("AD", "Ad");
+			put("ADXP.AL", "AdxpAl");
+			put("ADXP.ADL", "AdxpAdl");			
+			put("ADXP.UNID", "AdxpUnid");			
+			put("ADXP.UNIT", "AdxpUnit");			
+			put("ADXP.DAL", "AdxpDal");			
+			put("ADXP.DINST", "AdxpDinst");			
+			put("ADXP.DINSTA", "AdxpDinsta");			
+			put("ADXP.DINSTQ", "AdxpDinstq");			
+			put("ADXP.DMOD", "AdxpDmod");			
+			put("ADXP.DMODID", "AdxpDmodid");			
+			put("ADXP.SAL", "AdxpSal");			
+			put("ADXP.BNR", "AdxpBnr");			
+			put("ADXP.BNN", "AdxpBnn");			
+			put("ADXP.BNS", "AdxpBns");			
+			put("ADXP.STR", "AdxpStr");			
+			put("ADXP.STB", "AdxpStb");			
+			put("ADXP.STTYP", "AdxpSttyp");			
+			put("ADXP.DIR", "AdxpDir");			
+			put("ADXP.INT", "AdxpInt");			
+			put("ADXP.CAR", "AdxpCar");			
+			put("ADXP.CEN", "AdxpCen");			
+			put("ADXP.CNT", "AdxpCnt");			
+			put("ADXP.CPA", "AdxpCpa");			
+			put("ADXP.CTY", "AdxpCty");			
+			put("ADXP.DEL", "AdxpDel");			
+			put("ADXP.POB", "AdxpPob");			
+			put("ADXP.PRE", "AdxpPre");			
+			put("ADXP.STA", "AdxpSta");			
+			put("ADXP.ZIP", "AdxpZip");			
+			put("ADXP", "Adxp");
+			put("ENXP", "Enxp");
+			put("DSET", "DSet");
+			put("IVL", "Ivl");
+		}
+	};		
+	
 	
 	public TransformerUtils(Properties umlModelFileProperties,Properties transformerProperties,List cascadeStyles, ValidatorModel vModel, ValidatorModel vModelExtension, UMLModel model) {
 			BASE_PKG_LOGICAL_MODEL = umlModelFileProperties.getProperty("Logical Model") == null ? "" :umlModelFileProperties.getProperty("Logical Model").trim();
@@ -359,6 +439,10 @@ public class TransformerUtils
 		return BASE_PKG_LOGICAL_MODEL;
 	}
 
+	public String getBasePkgDataModel(){
+		return BASE_PKG_DATA_MODEL;
+	}
+	
 	public UMLClass getSuperClass(UMLClass klass) throws GenerationException
 	{
 		UMLClass[] superClasses = ModelUtil.getSuperclasses(klass);
@@ -505,10 +589,20 @@ public class TransformerUtils
 			for(UMLAttribute attr: klass.getAttributes())
 			{
 				String javaName = isoDatatypeMap.get(attr.getDatatype().getName());
+				if(javaName!=null && javaName.indexOf("<")>0)
+				{
+					String collectionType = javaName.substring(0,javaName.indexOf("<"));
+					String collectionElementType = javaName.substring(javaName.indexOf("<")+1,javaName.indexOf(">"));
+					//String collectionName = isoDatatypeMap.get(collectionType);
+					
+					if (!importList.contains("gov.nih.nci.iso21090."+collectionType))
+						importList.add("gov.nih.nci.iso21090."+collectionType);
+					javaName = collectionElementType;
+				}
+				
 				if(javaName!=null && !importList.contains("gov.nih.nci.iso21090."+javaName))
 				{
 					importList.add("gov.nih.nci.iso21090."+javaName);
-				break;
 				}
 			}
 		}
@@ -558,7 +652,7 @@ public class TransformerUtils
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append("	@XmlElementWrapper(name=\"").append(rolename).append("\",\n");
-		sb.append("		namespace=\"").append(getNamespaceUriPrefix()).append(getFullPackageName(klass)).append("\")\n"); 
+		sb.append("		namespace=\"").append(getNamespaceUriPrefix()).append(getFullPackageName(klass)).append("\")\n");  
 		sb.append("	@XmlElement(name=\"").append(assocKlass.getName()).append("\",\n");
 		sb.append("		namespace=\"").append(getNamespaceUriPrefix()).append(getFullPackageName(assocKlass)).append("\")"); 
 		
@@ -575,11 +669,13 @@ public class TransformerUtils
 		if(name.startsWith("java.lang."))
 			name = name.substring("java.lang.".length());
 
-		String returnValue = javaDatatypeMap.get(name.toLowerCase());
-
-		if(returnValue == null && isISO21090Enabled)
+		String returnValue = null;
+		if(isISO21090Enabled)
 			returnValue = isoDatatypeMap.get(name);
 
+		if(returnValue == null)
+			returnValue = javaDatatypeMap.get(name.toLowerCase());
+			
 		return returnValue == null ? "" : returnValue;
 	}
 
@@ -1549,7 +1645,7 @@ public class TransformerUtils
 		return result;
 	}
 	
-	private String getTagValue(UMLTaggableElement tgElt, String key) 
+	public String getTagValue(UMLTaggableElement tgElt, String key) 
 	{
 
 		for(UMLTaggedValue tv: tgElt.getTaggedValues())
@@ -1580,7 +1676,7 @@ public class TransformerUtils
 	}
 	
 
-	private String getColumnName(UMLClass klass, String key, String value,  boolean isValuePrefix, int minOccurrence, int maxOccurrence) throws GenerationException
+	public String getColumnName(UMLClass klass, String key, String value,  boolean isValuePrefix, int minOccurrence, int maxOccurrence) throws GenerationException
 	{
 		UMLAttribute attr = getColumn(klass,key,value,isValuePrefix,minOccurrence,maxOccurrence);
 		return (attr==null) ? "" : attr.getName();
@@ -1626,7 +1722,7 @@ public class TransformerUtils
 		return result;
 	}
 	
-	private String getTagValue(UMLClass klass, UMLAttribute attribute, String key, String value, Boolean isValuePrefix, int minOccurrence, int maxOccurrence) throws GenerationException
+	public String getTagValue(UMLClass klass, UMLAttribute attribute, String key, String value, Boolean isValuePrefix, int minOccurrence, int maxOccurrence) throws GenerationException
 	{
 		String result = null;
 		int count = 0;
@@ -2572,5 +2668,124 @@ public class TransformerUtils
 
 	public boolean isJaxbEnabled() {
 		return isJaxbEnabled;
+	}
+	
+	public boolean isJavaDataType(UMLAttribute attr)
+	{
+		String originalType = attr.getDatatype().getName();
+
+		if(isoDatatypeMap.containsKey(originalType))
+			return false;
+		
+		return javaDatatypeMap.containsKey(originalType.toLowerCase());
+	}
+	
+	public Collection<UMLAttribute> getSortedByJoinUMLAttribute(UMLClass klass, UMLAttribute idAttribute, UMLClass table) throws GenerationException
+	{
+		List<UMLAttribute> noJoinRequired = new ArrayList<UMLAttribute>();
+		List<UMLAttribute> joinRequired = new ArrayList<UMLAttribute>();
+		
+		
+		if (klass.getAttributes().size() > 0)
+		{
+			for (UMLAttribute attr : klass.getAttributes())
+			{
+				if (attr != idAttribute)
+				{
+					if (isCollection(null, attr))
+					{
+						noJoinRequired.add(attr);
+					} 
+					else
+					{
+						if (isJavaDataType(attr))
+						{
+							noJoinRequired.add(attr);
+						} 
+						else
+						{ // Start ISO Datatype component
+							IsoDatatypeTransformationHelper isoDatatypeTransformationHelper = new IsoDatatypeTransformationHelper();
+							isoDatatypeTransformationHelper.setModel(model);
+							isoDatatypeTransformationHelper.setUtils(this);
+
+							RootNode rootNode = isoDatatypeTransformationHelper.getDatatypeNode(klass, attr, table);
+							
+							if(isoDatatypeTransformationHelper.requiresJoin(rootNode))
+								joinRequired.add(attr);
+							else
+								noJoinRequired.add(attr);
+						}
+					}
+				} 
+			} 
+		} 
+		
+		List<UMLAssociation> noJoinRequiredAssociation = new ArrayList<UMLAssociation>();
+		List<UMLAssociation> joinRequiredAssociation = new ArrayList<UMLAssociation>();
+		
+		
+		for(UMLAssociation association:klass.getAssociations()){
+			List<UMLAssociationEnd> assocEnds = association.getAssociationEnds();
+			UMLAssociationEnd thisEnd = getThisEnd(klass,assocEnds);
+			UMLAssociationEnd otherEnd = getOtherEnd(klass,assocEnds);
+			
+			if (otherEnd.isNavigable())
+			{
+				UMLClass assocKlass = (UMLClass) otherEnd.getUMLElement();
+
+				if ((isMany2One(thisEnd, otherEnd) || isOne2One(thisEnd, otherEnd)) && null !=findCorrelationTable(association, model, assocKlass, false))
+				{
+					joinRequiredAssociation.add(association);
+				}
+				else
+				{
+					noJoinRequiredAssociation.add(association);
+				}
+			}
+		}
+		
+
+		List result = new ArrayList();
+		result.addAll(noJoinRequired);
+		result.addAll(noJoinRequiredAssociation);
+		result.addAll(joinRequired);
+		result.addAll(joinRequiredAssociation);
+		
+		return result;
+	}
+	
+	public String getHibernateMappingForIsoAttribute(RootNode rootNode, String prefix) throws GenerationException
+	{
+		IsoDatatypeTransformationHelper isoDatatypeTransformationHelper = new IsoDatatypeTransformationHelper();
+		isoDatatypeTransformationHelper.setModel(model);
+		isoDatatypeTransformationHelper.setUtils(this);
+		StringBuffer buffer = isoDatatypeTransformationHelper.convertToHibernateComponent(rootNode, prefix);
+		return buffer.toString();
+	}
+
+	public String getHibernateClassMappingForIsoAttribute(RootNode rootNode, String prefix) throws GenerationException
+	{
+		IsoDatatypeTransformationHelper isoDatatypeTransformationHelper = new IsoDatatypeTransformationHelper();
+		isoDatatypeTransformationHelper.setModel(model);
+		isoDatatypeTransformationHelper.setUtils(this);
+		StringBuffer buffer = isoDatatypeTransformationHelper.convertToHibernateClass(rootNode, prefix);
+		return buffer.toString();
+	}
+	
+	public RootNode getDatatypeNode(UMLClass klass, UMLAttribute attribute, UMLClass table) throws GenerationException
+	{
+		IsoDatatypeTransformationHelper isoDatatypeTransformationHelper = new IsoDatatypeTransformationHelper();
+		isoDatatypeTransformationHelper.setModel(model);
+		isoDatatypeTransformationHelper.setUtils(this);
+		RootNode rootNode = isoDatatypeTransformationHelper.getDatatypeNode(klass, attribute, table);
+		return rootNode;
+	}
+
+	public boolean isSeperateClassMappingRequired(RootNode rootNode)
+	{
+		IsoDatatypeTransformationHelper isoDatatypeTransformationHelper = new IsoDatatypeTransformationHelper();
+		isoDatatypeTransformationHelper.setModel(model);
+		isoDatatypeTransformationHelper.setUtils(this);
+		return isoDatatypeTransformationHelper.requiresSeperateClassMapping(rootNode);
 	}
 }
