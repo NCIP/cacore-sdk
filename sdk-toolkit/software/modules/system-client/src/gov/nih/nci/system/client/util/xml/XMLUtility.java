@@ -44,6 +44,17 @@ public class XMLUtility {
 		marshaller.toXML(beanObject, stream);
 	}
 	
+
+	public void toXML(Object beanObject, Writer stream, String namespacePrefix)
+			throws XMLUtilityException {
+		
+		if (!(unmarshaller instanceof JAXBUnmarshaller)){
+			throw new XMLUtilityException("Invalid method invocation.  This method is only valid when the Marshaller is a JAXBMarshaller instance");
+		}
+		
+		((JAXBMarshaller)marshaller).toXML(beanObject, stream, namespacePrefix);
+	}
+	
 	static public Object convertFromProxy(Object obj, boolean getAssociation) throws XMLUtilityException {
 		
 		Object convertedObject = null;
@@ -97,7 +108,7 @@ public class XMLUtility {
 	public Object fromXML(Class klazz, File xmlFile) throws XMLUtilityException {
 		
 		if (!(unmarshaller instanceof JAXBUnmarshaller)){
-			throw new XMLUtilityException("Invalid method usage.  This method is only valid when the Marshaller is a JAXBUnmarshaller instance");
+			throw new XMLUtilityException("Invalid method invocation.  This method is only valid when the unmarshaller is a JAXBUnmarshaller instance");
 		}
 		
 		Object beanObject = null;
