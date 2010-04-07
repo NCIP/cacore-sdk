@@ -36,7 +36,7 @@
 		<dependency org="ncicb" name="clm" rev="4.2.beta" conf="compile" />
 		<dependency org="ncicb" name="xmi.in.out" rev="1.0" conf="compile"/>	
 		<dependency org="ncicb" name="iso-datatypes" rev="2.0.1" conf="compile->master"/>	
-		<dependency org="ncicb" name="iso-datatypes-hibernate" rev="10.0" conf="compile->default"/>	
+		<dependency org="ncicb" name="iso-datatypes-hibernate" rev="10.0" conf="compile->master"/>	
 
 		<dependency org="apache" name="axis" rev="1.4" conf="runtime->compile" />
 		<dependency org="apache" name="log4j" rev="1.2.13" conf="runtime->compile" />
