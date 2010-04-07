@@ -76,50 +76,64 @@ public class Generator
 	 */
 	public void execute()
 	{
+
+		reportComponentExecutionPath();
+		
+		for(Validator validator:validators)
+			if(validator.isEnabled())
+				errors.addErrors(validator.validate(model));
+
+		reportErrors(errors);
+
+		for(Transformer transformer:transformers)
+			if(transformer.isEnabled())
+				errors.addErrors(transformer.validate(model));
+		
+		reportErrors(errors);
+		
+		for(Transformer transformer:transformers)
+			if(transformer.isEnabled())
+				errors.addErrors(transformer.execute(model));
+
+		reportErrors(errors);
+		
+		log.debug("*** Code generation complete ***");
+	}
+	
+	private void reportComponentExecutionPath()
+	{
 		for(Validator validator:validators)
 			if(validator.isEnabled())
 			{
-				log.info("Executing " + validator.getName());
-				errors.addErrors(validator.validate(model));
+				log.info("Execution enabled for " + validator.getName());
 			}
 			else
 			{
-				log.info("Skipped execution of " + validator.getName());
+				log.info("Execution disabled for " + validator.getName());
 			}
-
-		reportErrors(errors);
 
 		for(Transformer transformer:transformers)
 			if(transformer.isEnabled())
 			{
-				log.info("Executing validator for " + transformer.getName());
-				errors.addErrors(transformer.validate(model));
+				log.info("Execution enabled for " + transformer.getName());
 			}
 			else
 			{
-				log.info("Skipped validation of " + transformer.getName());
+				log.info("Execution enabled for " + transformer.getName());
 			}
 			
 		
-		reportErrors(errors);
-		
 		for(Transformer transformer:transformers)
 			if(transformer.isEnabled())
 			{
-				log.info("Executing " + transformer.getName());
-				errors.addErrors(transformer.execute(model));
+				log.info("Execution enabled for " + transformer.getName());
 			}
 			else
 			{
-				log.info("Skipped execution of " + transformer.getName());
+				log.info("Execution enabled for " + transformer.getName());
 			}
-				
-
-		reportErrors(errors);
-		
-		log.debug("Code generation complete");
 	}
-	
+
 	/**
 	 * Reports string representation of all the {@link GeneratorError} contained in the 
 	 * <code>errors</code> to the logger. If any error was reported then it performs 
@@ -165,13 +179,13 @@ public class Generator
 	public static void main(String args[]) throws Exception
 	{
 		String fileName = (args!=null && args.length >0) ? args[0] : "CodegenConfig.xml";
-		log.info("Initializing codegen configuration from "+fileName+"\n");
+		log.info("Initializing codegen configuration from "+fileName);
 
 		ObjectFactory.initialize(fileName);
 		Generator generator = (Generator)ObjectFactory.getObject("Generator");
-		log.info("Configuration read from the file\n");
-		log.info("Executing codegen\n");
+		log.info("Configuration read from the file");
+		log.info("Executing codegen");
 		generator.execute();
-		log.info("Codegen execution complete\n");		
+		log.info("Codegen execution complete");		
 	}	
 }
