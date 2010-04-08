@@ -2680,7 +2680,7 @@ public class TransformerUtils
 		return javaDatatypeMap.containsKey(originalType.toLowerCase());
 	}
 	
-	public Collection<UMLAttribute> getSortedByJoinUMLAttribute(UMLClass klass, UMLAttribute idAttribute, UMLClass table) throws GenerationException
+	public Collection getSortedByJoinUMLAttribute(UMLClass klass, UMLAttribute idAttribute, UMLClass table) throws GenerationException
 	{
 		List<UMLAttribute> noJoinRequired = new ArrayList<UMLAttribute>();
 		List<UMLAttribute> joinRequired = new ArrayList<UMLAttribute>();
