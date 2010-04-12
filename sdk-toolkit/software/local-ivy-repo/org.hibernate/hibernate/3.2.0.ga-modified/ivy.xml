@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl"
+                 href="http://gforge.nci.nih.gov/svnroot/commonlibrary/trunk/ivy-xsl/ivy.xsl"?>
+<ivy-module version="1.3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">  
+            
+  <info organisation="org.hibernate" module="hibernate" revision="3.2.0.ga-modified" status="integration" publication="20091015134032"/>
+        
+  <configurations>
+    
+    <conf name="master"/>
+    
+    <conf name="compile"/>
+       
+    <conf name="runtime" extends="compile"/>
+    
+    <conf name="optional" description="This optional config includes every caching provider you could dream of."/>
+          
+  </configurations>
+  
+  <publications>
+    <artifact name="hibernate" type="jar" conf="master, compile"/>
+  </publications>
+  
+  <dependencies>
+  
+    <!-- ibiblio had force=true for all depedencies..-->
+    <dependency org="jakarta" name="commons-logging" rev="1.0.4" conf="runtime->master"/>
+  
+	
+    <!-- 
+      ANT is necessary for the schema update, validate, export...            
+      
+    <dependency org="ant" 
+                name="ant" 
+                rev="1.6.5" 
+                conf="?????????"/>
+      -->                
+    <!--
+      I've never seen this in any of the ncia stuff....
+      I think this may be EJB3 stuff, but not sure
+    <dependency org="javax.security" 
+                name="jacc" 
+                rev="1.0" 
+                conf="????"/>      
+      -->
+      
+    <!-- this was optional in ibiblio, but every project I've seen includes it.... -->                
+    <dependency org="c3p0" name="c3p0" rev="0.9.0" conf="runtime->master"/>
+                               
+    <dependency org="ehcache" name="ehcache" rev="1.2.4" conf="runtime->runtime"/>                
+                
+    <dependency org="cglib" name="cglib" rev="2.1_3" conf="runtime->runtime"/>
+                
+    <dependency org="objectweb" name="asm" rev="1.5.3" conf="runtime->master"/>
+                
+    <dependency org="objectweb" name="asm-attrs" rev="1.5.3" conf="runtime->master"/>
+                
+    <dependency org="jakarta" name="commons-collections" rev="2.1.1" conf="runtime->master"/>
+                                
+    <!-- this lib has a lot of optional xml libs.... I dont think
+         basic hibernate uses the optional deps at all... and the ibiblio
+         based ivy file didnt make sense to me... xml-apis is the only
+         non-optional, non-test depednency in dom4j, and it excluded it
+         from here.... so I just made this depend on master -->
+    <dependency org="dom4j" name="dom4j" rev="1.6.1" conf="runtime->master"/>
+    
+    <dependency org="javax.transaction" name="jta" rev="1.0.1B" conf="runtime->master"/>
+                
+    <!-- was rc1, non-rc1 is what is in all ncia deployment units -->                
+    <dependency org="org.antlr" name="antlr" rev="2.7.6" conf="runtime->master"/>
+                
+
+    <!-- optional caching libs below -->                
+    <dependency org="proxool" name="proxool" rev="0.8.3" conf="optional->compile(*),master(*)"/>
+                
+    <dependency org="opensymphony" name="oscache" rev="2.1" conf="optional->compile(*),master(*)"/>
+                
+    <dependency org="swarmcache" name="swarmcache" rev="1.0RC2" conf="optional->compile(*),master(*)"/>
+                
+    <dependency org="jboss" name="jboss-cache" rev="1.2.2" conf="optional->compile(*),master(*)"/>
+                
+    <dependency org="jgroups" name="jgroups-all" rev="2.2.8" conf="optional->compile(*),master(*)"/>                
+  </dependencies>
+  
+</ivy-module>
