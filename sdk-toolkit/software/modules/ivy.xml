@@ -35,8 +35,7 @@
 		<dependency org="ncicb" name="csm" rev="4.2" conf="compile" />
 		<dependency org="ncicb" name="clm" rev="4.2.beta" conf="compile" />
 		<dependency org="ncicb" name="xmi.in.out" rev="1.0" conf="compile"/>	
-		<dependency org="ncicb" name="iso-datatypes" rev="2.0.1" conf="compile->master"/>	
-		<dependency org="ncicb" name="iso-datatypes-hibernate" rev="10.0" conf="compile->master"/>	
+		<dependency org="ncicb" name="iso-datatypes" rev="2.0.2-SNAPSHOT" conf="compile->master"/>	
 
 		<dependency org="apache" name="axis" rev="1.4" conf="runtime->compile" />
 		<dependency org="apache" name="log4j" rev="1.2.13" conf="runtime->compile" />
@@ -112,7 +111,7 @@
 		<dependency org="ognl" name="ognl" rev="2.6.7" conf="runtime->runtime" />
 		<dependency org="oracle" name="ojdbc14" rev="10.2.0.3.0" conf="runtime->compile" />
 		<dependency org="org.codehaus.castor" name="castor" rev="1.0.2" conf="runtime->compile"/>
-		<dependency org="org.hibernate" name="hibernate-modified" rev="3.2.0.ga-modified" conf="compile" />
+		<dependency org="org.hibernate" name="hibernate" rev="3.2.0.ga-modified" conf="compile" />
  		<dependency org="org.hibernate" name="hibernate-annotations" rev="3.2.0" conf="runtime->compile" />
 		<dependency org="org.hibernate" name="hibernate-validator" rev="3.0.0.GA" conf="runtime->compile" />
 		<dependency org="org.hibernate" name="ejb3-persistence" rev="1.0.1" conf="runtime->master" />

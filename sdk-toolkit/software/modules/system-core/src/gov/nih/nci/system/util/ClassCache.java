@@ -575,12 +575,14 @@ public class ClassCache {
 	 */
 	public void setDaoList(List<DAO> daoList) throws DAOException {
 		this.daoList = daoList;
-		initialize();
+		//TODO initialization code again
+		//initialize();
 	}	
 
 	public DAO getDAOForClass(String qualClassName){
-		
-		return daoCache.get(qualClassName);
+		return daoList.get(0);
+		//TODO returning correct DAO		
+		//return daoCache.get(qualClassName);
 	}
 
 	
