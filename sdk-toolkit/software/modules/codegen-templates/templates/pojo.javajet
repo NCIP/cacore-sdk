@@ -65,7 +65,6 @@ public<%=transformerUtils.isAbstract(klass)? " abstract" : "" %> class <%=klass.
 	@XmlElement(name="<%=otherEnd.getRoleName()%>", 
 				type=<%=assocKlass.getName()%>.class,
 				namespace="<%=transformerUtils.getNamespaceUriPrefix() +transformerUtils.getFullPackageName(assocKlass)%>")
-	//@ XmlJavaTypeAdapter(JAXBDomainObjectAdapter.class)	
 <%} %>
 	private <%=assocKlass.getName()%> <%=otherEnd.getRoleName()%>;
 	<%=transformerUtils.getGetterMethodJavaDocs(klass, assoc)%>
