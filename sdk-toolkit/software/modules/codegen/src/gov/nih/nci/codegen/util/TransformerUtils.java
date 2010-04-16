@@ -626,6 +626,11 @@ public class TransformerUtils
 		if (isJaxbEnabled){
 			sb.append("\n");
 			sb.append("import com.sun.xml.bind.CycleRecoverable;\n");
+			
+			if(isISO21090Enabled) {
+				sb.append("import gov.nih.nci.system.client.util.xml.JAXBISOAdapter;\n");
+			}
+			
 			sb.append("import javax.xml.bind.annotation.XmlAccessType;\n");
 			sb.append("import javax.xml.bind.annotation.XmlAccessorType;\n");
 			sb.append("import javax.xml.bind.annotation.XmlAttribute;\n");
@@ -635,7 +640,8 @@ public class TransformerUtils
 			sb.append("import javax.xml.bind.annotation.XmlSeeAlso;\n");
 			sb.append("import javax.xml.bind.annotation.XmlTransient;\n");
 			sb.append("import javax.xml.bind.annotation.XmlType;\n");
-			sb.append("import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;\n");
+			sb.append("import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;\n");			
+			
 			sb.append("\n");
 		}
 		
@@ -1998,11 +2004,13 @@ public class TransformerUtils
 	
 	public String getJaxbXmlAttributeAnnotation(UMLClass klass, UMLAttribute attr){
 		String type = this.getDataType(attr);
+		log.debug("* * * datatype for attribute " + attr.getName()+": " + type);
 		String collectionType = "";
+		StringBuffer sb = new StringBuffer();
 		if (type.startsWith("Collection")){ 
 			collectionType = type.substring(type.indexOf("<")+1,type.indexOf(">"));
 			
-			StringBuffer sb = new StringBuffer("    @XmlElementWrapper(name=\"");
+			sb.append("    @XmlElementWrapper(name=\"");
 			sb.append(attr.getName()).append("\", ");
 			sb.append("namespace=\"").append(this.getNamespaceUriPrefix() + this.getFullPackageName(klass)).append("\")"); 
 			
@@ -2013,8 +2021,28 @@ public class TransformerUtils
 			log.debug("Collection Attribute @XmlElement annotation: "+sb.toString());
 			
 			return sb.toString();
-		}  
-
+		}
+		
+		if(isISO21090Enabled){
+			String isoDatatypeValue = isoDatatypeMap.get(attr.getDatatype().getName());
+			
+			if (!isJavaDataType(attr)) {
+				log.debug("* * * Detected attribute " + attr.getName()+" is of ISO Datatype: " + isoDatatypeValue);
+				
+				if (isoDatatypeValue.indexOf('<')> 0){
+					log.debug ("ISO Datatype IS a collection; skipping the addition of @XmlJavaTypeAdapter annotation");
+					return "";
+				} else {
+					log.debug ("ISO Datatype is NOT a collection; adding @XmlJavaTypeAdapter annotation");
+//					sb.append("    @XmlElement(name=\"").append(klass.getName()).append("\",\n");					
+					sb.append("    @XmlElement(namespace=\"").append(getNamespaceUriPrefix()).append(getFullPackageName(klass)).append("\")"); 
+					sb.append("    @XmlJavaTypeAdapter(JAXBISOAdapter.class)");
+					
+					return sb.toString();
+				}
+			}
+		}
+		
 		return "    @XmlAttribute";
 	}
 	
@@ -2044,9 +2072,29 @@ public class TransformerUtils
 		int totalAttrCount = klass.getAttributes().size();
 		for(UMLAttribute attr:klass.getAttributes()){
 			counter++;
-			sb.append("\"").append(attr.getName()).append("\"");
-			if (counter < totalAttrCount){
-				sb.append(", ");
+			// TODO :: determine what to do with ISO Datatype Collections
+			if (isISO21090Enabled){
+				String isoDatatypeValue = isoDatatypeMap.get(attr.getDatatype().getName());
+				
+				if (!isJavaDataType(attr)) {
+					log.debug("* * * Detected attribute " + attr.getName()+" is of ISO Datatype: " + isoDatatypeValue);
+					
+					if (isoDatatypeValue.indexOf('<')> 0){
+						log.debug("ISO Datatype IS a collection; skipping the addition of attr " + attr.getName()+" to propOrder");
+					} else {
+						log.debug("ISO Datatype is NOT a collection; adding attr " + attr.getName()+" to propOrder");
+						sb.append("\"").append(attr.getName()).append("\"");
+						if (counter < totalAttrCount){
+							sb.append(", ");
+						}
+					}
+				}
+				
+			} else {
+				sb.append("\"").append(attr.getName()).append("\"");
+				if (counter < totalAttrCount){
+					sb.append(", ");
+				}
 			}
 		}
 		
@@ -2669,6 +2717,10 @@ public class TransformerUtils
 	public boolean isJaxbEnabled() {
 		return isJaxbEnabled;
 	}
+
+	public boolean isISO21090Enabled() {
+		return isISO21090Enabled;
+	}	
 	
 	public boolean isJavaDataType(UMLAttribute attr)
 	{
