@@ -87,8 +87,9 @@ public class TestXMLClient extends TestClient
 				System.out.println("Searching for " + klass.getName());
 				try {
 					Collection results = appService.search(klass, o);
+					int counter=0;
 					for (Object obj : results) {
-						
+						counter++;
 						boolean includeAssociations = true;
 						Object convertedObj = XMLUtility.convertFromProxy(obj, includeAssociations);
 						
@@ -99,7 +100,7 @@ public class TestXMLClient extends TestClient
 //						File myFile = new File("./output/" + klass.getName()
 //								+ "_test.xml");
 						File myFile = new File("./output/" + convertedObj.getClass().getName()
-								+ "_test.xml");
+								+ "_test"+counter+".xml");
 
 						FileWriter myWriter = new FileWriter(myFile);
 
@@ -152,7 +153,7 @@ public class TestXMLClient extends TestClient
 						 Object myObj = (Object) myUtil.fromXML(myFile);  // using context name supplied during Unmarshaller instantiation
 
 						printObject(myObj, convertedObj.getClass(), includeAssocation);
-						break;
+//						break;
 					}
 				} catch (Exception e) {
 					System.out.println("Exception caught processing class "
@@ -269,8 +270,9 @@ public class TestXMLClient extends TestClient
 		}
 		
 		SortedSet<String> sortedset= new TreeSet<String>(packageNames.keySet());
-		
-		StringBuffer jaxbContextName = new StringBuffer("gov.nih.nci.cacoresdk.domain.other.differentpackage.associations:");
+	
+		//StringBuffer jaxbContextName = new StringBuffer("gov.nih.nci.cacoresdk.domain.other.differentpackage.associations:");		
+		StringBuffer jaxbContextName = new StringBuffer();
 		int totalCount = sortedset.size();
 		int counter = 0;
 		for (String packageName : sortedset){
