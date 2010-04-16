@@ -28,6 +28,8 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
+
 import org.apache.log4j.Logger;
 import org.jdom.Attribute;
 import org.jdom.Document;
@@ -45,7 +47,6 @@ import org.mmbase.util.Encode;
  * @version 1.0
  */
 public class SchemaTransformer implements Transformer { 
-
 
 	private static Logger log = Logger.getLogger(SchemaTransformer.class);
 
@@ -72,6 +73,44 @@ public class SchemaTransformer implements Transformer {
 	public void setTransformerUtils(TransformerUtils transformerUtils) {
 		this.transformerUtils = transformerUtils;
 	}
+	
+	public static final Map<String, String> isoDatatypeMap = new HashMap<String, String>()
+	{
+		{
+			put("bl", "BL");
+			put("blnonnull", "BL.NonNull");
+			put("st", "ST");
+			put("stnt", "ST.NT");
+			put("ii", "II");
+			put("tel", "TEL");
+			put("telperson", "TEL.Person");
+			put("telurl", "TEL.Url");
+			put("telphone", "TEL.Phone");
+			put("telemail", "TEL.Email");
+			put("ed", "ED");
+			put("edtext", "ED.Text");
+			put("cd", "CD");
+			put("sc", "SC");
+			put("int", "INT");
+			put("real", "REAL");
+			put("ts", "TS");
+			put("pqv", "PQV");
+			put("pq", "PQ");
+			put("ivl<int>", "IVL_INT");
+			put("ivl<real>", "IVL_REAL");
+			put("ivl<ts>", "IVL_TS");
+			put("ivl<pqv>", "IVL_PQV");
+			put("ivl<pq>", "IVL_PQ");
+			put("en", "EN");
+			put("enpn", "EN.PN");
+			put("enon", "EN.ON");
+			put("dset<ii>", "DSET_II");
+			put("dset<tel>", "DSET_TEL");
+			put("dset<cd>", "DSET_CD");
+			put("dset<ad>", "DSET_AD");
+			put("ad", "AD");
+		}
+	};	
 	
 	/* @param model The UMLModel containing the classes for which a 
 	 * Castor Mapping file should be generated
@@ -149,6 +188,7 @@ public class SchemaTransformer implements Transformer {
 
 	private List<Namespace> getAssociatedNamespaces(Map<String,UMLClass> associatedClasses) {
 		List<Namespace> namespaces = new ArrayList<Namespace>();
+		
 
 		for (UMLClass associatedClass:associatedClasses.values()) {
 				String associatedURI = getNamespace(associatedClass);
@@ -160,6 +200,14 @@ public class SchemaTransformer implements Transformer {
 				Namespace associatedNamespace = Namespace.getNamespace(encode(associatedPackageName),encode(associatedURI));
 				namespaces.add(associatedNamespace);
 		}
+		
+		if (transformerUtils.isISO21090Enabled()){
+			Namespace iso21090Namespace = Namespace.getNamespace(encode("uri"),encode("uri:iso.org:21090"));
+			log.debug("* * * iso21090Namespace: "+iso21090Namespace);
+			
+			namespaces.add(iso21090Namespace);
+		}
+		
 		return namespaces;
 	}
 
@@ -182,6 +230,13 @@ public class SchemaTransformer implements Transformer {
 					tmpList.add(associatedPackageName);
 				}
 			}
+		}
+		
+		if (transformerUtils.isISO21090Enabled()){		
+			Element importElement = new Element("import", w3cNS);
+			importElement.setAttribute("namespace","uri:iso.org:21090");
+			importElement.setAttribute("schemaLocation", "ISO_datatypes_Narrative.xsd");
+			elements.add(importElement);
 		}
 
 		return sortImportStatements(elements);
@@ -301,7 +356,6 @@ public class SchemaTransformer implements Transformer {
 						continue;
 					}
 					
-					
 					if (usePermissibleValues){
 						addRestrictionEnumeration(klass,attr,attributeElement,type, w3cNS);
 					} else{
@@ -396,6 +450,11 @@ public class SchemaTransformer implements Transformer {
 						addRestrictionEnumeration(klass,attr,elementElement,type, w3cNS);
 					} else{
 						elementElement.setAttribute("type", type);	
+					}
+					
+					if (isIsoDatatype(attr)){
+						elementElement.setAttribute("minOccurs","0");   
+						elementElement.setAttribute("maxOccurs","1");
 					}
 					
 					addCaDSRAnnotation(attr, elementElement, w3cNS);
@@ -572,6 +631,15 @@ public class SchemaTransformer implements Transformer {
 	}
 
 	private String getName(String type) {
+		
+		if (isIsoDatatype(type)){
+			String isoDataType = isoDatatypeMap.get(type.toLowerCase());
+			
+			if (isoDataType != null && isoDataType.length() > 0){
+				return "uri:"+isoDataType;
+			}
+		}
+		
 		String finalType = "xs:";
 		
 		if (type.indexOf('.') > 0){//java.util.Long, etc.
@@ -719,6 +787,13 @@ public class SchemaTransformer implements Transformer {
 	
 	private boolean generateAttributeAsElement(UMLAttribute attr){
 		
+		if (transformerUtils.isISO21090Enabled()) {
+			if (isIsoDatatype(attr)){
+				return true;
+			} 
+			return false;
+		}
+		
 		if (useGMETags){
 			try {
 				return transformerUtils.generateXMLAttributeAsElement(attr);
@@ -727,6 +802,31 @@ public class SchemaTransformer implements Transformer {
 				generatorErrors.addError(new GeneratorError(getName() + ": Error getting the GME Attribute (XML Loc Ref) name for attribute: " + attr.getName(), ge));
 			}
 		}
+		return false;
+	}
+	
+	private boolean isIsoDatatype(UMLAttribute attr){
+		
+		String type = transformerUtils.getDataType(attr);
+		log.debug("* * * transformerUtils type: " + type);
+
+		return isIsoDatatype(type);
+	}
+	
+	private boolean isIsoDatatype(String type){
+		
+		if (!transformerUtils.isISO21090Enabled()){
+			return false;
+		}
+		
+		log.debug("* * * transformerUtils type: " + type);
+		String isoDatatype = isoDatatypeMap.get(type.toLowerCase());
+		log.debug("* * * isoDatatype type: " + type);
+		
+		if (isoDatatype != null && isoDatatype.length() > 0) {
+			return true;
+		}
+		
 		return false;
 	}
 
