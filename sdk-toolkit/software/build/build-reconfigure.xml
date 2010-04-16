@@ -717,6 +717,7 @@
 				<include name="dom4j-*.jar"/>
 				<include name="ehcache-*.jar"/>
 				<include name="hibernate-*.jar"/>
+				<include name="iso-datatypes-*.jar"/>
 				<include name="jaxb-*.jar"/>
 				<include name="jaxen-*.jar"/>
 				<include name="jaxrpc-*.jar"/>
@@ -756,6 +757,9 @@
 				<include name="${application.config.file}" />
 				<include name="${application.config.security.file}" />
 			</fileset>
+			<fileset dir="${iso21090.dist.relative.dir}">
+				<include name="${iso21090.datatype.xsd.file}" />
+			</fileset>			
 		</copy>
 	</target>
 
@@ -951,6 +955,8 @@
 				<include name="hibernate-*.jar"/>
 				<include name="hibernate-annotations-*.jar"/>
 				<include name="hibernate-validator-*.jar"/>
+				<include name="iso-datatypes-*.jar"/>
+				<exclude name="iso-datatypes-hibernate*.jar" />
 				<include name="jaxb-*.jar"/>
 				<include name="jaxen-*.jar"/>
 				<include name="jdom-1.1.jar"/>
@@ -974,6 +980,11 @@
 				<exclude name="**/*template*" />
 			</fileset>
 		</copy>
+		<copy todir="${package.client.remote.conf.dir}">
+			<fileset dir="${iso21090.dist.relative.dir}">
+				<include name="${iso21090.datatype.xsd.file}" />
+			</fileset>			
+		</copy>		
 	</target>
 
 	<target name="-package-remote-client-writable-api" depends="">
@@ -1154,6 +1165,8 @@
 				<include name="hibernate-*.jar"/>
 				<include name="hibernate-annotations-*.jar"/>
 				<include name="hibernate-validator-*.jar"/>
+				<include name="iso-datatypes-*.jar"/>
+				<exclude name="iso-datatypes-extensions*.jar" />
 				<include name="jaxb-*.jar"/>
 				<include name="stax-*.jar"/>
 				<include name="jaxrpc-*.jar"/>
