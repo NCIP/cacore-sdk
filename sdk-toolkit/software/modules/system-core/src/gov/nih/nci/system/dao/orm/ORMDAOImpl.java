@@ -91,8 +91,14 @@ public class ORMDAOImpl extends HibernateDaoSupport implements DAO
     	List<String> allClassNames = new ArrayList<String>();
     	Map allClassMetadata = getSessionFactory().getAllClassMetadata();
     	
-    	for (Iterator iter = allClassMetadata.keySet().iterator() ; iter.hasNext(); ){		
-    		allClassNames.add((String)iter.next());
+    	for (Iterator iter = allClassMetadata.keySet().iterator() ; iter.hasNext(); ){	
+    		String className = (String)iter.next();
+    		log.debug("Detected class "+className + " in DAO Class Metadata");
+    		if (!className.startsWith("_xxEntityxx_")){
+    			log.debug("Adding class "+className + " to DAO allClassNames List");
+        		allClassNames.add(className);
+    		}
+
     	}
     	
     	return allClassNames;
