@@ -144,26 +144,30 @@ public class JAXBUnmarshaller implements gov.nih.nci.system.client.util.xml.Unma
 
                 InputSource inSrc = new InputSource(reader);
                 EntityResolver entityResolver = new EntityResolver() {
-                    public InputSource resolveEntity(String publicId, String systemId) {
-                        String xsdPath = null;
-                        publicId = "gov.nih.nci.cacoresdk.domain.other.differentpackage.associations";
-                        if(systemId != null)
-                        {
-                        	xsdPath = systemId.substring(systemId.indexOf("gov.nih.nci")); 
-                        }
-                        
-                        System.out.println("Entity resolving publicId... " + publicId);
-                        System.out.println("Entity resolving systemID... " + systemId);
-                        System.out.println("Entity resolving to xsd... " + xsdPath);
-                        // InputSource source = new
-                        // InputSource(Thread.currentThread().getContextClassLoader()
-                        // .getResourceAsStream(xsdPath));
-                        InputSource source = new InputSource(Thread.currentThread().getContextClassLoader().getResourceAsStream(xsdPath));
-                        source.setSystemId(systemId);
-                        source.setPublicId(publicId);
-                        return source;
-                    }
-                };
+                	public InputSource resolveEntity(String publicId, String systemId) {
+                		String xsdPath = null;
+                		System.out.println("Entity resolving systemID... " + systemId);
+
+                		if(systemId != null)
+                		{
+                			xsdPath = systemId.substring(systemId.lastIndexOf("/")+1); 
+                			if(publicId == null)
+                				publicId = xsdPath.substring(0, xsdPath.length()-4);
+                		}
+
+                		System.out.println("Entity resolving publicId... " + publicId);
+                		System.out.println("Entity resolving to xsd... " + xsdPath);
+
+                		// InputSource source = new
+                		// InputSource(Thread.currentThread().getContextClassLoader()
+                		// .getResourceAsStream(xsdPath));
+
+                		InputSource source = new InputSource(Thread.currentThread().getContextClassLoader().getResourceAsStream(xsdPath));
+                		source.setSystemId(systemId);
+                		source.setPublicId(publicId);
+                		return source;
+                	}
+                };  
                 xmlReader.setEntityResolver(entityResolver);
 
                 saxSource = new SAXSource(xmlReader, inSrc); 
