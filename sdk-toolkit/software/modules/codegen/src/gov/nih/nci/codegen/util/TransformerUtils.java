@@ -675,6 +675,9 @@ public class TransformerUtils
 		if(name.startsWith("java.lang."))
 			name = name.substring("java.lang.".length());
 
+		if(name.startsWith(ISO_ROOT_PACKAGE_NAME+"."))
+			name = name.substring((ISO_ROOT_PACKAGE_NAME+".").length());
+		
 		String returnValue = null;
 		if(isISO21090Enabled)
 			returnValue = isoDatatypeMap.get(name);
@@ -755,7 +758,14 @@ public class TransformerUtils
 		if("date".equalsIgnoreCase(name) || "java.util.date".equalsIgnoreCase(name))
 			return "java.util.Date";
 
-		log.info("Type = "+name);
+		if(isISO21090Enabled)
+		{
+			if(name.startsWith(ISO_ROOT_PACKAGE_NAME+"."))
+				name = name.substring((ISO_ROOT_PACKAGE_NAME+".").length());
+			if("II".equals(name))
+				return "gov.nih.nci.iso21090.hibernate.usertype.IiUserType";
+		}	
+		//log.info("Type = "+name);
 		
 		return name;
 	}	
@@ -2726,7 +2736,7 @@ public class TransformerUtils
 	{
 		String originalType = attr.getDatatype().getName();
 
-		if(isoDatatypeMap.containsKey(originalType))
+		if(isISO21090Enabled && isoDatatypeMap.containsKey(originalType))
 			return false;
 		
 		return javaDatatypeMap.containsKey(originalType.toLowerCase());
@@ -2748,25 +2758,22 @@ public class TransformerUtils
 					{
 						noJoinRequired.add(attr);
 					} 
-					else
+					else if (isJavaDataType(attr))
 					{
-						if (isJavaDataType(attr))
-						{
-							noJoinRequired.add(attr);
-						} 
-						else
-						{ // Start ISO Datatype component
-							IsoDatatypeTransformationHelper isoDatatypeTransformationHelper = new IsoDatatypeTransformationHelper();
-							isoDatatypeTransformationHelper.setModel(model);
-							isoDatatypeTransformationHelper.setUtils(this);
+						noJoinRequired.add(attr);
+					} 
+					else // Start ISO Datatype component
+					{ 
+						IsoDatatypeTransformationHelper isoDatatypeTransformationHelper = new IsoDatatypeTransformationHelper();
+						isoDatatypeTransformationHelper.setModel(model);
+						isoDatatypeTransformationHelper.setUtils(this);
 
-							RootNode rootNode = isoDatatypeTransformationHelper.getDatatypeNode(klass, attr, table);
-							
-							if(isoDatatypeTransformationHelper.requiresJoin(rootNode))
-								joinRequired.add(attr);
-							else
-								noJoinRequired.add(attr);
-						}
+						RootNode rootNode = isoDatatypeTransformationHelper.getDatatypeNode(klass, attr, table);
+
+						if (isoDatatypeTransformationHelper.requiresJoin(rootNode))
+							joinRequired.add(attr);
+						else
+							noJoinRequired.add(attr);
 					}
 				} 
 			} 
