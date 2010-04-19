@@ -121,17 +121,6 @@ public class Generator
 			{
 				log.info("Execution enabled for " + transformer.getName());
 			}
-			
-		
-		for(Transformer transformer:transformers)
-			if(transformer.isEnabled())
-			{
-				log.info("Execution enabled for " + transformer.getName());
-			}
-			else
-			{
-				log.info("Execution enabled for " + transformer.getName());
-			}
 	}
 
 	/**
