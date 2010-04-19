@@ -45,7 +45,6 @@ public abstract class UMLPackageJetTransformer implements Transformer {
 
 		packages = model.getPackages();
 		for (UMLPackage umlPackage : packages) {
-			System.out.println(umlPackage.getName());
 			try {
 				executeTemplateRecursion(model,umlPackage, errors);	
 			} catch (GenerationException ge) {
