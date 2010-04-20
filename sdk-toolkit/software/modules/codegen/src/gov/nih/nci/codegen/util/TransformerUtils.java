@@ -2038,18 +2038,10 @@ public class TransformerUtils
 			
 			if (!isJavaDataType(attr)) {
 				log.debug("* * * Detected attribute " + attr.getName()+" is of ISO Datatype: " + isoDatatypeValue);
-				
-				if (isoDatatypeValue.indexOf('<')> 0){
-					log.debug ("ISO Datatype IS a collection; skipping the addition of @XmlJavaTypeAdapter annotation");
-					return "";
-				} else {
-					log.debug ("ISO Datatype is NOT a collection; adding @XmlJavaTypeAdapter annotation");
-//					sb.append("    @XmlElement(name=\"").append(klass.getName()).append("\",\n");					
-					sb.append("    @XmlElement(namespace=\"").append(getNamespaceUriPrefix()).append(getFullPackageName(klass)).append("\")"); 
-					sb.append("    @XmlJavaTypeAdapter(JAXBISOAdapter.class)");
+				sb.append("    @XmlElement(namespace=\"").append(getNamespaceUriPrefix()).append(getFullPackageName(klass)).append("\")"); 
+				sb.append("    @XmlJavaTypeAdapter(JAXBISOAdapter.class)");
 					
-					return sb.toString();
-				}
+				return sb.toString();
 			}
 		}
 		
