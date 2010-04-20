@@ -1,5 +1,7 @@
 package gov.nih.nci.system.client.util.xml;
 
+import java.util.Set;
+
 import gov.nih.nci.iso21090.*;
 import gov.nih.nci.iso21090.grid.dto.transform.iso.*;
 import gov.nih.nci.iso21090.grid.dto.transform.iso.ENTransformer.ENONTransformer;
@@ -14,30 +16,23 @@ public class JAXBISOAdapter extends XmlAdapter<ANY, gov.nih.nci.iso21090.Any> {
 	
 	private static Logger log = Logger.getLogger(JAXBISOAdapter.class.getName());
 	
-//	put("EN", "En");
 //	put("PQV", "Pqv");
-	
-//	put("IVL<INT>", "Ivl<Int>");
+
 //	put("IVL<REAL>", "Ivl<Real>");
-//	put("IVL<TS>", "Ivl<Ts>");
-//	put("IVL<PQV>", "Ivl<Pqv>");
-//	put("IVL<PQ>", "Ivl<Pq>");
-//	put("DSET<II>", "DSet<Ii>");
-//	put("DSET<TEL>", "DSet<Tel>");
-//	put("DSET<CD>", "DSet<Cd>");
-//	put("DSET<AD>", "DSet<Ad>");
 
 	public static final String Ad_NAME="gov.nih.nci.iso21090.Ad";
 	public static final String Bl_NAME="gov.nih.nci.iso21090.Bl";	
 	public static final String BlNonNull_NAME="gov.nih.nci.iso21090.BlNonNull";
 	public static final String Cd_NAME="gov.nih.nci.iso21090.Cd";
+	public static final String DSet_NAME="gov.nih.nci.iso21090.DSet";
 	public static final String Ed_NAME="gov.nih.nci.iso21090.Ed";	
 	public static final String EdText_NAME="gov.nih.nci.iso21090.EdText";	
-//	public static final String En_NAME="gov.nih.nci.iso21090.En";	
+	public static final String En_NAME="gov.nih.nci.iso21090.En";	
 	public static final String EnOn_NAME="gov.nih.nci.iso21090.EnOn";
 	public static final String EnPn_NAME="gov.nih.nci.iso21090.EnPn";
 	public static final String Ii_NAME="gov.nih.nci.iso21090.Ii";
-	public static final String Int_NAME="gov.nih.nci.iso21090.Int";	
+	public static final String Int_NAME="gov.nih.nci.iso21090.Int";
+	public static final String Ivl_NAME="gov.nih.nci.iso21090.Ivl";
 	public static final String Pq_NAME="gov.nih.nci.iso21090.Pq";
 //	public static final String Pqv_NAME="gov.nih.nci.iso21090.Pqv";		
 	public static final String Real_NAME="gov.nih.nci.iso21090.Real";	
@@ -55,13 +50,21 @@ public class JAXBISOAdapter extends XmlAdapter<ANY, gov.nih.nci.iso21090.Any> {
 	public static final String BL_NAME="org.iso._21090.BL";
 	public static final String BL_NONNULL_NAME="org.iso._21090.BL.NONNULL";
 	public static final String CD_NAME="org.iso._21090.CD";
+	public static final String DSETAD_NAME="org.iso._21090.DSETAD";	
+	public static final String DSETCD_NAME="org.iso._21090.DSETCD";
+	public static final String DSETII_NAME="org.iso._21090.DSETII";
+	public static final String DSETTEL_NAME="org.iso._21090.DSETTEL";
 	public static final String ED_NAME="org.iso._21090.ED";	
 	public static final String EDText_NAME="org.iso._21090.EDText";
-//	public static final String EN_NAME="org.iso._21090.EN";	
+	public static final String EN_NAME="org.iso._21090.EN";	
 	public static final String ENON_NAME="org.iso._21090.ENON";	
 	public static final String ENPN_NAME="org.iso._21090.ENPN";
 	public static final String II_NAME="org.iso._21090.II";
-	public static final String INT_NAME="org.iso._21090.INT";	
+	public static final String INT_NAME="org.iso._21090.INT";
+	public static final String IVLINT_NAME="org.iso._21090.IVLINT";
+	public static final String IVLPQ_NAME="org.iso._21090.IVLPQ";
+	public static final String IVLREAL_NAME="org.iso._21090.IVLREAL";
+	public static final String IVLTS_NAME="org.iso._21090.IVLTS";
 	public static final String PQ_NAME="org.iso._21090.PQ";	
 //	public static final String PQV_NAME="org.iso._21090.PQV";		
 	public static final String REAL_NAME="org.iso._21090.REAL";	
@@ -90,12 +93,16 @@ public class JAXBISOAdapter extends XmlAdapter<ANY, gov.nih.nci.iso21090.Any> {
 			return BLNONNULLTransformer.INSTANCE.toXml((BlNonNull)arg0);
 		else if(className.equals(Cd_NAME))
 			return CDTransformer.INSTANCE.toXml((Cd)arg0);
+		else if(className.equals(Cd_NAME))
+			return CDTransformer.INSTANCE.toXml((Cd)arg0);
+		else if(className.equals(DSet_NAME))
+			return dsetTransformerXml(arg0);
 		else if(className.equals(Ed_NAME))
 			return EDTransformer.INSTANCE.toXml((Ed)arg0);	
 		else if(className.equals(EdText_NAME))
 			return EDTextTransformer.INSTANCE.toXml((EdText)arg0);		
-//		else if(className.equals(En_NAME))
-//			return ENTransformer..toXml((En)arg0);	
+		else if(className.equals(En_NAME))
+			return ENTransformer.EN_INSTANCE.toXml((En)arg0);	
 		else if(className.equals(EnOn_NAME))
 			return ENONTransformer.ENON_INSTANCE.toXml((EnOn)arg0);	
 		else if(className.equals(EnPn_NAME))
@@ -103,7 +110,9 @@ public class JAXBISOAdapter extends XmlAdapter<ANY, gov.nih.nci.iso21090.Any> {
 		else if(className.equals(Ii_NAME))
 			return IITransformer.INSTANCE.toXml((Ii)arg0);
 		else if(className.equals(Int_NAME))
-			return INTTransformer.INSTANCE.toXml((Int)arg0);		
+			return INTTransformer.INSTANCE.toXml((Int)arg0);
+		else if(className.equals(Ivl_NAME))
+			return ivlTransformerXml(arg0);
 		else if(className.equals(Pq_NAME))
 			return PQTransformer.INSTANCE.toXml((Pq)arg0);
 //		else if(className.equals(Pqv_NAME))
@@ -129,7 +138,7 @@ public class JAXBISOAdapter extends XmlAdapter<ANY, gov.nih.nci.iso21090.Any> {
 		else if(className.equals(Ts_NAME))
 			return TSTransformer.INSTANCE.toXml((Ts)arg0);			
 		else {
-			log.debug(" * * * Class " + className + " did not match any ISO Datatype classes.");
+			log.debug(" * * * Class " + className + " did not match any ISO Datatype classes, and will be ignored.");
 			return null;
 		}
 	}
@@ -148,13 +157,21 @@ public class JAXBISOAdapter extends XmlAdapter<ANY, gov.nih.nci.iso21090.Any> {
 		else if(className.equals(BL_NONNULL_NAME))
 			return BLNONNULLTransformer.INSTANCE.toDto((BLNonNull)arg0);	
 		else if(className.equals(CD_NAME))
-			return CDTransformer.INSTANCE.toDto((CD)arg0);	
+			return CDTransformer.INSTANCE.toDto((CD)arg0);
+		else if(className.equals(DSETAD_NAME))
+			return DSETADTransformer.INSTANCE.toDto((DSETAD)arg0);	
+		else if(className.equals(DSETCD_NAME))
+			return DSETCDTransformer.INSTANCE.toDto((DSETCD)arg0);
+		else if(className.equals(DSETII_NAME))
+			return DSETIITransformer.INSTANCE.toDto((DSETII)arg0);
+		else if(className.equals(DSETTEL_NAME))
+			return DSETTELTransformer.INSTANCE.toDto((DSETTEL)arg0);	
 		else if(className.equals(ED_NAME))
 			return EDTransformer.INSTANCE.toDto((ED)arg0);
 		else if(className.equals(EDText_NAME))
 			return EDTextTransformer.INSTANCE.toDto((EDText)arg0);			
-//		else if(className.equals(EN_NAME))
-//			return ENTransformer.ENPN_INSTANCE.toDto((EN)arg0);	
+		else if(className.equals(EN_NAME))
+			return ENTransformer.EN_INSTANCE.toDto((EN)arg0);	
 		else if(className.equals(ENON_NAME))
 			return ENONTransformer.ENON_INSTANCE.toDto((ENON)arg0);		
 		else if(className.equals(ENPN_NAME))
@@ -162,7 +179,15 @@ public class JAXBISOAdapter extends XmlAdapter<ANY, gov.nih.nci.iso21090.Any> {
 		else if(className.equals(II_NAME))
 			return IITransformer.INSTANCE.toDto((II)arg0);
 		else if(className.equals(INT_NAME))
-			return INTTransformer.INSTANCE.toDto((INT)arg0);		
+			return INTTransformer.INSTANCE.toDto((INT)arg0);
+		else if(className.equals(IVLINT_NAME))
+			return IVLINTTransformer.INSTANCE.toDto((IVLINT)arg0);
+		else if(className.equals(IVLPQ_NAME))
+			return IVLPQTransformer.INSTANCE.toDto((IVLPQ)arg0);
+//		else if(className.equals(IVLREAL_NAME))
+//			return IVLREALTransformer.INSTANCE.toDto((IVLREAL)arg0);
+		else if(className.equals(IVLTS_NAME))
+			return IVLTSTransformer.INSTANCE.toDto((IVLTS)arg0);
 		else if(className.equals(PQ_NAME))
 			return PQTransformer.INSTANCE.toDto((PQ)arg0);
 //		else if(className.equals(PQV_NAME))
@@ -191,6 +216,68 @@ public class JAXBISOAdapter extends XmlAdapter<ANY, gov.nih.nci.iso21090.Any> {
 			log.debug(" * * * Class " + className + " did not match any ISO Datatype classes.");
 			return null;
 		}
+	}
+	
+	private ANY dsetTransformerXml(Any arg0) throws Exception {
+		Set dsetItem = (Set)(((DSet)arg0).getItem());
+		
+		String dsetType=null;
+		for (Object obj : dsetItem){
+			dsetType = obj.getClass().getName();
+			break;
+		}
+		
+		log.debug( "DSet class detected of type: " + dsetType );
+		
+		if (dsetType==null)
+			return null;
+		else if(dsetType.equals(Ad_NAME))
+			return DSETADTransformer.INSTANCE.toXml((DSet<Ad>)arg0);
+		else if(dsetType.equals(Cd_NAME))
+			return DSETCDTransformer.INSTANCE.toXml((DSet<Cd>)arg0);
+		else if(dsetType.equals(Ii_NAME))
+			return DSETIITransformer.INSTANCE.toXml((DSet<Ii>)arg0); 
+		else if(dsetType.equals(Tel_NAME))
+			return DSETTELTransformer.INSTANCE.toXml((DSet<Tel>)arg0);
+		else 
+			log.error( "Error: Unsupported DSet class detected of type: " + dsetType + "; skipping processing");
+
+		return null;
+	}
+	
+	private ANY ivlTransformerXml(Any arg0) throws Exception {	
+		Qty any  = (Qty)(((Ivl)arg0).getAny());
+		
+		if (any == null){
+			any = (Qty)(((Ivl)arg0).getLow());
+			
+			if (any == null){
+				any = (Qty)(((Ivl)arg0).getHigh());
+				
+				if (any == null){
+					log.error( "Error: Undetermined Ivl type detected; skipping processing");
+					return null;
+				}
+			}	
+		}
+
+		String isetType=null;
+		isetType = any.getClass().getName();
+		
+		log.debug( "Ivl class detected of type: " + isetType );
+		
+		if(isetType.equals(Int_NAME))
+			return IVLINTTransformer.INSTANCE.toXml((Ivl<Int>)arg0);
+		else if(isetType.equals(Pq_NAME))
+			return IVLPQTransformer.INSTANCE.toXml((Ivl<Pq>)arg0);
+//		else if(isetType.equals(Real_NAME))
+//			return IVLREALTransformer.INSTANCE.toXml((Ivl<Real>)arg0); 
+		else if(isetType.equals(Ts_NAME))
+			return IVLTSTransformer.INSTANCE.toXml((Ivl<Ts>)arg0);
+		else 
+			log.error( "Error: Unsupported Ivl class detected of type: " + isetType + "; skipping processing");
+
+		return null;
 	}
 
 }
