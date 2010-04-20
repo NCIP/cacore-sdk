@@ -34,13 +34,12 @@ String discriminatorValueStr = (discriminatorValue==null) ? "" : "discriminator-
 			</generator><%
 			}%>			
 		</id><%
-		if(discriminatorColumnName!=null && !discriminatorColumnName.equals("")){%>
+			if(discriminatorColumnName!=null && !discriminatorColumnName.equals("")){%>
 		<%=emptySpace%><discriminator column="<%=discriminatorColumnName%>" type="string"/><%
+			}
 		}
-}
 		UMLClass currentKlass = klass;
 		do{%>
-
 		<%=emptySpace%><!-- Attributes mapping for the <%=currentKlass.getName()%> class --><%
 			for(Object obj :transformerUtils.getSortedByJoinUMLAttribute(currentKlass, idAttr, table))
 			{
@@ -99,8 +98,11 @@ String discriminatorValueStr = (discriminatorValue==null) ? "" : "discriminator-
 							String lazyValue = lazy == true ? "true" : "false";
 							UMLClass implicitClass = (UMLClass)otherEnd.getUMLElement();
 							UMLClass anyTable = transformerUtils.getTable(currentKlass);
+							UMLClass nonImplicitClass = transformerUtils.getNonImplicitSubclasses(implicitClass).get(0);
+							UMLAttribute implicitIdAttr = transformerUtils.getClassIdAttr(nonImplicitClass);
+							String implicitIdType = transformerUtils.getHibernateDataType(nonImplicitClass,implicitIdAttr);
 							%>
-		<%=emptySpace%><any name="<%=otherEnd.getRoleName()%>" meta-type="string" id-type="integer" lazy="<%=lazyValue%>" cascade="<%=cascadeStyle%>"><%
+		<%=emptySpace%><any name="<%=otherEnd.getRoleName()%>" meta-type="string" id-type="<%=implicitIdType%>" lazy="<%=lazyValue%>" cascade="<%=cascadeStyle%>"><%
 							for (UMLClass nonImplicitSubclass:transformerUtils.getNonImplicitSubclasses(implicitClass)){%>
 			<%=emptySpace%><meta-value value="<%=transformerUtils.getDiscriminatorValue(nonImplicitSubclass)%>" class="<%=transformerUtils.getFQCN(nonImplicitSubclass)%>"/><%
 							}//for	%>
@@ -118,12 +120,14 @@ String discriminatorValueStr = (discriminatorValue==null) ? "" : "discriminator-
 							String inverseValue = assocColumnName.equals(inverseColumnName) ?"true":"false";
 							String joinTableName = correlationTable.getName();
 							UMLClass implicitClass = (UMLClass)otherEnd.getUMLElement();
-							
+							UMLClass nonImplicitClass = transformerUtils.getNonImplicitSubclasses(implicitClass).get(0);
+							UMLAttribute implicitIdAttr = transformerUtils.getClassIdAttr(nonImplicitClass);
+							String implicitIdType = transformerUtils.getHibernateDataType(nonImplicitClass,implicitIdAttr);
 							%>
 		<%=emptySpace%><set name="<%=otherEnd.getRoleName()%>" table="<%=joinTableName%>" lazy="<%=lazyValue%>" inverse="<%=inverseValue%>">
 			<%=emptySpace%><cache usage="read-write" />
 			<%=emptySpace%><key column="<%=keyColumnName%>" />
-			<%=emptySpace%><many-to-any meta-type="string" id-type="integer"><%
+			<%=emptySpace%><many-to-any meta-type="string" id-type="<%=implicitIdType%>"><%
 							for (UMLClass nonImplicitSubclass:transformerUtils.getNonImplicitSubclasses(implicitClass)){%>
 			<%=emptySpace%><%=emptySpace%><meta-value value="<%=transformerUtils.getDiscriminatorValue(nonImplicitSubclass)%>" class="<%=transformerUtils.getFQCN(nonImplicitSubclass)%>"/><%
 							}//for	%>
