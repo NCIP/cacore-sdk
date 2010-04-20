@@ -208,7 +208,7 @@ public class IsoDatatypeTransformationHelper
 					{
 						//Other table with primary key and join table
 						mappingStyle = "joined many-to-one";
-						convertComplexNodeToHibernateJoinedManyToOne(rootNode,buffer,prefix,rootNode.getJoinTableName(), rootNode.getJoinTableInverseKey(), rootNode.getJoinTableForeignKey());
+						convertComplexNodeToHibernateJoinedManyToOne(rootNode,buffer,prefix,rootNode.getJoinTableName(), rootNode.getJoinTableForeignKey(), rootNode.getJoinTableInverseKey());
 					}
 					else
 					{
@@ -227,7 +227,7 @@ public class IsoDatatypeTransformationHelper
 	{
 		buffer.append(prefix+"<join table=\""+tableName+"\" optional=\"true\">");
 		buffer.append(prefix+"\t<key column=\""+keyColumnName+"\"/>");
-			convertComplexNodeToHibernateComponent(node, buffer, prefix+"\t", "component", true);
+		convertComplexNodeToHibernateComponent(node, buffer, prefix+"\t", "component", true);
 		buffer.append(prefix+"</join>");		
 	}
 	
@@ -243,7 +243,7 @@ public class IsoDatatypeTransformationHelper
 	private void convertComplexNodeToHibernateManyToOne(RootNode rootNode, StringBuffer buffer, String prefix, String keyColumnName)
 	{
 		String entityName = converteIsoPropertyToEntityName(rootNode.getParentClassName(),rootNode.getName());
-		buffer.append(prefix+"<many-to-one name=\""+rootNode.getName()+"\" entity-name=\""+entityName+"\" column=\""+keyColumnName+"\" lazy=\"false\"/>");
+		buffer.append(prefix+"<many-to-one name=\""+rootNode.getName()+"\" entity-name=\""+entityName+"\" column=\""+keyColumnName+"\" lazy=\"false\" cascade=\"all\"/>");
 		
 	}
 	
@@ -278,7 +278,7 @@ public class IsoDatatypeTransformationHelper
 			{
 				ComplexNode collectionNode = (ComplexNode) innerNode;
 				String tableNameString = "table=\""+tableName+"\"";
-				buffer.append(prefix+"\t<set name=\""+collectionNode.getName()+"\" lazy=\"false\" "+tableNameString+">");
+				buffer.append(prefix+"\t<set name=\""+collectionNode.getName()+"\" lazy=\"false\" "+tableNameString+" cascade=\"all\">");
 				buffer.append(prefix+"\t\t<key column=\""+inverseColumnName+"\" not-null=\"false\"/>");
 				switch(collectionNodeProcessingInstruction)
 				{
