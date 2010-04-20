@@ -276,16 +276,20 @@ public class ProxyHelperImpl implements ProxyHelper
 			for(Field field:fieldList)
 			{
 				Object obj = field.get(source);
-			    if(obj instanceof Integer || obj instanceof Float || obj instanceof Double
-			    		|| obj instanceof Character || obj instanceof Long || obj instanceof Boolean
-			    		|| obj instanceof String )
-			    {
-			    	if(!Modifier.isStatic(field.getModifiers()) && !Modifier.isFinal(field.getModifiers()))
+
+				if(obj!=null)
+				{
+				    if(obj.getClass().getName().equals("gov.nih.nci.iso21090.Ii") || obj instanceof Integer || obj instanceof Float || obj instanceof Double
+				    		|| obj instanceof Character || obj instanceof Long
+				    		|| obj instanceof String )
 				    {
-				    	field.setAccessible(true);
-				    	field.set(target, obj);
-			    	}
-			    }
+				    	if(!Modifier.isStatic(field.getModifiers()) && !Modifier.isFinal(field.getModifiers()))
+					    {
+					    	field.setAccessible(true);
+					    	field.set(target, obj);
+				    	}
+				    }
+				}
 			}
 			return target;
 		} catch (IllegalArgumentException e) {
