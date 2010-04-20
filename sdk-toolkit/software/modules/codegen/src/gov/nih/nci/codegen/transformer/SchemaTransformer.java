@@ -345,7 +345,7 @@ public class SchemaTransformer implements Transformer {
 
 				// Only process non-static attributes
 				log.debug("isStatic: " + transformerUtils.isStatic(attr));
-				if (!transformerUtils.isStatic(attr)){
+				if (!transformerUtils.isStatic(attr) && (!generateAttributeAsElement(attr))){
 					Element attributeElement = new Element("attribute", w3cNS);
 					attributeElement.setAttribute("name", getAttributeName(attr));
 					String type = getName(transformerUtils.getDataType(attr));
@@ -371,6 +371,50 @@ public class SchemaTransformer implements Transformer {
 			for ( UMLAttribute att : primitiveCollectionAtts){
 				addSequencePrimitiveCollectionElements(sequence,klass, att, w3cNS);
 			}
+			
+			/////////////////////////////// - Start
+			
+			//process attributes that should be treated/generated as elements
+			for (Iterator<UMLAttribute> i = klass.getAttributes().iterator(); i.hasNext();) {
+				UMLAttribute attr = (UMLAttribute) i.next();
+				log.debug("att.getName(): " + attr.getName());
+
+				// Only process non-static attributes that should be treated as elements
+				log.debug("isStatic: " + transformerUtils.isStatic(attr));
+				if (!transformerUtils.isStatic(attr) && generateAttributeAsElement(attr)){
+
+					// e.g.:  <xs:element name="title" type="xs:string"/>
+					Element elementElement = new Element("element", w3cNS);
+					elementElement.setAttribute("name", getAttributeName(attr));
+
+					String type = getName(transformerUtils.getDataType(attr));
+					log.debug("Attribute type: " + type);
+					
+					if (type.startsWith("xs:collection")) { // handle primitive collections; e.g., collection<string>
+						log.debug("Handling primitive collection type Name: " + type);    
+						primitiveCollectionAtts.add(attr);
+						continue;
+					}				
+					
+					if (usePermissibleValues){
+						addRestrictionEnumeration(klass,attr,elementElement,type, w3cNS);
+					} else{
+						elementElement.setAttribute("type", type);	
+					}
+					
+					if (isIsoDatatype(attr)){
+						elementElement.setAttribute("minOccurs","0");   
+						elementElement.setAttribute("maxOccurs","1");
+					}
+					
+					addCaDSRAnnotation(attr, elementElement, w3cNS);
+					
+					sequence.addContent(elementElement);
+				}
+			}
+			
+			
+			////////////////////////////////////  - END
 
 			for (Iterator i = transformerUtils.getAssociationEnds(klass).iterator(); i.hasNext();) {
 				UMLAssociationEnd thisEnd = (UMLAssociationEnd) i.next();
