@@ -82,6 +82,6 @@
 	</target>
 	
 	<target name="clean:all" depends="ivy:clean" description="cleans this project">
-			<delete dir="${target.dir}" failonerror="false"/>		
+		<delete dir="${target.dir}" failonerror="false"/>		
 	</target>
 </project>
