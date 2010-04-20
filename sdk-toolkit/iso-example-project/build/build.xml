@@ -52,9 +52,9 @@
 		<ant antfile="${master.build.file}" dir="${build.dir}" inheritall="false" inheritrefs="false" target="build:all" />
 		<antcall target="build-system" />
 	</target>
-	
-	<target name="build:sdk-workspace-modules" description="">
-		<ant antfile="${master.build.file}" dir="${build.dir}" inheritall="false" inheritrefs="false" target="build:workspace-modules" />
+
+	<target name="clean:SDK" description="Cleans the SDK. This is used mostly by SDK development team only">
+		<ant antfile="${master.build.file}" dir="${build.dir}" inheritall="false" inheritrefs="false" target="clean:all" />
 	</target>
 	
 </project>
