@@ -132,7 +132,8 @@ public class HTTPQuery extends HttpServlet {
 			httpUtils.setServletName(request.getRequestURL().toString());
 
 			if (httpUtils.getPageSize() != null) {
-				pageSize = Integer.parseInt(httpUtils.getPageSize());
+				//FIX for pagesize being reset by the end user
+				//pageSize = Integer.parseInt(httpUtils.getPageSize());
 			} else {
 				httpUtils.setPageSize(pageSize);
 			}
