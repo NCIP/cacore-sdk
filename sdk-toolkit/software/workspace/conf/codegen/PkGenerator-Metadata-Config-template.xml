@@ -20,6 +20,7 @@
 				<entry key="" value-ref="SystemwidePKProperty" />
 			</map>
 		</property>
+		<property name="name" value="Primary Key Generator Validator"/>		
 		<property name="transformerUtils" ref="TransformerUtils"></property>
 	</bean>
 

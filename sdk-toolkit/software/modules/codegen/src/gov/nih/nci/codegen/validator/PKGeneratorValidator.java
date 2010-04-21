@@ -22,7 +22,7 @@ public class PKGeneratorValidator implements Validator {
 
 	private boolean enabled = true;
 
-	private String name = PKGeneratorValidator.class.getName();
+	private String name = "";
 
 	private Map<String,PKGeneratorProperty> pkGeneratorPropertyMap;
 	
@@ -39,6 +39,10 @@ public class PKGeneratorValidator implements Validator {
    
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getName() {
@@ -60,13 +64,13 @@ public class PKGeneratorValidator implements Validator {
 		try {
 			classes = transformerUtils.getAllParentClasses(model);
 		} catch (GenerationException ge) {
-			errors.addError(new GeneratorError("Error getting all the parent classes",ge));
+			errors.addError(new GeneratorError(getName() + ": Error getting all the parent classes",ge));
 		}
 		for (UMLClass klass : classes) {
 			try {
 				validatePKGeneratorTag(klass, errors);
 			} catch (GenerationException e) {
-				errors.addError(new GeneratorError("error validating pkgenerator domain class "+klass.getName() + ". error message : "+ e.getMessage()));
+				errors.addError(new GeneratorError(getName() + ": Error validating pkgenerator domain class "+klass.getName() + ". error message : "+ e.getMessage()));
 			}
 		}
 		return errors;
@@ -82,7 +86,7 @@ public class PKGeneratorValidator implements Validator {
 		String tableName = table.getName();
 		
 		if (classIdAttr == null) {
-			errors.addError(new GeneratorError("No attribute found that maps to the primary key identifier for class : "+fqcn));
+			errors.addError(new GeneratorError(getName() + ": No attribute found that maps to the primary key identifier for class : "+fqcn));
 			return errors;
 		}
 
@@ -98,18 +102,19 @@ public class PKGeneratorValidator implements Validator {
 		String pkGeneratorClass = transformerUtils.getTagValue(taggedValues, pkgenClassKey, 1);
 		PKGeneratorProperty generatorProperty=pkGeneratorPropertyMap.get(pkGeneratorClass);
 		
-		log.debug("processing table " + tableName+ " pkGeneratorClass Property validator info "+ generatorProperty);
-		log.debug("pkObject class datatype " + pkDataType + " database Type "+ databaseType + "  primary key Id "
+		log.debug("Processing table " + tableName+ " pkGeneratorClass Property validator info "+ generatorProperty);
+		log.debug("PkObject class datatype " + pkDataType + " database Type "+ databaseType + "  primary key Id "
 				+ pkColumnName + " pkgenerator params "+ inputPkGeneratorParams.toString());
 		
 		if(generatorProperty==null){
-			errors.addError(new GeneratorError("invalid primary key generator class name "+pkGeneratorClass+" for table "+tableName+" with column "+pkColumnName));
+			errors.addError(new GeneratorError(getName() + ": Invalid primary key generator class name "+pkGeneratorClass+" for table "+tableName+" with column "+pkColumnName));
 		}else{
 			if(!(generatorProperty.getDatabaseTypes().contains(databaseType))){			
-				errors.addError(new GeneratorError("invalid database "+databaseType+" for table "+tableName+" with column "+pkColumnName));
+				errors.addError(new GeneratorError(getName() + ": Invalid database "+databaseType+" for table "+tableName+" with column "+pkColumnName));
 			}
 			if(!(generatorProperty.getDataTypes().contains(pkDataType))){
-				errors.addError(new GeneratorError("invalid dataType "+ pkDataType + " for table "+ tableName + " with column " + pkColumnName));
+				if(!transformerUtils.isISO21090Enabled() || (transformerUtils.isISO21090Enabled() && !("gov.nih.nci.iso21090.hibernate.usertype.IiUserType").equals(pkDataType)))
+					errors.addError(new GeneratorError(getName() + ": Invalid dataType "+ pkDataType + " for table "+ tableName + " with column " + pkColumnName));
 			}
 			
 			String syswidePKGeneratorTag = TransformerUtils.PK_GENERATOR_SYSTEMWIDE+databaseType;
@@ -118,7 +123,7 @@ public class PKGeneratorValidator implements Validator {
 			inputPkGeneratorParams.remove(syswidePKGeneratorTag);
 			inputPkGeneratorParams.remove(modelPkGeneratorTag);
 			if (!inputPkGeneratorParams.keySet().containsAll(generatorProperty.getPkGeneratorParams())) {						
-				errors.addError(new GeneratorError("invalid params "+ inputPkGeneratorParams.keySet().toString()+ ". required params "+generatorProperty.getPkGeneratorParams().toString()+" for primary key generator class "+ pkGeneratorClass + " in table " + tableName+ " with column " + pkColumnName));
+				errors.addError(new GeneratorError(getName() + ": Invalid params "+ inputPkGeneratorParams.keySet().toString()+ ". required params "+generatorProperty.getPkGeneratorParams().toString()+" for primary key generator class "+ pkGeneratorClass + " in table " + tableName+ " with column " + pkColumnName));
 			}
 		}
 		return errors;

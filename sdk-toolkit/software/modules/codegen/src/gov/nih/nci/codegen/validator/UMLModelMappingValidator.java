@@ -4,6 +4,10 @@ import gov.nih.nci.codegen.GenerationException;
 import gov.nih.nci.codegen.GeneratorError;
 import gov.nih.nci.codegen.GeneratorErrors;
 import gov.nih.nci.codegen.Validator;
+import gov.nih.nci.codegen.util.ComplexNode;
+import gov.nih.nci.codegen.util.Node;
+import gov.nih.nci.codegen.util.RootNode;
+import gov.nih.nci.codegen.util.SimpleNode;
 import gov.nih.nci.codegen.util.TransformerUtils;
 import gov.nih.nci.ncicb.xmiinout.domain.UMLAssociation;
 import gov.nih.nci.ncicb.xmiinout.domain.UMLAssociationEnd;
@@ -531,17 +535,24 @@ public class UMLModelMappingValidator implements Validator
 		for(UMLAttribute attribute: klass.getAttributes())
 		{
 			try {
-				if(transformerUtils.isCollection(klass, attribute))
+				if(transformerUtils.isISO21090Enabled() && !transformerUtils.isJavaDataType(attribute) && attribute!=transformerUtils.getClassIdAttr(klass))
 				{
-					UMLClass collectionTable = transformerUtils.findCollectionTable(attribute, model);
-					String keyColumnName = transformerUtils.getCollectionKeyColumnName(collectionTable, klass, attribute);
-					String elementColumnName = transformerUtils.getCollectionElementColumnName(collectionTable, klass, attribute);
-					String elementType = transformerUtils.getCollectionElementHibernateType(klass, attribute);
-					
+					validateIsoAttribute(model,klass,table,attribute,errors);
 				}
 				else
 				{
-				transformerUtils.getMappedColumnName(table,thisClassName+"."+attribute.getName());
+					if(transformerUtils.isCollection(klass, attribute))
+					{
+						UMLClass collectionTable = transformerUtils.findCollectionTable(attribute, model);
+						String keyColumnName = transformerUtils.getCollectionKeyColumnName(collectionTable, klass, attribute);
+						String elementColumnName = transformerUtils.getCollectionElementColumnName(collectionTable, klass, attribute);
+						String elementType = transformerUtils.getCollectionElementHibernateType(klass, attribute);
+						
+					}
+					else
+					{
+						transformerUtils.getMappedColumnName(table,thisClassName+"."+attribute.getName());
+					}
 				}
 			} catch (GenerationException e) {
 				errors.addError(new GeneratorError(getName() + ": Attribute mapping validation failed for "+thisClassName+"."+attribute.getName()+" ", e));
@@ -549,6 +560,75 @@ public class UMLModelMappingValidator implements Validator
 		}
 	}
 	
+	private void validateIsoAttribute(UMLModel model, UMLClass klass, UMLClass table, UMLAttribute attribute, GeneratorErrors errors)
+	{
+		
+		try
+		{
+			RootNode rootNode = transformerUtils.getDatatypeNode(klass, attribute, table);
+			validateComplexNode(rootNode,klass,attribute, "."+attribute.getName(),errors);
+		} 
+		catch (GenerationException e)
+		{
+			errors.addError(new GeneratorError(getName() + ": ISO Attribute mapping validation failed for "+transformerUtils.getFQCN(klass)+"."+attribute.getName()+" ", e));
+		}
+	}
+
+	private void validateComplexNode(ComplexNode complexNode, UMLClass klass, UMLAttribute attribute, String prefix,GeneratorErrors errors)
+	{
+		boolean nullFlavorFound = false;
+		
+		for(Node node1: complexNode.getInnerNodes())
+		{
+			if("nullFalvor".equals(node1.getName()))
+			{
+				nullFlavorFound = true;
+				break;
+			}
+		}
+		
+		//if(!nullFlavorFound)
+		//	errors.addError(new GeneratorError(getName() + ": Can not find NullFlavor mapping for "+transformerUtils.getFQCN(klass)+prefix));
+			
+
+		boolean simpleNodeFound = false;
+		boolean complexNodeFound = false;
+		
+		for(Node node1: complexNode.getInnerNodes())
+		{
+			if(node1 instanceof ComplexNode)
+			{
+				complexNodeFound = true;
+			}
+			else if(node1 instanceof SimpleNode)
+			{
+				simpleNodeFound = true;
+			}
+		}
+		
+		if(!complexNodeFound && !simpleNodeFound)
+			errors.addError(new GeneratorError(getName() + ": Can not find a single attribute mapped to the database column for "+transformerUtils.getFQCN(klass)+prefix));
+		
+		for(Node node1: complexNode.getInnerNodes())
+		{
+			for(Node node2: complexNode.getInnerNodes())
+			{
+				if(node1!=node2 && node1.getName().equals(node2.getName()))
+				{
+					if(node1.getNodeType().equals(node2.getNodeType()))
+						errors.addError(new GeneratorError(getName() + ": Attribute mapping validation failed for "+transformerUtils.getFQCN(klass)+prefix+"."+node1.getName()+" defined more than once through tag values"));
+					else
+						errors.addError(new GeneratorError(getName() + ": Attribute mapping validation failed for "+transformerUtils.getFQCN(klass)+prefix+"."+node1.getName()+" defined more than once through tag values. Node type{"+node1.getNodeType()+","+node2.getNodeType()+"}"));
+				}
+			}
+		}
+		for(Node node1: complexNode.getInnerNodes())
+		{
+			if(node1 instanceof ComplexNode)
+				validateComplexNode((ComplexNode)node1, klass, attribute, prefix+"."+node1.getName(), errors);
+		}
+	}
+
 	public void setEnabled(boolean enabled)
 	{
 		this.enabled = enabled;
