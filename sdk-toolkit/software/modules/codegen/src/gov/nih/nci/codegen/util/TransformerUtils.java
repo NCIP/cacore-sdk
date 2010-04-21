@@ -2074,29 +2074,10 @@ public class TransformerUtils
 		int totalAttrCount = klass.getAttributes().size();
 		for(UMLAttribute attr:klass.getAttributes()){
 			counter++;
-			// TODO :: determine what to do with ISO Datatype Collections
-			if (isISO21090Enabled){
-				String isoDatatypeValue = isoDatatypeMap.get(attr.getDatatype().getName());
-				
-				if (!isJavaDataType(attr)) {
-					log.debug("* * * Detected attribute " + attr.getName()+" is of ISO Datatype: " + isoDatatypeValue);
-					
-					if (isoDatatypeValue.indexOf('<')> 0){
-						log.debug("ISO Datatype IS a collection; skipping the addition of attr " + attr.getName()+" to propOrder");
-					} else {
-						log.debug("ISO Datatype is NOT a collection; adding attr " + attr.getName()+" to propOrder");
-						sb.append("\"").append(attr.getName()).append("\"");
-						if (counter < totalAttrCount){
-							sb.append(", ");
-						}
-					}
-				}
-				
-			} else {
-				sb.append("\"").append(attr.getName()).append("\"");
-				if (counter < totalAttrCount){
-					sb.append(", ");
-				}
+
+			sb.append("\"").append(attr.getName()).append("\"");
+			if (counter < totalAttrCount){
+				sb.append(", ");
 			}
 		}
 		
