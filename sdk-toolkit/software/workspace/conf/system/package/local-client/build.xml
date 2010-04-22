@@ -80,15 +80,27 @@
 	</target>
 	
 	<!-- *******************************************************************-->
-	<!-- Run XML Utility Demo                                               -->
+	<!-- Run XML Utility Demo                                                                         -->
 	<!-- *******************************************************************-->
-	<target name="runXML" depends="compile" description="Runs the XML Utility test">
+	<target name="runJaxbXML" depends="compile" description="Runs the JAXB XML Utility test">
 		<SDKecho message="${ant.project.name}: Running the XML Utility test"/>
 		<mkdir dir="./output"/>
-		<java classname="TestXMLClient" fork="true" maxmemory="512m">
+		<java classname="TestJaxbXMLClient" fork="true" maxmemory="512m">
+			<classpath refid="runtime" />
+		</java>
+	</target>
+	
+	<!-- *******************************************************************-->
+	<!-- Run Castor XML Utility Demo                                                            -->
+	<!-- *******************************************************************-->
+	<target name="runCastorXML" depends="compile" description="Runs the Castor XML Utility test">
+		<SDKecho message="${ant.project.name}: Running the Castor XML Utility test"/>
+		<mkdir dir="./output"/>
+		<java classname="TestCastorXMLClient" fork="true" maxmemory="512m">
 			<classpath refid="runtime" />
 		</java>
 	</target>	
+	
 	<!--***********************************************************************
 	*** Dumps the properties of the build script
 	*********************************************************************** -->
