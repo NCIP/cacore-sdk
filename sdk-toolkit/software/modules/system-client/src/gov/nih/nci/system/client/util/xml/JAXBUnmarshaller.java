@@ -146,7 +146,7 @@ public class JAXBUnmarshaller implements gov.nih.nci.system.client.util.xml.Unma
                 EntityResolver entityResolver = new EntityResolver() {
                 	public InputSource resolveEntity(String publicId, String systemId) {
                 		String xsdPath = null;
-                		System.out.println("Entity resolving systemID... " + systemId);
+                		log.debug("Entity resolving systemID... " + systemId);
 
                 		if(systemId != null)
                 		{
@@ -155,8 +155,8 @@ public class JAXBUnmarshaller implements gov.nih.nci.system.client.util.xml.Unma
                 				publicId = xsdPath.substring(0, xsdPath.length()-4);
                 		}
 
-                		System.out.println("Entity resolving publicId... " + publicId);
-                		System.out.println("Entity resolving to xsd... " + xsdPath);
+                		log.debug("Entity resolving publicId... " + publicId);
+                		log.debug("Entity resolving to xsd... " + xsdPath);
 
                 		// InputSource source = new
                 		// InputSource(Thread.currentThread().getContextClassLoader()
