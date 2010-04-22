@@ -97,7 +97,7 @@
             name="sdk.todo" />
     <historyfile name="" />
   </argo>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Wed Mar 17 13:54:25 EDT 2010'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Wed Apr 21 18:25:16 GMT 2010'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.24(5) revised on $Date: 2006-11-06 19:55:22 +0100 (Mon, 06 Nov 2006) $ </XMI.exporterVersion>
@@ -595,9 +595,9 @@
                       name = 'NAME' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
                       targetScope = 'instance'>
                       <UML:StructuralFeature.multiplicity>
-                        <UML:Multiplicity xmi.id = '-91-112--124--124-5c0ce2b1:1140955a358:-8000:0000000000000FEE'>
+                        <UML:Multiplicity xmi.id = '-64--88-1-25-17494c8:128219d146a:-8000:0000000000001655'>
                           <UML:Multiplicity.range>
-                            <UML:MultiplicityRange xmi.id = '-91-112--124--124-5c0ce2b1:1140955a358:-8000:0000000000000FED'
+                            <UML:MultiplicityRange xmi.id = '-64--88-1-25-17494c8:128219d146a:-8000:0000000000001654'
                               lower = '1' upper = '1'/>
                           </UML:Multiplicity.range>
                         </UML:Multiplicity>
@@ -611,7 +611,7 @@
                       <UML:ModelElement.taggedValue>
                         <UML:TaggedValue xmi.id = 'EAID_219079C5_B7DE_40ac_B07F_896FC9DA6627_fix_2_fix_1_fix_0'
                           isSpecification = 'false'>
-                          <UML:TaggedValue.dataValue>gov.nih.nci.cacoresdk.domain.other.levelassociation.Card.Name</UML:TaggedValue.dataValue>
+                          <UML:TaggedValue.dataValue>gov.nih.nci.cacoresdk.domain.other.levelassociation.Card.name</UML:TaggedValue.dataValue>
                           <UML:TaggedValue.type>
                             <UML:TagDefinition xmi.idref = '-64--88-1-107-8238f4:1121acba21f:-8000:0000000000003190'/>
                           </UML:TaggedValue.type>
@@ -18868,7 +18868,7 @@
                                                   </UML:StructuralFeature.type>
                                                 </UML:Attribute>
                                                 <UML:Attribute xmi.id = 'EAID_1D4C03D8_03CC_4f4e_A948_19A3B5DD3537_fix_1_fix_1'
-                                                  name = 'Name' visibility = 'private' isSpecification = 'false' ownerScope = 'instance'
+                                                  name = 'name' visibility = 'private' isSpecification = 'false' ownerScope = 'instance'
                                                   targetScope = 'instance'>
                                                   <UML:StructuralFeature.multiplicity>
                                                     <UML:Multiplicity xmi.id = '-91-112--124--124-5c0ce2b1:1140955a358:-8000:0000000000000FEA'>
@@ -30205,7 +30205,7 @@
       fill="1"
       fillcolor="white"
       stroke="0"
-      strokecolor="0 255 255"
+      strokecolor="black"
     />
     <group name="Fig93.1"
          description="org.argouml.uml.diagram.ui.FigStereotypesCompartment[648, 1640, 179, 2]"
@@ -53585,7 +53585,7 @@
         strokecolor="black"
         font="Dialog"
         textsize="10"
-      >Name : String</text>
+      >name : String</text>
       <text name="Fig6.4.4"
         x="273"
         y="613"
