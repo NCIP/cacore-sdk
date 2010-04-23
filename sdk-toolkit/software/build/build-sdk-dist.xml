@@ -32,6 +32,11 @@
 		<property name="ivy.dep.file" value="${ivy.build.def.file}" />
 		<ivy:settings file="${ivy.settings.dir}/${ivy.settings.file}"/>
 	</target>
+	
+	<target name="ivy:package-iso21090_xsd" depends="ivy:init">
+		<ivy:resolve refresh="true" conf="standards_xsd" />
+		<ivy:retrieve pattern="${common.dir}/resources/iso21090/[artifact].[ext]" conf="standards_xsd" />
+	</target>
 
 	<target name="ivy:package-target_grid" depends="ivy:init">
 		<ivy:resolve refresh="true" conf="target_grid_training" />

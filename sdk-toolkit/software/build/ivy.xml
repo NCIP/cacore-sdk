@@ -10,12 +10,14 @@
 		<conf name="target_grid_prod" visibility="private"/>
 		<conf name="target_grid_qa" visibility="private"/>
 		<conf name="target_grid_stage" visibility="private"/>
+		<conf name="standards_xsd" visibility="public"/>
 	</configurations>
 
 	<publications>
 	</publications>
 
 	<dependencies>
+		<dependency rev="${ISO21090_DATATYPES_NARRATIVE_XSD}" org="ncicb" name="iso-datatypes"  conf="standards_xsd->standards_xsd"/>	
 		<dependency rev="${TRAINING_TARGET_GRID}" org="caGrid" name="target_grid" conf="target_grid_training->urls,trust,syncdesc" />
 		<dependency rev="${NCI_PROD_TARGET_GRID}" org="caGrid" name="target_grid" conf="target_grid_prod->urls,trust,syncdesc" />
 		<dependency rev="${NCI_QA_TARGET_GRID}" org="caGrid" name="target_grid" conf="target_grid_qa->urls,trust,syncdesc" />
