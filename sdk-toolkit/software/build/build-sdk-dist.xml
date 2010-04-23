@@ -68,7 +68,8 @@
 		build:workspace-modules,
 		dist:tools:retrieve,
 		dist:tools:retrieve:jboss-bindings,
-		ivy:package-target_grid
+		ivy:package-target_grid,
+		ivy:package-iso21090_xsd
 		" />
 
 	<target name="dist:tools:retrieve" description="Downloads binary applications from commonlibrary repository" depends="
