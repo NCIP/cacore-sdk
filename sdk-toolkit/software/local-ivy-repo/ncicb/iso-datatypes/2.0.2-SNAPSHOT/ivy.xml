@@ -16,12 +16,14 @@
 		<conf name="sources" visibility="public" description="this configuration contains the source artifact of this module, if any."/>
 		<conf name="javadoc" visibility="public" description="this configuration contains the javadoc artifact of this module, if any."/>
 		<conf name="optional" visibility="public" description="contains all optional dependencies"/>
+		<conf name="standards_xsd" visibility="public" description="contains common ISO Datatypes XSD's"/>
   </configurations>
   
   <publications>
     <artifact name="iso-datatypes-hibernate" type="jar" conf="master"/>
     <artifact name="iso-datatypes-extensions" type="jar" conf="master"/>
     <artifact name="iso-datatypes" type="jar" conf="master"/>
+    <artifact name="ISO_datatypes_Narrative" type="xsd" conf="standards_xsd" /> 
   </publications>
   
 	<dependencies> 
