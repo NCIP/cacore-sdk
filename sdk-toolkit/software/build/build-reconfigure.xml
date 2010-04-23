@@ -673,6 +673,7 @@
 				<antcall target="-package-local-client-grid-security" />
 				<antcall target="-package-local-client-logging" />
 				<antcall target="-package-local-client-iso-datatype" />
+				<antcall target="-package-local-client-jaxb" />				
 
 				<include-db-jar target.lib.directory="${package.client.local.lib.dir}" />
 				<!-- delete if present as duplicate mysql jar was added from Grid Services-->
@@ -693,7 +694,6 @@
 		<copy todir="${package.client.local.lib.dir}">
 			<fileset dir="${runtime.lib.dir}">
 				<include name="acegi-security-*.jar"/>
-				<include name="activation-*.jar"/>
 				<include name="antlr-*.jar"/>
 				<include name="asm-*.jar"/>
 				<include name="axis-1.4.jar"/>
@@ -717,8 +717,6 @@
 				<include name="dom4j-*.jar"/>
 				<include name="ehcache-*.jar"/>
 				<include name="hibernate-*.jar"/>
-				<include name="iso-datatypes-*.jar"/>
-				<include name="jaxb-*.jar"/>
 				<include name="jaxen-*.jar"/>
 				<include name="jaxrpc-*.jar"/>
 				<include name="jdom-1.1.jar"/>
@@ -726,7 +724,6 @@
 				<include name="log4j-*.jar"/>
 				<include name="spring-*.jar"/>
 				<include name="xercesImpl-*.jar"/>
-				<include name="stax-*.jar"/>
 			</fileset>
 			<fileset dir="${lib.dir}">
 				<include name="sdk-security-client-*.jar" />
@@ -735,7 +732,7 @@
 				<include name="sdk-system-core-*.jar"/>
 			</fileset>
 			<fileset dir="${output.target.dir}" />
-		</copy>
+		</copy>	
 		<if>
 			<equals arg1="${USE_CONNECTION_POOL}" arg2="true" />
 			<then>
@@ -756,10 +753,7 @@
 			<fileset dir="${system.config.web.classes.dir}">
 				<include name="${application.config.file}" />
 				<include name="${application.config.security.file}" />
-			</fileset>
-			<fileset dir="${iso21090.dist.relative.dir}">
-				<include name="${iso21090.datatype.xsd.file}" />
-			</fileset>			
+			</fileset>		
 		</copy>
 	</target>
 
@@ -894,20 +888,38 @@
 				<copy tofile="${package.client.local.conf.dir}/${csm.security.config.file}" file="${system.config.security.dir}/${csm.security.config.original.file}" overwrite="true" />
 			</then>
 		</if>
+	</target>	
+	<target name="-package-local-client-jaxb" depends="">
+		<if>
+			<equals arg1="${GENERATE_JAXB_MAPPING}" arg2="true" />
+			<then>
+				<echo message="JAXB enabled" />
+				<copy todir="${package.client.local.lib.dir}" overwrite="true">
+					<fileset dir="${runtime.lib.dir}">
+						<include name="activation-*.jar"/>
+						<include name="jaxb-*.jar"/>
+						<include name="stax-*.jar"/>
+					</fileset>
+				</copy>
+			</then>
+		</if>
 	</target>
-
 	<target name="-package-local-client-iso-datatype" depends="">
 		<if>
 			<equals arg1="${ISO21090_DATATYPES_ENABLED}" arg2="true" />
 			<then>
 				<echo message="ISO datatypes enabled" />
-
 				<copy todir="${package.client.local.lib.dir}">
 					<fileset dir="${runtime.lib.dir}">
-						<include name="iso-*.jar"/>
+						<include name="iso-datatypes-*.jar"/>
 					</fileset>
 				</copy>
-				<echo message="ISO datatypes enabled - Copy COmplete" />
+				<copy todir="${package.client.local.conf.dir}">
+					<fileset dir="${iso21090.dist.relative.dir}">
+						<include name="${iso21090.datatype.xsd.file}" />
+					</fileset>			
+				</copy>				
+				<echo message="ISO datatypes enabled - Copy Complete" />
 			</then>
 		</if>
 	</target>
@@ -924,6 +936,8 @@
 				<antcall target="-package-remote-client-writable-api" />
 				<antcall target="-package-remote-client-security" />
 				<antcall target="-package-remote-client-grid-security" />
+				<antcall target="-package-remote-client-iso-datatype" />
+				<antcall target="-package-remote-client-jaxb" />	
 			</then>
 		</if>
 	</target>
@@ -941,7 +955,6 @@
 		<copy todir="${package.client.remote.lib.dir}">
 			<fileset dir="${runtime.lib.dir}">
 				<include name="acegi-security-*.jar"/>
-				<include name="activation-*.jar"/>
 				<include name="antlr-*.jar"/>
 				<include name="asm-*.jar"/>
 				<include name="caGrid-CQL-cql.*.jar"/>
@@ -955,14 +968,10 @@
 				<include name="hibernate-*.jar"/>
 				<include name="hibernate-annotations-*.jar"/>
 				<include name="hibernate-validator-*.jar"/>
-				<include name="iso-datatypes-*.jar"/>
-				<exclude name="iso-datatypes-hibernate*.jar" />
-				<include name="jaxb-*.jar"/>
 				<include name="jaxen-*.jar"/>
 				<include name="jdom-1.1.jar"/>
 				<include name="log4j-*.jar"/>
 				<include name="spring-*.jar"/>
-				<include name="stax-*.jar"/>
 				<include name="xercesImpl-*.jar"/>
 			</fileset>
 			<fileset dir="${lib.dir}">
@@ -979,12 +988,7 @@
 			<fileset dir="${system.config.client.remote.dir}">
 				<exclude name="**/*template*" />
 			</fileset>
-		</copy>
-		<copy todir="${package.client.remote.conf.dir}">
-			<fileset dir="${iso21090.dist.relative.dir}">
-				<include name="${iso21090.datatype.xsd.file}" />
-			</fileset>			
-		</copy>		
+		</copy>	
 	</target>
 
 	<target name="-package-remote-client-writable-api" depends="">
@@ -1099,7 +1103,41 @@
 			</then>
 		</if>
 	</target>
-
+	<target name="-package-remote-client-jaxb" depends="">
+		<if>
+			<equals arg1="${GENERATE_JAXB_MAPPING}" arg2="true" />
+			<then>
+				<echo message="JAXB enabled" />
+				<copy todir="${package.client.remote.lib.dir}" overwrite="true">
+					<fileset dir="${runtime.lib.dir}">
+						<include name="activation-*.jar"/>
+						<include name="jaxb-*.jar"/>
+						<include name="stax-*.jar"/>
+					</fileset>
+				</copy>
+			</then>
+		</if>
+	</target>
+	<target name="-package-remote-client-iso-datatype" depends="">
+		<if>
+			<equals arg1="${ISO21090_DATATYPES_ENABLED}" arg2="true" />
+			<then>
+				<echo message="ISO datatypes enabled" />
+				<copy todir="${package.client.remote.lib.dir}">
+					<fileset dir="${runtime.lib.dir}">
+						<include name="iso-datatypes-*.jar"/>
+						<exclude name="iso-datatypes-hibernate*.jar" />
+					</fileset>
+				</copy>
+				<copy todir="${package.client.remote.conf.dir}">
+					<fileset dir="${iso21090.dist.relative.dir}">
+						<include name="${iso21090.datatype.xsd.file}" />
+					</fileset>			
+				</copy>				
+				<echo message="ISO datatypes enabled - Copy Complete" />
+			</then>
+		</if>
+	</target>	
 
 	<!-- #################################################################### -->
 	<!-- ######################## WS Client targets ######################### -->
@@ -1165,10 +1203,6 @@
 				<include name="hibernate-*.jar"/>
 				<include name="hibernate-annotations-*.jar"/>
 				<include name="hibernate-validator-*.jar"/>
-				<include name="iso-datatypes-*.jar"/>
-				<exclude name="iso-datatypes-extensions*.jar" />
-				<include name="jaxb-*.jar"/>
-				<include name="stax-*.jar"/>
 				<include name="jaxrpc-*.jar"/>
 				<include name="jdom-1.1.jar"/>
 				<include name="jta-*.jar"/>
@@ -1195,6 +1229,31 @@
 				<include name="${orm.file}" />
 			</fileset>
 		</copy>
+		<if>
+			<equals arg1="${GENERATE_JAXB_MAPPING}" arg2="true" />
+			<then>
+				<echo message="JAXB is enabled.  Copying JAXB related jars to web app staging lib" />
+				<copy todir="${temp.webapp.staging.lib.dir}" overwrite="true">
+					<fileset dir="${runtime.lib.dir}">
+						<include name="activation-*.jar"/>
+						<include name="jaxb-*.jar"/>
+						<include name="stax-*.jar"/>
+					</fileset>
+				</copy>
+			</then>
+		</if>
+		<if>
+			<equals arg1="${ISO21090_DATATYPES_ENABLED}" arg2="true" />
+			<then>
+				<echo message="ISO21090 Datatypes are enabled.  Copying ISO Datatype related jar files to web app staging lib" />
+				<copy todir="${temp.webapp.staging.lib.dir}" overwrite="true">
+					<fileset dir="${runtime.lib.dir}">
+						<include name="iso-datatypes-*.jar"/>
+						<exclude name="iso-datatypes-extensions*.jar" />
+					</fileset>
+				</copy>
+			</then>
+		</if>
 		<if>
 			<equals arg1="${USE_CONNECTION_POOL}" arg2="true" />
 			<then>
