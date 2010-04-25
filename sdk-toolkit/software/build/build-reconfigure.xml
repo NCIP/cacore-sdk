@@ -911,7 +911,7 @@
 				<echo message="ISO datatypes enabled" />
 				<copy todir="${package.client.local.lib.dir}">
 					<fileset dir="${runtime.lib.dir}">
-						<include name="iso-datatype-*.jar"/>
+						<include name="iso-datatypes-*.jar"/>
 					</fileset>
 				</copy>
 				
