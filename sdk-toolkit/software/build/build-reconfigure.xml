@@ -911,14 +911,15 @@
 				<echo message="ISO datatypes enabled" />
 				<copy todir="${package.client.local.lib.dir}">
 					<fileset dir="${runtime.lib.dir}">
-						<include name="iso-datatypes-*.jar"/>
+						<include name="iso-datatype-*.jar"/>
 					</fileset>
 				</copy>
+				
 				<copy todir="${package.client.local.conf.dir}">
-					<fileset dir="${iso21090.dist.relative.dir}">
-						<include name="${iso21090.datatype.xsd.file}" />
-					</fileset>			
-				</copy>				
+					<fileset dir="${output.src.dir}">
+						<include name="IsoConstants.xml"/>
+					</fileset>
+				</copy>
 				<echo message="ISO datatypes enabled - Copy Complete" />
 			</then>
 		</if>
@@ -989,6 +990,11 @@
 				<exclude name="**/*template*" />
 			</fileset>
 		</copy>	
+		<copy todir="${package.client.remote.conf.dir}">
+			<fileset dir="${iso21090.dist.relative.dir}">
+				<include name="${iso21090.datatype.xsd.file}" />
+			</fileset>			
+		</copy>		
 	</target>
 
 	<target name="-package-remote-client-writable-api" depends="">
@@ -1362,6 +1368,16 @@
 				<copy todir="${temp.webapp.staging.lib.dir}" overwrite="true">
 					<fileset dir="${runtime.lib.dir}">
 						<include name="xalan*.*" />
+					</fileset>
+				</copy>
+			</then>
+		</if>
+		<if>
+			<equals arg1="${ISO21090_DATATYPES_ENABLED}" arg2="true" />
+			<then>
+				<copy todir="${temp.webapp.staging.classes.dir}">
+					<fileset dir="${output.src.dir}">
+						<include name="IsoConstants.xml"/>
 					</fileset>
 				</copy>
 			</then>

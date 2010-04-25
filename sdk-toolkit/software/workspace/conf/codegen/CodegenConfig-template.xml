@@ -22,6 +22,7 @@
 		<constructor-arg index="2">
 			<list>
 				<ref bean="HibernateMappingTransformer"/>
+				<ref bean="IsoConstantTransformer"/>
 				<ref bean="BeanTransformer"/>
 				<ref bean="InterfaceTransformer"/>
 				<ref bean="EHCacheTransformer"/>
@@ -140,6 +141,19 @@
 		<property name="transformerUtils" ref="TransformerUtils"></property>			
 	</bean>
 
+	<bean name="IsoConstantTransformer" class="gov.nih.nci.codegen.transformer.IsoConstantTransformer">
+		<property name="artifactHandler">
+			<bean class="gov.nih.nci.codegen.handler.FileHandler">
+				<property name="useArtifactSource" value="false"/>
+				<property name="outputDir" value="@OUTPUTDIR@"/>				
+				<property name="fileName" value="IsoConstants.xml"/>						
+			</bean>
+		</property>
+		<property name="enabled" value="@GENERATE_ISO_CONSTANT@"/>
+		<property name="name" value="Iso Constant Transformer" />		
+		<property name="transformerUtils" ref="TransformerUtils"/>	
+	</bean>
+	
 	<bean name="BeanTransformer" class="gov.nih.nci.codegen.transformer.jet.POJOTransformer">
 		<property name="artifactHandler">
 			<bean class="gov.nih.nci.codegen.handler.FileHandler">
