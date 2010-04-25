@@ -36,6 +36,8 @@ import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
 import org.jdom.Element;
 
+import gov.nih.nci.iso21090.hibernate.node.*;
+
 public class TransformerUtils
 {
 	private static Logger log = Logger.getLogger(TransformerUtils.class);
@@ -69,6 +71,7 @@ public class TransformerUtils
 	
 	public static final String TV_ID_ATTR_COLUMN = "id-attribute";
 	public static final String TV_MAPPED_ATTR_COLUMN = "mapped-attributes";
+	public static final String TV_MAPPED_ATTR_CONSTANT = "mapped-constant";
 	public static final String TV_ASSOC_COLUMN = "implements-association";
 	public static final String TV_INVERSE_ASSOC_COLUMN = "inverse-of";
 	public static final String TV_DISCR_COLUMN = "discriminator";

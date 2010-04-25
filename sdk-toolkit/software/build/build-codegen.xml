@@ -174,6 +174,13 @@
 		</or>
 	</condition>
 
+	<condition property="ENABLE_ISO_CONSTANT_GENERATION" value="true" else="false">
+		<and>
+			<equals arg1="${ISO21090_DATATYPES_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${ENABLE_HIBERNATE_MAPPING_GENERATION}" arg2="true" casesensitive="false" trim="true" />
+		</and>
+	</condition>
+	
 	<condition property="ENABLE_CASTOR_MAPPING_GENERATION" value="true" else="false">
 			<or>
 				<equals arg1="${GENERATE_CASTOR_MAPPING}" arg2="true" casesensitive="false" trim="true" />
@@ -349,6 +356,7 @@
 			<filter token="VALIDATE_GME_TAGS" value="${ENABLE_GME_TAGS_VALIDATOR}" />
 			<filter token="VALIDATE_WRITABLE_API_EXTENSION" value="${ENABLE_WRITABLE_API_EXTENSION_VALIDATOR}" />
 			<filter token="GENERATE_HIBERNATE_MAPPING" value="${ENABLE_HIBERNATE_MAPPING_GENERATION}" />
+			<filter token="GENERATE_ISO_CONSTANT" value="${ENABLE_ISO_CONSTANT_GENERATION}" />
 			<filter token="GENERATE_BEANS" value="${ENABLE_BEANS_GENERATION}" />
 			<filter token="GENERATE_CASTOR_MAPPING" value="${ENABLE_CASTOR_MAPPING_GENERATION}" />
 			<filter token="GENERATE_JAXB_MAPPING" value="${ENABLE_JAXB_MAPPING_GENERATION}" />
@@ -361,7 +369,7 @@
 			<filter token="ENABLE_HIBERNATE_VALIDATOR_START" value="${ENABLE_HIBERNATE_VALIDATOR_START}" />
 			<filter token="ENABLE_HIBERNATE_VALIDATOR_END" value="${ENABLE_HIBERNATE_VALIDATOR_END}" />
 			<filter token="CADSR_CONNECTION_URL" value="${CADSR_CONNECTION_URL}" />
-
+			
 			<filter token="CSM_PROJECT_NAME" value="${CSM_PROJECT_NAME}" />
 			<filter token="INSTANCE_LEVEL_SECURITY_ENABLED" value="${INSTANCE_LEVEL_SECURITY_ENABLED}" />
 			<filter token="ATTRIBUTE_LEVEL_SECURITY_ENABLED" value="${ATTRIBUTE_LEVEL_SECURITY_ENABLED}" />

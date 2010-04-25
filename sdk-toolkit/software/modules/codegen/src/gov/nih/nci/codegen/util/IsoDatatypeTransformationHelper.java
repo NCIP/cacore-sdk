@@ -7,6 +7,11 @@ import gov.nih.nci.ncicb.xmiinout.domain.UMLModel;
 import gov.nih.nci.ncicb.xmiinout.domain.UMLPackage;
 import gov.nih.nci.ncicb.xmiinout.domain.UMLTaggedValue;
 import gov.nih.nci.ncicb.xmiinout.util.ModelUtil;
+import gov.nih.nci.iso21090.hibernate.node.ComplexNode;
+import gov.nih.nci.iso21090.hibernate.node.Node;
+import gov.nih.nci.iso21090.hibernate.node.RootNode;
+import gov.nih.nci.iso21090.hibernate.node.SimpleNode;
+import gov.nih.nci.iso21090.hibernate.node.ConstantNode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -324,9 +329,10 @@ public class IsoDatatypeTransformationHelper
 		{
 			String componentName = useElementName?" name=\""+node.getName()+"\"":"";
 			buffer.append(prefix+"<"+elementType+componentName+" class=\""+componentClassName+"\">");
+			buffer.append(prefix+"\t<tuplizer class=\"gov.nih.nci.iso21090.hibernate.tuple.ConstantAndNullFlavorTuplizer\"/>");
 		}
 		
-		buffer.append(prefix+"\t<tuplizer class=\"gov.nih.nci.iso21090.hibernate.tuple.ConstantAndNullFlavorTuplizer\"/>");
+		
 		for(Node innerNode: node.getInnerNodes())
 		{
 			if(innerNode instanceof SimpleNode)
@@ -364,7 +370,7 @@ public class IsoDatatypeTransformationHelper
 		}
 	}
 
-	private boolean isEnum(String type) throws GenerationException
+	public boolean isEnum(String type) throws GenerationException
 	{
 		if(!type.startsWith(utils.ISO_ROOT_PACKAGE_NAME+".")) return false;
 
@@ -406,7 +412,7 @@ public class IsoDatatypeTransformationHelper
 		return propertyType;
 	}
 
-	private String converteIsoClassNameToJavaClassName(String isoClassName)
+	public String converteIsoClassNameToJavaClassName(String isoClassName)
 	{
 		String isoName = isoClassName.substring((utils.ISO_ROOT_PACKAGE_NAME+".").length());
 		if(isoName.indexOf('<')>0)
@@ -525,10 +531,21 @@ public class IsoDatatypeTransformationHelper
 					{
 						if(val.startsWith(prefix) && !val.equals(prefix+"id"))
 						{
-							parseAndAddNode(rootNode,val.substring(prefix.length()),column.getName());
+							parseAndAddNode(rootNode,val.substring(prefix.length()),column.getName(),true);
 						}
 					}
 				}
+			}
+		}
+		
+		String tagValuePrefix = utils.TV_MAPPED_ATTR_CONSTANT+":"+prefix;
+		for(UMLTaggedValue tv: attr.getTaggedValues())
+		{
+			if (tv.getName().startsWith(tagValuePrefix))
+			{
+				String tvName = tv.getName();
+				parseAndAddNode(rootNode,tvName.substring(tagValuePrefix.length())
+						,tv.getValue(),false);
 			}
 		}
 		return rootNode;
@@ -539,10 +556,10 @@ public class IsoDatatypeTransformationHelper
 	 * 
 	 * @param rootNode
 	 * @param value
-	 * @param columnName
+	 * @param nodeValue
 	 * @throws GenerationException
 	 */
-	private void parseAndAddNode(ComplexNode rootNode, String value, String columnName) throws GenerationException
+	private void parseAndAddNode(ComplexNode rootNode, String value, String nodeValue, boolean isSimpleNode) throws GenerationException
 	{
 		String[] nodePath = value.split("\\.");
 	
@@ -554,8 +571,8 @@ public class IsoDatatypeTransformationHelper
 			{
 				if(node.getName().equals(nodePath[i]))
 				{
-					if(node instanceof SimpleNode)
-						throw new GenerationException("Can not add "+rootNode.getName()+"."+value+". It is defined as simple");
+					if(node instanceof SimpleNode || node instanceof ConstantNode)
+						throw new GenerationException("Can not add "+rootNode.getName()+"."+value+". It is not defined as complex.");
 					currentNode = (ComplexNode)node;
 					createNewNode = false;
 				}
@@ -575,9 +592,15 @@ public class IsoDatatypeTransformationHelper
 				throw new GenerationException("Can not map "+rootNode.getName()+"."+value+" twice. It is already defined");
 			}
 		}
-		SimpleNode newNode = new SimpleNode(nodePath[nodePath.length-1]);
-		newNode.setColumnName(columnName);
-		currentNode.addInnerNode(newNode);
+		if(isSimpleNode){
+			SimpleNode newNode = new SimpleNode(nodePath[nodePath.length-1]);
+			newNode.setColumnName(nodeValue);
+			currentNode.addInnerNode(newNode);
+		}else{
+			ConstantNode newNode = new ConstantNode(nodePath[nodePath.length-1]);
+			newNode.setConstantValue(nodeValue);
+			currentNode.addInnerNode(newNode);
+		}
 	}
 
 	
@@ -607,7 +630,7 @@ public class IsoDatatypeTransformationHelper
 	}
 
 	/**
-	 * Looks up the type of the attributeName in he isoClassName. Certain specific rules on the DSET, EN, and AD are followed
+	 * Looks up the type of the attributeName in the isoClassName. Certain specific rules on the DSET, EN, and AD are followed
 	 * 
 	 * @param isoClassName
 	 * @param attributeName
@@ -623,11 +646,11 @@ public class IsoDatatypeTransformationHelper
 		
 		String returnVal = null;
 
-		if(isoClassName.startsWith(utils.ISO_ROOT_PACKAGE_NAME+".EN") && !isoClassName.startsWith(utils.ISO_ROOT_PACKAGE_NAME+".ENXP"))
+		if(isoClassName.startsWith(utils.ISO_ROOT_PACKAGE_NAME+".EN") && !isoClassName.startsWith(utils.ISO_ROOT_PACKAGE_NAME+".ENXP") && !"nullFalvor".equals(attributeName))
 		{
 			returnVal = utils.ISO_ROOT_PACKAGE_NAME+".ENXP";
 		}
-		else if(isoClassName.equals(utils.ISO_ROOT_PACKAGE_NAME+".AD"))
+		else if(isoClassName.equals(utils.ISO_ROOT_PACKAGE_NAME+".AD") && !"nullFalvor".equals(attributeName))
 		{
 			
 			String key = utils.TV_MAPPED_COLLECTION_ELEMENT_TYPE+":"+attributeName;
