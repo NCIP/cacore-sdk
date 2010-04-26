@@ -918,9 +918,6 @@
 				<copy todir="${package.client.local.conf.dir}">
 					<fileset dir="${output.src.dir}">
 						<include name="IsoConstants.xml"/>
-					</fileset>
-					<fileset dir="${iso21090.dist.relative.dir}">
-						<include name="${iso21090.datatype.xsd.file}" />
 					</fileset>					
 				</copy>
 				<echo message="ISO datatypes enabled - Copy Complete" />
@@ -992,11 +989,6 @@
 			<fileset dir="${system.config.client.remote.dir}">
 				<exclude name="**/*template*" />
 			</fileset>
-		</copy>	
-		<copy todir="${package.client.remote.conf.dir}">
-			<fileset dir="${iso21090.dist.relative.dir}">
-				<include name="${iso21090.datatype.xsd.file}" />
-			</fileset>			
 		</copy>		
 	</target>
 
@@ -1137,12 +1129,7 @@
 						<include name="iso-datatypes-*.jar"/>
 						<exclude name="iso-datatypes-hibernate*.jar" />
 					</fileset>
-				</copy>
-				<copy todir="${package.client.remote.conf.dir}">
-					<fileset dir="${iso21090.dist.relative.dir}">
-						<include name="${iso21090.datatype.xsd.file}" />
-					</fileset>			
-				</copy>				
+				</copy>			
 				<echo message="ISO datatypes enabled - Copy Complete" />
 			</then>
 		</if>

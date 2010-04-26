@@ -529,6 +529,9 @@
 			<include name="**/*.xsd" />
 			<include name="unmarshaller-xml-mapping.xml" />
 			<include name="xml-mapping.xml" />
+			<fileset dir="${iso21090.dist.relative.dir}">
+				<include name="${iso21090.datatype.xsd.file}" />
+			</fileset>
 		</jar>
 	</target>
 
