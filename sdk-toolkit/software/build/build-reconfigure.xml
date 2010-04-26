@@ -919,6 +919,9 @@
 					<fileset dir="${output.src.dir}">
 						<include name="IsoConstants.xml"/>
 					</fileset>
+					<fileset dir="${iso21090.dist.relative.dir}">
+						<include name="${iso21090.datatype.xsd.file}" />
+					</fileset>					
 				</copy>
 				<echo message="ISO datatypes enabled - Copy Complete" />
 			</then>
