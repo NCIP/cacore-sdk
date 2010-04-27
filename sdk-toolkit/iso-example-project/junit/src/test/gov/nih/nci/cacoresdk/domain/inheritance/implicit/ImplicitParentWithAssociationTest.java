@@ -9,6 +9,7 @@ import gov.nih.nci.cacoresdk.domain.inheritance.implicit.SaltwaterFishTank;
 import gov.nih.nci.cacoresdk.domain.inheritance.implicit.Substrate;
 import gov.nih.nci.cacoresdk.domain.inheritance.implicit.Tank;
 import gov.nih.nci.cacoresdk.domain.inheritance.implicit.TankAccessory;
+import gov.nih.nci.iso21090.Ii;
 import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.query.cql.CQLAssociation;
 import gov.nih.nci.system.query.cql.CQLAttribute;
@@ -544,7 +545,9 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 	public void testZeroAssociationNestedSearch() throws ApplicationException
 	{
 		FishTank searchObject = new FishTank();
-		searchObject.setId(5);
+		Ii ii = new Ii();
+		ii.setExtension("5");
+		searchObject.setId(ii);
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.inheritance.implicit.FishTank",searchObject );
 
 		assertNotNull(results);
@@ -590,7 +593,9 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 	public void testAssociationNestedSearch1() throws ApplicationException
 	{
 		Fish searchObject = new Fish();
-		searchObject.setId(new Integer(3));
+		Ii ii = new Ii();
+		ii.setExtension("3");
+		searchObject.setId(ii);
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.inheritance.implicit.AngelFish",searchObject );
 
 		assertNotNull(results);
@@ -615,7 +620,9 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 	public void testAssociationNestedSearch2() throws ApplicationException
 	{
 		AngelFish searchObject = new AngelFish();
-		searchObject.setId(new Integer(3));
+		Ii ii = new Ii();
+		ii.setExtension("3");
+		searchObject.setId(ii);
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.inheritance.implicit.Fish",searchObject );
 
 		assertNotNull(results);
@@ -661,7 +668,9 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 	public void xtestAssociationNestedSearch4() throws ApplicationException
 	{
 		FishTank searchObject = new FishTank();
-		searchObject.setId(new Integer(1));
+		Ii ii = new Ii();
+		ii.setExtension("1");
+		searchObject.setId(ii);
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.inheritance.implicit.Tank",searchObject );
 
 		assertNotNull(results);
@@ -682,7 +691,9 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 	public void xtestAssociationNestedSearch5() throws ApplicationException
 	{
 		FishTank searchObject = new FishTank();
-		searchObject.setId(new Integer(1));
+		Ii ii = new Ii();
+		ii.setExtension("1");
+		searchObject.setId(ii);
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.inheritance.implicit.FreshwaterFishTank",searchObject );
 
 		assertNotNull(results);
@@ -708,7 +719,9 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 	public void xtestAssociationNestedSearch6() throws ApplicationException
 	{
 		FreshwaterFishTank searchObject = new FreshwaterFishTank();
-		searchObject.setId(new Integer(1));
+		Ii ii = new Ii();
+		ii.setExtension("1");
+		searchObject.setId(ii);
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.inheritance.implicit.FishTank",searchObject );
 
 		assertNotNull(results);
@@ -734,7 +747,9 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 	public void xtestAssociationNestedSearch7() throws ApplicationException
 	{
 		Fish searchObject = new Fish();
-		searchObject.setId(new Integer(4));
+		Ii ii = new Ii();
+		ii.setExtension("4");
+		searchObject.setId(ii);
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.inheritance.implicit.Tank",searchObject );
 
 		assertNotNull(results);
@@ -756,7 +771,9 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 	public void xtestAssociationNestedSearch9() throws ApplicationException
 	{
 		TankAccessory searchObject = new TankAccessory();
-		searchObject.setId(new Integer(4));
+		Ii ii = new Ii();
+		ii.setExtension("4");
+		searchObject.setId(ii);
 		
 		
 		boolean flag = false;
@@ -804,7 +821,9 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 	public void testAssociationNestedSearch11() throws ApplicationException
 	{
 		SaltwaterFishTank searchObject = new SaltwaterFishTank();
-		searchObject.setId(new Integer(3));
+		Ii ii = new Ii();
+		ii.setExtension("3");
+		searchObject.setId(ii);
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.inheritance.implicit.Substrate",searchObject );
 
 		assertNotNull(results);
@@ -1157,7 +1176,9 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 	public void testGetAssociation3() throws ApplicationException
 	{
 		SaltwaterFishTank searchObject = new SaltwaterFishTank();
-		searchObject.setId(new Integer(3));
+		Ii ii = new Ii();
+		ii.setExtension("3");
+		searchObject.setId(ii);
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.inheritance.implicit.SaltwaterFishTank",searchObject );
 
 		assertNotNull(results);
@@ -1183,7 +1204,9 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 	public void testGetAssociation4() throws ApplicationException
 	{
 		Fish searchObject = new Fish();
-		searchObject.setId(new Integer(1));
+		Ii ii = new Ii();
+		ii.setExtension("1");
+		searchObject.setId(ii);
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.inheritance.implicit.Fish",searchObject );
 
 		assertNotNull(results);
@@ -1205,7 +1228,9 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 	public void testGetAssociation5() throws ApplicationException
 	{
 		TankAccessory searchObject = new TankAccessory();
-		searchObject.setId(new Integer(1));
+		Ii ii = new Ii();
+		ii.setExtension("1");
+		searchObject.setId(ii);
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.inheritance.implicit.TankAccessory",searchObject );
 
 		assertNotNull(results);

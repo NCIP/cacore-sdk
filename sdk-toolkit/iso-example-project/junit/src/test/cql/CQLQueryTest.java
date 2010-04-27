@@ -67,7 +67,7 @@ public class CQLQueryTest extends SDKTestBase
 			assertNotNull(suit.getId());
 			assertNotNull(suit.getName());
 			
-			assertTrue("Suit id must equal '3':",suit.getId()==3);
+			assertTrue("Suit id must equal '3':",new Integer(suit.getId().getExtension())==3);
 			
 			Collection cardCollection = suit.getCardCollection();
 			assertNotNull(cardCollection);
@@ -87,7 +87,7 @@ public class CQLQueryTest extends SDKTestBase
 			for (Iterator j = cardCollection.iterator();j.hasNext();){
 				Card card = (Card)j.next();
 				
-				if (card.getId()==32)//suit 3 has card with id '32'
+				if (new Integer(card.getId().getExtension())==32)//suit 3 has card with id '32'
 					cardFound = true;
 			}
 			assertTrue("Card with id 32 not found",cardFound);
@@ -178,7 +178,7 @@ public class CQLQueryTest extends SDKTestBase
 			for (Iterator j = cardCollection.iterator();j.hasNext();){
 				Card card = (Card)j.next();
 				
-				if (card.getId()==2 || card.getId()==32)
+				if (new Integer(card.getId().getExtension())==2 || new Integer(card.getId().getExtension())==32)
 					cardFound = true;
 			}
 			assertTrue("Card with id 2 or 32 not found",cardFound);
