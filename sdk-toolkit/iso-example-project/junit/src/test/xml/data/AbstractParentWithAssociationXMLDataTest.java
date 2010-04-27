@@ -4,6 +4,7 @@ import gov.nih.nci.cacoresdk.domain.inheritance.abstrakt.PrivateTeacher;
 import gov.nih.nci.cacoresdk.domain.inheritance.abstrakt.Pupil;
 import gov.nih.nci.cacoresdk.domain.inheritance.abstrakt.Teacher;
 import gov.nih.nci.iso21090.Ii;
+import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -155,6 +156,26 @@ public class AbstractParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 		assertEquals(new Integer(1), result2.getId());
 	}
 
+	public void testAssociationNestedSearchHQL1() throws Exception {
+		HQLCriteria hqlCriteria = new HQLCriteria(
+				"from gov.nih.nci.cacoresdk.domain.inheritance.abstrakt.PrivateTeacher where id='1'");
+		Collection results = search(hqlCriteria,
+				"gov.nih.nci.cacoresdk.domain.inheritance.abstrakt.PrivateTeacher");
+
+		assertNotNull(results);
+		assertEquals(1, results.size());
+
+		PrivateTeacher result = (PrivateTeacher) results.iterator().next();
+		toXML(result);
+		PrivateTeacher result2 = (PrivateTeacher) fromXML(result);
+
+		assertNotNull(result2);
+		assertNotNull(result2.getId());
+		assertNotNull(result2.getName());
+		assertNotNull(result2.getYearsExperience());
+		assertEquals(new Integer(1), result2.getId());
+	}
+
 	/**
 	 * Uses Nested Search Criteria for inheritance as association in search
 	 * Verifies that the results are returned 
@@ -183,5 +204,23 @@ public class AbstractParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(result2.getName());
 		assertEquals(new Integer(2), result2.getId());
 	}
+	
+	public void testAssociationNestedSearchHQL2() throws Exception {
+		HQLCriteria hqlCriteria = new HQLCriteria(
+				"from gov.nih.nci.cacoresdk.domain.inheritance.abstrakt.PrivateTeacher where id='2'");
+		Collection results = search(hqlCriteria,
+				"gov.nih.nci.cacoresdk.domain.inheritance.abstrakt.PrivateTeacher");
 
+		assertNotNull(results);
+		assertEquals(1, results.size());
+
+		Teacher result = (Teacher) results.iterator().next();
+		toXML(result);
+		Teacher result2 = (Teacher) fromXML(result);
+
+		assertNotNull(result2);
+		assertNotNull(result2.getId());
+		assertNotNull(result2.getName());
+		assertEquals(new Integer(2), result2.getId());
+	}
 }
