@@ -18,6 +18,8 @@ import java.util.List;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 
+import test.gov.nih.nci.cacoresdk.SDKISOTestBase;
+
 public class DsetTelDataTypeTest extends SDKISOTestBase
 {
 

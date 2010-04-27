@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import test.gov.nih.nci.cacoresdk.SDKISOTestBase;
+
 /*
  * Test case for DsetCd ( DSET<CD> ) data type
  */

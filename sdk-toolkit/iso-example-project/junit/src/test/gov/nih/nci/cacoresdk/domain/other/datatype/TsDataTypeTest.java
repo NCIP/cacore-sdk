@@ -17,6 +17,8 @@ import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Property;
 
+import test.gov.nih.nci.cacoresdk.SDKISOTestBase;
+
 /*
  * Test case for Ts data type
  */

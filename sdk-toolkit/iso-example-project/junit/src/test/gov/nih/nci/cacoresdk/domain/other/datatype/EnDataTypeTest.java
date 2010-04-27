@@ -14,6 +14,8 @@ import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Property;
 import org.hibernate.criterion.Restrictions;
 
+import test.gov.nih.nci.cacoresdk.SDKISOTestBase;
+
 /*
  * Test case for En ( EN ) data type
  */

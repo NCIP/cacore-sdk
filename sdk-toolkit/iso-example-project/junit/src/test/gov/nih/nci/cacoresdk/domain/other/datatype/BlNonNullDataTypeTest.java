@@ -12,6 +12,8 @@ import java.util.List;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Property;
 
+import test.gov.nih.nci.cacoresdk.SDKISOTestBase;
+
 /*
  * Test case for BlNonNull ( BL.NONNULL ) data type
  */
