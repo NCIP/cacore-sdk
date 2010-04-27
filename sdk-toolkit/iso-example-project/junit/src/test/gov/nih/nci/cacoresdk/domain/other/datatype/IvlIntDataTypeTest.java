@@ -16,6 +16,8 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Property;
 import org.hibernate.criterion.Restrictions;
 
+import test.gov.nih.nci.cacoresdk.SDKISOTestBase;
+
 /*
  * Test case for IvlInt ( IVL<INT> ) data type
  */
