@@ -14,7 +14,10 @@ import gov.nih.nci.iso21090.hibernate.node.SimpleNode;
 import gov.nih.nci.iso21090.hibernate.node.ConstantNode;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class IsoDatatypeTransformationHelper
 {
@@ -383,7 +386,7 @@ public class IsoDatatypeTransformationHelper
 		return false;
 	}
 
-	private String converteIsoAttributeTypeToHibernateType(String isoType)
+	private String converteIsoAttributeTypeToHibernateType(String isoType) throws GenerationException
 	{
 		if(isoType.startsWith(utils.ISO_ROOT_PACKAGE_NAME+"."))
 			isoType = isoType.substring((utils.ISO_ROOT_PACKAGE_NAME+".").length());
@@ -407,7 +410,11 @@ public class IsoDatatypeTransformationHelper
 			propertyType = "boolean";
 		if("date".equals(isoType))
 			propertyType = "java.util.Date";
-
+		if("ENXP_qualifier".equals(isoType))
+			propertyType = "string";
+		
+		if(propertyType == null)
+			throw new GenerationException("Can not determine Hibernate Type for corresponding ISO Datatype:"+isoType);
 
 		return propertyType;
 	}
@@ -625,8 +632,21 @@ public class IsoDatatypeTransformationHelper
 				}
 				if(node instanceof ComplexNode)
 					traverseNodeAndAttachDataType(node, klass, attribute);
+				else if(!isEnum(node.getIsoClassName()) && !isValidIsoLeafLevelProperty(node.getIsoClassName()))
+					throw new GenerationException("Can not map the ISO datatype as a Simple or Constant type :"+parentNode.getName()+"."+node.getName());
 			}
 		}
+	}
+
+	@SuppressWarnings("serial")
+	private boolean isValidIsoLeafLevelProperty(String isoType)
+	{
+		if(isoType.startsWith(utils.ISO_ROOT_PACKAGE_NAME+".")) 
+			isoType = isoType.substring((utils.ISO_ROOT_PACKAGE_NAME+".").length());
+		
+		Set<String> validTypes = new HashSet<String>(Arrays.asList(new String[] {"Uri","Uid","Code","String","Binary","Integer", "Real", "Boolean", "date", "ENXP_qualifier"}));
+		
+		return validTypes.contains(isoType);
 	}
 
 	/**
@@ -646,11 +666,15 @@ public class IsoDatatypeTransformationHelper
 		
 		String returnVal = null;
 
-		if(isoClassName.startsWith(utils.ISO_ROOT_PACKAGE_NAME+".EN") && !isoClassName.startsWith(utils.ISO_ROOT_PACKAGE_NAME+".ENXP") && !"nullFalvor".equals(attributeName))
+		if(isoClassName.startsWith(utils.ISO_ROOT_PACKAGE_NAME+".EN") && !isoClassName.equals(utils.ISO_ROOT_PACKAGE_NAME+".ENXP") && !"nullFlavor".equals(attributeName))
 		{
 			returnVal = utils.ISO_ROOT_PACKAGE_NAME+".ENXP";
 		}
-		else if(isoClassName.equals(utils.ISO_ROOT_PACKAGE_NAME+".AD") && !"nullFalvor".equals(attributeName))
+		else if(isoClassName.equals(utils.ISO_ROOT_PACKAGE_NAME+".ENXP") && "qualifier".equals(attributeName))
+		{
+			returnVal = utils.ISO_ROOT_PACKAGE_NAME+".ENXP_qualifier";
+		}
+		else if(isoClassName.equals(utils.ISO_ROOT_PACKAGE_NAME+".AD") && !"nullFlavor".equals(attributeName))
 		{
 			
 			String key = utils.TV_MAPPED_COLLECTION_ELEMENT_TYPE+":"+attributeName;
