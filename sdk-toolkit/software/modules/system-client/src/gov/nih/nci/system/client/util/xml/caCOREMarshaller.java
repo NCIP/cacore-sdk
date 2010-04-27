@@ -109,8 +109,8 @@ public class caCOREMarshaller implements gov.nih.nci.system.client.util.xml.Mars
 		
 			marshaller.setMapping(mapping);
 		} catch (MappingException e) {
-			log.error("Exception caught while trying to set the mapping file: " + e.getException(),e);
-			throw new XMLUtilityException("Exception caught while trying to set the mapping file: " + e.getMessage(),e);
+			log.error("Exception caught while trying to set the mapping file: ",e);
+			throw new XMLUtilityException("Exception caught while trying to set the mapping file: ",e);
 		}
 
 		try {
