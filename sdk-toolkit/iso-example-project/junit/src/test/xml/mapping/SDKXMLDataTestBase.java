@@ -1,15 +1,20 @@
 package test.xml.mapping;
+import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 import gov.nih.nci.system.client.ApplicationServiceProvider;
+import gov.nih.nci.system.client.util.xml.JAXBMarshaller;
+import gov.nih.nci.system.client.util.xml.JAXBUnmarshaller;
 import gov.nih.nci.system.client.util.xml.Marshaller;
 import gov.nih.nci.system.client.util.xml.Unmarshaller;
 import gov.nih.nci.system.client.util.xml.XMLUtility;
 import gov.nih.nci.system.client.util.xml.caCOREMarshaller;
 import gov.nih.nci.system.client.util.xml.caCOREUnmarshaller;
+import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -26,6 +31,7 @@ import javax.xml.validation.Validator;
 import junit.framework.TestCase;
 
 import org.apache.log4j.Logger;
+import org.hibernate.criterion.DetachedCriteria;
 import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
 import org.springframework.aop.framework.Advised;
@@ -57,8 +63,16 @@ public abstract class SDKXMLDataTestBase extends TestCase {
 //		String url = "http://localhost:8080/example";
 //		appService = ApplicationServiceProvider.getApplicationServiceFromUrl(url);
 		
-		marshaller = new caCOREMarshaller("xml-mapping.xml", false);
-		unmarshaller = new caCOREUnmarshaller("unmarshaller-xml-mapping.xml", false);		
+		// JAXB
+		boolean validate = true;
+		boolean includeXmlDeclaration = true;
+		String namespacePrefix = "gme://caCORE.caCORE/3.2/";
+		String jaxbContextName = "gov.nih.nci.cacoresdk.domain.inheritance.abstrakt:gov.nih.nci.cacoresdk.domain.inheritance.childwithassociation:gov.nih.nci.cacoresdk.domain.inheritance.childwithassociation.sametable:gov.nih.nci.cacoresdk.domain.inheritance.implicit:gov.nih.nci.cacoresdk.domain.inheritance.multiplechild:gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.sametable:gov.nih.nci.cacoresdk.domain.inheritance.onechild:gov.nih.nci.cacoresdk.domain.inheritance.onechild.sametable:gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation:gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.sametable:gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance:gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable:gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametablerootlevel:gov.nih.nci.cacoresdk.domain.interfaze:gov.nih.nci.cacoresdk.domain.manytomany.bidirectional:gov.nih.nci.cacoresdk.domain.manytomany.unidirectional:gov.nih.nci.cacoresdk.domain.manytoone.unidirectional:gov.nih.nci.cacoresdk.domain.manytoone.unidirectional.withjoin:gov.nih.nci.cacoresdk.domain.onetomany.bidirectional:gov.nih.nci.cacoresdk.domain.onetomany.bidirectional.withjoin:gov.nih.nci.cacoresdk.domain.onetomany.selfassociation:gov.nih.nci.cacoresdk.domain.onetomany.unidirectional:gov.nih.nci.cacoresdk.domain.onetomany.unidirectional.withjoin:gov.nih.nci.cacoresdk.domain.onetoone.bidirectional:gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin:gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation:gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation.withjoin:gov.nih.nci.cacoresdk.domain.onetoone.unidirectional:gov.nih.nci.cacoresdk.domain.onetoone.unidirectional.withjoin:gov.nih.nci.cacoresdk.domain.other.datatype:gov.nih.nci.cacoresdk.domain.other.differentpackage:gov.nih.nci.cacoresdk.domain.other.differentpackage.associations:gov.nih.nci.cacoresdk.domain.other.levelassociation:gov.nih.nci.cacoresdk.domain.other.primarykey:gov.nih.nci.cacoresdk.domain.other.validationtype";
+		//Marshaller marshaller = new JAXBMarshaller(includeXmlDeclaration,jaxbContextName);  // Use this constructor if you plan to pass the namespace prefix with each call instead
+		marshaller = new JAXBMarshaller(includeXmlDeclaration,jaxbContextName,namespacePrefix);
+		unmarshaller = new JAXBUnmarshaller(validate,jaxbContextName);		
+
+		// JAXB
 		myUtil = new XMLUtility(marshaller, unmarshaller);
 		
 		useGMETags=Boolean.parseBoolean(System.getProperty("useGMETags"));
@@ -285,6 +299,24 @@ public abstract class SDKXMLDataTestBase extends TestCase {
 
 		Element associatedKlassElt = locateChild(children,associatedKlassName);
 		assertNotNull(associatedKlassElt);
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected Collection search(DetachedCriteria criteria, String type)
+			throws ApplicationException {
+		return appService.query(criteria, type);
+	}
+
+	@SuppressWarnings("deprecation")
+	protected Collection search(HQLCriteria criteria, String type)
+			throws ApplicationException {
+		return appService.query(criteria, type);
+	}
+
+	@SuppressWarnings("unchecked")
+	protected Collection search(String path, Object searchObject)
+			throws ApplicationException {
+		return appService.search(path, searchObject);
 	}
 	
 	private Element locateChild(List<Element> eltList, String roleName){
