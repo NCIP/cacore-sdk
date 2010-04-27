@@ -40,7 +40,7 @@ public class AbstractParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
+			validateAttribute(result,"id",result.getId().getExtension());
 			validateAttribute(result,"name",result.getName());
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
@@ -153,7 +153,7 @@ public class AbstractParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(result2.getId());
 		assertNotNull(result2.getName());
 		assertNotNull(result2.getYearsExperience());
-		assertEquals(new Integer(1), result2.getId());
+		assertEquals("1", result2.getId().getExtension());
 	}
 
 	public void testAssociationNestedSearchHQL1() throws Exception {
