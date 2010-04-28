@@ -145,30 +145,36 @@ public abstract class SDKXMLDataTestBase extends TestCase {
 		File myFile = new File(filepathPrefix + resultObj.getClass().getSimpleName() + filepathSuffix);
 		log.debug("myFile: "+myFile+"\n\n");
 		log.debug("myFile absolute path: "+myFile.getAbsolutePath()+"\n\n");
-
-		DocumentBuilder parser = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-		Document document = parser.parse(myFile);
-
-		SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-
-		try {
-			log.debug("Validating " + klass.getName() + " against the schema......\n\n");
-			log.debug("Schema filename is: "+schemaFilename+"\n\n");
-			Source schemaFile = new StreamSource(Thread.currentThread().getContextClassLoader().getResourceAsStream(schemaFilename));
-			log.debug("Schema filename: "+schemaFile+"\n\n");
-			
-			Schema schema = factory.newSchema(schemaFile);
-
-			Validator validator = schema.newValidator();
-
-			//validator.validate(new DOMSource(document));
-			log.debug(klass.getName() + " has been validated!!!\n\n");
-		} catch (Exception e) {
-			log.error(klass.getName() + " has failed validation!!!  Error reason is: \n\n" + e.getMessage(),e);
-			throw e;
-		}
 		
-		return true;
+		myUtil.fromXML(myFile);
+		
+		System.out.println("Has validation exceptions: " +((JAXBUnmarshaller)unmarshaller).hasValidationExceptions() );
+		
+		return !((JAXBUnmarshaller)unmarshaller).hasValidationExceptions();
+
+//		DocumentBuilder parser = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+//		Document document = parser.parse(myFile);
+//
+//		SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+//
+//		try {
+//			log.debug("Validating " + klass.getName() + " against the schema......\n\n");
+//			log.debug("Schema filename is: "+schemaFilename+"\n\n");
+//			Source schemaFile = new StreamSource(Thread.currentThread().getContextClassLoader().getResourceAsStream(schemaFilename));
+//			log.debug("Schema filename: "+schemaFile+"\n\n");
+//			
+//			Schema schema = factory.newSchema(schemaFile);
+//
+//			Validator validator = schema.newValidator();
+//
+//			//validator.validate(new DOMSource(document));
+//			log.debug(klass.getName() + " has been validated!!!\n\n");
+//		} catch (Exception e) {
+//			log.error(klass.getName() + " has failed validation!!!  Error reason is: \n\n" + e.getMessage(),e);
+//			throw e;
+//		}
+//		
+//		return true;
 	}
 	
 //  TODO :: figure out how to get xpath to work when the XML Data file does not contain a Namespace prefix
@@ -300,6 +306,36 @@ public abstract class SDKXMLDataTestBase extends TestCase {
 		Element associatedKlassElt = locateChild(children,associatedKlassName);
 		assertNotNull(associatedKlassElt);
 	}
+	
+	/**
+	 * Uses xpath to query the generated XSD Verifies that common elements
+	 * attributes(name, type) are present Verifies that the element 'name'
+	 * attribute matches the class name
+	 * 
+	 * @throws Exception
+	 */
+	protected void validateIso90210Element(Object resultObj, String iso90210ElementName, String iso90210ElementAttributeName, Object iso90210ElementAttributeValue)
+	throws Exception {
+		
+//		log.debug("Validating Class association from: " + filepathPrefix + resultObj.getClass().getSimpleName() + filepathSuffix);
+		org.jdom.Document doc = getDocument(filepathPrefix + resultObj.getClass().getSimpleName() + filepathSuffix);
+
+		Element klassElt = doc.getRootElement();
+		
+		List<Element> children = klassElt.getChildren();
+		assertNotNull(children);
+
+		assertEquals(1,countChildren(children,iso90210ElementName));
+		Element iso90210Element = locateChild(children,iso90210ElementName);
+		assertNotNull(iso90210Element);
+		assertEquals(iso90210Element.getName(),iso90210ElementName);
+		
+		String compareValue = null;
+		if (iso90210ElementAttributeValue != null)
+			compareValue = iso90210ElementAttributeValue.toString();
+		
+		assertEquals(iso90210Element.getAttributeValue(iso90210ElementAttributeName),compareValue);
+	}	
 	
 	@SuppressWarnings("unchecked")
 	protected Collection search(DetachedCriteria criteria, String type)

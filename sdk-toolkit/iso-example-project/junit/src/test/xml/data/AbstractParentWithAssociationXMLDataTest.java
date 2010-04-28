@@ -40,8 +40,8 @@ public class AbstractParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId().getExtension());
-			validateAttribute(result,"name",result.getName());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "name", "value", result.getName().getValue());
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
@@ -75,9 +75,9 @@ public class AbstractParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"name",result.getName());
-			validateAttribute(result,"yearsExperience",result.getYearsExperience());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "name", "value", result.getName().getValue());
+			validateIso90210Element(result, "yearsExperience", "value", result.getYearsExperience().getValue());
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
@@ -113,8 +113,8 @@ public class AbstractParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"name",result.getName());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "name", "value", result.getName().getValue());			
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
@@ -173,7 +173,7 @@ public class AbstractParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(result2.getId());
 		assertNotNull(result2.getName());
 		assertNotNull(result2.getYearsExperience());
-		assertEquals(new Integer(1), result2.getId());
+		assertEquals("1", result2.getId().getExtension());
 	}
 
 	/**
@@ -202,7 +202,7 @@ public class AbstractParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(result2);
 		assertNotNull(result2.getId());
 		assertNotNull(result2.getName());
-		assertEquals(new Integer(2), result2.getId());
+		assertEquals("2", result2.getId().getExtension());
 	}
 	
 	public void testAssociationNestedSearchHQL2() throws Exception {
@@ -221,6 +221,6 @@ public class AbstractParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(result2);
 		assertNotNull(result2.getId());
 		assertNotNull(result2.getName());
-		assertEquals(new Integer(2), result2.getId());
+		assertEquals("2", result2.getId().getExtension());
 	}
 }
