@@ -100,10 +100,13 @@ public class IsoDatatypeTransformationHelper
 		rootNode.setIsoClassName(utils.ISO_ROOT_PACKAGE_NAME+"."+attr.getDatatype().getName());
 		rootNode.setParentClassName(utils.getFQCN(klass));
 		traverseNodeAndAttachDataType(rootNode, klass, attr);
+		getGlobalConstantNode(rootNode);
+		traverseNodeAndAttachDataType(rootNode, klass, attr);
 		attachDataModelInformation(rootNode,klass, attr, table);
 		//printNode(rootNode, "");
 		return rootNode;
 	}
+
 
 	
 	/**
@@ -508,7 +511,47 @@ public class IsoDatatypeTransformationHelper
 		
 	}
 
+	public ComplexNode getGlobalConstantNode(ComplexNode rootNode) throws GenerationException
+	{
+		String isoClassName = rootNode.getIsoClassName().startsWith(utils.ISO_ROOT_PACKAGE_NAME+".DSET")?utils.ISO_ROOT_PACKAGE_NAME+".DSET":rootNode.getIsoClassName();
+		UMLClass datatypeClass = findISOClass(isoClassName);
 
+		UMLClass currentKlass = datatypeClass;
+		while(currentKlass != null)
+		{
+			for(UMLAttribute attribute:currentKlass.getAttributes())
+			{
+				String tagValuePrefix = utils.TV_MAPPED_ATTR_CONSTANT+":"+utils.getFQCN(currentKlass)+".";
+				for(UMLTaggedValue tv: attribute.getTaggedValues())
+				{
+					if (tv.getName().startsWith(tagValuePrefix))
+					{
+						String tvName = tv.getName();
+						parseAndAddNode(rootNode,tvName.substring(tagValuePrefix.length())
+								,tv.getValue(),false,true);
+					}
+				}
+				//Locate the child node and if it exist then proceed recursively
+				for(Node node: rootNode.getInnerNodes())
+				{
+					{
+						
+					}
+					if(node instanceof ComplexNode &&
+							((node.getName().equals(attribute.getName())) ||
+									((utils.ISO_ROOT_PACKAGE_NAME+".AD").equals(isoClassName) && node.getName().startsWith("part")) ||
+									((isoClassName.startsWith(utils.ISO_ROOT_PACKAGE_NAME+".EN")) && node.getName().startsWith("part"))))
+					{
+						getGlobalConstantNode((ComplexNode)node);
+					}
+				}
+			}
+			currentKlass = utils.getSuperClass(currentKlass);
+		}
+		
+		return null;
+	}
+	
 	/**
 	 * Main method to create the data structure for the graph by reading the mapped-attributes tag value 
 	 *  
@@ -518,7 +561,7 @@ public class IsoDatatypeTransformationHelper
 	 * @return
 	 * @throws GenerationException
 	 */
-	public RootNode createDatatypeNode(UMLClass klass, UMLAttribute attr, UMLClass table) throws GenerationException
+	private RootNode createDatatypeNode(UMLClass klass, UMLAttribute attr, UMLClass table) throws GenerationException
 	{
 		String prefix = utils.getFQCN(klass) + "." + attr.getName() + ".";
 
@@ -538,22 +581,34 @@ public class IsoDatatypeTransformationHelper
 					{
 						if(val.startsWith(prefix) && !val.equals(prefix+"id"))
 						{
-							parseAndAddNode(rootNode,val.substring(prefix.length()),column.getName(),true);
+							parseAndAddNode(rootNode,val.substring(prefix.length()),column.getName(),true,false);
 						}
 					}
 				}
 			}
 		}
 		
-		String tagValuePrefix = utils.TV_MAPPED_ATTR_CONSTANT+":"+prefix;
-		for(UMLTaggedValue tv: attr.getTaggedValues())
+		UMLClass currentKlass = klass;
+		Set<String> processedSuffix = new HashSet<String>(); 
+		while(currentKlass!=null)
 		{
-			if (tv.getName().startsWith(tagValuePrefix))
+			String currentPrefix = utils.getFQCN(currentKlass) + "." + attr.getName() + ".";
+			String tagValuePrefix = utils.TV_MAPPED_ATTR_CONSTANT+":"+currentPrefix;
+				
+			for(UMLTaggedValue tv: attr.getTaggedValues())
 			{
-				String tvName = tv.getName();
-				parseAndAddNode(rootNode,tvName.substring(tagValuePrefix.length())
-						,tv.getValue(),false);
+				if (tv.getName().startsWith(tagValuePrefix))
+				{
+					String tvName = tv.getName();
+					String suffix = tvName.substring(tagValuePrefix.length());
+					if(!processedSuffix.contains(suffix))
+					{
+						processedSuffix.add(suffix);
+						parseAndAddNode(rootNode,suffix,tv.getValue(),false,false);
+					}
+				}
 			}
+			currentKlass = utils.getSuperClass(currentKlass);
 		}
 		return rootNode;
 	}
@@ -566,7 +621,7 @@ public class IsoDatatypeTransformationHelper
 	 * @param nodeValue
 	 * @throws GenerationException
 	 */
-	private void parseAndAddNode(ComplexNode rootNode, String value, String nodeValue, boolean isSimpleNode) throws GenerationException
+	private void parseAndAddNode(ComplexNode rootNode, String value, String nodeValue, boolean isSimpleNode, boolean addGlobalConstantFlag) throws GenerationException
 	{
 		String[] nodePath = value.split("\\.");
 	
@@ -584,7 +639,7 @@ public class IsoDatatypeTransformationHelper
 					createNewNode = false;
 				}
 			}
-			if(createNewNode)
+			if(createNewNode && !addGlobalConstantFlag)
 			{
 				ComplexNode newNode = new ComplexNode(nodePath[i]);
 				currentNode.addInnerNode(newNode);
@@ -592,21 +647,39 @@ public class IsoDatatypeTransformationHelper
 			}
 		}
 
+		boolean createNewNode = true;
 		for(Node node: currentNode.getInnerNodes())
 		{
 			if(node.getName().equals(nodePath[nodePath.length-1]))
 			{
-				throw new GenerationException("Can not map "+rootNode.getName()+"."+value+" twice. It is already defined");
+				if(addGlobalConstantFlag)
+				{
+					createNewNode = false;
+				}
+				else
+				{
+					throw new GenerationException("Can not map "+rootNode.getName()+"."+value+" twice. It is already defined");
+				}
 			}
 		}
-		if(isSimpleNode){
-			SimpleNode newNode = new SimpleNode(nodePath[nodePath.length-1]);
-			newNode.setColumnName(nodeValue);
-			currentNode.addInnerNode(newNode);
-		}else{
-			ConstantNode newNode = new ConstantNode(nodePath[nodePath.length-1]);
-			newNode.setConstantValue(nodeValue);
-			currentNode.addInnerNode(newNode);
+		if(createNewNode)
+		{
+			if(isSimpleNode){
+				SimpleNode newNode = new SimpleNode(nodePath[nodePath.length-1]);
+				newNode.setColumnName(nodeValue);
+				currentNode.addInnerNode(newNode);
+			} else {
+				if(false)
+				{
+					
+				}
+				else
+				{
+					ConstantNode newNode = new ConstantNode(nodePath[nodePath.length-1]);
+					newNode.setConstantValue(nodeValue);
+					currentNode.addInnerNode(newNode);
+				}
+			}
 		}
 	}
 
@@ -695,16 +768,20 @@ public class IsoDatatypeTransformationHelper
 		}
 		else
 		{
-			UMLClass isoKlass = findISOClass(isoClassName);
+			
 			
 			//For DSet elements
-			if(isoKlass == null && isoClassName.indexOf('<')>0 && isoClassName.startsWith(utils.ISO_ROOT_PACKAGE_NAME+".DSET"))
+			if(isoClassName.indexOf('<')>0 && isoClassName.startsWith(utils.ISO_ROOT_PACKAGE_NAME+".DSET")&& "item".equals(attributeName))
 			{
 				String typeClassName = isoClassName.substring(isoClassName.indexOf('<')+1,isoClassName.indexOf('>'));
 				returnVal = utils.ISO_ROOT_PACKAGE_NAME+"."+typeClassName;
 			}
 			else
 			{
+				String tempIsoClassName = isoClassName; 
+				if (isoClassName.indexOf('<')>0 && isoClassName.startsWith(utils.ISO_ROOT_PACKAGE_NAME+".DSET"))
+					tempIsoClassName = utils.ISO_ROOT_PACKAGE_NAME+".DSET";
+				UMLClass isoKlass = findISOClass(tempIsoClassName);
 				UMLClass currentKlass = isoKlass;
 				UMLAttribute attr = null;
 				while(currentKlass != null)
