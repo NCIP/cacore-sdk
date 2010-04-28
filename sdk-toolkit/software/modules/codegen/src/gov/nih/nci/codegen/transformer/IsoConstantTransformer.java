@@ -84,17 +84,25 @@ public class IsoConstantTransformer implements Transformer{
 		stringBuffer.append("\n xsi:schemaLocation=\"http://www.springframework.org/schema/beans	http://www.springframework.org/schema/beans/spring-beans-2.5.xsd	http://www.springframework.org/schema/util	http://www.springframework.org/schema/util/spring-util-2.5.xsd\"");
 		stringBuffer.append("\n	default-lazy-init=\"false\" default-dependency-check=\"none\" default-autowire=\"no\">");
 		
-		Collection<UMLClass> classes= transformerUtils.getAllHibernateClasses(model);
+		Collection<UMLClass> classes= transformerUtils.getAllClasses(model);
+		
 		for(UMLClass klas: classes){
-			List<UMLAttribute> attributes = klas.getAttributes();
+			if(transformerUtils.isImplicitParent(klas)) 
+				continue;
 			UMLClass table = transformerUtils.getTable(klas);
 			UMLAttribute idAttr = transformerUtils.getClassIdAttr(klas);
-			for (UMLAttribute attribute : attributes){
-				if(attribute!=idAttr && !transformerUtils.isJavaDataType(attribute)){
-					RootNode rootNode = isoDatatypeTransformationHelper.getDatatypeNode(klas,attribute,table);
-					stringBuffer.append(convertToAnnotation(transformerUtils.getFQCN(klas)+"."+attribute.getName(), rootNode));
-					
+			
+			UMLClass currentKlass = klas;
+			while (currentKlass!= null)
+			{
+				for (UMLAttribute attribute : currentKlass.getAttributes()){
+					if(!transformerUtils.isJavaDataType(attribute)){
+						RootNode rootNode = isoDatatypeTransformationHelper.getDatatypeNode(klas,attribute,table);
+						stringBuffer.append(convertToAnnotation(transformerUtils.getFQCN(klas)+"."+attribute.getName(), rootNode));
+						
+					}
 				}
+				currentKlass = transformerUtils.getSuperClass(currentKlass);
 			}
 		}
 		stringBuffer.append("\n</beans>");
