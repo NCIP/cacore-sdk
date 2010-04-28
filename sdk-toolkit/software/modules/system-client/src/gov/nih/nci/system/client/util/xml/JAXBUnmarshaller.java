@@ -50,6 +50,8 @@ public class JAXBUnmarshaller implements gov.nih.nci.system.client.util.xml.Unma
 	
 	private boolean hasBeenInvokedWithoutContext = true;
 	
+	private List<ValidationEvent> validationEvents = new ArrayList<ValidationEvent>();
+	
 	public JAXBUnmarshaller(boolean validate, String contextName)
 	{
 		this.validate = validate;
@@ -123,13 +125,9 @@ public class JAXBUnmarshaller implements gov.nih.nci.system.client.util.xml.Unma
 
 	        Unmarshaller unmarshaller = context.createUnmarshaller();
 	
-	        if(validate){
-	        	//Schema tempSchemaObj = getJAXBSchema();
-				//if (tempSchemaObj == null){
-				//	throw new XMLUtilityException("JAXB Validation Schema has not been set within the JAXB Unmarshaller");
-				//}
-	        	//log.debug("Unmarshalling using Validation Schema");
-	    		//unmarshaller.setSchema(tempSchemaObj);	 
+	        if(validate){	        	
+	        	//reset validation events list
+	        	validationEvents = new ArrayList<ValidationEvent>();
 	    		
 	    		SAXParserFactory parserFactory = SAXParserFactory.newInstance();
                 parserFactory.setNamespaceAware(true);
@@ -368,8 +366,20 @@ public class JAXBUnmarshaller implements gov.nih.nci.system.client.util.xml.Unma
 		
 		public boolean handleEvent(ValidationEvent e) {
 			log.error("Validation Exception Event while unmarshalling: " + e.getMessage());
+			if (validationEvents == null ){
+				validationEvents = new ArrayList<ValidationEvent>();
+			}
+			validationEvents.add(e);
 			return true;
 		}	
+	}
+	
+	public boolean hasValidationExceptions() {
+		if (validationEvents == null || validationEvents.isEmpty()){
+			return false;
+		}
+		
+		return true;
 	}
 	
 	class SchemaErrorHandler implements ErrorHandler {
