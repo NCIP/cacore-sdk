@@ -10,6 +10,7 @@ import gov.nih.nci.cacoresdk.domain.inheritance.implicit.Substrate;
 import gov.nih.nci.cacoresdk.domain.inheritance.implicit.Tank;
 import gov.nih.nci.cacoresdk.domain.inheritance.implicit.TankAccessory;
 import gov.nih.nci.iso21090.Ii;
+import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -114,10 +115,10 @@ public class ImplicitParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"filterModel",result.getFilterModel());
-			validateAttribute(result,"numGallons",result.getNumGallons());
-			validateAttribute(result,"shape",result.getShape());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "filterModel", "value", result.getFilterModel().getValue());
+			validateIso90210Element(result, "numGallons", "value", result.getNumGallons().getValue());
+			validateIso90210Element(result, "shape", "value", result.getShape().getValue());
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
@@ -153,10 +154,10 @@ public class ImplicitParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"proteinSkimmerModel",result.getProteinSkimmerModel());
-			validateAttribute(result,"numGallons",result.getNumGallons());
-			validateAttribute(result,"shape",result.getShape());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "proteinSkimmerModel", "value", result.getProteinSkimmerModel().getValue());
+			validateIso90210Element(result, "numGallons", "value", result.getNumGallons().getValue());
+			validateIso90210Element(result, "shape", "value", result.getShape().getValue());
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
@@ -192,8 +193,8 @@ public class ImplicitParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"genera",result.getGenera());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "genera", "value", result.getGenera().getValue());
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
@@ -227,9 +228,9 @@ public class ImplicitParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"genera",result.getGenera());
-			validateAttribute(result,"finSize",result.getFinSize());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "genera", "value", result.getGenera().getValue());	
+			validateIso90210Element(result, "finSize", "value", result.getFinSize().getValue());				
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
@@ -263,9 +264,9 @@ public class ImplicitParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"genera",result.getGenera());
-			validateAttribute(result,"primaryColor",result.getPrimaryColor());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "genera", "value", result.getGenera().getValue());	
+			validateIso90210Element(result, "primaryColor", "value", result.getPrimaryColor().getValue());
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
@@ -300,8 +301,8 @@ public class ImplicitParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"name",result.getName());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "name", "value", result.getName().getValue());	
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
@@ -335,8 +336,8 @@ public class ImplicitParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"name",result.getName());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "name", "value", result.getName().getValue());				
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
@@ -375,8 +376,28 @@ public class ImplicitParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(result2.getId());
 		assertNotNull(result2.getGenera());
 		assertNotNull(result2.getId());
-		assertEquals(new Integer(3), result2.getId());
+		assertEquals("3", result2.getId().getExtension());
 	}
+	
+	public void testAssociationNestedSearchHQL1() throws Exception {
+		HQLCriteria hqlCriteria = new HQLCriteria(
+				"from gov.nih.nci.cacoresdk.domain.inheritance.implicit.Fish where id='3'");
+		Collection results = search(hqlCriteria,
+				"gov.nih.nci.cacoresdk.domain.inheritance.implicit.Fish");
+
+		assertNotNull(results);
+		assertEquals(1,results.size());
+		
+		Fish result = (Fish)results.iterator().next();
+		toXML(result);
+		Fish result2 = (Fish)fromXML(result);
+
+		assertNotNull(result2);
+		assertNotNull(result2.getId());
+		assertNotNull(result2.getGenera());
+		assertNotNull(result2.getId());
+		assertEquals("3", result2.getId().getExtension());
+	}	
 
 	/**
 	 * Uses Nested Search Criteria for inheritance as association in search
@@ -403,148 +424,26 @@ public class ImplicitParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 
 		assertNotNull(result2);
 		assertNotNull(result2.getId());
-		assertEquals(new Integer(3), result2.getId());
+		assertEquals("3", result2.getId().getExtension());
 	}
 	
-	/**
-	 * Uses Nested Search Criteria for inheritance as association in search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * 
-	 * @throws Exception
-	 */
-	public void xtestAssociationNestedSearch3() throws Exception
-	{
-		Tank searchObject = new Tank();
-		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.inheritance.implicit.FishTank",searchObject );
+	public void testAssociationNestedSearchHQL2() throws Exception {
+		HQLCriteria hqlCriteria = new HQLCriteria(
+				"from gov.nih.nci.cacoresdk.domain.inheritance.implicit.AngelFish where id='3'");
+		Collection results = search(hqlCriteria,
+				"gov.nih.nci.cacoresdk.domain.inheritance.implicit.AngelFish");
 
 		assertNotNull(results);
-		assertEquals(4,results.size());
+		assertEquals(1,results.size());
 		
-		FishTank result = (FishTank)results.iterator().next();
+		AngelFish result = (AngelFish)results.iterator().next();
 		toXML(result);
-		FishTank result2 = (FishTank)fromXML(result);
+		AngelFish result2 = (AngelFish)fromXML(result);
 
 		assertNotNull(result2);
 		assertNotNull(result2.getId());
-		assertNotNull(result2.getNumGallons());
-		assertNotNull(result2.getShape());
-	}
-
-	/**
-	 * Uses Nested Search Criteria for inheritance as association in search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * 
-	 * @throws Exception
-	 */
-	public void xtestAssociationNestedSearch4() throws Exception
-	{
-		FishTank searchObject = new FishTank();
-		Ii ii = new Ii();
-		ii.setExtension("2");
-		searchObject.setId(ii);
-		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.inheritance.implicit.Tank",searchObject );
-
-		assertNotNull(results);
-		assertEquals(1,results.size());
-		
-		Tank result = (Tank)results.iterator().next();
-		toXML(result);
-		Tank result2 = (Tank)fromXML(result);
-
-		assertNotNull(result2);
-	}
-	
-	/**
-	 * Uses Nested Search Criteria for inheritance as association in search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * 
-	 * @throws Exception
-	 */
-	public void xtestAssociationNestedSearch5() throws Exception
-	{
-		FishTank searchObject = new FishTank();
-		Ii ii = new Ii();
-		ii.setExtension("1");
-		searchObject.setId(ii);
-		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.inheritance.implicit.FreshwaterFishTank",searchObject );
-
-		assertNotNull(results);
-		assertEquals(1,results.size());
-		
-		FreshwaterFishTank result = (FreshwaterFishTank)results.iterator().next();
-		toXML(result);
-		FreshwaterFishTank result2 = (FreshwaterFishTank)fromXML(result);
-
-		assertNotNull(result2);
-		assertNotNull(result2.getId());
-		assertNotNull(result2.getNumGallons());
-		assertNotNull(result2.getShape());
-		assertNotNull(result2.getFilterModel());
-		assertEquals(new Integer(1), result2.getId());
-	}
-
-	/**
-	 * Uses Nested Search Criteria for inheritance as association in search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * 
-	 * @throws Exception
-	 */
-	public void xtestAssociationNestedSearch6() throws Exception
-	{
-		FreshwaterFishTank searchObject = new FreshwaterFishTank();
-		Ii ii = new Ii();
-		ii.setExtension("2");
-		searchObject.setId(ii);
-		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.inheritance.implicit.FishTank",searchObject );
-
-		assertNotNull(results);
-		assertEquals(1,results.size());
-		
-		FishTank result = (FishTank)results.iterator().next();
-		toXML(result);
-		FishTank result2 = (FishTank)fromXML(result);
-
-		assertNotNull(result2);
-		assertNotNull(result2.getId());
-		assertNotNull(result2.getNumGallons());
-		assertNotNull(result2.getShape());
-		assertEquals(new Integer(2), result2.getId());
-	}
-	
-
-	/**
-	 * Uses Nested Search Criteria for inheritance as association in search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * 
-	 * @throws Exception
-	 */
-	public void xtestAssociationNestedSearch7() throws Exception
-	{
-		Fish searchObject = new Fish();
-		Ii ii = new Ii();
-		ii.setExtension("1");
-		searchObject.setId(ii);
-		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.inheritance.implicit.Tank",searchObject );
-
-		assertNotNull(results);
-		assertEquals(1,results.size());
-		
-		Tank result = (Tank)results.iterator().next();
-		toXML(result);
-		Tank result2 = (Tank)fromXML(result);
-
-		assertNotNull(result2);
-	}
+		assertEquals("3", result2.getId().getExtension());
+	}	
 	
 	/**
 	 * Uses Nested Search Criteria for inheritance as association in search
@@ -563,7 +462,7 @@ public class ImplicitParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.inheritance.implicit.Substrate",searchObject );
 
 		assertNotNull(results);
-		assertEquals(2,results.size());
+		assertEquals(1,results.size());
 		
 		Substrate result = (Substrate)results.iterator().next();
 		toXML(result);
@@ -572,6 +471,7 @@ public class ImplicitParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(result2);
 		assertNotNull(result2.getId());
 		assertNotNull(result2.getName());
-		assertEquals(new Integer(1), result2.getId());
-	}		
+		assertEquals("3", result2.getId().getExtension());
+	}
+		
 }

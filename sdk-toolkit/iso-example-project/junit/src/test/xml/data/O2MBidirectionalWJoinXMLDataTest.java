@@ -1,9 +1,11 @@
 package test.xml.data;
 
+import gov.nih.nci.cacoresdk.domain.manytoone.unidirectional.Chef;
 import gov.nih.nci.cacoresdk.domain.manytoone.unidirectional.Restaurant;
 import gov.nih.nci.cacoresdk.domain.onetomany.bidirectional.withjoin.Flight;
 import gov.nih.nci.cacoresdk.domain.onetomany.bidirectional.withjoin.Passanger;
 import gov.nih.nci.iso21090.Ii;
+import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -39,8 +41,8 @@ public class O2MBidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"destination",result.getDestination());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "destination", "value", result.getDestination().getValue());			
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
@@ -74,8 +76,8 @@ public class O2MBidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"name",result.getName());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "name", "value", result.getName().getValue());
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
@@ -102,6 +104,29 @@ public class O2MBidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 		ii.setExtension("1");
 		searchObject.setId(ii);
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.onetomany.bidirectional.withjoin.Flight",searchObject );
+
+		assertNotNull(results);
+		assertEquals(1,results.size());
+		
+		Iterator i = results.iterator();
+		Flight result = (Flight)i.next();
+		toXML(result);
+		Flight result2 = (Flight)fromXML(result);
+		
+		assertNotNull(result2);
+		assertNotNull(result2.getId());
+		assertNotNull(result2.getDestination());
+		
+		Collection passangerCollection = result2.getPassangerCollection();
+		assertNull(passangerCollection);
+	}
+	
+	
+	public void testAssociationNestedSearchHQL1() throws Exception {
+		HQLCriteria hqlCriteria = new HQLCriteria(
+				"from gov.nih.nci.cacoresdk.domain.onetomany.bidirectional.withjoin.Flight where id='1'");
+		Collection results = search(hqlCriteria,
+				"gov.nih.nci.cacoresdk.domain.onetomany.bidirectional.withjoin.Flight");
 
 		assertNotNull(results);
 		assertEquals(1,results.size());
@@ -148,15 +173,17 @@ public class O2MBidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(result2.getId());
 		assertNotNull(result2.getDestination());
 		
-		Collection PassangerCollection = result2.getPassangerCollection();
-		Iterator j = PassangerCollection.iterator();
+		Collection passangerCollection = result2.getPassangerCollection();
+		assertNotNull(passangerCollection);
+		
+		Iterator j = passangerCollection.iterator();
 		
 		Passanger passanger = (Passanger)j.next();
 		
 		assertNotNull(passanger);
 		assertNotNull(passanger.getId());
 		assertNotNull(passanger.getName());
-		assertEquals(new Integer(1),passanger.getId());
+		assertEquals("1",passanger.getId().getExtension());
 	}
 
 	/**
@@ -188,7 +215,7 @@ public class O2MBidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(result2);
 		assertNotNull(result2.getId());
 		assertNotNull(result2.getName());
-		assertEquals(new Integer(1),result2.getId());
+		assertEquals("1",result2.getId().getExtension());
 	}
 
 	/**
@@ -220,7 +247,7 @@ public class O2MBidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(result2);
 		assertNotNull(result2.getId());
 		assertNotNull(result2.getDestination());
-		assertEquals(new Integer(1),result2.getId());
+		assertEquals("1",result2.getId().getExtension());
 	}	
 
 	public void testGetAssociation() throws Exception

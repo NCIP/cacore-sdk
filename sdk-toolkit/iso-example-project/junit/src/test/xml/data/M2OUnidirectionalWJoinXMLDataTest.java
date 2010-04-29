@@ -1,9 +1,11 @@
 package test.xml.data;
 
+import gov.nih.nci.cacoresdk.domain.manytomany.bidirectional.Employee;
 import gov.nih.nci.cacoresdk.domain.manytomany.unidirectional.Book;
 import gov.nih.nci.cacoresdk.domain.manytoone.unidirectional.withjoin.Album;
 import gov.nih.nci.cacoresdk.domain.manytoone.unidirectional.withjoin.Song;
 import gov.nih.nci.iso21090.Ii;
+import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -39,8 +41,8 @@ public class M2OUnidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"title",result.getTitle());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "title", "value", result.getTitle().getValue());
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
@@ -74,8 +76,8 @@ public class M2OUnidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"title",result.getTitle());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "title", "value", result.getTitle().getValue());
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
@@ -117,6 +119,28 @@ public class M2OUnidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 		
 		assertNull(result2.getAlbum());
 	}
+	
+	
+	public void testAssociationNestedSearchHQL1() throws Exception {
+		HQLCriteria hqlCriteria = new HQLCriteria(
+				"from gov.nih.nci.cacoresdk.domain.manytoone.unidirectional.withjoin.Song where id='12'");
+		Collection results = search(hqlCriteria,
+				"gov.nih.nci.cacoresdk.domain.manytoone.unidirectional.withjoin.Song");
+
+		assertNotNull(results);
+		assertEquals(1,results.size());
+		
+		Iterator i = results.iterator();
+		Song result = (Song)i.next();
+		toXML(result);
+		Song result2 = (Song)fromXML(result);
+		
+		assertNotNull(result2);
+		assertNotNull(result2.getId());
+		assertNotNull(result2.getTitle());
+		
+		assertNull(result2.getAlbum());
+	}	
 
 	/**
 	 * Uses Nested Search Criteria for search
@@ -182,7 +206,7 @@ public class M2OUnidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(result2);
 		assertNotNull(result2.getId());
 		assertNotNull(result2.getTitle());
-		assertEquals(new Integer(1),result2.getId());
+		assertEquals("1",result2.getId().getExtension());
 	}
 	
 	public void testGetAssociation() throws Exception

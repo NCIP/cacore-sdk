@@ -1,8 +1,10 @@
 package test.xml.data;
 
+import gov.nih.nci.cacoresdk.domain.manytoone.unidirectional.withjoin.Song;
 import gov.nih.nci.cacoresdk.domain.onetomany.bidirectional.Computer;
 import gov.nih.nci.cacoresdk.domain.onetomany.bidirectional.HardDrive;
 import gov.nih.nci.iso21090.Ii;
+import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -38,8 +40,8 @@ public class O2MBidirectionalXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"type",result.getType());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "type", "value", result.getType().getValue());
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
@@ -73,8 +75,8 @@ public class O2MBidirectionalXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"size",result.getSize());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "size", "value", result.getSize().getValue());
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
@@ -101,6 +103,28 @@ public class O2MBidirectionalXMLDataTest extends SDKXMLDataTestBase
 		ii.setExtension("3");
 		searchObject.setId(ii);
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.onetomany.bidirectional.Computer",searchObject );
+
+		assertNotNull(results);
+		assertEquals(1,results.size());
+		
+		Iterator i = results.iterator();
+		Computer result = (Computer)i.next();
+		toXML(result);
+		Computer result2 = (Computer)fromXML(result);
+		
+		assertNotNull(result2);
+		assertNotNull(result2.getId());
+		assertNotNull(result2.getType());
+		
+		Collection hardDriveCollection = result2.getHardDriveCollection();
+		assertNull(hardDriveCollection);
+	}
+
+	public void testAssociationNestedSearchHQL1() throws Exception {
+		HQLCriteria hqlCriteria = new HQLCriteria(
+				"from gov.nih.nci.cacoresdk.domain.onetomany.bidirectional.Computer where id='3'");
+		Collection results = search(hqlCriteria,
+				"gov.nih.nci.cacoresdk.domain.onetomany.bidirectional.Computer");
 
 		assertNotNull(results);
 		assertEquals(1,results.size());
@@ -150,6 +174,8 @@ public class O2MBidirectionalXMLDataTest extends SDKXMLDataTestBase
 		validateAssociation(result,"HardDrive","hardDriveCollection");
 		
 		Collection hardDriveCollection = result2.getHardDriveCollection();
+		assertNotNull(hardDriveCollection);
+		
 		Iterator j = hardDriveCollection.iterator();
 		
 		HardDrive hardDrive = (HardDrive)j.next();
@@ -190,7 +216,7 @@ public class O2MBidirectionalXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(result2);
 		assertNotNull(result2.getId());
 		assertNotNull(result2.getSize());
-		assertEquals(new Integer(1),result2.getId());
+		assertEquals("1",result2.getId().getExtension());
 	}
 
 	/**
@@ -222,7 +248,7 @@ public class O2MBidirectionalXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(result2);
 		assertNotNull(result2.getId());
 		assertNotNull(result2.getType());
-		assertEquals(new Integer(1),result2.getId());
+		assertEquals("1",result2.getId().getExtension());
 	}
 	
 	public void testGetAssociation() throws Exception
