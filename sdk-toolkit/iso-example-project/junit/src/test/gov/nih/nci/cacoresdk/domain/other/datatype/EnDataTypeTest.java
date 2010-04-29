@@ -383,7 +383,7 @@ public class EnDataTypeTest extends SDKISOTestBase{
 		int counter = 1;
 		for(EnDataType data : result)
 		{
-			//Validate 2nd record
+			//Validate 1st record
 			if((index == null && counter == 2) || (index != null && index.contains("2")))
 			{
 				if(index != null) 
@@ -415,7 +415,7 @@ public class EnDataTypeTest extends SDKISOTestBase{
 				counter++;
 				continue;
 			}
-			//Validate 2nd record
+			//Validate 3rd record
 			else if((index == null && counter == 4) || (index != null && index.contains("4")))
 			{
 				if(index != null) 
@@ -431,7 +431,23 @@ public class EnDataTypeTest extends SDKISOTestBase{
 				counter++;
 				continue;
 			}
-			//Validate 2nd record
+			//Validate 4th record
+			else if((index == null && counter == 5) || (index != null && index.contains("5")))
+			{
+				if(index != null) 
+					index.remove("5");
+
+				assertNotNull(data);
+				assertNotNull(data.getValue1());
+				assertNotNull(data.getValue1().getPart());
+				
+				assertNull(data.getValue1().getPart().get(0).getCode());
+				assertEquals("Mr. John Doe Super Sr.", data.getValue1().getPart().get(0).getValue());
+				assertValue1Constants(data);
+				counter++;
+				continue;
+			}
+			//Validate 5th record
 			else if((index == null && counter == 6) || (index != null && index.contains("6")))
 			{
 				if(index != null) 
@@ -464,8 +480,10 @@ public class EnDataTypeTest extends SDKISOTestBase{
 	{
 		assertEquals(NullFlavor.NI, data.getValue1().getNullFlavor());
 		assertNull(data.getValue1().getPart().get(0).getCode());
-		assertNull(data.getValue1().getPart().get(0).getCodeSystem());
-		assertNull(data.getValue1().getPart().get(0).getCodeSystemVersion());
+		//Global constant
+		assertEquals("ENXP Code System", data.getValue1().getPart().get(0).getCodeSystem());
+		//Global constant
+		assertEquals("ENXP Code System Version", data.getValue1().getPart().get(0).getCodeSystemVersion());
 		assertNull(data.getValue1().getPart().get(0).getQualifier());
 		assertNull(data.getValue1().getPart().get(0).getType());
 	}
@@ -573,8 +591,10 @@ public class EnDataTypeTest extends SDKISOTestBase{
 
 	private void assertValue2Constants(EnDataType data)
 	{
-		assertNull(data.getValue2().getPart().get(0).getCodeSystem());
-		assertNull(data.getValue2().getPart().get(0).getCodeSystemVersion());
+		//Global constant
+		assertEquals("ENXP Code System", data.getValue2().getPart().get(0).getCodeSystem());
+		//Global constant
+		assertEquals("ENXP Code System Version", data.getValue2().getPart().get(0).getCodeSystemVersion());
 		assertNull(data.getValue2().getPart().get(0).getQualifier());
 		assertNull(data.getValue2().getPart().get(0).getType());
 		assertEquals(NullFlavor.NI, data.getValue2().getNullFlavor());
@@ -806,8 +826,10 @@ public class EnDataTypeTest extends SDKISOTestBase{
 	private void assertValue4Constants(EnDataType data)
 	{
 		assertNull(data.getValue4().getPart().get(0).getCode());
-		assertNull(data.getValue4().getPart().get(0).getCodeSystem());
-		assertNull(data.getValue4().getPart().get(0).getCodeSystemVersion());
+		//Global constant
+		assertEquals("ENXP Code System", data.getValue4().getPart().get(0).getCodeSystem());
+		//Global constant
+		assertEquals("ENXP Code System Version", data.getValue4().getPart().get(0).getCodeSystemVersion());
 		assertNull(data.getValue4().getPart().get(0).getType());
 		assertEquals(NullFlavor.NI, data.getValue4().getNullFlavor());
 	}
@@ -1079,7 +1101,7 @@ public class EnDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data.getValue5().getPart().get(1));
 				
 				assertEquals("VALUE5_PN_CODE3", data.getValue5().getPart().get(0).getCode());
-				assertEquals("Mr. John Doe IV", data.getValue5().getPart().get(0).getValue());
+				assertEquals("Mr. John Doe VI", data.getValue5().getPart().get(0).getValue());
 				assertEquals("VALUE5_PN_CODE_SYSTEM2", data.getValue5().getPart().get(0).getCodeSystem());
 				assertEquals("2.1", data.getValue5().getPart().get(0).getCodeSystemVersion());
 				assertNull(data.getValue5().getPart().get(0).getQualifier());
@@ -1151,7 +1173,7 @@ public class EnDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data.getValue6());
 				assertNotNull(data.getValue6().getPart());
 				
-				assertEquals("VALUE6_PN_CODE1 ", data.getValue6().getPart().get(0).getCode());
+				assertEquals("VALUE6_PN_CODE1", data.getValue6().getPart().get(0).getCode());
 				assertEquals("Mr. John Doe II", data.getValue6().getPart().get(0).getValue());
 				assertNull(data.getValue6().getPart().get(0).getCodeSystem());
 				assertNull(data.getValue6().getPart().get(0).getCodeSystemVersion());

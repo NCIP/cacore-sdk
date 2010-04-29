@@ -215,10 +215,13 @@ public class EnPnDataTypeTest extends SDKISOTestBase{
 
 	private void assertValue1Constants(EnPnDataType data)
 	{
+		//Global constant
 		assertEquals(NullFlavor.NI, data.getValue1().getNullFlavor());
 		assertNull(data.getValue1().getPart().get(0).getCode());
-		assertNull(data.getValue1().getPart().get(0).getCodeSystem());
-		assertNull(data.getValue1().getPart().get(0).getCodeSystemVersion());
+		//Global constant
+		assertEquals("ENXP Code System", data.getValue1().getPart().get(0).getCodeSystem());
+		//Global constant
+		assertEquals("ENXP Code System Version", data.getValue1().getPart().get(0).getCodeSystemVersion());
 		assertNull(data.getValue1().getPart().get(0).getQualifier());
 		assertNull(data.getValue1().getPart().get(0).getType());
 	}

@@ -41,7 +41,7 @@ public class DsetIiDataTypeTest extends SDKISOTestBase{
 		DsetIiDataType searchObject = new DsetIiDataType();
 		Collection results = search("gov.nih.nci.cacoresdk.domain.other.datatype.DsetIiDataType",searchObject );
 		assertNotNull(results);
-		assertEquals(30,results.size());
+		assertEquals(29,results.size());
 	}
 
 	/**
@@ -55,7 +55,7 @@ public class DsetIiDataTypeTest extends SDKISOTestBase{
 	{
 		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.DsetIiDataType");
 		int count = getApplicationService().getQueryRowCount(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.DsetIiDataType");
-		assertEquals(30,count);
+		assertEquals(29,count);
 	}
 
 	/**
@@ -319,13 +319,14 @@ public class DsetIiDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data);
 				Ii item = data.getValue1().getItem().iterator().next();
 				assertEquals("Extension1", item.getExtension());
-				assertEquals(NullFlavor.NI, item.getNullFlavor());
 				assertEquals("2.16.12.123.456", item.getRoot());
 			
+				assertNull(item.getNullFlavor());
 				assertNull(item.getIdentifierName());
-				assertNull(item.getReliability());
-				assertNull(item.getScope());
-				assertNull(item.getDisplayable());
+				//Global constants
+				assertEquals(IdentifierReliability.ISS, item.getReliability());
+				assertEquals(IdentifierScope.OBJ, item.getScope());
+				assertEquals(Boolean.TRUE, item.getDisplayable());
 				counter++;
 				continue;
 			}
@@ -338,13 +339,14 @@ public class DsetIiDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data);
 				Ii item = data.getValue1().getItem().iterator().next();
 				assertEquals("Extension2", item.getExtension());
-				assertEquals(NullFlavor.NI, item.getNullFlavor());
 				assertEquals("2.16.12.123.456", item.getRoot());
 			
+				assertNull(item.getNullFlavor());
 				assertNull(item.getIdentifierName());
-				assertNull(item.getReliability());
-				assertNull(item.getScope());
-				assertNull(item.getDisplayable());
+				//Global constants
+				assertEquals(IdentifierReliability.ISS, item.getReliability());
+				assertEquals(IdentifierScope.OBJ, item.getScope());
+				assertEquals(Boolean.TRUE, item.getDisplayable());
 				counter++;
 				continue;
 			}
@@ -357,13 +359,14 @@ public class DsetIiDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data);
 				Ii item = data.getValue1().getItem().iterator().next();
 				assertEquals("Extension3", item.getExtension());
-				assertEquals(NullFlavor.NI, item.getNullFlavor());
 				assertEquals("2.16.12.123.456", item.getRoot());
 			
+				assertNull(item.getNullFlavor());
 				assertNull(item.getIdentifierName());
-				assertNull(item.getReliability());
-				assertNull(item.getScope());
-				assertNull(item.getDisplayable());
+				//Global constants
+				assertEquals(IdentifierReliability.ISS, item.getReliability());
+				assertEquals(IdentifierScope.OBJ, item.getScope());
+				assertEquals(Boolean.TRUE, item.getDisplayable());
 				counter++;
 				continue;
 			}
@@ -376,13 +379,14 @@ public class DsetIiDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data);
 				Ii item = data.getValue1().getItem().iterator().next();
 				assertEquals("Extension4", item.getExtension());
-				assertEquals(NullFlavor.NI, item.getNullFlavor());
 				assertEquals("2.16.12.123.456", item.getRoot());
 			
+				assertNull(item.getNullFlavor());
 				assertNull(item.getIdentifierName());
-				assertNull(item.getReliability());
-				assertNull(item.getScope());
-				assertNull(item.getDisplayable());
+				//Global constants
+				assertEquals(IdentifierReliability.ISS, item.getReliability());
+				assertEquals(IdentifierScope.OBJ, item.getScope());
+				assertEquals(Boolean.TRUE, item.getDisplayable());
 				counter++;
 				continue;
 			}
@@ -395,13 +399,14 @@ public class DsetIiDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data);
 				Ii item = data.getValue1().getItem().iterator().next();
 				assertEquals("Extension5", item.getExtension());
-				assertEquals(NullFlavor.NI, item.getNullFlavor());
 				assertEquals("2.16.12.123.456", item.getRoot());
 			
+				assertNull(item.getNullFlavor());
 				assertNull(item.getIdentifierName());
-				assertNull(item.getReliability());
-				assertNull(item.getScope());
-				assertNull(item.getDisplayable());
+				//Global constants
+				assertEquals(IdentifierReliability.ISS, item.getReliability());
+				assertEquals(IdentifierScope.OBJ, item.getScope());
+				assertEquals(Boolean.TRUE, item.getDisplayable());
 				counter++;
 				continue;
 			}
@@ -416,9 +421,10 @@ public class DsetIiDataTypeTest extends SDKISOTestBase{
 	
 				assertNull(item.getExtension());
 				assertNull(item.getIdentifierName());
-				assertNull(item.getReliability());
-				assertNull(item.getScope());
-				assertNull(item.getDisplayable());
+				//Global constants
+				assertEquals(IdentifierReliability.ISS, item.getReliability());
+				assertEquals(IdentifierScope.OBJ, item.getScope());
+				assertEquals(Boolean.TRUE, item.getDisplayable());
 				counter++;
 			}
 		}
@@ -440,13 +446,14 @@ public class DsetIiDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data);
 				Ii item = data.getValue2().getItem().iterator().next();
 				assertEquals("Extension1", item.getExtension());
-				assertEquals(NullFlavor.NI, item.getNullFlavor());
-				//assertEquals("2.16.12.123.456", item.getRoot());
 			
+				assertNull(item.getNullFlavor());
 				assertNull(item.getIdentifierName());
-				assertNull(item.getReliability());
-				assertNull(item.getScope());
-				assertNull(item.getDisplayable());
+				//Global constants
+				assertEquals("2.16.12.123.456.1", item.getRoot());
+				assertEquals(IdentifierReliability.ISS, item.getReliability());
+				assertEquals(IdentifierScope.OBJ, item.getScope());
+				assertEquals(Boolean.TRUE, item.getDisplayable());
 				counter++;
 				continue;
 			}
@@ -459,13 +466,14 @@ public class DsetIiDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data);
 				Ii item = data.getValue2().getItem().iterator().next();
 				assertEquals("Extension2", item.getExtension());
-				assertNull(item.getNullFlavor());
-				assertEquals("ROOT2", item.getRoot());
 			
+				assertNull(item.getNullFlavor());
 				assertNull(item.getIdentifierName());
-				assertNull(item.getReliability());
-				assertNull(item.getScope());
-				assertNull(item.getDisplayable());
+				//Global constants
+				assertEquals("2.16.12.123.456.1", item.getRoot());
+				assertEquals(IdentifierReliability.ISS, item.getReliability());
+				assertEquals(IdentifierScope.OBJ, item.getScope());
+				assertEquals(Boolean.TRUE, item.getDisplayable());
 				counter++;
 				continue;
 			}
@@ -478,13 +486,14 @@ public class DsetIiDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data);
 				Ii item = data.getValue2().getItem().iterator().next();
 				assertEquals("Extension3", item.getExtension());
-				assertEquals(NullFlavor.NI, item.getNullFlavor());
-				assertEquals("ROOT3", item.getRoot());
 			
+				assertNull(item.getNullFlavor());
 				assertNull(item.getIdentifierName());
-				assertNull(item.getReliability());
-				assertNull(item.getScope());
-				assertNull(item.getDisplayable());
+				//Global constants
+				assertEquals("2.16.12.123.456.1", item.getRoot());
+				assertEquals(IdentifierReliability.ISS, item.getReliability());
+				assertEquals(IdentifierScope.OBJ, item.getScope());
+				assertEquals(Boolean.TRUE, item.getDisplayable());
 				counter++;
 				continue;
 			}
@@ -497,13 +506,14 @@ public class DsetIiDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data);
 				Ii item = data.getValue2().getItem().iterator().next();
 				assertEquals("Extension4", item.getExtension());
-				assertEquals(NullFlavor.NI, item.getNullFlavor());
-				assertEquals("ROOT4", item.getRoot());
 			
+				assertNull(item.getNullFlavor());
 				assertNull(item.getIdentifierName());
-				assertNull(item.getReliability());
-				assertNull(item.getScope());
-				assertNull(item.getDisplayable());
+				//Global constants
+				assertEquals("2.16.12.123.456.1", item.getRoot());
+				assertEquals(IdentifierReliability.ISS, item.getReliability());
+				assertEquals(IdentifierScope.OBJ, item.getScope());
+				assertEquals(Boolean.TRUE, item.getDisplayable());
 				counter++;
 				continue;
 			}
@@ -516,13 +526,14 @@ public class DsetIiDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data);
 				Ii item = data.getValue2().getItem().iterator().next();
 				assertEquals("Extension5", item.getExtension());
-				assertEquals(NullFlavor.NI, item.getNullFlavor());
-				assertEquals("ROOT5", item.getRoot());
 			
+				assertNull(item.getNullFlavor());
 				assertNull(item.getIdentifierName());
-				assertNull(item.getReliability());
-				assertNull(item.getScope());
-				assertNull(item.getDisplayable());
+				//Global constants
+				assertEquals("2.16.12.123.456.1", item.getRoot());
+				assertEquals(IdentifierReliability.ISS, item.getReliability());
+				assertEquals(IdentifierScope.OBJ, item.getScope());
+				assertEquals(Boolean.TRUE, item.getDisplayable());
 				counter++;
 				continue;
 			}
@@ -533,13 +544,13 @@ public class DsetIiDataTypeTest extends SDKISOTestBase{
 				Ii item = data.getValue2().getItem().iterator().next();
 				assertNotNull(item);
 				assertEquals(NullFlavor.NI, item.getNullFlavor());
-				assertEquals("2.16.12.123.456", item.getRoot());
-	
 				assertNull(item.getExtension());
 				assertNull(item.getIdentifierName());
-				assertNull(item.getReliability());
-				assertNull(item.getScope());
-				assertNull(item.getDisplayable());
+				//Global constants
+				assertEquals("2.16.12.123.456.1", item.getRoot());
+				assertEquals(IdentifierReliability.ISS, item.getReliability());
+				assertEquals(IdentifierScope.OBJ, item.getScope());
+				assertEquals(Boolean.TRUE, item.getDisplayable());
 				counter++;
 			}
 		}
@@ -561,8 +572,9 @@ public class DsetIiDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data);
 				Ii item = data.getValue3().getItem().iterator().next();
 				assertEquals("Extension1", item.getExtension());
-				assertEquals(NullFlavor.NI, item.getNullFlavor());
-				assertEquals("2.16.12.123.456", item.getRoot());
+				assertNull(item.getNullFlavor());
+				//Global constant
+				assertEquals("2.16.12.123.456.1", item.getRoot());
 			
 				assertNull(item.getIdentifierName());
 				assertNull(item.getReliability());
@@ -582,8 +594,9 @@ public class DsetIiDataTypeTest extends SDKISOTestBase{
 				assertNull(item.getExtension());
 				assertEquals("IDENTIFIER_NAME2", item.getIdentifierName());
 				assertNull(item.getNullFlavor());
-				assertEquals("2.16.12.123.456", item.getRoot());
-
+				//Global constant
+				assertEquals("2.16.12.123.456.1", item.getRoot());
+			
 				assertNull(item.getReliability());
 				assertNull(item.getScope());
 				assertNull(item.getDisplayable());
@@ -600,9 +613,10 @@ public class DsetIiDataTypeTest extends SDKISOTestBase{
 				Ii item = data.getValue3().getItem().iterator().next();
 				assertEquals("Extension3", item.getExtension());
 				assertEquals("IDENTIFIER_NAME3", item.getIdentifierName());
-				assertEquals(NullFlavor.NI, item.getNullFlavor());
-				assertEquals("2.16.12.123.456", item.getRoot());
-				
+				assertNull(item.getNullFlavor());
+				//Global constant
+				assertEquals("2.16.12.123.456.1", item.getRoot());
+			
 				assertNull(item.getReliability());
 				assertNull(item.getScope());
 				assertNull(item.getDisplayable());
@@ -619,9 +633,10 @@ public class DsetIiDataTypeTest extends SDKISOTestBase{
 				Ii item = data.getValue3().getItem().iterator().next();
 				assertEquals("Extension4", item.getExtension());
 				assertEquals("IDENTIFIER_NAME4", item.getIdentifierName());
-				assertEquals(NullFlavor.NI, item.getNullFlavor());
-				assertEquals("2.16.12.123.456", item.getRoot());
-				
+				assertNull(item.getNullFlavor());
+				//Global constant
+				assertEquals("2.16.12.123.456.1", item.getRoot());
+			
 				assertNull(item.getReliability());
 				assertNull(item.getScope());
 				assertNull(item.getDisplayable());
@@ -638,9 +653,11 @@ public class DsetIiDataTypeTest extends SDKISOTestBase{
 				Ii item = data.getValue3().getItem().iterator().next();
 				assertEquals("Extension5", item.getExtension());
 				assertEquals("IDENTIFIER_NAME5", item.getIdentifierName());
-				assertEquals(NullFlavor.NI, item.getNullFlavor());
-				assertEquals("2.16.12.123.456", item.getRoot());
-				
+				assertNull(item.getNullFlavor());
+				//Global constant
+				assertEquals("2.16.12.123.456.1", item.getRoot());
+			
+				assertNull(item.getIdentifierName());
 				assertNull(item.getReliability());
 				assertNull(item.getScope());
 				assertNull(item.getDisplayable());
@@ -654,13 +671,15 @@ public class DsetIiDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data.getValue3());
 				Ii item = data.getValue3().getItem().iterator().next();
 				assertEquals(NullFlavor.NI, item.getNullFlavor());
-				assertEquals("2.16.12.123.456", item.getRoot());
-	
-				assertNull(item.getExtension());
+				//Global constant
+				assertEquals("2.16.12.123.456.1", item.getRoot());
+			
 				assertNull(item.getIdentifierName());
-				assertNull(item.getReliability());
-				assertNull(item.getScope());
-				assertNull(item.getDisplayable());
+				assertNull(item.getExtension());
+				//Global constants
+				assertEquals(IdentifierReliability.ISS, item.getReliability());
+				assertEquals(IdentifierScope.OBJ, item.getScope());
+				assertEquals(Boolean.TRUE, item.getDisplayable());
 				counter++;
 			}
 		}
@@ -683,12 +702,13 @@ public class DsetIiDataTypeTest extends SDKISOTestBase{
 				Ii item = data.getValue4().getItem().iterator().next();
 				assertEquals("Extension1", item.getExtension());
 				assertEquals("Root1", item.getRoot());
-				assertEquals(NullFlavor.NI, item.getNullFlavor());
 				assertEquals(Boolean.TRUE, item.getDisplayable());
 			
+				assertEquals(NullFlavor.NI, item.getNullFlavor());
+				//Global constants
+				assertEquals(IdentifierReliability.ISS, item.getReliability());
+				assertEquals(IdentifierScope.OBJ, item.getScope());
 				assertNull(item.getIdentifierName());
-				assertNull(item.getReliability());
-				assertNull(item.getScope());
 				counter++;
 				continue;
 			}
@@ -702,12 +722,12 @@ public class DsetIiDataTypeTest extends SDKISOTestBase{
 				Ii item = data.getValue4().getItem().iterator().next();
 				assertEquals("Extension2", item.getExtension());
 				assertEquals("IDENTIFIER_NAME2", item.getIdentifierName());
-				assertNull(item.getNullFlavor());
-				assertEquals("Root2", item.getRoot());
 				assertEquals(Boolean.TRUE, item.getDisplayable());
 
-				assertNull(item.getReliability());
-				assertNull(item.getScope());
+				assertNull(item.getNullFlavor());
+				//Global constants
+				assertEquals(IdentifierReliability.ISS, item.getReliability());
+				assertEquals(IdentifierScope.OBJ, item.getScope());
 				counter++;
 				continue;
 			}
@@ -721,12 +741,14 @@ public class DsetIiDataTypeTest extends SDKISOTestBase{
 				Ii item = data.getValue4().getItem().iterator().next();
 				assertNull(item.getExtension());
 				assertEquals("IDENTIFIER_NAME3", item.getIdentifierName());
-				assertEquals(NullFlavor.NI, item.getNullFlavor());
 				assertEquals("Root3", item.getRoot());
 				
 				assertEquals(IdentifierReliability.ISS, item.getReliability());
-				assertNull(item.getScope());
+				assertNull(item.getIdentifierName());
 				assertEquals(Boolean.TRUE, item.getDisplayable());
+				assertEquals(NullFlavor.NI, item.getNullFlavor());
+				//Global constants
+				assertEquals(IdentifierScope.OBJ, item.getScope());
 				counter++;
 				continue;
 			}
@@ -772,16 +794,7 @@ public class DsetIiDataTypeTest extends SDKISOTestBase{
 			else
 			{
 				assertNotNull(data);
-				assertNotNull(data.getValue4());
-				Ii item = data.getValue4().getItem().iterator().next();
-				assertEquals(NullFlavor.NI, item.getNullFlavor());
-				assertEquals("2.16.12.123.456", item.getRoot());
-	
-				assertNull(item.getExtension());
-				assertNull(item.getIdentifierName());
-				assertNull(item.getReliability());
-				assertNull(item.getScope());
-				assertNull(item.getDisplayable());
+				assertNull(data.getValue4());
 				counter++;
 			}
 		}
@@ -803,13 +816,14 @@ public class DsetIiDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data);
 				Ii item = data.getValue5().getItem().iterator().next();
 				assertEquals("Extension1", item.getExtension());
-				assertEquals(NullFlavor.NI, item.getNullFlavor());
-				assertEquals("2.16.12.123.456", item.getRoot());
-			
+				
+				assertNull(item.getNullFlavor());
 				assertNull(item.getIdentifierName());
-				assertNull(item.getReliability());
-				assertNull(item.getScope());
-				assertNull(item.getDisplayable());
+				//Global constants
+				assertEquals("2.16.12.123.456.1", item.getRoot());
+				assertEquals(IdentifierReliability.ISS, item.getReliability());
+				assertEquals(IdentifierScope.OBJ, item.getScope());
+				assertEquals(Boolean.TRUE, item.getDisplayable());
 				counter++;
 				continue;
 			}
@@ -822,13 +836,13 @@ public class DsetIiDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data);
 				Ii item = data.getValue5().getItem().iterator().next();
 				assertEquals("Extension2", item.getExtension());
-				assertEquals(NullFlavor.NI, item.getNullFlavor());
-				assertEquals("2.16.12.123.456", item.getRoot());
-			
+				assertNull(item.getNullFlavor());
 				assertNull(item.getIdentifierName());
-				assertNull(item.getReliability());
-				assertNull(item.getScope());
-				assertNull(item.getDisplayable());
+				//Global constants
+				assertEquals("2.16.12.123.456.1", item.getRoot());
+				assertEquals(IdentifierReliability.ISS, item.getReliability());
+				assertEquals(IdentifierScope.OBJ, item.getScope());
+				assertEquals(Boolean.TRUE, item.getDisplayable());
 				counter++;
 				continue;
 			}
@@ -841,13 +855,13 @@ public class DsetIiDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data);
 				Ii item = data.getValue5().getItem().iterator().next();
 				assertEquals("Extension3", item.getExtension());
-				assertEquals(NullFlavor.NI, item.getNullFlavor());
-				assertEquals("2.16.12.123.456", item.getRoot());
-			
+				assertNull(item.getNullFlavor());
 				assertNull(item.getIdentifierName());
-				assertNull(item.getReliability());
-				assertNull(item.getScope());
-				assertNull(item.getDisplayable());
+				//Global constants
+				assertEquals("2.16.12.123.456.1", item.getRoot());
+				assertEquals(IdentifierReliability.ISS, item.getReliability());
+				assertEquals(IdentifierScope.OBJ, item.getScope());
+				assertEquals(Boolean.TRUE, item.getDisplayable());
 				counter++;
 				continue;
 			}
@@ -860,13 +874,13 @@ public class DsetIiDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data);
 				Ii item = data.getValue5().getItem().iterator().next();
 				assertEquals("Extension4", item.getExtension());
-				assertEquals(NullFlavor.NI, item.getNullFlavor());
-				assertEquals("2.16.12.123.456", item.getRoot());
-			
+				assertNull(item.getNullFlavor());
 				assertNull(item.getIdentifierName());
-				assertNull(item.getReliability());
-				assertNull(item.getScope());
-				assertNull(item.getDisplayable());
+				//Global constants
+				assertEquals("2.16.12.123.456.1", item.getRoot());
+				assertEquals(IdentifierReliability.ISS, item.getReliability());
+				assertEquals(IdentifierScope.OBJ, item.getScope());
+				assertEquals(Boolean.TRUE, item.getDisplayable());
 				counter++;
 				continue;
 			}
@@ -879,13 +893,13 @@ public class DsetIiDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data);
 				Ii item = data.getValue5().getItem().iterator().next();
 				assertEquals("Extension5", item.getExtension());
-				assertEquals(NullFlavor.NI, item.getNullFlavor());
-				assertEquals("2.16.12.123.456", item.getRoot());
-			
+				assertNull(item.getNullFlavor());
 				assertNull(item.getIdentifierName());
-				assertNull(item.getReliability());
-				assertNull(item.getScope());
-				assertNull(item.getDisplayable());
+				//Global constants
+				assertEquals("2.16.12.123.456.1", item.getRoot());
+				assertEquals(IdentifierReliability.ISS, item.getReliability());
+				assertEquals(IdentifierScope.OBJ, item.getScope());
+				assertEquals(Boolean.TRUE, item.getDisplayable());
 				counter++;
 				continue;
 			}
@@ -896,13 +910,14 @@ public class DsetIiDataTypeTest extends SDKISOTestBase{
 				Ii item = data.getValue5().getItem().iterator().next();
 				assertNotNull(item);
 				assertEquals(NullFlavor.NI, item.getNullFlavor());
-				assertEquals("2.16.12.123.456", item.getRoot());
+				assertNull(item.getIdentifierName());
+				//Global constants
+				assertEquals("2.16.12.123.456.1", item.getRoot());
+				assertEquals(IdentifierReliability.ISS, item.getReliability());
+				assertEquals(IdentifierScope.OBJ, item.getScope());
+				assertEquals(Boolean.TRUE, item.getDisplayable());
 	
 				assertNull(item.getExtension());
-				assertNull(item.getIdentifierName());
-				assertNull(item.getReliability());
-				assertNull(item.getScope());
-				assertNull(item.getDisplayable());
 				counter++;
 			}
 		}
@@ -924,13 +939,13 @@ public class DsetIiDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data);
 				Ii item = data.getValue6().getItem().iterator().next();
 				assertEquals("Extension1", item.getExtension());
-				assertEquals(NullFlavor.NI, item.getNullFlavor());
-				assertEquals("2.16.12.123.456", item.getRoot());
-			
+				assertNull(item.getNullFlavor());
 				assertNull(item.getIdentifierName());
-				assertNull(item.getReliability());
-				assertNull(item.getScope());
-				assertNull(item.getDisplayable());
+				//Global constants
+				assertEquals("2.16.12.123.456.1", item.getRoot());
+				assertEquals(IdentifierReliability.ISS, item.getReliability());
+				assertEquals(IdentifierScope.OBJ, item.getScope());
+				assertEquals(Boolean.TRUE, item.getDisplayable());
 				counter++;
 				continue;
 			}
@@ -942,14 +957,14 @@ public class DsetIiDataTypeTest extends SDKISOTestBase{
 
 				assertNotNull(data);
 				Ii item = data.getValue6().getItem().iterator().next();
-				assertEquals("Extension2", item.getExtension());
-				assertEquals(NullFlavor.NI, item.getNullFlavor());
-				assertEquals("2.16.12.123.456", item.getRoot());
-			
+				assertEquals("Extension1", item.getExtension());
+				assertNull(item.getNullFlavor());
 				assertNull(item.getIdentifierName());
-				assertNull(item.getReliability());
-				assertNull(item.getScope());
-				assertNull(item.getDisplayable());
+				//Global constants
+				assertEquals("2.16.12.123.456.1", item.getRoot());
+				assertEquals(IdentifierReliability.ISS, item.getReliability());
+				assertEquals(IdentifierScope.OBJ, item.getScope());
+				assertEquals(Boolean.TRUE, item.getDisplayable());
 				counter++;
 				continue;
 			}
@@ -961,14 +976,14 @@ public class DsetIiDataTypeTest extends SDKISOTestBase{
 
 				assertNotNull(data);
 				Ii item = data.getValue6().getItem().iterator().next();
-				assertEquals("Extension3", item.getExtension());
-				assertEquals(NullFlavor.NI, item.getNullFlavor());
-				assertEquals("2.16.12.123.456", item.getRoot());
-			
+				assertEquals("Extension1", item.getExtension());
+				assertNull(item.getNullFlavor());
 				assertNull(item.getIdentifierName());
-				assertNull(item.getReliability());
-				assertNull(item.getScope());
-				assertNull(item.getDisplayable());
+				//Global constants
+				assertEquals("2.16.12.123.456.1", item.getRoot());
+				assertEquals(IdentifierReliability.ISS, item.getReliability());
+				assertEquals(IdentifierScope.OBJ, item.getScope());
+				assertEquals(Boolean.TRUE, item.getDisplayable());
 				counter++;
 				continue;
 			}
@@ -981,13 +996,13 @@ public class DsetIiDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data);
 				Ii item = data.getValue6().getItem().iterator().next();
 				assertEquals("Extension4", item.getExtension());
-				assertEquals(NullFlavor.NI, item.getNullFlavor());
-				assertEquals("2.16.12.123.456", item.getRoot());
-			
+				assertNull(item.getNullFlavor());
 				assertNull(item.getIdentifierName());
-				assertNull(item.getReliability());
-				assertNull(item.getScope());
-				assertNull(item.getDisplayable());
+				//Global constants
+				assertEquals("2.16.12.123.456.1", item.getRoot());
+				assertEquals(IdentifierReliability.ISS, item.getReliability());
+				assertEquals(IdentifierScope.OBJ, item.getScope());
+				assertEquals(Boolean.TRUE, item.getDisplayable());
 				counter++;
 				continue;
 			}
@@ -1000,13 +1015,13 @@ public class DsetIiDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data);
 				Ii item = data.getValue6().getItem().iterator().next();
 				assertEquals("Extension5", item.getExtension());
-				assertEquals(NullFlavor.NI, item.getNullFlavor());
-				assertEquals("2.16.12.123.456", item.getRoot());
-			
+				assertNull(item.getNullFlavor());
 				assertNull(item.getIdentifierName());
-				assertNull(item.getReliability());
-				assertNull(item.getScope());
-				assertNull(item.getDisplayable());
+				//Global constants
+				assertEquals("2.16.12.123.456.1", item.getRoot());
+				assertEquals(IdentifierReliability.ISS, item.getReliability());
+				assertEquals(IdentifierScope.OBJ, item.getScope());
+				assertEquals(Boolean.TRUE, item.getDisplayable());
 				counter++;
 				continue;
 			}
@@ -1017,13 +1032,14 @@ public class DsetIiDataTypeTest extends SDKISOTestBase{
 				Ii item = data.getValue6().getItem().iterator().next();
 				assertNotNull(item);
 				assertEquals(NullFlavor.NI, item.getNullFlavor());
-				assertEquals("2.16.12.123.456", item.getRoot());
-	
-				assertNull(item.getExtension());
+				assertNull(item.getNullFlavor());
 				assertNull(item.getIdentifierName());
-				assertNull(item.getReliability());
-				assertNull(item.getScope());
-				assertNull(item.getDisplayable());
+				//Global constants
+				assertEquals("2.16.12.123.456.1", item.getRoot());
+				assertEquals(IdentifierReliability.ISS, item.getReliability());
+				assertEquals(IdentifierScope.OBJ, item.getScope());
+				assertEquals(Boolean.TRUE, item.getDisplayable());
+				assertNull(item.getExtension());
 				counter++;
 			}
 		}

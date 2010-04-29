@@ -146,12 +146,13 @@ public class BlDataTypeTest extends SDKISOTestBase{
 		//Record1
 		BlDataType data = null;
 		
-		if(result.iterator().hasNext() && (index == 1 || index == 0))
+		if(result.iterator().hasNext() && (index == 1 || index == -1))
 		{
 			data = result.iterator().next();
 			assertNotNull(data.getValue1());
 			assertNull(data.getValue1().getValue());
-			assertEquals(NullFlavor.NI, data.getValue1().getNullFlavor());
+			//Local constant overriding global constant
+			assertEquals(NullFlavor.UNK, data.getValue1().getNullFlavor());
 		}
 		
 		//Record2
@@ -160,7 +161,8 @@ public class BlDataTypeTest extends SDKISOTestBase{
 			data = result.iterator().next();
 			assertNotNull(data.getValue1());
 			assertEquals(Boolean.TRUE, data.getValue1().getValue());
-			assertEquals(NullFlavor.NI, data.getValue1().getNullFlavor());
+			//Local constant overriding global constant
+			assertEquals(NullFlavor.UNK, data.getValue1().getNullFlavor());
 		}
 		
 		//Record3
@@ -169,7 +171,8 @@ public class BlDataTypeTest extends SDKISOTestBase{
 			data = result.iterator().next();
 			assertNotNull(data.getValue1());
 			assertNull(data.getValue1().getValue());
-			assertEquals(NullFlavor.NI, data.getValue1().getNullFlavor());
+			//Local constant overriding global constant
+			assertEquals(NullFlavor.UNK, data.getValue1().getNullFlavor());
 		}
 		
 		//Record4
@@ -178,7 +181,8 @@ public class BlDataTypeTest extends SDKISOTestBase{
 			data = result.iterator().next();
 			assertNotNull(data.getValue1());
 			assertNull(data.getValue1().getValue());
-			assertEquals(NullFlavor.NI, data.getValue1().getNullFlavor());
+			//Local constant overriding global constant
+			assertEquals(NullFlavor.UNK, data.getValue1().getNullFlavor());
 		}
 	}
 
@@ -191,14 +195,18 @@ public class BlDataTypeTest extends SDKISOTestBase{
 		if(result.iterator().hasNext() && (index == 1 || index == 0))
 		{
 			data = result.iterator().next();
-			assertNull(data.getValue2());
+			assertNotNull(data.getValue2());
+			//From database 
+			assertNull(data.getValue2().getNullFlavor());
 		}
 		
 		//Record2
 		if(result.iterator().hasNext() && (index == 2 || index == 0))
 		{
 			data = result.iterator().next();
-			assertNull(data.getValue2());
+			assertNotNull(data.getValue2());
+			//From database 
+			assertNull(data.getValue2().getNullFlavor());
 		}
 		
 		//Record3
@@ -206,17 +214,19 @@ public class BlDataTypeTest extends SDKISOTestBase{
 		{
 			data = result.iterator().next();
 			assertNotNull(data.getValue2());
-			assertNull(data.getValue2().getValue());
-			assertEquals(NullFlavor.NI, data.getValue2().getNullFlavor());
+			assertEquals(Boolean.TRUE, data.getValue2().getValue());
+			//From database 
+			assertNull(data.getValue2().getNullFlavor());
 		}
 
 		//Record4
-		if(result.iterator().hasNext() && (index == 4 || index == 0))
+		else if(result.iterator().hasNext() && (index == 4 || index == 0))
 		{
 			data = result.iterator().next();
 			assertNotNull(data.getValue2());
 			assertEquals(Boolean.FALSE, data.getValue2().getValue());
-			assertNull(data.getValue2().getNullFlavor());
+			//From the database
+			assertEquals(NullFlavor.INV, data.getValue2().getNullFlavor());
 		}
 	}
 	
