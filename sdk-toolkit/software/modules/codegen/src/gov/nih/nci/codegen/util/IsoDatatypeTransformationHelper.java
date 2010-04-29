@@ -534,9 +534,6 @@ public class IsoDatatypeTransformationHelper
 				//Locate the child node and if it exist then proceed recursively
 				for(Node node: rootNode.getInnerNodes())
 				{
-					{
-						
-					}
 					if(node instanceof ComplexNode &&
 							((node.getName().equals(attribute.getName())) ||
 									((utils.ISO_ROOT_PACKAGE_NAME+".AD").equals(isoClassName) && node.getName().startsWith("part")) ||
@@ -639,8 +636,11 @@ public class IsoDatatypeTransformationHelper
 					createNewNode = false;
 				}
 			}
-			if(createNewNode && !addGlobalConstantFlag)
+			if(createNewNode)
 			{
+				if(addGlobalConstantFlag)
+					return;
+				
 				ComplexNode newNode = new ComplexNode(nodePath[i]);
 				currentNode.addInnerNode(newNode);
 				currentNode = newNode;
@@ -669,16 +669,9 @@ public class IsoDatatypeTransformationHelper
 				newNode.setColumnName(nodeValue);
 				currentNode.addInnerNode(newNode);
 			} else {
-				if(false)
-				{
-					
-				}
-				else
-				{
-					ConstantNode newNode = new ConstantNode(nodePath[nodePath.length-1]);
-					newNode.setConstantValue(nodeValue);
-					currentNode.addInnerNode(newNode);
-				}
+				ConstantNode newNode = new ConstantNode(nodePath[nodePath.length - 1]);
+				newNode.setConstantValue(nodeValue);
+				currentNode.addInnerNode(newNode);
 			}
 		}
 	}
