@@ -51,8 +51,8 @@ public class CharacterKeyXSDTest extends SDKXSDTestBase
 
 		validateClassElements(targetClass);
 
-		validateAttributeElement(targetClass, "id", "String");
-		validateAttributeElement(targetClass, "name", "String");	
+		validateAttributeElement(targetClass, "id", "st");
+		validateAttributeElement(targetClass, "name", "st");	
 
 	}	
 }

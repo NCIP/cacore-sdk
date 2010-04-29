@@ -52,8 +52,8 @@ public class O2MBidirectionalWJoinXSDTest extends SDKXSDTestBase
 
 		validateClassElements(targetClass);
 
-		validateAttributeElement(targetClass, "id", "Integer");
-		validateAttributeElement(targetClass, "destination", "String");	
+		validateAttributeElement(targetClass, "id", "ii");
+		validateAttributeElement(targetClass, "destination", "st");	
 	}	
 
 	
@@ -68,8 +68,8 @@ public class O2MBidirectionalWJoinXSDTest extends SDKXSDTestBase
 	{
 		Class targetClass = Passanger.class;	
 
-		validateAttributeElement(targetClass, "id", "Integer");
-		validateAttributeElement(targetClass, "name", "String");		
+		validateAttributeElement(targetClass, "id", "ii");
+		validateAttributeElement(targetClass, "name", "st");		
 	}
 	
 	

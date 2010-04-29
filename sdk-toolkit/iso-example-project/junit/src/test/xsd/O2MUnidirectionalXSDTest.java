@@ -54,8 +54,8 @@ public class O2MUnidirectionalXSDTest extends SDKXSDTestBase
 		Class targetClass = LatchKey.class;
 
 		validateClassElements(targetClass);
-		validateAttributeElement(targetClass, "id", "Integer");
-		validateAttributeElement(targetClass, "type", "String");	
+		validateAttributeElement(targetClass, "id", "ii");
+		validateAttributeElement(targetClass, "type", "st");	
 	}	
 
 	
@@ -71,8 +71,8 @@ public class O2MUnidirectionalXSDTest extends SDKXSDTestBase
 		Class targetClass = KeyChain.class;	
 
 		validateClassElements(targetClass);
-		validateAttributeElement(targetClass, "id", "Integer");
-		validateAttributeElement(targetClass, "name", "String");		
+		validateAttributeElement(targetClass, "id", "ii");
+		validateAttributeElement(targetClass, "name", "st");		
 	}
 	
 	

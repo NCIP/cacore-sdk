@@ -54,8 +54,8 @@ public class O2MUnidirectionalWJoinXSDTest extends SDKXSDTestBase
 		Class targetClass = Button.class;
 
 		validateClassElements(targetClass);
-		validateAttributeElement(targetClass, "id", "Integer");
-		validateAttributeElement(targetClass, "holes", "Integer");	
+		validateAttributeElement(targetClass, "id", "ii");
+		validateAttributeElement(targetClass, "holes", "int");	
 	}	
 
 	
@@ -71,8 +71,8 @@ public class O2MUnidirectionalWJoinXSDTest extends SDKXSDTestBase
 		Class targetClass = Shirt.class;	
 
 		validateClassElements(targetClass);
-		validateAttributeElement(targetClass, "id", "Integer");
-		validateAttributeElement(targetClass, "style", "String");		
+		validateAttributeElement(targetClass, "id", "ii");
+		validateAttributeElement(targetClass, "style", "st");		
 	}
 	
 	

@@ -51,8 +51,8 @@ public class IntegerPrimitiveKeyXSDTest extends SDKXSDTestBase
 
 		validateClassElements(targetClass);
 
-		validateAttributeElement(targetClass, "id", "Integer");
-		validateAttributeElement(targetClass, "name", "String");	
+		validateAttributeElement(targetClass, "id", "ii");
+		validateAttributeElement(targetClass, "name", "st");	
 
 	}	
 }

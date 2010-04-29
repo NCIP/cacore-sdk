@@ -52,8 +52,8 @@ public class OneChildXSDTest extends SDKXSDTestBase
 
 		validateClassElements(targetClass);
 
-		validateAttributeElement(targetClass, "id", "Integer");
-		validateAttributeElement(targetClass, "hairColor", "String");	
+		validateAttributeElement(targetClass, "id", "ii");
+		validateAttributeElement(targetClass, "hairColor", "st");	
 	}	
 
 	
@@ -69,7 +69,7 @@ public class OneChildXSDTest extends SDKXSDTestBase
 		Class targetClass = Human.class;	
 
 		validateSubclassElements(targetClass);
-		validateSubclassAttributeElement(targetClass, "diet", "String");			
+		validateSubclassAttributeElement(targetClass, "diet", "st");			
 	}
 	
 }

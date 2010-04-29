@@ -51,8 +51,8 @@ public class StringKeyXSDTest extends SDKXSDTestBase
 
 		validateClassElements(targetClass);
 
-		validateAttributeElement(targetClass, "id", "String");
-		validateAttributeElement(targetClass, "name", "String");	
+		validateAttributeElement(targetClass, "id", "string");
+		validateAttributeElement(targetClass, "name", "string");	
 
 	}	
 }
