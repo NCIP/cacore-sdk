@@ -22,7 +22,7 @@
 			<props>
 				<prop key="jsonOutputFormatter">jsonOutputFormatter.xsl</prop>
 				<prop key="resultOutputFormatter">resultOutputFormatter.xsl</prop>
-				<prop key="rowCounter">200</prop>
+				<prop key="rowCounter">@RESTFUL_PAGE_SIZE@</prop>
 				<prop key="securityEnabled">@SECURITY_ENABLED@</prop>
 				<prop key="enableISO21090DataTypes">@ENABLE_ISO21090_DATATYPES@</prop>
 				<prop key="enableRestfulHtmlInterface">@ENABLE_RESTFUL_HTML_INTERFACE@</prop>
@@ -32,7 +32,7 @@
 
 	<bean name="ORMDAO" class="@DAO_IMPL@">
 		<property name="caseSensitive" value="false" />
-		<property name="resultCountPerQuery" value="1000" />
+		<property name="resultCountPerQuery" value="@DAO_PAGE_SIZE@" />
 		<property name="securityHelper">
 			<ref bean="SecurityInitializationHelper" />
 		</property>

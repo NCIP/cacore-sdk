@@ -68,6 +68,7 @@ public class ListProxy extends ArrayList implements Set {
 					if (rowCount == maxRecordsPerQuery_)
 						rowCount = appService.getQueryRowCount(originalCrit_,
 								targetClassName);
+					//System.out.println("After Query rowCount: " + rowCount + "; " + "maxRecordsPerQuery_: " + maxRecordsPerQuery_);
 				} catch (Exception ex) {
 					log.error("Exception: ", ex);
 				}
@@ -623,7 +624,8 @@ public class ListProxy extends ArrayList implements Set {
 	
 	public void calculateRealSize()
 	{
-		if(listChunk_.size()< maxRecordsPerQuery_)
+		//System.out.println("Calculate RealSize "+listChunk_.size() +"    "+maxRecordsPerQuery_);
+		if(listChunk_.size()< maxRecordsPerQuery_ || maxRecordsPerQuery_<0)
 		{
 			realSize_ = listChunk_.size(); 
 			hasAllRecords_ = true;

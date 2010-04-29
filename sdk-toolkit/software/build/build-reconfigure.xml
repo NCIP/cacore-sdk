@@ -267,14 +267,14 @@
 		</or>
 	</condition>
 
-	<condition property="REMOTE_JAVA_INTERFACE_ENABLED" value="true">
+	<condition property="REMOTE_JAVA_INTERFACE_ENABLED" value="true" else="false">
 		<or>
 			<equals arg1="${ENABLE_REMOTE_JAVA_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
 			<equals arg1="${ENABLE_REMOTE_JAVA_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
 		</or>
 	</condition>
 
-	<condition property="WEBSERVICE_INTERFACE_ENABLED" value="true">
+	<condition property="WEBSERVICE_INTERFACE_ENABLED" value="true" else="false">
 		<and>
 			<not>
 				<equals arg1="${ISO21090_DATATYPES_ENABLED}" arg2="true" casesensitive="false" trim="true" />
@@ -286,7 +286,7 @@
 		</and>
 	</condition>
 
-	<condition property="RESTFUL_XML_INTERFACE_ENABLED" value="true">
+	<condition property="RESTFUL_XML_INTERFACE_ENABLED" value="true" else="false">
 		<and>
 			<not>
 				<equals arg1="${ISO21090_DATATYPES_ENABLED}" arg2="true" casesensitive="false" trim="true" />
@@ -298,7 +298,7 @@
 		</and>
 	</condition>
 
-	<condition property="RESTFUL_HTML_INTERFACE_ENABLED" value="true">
+	<condition property="RESTFUL_HTML_INTERFACE_ENABLED" value="true" else="false">
 		<and>
 			<not>
 				<equals arg1="${ISO21090_DATATYPES_ENABLED}" arg2="true" casesensitive="false" trim="true" />
@@ -310,7 +310,7 @@
 		</and>
 	</condition>
 
-	<condition property="RESTFUL_JSON_INTERFACE_ENABLED" value="true">
+	<condition property="RESTFUL_JSON_INTERFACE_ENABLED" value="true" else="false">
 		<and>
 			<not>
 				<equals arg1="${ISO21090_DATATYPES_ENABLED}" arg2="true" casesensitive="false" trim="true" />
@@ -411,6 +411,8 @@
 			<filter token="GRID_JNDI_NAME" value="${GRID_JNDI_NAME}" />
 			<filter token="ENABLE_ISO21090_DATATYPES" value="${ISO21090_DATATYPES_ENABLED}" />
 			<filter token="ENABLE_RESTFUL_HTML_INTERFACE" value="${RESTFUL_HTML_INTERFACE_ENABLED}" />
+			<filter token="DAO_PAGE_SIZE" value="${DAO_PAGE_SIZE}" />
+			<filter token="RESTFUL_PAGE_SIZE" value="${RESTFUL_PAGE_SIZE}" />
 		</filterset>
 		<filterset id="filtertoken4" begintoken="${xml.comment.start}@" endtoken="@${xml.comment.end}" onmissingfiltersfile="fail">
 			<filter token="DB_JNDI_URL_START" value="${JNDI_START}" />
