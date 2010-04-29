@@ -24,6 +24,8 @@ public class UMLModelLoader
 			
 	private UMLModel model;
 	
+	private XmiInOutHandler xmiHandler;
+	
 	private boolean printModel;
 	
 	public UMLModelLoader(String fileName, String fileType) throws GenerationException
@@ -39,13 +41,17 @@ public class UMLModelLoader
 	{
 		return model;
 	}
+	
+	public XmiInOutHandler getXmiHandler() {
+		return xmiHandler;
+	}
 
 	private void loadModel(String xmiFileName, String fileType) throws GenerationException
 	{
 		
 		log.debug("Reading XMI File");
 		
-		XmiInOutHandler xmiHandler;
+		
 		if("EA".equalsIgnoreCase(fileType))
 			xmiHandler = XmiHandlerFactory.getXmiHandler(HandlerEnum.EADefault);
 		else if("ARGO".equalsIgnoreCase(fileType))
