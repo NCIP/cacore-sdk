@@ -355,7 +355,7 @@ public class TsDataTypeTest extends SDKISOTestBase
 
 				//From database, overriding global constant
 				assertEquals(NullFlavor.NA, data.getValue2().getNullFlavor());
-				assertEquals(df.parse("03/01/2010 12:00:00 AM"), df.parse(df.format(data.getValue2().getValue())));
+				assertNull(data.getValue2().getValue());
 
 				counter++;
 				continue;
@@ -371,7 +371,7 @@ public class TsDataTypeTest extends SDKISOTestBase
 
 				//From database, overriding global constant
 				assertEquals(NullFlavor.NA, data.getValue2().getNullFlavor());
-				assertEquals(df.parse("03/02/2010 12:00:00 AM"), df.parse(df.format(data.getValue2().getValue())));
+				assertNull(data.getValue2().getValue());
 
 				counter++;
 				continue;
@@ -387,8 +387,6 @@ public class TsDataTypeTest extends SDKISOTestBase
 
 				//From database, overriding global constant
 				assertEquals(NullFlavor.NA, data.getValue2().getNullFlavor());
-				//assertEquals(df.parse("03/03/2010 12:00:00 AM"), df.parse(df.format(data.getValue2().getValue())));
-				System.out.println("data.getValue2().getValue(): "+data.getValue2().getValue());
 				assertNull(data.getValue2().getValue());
 
 				counter++;

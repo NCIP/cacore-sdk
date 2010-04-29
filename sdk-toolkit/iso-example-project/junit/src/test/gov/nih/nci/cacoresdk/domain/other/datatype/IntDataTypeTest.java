@@ -325,7 +325,7 @@ public class IntDataTypeTest extends SDKISOTestBase
 
 				//From database
 				assertEquals(NullFlavor.NI, data.getValue2().getNullFlavor());
-				assertEquals(new Integer(9), data.getValue2().getValue());
+				assertNull(data.getValue2().getValue());
 
 				counter++;
 				continue;
@@ -341,7 +341,7 @@ public class IntDataTypeTest extends SDKISOTestBase
 
 				//From database
 				assertEquals(NullFlavor.NI, data.getValue2().getNullFlavor());
-				assertEquals(new Integer(10), data.getValue2().getValue());
+				assertNull(data.getValue2().getValue());
 
 				counter++;
 				continue;
@@ -357,7 +357,7 @@ public class IntDataTypeTest extends SDKISOTestBase
 
 				//From database
 				assertEquals(NullFlavor.NI, data.getValue2().getNullFlavor());
-				assertEquals(new Integer(11), data.getValue2().getValue());
+				assertNull(data.getValue2().getValue());
 
 				counter++;
 				continue;

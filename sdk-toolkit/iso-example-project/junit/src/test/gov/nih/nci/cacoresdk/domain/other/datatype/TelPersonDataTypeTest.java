@@ -316,7 +316,7 @@ public class TelPersonDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 
-				assertEquals(new URI("x-text-fax:8004226231"), data.getValue2().getValue());
+				assertNull(data.getValue2().getValue());
 				//From database, overriding global constant
 				assertEquals(NullFlavor.NA, data.getValue2().getNullFlavor());
 
@@ -332,7 +332,7 @@ public class TelPersonDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 
-				assertEquals(new URI("tel:8004226232"), data.getValue2().getValue());
+				assertNull(data.getValue2().getValue());
 				//From database, overriding global constant
 				assertEquals(NullFlavor.NA, data.getValue2().getNullFlavor());
 
@@ -348,7 +348,7 @@ public class TelPersonDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 
-				assertEquals(new URI("x-text-tel:8004226233"), data.getValue2().getValue());
+				assertNull(data.getValue2().getValue());
 				//From database, overriding global constant
 				assertEquals(NullFlavor.NA, data.getValue2().getNullFlavor());
 

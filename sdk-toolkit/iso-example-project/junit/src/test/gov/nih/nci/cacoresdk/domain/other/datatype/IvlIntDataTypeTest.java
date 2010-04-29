@@ -231,7 +231,9 @@ public class IvlIntDataTypeTest extends SDKISOTestBase
 				Int intData = new Int();
 				intData.setValue(new Integer(1));
 				assertEquals(intData, data.getValue1().getLow());
-				assertNull(data.getValue1().getHigh());
+				assertNull(data.getValue1().getHigh().getValue());
+				//Global constant
+				assertEquals(NullFlavor.NI, data.getValue1().getHigh().getNullFlavor());
 				assertValue1Constants(data);
 
 				counter++;
@@ -249,7 +251,9 @@ public class IvlIntDataTypeTest extends SDKISOTestBase
 				Int intData = new Int();
 				intData.setValue(new Integer(10));
 				assertEquals(intData, data.getValue1().getHigh());
-				assertNull(data.getValue1().getLow());
+				assertNull(data.getValue1().getLow().getValue());
+				//Global constant
+				assertEquals(NullFlavor.NI, data.getValue1().getLow().getNullFlavor());
 				assertValue1Constants(data);
 
 				counter++;
@@ -375,7 +379,9 @@ public class IvlIntDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 
-				assertNull(data.getValue2().getHigh());
+				assertNull(data.getValue2().getHigh().getValue());
+				//Global constant
+				assertEquals(NullFlavor.NI, data.getValue2().getHigh().getNullFlavor());
 				assertEquals(Boolean.TRUE, data.getValue2().getLowClosed());
 				assertValue2Constants(data);
 

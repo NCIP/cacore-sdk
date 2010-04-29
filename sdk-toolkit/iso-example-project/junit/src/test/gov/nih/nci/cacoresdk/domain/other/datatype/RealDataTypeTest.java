@@ -317,7 +317,7 @@ public class RealDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 
-				assertEquals(new BigDecimal(1103.15, decimalContext), data.getValue2().getValue());
+				assertEquals(new BigDecimal(-1201.15, decimalContext), data.getValue2().getValue());
 				//From the database
 				assertNull(data.getValue2().getNullFlavor());
 
@@ -333,7 +333,7 @@ public class RealDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 
-				assertEquals(new BigDecimal(-1201.15, decimalContext), data.getValue2().getValue());
+				assertNull(data.getValue2().getValue());
 				//From database, overriding global constant
 				assertEquals(NullFlavor.NA, data.getValue2().getNullFlavor());
 
@@ -349,7 +349,7 @@ public class RealDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 
-				assertEquals(new BigDecimal(1202.15, decimalContext), data.getValue2().getValue());
+				assertNull(data.getValue2().getValue());
 				//From database, overriding global constant
 				assertEquals(NullFlavor.NA, data.getValue2().getNullFlavor());
 
@@ -365,7 +365,7 @@ public class RealDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 
-				assertEquals(new BigDecimal(1203.15, decimalContext), data.getValue2().getValue());
+				assertNull(data.getValue2().getValue());
 				//From database, overriding global constant
 				assertEquals(NullFlavor.NA, data.getValue2().getNullFlavor());
 
