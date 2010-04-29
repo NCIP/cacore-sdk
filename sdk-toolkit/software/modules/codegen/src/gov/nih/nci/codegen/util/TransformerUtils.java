@@ -110,17 +110,17 @@ public class TransformerUtils
 	public static final Map<String, String> javaDatatypeMap = new HashMap<String, String>()
 	{
 		{
-			put("int", "int");
-			put("integer", "int");
+			put("int", "Integer");
+			put("integer", "Integer");
 			put("double", "Double");
 			put("float", "Float");
 			put("long", "Long");
-			put("string", "st");
+			put("string", "String");
 			put("char", "Character");
 			put("character", "Character");
 			put("boolean", "Boolean");
 			put("byte", "Byte");
-			put("byte[]", "byte[]");
+			put("byte[]", "Byte[]");
 			put("short", "Short");
 			put("date", "java.util.Date");
 			put("java.util.date", "java.util.Date");
