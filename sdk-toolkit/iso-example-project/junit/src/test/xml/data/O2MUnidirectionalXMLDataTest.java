@@ -1,8 +1,10 @@
 package test.xml.data;
 
+import gov.nih.nci.cacoresdk.domain.onetomany.bidirectional.Computer;
 import gov.nih.nci.cacoresdk.domain.onetomany.unidirectional.KeyChain;
 import gov.nih.nci.cacoresdk.domain.onetomany.unidirectional.LatchKey;
 import gov.nih.nci.iso21090.Ii;
+import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -38,8 +40,8 @@ public class O2MUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"name",result.getName());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "name", "value", result.getName().getValue());
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
@@ -73,8 +75,8 @@ public class O2MUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"type",result.getType());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "type", "value", result.getType().getValue());
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
@@ -101,6 +103,28 @@ public class O2MUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 		ii.setExtension("4");
 		searchObject.setId(ii);
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.onetomany.unidirectional.KeyChain",searchObject );
+
+		assertNotNull(results);
+		assertEquals(1,results.size());
+		
+		Iterator i = results.iterator();
+		KeyChain result = (KeyChain)i.next();
+		toXML(result);
+		KeyChain result2 = (KeyChain)fromXML(result);
+		
+		assertNotNull(result2);
+		assertNotNull(result2.getId());
+		assertNotNull(result2.getName());
+		
+		Collection keyCollection = result2.getKeyCollection();
+		assertNull(keyCollection);
+	}
+
+	public void testAssociationNestedSearchHQL1() throws Exception {
+		HQLCriteria hqlCriteria = new HQLCriteria(
+				"from gov.nih.nci.cacoresdk.domain.onetomany.unidirectional.KeyChain where id='4'");
+		Collection results = search(hqlCriteria,
+				"gov.nih.nci.cacoresdk.domain.onetomany.unidirectional.KeyChain");
 
 		assertNotNull(results);
 		assertEquals(1,results.size());
@@ -157,7 +181,7 @@ public class O2MUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(key);
 		assertNotNull(key.getId());
 		assertNotNull(key.getType());
-		assertEquals(new Integer(1),key.getId());
+		assertEquals("1",key.getId().getExtension());
 	}
 
 	/**
@@ -189,6 +213,6 @@ public class O2MUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(result2.getId());
 		assertNotNull(result2.getType());
 
-		assertEquals(new Integer(1),result2.getId());
+		assertEquals("1",result2.getId().getExtension());
 	}
 }

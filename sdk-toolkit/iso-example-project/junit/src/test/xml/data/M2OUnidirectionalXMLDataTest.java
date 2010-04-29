@@ -8,6 +8,7 @@ import gov.nih.nci.cacoresdk.domain.manytoone.unidirectional.Restaurant;
 import gov.nih.nci.cacoresdk.domain.manytoone.unidirectional.withjoin.Album;
 import gov.nih.nci.cacoresdk.domain.manytoone.unidirectional.withjoin.Song;
 import gov.nih.nci.iso21090.Ii;
+import gov.nih.nci.system.query.hibernate.HQLCriteria;
 import test.xml.mapping.SDKXMLDataTestBase;
 
 public class M2OUnidirectionalXMLDataTest extends SDKXMLDataTestBase
@@ -39,8 +40,8 @@ public class M2OUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"name",result.getName());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "name", "value", result.getName().getValue());
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
@@ -74,8 +75,8 @@ public class M2OUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"name",result.getName());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "name", "value", result.getName().getValue());
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
@@ -102,6 +103,27 @@ public class M2OUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 		ii.setExtension("4");
 		searchObject.setId(ii);
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.manytoone.unidirectional.Chef",searchObject );
+
+		assertNotNull(results);
+		assertEquals(1,results.size());
+		
+		Iterator i = results.iterator();
+		Chef result = (Chef)i.next();
+		toXML(result);
+		Chef result2 = (Chef)fromXML(result);
+		
+		assertNotNull(result2);
+		assertNotNull(result2.getId());
+		assertNotNull(result2.getName());
+	
+		assertNull(result2.getRestaurant());
+	}
+	
+	public void testAssociationNestedSearchHQL1() throws Exception {
+		HQLCriteria hqlCriteria = new HQLCriteria(
+				"from gov.nih.nci.cacoresdk.domain.manytoone.unidirectional.Chef where id='4'");
+		Collection results = search(hqlCriteria,
+				"gov.nih.nci.cacoresdk.domain.manytoone.unidirectional.Chef");
 
 		assertNotNull(results);
 		assertEquals(1,results.size());
@@ -151,7 +173,7 @@ public class M2OUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(restaurant);
 		assertNotNull(restaurant.getId());
 		assertNotNull(restaurant.getName());
-		assertEquals(new Integer(1),restaurant.getId());
+		assertEquals("1",restaurant.getId().getExtension());
 	}
 
 	/**
@@ -183,7 +205,7 @@ public class M2OUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(result2.getId());
 		assertNotNull(result2.getName());
 
-		assertEquals(new Integer(1),result2.getId());
+		assertEquals("1",result2.getId().getExtension());
 	}
 
 	public void testGetAssociation() throws Exception

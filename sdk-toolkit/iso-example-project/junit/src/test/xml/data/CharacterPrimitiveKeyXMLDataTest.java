@@ -36,7 +36,7 @@ public class CharacterPrimitiveKeyXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
+//			validateAttribute(result,"id",result.getId());
 			validateAttribute(result,"name",result.getName());
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));

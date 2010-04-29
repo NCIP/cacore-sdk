@@ -42,7 +42,7 @@ public class CharacterKeyXMLDataTest extends SDKXMLDataTestBase
 			}
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
+//			validateAttribute(result,"id",result.getId());
 			validateAttribute(result,"name",result.getName());
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));

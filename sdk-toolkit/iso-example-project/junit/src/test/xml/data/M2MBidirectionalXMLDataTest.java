@@ -3,10 +3,14 @@ package test.xml.data;
 import java.util.Collection;
 import java.util.Iterator;
 
+import gov.nih.nci.cacoresdk.domain.inheritance.abstrakt.PrivateTeacher;
 import gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.sametable.Organization;
 import gov.nih.nci.cacoresdk.domain.manytomany.bidirectional.Employee;
 import gov.nih.nci.cacoresdk.domain.manytomany.bidirectional.Project;
+import gov.nih.nci.cacoresdk.domain.other.levelassociation.Card;
+import gov.nih.nci.cacoresdk.domain.other.levelassociation.Suit;
 import gov.nih.nci.iso21090.Ii;
+import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
 import test.xml.mapping.SDKXMLDataTestBase;
 
@@ -39,8 +43,8 @@ public class M2MBidirectionalXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"name",result.getName());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "name", "value", result.getName().getValue());	
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
@@ -74,8 +78,8 @@ public class M2MBidirectionalXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"name",result.getName());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "name", "value", result.getName().getValue());
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
@@ -119,6 +123,29 @@ public class M2MBidirectionalXMLDataTest extends SDKXMLDataTestBase
 		assertNull(projectCollection);
 	}
 
+	
+	public void testAssociationNestedSearchHQL1() throws Exception {
+		HQLCriteria hqlCriteria = new HQLCriteria(
+				"from gov.nih.nci.cacoresdk.domain.manytomany.bidirectional.Employee where id='7'");
+		Collection results = search(hqlCriteria,
+				"gov.nih.nci.cacoresdk.domain.manytomany.bidirectional.Employee");
+
+		assertNotNull(results);
+		assertEquals(1,results.size());
+		
+		Iterator i = results.iterator();
+		Employee result = (Employee)i.next();
+		toXML(result);
+		Employee result2 = (Employee)fromXML(result);
+		
+		assertNotNull(result2);
+		assertNotNull(result2.getId());
+		assertNotNull(result2.getName());
+		
+		Collection projectCollection = result2.getProjectCollection();
+		assertNull(projectCollection);
+	}	
+
 	/**
 	 * Uses Nested Search Criteria for search
 	 * Verifies that the results are returned 
@@ -149,6 +176,7 @@ public class M2MBidirectionalXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(result2.getName());
 		
 		Collection projectCollection = result2.getProjectCollection();
+		assertNotNull(projectCollection);
 		Iterator j = projectCollection.iterator();
 		
 		Project project = (Project)j.next();
@@ -195,7 +223,7 @@ public class M2MBidirectionalXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(result2);
 		assertNotNull(result2.getId());
 		assertNotNull(result2.getName());
-		assertEquals(new Integer(1),result2.getId());
+		assertEquals("1",result2.getId().getExtension());
 
 	}
 
@@ -228,6 +256,6 @@ public class M2MBidirectionalXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(result2);
 		assertNotNull(result2.getId());
 		assertNotNull(result2.getName());
-		assertEquals(new Integer(1),result2.getId());
+		assertEquals("1",result2.getId().getExtension());
 	}	
 }

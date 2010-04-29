@@ -1,11 +1,13 @@
 package test.xml.data;
 
+import gov.nih.nci.cacoresdk.domain.inheritance.abstrakt.PrivateTeacher;
 import gov.nih.nci.cacoresdk.domain.onetomany.bidirectional.Computer;
 import gov.nih.nci.cacoresdk.domain.other.levelassociation.Card;
 import gov.nih.nci.cacoresdk.domain.other.levelassociation.Deck;
 import gov.nih.nci.cacoresdk.domain.other.levelassociation.Hand;
 import gov.nih.nci.cacoresdk.domain.other.levelassociation.Suit;
 import gov.nih.nci.iso21090.Ii;
+import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -41,7 +43,7 @@ public class LevelAssociationXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
@@ -74,9 +76,11 @@ public class LevelAssociationXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"image",result.getImage());
-			validateAttribute(result,"Name",result.getName());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			if (result.getId().getExtension().equals("1")) {// Only row with id=1 has an image
+				validateIso90210Element(result, "image", "value", result.getImage().getValue());
+			}
+			validateIso90210Element(result, "name", "value", result.getName().getValue());
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
@@ -112,8 +116,8 @@ public class LevelAssociationXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"name",result.getName());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "name", "value", result.getName().getValue());			
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
@@ -147,8 +151,8 @@ public class LevelAssociationXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"name",result.getName());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "name", "value", result.getName().getValue());				
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
@@ -225,7 +229,7 @@ public class LevelAssociationXMLDataTest extends SDKXMLDataTestBase
 //		
 //		assertNotNull(deck);
 //		assertEquals(deck.getSuitCollection().size(),4);
-	}
+	}	
 	
 	/**
 	 * Uses Nested Search Criteria for search
