@@ -742,15 +742,14 @@ public class TwoLevelInheritanceTest extends SDKISOTestBase
 	
 	public void testAssociationHQL5() throws ApplicationException {
 		HQLCriteria hqlCriteria = new HQLCriteria(
-				"from gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.CRTMonitor crtMonitor, "
-						+ "gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.LCDMonitor lcdMonitor where crtMonitor.id='1' "
-						+ "or lcdMonitor.id='3'");
+				"select monitor from gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.Monitor monitor "
+						+ "where monitor.id='1' or monitor.id='3'");
 		Collection results = search(hqlCriteria,
 				"gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.Monitor");
 		assertNotNull(results);
 		assertEquals(2, results.size());
 		for (Iterator i = results.iterator(); i.hasNext();) {
-			Display result = (Display) i.next();
+			Monitor result = (Monitor) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
 			assertNotNull(result.getWidth());

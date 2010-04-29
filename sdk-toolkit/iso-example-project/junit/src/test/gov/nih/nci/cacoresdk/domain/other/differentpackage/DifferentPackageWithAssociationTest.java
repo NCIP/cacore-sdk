@@ -17,7 +17,6 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import test.gov.nih.nci.cacoresdk.SDKISOTestBase;
-import test.gov.nih.nci.cacoresdk.SDKTestBase;
 
 public class DifferentPackageWithAssociationTest extends SDKISOTestBase
 {
@@ -267,7 +266,7 @@ public class DifferentPackageWithAssociationTest extends SDKISOTestBase
 		Pie result = (Pie)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
-		assertEquals(new Integer(3), result.getId());
+		assertEquals("3", result.getId().getExtension());
 	}
 
 	/**
@@ -330,7 +329,7 @@ public class DifferentPackageWithAssociationTest extends SDKISOTestBase
 		Dessert result = (Dessert)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
-		assertEquals(new Integer(3),result.getId());
+		assertEquals("3",result.getId().getExtension());
 	}
 
 	/**
@@ -356,7 +355,7 @@ public class DifferentPackageWithAssociationTest extends SDKISOTestBase
 		assertNotNull(result);
 		assertNotNull(result.getId());
 		assertNotNull(result.getFilling());
-		assertEquals(new Integer(4), result.getId());
+		assertEquals("4", result.getId().getExtension());
 	}
 
 	/**
@@ -388,7 +387,7 @@ public class DifferentPackageWithAssociationTest extends SDKISOTestBase
 		Dessert result = (Dessert)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
-		assertEquals(new Integer(3), result.getId());
+		assertEquals("3", result.getId().getExtension());
 	}
 	
 	public void testAssociationHQL1() throws ApplicationException {
@@ -403,7 +402,7 @@ public class DifferentPackageWithAssociationTest extends SDKISOTestBase
 		Dessert result = (Dessert) results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
-		assertEquals(new Integer(3), result.getId());
+		assertEquals("3", result.getId().getExtension());
 	}
 
 	/**
@@ -435,7 +434,7 @@ public class DifferentPackageWithAssociationTest extends SDKISOTestBase
 		Pie result = (Pie)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
-		assertEquals(new Integer(4), result.getId());
+		assertEquals("4", result.getId().getExtension());
 	}
 
 	public void testAssociationHQL2() throws ApplicationException {
@@ -449,7 +448,7 @@ public class DifferentPackageWithAssociationTest extends SDKISOTestBase
 		Pie result = (Pie) results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
-		assertEquals(new Integer(4), result.getId());
+		assertEquals("4", result.getId().getExtension());
 	}
 
 	/**
@@ -482,7 +481,7 @@ public class DifferentPackageWithAssociationTest extends SDKISOTestBase
 		Dessert result = (Dessert)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
-		assertEquals(new Integer(1), result.getId());
+		assertEquals("1", result.getId().getExtension());
 	}
 
 	public void testAssociationHQL3() throws ApplicationException {
@@ -497,7 +496,7 @@ public class DifferentPackageWithAssociationTest extends SDKISOTestBase
 		Dessert result = (Dessert) results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
-		assertEquals(new Integer(1), result.getId());
+		assertEquals("1", result.getId().getExtension());
 	}
 
 	/**
@@ -530,22 +529,22 @@ public class DifferentPackageWithAssociationTest extends SDKISOTestBase
 		Pie result = (Pie)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
-		assertEquals(new Integer(3), result.getId());
+		assertEquals("3", result.getId().getExtension());
 	}
 	
 	public void testAssociationHQL4() throws ApplicationException {
 		HQLCriteria hqlCriteria = new HQLCriteria(
 				"from gov.nih.nci.cacoresdk.domain.other.differentpackage.associations.Pie as pie "
-						+ "left join fetch dessert.utensilCollection as utensil where utensil.name='Spoon'");
+						+ "left join fetch pie.utensilCollection as utensil where utensil.name='Spoon'");
 		Collection results = search(hqlCriteria,
-				"gov.nih.nci.cacoresdk.domain.other.differentpackage.Dessert");
+				"gov.nih.nci.cacoresdk.domain.other.differentpackage.associations.Pie");
 		assertNotNull(results);
 		assertEquals(1, results.size());
 
 		Pie result = (Pie) results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
-		assertEquals(new Integer(3), result.getId());
+		assertEquals("3", result.getId().getExtension());
 	}
 
 	public void testGetAssociation() throws ApplicationException

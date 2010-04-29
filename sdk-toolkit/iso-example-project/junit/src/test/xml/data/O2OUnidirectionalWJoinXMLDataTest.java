@@ -4,11 +4,13 @@ import gov.nih.nci.cacoresdk.domain.onetomany.bidirectional.Computer;
 import gov.nih.nci.cacoresdk.domain.onetoone.unidirectional.withjoin.Handle;
 import gov.nih.nci.cacoresdk.domain.onetoone.unidirectional.withjoin.Bag;
 import gov.nih.nci.iso21090.Ii;
+import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
 import java.util.Collection;
 import java.util.Iterator;
 
 import test.xml.mapping.SDKXMLDataTestBase;
+
 
 public class O2OUnidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 {
@@ -119,6 +121,28 @@ public class O2OUnidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 		assertNull(handle);
 	}
 	
+	public void testZeroAssociatedObjectsNestedSearchHQL1() throws Exception {
+		HQLCriteria hqlCriteria = new HQLCriteria(
+				"from gov.nih.nci.cacoresdk.domain.onetoone.unidirectional.withjoin.Bag where id='11'");
+		Collection results = search(hqlCriteria,
+				"gov.nih.nci.cacoresdk.domain.onetoone.unidirectional.withjoin.Bag");
+
+		assertNotNull(results);
+		assertEquals(1, results.size());
+
+		Iterator i = results.iterator();
+		Bag result = (Bag) i.next();
+		toXML(result);
+		Bag result2 = (Bag) fromXML(result);
+
+		assertNotNull(result2);
+		assertNotNull(result2.getId());
+		assertNotNull(result2.getStyle());
+
+		Handle handle = result2.getHandle();
+		assertNull(handle);
+	}
+	
 	/**
 	 * Uses Nested Search Criteria for search
 	 * Verifies that the results are returned 
@@ -188,6 +212,28 @@ public class O2OUnidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(result2.getColor());
 
 		assertEquals(new Integer(1),result2.getId());
+	}
+
+	public void testOneAssociatedObjectNestedSearchHQL2() throws Exception {
+		HQLCriteria hqlCriteria = new HQLCriteria(
+				"from gov.nih.nci.cacoresdk.domain.onetoone.unidirectional.withjoin.Handle where id='1'");
+		Collection results = search(hqlCriteria,
+				"gov.nih.nci.cacoresdk.domain.onetoone.unidirectional.withjoin.Handle");
+
+		assertNotNull(results);
+		assertEquals(1, results.size());
+
+		Iterator i = results.iterator();
+
+		Handle handle = (Handle) i.next();
+		toXML(handle);
+		Handle result2 = (Handle) fromXML(handle);
+
+		assertNotNull(result2);
+		assertNotNull(result2.getId());
+		assertNotNull(result2.getColor());
+
+		assertEquals(new Integer(1), result2.getId());
 	}
 	
 	public void testGetAssociation() throws Exception

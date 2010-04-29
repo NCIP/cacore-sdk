@@ -5,11 +5,13 @@ import gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.Display;
 import gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.LCDMonitor;
 import gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.Monitor;
 import gov.nih.nci.iso21090.St;
+import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
 import java.util.Collection;
 import java.util.Iterator;
 
 import test.xml.mapping.SDKXMLDataTestBase;
+
 
 public class TwoLevelInheritanceXMLDataTest extends SDKXMLDataTestBase
 {
@@ -176,6 +178,40 @@ public class TwoLevelInheritanceXMLDataTest extends SDKXMLDataTestBase
 		}
 	}
 	
+	public void testEntireObjectNestedSearchHQL4() throws Exception {
+		HQLCriteria hqlCriteria = new HQLCriteria(
+				"from gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.LCDMonitor");
+		Collection results = search(hqlCriteria,
+				"gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.LCDMonitor");
+
+		LCDMonitor searchObject = new LCDMonitor();
+		assertNotNull(results);
+		assertEquals(2, results.size());
+
+		for (Iterator i = results.iterator(); i.hasNext();) {
+			LCDMonitor result = (LCDMonitor) i.next();
+			toXML(result);
+
+			validateClassElements(result);
+			validateAttribute(result, "id", result.getId());
+			validateAttribute(result, "height", result.getHeight());
+			validateAttribute(result, "width", result.getWidth());
+			validateAttribute(result, "brand", result.getBrand());
+			validateAttribute(result, "dpiSupported", result.getDpiSupported());
+
+			assertTrue(validateXMLData(result, searchObject.getClass()));
+
+			LCDMonitor result2 = (LCDMonitor) fromXML(result);
+
+			assertNotNull(result2);
+			assertNotNull(result2.getId());
+			assertNotNull(result2.getHeight());
+			assertNotNull(result2.getWidth());
+			assertNotNull(result2.getBrand());
+			assertNotNull(result2.getDpiSupported());
+		}
+	}
+
 	/**
 	 * Uses Nested Search Criteria for inheritance as association in search
 	 * Verifies that the results are returned 
@@ -208,6 +244,26 @@ public class TwoLevelInheritanceXMLDataTest extends SDKXMLDataTestBase
 		}
 	}
 
+	public void testAssociationNestedSearchHQL1() throws Exception {
+		HQLCriteria hqlCriteria = new HQLCriteria(
+				"from gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.CRTMonitor where brand='A'");
+		Collection results = search(hqlCriteria,
+				"gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.CRTMonitor");
+
+		assertNotNull(results);
+		assertEquals(1, results.size());
+
+		for (Iterator i = results.iterator(); i.hasNext();) {
+			CRTMonitor result = (CRTMonitor) i.next();
+			toXML(result);
+			CRTMonitor result2 = (CRTMonitor) fromXML(result);
+
+			assertNotNull(result2);
+			assertNotNull(result2.getId());
+			assertNotNull(result2.getBrand());
+		}
+	}
+	
 	/**
 	 * Uses Nested Search Criteria for inheritance as association in search
 	 * Verifies that the results are returned 

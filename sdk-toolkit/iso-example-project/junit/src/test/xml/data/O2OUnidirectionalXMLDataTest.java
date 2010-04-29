@@ -4,11 +4,13 @@ import gov.nih.nci.cacoresdk.domain.onetomany.bidirectional.Computer;
 import gov.nih.nci.cacoresdk.domain.onetoone.unidirectional.Address;
 import gov.nih.nci.cacoresdk.domain.onetoone.unidirectional.Person;
 import gov.nih.nci.iso21090.Ii;
+import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
 import java.util.Collection;
 import java.util.Iterator;
 
 import test.xml.mapping.SDKXMLDataTestBase;
+
 
 public class O2OUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 {
@@ -118,6 +120,28 @@ public class O2OUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 		Address address = result2.getLivesAt();
 		assertNull(address);
 	}
+	
+	public void testZeroAssociatedObjectsNestedSearchHQL1() throws Exception {
+		HQLCriteria hqlCriteria = new HQLCriteria(
+				"from gov.nih.nci.cacoresdk.domain.onetoone.unidirectional.Person where id='1'");
+		Collection results = search(hqlCriteria,
+				"gov.nih.nci.cacoresdk.domain.onetoone.unidirectional.Person");
+
+		assertNotNull(results);
+		assertEquals(1, results.size());
+
+		Iterator i = results.iterator();
+		Person result = (Person) i.next();
+		toXML(result);
+		Person result2 = (Person) fromXML(result);
+
+		assertNotNull(result2);
+		assertNotNull(result2.getId());
+		assertNotNull(result2.getName());
+
+		Address address = result2.getLivesAt();
+		assertNull(address);
+	}
 
 	/**
 	 * Uses Nested Search Criteria for search
@@ -218,4 +242,32 @@ public class O2OUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 			}
 		}
 	}	
+	
+	public void testGetAssociationHQL() throws Exception {
+		HQLCriteria hqlCriteria = new HQLCriteria(
+				"from gov.nih.nci.cacoresdk.domain.onetoone.unidirectional.Person");
+		Collection results = search(hqlCriteria,
+				"gov.nih.nci.cacoresdk.domain.onetoone.unidirectional.Person");
+		assertNotNull(results);
+		assertEquals(5, results.size());
+
+		Address address;
+		for (Iterator i = results.iterator(); i.hasNext();) {
+			Person result = (Person) i.next();
+			toXML(result);
+			Person result2 = (Person) fromXML(result);
+
+			assertNotNull(result2);
+			assertNotNull(result2.getId());
+			assertNotNull(result2.getName());
+
+			if (new Integer(result2.getId().getExtension()) < 4) {//Person id=1,2,3 have an associated Address; the others don't
+				validateAssociation(result, "Address", "livesAt");
+				address = result2.getLivesAt();
+				assertNotNull(address);
+				assertNotNull(address.getId());
+				assertNotNull(address.getZip());
+			}
+		}
+	}
 }

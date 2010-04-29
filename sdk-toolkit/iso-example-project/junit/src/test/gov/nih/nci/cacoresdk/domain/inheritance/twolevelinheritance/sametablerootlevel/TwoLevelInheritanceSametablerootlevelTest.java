@@ -13,6 +13,7 @@ import gov.nih.nci.system.query.cql.CQLLogicalOperator;
 import gov.nih.nci.system.query.cql.CQLObject;
 import gov.nih.nci.system.query.cql.CQLPredicate;
 import gov.nih.nci.system.query.cql.CQLQuery;
+import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -248,6 +249,22 @@ public class TwoLevelInheritanceSametablerootlevelTest extends SDKISOTestBase
 		}
 	}
 
+	public void testEntireObjectHQL4() throws ApplicationException {
+		HQLCriteria hqlCriteria = new HQLCriteria(
+				"from gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametablerootlevel.GraphicCalculator");
+		Collection results = search(
+				hqlCriteria,
+				"gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametablerootlevel.GraphicCalculator");
+		assertNotNull(results);
+		assertEquals(1, results.size());
+
+		for (Iterator i = results.iterator(); i.hasNext();) {
+			GraphicCalculator result = (GraphicCalculator) i.next();
+			assertNotNull(result);
+			assertNotNull(result.getId());
+			assertNotNull(result.getBrand());
+		}
+	}
 	
 	/**
 	 * Uses Nested Search Criteria for inheritance as association in search
@@ -469,6 +486,23 @@ public class TwoLevelInheritanceSametablerootlevelTest extends SDKISOTestBase
 		for(Iterator i = results.iterator();i.hasNext();)
 		{
 			GraphicCalculator result = (GraphicCalculator)i.next();
+			assertNotNull(result);
+			assertNotNull(result.getId());
+			assertNotNull(result.getBrand());
+		}
+	}
+	
+	public void testAssociationHQL2() throws ApplicationException {
+		HQLCriteria hqlCriteria = new HQLCriteria(
+				"from gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametablerootlevel.ScientificCalculator where brand='HP'");
+		Collection results = search(
+				hqlCriteria,
+				"gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametablerootlevel.GraphicCalculator");
+
+		assertNotNull(results);
+		assertEquals(1, results.size());
+		for (Iterator i = results.iterator(); i.hasNext();) {
+			GraphicCalculator result = (GraphicCalculator) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
 			assertNotNull(result.getBrand());

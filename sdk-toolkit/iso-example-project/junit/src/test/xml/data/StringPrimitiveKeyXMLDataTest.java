@@ -2,11 +2,13 @@ package test.xml.data;
 
 import gov.nih.nci.cacoresdk.domain.other.primarykey.StringPrimitiveKey;
 import gov.nih.nci.system.applicationservice.ApplicationException;
+import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
 import java.util.Collection;
 import java.util.Iterator;
 
 import test.xml.mapping.SDKXMLDataTestBase;
+
 
 public class StringPrimitiveKeyXMLDataTest extends SDKXMLDataTestBase
 {
@@ -44,6 +46,35 @@ public class StringPrimitiveKeyXMLDataTest extends SDKXMLDataTestBase
 
 			StringPrimitiveKey result2 = (StringPrimitiveKey)fromXML(result);
 			
+			assertNotNull(result2);
+			assertNotNull(result2.getId());
+			assertNotNull(result2.getName());
+		}
+	}
+	
+	public void testEntireObjectNestedSearchHQL() throws Exception {
+		HQLCriteria hqlCriteria = new HQLCriteria(
+				"from gov.nih.nci.cacoresdk.domain.other.primarykey.StringPrimitiveKey where id='1'");
+		Collection results = search(hqlCriteria,
+				"gov.nih.nci.cacoresdk.domain.other.primarykey.StringPrimitiveKey");
+
+		StringPrimitiveKey searchObject = new StringPrimitiveKey();
+
+		assertNotNull(results);
+		assertEquals(2, results.size());
+
+		for (Iterator i = results.iterator(); i.hasNext();) {
+			StringPrimitiveKey result = (StringPrimitiveKey) i.next();
+			toXML(result);
+
+			validateClassElements(result);
+			validateAttribute(result, "id", result.getId());
+			validateAttribute(result, "name", result.getName());
+
+			assertTrue(validateXMLData(result, searchObject.getClass()));
+
+			StringPrimitiveKey result2 = (StringPrimitiveKey) fromXML(result);
+
 			assertNotNull(result2);
 			assertNotNull(result2.getId());
 			assertNotNull(result2.getName());

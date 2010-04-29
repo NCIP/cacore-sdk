@@ -152,7 +152,7 @@ public class O2OBidirectionalWJoinTest extends SDKISOTestBase
 		assertNotNull(chain);
 		assertNotNull(chain.getId());
 		assertNotNull(chain.getMetal());
-		assertEquals(new Integer(1),chain.getId());
+		assertEquals("1",chain.getId().getExtension());
 	}
 
 	/**
@@ -183,7 +183,7 @@ public class O2OBidirectionalWJoinTest extends SDKISOTestBase
 		assertNotNull(chain);
 		assertNotNull(chain.getId());
 		assertNotNull(chain.getMetal());
-		assertEquals(new Integer(1),chain.getId());
+		assertEquals("1",chain.getId().getExtension());
 	}
 
 	/**
@@ -214,7 +214,7 @@ public class O2OBidirectionalWJoinTest extends SDKISOTestBase
 		assertNotNull(pendant);
 		assertNotNull(pendant.getId());
 		assertNotNull(pendant.getShape());
-		assertEquals(new Integer(1),pendant.getId());
+		assertEquals("1",pendant.getId().getExtension());
 	}	
 	/**
 	 * Uses CQL Criteria for search
@@ -384,7 +384,7 @@ public class O2OBidirectionalWJoinTest extends SDKISOTestBase
 		assertEquals(1,results.size());
 		
 		Pendant result = (Pendant)results.iterator().next();
-		assertEquals(new Integer(1),result.getChain().getId());
+		assertEquals("1",result.getChain().getId().getExtension());
 
 		Ii ii2=new Ii();
 		ii.setExtension("1");
@@ -424,7 +424,7 @@ public class O2OBidirectionalWJoinTest extends SDKISOTestBase
 		assertEquals(1,results.size());
 		
 		Chain result = (Chain)results.iterator().next();
-		assertEquals(new Integer(1),result.getPendant().getId());
+		assertEquals("1",result.getPendant().getId().getExtension());
 
 		Ii ii2=new Ii();
 		ii.setExtension("2");

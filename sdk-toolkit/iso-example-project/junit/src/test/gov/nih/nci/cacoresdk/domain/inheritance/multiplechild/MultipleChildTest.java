@@ -113,7 +113,7 @@ public class MultipleChildTest extends SDKISOTestBase
 		CQLQuery cqlQuery = new CQLQuery();
 		CQLObject target = new CQLObject();
 		
-		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.Undergraduatextestent");
+		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.UndergraduateStudent");
 		cqlQuery.setTarget(target);
 
 		Collection results = getApplicationService().query(cqlQuery);

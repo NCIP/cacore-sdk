@@ -6,11 +6,13 @@ import gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametableroo
 import gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametablerootlevel.GraphicCalculator;
 import gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametablerootlevel.ScientificCalculator;
 import gov.nih.nci.iso21090.St;
+import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
 import java.util.Collection;
 import java.util.Iterator;
 
 import test.xml.mapping.SDKXMLDataTestBase;
+
 
 public class TwoLevelInheritanceSametablerootlevelXMLDataTest extends SDKXMLDataTestBase
 {
@@ -248,6 +250,27 @@ public class TwoLevelInheritanceSametablerootlevelXMLDataTest extends SDKXMLData
 			assertNotNull(result2.getBrand());
 		}
 	}
+	
+	public void testAssociationNestedSearchHQL3() throws Exception {
+		HQLCriteria hqlCriteria = new HQLCriteria(
+				"from gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametablerootlevel.ScientificCalculator where brand='HP'");
+		Collection results = search(
+				hqlCriteria,
+				"gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametablerootlevel.GraphicCalculator");
+
+		assertNotNull(results);
+		assertEquals(1, results.size());
+
+		for (Iterator i = results.iterator(); i.hasNext();) {
+			GraphicCalculator result = (GraphicCalculator) i.next();
+			toXML(result);
+			GraphicCalculator result2 = (GraphicCalculator) fromXML(result);
+
+			assertNotNull(result2);
+			assertNotNull(result2.getId());
+			assertNotNull(result2.getBrand());
+		}
+	}
 
 	/**
 	 * Uses Nested Search Criteria for inheritance as association in search
@@ -273,6 +296,27 @@ public class TwoLevelInheritanceSametablerootlevelXMLDataTest extends SDKXMLData
 			ScientificCalculator result = (ScientificCalculator)i.next();
 			toXML(result);
 			ScientificCalculator result2 = (ScientificCalculator)fromXML(result);
+
+			assertNotNull(result2);
+			assertNotNull(result2.getId());
+			assertNotNull(result2.getBrand());
+		}
+	}
+	
+	public void testAssociationNestedSearchHQL4() throws Exception {
+		HQLCriteria hqlCriteria = new HQLCriteria(
+				"from gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametablerootlevel.GraphicCalculator where brand='HP'");
+		Collection results = search(
+				hqlCriteria,
+				"gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametablerootlevel.ScientificCalculator");
+
+		assertNotNull(results);
+		assertEquals(1, results.size());
+
+		for (Iterator i = results.iterator(); i.hasNext();) {
+			ScientificCalculator result = (ScientificCalculator) i.next();
+			toXML(result);
+			ScientificCalculator result2 = (ScientificCalculator) fromXML(result);
 
 			assertNotNull(result2);
 			assertNotNull(result2.getId());

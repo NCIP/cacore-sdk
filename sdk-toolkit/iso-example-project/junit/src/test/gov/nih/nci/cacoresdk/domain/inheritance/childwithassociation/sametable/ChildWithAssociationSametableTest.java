@@ -424,7 +424,7 @@ public class ChildWithAssociationSametableTest extends SDKISOTestBase
 		SportsShoes result = (SportsShoes)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
-		assertEquals(new Integer(2), result.getId());
+		assertEquals("2", result.getId().getExtension());
 	}
 
 	/**
@@ -449,7 +449,7 @@ public class ChildWithAssociationSametableTest extends SDKISOTestBase
 		Shoes result = (Shoes)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
-		assertEquals(new Integer(2),result.getId());
+		assertEquals("2", result.getId().getExtension());
 	}
 
 	/**
@@ -474,8 +474,7 @@ public class ChildWithAssociationSametableTest extends SDKISOTestBase
 		DesignerShoes result = (DesignerShoes)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
-		assertEquals(new Integer(3), result.getId());
-	}
+		assertEquals("3", result.getId().getExtension());	}
 
 	/**
 	 * Uses Nested Search Criteria for inheritance as association in search
@@ -499,7 +498,7 @@ public class ChildWithAssociationSametableTest extends SDKISOTestBase
 		Shoes result = (Shoes)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
-		assertEquals(new Integer(3), result.getId());
+		assertEquals("3", result.getId().getExtension());
 	}
 	
 	/**
@@ -531,7 +530,7 @@ public class ChildWithAssociationSametableTest extends SDKISOTestBase
 		Shoes result = (Shoes)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
-		assertEquals(new Integer(2), result.getId());
+		assertEquals("2", result.getId().getExtension());
 	}
 	
 	public void testAssociationHQL1() throws ApplicationException {
@@ -577,7 +576,7 @@ public class ChildWithAssociationSametableTest extends SDKISOTestBase
 		SportsShoes result = (SportsShoes)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
-		assertEquals(new Integer(2), result.getId());
+		assertEquals("2", result.getId().getExtension());
 	}
 
 	public void testAssociationHQL2() throws ApplicationException {
@@ -623,7 +622,7 @@ public class ChildWithAssociationSametableTest extends SDKISOTestBase
 		Shoes result = (Shoes)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
-		assertEquals(new Integer(1), result.getId());
+		assertEquals("1", result.getId().getExtension());
 	}
 
 	public void testAssociationHQL3() throws ApplicationException {
@@ -671,8 +670,7 @@ public class ChildWithAssociationSametableTest extends SDKISOTestBase
 		DesignerShoes result = (DesignerShoes)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
-		assertEquals(new Integer(3), result.getId());
-	}
+		assertEquals("3", result.getId().getExtension());	}
 	
 	public void testAssociationHQL4() throws ApplicationException {
 

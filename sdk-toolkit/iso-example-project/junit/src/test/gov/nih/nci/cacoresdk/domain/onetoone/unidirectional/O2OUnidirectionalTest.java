@@ -153,7 +153,7 @@ public class O2OUnidirectionalTest extends SDKISOTestBase
 		assertNotNull(address);
 		assertNotNull(address.getId());
 		assertNotNull(address.getZip());
-		assertEquals(new Integer(1),address.getId());
+		assertEquals("1",address.getId().getExtension());
 	}
 
 	/**
@@ -184,7 +184,7 @@ public class O2OUnidirectionalTest extends SDKISOTestBase
 		assertNotNull(address);
 		assertNotNull(address.getId());
 		assertNotNull(address.getZip());
-		assertEquals(new Integer(1),address.getId());
+		assertEquals("1",address.getId().getExtension());
 	}
 	
 
@@ -262,7 +262,7 @@ public class O2OUnidirectionalTest extends SDKISOTestBase
 		assertNotNull(address);
 		assertNotNull(address.getId());
 		assertNotNull(address.getZip());
-		assertEquals(new Integer(1),address.getId());
+		assertEquals("1",address.getId().getExtension());
 	}	
 	
 	public void testOneAssociatedObjectHQL() throws ApplicationException {

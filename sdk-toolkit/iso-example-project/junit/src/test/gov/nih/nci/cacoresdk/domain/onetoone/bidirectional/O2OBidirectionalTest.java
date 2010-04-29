@@ -154,7 +154,7 @@ public class O2OBidirectionalTest extends SDKISOTestBase
 		assertNotNull(orderLine);
 		assertNotNull(orderLine.getId());
 		assertNotNull(orderLine.getName());
-		assertEquals(new Integer(1),orderLine.getId());
+		assertEquals("1",orderLine.getId().getExtension());
 	}
 
 	/**
@@ -185,7 +185,7 @@ public class O2OBidirectionalTest extends SDKISOTestBase
 		assertNotNull(orderLine);
 		assertNotNull(orderLine.getId());
 		assertNotNull(orderLine.getName());
-		assertEquals(new Integer(1),orderLine.getId());
+		assertEquals("1",orderLine.getId().getExtension());
 	}
 
 	/**
@@ -216,7 +216,7 @@ public class O2OBidirectionalTest extends SDKISOTestBase
 		assertNotNull(product);
 		assertNotNull(product.getId());
 		assertNotNull(product.getName());
-		assertEquals(new Integer(1),product.getId());
+		assertEquals("1",product.getId().getExtension());
 	}	
 	/**
 	 * Uses CQL Criteria for search
@@ -254,7 +254,7 @@ public class O2OBidirectionalTest extends SDKISOTestBase
 		assertNotNull(orderLine);
 		assertNotNull(orderLine.getId());
 		assertNotNull(orderLine.getName());
-		assertEquals(new Integer(1),orderLine.getId());
+		assertEquals("1",orderLine.getId().getExtension());
 	}	
 
 	public void testOneAssociatedObjectHQL1() throws ApplicationException {
@@ -274,7 +274,7 @@ public class O2OBidirectionalTest extends SDKISOTestBase
 		assertNotNull(orderLine);
 		assertNotNull(orderLine.getId());
 		assertNotNull(orderLine.getName());
-		assertEquals(new Integer(1), new Integer(orderLine.getId().getExtension()));	
+		assertEquals("1",orderLine.getId().getExtension());	
 	}
 
 	/**
@@ -313,7 +313,7 @@ public class O2OBidirectionalTest extends SDKISOTestBase
 		assertNotNull(product);
 		assertNotNull(product.getId());
 		assertNotNull(product.getName());
-		assertEquals(new Integer(1),product.getId());
+		assertEquals("1",product.getId().getExtension());
 	}	
 	
 	public void testOneAssociatedObjectHQL2() throws ApplicationException {
@@ -375,7 +375,7 @@ public class O2OBidirectionalTest extends SDKISOTestBase
 		assertEquals(1,results.size());
 		
 		Product result = (Product)results.iterator().next();
-		assertEquals(new Integer(1),result.getLine().getId());
+		assertEquals("1",result.getLine().getId().getExtension());
 
 		Ii ii2=new Ii();
 		ii2.setExtension("2");
@@ -386,7 +386,7 @@ public class O2OBidirectionalTest extends SDKISOTestBase
 		assertEquals(1,results.size());
 		
 		result = (Product)results.iterator().next();
-		assertEquals(new Integer(2),result.getLine().getId());
+		assertEquals("2",result.getLine().getId().getExtension());
 
 		Ii ii3=new Ii();
 		ii3.setExtension("3");
@@ -414,7 +414,7 @@ public class O2OBidirectionalTest extends SDKISOTestBase
 		assertEquals(1,results.size());
 		
 		OrderLine result = (OrderLine)results.iterator().next();
-		assertEquals(new Integer(1),result.getProduct().getId());
+		assertEquals("1",result.getProduct().getId().getExtension());
 
 		Ii ii2=new Ii();
 		ii.setExtension("2");

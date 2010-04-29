@@ -156,7 +156,7 @@ public class O2MBidirectionalWJoinTest extends SDKISOTestBase
 		
 		assertNotNull(passanger.getId());
 		assertNotNull(passanger.getName());
-		assertEquals(new Integer(1),passanger.getId());
+		assertEquals("1",passanger.getId().getExtension());
 	}
 
 	/**
@@ -187,7 +187,7 @@ public class O2MBidirectionalWJoinTest extends SDKISOTestBase
 		assertNotNull(Passanger);
 		assertNotNull(Passanger.getId());
 		assertNotNull(Passanger.getName());
-		assertEquals(new Integer(1),Passanger.getId());
+		assertEquals("1",Passanger.getId().getExtension());
 	}
 
 	/**
@@ -216,8 +216,7 @@ public class O2MBidirectionalWJoinTest extends SDKISOTestBase
 		assertNotNull(Flight);
 		assertNotNull(Flight.getId());
 		assertNotNull(Flight.getDestination());
-		assertEquals(new Integer(1),Flight.getId());
-	}	
+		assertEquals("1",Flight.getId().getExtension());	}	
 	/**
 	 * Uses CQL Criteria for search
 	 * Verifies that the results are returned 

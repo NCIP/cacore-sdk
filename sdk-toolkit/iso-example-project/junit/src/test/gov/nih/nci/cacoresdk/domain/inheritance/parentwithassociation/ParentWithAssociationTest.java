@@ -436,7 +436,7 @@ public class ParentWithAssociationTest extends SDKISOTestBase
 		TenuredProfessor result = (TenuredProfessor)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
-		assertEquals(new Integer(1), result.getId());
+		assertEquals("1", result.getId().getExtension());
 	}
 
 	/**
@@ -500,7 +500,7 @@ public class ParentWithAssociationTest extends SDKISOTestBase
 		Professor result = (Professor)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
-		assertEquals(new Integer(2),result.getId());
+		assertEquals("2", result.getId().getExtension());
 	}
 
 	/**
@@ -525,7 +525,7 @@ public class ParentWithAssociationTest extends SDKISOTestBase
 		AssociateProfessor result = (AssociateProfessor)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
-		assertEquals(new Integer(7), result.getId());
+		assertEquals("7", result.getId().getExtension());
 	}
 
 	/**
@@ -550,7 +550,7 @@ public class ParentWithAssociationTest extends SDKISOTestBase
 		Professor result = (Professor)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
-		assertEquals(new Integer(7), result.getId());
+		assertEquals("7", result.getId().getExtension());
 	}
 	
 	/**
@@ -582,7 +582,7 @@ public class ParentWithAssociationTest extends SDKISOTestBase
 		Professor result = (Professor)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
-		assertEquals(new Integer(1), result.getId());
+		assertEquals("1", result.getId().getExtension());
 	}
 
 	public void testAssociationHQL1() throws ApplicationException {
@@ -628,7 +628,7 @@ public class ParentWithAssociationTest extends SDKISOTestBase
 		TenuredProfessor result = (TenuredProfessor)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
-		assertEquals(new Integer(2), result.getId());
+		assertEquals("2", result.getId().getExtension());
 	}
 
 	public void testAssociationHQL2() throws ApplicationException {
@@ -677,7 +677,7 @@ public class ParentWithAssociationTest extends SDKISOTestBase
 		Professor result = (Professor)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
-		assertEquals(new Integer(1), result.getId());
+		assertEquals("1", result.getId().getExtension());
 	}
 
 	public void testAssociationHQL3() throws ApplicationException {
@@ -725,7 +725,7 @@ public class ParentWithAssociationTest extends SDKISOTestBase
 		AssociateProfessor result = (AssociateProfessor)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
-		assertEquals(new Integer(6), result.getId());
+		assertEquals("6", result.getId().getExtension());
 	}
 	
 	public void testAssociationHQL4() throws ApplicationException

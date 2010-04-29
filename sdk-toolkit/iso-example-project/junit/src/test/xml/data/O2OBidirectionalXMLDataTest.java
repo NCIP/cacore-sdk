@@ -4,11 +4,13 @@ import gov.nih.nci.cacoresdk.domain.onetomany.bidirectional.Computer;
 import gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.OrderLine;
 import gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.Product;
 import gov.nih.nci.iso21090.Ii;
+import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
 import java.util.Collection;
 import java.util.Iterator;
 
 import test.xml.mapping.SDKXMLDataTestBase;
+
 
 public class O2OBidirectionalXMLDataTest extends SDKXMLDataTestBase
 {
@@ -153,6 +155,30 @@ public class O2OBidirectionalXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(orderLine.getId());
 		assertNotNull(orderLine.getName());
 		assertEquals(new Integer(1),orderLine.getId());
+	}
+
+	public void testOneAssociatedObjectNestedSearchHQL1() throws Exception {
+		HQLCriteria hqlCriteria = new HQLCriteria(
+				"from gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.Product where id='1'");
+		Collection results = search(hqlCriteria,
+				"gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.Product");
+		assertNotNull(results);
+		assertEquals(1, results.size());
+
+		Iterator i = results.iterator();
+		Product result = (Product) i.next();
+		toXML(result);
+		Product result2 = (Product) fromXML(result);
+
+		assertNotNull(result2);
+		assertNotNull(result2.getId());
+		assertNotNull(result2.getName());
+
+		OrderLine orderLine = result2.getLine();
+		assertNotNull(orderLine);
+		assertNotNull(orderLine.getId());
+		assertNotNull(orderLine.getName());
+		assertEquals(new Integer(1), orderLine.getId());
 	}
 
 	/**
@@ -306,6 +332,47 @@ public class O2OBidirectionalXMLDataTest extends SDKXMLDataTestBase
 		result2 = (OrderLine)fromXML(result);
 		assertNull(result2.getProduct());
 		
+	}
+	
+	public void testGetMethodsHQL2() throws Exception {
+		HQLCriteria hqlCriteria = new HQLCriteria(
+				"from gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.OrderLine where id='1'");
+		Collection results = search(hqlCriteria,
+				"gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.OrderLine");
+
+		assertNotNull(results);
+		assertEquals(1, results.size());
+
+		OrderLine result = (OrderLine) results.iterator().next();
+		toXML(result);
+		OrderLine result2 = (OrderLine) fromXML(result);
+		assertEquals(new Integer(1), result2.getProduct().getId());
+
+		hqlCriteria = new HQLCriteria(
+				"from gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.OrderLine where id='2'");
+		results = search(hqlCriteria,
+				"gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.OrderLine");
+
+		assertNotNull(results);
+		assertEquals(1, results.size());
+
+		result = (OrderLine) results.iterator().next();
+		toXML(result);
+		result2 = (OrderLine) fromXML(result);
+		assertEquals(new Integer(2), result2.getProduct().getId());
+
+		hqlCriteria = new HQLCriteria(
+				"from gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.OrderLine where id='3'");
+		results = search(hqlCriteria,
+				"gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.OrderLine");
+
+		assertNotNull(results);
+		assertEquals(1, results.size());
+
+		result = (OrderLine) results.iterator().next();
+		toXML(result);
+		result2 = (OrderLine) fromXML(result);
+		assertNull(result2.getProduct());
 	}
 	
 	public void testGetAssociation1() throws Exception

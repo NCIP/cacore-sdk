@@ -187,7 +187,7 @@ public class M2MUnidirectionalTest extends SDKISOTestBase
 		assertNotNull(author);
 		assertNotNull(author.getId());
 		assertNotNull(author.getName());
-		assertEquals(new Integer(1),author.getId());
+		assertEquals("1",author.getId().getExtension());
 	}
 
 	/**
@@ -215,7 +215,7 @@ public class M2MUnidirectionalTest extends SDKISOTestBase
 		assertNotNull(author);
 		assertNotNull(author.getId());
 		assertNotNull(author.getName());
-		assertEquals(new Integer(1),author.getId());
+		assertEquals("1",author.getId().getExtension());		
 	}
 	
 
@@ -290,7 +290,7 @@ public class M2MUnidirectionalTest extends SDKISOTestBase
 		assertNotNull(author);
 		assertNotNull(author.getId());
 		assertNotNull(author.getName());
-		assertEquals(new Integer(1),author.getId());
+		assertEquals("1",author.getId().getExtension());
 	}
 	
 	public void testOneAssociatedObjectHQL() throws ApplicationException {

@@ -16,7 +16,6 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import test.gov.nih.nci.cacoresdk.SDKISOTestBase;
-import test.gov.nih.nci.cacoresdk.SDKTestBase;
 
 public class MultipleChildSametableTest extends SDKISOTestBase
 {
