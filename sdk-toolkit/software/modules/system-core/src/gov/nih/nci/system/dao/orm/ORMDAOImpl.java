@@ -188,8 +188,10 @@ public class ORMDAOImpl extends HibernateDaoSupport implements DAO
 
 			public Object doInHibernate(Session session) throws HibernateException, SQLException {
 				Query query = session.createQuery(hql);
-				query.setFirstResult(firstResult);				    		
-				query.setMaxResults(maxResult);
+				query.setFirstResult(firstResult);	
+				if(maxResult>0){
+					query.setMaxResults(maxResult);
+				}
 				
 				int count = 0;
 				if(params!=null)
