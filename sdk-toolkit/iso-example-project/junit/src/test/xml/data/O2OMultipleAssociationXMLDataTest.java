@@ -4,11 +4,13 @@ import gov.nih.nci.cacoresdk.domain.onetomany.bidirectional.Computer;
 import gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation.Child;
 import gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation.Parent;
 import gov.nih.nci.iso21090.Ii;
+import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
 import java.util.Collection;
 import java.util.Iterator;
 
 import test.xml.mapping.SDKXMLDataTestBase;
+
 
 public class O2OMultipleAssociationXMLDataTest extends SDKXMLDataTestBase
 {
@@ -217,6 +219,42 @@ public class O2OMultipleAssociationXMLDataTest extends SDKXMLDataTestBase
 			
 			validateAssociation(result,"Parent","mother");
 			
+			mother = result2.getMother();
+			assertNotNull(mother);
+			assertNotNull(mother.getId());
+			assertNotNull(mother.getName());
+		}
+	}
+	
+	public void testGetAssociationHQL() throws Exception {
+
+		HQLCriteria hqlCriteria = new HQLCriteria(
+				"from gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation.Child where id='2'");
+		Collection results = search(hqlCriteria,
+				"gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation.Child");
+		assertNotNull(results);
+		assertEquals(1, results.size());
+
+		Parent father;
+		Parent mother;
+		for (Iterator i = results.iterator(); i.hasNext();) {
+			Child result = (Child) i.next();
+			toXML(result);
+			Child result2 = (Child) fromXML(result);
+
+			assertNotNull(result2);
+			assertNotNull(result2.getId());
+			assertNotNull(result2.getName());
+
+			validateAssociation(result, "Parent", "father");
+
+			father = result2.getFather();
+			assertNotNull(father);
+			assertNotNull(father.getId());
+			assertNotNull(father.getName());
+
+			validateAssociation(result, "Parent", "mother");
+
 			mother = result2.getMother();
 			assertNotNull(mother);
 			assertNotNull(mother.getId());

@@ -154,7 +154,7 @@ public class M2MBidirectionalTest extends SDKISOTestBase
 		assertNotNull(project);
 		assertNotNull(project.getId());
 		assertNotNull(project.getName());
-		assertEquals(new Integer(1),project.getId());
+		assertEquals("1",project.getId().getExtension());
 		
 		Collection employeeCollection = project.getEmployeeCollection();
 		assertEquals(1,employeeCollection.size());
@@ -186,7 +186,7 @@ public class M2MBidirectionalTest extends SDKISOTestBase
 		assertNotNull(project);
 		assertNotNull(project.getId());
 		assertNotNull(project.getName());
-		assertEquals(new Integer(1),project.getId());
+		assertEquals("1",project.getId().getExtension());
 	}
 
 	/**
@@ -215,7 +215,7 @@ public class M2MBidirectionalTest extends SDKISOTestBase
 		assertNotNull(employee);
 		assertNotNull(employee.getId());
 		assertNotNull(employee.getName());
-		assertEquals(new Integer(1),employee.getId());
+		assertEquals("1",employee.getId().getExtension());
 	}	
 	/**
 	 * Uses CQL Criteria for search
@@ -309,7 +309,7 @@ public class M2MBidirectionalTest extends SDKISOTestBase
 		assertNotNull(employee);
 		assertNotNull(employee.getId());
 		assertNotNull(employee.getName());
-		assertEquals(new Integer(4),employee.getId());
+		assertEquals("4",employee.getId().getExtension());
 	}	
 	
 	public void testOneAssociatedObjectHQL2() throws ApplicationException {

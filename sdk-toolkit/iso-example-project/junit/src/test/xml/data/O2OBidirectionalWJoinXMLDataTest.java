@@ -3,11 +3,13 @@ package test.xml.data;
 import gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin.Chain;
 import gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin.Pendant;
 import gov.nih.nci.iso21090.Ii;
+import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
 import java.util.Collection;
 import java.util.Iterator;
 
 import test.xml.mapping.SDKXMLDataTestBase;
+
 
 public class O2OBidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 {
@@ -114,6 +116,28 @@ public class O2OBidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(result2.getId());
 		assertNotNull(result2.getShape());
 		
+		Chain chain = result2.getChain();
+		assertNull(chain);
+	}
+	
+	public void testZeroAssociatedObjectsNestedSearchHQL1() throws Exception {
+		HQLCriteria hqlCriteria = new HQLCriteria(
+				"from gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin.Pendant where id='3'");
+		Collection results = search(hqlCriteria,
+				"gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin.Pendant");
+
+		assertNotNull(results);
+		assertEquals(1, results.size());
+
+		Iterator i = results.iterator();
+		Pendant result = (Pendant) i.next();
+		toXML(result);
+		Pendant result2 = (Pendant) fromXML(result);
+
+		assertNotNull(result2);
+		assertNotNull(result2.getId());
+		assertNotNull(result2.getShape());
+
 		Chain chain = result2.getChain();
 		assertNull(chain);
 	}
@@ -233,7 +257,7 @@ public class O2OBidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 		Pendant result = (Pendant)results.iterator().next();
 		toXML(result);
 		Pendant result2 = (Pendant)fromXML(result);
-		assertEquals(new Integer(1),result2.getChain().getId());
+		assertEquals("1",result2.getChain().getId().getExtension());
 
 		Ii ii2 = new Ii();
 		ii2.setExtension("2");
@@ -246,8 +270,8 @@ public class O2OBidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 		result = (Pendant)results.iterator().next();
 		toXML(result);
 		result2 = (Pendant)fromXML(result);
-		assertEquals(new Integer(2),result2.getChain().getId());
-
+		assertEquals("2",result2.getChain().getId().getExtension());
+		
 		Ii ii3 = new Ii();
 		ii3.setExtension("3");
 		searchObject.setId(ii);
@@ -259,13 +283,13 @@ public class O2OBidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 		result = (Pendant)results.iterator().next();
 		toXML(result);
 		result2 = (Pendant)fromXML(result);
-		assertNull(result2.getChain());
-		
+		assertNull(result2.getChain());		
 	}
 
 
 	public void testGetMethods2() throws Exception
 	{
+		
 		Chain searchObject = new Chain();
 		Ii ii = new Ii();
 		ii.setExtension("1");
@@ -307,7 +331,49 @@ public class O2OBidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 		assertNull(result2.getPendant());
 		
 	}
-	
+
+	public void testGetMethodsHQL2() throws Exception {
+		HQLCriteria hqlCriteria = new HQLCriteria(
+				"from gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin.Chain where id='1'");
+		Collection results = search(hqlCriteria,
+				"gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin.Chain");
+
+		assertNotNull(results);
+		assertEquals(1, results.size());
+
+		Chain result = (Chain) results.iterator().next();
+		toXML(result);
+		Chain result2 = (Chain) fromXML(result);
+		assertEquals("1",result2.getPendant().getId().getExtension());
+		
+		HQLCriteria hqlCriteria2 = new HQLCriteria(
+				"from gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin.Chain where id='2'");
+		results = search(hqlCriteria,
+				"gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin.Chain");
+
+		assertNotNull(results);
+		assertEquals(1, results.size());
+
+		result = (Chain) results.iterator().next();
+		toXML(result);
+		result2 = (Chain) fromXML(result);
+		assertEquals(new Integer(2), result2.getPendant().getId());
+
+		HQLCriteria hqlCriteria3 = new HQLCriteria(
+				"from gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin.Chain where id='3'");
+		results = search(hqlCriteria,
+				"gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin.Chain");
+
+		assertNotNull(results);
+		assertEquals(1, results.size());
+
+		result = (Chain) results.iterator().next();
+		toXML(result);
+		result2 = (Chain) fromXML(result);
+		assertNull(result2.getPendant());
+
+	}
+
 	public void testGetAssociation1() throws Exception
 	{
 

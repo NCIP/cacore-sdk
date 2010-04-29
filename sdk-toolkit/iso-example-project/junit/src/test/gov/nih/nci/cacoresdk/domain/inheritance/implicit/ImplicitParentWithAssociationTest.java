@@ -606,7 +606,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 		assertNotNull(result.getId());
 		assertNotNull(result.getGenera());
 		assertNotNull(result.getFinSize());
-		assertEquals(new Integer(3), result.getId());
+		assertEquals("3", result.getId().getExtension());
 	}
 	
 	/**
@@ -631,7 +631,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 		Fish result = (Fish)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
-		assertEquals(new Integer(3), result.getId());
+		assertEquals("3", result.getId().getExtension());
 	}	
 	
 	/**
@@ -833,7 +833,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 		assertNotNull(result);
 		assertNotNull(result.getId());
 		assertNotNull(result.getName());
-		assertEquals(new Integer(1), result.getId());
+		assertEquals("1", result.getId().getExtension());
 	}	
 	
 	/**
@@ -867,7 +867,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 		assertNotNull(result.getId());
 		assertNotNull(result.getFinSize());
 		assertNotNull(result.getGenera());
-		assertEquals(new Integer(3), result.getId());
+		assertEquals("3", result.getId().getExtension());
 	}
 	
 
@@ -901,7 +901,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 		assertNotNull(result);
 		assertNotNull(result.getId());
 		assertNotNull(result.getGenera());
-		assertEquals(new Integer(3), result.getId());
+		assertEquals("3", result.getId().getExtension());
 	}
 
 	/**
@@ -1137,7 +1137,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 		assertNotNull(result.getNumGallons());
 		assertNotNull(result.getProteinSkimmerModel());
 		assertNotNull(result.getShape());
-		assertEquals(new Integer(4), result.getId());
+		assertEquals("4", result.getId().getExtension());
 	}	
 	
 	public void xtestGetAssociation1() throws ApplicationException

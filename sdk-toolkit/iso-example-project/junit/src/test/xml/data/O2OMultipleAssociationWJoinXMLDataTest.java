@@ -4,11 +4,13 @@ import gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.Product;
 import gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation.withjoin.Bride;
 import gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation.withjoin.InLaw;
 import gov.nih.nci.iso21090.Ii;
+import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
 import java.util.Collection;
 import java.util.Iterator;
 
 import test.xml.mapping.SDKXMLDataTestBase;
+
 
 public class O2OMultipleAssociationWJoinXMLDataTest extends SDKXMLDataTestBase
 {
@@ -223,5 +225,43 @@ public class O2OMultipleAssociationWJoinXMLDataTest extends SDKXMLDataTestBase
 			assertNotNull(motherInLaw.getId());
 			assertNotNull(motherInLaw.getName());
 		}
-	}	
+	}
+	
+
+	public void testGetAssociationHQL() throws Exception {
+
+		HQLCriteria hqlCriteria = new HQLCriteria(
+				"from gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation.withjoin.Bride where id='4'");
+		Collection results = search(hqlCriteria,
+				"gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation.withjoin.Bride");
+
+		assertNotNull(results);
+		assertEquals(1, results.size());
+
+		InLaw fatherInLaw;
+		InLaw motherInLaw;
+		for (Iterator i = results.iterator(); i.hasNext();) {
+			Bride result = (Bride) i.next();
+			toXML(result);
+			Bride result2 = (Bride) fromXML(result);
+
+			assertNotNull(result2);
+			assertNotNull(result2.getId());
+			assertNotNull(result2.getName());
+
+			validateAssociation(result, "InLaw", "father");
+
+			fatherInLaw = result2.getFather();
+			assertNotNull(fatherInLaw);
+			assertNotNull(fatherInLaw.getId());
+			assertNotNull(fatherInLaw.getName());
+
+			validateAssociation(result, "InLaw", "mother");
+
+			motherInLaw = result2.getMother();
+			assertNotNull(motherInLaw);
+			assertNotNull(motherInLaw.getId());
+			assertNotNull(motherInLaw.getName());
+		}
+	}
 }

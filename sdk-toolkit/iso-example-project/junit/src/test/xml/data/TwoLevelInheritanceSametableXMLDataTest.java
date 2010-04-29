@@ -6,11 +6,13 @@ import gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.Pa
 import gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.Goverment;
 import gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.PresidentialGovt;
 import gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.DemocraticGovt;
+import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
 import java.util.Collection;
 import java.util.Iterator;
 
 import test.xml.mapping.SDKXMLDataTestBase;
+
 
 public class TwoLevelInheritanceSametableXMLDataTest extends SDKXMLDataTestBase
 {
@@ -301,6 +303,27 @@ public class TwoLevelInheritanceSametableXMLDataTest extends SDKXMLDataTestBase
 			DemocraticGovt result = (DemocraticGovt)i.next();
 			toXML(result);
 			DemocraticGovt result2 = (DemocraticGovt)fromXML(result);
+
+			assertNotNull(result2);
+			assertNotNull(result2.getId());
+		}
+	}
+	
+	public void testAssociationNestedSearchHQL4() throws Exception {
+		HQLCriteria hqlCriteria = new HQLCriteria(
+				"from gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.DemocraticGovt");
+		Collection results = search(
+				hqlCriteria,
+				"gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.DemocraticGovt");
+
+		PresidentialGovt searchObject = new PresidentialGovt();
+		assertNotNull(results);
+		assertEquals(1, results.size());
+
+		for (Iterator i = results.iterator(); i.hasNext();) {
+			DemocraticGovt result = (DemocraticGovt) i.next();
+			toXML(result);
+			DemocraticGovt result2 = (DemocraticGovt) fromXML(result);
 
 			assertNotNull(result2);
 			assertNotNull(result2.getId());

@@ -155,7 +155,7 @@ public class O2MBidirectionalTest extends SDKISOTestBase
 		assertNotNull(hardDrive);
 		assertNotNull(hardDrive.getId());
 		assertNotNull(hardDrive.getSize());
-		assertEquals(new Integer(1),hardDrive.getId());
+		assertEquals("1",hardDrive.getId().getExtension());
 	}
 
 	/**
@@ -184,7 +184,7 @@ public class O2MBidirectionalTest extends SDKISOTestBase
 		assertNotNull(hardDrive);
 		assertNotNull(hardDrive.getId());
 		assertNotNull(hardDrive.getSize());
-		assertEquals(new Integer(1),hardDrive.getId());
+		assertEquals("1",hardDrive.getId().getExtension());
 	}
 
 	/**
@@ -213,7 +213,7 @@ public class O2MBidirectionalTest extends SDKISOTestBase
 		assertNotNull(computer);
 		assertNotNull(computer.getId());
 		assertNotNull(computer.getType());
-		assertEquals(new Integer(1),computer.getId());
+		assertEquals("1",computer.getId().getExtension());
 	}	
 	/**
 	 * Uses CQL Criteria for search
@@ -308,7 +308,7 @@ public class O2MBidirectionalTest extends SDKISOTestBase
 		assertNotNull(computer);
 		assertNotNull(computer.getId());
 		assertNotNull(computer.getType());
-		assertEquals(new Integer(1),computer.getId());
+		assertEquals("1",computer.getId().getExtension());
 	}	
 	
 	public void testOneAssociatedObjectHQL2() throws ApplicationException {

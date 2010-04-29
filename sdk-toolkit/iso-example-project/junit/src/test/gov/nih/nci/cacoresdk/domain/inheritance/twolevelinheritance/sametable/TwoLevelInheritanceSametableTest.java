@@ -806,9 +806,8 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 	
 	public void testAssociationHQL5() throws ApplicationException {
 		HQLCriteria hqlCriteria = new HQLCriteria(
-				"from gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.ParliamantaryGovt parGovt, "
-						+ "gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.PresidentialGovt preGovt where parGovt.id='2' "
-						+ "or preGovt.id='1'");
+				"from gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.Goverment govt" +
+				" where govt.id='2' or govt.id='1'");
 
 		Collection results = search(
 				hqlCriteria,

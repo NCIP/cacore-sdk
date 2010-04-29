@@ -170,7 +170,7 @@ public class O2MUnidirectionalTest extends SDKISOTestBase
 		assertNotNull(key);
 		assertNotNull(key.getId());
 		assertNotNull(key.getType());
-		assertEquals(new Integer(1),key.getId());
+		assertEquals("1",key.getId().getExtension());
 	}
 
 	/**
@@ -198,7 +198,7 @@ public class O2MUnidirectionalTest extends SDKISOTestBase
 		assertNotNull(key);
 		assertNotNull(key.getId());
 		assertNotNull(key.getType());
-		assertEquals(new Integer(1),key.getId());
+		assertEquals("1",key.getId().getExtension());
 	}
 	
 
@@ -273,6 +273,6 @@ public class O2MUnidirectionalTest extends SDKISOTestBase
 		assertNotNull(key);
 		assertNotNull(key.getId());
 		assertNotNull(key.getType());
-		assertEquals(new Integer(1),key.getId());
+		assertEquals("1",key.getId().getExtension());
 	}	
 }

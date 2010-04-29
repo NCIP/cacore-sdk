@@ -3,6 +3,8 @@ package test.xml.data;
 import java.util.Collection;
 import java.util.Iterator;
 
+import test.xml.mapping.SDKXMLDataTestBase;
+
 import gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.sametable.Organization;
 import gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.Assistant;
 import gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.AssistantProfessor;
@@ -10,8 +12,8 @@ import gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.AssociateP
 import gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.Professor;
 import gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.TenuredProfessor;
 import gov.nih.nci.iso21090.Ii;
+import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
-import test.xml.mapping.SDKXMLDataTestBase;
 
 public class ParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 {
@@ -231,6 +233,26 @@ public class ParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 		assertEquals(new Integer(1), result2.getId());
 	}
 
+	public void testAssociationNestedSearchHQL1() throws Exception {
+		HQLCriteria hqlCriteria = new HQLCriteria(
+				"from gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.TenuredProfessor where id='1'");
+		Collection results = search(
+				hqlCriteria,
+				"gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.TenuredProfessor");
+
+		assertNotNull(results);
+		assertEquals(1, results.size());
+
+		TenuredProfessor result = (TenuredProfessor) results.iterator().next();
+		toXML(result);
+		TenuredProfessor result2 = (TenuredProfessor) fromXML(result);
+
+		assertNotNull(result2);
+		assertNotNull(result2.getId());
+		assertNotNull(result2.getName());
+		assertEquals(new Integer(1), result2.getId());
+	}
+
 	/**
 	 * Uses Nested Search Criteria for inheritance as association in search
 	 * Verifies that the results are returned 
@@ -253,6 +275,24 @@ public class ParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 		Professor result = (Professor)results.iterator().next();
 		toXML(result);
 		Professor result2 = (Professor)fromXML(result);
+
+		assertNotNull(result2);
+		assertNotNull(result2.getId());
+		assertNotNull(result2.getName());
+		assertEquals(new Integer(2), result2.getId());
+	}
+
+	public void testAssociationNestedSearchHQL2() throws Exception {
+		HQLCriteria hqlCriteria = new HQLCriteria(
+				"from gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.Professor where id='2'");
+		Collection results = search(hqlCriteria,
+				"gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.Professor");
+		assertNotNull(results);
+		assertEquals(1, results.size());
+
+		Professor result = (Professor) results.iterator().next();
+		toXML(result);
+		Professor result2 = (Professor) fromXML(result);
 
 		assertNotNull(result2);
 		assertNotNull(result2.getId());
@@ -311,6 +351,25 @@ public class ParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 		Professor result = (Professor)results.iterator().next();
 		toXML(result);
 		Professor result2 = (Professor)fromXML(result);
+
+		assertNotNull(result2);
+		assertNotNull(result2.getId());
+		assertNotNull(result2.getName());
+		assertEquals(new Integer(7), result2.getId());
+	}
+	
+	public void testAssociationNestedSearchHQL4() throws Exception {
+		HQLCriteria hqlCriteria = new HQLCriteria(
+				"from gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.Professor where id='7'");
+		Collection results = search(hqlCriteria,
+				"gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.Professor");
+
+		assertNotNull(results);
+		assertEquals(1, results.size());
+
+		Professor result = (Professor) results.iterator().next();
+		toXML(result);
+		Professor result2 = (Professor) fromXML(result);
 
 		assertNotNull(result2);
 		assertNotNull(result2.getId());

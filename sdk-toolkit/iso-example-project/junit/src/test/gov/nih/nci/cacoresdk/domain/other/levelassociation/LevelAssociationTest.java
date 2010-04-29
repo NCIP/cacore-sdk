@@ -18,7 +18,6 @@ import gov.nih.nci.system.query.cql.CQLPredicate;
 import gov.nih.nci.system.query.cql.CQLQuery;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
 import test.gov.nih.nci.cacoresdk.SDKISOTestBase;
-import test.gov.nih.nci.cacoresdk.SDKTestBase;
 
 public class LevelAssociationTest extends SDKISOTestBase
 {

@@ -361,7 +361,6 @@ public class ParentWithAssociationSametableTest extends SDKISOTestBase
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.sametable.HardTop",searchObject );
 
 		assertNotNull(results);
-		assertEquals(1,results.size());
 		
 		for(Iterator i = results.iterator();i.hasNext();)
 		{
@@ -397,7 +396,7 @@ public class ParentWithAssociationSametableTest extends SDKISOTestBase
 		HardTop result = (HardTop)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
-		assertEquals(new Integer(1), result.getId());
+		assertEquals("1", result.getId().getExtension());
 	}
 
 	/**
@@ -461,7 +460,7 @@ public class ParentWithAssociationSametableTest extends SDKISOTestBase
 		Luggage result = (Luggage)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
-		assertEquals(new Integer(2),result.getId());
+		assertEquals("2", result.getId().getExtension());
 	}
 
 	/**
@@ -486,7 +485,7 @@ public class ParentWithAssociationSametableTest extends SDKISOTestBase
 		SoftTop result = (SoftTop)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
-		assertEquals(new Integer(3), result.getId());
+		assertEquals("3", result.getId().getExtension());
 	}
 
 	/**
@@ -511,7 +510,7 @@ public class ParentWithAssociationSametableTest extends SDKISOTestBase
 		Luggage result = (Luggage)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
-		assertEquals(new Integer(3), result.getId());
+		assertEquals("3", result.getId().getExtension());
 	}
 	
 	/**
@@ -580,7 +579,7 @@ public class ParentWithAssociationSametableTest extends SDKISOTestBase
 		Luggage result = (Luggage)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
-		assertEquals(new Integer(1), result.getId());
+		assertEquals("1", result.getId().getExtension());
 	}
 	
 	public void testAssociationHQL1() throws ApplicationException {
@@ -627,7 +626,7 @@ public class ParentWithAssociationSametableTest extends SDKISOTestBase
 		HardTop result = (HardTop)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
-		assertEquals(new Integer(2), result.getId());
+		assertEquals("2", result.getId().getExtension());
 	}
 
 	public void testAssociationHQL2() throws ApplicationException {
@@ -675,7 +674,7 @@ public class ParentWithAssociationSametableTest extends SDKISOTestBase
 		Luggage result = (Luggage)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
-		assertEquals(new Integer(1), result.getId());
+		assertEquals("1", result.getId().getExtension());
 	}
 
 	public void testAssociationHQL3() throws ApplicationException {
@@ -722,7 +721,7 @@ public class ParentWithAssociationSametableTest extends SDKISOTestBase
 		SoftTop result = (SoftTop)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
-		assertEquals(new Integer(4), result.getId());
+		assertEquals("4", result.getId().getExtension());
 	}
 
 	public void testAssociationHQL4() throws ApplicationException {

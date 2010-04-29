@@ -3,11 +3,13 @@ package test.xml.data;
 import gov.nih.nci.cacoresdk.domain.inheritance.onechild.sametable.Currency;
 import gov.nih.nci.cacoresdk.domain.inheritance.onechild.sametable.Note;
 import gov.nih.nci.iso21090.St;
+import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
 import java.util.Collection;
 import java.util.Iterator;
 
 import test.xml.mapping.SDKXMLDataTestBase;
+
 
 public class OneChildSametableXMLDataTest extends SDKXMLDataTestBase
 {
@@ -118,6 +120,27 @@ public class OneChildSametableXMLDataTest extends SDKXMLDataTestBase
 			assertNotNull(result2.getValue());
 		}
 	}
+	
+	public void testAssociationNestedSearchHQL1() throws Exception {
+		HQLCriteria hqlCriteria = new HQLCriteria(
+				"from gov.nih.nci.cacoresdk.domain.inheritance.onechild.sametable.Note note "
+						+ " where note.country='USA'");
+		Collection results = search(hqlCriteria,
+				"gov.nih.nci.cacoresdk.domain.inheritance.onechild.sametable.Note");
+
+		assertNotNull(results);
+		assertEquals(1, results.size());
+
+		for (Iterator i = results.iterator(); i.hasNext();) {
+			Note result = (Note) i.next();
+			toXML(result);
+			Note result2 = (Note) fromXML(result);
+
+			assertNotNull(result2);
+			assertNotNull(result2.getId());
+			assertNotNull(result2.getValue());
+		}
+	}
 
 	/**
 	 * Uses Nested Search Criteria for inheritance as association in search
@@ -143,6 +166,27 @@ public class OneChildSametableXMLDataTest extends SDKXMLDataTestBase
 			Currency result = (Currency)i.next();
 			toXML(result);
 			Currency result2 = (Currency)fromXML(result);
+
+			assertNotNull(result2);
+			assertNotNull(result2.getId());
+			assertNotNull(result2.getCountry());
+		}
+	}
+	
+	public void testAssociationNestedSearchHQL2() throws Exception {
+		HQLCriteria hqlCriteria = new HQLCriteria(
+				"from gov.nih.nci.cacoresdk.domain.inheritance.onechild.sametable.Currency currency "
+						+ " where currency.country='USA'");
+		Collection results = search(hqlCriteria,
+				"gov.nih.nci.cacoresdk.domain.inheritance.onechild.sametable.Currency");
+
+		assertNotNull(results);
+		assertEquals(1, results.size());
+
+		for (Iterator i = results.iterator(); i.hasNext();) {
+			Currency result = (Currency) i.next();
+			toXML(result);
+			Currency result2 = (Currency) fromXML(result);
 
 			assertNotNull(result2);
 			assertNotNull(result2.getId());

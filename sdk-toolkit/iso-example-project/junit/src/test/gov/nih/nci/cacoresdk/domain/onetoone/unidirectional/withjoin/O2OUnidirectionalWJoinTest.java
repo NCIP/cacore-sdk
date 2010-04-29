@@ -15,7 +15,6 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import test.gov.nih.nci.cacoresdk.SDKISOTestBase;
-import test.gov.nih.nci.cacoresdk.SDKTestBase;
 
 public class O2OUnidirectionalWJoinTest extends SDKISOTestBase
 {
@@ -154,7 +153,7 @@ public class O2OUnidirectionalWJoinTest extends SDKISOTestBase
 		assertNotNull(handle);
 		assertNotNull(handle.getId());
 		assertNotNull(handle.getColor());
-		assertEquals(new Integer(1),handle.getId());
+		assertEquals("1",handle.getId().getExtension());
 	}
 
 	/**
@@ -185,7 +184,7 @@ public class O2OUnidirectionalWJoinTest extends SDKISOTestBase
 		assertNotNull(handle);
 		assertNotNull(handle.getId());
 		assertNotNull(handle.getColor());
-		assertEquals(new Integer(1),handle.getId());
+		assertEquals("1",handle.getId().getExtension());
 	}
 	
 
@@ -263,7 +262,7 @@ public class O2OUnidirectionalWJoinTest extends SDKISOTestBase
 		assertNotNull(handle);
 		assertNotNull(handle.getId());
 		assertNotNull(handle.getColor());
-		assertEquals(new Integer(1),handle.getId());
+		assertEquals("1",handle.getId().getExtension());
 	}	
 	
 	
