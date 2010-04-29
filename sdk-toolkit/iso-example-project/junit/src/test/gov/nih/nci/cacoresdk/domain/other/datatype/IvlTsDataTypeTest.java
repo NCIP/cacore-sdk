@@ -244,15 +244,11 @@ public class IvlTsDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 
-				assertNull(data.getValue1().getNullFlavor());
 				assertEquals(df.parse("03/11/2010 12:00:00 AM"), df.parse(df.format(data.getValue1().getLow().getValue())));
+				assertNull(data.getValue1().getHigh());
 				assertTrue(data.getValue1().getLow().getValue().equals(data.getValue1().getLow().getValue()));
 				assertTrue(data.getValue1().getLow().getValue().clone().equals(data.getValue1().getLow().getValue()));
-				assertNull(data.getValue1().getHigh());
-				assertNull(data.getValue1().getAny());
-				assertNull(data.getValue1().getHighClosed());
-				assertNull(data.getValue1().getLowClosed());
-				assertNull(data.getValue1().getWidth());
+				assertValue1Constants(data);
 
 				counter++;
 				continue;
@@ -266,13 +262,9 @@ public class IvlTsDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 
-				assertNull(data.getValue1().getNullFlavor());
 				assertEquals(df.parse("03/12/2010 12:00:00 AM"), df.parse(df.format(data.getValue1().getLow().getValue())));
 				assertNull(data.getValue1().getHigh());
-				assertNull(data.getValue1().getAny());
-				assertNull(data.getValue1().getHighClosed());
-				assertNull(data.getValue1().getLowClosed());
-				assertNull(data.getValue1().getWidth());
+				assertValue1Constants(data);
 
 				counter++;
 				continue;
@@ -286,13 +278,9 @@ public class IvlTsDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 
-				assertNull(data.getValue1().getNullFlavor());
 				assertEquals(df.parse("03/11/2010 12:00:00 AM"), df.parse(df.format(data.getValue1().getHigh().getValue())));
 				assertNull(data.getValue1().getLow());
-				assertNull(data.getValue1().getAny());
-				assertNull(data.getValue1().getHighClosed());
-				assertNull(data.getValue1().getLowClosed());
-				assertNull(data.getValue1().getWidth());
+				assertValue1Constants(data);
 				
 				counter++;
 				continue;
@@ -306,13 +294,9 @@ public class IvlTsDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 
-				assertNull(data.getValue1().getNullFlavor());
 				assertEquals(df.parse("03/12/2000 12:00:00 AM"), df.parse(df.format(data.getValue1().getHigh().getValue())));
 				assertNull(data.getValue1().getLow());
-				assertNull(data.getValue1().getAny());
-				assertNull(data.getValue1().getHighClosed());
-				assertNull(data.getValue1().getLowClosed());
-				assertNull(data.getValue1().getWidth());
+				assertValue1Constants(data);
 
 				counter++;
 				continue;
@@ -326,13 +310,9 @@ public class IvlTsDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 
-				assertNull(data.getValue1().getNullFlavor());
 				assertEquals(df.parse("03/03/2010 12:00:00 AM"), df.parse(df.format(data.getValue1().getLow().getValue())));
 				assertEquals(df.parse("03/13/2010 12:00:00 AM"), df.parse(df.format(data.getValue1().getHigh().getValue())));
-				assertNull(data.getValue1().getAny());
-				assertNull(data.getValue1().getHighClosed());
-				assertNull(data.getValue1().getLowClosed());
-				assertNull(data.getValue1().getWidth());
+				assertValue1Constants(data);
 
 				counter++;
 				continue;
@@ -341,12 +321,28 @@ public class IvlTsDataTypeTest extends SDKISOTestBase
 			else
 			{
 				assertNotNull(data);
-				assertNull(data.getValue1());
+				assertNotNull(data.getValue1());
+				assertValue1Constants(data);
 				counter++;
 			}
 		}
 	}
 
+	private void assertValue1Constants(IvlTsDataType data)
+	{
+		
+		assertNull(data.getValue1().getAny());
+		assertNull(data.getValue1().getWidth());
+		assertNull(data.getValue1().getHighClosed());
+		assertNull(data.getValue1().getLowClosed());
+		//Global constant
+		assertEquals(NullFlavor.NI, data.getValue1().getNullFlavor());
+		//Global constant
+		assertEquals(NullFlavor.NI, data.getValue1().getLow().getNullFlavor());
+		//Global constant
+		assertEquals(NullFlavor.NI, data.getValue1().getHigh().getNullFlavor());
+	}
+	
 	private void assertValue2(Collection<IvlTsDataType> result, List<Integer> index) throws ParseException
 	{
 		assertNotNull(result);
@@ -364,15 +360,11 @@ public class IvlTsDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 
-				assertNull(data.getValue2().getNullFlavor());
 				assertEquals(df.parse("03/11/2010 12:00:00 AM"), df.parse(df.format(data.getValue2().getHigh().getValue())));
 				assertTrue(data.getValue2().getHigh().getValue().equals(data.getValue2().getHigh().getValue()));
 				assertTrue(data.getValue2().getHigh().getValue().clone().equals(data.getValue2().getHigh().getValue()));
-				assertNull(data.getValue2().getLow());
-				assertNull(data.getValue2().getAny());
-				assertNull(data.getValue2().getHighClosed());
 				assertNull(data.getValue2().getLowClosed());
-				assertNull(data.getValue2().getWidth());
+				assertValue2Constants(data);
 
 				counter++;
 				continue;
@@ -386,13 +378,9 @@ public class IvlTsDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 
-				assertNull(data.getValue2().getNullFlavor());
 				assertEquals(df.parse("03/11/2001 12:00:00 AM"), df.parse(df.format(data.getValue2().getHigh().getValue())));
-				assertNull(data.getValue2().getLow());
-				assertNull(data.getValue2().getAny());
-				assertNull(data.getValue2().getHighClosed());
 				assertEquals(Boolean.TRUE, data.getValue2().getLowClosed());
-				assertNull(data.getValue2().getWidth());
+				assertValue2Constants(data);
 
 				counter++;
 				continue;
@@ -406,13 +394,9 @@ public class IvlTsDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 
-				assertNull(data.getValue2().getNullFlavor());
-				assertNull(data.getValue2().getLow());
-				assertNull(data.getValue2().getHigh());
-				assertNull(data.getValue2().getAny());
-				assertNull(data.getValue2().getHighClosed());
+				assertNull(data.getValue2().getHigh().getValue());
 				assertEquals(Boolean.TRUE, data.getValue2().getLowClosed());
-				assertNull(data.getValue2().getWidth());
+				assertValue2Constants(data);
 				
 				counter++;
 				continue;
@@ -426,13 +410,9 @@ public class IvlTsDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 
-				assertNull(data.getValue2().getNullFlavor());
 				assertEquals(df.parse("03/13/2010 12:00:00 AM"), df.parse(df.format(data.getValue2().getHigh().getValue())));
-				assertNull(data.getValue2().getLow());
-				assertNull(data.getValue2().getAny());
-				assertNull(data.getValue2().getHighClosed());
 				assertEquals(Boolean.FALSE, data.getValue2().getLowClosed());
-				assertNull(data.getValue2().getWidth());
+				assertValue2Constants(data);
 
 				counter++;
 				continue;
@@ -446,13 +426,9 @@ public class IvlTsDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 
-				assertNull(data.getValue2().getNullFlavor());
 				assertEquals(df.parse("03/14/2010 12:00:00 AM"), df.parse(df.format(data.getValue2().getHigh().getValue())));
-				assertNull(data.getValue2().getLow());
-				assertNull(data.getValue2().getAny());
-				assertNull(data.getValue2().getHighClosed());
 				assertEquals(Boolean.TRUE, data.getValue2().getLowClosed());
-				assertNull(data.getValue2().getWidth());
+				assertValue2Constants(data);
 
 				counter++;
 				continue;
@@ -466,13 +442,9 @@ public class IvlTsDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 
-				assertNull(data.getValue2().getNullFlavor());
 				assertEquals(df.parse("03/15/2010 12:00:00 AM"), df.parse(df.format(data.getValue2().getHigh().getValue())));
-				assertNull(data.getValue2().getLow());
-				assertNull(data.getValue2().getAny());
-				assertNull(data.getValue2().getHighClosed());
 				assertEquals(Boolean.TRUE, data.getValue2().getLowClosed());
-				assertNull(data.getValue2().getWidth());
+				assertValue2Constants(data);
 
 				counter++;
 				continue;
@@ -481,12 +453,25 @@ public class IvlTsDataTypeTest extends SDKISOTestBase
 			else
 			{
 				assertNotNull(data);
-				assertNull(data.getValue2());
+				assertNotNull(data.getValue2());
+				assertValue2Constants(data);
 				counter++;
 			}
 		}
 	}
 
+
+	private void assertValue2Constants(IvlTsDataType data)
+	{
+		assertNull(data.getValue2().getAny());
+		assertNull(data.getValue2().getWidth());
+		assertNull(data.getValue2().getHighClosed());
+		assertNull(data.getValue2().getLow());
+		//Global constant
+		assertEquals(NullFlavor.NI, data.getValue2().getNullFlavor());
+		//Global constant
+		assertEquals(NullFlavor.NI, data.getValue2().getHigh().getNullFlavor());
+	}
 
 	private void assertValue3(Collection<IvlTsDataType> result, List<Integer> index) throws ParseException
 	{
@@ -507,17 +492,13 @@ public class IvlTsDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue3());
 				assertNull(data.getValue3().getNullFlavor());
 
-				assertNull(data.getValue3().getAny());
 				assertEquals(df.parse("03/11/2010 12:00:00 AM"), df.parse(df.format(data.getValue3().getHigh().getValue())));
-				assertNull(data.getValue3().getHighClosed());
 				assertEquals(df.parse("03/01/2010 12:00:00 AM"), df.parse(df.format(data.getValue3().getLow().getValue())));
 				assertTrue(data.getValue3().getHigh().getValue().compareTo(data.getValue3().getLow().getValue()) > 0);
-				assertNull(data.getValue3().getLowClosed());
 				assertEquals(new BigDecimal(4, decimalContext), ((gov.nih.nci.iso21090.Pq)data.getValue3().getWidth()).getValue());
+				//From database
 				assertEquals(NullFlavor.NI, data.getValue3().getWidth().getNullFlavor());
-				
-				assertNull(data.getValue3().getHigh().getNullFlavor());
-				assertNull(data.getValue3().getLow().getNullFlavor());
+				assertValue3Constants(data);
 
 				counter++;
 				continue;
@@ -532,18 +513,14 @@ public class IvlTsDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue3());
 				assertNull(data.getValue3().getNullFlavor());
 
-				assertNull(data.getValue3().getAny());
 				assertEquals(df.parse("03/12/2010 12:00:00 AM"), df.parse(df.format(data.getValue3().getHigh().getValue())));
-				assertNull(data.getValue3().getHighClosed());
 				assertEquals(df.parse("03/02/2010 12:00:00 AM"), df.parse(df.format(data.getValue3().getLow().getValue())));
 				assertFalse(data.getValue3().getHigh().getValue().compareTo(data.getValue3().getLow().getValue()) == 0);
-				assertNull(data.getValue3().getLowClosed());
 				assertEquals(new BigDecimal(4, decimalContext), ((gov.nih.nci.iso21090.Pq)data.getValue3().getWidth()).getValue());
+				//From database
 				assertEquals(NullFlavor.NI, data.getValue3().getWidth().getNullFlavor());
+				assertValue3Constants(data);
 				
-				assertNull(data.getValue3().getHigh().getNullFlavor());
-				assertNull(data.getValue3().getLow().getNullFlavor());
-
 				counter++;
 				continue;
 			}
@@ -557,17 +534,13 @@ public class IvlTsDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue3());
 				assertNull(data.getValue3().getNullFlavor());
 				
-				assertNull(data.getValue3().getAny());
 				assertEquals(df.parse("03/13/2010 12:00:00 AM"), df.parse(df.format(data.getValue3().getHigh().getValue())));
-				assertNull(data.getValue3().getHighClosed());
 				assertEquals(df.parse("03/03/2010 12:00:00 AM"), df.parse(df.format(data.getValue3().getLow().getValue())));
 				assertFalse(data.getValue3().getHigh().getValue().compareTo(data.getValue3().getLow().getValue()) == 0);
-				assertNull(data.getValue3().getLowClosed());
 				assertEquals(new BigDecimal(4, decimalContext), ((gov.nih.nci.iso21090.Pq)data.getValue3().getWidth()).getValue());
+				//From database
 				assertEquals(NullFlavor.NI, data.getValue3().getWidth().getNullFlavor());
-				
-				assertNull(data.getValue3().getHigh().getNullFlavor());
-				assertNull(data.getValue3().getLow().getNullFlavor());
+				assertValue3Constants(data);
 				
 				counter++;
 				continue;
@@ -582,17 +555,13 @@ public class IvlTsDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue3());
 				assertNull(data.getValue3().getNullFlavor());
 
-				assertNull(data.getValue3().getAny());
 				assertEquals(df.parse("03/14/2010 12:00:00 AM"), df.parse(df.format(data.getValue3().getHigh().getValue())));
-				assertNull(data.getValue3().getHighClosed());
 				assertEquals(df.parse("03/04/2010 12:00:00 AM"), df.parse(df.format(data.getValue3().getLow().getValue())));
-				assertNull(data.getValue3().getLowClosed());
 				assertEquals(new BigDecimal(4, decimalContext), ((gov.nih.nci.iso21090.Pq)data.getValue3().getWidth()).getValue());
+				//From database
 				assertEquals(NullFlavor.NI, data.getValue3().getWidth().getNullFlavor());
+				assertValue3Constants(data);
 				
-				assertNull(data.getValue3().getHigh().getNullFlavor());
-				assertNull(data.getValue3().getLow().getNullFlavor());
-
 				counter++;
 				continue;
 			}
@@ -606,17 +575,13 @@ public class IvlTsDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue3());
 				assertNull(data.getValue3().getNullFlavor());
 
-				assertNull(data.getValue3().getAny());
 				assertEquals(df.parse("03/15/2010 12:00:00 AM"), df.parse(df.format(data.getValue3().getHigh().getValue())));
-				assertNull(data.getValue3().getHighClosed());
 				assertEquals(df.parse("03/05/2010 12:00:00 AM"), df.parse(df.format(data.getValue3().getLow().getValue())));
-				assertNull(data.getValue3().getLowClosed());
 				assertEquals(new BigDecimal(4, decimalContext), ((gov.nih.nci.iso21090.Pq)data.getValue3().getWidth()).getValue());
+				//From database
 				assertEquals(NullFlavor.NI, data.getValue3().getWidth().getNullFlavor());
+				assertValue3Constants(data);
 				
-				assertNull(data.getValue3().getHigh().getNullFlavor());
-				assertNull(data.getValue3().getLow().getNullFlavor());
-
 				counter++;
 				continue;
 			}
@@ -628,19 +593,16 @@ public class IvlTsDataTypeTest extends SDKISOTestBase
 
 				assertNotNull(data);
 				assertNotNull(data.getValue3());
+				//From database
 				assertEquals(NullFlavor.NI, data.getValue3().getNullFlavor());
 
-				assertNull(data.getValue3().getAny());
 				assertEquals(df.parse("03/21/2010 12:00:00 AM"), df.parse(df.format(data.getValue3().getHigh().getValue())));
-				assertNull(data.getValue3().getHighClosed());
 				assertEquals(df.parse("03/01/2010 12:00:00 AM"), df.parse(df.format(data.getValue3().getLow().getValue())));
-				assertNull(data.getValue3().getLowClosed());
 				assertEquals(new BigDecimal(4, decimalContext), ((gov.nih.nci.iso21090.Pq)data.getValue3().getWidth()).getValue());
+				//From database
 				assertEquals(NullFlavor.NI, data.getValue3().getWidth().getNullFlavor());
+				assertValue3Constants(data);
 				
-				assertNull(data.getValue3().getHigh().getNullFlavor());
-				assertNull(data.getValue3().getLow().getNullFlavor());
-
 				counter++;
 				continue;
 			}
@@ -652,19 +614,16 @@ public class IvlTsDataTypeTest extends SDKISOTestBase
 
 				assertNotNull(data);
 				assertNotNull(data.getValue3());
+				//From database
 				assertEquals(NullFlavor.NI, data.getValue3().getNullFlavor());
 
-				assertNull(data.getValue3().getAny());
 				assertEquals(df.parse("03/22/2010 12:00:00 AM"), df.parse(df.format(data.getValue3().getHigh().getValue())));
-				assertNull(data.getValue3().getHighClosed());
 				assertEquals(df.parse("03/02/2010 12:00:00 AM"), df.parse(df.format(data.getValue3().getLow().getValue())));
-				assertNull(data.getValue3().getLowClosed());
 				assertEquals(new BigDecimal(4, decimalContext), ((gov.nih.nci.iso21090.Pq)data.getValue3().getWidth()).getValue());
+				//From database
 				assertEquals(NullFlavor.NI, data.getValue3().getWidth().getNullFlavor());
+				assertValue3Constants(data);
 				
-				assertNull(data.getValue3().getHigh().getNullFlavor());
-				assertNull(data.getValue3().getLow().getNullFlavor());
-
 				counter++;
 				continue;
 			}
@@ -676,18 +635,15 @@ public class IvlTsDataTypeTest extends SDKISOTestBase
 
 				assertNotNull(data);
 				assertNotNull(data.getValue3());
+				//From database
 				assertEquals(NullFlavor.NI, data.getValue3().getNullFlavor());
 
-				assertNull(data.getValue3().getAny());
 				assertEquals(df.parse("03/23/2010 12:00:00 AM"), df.parse(df.format(data.getValue3().getHigh().getValue())));
-				assertNull(data.getValue3().getHighClosed());
 				assertEquals(df.parse("03/03/2010 12:00:00 AM"), df.parse(df.format(data.getValue3().getLow().getValue())));
-				assertNull(data.getValue3().getLowClosed());
 				assertEquals(new BigDecimal(4, decimalContext), ((gov.nih.nci.iso21090.Pq)data.getValue3().getWidth()).getValue());
+				//From database
 				assertEquals(NullFlavor.NI, data.getValue3().getWidth().getNullFlavor());
-				
-				assertNull(data.getValue3().getHigh().getNullFlavor());
-				assertNull(data.getValue3().getLow().getNullFlavor());
+				assertValue3Constants(data);
 				
 				counter++;
 				continue;
@@ -700,19 +656,16 @@ public class IvlTsDataTypeTest extends SDKISOTestBase
 
 				assertNotNull(data);
 				assertNotNull(data.getValue3());
+				//From database
 				assertEquals(NullFlavor.NI, data.getValue3().getNullFlavor());
 
-				assertNull(data.getValue3().getAny());
 				assertEquals(df.parse("03/24/2010 12:00:00 AM"), df.parse(df.format(data.getValue3().getHigh().getValue())));
-				assertNull(data.getValue3().getHighClosed());
 				assertEquals(df.parse("03/04/2010 12:00:00 AM"), df.parse(df.format(data.getValue3().getLow().getValue())));
-				assertNull(data.getValue3().getLowClosed());
 				assertEquals(new BigDecimal(4, decimalContext), ((gov.nih.nci.iso21090.Pq)data.getValue3().getWidth()).getValue());
+				//From database
 				assertEquals(NullFlavor.NI, data.getValue3().getWidth().getNullFlavor());
+				assertValue3Constants(data);
 				
-				assertNull(data.getValue3().getHigh().getNullFlavor());
-				assertNull(data.getValue3().getLow().getNullFlavor());
-
 				counter++;
 				continue;
 			}
@@ -724,19 +677,16 @@ public class IvlTsDataTypeTest extends SDKISOTestBase
 
 				assertNotNull(data);
 				assertNotNull(data.getValue3());
+				//From database
 				assertEquals(NullFlavor.NI, data.getValue3().getNullFlavor());
 
-				assertNull(data.getValue3().getAny());
 				assertEquals(df.parse("03/25/2010 12:00:00 AM"), df.parse(df.format(data.getValue3().getHigh().getValue())));
-				assertNull(data.getValue3().getHighClosed());
 				assertEquals(df.parse("03/05/2010 12:00:00 AM"), df.parse(df.format(data.getValue3().getLow().getValue())));
-				assertNull(data.getValue3().getLowClosed());
 				assertEquals(new BigDecimal(4, decimalContext), ((gov.nih.nci.iso21090.Pq)data.getValue3().getWidth()).getValue());
+				//From database
 				assertEquals(NullFlavor.NI, data.getValue3().getWidth().getNullFlavor());
+				assertValue3Constants(data);
 				
-				assertNull(data.getValue3().getHigh().getNullFlavor());
-				assertNull(data.getValue3().getLow().getNullFlavor());
-
 				counter++;
 				continue;
 			}
@@ -744,10 +694,26 @@ public class IvlTsDataTypeTest extends SDKISOTestBase
 			else
 			{
 				assertNotNull(data);
-				assertNull(data.getValue3());
+				assertNotNull(data.getValue3());
+				assertNull(data.getValue3().getNullFlavor());
+				assertNull(data.getValue3().getWidth());
+				assertValue3Constants(data);
 				counter++;
+				
 			}
 		}
 	}
 
+	private void assertValue3Constants(IvlTsDataType data)
+	{
+		assertNull(data.getValue3().getAny());
+		assertNull(data.getValue3().getHighClosed());
+		assertNull(data.getValue3().getLowClosed());
+		//Global constant
+		assertEquals(NullFlavor.NI, data.getValue3().getNullFlavor());
+		//Global constant
+		assertEquals(NullFlavor.NI, data.getValue3().getLow().getNullFlavor());
+		//Global constant
+		assertEquals(NullFlavor.NI, data.getValue3().getHigh().getNullFlavor());
+	}
 }

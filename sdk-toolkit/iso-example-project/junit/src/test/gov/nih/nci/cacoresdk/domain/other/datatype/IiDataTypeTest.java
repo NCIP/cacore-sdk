@@ -257,7 +257,6 @@ public class IiDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data);
 
 				assertEquals("II_Extension", data.getValue1().getExtension());
-				assertEquals(NullFlavor.NI, data.getValue1().getNullFlavor());
 				assertValue1Constants(data);
 				counter++;
 				continue;
@@ -267,7 +266,6 @@ public class IiDataTypeTest extends SDKISOTestBase{
 			{
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
-				assertEquals(NullFlavor.NI, data.getValue1().getNullFlavor());
 				assertNull(data.getValue1().getExtension());
 				assertValue1Constants(data);
 				counter++;
@@ -277,12 +275,17 @@ public class IiDataTypeTest extends SDKISOTestBase{
 
 	private void assertValue1Constants(IiDataType data)
 	{
-		assertNull(data.getValue1().getRoot());
+		//Local constant
+		assertEquals(NullFlavor.NI, data.getValue1().getNullFlavor());
+		//Global constant
+		assertEquals("2.16.12.123.456.1", data.getValue1().getRoot());
 		assertNull(data.getValue1().getIdentifierName());
-		assertNull(data.getValue1().getReliability());
-		assertNull(data.getValue1().getScope());
-		assertNull(data.getValue1().getDisplayable());
-		
+		//Global constant
+		assertEquals(IdentifierReliability.ISS, data.getValue1().getReliability());
+		//Global constant
+		assertEquals(IdentifierScope.OBJ, data.getValue1().getScope());
+		//Global constant
+		assertEquals(Boolean.TRUE, data.getValue1().getDisplayable());
 	}
 	
 	private void assertValue2(Collection<IiDataType> result, List<Integer> index)
@@ -316,6 +319,7 @@ public class IiDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 				assertEquals(NullFlavor.NI, data.getValue2().getNullFlavor());
+				//From the database - Overriding global constant
 				assertEquals("II_VALUE2_ROOT", data.getValue2().getRoot());
 				assertNull(data.getValue2().getExtension());
 				assertValue2Constants(data);
@@ -331,6 +335,7 @@ public class IiDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 				assertEquals(NullFlavor.NI, data.getValue2().getNullFlavor());
+				//From the database - Overriding global constant
 				assertEquals("II_VALUE2_ROOT", data.getValue2().getRoot());
 				assertEquals("II_VALUE2_EXTENSION", data.getValue2().getExtension());
 				assertValue2Constants(data);
@@ -342,10 +347,10 @@ public class IiDataTypeTest extends SDKISOTestBase{
 			{
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
-				assertEquals(NullFlavor.NI, data.getValue2().getNullFlavor());
 	
 				assertNull(data.getValue2().getExtension());
-				assertNull(data.getValue2().getRoot());
+				//From global constant
+				assertEquals("2.16.12.123.456.1", data.getValue2().getRoot());
 				assertValue2Constants(data);
 				counter++;
 			}
@@ -355,9 +360,14 @@ public class IiDataTypeTest extends SDKISOTestBase{
 	private void assertValue2Constants(IiDataType data)
 	{
 		assertNull(data.getValue2().getIdentifierName());
-		assertNull(data.getValue2().getReliability());
-		assertNull(data.getValue2().getScope());
-		assertNull(data.getValue2().getDisplayable());
+		//Global constant
+		assertEquals(IdentifierReliability.ISS, data.getValue2().getReliability());
+		//Global constant
+		assertEquals(IdentifierScope.OBJ, data.getValue2().getScope());
+		//Global constant
+		assertEquals(Boolean.TRUE, data.getValue2().getDisplayable());
+		//From database
+		assertEquals(NullFlavor.NI, data.getValue2().getNullFlavor());
 	}
 
 	private void assertValue3(Collection<IiDataType> result, List<Integer> index)
@@ -375,13 +385,15 @@ public class IiDataTypeTest extends SDKISOTestBase{
 
 				assertNotNull(data);
 				assertNotNull(data.getValue3());
+				//From database
 				assertEquals(NullFlavor.UNK, data.getValue3().getNullFlavor());
-				assertEquals("2.16.12.123.456", data.getValue3().getRoot());
 				assertNull(data.getValue3().getExtension());
 				assertNull(data.getValue3().getIdentifierName());
 				assertNull(data.getValue3().getReliability());
 				assertNull(data.getValue3().getScope());
 				assertNull(data.getValue3().getDisplayable());
+
+				assertValue3Constants(data);
 				counter++;
 				continue;
 			}
@@ -393,13 +405,14 @@ public class IiDataTypeTest extends SDKISOTestBase{
 
 				assertNotNull(data);
 				assertNotNull(data.getValue3());
+				//From database
 				assertEquals(NullFlavor.UNK, data.getValue3().getNullFlavor());
 				assertEquals("II_VALUE3_EXTENSION", data.getValue3().getExtension());
-				assertEquals("2.16.12.123.456", data.getValue3().getRoot());
 				assertNull(data.getValue3().getIdentifierName());
 				assertNull(data.getValue3().getReliability());
 				assertNull(data.getValue3().getScope());
 				assertNull(data.getValue3().getDisplayable());
+				assertValue3Constants(data);
 				counter++;
 				continue;
 			}
@@ -411,13 +424,14 @@ public class IiDataTypeTest extends SDKISOTestBase{
 
 				assertNotNull(data);
 				assertNotNull(data.getValue3());
+				//From database
 				assertEquals(NullFlavor.UNK, data.getValue3().getNullFlavor());
 				assertEquals("II_VALUE3_EXTENSION", data.getValue3().getExtension());
 				assertEquals("II_VALUE3_IDENTIFIER_NAME", data.getValue3().getIdentifierName());
-				assertEquals("2.16.12.123.456", data.getValue3().getRoot());
 				assertNull(data.getValue3().getReliability());
 				assertNull(data.getValue3().getScope());
 				assertNull(data.getValue3().getDisplayable());
+				assertValue3Constants(data);
 				counter++;
 				continue;
 			}
@@ -429,13 +443,16 @@ public class IiDataTypeTest extends SDKISOTestBase{
 
 				assertNotNull(data);
 				assertNotNull(data.getValue3());
+				//From database
 				assertEquals(NullFlavor.UNK, data.getValue3().getNullFlavor());
 				assertEquals("II_VALUE3_EXTENSION", data.getValue3().getExtension());
 				assertEquals("II_VALUE3_IDENTIFIER_NAME", data.getValue3().getIdentifierName());
+				//From database, overriding global constant
 				assertEquals(IdentifierReliability.ISS, data.getValue3().getReliability());
+				//From database, overriding global constant
 				assertEquals(IdentifierScope.BUSN, data.getValue3().getScope());
-				assertEquals("2.16.12.123.456", data.getValue3().getRoot());
 				assertNull(data.getValue3().getDisplayable());
+				assertValue3Constants(data);
 				counter++;
 				continue;
 			}
@@ -447,13 +464,17 @@ public class IiDataTypeTest extends SDKISOTestBase{
 
 				assertNotNull(data);
 				assertNotNull(data.getValue3());
+				//From database
 				assertEquals(NullFlavor.UNK, data.getValue3().getNullFlavor());
 				assertEquals("II_VALUE3_EXTENSION", data.getValue3().getExtension());
 				assertEquals("II_VALUE3_IDENTIFIER_NAME", data.getValue3().getIdentifierName());
+				//From database, overriding global constant
 				assertEquals(IdentifierReliability.VRF, data.getValue3().getReliability());
-				assertEquals(IdentifierScope.OBJ, data.getValue3().getScope());
-				assertEquals(Boolean.TRUE, data.getValue3().getDisplayable());
-				assertEquals("2.16.12.123.456", data.getValue3().getRoot());
+				//From database, overriding global constant
+				assertEquals(IdentifierScope.BUSN, data.getValue3().getScope());
+				//Overriding Global constant
+				assertEquals(Boolean.FALSE, data.getValue3().getDisplayable());
+				assertValue3Constants(data);
 				counter++;
 				continue;
 			}
@@ -462,19 +483,27 @@ public class IiDataTypeTest extends SDKISOTestBase{
 			{
 				assertNotNull(data);
 				assertNotNull(data.getValue3());
-				
-				assertEquals("2.16.12.123.456", data.getValue3().getRoot());
+				assertValue3Constants(data);
 				assertNull(data.getValue3().getNullFlavor());
+				//Global constant
+				assertNull(data.getValue3().getReliability());
+				//Global constant
+				assertNull(data.getValue3().getScope());
+				//Global constant
+				assertNull(data.getValue3().getDisplayable());
 				assertNull(data.getValue3().getExtension());
 				assertNull(data.getValue3().getIdentifierName());
-				assertNull(data.getValue3().getReliability());
-				assertNull(data.getValue3().getScope());
-				assertNull(data.getValue3().getDisplayable());
 				counter++;
 			}
 		}
 	}
 
+	private void assertValue3Constants(IiDataType data)
+	{
+		//From local constant overriding global constant
+		assertEquals("2.16.12.123.456", data.getValue3().getRoot());
+	}
+	
 	private void assertValue4(Collection<IiDataType> result, List<Integer> index)
 	{
 		assertNotNull(result);
@@ -491,6 +520,7 @@ public class IiDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data);
 				assertNotNull(data.getValue4());
 				assertEquals(NullFlavor.INV, data.getValue4().getNullFlavor());
+				//From the database - Overriding global constant
 				assertEquals("II_VALUE4_ROOT", data.getValue4().getRoot());
 				assertNull(data.getValue4().getExtension());
 				assertNull(data.getValue4().getIdentifierName());
@@ -509,6 +539,7 @@ public class IiDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data);
 				assertNotNull(data.getValue4());
 				assertEquals(NullFlavor.INV, data.getValue4().getNullFlavor());
+				//From the database - Overriding global constant
 				assertEquals("II_VALUE4_ROOT", data.getValue4().getRoot());
 				assertEquals("II_VALUE4_EXTENSION", data.getValue4().getExtension());
 				assertNull(data.getValue4().getIdentifierName());
@@ -527,6 +558,7 @@ public class IiDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data);
 				assertNotNull(data.getValue4());
 				assertEquals(NullFlavor.INV, data.getValue4().getNullFlavor());
+				//From the database - Overriding global constant
 				assertEquals("II_VALUE4_ROOT", data.getValue4().getRoot());
 				assertEquals("II_VALUE4_EXTENSION", data.getValue4().getExtension());
 				assertEquals("II_VALUE4_IDENTIFIER_NAME", data.getValue4().getIdentifierName());
@@ -545,6 +577,7 @@ public class IiDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data);
 				assertNotNull(data.getValue4());
 				assertEquals(NullFlavor.INV, data.getValue4().getNullFlavor());
+				//From the database - Overriding global constant
 				assertEquals("II_VALUE4_ROOT", data.getValue4().getRoot());
 				assertEquals("II_VALUE4_EXTENSION", data.getValue4().getExtension());
 				assertEquals("II_VALUE4_IDENTIFIER_NAME", data.getValue4().getIdentifierName());
@@ -564,6 +597,7 @@ public class IiDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data);
 				assertNotNull(data.getValue4());
 				assertEquals(NullFlavor.INV, data.getValue4().getNullFlavor());
+				//From the database - Overriding global constant
 				assertEquals("II_VALUE4_ROOT", data.getValue4().getRoot());
 				assertEquals("II_VALUE4_EXTENSION", data.getValue4().getExtension());
 				assertEquals("II_VALUE4_IDENTIFIER_NAME", data.getValue4().getIdentifierName());
@@ -582,12 +616,13 @@ public class IiDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data);
 				assertNotNull(data.getValue4());
 				assertEquals(NullFlavor.INV, data.getValue4().getNullFlavor());
+				//From the database - Overriding global constant
 				assertEquals("II_VALUE4_ROOT", data.getValue4().getRoot());
 				assertEquals("II_VALUE4_EXTENSION", data.getValue4().getExtension());
 				assertEquals("II_VALUE4_IDENTIFIER_NAME", data.getValue4().getIdentifierName());
 				assertEquals(IdentifierReliability.VRF, data.getValue4().getReliability());
 				assertEquals(IdentifierScope.BUSN, data.getValue4().getScope());
-				assertEquals(Boolean.TRUE, data.getValue4().getDisplayable());
+				assertEquals(Boolean.FALSE, data.getValue4().getDisplayable());
 				counter++;
 				continue;
 			}
@@ -595,15 +630,7 @@ public class IiDataTypeTest extends SDKISOTestBase{
 			else
 			{
 				assertNotNull(data);
-				assertNotNull(data.getValue4());
-				
-				assertNull(data.getValue4().getRoot());
-				assertNull(data.getValue4().getNullFlavor());
-				assertNull(data.getValue4().getExtension());
-				assertNull(data.getValue4().getIdentifierName());
-				assertNull(data.getValue4().getReliability());
-				assertNull(data.getValue4().getScope());
-				assertNull(data.getValue4().getDisplayable());
+				assertNull(data.getValue4());
 				counter++;
 			}
 		}

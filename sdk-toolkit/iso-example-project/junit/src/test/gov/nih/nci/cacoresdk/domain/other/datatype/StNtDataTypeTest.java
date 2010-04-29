@@ -191,9 +191,8 @@ public class StNtDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 
-				assertEquals(NullFlavor.NI, data.getValue1().getNullFlavor());
 				assertEquals("VALUE1_VALUE1", data.getValue1().getValue());
-				assertEquals("VALUE1_VALUE1", data.getValue1().getValue());
+				assertValue1Constants(data);
 
 				counter++;
 				continue;
@@ -207,8 +206,8 @@ public class StNtDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 
-				assertEquals(NullFlavor.NI, data.getValue1().getNullFlavor());
 				assertEquals("VALUE1_VALUE2", data.getValue1().getValue());
+				assertValue1Constants(data);
 
 				counter++;
 				continue;
@@ -222,8 +221,8 @@ public class StNtDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 
-				assertEquals(NullFlavor.NI, data.getValue1().getNullFlavor());
 				assertEquals("VALUE1_VALUE3", data.getValue1().getValue());
+				assertValue1Constants(data);
 
 				counter++;
 				continue;
@@ -237,8 +236,8 @@ public class StNtDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 
-				assertEquals(NullFlavor.NI, data.getValue1().getNullFlavor());
 				assertEquals("VALUE1_VALUE4", data.getValue1().getValue());
+				assertValue1Constants(data);
 
 				counter++;
 				continue;
@@ -252,8 +251,8 @@ public class StNtDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 
-				assertEquals(NullFlavor.NI, data.getValue1().getNullFlavor());
 				assertEquals("VALUE1_VALUE5", data.getValue1().getValue());
+				assertValue1Constants(data);
 
 				counter++;
 				continue;
@@ -264,12 +263,18 @@ public class StNtDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 				assertNull(data.getValue1().getValue());
-				assertEquals(NullFlavor.NI, data.getValue1().getNullFlavor());
+				assertValue1Constants(data);
 				counter++;
 			}
 		}
 	}
 
+	private void assertValue1Constants(StNtDataType data)
+	{
+		//Local constant overriding global constant
+		assertEquals(NullFlavor.UNK, data.getValue1().getNullFlavor());
+	}
+	
 	private void assertValue2(Collection<StNtDataType> result, List<Integer> index)
 	{
 		assertNotNull(result);
@@ -286,8 +291,9 @@ public class StNtDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 
-				assertNull(data.getValue2().getNullFlavor());
 				assertEquals("VALUE2_VALUE1", data.getValue2().getValue());
+				//From the database
+				assertNull(data.getValue2().getNullFlavor());
 
 				counter++;
 				continue;
@@ -301,8 +307,9 @@ public class StNtDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 
-				assertNull(data.getValue2().getNullFlavor());
 				assertEquals("VALUE2_VALUE2", data.getValue2().getValue());
+				//From the database
+				assertNull(data.getValue2().getNullFlavor());
 
 				counter++;
 				continue;
@@ -316,8 +323,9 @@ public class StNtDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 
-				assertNull(data.getValue2().getNullFlavor());
 				assertEquals("VALUE2_VALUE3", data.getValue2().getValue());
+				//From the database
+				assertNull(data.getValue2().getNullFlavor());
 
 				counter++;
 				continue;
@@ -331,8 +339,9 @@ public class StNtDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 
-				assertNull(data.getValue2().getNullFlavor());
 				assertEquals("VALUE2_VALUE4", data.getValue2().getValue());
+				//From the database
+				assertNull(data.getValue2().getNullFlavor());
 
 				counter++;
 				continue;
@@ -346,8 +355,9 @@ public class StNtDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 
-				assertNull(data.getValue2().getNullFlavor());
 				assertEquals("VALUE2_VALUE5", data.getValue2().getValue());
+				//From the database
+				assertNull(data.getValue2().getNullFlavor());
 
 				counter++;
 				continue;
@@ -361,7 +371,8 @@ public class StNtDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 
-				assertEquals(NullFlavor.NI, data.getValue2().getNullFlavor());
+				//From database, overriding global constant
+				assertEquals(NullFlavor.UNK, data.getValue2().getNullFlavor());
 				assertEquals("VALUE2_VALUE1", data.getValue2().getValue());
 
 				counter++;
@@ -376,7 +387,8 @@ public class StNtDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 
-				assertEquals(NullFlavor.NI, data.getValue2().getNullFlavor());
+				//From database, overriding global constant
+				assertEquals(NullFlavor.UNK, data.getValue2().getNullFlavor());
 				assertEquals("VALUE2_VALUE2", data.getValue2().getValue());
 
 				counter++;
@@ -391,7 +403,8 @@ public class StNtDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 
-				assertEquals(NullFlavor.NI, data.getValue2().getNullFlavor());
+				//From database, overriding global constant
+				assertEquals(NullFlavor.UNK, data.getValue2().getNullFlavor());
 				assertEquals("VALUE2_VALUE3", data.getValue2().getValue());
 
 				counter++;
@@ -406,7 +419,8 @@ public class StNtDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 
-				assertEquals(NullFlavor.NI, data.getValue2().getNullFlavor());
+				//From database, overriding global constant
+				assertEquals(NullFlavor.UNK, data.getValue2().getNullFlavor());
 				assertEquals("VALUE2_VALUE4", data.getValue2().getValue());
 
 				counter++;
@@ -421,7 +435,8 @@ public class StNtDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 
-				assertEquals(NullFlavor.NI, data.getValue2().getNullFlavor());
+				//From database, overriding global constant
+				assertEquals(NullFlavor.UNK, data.getValue2().getNullFlavor());
 				assertEquals("VALUE2_VALUE5", data.getValue2().getValue());
 
 				counter++;
@@ -431,8 +446,7 @@ public class StNtDataTypeTest extends SDKISOTestBase
 			else
 			{
 				assertNotNull(data);
-				assertNull(data.getValue2().getValue());
-				assertNull(data.getValue1().getNullFlavor());
+				assertNull(data.getValue2());
 				counter++;
 			}
 		}

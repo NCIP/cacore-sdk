@@ -3,6 +3,7 @@ package test.gov.nih.nci.cacoresdk.domain.other.datatype;
 
 import gov.nih.nci.cacoresdk.domain.other.datatype.AdDataType;
 import gov.nih.nci.iso21090.AddressPartType;
+import gov.nih.nci.iso21090.NullFlavor;
 import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
@@ -272,6 +273,7 @@ public class AdDataTypeTest extends SDKISOTestBase{
 				assertEquals("1 Jefferson Street", data.getValue1().getPart().get(0).getValue());
 				assertNull(data.getValue1().getPart().get(0).getCode());
 				assertNull(data.getValue1().getPart().get(0).getCodeSystem());
+				//NullFlavor global constant will be assigned if value1.part is null
 				assertNull(data.getValue1().getNullFlavor());
 				counter++;
 				continue;
@@ -364,7 +366,9 @@ public class AdDataTypeTest extends SDKISOTestBase{
 			else
 			{
 				assertNotNull(data);
-				assertNull(data.getValue1());
+				assertNotNull(data.getValue1());
+				//Global constant
+				assertEquals(NullFlavor.NI, data.getValue1().getNullFlavor());
 				counter++;
 			}
 		}
@@ -486,7 +490,9 @@ public class AdDataTypeTest extends SDKISOTestBase{
 			else
 			{
 				assertNotNull(data);
-				assertNull(data.getValue2());
+				assertNotNull(data.getValue2());
+				//Global constant
+				assertEquals(NullFlavor.NI, data.getValue2().getNullFlavor());
 				counter++;
 			}
 		}
@@ -608,7 +614,9 @@ public class AdDataTypeTest extends SDKISOTestBase{
 			else
 			{
 				assertNotNull(data);
-				assertNull(data.getValue3());
+				assertNotNull(data.getValue3());
+				//Global constant
+				assertEquals(NullFlavor.NI, data.getValue3().getNullFlavor());
 				counter++;
 			}
 		}
@@ -819,7 +827,9 @@ public class AdDataTypeTest extends SDKISOTestBase{
 			else
 			{
 				assertNotNull(data);
-				assertNull(data.getValue4());
+				assertNotNull(data.getValue4());
+				//Global constant
+				assertEquals(NullFlavor.NI, data.getValue4().getNullFlavor());
 				counter++;
 			}
 		}
@@ -1026,7 +1036,9 @@ public class AdDataTypeTest extends SDKISOTestBase{
 			else
 			{
 				assertNotNull(data);
-				assertNull(data.getValue5());
+				assertNotNull(data.getValue5());
+				//Global constant
+				assertEquals(NullFlavor.NI, data.getValue5().getNullFlavor());
 				counter++;
 			}
 		}
@@ -1037,10 +1049,9 @@ public class AdDataTypeTest extends SDKISOTestBase{
 		assertNotNull(result);
 
 		int counter = 1;
-		int recordIndex = 28;
+		int recordIndex = 29;
 		for(AdDataType data : result)
 		{
-			recordIndex++;
 			if((index == null && counter == recordIndex) || (index != null && index.contains(Integer.toString(recordIndex))))
 			{
 				if(index != null) 
@@ -1264,9 +1275,12 @@ public class AdDataTypeTest extends SDKISOTestBase{
 			else
 			{
 				assertNotNull(data);
-				assertNull(data.getValue6());
+				assertNotNull(data.getValue6());
+				//Global constant
+				assertEquals(NullFlavor.NI, data.getValue6().getNullFlavor());
 				counter++;
 			}
+			recordIndex++;
 		}
 	}
 
@@ -1415,7 +1429,7 @@ public class AdDataTypeTest extends SDKISOTestBase{
 				
 				assertNotNull(data);
 				assertNotNull(data.getValue7());
-				assertNull(data.getValue7().getPart());
+				assertNotNull(data.getValue7().getPart());
 				assertEquals(1, data.getValue7().getPart().size());
 				assertNotNull(data.getValue7().getPart().get(0));
 				assertNotNull(data.getValue7().getPart().get(0).getType());
@@ -1438,7 +1452,7 @@ public class AdDataTypeTest extends SDKISOTestBase{
 				
 				assertNotNull(data);
 				assertNotNull(data.getValue7());
-				assertNull(data.getValue7().getPart());
+				assertNotNull(data.getValue7().getPart());
 				assertEquals(2, data.getValue7().getPart().size());
 				assertNotNull(data.getValue7().getPart().get(0));
 				assertNotNull(data.getValue7().getPart().get(0).getType());
@@ -1470,7 +1484,7 @@ public class AdDataTypeTest extends SDKISOTestBase{
 				
 				assertNotNull(data);
 				assertNotNull(data.getValue7());
-				assertNull(data.getValue7().getPart());
+				assertNotNull(data.getValue7().getPart());
 				assertEquals(2, data.getValue7().getPart().size());
 				assertNotNull(data.getValue7().getPart().get(0));
 				assertNotNull(data.getValue7().getPart().get(0).getType());
@@ -1502,7 +1516,7 @@ public class AdDataTypeTest extends SDKISOTestBase{
 				
 				assertNotNull(data);
 				assertNotNull(data.getValue7());
-				assertNull(data.getValue7().getPart());
+				assertNotNull(data.getValue7().getPart());
 				assertEquals(3, data.getValue7().getPart().size());
 				assertNotNull(data.getValue7().getPart().get(0));
 				assertNotNull(data.getValue7().getPart().get(0).getType());
@@ -1543,7 +1557,7 @@ public class AdDataTypeTest extends SDKISOTestBase{
 				
 				assertNotNull(data);
 				assertNotNull(data.getValue7());
-				assertNull(data.getValue7().getPart());
+				assertNotNull(data.getValue7().getPart());
 				assertEquals(3, data.getValue7().getPart().size());
 				assertNotNull(data.getValue7().getPart().get(0));
 				assertNotNull(data.getValue7().getPart().get(0).getType());
@@ -1580,7 +1594,9 @@ public class AdDataTypeTest extends SDKISOTestBase{
 			else
 			{
 				assertNotNull(data);
-				assertNull(data.getValue7());
+				assertNotNull(data.getValue7());
+				//Global constant
+				assertEquals(NullFlavor.NI, data.getValue7().getNullFlavor());
 				counter++;
 			}
 		}
@@ -1601,7 +1617,7 @@ public class AdDataTypeTest extends SDKISOTestBase{
 				
 				assertNotNull(data);
 				assertNotNull(data.getValue8());
-				assertNull(data.getValue8().getPart());
+				assertNotNull(data.getValue8().getPart());
 				assertEquals(1, data.getValue8().getPart().size());
 				assertNotNull(data.getValue8().getPart().get(0));
 				assertNotNull(data.getValue8().getPart().get(0).getType());
@@ -1624,7 +1640,7 @@ public class AdDataTypeTest extends SDKISOTestBase{
 				
 				assertNotNull(data);
 				assertNotNull(data.getValue8());
-				assertNull(data.getValue8().getPart());
+				assertNotNull(data.getValue8().getPart());
 				assertEquals(2, data.getValue8().getPart().size());
 				assertNotNull(data.getValue8().getPart().get(0));
 				assertNotNull(data.getValue8().getPart().get(0).getType());
@@ -1656,7 +1672,7 @@ public class AdDataTypeTest extends SDKISOTestBase{
 				
 				assertNotNull(data);
 				assertNotNull(data.getValue8());
-				assertNull(data.getValue8().getPart());
+				assertNotNull(data.getValue8().getPart());
 				assertEquals(2, data.getValue8().getPart().size());
 				assertNotNull(data.getValue8().getPart().get(0));
 				assertNotNull(data.getValue8().getPart().get(0).getType());
@@ -1688,7 +1704,7 @@ public class AdDataTypeTest extends SDKISOTestBase{
 				
 				assertNotNull(data);
 				assertNotNull(data.getValue8());
-				assertNull(data.getValue8().getPart());
+				assertNotNull(data.getValue8().getPart());
 				assertEquals(2, data.getValue8().getPart().size());
 				assertNotNull(data.getValue8().getPart().get(0));
 				assertNotNull(data.getValue8().getPart().get(0).getType());
@@ -1720,7 +1736,7 @@ public class AdDataTypeTest extends SDKISOTestBase{
 				
 				assertNotNull(data);
 				assertNotNull(data.getValue8());
-				assertNull(data.getValue8().getPart());
+				assertNotNull(data.getValue8().getPart());
 				assertEquals(3, data.getValue8().getPart().size());
 				assertNotNull(data.getValue8().getPart().get(0));
 				assertNotNull(data.getValue8().getPart().get(0).getType());
@@ -1757,7 +1773,9 @@ public class AdDataTypeTest extends SDKISOTestBase{
 			else
 			{
 				assertNotNull(data);
-				assertNull(data.getValue8());
+				assertNotNull(data.getValue8());
+				//Global constant
+				assertEquals(NullFlavor.NI, data.getValue8().getNullFlavor());
 				counter++;
 			}
 		}
@@ -1774,16 +1792,33 @@ public class AdDataTypeTest extends SDKISOTestBase{
 			{
 				assertNotNull(data);
 				assertNotNull(data.getValue9());
-				assertNull(data.getValue9().getPart());
-				assertEquals(1, data.getValue9().getPart().size());
+				assertNotNull(data.getValue9().getPart());
+				assertEquals(3, data.getValue9().getPart().size());
 				assertNotNull(data.getValue9().getPart().get(0));
 				assertNotNull(data.getValue9().getPart().get(0).getType());
 				assertNotNull(data.getValue9().getPart().get(0).getValue());
 
 				assertEquals(AddressPartType.AL, data.getValue9().getPart().get(0).getType());
-				assertEquals("AL_VALUE1", data.getValue9().getPart().get(0).getValue());
-				assertEquals("AL_CODE1", data.getValue9().getPart().get(0).getCode());
-				assertEquals("AL_CODESYSTEM1", data.getValue9().getPart().get(0).getCodeSystem());
+				assertEquals("AL_VALUE4", data.getValue9().getPart().get(0).getValue());
+				assertEquals("AL_CODE4", data.getValue9().getPart().get(0).getCode());
+				assertEquals("AL_CODESYSTEM4", data.getValue9().getPart().get(0).getCodeSystem());
+
+				assertNotNull(data.getValue9().getPart().get(1));
+				assertNotNull(data.getValue9().getPart().get(1).getType());
+				assertNotNull(data.getValue9().getPart().get(1).getValue());
+
+				assertEquals(AddressPartType.DAL, data.getValue9().getPart().get(1).getType());
+				assertEquals("DAL_VALUE4", data.getValue9().getPart().get(1).getValue());
+				assertEquals("DAL_CODE4", data.getValue9().getPart().get(1).getCode());
+				assertEquals("DAL_CODESYSTEM4", data.getValue9().getPart().get(1).getCodeSystem());
+				assertNotNull(data.getValue9().getPart().get(2));
+				assertNotNull(data.getValue9().getPart().get(2).getType());
+				assertNotNull(data.getValue9().getPart().get(2).getValue());
+
+				assertEquals(AddressPartType.CTY, data.getValue9().getPart().get(2).getType());
+				assertEquals("CTY_VALUE4", data.getValue9().getPart().get(2).getValue());
+				assertEquals("CTY_CODE4", data.getValue9().getPart().get(2).getCode());
+				assertEquals("CTY_CODESYSTEM4", data.getValue9().getPart().get(2).getCodeSystem());
 
 				assertNull(data.getValue9().getNullFlavor());
 			}
@@ -1791,7 +1826,9 @@ public class AdDataTypeTest extends SDKISOTestBase{
 			else
 			{
 				assertNotNull(data);
-				assertNull(data.getValue9());
+				assertNotNull(data.getValue9());
+				//Global constant
+				assertEquals(NullFlavor.NI, data.getValue9().getNullFlavor());
 			}
 		}
 	}

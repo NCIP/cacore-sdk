@@ -185,7 +185,7 @@ public class TelUrlDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue1());
 				
 				assertEquals(new URI("https://www.cancer.gov"), data.getValue1().getValue());
-				assertEquals(NullFlavor.NI, data.getValue1().getNullFlavor());
+				assertValue1Constants(data);
 
 				counter++;
 				continue;
@@ -200,7 +200,7 @@ public class TelUrlDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue1());
 
 				assertEquals(new URI("file://test.xml"), data.getValue1().getValue());
-				assertEquals(NullFlavor.NI, data.getValue1().getNullFlavor());
+				assertValue1Constants(data);
 
 				counter++;
 				continue;
@@ -215,7 +215,7 @@ public class TelUrlDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue1());
 
 				assertEquals(new URI("ftp://cancer.gov"), data.getValue1().getValue());
-				assertEquals(NullFlavor.NI, data.getValue1().getNullFlavor());
+				assertValue1Constants(data);
 
 				counter++;
 				continue;
@@ -230,7 +230,7 @@ public class TelUrlDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue1());
 
 				assertEquals(new URI("cid://www.cancer3.gov"), data.getValue1().getValue());
-				assertEquals(NullFlavor.NI, data.getValue1().getNullFlavor());
+				assertValue1Constants(data);
 
 				counter++;
 				continue;
@@ -245,7 +245,7 @@ public class TelUrlDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue1());
 
 				assertEquals(new URI("http://www.cancer4.gov"), data.getValue1().getValue());
-				assertEquals(NullFlavor.NI, data.getValue1().getNullFlavor());
+				assertValue1Constants(data);
 
 				counter++;
 				continue;
@@ -256,12 +256,18 @@ public class TelUrlDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 				assertNull(data.getValue1().getValue());
-				assertEquals(NullFlavor.NI, data.getValue1().getNullFlavor());
+				assertValue1Constants(data);
 				counter++;
 			}
 		}
 	}
 
+	private void assertValue1Constants(TelUrlDataType data)
+	{
+		//Local constant overriding global constant
+		assertEquals(NullFlavor.NA, data.getValue1().getNullFlavor());
+	}
+	
 	private void assertValue2(Collection<TelUrlDataType> result, List<Integer> index) throws URISyntaxException
 	{
 		assertNotNull(result);
@@ -279,6 +285,7 @@ public class TelUrlDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue2());
 
 				assertEquals(new URI("https://www.cancer.gov"), data.getValue2().getValue());
+				//From the database
 				assertNull(data.getValue2().getNullFlavor());
 
 				counter++;
@@ -294,6 +301,7 @@ public class TelUrlDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue2());
 
 				assertEquals(new URI("nfs://d/test.xml"), data.getValue2().getValue());
+				//From the database
 				assertNull(data.getValue2().getNullFlavor());
 
 				counter++;
@@ -309,7 +317,8 @@ public class TelUrlDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue2());
 
 				assertEquals(new URI("cid://cancer.gov"), data.getValue2().getValue());
-				assertEquals(NullFlavor.NI, data.getValue2().getNullFlavor());
+				//From database, overriding global constant
+				assertEquals(NullFlavor.NA, data.getValue2().getNullFlavor());
 
 				counter++;
 				continue;
@@ -324,7 +333,8 @@ public class TelUrlDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue2());
 
 				assertEquals(new URI("ftp://www.cancer2.gov"), data.getValue2().getValue());
-				assertEquals(NullFlavor.NI, data.getValue2().getNullFlavor());
+				//From database, overriding global constant
+				assertEquals(NullFlavor.NA, data.getValue2().getNullFlavor());
 
 				counter++;
 				continue;
@@ -339,7 +349,8 @@ public class TelUrlDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue2());
 
 				assertEquals(new URI("http://www.cancer3.gov"), data.getValue2().getValue());
-				assertEquals(NullFlavor.NI, data.getValue2().getNullFlavor());
+				//From database, overriding global constant
+				assertEquals(NullFlavor.NA, data.getValue2().getNullFlavor());
 
 				counter++;
 				continue;
@@ -348,8 +359,7 @@ public class TelUrlDataTypeTest extends SDKISOTestBase
 			else
 			{
 				assertNotNull(data);
-				assertNull(data.getValue2().getValue());
-				assertNull(data.getValue2().getNullFlavor());
+				assertNull(data.getValue2());
 				counter++;
 			}
 		}

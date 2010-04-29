@@ -183,7 +183,7 @@ public class IntDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 
-				assertEquals(NullFlavor.NI, data.getValue1().getNullFlavor());
+				assertEquals(NullFlavor.NA, data.getValue1().getNullFlavor());
 				assertEquals(new Integer(1), data.getValue1().getValue());
 
 				counter++;
@@ -198,7 +198,7 @@ public class IntDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 
-				assertEquals(NullFlavor.NI, data.getValue1().getNullFlavor());
+				assertEquals(NullFlavor.NA, data.getValue1().getNullFlavor());
 				assertEquals(new Integer(2), data.getValue1().getValue());
 
 				counter++;
@@ -213,7 +213,7 @@ public class IntDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 
-				assertEquals(NullFlavor.NI, data.getValue1().getNullFlavor());
+				assertEquals(NullFlavor.NA, data.getValue1().getNullFlavor());
 				assertEquals(new Integer(3), data.getValue1().getValue());
 				
 				counter++;
@@ -228,7 +228,7 @@ public class IntDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 
-				assertEquals(NullFlavor.NI, data.getValue1().getNullFlavor());
+				assertEquals(NullFlavor.NA, data.getValue1().getNullFlavor());
 				assertEquals(new Integer(4), data.getValue1().getValue());
 
 				counter++;
@@ -243,7 +243,7 @@ public class IntDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 
-				assertEquals(NullFlavor.NI, data.getValue1().getNullFlavor());
+				assertEquals(NullFlavor.NA, data.getValue1().getNullFlavor());
 				assertEquals(new Integer(5), data.getValue1().getValue());
 
 				counter++;
@@ -255,7 +255,8 @@ public class IntDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 				assertNull(data.getValue1().getValue());
-				assertEquals(NullFlavor.NI, data.getValue1().getNullFlavor());
+				//Local constant overriding global constant
+				assertEquals(NullFlavor.NA, data.getValue1().getNullFlavor());
 				counter++;
 			}
 		}
@@ -322,6 +323,7 @@ public class IntDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 
+				//From database
 				assertEquals(NullFlavor.NI, data.getValue2().getNullFlavor());
 				assertEquals(new Integer(9), data.getValue2().getValue());
 
@@ -337,6 +339,7 @@ public class IntDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 
+				//From database
 				assertEquals(NullFlavor.NI, data.getValue2().getNullFlavor());
 				assertEquals(new Integer(10), data.getValue2().getValue());
 
@@ -352,6 +355,7 @@ public class IntDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 
+				//From database
 				assertEquals(NullFlavor.NI, data.getValue2().getNullFlavor());
 				assertEquals(new Integer(11), data.getValue2().getValue());
 
