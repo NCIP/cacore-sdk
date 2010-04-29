@@ -55,7 +55,7 @@ public abstract class SDKXMLDataTestBase extends TestCase {
 	private ApplicationService appService;
 	private Marshaller marshaller;
 	private Unmarshaller unmarshaller;
-	private XMLUtility myUtil;
+	protected XMLUtility myUtil;
 
 	protected void setUp() throws Exception {
 		super.setUp();
@@ -101,7 +101,19 @@ public abstract class SDKXMLDataTestBase extends TestCase {
 	}
 	
 	protected void toXML(Object resultObj) throws Exception {
-		File myFile = new File(filepathPrefix + resultObj.getClass().getSimpleName() + filepathSuffix);						
+		toXML(resultObj,0);
+	}
+	
+	protected void toXML(Object resultObj, int counter) throws Exception {
+		String filename = filepathPrefix + resultObj.getClass().getSimpleName();
+		
+		if (counter != 0){
+			filename += ("_test"+counter+".xml");
+		} else {
+			filename += filepathSuffix;
+		}
+		
+		File myFile = new File(filename);						
 		log.info("writing data to file "+myFile.getAbsolutePath());
 		FileWriter myWriter = new FileWriter(myFile);
 		
