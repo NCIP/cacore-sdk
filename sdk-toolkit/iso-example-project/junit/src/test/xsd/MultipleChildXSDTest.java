@@ -53,8 +53,8 @@ public class MultipleChildXSDTest extends SDKXSDTestBase
 
 		validateClassElements(targetClass);
 
-		validateAttributeElement(targetClass, "id", "Integer");
-		validateAttributeElement(targetClass, "name", "String");	
+		validateAttributeElement(targetClass, "id", "ii");
+		validateAttributeElement(targetClass, "name", "st");	
 	}	
 	
 	/**
@@ -69,7 +69,7 @@ public class MultipleChildXSDTest extends SDKXSDTestBase
 		Class targetClass = GraduateStudent.class;
 
 		validateSubclassElements(targetClass);
-		validateSubclassAttributeElement(targetClass, "projectName","String");
+		validateSubclassAttributeElement(targetClass, "projectName","st");
 	}	
 	
 	/**

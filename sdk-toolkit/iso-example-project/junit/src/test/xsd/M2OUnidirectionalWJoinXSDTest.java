@@ -55,8 +55,8 @@ public class M2OUnidirectionalWJoinXSDTest extends SDKXSDTestBase
 
 		validateClassElements(targetClass);
 
-		validateAttributeElement(targetClass, "id", "Integer");
-		validateAttributeElement(targetClass, "title", "String");	
+		validateAttributeElement(targetClass, "id", "ii");
+		validateAttributeElement(targetClass, "title", "st");	
 	}	
 
 	
@@ -71,8 +71,8 @@ public class M2OUnidirectionalWJoinXSDTest extends SDKXSDTestBase
 	{
 		Class targetClass = Song.class;	
 
-		validateAttributeElement(targetClass, "id", "Integer");
-		validateAttributeElement(targetClass, "title", "String");		
+		validateAttributeElement(targetClass, "id", "ii");
+		validateAttributeElement(targetClass, "title", "st");		
 	}
 	
 	

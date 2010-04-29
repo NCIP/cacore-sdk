@@ -59,8 +59,8 @@ public class ImplicitParentWithAssociationXSDTest extends SDKXSDTestBase
 
 		validateClassElements(targetClass);
 
-		validateAttributeElement(targetClass, "id", "Integer");
-		validateAttributeElement(targetClass, "genera", "String");
+		validateAttributeElement(targetClass, "id", "ii");
+		validateAttributeElement(targetClass, "genera", "st.nt");
 	}	
 	
 	/**
@@ -75,7 +75,7 @@ public class ImplicitParentWithAssociationXSDTest extends SDKXSDTestBase
 		Class targetClass = AngelFish.class;
 
 		validateSubclassElements(targetClass);
-		validateSubclassAttributeElement(targetClass, "finSize","Integer");
+		validateSubclassAttributeElement(targetClass, "finSize","int");
 
 	}	
 	
@@ -91,7 +91,7 @@ public class ImplicitParentWithAssociationXSDTest extends SDKXSDTestBase
 		Class targetClass = DiscusFish.class;
 
 		validateSubclassElements(targetClass);
-		validateSubclassAttributeElement(targetClass, "primaryColor", "String");	
+		validateSubclassAttributeElement(targetClass, "primaryColor", "st");	
 	}	
 	
 	
@@ -122,9 +122,9 @@ public class ImplicitParentWithAssociationXSDTest extends SDKXSDTestBase
 		Class targetClass = FishTank.class;
 
 		validateSubclassElements(targetClass);
-		validateSubclassAttributeElement(targetClass, "id", "Integer");
-		validateSubclassAttributeElement(targetClass, "shape", "String");
-		validateSubclassAttributeElement(targetClass, "numGallons", "Integer");
+		validateSubclassAttributeElement(targetClass, "id", "ii");
+		validateSubclassAttributeElement(targetClass, "shape", "st");
+		validateSubclassAttributeElement(targetClass, "numGallons", "int");
 	}	
 	
 	
@@ -140,7 +140,7 @@ public class ImplicitParentWithAssociationXSDTest extends SDKXSDTestBase
 		Class targetClass = FreshwaterFishTank.class;
 
 		validateSubclassElements(targetClass);
-		validateSubclassAttributeElement(targetClass, "filterModel", "String");	
+		validateSubclassAttributeElement(targetClass, "filterModel", "st");	
 	}	
 	
 	
@@ -156,7 +156,7 @@ public class ImplicitParentWithAssociationXSDTest extends SDKXSDTestBase
 		Class targetClass = SaltwaterFishTank.class;
 
 		validateSubclassElements(targetClass);
-		validateSubclassAttributeElement(targetClass, "proteinSkimmerModel", "String");	
+		validateSubclassAttributeElement(targetClass, "proteinSkimmerModel", "st");	
 	}	
 	
 	
@@ -172,8 +172,8 @@ public class ImplicitParentWithAssociationXSDTest extends SDKXSDTestBase
 		Class targetClass = TankAccessory.class;
 
 		validateClassElements(targetClass);
-		validateAttributeElement(targetClass, "id", "Integer");
-		validateAttributeElement(targetClass, "name", "String");
+		validateAttributeElement(targetClass, "id", "ii");
+		validateAttributeElement(targetClass, "name", "st");
 	}	
 	
 	/**
@@ -188,8 +188,8 @@ public class ImplicitParentWithAssociationXSDTest extends SDKXSDTestBase
 		Class targetClass = Substrate.class;
 
 		validateClassElements(targetClass);
-		validateAttributeElement(targetClass, "id", "Integer");
-		validateAttributeElement(targetClass, "name", "String");
+		validateAttributeElement(targetClass, "id", "ii");
+		validateAttributeElement(targetClass, "name", "st");
 	}	
 	
 	/**

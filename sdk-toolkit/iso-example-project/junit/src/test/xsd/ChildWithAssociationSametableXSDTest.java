@@ -54,8 +54,8 @@ public class ChildWithAssociationSametableXSDTest extends SDKXSDTestBase
 
 		validateClassElements(targetClass);
 
-		validateAttributeElement(targetClass, "id", "Integer");
-		validateAttributeElement(targetClass, "color", "String");	
+		validateAttributeElement(targetClass, "id", "ii");
+		validateAttributeElement(targetClass, "color", "st");	
 	}	
 	
 	/**
@@ -70,7 +70,7 @@ public class ChildWithAssociationSametableXSDTest extends SDKXSDTestBase
 		Class targetClass = SportsShoes.class;
 
 		validateSubclassElements(targetClass);
-		validateSubclassAttributeElement(targetClass, "sportsType","String");
+		validateSubclassAttributeElement(targetClass, "sportsType","st");
 	}	
 	
 	/**
@@ -100,8 +100,8 @@ public class ChildWithAssociationSametableXSDTest extends SDKXSDTestBase
 
 		validateClassElements(targetClass);
 
-		validateAttributeElement(targetClass, "id", "Integer");
-		validateAttributeElement(targetClass, "name", "String");	
+		validateAttributeElement(targetClass, "id", "ii");
+		validateAttributeElement(targetClass, "name", "st");	
 	}	
 	
 	/**

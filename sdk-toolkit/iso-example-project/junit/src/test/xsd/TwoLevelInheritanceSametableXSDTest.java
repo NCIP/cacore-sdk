@@ -55,8 +55,8 @@ public class TwoLevelInheritanceSametableXSDTest extends SDKXSDTestBase
 
 		validateClassElements(targetClass);
 
-		validateAttributeElement(targetClass, "id", "Integer");
-		validateAttributeElement(targetClass, "country", "String");	
+		validateAttributeElement(targetClass, "id", "ii");
+		validateAttributeElement(targetClass, "country", "st");	
 	}	
 	
 	/**
@@ -99,7 +99,7 @@ public class TwoLevelInheritanceSametableXSDTest extends SDKXSDTestBase
 		Class targetClass = ParliamantaryGovt.class;
 
 		validateSubclassElements(targetClass);
-		validateSubclassAttributeElement(targetClass, "primeMinister", "String");	
+		validateSubclassAttributeElement(targetClass, "primeMinister", "st");	
 	}	
 	
 	/**
@@ -115,7 +115,7 @@ public class TwoLevelInheritanceSametableXSDTest extends SDKXSDTestBase
 
 		validateSubclassElements(targetClass);
 
-		validateSubclassAttributeElement(targetClass, "president", "String");	
+		validateSubclassAttributeElement(targetClass, "president", "st");	
 	}	
 	
 }

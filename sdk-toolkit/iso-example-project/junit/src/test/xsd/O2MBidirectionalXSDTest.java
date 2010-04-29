@@ -52,8 +52,8 @@ public class O2MBidirectionalXSDTest extends SDKXSDTestBase
 
 		validateClassElements(targetClass);
 
-		validateAttributeElement(targetClass, "id", "Integer");
-		validateAttributeElement(targetClass, "type", "String");	
+		validateAttributeElement(targetClass, "id", "ii");
+		validateAttributeElement(targetClass, "type", "st");	
 	}	
 
 	
@@ -68,8 +68,8 @@ public class O2MBidirectionalXSDTest extends SDKXSDTestBase
 	{
 		Class targetClass = HardDrive.class;	
 
-		validateAttributeElement(targetClass, "id", "Integer");
-		validateAttributeElement(targetClass, "size", "Integer");		
+		validateAttributeElement(targetClass, "id", "ii");
+		validateAttributeElement(targetClass, "size", "int");		
 	}
 	
 	

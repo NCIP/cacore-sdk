@@ -54,9 +54,9 @@ public class TwoLevelInheritanceXSDTest extends SDKXSDTestBase
 
 		validateClassElements(targetClass);
 
-		validateAttributeElement(targetClass, "id", "Integer");
-		validateAttributeElement(targetClass, "height", "Integer");
-		validateAttributeElement(targetClass, "width", "Integer");	
+		validateAttributeElement(targetClass, "id", "ii");
+		validateAttributeElement(targetClass, "height", "int");
+		validateAttributeElement(targetClass, "width", "int");	
 	}	
 	
 	/**
@@ -71,7 +71,7 @@ public class TwoLevelInheritanceXSDTest extends SDKXSDTestBase
 		Class targetClass = Monitor.class;
 
 		validateSubclassElements(targetClass);
-		validateSubclassAttributeElement(targetClass, "brand", "String");
+		validateSubclassAttributeElement(targetClass, "brand", "st");
 	}
 	
 	/**
@@ -86,7 +86,7 @@ public class TwoLevelInheritanceXSDTest extends SDKXSDTestBase
 		Class targetClass = CRTMonitor.class;
 
 		validateSubclassElements(targetClass);
-		validateSubclassAttributeElement(targetClass, "refreshRate", "Integer");
+		validateSubclassAttributeElement(targetClass, "refreshRate", "int");
 	}
 		
 	/**
@@ -101,7 +101,7 @@ public class TwoLevelInheritanceXSDTest extends SDKXSDTestBase
 		Class targetClass = LCDMonitor.class;
 
 		validateSubclassElements(targetClass);
-		validateSubclassAttributeElement(targetClass, "dpiSupported", "Integer");
+		validateSubclassAttributeElement(targetClass, "dpiSupported", "int");
 
 	}	
 	

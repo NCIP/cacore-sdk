@@ -54,13 +54,13 @@ public class ChildWithAssociationXSDTest extends SDKXSDTestBase
 		
 		if (useGMETags){
 			validateClassElements(targetClass,"PaymentGMEAlias");
-			validateAttributeElement(targetClass,"PaymentGMEAlias", "idGMEAlias", "Integer");
-			validateAttributeElement(targetClass,"PaymentGMEAlias", "amountGMEAlias", "Integer");
+			validateAttributeElement(targetClass,"PaymentGMEAlias", "idGMEAlias", "int");
+			validateAttributeElement(targetClass,"PaymentGMEAlias", "amountGMEAlias", "int");
 			
 		} else {
 			validateClassElements(targetClass);
-			validateAttributeElement(targetClass, "id", "Integer");
-			validateAttributeElement(targetClass, "amount", "Integer");
+			validateAttributeElement(targetClass, "id", "ii");
+			validateAttributeElement(targetClass, "amount", "int");
 		}
 
 	}	
@@ -96,11 +96,11 @@ public class ChildWithAssociationXSDTest extends SDKXSDTestBase
 
 		if (useGMETags){
 			validateSubclassElements(targetClass,"CreditGMEAlias","PaymentGMEAlias");
-			validateSubclassAttributeElement(targetClass,"CreditGMEAlias","PaymentGMEAlias", "cardNumberGMEAlias","String");
+			validateSubclassAttributeElement(targetClass,"CreditGMEAlias","PaymentGMEAlias", "cardNumberGMEAlias","st");
 			
 		} else {
 			validateSubclassElements(targetClass);
-			validateSubclassAttributeElement(targetClass, "cardNumber","String");
+			validateSubclassAttributeElement(targetClass, "cardNumber","st");
 		}
 	}
 	
@@ -117,12 +117,12 @@ public class ChildWithAssociationXSDTest extends SDKXSDTestBase
 		
 		if (useGMETags){
 			validateClassElements(targetClass,"BankGMEAlias");
-			validateAttributeElement(targetClass, "BankGMEAlias","idGMEAlias", "Integer");
-			validateAttributeElement(targetClass, "BankGMEAlias","nameGMEAlias", "String");
+			validateAttributeElement(targetClass, "BankGMEAlias","idGMEAlias", "int");
+			validateAttributeElement(targetClass, "BankGMEAlias","nameGMEAlias", "st");
 		} else {
 			validateClassElements(targetClass);
-			validateAttributeElement(targetClass, "id", "Integer");
-			validateAttributeElement(targetClass, "name", "String");
+			validateAttributeElement(targetClass, "id", "ii");
+			validateAttributeElement(targetClass, "name", "st");
 		}
 
 	

@@ -52,8 +52,8 @@ public class M2MBidirectionalXSDTest extends SDKXSDTestBase
 
 		validateClassElements(targetClass);
 
-		validateAttributeElement(targetClass, "id", "Integer");
-		validateAttributeElement(targetClass, "name", "String");	
+		validateAttributeElement(targetClass, "id", "ii");
+		validateAttributeElement(targetClass, "name", "st");	
 	}	
 
 	
@@ -68,8 +68,8 @@ public class M2MBidirectionalXSDTest extends SDKXSDTestBase
 	{
 		Class targetClass = Employee.class;	
 
-		validateAttributeElement(targetClass, "id", "Integer");
-		validateAttributeElement(targetClass, "name", "String");		
+		validateAttributeElement(targetClass, "id", "ii");
+		validateAttributeElement(targetClass, "name", "st");		
 	}
 	
 	

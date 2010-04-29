@@ -53,8 +53,8 @@ public class MultipleChildSametableXSDTest extends SDKXSDTestBase
 
 		validateClassElements(targetClass);
 
-		validateAttributeElement(targetClass, "id", "Integer");
-		validateAttributeElement(targetClass, "name", "String");	
+		validateAttributeElement(targetClass, "id", "ii");
+		validateAttributeElement(targetClass, "name", "st");	
 	}	
 	
 	/**
@@ -69,7 +69,7 @@ public class MultipleChildSametableXSDTest extends SDKXSDTestBase
 		Class targetClass = GovtOrganization.class;
 
 		validateSubclassElements(targetClass);
-		validateSubclassAttributeElement(targetClass, "agencyBudget","Integer");
+		validateSubclassAttributeElement(targetClass, "agencyBudget","int");
 	}	
 	
 	/**
@@ -82,7 +82,7 @@ public class MultipleChildSametableXSDTest extends SDKXSDTestBase
 	public void testClassElement3() throws Exception
 	{
 		Class targetClass = PvtOrganization.class;
-		validateSubclassAttributeElement(targetClass, "ceo","String");		
+		validateSubclassAttributeElement(targetClass, "ceo","st");		
 
 		validateSubclassElements(targetClass);
 	}

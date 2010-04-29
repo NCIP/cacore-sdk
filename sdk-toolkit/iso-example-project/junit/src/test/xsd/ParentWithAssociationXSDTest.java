@@ -55,8 +55,8 @@ public class ParentWithAssociationXSDTest extends SDKXSDTestBase
 
 		validateClassElements(targetClass);
 
-		validateAttributeElement(targetClass, "id", "Integer");
-		validateAttributeElement(targetClass, "name", "String");	
+		validateAttributeElement(targetClass, "id", "ii");
+		validateAttributeElement(targetClass, "name", "st");	
 	}	
 	
 	/**
@@ -71,7 +71,7 @@ public class ParentWithAssociationXSDTest extends SDKXSDTestBase
 		Class targetClass = AssociateProfessor.class;
 
 		validateSubclassElements(targetClass);
-		validateSubclassAttributeElement(targetClass, "yearsServed","Integer");
+		validateSubclassAttributeElement(targetClass, "yearsServed","int");
 
 	}	
 	
@@ -87,7 +87,7 @@ public class ParentWithAssociationXSDTest extends SDKXSDTestBase
 		Class targetClass = TenuredProfessor.class;
 
 		validateSubclassElements(targetClass);
-		validateSubclassAttributeElement(targetClass, "tenuredYear","Integer");
+		validateSubclassAttributeElement(targetClass, "tenuredYear","int");
 	}
 	
 	/**
@@ -102,7 +102,7 @@ public class ParentWithAssociationXSDTest extends SDKXSDTestBase
 		Class targetClass = AssistantProfessor.class;
 
 		validateSubclassElements(targetClass);
-		validateSubclassAttributeElement(targetClass, "joiningYear","Integer");
+		validateSubclassAttributeElement(targetClass, "joiningYear","int");
 	}
 		
 	/**
@@ -118,8 +118,8 @@ public class ParentWithAssociationXSDTest extends SDKXSDTestBase
 
 		validateClassElements(targetClass);
 
-		validateAttributeElement(targetClass, "id", "Integer");
-		validateAttributeElement(targetClass, "name", "String");	
+		validateAttributeElement(targetClass, "id", "ii");
+		validateAttributeElement(targetClass, "name", "st");	
 	}	
 	
 	/**
@@ -134,6 +134,6 @@ public class ParentWithAssociationXSDTest extends SDKXSDTestBase
 		Class targetClass = Professor.class;
 		Class associatedClass = Assistant.class;
 
-		validateClassAssociationElements(targetClass, associatedClass, "assistantCollection","0","unbounded");
+		validateClassAssociationElements(targetClass, associatedClass, "assistantCollection","0","1");
 	}	
 }

@@ -53,8 +53,8 @@ public class AbstractParentWithAssociationXSDTest extends SDKXSDTestBase
 
 		validateClassElements(targetClass);
 
-		validateAttributeElement(targetClass, "id", "Integer");
-		validateAttributeElement(targetClass, "name", "String");
+		validateAttributeElement(targetClass, "id", "ii");
+		validateAttributeElement(targetClass, "name", "st");
 		
 		validateClassIsAbstract(targetClass);
 	}	
@@ -71,7 +71,7 @@ public class AbstractParentWithAssociationXSDTest extends SDKXSDTestBase
 		Class targetClass = PrivateTeacher.class;
 
 		validateSubclassElements(targetClass);
-		validateSubclassAttributeElement(targetClass, "yearsExperience","Integer");
+		validateSubclassAttributeElement(targetClass, "yearsExperience","int");
 
 	}	
 	
@@ -88,8 +88,8 @@ public class AbstractParentWithAssociationXSDTest extends SDKXSDTestBase
 
 		validateClassElements(targetClass);
 
-		validateAttributeElement(targetClass, "id", "Integer");
-		validateAttributeElement(targetClass, "name", "String");	
+		validateAttributeElement(targetClass, "id", "ii");
+		validateAttributeElement(targetClass, "name", "st");	
 	}	
 	
 	/**

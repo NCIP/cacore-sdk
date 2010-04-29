@@ -52,7 +52,7 @@ public class DoublePrimitiveKeyXSDTest extends SDKXSDTestBase
 		validateClassElements(targetClass);
 
 		validateAttributeElement(targetClass, "id", "Double");
-		validateAttributeElement(targetClass, "name", "String");	
+		validateAttributeElement(targetClass, "name", "st");	
 
 	}	
 }

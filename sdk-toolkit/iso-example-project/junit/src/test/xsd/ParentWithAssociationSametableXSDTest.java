@@ -54,8 +54,8 @@ public class ParentWithAssociationSametableXSDTest extends SDKXSDTestBase
 
 		validateClassElements(targetClass);
 
-		validateAttributeElement(targetClass, "id", "Integer");
-		validateAttributeElement(targetClass, "capacity", "Integer");	
+		validateAttributeElement(targetClass, "id", "ii");
+		validateAttributeElement(targetClass, "capacity", "int");	
 	}	
 	
 	/**
@@ -70,7 +70,7 @@ public class ParentWithAssociationSametableXSDTest extends SDKXSDTestBase
 		Class targetClass = HardTop.class;
 
 		validateSubclassElements(targetClass);
-		validateSubclassAttributeElement(targetClass, "keyCode","Integer");
+		validateSubclassAttributeElement(targetClass, "keyCode","int");
 	}
 	
 	/**
@@ -85,7 +85,7 @@ public class ParentWithAssociationSametableXSDTest extends SDKXSDTestBase
 		Class targetClass = SoftTop.class;
 
 		validateSubclassElements(targetClass);
-		validateSubclassAttributeElement(targetClass, "expandable","Boolean");
+		validateSubclassAttributeElement(targetClass, "expandable","bl");
 	}
 		
 	/**
@@ -101,8 +101,8 @@ public class ParentWithAssociationSametableXSDTest extends SDKXSDTestBase
 
 		validateClassElements(targetClass);
 
-		validateAttributeElement(targetClass, "id", "Integer");
-		validateAttributeElement(targetClass, "radius", "Integer");	
+		validateAttributeElement(targetClass, "id", "ii");
+		validateAttributeElement(targetClass, "radius", "int");	
 	}	
 	
 	/**

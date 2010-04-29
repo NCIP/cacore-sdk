@@ -53,8 +53,8 @@ public class OneChildSametableXSDTest extends SDKXSDTestBase
 
 		validateClassElements(targetClass);
 
-		validateAttributeElement(targetClass, "id", "Integer");
-		validateAttributeElement(targetClass, "country", "String");	
+		validateAttributeElement(targetClass, "id", "ii");
+		validateAttributeElement(targetClass, "country", "st");	
 	}	
 
 	
@@ -70,7 +70,7 @@ public class OneChildSametableXSDTest extends SDKXSDTestBase
 		Class targetClass = Note.class;	
 
 		validateSubclassElements(targetClass);
-		validateSubclassAttributeElement(targetClass, "value", "Integer");			
+		validateSubclassAttributeElement(targetClass, "value", "int");			
 	}
 	
 }

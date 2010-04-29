@@ -55,8 +55,8 @@ public class O2OMultipleAssociationWJoinXSDTest extends SDKXSDTestBase
 
 		validateClassElements(targetClass);
 
-		validateAttributeElement(targetClass, "id", "Integer");
-		validateAttributeElement(targetClass, "name", "String");	
+		validateAttributeElement(targetClass, "id", "ii");
+		validateAttributeElement(targetClass, "name", "st");	
 	}	
 
 	
@@ -71,8 +71,8 @@ public class O2OMultipleAssociationWJoinXSDTest extends SDKXSDTestBase
 	{
 		Class targetClass = Bride.class;	
 
-		validateAttributeElement(targetClass, "id", "Integer");
-		validateAttributeElement(targetClass, "name", "String");		
+		validateAttributeElement(targetClass, "id", "ii");
+		validateAttributeElement(targetClass, "name", "st");		
 	}
 	
 	

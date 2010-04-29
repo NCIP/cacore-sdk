@@ -54,8 +54,8 @@ public class TwoLevelInheritanceSametablerootlevelXSDTest extends SDKXSDTestBase
 
 		validateClassElements(targetClass);
 
-		validateAttributeElement(targetClass, "id", "Integer");
-		validateAttributeElement(targetClass, "brand", "String");	
+		validateAttributeElement(targetClass, "id", "ii");
+		validateAttributeElement(targetClass, "brand", "st");	
 	}	
 	
 	/**

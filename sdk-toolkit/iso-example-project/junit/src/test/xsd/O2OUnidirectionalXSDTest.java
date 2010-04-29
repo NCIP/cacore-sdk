@@ -55,8 +55,8 @@ public class O2OUnidirectionalXSDTest extends SDKXSDTestBase
 
 		validateClassElements(targetClass);
 
-		validateAttributeElement(targetClass, "id", "Integer");
-		validateAttributeElement(targetClass, "zip", "String");	
+		validateAttributeElement(targetClass, "id", "ii");
+		validateAttributeElement(targetClass, "zip", "st");	
 	}	
 
 	
@@ -71,8 +71,8 @@ public class O2OUnidirectionalXSDTest extends SDKXSDTestBase
 	{
 		Class targetClass = Person.class;	
 
-		validateAttributeElement(targetClass, "id", "Integer");
-		validateAttributeElement(targetClass, "name", "String");		
+		validateAttributeElement(targetClass, "id", "ii");
+		validateAttributeElement(targetClass, "name", "st");		
 	}
 	
 	

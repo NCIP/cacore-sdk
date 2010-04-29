@@ -61,10 +61,10 @@ public class DifferentPackageWithAssociationXSDTest extends SDKXSDTestBase
 		
 		if (useGMETags){
 			validateClassElements(targetClass,"DessertAlias");
-			validateAttributeElement(targetClass,"DessertAlias", "idAlias", "Integer");
+			validateAttributeElement(targetClass,"DessertAlias", "idAlias", "int");
 		} else {
 			validateClassElements(targetClass);
-			validateAttributeElement(targetClass, "id", "Integer");
+			validateAttributeElement(targetClass, "id", "ii");
 		}
 	}	
 	
@@ -86,10 +86,10 @@ public class DifferentPackageWithAssociationXSDTest extends SDKXSDTestBase
 
 		if (useGMETags){
 			validateSubclassElements(targetClass,"PieAlias","DessertAlias");
-			validateSubclassAttributeElement(targetClass,"PieAlias","DessertAlias", "fillingAlias","String");			
+			validateSubclassAttributeElement(targetClass,"PieAlias","DessertAlias", "fillingAlias","st");			
 		} else {
 			validateSubclassElements(targetClass);
-			validateSubclassAttributeElement(targetClass, "filling","String");
+			validateSubclassAttributeElement(targetClass, "filling","st");
 		}
 	}
 	
@@ -111,10 +111,10 @@ public class DifferentPackageWithAssociationXSDTest extends SDKXSDTestBase
 
 		if (useGMETags){
 			validateSubclassElements(targetClass,"IceCreamAlias","DessertAlias");
-			validateSubclassAttributeElement(targetClass,"IceCreamAlias","DessertAlias","toppingAlias","String");			
+			validateSubclassAttributeElement(targetClass,"IceCreamAlias","DessertAlias","toppingAlias","st");			
 		} else {
 			validateSubclassElements(targetClass);
-			validateSubclassAttributeElement(targetClass, "topping","String");
+			validateSubclassAttributeElement(targetClass, "topping","st");
 		}
 
 	}
@@ -137,12 +137,12 @@ public class DifferentPackageWithAssociationXSDTest extends SDKXSDTestBase
 		
 		if (useGMETags){
 			validateClassElements(targetClass,"UtensilAlias");
-			validateAttributeElement(targetClass,"UtensilAlias", "idAlias", "Integer");
-			validateAttributeElement(targetClass,"UtensilAlias", "nameAlias", "String");
+			validateAttributeElement(targetClass,"UtensilAlias", "idAlias", "int");
+			validateAttributeElement(targetClass,"UtensilAlias", "nameAlias", "st");
 		} else {
 			validateClassElements(targetClass);
-			validateAttributeElement(targetClass, "id", "Integer");
-			validateAttributeElement(targetClass, "name", "String");
+			validateAttributeElement(targetClass, "id", "ii");
+			validateAttributeElement(targetClass, "name", "st");
 		}
 	}	
 	

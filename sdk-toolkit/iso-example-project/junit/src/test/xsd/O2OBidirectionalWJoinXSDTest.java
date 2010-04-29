@@ -52,8 +52,8 @@ public class O2OBidirectionalWJoinXSDTest extends SDKXSDTestBase
 
 		validateClassElements(targetClass);
 
-		validateAttributeElement(targetClass, "id", "Integer");
-		validateAttributeElement(targetClass, "metal", "String");	
+		validateAttributeElement(targetClass, "id", "ii");
+		validateAttributeElement(targetClass, "metal", "st");	
 	}	
 
 	
@@ -68,8 +68,8 @@ public class O2OBidirectionalWJoinXSDTest extends SDKXSDTestBase
 	{
 		Class targetClass = Pendant.class;	
 
-		validateAttributeElement(targetClass, "id", "Integer");
-		validateAttributeElement(targetClass, "shape", "String");		
+		validateAttributeElement(targetClass, "id", "ii");
+		validateAttributeElement(targetClass, "shape", "st");		
 	}
 	
 	

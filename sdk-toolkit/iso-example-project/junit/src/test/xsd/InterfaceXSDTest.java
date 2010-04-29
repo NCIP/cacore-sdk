@@ -51,9 +51,9 @@ public class InterfaceXSDTest extends SDKXSDTestBase
 
 		validateClassElements(targetClass);
 
-		validateAttributeElement(targetClass, "id", "Integer");
-		validateAttributeElement(targetClass, "breed", "String");
-		validateAttributeElement(targetClass, "gender", "String");
+		validateAttributeElement(targetClass, "id", "ii");
+		validateAttributeElement(targetClass, "breed", "st");
+		validateAttributeElement(targetClass, "gender", "st.nt");
 		
 	}		
 }
