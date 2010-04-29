@@ -360,7 +360,7 @@ public class IvlRealDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue2());
 
 				assertEquals(new BigDecimal(-310), data.getValue2().getHigh().getValue());
-				assertNull(data.getValue2().getLow());
+				assertNull(data.getValue2().getLowClosed());
 				assertValue2Constants(data);
 
 				counter++;
@@ -493,7 +493,7 @@ public class IvlRealDataTypeTest extends SDKISOTestBase
 				assertEquals(new BigDecimal(2, decimalContext), data.getValue3().getLow().getValue());
 				assertEquals(Boolean.TRUE, data.getValue3().getLowClosed());
 				assertEquals(new BigDecimal(44, decimalContext), ((gov.nih.nci.iso21090.Real)data.getValue3().getWidth()).getValue());
-				assertEquals(NullFlavor.NI, data.getValue3().getWidth().getNullFlavor());
+				assertNull(data.getValue3().getWidth().getNullFlavor());
 				
 				assertNull(data.getValue3().getHigh().getNullFlavor());
 				assertNull(data.getValue3().getLow().getNullFlavor());
@@ -517,7 +517,7 @@ public class IvlRealDataTypeTest extends SDKISOTestBase
 				assertEquals(new BigDecimal(2, decimalContext), data.getValue3().getLow().getValue());
 				assertEquals(Boolean.TRUE, data.getValue3().getLowClosed());
 				assertEquals(new BigDecimal(44, decimalContext), ((gov.nih.nci.iso21090.Real)data.getValue3().getWidth()).getValue());
-				assertEquals(NullFlavor.NI, data.getValue3().getWidth().getNullFlavor());
+				assertNull(data.getValue3().getWidth().getNullFlavor());
 				
 				assertNull(data.getValue3().getHigh().getNullFlavor());
 				assertNull(data.getValue3().getLow().getNullFlavor());
@@ -540,7 +540,7 @@ public class IvlRealDataTypeTest extends SDKISOTestBase
 				assertEquals(Boolean.TRUE, data.getValue3().getHighClosed());
 				assertEquals(new BigDecimal(2, decimalContext), data.getValue3().getLow().getValue());
 				assertEquals(Boolean.TRUE, data.getValue3().getLowClosed());
-				assertEquals(new BigDecimal(44, decimalContext), ((gov.nih.nci.iso21090.Real)data.getValue3().getWidth()).getValue());
+				assertNull(data.getValue3().getWidth());
 				assertEquals(NullFlavor.NI, data.getValue3().getWidth().getNullFlavor());
 				
 				assertNull(data.getValue3().getHigh().getNullFlavor());
@@ -565,7 +565,7 @@ public class IvlRealDataTypeTest extends SDKISOTestBase
 				assertEquals(new BigDecimal(2, decimalContext), data.getValue3().getLow().getValue());
 				assertEquals(Boolean.TRUE, data.getValue3().getLowClosed());
 				assertEquals(new BigDecimal(44, decimalContext), ((gov.nih.nci.iso21090.Real)data.getValue3().getWidth()).getValue());
-				assertEquals(NullFlavor.NI, data.getValue3().getWidth().getNullFlavor());
+				assertNull(data.getValue3().getWidth().getNullFlavor());
 				
 				assertNull(data.getValue3().getHigh().getNullFlavor());
 				assertNull(data.getValue3().getLow().getNullFlavor());
@@ -581,18 +581,18 @@ public class IvlRealDataTypeTest extends SDKISOTestBase
 
 				assertNotNull(data);
 				assertNotNull(data.getValue3());
-				assertNull(data.getValue3().getNullFlavor());
+				assertEquals(NullFlavor.NI, data.getValue3().getNullFlavor());
 
 				assertNull(data.getValue3().getAny());
-				assertEquals(new BigDecimal(550, decimalContext), data.getValue3().getHigh().getValue());
-				assertEquals(Boolean.TRUE, data.getValue3().getHighClosed());
-				assertEquals(new BigDecimal(2, decimalContext), data.getValue3().getLow().getValue());
-				assertEquals(Boolean.TRUE, data.getValue3().getLowClosed());
-				assertEquals(new BigDecimal(44, decimalContext), ((gov.nih.nci.iso21090.Real)data.getValue3().getWidth()).getValue());
+				assertNull(data.getValue3().getHigh().getValue());
+				assertNull(data.getValue3().getHighClosed());
+				assertNull(data.getValue3().getLow().getValue());
+				assertNull(data.getValue3().getLowClosed());
+				assertNull(data.getValue3().getWidth());
 				assertEquals(NullFlavor.NI, data.getValue3().getWidth().getNullFlavor());
 				
-				assertNull(data.getValue3().getHigh().getNullFlavor());
-				assertNull(data.getValue3().getLow().getNullFlavor());
+				assertEquals(NullFlavor.NI, data.getValue3().getHigh().getNullFlavor());
+				assertEquals(NullFlavor.NI, data.getValue3().getLow().getNullFlavor());
 
 				counter++;
 				continue;
@@ -605,7 +605,7 @@ public class IvlRealDataTypeTest extends SDKISOTestBase
 
 				assertNotNull(data);
 				assertNotNull(data.getValue3());
-				assertEquals(NullFlavor.NI, data.getValue3().getNullFlavor());
+				assertNull(data.getValue3().getNullFlavor());
 
 				assertNull(data.getValue3().getAny());
 				assertEquals(new BigDecimal(610, decimalContext), data.getValue3().getHigh().getValue());
@@ -613,7 +613,7 @@ public class IvlRealDataTypeTest extends SDKISOTestBase
 				assertEquals(new BigDecimal(251, decimalContext), data.getValue3().getLow().getValue());
 				assertEquals(Boolean.TRUE, data.getValue3().getLowClosed());
 				assertEquals(new BigDecimal(4, decimalContext), ((gov.nih.nci.iso21090.Real)data.getValue3().getWidth()).getValue());
-				assertEquals(NullFlavor.NI, data.getValue3().getWidth().getNullFlavor());
+				assertNull(data.getValue3().getWidth().getNullFlavor());
 				
 				assertNull(data.getValue3().getHigh().getNullFlavor());
 				assertNull(data.getValue3().getLow().getNullFlavor());
@@ -629,7 +629,7 @@ public class IvlRealDataTypeTest extends SDKISOTestBase
 
 				assertNotNull(data);
 				assertNotNull(data.getValue3());
-				assertEquals(NullFlavor.NI, data.getValue3().getNullFlavor());
+				assertNull(data.getValue3().getNullFlavor());
 
 				assertNull(data.getValue3().getAny());
 				assertEquals(new BigDecimal(620, decimalContext), data.getValue3().getHigh().getValue());
@@ -637,7 +637,7 @@ public class IvlRealDataTypeTest extends SDKISOTestBase
 				assertEquals(new BigDecimal(252, decimalContext), data.getValue3().getLow().getValue());
 				assertEquals(Boolean.TRUE, data.getValue3().getLowClosed());
 				assertEquals(new BigDecimal(4, decimalContext), ((gov.nih.nci.iso21090.Real)data.getValue3().getWidth()).getValue());
-				assertEquals(NullFlavor.NI, data.getValue3().getWidth().getNullFlavor());
+				assertNull(data.getValue3().getWidth().getNullFlavor());
 				
 				assertNull(data.getValue3().getHigh().getNullFlavor());
 				assertNull(data.getValue3().getLow().getNullFlavor());
@@ -653,7 +653,7 @@ public class IvlRealDataTypeTest extends SDKISOTestBase
 
 				assertNotNull(data);
 				assertNotNull(data.getValue3());
-				assertEquals(NullFlavor.NI, data.getValue3().getNullFlavor());
+				assertNull(data.getValue3().getNullFlavor());
 
 				assertNull(data.getValue3().getAny());
 				assertEquals(new BigDecimal(630, decimalContext), data.getValue3().getHigh().getValue());
@@ -661,7 +661,7 @@ public class IvlRealDataTypeTest extends SDKISOTestBase
 				assertEquals(new BigDecimal(253, decimalContext), data.getValue3().getLow().getValue());
 				assertEquals(Boolean.TRUE, data.getValue3().getLowClosed());
 				assertEquals(new BigDecimal(4, decimalContext), ((gov.nih.nci.iso21090.Real)data.getValue3().getWidth()).getValue());
-				assertEquals(NullFlavor.NI, data.getValue3().getWidth().getNullFlavor());
+				assertNull(data.getValue3().getWidth().getNullFlavor());
 				
 				assertNull(data.getValue3().getHigh().getNullFlavor());
 				assertNull(data.getValue3().getLow().getNullFlavor());
@@ -677,7 +677,7 @@ public class IvlRealDataTypeTest extends SDKISOTestBase
 
 				assertNotNull(data);
 				assertNotNull(data.getValue3());
-				assertEquals(NullFlavor.NI, data.getValue3().getNullFlavor());
+				assertNull(data.getValue3().getNullFlavor());
 
 				assertNull(data.getValue3().getAny());
 				assertEquals(new BigDecimal(640, decimalContext), data.getValue3().getHigh().getValue());
@@ -685,7 +685,7 @@ public class IvlRealDataTypeTest extends SDKISOTestBase
 				assertEquals(new BigDecimal(254, decimalContext), data.getValue3().getLow().getValue());
 				assertEquals(Boolean.TRUE, data.getValue3().getLowClosed());
 				assertEquals(new BigDecimal(4, decimalContext), ((gov.nih.nci.iso21090.Real)data.getValue3().getWidth()).getValue());
-				assertEquals(NullFlavor.NI, data.getValue3().getWidth().getNullFlavor());
+				assertNull(data.getValue3().getWidth().getNullFlavor());
 				
 				assertNull(data.getValue3().getHigh().getNullFlavor());
 				assertNull(data.getValue3().getLow().getNullFlavor());
@@ -701,7 +701,7 @@ public class IvlRealDataTypeTest extends SDKISOTestBase
 
 				assertNotNull(data);
 				assertNotNull(data.getValue3());
-				assertEquals(NullFlavor.NI, data.getValue3().getNullFlavor());
+				assertNull(data.getValue3().getNullFlavor());
 
 				assertNull(data.getValue3().getAny());
 				assertEquals(new BigDecimal(650, decimalContext), data.getValue3().getHigh().getValue());
@@ -709,7 +709,7 @@ public class IvlRealDataTypeTest extends SDKISOTestBase
 				assertEquals(new BigDecimal(255, decimalContext), data.getValue3().getLow().getValue());
 				assertEquals(Boolean.TRUE, data.getValue3().getLowClosed());
 				assertEquals(new BigDecimal(4, decimalContext), ((gov.nih.nci.iso21090.Real)data.getValue3().getWidth()).getValue());
-				assertEquals(NullFlavor.NI, data.getValue3().getWidth().getNullFlavor());
+				assertNull(data.getValue3().getWidth().getNullFlavor());
 				
 				assertNull(data.getValue3().getHigh().getNullFlavor());
 				assertNull(data.getValue3().getLow().getNullFlavor());

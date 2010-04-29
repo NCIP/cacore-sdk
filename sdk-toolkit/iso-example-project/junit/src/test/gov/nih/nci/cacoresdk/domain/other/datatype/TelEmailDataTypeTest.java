@@ -316,7 +316,7 @@ public class TelEmailDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 
-				assertEquals(new URI("MailTo:jdoe3@nci.gov"), data.getValue2().getValue());
+				assertNull(data.getValue2().getValue());
 				//From the database, overriding global constant
 				assertEquals(NullFlavor.NA, data.getValue2().getNullFlavor());
 
@@ -332,7 +332,7 @@ public class TelEmailDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 
-				assertEquals(new URI("MailTo:jdoe4@nci.gov"), data.getValue2().getValue());
+				assertNull(data.getValue2().getValue());
 				//From the database, overriding global constant
 				assertEquals(NullFlavor.NA, data.getValue2().getNullFlavor());
 
@@ -348,7 +348,7 @@ public class TelEmailDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 
-				assertEquals(new URI("MailTo:jdoe5@nci.gov"), data.getValue2().getValue());
+				assertNull(data.getValue2().getValue());
 				//From the database, overriding global constant
 				assertEquals(NullFlavor.NA, data.getValue2().getNullFlavor());
 

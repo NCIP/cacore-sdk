@@ -320,7 +320,7 @@ public class TelDataTypeTest extends SDKISOTestBase
 
 				assertEquals(new URI("tel://123-456-7898"), data.getValue2().getValue());
 				//From the database, overriding global constant
-				assertEquals(NullFlavor.NA, data.getValue2().getNullFlavor());
+				assertNull(data.getValue2().getNullFlavor());
 
 				counter++;
 				continue;
@@ -334,7 +334,7 @@ public class TelDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 
-				assertEquals(new URI("tel://123-456-7797"), data.getValue2().getValue());
+				assertNull(data.getValue2().getValue());
 				//From the database, overriding global constant
 				assertEquals(NullFlavor.NA, data.getValue2().getNullFlavor());
 
@@ -350,7 +350,7 @@ public class TelDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 
-				assertEquals(new URI("tel://123-456-7900"), data.getValue2().getValue());
+				assertNull(data.getValue2().getValue());
 				//From the database, overriding global constant
 				assertEquals(NullFlavor.NA, data.getValue2().getNullFlavor());
 
@@ -366,7 +366,7 @@ public class TelDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 
-				assertEquals(new URI("tel://123-456-7901"), data.getValue2().getValue());
+				assertNull(data.getValue2().getValue());
 				//From the database, overriding global constant
 				assertEquals(NullFlavor.NA, data.getValue2().getNullFlavor());
 
