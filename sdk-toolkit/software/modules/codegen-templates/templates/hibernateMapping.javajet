@@ -16,7 +16,10 @@ String discriminatorValueStr = (discriminatorValue==null) ? "" : "discriminator-
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping package="<%=transformerUtils.getFullPackageName(klass)%>" auto-import="false" default-cascade="none">
 	<class name="<%=klass.getName()%>" table="<%=table.getName()%>" lazy="true" polymorphism="<%=polymorphismAttr%>" abstract="<%=abstractModifier%>" <%=discriminatorValueStr%>>
-		<cache usage="read-write" />
+		<cache usage="read-write" /><%
+		if(transformerUtils.isISO21090Enabled()){%>
+		<tuplizer entity-mode="pojo" class="gov.nih.nci.iso21090.hibernate.tuple.IsoCustomEntityTuplizer"/><%
+		}%>
 		<id name="<%=idAttr.getName()%>" type="<%=transformerUtils.getHibernateDataType(klass,idAttr)%>" column="<%=transformerUtils.getMappedColumnName(table,fqcn+"."+idAttr.getName())%>"><%
 		java.util.HashMap<String,String> pkGeneratorTags=transformerUtils.getPKGeneratorTags(table,fqcn,idAttr);
 		  String pkSystemwideGeneratorTag=pkGeneratorTags.get(transformerUtils.PK_GENERATOR_SYSTEMWIDE+transformerUtils.getDatabaseType());
