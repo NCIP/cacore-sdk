@@ -184,7 +184,7 @@ public class IntDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 
-				assertEquals(NullFlavor.NA, data.getValue1().getNullFlavor());
+				assertNull(data.getValue1().getNullFlavor());
 				assertEquals(new Integer(1), data.getValue1().getValue());
 
 				counter++;

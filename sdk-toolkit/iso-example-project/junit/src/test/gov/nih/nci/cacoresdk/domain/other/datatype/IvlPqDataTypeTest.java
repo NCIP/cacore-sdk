@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.LogicalExpression;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Property;
 import org.hibernate.criterion.Restrictions;
@@ -163,7 +164,9 @@ public class IvlPqDataTypeTest extends SDKISOTestBase
 	public void testIvlPqValue3ByDetachedCriteria() throws ApplicationException
 	{
 		DetachedCriteria criteria = DetachedCriteria.forClass(IvlPqDataType.class);
-		criteria.add(Restrictions.or(Property.forName("value3.low.value").isNotNull(), Property.forName("value3.low.precision").isNotNull()));
+		LogicalExpression exp1 = Restrictions.or(Property.forName("value3.low.value").isNotNull(), Property.forName("value3.low.precision").isNotNull());
+		criteria.add(Restrictions.or(Property.forName("value3.nullFlavor").isNotNull(), exp1));
+
 		criteria.addOrder(Order.asc("id"));
 
 		Collection<IvlPqDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.IvlPqDataType");
@@ -185,7 +188,7 @@ public class IvlPqDataTypeTest extends SDKISOTestBase
 	@SuppressWarnings("unchecked")
 	public void testIvlPqValue3ByHQLCriteria() throws ApplicationException
 	{
-		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.IvlPqDataType a where (a.value3.low.value is not null or a.value3.low.precision is not null) order by a.id asc asc");
+		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.IvlPqDataType a where (a.value3.low.value is not null or a.value3.low.precision is not null or a.value3.nullFlavor is not null) order by a.id asc asc");
 		Collection<IvlPqDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.IvlPqDataType");
 		assertEquals(5, result.size());
 		List index = new ArrayList();
@@ -206,7 +209,7 @@ public class IvlPqDataTypeTest extends SDKISOTestBase
 	public void testIvlPqValue4ByDetachedCriteria() throws ApplicationException
 	{
 		DetachedCriteria criteria = DetachedCriteria.forClass(IvlPqDataType.class);
-		criteria.add(Property.forName("value4.low.value").isNotNull());
+		criteria.add(Restrictions.or(Property.forName("value4.high.value").isNotNull(), Property.forName("value2.high.nullFlavor").isNotNull()));
 		criteria.addOrder(Order.asc("id"));
 
 		Collection<IvlPqDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.IvlPqDataType");
@@ -228,7 +231,7 @@ public class IvlPqDataTypeTest extends SDKISOTestBase
 	@SuppressWarnings("unchecked")
 	public void testIvlPqValue4ByHQLCriteria() throws ApplicationException
 	{
-		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.IvlPqDataType a where a.value4.low.value is not null order by a.id asc asc");
+		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.IvlPqDataType a where (a.value4.high.value is not null or a.value4.high.nullFlavor is not null) order by a.id asc asc");
 		Collection<IvlPqDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.IvlPqDataType");
 		assertEquals(5, result.size());
 		List index = new ArrayList();

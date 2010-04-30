@@ -13,6 +13,7 @@ import java.util.List;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Property;
+import org.hibernate.criterion.Restrictions;
 
 import test.gov.nih.nci.cacoresdk.SDKISOTestBase;
 
@@ -115,7 +116,8 @@ public class ScDataTypeTest extends SDKISOTestBase
 	public void testScValue2ByDetachedCriteria() throws ApplicationException
 	{
 		DetachedCriteria criteria = DetachedCriteria.forClass(ScDataType.class);
-		criteria.add(Property.forName("value2.code.code").isNotNull());
+		criteria.add(Restrictions.or(Property.forName("value2.value").isNotNull(), Property.forName("value2.code.code").isNotNull()));
+		
 		criteria.addOrder(Order.asc("id"));
 
 		Collection<ScDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.ScDataType");
@@ -138,7 +140,7 @@ public class ScDataTypeTest extends SDKISOTestBase
 	@SuppressWarnings("unchecked")
 	public void testScValue2ByHQLCriteria() throws ApplicationException
 	{
-		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.ScDataType a where a.value2.code.code is not null order by a.id asc asc");
+		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.ScDataType a where (a.value2.code.code is not null or a.value2.value is not null) order by a.id asc asc");
 		Collection<ScDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.ScDataType");
 		assertEquals(6, result.size());
 		List index = new ArrayList();
@@ -160,7 +162,7 @@ public class ScDataTypeTest extends SDKISOTestBase
 	public void testScValue3ByDetachedCriteria() throws ApplicationException
 	{
 		DetachedCriteria criteria = DetachedCriteria.forClass(ScDataType.class);
-		criteria.add(Property.forName("value3.code.code").isNotNull());
+		criteria.add(Restrictions.or(Property.forName("value3.value").isNotNull(), Property.forName("value3.code.code").isNotNull()));
 		criteria.addOrder(Order.asc("id"));
 
 		Collection<ScDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.ScDataType");
@@ -188,7 +190,7 @@ public class ScDataTypeTest extends SDKISOTestBase
 	@SuppressWarnings("unchecked")
 	public void testScValue3ByHQLCriteria() throws ApplicationException
 	{
-		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.ScDataType a where a.value3.code.code is not null order by a.id asc asc");
+		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.ScDataType a where (a.value3.code.code is not null or a.value3.value is not null) order by a.id asc asc");
 		Collection<ScDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.ScDataType");
 		assertEquals(11, result.size());
 		List index = new ArrayList();

@@ -11,7 +11,9 @@ import java.util.Collection;
 import java.util.List;
 
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.LogicalExpression;
 import org.hibernate.criterion.Property;
+import org.hibernate.criterion.Restrictions;
 
 import test.gov.nih.nci.cacoresdk.SDKISOTestBase;
 
@@ -111,7 +113,7 @@ public class EdDataTypeTest extends SDKISOTestBase{
 	public void testEdValue2ByDetachedCriteria() throws ApplicationException
 	{
 		DetachedCriteria criteria = DetachedCriteria.forClass(EdDataType.class);
-		criteria.add(Property.forName("value2.nullFlavor").eq(NullFlavor.NI));
+		criteria.add(Restrictions.or(Property.forName("value2.data").isNotNull(), Property.forName("value2.nullFlavor").isNotNull()));
 
 		Collection<EdDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.EdDataType");
 		assertNotNull(result);
@@ -133,9 +135,7 @@ public class EdDataTypeTest extends SDKISOTestBase{
 	@SuppressWarnings("unchecked")
 	public void testEdValue2ByHQLCriteria() throws ApplicationException
 	{
-		List params = new ArrayList();
-		params.add(NullFlavor.NI);
-		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.EdDataType a where a.value2.nullFlavor = ? order by a.id asc", params);
+		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.EdDataType a where (a.value2.nullFlavor is not null or a.value2.data is not null) order by a.id asc");
 		Collection<EdDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.EdDataType");
 		assertEquals(5, result.size());
 		List indexList = new ArrayList();
@@ -156,7 +156,9 @@ public class EdDataTypeTest extends SDKISOTestBase{
 	public void testEdValue3ByDetachedCriteria() throws ApplicationException
 	{
 		DetachedCriteria criteria = DetachedCriteria.forClass(EdDataType.class);
-		criteria.add(Property.forName("value3.nullFlavor").eq(NullFlavor.NI));
+		LogicalExpression exp1 = Restrictions.or(Property.forName("value3.data").isNotNull(), Property.forName("value3.nullFlavor").isNotNull());
+		LogicalExpression exp2 = Restrictions.or(Property.forName("value3.value").isNotNull(), Property.forName("value3.compression").isNotNull()); 
+		criteria.add(Restrictions.or(exp1, exp2));
 
 		Collection<EdDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.EdDataType");
 		assertNotNull(result);
@@ -178,9 +180,7 @@ public class EdDataTypeTest extends SDKISOTestBase{
 	@SuppressWarnings("unchecked")
 	public void testEdValue3ByHQLCriteria() throws ApplicationException
 	{
-		List params = new ArrayList();
-		params.add(NullFlavor.NI);
-		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.EdDataType a where a.value3.nullFlavor = ? order by a.id asc", params);
+		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.EdDataType a where (a.value3.nullFlavor is not null or a.value3.data is not null or a.value3.compression is not null or a.value3.value is not null) order by a.id asc");
 		Collection<EdDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.EdDataType");
 		assertEquals(5, result.size());
 		List indexList = new ArrayList();
