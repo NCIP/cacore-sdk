@@ -143,10 +143,12 @@ public class TsDataTypeXMLTest extends SDKISOTestBase
 					
 					//Make sure date format matches
 					Date date1 = data.getValue1().getValue();
-					data.getValue1().setValue(df.parse(df.format(date1)));
+					if(date1 != null)
+						data.getValue1().setValue(df.parse(df.format(date1)));
 					
 					Date date2 = unmarshalledData.getValue1().getValue();
-					unmarshalledData.getValue1().setValue(df.parse(df.format(date2)));
+					if(date2 != null)
+						unmarshalledData.getValue1().setValue(df.parse(df.format(date2)));
 					//Verify umarshalled object with original object
 					assertTrue(compareValue1(data, unmarshalledData));
 				}
@@ -192,10 +194,12 @@ public class TsDataTypeXMLTest extends SDKISOTestBase
 					
 					//Make sure date format matches
 					Date date1 = data.getValue2().getValue();
-					data.getValue2().setValue(df.parse(df.format(date1)));
+					if(date1 != null)
+						data.getValue2().setValue(df.parse(df.format(date1)));
 					
 					Date date2 = unmarshalledData.getValue2().getValue();
-					unmarshalledData.getValue2().setValue(df.parse(df.format(date2)));
+					if(date2 != null)
+						unmarshalledData.getValue2().setValue(df.parse(df.format(date2)));
 					//Verify umarshalled object with original object
 					assertTrue(compareValue2(data, unmarshalledData));
 				}
