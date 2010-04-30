@@ -51,8 +51,8 @@ public class NoIdKeyXSDTest extends SDKXSDTestBase
 
 		validateClassElements(targetClass);
 
-		validateAttributeElement(targetClass, "mykey", "int");
-		validateAttributeElement(targetClass, "name", "st");	
+		validateAttributeElement(targetClass, "mykey", "integer");
+		validateAttributeElement(targetClass, "name", "string");	
 
 	}	
 }

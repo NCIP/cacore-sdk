@@ -273,17 +273,15 @@ public abstract class SDKXSDTestBase extends TestCase {
 
 		String xpath = "/xs:schema/xs:complexType[@name='" + klassAlias + "']"
 				+ "/xs:complexContent/xs:extension[@base='" + superklassName
-				+ "']" + "/xs:sequence/xs:element[@name='" + rolename + "']"
-				+ "/xs:complexType/xs:sequence/xs:element[@ref='"
-				+ associatedKlassAlias + "']";
+				+ "']" + "/xs:sequence/xs:element[@name='" + rolename + "']";
 
 		List<Element> elts = queryXSD(doc, xpath);
 		assertEquals(1, elts.size());
 
 		Element klassElt = elts.get(0);
-		assertEquals(3, klassElt.getAttributes().size()); // ref, minOccurs,
+		//assertEquals(3, klassElt.getAttributes().size()); // ref, minOccurs,
 															// maxOccurs
-		assertEquals(klassElt.getAttributeValue("ref"), associatedKlassAlias);
+		//assertEquals(klassElt.getAttributeValue("ref"), associatedKlassAlias);
 
 		// TODO :: change eventually to honor minOccurs value passed in
 		// ignore 'minOccurs' value for now, as the Code Generator always sets
@@ -305,13 +303,21 @@ public abstract class SDKXSDTestBase extends TestCase {
 		Document doc = getDoc();
 		String xpath = "/xs:schema/xs:complexType[@name='" + klassAlias
 				+ "']/xs:sequence/xs:element[@name='" + attributeName + "']";
-
+		String prefix = "uri:";
 		List<Element> attributeElts = queryXSD(doc, xpath);
+		
+		if (attributeElts.size() == 0) {
+			xpath = "/xs:schema/xs:complexType[@name='" + klassAlias
+					+ "']/xs:attribute[@name='" + attributeName
+					+ "']";
+			attributeElts = queryXSD(doc, xpath);
+			prefix="xs:";
+		}
 		assertNotNull(attributeElts);
 		assertEquals(1, attributeElts.size());
 
 		Element elt = attributeElts.get(0);
-		assertEquals(elt.getAttributeValue("type").toLowerCase(), "uri:"
+		assertEquals(elt.getAttributeValue("type").toLowerCase(), prefix
 				+ attributeType.toLowerCase());
 	}
 

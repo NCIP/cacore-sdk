@@ -88,7 +88,7 @@ public class O2MUnidirectionalWJoinXSDTest extends SDKXSDTestBase
 		Class targetClass = Shirt.class;
 		Class associatedClass = Button.class;
 
-		validateClassAssociationElements(targetClass, associatedClass, "buttonCollection","0","unbounded");
+		validateClassAssociationElements(targetClass, associatedClass, "buttonCollection","0","1");
 	}	
 	
 	

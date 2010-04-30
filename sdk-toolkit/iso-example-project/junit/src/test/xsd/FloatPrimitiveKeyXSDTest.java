@@ -52,7 +52,7 @@ public class FloatPrimitiveKeyXSDTest extends SDKXSDTestBase
 		validateClassElements(targetClass);
 
 		validateAttributeElement(targetClass, "id", "Float");
-		validateAttributeElement(targetClass, "name", "st");	
+		validateAttributeElement(targetClass, "name", "string");	
 
 	}	
 }

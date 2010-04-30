@@ -88,7 +88,7 @@ public class M2MUnidirectionalXSDTest extends SDKXSDTestBase
 		Class targetClass = Book.class;
 		Class associatedClass = Author.class;
 
-		validateClassAssociationElements(targetClass, associatedClass, "authorCollection","0","unbounded");
+		validateClassAssociationElements(targetClass, associatedClass, "authorCollection","0","1");
 	}	
 	
 	

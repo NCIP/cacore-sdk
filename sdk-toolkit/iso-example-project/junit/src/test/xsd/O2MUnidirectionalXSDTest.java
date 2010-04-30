@@ -88,7 +88,7 @@ public class O2MUnidirectionalXSDTest extends SDKXSDTestBase
 		Class targetClass = KeyChain.class;
 		Class associatedClass = LatchKey.class;
 
-		validateClassAssociationElements(targetClass, associatedClass, "keyCollection","0","unbounded");
+		validateClassAssociationElements(targetClass, associatedClass, "keyCollection","0","1");
 	}	
 	
 	

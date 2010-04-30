@@ -219,7 +219,7 @@ public class ImplicitParentWithAssociationXSDTest extends SDKXSDTestBase
 		Class targetClass = TankAccessory.class;
 		Class associatedClass = Tank.class;
 
-		validateClassAssociationElements(targetClass, associatedClass, "tankCollection","0","unbounded");
+		validateClassAssociationElements(targetClass, associatedClass, "tankCollection","0","1");
 	}
 	
 	
@@ -235,6 +235,6 @@ public class ImplicitParentWithAssociationXSDTest extends SDKXSDTestBase
 		Class targetClass = SaltwaterFishTank.class;
 		Class associatedClass = Substrate.class;
 
-		validateSubclassAssociationElements(targetClass, associatedClass, "substrateCollection","1","unbounded");
+		validateSubclassAssociationElements(targetClass, associatedClass, "substrateCollection","1","1");
 	}	
 }
