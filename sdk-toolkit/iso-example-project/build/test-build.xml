@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="caCore SDK - Test Scripts" basedir="." default="executeAllTests">
+
+	<description>Build script for caCORE SDK Generator Hudson Tests</description>
+	<property name="project.home" location="${basedir}/.." />
+	<property name="project.target.dir" value="${project.home}/target" />
+	<property name="dist.dir" value="${project.target.dir}/dist"/>
+	<property name="dist.exploded.dir" value="${dist.dir}/exploded"/>
+	<property name="output.property.file.dir" value="${project.home}/example-usecases"/>
+
+	<property name="junit.dir" value="${project.home}/junit"/>
+	<property name="src.dir" value="${junit.dir}/src"/>
+	<property name="classes.dir" value="${junit.dir}/classes"/>
+
+	<path id="junit-lib.cp">
+		<fileset dir="${junit.dir}/lib">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="junit-lib.cp" />
+
+	<macrodef name="run-test">
+		<attribute name="REPORT.PROJECT.DIR" default="defaultTest" />
+		<sequential>
+			<property name="generate.report" value="false" />
+			<echo message="@{REPORT.PROJECT.DIR}"/>
+			<property name="report.project.dir" value="${junit.dir}/report/@{REPORT.PROJECT.DIR}" />
+			<mkdir dir="${report.project.dir}" />
+			<property name="project.name" value="${PROJECT_NAME}"/>
+
+			<delete dir="${project.target.dir}" failonerror="false"/>
+			<ant antfile="build.xml" dir="." target="build-system" inheritAll="true"/>
+			<ant antfile="build.xml" dir="." target="dist:installer:prep" inheritAll="true"/>
+
+			<copy todir="${dist.exploded.dir}" overwrite="true">
+				<fileset dir="${output.property.file.dir}/@{REPORT.PROJECT.DIR}" includes="*.properties" />
+			</copy>
+
+			<ant antfile="build.xml" dir="${dist.exploded.dir}" target="install" inheritAll="true">
+				<property name="bda-utils.dir" value="${dist.exploded.dir}/bda-utils" />
+				<property name="force.reinstall" value="true" />
+			</ant>
+
+			<if>
+				<and>
+					<equals arg1="${ENABLE_LOCAL_JAVA_INTERFACE}" arg2="true" />
+					<not>
+						<or>
+							<equals arg1="${DB_USE_JNDI_BASED_CONNECTION}" arg2="true" />
+							<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="true" />
+						</or>
+					</not>
+				</and>
+				<then>
+					<if>
+						<not>
+							<equals arg1="${ENABLE_SECURITY}" arg2="true" />
+						</not>
+						<then>
+							<ant antfile="build.xml" dir="${junit.dir}" target="readThickClientTest" inheritAll="true" />
+							<ant antfile="build.xml" dir="${junit.dir}" target="cqlQueryThickClientTest" inheritAll="true" />
+						</then>
+						<else>
+							<ant antfile="build.xml" dir="${junit.dir}" target="securityThickClientTest" inheritAll="true" />
+							<ant antfile="build.xml" dir="${junit.dir}" target="securityGroupThickClientTest" inheritAll="true" />
+						</else>
+					</if>
+				</then>
+			</if>
+
+			<if>
+				<and>
+					<equals arg1="${ENABLE_LOCAL_JAVA_INTERFACE}" arg2="true" />
+					<not>
+						<or>
+							<equals arg1="${DB_USE_JNDI_BASED_CONNECTION}" arg2="true" />
+							<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="true" />
+						</or>
+					</not>
+				</and>
+				<then>
+					<if>
+						<not>
+							<equals arg1="${ENABLE_SECURITY}" arg2="true" />
+						</not>
+						<then>
+							<ant antfile="build.xml" dir="${junit.dir}" target="readRemoteClientTest" inheritAll="true" />
+							<ant antfile="build.xml" dir="${junit.dir}" target="cqlQueryRemoteClientTest" inheritAll="true" />
+							<ant antfile="build.xml" dir="${junit.dir}" target="xmlDataRemoteClientTest" inheritAll="true" />
+						</then>
+						<else>
+							<ant antfile="build.xml" dir="${junit.dir}" target="securityRemoteClientTest" inheritAll="true" />
+						</else>
+					</if>
+				</then>
+			</if>
+
+			<copy file="${SDK_INSTALL_DIR}/software/build/cobertura.ser" tofile="${junit.dir}/report/@{REPORT.PROJECT.DIR}/codegen-cobertura.ser" overwrite="true" failonerror="false" />
+			<delete file="${SDK_INSTALL_DIR}/software/build/cobertura.ser"  failonerror="false"/>
+			<condition property="application.base.path" value="${application.base.path.linux}">
+				<or>
+					<os family="unix" />
+					<os family="mac" />
+				</or>
+			</condition>
+			<condition property="application.base.path" value="${application.base.path.windows}">
+				<os family="windows" />
+			</condition>
+			<property name="jboss.home" value="${application.base.path}/${jboss.relative.path}"/>
+			<property name="tomcat.home" value="${application.base.path}/${tomcat.relative.path}"/>
+
+			<if>
+				<equals arg1="${SERVER_TYPE}" arg2="tomcat" />
+				<then>
+					<post to="http://${tomcat.hostname}:${tomcat.port.http}/coberturaFlush/flushCobertura" verbose="true"/>
+					<ant antfile="build.xml" dir="${dist.exploded.dir}" target="install:tomcat:stop" inheritAll="true" />
+					<copy file="${tomcat.home}/bin/cobertura.ser" tofile="${junit.dir}/report/@{REPORT.PROJECT.DIR}/tomcat-cobertura.ser" overwrite="true" />
+				</then>
+				<else>
+					<post to="http://${jboss.server.hostname}:${jboss.server.port}/coberturaFlush/flushCobertura"  verbose="true"/>
+					<ant antfile="build.xml" dir="${dist.exploded.dir}" target="install:jboss:stop" inheritAll="true" />
+					<copy file="${jboss.home}/bin/cobertura.ser" tofile="${junit.dir}/report/@{REPORT.PROJECT.DIR}/jboss-cobertura.ser" overwrite="true" />
+				</else>
+			</if>
+		</sequential>
+	</macrodef>
+
+	<target name="diag">
+		<property environment="env" />
+		<echoproperties />
+	</target>
+
+	<target name="generatePropertyFilesFromExcel">
+		<mkdir dir="${classes.dir}" />
+		<javac srcdir="${src.dir}" destdir="${classes.dir}" debug="true" debuglevel="lines,vars,source">
+			<include name="**/cacoresdk/PropertyGenerator.java" />
+			<exclude name="" />
+			<classpath refid="junit-lib.cp" />
+		</javac>
+		<delete includeemptydirs="true" verbose="true">
+			<fileset dir="${output.property.file.dir}">
+				<include name="**/*" />
+				<exclude name="**/*.xls" />
+			</fileset>
+		</delete>
+		<java classname="test.gov.nih.nci.cacoresdk.PropertyGenerator">
+			<arg value="${output.property.file.dir}/sdk.xls" />
+			<arg value="${output.property.file.dir}" />
+			<jvmarg value="-Xms256M" />
+			<jvmarg value="-Xmx512M" />
+			<classpath>
+				<path refid="junit-lib.cp" />
+				<pathelement location="${classes.dir}" />
+			</classpath>
+		</java>
+		<property name="EXCLUDE_NAME" value=""/>
+		<property name="EXCLUDE_NAMESPACE" value=""/>
+	</target>
+
+	<target name="executeAllTests" depends="generatePropertyFilesFromExcel">
+		<delete dir="${junit.dir}/report" />
+		<foreach target="execute" param="FileName" inheritall="false">
+			<path>
+				<fileset dir="${output.property.file.dir}" casesensitive="no" />
+			</path>
+		</foreach>
+		<antcall target="buildAggregateReport" inheritall="true"/>
+	</target>
+
+	<target name="execute">
+		<propertyregex property="property.file.location" defaultvalue="invalid" input="${FileName}" regexp="([^\.]*)install.properties" select="\1" casesensitive="false" />
+		<if>
+			<not>
+				<equals arg1="${property.file.location}" arg2="invalid" />
+			</not>
+			<then>
+				<property file="${property.file.location}codegen.properties" />
+				<property name="workspace.dir" value="${SDK_INSTALL_DIR}/software/workspace"/>
+				<property name="output.dir.location" value="${dist.exploded.dir}"/>
+				<property file="${SDK_INSTALL_DIR}/software/build/project.properties"/>
+				<property file="${property.file.location}install.properties" />
+
+				<propertyregex property="temp.report.dir" input="${property.file.location}" regexp="example-usecases\\([^\.]*)\\" select="\1" casesensitive="false" />
+				<echo message="report.dir ${temp.report.dir}" />
+				<property name="EXCLUDE_NAME" value=""/>
+				<property name="EXCLUDE_NAMESPACE" value=""/>
+				<run-test REPORT.PROJECT.DIR="${temp.report.dir}" />
+			</then>
+		</if>
+	</target>
+
+	<target name="executeTest" depends="generatePropertyFilesFromExcel">
+		<input message="Please enter testcase name:" addproperty="testcase.name" />
+		<property name="property.file.location" value="${output.property.file.dir}/${testcase.name}" />
+		<echo message="${property.file.location}"/>
+		<available file="${property.file.location}/install.properties" type="file" property="property.file.present"/>
+		<if>
+			<equals arg1="${property.file.present}" arg2="true"/>
+			<then>
+				<property file="${property.file.location}/codegen.properties" />
+				<property name="workspace.dir" value="${SDK_INSTALL_DIR}/software/workspace"/>
+				<property name="output.dir.location" value="${dist.exploded.dir}"/>
+				<property file="${SDK_INSTALL_DIR}/software/build/project.properties"/>
+				<property file="${property.file.location}/install.properties" />
+				<run-test REPORT.PROJECT.DIR="${testcase.name}" />
+			</then>
+			<else>
+				<fail message="Invalid Test casename"/>
+			</else>
+		</if>
+	</target>
+
+	<target name="buildAggregateReport">
+		<ant antfile="build.xml" dir="${junit.dir}" target="buildAggregateReport" inheritAll="true" />
+	</target>
+</project>
