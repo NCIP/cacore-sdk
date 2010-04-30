@@ -1305,8 +1305,8 @@ public class AdDataTypeTest extends SDKISOTestBase{
 			{
 				assertNotNull(data);
 				assertNotNull(data.getValue6());
-				assertNull(data.getValue6().getPart());
-				for(int i=0;i<28;i++)
+				assertNotNull(data.getValue6().getPart());
+				for(int i=0;i<data.getValue6().getPart().size();i++)
 				{
 					assertNull(data.getValue6().getPart().get(i).getType());
 					assertNull(data.getValue6().getPart().get(i).getValue());

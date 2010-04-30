@@ -134,9 +134,7 @@ public class CdDataTypeTest extends SDKISOTestBase{
 	@SuppressWarnings("unchecked")
 	public void testCdValue2ByHQLCriteria() throws ApplicationException
 	{
-		List params = new ArrayList();
-		params.add(NullFlavor.NI);
-		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.CdDataType a where a.value2.nullFlavor = ?  order by a.id asc", params);
+		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.CdDataType a where (a.value2.nullFlavor is not null or (a.value2.code is not null and a.value2.code not like 'CODE6%')) order by a.id asc");
 		Collection<CdDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.CdDataType");
 		assertEquals(5, result.size());
 		List indexList = new ArrayList();
@@ -199,7 +197,7 @@ public class CdDataTypeTest extends SDKISOTestBase{
 	@SuppressWarnings("unchecked")
 	public void testCdValue4ByHQLCriteria() throws ApplicationException
 	{
-		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.CdDataType a where a.value4.code is not null  order by a.id asc");
+		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.CdDataType a where (a.value4.code is not null or a.value4.nullFlavor is not null)  order by a.id asc");
 		Collection<CdDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.CdDataType");
 		assertEquals(8, result.size());
 		List indexList = new ArrayList();
@@ -865,10 +863,8 @@ public class CdDataTypeTest extends SDKISOTestBase{
 				assertEquals("VALUE5_CODE_SYSTEM1", data.getValue5().getCodeSystem());
 				assertNull(data.getValue5().getCodeSystemName());
 				assertNull(data.getValue5().getCodeSystemVersion());
-				assertNull(data.getValue5().getDisplayName().getValue());
-				assertEquals(NullFlavor.NI, data.getValue5().getDisplayName().getNullFlavor());
-				assertNull(data.getValue5().getOriginalText().getValue());
-				assertEquals(NullFlavor.NI, data.getValue5().getOriginalText().getNullFlavor());
+				assertNull(data.getValue5().getDisplayName());
+				assertNull(data.getValue5().getOriginalText());
 				assertNull(data.getValue5().getNullFlavor());
 				counter++;
 				continue;
@@ -887,9 +883,8 @@ public class CdDataTypeTest extends SDKISOTestBase{
 				assertNull(data.getValue5().getCodeSystemName());
 				assertNull(data.getValue5().getCodeSystemVersion());
 				assertEquals("VALUE5_DISPLAY_VALUE1", data.getValue5().getDisplayName().getValue());
-				assertEquals(NullFlavor.NI, data.getValue5().getDisplayName().getNullFlavor());
-				assertNull(data.getValue5().getOriginalText().getValue());
-				assertEquals(NullFlavor.NI, data.getValue5().getOriginalText().getNullFlavor());
+				assertNull(data.getValue5().getDisplayName().getNullFlavor());
+				assertNull(data.getValue5().getOriginalText());
 				assertNull(data.getValue5().getNullFlavor());
 				counter++;
 				continue;
@@ -908,10 +903,10 @@ public class CdDataTypeTest extends SDKISOTestBase{
 				assertEquals("VALUE5_CODE_SYSTEM_NAME1", data.getValue5().getCodeSystemName());
 				assertNull(data.getValue5().getCodeSystemVersion());
 				assertEquals("VALUE5_DISPLAY_VALUE2", data.getValue5().getDisplayName().getValue());
-				assertEquals(NullFlavor.NI, data.getValue5().getDisplayName().getNullFlavor());
+				assertNull(data.getValue5().getDisplayName().getNullFlavor());
 				assertEquals("VALUE5_ORIG_TXT_DESCRIPTION1", data.getValue5().getOriginalText().getDescription().getValue());
 				assertNull(data.getValue5().getOriginalText().getValue());
-				assertEquals(NullFlavor.NI, data.getValue5().getOriginalText().getNullFlavor());
+				assertNull(data.getValue5().getOriginalText().getNullFlavor());
 				assertNull(data.getValue5().getNullFlavor());
 				counter++;
 				continue;
@@ -930,7 +925,7 @@ public class CdDataTypeTest extends SDKISOTestBase{
 				assertNull(data.getValue5().getCodeSystemName());
 				assertNull(data.getValue5().getCodeSystemVersion());
 				assertEquals("VALUE5_DISPLAY_VALUE2", data.getValue5().getDisplayName().getValue());
-				assertEquals(NullFlavor.NI, data.getValue5().getDisplayName().getNullFlavor());
+				assertNull(data.getValue5().getDisplayName().getNullFlavor());
 				assertEquals("VALUE5_ORIG_TXT_DESCRIPTION2", data.getValue5().getOriginalText().getDescription().getValue());
 				assertEquals("VALUE5_ORIG_TXT_VALUE1", data.getValue5().getOriginalText().getValue());
 				assertNull(data.getValue5().getOriginalText().getNullFlavor());
@@ -974,7 +969,7 @@ public class CdDataTypeTest extends SDKISOTestBase{
 				assertNull(data.getValue5().getCodeSystemName());
 				assertNull(data.getValue5().getCodeSystemVersion());
 				assertEquals("VALUE5_DISPLAY_VALUE5", data.getValue5().getDisplayName().getValue());
-				assertEquals(NullFlavor.NI, data.getValue5().getDisplayName().getNullFlavor());
+				assertNull(data.getValue5().getDisplayName().getNullFlavor());
 				assertEquals("VALUE5_ORIG_TXT_DESCRIPTION4", data.getValue5().getOriginalText().getDescription().getValue());
 				assertEquals("VALUE5_ORIG_TXT_VALUE3", data.getValue5().getOriginalText().getValue());
 				assertNull(data.getValue5().getOriginalText().getNullFlavor());
@@ -1037,12 +1032,8 @@ public class CdDataTypeTest extends SDKISOTestBase{
 				assertNull(data.getValue5().getCodeSystem());
 				assertNull(data.getValue5().getCodeSystemName());
 				assertNull(data.getValue5().getCodeSystemVersion());
-				assertNotNull(data.getValue5().getDisplayName());
-				assertNotNull(data.getValue5().getOriginalText());
-				assertNull(data.getValue5().getNullFlavor());
-				assertEquals(NullFlavor.NI, data.getValue5().getDisplayName().getNullFlavor());
-				assertNull(data.getValue5().getOriginalText().getValue());
-				assertEquals(NullFlavor.NI, data.getValue5().getOriginalText().getNullFlavor());
+				assertNull(data.getValue5().getDisplayName());
+				assertNull(data.getValue5().getOriginalText());
 				assertNull(data.getValue5().getNullFlavor());
 				counter++;
 			}
@@ -1197,9 +1188,7 @@ public class CdDataTypeTest extends SDKISOTestBase{
 				assertEquals("CODE_SYSTEM_VERSION_61", data.getValue6().getCodeSystemVersion());
 				assertEquals("VALUE6_DISPLAY_VALUE6", data.getValue6().getDisplayName().getValue());
 				assertNull(data.getValue6().getDisplayName().getNullFlavor());
-				assertNull(data.getValue6().getOriginalText().getValue());
-				assertNull(data.getValue6().getOriginalText().getDescription());
-				assertNull(data.getValue6().getOriginalText().getNullFlavor());
+				assertNull(data.getValue6().getOriginalText());
 				assertNull(data.getValue6().getNullFlavor());
 				counter++;
 				continue;

@@ -123,8 +123,8 @@ public class BlNonNullDataTypeTest extends SDKISOTestBase{
 			{
 				assertNotNull(data.getValue1());
 				assertNull(data.getValue1().getValue());
-				//Local constant overriding global constant
-				assertEquals(NullFlavor.NI, data.getValue1().getNullFlavor());
+				//BL NON NULL does not support a null flavor.
+				assertNull(data.getValue1().getNullFlavor());
 				if(index != null) index.remove("1");
 				counter++;
 			}

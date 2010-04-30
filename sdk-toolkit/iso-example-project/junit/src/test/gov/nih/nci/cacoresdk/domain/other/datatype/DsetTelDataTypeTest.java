@@ -283,8 +283,8 @@ public class DsetTelDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 				Tel item = data.getValue1().getItem().iterator().next();
-				assertEquals(NullFlavor.NI, item.getNullFlavor());
-				assertNull(item.getValue());
+				assertNull(item.getNullFlavor());
+				assertEquals(new URI("tel://123-456-7895"), item.getValue());
 
 				counter++;
 				continue;
@@ -378,8 +378,8 @@ public class DsetTelDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 				Tel item = data.getValue2().getItem().iterator().next();
-				assertEquals(NullFlavor.NI, item.getNullFlavor());
-				assertNull(item.getValue());
+				assertNull(item.getNullFlavor());
+				assertEquals(new URI("tel://123-456-7895"), item.getValue());
 
 				counter++;
 				continue;
