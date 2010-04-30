@@ -1,6 +1,5 @@
 package test.xml.data;
 
-import gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.sametable.Organization;
 import gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametablerootlevel.FinancialCalculator;
 import gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametablerootlevel.Calculator;
 import gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametablerootlevel.GraphicCalculator;
@@ -44,8 +43,8 @@ public class TwoLevelInheritanceSametablerootlevelXMLDataTest extends SDKXMLData
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"brand",result.getBrand());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "brand", "value", result.getBrand().getValue());
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
@@ -79,8 +78,8 @@ public class TwoLevelInheritanceSametablerootlevelXMLDataTest extends SDKXMLData
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"brand",result.getBrand());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "brand", "value", result.getBrand().getValue());
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
@@ -114,8 +113,8 @@ public class TwoLevelInheritanceSametablerootlevelXMLDataTest extends SDKXMLData
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"brand",result.getBrand());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "brand", "value", result.getBrand().getValue());
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
@@ -149,8 +148,8 @@ public class TwoLevelInheritanceSametablerootlevelXMLDataTest extends SDKXMLData
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"brand",result.getBrand());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "brand", "value", result.getBrand().getValue());
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 

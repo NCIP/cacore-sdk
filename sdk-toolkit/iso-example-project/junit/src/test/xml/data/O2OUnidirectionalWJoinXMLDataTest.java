@@ -1,6 +1,5 @@
 package test.xml.data;
 
-import gov.nih.nci.cacoresdk.domain.onetomany.bidirectional.Computer;
 import gov.nih.nci.cacoresdk.domain.onetoone.unidirectional.withjoin.Handle;
 import gov.nih.nci.cacoresdk.domain.onetoone.unidirectional.withjoin.Bag;
 import gov.nih.nci.iso21090.Ii;
@@ -41,8 +40,8 @@ public class O2OUnidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"style",result.getStyle());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "style", "value", result.getStyle().getValue());
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
@@ -76,8 +75,8 @@ public class O2OUnidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"color",result.getColor());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "color", "value", result.getColor().getValue());
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
@@ -211,7 +210,7 @@ public class O2OUnidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(result2.getId());
 		assertNotNull(result2.getColor());
 
-		assertEquals(new Integer(1),result2.getId());
+		assertEquals("1",result2.getId().getExtension());
 	}
 
 	public void testOneAssociatedObjectNestedSearchHQL2() throws Exception {
@@ -233,7 +232,7 @@ public class O2OUnidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(result2.getId());
 		assertNotNull(result2.getColor());
 
-		assertEquals(new Integer(1), result2.getId());
+		assertEquals("1", result2.getId().getExtension());
 	}
 	
 	public void testGetAssociation() throws Exception

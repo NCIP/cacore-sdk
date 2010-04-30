@@ -1,13 +1,10 @@
 package test.xml.data;
 
-import gov.nih.nci.cacoresdk.domain.inheritance.abstrakt.PrivateTeacher;
-import gov.nih.nci.cacoresdk.domain.onetomany.bidirectional.Computer;
 import gov.nih.nci.cacoresdk.domain.other.levelassociation.Card;
 import gov.nih.nci.cacoresdk.domain.other.levelassociation.Deck;
 import gov.nih.nci.cacoresdk.domain.other.levelassociation.Hand;
 import gov.nih.nci.cacoresdk.domain.other.levelassociation.Suit;
 import gov.nih.nci.iso21090.Ii;
-import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -198,38 +195,36 @@ public class LevelAssociationXMLDataTest extends SDKXMLDataTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void testAssociationsInBeans() throws Exception
-	{
+	public void testAssociationsInBeans() throws Exception {
 		Hand searchObject = new Hand();
 		Ii ii = new Ii();
 		ii.setExtension("1");
 		searchObject.setId(ii);
-		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.other.levelassociation.Card",searchObject );
+		Collection results = getApplicationService().search(
+				"gov.nih.nci.cacoresdk.domain.other.levelassociation.Card",searchObject);
 
 		assertNotNull(results);
-		assertEquals(3,results.size());
-		
+		assertEquals(3, results.size());
+
 		Iterator i = results.iterator();
-		Card card = (Card)i.next();
+		Card card = (Card) i.next();
 		toXML(card);
-		Card result2 = (Card)fromXML(card);
-		
+		Card result2 = (Card) fromXML(card);
+
 		assertNotNull(result2);
 		assertNotNull(result2.getId());
-		
-		validateAssociation(card,"Suit","suit");
-		
+
+		validateAssociation(card, "Suit", "suit");
+
 		Suit suit = result2.getSuit();
-		
 		assertNotNull(suit);
 		assertNull(suit.getCardCollection());
-//		assertEquals(suit.getCardCollection().size(),13);
-//		
-//		Deck deck = suit.getDeck();
-//		
-//		assertNotNull(deck);
-//		assertEquals(deck.getSuitCollection().size(),4);
-	}	
+		assertEquals(suit.getCardCollection().size(), 13);
+
+		Deck deck = suit.getDeck();
+		assertNotNull(deck);
+		assertEquals(deck.getSuitCollection().size(), 4);
+	}
 	
 	/**
 	 * Uses Nested Search Criteria for search

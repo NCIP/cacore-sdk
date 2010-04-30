@@ -42,9 +42,9 @@ public class TwoLevelInheritanceXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"height",result.getHeight());
-			validateAttribute(result,"width",result.getWidth());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "height", "value", result.getHeight().getValue());
+			validateIso90210Element(result, "width", "value", result.getWidth().getValue());
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
@@ -79,10 +79,10 @@ public class TwoLevelInheritanceXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"height",result.getHeight());
-			validateAttribute(result,"width",result.getWidth());
-			validateAttribute(result,"brand",result.getBrand());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "height", "value", result.getHeight().getValue());
+			validateIso90210Element(result, "width", "value", result.getWidth().getValue());
+			validateIso90210Element(result, "brand", "value", result.getBrand().getValue());
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
@@ -118,11 +118,11 @@ public class TwoLevelInheritanceXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"height",result.getHeight());
-			validateAttribute(result,"width",result.getWidth());
-			validateAttribute(result,"brand",result.getBrand());
-			validateAttribute(result,"refreshRate",result.getRefreshRate());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "height", "value", result.getHeight().getValue());
+			validateIso90210Element(result, "width", "value", result.getWidth().getValue());
+			validateIso90210Element(result, "brand", "value", result.getBrand().getValue());
+			validateIso90210Element(result, "refreshRate", "value", result.getRefreshRate().getValue());
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
@@ -159,11 +159,11 @@ public class TwoLevelInheritanceXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"height",result.getHeight());
-			validateAttribute(result,"width",result.getWidth());
-			validateAttribute(result,"brand",result.getBrand());
-			validateAttribute(result,"dpiSupported",result.getDpiSupported());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "height", "value", result.getHeight().getValue());
+			validateIso90210Element(result, "width", "value", result.getWidth().getValue());
+			validateIso90210Element(result, "brand", "value", result.getBrand().getValue());
+			validateIso90210Element(result, "dpiSupported", "value", result.getDpiSupported().getValue());
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
@@ -193,11 +193,11 @@ public class TwoLevelInheritanceXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 
 			validateClassElements(result);
-			validateAttribute(result, "id", result.getId());
-			validateAttribute(result, "height", result.getHeight());
-			validateAttribute(result, "width", result.getWidth());
-			validateAttribute(result, "brand", result.getBrand());
-			validateAttribute(result, "dpiSupported", result.getDpiSupported());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "height", "value", result.getHeight().getValue());
+			validateIso90210Element(result, "width", "value", result.getWidth().getValue());
+			validateIso90210Element(result, "brand", "value", result.getBrand().getValue());
+			validateIso90210Element(result, "dpiSupported", "value", result.getDpiSupported().getValue());
 
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 

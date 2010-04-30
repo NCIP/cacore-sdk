@@ -40,8 +40,8 @@ public class OneChildXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"hairColor",result.getHairColor());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "hairColor", "value", result.getHairColor().getValue());
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
@@ -75,9 +75,9 @@ public class OneChildXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"diet",result.getDiet());
-			validateAttribute(result,"hairColor",result.getHairColor());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "hairColor", "value", result.getHairColor().getValue());
+			validateIso90210Element(result, "diet", "value", result.getDiet().getValue());
 
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 

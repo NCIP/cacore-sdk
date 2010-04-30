@@ -1,6 +1,5 @@
 package test.xml.data;
 
-import gov.nih.nci.cacoresdk.domain.onetomany.bidirectional.Computer;
 import gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation.Child;
 import gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation.Parent;
 import gov.nih.nci.iso21090.Ii;
@@ -41,8 +40,8 @@ public class O2OMultipleAssociationXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"name",result.getName());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "name", "value", result.getName().getValue());
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
@@ -76,8 +75,8 @@ public class O2OMultipleAssociationXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"name",result.getName());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "name", "value", result.getName().getValue());
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 

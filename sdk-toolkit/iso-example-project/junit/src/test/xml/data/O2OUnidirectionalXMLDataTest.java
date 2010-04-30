@@ -1,6 +1,5 @@
 package test.xml.data;
 
-import gov.nih.nci.cacoresdk.domain.onetomany.bidirectional.Computer;
 import gov.nih.nci.cacoresdk.domain.onetoone.unidirectional.Address;
 import gov.nih.nci.cacoresdk.domain.onetoone.unidirectional.Person;
 import gov.nih.nci.iso21090.Ii;
@@ -41,8 +40,8 @@ public class O2OUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"name",result.getName());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "name", "value", result.getName().getValue());
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
@@ -76,8 +75,8 @@ public class O2OUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"zip",result.getZip());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "zip", "value", result.getZip().getValue());
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
@@ -208,7 +207,7 @@ public class O2OUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(result2);
 		assertNotNull(result2.getId());
 		assertNotNull(result2.getZip());
-		assertEquals(new Integer(1),result2.getId());
+		assertEquals("1",result2.getId().getExtension());
 	}
 	
 	public void testGetAssociation() throws Exception
