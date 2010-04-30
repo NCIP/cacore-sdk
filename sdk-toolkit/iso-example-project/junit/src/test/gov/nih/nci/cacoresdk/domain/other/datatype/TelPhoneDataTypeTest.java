@@ -256,16 +256,14 @@ public class TelPhoneDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 				assertNull(data.getValue1().getValue());
-				assertValue1Constants(data);
-				counter++;
+				assertEquals(NullFlavor.NA, data.getValue1().getNullFlavor());				counter++;
 			}
 		}
 	}
 
 	private void assertValue1Constants(TelPhoneDataType data)
 	{
-		//Local constant overriding global constant
-		assertEquals(NullFlavor.NA, data.getValue1().getNullFlavor());
+		assertNull(data.getValue1().getNullFlavor());
 	}
 	
 	private void assertValue2(Collection<TelPhoneDataType> result, List<Integer> index) throws URISyntaxException
@@ -316,9 +314,8 @@ public class TelPhoneDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 
-				assertNull(data.getValue2().getValue());
-				//From database, overriding global constant
-				assertEquals(NullFlavor.NA, data.getValue2().getNullFlavor());
+				assertNull(data.getValue2().getNullFlavor());
+				assertEquals(new URI("x-text-fax:8004226233"), data.getValue2().getValue());
 
 				counter++;
 				continue;
@@ -332,9 +329,8 @@ public class TelPhoneDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 
-				assertNull(data.getValue2().getValue());
-				//From database, overriding global constant
-				assertEquals(NullFlavor.NA, data.getValue2().getNullFlavor());
+				assertNull(data.getValue2().getNullFlavor());
+				assertEquals(new URI("tel:8004226234"), data.getValue2().getValue());
 
 				counter++;
 				continue;
@@ -348,9 +344,8 @@ public class TelPhoneDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 
-				assertNull(data.getValue2().getValue());
-				//From database, overriding global constant
-				assertEquals(NullFlavor.NA, data.getValue2().getNullFlavor());
+				assertNull(data.getValue2().getNullFlavor());
+				assertEquals(new URI("tel:8004226235"), data.getValue2().getValue());
 				
 				counter++;
 				continue;

@@ -223,11 +223,13 @@ public class EdDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 				assertNotNull(data.getValue1().getData());
+				byte[] bytes = {1,1,0,1,0,1,0,1,0,0,1};
+				org.junit.Assert.assertArrayEquals(bytes, data.getValue1().getData());
 				
 				assertNull(data.getValue1().getCompression());
 				assertNull(data.getValue1().getValue());
 				assertNull(data.getValue1().getDescription());
-				assertEquals(NullFlavor.NI, data.getValue1().getNullFlavor());
+				assertNull(data.getValue1().getNullFlavor());
 				counter++;
 				continue;
 			}
@@ -239,13 +241,13 @@ public class EdDataTypeTest extends SDKISOTestBase{
 
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
-				byte[] bytes = {1,1,0,1,0,1,0,1,0,0,1};
+				byte[] bytes = {1,0,0,1,0,1,0,1,0,0,1};
 				org.junit.Assert.assertArrayEquals(bytes, data.getValue1().getData());
 				
 				assertNull(data.getValue1().getCompression());
 				assertNull(data.getValue1().getValue());
 				assertNull(data.getValue1().getDescription());
-				assertEquals(NullFlavor.NI, data.getValue1().getNullFlavor());
+				assertNull(data.getValue1().getNullFlavor());
 				counter++;
 				continue;
 			}
@@ -257,13 +259,13 @@ public class EdDataTypeTest extends SDKISOTestBase{
 
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
-				byte[] bytes = {1,0,0,1,0,1,0,1,0,0,1};
+				byte[] bytes = {1,0,0,0,0,1,0,1,0,0,1};
 				org.junit.Assert.assertArrayEquals(bytes, data.getValue1().getData());
 				
 				assertNull(data.getValue1().getCompression());
 				assertNull(data.getValue1().getValue());
 				assertNull(data.getValue1().getDescription());
-				assertEquals(NullFlavor.NI, data.getValue1().getNullFlavor());
+				assertNull(data.getValue1().getNullFlavor());
 				counter++;
 				continue;
 			}
@@ -275,13 +277,13 @@ public class EdDataTypeTest extends SDKISOTestBase{
 
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
-				byte[] bytes = {1,0,0,0,0,1,0,1,0,0,1};
+				byte[] bytes = {1,1,0,0,0,1,0,1,0,0,1};
 				org.junit.Assert.assertArrayEquals(bytes, data.getValue1().getData());
 				
 				assertNull(data.getValue1().getCompression());
 				assertNull(data.getValue1().getValue());
 				assertNull(data.getValue1().getDescription());
-				assertEquals(NullFlavor.NI, data.getValue1().getNullFlavor());
+				assertNull(data.getValue1().getNullFlavor());
 				counter++;
 				continue;
 			}
@@ -293,13 +295,13 @@ public class EdDataTypeTest extends SDKISOTestBase{
 
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
-				byte[] bytes = {1,1,0,0,0,1,0,1,0,0,1};
+				byte[] bytes = {1,1,0,0,0,1,0,1,1,1,1};
 				org.junit.Assert.assertArrayEquals(bytes, data.getValue1().getData());
 				
 				assertNull(data.getValue1().getCompression());
 				assertNull(data.getValue1().getValue());
 				assertNull(data.getValue1().getDescription());
-				assertEquals(NullFlavor.NI, data.getValue1().getNullFlavor());
+				assertNull(data.getValue1().getNullFlavor());
 				counter++;
 				continue;
 			}
@@ -357,7 +359,7 @@ public class EdDataTypeTest extends SDKISOTestBase{
 				assertNull(data.getValue2().getCompression());
 				assertNull(data.getValue2().getValue());
 				assertNull(data.getValue2().getDescription());
-				assertEquals(NullFlavor.NI, data.getValue2().getNullFlavor());
+				assertNull(data.getValue2().getNullFlavor());
 				counter++;
 				continue;
 			}
@@ -374,7 +376,7 @@ public class EdDataTypeTest extends SDKISOTestBase{
 				assertNull(data.getValue2().getCompression());
 				assertNull(data.getValue2().getValue());
 				assertNull(data.getValue2().getDescription());
-				assertEquals(NullFlavor.NI, data.getValue2().getNullFlavor());
+				assertNull(data.getValue2().getNullFlavor());
 				counter++;
 				continue;
 			}
@@ -391,7 +393,7 @@ public class EdDataTypeTest extends SDKISOTestBase{
 				assertEquals(Compression.GZ, data.getValue2().getCompression());
 				assertNull(data.getValue2().getValue());
 				assertNull(data.getValue2().getDescription());
-				assertEquals(NullFlavor.NI, data.getValue2().getNullFlavor());
+				assertNull(data.getValue2().getNullFlavor());
 				counter++;
 				continue;
 			}
@@ -409,7 +411,7 @@ public class EdDataTypeTest extends SDKISOTestBase{
 				
 				assertNull(data.getValue2().getValue());
 				assertNull(data.getValue2().getDescription());
-				assertEquals(NullFlavor.NI, data.getValue2().getNullFlavor());
+				assertNull(data.getValue2().getNullFlavor());
 				counter++;
 				continue;
 			}
@@ -449,7 +451,7 @@ public class EdDataTypeTest extends SDKISOTestBase{
 				assertEquals(Compression.GZ, data.getValue3().getCompression());
 				assertNull(data.getValue3().getValue());
 				assertNull(data.getValue3().getDescription());
-				assertEquals(NullFlavor.NI, data.getValue3().getNullFlavor());
+				assertNull(data.getValue3().getNullFlavor());
 				counter++;
 				continue;
 			}
@@ -483,7 +485,7 @@ public class EdDataTypeTest extends SDKISOTestBase{
 				assertEquals(Compression.GZ, data.getValue3().getCompression());
 				assertNull(data.getValue3().getValue());
 				assertNull(data.getValue3().getDescription());
-				assertEquals(NullFlavor.NI, data.getValue3().getNullFlavor());
+				assertNull(data.getValue3().getNullFlavor());
 				counter++;
 				continue;
 			}
@@ -500,7 +502,7 @@ public class EdDataTypeTest extends SDKISOTestBase{
 				assertEquals(Compression.GZ, data.getValue3().getCompression());
 				assertNull(data.getValue3().getValue());
 				assertEquals("DESCRIPTION", data.getValue3().getDescription().getValue());
-				assertEquals(NullFlavor.NI, data.getValue3().getNullFlavor());
+				assertNull(data.getValue3().getNullFlavor());
 				counter++;
 				continue;
 			}
@@ -517,7 +519,7 @@ public class EdDataTypeTest extends SDKISOTestBase{
 				assertEquals(Compression.GZ, data.getValue3().getCompression());
 				assertEquals("VALUE3_VALUE_A", data.getValue3().getValue());
 				assertEquals("DESCRIPTION", data.getValue3().getDescription().getValue());
-				assertEquals(NullFlavor.NI, data.getValue3().getNullFlavor());
+				assertNull(data.getValue3().getNullFlavor());
 				counter++;
 				continue;
 			}

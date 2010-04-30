@@ -13,6 +13,7 @@ import java.util.List;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Property;
+import org.hibernate.criterion.Restrictions;
 
 import test.gov.nih.nci.cacoresdk.SDKISOTestBase;
 
@@ -115,7 +116,7 @@ public class StNtDataTypeTest extends SDKISOTestBase
 	public void testStNtValue2ByDetachedCriteria() throws ApplicationException
 	{
 		DetachedCriteria criteria = DetachedCriteria.forClass(StNtDataType.class);
-		criteria.add(Property.forName("value2.value").isNotNull());
+		criteria.add(Restrictions.or(Property.forName("value2.value").isNotNull(), Property.forName("value2.nullFlavor").isNotNull()));
 		criteria.addOrder(Order.asc("id"));
 
 		Collection<StNtDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.StNtDataType");
@@ -142,7 +143,7 @@ public class StNtDataTypeTest extends SDKISOTestBase
 	@SuppressWarnings("unchecked")
 	public void testStNtValue2ByHQLCriteria() throws ApplicationException
 	{
-		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.StNtDataType a where a.value2.value is not null order by a.id asc asc");
+		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.StNtDataType a where (a.value2.value is not null or a.value2.nullFlavor is not null) order by a.id asc asc");
 		Collection<StNtDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.StNtDataType");
 		assertEquals(10, result.size());
 		List index = new ArrayList();
@@ -263,7 +264,7 @@ public class StNtDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 				assertNull(data.getValue1().getValue());
-				assertValue1Constants(data);
+				assertEquals(NullFlavor.UNK, data.getValue1().getNullFlavor());
 				counter++;
 			}
 		}
@@ -271,8 +272,7 @@ public class StNtDataTypeTest extends SDKISOTestBase
 
 	private void assertValue1Constants(StNtDataType data)
 	{
-		//Local constant overriding global constant
-		assertEquals(NullFlavor.UNK, data.getValue1().getNullFlavor());
+		assertNull(data.getValue1().getNullFlavor());
 	}
 	
 	private void assertValue2(Collection<StNtDataType> result, List<Integer> index)

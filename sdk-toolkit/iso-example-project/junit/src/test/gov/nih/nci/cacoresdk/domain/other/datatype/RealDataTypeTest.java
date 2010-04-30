@@ -15,6 +15,7 @@ import java.util.List;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Property;
+import org.hibernate.criterion.Restrictions;
 
 import test.gov.nih.nci.cacoresdk.SDKISOTestBase;
 
@@ -118,7 +119,7 @@ public class RealDataTypeTest extends SDKISOTestBase
 	public void testRealValue2ByDetachedCriteria() throws ApplicationException, ParseException
 	{
 		DetachedCriteria criteria = DetachedCriteria.forClass(RealDataType.class);
-		criteria.add(Property.forName("value2.value").isNotNull());
+		criteria.add(Restrictions.or(Property.forName("value2.value").isNotNull(), Property.forName("value2.nullFlavor").isNotNull()));
 		criteria.addOrder(Order.asc("id"));
 
 		Collection<RealDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.RealDataType");
@@ -141,7 +142,7 @@ public class RealDataTypeTest extends SDKISOTestBase
 	@SuppressWarnings("unchecked")
 	public void testRealValue2ByHQLCriteria() throws ApplicationException, ParseException
 	{
-		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.RealDataType a where a.value2.value is not null order by a.id asc asc");
+		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.RealDataType a where (a.value2.value is not null or a.value2.nullFlavor is not null) order by a.id asc asc");
 		Collection<RealDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.RealDataType");
 		assertEquals(6, result.size());
 		List index = new ArrayList();
@@ -187,8 +188,7 @@ public class RealDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue1());
 
 				assertEquals(new BigDecimal(1001.15, decimalContext), data.getValue1().getValue());
-				//Local constant overriding global constant
-				assertEquals(NullFlavor.NA, data.getValue1().getNullFlavor());
+				assertNull(data.getValue1().getNullFlavor());
 
 				counter++;
 				continue;
@@ -203,8 +203,7 @@ public class RealDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue1());
 
 				assertEquals(new BigDecimal(1002.15, decimalContext), data.getValue1().getValue());
-				//Local constant overriding global constant
-				assertEquals(NullFlavor.NA, data.getValue1().getNullFlavor());
+				assertNull(data.getValue1().getNullFlavor());
 
 				counter++;
 				continue;
@@ -219,8 +218,7 @@ public class RealDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue1());
 
 				assertEquals(new BigDecimal(-1003), data.getValue1().getValue());
-				//Local constant overriding global constant
-				assertEquals(NullFlavor.NA, data.getValue1().getNullFlavor());
+				assertNull(data.getValue1().getNullFlavor());
 				
 				counter++;
 				continue;
@@ -235,8 +233,7 @@ public class RealDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue1());
 
 				assertEquals(new BigDecimal(1004), data.getValue1().getValue());
-				//Local constant overriding global constant
-				assertEquals(NullFlavor.NA, data.getValue1().getNullFlavor());
+				assertNull(data.getValue1().getNullFlavor());
 
 				counter++;
 				continue;
@@ -251,8 +248,7 @@ public class RealDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue1());
 
 				assertEquals(new BigDecimal(1005.15, decimalContext), data.getValue1().getValue());
-				//Local constant overriding global constant
-				assertEquals(NullFlavor.NA, data.getValue1().getNullFlavor());
+				assertNull(data.getValue1().getNullFlavor());
 
 				counter++;
 				continue;

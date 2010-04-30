@@ -15,6 +15,7 @@ import java.util.List;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Property;
+import org.hibernate.criterion.Restrictions;
 
 import test.gov.nih.nci.cacoresdk.SDKISOTestBase;
 
@@ -170,7 +171,7 @@ public class PqDataTypeTest extends SDKISOTestBase
 	public void testPqValue3ByDetachedCriteria() throws ApplicationException, ParseException
 	{
 		DetachedCriteria criteria = DetachedCriteria.forClass(PqDataType.class);
-		criteria.add(Property.forName("value3.value").isNotNull());
+		criteria.add(Restrictions.or(Property.forName("value3.value").isNotNull(), Property.forName("value3.nullFlavor").isNotNull()));
 		criteria.addOrder(Order.asc("id"));
 
 		Collection<PqDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.PqDataType");
@@ -198,7 +199,7 @@ public class PqDataTypeTest extends SDKISOTestBase
 	@SuppressWarnings("unchecked")
 	public void testPqValue3ByHQLCriteria() throws ApplicationException, ParseException
 	{
-		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.PqDataType a where a.value3.value is not null order by a.id asc asc");
+		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.PqDataType a where (a.value3.value is not null or a.value3.nullFlavor is not null) order by a.id asc asc");
 		Collection<PqDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.PqDataType");
 		assertEquals(11, result.size());
 		List index = new ArrayList();
@@ -249,8 +250,7 @@ public class PqDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 
-				//Local constant overriding global constant
-				assertEquals(NullFlavor.NA, data.getValue1().getNullFlavor());
+				assertNull(data.getValue1().getNullFlavor());
 				assertEquals(new BigDecimal(1.12, decimalContext), data.getValue1().getValue());
 				assertNull(data.getValue1().getUnit());
 				assertNull(data.getValue1().getPrecision());
@@ -267,8 +267,7 @@ public class PqDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 
-				//Local constant overriding global constant
-				assertEquals(NullFlavor.NA, data.getValue1().getNullFlavor());
+				assertNull(data.getValue1().getNullFlavor());
 				assertEquals(new BigDecimal(2.12, decimalContext), data.getValue1().getValue());
 				assertNull(data.getValue1().getUnit());
 				assertNull(data.getValue1().getPrecision());
@@ -285,8 +284,7 @@ public class PqDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 
-				//Local constant overriding global constant
-				assertEquals(NullFlavor.NA, data.getValue1().getNullFlavor());
+				assertNull(data.getValue1().getNullFlavor());
 				assertEquals(new BigDecimal(3.12, decimalContext), data.getValue1().getValue());
 				assertNull(data.getValue1().getUnit());
 				assertNull(data.getValue1().getPrecision());
@@ -303,8 +301,7 @@ public class PqDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 
-				//Local constant overriding global constant
-				assertEquals(NullFlavor.NA, data.getValue1().getNullFlavor());
+				assertNull(data.getValue1().getNullFlavor());
 				assertEquals(new BigDecimal(4.12, decimalContext), data.getValue1().getValue());
 				assertNull(data.getValue1().getUnit());
 				assertNull(data.getValue1().getPrecision());
@@ -321,8 +318,7 @@ public class PqDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 
-				//Local constant overriding global constant
-				assertEquals(NullFlavor.NA, data.getValue1().getNullFlavor());
+				assertNull(data.getValue1().getNullFlavor());
 				assertEquals(new BigDecimal(5.12, decimalContext), data.getValue1().getValue());
 				assertNull(data.getValue1().getUnit());
 				assertNull(data.getValue1().getPrecision());
@@ -339,8 +335,7 @@ public class PqDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 
-				//Local constant overriding global constant
-				assertEquals(NullFlavor.NA, data.getValue1().getNullFlavor());
+				assertNull(data.getValue1().getNullFlavor());
 				assertEquals(new BigDecimal(1.12, decimalContext), data.getValue1().getValue());
 				//From database, overriding global constant
 				assertEquals("GALLON", data.getValue1().getUnit());
@@ -358,8 +353,7 @@ public class PqDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 
-				//Local constant overriding global constant
-				assertEquals(NullFlavor.NA, data.getValue1().getNullFlavor());
+				assertNull(data.getValue1().getNullFlavor());
 				assertEquals(new BigDecimal(2.12, decimalContext), data.getValue1().getValue());
 				//From database, overriding global constant
 				assertEquals("GALLON", data.getValue1().getUnit());
@@ -377,8 +371,7 @@ public class PqDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 
-				//Local constant overriding global constant
-				assertEquals(NullFlavor.NA, data.getValue1().getNullFlavor());
+				assertNull(data.getValue1().getNullFlavor());
 				assertEquals(new BigDecimal(3.12, decimalContext), data.getValue1().getValue());
 				//From database, overriding global constant
 				assertEquals("GALLON", data.getValue1().getUnit());
@@ -396,8 +389,7 @@ public class PqDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 
-				//Local constant overriding global constant
-				assertEquals(NullFlavor.NA, data.getValue1().getNullFlavor());
+				assertNull(data.getValue1().getNullFlavor());
 				assertEquals(new BigDecimal(4.12, decimalContext), data.getValue1().getValue());
 				//From database, overriding global constant
 				assertEquals("GALLON", data.getValue1().getUnit());
@@ -415,8 +407,7 @@ public class PqDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 
-				//Local constant overriding global constant
-				assertEquals(NullFlavor.NA, data.getValue1().getNullFlavor());
+				assertNull(data.getValue1().getNullFlavor());
 				assertEquals(new BigDecimal(5.12, decimalContext), data.getValue1().getValue());
 				//From database, overriding global constant
 				assertEquals("GALLON", data.getValue1().getUnit());
@@ -456,10 +447,9 @@ public class PqDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 
-				//Global constant
-				assertEquals(NullFlavor.NI, data.getValue2().getNullFlavor());
+				assertNull(data.getValue2().getNullFlavor());
 				assertEquals(new BigDecimal(1.23, decimalContext), data.getValue2().getValue());
-				//Local constant overriding global constant
+				//Local constant
 				assertEquals("UNIT", data.getValue2().getUnit());
 				assertNull(data.getValue2().getPrecision());
 
@@ -475,10 +465,9 @@ public class PqDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 
-				//Global constant
-				assertEquals(NullFlavor.NI, data.getValue2().getNullFlavor());
+				assertNull(data.getValue2().getNullFlavor());
 				assertEquals(new BigDecimal(2.23, decimalContext), data.getValue2().getValue());
-				//Local constant overriding global constant
+				//Local constant
 				assertEquals("UNIT", data.getValue2().getUnit());
 				assertNull(data.getValue2().getPrecision());
 
@@ -494,10 +483,9 @@ public class PqDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 
-				//Global constant
-				assertEquals(NullFlavor.NI, data.getValue2().getNullFlavor());
+				assertNull(data.getValue2().getNullFlavor());
 				assertEquals(new BigDecimal(3.23, decimalContext), data.getValue2().getValue());
-				//Local constant overriding global constant
+				//Local constant
 				assertEquals("UNIT", data.getValue2().getUnit());
 				assertNull(data.getValue2().getPrecision());
 				
@@ -513,10 +501,9 @@ public class PqDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 
-				//Global constant
-				assertEquals(NullFlavor.NI, data.getValue2().getNullFlavor());
+				assertNull(data.getValue2().getNullFlavor());
 				assertEquals(new BigDecimal(4.23, decimalContext), data.getValue2().getValue());
-				//Local constant overriding global constant
+				//Local constant
 				assertEquals("UNIT", data.getValue2().getUnit());
 				assertNull(data.getValue2().getPrecision());
 
@@ -532,10 +519,9 @@ public class PqDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 
-				//Global constant
-				assertEquals(NullFlavor.NI, data.getValue2().getNullFlavor());
+				assertNull(data.getValue2().getNullFlavor());
 				assertEquals(new BigDecimal(5.23, decimalContext), data.getValue2().getValue());
-				//Local constant overriding global constant
+				//Local constant
 				assertEquals("UNIT", data.getValue2().getUnit());
 				assertNull(data.getValue2().getPrecision());
 
@@ -547,11 +533,10 @@ public class PqDataTypeTest extends SDKISOTestBase
 			{
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
-				//Global constant
 				assertEquals(NullFlavor.NI, data.getValue2().getNullFlavor());
-				//Local constant overriding global constant
-				assertEquals("UNIT", data.getValue2().getUnit());
+				assertNull(data.getValue2().getUnit());
 				assertNull(data.getValue2().getPrecision());
+				assertNull(data.getValue2().getValue());
 				counter++;
 			}
 		}

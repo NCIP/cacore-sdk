@@ -478,7 +478,7 @@ public class EnDataTypeTest extends SDKISOTestBase{
 
 	private void assertValue1Constants(EnDataType data)
 	{
-		assertEquals(NullFlavor.NI, data.getValue1().getNullFlavor());
+		assertNull(data.getValue1().getNullFlavor());
 		assertNull(data.getValue1().getPart().get(0).getCode());
 		//Global constant
 		assertEquals("ENXP Code System", data.getValue1().getPart().get(0).getCodeSystem());
@@ -597,7 +597,7 @@ public class EnDataTypeTest extends SDKISOTestBase{
 		assertEquals("ENXP Code System Version", data.getValue2().getPart().get(0).getCodeSystemVersion());
 		assertNull(data.getValue2().getPart().get(0).getQualifier());
 		assertNull(data.getValue2().getPart().get(0).getType());
-		assertEquals(NullFlavor.NI, data.getValue2().getNullFlavor());
+		assertNull(data.getValue2().getNullFlavor());
 	}
 	
 	private void assertValue3(Collection<EnDataType> result, List<Integer> index)
@@ -701,13 +701,8 @@ public class EnDataTypeTest extends SDKISOTestBase{
 			else
 			{
 				assertNotNull(data);
-				assertNotNull(data.getValue3());
-				assertNotNull(data.getValue3().getPart());
-				assertNull(data.getValue3().getPart().get(0).getCode());
-				assertNull(data.getValue3().getPart().get(0).getValue());
-				assertNull(data.getValue3().getPart().get(0).getCodeSystem());
-				assertNull(data.getValue3().getPart().get(0).getCodeSystemVersion());
-				assertValue3Constants(data);
+				assertNull(data.getValue3());
+				assertEquals(NullFlavor.NI, data.getValue3());
 				counter++;
 			}
 		}
@@ -717,7 +712,7 @@ public class EnDataTypeTest extends SDKISOTestBase{
 	{
 		assertNull(data.getValue3().getPart().get(0).getQualifier());
 		assertNull(data.getValue3().getPart().get(0).getType());
-		assertEquals(NullFlavor.NI, data.getValue3().getNullFlavor());
+		assertNull(data.getValue3().getNullFlavor());
 	}
 	
 	private void assertValue4(Collection<EnDataType> result, List<Integer> index)
@@ -831,7 +826,7 @@ public class EnDataTypeTest extends SDKISOTestBase{
 		//Global constant
 		assertEquals("ENXP Code System Version", data.getValue4().getPart().get(0).getCodeSystemVersion());
 		assertNull(data.getValue4().getPart().get(0).getType());
-		assertEquals(NullFlavor.NI, data.getValue4().getNullFlavor());
+		assertNull(data.getValue4().getNullFlavor());
 	}
 	
 	private void assertValue5(Collection<EnDataType> result, List<Integer> index)
@@ -857,7 +852,7 @@ public class EnDataTypeTest extends SDKISOTestBase{
 				assertNull(data.getValue5().getPart().get(0).getCodeSystemVersion());
 				assertNull(data.getValue5().getPart().get(0).getQualifier());
 				assertNull(data.getValue5().getPart().get(0).getType());
-				assertEquals(NullFlavor.NI, data.getValue5().getNullFlavor());
+				assertNull(data.getValue5().getNullFlavor());
 				counter++;
 				continue;
 			}
@@ -877,7 +872,7 @@ public class EnDataTypeTest extends SDKISOTestBase{
 				assertNull(data.getValue5().getPart().get(0).getCodeSystemVersion());
 				assertNull(data.getValue5().getPart().get(0).getQualifier());
 				assertNull(data.getValue5().getPart().get(0).getType());
-				assertEquals(NullFlavor.NI, data.getValue5().getNullFlavor());
+				assertNull(data.getValue5().getNullFlavor());
 				counter++;
 				continue;
 			}
@@ -897,7 +892,7 @@ public class EnDataTypeTest extends SDKISOTestBase{
 				assertNull(data.getValue5().getPart().get(0).getCodeSystemVersion());
 				assertNull(data.getValue5().getPart().get(0).getQualifier());
 				assertNull(data.getValue5().getPart().get(0).getType());
-				assertEquals(NullFlavor.NI, data.getValue5().getNullFlavor());
+				assertNull(data.getValue5().getNullFlavor());
 				counter++;
 				continue;
 			}
@@ -917,7 +912,7 @@ public class EnDataTypeTest extends SDKISOTestBase{
 				assertEquals("2.1", data.getValue5().getPart().get(0).getCodeSystemVersion());
 				assertNull(data.getValue5().getPart().get(0).getQualifier());
 				assertNull(data.getValue5().getPart().get(0).getType());
-				assertEquals(NullFlavor.NI, data.getValue5().getNullFlavor());
+				assertNull(data.getValue5().getNullFlavor());
 				counter++;
 				continue;
 			}
@@ -937,7 +932,7 @@ public class EnDataTypeTest extends SDKISOTestBase{
 				assertNull(data.getValue5().getPart().get(0).getCodeSystemVersion());
 				assertNull(data.getValue5().getPart().get(0).getQualifier());
 				assertNull(data.getValue5().getPart().get(0).getType());
-				assertEquals(NullFlavor.NI, data.getValue5().getNullFlavor());
+				assertNull(data.getValue5().getNullFlavor());
 				counter++;
 				continue;
 			}
@@ -957,7 +952,7 @@ public class EnDataTypeTest extends SDKISOTestBase{
 				assertNull(data.getValue5().getPart().get(0).getCodeSystemVersion());
 				assertNull(data.getValue5().getPart().get(0).getQualifier());
 				assertNull(data.getValue5().getPart().get(0).getType());
-				assertEquals(NullFlavor.NI, data.getValue5().getNullFlavor());
+				assertNull(data.getValue5().getNullFlavor());
 				counter++;
 				continue;
 			}
@@ -977,7 +972,7 @@ public class EnDataTypeTest extends SDKISOTestBase{
 				assertNull(data.getValue5().getPart().get(0).getCodeSystemVersion());
 				assertNull(data.getValue5().getPart().get(0).getQualifier());
 				assertNull(data.getValue5().getPart().get(0).getType());
-				assertEquals(NullFlavor.NI, data.getValue5().getNullFlavor());
+				assertNull(data.getValue5().getNullFlavor());
 				counter++;
 				continue;
 			}
@@ -997,7 +992,7 @@ public class EnDataTypeTest extends SDKISOTestBase{
 				assertEquals("2.2", data.getValue5().getPart().get(0).getCodeSystemVersion());
 				assertNull(data.getValue5().getPart().get(0).getQualifier());
 				assertNull(data.getValue5().getPart().get(0).getType());
-				assertEquals(NullFlavor.NI, data.getValue5().getNullFlavor());
+				assertNull(data.getValue5().getNullFlavor());
 				counter++;
 				continue;
 			}
@@ -1019,7 +1014,7 @@ public class EnDataTypeTest extends SDKISOTestBase{
 				assertNull(data.getValue5().getPart().get(0).getCodeSystemVersion());
 				assertNull(data.getValue5().getPart().get(0).getQualifier());
 				assertNull(data.getValue5().getPart().get(0).getType());
-				assertEquals(NullFlavor.NI, data.getValue5().getNullFlavor());
+				assertNull(data.getValue5().getNullFlavor());
 
 				assertNull(data.getValue5().getPart().get(1).getCode());
 				assertEquals("Mr. John Doe V", data.getValue5().getPart().get(1).getValue());
@@ -1048,7 +1043,7 @@ public class EnDataTypeTest extends SDKISOTestBase{
 				assertNull(data.getValue5().getPart().get(0).getCodeSystemVersion());
 				assertNull(data.getValue5().getPart().get(0).getQualifier());
 				assertNull(data.getValue5().getPart().get(0).getType());
-				assertEquals(NullFlavor.NI, data.getValue5().getNullFlavor());
+				assertNull(data.getValue5().getNullFlavor());
 
 				assertEquals("VALUE5_PN2_CODE1", data.getValue5().getPart().get(1).getCode());
 				assertEquals("Mr. John Doe VI", data.getValue5().getPart().get(1).getValue());
@@ -1077,7 +1072,7 @@ public class EnDataTypeTest extends SDKISOTestBase{
 				assertNull(data.getValue5().getPart().get(0).getCodeSystemVersion());
 				assertNull(data.getValue5().getPart().get(0).getQualifier());
 				assertNull(data.getValue5().getPart().get(0).getType());
-				assertEquals(NullFlavor.NI, data.getValue5().getNullFlavor());
+				assertNull(data.getValue5().getNullFlavor());
 
 				assertEquals("VALUE5_PN2_CODE2", data.getValue5().getPart().get(1).getCode());
 				assertEquals("Mr. John Doe VII", data.getValue5().getPart().get(1).getValue());
@@ -1106,7 +1101,7 @@ public class EnDataTypeTest extends SDKISOTestBase{
 				assertEquals("2.1", data.getValue5().getPart().get(0).getCodeSystemVersion());
 				assertNull(data.getValue5().getPart().get(0).getQualifier());
 				assertNull(data.getValue5().getPart().get(0).getType());
-				assertEquals(NullFlavor.NI, data.getValue5().getNullFlavor());
+				assertNull(data.getValue5().getNullFlavor());
 
 				assertEquals("VALUE5_PN2_CODE3", data.getValue5().getPart().get(1).getCode());
 				assertEquals("Mr. John Doe VIII", data.getValue5().getPart().get(1).getValue());
@@ -1122,15 +1117,8 @@ public class EnDataTypeTest extends SDKISOTestBase{
 			else
 			{
 				assertNotNull(data);
-				assertNotNull(data.getValue5());
-				assertNotNull(data.getValue5().getPart());
+				assertNull(data.getValue5());
 				assertEquals(NullFlavor.NI, data.getValue5().getNullFlavor());
-				assertNull(data.getValue5().getPart().get(0).getCode());
-				assertNull(data.getValue5().getPart().get(0).getValue());
-				assertNull(data.getValue5().getPart().get(0).getCodeSystem());
-				assertNull(data.getValue5().getPart().get(0).getCodeSystemVersion());
-				assertNull(data.getValue5().getPart().get(0).getQualifier());
-				assertNull(data.getValue5().getPart().get(0).getType());
 				counter++;
 			}
 		}
@@ -1159,7 +1147,7 @@ public class EnDataTypeTest extends SDKISOTestBase{
 				assertNull(data.getValue6().getPart().get(0).getCodeSystemVersion());
 				assertNull(data.getValue6().getPart().get(0).getQualifier());
 				assertNull(data.getValue6().getPart().get(0).getType());
-				assertEquals(NullFlavor.NI, data.getValue6().getNullFlavor());
+				assertNull(data.getValue6().getNullFlavor());
 				counter++;
 				continue;
 			}
@@ -1179,7 +1167,7 @@ public class EnDataTypeTest extends SDKISOTestBase{
 				assertNull(data.getValue6().getPart().get(0).getCodeSystemVersion());
 				assertNull(data.getValue6().getPart().get(0).getQualifier());
 				assertNull(data.getValue6().getPart().get(0).getType());
-				assertEquals(NullFlavor.NI, data.getValue6().getNullFlavor());
+				assertNull(data.getValue6().getNullFlavor());
 				counter++;
 				continue;
 			}
@@ -1199,7 +1187,7 @@ public class EnDataTypeTest extends SDKISOTestBase{
 				assertNull(data.getValue6().getPart().get(0).getCodeSystemVersion());
 				assertNull(data.getValue6().getPart().get(0).getQualifier());
 				assertNull(data.getValue6().getPart().get(0).getType());
-				assertEquals(NullFlavor.NI, data.getValue6().getNullFlavor());
+				assertNull(data.getValue6().getNullFlavor());
 				counter++;
 				continue;
 			}
@@ -1219,7 +1207,7 @@ public class EnDataTypeTest extends SDKISOTestBase{
 				assertEquals("3.1", data.getValue6().getPart().get(0).getCodeSystemVersion());
 				assertNull(data.getValue6().getPart().get(0).getQualifier());
 				assertNull(data.getValue6().getPart().get(0).getType());
-				assertEquals(NullFlavor.NI, data.getValue6().getNullFlavor());
+				assertNull(data.getValue6().getNullFlavor());
 				counter++;
 				continue;
 			}
@@ -1239,7 +1227,7 @@ public class EnDataTypeTest extends SDKISOTestBase{
 				assertNull(data.getValue6().getPart().get(0).getCodeSystemVersion());
 				assertNull(data.getValue6().getPart().get(0).getQualifier());
 				assertNull(data.getValue6().getPart().get(0).getType());
-				assertEquals(NullFlavor.NI, data.getValue6().getNullFlavor());
+				assertNull(data.getValue6().getNullFlavor());
 				counter++;
 				continue;
 			}
@@ -1259,7 +1247,7 @@ public class EnDataTypeTest extends SDKISOTestBase{
 				assertNull(data.getValue6().getPart().get(0).getCodeSystemVersion());
 				assertNull(data.getValue6().getPart().get(0).getQualifier());
 				assertNull(data.getValue6().getPart().get(0).getType());
-				assertEquals(NullFlavor.NI, data.getValue6().getNullFlavor());
+				assertNull(data.getValue6().getNullFlavor());
 				counter++;
 				continue;
 			}
@@ -1279,7 +1267,7 @@ public class EnDataTypeTest extends SDKISOTestBase{
 				assertNull(data.getValue6().getPart().get(0).getCodeSystemVersion());
 				assertNull(data.getValue6().getPart().get(0).getQualifier());
 				assertNull(data.getValue6().getPart().get(0).getType());
-				assertEquals(NullFlavor.NI, data.getValue6().getNullFlavor());
+				assertNull(data.getValue6().getNullFlavor());
 				counter++;
 				continue;
 			}
@@ -1299,7 +1287,7 @@ public class EnDataTypeTest extends SDKISOTestBase{
 				assertEquals("1.1", data.getValue6().getPart().get(0).getCodeSystemVersion());
 				assertNull(data.getValue6().getPart().get(0).getQualifier());
 				assertNull(data.getValue6().getPart().get(0).getType());
-				assertEquals(NullFlavor.NI, data.getValue6().getNullFlavor());
+				assertNull(data.getValue6().getNullFlavor());
 				counter++;
 				continue;
 			}
@@ -1321,7 +1309,7 @@ public class EnDataTypeTest extends SDKISOTestBase{
 				assertNull(data.getValue6().getPart().get(0).getCodeSystemVersion());
 				assertNull(data.getValue6().getPart().get(0).getQualifier());
 				assertNull(data.getValue6().getPart().get(0).getType());
-				assertEquals(NullFlavor.NI, data.getValue6().getNullFlavor());
+				assertNull(data.getValue6().getNullFlavor());
 
 				assertNull(data.getValue6().getPart().get(1).getCode());
 				assertEquals("Mr. John Doe V", data.getValue6().getPart().get(1).getValue());
@@ -1350,7 +1338,7 @@ public class EnDataTypeTest extends SDKISOTestBase{
 				assertNull(data.getValue6().getPart().get(0).getCodeSystemVersion());
 				assertNull(data.getValue6().getPart().get(0).getQualifier());
 				assertNull(data.getValue6().getPart().get(0).getType());
-				assertEquals(NullFlavor.NI, data.getValue6().getNullFlavor());
+				assertNull(data.getValue6().getNullFlavor());
 
 				assertEquals("VALUE6_ON_CODE1", data.getValue6().getPart().get(1).getCode());
 				assertEquals("Mr. John Doe VI", data.getValue6().getPart().get(1).getValue());
@@ -1379,7 +1367,7 @@ public class EnDataTypeTest extends SDKISOTestBase{
 				assertNull(data.getValue6().getPart().get(0).getCodeSystemVersion());
 				assertNull(data.getValue6().getPart().get(0).getQualifier());
 				assertNull(data.getValue6().getPart().get(0).getType());
-				assertEquals(NullFlavor.NI, data.getValue6().getNullFlavor());
+				assertNull(data.getValue6().getNullFlavor());
 
 				assertEquals("VALUE6_ON_CODE2", data.getValue6().getPart().get(1).getCode());
 				assertEquals("Mr. John Doe VII", data.getValue6().getPart().get(1).getValue());
@@ -1408,7 +1396,7 @@ public class EnDataTypeTest extends SDKISOTestBase{
 				assertEquals("2.1", data.getValue6().getPart().get(0).getCodeSystemVersion());
 				assertNull(data.getValue6().getPart().get(0).getQualifier());
 				assertNull(data.getValue6().getPart().get(0).getType());
-				assertEquals(NullFlavor.NI, data.getValue6().getNullFlavor());
+				assertNull(data.getValue6().getNullFlavor());
 
 				assertEquals("VALUE6_ON_CODE3", data.getValue6().getPart().get(1).getCode());
 				assertEquals("Mr. John Doe VIII", data.getValue6().getPart().get(1).getValue());
@@ -1424,15 +1412,8 @@ public class EnDataTypeTest extends SDKISOTestBase{
 			else
 			{
 				assertNotNull(data);
-				assertNotNull(data.getValue6());
-				assertNotNull(data.getValue6().getPart());
+				assertNull(data.getValue6());
 				assertEquals(NullFlavor.NI, data.getValue6().getNullFlavor());
-				assertNull(data.getValue6().getPart().get(0).getCode());
-				assertNull(data.getValue6().getPart().get(0).getValue());
-				assertNull(data.getValue6().getPart().get(0).getCodeSystem());
-				assertNull(data.getValue6().getPart().get(0).getCodeSystemVersion());
-				assertNull(data.getValue6().getPart().get(0).getQualifier());
-				assertNull(data.getValue6().getPart().get(0).getType());
 				counter++;
 			}
 		}

@@ -256,7 +256,7 @@ public class TelEmailDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 				assertNull(data.getValue1().getValue());
-				assertValue1Constants(data);
+				assertEquals(NullFlavor.NA, data.getValue1().getNullFlavor());
 				counter++;
 			}
 		}
@@ -264,8 +264,7 @@ public class TelEmailDataTypeTest extends SDKISOTestBase
 	
 	private void assertValue1Constants(TelEmailDataType data)
 	{
-		//Local constant overriding global constant
-		assertEquals(NullFlavor.NA, data.getValue1().getNullFlavor());
+		assertNull(data.getValue1().getNullFlavor());
 	}
 
 	private void assertValue2(Collection<TelEmailDataType> result, List<Integer> index) throws URISyntaxException
@@ -316,9 +315,8 @@ public class TelEmailDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 
-				assertNull(data.getValue2().getValue());
-				//From the database, overriding global constant
-				assertEquals(NullFlavor.NA, data.getValue2().getNullFlavor());
+				assertEquals(new URI("MailTo:jdoe3@nci.gov"), data.getValue2().getValue());
+				assertNull(data.getValue2().getNullFlavor());
 
 				counter++;
 				continue;
@@ -332,9 +330,8 @@ public class TelEmailDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 
-				assertNull(data.getValue2().getValue());
-				//From the database, overriding global constant
-				assertEquals(NullFlavor.NA, data.getValue2().getNullFlavor());
+				assertEquals(new URI("MailTo:jdoe4@nci.gov"), data.getValue2().getValue());
+				assertNull(data.getValue2().getNullFlavor());
 
 				counter++;
 				continue;
@@ -348,9 +345,8 @@ public class TelEmailDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 
-				assertNull(data.getValue2().getValue());
-				//From the database, overriding global constant
-				assertEquals(NullFlavor.NA, data.getValue2().getNullFlavor());
+				assertEquals(new URI("MailTo:jdoe5@nci.gov"), data.getValue2().getValue());
+				assertNull(data.getValue2().getNullFlavor());
 
 				counter++;
 				continue;

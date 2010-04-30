@@ -240,6 +240,7 @@ public class ScDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue1());
 
 				assertEquals("VALUE1_VALUE1", data.getValue1().getValue());
+				assertNull(data.getValue1().getCode());
 				assertValue1Constants(data);
 
 				counter++;
@@ -255,6 +256,7 @@ public class ScDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue1());
 
 				assertEquals("VALUE1_VALUE2", data.getValue1().getValue());
+				assertNull(data.getValue1().getCode());
 				assertValue1Constants(data);
 
 				counter++;
@@ -270,6 +272,7 @@ public class ScDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue1());
 
 				assertEquals("VALUE1_VALUE3", data.getValue1().getValue());
+				assertNull(data.getValue1().getCode());
 				assertValue1Constants(data);
 
 				counter++;
@@ -285,6 +288,7 @@ public class ScDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue1());
 
 				assertEquals("VALUE1_VALUE4", data.getValue1().getValue());
+				assertEquals("CODE1",data.getValue1().getCode().getCode());
 				assertValue1Constants(data);
 
 				counter++;
@@ -300,6 +304,7 @@ public class ScDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue1());
 
 				assertEquals("VALUE1_VALUE5", data.getValue1().getValue());
+				assertEquals("CODE2",data.getValue1().getCode().getCode());
 				assertValue1Constants(data);
 
 				counter++;
@@ -321,21 +326,17 @@ public class ScDataTypeTest extends SDKISOTestBase
 	private void assertValue1Constants(ScDataType data)
 	{
 		//Local constant overriding global constant
-		assertEquals(NullFlavor.NA, data.getValue1().getNullFlavor());
+		assertNull(data.getValue1().getNullFlavor());
 		
 		//Global constant
 		assertEquals("CD Code System", data.getValue1().getCode().getCodeSystem());
 		//Global constant
-		assertEquals("CD Code System Name", data.getValue1().getCode().getCodeSystemName());
+		assertEquals("SC CD Code System Name", data.getValue1().getCode().getCodeSystemName());
 		//Global constant
 		assertEquals("1.1 HF2", data.getValue1().getCode().getCodeSystemVersion());
 		assertNull(data.getValue1().getCode().getCode());
-		assertNotNull(data.getValue1().getCode().getDisplayName());
-		assertNull(data.getValue1().getCode().getDisplayName().getValue());
-		//Global constant
-		assertEquals(NullFlavor.NI, data.getValue1().getCode().getDisplayName().getNullFlavor());
-		assertNotNull(data.getValue1().getCode().getOriginalText());
-		assertNull(data.getValue1().getCode().getOriginalText().getValue());
+		assertNull(data.getValue1().getCode().getOriginalText());
+		assertNull(data.getValue1().getCode().getDisplayName());
 	}
 	
 	private void assertValue2(Collection<ScDataType> result, List<Integer> index)
@@ -358,15 +359,7 @@ public class ScDataTypeTest extends SDKISOTestBase
 				//From database, overriding global constant
 				assertEquals(NullFlavor.UNK, data.getValue2().getNullFlavor());
 				assertNull(data.getValue2().getValue());
-				assertEquals("VALUE2_CODE_CODE1", data.getValue2().getCode().getCode());
-				assertNull(data.getValue2().getCode().getCodeSystem());
-				assertNull(data.getValue2().getCode().getCodeSystemName());
-				assertNull(data.getValue2().getCode().getCodeSystemVersion());
-				assertNull(data.getValue2().getCode().getNullFlavor());
-				//Global constant
-				assertEquals(NullFlavor.NI, data.getValue2().getCode().getOriginalText().getNullFlavor());
-				//Global constant
-				assertEquals(NullFlavor.NI, data.getValue2().getCode().getDisplayName().getNullFlavor());
+				assertNull(data.getValue2().getCode());
 
 				counter++;
 				continue;
@@ -381,18 +374,15 @@ public class ScDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue2());
 				assertNotNull(data.getValue2().getCode());
 				
-				//From database, overriding global constant
-				assertEquals(NullFlavor.NI, data.getValue2().getNullFlavor());
+				assertNull(data.getValue2().getNullFlavor());
 				assertEquals("VALUE2_VALUE1", data.getValue2().getValue());
 				assertEquals("VALUE2_CODE_CODE1", data.getValue2().getCode().getCode());
 				assertNull(data.getValue2().getCode().getCodeSystem());
 				assertNull(data.getValue2().getCode().getCodeSystemName());
 				assertNull(data.getValue2().getCode().getCodeSystemVersion());
 				assertNull(data.getValue2().getCode().getNullFlavor());
-				//Global constant
-				assertEquals(NullFlavor.NI, data.getValue2().getCode().getOriginalText().getNullFlavor());
-				//Global constant
-				assertEquals(NullFlavor.NI, data.getValue2().getCode().getDisplayName().getNullFlavor());
+				assertNull(data.getValue2().getCode().getOriginalText());
+				assertNull(data.getValue2().getCode().getDisplayName());
 
 				counter++;
 				continue;
@@ -407,8 +397,7 @@ public class ScDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue2());
 				assertNotNull(data.getValue2().getCode());
 				
-				//From database, overriding global constant
-				assertEquals(NullFlavor.UNK, data.getValue2().getNullFlavor());
+				assertNull(data.getValue2().getNullFlavor());
 				assertEquals("VALUE2_VALUE2", data.getValue2().getValue());
 				assertNull(data.getValue2().getCode().getNullFlavor());
 				assertEquals("VALUE2_CODE_CODE2", data.getValue2().getCode().getCode());
@@ -417,10 +406,8 @@ public class ScDataTypeTest extends SDKISOTestBase
 				assertNull(data.getValue2().getCode().getCodeSystemName());
 				assertNull(data.getValue2().getCode().getCodeSystemVersion());
 				assertNull(data.getValue2().getCode().getNullFlavor());
-				//Global constant
-				assertEquals(NullFlavor.NI, data.getValue2().getCode().getOriginalText().getNullFlavor());
-				//Global constant
-				assertEquals(NullFlavor.NI, data.getValue2().getCode().getDisplayName().getNullFlavor());
+				assertNull(data.getValue2().getCode().getOriginalText());
+				assertNull(data.getValue2().getCode().getDisplayName());
 
 				counter++;
 				continue;
@@ -435,8 +422,7 @@ public class ScDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue2());
 				assertNotNull(data.getValue2().getCode());
 				
-				//From database, overriding global constant
-				assertEquals(NullFlavor.NI, data.getValue2().getNullFlavor());
+				assertNull(data.getValue2().getNullFlavor());
 				assertEquals("VALUE2_VALUE3", data.getValue2().getValue());
 				assertEquals("VALUE2_CODE_CODE3", data.getValue2().getCode().getCode());
 				//From database, overriding global constant
@@ -445,10 +431,8 @@ public class ScDataTypeTest extends SDKISOTestBase
 				assertEquals("VALUE2_CODE_CODE_SYSTEM_NAME1", data.getValue2().getCode().getCodeSystemName());
 				assertNull(data.getValue2().getCode().getCodeSystemVersion());
 				assertNull(data.getValue2().getCode().getNullFlavor());
-				//Global constant
-				assertEquals(NullFlavor.NI, data.getValue2().getCode().getOriginalText().getNullFlavor());
-				//Global constant
-				assertEquals(NullFlavor.NI, data.getValue2().getCode().getDisplayName().getNullFlavor());
+				assertNull(data.getValue2().getCode().getOriginalText());
+				assertNull(data.getValue2().getCode().getDisplayName());
 
 				counter++;
 				continue;
@@ -463,8 +447,7 @@ public class ScDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue2());
 				assertNotNull(data.getValue2().getCode());
 				
-				//From database, overriding global constant
-				assertEquals(NullFlavor.UNK, data.getValue2().getNullFlavor());
+				assertNull(data.getValue2().getNullFlavor());
 				assertEquals("VALUE2_VALUE4", data.getValue2().getValue());
 				assertNull(data.getValue2().getCode().getNullFlavor());
 				assertEquals("VALUE2_CODE_CODE4", data.getValue2().getCode().getCode());
@@ -474,10 +457,8 @@ public class ScDataTypeTest extends SDKISOTestBase
 				assertEquals("VALUE2_CODE_CODE_SYSTEM_NAME2", data.getValue2().getCode().getCodeSystemName());
 				//From database, overriding global constant
 				assertEquals("1.1", data.getValue2().getCode().getCodeSystemVersion());
-				//Global constant
-				assertEquals(NullFlavor.NI, data.getValue2().getCode().getOriginalText().getNullFlavor());
-				//Global constant
-				assertEquals(NullFlavor.NI, data.getValue2().getCode().getDisplayName().getNullFlavor());
+				assertNull(data.getValue2().getCode().getOriginalText());
+				assertNull(data.getValue2().getCode().getDisplayName());
 
 				counter++;
 				continue;
@@ -492,8 +473,7 @@ public class ScDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue2());
 				assertNotNull(data.getValue2().getCode());
 				
-				//From database, overriding global constant
-				assertEquals(NullFlavor.NI, data.getValue2().getNullFlavor());
+				assertNull(data.getValue2().getNullFlavor());
 				assertEquals("VALUE2_VALUE5", data.getValue2().getValue());
 				//From database, overriding global constant
 				assertEquals(NullFlavor.NA, data.getValue2().getCode().getNullFlavor());
@@ -504,10 +484,8 @@ public class ScDataTypeTest extends SDKISOTestBase
 				assertEquals("VALUE2_CODE_CODE_SYSTEM_NAME3", data.getValue2().getCode().getCodeSystemName());
 				//From database, overriding global constant
 				assertEquals("1.1", data.getValue2().getCode().getCodeSystemVersion());
-				//Global constant
-				assertEquals(NullFlavor.NI, data.getValue2().getCode().getOriginalText().getNullFlavor());
-				//Global constant
-				assertEquals(NullFlavor.NI, data.getValue2().getCode().getDisplayName().getNullFlavor());
+				assertNull(data.getValue2().getCode().getOriginalText());
+				assertNull(data.getValue2().getCode().getDisplayName());
 
 				counter++;
 				continue;
@@ -518,24 +496,17 @@ public class ScDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 				assertNotNull(data.getValue2().getCode());
-				//Global constant
-				assertEquals(NullFlavor.NI, data.getValue2().getCode().getNullFlavor());
+				assertNull(data.getValue2().getNullFlavor());
 				//Global constant
 				assertEquals("CD Code System", data.getValue2().getCode().getCodeSystem());
 				//Global constant
-				assertEquals("CD Code System Name", data.getValue2().getCode().getCodeSystemName());
+				assertEquals("SC CD Code System Name", data.getValue2().getCode().getCodeSystemName());
 				//Global constant
 				assertEquals("1.1 HF2", data.getValue2().getCode().getCodeSystemVersion());
 				assertNull(data.getValue2().getCode().getCode());
 				assertNotNull(data.getValue2().getCode().getDisplayName());
-				assertNull(data.getValue2().getCode().getDisplayName().getValue());
-				//Global constant
-				assertEquals(NullFlavor.NI, data.getValue2().getCode().getDisplayName().getNullFlavor());
-				assertNotNull(data.getValue2().getCode().getOriginalText());
-				assertNull(data.getValue2().getCode().getOriginalText().getValue());
-				//Global constant
-				assertEquals(NullFlavor.NI, data.getValue2().getCode().getOriginalText().getNullFlavor());
-				
+				assertNull(data.getValue2().getCode().getOriginalText());
+				assertNull(data.getValue2().getCode().getDisplayName());
 				counter++;
 			}
 		}
@@ -560,12 +531,7 @@ public class ScDataTypeTest extends SDKISOTestBase
 				
 				assertEquals(NullFlavor.NI, data.getValue3().getNullFlavor());
 				assertNull(data.getValue3().getValue());
-				assertEquals("VALUE3_CODE_CODE1", data.getValue3().getCode().getCode());
-				assertNull(data.getValue3().getCode().getCodeSystem());
-				assertNull(data.getValue3().getCode().getCodeSystemName());
-				assertNull(data.getValue3().getCode().getCodeSystemVersion());
-				assertNull(data.getValue3().getCode().getOriginalText());
-				assertNull(data.getValue3().getCode().getDisplayName());
+				assertNull(data.getValue3().getCode());
 
 				counter++;
 				continue;
@@ -580,11 +546,9 @@ public class ScDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue3());
 				assertNotNull(data.getValue3().getCode());
 				
-				//From database, overriding global constant
-				assertEquals(NullFlavor.NI, data.getValue3().getNullFlavor());
+				assertNull(data.getValue3().getNullFlavor());
 				assertEquals("VALUE3_VALUE1", data.getValue3().getValue());
 				assertEquals("VALUE3_CODE_CODE1", data.getValue3().getCode().getCode());
-				//From database, overriding global constant
 				assertEquals("VALUE3_CODE_CODE_SYSTEM1", data.getValue3().getCode().getCodeSystem());
 				assertNull(data.getValue3().getCode().getCodeSystemName());
 				assertNull(data.getValue3().getCode().getCodeSystemVersion());
@@ -604,15 +568,11 @@ public class ScDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue3());
 				assertNotNull(data.getValue3().getCode());
 
-				//From database, overriding global constant
-				assertEquals(NullFlavor.NI, data.getValue3().getNullFlavor());
+				assertNull(data.getValue3().getNullFlavor());
 				assertEquals("VALUE3_VALUE2", data.getValue3().getValue());
 				assertEquals("VALUE3_CODE_CODE1", data.getValue3().getCode().getCode());
-				//From database, overriding global constant
 				assertEquals("VALUE3_CODE_CODE_SYSTEM1", data.getValue3().getCode().getCodeSystem());
-				//From database, overriding global constant
 				assertEquals("VALUE3_CODE_CODE_SYSTEM_NAME1", data.getValue3().getCode().getCodeSystemName());
-				//From database, overriding local and global constants
 				assertEquals("VALUE3_CODE_CODE_SYSTEM_VER1", data.getValue3().getCode().getCodeSystemVersion());
 				assertNull(data.getValue3().getCode().getOriginalText());
 				assertNull(data.getValue3().getCode().getDisplayName());
@@ -630,18 +590,16 @@ public class ScDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue3());
 				assertNotNull(data.getValue3().getCode());
 				
-				//From database, overriding global constant
-				assertEquals(NullFlavor.NI, data.getValue3().getNullFlavor());
+				assertNull(data.getValue3().getNullFlavor());
 				assertEquals("VALUE3_VALUE1", data.getValue3().getValue());
 				assertEquals("VALUE3_CODE_CODE1", data.getValue3().getCode().getCode());
-				//From database, overriding global constant
 				assertEquals("VALUE3_CODE_CODE_SYSTEM1", data.getValue3().getCode().getCodeSystem());
-				//From database, overriding global constant
 				assertEquals("VALUE3_CODE_CODE_SYSTEM_NAME1", data.getValue3().getCode().getCodeSystemName());
-				//From database, overriding global and local constant 
 				assertEquals("VALUE3_CODE_CODE_SYSTEM_VER1", data.getValue3().getCode().getCodeSystemVersion());
-				assertNull(data.getValue3().getCode().getOriginalText());
-				assertNull(data.getValue3().getCode().getDisplayName());
+				assertNotNull(data.getValue3().getCode().getOriginalText());
+				assertNotNull(data.getValue3().getCode().getDisplayName());
+				assertEquals(NullFlavor.NI, data.getValue3().getCode().getDisplayName().getNullFlavor());
+				assertEquals(NullFlavor.NI, data.getValue3().getCode().getOriginalText().getNullFlavor());
 				
 				counter++;
 				continue;
@@ -656,21 +614,17 @@ public class ScDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue3());
 				assertNotNull(data.getValue3().getCode());
 				
-				//From database, overriding global constant
-				assertEquals(NullFlavor.NI, data.getValue3().getNullFlavor());
+				assertNull(data.getValue3().getNullFlavor());
 				assertEquals("VALUE3_VALUE3", data.getValue3().getValue());
 				assertEquals("VALUE3_CODE_CODE1", data.getValue3().getCode().getCode());
-				//From database, overriding global constant
 				assertEquals("VALUE3_CODE_CODE_SYSTEM1", data.getValue3().getCode().getCodeSystem());
-				//From database, overriding global constant
 				assertEquals("VALUE3_CODE_CODE_SYSTEM_NAME1", data.getValue3().getCode().getCodeSystemName());
-				//From database, overriding global and local constants
 				assertEquals("VALUE3_CODE_CODE_SYSTEM_VER", data.getValue3().getCode().getCodeSystemVersion());
 				assertNotNull(data.getValue3().getCode().getDisplayName());
-				//From database, overriding global constant
 				assertEquals(NullFlavor.NI, data.getValue3().getCode().getDisplayName().getNullFlavor());
 				assertEquals("VALUE3_CODE_DISPLAY_VALUE", data.getValue3().getCode().getDisplayName().getValue());
-				assertNull(data.getValue3().getCode().getOriginalText());
+				assertNull(data.getValue3().getCode().getDisplayName().getNullFlavor());
+				assertEquals(NullFlavor.NI, data.getValue3().getCode().getOriginalText().getNullFlavor());
 
 				counter++;
 				continue;
@@ -685,21 +639,16 @@ public class ScDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue3());
 				assertNotNull(data.getValue3().getCode());
 				
-				//From database, overriding global constant
-				assertEquals(NullFlavor.NI, data.getValue3().getNullFlavor());
+				assertNull(data.getValue3().getNullFlavor());
 				assertEquals("VALUE3_VALUE4", data.getValue3().getValue());
 				assertEquals("VALUE3_CODE_CODE31", data.getValue3().getCode().getCode());
-				//From database, overriding global constant
 				assertEquals("VALUE3_CODE_CODE_SYSTEM31", data.getValue3().getCode().getCodeSystem());
-				//From database, overriding global constant
 				assertEquals("VALUE3_CODE_CODE_SYSTEM_NAME31", data.getValue3().getCode().getCodeSystemName());
-				//From database, overriding global and local constant
 				assertEquals("VALUE3_CODE_CODE_SYSTEM_VER31", data.getValue3().getCode().getCodeSystemVersion());
 				assertNotNull(data.getValue3().getCode().getDisplayName());
-				//From database, overriding global constant
-				assertEquals(NullFlavor.NI, data.getValue3().getCode().getDisplayName().getNullFlavor());
 				assertEquals("VALUE3_CODE_DISPLAY_VALUE31", data.getValue3().getCode().getDisplayName().getValue());
-				assertNull(data.getValue3().getCode().getOriginalText());
+				assertNull(data.getValue3().getCode().getDisplayName().getNullFlavor());
+				assertEquals(NullFlavor.NI, data.getValue3().getCode().getOriginalText().getNullFlavor());
 
 				counter++;
 				continue;
@@ -714,21 +663,16 @@ public class ScDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue3());
 				assertNotNull(data.getValue3().getCode());
 				
-				//From database, overriding global constant
-				assertEquals(NullFlavor.NI, data.getValue3().getNullFlavor());
+				assertNull(data.getValue3().getNullFlavor());
 				assertEquals("VALUE3_VALUE5", data.getValue3().getValue());
 				assertEquals("VALUE3_CODE_CODE31", data.getValue3().getCode().getCode());
-				//From database, overriding global constant
 				assertEquals("VALUE3_CODE_CODE_SYSTEM31", data.getValue3().getCode().getCodeSystem());
-				//From database, overriding global constant
 				assertEquals("VALUE3_CODE_CODE_SYSTEM_NAME31", data.getValue3().getCode().getCodeSystemName());
-				//From database, overriding global and local constant
 				assertEquals("VALUE3_CODE_CODE_SYSTEM_VER31", data.getValue3().getCode().getCodeSystemVersion());
 				assertNotNull(data.getValue3().getCode().getDisplayName());
-				//From database, overriding global constant
-				assertEquals(NullFlavor.NI, data.getValue3().getCode().getDisplayName().getNullFlavor());
 				assertEquals("VALUE3_CODE_DISPLAY_VALUE31", data.getValue3().getCode().getDisplayName().getValue());
-				assertNull(data.getValue3().getCode().getOriginalText());
+				assertNull(data.getValue3().getCode().getDisplayName().getNullFlavor());
+				assertEquals(NullFlavor.NI, data.getValue3().getCode().getOriginalText().getNullFlavor());
 
 				counter++;
 				continue;
@@ -743,21 +687,16 @@ public class ScDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue3());
 				assertNotNull(data.getValue3().getCode());
 				
-				//From database, overriding global constant
-				assertEquals(NullFlavor.NI, data.getValue3().getNullFlavor());
+				assertNull(data.getValue3().getNullFlavor());
 				assertEquals("VALUE3_VALUE6", data.getValue3().getValue());
 				assertEquals("VALUE3_CODE_CODE31", data.getValue3().getCode().getCode());
-				//From database, overriding global constant
 				assertEquals("VALUE3_CODE_CODE_SYSTEM31", data.getValue3().getCode().getCodeSystem());
-				//From database, overriding global constant
 				assertEquals("VALUE3_CODE_CODE_SYSTEM_NAME31", data.getValue3().getCode().getCodeSystemName());
-				//From database, overriding global constant
 				assertEquals("VALUE3_CODE_CODE_SYSTEM_VER31", data.getValue3().getCode().getCodeSystemVersion());
 				assertNotNull(data.getValue3().getCode().getDisplayName());
-				//From database, overriding global constant
-				assertEquals(NullFlavor.NI, data.getValue3().getCode().getDisplayName().getNullFlavor());
 				assertEquals("VALUE3_CODE_DISPLAY_VALUE31", data.getValue3().getCode().getDisplayName().getValue());
-				assertNull(data.getValue3().getCode().getOriginalText());
+				assertNull(data.getValue3().getCode().getDisplayName().getNullFlavor());
+				assertEquals(NullFlavor.NI, data.getValue3().getCode().getOriginalText().getNullFlavor());
 
 				counter++;
 				continue;
@@ -772,24 +711,18 @@ public class ScDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue3());
 				assertNotNull(data.getValue3().getCode());
 				
-				//From database, overriding global constant
-				assertEquals(NullFlavor.NI, data.getValue3().getNullFlavor());
+				assertNull(data.getValue3().getNullFlavor());
 				assertEquals("VALUE3_VALUE7", data.getValue3().getValue());
 				assertEquals("VALUE3_CODE_CODE31", data.getValue3().getCode().getCode());
-				//From database, overriding global constant
 				assertEquals("VALUE3_CODE_CODE_SYSTEM31", data.getValue3().getCode().getCodeSystem());
-				//From database, overriding global constant
 				assertEquals("VALUE3_CODE_CODE_SYSTEM_NAME31", data.getValue3().getCode().getCodeSystemName());
-				//From database, overriding global and local constant
 				assertEquals("VALUE3_CODE_CODE_SYSTEM_VER31", data.getValue3().getCode().getCodeSystemVersion());
 				assertNotNull(data.getValue3().getCode().getDisplayName());
-				//From database, overriding global constant
-				assertEquals(NullFlavor.NI, data.getValue3().getCode().getDisplayName().getNullFlavor());
+				assertNull(data.getValue3().getCode().getDisplayName().getNullFlavor());
 				assertEquals("VALUE3_CODE_DISPLAY_VALUE31", data.getValue3().getCode().getDisplayName().getValue());
 				assertNotNull(data.getValue3().getCode().getOriginalText());
 				assertEquals("VALUE3_CODE_ORIG_TXT_DESC1", data.getValue3().getCode().getOriginalText().getDescription().getValue());
-				//From database, overriding global constant
-				assertEquals(NullFlavor.NI, data.getValue3().getCode().getOriginalText().getNullFlavor());
+				assertNull(data.getValue3().getCode().getOriginalText().getNullFlavor());
 
 				counter++;
 				continue;
@@ -804,23 +737,17 @@ public class ScDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue3());
 				assertNotNull(data.getValue3().getCode());
 				
-				//From database, overriding global constant
-				assertEquals(NullFlavor.NI, data.getValue3().getNullFlavor());
+				assertNull(data.getValue3().getNullFlavor());
 				assertEquals("VALUE3_VALUE8", data.getValue3().getValue());
 				assertEquals("VALUE3_CODE_CODE31", data.getValue3().getCode().getCode());
-				//From database, overriding global constant
 				assertEquals("VALUE3_CODE_CODE_SYSTEM31", data.getValue3().getCode().getCodeSystem());
-				//From database, overriding global constant
 				assertEquals("VALUE3_CODE_CODE_SYSTEM_NAME31", data.getValue3().getCode().getCodeSystemName());
-				//From database, overriding global and local constant
 				assertEquals("VALUE3_CODE_CODE_SYSTEM_VER31", data.getValue3().getCode().getCodeSystemVersion());
 				assertNotNull(data.getValue3().getCode().getDisplayName());
-				//From database, overriding global constant
-				assertEquals(NullFlavor.NI, data.getValue3().getCode().getDisplayName().getNullFlavor());
+				assertNull(data.getValue3().getCode().getDisplayName().getNullFlavor());
 				assertEquals("VALUE3_CODE_DISPLAY_VALUE31", data.getValue3().getCode().getDisplayName().getValue());
 				assertNotNull(data.getValue3().getCode().getOriginalText());
-				//From database, overriding global constant
-				assertEquals(NullFlavor.NI, data.getValue3().getCode().getOriginalText().getNullFlavor());
+				assertNull(data.getValue3().getCode().getOriginalText().getNullFlavor());
 				assertEquals("VALUE3_CODE_ORIG_TXT_DESC31", data.getValue3().getCode().getOriginalText().getDescription().getValue());
 				assertEquals("VALUE3_CODE_ORIG_TXT_VALUE31", data.getValue3().getCode().getOriginalText().getValue());
 
@@ -837,23 +764,17 @@ public class ScDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue3());
 				assertNotNull(data.getValue3().getCode());
 				
-				//From database, overriding global constant
-				assertEquals(NullFlavor.NI, data.getValue3().getNullFlavor());
+				assertNull(data.getValue3().getNullFlavor());
 				assertEquals("VALUE3_VALUE9", data.getValue3().getValue());
 				assertEquals("VALUE3_CODE_CODE31", data.getValue3().getCode().getCode());
-				//From database, overriding global constant
 				assertEquals("VALUE3_CODE_CODE_SYSTEM31", data.getValue3().getCode().getCodeSystem());
-				//From database, overriding global constant
 				assertEquals("VALUE3_CODE_CODE_SYSTEM_NAME31", data.getValue3().getCode().getCodeSystemName());
-				//From database, overriding global constant
 				assertEquals("VALUE3_CODE_CODE_SYSTEM_VER31", data.getValue3().getCode().getCodeSystemVersion());
 				assertNotNull(data.getValue3().getCode().getDisplayName());
-				//From database, overriding global constant
-				assertEquals(NullFlavor.NI, data.getValue3().getCode().getDisplayName().getNullFlavor());
+				assertNull(data.getValue3().getCode().getDisplayName().getNullFlavor());
 				assertEquals("VALUE3_CODE_DISPLAY_VALUE31", data.getValue3().getCode().getDisplayName().getValue());
 				assertNotNull(data.getValue3().getCode().getOriginalText());
-				//From database, overriding global constant
-				assertEquals(NullFlavor.NI, data.getValue3().getCode().getOriginalText().getNullFlavor());
+				assertNull(data.getValue3().getCode().getOriginalText().getNullFlavor());
 				assertEquals("VALUE3_CODE_ORIG_TXT_DESC31", data.getValue3().getCode().getOriginalText().getDescription().getValue());
 				assertEquals("VALUE3_CODE_ORIG_TXT_VALUE31", data.getValue3().getCode().getOriginalText().getValue());
 				//Global constant
@@ -867,24 +788,10 @@ public class ScDataTypeTest extends SDKISOTestBase
 			{
 				assertNotNull(data);
 				assertNotNull(data.getValue3());
-				assertNotNull(data.getValue3().getCode());
 				//Global constant
 				assertEquals(NullFlavor.NI, data.getValue3().getCode().getNullFlavor());
-				//Global constant
-				assertEquals("CD Code System", data.getValue3().getCode().getCodeSystem());
-				//Global constant
-				assertEquals("CD Code System Name", data.getValue3().getCode().getCodeSystemName());
-				//Local constant overriding global constant
-				assertEquals("1.2 GA", data.getValue3().getCode().getCodeSystemVersion());
-				assertNull(data.getValue3().getCode().getCode());
-				assertNotNull(data.getValue3().getCode().getDisplayName());
-				assertNull(data.getValue3().getCode().getDisplayName().getValue());
-				//Global constant
-				assertEquals(NullFlavor.NI, data.getValue3().getCode().getDisplayName().getNullFlavor());
-				assertNotNull(data.getValue3().getCode().getOriginalText());
-				assertNull(data.getValue3().getCode().getOriginalText().getValue());
-				//Global constant
-				assertEquals(NullFlavor.NI, data.getValue3().getCode().getOriginalText().getNullFlavor());
+				assertNull(data.getValue3().getCode());
+				assertNull(data.getValue3().getValue());
 				counter++;
 			}
 		}

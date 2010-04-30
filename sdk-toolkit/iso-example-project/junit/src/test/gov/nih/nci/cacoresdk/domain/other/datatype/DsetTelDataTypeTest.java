@@ -223,7 +223,7 @@ public class DsetTelDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 				Tel item = data.getValue1().getItem().iterator().next();
-				assertEquals(NullFlavor.NI, item.getNullFlavor());
+				assertNull(item.getNullFlavor());
 				assertEquals(new URI("tel://123-456-7891"), item.getValue());
 
 				counter++;
@@ -238,7 +238,7 @@ public class DsetTelDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 				Tel item = data.getValue1().getItem().iterator().next();
-				assertEquals(NullFlavor.NI, item.getNullFlavor());
+				assertNull(item.getNullFlavor());
 				assertEquals(new URI("tel://123-456-7892"), item.getValue());
 
 				counter++;
@@ -253,7 +253,7 @@ public class DsetTelDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 				Tel item = data.getValue1().getItem().iterator().next();
-				assertEquals(NullFlavor.NI, item.getNullFlavor());
+				assertNull(item.getNullFlavor());
 				assertEquals(new URI("tel://123-456-7893"), item.getValue());
 
 				counter++;
@@ -268,7 +268,7 @@ public class DsetTelDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 				Tel item = data.getValue1().getItem().iterator().next();
-				assertEquals(NullFlavor.NI, item.getNullFlavor());
+				assertNull(item.getNullFlavor());
 				assertEquals(new URI("tel://123-456-7894"), item.getValue());
 
 				counter++;
@@ -284,7 +284,7 @@ public class DsetTelDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue1());
 				Tel item = data.getValue1().getItem().iterator().next();
 				assertEquals(NullFlavor.NI, item.getNullFlavor());
-				assertEquals(new URI("tel://123-456-7895"), item.getValue());
+				assertNull(item.getValue());
 
 				counter++;
 				continue;
@@ -296,7 +296,7 @@ public class DsetTelDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue1());
 				Tel item = data.getValue1().getItem().iterator().next();
 				assertNull(item.getValue());
-				assertEquals(NullFlavor.NI, item.getNullFlavor());
+				assertNull(item.getNullFlavor());
 				counter++;
 			}
 		}
@@ -348,7 +348,7 @@ public class DsetTelDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 				Tel item = data.getValue2().getItem().iterator().next();
-				assertEquals(NullFlavor.NI, item.getNullFlavor());
+				assertNull(item.getNullFlavor());
 				assertEquals(new URI("tel://123-456-7893"), item.getValue());
 
 				counter++;
@@ -363,7 +363,7 @@ public class DsetTelDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 				Tel item = data.getValue2().getItem().iterator().next();
-				assertEquals(NullFlavor.NI, item.getNullFlavor());
+				assertNull(item.getNullFlavor());
 				assertEquals(new URI("tel://123-456-7894"), item.getValue());
 
 				counter++;
@@ -379,7 +379,7 @@ public class DsetTelDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue2());
 				Tel item = data.getValue2().getItem().iterator().next();
 				assertEquals(NullFlavor.NI, item.getNullFlavor());
-				assertEquals(new URI("tel://123-456-7895"), item.getValue());
+				assertNull(item.getValue());
 
 				counter++;
 				continue;
@@ -442,7 +442,7 @@ public class DsetTelDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue3());
 				Tel item = data.getValue3().getItem().iterator().next();
-				assertEquals(NullFlavor.NI, item.getNullFlavor());
+				assertNull(item.getNullFlavor());
 				assertEquals(new URI("tel://123-456-7892"), item.getValue());
 
 				counter++;
@@ -457,7 +457,7 @@ public class DsetTelDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue3());
 				Tel item = data.getValue3().getItem().iterator().next();
-				assertEquals(NullFlavor.NI, item.getNullFlavor());
+				assertNull(item.getNullFlavor());
 				assertEquals(new URI("tel://123-456-7892"), item.getValue());
 
 				counter++;
@@ -472,7 +472,7 @@ public class DsetTelDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue3());
 				Tel item = data.getValue3().getItem().iterator().next();
-				assertEquals(NullFlavor.NI, item.getNullFlavor());
+				assertNull(item.getNullFlavor());
 				assertEquals(new URI("tel://123-456-7892"), item.getValue());
 
 				counter++;
