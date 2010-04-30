@@ -133,6 +133,6 @@ public class ParentWithAssociationSametableXSDTest extends SDKXSDTestBase
 		Class targetClass = Wheel.class;
 		Class associatedClass = Luggage.class;
 
-		validateClassAssociationElements(targetClass, associatedClass, "luggage","0","unbounded");
+		validateClassAssociationElements(targetClass, associatedClass, "luggage","0","1");
 	}		
 }

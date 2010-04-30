@@ -101,6 +101,6 @@ public class O2MBidirectionalWJoinXSDTest extends SDKXSDTestBase
 		Class targetClass = Flight.class;
 		Class associatedClass = Passanger.class;
 
-		validateClassAssociationElements(targetClass, associatedClass, "passangerCollection","1","unbounded");
+		validateClassAssociationElements(targetClass, associatedClass, "passangerCollection","1","1");
 	}	
 }

@@ -52,7 +52,7 @@ public class LongPrimitiveKeyXSDTest extends SDKXSDTestBase
 		validateClassElements(targetClass);
 
 		validateAttributeElement(targetClass, "id", "Long");
-		validateAttributeElement(targetClass, "name", "st");	
+		validateAttributeElement(targetClass, "name", "string");	
 
 	}	
 }

@@ -54,24 +54,24 @@ public class AllDataTypeXSDTest extends SDKXSDTestBase
 
 		validateClassElements(targetClass);
 
-		validateAttributeElement(targetClass, "id", "ii");
-		validateAttributeElement(targetClass, "booleanPrimitiveValue", "bl");	
-		validateAttributeElement(targetClass, "booleanValue", "bl");
-		validateAttributeElement(targetClass, "characterPrimitiveValue", "st");
-		validateAttributeElement(targetClass, "characterValue", "st");
-		validateAttributeElement(targetClass, "clobValue", "st");
+		validateAttributeElement(targetClass, "id", "integer");
+		validateAttributeElement(targetClass, "booleanPrimitiveValue", "boolean");	
+		validateAttributeElement(targetClass, "booleanValue", "boolean");
+		validateAttributeElement(targetClass, "characterPrimitiveValue", "string");
+		validateAttributeElement(targetClass, "characterValue", "string");
+		validateAttributeElement(targetClass, "clobValue", "string");
 		validateAttributeElement(targetClass, "datePrimitiveValue", "Datetime");
 		validateAttributeElement(targetClass, "dateValue", "Datetime");
 		validateAttributeElement(targetClass, "doublePrimitiveValue", "Double");
 		validateAttributeElement(targetClass, "doubleValue", "Double");
 		validateAttributeElement(targetClass, "floatPrimitiveValue", "Float");
 		validateAttributeElement(targetClass, "floatValue", "Float");
-		validateAttributeElement(targetClass, "intValue", "int");
-		validateAttributeElement(targetClass, "intPrimitiveValue", "int");
+		validateAttributeElement(targetClass, "intValue", "integer");
+		validateAttributeElement(targetClass, "intPrimitiveValue", "integer");
 		validateAttributeElement(targetClass, "longValue", "Long");
 		validateAttributeElement(targetClass, "longPrimitiveValue", "Long");
-		validateAttributeElement(targetClass, "stringPrimitiveValue", "st");
-		validateAttributeElement(targetClass, "stringValue", "st");		
+		validateAttributeElement(targetClass, "stringPrimitiveValue", "string");
+		validateAttributeElement(targetClass, "stringValue", "string");		
 
 	}	
 	

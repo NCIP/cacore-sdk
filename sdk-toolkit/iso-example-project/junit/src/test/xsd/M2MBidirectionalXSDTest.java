@@ -85,7 +85,7 @@ public class M2MBidirectionalXSDTest extends SDKXSDTestBase
 		Class targetClass = Employee.class;
 		Class associatedClass = Project.class;
 
-		validateClassAssociationElements(targetClass, associatedClass, "projectCollection","0","unbounded");
+		validateClassAssociationElements(targetClass, associatedClass, "projectCollection","0","1");
 	}	
 	
 	
@@ -101,6 +101,6 @@ public class M2MBidirectionalXSDTest extends SDKXSDTestBase
 		Class targetClass = Project.class;
 		Class associatedClass = Employee.class;
 
-		validateClassAssociationElements(targetClass, associatedClass, "employeeCollection","0","unbounded");
+		validateClassAssociationElements(targetClass, associatedClass, "employeeCollection","0","1");
 	}	
 }

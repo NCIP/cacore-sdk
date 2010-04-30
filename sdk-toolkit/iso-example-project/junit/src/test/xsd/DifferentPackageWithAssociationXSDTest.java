@@ -166,7 +166,7 @@ public class DifferentPackageWithAssociationXSDTest extends SDKXSDTestBase
 		if (useGMETags){
 			validateClassAssociationElements(targetClass,"DessertAlias", associatedClass,"UtensilAlias","utensilAliasRoleName","0","unbounded");
 		} else {
-			validateClassAssociationElements(targetClass,"Dessert", associatedClass,"gov.nih.nci.cacoresdk.domain.other.differentpackage.associations:Utensil","utensilCollection","0","unbounded");
+			validateClassAssociationElements(targetClass,"Dessert", associatedClass,"gov.nih.nci.cacoresdk.domain.other.differentpackage.associations:Utensil","utensilCollection","0","1");
 		}
 
 	}	
@@ -189,9 +189,9 @@ public class DifferentPackageWithAssociationXSDTest extends SDKXSDTestBase
 		Class associatedClass = Dessert.class;
 		
 		if (useGMETags){
-			validateClassAssociationElements(targetClass,"UtensilAlias", associatedClass,"DessertAlias","dessertAliasRoleName","0","unbounded");
+			validateClassAssociationElements(targetClass,"UtensilAlias", associatedClass,"DessertAlias","dessertAliasRoleName","0","1");
 		} else {
-			validateClassAssociationElements(targetClass,"Utensil", associatedClass,"gov.nih.nci.cacoresdk.domain.other.differentpackage:Dessert","dessertCollection","0","unbounded");
+			validateClassAssociationElements(targetClass,"Utensil", associatedClass,"gov.nih.nci.cacoresdk.domain.other.differentpackage:Dessert","dessertCollection","0","1");
 		}
 	}	
 }

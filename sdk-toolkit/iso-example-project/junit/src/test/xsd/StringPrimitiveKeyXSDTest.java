@@ -51,8 +51,8 @@ public class StringPrimitiveKeyXSDTest extends SDKXSDTestBase
 
 		validateClassElements(targetClass);
 
-		validateAttributeElement(targetClass, "id", "st");
-		validateAttributeElement(targetClass, "name", "st");	
+		validateAttributeElement(targetClass, "id", "string");
+		validateAttributeElement(targetClass, "name", "string");	
 
 	}	
 }

@@ -104,6 +104,6 @@ public class AbstractParentWithAssociationXSDTest extends SDKXSDTestBase
 		Class targetClass = Teacher.class;
 		Class associatedClass = Pupil.class;
 
-		validateClassAssociationElements(targetClass, associatedClass, "pupilCollection","0","unbounded");
+		validateClassAssociationElements(targetClass, associatedClass, "pupilCollection","0","1");
 	}	
 }
