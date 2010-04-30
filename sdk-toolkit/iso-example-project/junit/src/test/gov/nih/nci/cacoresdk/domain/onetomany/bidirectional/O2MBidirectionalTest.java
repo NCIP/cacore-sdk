@@ -44,6 +44,7 @@ public class O2MBidirectionalTest extends SDKISOTestBase
 			Computer result = (Computer)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getType());
 		}
 	}
@@ -69,6 +70,7 @@ public class O2MBidirectionalTest extends SDKISOTestBase
 			HardDrive result = (HardDrive)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getSize());
 		}
 	}
@@ -96,6 +98,7 @@ public class O2MBidirectionalTest extends SDKISOTestBase
 		Computer result = (Computer)i.next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(result.getType());
 		
 		Collection hardDriveCollection = result.getHardDriveCollection();
@@ -146,6 +149,7 @@ public class O2MBidirectionalTest extends SDKISOTestBase
 		Computer result = (Computer)i.next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(result.getType());
 		
 		Collection hardDriveCollection = result.getHardDriveCollection();
@@ -154,6 +158,7 @@ public class O2MBidirectionalTest extends SDKISOTestBase
 		HardDrive hardDrive = (HardDrive)j.next();
 		assertNotNull(hardDrive);
 		assertNotNull(hardDrive.getId());
+		assertEquals(hardDrive.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(hardDrive.getSize());
 		assertEquals("1",hardDrive.getId().getExtension());
 	}
@@ -183,6 +188,7 @@ public class O2MBidirectionalTest extends SDKISOTestBase
 		HardDrive hardDrive = (HardDrive)i.next();		
 		assertNotNull(hardDrive);
 		assertNotNull(hardDrive.getId());
+		assertEquals(hardDrive.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(hardDrive.getSize());
 		assertEquals("1",hardDrive.getId().getExtension());
 	}
@@ -209,11 +215,12 @@ public class O2MBidirectionalTest extends SDKISOTestBase
 		
 		Iterator i = results.iterator();
 		
-		Computer computer = (Computer)i.next();
-		assertNotNull(computer);
-		assertNotNull(computer.getId());
-		assertNotNull(computer.getType());
-		assertEquals("1",computer.getId().getExtension());
+		Computer result = (Computer)i.next();
+		assertNotNull(result);
+		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
+		assertNotNull(result.getType());
+		assertEquals("1",result.getId().getExtension());
 	}	
 	/**
 	 * Uses CQL Criteria for search
@@ -245,11 +252,12 @@ public class O2MBidirectionalTest extends SDKISOTestBase
 		
 		for(Iterator i = results.iterator();i.hasNext();)
 		{
-			HardDrive hardDrive = (HardDrive)i.next();
-			assertNotNull(hardDrive);
-			assertNotNull(hardDrive.getId());
-			assertNotNull(hardDrive.getSize());
-			assertEquals(true,new Integer(hardDrive.getId().getExtension())>1);
+			HardDrive result = (HardDrive)i.next();
+			assertNotNull(result);
+			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
+			assertNotNull(result.getSize());
+			assertEquals(true,new Integer(result.getId().getExtension())>1);
 		}
 	}	
 	
@@ -263,12 +271,12 @@ public class O2MBidirectionalTest extends SDKISOTestBase
 		assertEquals(2, results.size());
 
 		for (Iterator i = results.iterator(); i.hasNext();) {
-			HardDrive hardDrive = (HardDrive) i.next();
-			assertNotNull(hardDrive);
-			assertNotNull(hardDrive.getId());
-			assertNotNull(hardDrive.getSize());
-			assertEquals(true,
-					new Integer(hardDrive.getId().getExtension()) > 1);
+			HardDrive result = (HardDrive) i.next();
+			assertNotNull(result);
+			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
+			assertNotNull(result.getSize());
+			assertEquals(true,new Integer(result.getId().getExtension()) > 1);
 		}
 	}
 
@@ -302,13 +310,14 @@ public class O2MBidirectionalTest extends SDKISOTestBase
 		
 		Iterator i = results.iterator();
 		
-		Computer computer = (Computer)i.next();
-		assertNotNull(computer);
+		Computer result = (Computer)i.next();
+		assertNotNull(result);
 		
-		assertNotNull(computer);
-		assertNotNull(computer.getId());
-		assertNotNull(computer.getType());
-		assertEquals("1",computer.getId().getExtension());
+		assertNotNull(result);
+		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
+		assertNotNull(result.getType());
+		assertEquals("1",result.getId().getExtension());
 	}	
 	
 	public void testOneAssociatedObjectHQL2() throws ApplicationException {
@@ -323,13 +332,14 @@ public class O2MBidirectionalTest extends SDKISOTestBase
 
 		Iterator i = results.iterator();
 
-		Computer computer = (Computer) i.next();
-		assertNotNull(computer);
+		Computer result = (Computer) i.next();
+		assertNotNull(result);
 
-		assertNotNull(computer);
-		assertNotNull(computer.getId());
-		assertNotNull(computer.getType());
-		assertEquals("1", computer.getId().getExtension());
+		assertNotNull(result);
+		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
+		assertNotNull(result.getType());
+		assertEquals("1", result.getId().getExtension());
 	}
 
 	/**
@@ -374,11 +384,13 @@ public class O2MBidirectionalTest extends SDKISOTestBase
 			HardDrive result = (HardDrive)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getSize());
 			
 			computer = result.getComputer();
 			assertNotNull(computer);
 			assertNotNull(computer.getId());
+			assertEquals(computer.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(computer.getType());
 		}
 	}	

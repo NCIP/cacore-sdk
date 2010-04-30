@@ -47,6 +47,7 @@ public class DifferentPackageWithAssociationTest extends SDKISOTestBase
 			Dessert result = (Dessert)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		}
 	}	
 	
@@ -72,6 +73,7 @@ public class DifferentPackageWithAssociationTest extends SDKISOTestBase
 			Pie result = (Pie)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getFilling());
 		}
 	}
@@ -97,6 +99,7 @@ public class DifferentPackageWithAssociationTest extends SDKISOTestBase
 			Utensil result = (Utensil)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 		}
 	}
@@ -128,6 +131,7 @@ public class DifferentPackageWithAssociationTest extends SDKISOTestBase
 			Pie result = (Pie)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getFilling());
 		}
 	}
@@ -145,6 +149,7 @@ public class DifferentPackageWithAssociationTest extends SDKISOTestBase
 			Pie result = (Pie) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getFilling());
 		}
 	}
@@ -175,6 +180,7 @@ public class DifferentPackageWithAssociationTest extends SDKISOTestBase
 			Pie result = (Pie)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getFilling());
 		}
 	}
@@ -205,6 +211,7 @@ public class DifferentPackageWithAssociationTest extends SDKISOTestBase
 			Utensil result = (Utensil)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 		}
 	}
@@ -222,6 +229,7 @@ public class DifferentPackageWithAssociationTest extends SDKISOTestBase
 			Utensil result = (Utensil) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 		}
 	}
@@ -266,6 +274,7 @@ public class DifferentPackageWithAssociationTest extends SDKISOTestBase
 		Pie result = (Pie)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertEquals("3", result.getId().getExtension());
 	}
 
@@ -329,6 +338,7 @@ public class DifferentPackageWithAssociationTest extends SDKISOTestBase
 		Dessert result = (Dessert)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertEquals("3",result.getId().getExtension());
 	}
 
@@ -354,6 +364,7 @@ public class DifferentPackageWithAssociationTest extends SDKISOTestBase
 		Pie result = (Pie)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(result.getFilling());
 		assertEquals("4", result.getId().getExtension());
 	}
@@ -387,6 +398,7 @@ public class DifferentPackageWithAssociationTest extends SDKISOTestBase
 		Dessert result = (Dessert)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertEquals("3", result.getId().getExtension());
 	}
 	
@@ -402,6 +414,7 @@ public class DifferentPackageWithAssociationTest extends SDKISOTestBase
 		Dessert result = (Dessert) results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertEquals("3", result.getId().getExtension());
 	}
 
@@ -434,6 +447,7 @@ public class DifferentPackageWithAssociationTest extends SDKISOTestBase
 		Pie result = (Pie)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertEquals("4", result.getId().getExtension());
 	}
 
@@ -448,6 +462,7 @@ public class DifferentPackageWithAssociationTest extends SDKISOTestBase
 		Pie result = (Pie) results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertEquals("4", result.getId().getExtension());
 	}
 
@@ -481,6 +496,7 @@ public class DifferentPackageWithAssociationTest extends SDKISOTestBase
 		Dessert result = (Dessert)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertEquals("1", result.getId().getExtension());
 	}
 
@@ -496,6 +512,7 @@ public class DifferentPackageWithAssociationTest extends SDKISOTestBase
 		Dessert result = (Dessert) results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertEquals("1", result.getId().getExtension());
 	}
 
@@ -529,6 +546,7 @@ public class DifferentPackageWithAssociationTest extends SDKISOTestBase
 		Pie result = (Pie)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertEquals("3", result.getId().getExtension());
 	}
 	
@@ -544,6 +562,7 @@ public class DifferentPackageWithAssociationTest extends SDKISOTestBase
 		Pie result = (Pie) results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertEquals("3", result.getId().getExtension());
 	}
 
@@ -564,6 +583,7 @@ public class DifferentPackageWithAssociationTest extends SDKISOTestBase
 			Pie result = (Pie)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getFilling());
 			
 			for(Iterator j = result.getUtensilCollection().iterator();j.hasNext();)
@@ -571,6 +591,7 @@ public class DifferentPackageWithAssociationTest extends SDKISOTestBase
 				utensil = (Utensil)j.next();
 				assertNotNull(utensil);
 				assertNotNull(utensil.getId());
+				assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 				assertNotNull(utensil.getName());
 			}
 		}

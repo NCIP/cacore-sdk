@@ -47,6 +47,7 @@ public class ParentWithAssociationSametableTest extends SDKISOTestBase
 			Luggage result = (Luggage)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getCapacity());
 		}
 	}
@@ -72,6 +73,7 @@ public class ParentWithAssociationSametableTest extends SDKISOTestBase
 			HardTop result = (HardTop)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getCapacity());
 			assertNotNull(result.getKeyCode());
 		}
@@ -98,8 +100,10 @@ public class ParentWithAssociationSametableTest extends SDKISOTestBase
 			SoftTop result = (SoftTop)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getCapacity());
 			assertNotNull(result.getExpandable());
+			assertEquals(result.getExpandable().getNullFlavor(),"MSK");
 		}
 	}
 	
@@ -124,6 +128,7 @@ public class ParentWithAssociationSametableTest extends SDKISOTestBase
 			Wheel result = (Wheel)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getRadius());
 		}
 	}
@@ -154,6 +159,7 @@ public class ParentWithAssociationSametableTest extends SDKISOTestBase
 			HardTop result = (HardTop)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getCapacity());
 			assertNotNull(result.getKeyCode());
 		}
@@ -173,6 +179,7 @@ public class ParentWithAssociationSametableTest extends SDKISOTestBase
 			HardTop result = (HardTop) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getCapacity());
 			assertNotNull(result.getKeyCode());
 		}
@@ -204,6 +211,7 @@ public class ParentWithAssociationSametableTest extends SDKISOTestBase
 			Luggage result = (Luggage)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getCapacity());
 		}
 	}
@@ -221,6 +229,7 @@ public class ParentWithAssociationSametableTest extends SDKISOTestBase
 			Luggage result = (Luggage) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getCapacity());
 		}
 	}
@@ -251,8 +260,10 @@ public class ParentWithAssociationSametableTest extends SDKISOTestBase
 			SoftTop result = (SoftTop)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getCapacity());
 			assertNotNull(result.getExpandable());
+			assertEquals(result.getExpandable().getNullFlavor(),"MSK");
 		}
 	}
 
@@ -269,8 +280,10 @@ public class ParentWithAssociationSametableTest extends SDKISOTestBase
 			SoftTop result = (SoftTop) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getCapacity());
 			assertNotNull(result.getExpandable());
+			assertEquals(result.getExpandable().getNullFlavor(),"MSK");
 		}
 	}	
 
@@ -300,6 +313,7 @@ public class ParentWithAssociationSametableTest extends SDKISOTestBase
 			Wheel result = (Wheel)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getRadius());
 		}
 	}
@@ -317,6 +331,7 @@ public class ParentWithAssociationSametableTest extends SDKISOTestBase
 			Wheel result = (Wheel) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getRadius());
 		}
 	}
@@ -367,6 +382,7 @@ public class ParentWithAssociationSametableTest extends SDKISOTestBase
 			HardTop result = (HardTop)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getKeyCode());
 			assertNotNull(result.getCapacity());
 			assertEquals(result.getKeyCode(),new Integer(627));
@@ -396,6 +412,7 @@ public class ParentWithAssociationSametableTest extends SDKISOTestBase
 		HardTop result = (HardTop)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertEquals("1", result.getId().getExtension());
 	}
 
@@ -460,6 +477,7 @@ public class ParentWithAssociationSametableTest extends SDKISOTestBase
 		Luggage result = (Luggage)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertEquals("2", result.getId().getExtension());
 	}
 
@@ -485,6 +503,7 @@ public class ParentWithAssociationSametableTest extends SDKISOTestBase
 		SoftTop result = (SoftTop)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertEquals("3", result.getId().getExtension());
 	}
 
@@ -510,6 +529,7 @@ public class ParentWithAssociationSametableTest extends SDKISOTestBase
 		Luggage result = (Luggage)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertEquals("3", result.getId().getExtension());
 	}
 	
@@ -544,6 +564,7 @@ public class ParentWithAssociationSametableTest extends SDKISOTestBase
 			HardTopType result = (HardTopType)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertEquals(new Integer(5), result.getId());
 			assertEquals(new Integer(100), result.getCapacity());
 			assertEquals(new Integer(890), result.getKeyCode());
@@ -579,6 +600,7 @@ public class ParentWithAssociationSametableTest extends SDKISOTestBase
 		Luggage result = (Luggage)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertEquals("1", result.getId().getExtension());
 	}
 	
@@ -594,6 +616,7 @@ public class ParentWithAssociationSametableTest extends SDKISOTestBase
 		Luggage result = (Luggage) results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertEquals("1", result.getId().getExtension());
 	}
 	
@@ -626,6 +649,7 @@ public class ParentWithAssociationSametableTest extends SDKISOTestBase
 		HardTop result = (HardTop)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertEquals("2", result.getId().getExtension());
 	}
 
@@ -642,6 +666,7 @@ public class ParentWithAssociationSametableTest extends SDKISOTestBase
 		HardTop result = (HardTop) results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertEquals("2", result.getId().getExtension());
 	}
 	
@@ -674,6 +699,7 @@ public class ParentWithAssociationSametableTest extends SDKISOTestBase
 		Luggage result = (Luggage)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertEquals("1", result.getId().getExtension());
 	}
 
@@ -689,6 +715,7 @@ public class ParentWithAssociationSametableTest extends SDKISOTestBase
 		Luggage result = (Luggage) results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertEquals("1", result.getId().getExtension());
 	}
 
@@ -721,6 +748,7 @@ public class ParentWithAssociationSametableTest extends SDKISOTestBase
 		SoftTop result = (SoftTop)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertEquals("4", result.getId().getExtension());
 	}
 
@@ -737,6 +765,7 @@ public class ParentWithAssociationSametableTest extends SDKISOTestBase
 		SoftTop result = (SoftTop) results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertEquals("4", result.getId().getExtension());
 	}
 	
@@ -754,11 +783,13 @@ public class ParentWithAssociationSametableTest extends SDKISOTestBase
 			Luggage result = (Luggage)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getCapacity());
 			
 			wheel = result.getWheel();
 			assertNotNull(wheel);
 			assertNotNull(wheel.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(wheel.getRadius());
 		}
 	}

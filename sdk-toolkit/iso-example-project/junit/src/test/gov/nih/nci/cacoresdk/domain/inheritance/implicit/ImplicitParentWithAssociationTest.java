@@ -51,6 +51,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 			AngelFish result = (AngelFish)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getGenera());
 			assertNotNull(result.getFinSize());
 		}
@@ -77,6 +78,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 			DiscusFish result = (DiscusFish)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getGenera());
 			assertNotNull(result.getPrimaryColor());
 		}
@@ -103,6 +105,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 			Fish result = (Fish)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getGenera());
 		}
 	}
@@ -128,6 +131,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 			FishTank result = (FishTank)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getShape());
 			assertNotNull(result.getNumGallons());
 		}
@@ -154,6 +158,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 			FreshwaterFishTank result = (FreshwaterFishTank)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getShape());
 			assertNotNull(result.getNumGallons());
 			assertNotNull(result.getFilterModel());
@@ -181,6 +186,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 			SaltwaterFishTank result = (SaltwaterFishTank)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getShape());
 			assertNotNull(result.getNumGallons());
 			assertNotNull(result.getProteinSkimmerModel());
@@ -208,6 +214,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 			Substrate result = (Substrate)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 		}
 	}
@@ -256,6 +263,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 			TankAccessory result = (TankAccessory)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 		}
 	}	
@@ -287,6 +295,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 			AngelFish result = (AngelFish)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getGenera());
 			assertNotNull(result.getFinSize());
 		}
@@ -318,6 +327,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 			DiscusFish result = (DiscusFish)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getGenera());
 			assertNotNull(result.getPrimaryColor());
 		}
@@ -349,6 +359,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 			Fish result = (Fish)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getGenera());
 		}
 	}
@@ -379,6 +390,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 			FishTank result = (FishTank)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getShape());
 			assertNotNull(result.getNumGallons());
 		}
@@ -410,6 +422,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 			FreshwaterFishTank result = (FreshwaterFishTank)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getShape());
 			assertNotNull(result.getNumGallons());
 			assertNotNull(result.getFilterModel());
@@ -442,6 +455,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 			SaltwaterFishTank result = (SaltwaterFishTank)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getShape());
 			assertNotNull(result.getNumGallons());
 			assertNotNull(result.getProteinSkimmerModel());
@@ -474,6 +488,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 			Substrate result = (Substrate)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 		}
 	}
@@ -532,6 +547,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 			TankAccessory result = (TankAccessory)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 		}
 	}	
@@ -604,6 +620,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 		AngelFish result = (AngelFish)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(result.getGenera());
 		assertNotNull(result.getFinSize());
 		assertEquals("3", result.getId().getExtension());
@@ -631,6 +648,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 		Fish result = (Fish)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertEquals("3", result.getId().getExtension());
 	}	
 	
@@ -653,6 +671,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 		FishTank result = (FishTank)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(result.getNumGallons());
 		assertNotNull(result.getShape());
 	}
@@ -702,6 +721,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 		FreshwaterFishTank result = (FreshwaterFishTank)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(result.getFilterModel());
 		assertNotNull(result.getNumGallons());
 		assertNotNull(result.getShape());
@@ -730,6 +750,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 		FishTank result = (FishTank)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(result.getNumGallons());
 		assertNotNull(result.getShape());
 		assertEquals(new Integer(1), result.getId());
@@ -832,6 +853,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 		Substrate result = (Substrate)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(result.getName());
 		assertEquals("1", result.getId().getExtension());
 	}	
@@ -865,6 +887,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 		AngelFish result = (AngelFish)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(result.getFinSize());
 		assertNotNull(result.getGenera());
 		assertEquals("3", result.getId().getExtension());
@@ -900,6 +923,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 		Fish result = (Fish)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(result.getGenera());
 		assertEquals("3", result.getId().getExtension());
 	}
@@ -933,6 +957,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 		FishTank result = (FishTank)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(result.getNumGallons());
 		assertNotNull(result.getShape());
 		assertEquals(new Integer(1), result.getId());
@@ -998,6 +1023,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 		FreshwaterFishTank result = (FreshwaterFishTank)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(result.getNumGallons());
 		assertNotNull(result.getShape());
 		assertEquals(new Integer(1), result.getId());
@@ -1033,6 +1059,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 		FishTank result = (FishTank)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertEquals(new Integer(1), result.getId());
 	}	
 
@@ -1067,6 +1094,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 		Fish result = (Fish)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(result.getGenera());
 		assertEquals(new Integer(4), result.getId());
 	}
@@ -1134,6 +1162,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 		SaltwaterFishTank result = (SaltwaterFishTank)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(result.getNumGallons());
 		assertNotNull(result.getProteinSkimmerModel());
 		assertNotNull(result.getShape());
@@ -1190,12 +1219,14 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 			SaltwaterFishTank result = (SaltwaterFishTank)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 
 			for(Iterator j = result.getSubstrateCollection().iterator();j.hasNext();)
 			{
 				substrate = (Substrate)j.next();
 				assertNotNull(substrate);
 				assertNotNull(substrate.getId());
+				assertEquals(substrate.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 				assertNotNull(substrate.getName());
 			}
 		}		
@@ -1218,6 +1249,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 			Fish fish = (Fish)i.next();
 			assertNotNull(fish);
 			assertNotNull(fish.getId());
+			assertEquals(fish.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(fish.getGenera());
 
 			tank = fish.getTank();
@@ -1242,6 +1274,7 @@ public class ImplicitParentWithAssociationTest extends SDKTestBase
 			TankAccessory tankAccessory = (TankAccessory)i.next();
 			assertNotNull(tankAccessory);
 			assertNotNull(tankAccessory.getId());
+			assertEquals(tankAccessory.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(tankAccessory.getName());
 			
 			flag = false;

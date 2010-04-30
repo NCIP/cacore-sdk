@@ -45,6 +45,7 @@ public class MultipleChildTest extends SDKISOTestBase
 			Student result = (Student)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 		}
 	}
@@ -95,6 +96,7 @@ public class MultipleChildTest extends SDKISOTestBase
 			GraduateStudent result = (GraduateStudent)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 			assertNotNull(result.getProjectName());
 		}
@@ -126,6 +128,7 @@ public class MultipleChildTest extends SDKISOTestBase
 			UndergraduateStudent result = (UndergraduateStudent)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 		}
 	}
@@ -144,6 +147,7 @@ public class MultipleChildTest extends SDKISOTestBase
 			UndergraduateStudent result = (UndergraduateStudent) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 		}
 	}
@@ -169,6 +173,7 @@ public class MultipleChildTest extends SDKISOTestBase
 			Student result = (Student) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 		}
 	}
@@ -191,6 +196,7 @@ public class MultipleChildTest extends SDKISOTestBase
 			Student result = (Student)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 		}
 	}
@@ -221,6 +227,7 @@ public class MultipleChildTest extends SDKISOTestBase
 			GraduateStudent result = (GraduateStudent)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 			assertNotNull(result.getProjectName());
 		}
@@ -239,6 +246,7 @@ public class MultipleChildTest extends SDKISOTestBase
 			GraduateStudent result = (GraduateStudent) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 			assertNotNull(result.getProjectName());
 		}
@@ -326,6 +334,7 @@ public class MultipleChildTest extends SDKISOTestBase
 			Student result = (Student)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 		}
 	}
@@ -354,6 +363,7 @@ public class MultipleChildTest extends SDKISOTestBase
 			GraduateStudent result = (GraduateStudent)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 		}
 	}
@@ -382,6 +392,7 @@ public class MultipleChildTest extends SDKISOTestBase
 			Student result = (Student)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 		}
 	}
@@ -417,6 +428,7 @@ public class MultipleChildTest extends SDKISOTestBase
 			Student result = (Student)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 		}
 	}
@@ -434,6 +446,7 @@ public class MultipleChildTest extends SDKISOTestBase
 			Student result = (Student) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 		}
 	}	
@@ -469,6 +482,7 @@ public class MultipleChildTest extends SDKISOTestBase
 			UndergraduateStudent result = (UndergraduateStudent)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 		}
 	}
@@ -486,6 +500,7 @@ public class MultipleChildTest extends SDKISOTestBase
 			UndergraduateStudent result = (UndergraduateStudent) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 		}
 	}	
@@ -521,6 +536,7 @@ public class MultipleChildTest extends SDKISOTestBase
 			Student result = (Student)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 		}
 	}
@@ -539,6 +555,7 @@ public class MultipleChildTest extends SDKISOTestBase
 			Student result = (Student) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 		}
 	}
@@ -574,6 +591,7 @@ public class MultipleChildTest extends SDKISOTestBase
 			GraduateStudent result = (GraduateStudent)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 		}
 	}
@@ -590,6 +608,7 @@ public class MultipleChildTest extends SDKISOTestBase
 			GraduateStudent result = (GraduateStudent) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 		}
 	}

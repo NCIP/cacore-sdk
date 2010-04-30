@@ -50,6 +50,7 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 			Goverment result = (Goverment)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getCountry());
 		}
 	}
@@ -75,6 +76,7 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 			CommunistGovt result = (CommunistGovt)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getCountry());
 		}
 	}
@@ -100,6 +102,7 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 			DemocraticGovt result = (DemocraticGovt)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getCountry());
 		}
 	}
@@ -125,6 +128,7 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 			ParliamantaryGovt result = (ParliamantaryGovt)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getCountry());			
 			assertNotNull(result.getPrimeMinister());
 		}
@@ -151,6 +155,7 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 			PresidentialGovt result = (PresidentialGovt)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getCountry());	
 			assertNotNull(result.getPresident());
 		}
@@ -183,6 +188,7 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 			Goverment result = (Goverment)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getCountry());
 		}
 	}
@@ -201,6 +207,7 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 			Goverment result = (Goverment) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getCountry());
 		}
 	}
@@ -231,6 +238,7 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 			CommunistGovt result = (CommunistGovt)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		}
 	}	
 
@@ -247,6 +255,7 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 			CommunistGovt result = (CommunistGovt) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		}
 	}
 	
@@ -276,6 +285,7 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 			ParliamantaryGovt result = (ParliamantaryGovt)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		}
 	}
 
@@ -292,6 +302,7 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 			ParliamantaryGovt result = (ParliamantaryGovt) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		}
 	}
 	
@@ -321,6 +332,7 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 			DemocraticGovt result = (DemocraticGovt)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		}
 	}
 
@@ -337,6 +349,7 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 			DemocraticGovt result = (DemocraticGovt) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		}
 	}
 
@@ -366,6 +379,7 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 			PresidentialGovt result = (PresidentialGovt)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getPresident());
 		}
 	}
@@ -384,6 +398,7 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 			PresidentialGovt result = (PresidentialGovt) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getPresident());
 		}
 	}
@@ -428,6 +443,7 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 			CommunistGovt result = (CommunistGovt)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		}		
 	}
 
@@ -491,6 +507,7 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 			DemocraticGovt result = (DemocraticGovt)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		}
 	}
 
@@ -515,6 +532,7 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 			PresidentialGovt result = (PresidentialGovt)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		}
 	}
 
@@ -539,6 +557,7 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 			DemocraticGovt result = (DemocraticGovt)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		}
 	}
 	
@@ -555,6 +574,7 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 			PresidentialGovt result = (PresidentialGovt)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		}
 	}
 	
@@ -589,6 +609,7 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 			DemocraticGovt result = (DemocraticGovt)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		}
 	}
 	
@@ -605,6 +626,7 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 			DemocraticGovt result = (DemocraticGovt) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		}
 	}
 
@@ -639,6 +661,7 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 			ParliamantaryGovt result = (ParliamantaryGovt)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		}
 	}
 
@@ -655,6 +678,7 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 			ParliamantaryGovt result = (ParliamantaryGovt) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		}
 	}
 	
@@ -689,6 +713,7 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 			DemocraticGovt result = (DemocraticGovt)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		}
 	}
 	
@@ -706,6 +731,7 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 			DemocraticGovt result = (DemocraticGovt) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		}
 	}
 
@@ -740,6 +766,7 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 			PresidentialGovt result = (PresidentialGovt)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		}
 	}
 
@@ -756,6 +783,7 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 			PresidentialGovt result = (PresidentialGovt) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		}
 	}
 	
@@ -800,6 +828,7 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 			Goverment result = (Goverment)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getCountry());
 		}
 	}
@@ -819,6 +848,7 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 			Goverment result = (Goverment) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getCountry());
 		}
 	}

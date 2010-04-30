@@ -44,6 +44,7 @@ public class M2OUnidirectionalTest extends SDKISOTestBase
 			Restaurant result = (Restaurant)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 		}
 	}
@@ -69,6 +70,7 @@ public class M2OUnidirectionalTest extends SDKISOTestBase
 			Chef result = (Chef)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 		}
 	}
@@ -96,6 +98,7 @@ public class M2OUnidirectionalTest extends SDKISOTestBase
 		Chef result = (Chef)i.next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(result.getName());
 		
 		assertNull(result.getRestaurant());
@@ -144,11 +147,13 @@ public class M2OUnidirectionalTest extends SDKISOTestBase
 		Chef result = (Chef)i.next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(result.getName());
 		
 		Restaurant restaurant = result.getRestaurant();
 		assertNotNull(restaurant);
 		assertNotNull(restaurant.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(restaurant.getName());
 		assertEquals(new Integer(1),restaurant.getId());
 	}
@@ -177,6 +182,7 @@ public class M2OUnidirectionalTest extends SDKISOTestBase
 		Restaurant restaurant = (Restaurant)i.next();
 		assertNotNull(restaurant);
 		assertNotNull(restaurant.getId());
+		assertEquals(restaurant.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(restaurant.getName());
 		assertEquals(new Integer(1),restaurant.getId());
 	}
@@ -252,6 +258,7 @@ public class M2OUnidirectionalTest extends SDKISOTestBase
 		Restaurant restaurant = (Restaurant)i.next();
 		assertNotNull(restaurant);
 		assertNotNull(restaurant.getId());
+		assertEquals(restaurant.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(restaurant.getName());
 		assertEquals(new Integer(1),restaurant.getId());
 	}	
@@ -270,6 +277,7 @@ public class M2OUnidirectionalTest extends SDKISOTestBase
 		Restaurant restaurant = (Restaurant) i.next();
 		assertNotNull(restaurant);
 		assertNotNull(restaurant.getId());
+		assertEquals(restaurant.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(restaurant.getName());
 		assertEquals("1", restaurant.getId().getExtension());
 	}
@@ -289,12 +297,14 @@ public class M2OUnidirectionalTest extends SDKISOTestBase
 			Chef result = (Chef)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 			
 			if (new Integer(result.getId().getExtension()) != 4) { //Chef id=4 has no Restaurant associated with it
 				restaurant = result.getRestaurant();
 				assertNotNull(restaurant);
 				assertNotNull(restaurant.getId());
+				assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 				assertNotNull(restaurant.getName());
 			}
 

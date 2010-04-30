@@ -19,6 +19,8 @@ public abstract class SDKISOTestBase extends TestCase {
 
 	private ApplicationService appService;
 	private ApplicationService appServiceFromUrl;
+	
+	protected String II_ROOT_GLOBAL_CONSTANT_VALUE = "2.16.12.123.456.1";
 
 	protected void setUp() throws Exception {
 		super.setUp();

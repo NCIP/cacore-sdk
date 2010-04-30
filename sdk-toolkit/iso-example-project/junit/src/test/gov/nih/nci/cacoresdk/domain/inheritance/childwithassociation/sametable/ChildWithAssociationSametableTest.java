@@ -19,6 +19,10 @@ import test.gov.nih.nci.cacoresdk.SDKISOTestBase;
 
 public class ChildWithAssociationSametableTest extends SDKISOTestBase
 {
+	protected String DESIGNER_SHOES_ROOT_LOCAL_CONSTANT_VALUE = "DesignerShoesRoot LocalConstant";
+	protected String SHOES_ROOT_LOCAL_CONSTANT_VALUE = "ShoesRoot LocalConstant";
+	protected String SPORTS_SHOES_ROOT_LOCAL_CONSTANT_VALUE = "DesignerShoesRoot LocalConstant";	
+	
 	public static String getTestCaseName()
 	{
 		return "Child With Association Same Table Test Case";
@@ -45,6 +49,7 @@ public class ChildWithAssociationSametableTest extends SDKISOTestBase
 			Shoes result = (Shoes)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getColor());
 		}
 	}
@@ -70,6 +75,7 @@ public class ChildWithAssociationSametableTest extends SDKISOTestBase
 			SportsShoes result = (SportsShoes)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),SPORTS_SHOES_ROOT_LOCAL_CONSTANT_VALUE);
 			assertNotNull(result.getColor());
 			assertNotNull(result.getSportsType());
 		}
@@ -96,6 +102,7 @@ public class ChildWithAssociationSametableTest extends SDKISOTestBase
 			DesignerShoes result = (DesignerShoes)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),DESIGNER_SHOES_ROOT_LOCAL_CONSTANT_VALUE);
 			assertNotNull(result.getColor());
 		}
 	}
@@ -122,12 +129,14 @@ public class ChildWithAssociationSametableTest extends SDKISOTestBase
 			DesignerShoes result = (DesignerShoes)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),DESIGNER_SHOES_ROOT_LOCAL_CONSTANT_VALUE);
 			assertNotNull(result.getColor());
 			
 			designer = result.getDesigner();
 			
 			assertNotNull(designer);
 			assertNotNull(designer.getId());
+			assertEquals(result.getId().getRoot(),DESIGNER_SHOES_ROOT_LOCAL_CONSTANT_VALUE);
 			assertNotNull(designer.getName());
 		}
 	}
@@ -153,6 +162,7 @@ public class ChildWithAssociationSametableTest extends SDKISOTestBase
 			Designer result = (Designer)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 		}
 	}
@@ -183,6 +193,7 @@ public class ChildWithAssociationSametableTest extends SDKISOTestBase
 			SportsShoes result = (SportsShoes)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),SPORTS_SHOES_ROOT_LOCAL_CONSTANT_VALUE);
 			assertNotNull(result.getColor());
 		}
 	}
@@ -199,6 +210,7 @@ public class ChildWithAssociationSametableTest extends SDKISOTestBase
 			SportsShoes result = (SportsShoes) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),SPORTS_SHOES_ROOT_LOCAL_CONSTANT_VALUE);
 			assertNotNull(result.getColor());
 		}
 	}
@@ -229,6 +241,7 @@ public class ChildWithAssociationSametableTest extends SDKISOTestBase
 			Shoes result = (Shoes)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getColor());
 		}
 	}
@@ -245,6 +258,7 @@ public class ChildWithAssociationSametableTest extends SDKISOTestBase
 			Shoes result = (Shoes) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getColor());
 		}
 	}
@@ -275,6 +289,7 @@ public class ChildWithAssociationSametableTest extends SDKISOTestBase
 			DesignerShoes result = (DesignerShoes)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),DESIGNER_SHOES_ROOT_LOCAL_CONSTANT_VALUE);
 			assertNotNull(result.getColor());
 		}
 	}
@@ -292,6 +307,7 @@ public class ChildWithAssociationSametableTest extends SDKISOTestBase
 			DesignerShoes result = (DesignerShoes) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),DESIGNER_SHOES_ROOT_LOCAL_CONSTANT_VALUE);
 			assertNotNull(result.getColor());
 		}
 	}
@@ -322,6 +338,7 @@ public class ChildWithAssociationSametableTest extends SDKISOTestBase
 			Designer result = (Designer)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 		}
 	}
@@ -340,6 +357,7 @@ public class ChildWithAssociationSametableTest extends SDKISOTestBase
 			Designer result = (Designer) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 		}
 	}
@@ -424,6 +442,7 @@ public class ChildWithAssociationSametableTest extends SDKISOTestBase
 		SportsShoes result = (SportsShoes)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),SPORTS_SHOES_ROOT_LOCAL_CONSTANT_VALUE);
 		assertEquals("2", result.getId().getExtension());
 	}
 
@@ -449,6 +468,7 @@ public class ChildWithAssociationSametableTest extends SDKISOTestBase
 		Shoes result = (Shoes)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),SPORTS_SHOES_ROOT_LOCAL_CONSTANT_VALUE);
 		assertEquals("2", result.getId().getExtension());
 	}
 
@@ -474,6 +494,7 @@ public class ChildWithAssociationSametableTest extends SDKISOTestBase
 		DesignerShoes result = (DesignerShoes)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),DESIGNER_SHOES_ROOT_LOCAL_CONSTANT_VALUE);
 		assertEquals("3", result.getId().getExtension());	}
 
 	/**
@@ -498,6 +519,7 @@ public class ChildWithAssociationSametableTest extends SDKISOTestBase
 		Shoes result = (Shoes)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),DESIGNER_SHOES_ROOT_LOCAL_CONSTANT_VALUE);
 		assertEquals("3", result.getId().getExtension());
 	}
 	
@@ -530,6 +552,7 @@ public class ChildWithAssociationSametableTest extends SDKISOTestBase
 		Shoes result = (Shoes)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertEquals("2", result.getId().getExtension());
 	}
 	
@@ -544,6 +567,7 @@ public class ChildWithAssociationSametableTest extends SDKISOTestBase
 		Shoes result = (Shoes) results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),SHOES_ROOT_LOCAL_CONSTANT_VALUE);
 		assertEquals("2", result.getId().getExtension());
 	}
 
@@ -576,6 +600,7 @@ public class ChildWithAssociationSametableTest extends SDKISOTestBase
 		SportsShoes result = (SportsShoes)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),SPORTS_SHOES_ROOT_LOCAL_CONSTANT_VALUE);
 		assertEquals("2", result.getId().getExtension());
 	}
 
@@ -590,6 +615,7 @@ public class ChildWithAssociationSametableTest extends SDKISOTestBase
 		SportsShoes result = (SportsShoes)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),SPORTS_SHOES_ROOT_LOCAL_CONSTANT_VALUE);
 		assertEquals("2", result.getId().getExtension());
 	}
 	
@@ -622,6 +648,7 @@ public class ChildWithAssociationSametableTest extends SDKISOTestBase
 		Shoes result = (Shoes)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),DESIGNER_SHOES_ROOT_LOCAL_CONSTANT_VALUE);
 		assertEquals("1", result.getId().getExtension());
 	}
 
@@ -638,6 +665,7 @@ public class ChildWithAssociationSametableTest extends SDKISOTestBase
 		Shoes result = (Shoes) results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),DESIGNER_SHOES_ROOT_LOCAL_CONSTANT_VALUE);
 		assertEquals("1", result.getId().getExtension());
 	}
 
@@ -670,6 +698,7 @@ public class ChildWithAssociationSametableTest extends SDKISOTestBase
 		DesignerShoes result = (DesignerShoes)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),DESIGNER_SHOES_ROOT_LOCAL_CONSTANT_VALUE);
 		assertEquals("3", result.getId().getExtension());	}
 	
 	public void testAssociationHQL4() throws ApplicationException {
@@ -685,6 +714,7 @@ public class ChildWithAssociationSametableTest extends SDKISOTestBase
 		DesignerShoes result = (DesignerShoes) results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),DESIGNER_SHOES_ROOT_LOCAL_CONSTANT_VALUE);
 		assertEquals("3", result.getId().getExtension());
 	}
 }

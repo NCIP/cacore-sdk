@@ -44,6 +44,7 @@ public class O2OUnidirectionalTest extends SDKISOTestBase
 			Person result = (Person)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 		}
 	}
@@ -69,6 +70,7 @@ public class O2OUnidirectionalTest extends SDKISOTestBase
 			Address result = (Address)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getZip());
 		}
 	}
@@ -96,6 +98,7 @@ public class O2OUnidirectionalTest extends SDKISOTestBase
 		Person result = (Person)i.next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(result.getName());
 		
 		Address address = result.getLivesAt();
@@ -145,6 +148,7 @@ public class O2OUnidirectionalTest extends SDKISOTestBase
 		Person result = (Person)i.next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(result.getName());
 		
 		Address address = result.getLivesAt();
@@ -152,6 +156,7 @@ public class O2OUnidirectionalTest extends SDKISOTestBase
 		
 		assertNotNull(address);
 		assertNotNull(address.getId());
+		assertEquals(address.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(address.getZip());
 		assertEquals("1",address.getId().getExtension());
 	}
@@ -183,6 +188,7 @@ public class O2OUnidirectionalTest extends SDKISOTestBase
 		
 		assertNotNull(address);
 		assertNotNull(address.getId());
+		assertEquals(address.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(address.getZip());
 		assertEquals("1",address.getId().getExtension());
 	}
@@ -261,6 +267,7 @@ public class O2OUnidirectionalTest extends SDKISOTestBase
 		
 		assertNotNull(address);
 		assertNotNull(address.getId());
+		assertEquals(address.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(address.getZip());
 		assertEquals("1",address.getId().getExtension());
 	}	
@@ -282,6 +289,7 @@ public class O2OUnidirectionalTest extends SDKISOTestBase
 
 		assertNotNull(address);
 		assertNotNull(address.getId());
+		assertEquals(address.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(address.getZip());
 		assertEquals("1", address.getId().getExtension());
 	}
@@ -301,6 +309,7 @@ public class O2OUnidirectionalTest extends SDKISOTestBase
 			Person result = (Person)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 			
 			if (new Integer(result.getId().getExtension()) < 4){//Person id=1,2,3 have an associated Address; the others don't

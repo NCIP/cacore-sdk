@@ -49,6 +49,7 @@ public class InterfaceTest extends SDKISOTestBase
 			Dog result = (Dog)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getBreed());
 			assertNotNull(result.getGender());
 		}
@@ -80,6 +81,7 @@ public class InterfaceTest extends SDKISOTestBase
 			Dog result = (Dog)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getBreed());
 			assertNotNull(result.getGender());
 		}
@@ -97,6 +99,7 @@ public class InterfaceTest extends SDKISOTestBase
 			Dog result = (Dog) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getBreed());
 			assertNotNull(result.getGender());
 		}

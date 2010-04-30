@@ -44,6 +44,7 @@ public class O2OUnidirectionalWJoinTest extends SDKISOTestBase
 			Bag result = (Bag)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getStyle());
 		}
 	}
@@ -69,6 +70,7 @@ public class O2OUnidirectionalWJoinTest extends SDKISOTestBase
 			Handle result = (Handle)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getColor());
 		}
 	}
@@ -96,6 +98,7 @@ public class O2OUnidirectionalWJoinTest extends SDKISOTestBase
 		Bag result = (Bag)i.next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(result.getStyle());
 		
 		Handle handle = result.getHandle();
@@ -145,6 +148,7 @@ public class O2OUnidirectionalWJoinTest extends SDKISOTestBase
 		Bag result = (Bag)i.next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(result.getStyle());
 		
 		Handle handle = result.getHandle();
@@ -152,6 +156,7 @@ public class O2OUnidirectionalWJoinTest extends SDKISOTestBase
 		
 		assertNotNull(handle);
 		assertNotNull(handle.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(handle.getColor());
 		assertEquals("1",handle.getId().getExtension());
 	}
@@ -183,6 +188,7 @@ public class O2OUnidirectionalWJoinTest extends SDKISOTestBase
 		
 		assertNotNull(handle);
 		assertNotNull(handle.getId());
+		assertEquals(handle.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(handle.getColor());
 		assertEquals("1",handle.getId().getExtension());
 	}
@@ -261,6 +267,7 @@ public class O2OUnidirectionalWJoinTest extends SDKISOTestBase
 		
 		assertNotNull(handle);
 		assertNotNull(handle.getId());
+		assertEquals(handle.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(handle.getColor());
 		assertEquals("1",handle.getId().getExtension());
 	}	
@@ -283,6 +290,7 @@ public class O2OUnidirectionalWJoinTest extends SDKISOTestBase
 
 		assertNotNull(handle);
 		assertNotNull(handle.getId());
+		assertEquals(handle.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(handle.getColor());
 		assertEquals("1", handle.getId().getExtension());
 	}
@@ -302,12 +310,14 @@ public class O2OUnidirectionalWJoinTest extends SDKISOTestBase
 			Bag result = (Bag)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getStyle());
 			
 			if (new Integer(result.getId().getExtension()) < 11){
 				handle = result.getHandle();
 				assertNotNull(handle);
 				assertNotNull(handle.getId());
+				assertEquals(handle.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 				assertNotNull(handle.getColor());
 			}
 		}

@@ -43,6 +43,7 @@ public class M2MBidirectionalTest extends SDKISOTestBase
 			Employee result = (Employee)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 		}
 	}
@@ -68,6 +69,7 @@ public class M2MBidirectionalTest extends SDKISOTestBase
 			Project result = (Project)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 		}
 	}
@@ -95,6 +97,7 @@ public class M2MBidirectionalTest extends SDKISOTestBase
 		Employee result = (Employee)i.next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(result.getName());
 		
 		Collection projectCollection = result.getProjectCollection();
@@ -145,6 +148,7 @@ public class M2MBidirectionalTest extends SDKISOTestBase
 		Employee result = (Employee)i.next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(result.getName());
 		
 		Collection projectCollection = result.getProjectCollection();
@@ -153,6 +157,7 @@ public class M2MBidirectionalTest extends SDKISOTestBase
 		Project project = (Project)j.next();
 		assertNotNull(project);
 		assertNotNull(project.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(project.getName());
 		assertEquals("1",project.getId().getExtension());
 		
@@ -185,6 +190,7 @@ public class M2MBidirectionalTest extends SDKISOTestBase
 		Project project = (Project)i.next();
 		assertNotNull(project);
 		assertNotNull(project.getId());
+		assertEquals(project.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(project.getName());
 		assertEquals("1",project.getId().getExtension());
 	}
@@ -214,6 +220,7 @@ public class M2MBidirectionalTest extends SDKISOTestBase
 		Employee employee = (Employee)i.next();
 		assertNotNull(employee);
 		assertNotNull(employee.getId());
+		assertEquals(employee.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(employee.getName());
 		assertEquals("1",employee.getId().getExtension());
 	}	

@@ -47,6 +47,7 @@ public class ParentWithAssociationTest extends SDKISOTestBase
 			Professor result = (Professor)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 		}
 	}
@@ -72,6 +73,7 @@ public class ParentWithAssociationTest extends SDKISOTestBase
 			TenuredProfessor result = (TenuredProfessor)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 			assertNotNull(result.getTenuredYear());
 		}
@@ -98,6 +100,7 @@ public class ParentWithAssociationTest extends SDKISOTestBase
 			AssociateProfessor result = (AssociateProfessor)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 			assertNotNull(result.getYearsServed());
 		}
@@ -124,6 +127,7 @@ public class ParentWithAssociationTest extends SDKISOTestBase
 			Assistant result = (Assistant)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 		}
 	}
@@ -149,6 +153,7 @@ public class ParentWithAssociationTest extends SDKISOTestBase
 			AssistantProfessor result = (AssistantProfessor)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 			assertNotNull(result.getJoiningYear());
 		}
@@ -180,6 +185,7 @@ public class ParentWithAssociationTest extends SDKISOTestBase
 			TenuredProfessor result = (TenuredProfessor)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 			assertNotNull(result.getTenuredYear());
 		}
@@ -199,6 +205,7 @@ public class ParentWithAssociationTest extends SDKISOTestBase
 			TenuredProfessor result = (TenuredProfessor) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 			assertNotNull(result.getTenuredYear());
 		}
@@ -230,6 +237,7 @@ public class ParentWithAssociationTest extends SDKISOTestBase
 			Professor result = (Professor)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 		}
 	}
@@ -247,6 +255,7 @@ public class ParentWithAssociationTest extends SDKISOTestBase
 			Professor result = (Professor) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 		}
 	}
@@ -277,6 +286,7 @@ public class ParentWithAssociationTest extends SDKISOTestBase
 			AssociateProfessor result = (AssociateProfessor)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 			assertNotNull(result.getYearsServed());
 		}
@@ -295,6 +305,7 @@ public class ParentWithAssociationTest extends SDKISOTestBase
 			AssociateProfessor result = (AssociateProfessor) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 			assertNotNull(result.getYearsServed());
 		}
@@ -326,6 +337,7 @@ public class ParentWithAssociationTest extends SDKISOTestBase
 			Assistant result = (Assistant)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 		}
 	}
@@ -342,6 +354,7 @@ public class ParentWithAssociationTest extends SDKISOTestBase
 			Assistant result = (Assistant) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 		}
 	}
@@ -372,6 +385,7 @@ public class ParentWithAssociationTest extends SDKISOTestBase
 			AssistantProfessor result = (AssistantProfessor)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 			assertNotNull(result.getJoiningYear());
 		}
@@ -390,6 +404,7 @@ public class ParentWithAssociationTest extends SDKISOTestBase
 			AssistantProfessor result = (AssistantProfessor) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 			assertNotNull(result.getJoiningYear());
 		}
@@ -436,6 +451,7 @@ public class ParentWithAssociationTest extends SDKISOTestBase
 		TenuredProfessor result = (TenuredProfessor)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertEquals("1", result.getId().getExtension());
 	}
 
@@ -500,6 +516,7 @@ public class ParentWithAssociationTest extends SDKISOTestBase
 		Professor result = (Professor)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertEquals("2", result.getId().getExtension());
 	}
 
@@ -525,6 +542,7 @@ public class ParentWithAssociationTest extends SDKISOTestBase
 		AssociateProfessor result = (AssociateProfessor)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertEquals("7", result.getId().getExtension());
 	}
 
@@ -550,6 +568,7 @@ public class ParentWithAssociationTest extends SDKISOTestBase
 		Professor result = (Professor)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertEquals("7", result.getId().getExtension());
 	}
 	
@@ -582,6 +601,7 @@ public class ParentWithAssociationTest extends SDKISOTestBase
 		Professor result = (Professor)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertEquals("1", result.getId().getExtension());
 	}
 
@@ -596,6 +616,7 @@ public class ParentWithAssociationTest extends SDKISOTestBase
 		Professor result = (Professor) results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertEquals("1", result.getId().getExtension());
 	}	
 
@@ -628,6 +649,7 @@ public class ParentWithAssociationTest extends SDKISOTestBase
 		TenuredProfessor result = (TenuredProfessor)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertEquals("2", result.getId().getExtension());
 	}
 
@@ -644,6 +666,7 @@ public class ParentWithAssociationTest extends SDKISOTestBase
 		TenuredProfessor result = (TenuredProfessor) results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertEquals("2", result.getId().getExtension());
 	}
 
@@ -677,6 +700,7 @@ public class ParentWithAssociationTest extends SDKISOTestBase
 		Professor result = (Professor)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertEquals("1", result.getId().getExtension());
 	}
 
@@ -692,6 +716,7 @@ public class ParentWithAssociationTest extends SDKISOTestBase
 		Professor result = (Professor) results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertEquals("1", result.getId().getExtension());
 	}	
 
@@ -725,6 +750,7 @@ public class ParentWithAssociationTest extends SDKISOTestBase
 		AssociateProfessor result = (AssociateProfessor)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertEquals("6", result.getId().getExtension());
 	}
 	
@@ -742,6 +768,7 @@ public class ParentWithAssociationTest extends SDKISOTestBase
 		AssociateProfessor result = (AssociateProfessor)results.iterator().next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertEquals("6", result.getId().getExtension());
 	}
 

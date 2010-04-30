@@ -47,6 +47,7 @@ public class LevelAssociationTest extends SDKISOTestBase
 			Hand result = (Hand)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		}
 	}
 
@@ -71,6 +72,7 @@ public class LevelAssociationTest extends SDKISOTestBase
 			Card result = (Card)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());			
 		}
 	}
@@ -96,6 +98,7 @@ public class LevelAssociationTest extends SDKISOTestBase
 			Suit result = (Suit)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());			
 		}
 	}
@@ -121,6 +124,7 @@ public class LevelAssociationTest extends SDKISOTestBase
 			Deck result = (Deck)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 		}
 	}
@@ -147,6 +151,7 @@ public class LevelAssociationTest extends SDKISOTestBase
 		
 		assertNotNull(card);
 		assertNotNull(card.getId());
+		assertEquals(card.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		
 		Suit suit = card.getSuit();
 		
@@ -174,6 +179,7 @@ public class LevelAssociationTest extends SDKISOTestBase
 		
 		assertNotNull(card);
 		assertNotNull(card.getId());
+		assertEquals(card.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		
 		Suit suit = card.getSuit();
 		
@@ -209,6 +215,7 @@ public class LevelAssociationTest extends SDKISOTestBase
 			Card result = (Card)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		}
 	}
 
@@ -235,6 +242,7 @@ public class LevelAssociationTest extends SDKISOTestBase
 			Card result = (Card)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		}
 	}
 
@@ -261,6 +269,7 @@ public class LevelAssociationTest extends SDKISOTestBase
 			Suit result = (Suit)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		}
 	}
 
@@ -287,6 +296,7 @@ public class LevelAssociationTest extends SDKISOTestBase
 			Deck result = (Deck)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		}
 	}
 
@@ -319,6 +329,7 @@ public class LevelAssociationTest extends SDKISOTestBase
 			Card result = (Card)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		}
 	}
 	
@@ -336,6 +347,7 @@ public class LevelAssociationTest extends SDKISOTestBase
 			Card result = (Card) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		}
 	}
 
@@ -381,6 +393,7 @@ public class LevelAssociationTest extends SDKISOTestBase
 			Card result = (Card)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		}
 	}
 	
@@ -398,6 +411,7 @@ public class LevelAssociationTest extends SDKISOTestBase
 			Card result = (Card) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		}
 	}
 
@@ -437,6 +451,7 @@ public class LevelAssociationTest extends SDKISOTestBase
 			Suit result = (Suit)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		}
 	}
 
@@ -481,6 +496,7 @@ public class LevelAssociationTest extends SDKISOTestBase
 			Deck result = (Deck)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		}
 	}
 }

@@ -44,6 +44,7 @@ public class O2OMultipleAssociationWJoinTest extends SDKISOTestBase
 			InLaw result = (InLaw)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 		}
 	}
@@ -69,6 +70,7 @@ public class O2OMultipleAssociationWJoinTest extends SDKISOTestBase
 			Bride result = (Bride)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 		}
 	}
@@ -97,6 +99,7 @@ public class O2OMultipleAssociationWJoinTest extends SDKISOTestBase
 		Bride result = (Bride)i.next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(result.getName());
 		
 		assertNotNull(result.getFather());
@@ -126,6 +129,7 @@ public class O2OMultipleAssociationWJoinTest extends SDKISOTestBase
 		Bride result = (Bride)i.next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(result.getName());
 		
 		assertNull(result.getFather());
@@ -155,6 +159,7 @@ public class O2OMultipleAssociationWJoinTest extends SDKISOTestBase
 		Bride result = (Bride)i.next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(result.getName());
 		
 		assertNull(result.getFather());
@@ -311,6 +316,7 @@ public class O2OMultipleAssociationWJoinTest extends SDKISOTestBase
 		
 		assertNotNull(parent);
 		assertNotNull(parent.getId());
+		assertEquals(parent.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(parent.getName());
 		assertEquals("1",parent.getId().getExtension());
 	}		
@@ -333,6 +339,7 @@ public class O2OMultipleAssociationWJoinTest extends SDKISOTestBase
 
 		assertNotNull(parent);
 		assertNotNull(parent.getId());
+		assertEquals(parent.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(parent.getName());
 		assertEquals("1", parent.getId().getExtension());
 	}
@@ -372,6 +379,7 @@ public class O2OMultipleAssociationWJoinTest extends SDKISOTestBase
 		
 		assertNotNull(parent);
 		assertNotNull(parent.getId());
+		assertEquals(parent.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(parent.getName());
 		assertEquals("2",parent.getId().getExtension());
 	}	
@@ -393,6 +401,7 @@ public class O2OMultipleAssociationWJoinTest extends SDKISOTestBase
 
 		assertNotNull(parent);
 		assertNotNull(parent.getId());
+		assertEquals(parent.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(parent.getName());
 		assertEquals("2", parent.getId().getExtension());
 	}
@@ -416,16 +425,19 @@ public class O2OMultipleAssociationWJoinTest extends SDKISOTestBase
 			Bride result = (Bride)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 			
 			fatherInLaw = result.getFather();
 			assertNotNull(fatherInLaw);
 			assertNotNull(fatherInLaw.getId());
+			assertEquals(fatherInLaw.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(fatherInLaw.getName());
 			
 			motherInLaw = result.getMother();
 			assertNotNull(motherInLaw);
 			assertNotNull(motherInLaw.getId());
+			assertEquals(motherInLaw.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(motherInLaw.getName());
 		}
 	}	
