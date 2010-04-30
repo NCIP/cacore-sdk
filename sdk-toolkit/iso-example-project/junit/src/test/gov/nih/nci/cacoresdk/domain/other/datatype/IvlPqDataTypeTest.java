@@ -346,8 +346,8 @@ public class IvlPqDataTypeTest extends SDKISOTestBase
 			{
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
-				assertValue1Constants(data);
 				assertNull(data.getValue1().getLow().getValue());
+				assertValue1Constants(data);
 				counter++;
 			}
 		}
@@ -357,17 +357,12 @@ public class IvlPqDataTypeTest extends SDKISOTestBase
 	{
 		assertNull(data.getValue1().getHigh());
 		assertNull(data.getValue1().getAny());
-		//Local constant
-		assertEquals(NullFlavor.NA, data.getValue1().getNullFlavor());
+		assertNull(data.getValue1().getNullFlavor());
 		assertNull(data.getValue1().getHighClosed());
 		assertNull(data.getValue1().getLowClosed());
 		assertNull(data.getValue1().getWidth());
 		assertNull(data.getValue1().getLow().getPrecision());
-		//Global constant
-		assertEquals(NullFlavor.NI, data.getValue1().getLow().getNullFlavor());
-		//Local constant
-		assertEquals("UNIT", data.getValue1().getLow().getUnit());
-		
+		assertEquals("GALLON", data.getValue1().getLow().getUnit());
 	}
 	
 	private void assertValue2(Collection<IvlPqDataType> result, List<Integer> index)
@@ -485,7 +480,9 @@ public class IvlPqDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 				assertValue2Constants(data);
-				assertNotNull(data.getValue2().getLow());
+				assertNull(data.getValue2().getLow());
+				assertEquals(NullFlavor.NI, data.getValue2().getNullFlavor());
+		
 				counter++;
 			}
 		}
@@ -494,14 +491,10 @@ public class IvlPqDataTypeTest extends SDKISOTestBase
 	private void assertValue2Constants(IvlPqDataType data)
 	{
 		assertNull(data.getValue2().getAny());
-		//Global constant
-		assertEquals(NullFlavor.NI, data.getValue2().getNullFlavor());
 		assertNull(data.getValue2().getHighClosed());
 		assertNull(data.getValue2().getLowClosed());
 		assertNull(data.getValue2().getWidth());
 		assertNull(data.getValue2().getHigh());
-		//Global constant
-		assertEquals(NullFlavor.NI, data.getValue2().getLow().getNullFlavor());
 	}
 	
 	private void assertValue3(Collection<IvlPqDataType> result, List<Integer> index)
@@ -582,7 +575,6 @@ public class IvlPqDataTypeTest extends SDKISOTestBase
 				assertNull(data.getValue3().getNullFlavor());
 				assertEquals(new BigDecimal(224.1, decimalContext), data.getValue3().getLow().getValue());
 				assertEquals(new Integer(2), data.getValue3().getLow().getPrecision());
-				//From the database overriding global constant
 				assertEquals("Unit", data.getValue3().getLow().getUnit());
 				assertValue3Constants(data);
 
@@ -598,11 +590,10 @@ public class IvlPqDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue3());
 
-				//From the database overriding global constant
-				assertEquals(NullFlavor.NI, data.getValue3().getNullFlavor());
+				assertNull(data.getValue3().getNullFlavor());
 				assertNull(data.getValue3().getLow().getValue());
+				assertEquals(NullFlavor.NI, data.getValue3().getLow().getNullFlavor());
 				assertNull(data.getValue3().getLow().getPrecision());
-				//From the database overriding global constant
 				assertNull(data.getValue3().getLow().getUnit());
 				assertValue3Constants(data);
 
@@ -616,6 +607,9 @@ public class IvlPqDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue3());
 				assertNull(data.getValue3().getNullFlavor());
 				assertValue3Constants(data);
+				assertNull(data.getValue3().getLow().getUnit());
+				//Global constant
+				assertEquals(NullFlavor.NI, data.getValue3().getLow().getNullFlavor());
 				counter++;
 			}
 		}
@@ -624,8 +618,6 @@ public class IvlPqDataTypeTest extends SDKISOTestBase
 	private void assertValue3Constants(IvlPqDataType data)
 	{
 		assertNull(data.getValue3().getAny());
-		//Global constant
-		assertEquals(NullFlavor.NI, data.getValue3().getLow().getNullFlavor());
 		assertNull(data.getValue3().getHighClosed());
 		assertNull(data.getValue3().getLowClosed());
 		assertNull(data.getValue3().getWidth());

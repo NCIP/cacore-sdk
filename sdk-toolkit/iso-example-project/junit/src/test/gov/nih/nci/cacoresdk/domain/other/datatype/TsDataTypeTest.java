@@ -48,23 +48,9 @@ public class TsDataTypeTest extends SDKISOTestBase
 		TsDataType searchObject = new TsDataType();
 		Collection<TsDataType> results = search("gov.nih.nci.cacoresdk.domain.other.datatype.TsDataType",searchObject );
 		assertNotNull(results);
-//		printTS(results);
 		assertEquals(12,results.size());
 	}
 
-	private void printTS(Collection<TsDataType> results)
-	{
-		for(TsDataType data : results)
-		{
-			System.out.println("******************************************");
-			System.out.println("TsDataType");
-			System.out.println("data Id: "+ data.getId());
-			System.out.println("data value1: "+ data.getValue1());
-			System.out.println("data value2: "+ data.getValue2());
-			System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-		}
-	}
-	
 	/**
 	 * Uses HQL for search
 	 * Verifies that the results are returned 
@@ -204,7 +190,7 @@ public class TsDataTypeTest extends SDKISOTestBase
 
 				assertEquals(df.parse("03/11/2010 12:00:00 AM"), df.parse(df.format(data.getValue1().getValue())));
 				assertTrue(data.getValue1().getValue().equals(data.getValue1().getValue()));
-				assertValue1Constants(data);
+				assertNull(data.getValue1().getNullFlavor());
 
 				counter++;
 				continue;
@@ -219,7 +205,7 @@ public class TsDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue1());
 
 				assertEquals(df.parse("03/12/2010 12:00:00 AM"), df.parse(df.format(data.getValue1().getValue())));
-				assertValue1Constants(data);
+				assertNull(data.getValue1().getNullFlavor());
 
 				counter++;
 				continue;
@@ -234,7 +220,7 @@ public class TsDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue1());
 				
 				assertEquals(df.parse("03/13/2010 12:00:00 AM"), df.parse(df.format(data.getValue1().getValue())));
-				assertValue1Constants(data);
+				assertNull(data.getValue1().getNullFlavor());
 				
 				counter++;
 				continue;
@@ -249,7 +235,7 @@ public class TsDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue1());
 				
 				assertEquals(df.parse("03/14/2010 12:00:00 AM"), df.parse(df.format(data.getValue1().getValue())));
-				assertValue1Constants(data);
+				assertNull(data.getValue1().getNullFlavor());
 
 				counter++;
 				continue;
@@ -264,7 +250,7 @@ public class TsDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue1());
 
 				assertEquals(df.parse("03/15/2010 12:00:00 AM"), df.parse(df.format(data.getValue1().getValue())));
-				assertValue1Constants(data);
+				assertNull(data.getValue1().getNullFlavor());
 
 				counter++;
 				continue;
@@ -275,18 +261,12 @@ public class TsDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 				assertNull(data.getValue1().getValue());
-				assertValue1Constants(data);
+				assertEquals(NullFlavor.NA, data.getValue1().getNullFlavor());
 				counter++;
 			}
 		}
 	}
 
-	private void assertValue1Constants(TsDataType data)
-	{
-		//Local constant overriding global constant
-		assertEquals(NullFlavor.NA, data.getValue1().getNullFlavor());
-	}
-	
 	private void assertValue2(Collection<TsDataType> result, List<Integer> index) throws ParseException, URISyntaxException
 	{
 		assertNotNull(result);

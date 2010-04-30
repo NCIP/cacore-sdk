@@ -319,6 +319,7 @@ public class DsetIiDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data);
 				Ii item = data.getValue1().getItem().iterator().next();
 				assertEquals("Extension1", item.getExtension());
+				//Local constant
 				assertEquals("2.16.12.123.456", item.getRoot());
 			
 				assertNull(item.getNullFlavor());
@@ -339,6 +340,7 @@ public class DsetIiDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data);
 				Ii item = data.getValue1().getItem().iterator().next();
 				assertEquals("Extension2", item.getExtension());
+				//Local constant
 				assertEquals("2.16.12.123.456", item.getRoot());
 			
 				assertNull(item.getNullFlavor());
@@ -359,6 +361,7 @@ public class DsetIiDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data);
 				Ii item = data.getValue1().getItem().iterator().next();
 				assertEquals("Extension3", item.getExtension());
+				//Local constant
 				assertEquals("2.16.12.123.456", item.getRoot());
 			
 				assertNull(item.getNullFlavor());
@@ -379,6 +382,7 @@ public class DsetIiDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data);
 				Ii item = data.getValue1().getItem().iterator().next();
 				assertEquals("Extension4", item.getExtension());
+				//Local constant
 				assertEquals("2.16.12.123.456", item.getRoot());
 			
 				assertNull(item.getNullFlavor());
@@ -399,6 +403,7 @@ public class DsetIiDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data);
 				Ii item = data.getValue1().getItem().iterator().next();
 				assertEquals("Extension5", item.getExtension());
+				//Local constant
 				assertEquals("2.16.12.123.456", item.getRoot());
 			
 				assertNull(item.getNullFlavor());
@@ -416,7 +421,8 @@ public class DsetIiDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data);
 				Ii item = data.getValue1().getItem().iterator().next();
 				assertNotNull(item);
-				assertEquals(NullFlavor.NI, item.getNullFlavor());
+				assertNull(item.getNullFlavor());
+				//Local constant
 				assertEquals("2.16.12.123.456", item.getRoot());
 	
 				assertNull(item.getExtension());
@@ -445,15 +451,14 @@ public class DsetIiDataTypeTest extends SDKISOTestBase{
 
 				assertNotNull(data);
 				Ii item = data.getValue2().getItem().iterator().next();
-				assertEquals("Extension1", item.getExtension());
+				assertNull(item.getExtension());
 			
-				assertNull(item.getNullFlavor());
+				assertEquals(NullFlavor.NI, item.getNullFlavor());
 				assertNull(item.getIdentifierName());
-				//Global constants
-				assertEquals("2.16.12.123.456.1", item.getRoot());
-				assertEquals(IdentifierReliability.ISS, item.getReliability());
-				assertEquals(IdentifierScope.OBJ, item.getScope());
-				assertEquals(Boolean.TRUE, item.getDisplayable());
+				assertNull(item.getRoot());
+				assertNull(item.getReliability());
+				assertNull(item.getScope());
+				assertNull(item.getDisplayable());
 				counter++;
 				continue;
 			}

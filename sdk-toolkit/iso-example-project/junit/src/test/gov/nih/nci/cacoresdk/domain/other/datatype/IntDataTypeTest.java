@@ -13,6 +13,7 @@ import java.util.List;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Property;
+import org.hibernate.criterion.Restrictions;
 
 import test.gov.nih.nci.cacoresdk.SDKISOTestBase;
 
@@ -115,7 +116,7 @@ public class IntDataTypeTest extends SDKISOTestBase
 	public void testIntValue2ByDetachedCriteria() throws ApplicationException
 	{
 		DetachedCriteria criteria = DetachedCriteria.forClass(IntDataType.class);
-		criteria.add(Property.forName("value2.value").isNotNull());
+		criteria.add(Restrictions.or(Property.forName("value2.value").isNotNull(), Property.forName("value2.nullFlavor").isNotNull()));
 		criteria.addOrder(Order.asc("id"));
 
 		Collection<IntDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.IntDataType");
@@ -138,7 +139,7 @@ public class IntDataTypeTest extends SDKISOTestBase
 	@SuppressWarnings("unchecked")
 	public void testIntValue2ByHQLCriteria() throws ApplicationException
 	{
-		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.IntDataType a where a.value2.value is not null order by a.id asc asc");
+		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.IntDataType a where (a.value2.value is not null or a.value2.nullFlavor is not null) order by a.id asc asc");
 		Collection<IntDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.IntDataType");
 		assertEquals(6, result.size());
 		List index = new ArrayList();
@@ -198,7 +199,7 @@ public class IntDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 
-				assertEquals(NullFlavor.NA, data.getValue1().getNullFlavor());
+				assertNull(data.getValue1().getNullFlavor());
 				assertEquals(new Integer(2), data.getValue1().getValue());
 
 				counter++;
@@ -213,7 +214,7 @@ public class IntDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 
-				assertEquals(NullFlavor.NA, data.getValue1().getNullFlavor());
+				assertNull(data.getValue1().getNullFlavor());
 				assertEquals(new Integer(3), data.getValue1().getValue());
 				
 				counter++;
@@ -228,7 +229,7 @@ public class IntDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 
-				assertEquals(NullFlavor.NA, data.getValue1().getNullFlavor());
+				assertNull(data.getValue1().getNullFlavor());
 				assertEquals(new Integer(4), data.getValue1().getValue());
 
 				counter++;
@@ -243,7 +244,7 @@ public class IntDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 
-				assertEquals(NullFlavor.NA, data.getValue1().getNullFlavor());
+				assertNull(data.getValue1().getNullFlavor());
 				assertEquals(new Integer(5), data.getValue1().getValue());
 
 				counter++;

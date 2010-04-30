@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Property;
 
 import test.gov.nih.nci.cacoresdk.SDKISOTestBase;
@@ -73,7 +74,9 @@ public class BlDataTypeTest extends SDKISOTestBase{
 
 		Collection<BlDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.BlDataType");
 		assertEquals(1, result.size());
-		assertValue1(result, 2);
+		List index = new ArrayList();
+		index.add("2");
+		assertValue1(result, index);
 	}
 
 	/**
@@ -89,7 +92,9 @@ public class BlDataTypeTest extends SDKISOTestBase{
 		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.BlDataType a where a.value1.value = ?  order by a.id", params);
 		Collection<BlDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.BlDataType");
 		assertEquals(1, result.size());
-		assertValue1(result, 2);
+		List index = new ArrayList();
+		index.add("2");
+		assertValue1(result, index);
 	}
 
 
@@ -106,7 +111,9 @@ public class BlDataTypeTest extends SDKISOTestBase{
 
 		Collection<BlDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.BlDataType");
 		assertEquals(1, result.size());
-		assertValue2(result, 4);
+		List index = new ArrayList();
+		index.add("4");
+		assertValue2(result, index);
 	}
 
 	/**
@@ -122,7 +129,9 @@ public class BlDataTypeTest extends SDKISOTestBase{
 		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.BlDataType a where a.value2.value = ?  order by a.id", params);
 		Collection<BlDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.BlDataType");
 		assertEquals(1, result.size());
-		assertValue2(result, 4);
+		List index = new ArrayList();
+		index.add("4");
+		assertValue2(result, index);
 	}
 
 	/**
@@ -133,100 +142,106 @@ public class BlDataTypeTest extends SDKISOTestBase{
 	@SuppressWarnings("unchecked")
 	public void testBlValue() throws ApplicationException
 	{
-		BlDataType searchObject = new BlDataType();
-		Collection<BlDataType> result = search("gov.nih.nci.cacoresdk.domain.other.datatype.BlDataType",searchObject );
-		assertValue1(result, 0);
-		assertValue2(result, 0);
+		DetachedCriteria criteria = DetachedCriteria.forClass(BlDataType.class);
+		criteria.addOrder(Order.asc("id"));
+		Collection<BlDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.BlDataType");
+		assertEquals(4, result.size());
+		assertValue1(result, null);
+		assertValue2(result, null);
 	}
 
-	private void assertValue1(Collection<BlDataType> result, int index)
+	private void assertValue1(Collection<BlDataType> result, List index)
 	{
 		assertNotNull(result);
-
-		//Record1
-		BlDataType data = null;
-		
-		if(result.iterator().hasNext() && (index == 1 || index == -1))
+		int counter = 1;
+		for(BlDataType data :  result)
 		{
-			data = result.iterator().next();
-			assertNotNull(data.getValue1());
-			assertNull(data.getValue1().getValue());
-			//Local constant overriding global constant
-			assertEquals(NullFlavor.UNK, data.getValue1().getNullFlavor());
-		}
-		
-		//Record2
-		if(result.iterator().hasNext() && (index == 2 || index == 0))
-		{
-			data = result.iterator().next();
-			assertNotNull(data.getValue1());
-			assertEquals(Boolean.TRUE, data.getValue1().getValue());
-			//Local constant overriding global constant
-			assertEquals(NullFlavor.UNK, data.getValue1().getNullFlavor());
-		}
-		
-		//Record3
-		if(result.iterator().hasNext() && (index == 3 || index == 0))
-		{
-			data = result.iterator().next();
-			assertNotNull(data.getValue1());
-			assertNull(data.getValue1().getValue());
-			//Local constant overriding global constant
-			assertEquals(NullFlavor.UNK, data.getValue1().getNullFlavor());
-		}
-		
-		//Record4
-		if(result.iterator().hasNext() && (index == 4 || index == 0))
-		{
-			data = result.iterator().next();
-			assertNotNull(data.getValue1());
-			assertNull(data.getValue1().getValue());
-			//Local constant overriding global constant
-			assertEquals(NullFlavor.UNK, data.getValue1().getNullFlavor());
+			if((index == null && counter == 1) || (index != null && index.contains("1")))
+			{
+				assertNotNull(data.getValue1());
+				assertNull(data.getValue1().getValue());
+				//Local constant overriding global constant
+				assertEquals(NullFlavor.UNK, data.getValue1().getNullFlavor());
+				if(index != null) index.remove("1");
+				counter++;
+			}
+			
+			//Record2
+			else if((index == null && counter == 2) || (index != null && index.contains("2")))
+			{
+				assertNotNull(data.getValue1());
+				assertEquals(Boolean.TRUE, data.getValue1().getValue());
+				assertNull(data.getValue1().getNullFlavor());
+				if(index != null) index.remove("2");
+				counter++;
+			}
+			
+			//Record3
+			else if((index == null && counter == 3) || (index != null && index.contains("3")))
+			{
+				assertNotNull(data.getValue1());
+				assertNull(data.getValue1().getValue());
+				//Local constant overriding global constant
+				assertEquals(NullFlavor.UNK, data.getValue1().getNullFlavor());
+				if(index != null) index.remove("3");
+				counter++;
+			}
+			
+			//Record4
+			else if((index == null && counter == 4) || (index != null && index.contains("4")))
+			{
+				assertNotNull(data.getValue1());
+				assertNull(data.getValue1().getValue());
+				//Local constant overriding global constant
+				assertEquals(NullFlavor.UNK, data.getValue1().getNullFlavor());
+				if(index != null) index.remove("4");
+				counter++;
+			}
 		}
 	}
 
-	private void assertValue2(Collection<BlDataType> result, int index)
+	private void assertValue2(Collection<BlDataType> result, List index)
 	{
 		assertNotNull(result);
-
-		//Record1
-		BlDataType data = null;
-		if(result.iterator().hasNext() && (index == 1 || index == 0))
+		int counter = 1;
+		for(BlDataType data :  result)
 		{
-			data = result.iterator().next();
-			assertNotNull(data.getValue2());
-			//From database 
-			assertNull(data.getValue2().getNullFlavor());
-		}
-		
-		//Record2
-		if(result.iterator().hasNext() && (index == 2 || index == 0))
-		{
-			data = result.iterator().next();
-			assertNotNull(data.getValue2());
-			//From database 
-			assertNull(data.getValue2().getNullFlavor());
-		}
-		
-		//Record3
-		if(result.iterator().hasNext() && (index == 3 || index == 0))
-		{
-			data = result.iterator().next();
-			assertNotNull(data.getValue2());
-			assertEquals(Boolean.TRUE, data.getValue2().getValue());
-			//From database 
-			assertNull(data.getValue2().getNullFlavor());
-		}
-
-		//Record4
-		else if(result.iterator().hasNext() && (index == 4 || index == 0))
-		{
-			data = result.iterator().next();
-			assertNotNull(data.getValue2());
-			assertEquals(Boolean.FALSE, data.getValue2().getValue());
-			//From the database
-			assertEquals(NullFlavor.INV, data.getValue2().getNullFlavor());
+			if((index == null && counter == 1) || (index != null && index.contains("1")))
+			{
+				assertNull(data.getValue2());
+				if(index != null) index.remove("1");
+				counter++;
+			}
+			
+			//Record2
+			else if((index == null && counter == 2) || (index != null && index.contains("2")))
+			{
+				assertNull(data.getValue2());
+				if(index != null) index.remove("2");
+				counter++;
+			}
+			
+			//Record3
+			else if((index == null && counter == 3) || (index != null && index.contains("3")))
+			{
+				assertNotNull(data.getValue2());
+				assertEquals(Boolean.TRUE, data.getValue2().getValue());
+				//From database 
+				assertNull(data.getValue2().getNullFlavor());
+				if(index != null) index.remove("3");
+				counter++;
+			}
+	
+			//Record4
+			else if((index == null && counter == 4) || (index != null && index.contains("4")))
+			{
+				assertNotNull(data.getValue2());
+				assertEquals(Boolean.FALSE, data.getValue2().getValue());
+				//From the database
+				assertEquals(NullFlavor.INV, data.getValue2().getNullFlavor());
+				if(index != null) index.remove("4");
+				counter++;
+			}
 		}
 	}
 	

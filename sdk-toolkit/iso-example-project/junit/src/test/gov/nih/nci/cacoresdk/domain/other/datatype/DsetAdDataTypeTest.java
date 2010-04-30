@@ -281,7 +281,9 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 				assertEquals(AddressPartType.AL, ad.getType());
 				assertEquals("1 Jefferson Street", ad.getValue());
 				assertNull(ad.getCode());
-				assertNull(ad.getCodeSystem());
+				//Global constant
+				assertEquals("ADXP Code System", ad.getCodeSystem());
+				
 				assertNull(data.getValue1().getItem().iterator().next().getNullFlavor());
 				counter++;
 				continue;
@@ -304,7 +306,8 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 				assertEquals(AddressPartType.AL, ad.getType());
 				assertEquals("2 Jefferson Street", ad.getValue());
 				assertNull(ad.getCode());
-				assertNull(ad.getCodeSystem());
+				//Global constant
+				assertEquals("ADXP Code System", ad.getCodeSystem());
 				assertNull(data.getValue1().getItem().iterator().next().getNullFlavor());
 				counter++;
 				continue;
@@ -327,7 +330,8 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 				assertEquals(AddressPartType.AL, ad.getType());
 				assertEquals("3 Jefferson Street", ad.getValue());
 				assertNull(ad.getCode());
-				assertNull(ad.getCodeSystem());
+				//Global constant
+				assertEquals("ADXP Code System", ad.getCodeSystem());
 				assertNull(data.getValue1().getItem().iterator().next().getNullFlavor());
 				counter++;
 				continue;
@@ -350,7 +354,8 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 				assertEquals(AddressPartType.AL, ad.getType());
 				assertEquals("4 Sun Street", ad.getValue());
 				assertNull(ad.getCode());
-				assertNull(ad.getCodeSystem());
+				//Global constant
+				assertEquals("ADXP Code System", ad.getCodeSystem());
 				assertNull(data.getValue1().getItem().iterator().next().getNullFlavor());
 				counter++;
 				continue;
@@ -373,7 +378,8 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 				assertEquals(AddressPartType.AL, ad.getType());
 				assertEquals("5 Sun Street", ad.getValue());
 				assertNull(ad.getCode());
-				assertNull(ad.getCodeSystem());
+				//Global constant
+				assertEquals("ADXP Code System", ad.getCodeSystem());
 				assertNull(data.getValue1().getItem().iterator().next().getNullFlavor());
 				counter++;
 				continue;
@@ -382,7 +388,17 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 			else
 			{
 				assertNotNull(data);
-				assertNull(data.getValue1());
+				assertNotNull(data.getValue1());
+				assertNotNull(data);
+				assertNotNull(data.getValue1());
+				assertNotNull(data.getValue1().getItem());
+				Ad address = data.getValue1().getItem().iterator().next();
+				assertNotNull(address.getPart().get(0));
+				Adxp ad = address.getPart().get(0);
+				assertNull(ad.getType());
+				assertNull(ad.getValue());
+				//Global constant
+				assertEquals("ADXP Code System", ad.getCodeSystem());
 				counter++;
 			}
 		}

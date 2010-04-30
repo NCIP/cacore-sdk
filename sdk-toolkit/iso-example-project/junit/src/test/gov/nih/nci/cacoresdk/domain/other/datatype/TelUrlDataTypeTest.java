@@ -256,7 +256,7 @@ public class TelUrlDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 				assertNull(data.getValue1().getValue());
-				assertValue1Constants(data);
+				assertEquals(NullFlavor.NA, data.getValue1().getNullFlavor());
 				counter++;
 			}
 		}
@@ -264,8 +264,7 @@ public class TelUrlDataTypeTest extends SDKISOTestBase
 
 	private void assertValue1Constants(TelUrlDataType data)
 	{
-		//Local constant overriding global constant
-		assertEquals(NullFlavor.NA, data.getValue1().getNullFlavor());
+		assertNull(data.getValue1().getNullFlavor());
 	}
 	
 	private void assertValue2(Collection<TelUrlDataType> result, List<Integer> index) throws URISyntaxException
@@ -316,9 +315,8 @@ public class TelUrlDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 
-				assertNull(data.getValue2().getValue());
-				//From database, overriding global constant
-				assertEquals(NullFlavor.NA, data.getValue2().getNullFlavor());
+				assertNull(data.getValue2().getNullFlavor());
+				assertEquals(new URI("cid://www.cancer3.gov"), data.getValue2().getValue());
 
 				counter++;
 				continue;
@@ -332,9 +330,8 @@ public class TelUrlDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 
-				assertNull(data.getValue2().getValue());
-				//From database, overriding global constant
-				assertEquals(NullFlavor.NA, data.getValue2().getNullFlavor());
+				assertNull(data.getValue2().getNullFlavor());
+				assertEquals(new URI("ftp://cancer.gov"), data.getValue2().getValue());
 
 				counter++;
 				continue;
@@ -348,9 +345,8 @@ public class TelUrlDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 
-				assertNull(data.getValue2().getValue());
-				//From database, overriding global constant
-				assertEquals(NullFlavor.NA, data.getValue2().getNullFlavor());
+				assertNull(data.getValue2().getNullFlavor());
+				assertEquals(new URI("http://www.cancer4.gov"), data.getValue2().getValue());
 
 				counter++;
 				continue;
