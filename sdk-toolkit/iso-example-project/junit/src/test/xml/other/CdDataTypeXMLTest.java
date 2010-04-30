@@ -72,9 +72,7 @@ public class CdDataTypeXMLTest extends SDKISOTestBase
 	@SuppressWarnings("unchecked")
 	public void testCdValue2ByHQLCriteria() throws ApplicationException
 	{
-		List params = new ArrayList();
-		params.add(NullFlavor.NI);
-		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.CdDataType a where a.value2.nullFlavor = ?  order by a.id asc", params);
+		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.CdDataType a where (a.value2.nullFlavor is not null or (a.value2.code is not null and a.value2.code not like 'CODE6%')) order by a.id asc");
 		Collection<CdDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.CdDataType");
 		assertEquals(5, result.size());
 		assertValue2(result);
@@ -119,7 +117,7 @@ public class CdDataTypeXMLTest extends SDKISOTestBase
 	@SuppressWarnings("unchecked")
 	public void testCdValue4ByHQLCriteria() throws ApplicationException
 	{
-		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.CdDataType a where a.value4.code is not null  order by a.id asc");
+		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.CdDataType a where (a.value4.code is not null or a.value4.nullFlavor is not null)  order by a.id asc");
 		Collection<CdDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.CdDataType");
 		assertEquals(8, result.size());
 		assertValue4(result);

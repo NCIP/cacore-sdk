@@ -110,7 +110,8 @@ public class IvlRealDataTypeXMLTest extends SDKISOTestBase
 		DetachedCriteria criteria = DetachedCriteria.forClass(IvlRealDataType.class);
 		LogicalExpression exp1 = Restrictions.or(Property.forName("value3.high.value").isNotNull(), Property.forName("value3.low.value").isNotNull());
 		LogicalExpression exp2 = Restrictions.or(Property.forName("value3.width.value").isNotNull(), Property.forName("value3.width.nullFlavor").isNotNull()); 
-		criteria.add(Restrictions.or(exp1, exp2));
+		LogicalExpression exp3 = Restrictions.or(exp1, exp2);
+		criteria.add(Restrictions.or(Property.forName("value3.nullFlavor").isNotNull(), exp3));
 		criteria.addOrder(Order.asc("id"));
 
 		Collection<IvlRealDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.IvlRealDataType");
@@ -126,7 +127,7 @@ public class IvlRealDataTypeXMLTest extends SDKISOTestBase
 	@SuppressWarnings("unchecked")
 	public void testIvlTsValue3ByHQLCriteria() throws ApplicationException, ParseException
 	{
-		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.IvlRealDataType a where (a.value3.low.value is not null or a.value3.high.value is not null or a.value3.width.value is not null or a.value3.width.nullFlavor is not null) order by a.id asc asc");
+		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.IvlRealDataType a where (a.value3.low.value is not null or a.value3.high.value is not null or a.value3.width.value is not null or a.value3.width.nullFlavor is not null or a.value3.nullFlavor is not null) order by a.id asc asc");
 		Collection<IvlRealDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.IvlRealDataType");
 		assertEquals(10, result.size());
 		assertValue3(result);
