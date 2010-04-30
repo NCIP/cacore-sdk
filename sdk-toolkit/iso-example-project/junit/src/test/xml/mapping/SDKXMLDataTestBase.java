@@ -160,7 +160,7 @@ public abstract class SDKXMLDataTestBase extends TestCase {
 		
 		myUtil.fromXML(myFile);
 		
-		System.out.println("Has validation exceptions: " +((JAXBUnmarshaller)unmarshaller).hasValidationExceptions() );
+		log.debug("Has validation exceptions: " +((JAXBUnmarshaller)unmarshaller).hasValidationExceptions() );
 		
 		return !((JAXBUnmarshaller)unmarshaller).hasValidationExceptions();
 
