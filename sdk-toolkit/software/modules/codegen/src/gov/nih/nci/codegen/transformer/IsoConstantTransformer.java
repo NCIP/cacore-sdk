@@ -208,14 +208,13 @@ public class IsoConstantTransformer implements Transformer{
 
 	private String removeBraces(String name) 
 	{
-		String r = "";
-		char c1 = '[';
-		char c2 = ']';
-		for (int i = 0; i < name.length(); i++)
-		{
-			if (name.charAt(i) != c1 && name.charAt(i) != c2)
-				r += name.charAt(i);
-		}
-		return r;
+
+		if(name.indexOf('[')<0) return name;
+		
+		String temp = name;
+		temp = temp.replace('[','_');
+		temp = temp.substring(0, name.length()-1);
+		
+		return temp;
 	}
 }
