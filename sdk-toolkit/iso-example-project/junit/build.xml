@@ -7,15 +7,13 @@
 <project name="caCORE SDK Test" default="readThickClientTest" basedir=".">
 
 	<!-- load properties files -->
-	<property name="PROJECT_NAME" value="isoExample"/>
 	<property name="project.home" location="${basedir}/.." />
 	<property name="project.build.home" location="${project.home}/build" />
 
+	<property name="output.dir.location" value="${project.home}/target/dist/exploded"/>
 	<property file="${project.build.home}/codegen.properties" />
 	<property file="${project.build.home}/install.properties" />
 	<property file="${SDK_INSTALL_DIR}/software/build/project.properties"/>
-	<property file="${project.home}/${junit.dir}/project.properties"/>
-
 
 	<property name="junit.home" location="${project.home}/junit" />
 	<property name="src.dir" value="${junit.home}/src"/>
@@ -23,41 +21,23 @@
 	<property name="classes.dir" value="${junit.home}/classes"/>
 	<property name="test.cobertura.dir" value="${SDK_INSTALL_DIR}/software/target/modules/lib/test-cobertura"/>
 
-	<echo>*  ${project.home}</echo>	
-	
 	<property name="project.target.dir" value="${project.home}/target"/>
 	<property name="dist.dir" value="${project.target.dir}/dist"/>
 	<property name="dist.exploded.dir" value="${dist.dir}/exploded"/>
-	
-	<echo>**  ${dist.exploded.dir}</echo>
 
-	<property name="output.dir" value="${dist.exploded.dir}/${output.dir.name}"/>
-	
-	<echo>***  ${output.dir}</echo>
-	
-	<property name="output.project.dir" value="${output.dir}/${PROJECT_NAME}"/>
-	<property name="package.dir" value="${output.project.dir}/package"/>
-	<property name="package.client.local.lib.dir" value="${package.dir}/local-client"/>
-	
-	<echo>****  ${package.client.local.lib.dir}</echo>	
-	
-	
 	<property name="junit.report.dir" value="${junit.home}/report"/>
 	<property name="aggregate.report.dir" value="${junit.report.dir}/aggregate-report"/>
 	<property name="cobertura.report.dir" value="${junit.report.dir}/cobertura-report"/>
 	
 	<property name="report.project.dir" value="${junit.report.dir}/defaultTest" />
-
 	<property name="build.report.dir" value="${report.project.dir}/build-report" />
 
 	<property name="report.dir" value="${report.project.dir}" />
-	<property name="report.dir.app.service" value="${report.dir}/appservice" />
 	<property name="report.dir.thick-client.cql.query" value="${report.dir}/thick-client-cql" />
 	<property name="report.dir.remote-client.cql.query" value="${report.dir}/remote-client-cql" />
 	<property name="report.dir.thick-client" value="${report.dir}/thick-client" />
 	<property name="report.dir.remote-client" value="${report.dir}/remote-client" />
 	<property name="report.dir.hv-client" value="${report.dir}/hibernate-validator-client" />
-	<property name="report.dir.ws-client" value="${report.dir}/ws-client" />
 	<property name="report.dir.xsd-client" value="${report.dir}/xsd-client" />
 	<property name="report.dir.xml-thick-data-client" value="${report.dir}/xml-local-data-client" />
 	<property name="report.dir.xml-remote-data-client" value="${report.dir}/xml-remote-data-client" />
@@ -110,12 +90,12 @@
 	*** Classpath entries
 	*********************************************************************** -->
 	<path id="local-client-cp">
-		<fileset dir="../target/dist/exploded/${package.client.local.lib.dir}">
+		<fileset dir="${package.client.local.lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
 		<path refid="junit-lib" />
 		<pathelement path="${classes.dir}" />
-		<pathelement path="../target/dist/exploded/${package.client.local.conf.dir}" />
+		<pathelement path="${package.client.local.conf.dir}" />
 	</path>
 
 	<path id="junit-lib">
@@ -195,7 +175,7 @@
 		<attribute name="includePattern" />
 		<attribute name="junitreportfile" />
 		<attribute name="excludePattern" />
-		<attribute name="loginConfig.location" default="../target/dist/exploded/${package.client.local.conf.dir}"/>
+		<attribute name="loginConfig.location" default="${package.client.local.conf.dir}"/>
 		<sequential>
 			<delete dir="@{junitOutputDir}" />
 			<mkdir dir="@{junitOutputDir}" />
@@ -218,7 +198,9 @@
 				<sysproperty key="net.sourceforge.cobertura.datafile" file="@{junitOutputDir}/cobertura.ser" />
 				
 				<classpath>
+					<path refid="instrumented.classpath" />
 					<path refid="@{junitClasspath}"/>
+					<path refid="project.test.cobertura.classpath"/>
 				</classpath>
 				<formatter type="xml" />
 				<batchtest haltonfailure="no" todir="@{junitOutputDir}" fork="true">
@@ -242,9 +224,8 @@
 
 	<macrodef name="SDKCompileJUnit">
 		<attribute name="compileClasspath" />
-		<attribute name="includePattern"/>
+		<attribute name="includePattern" />
 		<attribute name="excludePattern" />
-				
 		<sequential>
 			<mkdir dir="${classes.dir}"/>
 			<javac srcdir="${src.dir}" destdir="${classes.dir}" debug="true" debuglevel="lines,vars,source">
@@ -307,19 +288,13 @@
 		<delete dir="${classes.dir}" />
 	</target>
 
-	<target name="compileJUnit" depends="createDir">
-		<SDKCompileJUnit compileClasspath="local-client-cp" includePattern="**/test/gov/**/cacoresdk/*.java" excludePattern="" />
-		<SDKCompileJUnit compileClasspath="local-client-cp" includePattern="**/test/gov/**/cacoresdk/**/*.java" excludePattern="" />
-	</target>
-
 	<!-- ************************************************************************************************-->
 	<!--                                Run JUnits for Thick client            	                         -->
 	<!-- ************************************************************************************************-->
 
 	<target name="readThickClientTest" depends="createDir">
 		<SDKCompileJUnit compileClasspath="local-client-cp" includePattern="**/cacoresdk/**/*Test.java" excludePattern="" />
-		<SDKCompileJUnit compileClasspath="local-client-cp" includePattern="**/test/gov/**/cacoresdk/**/*.java" excludePattern="" />
-		<SDKRunJUnit junitClasspath="local-client-cp" junitOutputDir="${report.dir.thick-client}" includePattern="**/cacoresdk/**/*Test.class" excludePattern="**/cacoresdk/**/DsetAd*Test.class" junitreportfile="TEST-readThickClient.xml" />
+		<SDKRunJUnit junitClasspath="local-client-cp" junitOutputDir="${report.dir.thick-client}" includePattern="**/cacoresdk/**/*Test.class" excludePattern="" junitreportfile="TEST-readThickClient.xml" />
 		<SDKGenerateReport junitOutputDir="${report.dir.thick-client}" />
 	</target>
 
@@ -331,6 +306,16 @@
 		<SDKCompileJUnit compileClasspath="remote-client-cp" includePattern="**/*XSD*.java" excludePattern="" />
 		<SDKRunJUnit junitClasspath="remote-client-cp" junitOutputDir="${report.dir.xsd-client}" includePattern="**/*XSD*Test.class" excludePattern="" junitreportfile="TEST-xsd.xml" />
 		<SDKGenerateReport junitOutputDir="${report.dir.xsd-client}" />
+	</target>
+
+	<!-- ************************************************************************************************-->
+	<!--                                Run JUnits for XML Mapping (Castor) client 	                     -->
+	<!-- ************************************************************************************************-->
+
+	<target name="xmlMappingTest" depends="createDir">
+		<SDKCompileJUnit compileClasspath="remote-client-cp" includePattern="**/*XMLMapping*.java" excludePattern="" />
+		<SDKRunJUnit junitClasspath="remote-client-cp" junitOutputDir="${report.dir.xml-mapping-client}" includePattern="**/*XMLMapping*Test.class" excludePattern="" junitreportfile="TEST-xmlMapping.xml"/>
+		<SDKGenerateReport junitOutputDir="${report.dir.xml-mapping-client}" />
 	</target>
 
 	<!-- ************************************************************************************************-->

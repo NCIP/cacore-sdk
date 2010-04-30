@@ -9,7 +9,8 @@
 	<!-- load properties files -->
 	<property name="project.home" location="${basedir}/.." />
 	<property name="project.build.home" location="${project.home}/build" />
-
+	
+	<property name="output.dir.location" value="${project.home}/target/dist/exploded"/>
 	<property file="${project.build.home}/codegen.properties" />
 	<property file="${project.build.home}/install.properties" />
 	<property file="${SDK_INSTALL_DIR}/software/build/project.properties"/>
