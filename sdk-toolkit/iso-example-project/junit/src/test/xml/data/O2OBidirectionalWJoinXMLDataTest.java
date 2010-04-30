@@ -40,9 +40,9 @@ public class O2OBidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"shape",result.getShape());
-			
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "shape", "value", result.getShape().getValue());
+
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
 			Pendant result2 = (Pendant)fromXML(result);
@@ -75,8 +75,8 @@ public class O2OBidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"metal",result.getMetal());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "metal", "value", result.getMetal().getValue());
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 

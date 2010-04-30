@@ -1,6 +1,5 @@
 package test.xml.data;
 
-import gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.sametable.Organization;
 import gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.CommunistGovt;
 import gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.ParliamantaryGovt;
 import gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.Goverment;
@@ -44,8 +43,8 @@ public class TwoLevelInheritanceSametableXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"country",result.getCountry());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "country", "value", result.getCountry().getValue());
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
@@ -79,8 +78,8 @@ public class TwoLevelInheritanceSametableXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"country",result.getCountry());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "country", "value", result.getCountry().getValue());
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
@@ -114,8 +113,8 @@ public class TwoLevelInheritanceSametableXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"country",result.getCountry());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "country", "value", result.getCountry().getValue());
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
@@ -149,9 +148,9 @@ public class TwoLevelInheritanceSametableXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"country",result.getCountry());
-			validateAttribute(result,"primeMinister",result.getPrimeMinister());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "country", "value", result.getCountry().getValue());
+			validateIso90210Element(result, "primeMinister", "value", result.getPrimeMinister().getValue());
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
@@ -186,9 +185,9 @@ public class TwoLevelInheritanceSametableXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"country",result.getCountry());
-			validateAttribute(result,"president",result.getPresident());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "country", "value", result.getCountry().getValue());
+			validateIso90210Element(result, "president", "value", result.getPresident().getValue());
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 

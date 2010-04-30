@@ -5,7 +5,6 @@ import java.util.Iterator;
 
 import test.xml.mapping.SDKXMLDataTestBase;
 
-import gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.sametable.Organization;
 import gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.Assistant;
 import gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.AssistantProfessor;
 import gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.AssociateProfessor;
@@ -44,8 +43,8 @@ public class ParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"name",result.getName());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "name", "value", result.getName().getValue());
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
@@ -79,9 +78,9 @@ public class ParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"name",result.getName());
-			validateAttribute(result,"tenuredYear",result.getTenuredYear());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "name", "value", result.getName().getValue());
+			validateIso90210Element(result, "tenuredYear", "value", result.getTenuredYear().getValue());
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
@@ -117,9 +116,9 @@ public class ParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"name",result.getName());
-			validateAttribute(result,"yearsServed",result.getYearsServed());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "name", "value", result.getName().getValue());
+			validateIso90210Element(result, "yearsServed", "value", result.getYearsServed().getValue());
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
@@ -154,9 +153,8 @@ public class ParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"name",result.getName());
-			
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "name", "value", result.getName().getValue());
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
 			Assistant result2 = (Assistant)fromXML(result);
@@ -189,9 +187,9 @@ public class ParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"name",result.getName());
-			validateAttribute(result,"joiningYear",result.getJoiningYear());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "name", "value", result.getName().getValue());
+			validateIso90210Element(result, "joiningYear", "value", result.getJoiningYear().getValue());
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
@@ -230,7 +228,7 @@ public class ParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(result2);
 		assertNotNull(result2.getId());
 		assertNotNull(result2.getName());
-		assertEquals(new Integer(1), result2.getId());
+		assertEquals("1", result2.getId().getExtension());
 	}
 
 	public void testAssociationNestedSearchHQL1() throws Exception {
@@ -250,7 +248,7 @@ public class ParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(result2);
 		assertNotNull(result2.getId());
 		assertNotNull(result2.getName());
-		assertEquals(new Integer(1), result2.getId());
+		assertEquals("1", result2.getId().getExtension());
 	}
 
 	/**
@@ -279,7 +277,7 @@ public class ParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(result2);
 		assertNotNull(result2.getId());
 		assertNotNull(result2.getName());
-		assertEquals(new Integer(2), result2.getId());
+		assertEquals("2", result2.getId().getExtension());
 	}
 
 	public void testAssociationNestedSearchHQL2() throws Exception {
@@ -297,7 +295,7 @@ public class ParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(result2);
 		assertNotNull(result2.getId());
 		assertNotNull(result2.getName());
-		assertEquals(new Integer(2), result2.getId());
+		assertEquals("2", result2.getId().getExtension());
 	}
 
 	/**
@@ -326,7 +324,7 @@ public class ParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(result2);
 		assertNotNull(result2.getId());
 		assertNotNull(result2.getName());
-		assertEquals(new Integer(7), result2.getId());
+		assertEquals("7", result2.getId().getExtension());
 	}
 
 	/**
@@ -355,7 +353,7 @@ public class ParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(result2);
 		assertNotNull(result2.getId());
 		assertNotNull(result2.getName());
-		assertEquals(new Integer(7), result2.getId());
+		assertEquals("7", result2.getId().getExtension());
 	}
 	
 	public void testAssociationNestedSearchHQL4() throws Exception {
@@ -374,7 +372,6 @@ public class ParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(result2);
 		assertNotNull(result2.getId());
 		assertNotNull(result2.getName());
-		assertEquals(new Integer(7), result2.getId());
-	}
-	
+		assertEquals("7", result2.getId().getExtension());
+	}	
 }

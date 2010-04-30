@@ -1,6 +1,5 @@
 package test.xml.data;
 
-import gov.nih.nci.cacoresdk.domain.onetomany.bidirectional.Computer;
 import gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.OrderLine;
 import gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.Product;
 import gov.nih.nci.iso21090.Ii;
@@ -41,8 +40,8 @@ public class O2OBidirectionalXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"name",result.getName());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "name", "value", result.getName().getValue());
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
@@ -76,8 +75,8 @@ public class O2OBidirectionalXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId());
-			validateAttribute(result,"name",result.getName());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "name", "value", result.getName().getValue());
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
@@ -210,7 +209,7 @@ public class O2OBidirectionalXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(result2);
 		assertNotNull(result2.getId());
 		assertNotNull(result2.getName());
-		assertEquals(new Integer(1),result2.getId());
+		assertEquals("1",result2.getId().getExtension());
 	}
 
 	/**
@@ -242,7 +241,7 @@ public class O2OBidirectionalXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(result2);
 		assertNotNull(result2.getId());
 		assertNotNull(result2.getName());
-		assertEquals(new Integer(1),result2.getId());
+		assertEquals("1",result2.getId().getExtension());
 	}	
 
 	public void testGetMethods1() throws Exception
@@ -259,7 +258,7 @@ public class O2OBidirectionalXMLDataTest extends SDKXMLDataTestBase
 		Product result = (Product)results.iterator().next();
 		toXML(result);
 		Product result2 = (Product)fromXML(result);
-		assertEquals(new Integer(1),result2.getLine().getId());
+		assertEquals("1",result2.getLine().getId().getExtension());
 
 		Ii ii2 = new Ii();
 		ii2.setExtension("2");
@@ -272,7 +271,7 @@ public class O2OBidirectionalXMLDataTest extends SDKXMLDataTestBase
 		result = (Product)results.iterator().next();
 		toXML(result);
 		result2 = (Product)fromXML(result);
-		assertEquals(new Integer(2),result2.getLine().getId());
+		assertEquals("2",result2.getLine().getId().getExtension());
 
 		Ii ii3 = new Ii();
 		ii3.setExtension("3");
@@ -304,7 +303,7 @@ public class O2OBidirectionalXMLDataTest extends SDKXMLDataTestBase
 		OrderLine result = (OrderLine)results.iterator().next();
 		toXML(result);
 		OrderLine result2 = (OrderLine)fromXML(result);
-		assertEquals(new Integer(1),result2.getProduct().getId());
+		assertEquals("1",result2.getProduct().getId().getExtension());
 
 		Ii ii2 = new Ii();
 		ii.setExtension("2");
@@ -346,7 +345,7 @@ public class O2OBidirectionalXMLDataTest extends SDKXMLDataTestBase
 		OrderLine result = (OrderLine) results.iterator().next();
 		toXML(result);
 		OrderLine result2 = (OrderLine) fromXML(result);
-		assertEquals(new Integer(1), result2.getProduct().getId());
+		assertEquals("1",result2.getProduct().getId().getExtension());
 
 		hqlCriteria = new HQLCriteria(
 				"from gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.OrderLine where id='2'");
