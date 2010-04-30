@@ -44,6 +44,7 @@ public class OneChildTest extends SDKISOTestBase
 			Mammal result = (Mammal)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getHairColor());
 		}
 	}
@@ -69,6 +70,7 @@ public class OneChildTest extends SDKISOTestBase
 			Human result = (Human)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getDiet());
 			assertNotNull(result.getHairColor());
 		}
@@ -100,6 +102,7 @@ public class OneChildTest extends SDKISOTestBase
 			Human result = (Human)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getDiet());
 		}
 	}
@@ -116,6 +119,7 @@ public class OneChildTest extends SDKISOTestBase
 			Human result = (Human) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getDiet());
 		}
 	}
@@ -146,6 +150,7 @@ public class OneChildTest extends SDKISOTestBase
 			Mammal result = (Mammal)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getHairColor());
 		}
 	}
@@ -162,6 +167,7 @@ public class OneChildTest extends SDKISOTestBase
 			Mammal result = (Mammal) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getHairColor());
 		}
 	}
@@ -190,6 +196,7 @@ public class OneChildTest extends SDKISOTestBase
 			Human result = (Human)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getDiet());
 		}
 	}
@@ -218,6 +225,7 @@ public class OneChildTest extends SDKISOTestBase
 			Mammal result = (Mammal)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getHairColor());
 		}
 	}
@@ -253,6 +261,7 @@ public class OneChildTest extends SDKISOTestBase
 			Mammal result = (Mammal)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getHairColor());
 		}
 	}
@@ -269,6 +278,7 @@ public class OneChildTest extends SDKISOTestBase
 			Mammal result = (Mammal) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getHairColor());
 		}
 	}
@@ -304,6 +314,7 @@ public class OneChildTest extends SDKISOTestBase
 			Human result = (Human)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getHairColor());
 		}
 	}
@@ -320,6 +331,7 @@ public class OneChildTest extends SDKISOTestBase
 			Human result = (Human) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getHairColor());
 		}
 	}

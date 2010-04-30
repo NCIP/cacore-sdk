@@ -44,6 +44,7 @@ public class O2OBidirectionalWJoinTest extends SDKISOTestBase
 			Pendant result = (Pendant)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getShape());
 		}
 	}
@@ -69,6 +70,7 @@ public class O2OBidirectionalWJoinTest extends SDKISOTestBase
 			Chain result = (Chain)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getMetal());
 		}
 	}
@@ -96,6 +98,7 @@ public class O2OBidirectionalWJoinTest extends SDKISOTestBase
 		Pendant result = (Pendant)i.next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(result.getShape());
 		
 		Chain chain = result.getChain();
@@ -146,11 +149,13 @@ public class O2OBidirectionalWJoinTest extends SDKISOTestBase
 		Pendant result = (Pendant)i.next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(result.getShape());
 		
 		Chain chain = result.getChain();
 		assertNotNull(chain);
 		assertNotNull(chain.getId());
+		assertEquals(chain.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(chain.getMetal());
 		assertEquals("1",chain.getId().getExtension());
 	}
@@ -182,6 +187,7 @@ public class O2OBidirectionalWJoinTest extends SDKISOTestBase
 		
 		assertNotNull(chain);
 		assertNotNull(chain.getId());
+		assertEquals(chain.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(chain.getMetal());
 		assertEquals("1",chain.getId().getExtension());
 	}
@@ -213,6 +219,7 @@ public class O2OBidirectionalWJoinTest extends SDKISOTestBase
 		
 		assertNotNull(pendant);
 		assertNotNull(pendant.getId());
+		assertEquals(pendant.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(pendant.getShape());
 		assertEquals("1",pendant.getId().getExtension());
 	}	
@@ -246,13 +253,14 @@ public class O2OBidirectionalWJoinTest extends SDKISOTestBase
 		
 		Iterator i = results.iterator();
 		
-		Chain Chain = (Chain)i.next();
-		assertNotNull(Chain);
+		Chain chain = (Chain)i.next();
+		assertNotNull(chain);
 		
-		assertNotNull(Chain);
-		assertNotNull(Chain.getId());
-		assertNotNull(Chain.getMetal());
-		assertEquals("1",Chain.getId().getExtension());
+		assertNotNull(chain);
+		assertNotNull(chain.getId());
+		assertEquals(chain.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
+		assertNotNull(chain.getMetal());
+		assertEquals("1",chain.getId().getExtension());
 	}	
 	
 	public void testOneAssociatedObjectHQL1() throws ApplicationException {
@@ -266,13 +274,14 @@ public class O2OBidirectionalWJoinTest extends SDKISOTestBase
 
 		Iterator i = results.iterator();
 
-		Chain Chain = (Chain) i.next();
-		assertNotNull(Chain);
+		Chain chain = (Chain) i.next();
+		assertNotNull(chain);
 
-		assertNotNull(Chain);
-		assertNotNull(Chain.getId());
-		assertNotNull(Chain.getMetal());
-		assertEquals("1",Chain.getId().getExtension());
+		assertNotNull(chain);
+		assertNotNull(chain.getId());
+		assertEquals(chain.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
+		assertNotNull(chain.getMetal());
+		assertEquals("1",chain.getId().getExtension());
 	}
 
 	/**
@@ -305,13 +314,14 @@ public class O2OBidirectionalWJoinTest extends SDKISOTestBase
 		
 		Iterator i = results.iterator();
 		
-		Pendant Pendant = (Pendant)i.next();
-		assertNotNull(Pendant);
+		Pendant pendant = (Pendant)i.next();
+		assertNotNull(pendant);
 		
-		assertNotNull(Pendant);
-		assertNotNull(Pendant.getId());
-		assertNotNull(Pendant.getShape());
-		assertEquals("1",Pendant.getId().getExtension());	
+		assertNotNull(pendant);
+		assertNotNull(pendant.getId());
+		assertEquals(pendant.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
+		assertNotNull(pendant.getShape());
+		assertEquals("1",pendant.getId().getExtension());	
 	}	
 	
 	public void testOneAssociatedObjectHQL2() throws ApplicationException {
@@ -325,13 +335,14 @@ public class O2OBidirectionalWJoinTest extends SDKISOTestBase
 
 		Iterator i = results.iterator();
 
-		Pendant Pendant = (Pendant) i.next();
-		assertNotNull(Pendant);
+		Pendant pendant = (Pendant) i.next();
+		assertNotNull(pendant);
 
-		assertNotNull(Pendant);
-		assertNotNull(Pendant.getId());
-		assertNotNull(Pendant.getShape());
-		assertEquals("1",Pendant.getId().getExtension());	
+		assertNotNull(pendant);
+		assertNotNull(pendant.getId());
+		assertEquals(pendant.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
+		assertNotNull(pendant.getShape());
+		assertEquals("1",pendant.getId().getExtension());	
 	}	
 
 	/**
@@ -435,7 +446,7 @@ public class O2OBidirectionalWJoinTest extends SDKISOTestBase
 		assertEquals(1,results.size());
 		
 		result = (Chain)results.iterator().next();
-		assertEquals(new Integer(2),result.getPendant().getId());
+		assertEquals("2",result.getPendant().getId().getExtension());
 
 		Ii ii3=new Ii();
 		ii.setExtension("3");
@@ -465,12 +476,14 @@ public class O2OBidirectionalWJoinTest extends SDKISOTestBase
 			Pendant result = (Pendant)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getShape());
 			
 			if (new Integer(result.getId().getExtension()) != 3){ // Pendant id = 3 does not have an associated Chain			
 				chain = result.getChain();
 				assertNotNull(chain);
 				assertNotNull(chain.getId());
+				assertEquals(chain.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 				assertNotNull(chain.getMetal());
 			}
 		}
@@ -491,12 +504,14 @@ public class O2OBidirectionalWJoinTest extends SDKISOTestBase
 			Chain result = (Chain)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getMetal());
 			
 			if (new Integer(result.getId().getExtension()) != 3){ // Chain id = 3 does not have an associated Pendant
 				pendant = result.getPendant();
 				assertNotNull(pendant);
 				assertNotNull(pendant.getId());
+				assertEquals(pendant.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 				assertNotNull(pendant.getShape());
 			}
 		}

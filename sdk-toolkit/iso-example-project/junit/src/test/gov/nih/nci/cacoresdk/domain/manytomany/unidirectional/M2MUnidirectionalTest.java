@@ -44,6 +44,7 @@ public class M2MUnidirectionalTest extends SDKISOTestBase
 			Book result = (Book)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 		}
 	}
@@ -60,6 +61,7 @@ public class M2MUnidirectionalTest extends SDKISOTestBase
 			Book result = (Book) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 		}
 	}
@@ -85,6 +87,7 @@ public class M2MUnidirectionalTest extends SDKISOTestBase
 			Author result = (Author)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 		}
 	}
@@ -101,6 +104,7 @@ public class M2MUnidirectionalTest extends SDKISOTestBase
 			Author result = (Author) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 		}
 	}

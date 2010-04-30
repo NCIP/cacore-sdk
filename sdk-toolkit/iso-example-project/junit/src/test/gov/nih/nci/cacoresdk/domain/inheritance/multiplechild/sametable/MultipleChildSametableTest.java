@@ -45,6 +45,7 @@ public class MultipleChildSametableTest extends SDKISOTestBase
 			Organization result = (Organization)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);			
 			assertNotNull(result.getName());
 		}
 	}
@@ -70,6 +71,7 @@ public class MultipleChildSametableTest extends SDKISOTestBase
 			GovtOrganization result = (GovtOrganization)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);	
 			assertNotNull(result.getName());
 		}
 	}
@@ -95,6 +97,7 @@ public class MultipleChildSametableTest extends SDKISOTestBase
 			PvtOrganization result = (PvtOrganization)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);				
 			assertNotNull(result.getName());
 			assertNotNull(result.getCeo());
 		}
@@ -126,6 +129,7 @@ public class MultipleChildSametableTest extends SDKISOTestBase
 			GovtOrganization result = (GovtOrganization)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);				
 			assertNotNull(result.getName());
 		}
 	}
@@ -157,6 +161,7 @@ public class MultipleChildSametableTest extends SDKISOTestBase
 			Organization result = (Organization)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);				
 			assertNotNull(result.getName());
 		}
 	}
@@ -174,6 +179,7 @@ public class MultipleChildSametableTest extends SDKISOTestBase
 			Organization result = (Organization) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);				
 			assertNotNull(result.getName());
 		}
 	}
@@ -204,6 +210,7 @@ public class MultipleChildSametableTest extends SDKISOTestBase
 			PvtOrganization result = (PvtOrganization)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);	
 			assertNotNull(result.getName());
 			assertNotNull(result.getCeo());
 		}
@@ -223,6 +230,7 @@ public class MultipleChildSametableTest extends SDKISOTestBase
 			PvtOrganization result = (PvtOrganization) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);				
 			assertNotNull(result.getName());
 			assertNotNull(result.getCeo());
 		}
@@ -313,6 +321,7 @@ public class MultipleChildSametableTest extends SDKISOTestBase
 			Organization result = (Organization)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);				
 			assertNotNull(result.getName());
 		}
 	}
@@ -341,6 +350,7 @@ public class MultipleChildSametableTest extends SDKISOTestBase
 			PvtOrganization result = (PvtOrganization)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);	
 			assertNotNull(result.getName());
 		}
 	}
@@ -369,6 +379,7 @@ public class MultipleChildSametableTest extends SDKISOTestBase
 			Organization result = (Organization)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);	
 			assertNotNull(result.getName());
 		}
 	}
@@ -404,6 +415,7 @@ public class MultipleChildSametableTest extends SDKISOTestBase
 			Organization result = (Organization)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);				
 			assertNotNull(result.getName());
 		}
 	}
@@ -420,6 +432,7 @@ public class MultipleChildSametableTest extends SDKISOTestBase
 			Organization result = (Organization) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);	
 			assertNotNull(result.getName());
 		}
 	}
@@ -455,6 +468,7 @@ public class MultipleChildSametableTest extends SDKISOTestBase
 			GovtOrganization result = (GovtOrganization)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);	
 			assertNotNull(result.getName());
 		}
 	}
@@ -473,6 +487,7 @@ public class MultipleChildSametableTest extends SDKISOTestBase
 			GovtOrganization result = (GovtOrganization)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);	
 			assertNotNull(result.getName());
 		}
 	}
@@ -508,6 +523,7 @@ public class MultipleChildSametableTest extends SDKISOTestBase
 			Organization result = (Organization)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);	
 			assertNotNull(result.getName());
 		}
 	}
@@ -526,6 +542,7 @@ public class MultipleChildSametableTest extends SDKISOTestBase
 			Organization result = (Organization)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);	
 			assertNotNull(result.getName());
 		}
 	}
@@ -561,6 +578,7 @@ public class MultipleChildSametableTest extends SDKISOTestBase
 			PvtOrganization result = (PvtOrganization)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);	
 			assertNotNull(result.getName());
 		}
 	}
@@ -579,6 +597,7 @@ public class MultipleChildSametableTest extends SDKISOTestBase
 			PvtOrganization result = (PvtOrganization) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);	
 			assertNotNull(result.getName());
 		}
 	}

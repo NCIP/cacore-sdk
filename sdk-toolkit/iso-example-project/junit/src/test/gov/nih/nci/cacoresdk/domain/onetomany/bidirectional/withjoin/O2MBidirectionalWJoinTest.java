@@ -44,6 +44,7 @@ public class O2MBidirectionalWJoinTest extends SDKISOTestBase
 			Flight result = (Flight)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getDestination());
 		}
 	}
@@ -69,6 +70,7 @@ public class O2MBidirectionalWJoinTest extends SDKISOTestBase
 			Passanger result = (Passanger)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
 		}
 	}
@@ -96,6 +98,7 @@ public class O2MBidirectionalWJoinTest extends SDKISOTestBase
 		Flight result = (Flight)i.next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(result.getDestination());
 		
 		Collection passangerCollection = result.getPassangerCollection();
@@ -146,6 +149,7 @@ public class O2MBidirectionalWJoinTest extends SDKISOTestBase
 		Flight result = (Flight)i.next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(result.getDestination());
 		
 		Collection PassangerCollection = result.getPassangerCollection();
@@ -155,6 +159,7 @@ public class O2MBidirectionalWJoinTest extends SDKISOTestBase
 		assertNotNull(passanger);
 		
 		assertNotNull(passanger.getId());
+		assertEquals(passanger.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(passanger.getName());
 		assertEquals("1",passanger.getId().getExtension());
 	}
@@ -181,13 +186,14 @@ public class O2MBidirectionalWJoinTest extends SDKISOTestBase
 		
 		Iterator i = results.iterator();
 		
-		Passanger Passanger = (Passanger)i.next();
-		assertNotNull(Passanger);
+		Passanger passanger = (Passanger)i.next();
+		assertNotNull(passanger);
 		
-		assertNotNull(Passanger);
-		assertNotNull(Passanger.getId());
-		assertNotNull(Passanger.getName());
-		assertEquals("1",Passanger.getId().getExtension());
+		assertNotNull(passanger);
+		assertNotNull(passanger.getId());
+		assertEquals(passanger.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
+		assertNotNull(passanger.getName());
+		assertEquals("1",passanger.getId().getExtension());
 	}
 
 	/**
@@ -212,11 +218,12 @@ public class O2MBidirectionalWJoinTest extends SDKISOTestBase
 		
 		Iterator i = results.iterator();
 		
-		Flight Flight = (Flight)i.next();
-		assertNotNull(Flight);
-		assertNotNull(Flight.getId());
-		assertNotNull(Flight.getDestination());
-		assertEquals("1",Flight.getId().getExtension());	}	
+		Flight flight = (Flight)i.next();
+		assertNotNull(flight);
+		assertNotNull(flight.getId());
+		assertEquals(flight.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
+		assertNotNull(flight.getDestination());
+		assertEquals("1",flight.getId().getExtension());	}	
 	/**
 	 * Uses CQL Criteria for search
 	 * Verifies that the results are returned 
@@ -247,11 +254,12 @@ public class O2MBidirectionalWJoinTest extends SDKISOTestBase
 		
 		for(Iterator i = results.iterator();i.hasNext();)
 		{
-			Passanger Passanger = (Passanger)i.next();
-			assertNotNull(Passanger);
-			assertNotNull(Passanger.getId());
-			assertNotNull(Passanger.getName());
-			assertEquals(true,new Integer(Passanger.getId().getExtension())>0);
+			Passanger passanger = (Passanger)i.next();
+			assertNotNull(passanger);
+			assertNotNull(passanger.getId());
+			assertEquals(passanger.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
+			assertNotNull(passanger.getName());
+			assertEquals(true,new Integer(passanger.getId().getExtension())>0);
 		}
 	}	
 	
@@ -265,12 +273,12 @@ public class O2MBidirectionalWJoinTest extends SDKISOTestBase
 		assertEquals(2, results.size());
 
 		for (Iterator i = results.iterator(); i.hasNext();) {
-			Passanger Passanger = (Passanger) i.next();
-			assertNotNull(Passanger);
-			assertNotNull(Passanger.getId());
-			assertNotNull(Passanger.getName());
-			assertEquals(true,
-					new Integer(Passanger.getId().getExtension()) > 0);
+			Passanger passanger = (Passanger) i.next();
+			assertNotNull(passanger);
+			assertNotNull(passanger.getId());
+			assertEquals(passanger.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
+			assertNotNull(passanger.getName());
+			assertEquals(true,new Integer(passanger.getId().getExtension()) > 0);
 		}
 	}
 

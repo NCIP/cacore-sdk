@@ -49,6 +49,7 @@ public class TwoLevelInheritanceTest extends SDKISOTestBase
 			Display result = (Display)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getHeight());
 			assertNotNull(result.getWidth());
 		}
@@ -75,6 +76,7 @@ public class TwoLevelInheritanceTest extends SDKISOTestBase
 			Monitor result = (Monitor)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getBrand());
 		}
 	}
@@ -100,6 +102,7 @@ public class TwoLevelInheritanceTest extends SDKISOTestBase
 			CRTMonitor result = (CRTMonitor)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getBrand());
 			assertNotNull(result.getRefreshRate());
 		}
@@ -126,6 +129,7 @@ public class TwoLevelInheritanceTest extends SDKISOTestBase
 			LCDMonitor result = (LCDMonitor)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getBrand());
 			assertNotNull(result.getDpiSupported());
 		}
@@ -158,6 +162,7 @@ public class TwoLevelInheritanceTest extends SDKISOTestBase
 			Display result = (Display)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getWidth());
 			assertNotNull(result.getHeight());
 		}
@@ -175,6 +180,7 @@ public class TwoLevelInheritanceTest extends SDKISOTestBase
 			Display result = (Display) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getWidth());
 			assertNotNull(result.getHeight());
 		}
@@ -206,6 +212,7 @@ public class TwoLevelInheritanceTest extends SDKISOTestBase
 			CRTMonitor result = (CRTMonitor)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getBrand());
 		}
 	}
@@ -223,6 +230,7 @@ public class TwoLevelInheritanceTest extends SDKISOTestBase
 			CRTMonitor result = (CRTMonitor) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getBrand());
 		}
 	}
@@ -253,6 +261,7 @@ public class TwoLevelInheritanceTest extends SDKISOTestBase
 			Monitor result = (Monitor)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getBrand());
 		}
 	}
@@ -269,6 +278,7 @@ public class TwoLevelInheritanceTest extends SDKISOTestBase
 			Monitor result = (Monitor) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getBrand());
 		}
 	}
@@ -299,6 +309,7 @@ public class TwoLevelInheritanceTest extends SDKISOTestBase
 			LCDMonitor result = (LCDMonitor)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getBrand());
 			assertNotNull(result.getDpiSupported());
 		}
@@ -316,6 +327,7 @@ public class TwoLevelInheritanceTest extends SDKISOTestBase
 			LCDMonitor result = (LCDMonitor) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getBrand());
 			assertNotNull(result.getDpiSupported());
 		}
@@ -364,6 +376,7 @@ public class TwoLevelInheritanceTest extends SDKISOTestBase
 			CRTMonitor result = (CRTMonitor)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getBrand());
 		}
 	}
@@ -430,6 +443,7 @@ public class TwoLevelInheritanceTest extends SDKISOTestBase
 			Monitor result = (Monitor)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getBrand());
 		}
 	}
@@ -458,6 +472,7 @@ public class TwoLevelInheritanceTest extends SDKISOTestBase
 			LCDMonitor result = (LCDMonitor)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getBrand());
 		}
 	}
@@ -486,6 +501,7 @@ public class TwoLevelInheritanceTest extends SDKISOTestBase
 			Monitor result = (Monitor)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getBrand());
 		}
 	}
@@ -521,6 +537,7 @@ public class TwoLevelInheritanceTest extends SDKISOTestBase
 			Monitor result = (Monitor)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getBrand());
 		}
 	}
@@ -537,6 +554,7 @@ public class TwoLevelInheritanceTest extends SDKISOTestBase
 			Monitor result = (Monitor) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getBrand());
 		}
 	}
@@ -572,6 +590,7 @@ public class TwoLevelInheritanceTest extends SDKISOTestBase
 			CRTMonitor result = (CRTMonitor)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getBrand());
 		}
 	}
@@ -588,6 +607,7 @@ public class TwoLevelInheritanceTest extends SDKISOTestBase
 			CRTMonitor result = (CRTMonitor) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getBrand());
 		}
 	}
@@ -623,6 +643,7 @@ public class TwoLevelInheritanceTest extends SDKISOTestBase
 			Monitor result = (Monitor)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getBrand());
 		}
 	}
@@ -639,6 +660,7 @@ public class TwoLevelInheritanceTest extends SDKISOTestBase
 			Monitor result = (Monitor) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getBrand());
 		}
 	}	
@@ -674,6 +696,7 @@ public class TwoLevelInheritanceTest extends SDKISOTestBase
 			LCDMonitor result = (LCDMonitor)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getBrand());
 		}
 	}
@@ -690,6 +713,7 @@ public class TwoLevelInheritanceTest extends SDKISOTestBase
 			LCDMonitor result = (LCDMonitor) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getBrand());
 		}
 	}
@@ -735,6 +759,7 @@ public class TwoLevelInheritanceTest extends SDKISOTestBase
 			Display result = (Display)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getWidth());
 			assertNotNull(result.getHeight());
 		}
@@ -752,6 +777,7 @@ public class TwoLevelInheritanceTest extends SDKISOTestBase
 			Monitor result = (Monitor) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getWidth());
 			assertNotNull(result.getHeight());
 		}

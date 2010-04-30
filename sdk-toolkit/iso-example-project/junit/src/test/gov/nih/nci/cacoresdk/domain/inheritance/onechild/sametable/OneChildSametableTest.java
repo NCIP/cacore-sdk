@@ -44,6 +44,7 @@ public class OneChildSametableTest extends SDKISOTestBase
 			Currency result = (Currency)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getCountry());
 		}
 	}
@@ -69,6 +70,7 @@ public class OneChildSametableTest extends SDKISOTestBase
 			Note result = (Note)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getCountry());			
 			assertNotNull(result.getValue());
 		}
@@ -100,6 +102,7 @@ public class OneChildSametableTest extends SDKISOTestBase
 			Note result = (Note)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getValue());
 		}
 	}
@@ -116,6 +119,7 @@ public class OneChildSametableTest extends SDKISOTestBase
 			Note result = (Note) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getValue());
 		}
 	}	
@@ -147,6 +151,7 @@ public class OneChildSametableTest extends SDKISOTestBase
 			Currency result = (Currency)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getCountry());
 		}
 	}
@@ -163,6 +168,7 @@ public class OneChildSametableTest extends SDKISOTestBase
 			Currency result = (Currency) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getCountry());
 		}
 	}
@@ -191,6 +197,7 @@ public class OneChildSametableTest extends SDKISOTestBase
 			Note result = (Note)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getValue());
 		}
 	}
@@ -219,6 +226,7 @@ public class OneChildSametableTest extends SDKISOTestBase
 			Currency result = (Currency)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getCountry());
 		}
 	}
@@ -254,6 +262,7 @@ public class OneChildSametableTest extends SDKISOTestBase
 			Currency result = (Currency)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getCountry());
 		}
 	}
@@ -270,6 +279,7 @@ public class OneChildSametableTest extends SDKISOTestBase
 			Currency result = (Currency) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getCountry());
 		}
 	}	
@@ -305,6 +315,7 @@ public class OneChildSametableTest extends SDKISOTestBase
 			Note result = (Note)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getCountry());
 		}
 	}
@@ -322,6 +333,7 @@ public class OneChildSametableTest extends SDKISOTestBase
 			Note result = (Note) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getCountry());
 		}
 	}

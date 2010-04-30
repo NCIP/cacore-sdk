@@ -43,7 +43,9 @@ public class O2MUnidirectionalTest extends SDKISOTestBase
 			KeyChain result = (KeyChain)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
+			assertEquals(result.getName().getNullFlavor(),"MSK");
 		}
 	}
 
@@ -59,7 +61,9 @@ public class O2MUnidirectionalTest extends SDKISOTestBase
 			KeyChain result = (KeyChain) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
+			assertEquals(result.getName().getNullFlavor(),"MSK");
 		}
 	}
 
@@ -84,6 +88,7 @@ public class O2MUnidirectionalTest extends SDKISOTestBase
 			LatchKey result = (LatchKey)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
+			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getType());
 		}
 	}
@@ -111,7 +116,9 @@ public class O2MUnidirectionalTest extends SDKISOTestBase
 		KeyChain result = (KeyChain)i.next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(result.getName());
+		assertEquals(result.getName().getNullFlavor(),"MSK");
 		
 		Collection keyCollection = result.getKeyCollection();
 		assertEquals(0, keyCollection.size());
@@ -160,7 +167,9 @@ public class O2MUnidirectionalTest extends SDKISOTestBase
 		KeyChain result = (KeyChain)i.next();
 		assertNotNull(result);
 		assertNotNull(result.getId());
+		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(result.getName());
+		assertEquals(result.getName().getNullFlavor(),"MSK");
 		
 		Collection keyCollection = result.getKeyCollection();
 		assertEquals(true, keyCollection.size()>0);
@@ -169,6 +178,7 @@ public class O2MUnidirectionalTest extends SDKISOTestBase
 		LatchKey key = (LatchKey)j.next();
 		assertNotNull(key);
 		assertNotNull(key.getId());
+		assertEquals(key.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(key.getType());
 		assertEquals("1",key.getId().getExtension());
 	}
@@ -197,6 +207,7 @@ public class O2MUnidirectionalTest extends SDKISOTestBase
 		LatchKey key = (LatchKey)i.next();
 		assertNotNull(key);
 		assertNotNull(key.getId());
+		assertEquals(key.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(key.getType());
 		assertEquals("1",key.getId().getExtension());
 	}
@@ -272,6 +283,7 @@ public class O2MUnidirectionalTest extends SDKISOTestBase
 		LatchKey key = (LatchKey)i.next();
 		assertNotNull(key);
 		assertNotNull(key.getId());
+		assertEquals(key.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(key.getType());
 		assertEquals("1",key.getId().getExtension());
 	}	
