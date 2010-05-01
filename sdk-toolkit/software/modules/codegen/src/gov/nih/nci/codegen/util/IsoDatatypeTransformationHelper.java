@@ -138,6 +138,9 @@ public class IsoDatatypeTransformationHelper
 		String className = converteIsoClassNameToJavaClassName(processingNode.getIsoClassName());
 		
 		buffer.append(prefix+"<class name=\""+className+"\" table=\""+rootNode.getTargetTableName()+"\" entity-name=\""+entityName+"\">");
+		if(((utils.ISO_ROOT_PACKAGE_NAME+".AD").equals(className)) || (className.startsWith(utils.ISO_ROOT_PACKAGE_NAME+".EN") && !className.equals(utils.ISO_ROOT_PACKAGE_NAME+".ENXP")))
+			buffer.append(prefix+"\t<tuplizer entity-mode=\"pojo\" class=\"gov.nih.nci.iso21090.hibernate.tuple.PartCollectionEntityTuplizer\"/>");
+		//buffer.append(prefix+"\t<tuplizer entity-mode=\"pojo\" class=\"gov.nih.nci.iso21090.hibernate.tuple.IsoCustomEntityTuplizer\"/>");
 		buffer.append(prefix+"\t<id column=\""+rootNode.getTargetTablePrimaryKey()+"\" type=\"int\"/>");
 		
 		for(Node innerNode: processingNode.getInnerNodes())
@@ -337,7 +340,6 @@ public class IsoDatatypeTransformationHelper
 			buffer.append(prefix+"<"+elementType+componentName+" class=\""+componentClassName+"\">");
 			if(((utils.ISO_ROOT_PACKAGE_NAME+".AD").equals(node.getIsoClassName())) || (node.getIsoClassName().startsWith(utils.ISO_ROOT_PACKAGE_NAME+".EN") && !node.getIsoClassName().equals(utils.ISO_ROOT_PACKAGE_NAME+".ENXP")))
 				buffer.append(prefix+"\t<tuplizer class=\"gov.nih.nci.iso21090.hibernate.tuple.PartCollectionTuplizer\"/>");
-				
 			//buffer.append(prefix+"\t<tuplizer class=\"gov.nih.nci.iso21090.hibernate.tuple.ConstantAndNullFlavorTuplizer\"/>");
 		}
 		
