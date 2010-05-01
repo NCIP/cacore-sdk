@@ -1,6 +1,5 @@
 package test.xml.data;
 
-import gov.nih.nci.cacoresdk.domain.onetomany.bidirectional.Computer;
 import gov.nih.nci.cacoresdk.domain.onetomany.unidirectional.KeyChain;
 import gov.nih.nci.cacoresdk.domain.onetomany.unidirectional.LatchKey;
 import gov.nih.nci.iso21090.Ii;
@@ -48,7 +47,9 @@ public class O2MUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 			KeyChain result2 = (KeyChain)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension()); 
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
+			assertEquals("MSK",result2.getName().getNullFlavor());
 			assertNotNull(result2.getName());
 		}
 	}
@@ -83,7 +84,8 @@ public class O2MUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 			LatchKey result2 = (LatchKey)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());  
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getType());
 		}
 	}
@@ -113,7 +115,9 @@ public class O2MUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 		KeyChain result2 = (KeyChain)fromXML(result);
 		
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension()); 
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
+		assertEquals("MSK",result2.getName().getNullFlavor());
 		assertNotNull(result2.getName());
 		
 		Collection keyCollection = result2.getKeyCollection();
@@ -135,7 +139,9 @@ public class O2MUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 		KeyChain result2 = (KeyChain)fromXML(result);
 		
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension());  
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
+		assertEquals("MSK",result2.getName().getNullFlavor());
 		assertNotNull(result2.getName());
 		
 		Collection keyCollection = result2.getKeyCollection();
@@ -168,7 +174,9 @@ public class O2MUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 		KeyChain result2 = (KeyChain)fromXML(result);
 		
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension());
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
+		assertEquals("MSK",result2.getName().getNullFlavor());
 		assertNotNull(result2.getName());
 		
 		validateAssociation(result,"LatchKey","keyCollection");
@@ -210,7 +218,8 @@ public class O2MUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 		LatchKey result2 = (LatchKey)fromXML(result);
 		
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension());  
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getType());
 
 		assertEquals("1",result2.getId().getExtension());

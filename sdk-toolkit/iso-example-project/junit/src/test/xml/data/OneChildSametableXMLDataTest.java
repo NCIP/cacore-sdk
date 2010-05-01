@@ -48,7 +48,8 @@ public class OneChildSametableXMLDataTest extends SDKXMLDataTestBase
 			Currency result2 = (Currency)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());  
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getCountry());
 		}
 	}
@@ -84,7 +85,8 @@ public class OneChildSametableXMLDataTest extends SDKXMLDataTestBase
 			Currency result2 = (Currency)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension()); 
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getCountry());
 			assertNotNull(result.getValue());
 		}
@@ -116,7 +118,8 @@ public class OneChildSametableXMLDataTest extends SDKXMLDataTestBase
 			Note result2 = (Note)fromXML(result);
 
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension()); 
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getValue());
 		}
 	}
@@ -137,7 +140,8 @@ public class OneChildSametableXMLDataTest extends SDKXMLDataTestBase
 			Note result2 = (Note) fromXML(result);
 
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getValue());
 		}
 	}
@@ -168,7 +172,8 @@ public class OneChildSametableXMLDataTest extends SDKXMLDataTestBase
 			Currency result2 = (Currency)fromXML(result);
 
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());  
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getCountry());
 		}
 	}
@@ -189,7 +194,8 @@ public class OneChildSametableXMLDataTest extends SDKXMLDataTestBase
 			Currency result2 = (Currency) fromXML(result);
 
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());  
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getCountry());
 		}
 	}

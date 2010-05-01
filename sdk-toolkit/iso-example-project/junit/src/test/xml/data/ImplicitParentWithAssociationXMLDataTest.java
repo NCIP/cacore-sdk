@@ -86,7 +86,8 @@ public class ImplicitParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 			FishTank result2 = (FishTank)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getNumGallons());
 			assertNotNull(result2.getShape());
 
@@ -125,7 +126,8 @@ public class ImplicitParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 			FreshwaterFishTank result2 = (FreshwaterFishTank)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getFilterModel());
 			assertNotNull(result2.getNumGallons());
 			assertNotNull(result2.getShape());
@@ -164,7 +166,8 @@ public class ImplicitParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 			SaltwaterFishTank result2 = (SaltwaterFishTank)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getProteinSkimmerModel());
 			assertNotNull(result2.getNumGallons());
 			assertNotNull(result2.getShape());
@@ -201,7 +204,8 @@ public class ImplicitParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 			Fish result2 = (Fish)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getGenera());
 		}
 	}	
@@ -237,7 +241,8 @@ public class ImplicitParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 			AngelFish result2 = (AngelFish)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension()); 
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getGenera());
 		}
 	}
@@ -273,7 +278,8 @@ public class ImplicitParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 			DiscusFish result2 = (DiscusFish)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension()); 
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getGenera());
 			assertNotNull(result2.getPrimaryColor());
 		}
@@ -309,7 +315,8 @@ public class ImplicitParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 			TankAccessory result2 = (TankAccessory)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());  
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getName());
 		}
 	}
@@ -344,7 +351,8 @@ public class ImplicitParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 			Substrate result2 = (Substrate)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getName());
 		}
 	}		
@@ -373,9 +381,9 @@ public class ImplicitParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 		Fish result2 = (Fish)fromXML(result);
 
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension());
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getGenera());
-		assertNotNull(result2.getId());
 		assertEquals("3", result2.getId().getExtension());
 	}
 	
@@ -393,9 +401,9 @@ public class ImplicitParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 		Fish result2 = (Fish)fromXML(result);
 
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension()); 
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getGenera());
-		assertNotNull(result2.getId());
 		assertEquals("3", result2.getId().getExtension());
 	}	
 
@@ -423,7 +431,8 @@ public class ImplicitParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 		AngelFish result2 = (AngelFish)fromXML(result);
 
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension());
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertEquals("3", result2.getId().getExtension());
 	}
 	
@@ -441,7 +450,8 @@ public class ImplicitParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 		AngelFish result2 = (AngelFish)fromXML(result);
 
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension()); 
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertEquals("3", result2.getId().getExtension());
 	}	
 	
@@ -469,7 +479,8 @@ public class ImplicitParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 		Substrate result2 = (Substrate)fromXML(result);
 
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension());
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getName());
 		assertEquals("3", result2.getId().getExtension());
 	}

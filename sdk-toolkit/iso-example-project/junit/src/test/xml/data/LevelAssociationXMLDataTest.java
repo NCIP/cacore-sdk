@@ -47,7 +47,8 @@ public class LevelAssociationXMLDataTest extends SDKXMLDataTestBase
 			Hand result2 = (Hand)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());  
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		}
 	}
 
@@ -84,7 +85,7 @@ public class LevelAssociationXMLDataTest extends SDKXMLDataTestBase
 			Card result2 = (Card)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());   assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			if (new Integer(result2.getId().getExtension()) == 1)
 				assertNotNull(result2.getImage());// Only row with id=1 has an image
 			assertNotNull(result2.getName());		
@@ -121,7 +122,7 @@ public class LevelAssociationXMLDataTest extends SDKXMLDataTestBase
 			Suit result2 = (Suit)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());   assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getName());
 		}
 	}
@@ -156,7 +157,7 @@ public class LevelAssociationXMLDataTest extends SDKXMLDataTestBase
 			Deck result2 = (Deck)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());   assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getName());
 		}
 	}
@@ -184,7 +185,8 @@ public class LevelAssociationXMLDataTest extends SDKXMLDataTestBase
 		Card result2 = (Card)fromXML(card);
 		
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension());  
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		
 		Suit suit = result2.getSuit();
 		assertNull(suit);
@@ -212,7 +214,8 @@ public class LevelAssociationXMLDataTest extends SDKXMLDataTestBase
 		Card result2 = (Card) fromXML(card);
 
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension());   
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 
 		validateAssociation(card, "Suit", "suit");
 
@@ -251,7 +254,8 @@ public class LevelAssociationXMLDataTest extends SDKXMLDataTestBase
 			Card result2 = (Card)fromXML(card);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());  
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		}
 	}
 
@@ -280,7 +284,8 @@ public class LevelAssociationXMLDataTest extends SDKXMLDataTestBase
 			Card result2 = (Card)fromXML(card);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension()); 
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		}
 	}
 
@@ -309,7 +314,8 @@ public class LevelAssociationXMLDataTest extends SDKXMLDataTestBase
 			Suit result2 = (Suit)fromXML(card);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		}
 	}
 
@@ -338,7 +344,8 @@ public class LevelAssociationXMLDataTest extends SDKXMLDataTestBase
 			Deck result2 = (Deck)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		}
 	}
 }

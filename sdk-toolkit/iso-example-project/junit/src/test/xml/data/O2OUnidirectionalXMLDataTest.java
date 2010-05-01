@@ -48,7 +48,8 @@ public class O2OUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 			Person result2 = (Person)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());  
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getName());
 		}
 	}
@@ -83,7 +84,8 @@ public class O2OUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 			Address result2 = (Address)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());  
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getZip());
 		}
 	}
@@ -113,7 +115,8 @@ public class O2OUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 		Person result2 = (Person)fromXML(result);
 		
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension());   
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getName());
 		
 		Address address = result2.getLivesAt();
@@ -135,7 +138,8 @@ public class O2OUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 		Person result2 = (Person) fromXML(result);
 
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension());  
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getName());
 
 		Address address = result2.getLivesAt();
@@ -168,7 +172,8 @@ public class O2OUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 		Person result2 = (Person)fromXML(result);
 		
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension()); 
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getName());
 		
 		Address address = result2.getLivesAt();
@@ -205,7 +210,8 @@ public class O2OUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 		Address result2 = (Address)fromXML(result);
 		
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension());  
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getZip());
 		assertEquals("1",result2.getId().getExtension());
 	}
@@ -227,7 +233,8 @@ public class O2OUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 			Person result2 = (Person)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());  
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getName());
 			
 			if (new Integer(result2.getId().getExtension()) < 4){//Person id=1,2,3 have an associated Address; the others don't
@@ -257,7 +264,8 @@ public class O2OUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 			Person result2 = (Person) fromXML(result);
 
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension()); 
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getName());
 
 			if (new Integer(result2.getId().getExtension()) < 4) {//Person id=1,2,3 have an associated Address; the others don't

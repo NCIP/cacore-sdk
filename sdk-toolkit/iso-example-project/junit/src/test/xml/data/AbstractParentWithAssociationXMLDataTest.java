@@ -48,7 +48,8 @@ public class AbstractParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 			Teacher result2 = (Teacher)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());
+			assertEquals("TeacherRoot LocalConstant",result2.getId().getRoot());
 			assertNotNull(result2.getName());
 		}
 	}
@@ -84,7 +85,9 @@ public class AbstractParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 			PrivateTeacher result2 = (PrivateTeacher)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());
+			assertEquals("PrivateTeacherRoot LocalConstant",result2.getId().getRoot());
+			assertEquals("MSK",result2.getYearsExperience().getNullFlavor());
 			assertNotNull(result2.getName());
 			assertNotNull(result2.getYearsExperience());
 
@@ -121,7 +124,8 @@ public class AbstractParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 			Pupil result2 = (Pupil)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getName());			
 		}
 	}
@@ -150,7 +154,9 @@ public class AbstractParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 		PrivateTeacher result2 = (PrivateTeacher)fromXML(result);
 
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension());
+		assertEquals("PrivateTeacherRoot LocalConstant",result2.getId().getRoot());
+		assertEquals("MSK",result2.getYearsExperience().getNullFlavor());
 		assertNotNull(result2.getName());
 		assertNotNull(result2.getYearsExperience());
 		assertEquals("1", result2.getId().getExtension());
@@ -170,7 +176,9 @@ public class AbstractParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 		PrivateTeacher result2 = (PrivateTeacher) fromXML(result);
 
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension());
+		assertEquals("PrivateTeacherRoot LocalConstant",result2.getId().getRoot());
+		assertEquals("MSK",result2.getYearsExperience().getNullFlavor());
 		assertNotNull(result2.getName());
 		assertNotNull(result2.getYearsExperience());
 		assertEquals("1", result2.getId().getExtension());
@@ -200,7 +208,8 @@ public class AbstractParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 		Teacher result2 = (Teacher)fromXML(result);
 
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension());
+		assertEquals("TeacherRoot LocalConstant",result2.getId().getRoot());
 		assertNotNull(result2.getName());
 		assertEquals("2", result2.getId().getExtension());
 	}
@@ -219,7 +228,8 @@ public class AbstractParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 		Teacher result2 = (Teacher) fromXML(result);
 
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension());
+		assertEquals("TeacherRoot LocalConstant",result2.getId().getRoot());
 		assertNotNull(result2.getName());
 		assertEquals("2", result2.getId().getExtension());
 	}

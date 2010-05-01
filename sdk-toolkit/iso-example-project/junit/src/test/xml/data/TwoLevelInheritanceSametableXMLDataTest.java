@@ -51,7 +51,8 @@ public class TwoLevelInheritanceSametableXMLDataTest extends SDKXMLDataTestBase
 			Goverment result2 = (Goverment)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());  
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getCountry());
 		}
 	}
@@ -86,7 +87,8 @@ public class TwoLevelInheritanceSametableXMLDataTest extends SDKXMLDataTestBase
 			CommunistGovt result2 = (CommunistGovt)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension()); 
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getCountry());			
 		}
 	}
@@ -121,7 +123,8 @@ public class TwoLevelInheritanceSametableXMLDataTest extends SDKXMLDataTestBase
 			DemocraticGovt result2 = (DemocraticGovt)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());  
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getCountry());	
 		}
 	}
@@ -157,7 +160,8 @@ public class TwoLevelInheritanceSametableXMLDataTest extends SDKXMLDataTestBase
 			ParliamantaryGovt result2 = (ParliamantaryGovt)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());  
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getCountry());
 			assertNotNull(result2.getPrimeMinister());
 		}
@@ -194,7 +198,8 @@ public class TwoLevelInheritanceSametableXMLDataTest extends SDKXMLDataTestBase
 			PresidentialGovt result2 = (PresidentialGovt)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());  
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getCountry());
 			assertNotNull(result2.getPresident());
 		}
@@ -223,7 +228,8 @@ public class TwoLevelInheritanceSametableXMLDataTest extends SDKXMLDataTestBase
 			CommunistGovt result2 = (CommunistGovt)fromXML(result);
 
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension()); 
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		}		
 	}
 	
@@ -250,7 +256,8 @@ public class TwoLevelInheritanceSametableXMLDataTest extends SDKXMLDataTestBase
 			DemocraticGovt result2 = (DemocraticGovt)fromXML(result);
 
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension()); 
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		}
 	}
 
@@ -277,7 +284,8 @@ public class TwoLevelInheritanceSametableXMLDataTest extends SDKXMLDataTestBase
 			PresidentialGovt result2 = (PresidentialGovt)fromXML(result);
 
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());  
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		}
 	}
 
@@ -304,7 +312,8 @@ public class TwoLevelInheritanceSametableXMLDataTest extends SDKXMLDataTestBase
 			DemocraticGovt result2 = (DemocraticGovt)fromXML(result);
 
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension()); 
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		}
 	}
 	
@@ -325,7 +334,8 @@ public class TwoLevelInheritanceSametableXMLDataTest extends SDKXMLDataTestBase
 			DemocraticGovt result2 = (DemocraticGovt) fromXML(result);
 
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());  
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		}
 	}
 }

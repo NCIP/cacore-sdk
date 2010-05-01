@@ -49,7 +49,8 @@ public class O2MBidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 			Flight result2 = (Flight)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());   
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getDestination());
 		}
 	}
@@ -84,7 +85,8 @@ public class O2MBidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 			Passanger result2 = (Passanger)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension()); 
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getName());
 		}
 	}
@@ -114,7 +116,8 @@ public class O2MBidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 		Flight result2 = (Flight)fromXML(result);
 		
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension());   
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getDestination());
 		
 		Collection passangerCollection = result2.getPassangerCollection();
@@ -137,7 +140,8 @@ public class O2MBidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 		Flight result2 = (Flight)fromXML(result);
 		
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension());
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getDestination());
 		
 		Collection passangerCollection = result2.getPassangerCollection();
@@ -170,7 +174,8 @@ public class O2MBidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 		Flight result2 = (Flight)fromXML(result);
 		
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension()); 
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getDestination());
 		
 		Collection passangerCollection = result2.getPassangerCollection();
@@ -213,7 +218,8 @@ public class O2MBidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 		Passanger result2 = (Passanger)fromXML(result);
 		
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension());  
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getName());
 		assertEquals("1",result2.getId().getExtension());
 	}
@@ -245,7 +251,8 @@ public class O2MBidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 		Flight result2 = (Flight)fromXML(result);
 		
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension());
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getDestination());
 		assertEquals("1",result2.getId().getExtension());
 	}	
@@ -267,7 +274,8 @@ public class O2MBidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 			Passanger result2 = (Passanger)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension()); 
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getName());
 			
 			validateAssociation(result,"Flight","flight");
