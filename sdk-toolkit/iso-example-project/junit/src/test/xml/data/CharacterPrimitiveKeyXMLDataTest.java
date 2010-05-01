@@ -44,7 +44,7 @@ public class CharacterPrimitiveKeyXMLDataTest extends SDKXMLDataTestBase
 			CharacterPrimitiveKey result2 = (CharacterPrimitiveKey)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId());			
 			assertNotNull(result2.getName());
 		}
 	}

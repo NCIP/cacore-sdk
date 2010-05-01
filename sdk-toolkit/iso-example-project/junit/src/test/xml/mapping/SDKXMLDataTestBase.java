@@ -56,6 +56,8 @@ public abstract class SDKXMLDataTestBase extends TestCase {
 	private Marshaller marshaller;
 	private Unmarshaller unmarshaller;
 	protected XMLUtility myUtil;
+	
+	protected String II_ROOT_GLOBAL_CONSTANT_VALUE = "2.16.12.123.456.1";
 
 	protected void setUp() throws Exception {
 		super.setUp();

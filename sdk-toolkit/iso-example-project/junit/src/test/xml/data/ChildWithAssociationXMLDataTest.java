@@ -60,7 +60,7 @@ public class ChildWithAssociationXMLDataTest extends SDKXMLDataTestBase
 //			Payment result2 = (Payment)fromXML(result);
 //			
 //			assertNotNull(result2);
-//			assertNotNull(result2.getId());
+//			assertNotNull(result2.getId().getExtension());   assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 //			assertNotNull(result2.getAmount());
 //		}
 //	}
@@ -105,7 +105,7 @@ public class ChildWithAssociationXMLDataTest extends SDKXMLDataTestBase
 //			Cash result2 = (Cash)fromXML(result);
 //			
 //			assertNotNull(result2);
-//			assertNotNull(result2.getId());
+//			assertNotNull(result2.getId().getExtension());   assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 //			assertNotNull(result2.getAmount());
 //		}
 //	}
@@ -153,7 +153,7 @@ public class ChildWithAssociationXMLDataTest extends SDKXMLDataTestBase
 //			Credit result2 = (Credit)fromXML(result);
 //			
 //			assertNotNull(result2);
-//			assertNotNull(result2.getId());
+//			assertNotNull(result2.getId().getExtension());   assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 //			assertNotNull(result2.getAmount());
 //			assertNotNull(result2.getCardNumber());
 //		}
@@ -199,7 +199,7 @@ public class ChildWithAssociationXMLDataTest extends SDKXMLDataTestBase
 //			Bank result2 = (Bank)fromXML(result);
 //			
 //			assertNotNull(result2);
-//			assertNotNull(result2.getId());
+//			assertNotNull(result2.getId().getExtension());   assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 //			assertNotNull(result2.getName());
 //		}
 //	}
@@ -229,7 +229,7 @@ public class ChildWithAssociationXMLDataTest extends SDKXMLDataTestBase
 //		Cash result2 = (Cash)fromXML(result);
 //
 //		assertNotNull(result2);
-//		assertNotNull(result2.getId());
+//		assertNotNull(result2.getId().getExtension());   assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 //		assertEquals("1", result2.getId().getExtension());
 //	}
 //
@@ -257,7 +257,7 @@ public class ChildWithAssociationXMLDataTest extends SDKXMLDataTestBase
 //		Payment result2 = (Payment)fromXML(result);
 //
 //		assertNotNull(result2);
-//		assertNotNull(result2.getId());
+//		assertNotNull(result2.getId().getExtension());   assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 //		assertEquals("2", result2.getId().getExtension());
 //	}
 //
@@ -285,7 +285,7 @@ public class ChildWithAssociationXMLDataTest extends SDKXMLDataTestBase
 //		Credit result2 = (Credit)fromXML(result);
 //
 //		assertNotNull(result2);
-//		assertNotNull(result2.getId());
+//		assertNotNull(result2.getId().getExtension());   assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 //		assertEquals("4", result2.getId().getExtension());
 //		
 //	}
@@ -314,7 +314,7 @@ public class ChildWithAssociationXMLDataTest extends SDKXMLDataTestBase
 //		Payment result2 = (Payment)fromXML(result);
 //
 //		assertNotNull(result2);
-//		assertNotNull(result2.getId());
+//		assertNotNull(result2.getId().getExtension());   assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 //		assertEquals("4", result2.getId().getExtension());		
 //	}
 //	
@@ -349,7 +349,8 @@ public class ChildWithAssociationXMLDataTest extends SDKXMLDataTestBase
 			bank = result2.getIssuingBank();
 			
 			assertNotNull(bank);
-			assertNotNull(bank.getId());
+			assertNotNull(bank.getId().getExtension());
+			assertNotNull(bank.getId().getRoot());
 			assertNotNull(bank.getName());
 		}
 	}

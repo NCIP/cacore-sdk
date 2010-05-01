@@ -51,7 +51,8 @@ public class TwoLevelInheritanceXMLDataTest extends SDKXMLDataTestBase
 			Display result2 = (Display)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());  
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getHeight());
 			assertNotNull(result2.getWidth());
 		}
@@ -89,7 +90,8 @@ public class TwoLevelInheritanceXMLDataTest extends SDKXMLDataTestBase
 			Monitor result2 = (Monitor)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());  
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getHeight());
 			assertNotNull(result2.getWidth());
 			assertNotNull(result2.getBrand());
@@ -129,7 +131,8 @@ public class TwoLevelInheritanceXMLDataTest extends SDKXMLDataTestBase
 			CRTMonitor result2 = (CRTMonitor)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());   
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getHeight());
 			assertNotNull(result2.getWidth());
 			assertNotNull(result2.getBrand());
@@ -170,7 +173,8 @@ public class TwoLevelInheritanceXMLDataTest extends SDKXMLDataTestBase
 			LCDMonitor result2 = (LCDMonitor)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getHeight());
 			assertNotNull(result2.getWidth());
 			assertNotNull(result2.getBrand());
@@ -204,7 +208,8 @@ public class TwoLevelInheritanceXMLDataTest extends SDKXMLDataTestBase
 			LCDMonitor result2 = (LCDMonitor) fromXML(result);
 
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());  
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getHeight());
 			assertNotNull(result2.getWidth());
 			assertNotNull(result2.getBrand());
@@ -239,7 +244,8 @@ public class TwoLevelInheritanceXMLDataTest extends SDKXMLDataTestBase
 			CRTMonitor result2 = (CRTMonitor)fromXML(result);
 
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());  
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getBrand());
 		}
 	}
@@ -259,7 +265,8 @@ public class TwoLevelInheritanceXMLDataTest extends SDKXMLDataTestBase
 			CRTMonitor result2 = (CRTMonitor) fromXML(result);
 
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());  
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getBrand());
 		}
 	}
@@ -290,7 +297,8 @@ public class TwoLevelInheritanceXMLDataTest extends SDKXMLDataTestBase
 			Monitor result2 = (Monitor)fromXML(result);
 
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());  
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getHeight());
 			assertNotNull(result2.getWidth());
 			assertNotNull(result2.getBrand());
@@ -323,7 +331,8 @@ public class TwoLevelInheritanceXMLDataTest extends SDKXMLDataTestBase
 			LCDMonitor result2 = (LCDMonitor)fromXML(result);
 
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension()); 
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getHeight());
 			assertNotNull(result2.getWidth());
 			assertNotNull(result2.getBrand());
@@ -356,7 +365,8 @@ public class TwoLevelInheritanceXMLDataTest extends SDKXMLDataTestBase
 			Monitor result2 = (Monitor)fromXML(result);
 
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension()); 
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getHeight());
 			assertNotNull(result2.getWidth());
 			assertNotNull(result2.getBrand());

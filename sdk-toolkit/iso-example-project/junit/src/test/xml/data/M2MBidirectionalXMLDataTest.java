@@ -3,12 +3,8 @@ package test.xml.data;
 import java.util.Collection;
 import java.util.Iterator;
 
-import gov.nih.nci.cacoresdk.domain.inheritance.abstrakt.PrivateTeacher;
-import gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.sametable.Organization;
 import gov.nih.nci.cacoresdk.domain.manytomany.bidirectional.Employee;
 import gov.nih.nci.cacoresdk.domain.manytomany.bidirectional.Project;
-import gov.nih.nci.cacoresdk.domain.other.levelassociation.Card;
-import gov.nih.nci.cacoresdk.domain.other.levelassociation.Suit;
 import gov.nih.nci.iso21090.Ii;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
@@ -51,7 +47,8 @@ public class M2MBidirectionalXMLDataTest extends SDKXMLDataTestBase
 			Employee result2 = (Employee)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());  
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getName());	
 		}
 	}
@@ -86,7 +83,8 @@ public class M2MBidirectionalXMLDataTest extends SDKXMLDataTestBase
 			Project result2 = (Project)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension()); 
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getName());
 		}
 	}
@@ -116,7 +114,8 @@ public class M2MBidirectionalXMLDataTest extends SDKXMLDataTestBase
 		Employee result2 = (Employee)fromXML(result);
 		
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension());
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getName());
 		
 		Collection projectCollection = result2.getProjectCollection();
@@ -139,7 +138,8 @@ public class M2MBidirectionalXMLDataTest extends SDKXMLDataTestBase
 		Employee result2 = (Employee)fromXML(result);
 		
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension()); 
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getName());
 		
 		Collection projectCollection = result2.getProjectCollection();
@@ -172,7 +172,8 @@ public class M2MBidirectionalXMLDataTest extends SDKXMLDataTestBase
 		Employee result2 = (Employee)fromXML(result);
 		
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension()); 
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getName());
 		
 		Collection projectCollection = result2.getProjectCollection();
@@ -221,7 +222,8 @@ public class M2MBidirectionalXMLDataTest extends SDKXMLDataTestBase
 		Project result2 = (Project)fromXML(result);
 		
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension()); 
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getName());
 		assertEquals("1",result2.getId().getExtension());
 
@@ -254,7 +256,8 @@ public class M2MBidirectionalXMLDataTest extends SDKXMLDataTestBase
 		Employee result2 = (Employee)fromXML(result);
 		
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension());  
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getName());
 		assertEquals("1",result2.getId().getExtension());
 	}	

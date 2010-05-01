@@ -47,7 +47,8 @@ public class MultipleChildXMLDataTest extends SDKXMLDataTestBase
 			Student result2 = (Student)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getName());			
 		}
 	}
@@ -82,7 +83,8 @@ public class MultipleChildXMLDataTest extends SDKXMLDataTestBase
 			UndergraduateStudent result2 = (UndergraduateStudent)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension()); 
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getName());
 		}
 	}
@@ -117,7 +119,8 @@ public class MultipleChildXMLDataTest extends SDKXMLDataTestBase
 			GraduateStudent result2 = (GraduateStudent)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension()); 
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getName());
 			assertNotNull(result2.getProjectName());
 		}
@@ -149,7 +152,8 @@ public class MultipleChildXMLDataTest extends SDKXMLDataTestBase
 			Student result2 = (Student)fromXML(result);
 
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());  
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getName());
 		}
 	}
@@ -180,7 +184,8 @@ public class MultipleChildXMLDataTest extends SDKXMLDataTestBase
 			GraduateStudent result2 = (GraduateStudent)fromXML(result);
 
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());  
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getName());
 		}
 	}
@@ -211,7 +216,8 @@ public class MultipleChildXMLDataTest extends SDKXMLDataTestBase
 			Student result2 = (Student)fromXML(result);
 
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());   
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getName());
 		}
 	}

@@ -15,6 +15,11 @@ import test.xml.mapping.SDKXMLDataTestBase;
 
 public class TwoLevelInheritanceSametablerootlevelXMLDataTest extends SDKXMLDataTestBase
 {
+	protected String CALCULATOR_ROOT_LOCAL_CONSTANT_VALUE = "CalculatorRoot LocalConstant";
+	protected String FINANCIAL_CALCULATOR_ROOT_LOCAL_CONSTANT_VALUE = "FinancialCalculatorRoot LocalConstant";
+	protected String GRAPHIC_CALCULATOR_ROOT_LOCAL_CONSTANT_VALUE = "GraphicCalculatorRoot LocalConstant";
+	protected String SCIENTIFIC_CALCULATOR_ROOT_LOCAL_CONSTANT_VALUE = "ScientificCalculatorRoot LocalConstant";
+
 	public static String getTestCaseName()
 	{
 		return "Two Level Inheritance Same Table Root Level XML Data Test Case";
@@ -51,7 +56,8 @@ public class TwoLevelInheritanceSametablerootlevelXMLDataTest extends SDKXMLData
 			Calculator result2 = (Calculator)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());
+			assertEquals(CALCULATOR_ROOT_LOCAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getBrand());
 		}
 	}
@@ -86,7 +92,8 @@ public class TwoLevelInheritanceSametablerootlevelXMLDataTest extends SDKXMLData
 			FinancialCalculator result2 = (FinancialCalculator)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());
+			assertEquals(FINANCIAL_CALCULATOR_ROOT_LOCAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getBrand());
 		}
 	}
@@ -121,7 +128,8 @@ public class TwoLevelInheritanceSametablerootlevelXMLDataTest extends SDKXMLData
 			ScientificCalculator result2 = (ScientificCalculator)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension()); 
+			assertEquals(SCIENTIFIC_CALCULATOR_ROOT_LOCAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getBrand());
 		}
 	}
@@ -156,7 +164,8 @@ public class TwoLevelInheritanceSametablerootlevelXMLDataTest extends SDKXMLData
 			GraphicCalculator result2 = (GraphicCalculator)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());
+			assertEquals(GRAPHIC_CALCULATOR_ROOT_LOCAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getBrand());
 		}
 	}
@@ -185,7 +194,8 @@ public class TwoLevelInheritanceSametablerootlevelXMLDataTest extends SDKXMLData
 			GraphicCalculator result2 = (GraphicCalculator)fromXML(result);
 
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension()); 
+			assertEquals(GRAPHIC_CALCULATOR_ROOT_LOCAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getBrand());
 		}
 	}
@@ -213,7 +223,8 @@ public class TwoLevelInheritanceSametablerootlevelXMLDataTest extends SDKXMLData
 			ScientificCalculator result2 = (ScientificCalculator)fromXML(result);
 
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());
+			assertEquals(SCIENTIFIC_CALCULATOR_ROOT_LOCAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getBrand());
 		}
 	}
@@ -245,7 +256,8 @@ public class TwoLevelInheritanceSametablerootlevelXMLDataTest extends SDKXMLData
 			GraphicCalculator result2 = (GraphicCalculator)fromXML(result);
 
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());  
+			assertEquals(GRAPHIC_CALCULATOR_ROOT_LOCAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getBrand());
 		}
 	}
@@ -266,7 +278,8 @@ public class TwoLevelInheritanceSametablerootlevelXMLDataTest extends SDKXMLData
 			GraphicCalculator result2 = (GraphicCalculator) fromXML(result);
 
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());  
+			assertEquals(GRAPHIC_CALCULATOR_ROOT_LOCAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getBrand());
 		}
 	}
@@ -297,7 +310,8 @@ public class TwoLevelInheritanceSametablerootlevelXMLDataTest extends SDKXMLData
 			ScientificCalculator result2 = (ScientificCalculator)fromXML(result);
 
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());
+			assertEquals(CALCULATOR_ROOT_LOCAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getBrand());
 		}
 	}
@@ -318,7 +332,8 @@ public class TwoLevelInheritanceSametablerootlevelXMLDataTest extends SDKXMLData
 			ScientificCalculator result2 = (ScientificCalculator) fromXML(result);
 
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension()); 
+			assertEquals(SCIENTIFIC_CALCULATOR_ROOT_LOCAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getBrand());
 		}
 	}

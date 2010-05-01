@@ -48,7 +48,8 @@ public class O2OBidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 			Pendant result2 = (Pendant)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension()); 
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getShape());
 		}
 	}
@@ -83,7 +84,8 @@ public class O2OBidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 			Chain result2 = (Chain)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getMetal());
 		}
 	}
@@ -113,7 +115,8 @@ public class O2OBidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 		Pendant result2 = (Pendant)fromXML(result);
 		
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension()); 
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getShape());
 		
 		Chain chain = result2.getChain();
@@ -135,7 +138,8 @@ public class O2OBidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 		Pendant result2 = (Pendant) fromXML(result);
 
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension()); 
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getShape());
 
 		Chain chain = result2.getChain();
@@ -168,7 +172,8 @@ public class O2OBidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 		Pendant result2 = (Pendant)fromXML(result);
 		
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension());
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getShape());
 		
 		Chain chain = result2.getChain();
@@ -206,7 +211,8 @@ public class O2OBidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 		Chain result2 = (Chain)fromXML(result);
 		
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension()); 
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getMetal());
 		assertEquals(new Integer(1),result2.getId());
 	}
@@ -238,7 +244,8 @@ public class O2OBidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 		Pendant result2 = (Pendant)fromXML(result);
 		
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension()); 
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getShape());
 		assertEquals(new Integer(1),result2.getId());		
 	}	
@@ -391,7 +398,8 @@ public class O2OBidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 			Pendant result2 = (Pendant)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension()); 
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getShape());
 			
 			if (new Integer(result2.getId().getExtension()) != 3){ // Pendant id = 3 does not have an associated Chain	
@@ -423,7 +431,8 @@ public class O2OBidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 			Chain result2 = (Chain)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension()); 
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getMetal());
 			
 			if (new Integer(result2.getId().getExtension()) != 3){ // Chain id = 3 does not have an associated Pendant

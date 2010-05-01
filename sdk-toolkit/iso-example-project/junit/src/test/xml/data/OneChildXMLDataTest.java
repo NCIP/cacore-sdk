@@ -48,7 +48,8 @@ public class OneChildXMLDataTest extends SDKXMLDataTestBase
 			Mammal result2 = (Mammal)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension()); 
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getHairColor());
 		}
 	}
@@ -84,7 +85,8 @@ public class OneChildXMLDataTest extends SDKXMLDataTestBase
 			Human result2 = (Human)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getDiet());
 			assertNotNull(result2.getHairColor());
 		}
@@ -116,7 +118,8 @@ public class OneChildXMLDataTest extends SDKXMLDataTestBase
 			Human result2 = (Human)fromXML(result);
 
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension()); 
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getDiet());
 		}
 	}
@@ -147,7 +150,8 @@ public class OneChildXMLDataTest extends SDKXMLDataTestBase
 			Mammal result2 = (Mammal)fromXML(result);
 
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());   
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getHairColor());
 		}
 	}
@@ -167,7 +171,8 @@ public class OneChildXMLDataTest extends SDKXMLDataTestBase
 			Mammal result2 = (Mammal) fromXML(result);
 
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());  
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getHairColor());
 		}
 	}

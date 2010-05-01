@@ -48,7 +48,8 @@ public class O2MBidirectionalXMLDataTest extends SDKXMLDataTestBase
 			Computer result2 = (Computer)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension()); 
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getType());
 		}
 	}
@@ -83,7 +84,8 @@ public class O2MBidirectionalXMLDataTest extends SDKXMLDataTestBase
 			HardDrive result2 = (HardDrive)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension()); 
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getSize());
 		}
 	}
@@ -113,7 +115,8 @@ public class O2MBidirectionalXMLDataTest extends SDKXMLDataTestBase
 		Computer result2 = (Computer)fromXML(result);
 		
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension());  
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getType());
 		
 		Collection hardDriveCollection = result2.getHardDriveCollection();
@@ -135,7 +138,8 @@ public class O2MBidirectionalXMLDataTest extends SDKXMLDataTestBase
 		Computer result2 = (Computer)fromXML(result);
 		
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension()); 
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getType());
 		
 		Collection hardDriveCollection = result2.getHardDriveCollection();
@@ -168,7 +172,8 @@ public class O2MBidirectionalXMLDataTest extends SDKXMLDataTestBase
 		Computer result2 = (Computer)fromXML(result);
 		
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension()); 
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getType());
 		
 		validateAssociation(result,"HardDrive","hardDriveCollection");
@@ -214,7 +219,8 @@ public class O2MBidirectionalXMLDataTest extends SDKXMLDataTestBase
 		HardDrive result2 = (HardDrive)fromXML(hardDrive);
 		
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension()); 
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getSize());
 		assertEquals("1",result2.getId().getExtension());
 	}
@@ -246,7 +252,8 @@ public class O2MBidirectionalXMLDataTest extends SDKXMLDataTestBase
 		Computer result2 = (Computer)fromXML(computer);
 		
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension());
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getType());
 		assertEquals("1",result2.getId().getExtension());
 	}
@@ -268,7 +275,8 @@ public class O2MBidirectionalXMLDataTest extends SDKXMLDataTestBase
 			HardDrive result2 = (HardDrive)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension()); 
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getSize());
 			
 			validateAssociation(result,"Computer","computer");

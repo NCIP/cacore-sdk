@@ -48,7 +48,7 @@ public class O2OMultipleAssociationWJoinXMLDataTest extends SDKXMLDataTestBase
 			InLaw result2 = (InLaw)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());   assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getName());
 		}
 	}
@@ -83,7 +83,8 @@ public class O2OMultipleAssociationWJoinXMLDataTest extends SDKXMLDataTestBase
 			Bride result2 = (Bride)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());  
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getName());
 		}
 	}
@@ -114,7 +115,8 @@ public class O2OMultipleAssociationWJoinXMLDataTest extends SDKXMLDataTestBase
 		Bride result2 = (Bride)fromXML(result);
 		
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension());  
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getName());
 		
 		assertNotNull(result2.getFather());
@@ -146,7 +148,8 @@ public class O2OMultipleAssociationWJoinXMLDataTest extends SDKXMLDataTestBase
 		Bride result2 = (Bride)fromXML(result);
 		
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension()); 
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getName());
 		
 		assertNull(result2.getFather());
@@ -178,7 +181,8 @@ public class O2OMultipleAssociationWJoinXMLDataTest extends SDKXMLDataTestBase
 		Bride result2 = (Bride)fromXML(result);
 		
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension());  
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getName());
 		
 		assertNull(result2.getFather());
@@ -207,7 +211,8 @@ public class O2OMultipleAssociationWJoinXMLDataTest extends SDKXMLDataTestBase
 			Bride result2 = (Bride)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension()); 
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getName());
 			
 			validateAssociation(result,"InLaw","father");			
@@ -245,7 +250,8 @@ public class O2OMultipleAssociationWJoinXMLDataTest extends SDKXMLDataTestBase
 			Bride result2 = (Bride) fromXML(result);
 
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());  
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getName());
 
 			validateAssociation(result, "InLaw", "father");

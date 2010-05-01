@@ -48,7 +48,8 @@ public class O2OUnidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 			Bag result2 = (Bag)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());  
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getStyle());
 		}
 	}
@@ -83,7 +84,8 @@ public class O2OUnidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 			Handle result2 = (Handle)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension()); 
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getColor());
 		}
 	}
@@ -113,7 +115,8 @@ public class O2OUnidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 		Bag result2 = (Bag)fromXML(result);
 		
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension()); 
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getStyle());
 		
 		Handle handle = result2.getHandle();
@@ -135,7 +138,8 @@ public class O2OUnidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 		Bag result2 = (Bag) fromXML(result);
 
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension());  
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getStyle());
 
 		Handle handle = result2.getHandle();
@@ -168,7 +172,8 @@ public class O2OUnidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 		Bag result2 = (Bag)fromXML(result);
 		
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension());   
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getStyle());
 		
 		Handle handle = result2.getHandle();
@@ -207,7 +212,8 @@ public class O2OUnidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 		Handle result2 = (Handle)fromXML(handle);
 		
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension());
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getColor());
 
 		assertEquals("1",result2.getId().getExtension());
@@ -229,7 +235,8 @@ public class O2OUnidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 		Handle result2 = (Handle) fromXML(handle);
 
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension());  
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getColor());
 
 		assertEquals("1", result2.getId().getExtension());
@@ -251,7 +258,8 @@ public class O2OUnidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			Bag result2 = (Bag)fromXML(result);
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());   
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getStyle());
 			
 			if (new Integer(result2.getId().getExtension()) < 11){

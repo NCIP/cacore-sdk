@@ -51,7 +51,8 @@ public class ParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 			Professor result2 = (Professor)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());   
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getName());
 		}
 	}
@@ -87,7 +88,8 @@ public class ParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 			TenuredProfessor result2 = (TenuredProfessor)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());   
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getName());
 			assertNotNull(result2.getTenuredYear());
 
@@ -125,7 +127,8 @@ public class ParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 			AssociateProfessor result2 = (AssociateProfessor)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());  
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getName());
 			assertNotNull(result2.getYearsServed());
 		}
@@ -160,7 +163,8 @@ public class ParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 			Assistant result2 = (Assistant)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());  
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getName());			
 		}
 	}
@@ -196,7 +200,8 @@ public class ParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 			AssistantProfessor result2 = (AssistantProfessor)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());   
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getName());
 			assertNotNull(result2.getJoiningYear());
 		}
@@ -226,7 +231,8 @@ public class ParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 		TenuredProfessor result2 = (TenuredProfessor)fromXML(result);
 
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension()); 
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getName());
 		assertEquals("1", result2.getId().getExtension());
 	}
@@ -246,7 +252,8 @@ public class ParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 		TenuredProfessor result2 = (TenuredProfessor) fromXML(result);
 
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension());  
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getName());
 		assertEquals("1", result2.getId().getExtension());
 	}
@@ -275,7 +282,8 @@ public class ParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 		Professor result2 = (Professor)fromXML(result);
 
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension()); 
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getName());
 		assertEquals("2", result2.getId().getExtension());
 	}
@@ -293,7 +301,7 @@ public class ParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 		Professor result2 = (Professor) fromXML(result);
 
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension());   assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getName());
 		assertEquals("2", result2.getId().getExtension());
 	}
@@ -322,7 +330,8 @@ public class ParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 		AssociateProfessor result2 = (AssociateProfessor)fromXML(result);
 
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension()); 
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getName());
 		assertEquals("7", result2.getId().getExtension());
 	}
@@ -351,7 +360,8 @@ public class ParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 		Professor result2 = (Professor)fromXML(result);
 
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension());
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getName());
 		assertEquals("7", result2.getId().getExtension());
 	}
@@ -370,7 +380,8 @@ public class ParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 		Professor result2 = (Professor) fromXML(result);
 
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension());   
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getName());
 		assertEquals("7", result2.getId().getExtension());
 	}	

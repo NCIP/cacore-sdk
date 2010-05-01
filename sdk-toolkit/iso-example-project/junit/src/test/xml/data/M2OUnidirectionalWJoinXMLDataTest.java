@@ -1,7 +1,5 @@
 package test.xml.data;
 
-import gov.nih.nci.cacoresdk.domain.manytomany.bidirectional.Employee;
-import gov.nih.nci.cacoresdk.domain.manytomany.unidirectional.Book;
 import gov.nih.nci.cacoresdk.domain.manytoone.unidirectional.withjoin.Album;
 import gov.nih.nci.cacoresdk.domain.manytoone.unidirectional.withjoin.Song;
 import gov.nih.nci.iso21090.Ii;
@@ -49,7 +47,8 @@ public class M2OUnidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 			Album result2 = (Album)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());   
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getTitle());
 		}
 	}
@@ -84,7 +83,8 @@ public class M2OUnidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 			Song result2 = (Song)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());  
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getTitle());
 		}
 	}
@@ -114,7 +114,8 @@ public class M2OUnidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 		Song result2 = (Song)fromXML(result);
 		
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension()); 
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getTitle());
 		
 		assertNull(result2.getAlbum());
@@ -136,7 +137,8 @@ public class M2OUnidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 		Song result2 = (Song)fromXML(result);
 		
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension());
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getTitle());
 		
 		assertNull(result2.getAlbum());
@@ -168,7 +170,8 @@ public class M2OUnidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 		Song result2 = (Song)fromXML(result);
 		
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension());
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getTitle());
 		
 		Album Album = result2.getAlbum();
@@ -204,7 +207,8 @@ public class M2OUnidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 		Album result2 = (Album)fromXML(result);
 		
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension()); 
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getTitle());
 		assertEquals("1",result2.getId().getExtension());
 	}
@@ -227,7 +231,8 @@ public class M2OUnidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 			Song result2 = (Song)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getTitle());
 
 			if (new Integer(result2.getId().getExtension()) != 12) { //Song id=12 has no Album associated with it

@@ -48,7 +48,8 @@ public class O2OBidirectionalXMLDataTest extends SDKXMLDataTestBase
 			Product result2 = (Product)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension()); 
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getName());
 		}
 	}
@@ -83,7 +84,8 @@ public class O2OBidirectionalXMLDataTest extends SDKXMLDataTestBase
 			OrderLine result2 = (OrderLine)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getName());			
 		}
 	}
@@ -113,7 +115,8 @@ public class O2OBidirectionalXMLDataTest extends SDKXMLDataTestBase
 		Product result2 = (Product)fromXML(result);
 		
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension());
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getName());
 		
 		OrderLine orderLine = result2.getLine();
@@ -146,7 +149,8 @@ public class O2OBidirectionalXMLDataTest extends SDKXMLDataTestBase
 		Product result2 = (Product)fromXML(result);
 		
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension());
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getName());
 		
 		OrderLine orderLine = result2.getLine();
@@ -170,7 +174,8 @@ public class O2OBidirectionalXMLDataTest extends SDKXMLDataTestBase
 		Product result2 = (Product) fromXML(result);
 
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension());
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getName());
 
 		OrderLine orderLine = result2.getLine();
@@ -207,7 +212,8 @@ public class O2OBidirectionalXMLDataTest extends SDKXMLDataTestBase
 		OrderLine result2 = (OrderLine)fromXML(orderLine);
 		
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension());
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getName());
 		assertEquals("1",result2.getId().getExtension());
 	}
@@ -239,7 +245,8 @@ public class O2OBidirectionalXMLDataTest extends SDKXMLDataTestBase
 		Product result2 = (Product)fromXML(product);
 		
 		assertNotNull(result2);
-		assertNotNull(result2.getId());
+		assertNotNull(result2.getId().getExtension());
+		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getName());
 		assertEquals("1",result2.getId().getExtension());
 	}	
@@ -390,7 +397,8 @@ public class O2OBidirectionalXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			Product result2 = (Product)fromXML(result);
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension());
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getName());
 			
 			if (new Integer(result2.getId().getExtension()) < 3){ // Product id = 3 does not have an associated Orderline	
@@ -419,7 +427,8 @@ public class O2OBidirectionalXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			OrderLine result2 = (OrderLine)fromXML(result);
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId().getExtension()); 
+			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getName());
 			
 			if (new Integer(result2.getId().getExtension()) < 3){ // OrderLine id = 3,4, and 5 don't have an associated Product

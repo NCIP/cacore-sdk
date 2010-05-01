@@ -50,7 +50,7 @@ public class CharacterKeyXMLDataTest extends SDKXMLDataTestBase
 			CharacterKey result2 = (CharacterKey)fromXML(result);
 			
 			assertNotNull(result2);
-			assertNotNull(result2.getId());
+			assertNotNull(result2.getId()); 
 			assertNotNull(result2.getName());
 		}
 	}
