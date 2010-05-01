@@ -20,9 +20,9 @@ import gov.nih.nci.system.query.cql.CQLQuery;
 import java.util.Collection;
 import java.util.Iterator;
 
-import test.gov.nih.nci.cacoresdk.SDKTestBase;
+import test.gov.nih.nci.cacoresdk.SDKISOTestBase;
 
-public class ImplicitParentWithAssociationTest extends SDKTestBase
+public class ImplicitParentWithAssociationTest extends SDKISOTestBase
 {
 	public static String getTestCaseName()
 	{
