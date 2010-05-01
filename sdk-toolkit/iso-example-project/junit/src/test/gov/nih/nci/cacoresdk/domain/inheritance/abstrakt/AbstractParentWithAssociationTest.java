@@ -4,6 +4,7 @@ import gov.nih.nci.cacoresdk.domain.inheritance.abstrakt.PrivateTeacher;
 import gov.nih.nci.cacoresdk.domain.inheritance.abstrakt.Pupil;
 import gov.nih.nci.cacoresdk.domain.inheritance.abstrakt.Teacher;
 import gov.nih.nci.iso21090.Ii;
+import gov.nih.nci.iso21090.NullFlavor;
 import gov.nih.nci.iso21090.St;
 import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.query.cql.CQLAssociation;
@@ -51,7 +52,8 @@ public class AbstractParentWithAssociationTest extends SDKISOTestBase
 			assertEquals(result.getId().getRoot(),"PrivateTeacherRoot LocalConstant");
 			assertNotNull(result.getName());
 			assertNotNull(result.getYearsExperience());
-			assertEquals(result.getYearsExperience().getNullFlavor(),"MSK");
+			assertNull(result.getYearsExperience().getValue());
+			assertEquals(result.getYearsExperience().getNullFlavor(),NullFlavor.MSK);
 		}
 	}
 

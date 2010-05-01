@@ -187,7 +187,7 @@ public class M2MBidirectionalXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(project2);
 		assertNotNull(project2.getId());
 		assertNotNull(project2.getName());
-		assertEquals(new Integer(1),project2.getId());
+		assertEquals("1",project2.getId().getExtension());
 		
 		Collection employeeCollection = project2.getEmployeeCollection();
 		//2nd level associations, including Collections, get nullified via the Castor Collection Handler

@@ -195,7 +195,7 @@ public class O2OMultipleAssociationWJoinXMLDataTest extends SDKXMLDataTestBase
 
 		Bride searchObject = new Bride();
 		Ii ii = new Ii();
-		ii.setExtension("4");
+		ii.setExtension("1");
 		searchObject.setId(ii);// A Bride with both a Mother- and Father-in-Law
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation.withjoin.Bride",searchObject );
 
@@ -235,7 +235,7 @@ public class O2OMultipleAssociationWJoinXMLDataTest extends SDKXMLDataTestBase
 	public void testGetAssociationHQL() throws Exception {
 
 		HQLCriteria hqlCriteria = new HQLCriteria(
-				"from gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation.withjoin.Bride where id='4'");
+				"from gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation.withjoin.Bride where id='1'");
 		Collection results = search(hqlCriteria,
 				"gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation.withjoin.Bride");
 
