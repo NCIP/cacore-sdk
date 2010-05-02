@@ -27,7 +27,7 @@
 			<property name="report.project.dir" value="${junit.dir}/report/@{REPORT.PROJECT.DIR}" />
 			<mkdir dir="${report.project.dir}" />
 			<property name="project.name" value="${PROJECT_NAME}"/>
-			
+
 			<delete dir="${project.target.dir}" failonerror="false"/>
 			<ant antfile="build.xml" dir="." target="build-system" inheritAll="true"/>
 			<ant antfile="build.xml" dir="." target="dist:installer:prep" inheritAll="true"/>
@@ -40,7 +40,7 @@
 				<property name="bda-utils.dir" value="${dist.exploded.dir}/bda-utils" />
 				<property name="force.reinstall" value="true" />
 			</ant>
-			
+
 			<if>
 				<and>
 					<equals arg1="${ENABLE_LOCAL_JAVA_INTERFACE}" arg2="true" />
@@ -110,17 +110,22 @@
 			<property name="tomcat.home" value="${application.base.path}/${tomcat.relative.path}"/>
 
 			<if>
-				<equals arg1="${SERVER_TYPE}" arg2="tomcat" />
+				<equals arg1="${ENABLE_REMOTE_JAVA_INTERFACE}" arg2="true" />
 				<then>
-					<post to="http://${tomcat.hostname}:${tomcat.port.http}/coberturaFlush/flushCobertura" verbose="true"/>
-					<ant antfile="build.xml" dir="${dist.exploded.dir}" target="install:tomcat:stop" inheritAll="true" />
-					<copy file="${tomcat.home}/bin/cobertura.ser" tofile="${junit.dir}/report/@{REPORT.PROJECT.DIR}/tomcat-cobertura.ser" overwrite="true" />
+					<if>
+						<equals arg1="${SERVER_TYPE}" arg2="tomcat" />
+						<then>
+							<post to="http://${tomcat.hostname}:${tomcat.port.http}/coberturaFlush/flushCobertura" verbose="true" />
+							<ant antfile="build.xml" dir="${dist.exploded.dir}" target="install:tomcat:stop" inheritAll="true" />
+							<copy file="${tomcat.home}/bin/cobertura.ser" tofile="${junit.dir}/report/@{REPORT.PROJECT.DIR}/tomcat-cobertura.ser" overwrite="true" />
+						</then>
+						<else>
+							<post to="http://${jboss.server.hostname}:${jboss.server.port}/coberturaFlush/flushCobertura" verbose="true" />
+							<ant antfile="build.xml" dir="${dist.exploded.dir}" target="install:jboss:stop" inheritAll="true" />
+							<copy file="${jboss.home}/bin/cobertura.ser" tofile="${junit.dir}/report/@{REPORT.PROJECT.DIR}/jboss-cobertura.ser" overwrite="true" />
+						</else>
+					</if>
 				</then>
-				<else>
-					<post to="http://${jboss.server.hostname}:${jboss.server.port}/coberturaFlush/flushCobertura"  verbose="true"/>
-					<ant antfile="build.xml" dir="${dist.exploded.dir}" target="install:jboss:stop" inheritAll="true" />
-					<copy file="${jboss.home}/bin/cobertura.ser" tofile="${junit.dir}/report/@{REPORT.PROJECT.DIR}/jboss-cobertura.ser" overwrite="true" />
-				</else>
 			</if>
 		</sequential>
 	</macrodef>
