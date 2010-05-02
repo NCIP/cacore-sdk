@@ -6,6 +6,7 @@ import java.util.Iterator;
 import gov.nih.nci.cacoresdk.domain.onetomany.unidirectional.KeyChain;
 import gov.nih.nci.cacoresdk.domain.onetomany.unidirectional.LatchKey;
 import gov.nih.nci.iso21090.Ii;
+import gov.nih.nci.iso21090.NullFlavor;
 import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.query.cql.CQLAssociation;
 import gov.nih.nci.system.query.cql.CQLAttribute;
@@ -45,7 +46,7 @@ public class O2MUnidirectionalTest extends SDKISOTestBase
 			assertNotNull(result.getId());
 			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
-			assertEquals(result.getName().getNullFlavor(),"MSK");
+			assertEquals(result.getName().getNullFlavor(),NullFlavor.MSK);
 		}
 	}
 
@@ -63,7 +64,7 @@ public class O2MUnidirectionalTest extends SDKISOTestBase
 			assertNotNull(result.getId());
 			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
-			assertEquals(result.getName().getNullFlavor(),"MSK");
+			assertEquals(result.getName().getNullFlavor(),NullFlavor.MSK);
 		}
 	}
 
@@ -118,7 +119,7 @@ public class O2MUnidirectionalTest extends SDKISOTestBase
 		assertNotNull(result.getId());
 		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(result.getName());
-		assertEquals(result.getName().getNullFlavor(),"MSK");
+		assertEquals(result.getName().getNullFlavor(),NullFlavor.MSK);
 		
 		Collection keyCollection = result.getKeyCollection();
 		assertEquals(0, keyCollection.size());
@@ -169,7 +170,7 @@ public class O2MUnidirectionalTest extends SDKISOTestBase
 		assertNotNull(result.getId());
 		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(result.getName());
-		assertEquals(result.getName().getNullFlavor(),"MSK");
+		assertEquals(result.getName().getNullFlavor(),NullFlavor.MSK);
 		
 		Collection keyCollection = result.getKeyCollection();
 		assertEquals(true, keyCollection.size()>0);

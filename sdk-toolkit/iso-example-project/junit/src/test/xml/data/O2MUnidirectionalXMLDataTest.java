@@ -3,6 +3,7 @@ package test.xml.data;
 import gov.nih.nci.cacoresdk.domain.onetomany.unidirectional.KeyChain;
 import gov.nih.nci.cacoresdk.domain.onetomany.unidirectional.LatchKey;
 import gov.nih.nci.iso21090.Ii;
+import gov.nih.nci.iso21090.NullFlavor;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
 import java.util.Collection;
@@ -49,7 +50,7 @@ public class O2MUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 			assertNotNull(result2);
 			assertNotNull(result2.getId().getExtension()); 
 			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
-			assertEquals("MSK",result2.getName().getNullFlavor());
+			assertEquals(NullFlavor.MSK,result2.getName().getNullFlavor());
 			assertNotNull(result2.getName());
 		}
 	}
@@ -117,7 +118,7 @@ public class O2MUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(result2);
 		assertNotNull(result2.getId().getExtension()); 
 		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
-		assertEquals("MSK",result2.getName().getNullFlavor());
+		assertEquals(NullFlavor.MSK,result2.getName().getNullFlavor());
 		assertNotNull(result2.getName());
 		
 		Collection keyCollection = result2.getKeyCollection();
@@ -141,7 +142,7 @@ public class O2MUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(result2);
 		assertNotNull(result2.getId().getExtension());  
 		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
-		assertEquals("MSK",result2.getName().getNullFlavor());
+		assertEquals(NullFlavor.MSK,result2.getName().getNullFlavor());
 		assertNotNull(result2.getName());
 		
 		Collection keyCollection = result2.getKeyCollection();
@@ -176,7 +177,7 @@ public class O2MUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(result2);
 		assertNotNull(result2.getId().getExtension());
 		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
-		assertEquals("MSK",result2.getName().getNullFlavor());
+		assertEquals(NullFlavor.MSK,result2.getName().getNullFlavor());
 		assertNotNull(result2.getName());
 		
 		validateAssociation(result,"LatchKey","keyCollection");
