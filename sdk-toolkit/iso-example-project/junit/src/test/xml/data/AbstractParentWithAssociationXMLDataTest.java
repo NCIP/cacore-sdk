@@ -4,6 +4,7 @@ import gov.nih.nci.cacoresdk.domain.inheritance.abstrakt.PrivateTeacher;
 import gov.nih.nci.cacoresdk.domain.inheritance.abstrakt.Pupil;
 import gov.nih.nci.cacoresdk.domain.inheritance.abstrakt.Teacher;
 import gov.nih.nci.iso21090.Ii;
+import gov.nih.nci.iso21090.NullFlavor;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
 import java.util.Collection;
@@ -87,7 +88,7 @@ public class AbstractParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 			assertNotNull(result2);
 			assertNotNull(result2.getId().getExtension());
 			assertEquals("PrivateTeacherRoot LocalConstant",result2.getId().getRoot());
-			assertEquals("MSK",result2.getYearsExperience().getNullFlavor());
+			assertEquals(NullFlavor.MSK,result2.getYearsExperience().getNullFlavor());
 			assertNotNull(result2.getName());
 			assertNotNull(result2.getYearsExperience());
 
@@ -156,7 +157,7 @@ public class AbstractParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(result2);
 		assertNotNull(result2.getId().getExtension());
 		assertEquals("PrivateTeacherRoot LocalConstant",result2.getId().getRoot());
-		assertEquals("MSK",result2.getYearsExperience().getNullFlavor());
+		assertEquals(NullFlavor.MSK,result2.getYearsExperience().getNullFlavor());
 		assertNotNull(result2.getName());
 		assertNotNull(result2.getYearsExperience());
 		assertEquals("1", result2.getId().getExtension());
@@ -178,7 +179,7 @@ public class AbstractParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(result2);
 		assertNotNull(result2.getId().getExtension());
 		assertEquals("PrivateTeacherRoot LocalConstant",result2.getId().getRoot());
-		assertEquals("MSK",result2.getYearsExperience().getNullFlavor());
+		assertEquals(NullFlavor.MSK,result2.getYearsExperience().getNullFlavor());
 		assertNotNull(result2.getName());
 		assertNotNull(result2.getYearsExperience());
 		assertEquals("1", result2.getId().getExtension());

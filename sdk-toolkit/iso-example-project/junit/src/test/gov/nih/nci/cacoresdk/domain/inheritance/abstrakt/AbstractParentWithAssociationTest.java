@@ -113,7 +113,7 @@ public class AbstractParentWithAssociationTest extends SDKISOTestBase
 			assertEquals(result.getId().getRoot(),"PrivateTeacherRoot LocalConstant");
 			assertNotNull(result.getName());
 			assertNotNull(result.getYearsExperience());
-			assertEquals(result.getYearsExperience().getNullFlavor(),"MSK");
+			assertEquals(result.getYearsExperience().getNullFlavor(),NullFlavor.MSK);
 		}
 	}
 
@@ -131,7 +131,7 @@ public class AbstractParentWithAssociationTest extends SDKISOTestBase
 			assertEquals(result.getId().getRoot(),"PrivateTeacherRoot LocalConstant");
 			assertNotNull(result.getName());
 			assertNotNull(result.getYearsExperience());
-			assertEquals(result.getYearsExperience().getNullFlavor(),"MSK");
+			assertEquals(result.getYearsExperience().getNullFlavor(),NullFlavor.MSK);
 		}
 	}
 	
@@ -534,7 +534,7 @@ public class AbstractParentWithAssociationTest extends SDKISOTestBase
 			assertNotNull(result.getId());
 			assertEquals(result.getId().getRoot(),"PrivateTeacherRoot LocalConstant");
 			assertNotNull(result.getYearsExperience());
-			assertEquals(result.getYearsExperience().getNullFlavor(),"MSK");
+			assertEquals(result.getYearsExperience().getNullFlavor(),NullFlavor.MSK);
 			
 			for(Iterator j = result.getPupilCollection().iterator();j.hasNext();)
 			{
