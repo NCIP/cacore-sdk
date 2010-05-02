@@ -10,6 +10,7 @@ import gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.sametable.
 import gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.sametable.HardTop;
 import gov.nih.nci.iso21090.Ii;
 import gov.nih.nci.iso21090.Int;
+import gov.nih.nci.iso21090.NullFlavor;
 import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.query.cql.CQLAssociation;
 import gov.nih.nci.system.query.cql.CQLAttribute;
@@ -103,7 +104,7 @@ public class ParentWithAssociationSametableTest extends SDKISOTestBase
 			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getCapacity());
 			assertNotNull(result.getExpandable());
-			assertEquals(result.getExpandable().getNullFlavor(),"MSK");
+			assertEquals(result.getExpandable().getNullFlavor(),NullFlavor.MSK);
 		}
 	}
 	
@@ -263,7 +264,7 @@ public class ParentWithAssociationSametableTest extends SDKISOTestBase
 			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getCapacity());
 			assertNotNull(result.getExpandable());
-			assertEquals(result.getExpandable().getNullFlavor(),"MSK");
+			assertEquals(result.getExpandable().getNullFlavor(),NullFlavor.MSK);
 		}
 	}
 
@@ -283,7 +284,7 @@ public class ParentWithAssociationSametableTest extends SDKISOTestBase
 			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getCapacity());
 			assertNotNull(result.getExpandable());
-			assertEquals(result.getExpandable().getNullFlavor(),"MSK");
+			assertEquals(result.getExpandable().getNullFlavor(),NullFlavor.MSK);
 		}
 	}	
 
