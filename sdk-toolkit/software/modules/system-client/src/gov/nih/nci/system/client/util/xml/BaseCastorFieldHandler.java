@@ -67,7 +67,7 @@ extends GeneralizedFieldHandler
 					if (getAssociations
 							|| ((!type.getName().equals("java.util.Collection")) && (type
 									.getName().startsWith("java")))
-							|| type.isPrimitive())
+							|| type.isPrimitive() || type.getName().startsWith("gov.nih.nci.iso21090."))
 						value = method.invoke(obj, (Object[])null);
 						
 					if (!Hibernate.isInitialized(value)){
