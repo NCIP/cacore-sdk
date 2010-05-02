@@ -314,12 +314,12 @@ public abstract class SDKXMLDataTestBase extends TestCase {
 		assertNotNull(roleNameElt);
 		assertEquals(roleNameElt.getName(),roleName);
 		
-/*		children = roleNameElt.getChildren();
+		children = roleNameElt.getChildren();
 		assertNotNull(children);
 
 		Element associatedKlassElt = locateChild(children,associatedKlassName);
 		assertNotNull(associatedKlassElt);
-*/	}
+	}
 	
 	/**
 	 * Uses xpath to query the generated XSD Verifies that common elements
