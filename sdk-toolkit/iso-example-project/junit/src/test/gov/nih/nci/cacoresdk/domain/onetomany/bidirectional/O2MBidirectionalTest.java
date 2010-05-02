@@ -87,7 +87,7 @@ public class O2MBidirectionalTest extends SDKISOTestBase
 	{
 		Computer searchObject = new Computer();
 		Ii ii=new Ii();
-		ii.setExtension("1");
+		ii.setExtension("5");
 		searchObject.setId(ii);
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.onetomany.bidirectional.Computer",searchObject );
 

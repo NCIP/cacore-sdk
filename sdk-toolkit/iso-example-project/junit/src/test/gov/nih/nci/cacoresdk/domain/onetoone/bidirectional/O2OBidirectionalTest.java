@@ -428,7 +428,7 @@ public class O2OBidirectionalTest extends SDKISOTestBase
 		assertEquals("1",result.getProduct().getId().getExtension());
 
 		Ii ii2=new Ii();
-		ii.setExtension("2");
+		ii2.setExtension("2");
 		searchObject.setId(ii2);
 		results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.OrderLine",searchObject );
 
@@ -439,7 +439,7 @@ public class O2OBidirectionalTest extends SDKISOTestBase
 		assertEquals("2",result.getProduct().getId().getExtension());
 
 		Ii ii3=new Ii();
-		ii.setExtension("3");
+		ii3.setExtension("3");
 		searchObject.setId(ii3);
 		results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.OrderLine",searchObject );
 

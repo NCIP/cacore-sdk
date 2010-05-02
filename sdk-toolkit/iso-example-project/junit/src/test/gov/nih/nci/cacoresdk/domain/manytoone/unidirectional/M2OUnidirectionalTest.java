@@ -155,7 +155,7 @@ public class M2OUnidirectionalTest extends SDKISOTestBase
 		assertNotNull(restaurant.getId());
 		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(restaurant.getName());
-		assertEquals(new Integer(1),restaurant.getId());
+		assertEquals("1",restaurant.getId().getExtension());
 	}
 
 	/**
@@ -184,7 +184,7 @@ public class M2OUnidirectionalTest extends SDKISOTestBase
 		assertNotNull(restaurant.getId());
 		assertEquals(restaurant.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(restaurant.getName());
-		assertEquals(new Integer(1),restaurant.getId());
+		assertEquals("1",restaurant.getId().getExtension());
 	}
 	
 
@@ -260,7 +260,7 @@ public class M2OUnidirectionalTest extends SDKISOTestBase
 		assertNotNull(restaurant.getId());
 		assertEquals(restaurant.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(restaurant.getName());
-		assertEquals(new Integer(1),restaurant.getId());
+		assertEquals("1",restaurant.getId().getExtension());
 	}	
 	
 	public void testOneAssociatedObjectHQL() throws ApplicationException {
