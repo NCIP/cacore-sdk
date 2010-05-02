@@ -52,8 +52,8 @@ public class AbstractParentWithAssociationTest extends SDKISOTestBase
 			assertEquals(result.getId().getRoot(),"PrivateTeacherRoot LocalConstant");
 			assertNotNull(result.getName());
 			assertNotNull(result.getYearsExperience());
-			assertNull(result.getYearsExperience().getValue());
-			assertEquals(result.getYearsExperience().getNullFlavor(),NullFlavor.MSK);
+			assertNotNull(result.getYearsExperience().getValue());
+			assertNull(result.getYearsExperience().getNullFlavor());
 		}
 	}
 

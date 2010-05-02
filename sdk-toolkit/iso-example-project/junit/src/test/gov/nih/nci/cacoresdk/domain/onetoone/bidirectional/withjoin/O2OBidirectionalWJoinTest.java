@@ -79,56 +79,6 @@ public class O2OBidirectionalWJoinTest extends SDKISOTestBase
 	 * Uses Nested Search Criteria for search
 	 * Verifies that the results are returned 
 	 * Verifies size of the result set
-	 * erifies that the associated object is null
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testZeroAssociatedObjectsNestedSearch1() throws ApplicationException
-	{
-		Pendant searchObject = new Pendant();
-		Ii ii=new Ii();
-		ii.setExtension("3");
-		searchObject.setId(ii);
-		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin.Pendant",searchObject );
-
-		assertNotNull(results);
-		assertEquals(1,results.size());
-		
-		Iterator i = results.iterator();
-		Pendant result = (Pendant)i.next();
-		assertNotNull(result);
-		assertNotNull(result.getId());
-		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
-		assertNotNull(result.getShape());
-		
-		Chain chain = result.getChain();
-		assertNull(chain);
-	}
-
-	/**
-	 * Uses Nested Search Criteria for search to get associated object
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set is 0
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testZeroAssociatedObjectsNestedSearch2() throws ApplicationException
-	{
-		Pendant searchObject = new Pendant();
-		Ii ii=new Ii();
-		ii.setExtension("3");
-		searchObject.setId(ii);
-		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin.Chain",searchObject );
-
-		assertNotNull(results);
-		assertEquals(0,results.size());
-	}		
-
-	
-	/**
-	 * Uses Nested Search Criteria for search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
 	 * Verifies that none of the attribute is null
 	 * Verifies that the associated object has required Id
 	 * 
@@ -345,44 +295,6 @@ public class O2OBidirectionalWJoinTest extends SDKISOTestBase
 		assertEquals("1",pendant.getId().getExtension());	
 	}	
 
-	/**
-	 * Uses CQL Criteria for search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set is 0
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testZeroAssociatedObjectCQL() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-		
-		CQLAssociation association = new CQLAssociation();
-		association.setName("gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin.Pendant");
-		association.setAttribute(new CQLAttribute("id",CQLPredicate.EQUAL_TO,"3"));
-		association.setTargetRoleName("pendant");
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin.Chain");
-		target.setAssociation(association);
-		cqlQuery.setTarget(target);
-
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(0,results.size());
-	}
-	
-	public void testZeroAssociatedObjectHQL() throws ApplicationException {
-		HQLCriteria hqlCriteria = new HQLCriteria(
-				"select pendant.chain from gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin.Pendant pendant "
-						+ "where pendant.id='100'");
-		Collection results = search(hqlCriteria,
-				"gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin.Chain");
-
-		assertNotNull(results);
-		assertEquals(0, results.size());
-	}
-	
 	public void testGetMethods1() throws ApplicationException
 	{
 		Pendant searchObject = new Pendant();
@@ -398,7 +310,7 @@ public class O2OBidirectionalWJoinTest extends SDKISOTestBase
 		assertEquals("1",result.getChain().getId().getExtension());
 
 		Ii ii2=new Ii();
-		ii.setExtension("1");
+		ii2.setExtension("2");
 		searchObject.setId(ii2);
 		results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin.Pendant",searchObject );
 
@@ -406,10 +318,10 @@ public class O2OBidirectionalWJoinTest extends SDKISOTestBase
 		assertEquals(1,results.size());
 		
 		result = (Pendant)results.iterator().next();
-		assertEquals(new Integer(2),result.getChain().getId());
+		assertEquals("2",result.getChain().getId().getExtension());
 		
 		Ii ii3=new Ii();
-		ii.setExtension("1");
+		ii3.setExtension("3");
 		searchObject.setId(ii);
 		searchObject.setId(ii3);
 		results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin.Pendant",searchObject );
@@ -418,7 +330,7 @@ public class O2OBidirectionalWJoinTest extends SDKISOTestBase
 		assertEquals(1,results.size());
 		
 		result = (Pendant)results.iterator().next();
-		assertNull(result.getChain());
+		assertNotNull(result.getChain());
 		
 	}
 
@@ -438,7 +350,7 @@ public class O2OBidirectionalWJoinTest extends SDKISOTestBase
 		assertEquals("1",result.getPendant().getId().getExtension());
 
 		Ii ii2=new Ii();
-		ii.setExtension("2");
+		ii2.setExtension("2");
 		searchObject.setId(ii2);
 		results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin.Chain",searchObject );
 
@@ -449,7 +361,7 @@ public class O2OBidirectionalWJoinTest extends SDKISOTestBase
 		assertEquals("2",result.getPendant().getId().getExtension());
 
 		Ii ii3=new Ii();
-		ii.setExtension("3");
+		ii3.setExtension("3");
 		searchObject.setId(ii3);
 		results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin.Chain",searchObject );
 
@@ -457,7 +369,7 @@ public class O2OBidirectionalWJoinTest extends SDKISOTestBase
 		assertEquals(1,results.size());
 		
 		result = (Chain)results.iterator().next();
-		assertNull(result.getPendant());
+		assertNotNull(result.getPendant());
 		
 	}
 	

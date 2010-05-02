@@ -4,6 +4,7 @@ import gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametableroo
 import gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametablerootlevel.Calculator;
 import gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametablerootlevel.GraphicCalculator;
 import gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametablerootlevel.ScientificCalculator;
+import gov.nih.nci.iso21090.Ii;
 import gov.nih.nci.iso21090.St;
 import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.query.cql.CQLAssociation;
@@ -55,11 +56,29 @@ public class TwoLevelInheritanceSametablerootlevelTest extends SDKISOTestBase
 			Calculator result = (Calculator)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
-			assertEquals(result.getId().getRoot(),CALCULATOR_ROOT_LOCAL_CONSTANT_VALUE);
+			assertCalculatorRoot(result);
 			assertNotNull(result.getBrand());
 		}
 	}
 	
+	private void assertCalculatorRoot(Calculator calculator) {
+		if (calculator instanceof GraphicCalculator) {
+			assertEquals(calculator.getId().getRoot(),
+					GRAPHIC_CALCULATOR_ROOT_LOCAL_CONSTANT_VALUE);
+
+		} else if (calculator instanceof FinancialCalculator) {
+			assertEquals(calculator.getId().getRoot(),
+					FINANCIAL_CALCULATOR_ROOT_LOCAL_CONSTANT_VALUE);
+
+		} else if (calculator instanceof ScientificCalculator) {
+			assertEquals(calculator.getId().getRoot(),
+					SCIENTIFIC_CALCULATOR_ROOT_LOCAL_CONSTANT_VALUE);
+
+		} else {
+			assertEquals(calculator.getId().getRoot(),
+					CALCULATOR_ROOT_LOCAL_CONSTANT_VALUE);
+		}
+	}
 	/**
 	 * Uses Nested Search Criteria for search
 	 * Verifies that the results are returned 
@@ -81,7 +100,7 @@ public class TwoLevelInheritanceSametablerootlevelTest extends SDKISOTestBase
 			FinancialCalculator result = (FinancialCalculator)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
-			assertEquals(result.getId().getRoot(),FINANCIAL_CALCULATOR_ROOT_LOCAL_CONSTANT_VALUE);
+			assertCalculatorRoot(result);
 			assertNotNull(result.getBrand());
 		}
 	}
@@ -107,7 +126,7 @@ public class TwoLevelInheritanceSametablerootlevelTest extends SDKISOTestBase
 			ScientificCalculator result = (ScientificCalculator)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
-			assertEquals(result.getId().getRoot(),SCIENTIFIC_CALCULATOR_ROOT_LOCAL_CONSTANT_VALUE);
+			assertCalculatorRoot(result);
 			assertNotNull(result.getBrand());
 		}
 	}
@@ -133,7 +152,7 @@ public class TwoLevelInheritanceSametablerootlevelTest extends SDKISOTestBase
 			GraphicCalculator result = (GraphicCalculator)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
-			assertEquals(result.getId().getRoot(),GRAPHIC_CALCULATOR_ROOT_LOCAL_CONSTANT_VALUE);
+			assertCalculatorRoot(result);
 			assertNotNull(result.getBrand());
 		}
 	}
@@ -165,7 +184,7 @@ public class TwoLevelInheritanceSametablerootlevelTest extends SDKISOTestBase
 			Calculator result = (Calculator)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
-			assertEquals(result.getId().getRoot(),CALCULATOR_ROOT_LOCAL_CONSTANT_VALUE);
+			assertCalculatorRoot(result);
 			assertNotNull(result.getBrand());
 		}
 	}
@@ -196,7 +215,7 @@ public class TwoLevelInheritanceSametablerootlevelTest extends SDKISOTestBase
 			FinancialCalculator result = (FinancialCalculator)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
-			assertEquals(result.getId().getRoot(),FINANCIAL_CALCULATOR_ROOT_LOCAL_CONSTANT_VALUE);
+			assertCalculatorRoot(result);
 			assertNotNull(result.getBrand());
 		}
 	}	
@@ -227,7 +246,7 @@ public class TwoLevelInheritanceSametablerootlevelTest extends SDKISOTestBase
 			ScientificCalculator result = (ScientificCalculator)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
-			assertEquals(result.getId().getRoot(),SCIENTIFIC_CALCULATOR_ROOT_LOCAL_CONSTANT_VALUE);
+			assertCalculatorRoot(result);
 			assertNotNull(result.getBrand());
 		}
 	}
@@ -258,7 +277,7 @@ public class TwoLevelInheritanceSametablerootlevelTest extends SDKISOTestBase
 			GraphicCalculator result = (GraphicCalculator)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
-			assertEquals(result.getId().getRoot(),GRAPHIC_CALCULATOR_ROOT_LOCAL_CONSTANT_VALUE);
+			assertCalculatorRoot(result);
 			assertNotNull(result.getBrand());
 		}
 	}
@@ -276,7 +295,7 @@ public class TwoLevelInheritanceSametablerootlevelTest extends SDKISOTestBase
 			GraphicCalculator result = (GraphicCalculator) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
-			assertEquals(result.getId().getRoot(),GRAPHIC_CALCULATOR_ROOT_LOCAL_CONSTANT_VALUE);
+			assertCalculatorRoot(result);
 			assertNotNull(result.getBrand());
 		}
 	}
@@ -300,7 +319,7 @@ public class TwoLevelInheritanceSametablerootlevelTest extends SDKISOTestBase
 			FinancialCalculator result = (FinancialCalculator)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
-			assertEquals(result.getId().getRoot(),FINANCIAL_CALCULATOR_ROOT_LOCAL_CONSTANT_VALUE);
+			assertCalculatorRoot(result);
 			assertNotNull(result.getBrand());
 		}
 	}
@@ -353,7 +372,7 @@ public class TwoLevelInheritanceSametablerootlevelTest extends SDKISOTestBase
 			GraphicCalculator result = (GraphicCalculator)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
-			assertEquals(result.getId().getRoot(),GRAPHIC_CALCULATOR_ROOT_LOCAL_CONSTANT_VALUE);
+			assertCalculatorRoot(result);
 			assertNotNull(result.getBrand());
 		}
 	}
@@ -379,7 +398,7 @@ public class TwoLevelInheritanceSametablerootlevelTest extends SDKISOTestBase
 			ScientificCalculator result = (ScientificCalculator)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
-			assertEquals(result.getId().getRoot(),SCIENTIFIC_CALCULATOR_ROOT_LOCAL_CONSTANT_VALUE);
+			assertCalculatorRoot(result);
 			assertNotNull(result.getBrand());
 		}
 	}
@@ -408,7 +427,7 @@ public class TwoLevelInheritanceSametablerootlevelTest extends SDKISOTestBase
 			GraphicCalculator result = (GraphicCalculator)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
-			assertEquals(result.getId().getRoot(),GRAPHIC_CALCULATOR_ROOT_LOCAL_CONSTANT_VALUE);
+			assertCalculatorRoot(result);
 			assertNotNull(result.getBrand());
 		}
 	}
@@ -437,7 +456,7 @@ public class TwoLevelInheritanceSametablerootlevelTest extends SDKISOTestBase
 			ScientificCalculator result = (ScientificCalculator)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
-			assertEquals(result.getId().getRoot(),SCIENTIFIC_CALCULATOR_ROOT_LOCAL_CONSTANT_VALUE);
+			assertCalculatorRoot(result);
 			assertNotNull(result.getBrand());
 		}
 	}
@@ -473,7 +492,7 @@ public class TwoLevelInheritanceSametablerootlevelTest extends SDKISOTestBase
 			ScientificCalculator result = (ScientificCalculator)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
-			assertEquals(result.getId().getRoot(),SCIENTIFIC_CALCULATOR_ROOT_LOCAL_CONSTANT_VALUE);
+			assertCalculatorRoot(result);
 			assertNotNull(result.getBrand());
 		}
 	}
@@ -509,7 +528,7 @@ public class TwoLevelInheritanceSametablerootlevelTest extends SDKISOTestBase
 			GraphicCalculator result = (GraphicCalculator)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
-			assertEquals(result.getId().getRoot(),GRAPHIC_CALCULATOR_ROOT_LOCAL_CONSTANT_VALUE);
+			assertCalculatorRoot(result);
 			assertNotNull(result.getBrand());
 		}
 	}
@@ -527,7 +546,7 @@ public class TwoLevelInheritanceSametablerootlevelTest extends SDKISOTestBase
 			GraphicCalculator result = (GraphicCalculator) i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
-			assertEquals(result.getId().getRoot(),GRAPHIC_CALCULATOR_ROOT_LOCAL_CONSTANT_VALUE);
+			assertCalculatorRoot(result);
 			assertNotNull(result.getBrand());
 		}
 	}
@@ -563,7 +582,7 @@ public class TwoLevelInheritanceSametablerootlevelTest extends SDKISOTestBase
 			ScientificCalculator result = (ScientificCalculator)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
-			assertEquals(result.getId().getRoot(),GRAPHIC_CALCULATOR_ROOT_LOCAL_CONSTANT_VALUE);
+			assertCalculatorRoot(result);
 			assertNotNull(result.getBrand());
 		}
 	}
@@ -599,7 +618,7 @@ public class TwoLevelInheritanceSametablerootlevelTest extends SDKISOTestBase
 			GraphicCalculator result = (GraphicCalculator)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
-			assertEquals(result.getId().getRoot(),GRAPHIC_CALCULATOR_ROOT_LOCAL_CONSTANT_VALUE);
+			assertCalculatorRoot(result);
 		}
 	}
 
@@ -644,7 +663,7 @@ public class TwoLevelInheritanceSametablerootlevelTest extends SDKISOTestBase
 			Calculator result = (Calculator)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
-			assertEquals(result.getId().getRoot(),CALCULATOR_ROOT_LOCAL_CONSTANT_VALUE);
+			assertCalculatorRoot(result);
 			assertNotNull(result.getBrand());
 		}
 	}

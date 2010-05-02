@@ -1,5 +1,6 @@
 package test.gov.nih.nci.cacoresdk;
 
+import gov.nih.nci.iso21090.NullFlavor;
 import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 import gov.nih.nci.system.client.ApplicationServiceProvider;
@@ -21,6 +22,7 @@ public abstract class SDKISOTestBase extends TestCase {
 	private ApplicationService appServiceFromUrl;
 	
 	protected String II_ROOT_GLOBAL_CONSTANT_VALUE = "2.16.12.123.456.1";
+	protected NullFlavor NULL_FLAVOR_GLOBAL_CONSTANT_VALUE = NullFlavor.MSK;
 
 	protected void setUp() throws Exception {
 		super.setUp();

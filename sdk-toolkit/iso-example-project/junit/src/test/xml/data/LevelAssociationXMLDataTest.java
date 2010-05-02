@@ -26,7 +26,7 @@ public class LevelAssociationXMLDataTest extends SDKXMLDataTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void testEntireObjectNestedSearch1() throws Exception
+	public void xtestEntireObjectNestedSearch1() throws Exception
 	{
 		Hand searchObject = new Hand();
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.other.levelassociation.Hand",searchObject );
@@ -60,7 +60,7 @@ public class LevelAssociationXMLDataTest extends SDKXMLDataTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void testEntireObjectNestedSearch2() throws Exception
+	public void xtestEntireObjectNestedSearch2() throws Exception
 	{
 		Card searchObject = new Card();
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.other.levelassociation.Card",searchObject );
@@ -100,7 +100,7 @@ public class LevelAssociationXMLDataTest extends SDKXMLDataTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void testEntireObjectNestedSearch3() throws Exception
+	public void xtestEntireObjectNestedSearch3() throws Exception
 	{
 		Suit searchObject = new Suit();
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.other.levelassociation.Suit",searchObject );
@@ -135,7 +135,7 @@ public class LevelAssociationXMLDataTest extends SDKXMLDataTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void testEntireObjectNestedSearch4() throws Exception
+	public void xtestEntireObjectNestedSearch4() throws Exception
 	{
 		Deck searchObject = new Deck();
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.other.levelassociation.Deck",searchObject );
@@ -168,7 +168,7 @@ public class LevelAssociationXMLDataTest extends SDKXMLDataTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void testNullAssociationsInBeans() throws Exception
+	public void xtestNullAssociationsInBeans() throws Exception
 	{
 		Card searchObject = new Card();
 		Ii ii = new Ii();
@@ -236,7 +236,7 @@ public class LevelAssociationXMLDataTest extends SDKXMLDataTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void testOneLevelAssociationNestedSearch1() throws Exception
+	public void xtestOneLevelAssociationNestedSearch1() throws Exception
 	{
 		Hand searchObject = new Hand();
 		Ii ii = new Ii();
@@ -266,7 +266,7 @@ public class LevelAssociationXMLDataTest extends SDKXMLDataTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void testOneLevelAssociationNestedSearch2() throws Exception
+	public void xtestOneLevelAssociationNestedSearch2() throws Exception
 	{
 		Hand searchObject = new Hand();
 		Ii ii = new Ii();
@@ -296,7 +296,7 @@ public class LevelAssociationXMLDataTest extends SDKXMLDataTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void testTwoLevelAssociationNestedSearch() throws Exception
+	public void xtestTwoLevelAssociationNestedSearch() throws Exception
 	{
 		Hand searchObject = new Hand();
 		Ii ii = new Ii();
@@ -326,7 +326,7 @@ public class LevelAssociationXMLDataTest extends SDKXMLDataTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void testThreeLevelAssociationNestedSearch() throws Exception
+	public void xtestThreeLevelAssociationNestedSearch() throws Exception
 	{
 		Hand searchObject = new Hand();
 		Ii ii = new Ii();
