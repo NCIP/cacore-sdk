@@ -48,6 +48,7 @@
 		<dependency org="backport-util-concurrent" name="backport-util-concurrent" rev="3.0" conf="runtime->compile" />
 	
 		<dependency org="caGrid" name="cql" rev="1.3" conf="runtime->cql;compile->cql"/>
+		<dependency org="caGrid" name="iso21090SdkQueryProcessor" rev="1.3" conf="compile->queryProcessor,translator" transitive="false"/>
 		<dependency org="caGrid" name="sdkQuery4" rev="1.3" conf="compile->processor,stubs" transitive="false"/>
 		<dependency org="caGrid" name="data" rev="1.3" conf="compile->common" transitive="false"/>
 		<dependency org="caGrid" name="gts" rev="1.3" conf="runtime->client;runtime->common" />
