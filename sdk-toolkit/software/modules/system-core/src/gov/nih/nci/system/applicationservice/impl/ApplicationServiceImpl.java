@@ -1,6 +1,5 @@
 package gov.nih.nci.system.applicationservice.impl;
 
-import gov.nih.nci.cagrid.sdkquery4.processor.ParameterizedHqlQuery;
 import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 import gov.nih.nci.system.client.proxy.ListProxy;
@@ -9,7 +8,6 @@ import gov.nih.nci.system.dao.DAOException;
 import gov.nih.nci.system.dao.Request;
 import gov.nih.nci.system.dao.Response;
 import gov.nih.nci.system.dao.orm.ORMDAOImpl;
-import gov.nih.nci.system.dao.orm.translator.gridCQL.CQL2ParameterizedHQL;
 import gov.nih.nci.system.query.cql.CQLQuery;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
 import gov.nih.nci.system.query.nestedcriteria.NestedCriteriaPath;
@@ -21,6 +19,11 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import org.apache.log4j.Logger;
+import org.cagrid.iso21090.sdkquery.translator.CQL2ParameterizedHQL;
+import org.cagrid.iso21090.sdkquery.translator.HibernateConfigTypesInformationResolver;
+import org.cagrid.iso21090.sdkquery.translator.IsoDatatypesConstantValueResolver;
+import org.cagrid.iso21090.sdkquery.translator.ParameterizedHqlQuery;
+import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.impl.CriteriaImpl;
 
@@ -38,6 +41,8 @@ public class ApplicationServiceImpl implements ApplicationService {
 	private Integer maxRecordCount = 1000;
 	
 	private static Logger log = Logger.getLogger(ApplicationServiceImpl.class.getName());
+	
+	private CQL2ParameterizedHQL cqlTranslator;
 
 	/**
 	 * Default constructor. Cache is required and is expected to have a collection of DAO
@@ -52,8 +57,18 @@ public class ApplicationServiceImpl implements ApplicationService {
 		{
 			DAO dao = daoList.get(0);
 			if(dao instanceof ORMDAOImpl)
+			{
 				maxRecordCount = ((ORMDAOImpl)dao).getResultCountPerQuery();
+				cqlTranslator = initializeCQLTranslator(((ORMDAOImpl)dao).getConfig());
+			}
 		}
+	}
+	
+	private CQL2ParameterizedHQL initializeCQLTranslator(Configuration config)
+	{
+		HibernateConfigTypesInformationResolver typeResolver = new HibernateConfigTypesInformationResolver(config, true);
+		IsoDatatypesConstantValueResolver constantResolver = new IsoDatatypesConstantValueResolver();			
+		return new CQL2ParameterizedHQL(typeResolver, constantResolver, false);
 	}
 	
 	/**
@@ -310,8 +325,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 	{
 		try
 		{
-			CQL2ParameterizedHQL converter = new CQL2ParameterizedHQL(classCache,false);
-			ParameterizedHqlQuery query = converter.convertToHql(cqlQuery);
+			ParameterizedHqlQuery query = cqlTranslator.convertToHql(cqlQuery);
 			HQLCriteria hqlCriteria = new HQLCriteria(query.getHql(), query.getParameters());
 			return query(hqlCriteria);
 		} 

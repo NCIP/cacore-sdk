@@ -703,7 +703,8 @@
 				<include name="caGrid-data-common-*.jar"/>
 				<include name="caGrid-data-stubs-*.jar"/>
 				<include name="caGrid-sdkQuery4-beans-*.jar"/>
-				<include name="caGrid-sdkQuery4-processor-*.jar"/>
+				<include name="caGrid-*-processor-*.jar"/>
+				<include name="caGrid-*-translator-*.jar"/>
 				<include name="castor-*.jar"/>
 				<include name="cglib-*.jar"/>
 				<include name="cog-axis-*.jar"/>
@@ -1186,6 +1187,8 @@
 				<include name="caGrid-data-stubs-*.jar"/>
 				<include name="caGrid-sdkQuery4-beans-*.jar"/>
 				<include name="caGrid-sdkQuery4-processor-*.jar"/>
+				<include name="caGrid-*-processor-*.jar"/>
+				<include name="caGrid-*-translator-*.jar"/>
 				<include name="castor-*.jar"/>
 				<include name="cglib-*.jar"/>
 				<include name="commons-collections-*.jar"/>
