@@ -27,7 +27,7 @@
 			<property name="report.project.dir" value="${junit.dir}/report/@{REPORT.PROJECT.DIR}" />
 			<mkdir dir="${report.project.dir}" />
 			<property name="project.name" value="${PROJECT_NAME}"/>
-			<!--
+			
 			<delete dir="${project.target.dir}" failonerror="false"/>
 			<ant antfile="build.xml" dir="." target="build-system" inheritAll="true"/>
 			<ant antfile="build.xml" dir="." target="dist:installer:prep" inheritAll="true"/>
@@ -40,7 +40,7 @@
 				<property name="bda-utils.dir" value="${dist.exploded.dir}/bda-utils" />
 				<property name="force.reinstall" value="true" />
 			</ant>
-			-->
+			
 			<if>
 				<and>
 					<equals arg1="${ENABLE_LOCAL_JAVA_INTERFACE}" arg2="true" />
