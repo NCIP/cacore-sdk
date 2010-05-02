@@ -99,10 +99,6 @@ public class TestJaxbXMLClient extends TestClient
 						//myUtil.toXML(convertedObj, myWriter, namespacePrefix);  // use this method to set the namespace prefix with each call
 						myUtil.toXML(convertedObj, myWriter);
 						myWriter.close();
-						
-
-						DocumentBuilder parser = DocumentBuilderFactory
-								.newInstance().newDocumentBuilder();
 
 						System.out.println("Can read " + myFile.getName()
 								+ "? " + myFile.canRead());
