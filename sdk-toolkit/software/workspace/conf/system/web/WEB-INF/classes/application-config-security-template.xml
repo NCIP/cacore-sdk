@@ -115,8 +115,8 @@
 		<property name='accessDecisionManager' ref='authenticationAccessDecisionManager'/>
 		<property name='objectDefinitionSource'>
 			<value>
-				gov.nih.nci.system.applicationservice.ApplicationService.*=IS_AUTHENTICATED_FULLY
-				gov.nih.nci.system.applicationservice.WritableApplicationService.*=IS_AUTHENTICATED_FULLY
+				@READABLE_APPLICATION_SERVICE_INTERFACE@.*=IS_AUTHENTICATED_FULLY
+				@WRITABLE_APPLICATION_SERVICE_INTERFACE@
 			</value>
 		</property>
 	</bean>
@@ -148,7 +148,7 @@
 		<property name='objectDefinitionSource'>
 			<value>
 				@READABLE_APPLICATION_SERVICE_INTERFACE@.*=DUMMYVALUE
-				@WRITABLE_APPLICATION_SERVICE_INTERFACE@
+				@WRITABLE_APPLICATION_SERVICE_CLASS_LEVEL_SECURITY_INTERFACE@
 			</value>
 		</property>
 	</bean>

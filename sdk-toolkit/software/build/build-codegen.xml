@@ -131,6 +131,9 @@
 	<condition property="WRITABLE_APPLICATION_SERVICE_INTERFACE" value="${extension.api.security}" else="">
 		<equals arg1="${WRITABLE_API_EXTENSION_ENABLED}" arg2="true" casesensitive="false" trim="true" />
 	</condition>
+	<condition property="WRITABLE_APPLICATION_SERVICE_CLASS_LEVEL_SECURITY_INTERFACE" value="${extension.api.classlevel.security}" else="">
+		<equals arg1="${WRITABLE_API_EXTENSION_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+	</condition>
 	<condition property="ENABLE_HIBERNATE_VALIDATOR" value="true" else="false">
 		<and>
 			<equals arg1="${WRITABLE_API_EXTENSION_ENABLED}" arg2="true" casesensitive="false" trim="true" />
@@ -385,6 +388,7 @@
 			<filter token="GENERATE_CLM_LOGGER_CFG" value="${ENABLE_CLM_LOGGER_CFG_GENERATION}" />
 			<filter token="READABLE_APPLICATION_SERVICE_INTERFACE" value="${sdk.api.interface}" />
 			<filter token="WRITABLE_APPLICATION_SERVICE_INTERFACE" value="${WRITABLE_APPLICATION_SERVICE_INTERFACE}" />
+			<filter token="WRITABLE_APPLICATION_SERVICE_CLASS_LEVEL_SECURITY_INTERFACE" value="${WRITABLE_APPLICATION_SERVICE_CLASS_LEVEL_SECURITY_INTERFACE}" />			
 			<filter token="ENABLE_EMPTY_INTERCEPTOR_START" value="${ENABLE_EMPTY_INTERCEPTOR_START}" />
 			<filter token="ENABLE_EMPTY_INTERCEPTOR_END" value="${ENABLE_EMPTY_INTERCEPTOR_END}" />
 			<filter token="ATTRIBUTE_LEVEL_SECURITY_START" value="${ATTRIBUTE_LEVEL_SECURITY_START}" />
