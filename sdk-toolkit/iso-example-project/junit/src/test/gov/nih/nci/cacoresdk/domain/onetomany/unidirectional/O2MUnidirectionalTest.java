@@ -46,7 +46,7 @@ public class O2MUnidirectionalTest extends SDKISOTestBase
 			assertNotNull(result.getId());
 			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
-			assertEquals(result.getName().getNullFlavor(),NullFlavor.MSK);
+			assertNull(result.getName().getNullFlavor());
 		}
 	}
 
@@ -119,7 +119,7 @@ public class O2MUnidirectionalTest extends SDKISOTestBase
 		assertNotNull(result.getId());
 		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(result.getName());
-		assertEquals(result.getName().getNullFlavor(),NullFlavor.MSK);
+		assertNull(result.getName().getNullFlavor());
 		
 		Collection keyCollection = result.getKeyCollection();
 		assertEquals(0, keyCollection.size());
@@ -170,7 +170,7 @@ public class O2MUnidirectionalTest extends SDKISOTestBase
 		assertNotNull(result.getId());
 		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(result.getName());
-		assertEquals(result.getName().getNullFlavor(),NullFlavor.MSK);
+		assertNull(result.getName().getNullFlavor());
 		
 		Collection keyCollection = result.getKeyCollection();
 		assertEquals(true, keyCollection.size()>0);

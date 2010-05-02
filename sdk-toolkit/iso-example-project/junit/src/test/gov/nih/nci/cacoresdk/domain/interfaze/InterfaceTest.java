@@ -18,6 +18,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import com.sun.xml.bind.CycleRecoverable;
+
 import test.gov.nih.nci.cacoresdk.SDKISOTestBase;
 
 public class InterfaceTest extends SDKISOTestBase
@@ -126,9 +128,11 @@ public class InterfaceTest extends SDKISOTestBase
 		implementedInterfaces.add(Serializable.class);
 		implementedInterfaces.add(Canidae.class);
 		implementedInterfaces.add(Pet.class);
+		implementedInterfaces.add(CycleRecoverable.class);
 		
 		for (Class interfaceKlass : Dog.class.getInterfaces()){
-			assertTrue(implementedInterfaces.contains(interfaceKlass));
+			Boolean result = implementedInterfaces.contains(interfaceKlass);
+			assertTrue(result);
 		}
 	}
 	
