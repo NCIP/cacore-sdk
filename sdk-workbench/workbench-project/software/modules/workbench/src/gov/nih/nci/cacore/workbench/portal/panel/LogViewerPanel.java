@@ -257,7 +257,7 @@ public final class LogViewerPanel implements Panel, PanelValidator {
 			gridBagConstraints30.weightx = 1.0D;
 			
             logFileLabel = new JLabel();
-            logFileLabel.setText("Select the log file:");
+            logFileLabel.setText("Log File:");
             logFileLabel.setName("Log File");
 
 		    logViewerPanel = new JPanel();
