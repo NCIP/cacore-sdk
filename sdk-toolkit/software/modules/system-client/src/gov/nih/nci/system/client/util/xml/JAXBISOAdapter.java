@@ -10,9 +10,9 @@ import gov.nih.nci.iso21090.grid.dto.transform.iso.ENTransformer.ENPNTransformer
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 import org.apache.log4j.Logger;
-import org.iso._21090.*;
+//import org.iso._21090.*;
 
-public class JAXBISOAdapter extends XmlAdapter<ANY, gov.nih.nci.iso21090.Any> {
+public class JAXBISOAdapter extends XmlAdapter<org.iso._21090.ANY, gov.nih.nci.iso21090.Any> {
 	
 	private static Logger log = Logger.getLogger(JAXBISOAdapter.class.getName());
 	
@@ -79,7 +79,7 @@ public class JAXBISOAdapter extends XmlAdapter<ANY, gov.nih.nci.iso21090.Any> {
 	public static final String TS_NAME="org.iso._21090.TS";	
 
 	@Override
-	public ANY marshal(Any arg0) throws Exception {
+	public org.iso._21090.ANY marshal(Any arg0) throws Exception {
 		if(arg0 == null)
 			return null;
 		
@@ -144,81 +144,81 @@ public class JAXBISOAdapter extends XmlAdapter<ANY, gov.nih.nci.iso21090.Any> {
 	}
 
 	@Override
-	public Any unmarshal(ANY arg0) throws Exception {
+	public Any unmarshal(org.iso._21090.ANY arg0) throws Exception {
 		if(arg0 == null)
 			return null;
 		
 		String className = arg0.getClass().getName();
 
 		if (className.equals(AD_NAME))
-			return ADTransformer.INSTANCE.toDto((AD)arg0);
+			return ADTransformer.INSTANCE.toDto((org.iso._21090.Ad)arg0);
 		else if(className.equals(BL_NAME))
-			return BLTransformer.INSTANCE.toDto((BL)arg0);
+			return BLTransformer.INSTANCE.toDto((org.iso._21090.BL)arg0);
 		else if(className.equals(BL_NONNULL_NAME))
-			return BLNONNULLTransformer.INSTANCE.toDto((BLNonNull)arg0);	
+			return BLNONNULLTransformer.INSTANCE.toDto((org.iso._21090.BlNonNull)arg0);	
 		else if(className.equals(CD_NAME))
-			return CDTransformer.INSTANCE.toDto((CD)arg0);
+			return CDTransformer.INSTANCE.toDto((org.iso._21090.CD)arg0);
 		else if(className.equals(DSETAD_NAME))
-			return DSETADTransformer.INSTANCE.toDto((DSETAD)arg0);	
+			return DSETADTransformer.INSTANCE.toDto((org.iso._21090.DSetAd)arg0);	
 		else if(className.equals(DSETCD_NAME))
-			return DSETCDTransformer.INSTANCE.toDto((DSETCD)arg0);
+			return DSETCDTransformer.INSTANCE.toDto((org.iso._21090.DSetCd)arg0);
 		else if(className.equals(DSETII_NAME))
-			return DSETIITransformer.INSTANCE.toDto((DSETII)arg0);
+			return DSETIITransformer.INSTANCE.toDto((org.iso._21090.DSetII)arg0);
 		else if(className.equals(DSETTEL_NAME))
-			return DSETTELTransformer.INSTANCE.toDto((DSETTEL)arg0);	
+			return DSETTELTransformer.INSTANCE.toDto((org.iso._21090.DSetTel)arg0);	
 		else if(className.equals(ED_NAME))
-			return EDTransformer.INSTANCE.toDto((ED)arg0);
+			return EDTransformer.INSTANCE.toDto((org.iso._21090.ED)arg0);
 		else if(className.equals(EDText_NAME))
-			return EDTextTransformer.INSTANCE.toDto((EDText)arg0);			
+			return EDTextTransformer.INSTANCE.toDto((org.iso._21090.EdText)arg0);			
 		else if(className.equals(EN_NAME))
-			return ENTransformer.EN_INSTANCE.toDto((EN)arg0);	
+			return ENTransformer.EN_INSTANCE.toDto((org.iso._21090.EN)arg0);	
 		else if(className.equals(ENON_NAME))
-			return ENONTransformer.ENON_INSTANCE.toDto((ENON)arg0);		
+			return ENONTransformer.ENON_INSTANCE.toDto((org.iso._21090.EnOn)arg0);		
 		else if(className.equals(ENPN_NAME))
-			return ENTransformer.ENPN_INSTANCE.toDto((ENPN)arg0);
+			return ENTransformer.ENPN_INSTANCE.toDto((org.iso._21090.EnPn)arg0);
 		else if(className.equals(II_NAME))
-			return IITransformer.INSTANCE.toDto((II)arg0);
+			return IITransformer.INSTANCE.toDto((org.iso._21090.Ii)arg0);
 		else if(className.equals(INT_NAME))
-			return INTTransformer.INSTANCE.toDto((INT)arg0);
+			return INTTransformer.INSTANCE.toDto((org.iso._21090.INT)arg0);
 		else if(className.equals(IVLINT_NAME))
-			return IVLINTTransformer.INSTANCE.toDto((IVLINT)arg0);
+			return IVLINTTransformer.INSTANCE.toDto((org.iso._21090.IVLINT)arg0);
 		else if(className.equals(IVLPQ_NAME))
-			return IVLPQTransformer.INSTANCE.toDto((IVLPQ)arg0);
+			return IVLPQTransformer.INSTANCE.toDto((org.iso._21090.IVLPQ)arg0);
 //		else if(className.equals(IVLREAL_NAME))
-//			return IVLREALTransformer.INSTANCE.toDto((IVLREAL)arg0);
+//			return IVLREALTransformer.INSTANCE.toDto((org.iso._21090.IVLREAL)arg0);
 		else if(className.equals(IVLTS_NAME))
-			return IVLTSTransformer.INSTANCE.toDto((IVLTS)arg0);
+			return IVLTSTransformer.INSTANCE.toDto((org.iso._21090.IVLTS)arg0);
 		else if(className.equals(PQ_NAME))
-			return PQTransformer.INSTANCE.toDto((PQ)arg0);
+			return PQTransformer.INSTANCE.toDto((org.iso._21090.PQ)arg0);
 //		else if(className.equals(PQV_NAME))
-//			return PQTransformer.INSTANCE.toDto((PQV)arg0);		
+//			return PQTransformer.INSTANCE.toDto((org.iso._21090.PQV)arg0);		
 		else if(className.equals(REAL_NAME))
-			return REALTransformer.INSTANCE.toDto((REAL)arg0);		
+			return REALTransformer.INSTANCE.toDto((org.iso._21090.Real)arg0);		
 		else if(className.equals(SC_NAME))
-			return SCTransformer.INSTANCE.toDto((SC)arg0);
+			return SCTransformer.INSTANCE.toDto((org.iso._21090.SC)arg0);
 		else if(className.equals(ST_NAME))
-			return STTransformer.INSTANCE.toDto((ST)arg0);
+			return STTransformer.INSTANCE.toDto((org.iso._21090.ST)arg0);
 		else if(className.equals(STNT_NAME))
-			return STNTTransformer.INSTANCE.toDto((STNT)arg0);
+			return STNTTransformer.INSTANCE.toDto((org.iso._21090.StNt)arg0);
 		else if(className.equals(TEL_NAME))
-			return TELTransformer.INSTANCE.toDto((TEL)arg0);
+			return TELTransformer.INSTANCE.toDto((org.iso._21090.TEL)arg0);
 		else if(className.equals(TEL_EMAIL_NAME))
-			return TELTransformer.INSTANCE.toDto((TELEmail)arg0);		
+			return TELTransformer.INSTANCE.toDto((org.iso._21090.TelEmail)arg0);		
 		else if(className.equals(TEL_PERSON_NAME))
-			return TELTransformer.INSTANCE.toDto((TELPerson)arg0);
+			return TELTransformer.INSTANCE.toDto((org.iso._21090.TELPerson)arg0);
 		else if(className.equals(TEL_PHONE_NAME))
-			return TELTransformer.INSTANCE.toDto((TELPhone)arg0);		
+			return TELTransformer.INSTANCE.toDto((org.iso._21090.TelPhone)arg0);		
 		else if(className.equals(TEL_URL_NAME))
-			return TELTransformer.INSTANCE.toDto((TELUrl)arg0);	
+			return TELTransformer.INSTANCE.toDto((org.iso._21090.TelUrl)arg0);	
 		else if(className.equals(TS_NAME))
-			return TSTransformer.INSTANCE.toDto((TS)arg0);			
+			return TSTransformer.INSTANCE.toDto((org.iso._21090.TS)arg0);			
 		else {
 			log.debug(" * * * Class " + className + " did not match any ISO Datatype classes.");
 			return null;
 		}
 	}
 	
-	private ANY dsetTransformerXml(Any arg0) throws Exception {
+	private org.iso._21090.ANY dsetTransformerXml(Any arg0) throws Exception {
 		Set dsetItem = (Set)(((DSet)arg0).getItem());
 		
 		String dsetType=null;
@@ -245,7 +245,7 @@ public class JAXBISOAdapter extends XmlAdapter<ANY, gov.nih.nci.iso21090.Any> {
 		return null;
 	}
 	
-	private ANY ivlTransformerXml(Any arg0) throws Exception {	
+	private org.iso._21090.ANY ivlTransformerXml(Any arg0) throws Exception {	
 		Qty any  = (Qty)(((Ivl)arg0).getAny());
 		
 		if (any == null){
