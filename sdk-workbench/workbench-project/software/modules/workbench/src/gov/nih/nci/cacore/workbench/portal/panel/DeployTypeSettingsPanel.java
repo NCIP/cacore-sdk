@@ -390,7 +390,7 @@ public final class DeployTypeSettingsPanel implements Panel, PanelValidator {
 			gridBagConstraints40.weightx = 1.0D;
 			
             projectDirLabel = new JLabel();
-            projectDirLabel.setText("Enter the project directory:");
+            projectDirLabel.setText("Project Generation Directory:");
             projectDirLabel.setName("Project Directory");
 			
 			deployTypeLabel = new JLabel();
