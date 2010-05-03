@@ -35,6 +35,7 @@ public final class SecuritySettingsPanel implements Panel, PanelValidator {
 	CodegenPropertiesViewer parentContainer = null;
 	
 	// Security Panel Validation
+	private static final String CLASS_LEVEL_SECURITY = "Class level Security";
 	private static final String INSTANCE_LEVEL_SECURITY = "Instance level Security";
 	private static final String CSM_PROJECT_NAME = "CSM Project Name";
 	
@@ -50,6 +51,7 @@ public final class SecuritySettingsPanel implements Panel, PanelValidator {
     
 	// Security Settings Panel Component Definitions
     private JCheckBox  enableSecurityCheckBox = null;
+    private JCheckBox  enableClassLevelSecurityCheckBox = null;
     private JCheckBox  enableInstanceLevelSecurityCheckBox = null;
     private JCheckBox  enableAttributeLevelSecurityCheckBox = null;
     private JTextField csmProjectNameField = null;
@@ -111,6 +113,38 @@ public final class SecuritySettingsPanel implements Panel, PanelValidator {
     public boolean isSecurityEnabled(){
     	return getEnableSecurityCheckBox().isSelected();
     }
+    
+    /**
+     * This method initializes the Enable Instance Level Security CheckBox
+     * 
+     * @return javax.swing.JCheckBox
+     */
+    private JCheckBox getEnableClassLevelSecurityCheckBox() {
+        if (enableClassLevelSecurityCheckBox == null) {
+        	enableClassLevelSecurityCheckBox = new JCheckBox();
+        	enableClassLevelSecurityCheckBox.setToolTipText("Toggle to enable/disable CSM Class Level Security. Only relevant if Security is enabled.");
+        	enableClassLevelSecurityCheckBox.setHorizontalAlignment(SwingConstants.LEADING);
+        	enableClassLevelSecurityCheckBox.setSelected(Boolean.parseBoolean(propsMgr.getDeployPropertyValue("ENABLE_CLASS_LEVEL_SECURITY")));
+        	enableClassLevelSecurityCheckBox.setHorizontalTextPosition(SwingConstants.LEFT);
+			
+        	enableClassLevelSecurityCheckBox.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					toggleSecurityFields();
+					
+                    mainPanelValidator.setDirty(true);
+                    mainPanelValidator.validateInput();
+
+				}
+        	});
+
+        	enableClassLevelSecurityCheckBox.addFocusListener(new FocusChangeHandler());
+        }
+        return enableClassLevelSecurityCheckBox;
+    }  
+    
+    public boolean isClassLevelSecurityEnabled(){
+    	return getEnableClassLevelSecurityCheckBox().isSelected();
+    }    
     
     /**
      * This method initializes the Enable Instance Level Security CheckBox
@@ -323,12 +357,14 @@ public final class SecuritySettingsPanel implements Panel, PanelValidator {
     
     protected void toggleSecurityFields() {
 		if (getEnableSecurityCheckBox().isSelected()){
+			getEnableClassLevelSecurityCheckBox().setEnabled(true);
 		    getEnableInstanceLevelSecurityCheckBox().setEnabled(true);
 		    getEnableAttributeLevelSecurityCheckBox().setEnabled(true);
 		    getCsmProjectNameField().setEnabled(true);
 		    getCacheProtectionElementsCheckBox().setEnabled(true);
 		    getEnableCaGridLoginModuleCheckBox().setEnabled(true);
-		} else{
+		} else {
+			getEnableClassLevelSecurityCheckBox().setEnabled(false);
 		    getEnableInstanceLevelSecurityCheckBox().setEnabled(false);
 		    getEnableAttributeLevelSecurityCheckBox().setEnabled(false);
 		    getCsmProjectNameField().setEnabled(false);
@@ -417,6 +453,7 @@ public final class SecuritySettingsPanel implements Panel, PanelValidator {
 		if (securitySettingsSubPanel == null) {
 			
 		    //Security Settings Panel Label Definitions
+			JLabel enableClassLevelSecurityLabel = null;
 		    JLabel enableInstanceLevelSecurityLabel = null;
 		    JLabel enableAttributeLevelSecurityLabel = null;
 		    JLabel csmProjectNameLabel = null;
@@ -510,7 +547,11 @@ public final class SecuritySettingsPanel implements Panel, PanelValidator {
 			gridBagConstraints60.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints60.gridwidth = 3;
 			//gridBagConstraints60.weighty = 1.0D; //Non-standard 1.0 setting
-			gridBagConstraints60.weightx = 1.0D;  
+			gridBagConstraints60.weightx = 1.0D;
+			
+		    
+		    enableClassLevelSecurityLabel = new JLabel();
+		    enableClassLevelSecurityLabel.setText("Enable Class Level Security?");
 		    
 		    enableInstanceLevelSecurityLabel = new JLabel();
 		    enableInstanceLevelSecurityLabel.setText("Enable Instance Level Security?");
@@ -530,14 +571,16 @@ public final class SecuritySettingsPanel implements Panel, PanelValidator {
 					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 
-		    securitySettingsSubPanel.add(enableInstanceLevelSecurityLabel, gridBagConstraints10);
-		    securitySettingsSubPanel.add(getEnableInstanceLevelSecurityCheckBox(), gridBagConstraints11);
-		    securitySettingsSubPanel.add(enableAttributeLevelSecurityLabel, gridBagConstraints20);
-		    securitySettingsSubPanel.add(getEnableAttributeLevelSecurityCheckBox(), gridBagConstraints21);
-		    securitySettingsSubPanel.add(csmProjectNameLabel, gridBagConstraints30);
-		    securitySettingsSubPanel.add(getCsmProjectNameField(), gridBagConstraints31);
-		    securitySettingsSubPanel.add(cacheProtectionElementsLabel, gridBagConstraints40);
-		    securitySettingsSubPanel.add(getCacheProtectionElementsCheckBox(), gridBagConstraints41);
+		    securitySettingsSubPanel.add(enableClassLevelSecurityLabel, gridBagConstraints10);
+		    securitySettingsSubPanel.add(getEnableClassLevelSecurityCheckBox(), gridBagConstraints11);
+		    securitySettingsSubPanel.add(enableInstanceLevelSecurityLabel, gridBagConstraints20);
+		    securitySettingsSubPanel.add(getEnableInstanceLevelSecurityCheckBox(), gridBagConstraints21);
+		    securitySettingsSubPanel.add(enableAttributeLevelSecurityLabel, gridBagConstraints30);
+		    securitySettingsSubPanel.add(getEnableAttributeLevelSecurityCheckBox(), gridBagConstraints31);
+		    securitySettingsSubPanel.add(csmProjectNameLabel, gridBagConstraints40);
+		    securitySettingsSubPanel.add(getCsmProjectNameField(), gridBagConstraints41);
+		    securitySettingsSubPanel.add(cacheProtectionElementsLabel, gridBagConstraints50);
+		    securitySettingsSubPanel.add(getCacheProtectionElementsCheckBox(), gridBagConstraints51);
 
 		    securitySettingsSubPanel.add(getCaGridLoginSettingsSubPanel(), gridBagConstraints60);
 
@@ -646,6 +689,8 @@ public final class SecuritySettingsPanel implements Panel, PanelValidator {
         	
         	JLabel enableSecurityLabel = null;
         	JLabel enableSecurityValueLabel = null;
+		    JLabel enableClassLevelSecurityLabel = null;
+		    JLabel enableClassLevelSecurityValueLabel = null;        	
 		    JLabel enableInstanceLevelSecurityLabel = null;
 		    JLabel enableInstanceLevelSecurityValueLabel = null;
 		    JLabel enableAttributeLevelSecurityLabel = null;
@@ -787,10 +832,31 @@ public final class SecuritySettingsPanel implements Panel, PanelValidator {
             gridBagConstraints81.weighty = 1.0D;
             gridBagConstraints81.gridx = 1;
             
+            GridBagConstraints gridBagConstraints90 = new GridBagConstraints();
+            gridBagConstraints90.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints90.gridy = 9;
+            gridBagConstraints90.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints90.gridx = 0;
+            
+            GridBagConstraints gridBagConstraints91 = new GridBagConstraints();
+            gridBagConstraints91.fill = java.awt.GridBagConstraints.HORIZONTAL;
+            gridBagConstraints91.gridy = 9;
+            gridBagConstraints91.weightx = 1.0;
+            gridBagConstraints91.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints91.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints91.gridwidth = 2;
+            gridBagConstraints91.weighty = 1.0D;
+            gridBagConstraints91.gridx = 1;            
+            
         	enableSecurityLabel = new JLabel();
         	enableSecurityLabel.setText("Enable Security?");
         	enableSecurityValueLabel = new JLabel();
         	enableSecurityValueLabel.setText(Utils.convertToYesNo(getEnableSecurityCheckBox()));
+        	
+		    enableClassLevelSecurityLabel = new JLabel();
+		    enableClassLevelSecurityLabel.setText("Enable Class Level Security?");
+		    enableClassLevelSecurityValueLabel = new JLabel();
+		    enableClassLevelSecurityValueLabel.setText(Utils.convertToYesNo(getEnableClassLevelSecurityCheckBox()));
 		               
 		    enableInstanceLevelSecurityLabel = new JLabel();
 		    enableInstanceLevelSecurityLabel.setText("Enable Instance Level Security?");
@@ -837,23 +903,25 @@ public final class SecuritySettingsPanel implements Panel, PanelValidator {
 		    securitySettingsReviewPanel.add(enableSecurityValueLabel, gridBagConstraints11);
 		    
 		    if (getEnableSecurityCheckBox().isSelected()){
-		    	securitySettingsReviewPanel.add(enableInstanceLevelSecurityLabel, gridBagConstraints20);
-		    	securitySettingsReviewPanel.add(enableInstanceLevelSecurityValueLabel, gridBagConstraints21);
-		    	securitySettingsReviewPanel.add(enableAttributeLevelSecurityLabel, gridBagConstraints30);
-		    	securitySettingsReviewPanel.add(enableAttributeLevelSecurityValueLabel, gridBagConstraints31);
-		    	securitySettingsReviewPanel.add(csmProjectNameLabel, gridBagConstraints40);
-		    	securitySettingsReviewPanel.add(csmProjectNameValueLabel, gridBagConstraints41); 
-		    	securitySettingsReviewPanel.add(cacheProtectionElementsLabel, gridBagConstraints50);
-		    	securitySettingsReviewPanel.add(cacheProtectionElementsValueLabel, gridBagConstraints51);
+		    	securitySettingsReviewPanel.add(enableClassLevelSecurityLabel, gridBagConstraints20);
+		    	securitySettingsReviewPanel.add(enableClassLevelSecurityValueLabel, gridBagConstraints21);
+		    	securitySettingsReviewPanel.add(enableInstanceLevelSecurityLabel, gridBagConstraints30);
+		    	securitySettingsReviewPanel.add(enableInstanceLevelSecurityValueLabel, gridBagConstraints31);
+		    	securitySettingsReviewPanel.add(enableAttributeLevelSecurityLabel, gridBagConstraints40);
+		    	securitySettingsReviewPanel.add(enableAttributeLevelSecurityValueLabel, gridBagConstraints41);
+		    	securitySettingsReviewPanel.add(csmProjectNameLabel, gridBagConstraints50);
+		    	securitySettingsReviewPanel.add(csmProjectNameValueLabel, gridBagConstraints51); 
+		    	securitySettingsReviewPanel.add(cacheProtectionElementsLabel, gridBagConstraints60);
+		    	securitySettingsReviewPanel.add(cacheProtectionElementsValueLabel, gridBagConstraints61);
 
-		    	securitySettingsReviewPanel.add(enableCaGridLoginModuleLabel, gridBagConstraints60);
-		    	securitySettingsReviewPanel.add(enableCaGridLoginModuleValueLabel, gridBagConstraints61);
+		    	securitySettingsReviewPanel.add(enableCaGridLoginModuleLabel, gridBagConstraints70);
+		    	securitySettingsReviewPanel.add(enableCaGridLoginModuleValueLabel, gridBagConstraints71);
 		    	
 		    	if (getEnableCaGridLoginModuleCheckBox().isSelected()){
-			    	securitySettingsReviewPanel.add(caGridLoginModuleNameLabel, gridBagConstraints70);
-			    	securitySettingsReviewPanel.add(caGridLoginModuleNameValueLabel, gridBagConstraints71);
-			    	securitySettingsReviewPanel.add(sdkGridLoginSvcNameLabel, gridBagConstraints80);
-			    	securitySettingsReviewPanel.add(sdkGridLoginSvcNameValueLabel, gridBagConstraints81);
+			    	securitySettingsReviewPanel.add(caGridLoginModuleNameLabel, gridBagConstraints80);
+			    	securitySettingsReviewPanel.add(caGridLoginModuleNameValueLabel, gridBagConstraints81);
+			    	securitySettingsReviewPanel.add(sdkGridLoginSvcNameLabel, gridBagConstraints90);
+			    	securitySettingsReviewPanel.add(sdkGridLoginSvcNameValueLabel, gridBagConstraints91);
 		    	}
 		    }
             
@@ -892,6 +960,8 @@ public final class SecuritySettingsPanel implements Panel, PanelValidator {
     public void initValidation() {
        
         //Security
+        ValidationComponentUtils.setMessageKey(getEnableClassLevelSecurityCheckBox(), CLASS_LEVEL_SECURITY);
+        ValidationComponentUtils.setMandatory(getEnableClassLevelSecurityCheckBox(), true);    	
         ValidationComponentUtils.setMessageKey(getEnableInstanceLevelSecurityCheckBox(), INSTANCE_LEVEL_SECURITY);
         ValidationComponentUtils.setMandatory(getEnableInstanceLevelSecurityCheckBox(), true);
         ValidationComponentUtils.setMessageKey(getCsmProjectNameField(), CSM_PROJECT_NAME);
@@ -913,6 +983,7 @@ public final class SecuritySettingsPanel implements Panel, PanelValidator {
     	
 		// Security properties
 		propsMap.put("ENABLE_SECURITY", Boolean.valueOf(enableSecurityCheckBox.isSelected()).toString() );
+		propsMap.put("ENABLE_CLASS_LEVEL_SECURITY", Boolean.valueOf(enableClassLevelSecurityCheckBox.isSelected()).toString() );
 		propsMap.put("ENABLE_INSTANCE_LEVEL_SECURITY", Boolean.valueOf(enableInstanceLevelSecurityCheckBox.isSelected()).toString() );
 		propsMap.put("ENABLE_ATTRIBUTE_LEVEL_SECURITY", Boolean.valueOf(enableAttributeLevelSecurityCheckBox.isSelected()).toString() );
 		propsMap.put("CSM_PROJECT_NAME", getCsmProjectNameField().getText());
