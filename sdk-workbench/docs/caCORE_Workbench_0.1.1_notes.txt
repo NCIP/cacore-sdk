@@ -1,0 +1,259 @@
+                        Release Notes
+    
+                       caCORE Workbench
+                        Version 0.1.1
+                        February, 2010
+
+       National Cancer Institute Center for Bioinformatics
+
+================================================================
+                            Contents
+================================================================
+
+
+    1.0 caCORE Workbench Introduction
+    2.0 Features and Updates
+    3.0 Bug Fixes
+    4.0 Known Issues
+    5.0 Bug Reports and Support
+    6.0 caCORE Open Development
+    7.0 Documentation
+    8.0 NCICB and caBIG Web Pages
+
+
+================================================================
+    1.0 caCORE Workbench Introduction and History
+================================================================
+
+    caCORE Workbench v0.1.1
+
+    --  24 February 2010
+    
+    caCORE Workbench v0.1 (Initial Version)
+
+    --  07 December 2009
+    
+    The caCORE Workbench is a GUI-driven tool which facilitates
+    the creation of caBIG silver or gold compliant system.  It
+    acts as a process guide and an integrated platform, enabling 
+    the user to more readily create a Data or Analytical service 
+    on the Grid.
+    
+    Currently supported caBIG process workflows include:
+    
+    -- Creation of a UML Model (ArgoUML, Enterprise Architect) - Link Only
+    -- Semantic Integration (SIW, CDE Browser, UML Model Browser,
+       Curation Tool)  - Link Only
+    -- Model Mapping (caAdapter)  - Link Only
+    -- Application Creation and Deployment (SDK) - Integrated
+    -- Creation of a Grid Service (Introduce). - Link Only
+
+================================================================
+    2.0 Features and Updates
+================================================================
+
+    +---------------------------------------+
+    | Features:  caCORE Workbench Components|
+    +---------------------------------------+
+    
+    The caCORE Workbench is a simple GUI based upon the caGrid "Grape"
+    framework.  It's key components include:
+    
+    -- Workbench Compatible SDK Toolkit instance
+    
+        The Workbench requires a compatible instance of the SDK in order 
+        to perform Application creation and deployment functions.  The 
+        Workbench will install a compatible SDK instance to a user-specified 
+        directory if one is not already present.
+
+    -- Framework packages
+
+        --  gov.nih.nci.cacore.workbench
+        --  gov.nih.nci.cagrid.common
+        --  com.jgoodies.validation
+        --  java.awt
+        --  javax.swing
+        --  org.springframework
+
+    --  Configuration file to enable you to customize your 
+        installation to meet your specific server and network needs.
+
+        --  project.properties
+
+    --  Ant buildfile
+
+        --  build.xml
+
+    Please read the caCORE Workbench User's Guide before
+    downloading and using the Workbench.  
+
+    +---------------------------------------+
+    | Updates / New Features                |
+    +---------------------------------------+
+	
+	caCORE Workbench v0.1.1 is a minor release created primarily to provide 
+	support for the Postgres database on the App DB, Logging, and CSM DB Deployment 
+	Panel tabs, as well as Oracle database support on the Logging tab.  Also, a "Use 
+	DB Connection Settings checkbox field has been added to the Logging tab to 
+	facilitate the synchronization of database properties between the App DB and 
+	Logging tabs.  Finally, behind the scenes, the algorithm used to determine 
+	whether or not the Logging and/or CSM database schemas can be dropped and re-
+	created during the deployment process has been altered to take into account not 
+	only the original schema property (v0.1), but now also the Hostname, Port, and 
+	Username properties.
+
+    Plans are underway to expand the Workbench functionality as follows:
+    
+    --  Phase I: Completed
+        --  Establish the foundation of the workbench
+        --  Enable individual tools to use the workbench and implement their workflow
+
+    --  Phase II: Future
+        --  Integrate existing tools and their workflows in the workbench
+        --  Maintain boundaries between individual tools in the workbench
+        
+    --  Phase III: Future
+        --  Harmonize the workflows between the individual tools
+        --  Eliminate boundaries between the tools to provide an unified view
+
+================================================================
+    3.0 Bug Fixes Since Last Release
+================================================================
+
+    --  [#26263] Not checking enough fields when determining whether or not to allow user to 
+        drop (and re-create) CLM and CSM databases
+	   
+    --  [#24010] Provide Support for Postgresql DB in caCORE SDK (Taken from the SDK Feature
+        Request Tracker list)   
+	   
+    --  [#24594] Create application failed when we run sdk-workbench for the first time.  The build 
+        and deploy process will fail if there is network latency while retrieving dependencies from the 
+        IVY repository.  	   
+	   
+    --  [#24615] If CLM, Writable Api and Grid Security are enabled, then CLM logging will not work.
+        CLM will work if CLM, the Writable API, and CSM are enabled, but not if the Writable API, 
+        CLM, and Grid Security are enabled.	
+	   
+    --  [#24626] SDK, CSM and CLM Application Database Schemas Must all be Dropped, or 
+        None at All.  Due to BDA script limitations, all (SDK, CSM and CLM application) 
+        database schemas must be dropped, or none at all when using the same schema.  
+        Dropping two or more schemas at a time causes earlier application schema installs 
+        to be dropped by later schema installs.
+		
+    --  [#24823] Provide support for postgres (Feature Request)		
+
+================================================================
+    4.0 Known Issues
+================================================================
+     
+    --  If the Grid Security is enabled, the following Warning message is displayed on the JBoss 
+        console:
+        
+        16:55:14,126 WARN  [Init] Exception while installing Function
+
+        java.lang.NoSuchMethodException: org.apache.xpath.compiler.FunctionTable.installFunction(
+        java.lang.String, org.apache.xpath.Expression)
+        at java.lang.Class.getMethod(Class.java:1581)
+        at org.apache.xml.security.Init.registerHereFunction(Unknown Source)
+
+        This warning can be ignored.
+    
+================================================================
+    5.0 Bug Reports and Support
+================================================================
+
+    --  The NCICB Application Support group can be contacted at:
+
+        http://ncicb.nci.nih.gov/NCICB/support
+        Telephone: 301-451-4384 
+        Toll free: 888-478-4423
+
+    --  A GForge Support tracker group, which is actively monitored by caCORE Workbench 
+        developers, has been created to track any support requests. If you believe 
+        there is a bug/issue in the caCORE Workbench software itself, or have a technical 
+        issue that cannot be resolved by contacting the NCICB Application Support group, 
+        please submit a new support tracker using the following link: 
+
+        https://gforge.nci.nih.gov/tracker/?group_id=624.   
+
+    --  Prior to submitting a new tracker, review any existing support request trackers 
+        in order to help avoid duplicate submissions.
+
+    --  A list summarizing the online Workbench resources is provided below:
+
+        Mailing List:              CACORE_WORKBENCH_L@mail.nih.gov
+        Mailing List Archive:        https://list.nih.gov/archives/cacore_workbench_l.html
+        Project Home (GForge):        https://gforge.nci.nih.gov/projects/cacoreworkbench/
+        Support Tracker (GForge):     https://gforge.nci.nih.gov/tracker/?group_id=624      
+
+
+================================================================
+    6.0 caCORE Open Development
+================================================================
+
+    --  cacoreworkbench : The caCORE Workbench is a GUI-driven tool 
+        that facilitates the generation of a caBIG silver or gold 
+        compliant system.  Using the Workbench as a guide and an 
+        integrated platform, the user can more easily create a new  
+        Data or Analytical service on the Grid.
+     
+        https://gforge.nci.nih.gov/projects/cacoreworkbench/
+     
+
+================================================================
+    7.0 Documentation
+================================================================
+    
+    --  The caCORE Workbench v0.1.1 provides a single Users guide which 
+        combines information on both installing and using the Workbench.  
+
+    --  The caCORE Workbench v0.1.1 User's Guide can be downloaded via
+        HTTP from:
+
+        https://gforge.nci.nih.gov/docman/index.php?group_id=624&selected_doc_group_id=5504&language_id=1
+
+    --  Much of the content of the Workbench User's Guide is also
+        integrated within the Workbench itself.  It is viewable
+        by clicking the "Help" button on the Workbench toolbar, or 
+        selecting "Help" from the Help menu.
+
+
+================================================================
+    8.0 NCICB and caBIG Web Pages
+================================================================
+
+    The NCI Center for Bioinformatics
+
+    --  http://ncicb.nci.nih.gov/
+    
+    NCICB Application Support
+     
+    --  http://ncicbsupport.nci.nih.gov/sw/
+    --  http://ncicb.nci.nih.gov/NCICB/support
+
+    NCICB Download Center
+
+    --  http://ncicb.nci.nih.gov/download/
+ 
+    caBIG Community Website
+
+    -- https://cabig.nci.nih.gov/
+
+    caCORE Overview
+
+    -- https://cabig.nci.nih.gov/adopt/concepts/caCORE_overview
+
+    caCORE Workbench
+
+    -- http://ncicb.nci.nih.gov/NCICB/infrastructure/cacoreWorkbench
+    -- http://gforge.nci.nih.gov/projects/cacoreWorkbench/
+
+    caCORE SDK
+
+    -- https://cabig.nci.nih.gov/tools/caCORE_SDK
+    -- http://ncicb.nci.nih.gov/NCICB/infrastructure/cacoresdk
+    -- http://gforge.nci.nih.gov/projects/cacoresdk/
+
+
+
+//end
