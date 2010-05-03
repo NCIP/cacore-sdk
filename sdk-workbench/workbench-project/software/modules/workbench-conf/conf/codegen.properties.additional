@@ -1,4 +1,1 @@
-###################################
-#  ISO21090 DATATYPE SUPPORT      #
-###################################
-ENABLE_ISO21090_DATATYPES=false
+#  Add any properties that should always be appended to the codegen.properties file 
