@@ -21,6 +21,8 @@ import javax.swing.SwingConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import org.apache.log4j.Logger;
+
 import com.jgoodies.validation.Severity;
 import com.jgoodies.validation.ValidationResult;
 import com.jgoodies.validation.message.SimpleValidationMessage;
@@ -29,11 +31,15 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
 
 public final class CodegenSettingsPanel implements Panel, PanelValidator {
 	
+	private static final Logger log = Logger.getLogger(CodegenSettingsPanel.class);
+	
 	WorkbenchPropertiesManager propsMgr = null;
 	TabbedPanePropertiesValidator mainPanelValidator = null;
 	
 	// Code Generation Panel Validation Message Constants
-	private static final String CADSR_CONNECTION_URL = "caDSR Connection URL";
+	private static final String DAO_PAGE_SIZE = "Page Size DB";
+	private static final String RESTFUL_PAGE_SIZE = "Page Size RESTful API";	
+	private static final String CADSR_CONNECTION_URL = "caDSR Connection URL";	
     
 	// Code Generation Settings Panel
 	private JPanel codeGenSettingsPanel = null;
@@ -42,6 +48,10 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
 	private JPanel codeGenSettingsReviewRightPanel = null;	
 	
 	//private JPanel codeGenSettingsPanel = null;
+	private JPanel miscSettingsSubPanel = null;	
+	private JPanel miscSettingsSubLeftPanel = null;
+	private JPanel miscSettingsSubCenterPanel = null;
+	private JPanel miscSettingsSubRightPanel = null;		
 	private JPanel interfaceGenSettingsSubPanel = null;
 	private JPanel interfaceGenSettingsSubLeftPanel = null;
 	private JPanel interfaceGenSettingsSubRightPanel = null;	
@@ -61,9 +71,15 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
     private JCheckBox enableRestfulHtmlInterfaceCheckBox = null;
     private JCheckBox enableRestfulJsonInterfaceCheckBox = null;
     
+    private JCheckBox enableIso21090DatatypesCheckBox = null; //ENABLE_ISO21090_DATATYPES
+    
+    private JTextField pageSizeDbField = null;
+    private JTextField pageSizeRestfulApiField = null;
+    
     private JCheckBox generateHibernateMappingCheckBox = null;
     private JCheckBox generateBeansCheckBox = null;
     private JCheckBox generateCastorMappingCheckBox = null;
+    private JCheckBox generateJaxbMappingCheckBox = null;    
     private JCheckBox generateXsdCheckBox = null;
     private JCheckBox generateXsdWithGmeTagsCheckBox = null;
     private JCheckBox generateXsdWithPermissibleValuesCheckBox = null;
@@ -80,11 +96,13 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
 		if (getGenerateXsdCheckBox().isSelected()){
 			validateGmeTagsCheckBox.setEnabled(true);
 			generateCastorMappingCheckBox.setEnabled(true);
+			generateJaxbMappingCheckBox.setEnabled(true);
 			generateXsdWithGmeTagsCheckBox.setEnabled(true);
 			generateXsdWithPermissibleValuesCheckBox.setEnabled(true);
-		} else{
+		} else {
 			validateGmeTagsCheckBox.setEnabled(false);
 			generateCastorMappingCheckBox.setEnabled(false);
+			generateJaxbMappingCheckBox.setEnabled(false);
 			generateXsdWithGmeTagsCheckBox.setEnabled(false);
 			generateXsdWithPermissibleValuesCheckBox.setEnabled(false);
 		}
@@ -434,6 +452,31 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
     }
     
     /**
+     * This method initializes the Generate Castor Mapping File Check Box
+     * 
+     * @return javax.swing.JCheckBox
+     */
+    private JCheckBox getGenerateJaxbMappingCheckBox() {
+        if (generateJaxbMappingCheckBox == null) {
+        	generateJaxbMappingCheckBox = new JCheckBox();
+        	generateJaxbMappingCheckBox.setToolTipText("Generate JAXB POJO Annotations and jaxb.index mapping files?");
+        	generateJaxbMappingCheckBox.setHorizontalAlignment(SwingConstants.LEADING);
+        	generateJaxbMappingCheckBox.setSelected(Boolean.parseBoolean(propsMgr.getDeployPropertyValue("GENERATE_JAXB_MAPPING")));
+        	generateJaxbMappingCheckBox.setHorizontalTextPosition(SwingConstants.LEFT);
+			
+        	generateJaxbMappingCheckBox.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+                    mainPanelValidator.setDirty(true);
+                    mainPanelValidator.validateInput();
+				}
+        	});
+
+        	generateJaxbMappingCheckBox.addFocusListener(new FocusChangeHandler());
+        }
+        return generateJaxbMappingCheckBox;
+    }    
+    
+    /**
      * This method initializes the Generate XSD Schema Files Check Box
      * 
      * @return javax.swing.JCheckBox
@@ -533,9 +576,98 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
         	generateWsddCheckBox.addFocusListener(new FocusChangeHandler());
         }
         return generateWsddCheckBox;
+    }  
+    
+    /**
+     * This method initializes the Generate XSD with Permissible Values Check Box
+     * 
+     * @return javax.swing.JCheckBox
+     */
+    private JCheckBox getEnableIso21090DatatypesCheckBox() {
+        if (enableIso21090DatatypesCheckBox == null) {
+        	enableIso21090DatatypesCheckBox = new JCheckBox();
+        	enableIso21090DatatypesCheckBox.setToolTipText("Enable ISO21090 Datatype Support?");
+        	enableIso21090DatatypesCheckBox.setHorizontalAlignment(SwingConstants.LEADING);
+        	enableIso21090DatatypesCheckBox.setSelected(Boolean.parseBoolean(propsMgr.getDeployPropertyValue("ENABLE_ISO21090_DATATYPES")));
+        	enableIso21090DatatypesCheckBox.setHorizontalTextPosition(SwingConstants.LEFT);
+			
+        	enableIso21090DatatypesCheckBox.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					log.debug("ENABLE_ISO21090_DATATYPES: " + Boolean.valueOf(enableIso21090DatatypesCheckBox.isSelected()).toString());
+                    mainPanelValidator.setDirty(true);
+                    mainPanelValidator.validateInput();
+				}
+        	});
+
+        	enableIso21090DatatypesCheckBox.addFocusListener(new FocusChangeHandler());
+        }
+        
+        return enableIso21090DatatypesCheckBox;
     }
     
     
+    /**
+     * This method initializes the DAO Page Size Text Field
+     * 
+     * @return javax.swing.JCheckBox
+     */
+    private JTextField getPageSizeDbField() {
+        if (pageSizeDbField == null) {
+        	pageSizeDbField = new JTextField();
+        	pageSizeDbField.setToolTipText("Maximum number of records to retrieve during a query from the database. If DB Page Size < 0, pagination will be disabled.");
+        	pageSizeDbField.setText(propsMgr.getDeployPropertyValue("DAO_PAGE_SIZE"));
+        	pageSizeDbField.getDocument().addDocumentListener(new DocumentListener() {
+                public void changedUpdate(DocumentEvent e) {
+                	mainPanelValidator.setDirty(true);
+                    mainPanelValidator.validateInput();
+                }
+
+                public void removeUpdate(DocumentEvent e) {
+                	mainPanelValidator.setDirty(true);
+                    mainPanelValidator.validateInput();
+                }
+
+                public void insertUpdate(DocumentEvent e) {
+                	mainPanelValidator.setDirty(true);
+                    mainPanelValidator.validateInput();
+                }
+            });
+        	pageSizeDbField.addFocusListener(new FocusChangeHandler());
+        }
+        return pageSizeDbField;
+    }
+    
+    /**
+     * This method initializes the DAO Page Size Text Field
+     * 
+     * @return javax.swing.JCheckBox
+     */
+    private JTextField getPageSizeRestfulApiField() {
+        if (pageSizeRestfulApiField == null) {
+        	pageSizeRestfulApiField = new JTextField();
+        	pageSizeRestfulApiField.setToolTipText("Maximum number of records to retrieve during a RESTful API query (XML, HTML, JSON)");
+        	pageSizeRestfulApiField.setText(propsMgr.getDeployPropertyValue("RESTFUL_PAGE_SIZE"));
+        	pageSizeRestfulApiField.getDocument().addDocumentListener(new DocumentListener() {
+                public void changedUpdate(DocumentEvent e) {
+                	mainPanelValidator.setDirty(true);
+                    mainPanelValidator.validateInput();
+                }
+
+                public void removeUpdate(DocumentEvent e) {
+                	mainPanelValidator.setDirty(true);
+                    mainPanelValidator.validateInput();
+                }
+
+                public void insertUpdate(DocumentEvent e) {
+                	mainPanelValidator.setDirty(true);
+                    mainPanelValidator.validateInput();
+                }
+            });
+        	pageSizeRestfulApiField.addFocusListener(new FocusChangeHandler());
+        }
+        return pageSizeRestfulApiField;
+    }    
+
     private final class FocusChangeHandler implements FocusListener {
 
         public void focusGained(FocusEvent e) {
@@ -586,60 +718,37 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
 	 */
 	public JPanel getSettingsPanel() {
 		if (codeGenSettingsPanel == null) {
-
-		    //Code Generation Settings Panel Label Definitions
-		    JLabel validateLogicalModelLabel = null;
-		    JLabel generateBeansLabel = null;
-		    JLabel generateWsddLabel = null;
 			
 			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
-			gridBagConstraints10.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints10.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints10.gridy = 1;
+			gridBagConstraints10.weightx = 1.0;
+			gridBagConstraints10.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints10.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints10.gridx = 0;
-
-			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
-			gridBagConstraints11.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints11.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints11.gridx = 1;
-			gridBagConstraints11.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints11.gridy = 1;
-			//gridBagConstraints11.weighty = 1.0D;
-			gridBagConstraints11.weightx = 1.0D;  
-			gridBagConstraints11.gridwidth = 2;
-
+			gridBagConstraints10.gridwidth = 3;
+			//gridBagConstraints10.weighty = 1.0D;
+			gridBagConstraints10.gridx = 0;			
+			
 			GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
-			gridBagConstraints20.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints20.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints20.gridy = 2;
+			gridBagConstraints20.weightx = 1.0;
+			gridBagConstraints20.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints20.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints20.gridx = 0;            
-
-			GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
-			gridBagConstraints21.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints21.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints21.gridy = 2;
-			gridBagConstraints21.gridx = 1;
-			gridBagConstraints21.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints21.gridwidth = 2;
-			//gridBagConstraints21.weighty = 1.0D;
-			gridBagConstraints21.weightx = 1.0D;  
+			gridBagConstraints20.gridwidth = 3;
+			//gridBagConstraints20.weighty = 1.0D;
+			gridBagConstraints20.gridx = 0;
 
 			GridBagConstraints gridBagConstraints30 = new GridBagConstraints();
-			gridBagConstraints30.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints30.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints30.gridy = 3;
+			gridBagConstraints30.weightx = 1.0;
+			gridBagConstraints30.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints30.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints30.gridwidth = 3;
+			//gridBagConstraints30.weighty = 1.0D;
 			gridBagConstraints30.gridx = 0;
 
-			GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
-			gridBagConstraints31.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints31.gridy = 3;
-			gridBagConstraints31.weightx = 1.0;
-			gridBagConstraints31.gridwidth = 2;
-			gridBagConstraints31.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints31.insets = new java.awt.Insets(2, 2, 2, 2);
-			//gridBagConstraints31.weighty = 1.0D;
-			gridBagConstraints31.gridx = 1;
-			
 			GridBagConstraints gridBagConstraints40 = new GridBagConstraints();
 			gridBagConstraints40.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints40.gridy = 4;
@@ -659,36 +768,6 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
 			gridBagConstraints50.gridwidth = 3;
 			//gridBagConstraints50.weighty = 1.0D;
 			gridBagConstraints50.gridx = 0;
-			
-
-			GridBagConstraints gridBagConstraints60 = new GridBagConstraints();
-			gridBagConstraints60.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints60.gridy = 6;
-			gridBagConstraints60.weightx = 1.0;
-			gridBagConstraints60.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints60.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints60.gridwidth = 3;
-			//gridBagConstraints60.weighty = 1.0D;
-			gridBagConstraints60.gridx = 0;
-
-			GridBagConstraints gridBagConstraints70 = new GridBagConstraints();
-			gridBagConstraints70.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints70.gridy = 7;
-			gridBagConstraints70.weightx = 1.0;
-			gridBagConstraints70.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints70.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints70.gridwidth = 3;
-			//gridBagConstraints70.weighty = 1.0D;
-			gridBagConstraints70.gridx = 0;
-			
-		    validateLogicalModelLabel = new JLabel();
-		    validateLogicalModelLabel.setText("Validate Logical Model?");
-		    
-		    generateBeansLabel = new JLabel();
-		    generateBeansLabel.setText("Generate domain Java Beans?");
-		    
-		    generateWsddLabel = new JLabel();
-		    generateWsddLabel.setText("Generate WSDD?");
             
             codeGenSettingsPanel = new JPanel();
             codeGenSettingsPanel.setLayout(new GridBagLayout());
@@ -696,21 +775,243 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
                 javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
                 javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
             
-		    codeGenSettingsPanel.add(validateLogicalModelLabel, gridBagConstraints10);
-		    codeGenSettingsPanel.add(getValidateLogicalModelCheckBox(), gridBagConstraints11);
-			codeGenSettingsPanel.add(generateBeansLabel, gridBagConstraints20);
-			codeGenSettingsPanel.add(getGenerateBeansCheckBox(), gridBagConstraints21);
-			codeGenSettingsPanel.add(generateWsddLabel, gridBagConstraints30);
-			codeGenSettingsPanel.add(getGenerateWsddCheckBox(), gridBagConstraints31);
-			codeGenSettingsPanel.add(getInterfaceSettingsSubPanel(), gridBagConstraints40);
-			codeGenSettingsPanel.add(getOrmCodeGenSettingsPanel(), gridBagConstraints50);
-			codeGenSettingsPanel.add(getXsdCodeGenSettingsSubPanel(), gridBagConstraints60);
-			codeGenSettingsPanel.add(getCaDsrCodeGenSettingsSubPanel(), gridBagConstraints70);
+			codeGenSettingsPanel.add(getMiscSettingsSubPanel(), gridBagConstraints10);
+			codeGenSettingsPanel.add(getInterfaceSettingsSubPanel(), gridBagConstraints20);
+			codeGenSettingsPanel.add(getOrmCodeGenSettingsPanel(), gridBagConstraints30);
+			codeGenSettingsPanel.add(getXsdCodeGenSettingsSubPanel(), gridBagConstraints40);
+			codeGenSettingsPanel.add(getCaDsrCodeGenSettingsSubPanel(), gridBagConstraints50);
             
             codeGenSettingsPanel.validate();
 		}
 		return codeGenSettingsPanel;
 	}
+	
+	private JPanel getMiscSettingsSubPanel() {
+		if (miscSettingsSubPanel == null) {
+
+			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
+			gridBagConstraints10.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints10.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints10.gridy = 1;
+			gridBagConstraints10.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints10.weighty = 1.0D;
+			gridBagConstraints10.weightx = 1.0D;
+			gridBagConstraints10.gridx = 0;
+
+			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+			gridBagConstraints11.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints11.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints11.gridx = 1;
+			gridBagConstraints11.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints11.gridy = 1;
+			gridBagConstraints11.weighty = 1.0D;
+			gridBagConstraints11.weightx = 1.0D; 
+
+			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
+			gridBagConstraints12.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints12.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints12.gridx = 2;
+			gridBagConstraints12.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints12.gridy = 1;
+			gridBagConstraints12.weighty = 1.0D;
+			gridBagConstraints12.weightx = 1.0D;  			
+       
+			miscSettingsSubPanel = new JPanel();
+		    miscSettingsSubPanel.setLayout(new GridBagLayout());
+		    miscSettingsSubPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Miscellaneous Generation Options",
+					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
+
+		    miscSettingsSubPanel.add(getMiscSettingsSubLeftPanel(), gridBagConstraints10);
+		    miscSettingsSubPanel.add(getMiscSettingsSubCenterPanel(), gridBagConstraints11);		    
+		    miscSettingsSubPanel.add(getMiscSettingsSubRightPanel(), gridBagConstraints12);		    
+			
+		    miscSettingsSubPanel.validate();
+		}
+		return miscSettingsSubPanel;
+	}
+	
+	
+	private JPanel getMiscSettingsSubLeftPanel() {
+		if (miscSettingsSubLeftPanel == null) {
+			
+		    //Code Generation Settings Panel Label Definitions
+		    JLabel validateLogicalModelLabel = null;
+		    JLabel generateBeansLabel = null;
+
+			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
+			gridBagConstraints10.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints10.gridy = 1;
+			gridBagConstraints10.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints10.gridx = 0;
+
+			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+			gridBagConstraints11.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints11.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints11.gridx = 1;
+			gridBagConstraints11.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints11.gridy = 1;
+			gridBagConstraints11.weighty = 1.0D;
+			gridBagConstraints11.weightx = 1.0D;  
+			gridBagConstraints11.gridwidth = 2;
+
+			GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
+			gridBagConstraints20.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints20.gridy = 2;
+			gridBagConstraints20.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints20.gridx = 0;            
+
+			GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
+			gridBagConstraints21.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints21.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints21.gridy = 2;
+			gridBagConstraints21.gridx = 1;
+			gridBagConstraints21.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints21.gridwidth = 2;
+			gridBagConstraints21.weighty = 1.0D;
+			gridBagConstraints21.weightx = 1.0D;  
+			
+		    validateLogicalModelLabel = new JLabel();
+		    validateLogicalModelLabel.setText("Validate Logical Model?");
+		    
+		    generateBeansLabel = new JLabel();
+		    generateBeansLabel.setText("Generate Domain Java Beans?");
+
+		    miscSettingsSubLeftPanel = new JPanel();
+		    miscSettingsSubLeftPanel.setLayout(new GridBagLayout());
+//		    miscSettingsSubLeftPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Miscellaneous Generation Options",
+//					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+//					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
+
+		    miscSettingsSubLeftPanel.add(validateLogicalModelLabel, gridBagConstraints10);
+		    miscSettingsSubLeftPanel.add(getValidateLogicalModelCheckBox(), gridBagConstraints11);
+		    miscSettingsSubLeftPanel.add(generateBeansLabel, gridBagConstraints20);
+		    miscSettingsSubLeftPanel.add(getGenerateBeansCheckBox(), gridBagConstraints21);
+			
+		    miscSettingsSubLeftPanel.validate();
+		}
+		return miscSettingsSubLeftPanel;
+	}	
+	
+	private JPanel getMiscSettingsSubCenterPanel() {
+		if (miscSettingsSubCenterPanel == null) {
+			
+		    JLabel pageSizeDbLabel = null;
+		    JLabel pageSizeRestfulApiLabel = null;
+
+			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
+			gridBagConstraints10.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints10.gridy = 1;
+			gridBagConstraints10.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints10.gridx = 0;
+
+			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+			gridBagConstraints11.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints11.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints11.gridx = 1;
+			gridBagConstraints11.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints11.gridy = 1;
+			gridBagConstraints11.weighty = 1.0D;
+			gridBagConstraints11.weightx = 1.0D;  
+			gridBagConstraints11.gridwidth = 2;
+
+			GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
+			gridBagConstraints20.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints20.gridy = 2;
+			gridBagConstraints20.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints20.gridx = 0;            
+
+			GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
+			gridBagConstraints21.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints21.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints21.gridy = 2;
+			gridBagConstraints21.gridx = 1;
+			gridBagConstraints21.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints21.gridwidth = 2;
+			gridBagConstraints21.weighty = 1.0D;
+			gridBagConstraints21.weightx = 1.0D;  
+		    
+			pageSizeDbLabel = new JLabel();
+			pageSizeDbLabel.setText("DB Query Page Size:");
+		    
+			pageSizeRestfulApiLabel = new JLabel();
+			pageSizeRestfulApiLabel.setText("RESTful API Query Page Size:");
+
+			miscSettingsSubCenterPanel = new JPanel();
+			miscSettingsSubCenterPanel.setLayout(new GridBagLayout());
+//		    miscSettingsSubCenterPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Miscellaneous Generation Options",
+//					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+//					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
+
+			miscSettingsSubCenterPanel.add(pageSizeDbLabel, gridBagConstraints10);
+			miscSettingsSubCenterPanel.add(getPageSizeDbField(), gridBagConstraints11);
+			miscSettingsSubCenterPanel.add(pageSizeRestfulApiLabel, gridBagConstraints20);
+		    miscSettingsSubCenterPanel.add(getPageSizeRestfulApiField(), gridBagConstraints21);    
+			
+			miscSettingsSubCenterPanel.validate();
+		}
+		return miscSettingsSubCenterPanel;
+	}
+	
+	private JPanel getMiscSettingsSubRightPanel() {
+		if (miscSettingsSubRightPanel == null) {
+			
+		    JLabel generateWsddLabel = null;
+		    JLabel enableIso21090DatatypesLabel = null;
+
+			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
+			gridBagConstraints10.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints10.gridy = 1;
+			gridBagConstraints10.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints10.gridx = 0;
+
+			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+			gridBagConstraints11.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints11.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints11.gridx = 1;
+			gridBagConstraints11.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints11.gridy = 1;
+			gridBagConstraints11.weighty = 1.0D;
+			gridBagConstraints11.weightx = 1.0D;  
+			gridBagConstraints11.gridwidth = 2;
+
+			GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
+			gridBagConstraints20.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints20.gridy = 2;
+			gridBagConstraints20.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints20.gridx = 0;            
+
+			GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
+			gridBagConstraints21.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints21.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints21.gridy = 2;
+			gridBagConstraints21.gridx = 1;
+			gridBagConstraints21.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints21.gridwidth = 2;
+			gridBagConstraints21.weighty = 1.0D;
+			gridBagConstraints21.weightx = 1.0D;  
+		    
+		    generateWsddLabel = new JLabel();
+		    generateWsddLabel.setText("Generate WSDD?");
+		    
+		    enableIso21090DatatypesLabel = new JLabel();
+		    enableIso21090DatatypesLabel.setText("Enable ISO21090 Datatype Support?");
+
+		    miscSettingsSubRightPanel = new JPanel();
+		    miscSettingsSubRightPanel.setLayout(new GridBagLayout());
+//		    miscSettingsSubRightPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Miscellaneous Generation Options",
+//					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+//					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
+
+		    miscSettingsSubRightPanel.add(generateWsddLabel, gridBagConstraints10);
+		    miscSettingsSubRightPanel.add(getGenerateWsddCheckBox(), gridBagConstraints11);
+		    miscSettingsSubRightPanel.add(enableIso21090DatatypesLabel, gridBagConstraints20);
+		    miscSettingsSubRightPanel.add(getEnableIso21090DatatypesCheckBox(), gridBagConstraints21);    
+			
+		    miscSettingsSubRightPanel.validate();
+		}
+		return miscSettingsSubRightPanel;
+	}			
 	
 	private JPanel getInterfaceSettingsSubPanel() {
 		if (interfaceGenSettingsSubPanel == null) {
@@ -1008,6 +1309,7 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
 			
 		    JLabel validateGmeTagsLabel = null;
 		    JLabel generateCastorMappingLabel = null;
+		    JLabel generateJaxbMappingLabel = null;
 		    JLabel generateXsdLabel = null;
 		    JLabel generateXsdWithGmeTagsLabel = null;
 		    JLabel generateXsdWithPermissibleValuesLabel = null;
@@ -1092,6 +1394,22 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
 			gridBagConstraints51.weighty = 1.0D;
 			gridBagConstraints51.gridx = 1;
 			
+			GridBagConstraints gridBagConstraints60 = new GridBagConstraints();
+			gridBagConstraints60.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints60.gridy = 6;
+			gridBagConstraints60.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints60.gridx = 0;
+
+			GridBagConstraints gridBagConstraints61 = new GridBagConstraints();
+			gridBagConstraints61.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints61.gridy = 6;
+			gridBagConstraints61.weightx = 1.0;
+			gridBagConstraints61.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints61.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints61.gridwidth = 2;
+			gridBagConstraints61.weighty = 1.0D;
+			gridBagConstraints61.gridx = 1;
+			
 		    generateXsdLabel = new JLabel();
 		    generateXsdLabel.setText("Generate XSD's?");
 		    
@@ -1099,7 +1417,10 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
 		    validateGmeTagsLabel.setText("Validate GME Tags?");
 		    
 		    generateCastorMappingLabel = new JLabel();
-		    generateCastorMappingLabel.setText("Generate Castor Mapping files?");
+		    generateCastorMappingLabel.setText("Generate Castor Mapping?");
+		    
+		    generateJaxbMappingLabel = new JLabel();
+		    generateJaxbMappingLabel.setText("Generate JAXB Mapping?");		    
 
 		    generateXsdWithGmeTagsLabel = new JLabel();
 		    generateXsdWithGmeTagsLabel.setText("Generate XSD's with GME tags?");
@@ -1117,12 +1438,14 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
 		    xsdCodeGenSettingsSubPanel.add(getGenerateXsdCheckBox(), gridBagConstraints11);
 		    xsdCodeGenSettingsSubPanel.add(generateCastorMappingLabel, gridBagConstraints20);
 		    xsdCodeGenSettingsSubPanel.add(getGenerateCastorMappingCheckBox(), gridBagConstraints21);
-		    xsdCodeGenSettingsSubPanel.add(generateXsdWithGmeTagsLabel, gridBagConstraints30);
-		    xsdCodeGenSettingsSubPanel.add(getGenerateXsdWithGmeTagsCheckBox(), gridBagConstraints31); 
-		    xsdCodeGenSettingsSubPanel.add(validateGmeTagsLabel, gridBagConstraints40);
-		    xsdCodeGenSettingsSubPanel.add(getValidateGmeTagsCheckBox(), gridBagConstraints41);
-		    xsdCodeGenSettingsSubPanel.add(generateXsdWithPermissibleValuesLabel, gridBagConstraints50);
-		    xsdCodeGenSettingsSubPanel.add(getGenerateXsdWithPermissibleValuesCheckBox(), gridBagConstraints51);
+		    xsdCodeGenSettingsSubPanel.add(generateJaxbMappingLabel, gridBagConstraints30);
+		    xsdCodeGenSettingsSubPanel.add(getGenerateJaxbMappingCheckBox(), gridBagConstraints31);		    
+		    xsdCodeGenSettingsSubPanel.add(generateXsdWithGmeTagsLabel, gridBagConstraints40);
+		    xsdCodeGenSettingsSubPanel.add(getGenerateXsdWithGmeTagsCheckBox(), gridBagConstraints41); 
+		    xsdCodeGenSettingsSubPanel.add(validateGmeTagsLabel, gridBagConstraints50);
+		    xsdCodeGenSettingsSubPanel.add(getValidateGmeTagsCheckBox(), gridBagConstraints51);
+		    xsdCodeGenSettingsSubPanel.add(generateXsdWithPermissibleValuesLabel, gridBagConstraints60);
+		    xsdCodeGenSettingsSubPanel.add(getGenerateXsdWithPermissibleValuesCheckBox(), gridBagConstraints61);
 			
 		    xsdCodeGenSettingsSubPanel.validate();
 		}
@@ -1223,6 +1546,9 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
 		    JLabel generateBeansValueLabel = null;
 		    JLabel generateWsddLabel = null;
 		    JLabel generateWsddValueLabel = null;
+		    
+		    JLabel enableIso21090DatatypesLabel = null;
+		    JLabel enableIso21090DatatypesValueLabel = null;
 		    
 		    JLabel enableLocalJavaInterfaceLabel = null;
 		    JLabel enableLocalJavaInterfaceValueLabel = null;
@@ -1378,6 +1704,22 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
             gridBagConstraints91.gridwidth = 2;
             gridBagConstraints91.weighty = 1.0D;
             gridBagConstraints91.gridx = 1;
+            
+            GridBagConstraints gridBagConstraints100 = new GridBagConstraints();
+            gridBagConstraints100.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints100.gridy = 10;
+            gridBagConstraints100.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints100.gridx = 0;
+            
+            GridBagConstraints gridBagConstraints101 = new GridBagConstraints();
+            gridBagConstraints101.fill = java.awt.GridBagConstraints.HORIZONTAL;
+            gridBagConstraints101.gridy = 10;
+            gridBagConstraints101.weightx = 1.0;
+            gridBagConstraints101.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints101.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints101.gridwidth = 2;
+            gridBagConstraints101.weighty = 1.0D;
+            gridBagConstraints101.gridx = 1;            
                         
 		    validateLogicalModelLabel = new JLabel();
 		    validateLogicalModelLabel.setText("Validate Logical Model?");
@@ -1393,6 +1735,11 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
 		    generateWsddLabel.setText("Generate WSDD?");
 		    generateWsddValueLabel = new JLabel();
 		    generateWsddValueLabel.setText(Utils.convertToYesNo(getGenerateWsddCheckBox()));		
+            
+		    enableIso21090DatatypesLabel = new JLabel();
+		    enableIso21090DatatypesLabel.setText("Enable ISO21090 Datatype Support?");
+		    enableIso21090DatatypesValueLabel = new JLabel();
+		    enableIso21090DatatypesValueLabel.setText(Utils.convertToYesNo(getEnableIso21090DatatypesCheckBox()));			    
 
 		    enableLocalJavaInterfaceLabel = new JLabel();
 		    enableLocalJavaInterfaceLabel.setText("Enable Local Java Interface?");
@@ -1436,20 +1783,23 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
             codeGenSettingsReviewLeftPanel.add(generateBeansValueLabel, gridBagConstraints21);
             codeGenSettingsReviewLeftPanel.add(generateWsddLabel, gridBagConstraints30);
             codeGenSettingsReviewLeftPanel.add(generateWsddValueLabel, gridBagConstraints31);
-    
-            codeGenSettingsReviewLeftPanel.add(enableLocalJavaInterfaceLabel, gridBagConstraints40);
-            codeGenSettingsReviewLeftPanel.add(enableLocalJavaInterfaceValueLabel, gridBagConstraints41);
-            codeGenSettingsReviewLeftPanel.add(enableRemoteJavaInterfaceLabel, gridBagConstraints50);
-            codeGenSettingsReviewLeftPanel.add(enableRemoteJavaInterfaceValueLabel, gridBagConstraints51);
-            codeGenSettingsReviewLeftPanel.add(enableWebServiceInterfaceLabel, gridBagConstraints60);
-            codeGenSettingsReviewLeftPanel.add(enableWebServiceInterfaceValueLabel, gridBagConstraints61);
             
-            codeGenSettingsReviewLeftPanel.add(enableRestfulXmlInterfaceLabel, gridBagConstraints70);
-            codeGenSettingsReviewLeftPanel.add(enableRestfulXmlInterfaceValueLabel, gridBagConstraints71);
-            codeGenSettingsReviewLeftPanel.add(enableRestfulHtmlInterfaceLabel, gridBagConstraints80);
-            codeGenSettingsReviewLeftPanel.add(enableRestfulHtmlInterfaceValueLabel, gridBagConstraints81);
-            codeGenSettingsReviewLeftPanel.add(enableRestfulJsonInterfaceLabel, gridBagConstraints90);
-            codeGenSettingsReviewLeftPanel.add(enableRestfulJsonInterfaceValueLabel, gridBagConstraints91); 
+            codeGenSettingsReviewLeftPanel.add(enableIso21090DatatypesLabel, gridBagConstraints40);
+            codeGenSettingsReviewLeftPanel.add(enableIso21090DatatypesValueLabel, gridBagConstraints41);
+    
+            codeGenSettingsReviewLeftPanel.add(enableLocalJavaInterfaceLabel, gridBagConstraints50);
+            codeGenSettingsReviewLeftPanel.add(enableLocalJavaInterfaceValueLabel, gridBagConstraints51);
+            codeGenSettingsReviewLeftPanel.add(enableRemoteJavaInterfaceLabel, gridBagConstraints60);
+            codeGenSettingsReviewLeftPanel.add(enableRemoteJavaInterfaceValueLabel, gridBagConstraints61);
+            codeGenSettingsReviewLeftPanel.add(enableWebServiceInterfaceLabel, gridBagConstraints70);
+            codeGenSettingsReviewLeftPanel.add(enableWebServiceInterfaceValueLabel, gridBagConstraints71);
+            
+            codeGenSettingsReviewLeftPanel.add(enableRestfulXmlInterfaceLabel, gridBagConstraints80);
+            codeGenSettingsReviewLeftPanel.add(enableRestfulXmlInterfaceValueLabel, gridBagConstraints81);
+            codeGenSettingsReviewLeftPanel.add(enableRestfulHtmlInterfaceLabel, gridBagConstraints90);
+            codeGenSettingsReviewLeftPanel.add(enableRestfulHtmlInterfaceValueLabel, gridBagConstraints91);
+            codeGenSettingsReviewLeftPanel.add(enableRestfulJsonInterfaceLabel, gridBagConstraints100);
+            codeGenSettingsReviewLeftPanel.add(enableRestfulJsonInterfaceValueLabel, gridBagConstraints101); 
             
             codeGenSettingsReviewLeftPanel.validate();
         //}
@@ -1471,6 +1821,8 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
 		    JLabel generateHibernateMappingValueLabel = null;
 		    JLabel generateCastorMappingLabel = null;
 		    JLabel generateCastorMappingValueLabel = null;
+		    JLabel generateJaxbMappingLabel = null;
+		    JLabel generateJaxbMappingValueLabel = null;		    
 		    JLabel generateXsdLabel = null;
 		    JLabel generateXsdValueLabel = null;
 		    JLabel generateXsdWithGmeTagsLabel = null;
@@ -1624,6 +1976,22 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
             gridBagConstraints91.weighty = 1.0D;
             gridBagConstraints91.gridx = 1;
             
+            GridBagConstraints gridBagConstraints100 = new GridBagConstraints();
+            gridBagConstraints100.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints100.gridy = 10;
+            gridBagConstraints100.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints100.gridx = 0;
+            
+            GridBagConstraints gridBagConstraints101 = new GridBagConstraints();
+            gridBagConstraints101.fill = java.awt.GridBagConstraints.HORIZONTAL;
+            gridBagConstraints101.gridy = 10;
+            gridBagConstraints101.weightx = 1.0;
+            gridBagConstraints101.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints101.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints101.gridwidth = 2;
+            gridBagConstraints101.weighty = 1.0D;
+            gridBagConstraints101.gridx = 1;            
+            
 		    validateModelMappingLabel = new JLabel();
 		    validateModelMappingLabel.setText("Validate Model Mapping?");
             validateModelMappingValueLabel = new JLabel();
@@ -1643,6 +2011,11 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
             generateCastorMappingLabel.setText("Generate Castor Mapping?");
             generateCastorMappingValueLabel = new JLabel();
             generateCastorMappingValueLabel.setText(Utils.convertToYesNo(getGenerateCastorMappingCheckBox()));
+            
+            generateJaxbMappingLabel = new JLabel();
+            generateJaxbMappingLabel.setText("Generate JAXB Mapping?");
+            generateJaxbMappingValueLabel = new JLabel();
+            generateJaxbMappingValueLabel.setText(Utils.convertToYesNo(getGenerateJaxbMappingCheckBox()));            
             
             generateXsdLabel = new JLabel();
             generateXsdLabel.setText("Generate XSD's?");
@@ -1688,17 +2061,19 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
             if (getGenerateXsdCheckBox().isSelected()){
             	codeGenSettingsReviewRightPanel.add(generateCastorMappingLabel, gridBagConstraints50);
             	codeGenSettingsReviewRightPanel.add(generateCastorMappingValueLabel, gridBagConstraints51);
-            	codeGenSettingsReviewRightPanel.add(generateXsdWithGmeTagsLabel, gridBagConstraints60);
-            	codeGenSettingsReviewRightPanel.add(generateXsdWithGmeTagsValueLabel, gridBagConstraints61); 
-            	codeGenSettingsReviewRightPanel.add(validateGmeTagsLabel, gridBagConstraints70);
-            	codeGenSettingsReviewRightPanel.add(validateGmeTagsValueLabel, gridBagConstraints71);
-            	codeGenSettingsReviewRightPanel.add(generateXsdWithPermissibleValuesLabel, gridBagConstraints80);
-            	codeGenSettingsReviewRightPanel.add(generateXsdWithPermissibleValuesValueLabel, gridBagConstraints81);
+            	codeGenSettingsReviewRightPanel.add(generateJaxbMappingLabel, gridBagConstraints60);
+            	codeGenSettingsReviewRightPanel.add(generateJaxbMappingValueLabel, gridBagConstraints61);
+            	codeGenSettingsReviewRightPanel.add(generateXsdWithGmeTagsLabel, gridBagConstraints70);
+            	codeGenSettingsReviewRightPanel.add(generateXsdWithGmeTagsValueLabel, gridBagConstraints71); 
+            	codeGenSettingsReviewRightPanel.add(validateGmeTagsLabel, gridBagConstraints80);
+            	codeGenSettingsReviewRightPanel.add(validateGmeTagsValueLabel, gridBagConstraints81);
+            	codeGenSettingsReviewRightPanel.add(generateXsdWithPermissibleValuesLabel, gridBagConstraints90);
+            	codeGenSettingsReviewRightPanel.add(generateXsdWithPermissibleValuesValueLabel, gridBagConstraints91);
             }
             
             if (getGenerateXsdWithPermissibleValuesCheckBox().isSelected() || getGenerateHibernateValidatorCheckBox().isSelected()){
-            	codeGenSettingsReviewRightPanel.add(caDsrConnectionUrlLabel, gridBagConstraints90);
-            	codeGenSettingsReviewRightPanel.add(caDsrConnectionUrlValueLabel, gridBagConstraints91);
+            	codeGenSettingsReviewRightPanel.add(caDsrConnectionUrlLabel, gridBagConstraints100);
+            	codeGenSettingsReviewRightPanel.add(caDsrConnectionUrlValueLabel, gridBagConstraints101);
             }
             
             codeGenSettingsReviewRightPanel.validate();
@@ -1715,12 +2090,24 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
     			result.add(new SimpleValidationMessage(CADSR_CONNECTION_URL + " must not be blank.", Severity.ERROR, CADSR_CONNECTION_URL));
     		} 
         }
+        
+		if (ValidationUtils.isBlank(this.getPageSizeDbField().getText())) {
+			result.add(new SimpleValidationMessage(DAO_PAGE_SIZE + " must not be blank.", Severity.ERROR, DAO_PAGE_SIZE));
+		} 
+		
+		if (ValidationUtils.isBlank(this.getPageSizeRestfulApiField().getText())) {
+			result.add(new SimpleValidationMessage(RESTFUL_PAGE_SIZE + " must not be blank.", Severity.ERROR, RESTFUL_PAGE_SIZE));
+		} 
     	
     	return result;
     }
     
     public void initValidation() {
     	
+        ValidationComponentUtils.setMessageKey(getPageSizeDbField(), DAO_PAGE_SIZE);
+        ValidationComponentUtils.setMandatory(getPageSizeDbField(), true);
+        ValidationComponentUtils.setMessageKey(getPageSizeRestfulApiField(), RESTFUL_PAGE_SIZE);
+        ValidationComponentUtils.setMandatory(getPageSizeRestfulApiField(), true);            
         ValidationComponentUtils.setMessageKey(getCaDsrConnectionUrlField(), CADSR_CONNECTION_URL);
         ValidationComponentUtils.setMandatory(getCaDsrConnectionUrlField(), true);
     	
@@ -1736,6 +2123,11 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
 		propsMap.put("VALIDATE_MODEL_MAPPING", Boolean.valueOf(validateModelMappingCheckBox.isSelected()).toString() );
 		propsMap.put("VALIDATE_GME_TAGS", Boolean.valueOf(validateGmeTagsCheckBox.isSelected()).toString() );
 		
+		propsMap.put("ENABLE_ISO21090_DATATYPES", Boolean.valueOf(enableIso21090DatatypesCheckBox.isSelected()).toString() );
+		
+		propsMap.put("DAO_PAGE_SIZE", getPageSizeDbField().getText() );
+		propsMap.put("RESTFUL_PAGE_SIZE", getPageSizeRestfulApiField().getText() );	
+		
 		propsMap.put("ENABLE_LOCAL_JAVA_INTERFACE", Boolean.valueOf(enableLocalJavaInterfaceCheckBox.isSelected()).toString() );
 		propsMap.put("ENABLE_REMOTE_JAVA_INTERFACE", Boolean.valueOf(enableRemoteJavaInterfaceCheckBox.isSelected()).toString() );
 		propsMap.put("ENABLE_WEBSERVICE_INTERFACE", Boolean.valueOf(enableWebServiceInterfaceCheckBox.isSelected()).toString() );
@@ -1746,6 +2138,7 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
 		propsMap.put("GENERATE_HIBERNATE_MAPPING", Boolean.valueOf(generateHibernateMappingCheckBox.isSelected()).toString() );
 		propsMap.put("GENERATE_BEANS", Boolean.valueOf(generateBeansCheckBox.isSelected()).toString() );
 		propsMap.put("GENERATE_CASTOR_MAPPING", Boolean.valueOf(generateCastorMappingCheckBox.isSelected()).toString() );
+		propsMap.put("GENERATE_JAXB_MAPPING", Boolean.valueOf(generateJaxbMappingCheckBox.isSelected()).toString() );
 		propsMap.put("GENERATE_XSD", Boolean.valueOf(generateXsdCheckBox.isSelected()).toString() );
 		propsMap.put("GENERATE_XSD_WITH_GME_TAGS", Boolean.valueOf(generateXsdWithGmeTagsCheckBox.isSelected()).toString() );
 		propsMap.put("GENERATE_XSD_WITH_PERMISSIBLE_VALUES", Boolean.valueOf(generateXsdWithPermissibleValuesCheckBox.isSelected()).toString() );
