@@ -406,10 +406,10 @@ public class CdDataTypeTest extends SDKISOTestBase{
 
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
-				assertEquals("CODE6", data.getValue1().getCode());
+				assertNull(data.getValue1().getCode());
 				
-				assertValue1Constants(data);
-				assertNull(data.getValue1().getNullFlavor());
+				//assertValue1Constants(data);
+				assertNotNull(data.getValue1().getNullFlavor());
 				counter++;
 				continue;
 			}
@@ -420,9 +420,9 @@ public class CdDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data.getValue1());
 				assertNull(data.getValue1().getCode());
 				
-				assertValue1Constants(data);
+				//assertValue1Constants(data);
 				//Global constant
-				assertNull(data.getValue1().getNullFlavor());
+				assertNotNull(data.getValue1().getNullFlavor());
 				counter++;
 			}
 		}
@@ -642,9 +642,9 @@ public class CdDataTypeTest extends SDKISOTestBase{
 
 	private void assertValue3Constants(CdDataType data)
 	{
-		assertEquals("CD Code System", data.getValue3().getCodeSystem());
-		assertEquals("CD Code System Name", data.getValue3().getCodeSystemName());
-		assertEquals("1.1 HF2", data.getValue3().getCodeSystemVersion());
+		assertEquals("CODESYSTEM", data.getValue3().getCodeSystem());
+		assertEquals("CODESYSTEMNAME", data.getValue3().getCodeSystemName());
+		assertEquals("CODESYSTEMVERSION", data.getValue3().getCodeSystemVersion());
 		assertNull(data.getValue3().getDisplayName());
 		assertNull(data.getValue3().getOriginalText());
 	}
@@ -864,7 +864,8 @@ public class CdDataTypeTest extends SDKISOTestBase{
 				assertNull(data.getValue5().getCodeSystemName());
 				assertNull(data.getValue5().getCodeSystemVersion());
 				assertNull(data.getValue5().getDisplayName());
-				assertNull(data.getValue5().getOriginalText());
+				assertNotNull(data.getValue5().getOriginalText());
+				assertNotNull(data.getValue5().getOriginalText().getNullFlavor());
 				assertNull(data.getValue5().getNullFlavor());
 				counter++;
 				continue;
@@ -884,7 +885,8 @@ public class CdDataTypeTest extends SDKISOTestBase{
 				assertNull(data.getValue5().getCodeSystemVersion());
 				assertEquals("VALUE5_DISPLAY_VALUE1", data.getValue5().getDisplayName().getValue());
 				assertNull(data.getValue5().getDisplayName().getNullFlavor());
-				assertNull(data.getValue5().getOriginalText());
+				assertNotNull(data.getValue5().getOriginalText());
+				assertNotNull(data.getValue5().getOriginalText().getNullFlavor());
 				assertNull(data.getValue5().getNullFlavor());
 				counter++;
 				continue;
@@ -905,8 +907,9 @@ public class CdDataTypeTest extends SDKISOTestBase{
 				assertEquals("VALUE5_DISPLAY_VALUE2", data.getValue5().getDisplayName().getValue());
 				assertNull(data.getValue5().getDisplayName().getNullFlavor());
 				assertEquals("VALUE5_ORIG_TXT_DESCRIPTION1", data.getValue5().getOriginalText().getDescription().getValue());
-				assertNull(data.getValue5().getOriginalText().getValue());
-				assertNull(data.getValue5().getOriginalText().getNullFlavor());
+				assertNotNull(data.getValue5().getOriginalText());
+				assertNotNull(data.getValue5().getOriginalText().getDescription());
+				assertNotNull(data.getValue5().getOriginalText().getDescription().getValue());
 				assertNull(data.getValue5().getNullFlavor());
 				counter++;
 				continue;
@@ -1188,8 +1191,8 @@ public class CdDataTypeTest extends SDKISOTestBase{
 				assertEquals("CODE_SYSTEM_VERSION_61", data.getValue6().getCodeSystemVersion());
 				assertEquals("VALUE6_DISPLAY_VALUE6", data.getValue6().getDisplayName().getValue());
 				assertNull(data.getValue6().getDisplayName().getNullFlavor());
-				assertNull(data.getValue6().getOriginalText());
-				assertNull(data.getValue6().getNullFlavor());
+				assertNotNull(data.getValue6().getOriginalText());
+				assertNotNull(data.getValue6().getOriginalText().getNullFlavor());
 				counter++;
 				continue;
 			}
@@ -1235,7 +1238,8 @@ public class CdDataTypeTest extends SDKISOTestBase{
 				assertEquals("VALUE7_DISPLAY_VALUE1", data.getValue7().getDisplayName().getValue());
 				assertNull(data.getValue7().getDisplayName().getNullFlavor());
 				assertEquals("ORIG_TXT_VALUE1", data.getValue7().getOriginalText().getValue());
-				assertNull(data.getValue7().getOriginalText().getDescription());
+				assertNotNull(data.getValue7().getOriginalText().getDescription());
+				assertNotNull(data.getValue7().getOriginalText().getDescription().getNullFlavor());
 				assertNull(data.getValue7().getOriginalText().getNullFlavor());
 				
 				counter++;
