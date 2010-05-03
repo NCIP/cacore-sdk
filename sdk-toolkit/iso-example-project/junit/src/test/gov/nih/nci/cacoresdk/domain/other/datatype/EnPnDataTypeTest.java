@@ -1,6 +1,7 @@
 package test.gov.nih.nci.cacoresdk.domain.other.datatype;
 
 import gov.nih.nci.cacoresdk.domain.other.datatype.EnPnDataType;
+import gov.nih.nci.iso21090.NullFlavor;
 import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
@@ -205,8 +206,10 @@ public class EnPnDataTypeTest extends SDKISOTestBase{
 			{
 				assertNotNull(data);
 				assertNotNull(data.getValue1().getPart());
-				assertNull(data.getValue1().getPart().get(0).getValue());
-				assertValue1Constants(data);
+				assertEquals(0,data.getValue1().getPart().size());
+				assertNotNull(data.getValue1().getNullFlavor());
+				assertEquals(NullFlavor.NI, data.getValue1().getNullFlavor());
+				//assertValue1Constants(data);
 				counter++;
 			}
 		}

@@ -132,13 +132,11 @@ public class DsetCdDataTypeTest extends SDKISOTestBase{
 	{
 		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.DsetCdDataType a where a.value2.item.code is not null order by a.id asc");
 		Collection<DsetCdDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.DsetCdDataType");
-		assertEquals(5, result.size());
+		assertEquals(3, result.size());
 		List indexList = new ArrayList();
 		indexList.add("6");
 		indexList.add("7");
 		indexList.add("8");
-		indexList.add("9");
-		indexList.add("10");
 		assertValue2(result, indexList);
 	}
 
@@ -303,9 +301,9 @@ public class DsetCdDataTypeTest extends SDKISOTestBase{
 				Cd item = data.getValue1().getItem().iterator().next();
 				assertEquals("CODE1", item.getCode());
 				
-				assertNull(item.getCodeSystem());
-				assertNull(item.getCodeSystemName());
-				assertNull(item.getCodeSystemVersion());
+				assertNotNull(item.getCodeSystem());
+				assertNotNull(item.getCodeSystemName());
+				assertNotNull(item.getCodeSystemVersion());
 				assertNull(item.getDisplayName());
 				assertNull(item.getOriginalText());
 				assertNull(item.getNullFlavor());
@@ -323,9 +321,12 @@ public class DsetCdDataTypeTest extends SDKISOTestBase{
 				Cd item = data.getValue1().getItem().iterator().next();
 				assertEquals("CODE2", item.getCode());
 				
-				assertNull(item.getCodeSystem());
-				assertNull(item.getCodeSystemName());
-				assertNull(item.getCodeSystemVersion());
+				assertNotNull(item.getCodeSystem());
+				assertEquals("CD Code System", item.getCodeSystem());
+				assertNotNull(item.getCodeSystemName());
+				assertEquals("CD Code System Name", item.getCodeSystemName());
+				assertNotNull(item.getCodeSystemVersion());
+				assertEquals("1.1 HF2", item.getCodeSystemVersion());
 				assertNull(item.getDisplayName());
 				assertNull(item.getOriginalText());
 				assertNull(item.getNullFlavor());
@@ -343,9 +344,12 @@ public class DsetCdDataTypeTest extends SDKISOTestBase{
 				Cd item = data.getValue1().getItem().iterator().next();
 				assertEquals("CODE3", item.getCode());
 				
-				assertNull(item.getCodeSystem());
-				assertNull(item.getCodeSystemName());
-				assertNull(item.getCodeSystemVersion());
+				assertNotNull(item.getCodeSystem());
+				assertEquals("CD Code System", item.getCodeSystem());
+				assertNotNull(item.getCodeSystemName());
+				assertEquals("CD Code System Name", item.getCodeSystemName());
+				assertNotNull(item.getCodeSystemVersion());
+				assertEquals("1.1 HF2", item.getCodeSystemVersion());
 				assertNull(item.getDisplayName());
 				assertNull(item.getOriginalText());
 				assertNull(item.getNullFlavor());
@@ -363,9 +367,12 @@ public class DsetCdDataTypeTest extends SDKISOTestBase{
 				Cd item = data.getValue1().getItem().iterator().next();
 				assertEquals("CODE4", item.getCode());
 				
-				assertNull(item.getCodeSystem());
-				assertNull(item.getCodeSystemName());
-				assertNull(item.getCodeSystemVersion());
+				assertNotNull(item.getCodeSystem());
+				assertEquals("CD Code System", item.getCodeSystem());
+				assertNotNull(item.getCodeSystemName());
+				assertEquals("CD Code System Name", item.getCodeSystemName());
+				assertNotNull(item.getCodeSystemVersion());
+				assertEquals("1.1 HF2", item.getCodeSystemVersion());
 				assertNull(item.getDisplayName());
 				assertNull(item.getOriginalText());
 				assertNull(item.getNullFlavor());
@@ -383,9 +390,12 @@ public class DsetCdDataTypeTest extends SDKISOTestBase{
 				Cd item = data.getValue1().getItem().iterator().next();
 				assertEquals("CODE5", item.getCode());
 				
-				assertNull(item.getCodeSystem());
-				assertNull(item.getCodeSystemName());
-				assertNull(item.getCodeSystemVersion());
+				assertNotNull(item.getCodeSystem());
+				assertEquals("CD Code System", item.getCodeSystem());
+				assertNotNull(item.getCodeSystemName());
+				assertEquals("CD Code System Name", item.getCodeSystemName());
+				assertNotNull(item.getCodeSystemVersion());
+				assertEquals("1.1 HF2", item.getCodeSystemVersion());
 				assertNull(item.getDisplayName());
 				assertNull(item.getOriginalText());
 				assertNull(item.getNullFlavor());
@@ -396,7 +406,8 @@ public class DsetCdDataTypeTest extends SDKISOTestBase{
 			else
 			{
 				assertNotNull(data);
-				assertNull(data.getValue1());
+				assertNotNull(data.getValue1());
+				assertNotNull(data.getValue1().getNullFlavor());
 				counter++;
 			}
 		}
@@ -420,12 +431,15 @@ public class DsetCdDataTypeTest extends SDKISOTestBase{
 				Cd item = data.getValue2().getItem().iterator().next();
 				assertEquals("CODE1", item.getCode());
 				
-				assertNull(item.getCodeSystem());
-				assertNull(item.getCodeSystemName());
-				assertNull(item.getCodeSystemVersion());
+				assertNotNull(item.getCodeSystem());
+				assertEquals("CD Code System", item.getCodeSystem());
+				assertNotNull(item.getCodeSystemName());
+				assertEquals("CD Code System Name", item.getCodeSystemName());
+				assertNotNull(item.getCodeSystemVersion());
+				assertEquals("1.1 HF2", item.getCodeSystemVersion());
 				assertNull(item.getDisplayName());
 				assertNull(item.getOriginalText());
-				assertEquals(NullFlavor.NI, item.getNullFlavor());
+				assertNull(item.getNullFlavor());
 				counter++;
 				continue;
 			}
@@ -440,12 +454,15 @@ public class DsetCdDataTypeTest extends SDKISOTestBase{
 				Cd item = data.getValue2().getItem().iterator().next();
 				assertEquals("CODE2", item.getCode());
 				
-				assertNull(item.getCodeSystem());
-				assertNull(item.getCodeSystemName());
-				assertNull(item.getCodeSystemVersion());
+				assertNotNull(item.getCodeSystem());
+				assertEquals("CD Code System", item.getCodeSystem());
+				assertNotNull(item.getCodeSystemName());
+				assertEquals("CD Code System Name", item.getCodeSystemName());
+				assertNotNull(item.getCodeSystemVersion());
+				assertEquals("1.1 HF2", item.getCodeSystemVersion());
 				assertNull(item.getDisplayName());
 				assertNull(item.getOriginalText());
-				assertEquals(NullFlavor.NI, item.getNullFlavor());
+				assertNull(item.getNullFlavor());
 				counter++;
 				continue;
 			}
@@ -460,12 +477,15 @@ public class DsetCdDataTypeTest extends SDKISOTestBase{
 				Cd item = data.getValue2().getItem().iterator().next();
 				assertEquals("CODE3", item.getCode());
 				
-				assertNull(item.getCodeSystem());
-				assertNull(item.getCodeSystemName());
-				assertNull(item.getCodeSystemVersion());
+				assertNotNull(item.getCodeSystem());
+				assertEquals("CD Code System", item.getCodeSystem());
+				assertNotNull(item.getCodeSystemName());
+				assertEquals("CD Code System Name", item.getCodeSystemName());
+				assertNotNull(item.getCodeSystemVersion());
+				assertEquals("1.1 HF2", item.getCodeSystemVersion());
 				assertNull(item.getDisplayName());
 				assertNull(item.getOriginalText());
-				assertEquals(NullFlavor.NI, item.getNullFlavor());
+				assertNull(item.getNullFlavor());
 				counter++;
 				continue;
 			}
@@ -480,12 +500,15 @@ public class DsetCdDataTypeTest extends SDKISOTestBase{
 				Cd item = data.getValue2().getItem().iterator().next();
 				assertEquals("CODE4", item.getCode());
 				
-				assertNull(item.getCodeSystem());
-				assertNull(item.getCodeSystemName());
-				assertNull(item.getCodeSystemVersion());
+				assertNotNull(item.getCodeSystem());
+				assertEquals("CD Code System", item.getCodeSystem());
+				assertNotNull(item.getCodeSystemName());
+				assertEquals("CD Code System Name", item.getCodeSystemName());
+				assertNotNull(item.getCodeSystemVersion());
+				assertEquals("1.1 HF2", item.getCodeSystemVersion());
 				assertNull(item.getDisplayName());
 				assertNull(item.getOriginalText());
-				assertEquals(NullFlavor.NI, item.getNullFlavor());
+				assertNull(item.getNullFlavor());
 				counter++;
 				continue;
 			}
@@ -500,12 +523,15 @@ public class DsetCdDataTypeTest extends SDKISOTestBase{
 				Cd item = data.getValue2().getItem().iterator().next();
 				assertEquals("CODE5", item.getCode());
 				
-				assertNull(item.getCodeSystem());
-				assertNull(item.getCodeSystemName());
-				assertNull(item.getCodeSystemVersion());
+				assertNotNull(item.getCodeSystem());
+				assertEquals("CD Code System", item.getCodeSystem());
+				assertNotNull(item.getCodeSystemName());
+				assertEquals("CD Code System Name", item.getCodeSystemName());
+				assertNotNull(item.getCodeSystemVersion());
+				assertEquals("1.1 HF2", item.getCodeSystemVersion());
 				assertNull(item.getDisplayName());
 				assertNull(item.getOriginalText());
-				assertEquals(NullFlavor.NI, item.getNullFlavor());
+				assertNull(item.getNullFlavor());
 				counter++;
 				continue;
 			}
@@ -917,9 +943,12 @@ public class DsetCdDataTypeTest extends SDKISOTestBase{
 				Cd item = data.getValue6().getItem().iterator().next();
 				assertEquals("CODE1", item.getCode());
 				
-				assertNull(item.getCodeSystem());
-				assertNull(item.getCodeSystemName());
-				assertNull(item.getCodeSystemVersion());
+				assertNotNull(item.getCodeSystem());
+				assertEquals("CD Code System", item.getCodeSystem());
+				assertNotNull(item.getCodeSystemName());
+				assertEquals("CD Code System Name", item.getCodeSystemName());
+				assertNotNull(item.getCodeSystemVersion());
+				assertEquals("1.1 HF2", item.getCodeSystemVersion());
 				assertNull(item.getDisplayName());
 				assertNull(item.getOriginalText());
 				assertNull(item.getNullFlavor());
@@ -937,9 +966,12 @@ public class DsetCdDataTypeTest extends SDKISOTestBase{
 				Cd item = data.getValue6().getItem().iterator().next();
 				assertEquals("CODE2", item.getCode());
 				
-				assertNull(item.getCodeSystem());
-				assertNull(item.getCodeSystemName());
-				assertNull(item.getCodeSystemVersion());
+				assertNotNull(item.getCodeSystem());
+				assertEquals("CD Code System", item.getCodeSystem());
+				assertNotNull(item.getCodeSystemName());
+				assertEquals("CD Code System Name", item.getCodeSystemName());
+				assertNotNull(item.getCodeSystemVersion());
+				assertEquals("1.1 HF2", item.getCodeSystemVersion());
 				assertNull(item.getDisplayName());
 				assertNull(item.getOriginalText());
 				assertNull(item.getNullFlavor());
@@ -957,9 +989,12 @@ public class DsetCdDataTypeTest extends SDKISOTestBase{
 				Cd item = data.getValue6().getItem().iterator().next();
 				assertEquals("CODE3", item.getCode());
 				
-				assertNull(item.getCodeSystem());
-				assertNull(item.getCodeSystemName());
-				assertNull(item.getCodeSystemVersion());
+				assertNotNull(item.getCodeSystem());
+				assertEquals("CD Code System", item.getCodeSystem());
+				assertNotNull(item.getCodeSystemName());
+				assertEquals("CD Code System Name", item.getCodeSystemName());
+				assertNotNull(item.getCodeSystemVersion());
+				assertEquals("1.1 HF2", item.getCodeSystemVersion());
 				assertNull(item.getDisplayName());
 				assertNull(item.getOriginalText());
 				assertNull(item.getNullFlavor());
@@ -977,9 +1012,12 @@ public class DsetCdDataTypeTest extends SDKISOTestBase{
 				Cd item = data.getValue6().getItem().iterator().next();
 				assertEquals("CODE4", item.getCode());
 				
-				assertNull(item.getCodeSystem());
-				assertNull(item.getCodeSystemName());
-				assertNull(item.getCodeSystemVersion());
+				assertNotNull(item.getCodeSystem());
+				assertEquals("CD Code System", item.getCodeSystem());
+				assertNotNull(item.getCodeSystemName());
+				assertEquals("CD Code System Name", item.getCodeSystemName());
+				assertNotNull(item.getCodeSystemVersion());
+				assertEquals("1.1 HF2", item.getCodeSystemVersion());
 				assertNull(item.getDisplayName());
 				assertNull(item.getOriginalText());
 				assertNull(item.getNullFlavor());
@@ -997,9 +1035,12 @@ public class DsetCdDataTypeTest extends SDKISOTestBase{
 				Cd item = data.getValue6().getItem().iterator().next();
 				assertEquals("CODE5", item.getCode());
 				
-				assertNull(item.getCodeSystem());
-				assertNull(item.getCodeSystemName());
-				assertNull(item.getCodeSystemVersion());
+				assertNotNull(item.getCodeSystem());
+				assertEquals("CD Code System", item.getCodeSystem());
+				assertNotNull(item.getCodeSystemName());
+				assertEquals("CD Code System Name", item.getCodeSystemName());
+				assertNotNull(item.getCodeSystemVersion());
+				assertEquals("1.1 HF2", item.getCodeSystemVersion());
 				assertNull(item.getDisplayName());
 				assertNull(item.getOriginalText());
 				assertNull(item.getNullFlavor());
@@ -1034,9 +1075,12 @@ public class DsetCdDataTypeTest extends SDKISOTestBase{
 				Cd item = data.getValue7().getItem().iterator().next();
 				assertEquals("CODE1", item.getCode());
 				
-				assertNull(item.getCodeSystem());
-				assertNull(item.getCodeSystemName());
-				assertNull(item.getCodeSystemVersion());
+				assertNotNull(item.getCodeSystem());
+				assertEquals("CD Code System", item.getCodeSystem());
+				assertNotNull(item.getCodeSystemName());
+				assertEquals("CD Code System Name", item.getCodeSystemName());
+				assertNotNull(item.getCodeSystemVersion());
+				assertEquals("1.1 HF2", item.getCodeSystemVersion());
 				assertNull(item.getDisplayName());
 				assertNull(item.getOriginalText());
 				assertNull(item.getNullFlavor());
@@ -1054,9 +1098,12 @@ public class DsetCdDataTypeTest extends SDKISOTestBase{
 				Cd item = data.getValue7().getItem().iterator().next();
 				assertEquals("CODE2", item.getCode());
 				
-				assertNull(item.getCodeSystem());
-				assertNull(item.getCodeSystemName());
-				assertNull(item.getCodeSystemVersion());
+				assertNotNull(item.getCodeSystem());
+				assertEquals("CD Code System", item.getCodeSystem());
+				assertNotNull(item.getCodeSystemName());
+				assertEquals("CD Code System Name", item.getCodeSystemName());
+				assertNotNull(item.getCodeSystemVersion());
+				assertEquals("1.1 HF2", item.getCodeSystemVersion());
 				assertNull(item.getDisplayName());
 				assertNull(item.getOriginalText());
 				assertNull(item.getNullFlavor());
@@ -1074,9 +1121,12 @@ public class DsetCdDataTypeTest extends SDKISOTestBase{
 				Cd item = data.getValue7().getItem().iterator().next();
 				assertEquals("CODE3", item.getCode());
 				
-				assertNull(item.getCodeSystem());
-				assertNull(item.getCodeSystemName());
-				assertNull(item.getCodeSystemVersion());
+				assertNotNull(item.getCodeSystem());
+				assertEquals("CD Code System", item.getCodeSystem());
+				assertNotNull(item.getCodeSystemName());
+				assertEquals("CD Code System Name", item.getCodeSystemName());
+				assertNotNull(item.getCodeSystemVersion());
+				assertEquals("1.1 HF2", item.getCodeSystemVersion());
 				assertNull(item.getDisplayName());
 				assertNull(item.getOriginalText());
 				assertNull(item.getNullFlavor());
@@ -1094,9 +1144,12 @@ public class DsetCdDataTypeTest extends SDKISOTestBase{
 				Cd item = data.getValue7().getItem().iterator().next();
 				assertEquals("CODE4", item.getCode());
 				
-				assertNull(item.getCodeSystem());
-				assertNull(item.getCodeSystemName());
-				assertNull(item.getCodeSystemVersion());
+				assertNotNull(item.getCodeSystem());
+				assertEquals("CD Code System", item.getCodeSystem());
+				assertNotNull(item.getCodeSystemName());
+				assertEquals("CD Code System Name", item.getCodeSystemName());
+				assertNotNull(item.getCodeSystemVersion());
+				assertEquals("1.1 HF2", item.getCodeSystemVersion());
 				assertNull(item.getDisplayName());
 				assertNull(item.getOriginalText());
 				assertNull(item.getNullFlavor());
@@ -1114,9 +1167,12 @@ public class DsetCdDataTypeTest extends SDKISOTestBase{
 				Cd item = data.getValue7().getItem().iterator().next();
 				assertEquals("CODE5", item.getCode());
 				
-				assertNull(item.getCodeSystem());
-				assertNull(item.getCodeSystemName());
-				assertNull(item.getCodeSystemVersion());
+				assertNotNull(item.getCodeSystem());
+				assertEquals("CD Code System", item.getCodeSystem());
+				assertNotNull(item.getCodeSystemName());
+				assertEquals("CD Code System Name", item.getCodeSystemName());
+				assertNotNull(item.getCodeSystemVersion());
+				assertEquals("1.1 HF2", item.getCodeSystemVersion());
 				assertNull(item.getDisplayName());
 				assertNull(item.getOriginalText());
 				assertNull(item.getNullFlavor());

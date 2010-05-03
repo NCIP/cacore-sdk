@@ -205,8 +205,9 @@ public class EnOnDataTypeTest extends SDKISOTestBase{
 			{
 				assertNotNull(data);
 				assertNotNull(data.getValue1().getPart());
-				assertNull(data.getValue1().getPart().get(0).getValue());
-				assertValue1Constants(data);
+				assertEquals(0,data.getValue1().getPart().size());
+				assertNotNull(data.getValue1().getNullFlavor());
+				//assertValue1Constants(data);
 				counter++;
 			}
 		}

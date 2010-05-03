@@ -209,7 +209,7 @@ public class IvlPqDataTypeTest extends SDKISOTestBase
 	public void testIvlPqValue4ByDetachedCriteria() throws ApplicationException
 	{
 		DetachedCriteria criteria = DetachedCriteria.forClass(IvlPqDataType.class);
-		criteria.add(Restrictions.or(Property.forName("value4.high.value").isNotNull(), Property.forName("value2.high.nullFlavor").isNotNull()));
+		criteria.add(Restrictions.or(Property.forName("value4.high.value").isNotNull(), Property.forName("value4.high.nullFlavor").isNotNull()));
 		criteria.addOrder(Order.asc("id"));
 
 		Collection<IvlPqDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.IvlPqDataType");
@@ -349,8 +349,9 @@ public class IvlPqDataTypeTest extends SDKISOTestBase
 			{
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
-				assertNull(data.getValue1().getLow().getValue());
-				assertValue1Constants(data);
+				assertNotNull(data.getValue1().getNullFlavor());
+				//assertNull(data.getValue1().getLow().getValue());
+				//assertValue1Constants(data);
 				counter++;
 			}
 		}
@@ -593,11 +594,9 @@ public class IvlPqDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue3());
 
-				assertNull(data.getValue3().getNullFlavor());
-				assertNull(data.getValue3().getLow().getValue());
-				assertEquals(NullFlavor.NI, data.getValue3().getLow().getNullFlavor());
-				assertNull(data.getValue3().getLow().getPrecision());
-				assertNull(data.getValue3().getLow().getUnit());
+				assertNotNull(data.getValue3().getNullFlavor());
+				assertEquals(NullFlavor.NI, data.getValue3().getNullFlavor());
+				assertNull(data.getValue3().getLow());
 				assertValue3Constants(data);
 
 				counter++;

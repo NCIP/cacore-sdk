@@ -417,7 +417,7 @@ public class IvlIntDataTypeTest extends SDKISOTestBase
 			else
 			{
 				assertNotNull(data);
-				assertNull(data.getValue2());
+				assertNotNull(data.getValue2());
 				assertNull(data.getValue2().getHigh());
 				assertEquals(NullFlavor.NI, data.getValue2().getNullFlavor());
 				assertValue2Constants(data);
