@@ -1,7 +1,7 @@
 package test.gov.nih.nci.cacoresdk.domain.other.differentpackage;
 
 import gov.nih.nci.cacoresdk.domain.other.differentpackage.Dessert;
-import gov.nih.nci.cacoresdk.domain.other.differentpackage.Pie;
+import gov.nih.nci.cacoresdk.domain.other.differentpackage.associations.Pie;
 import gov.nih.nci.cacoresdk.domain.other.differentpackage.associations.Utensil;
 import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.query.cql.CQLAssociation;
