@@ -46,20 +46,20 @@ public class JAXBISOAdapter extends XmlAdapter<org.iso._21090.ANY, gov.nih.nci.i
 	public static final String Tel_Url_NAME="gov.nih.nci.iso21090.TelUrl";
 	public static final String Ts_NAME="gov.nih.nci.iso21090.Ts";		
 
-	public static final String AD_NAME="org.iso._21090.AD";
+	public static final String AD_NAME="org.iso._21090.Ad";
 	public static final String BL_NAME="org.iso._21090.BL";
-	public static final String BL_NONNULL_NAME="org.iso._21090.BL.NONNULL";
+	public static final String BL_NONNULL_NAME="org.iso._21090.BlNonNull";
 	public static final String CD_NAME="org.iso._21090.CD";
-	public static final String DSETAD_NAME="org.iso._21090.DSETAD";	
-	public static final String DSETCD_NAME="org.iso._21090.DSETCD";
+	public static final String DSETAD_NAME="org.iso._21090.DSetAd";	
+	public static final String DSETCD_NAME="org.iso._21090.DSetCd";
 	public static final String DSETII_NAME="org.iso._21090.DSETII";
-	public static final String DSETTEL_NAME="org.iso._21090.DSETTEL";
+	public static final String DSETTEL_NAME="org.iso._21090.DSetTel";
 	public static final String ED_NAME="org.iso._21090.ED";	
-	public static final String EDText_NAME="org.iso._21090.EDText";
+	public static final String EDText_NAME="org.iso._21090.EdText";
 	public static final String EN_NAME="org.iso._21090.EN";	
-	public static final String ENON_NAME="org.iso._21090.ENON";	
-	public static final String ENPN_NAME="org.iso._21090.ENPN";
-	public static final String II_NAME="org.iso._21090.II";
+	public static final String ENON_NAME="org.iso._21090.EnOn";	
+	public static final String ENPN_NAME="org.iso._21090.EnPn";
+	public static final String II_NAME="org.iso._21090.Ii";
 	public static final String INT_NAME="org.iso._21090.INT";
 	public static final String IVLINT_NAME="org.iso._21090.IVLINT";
 	public static final String IVLPQ_NAME="org.iso._21090.IVLPQ";
@@ -67,15 +67,15 @@ public class JAXBISOAdapter extends XmlAdapter<org.iso._21090.ANY, gov.nih.nci.i
 	public static final String IVLTS_NAME="org.iso._21090.IVLTS";
 	public static final String PQ_NAME="org.iso._21090.PQ";	
 //	public static final String PQV_NAME="org.iso._21090.PQV";		
-	public static final String REAL_NAME="org.iso._21090.REAL";	
+	public static final String REAL_NAME="org.iso._21090.Real";	
 	public static final String SC_NAME="org.iso._21090.SC";
 	public static final String ST_NAME="org.iso._21090.ST";
-	public static final String STNT_NAME="org.iso._21090.STNT";
+	public static final String STNT_NAME="org.iso._21090.StNt";
 	public static final String TEL_NAME="org.iso._21090.TEL";
-	public static final String TEL_EMAIL_NAME="org.iso._21090.TELEmail";	
+	public static final String TEL_EMAIL_NAME="org.iso._21090.TelEmail";	
 	public static final String TEL_PERSON_NAME="org.iso._21090.TELPerson";
-	public static final String TEL_PHONE_NAME="org.iso._21090.TELPhone";	
-	public static final String TEL_URL_NAME="org.iso._21090.TELUrl";
+	public static final String TEL_PHONE_NAME="org.iso._21090.TelPhone";	
+	public static final String TEL_URL_NAME="org.iso._21090.TelUrl";
 	public static final String TS_NAME="org.iso._21090.TS";	
 
 	@Override
