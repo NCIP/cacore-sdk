@@ -12,8 +12,10 @@ import gov.nih.nci.ncicb.xmiinout.domain.UMLTaggedValue;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
@@ -54,24 +56,106 @@ public class ModelTagTransformerUtil{
 	
 	private static Logger log = Logger.getLogger(ModelTagTransformerUtil.class);
 	
-	public static void execute(UMLModel eaModel,UMLModel argoModel){
-		UMLPackage rootEAPackage=null;
-		UMLPackage rootArgoPackage=null;
+	public static void executeTaggedValuesInsertion(UMLModel eaModel,
+			UMLModel argoModel) {
+		List<UMLPackage> modelsPackage = resolveModelPackages(eaModel, argoModel);
+		Map<String, UMLClass> umlClasses = new HashMap<String, UMLClass>();
+		getUMLKlassesList(modelsPackage.get(0), umlClasses);
+		insertTaggedValues(modelsPackage.get(1), umlClasses);
+		DebugUtils.printModel(argoModel);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static void executeEAArgoValidation(UMLModel eaModel,UMLModel argoModel){
+		List<UMLPackage> modelsPackage = resolveModelPackages(eaModel, argoModel);
 		
+		Map<String, UMLClass> eaUMLClasses = new HashMap<String, UMLClass>();
+		Map<String, UMLClass> argoUMLClasses = new HashMap<String, UMLClass>();
+		
+		getUMLKlassesList(modelsPackage.get(0), eaUMLClasses);
+		getUMLKlassesList(modelsPackage.get(1), argoUMLClasses);
+		
+		StringBuilder errorMessage= new StringBuilder();
+		
+	    Iterator eait = eaUMLClasses.entrySet().iterator();
+	    errorMessage.append("\n--------------------------------------------------------------\n");
+	    while (eait.hasNext()) {
+	        Map.Entry eapairs = (Map.Entry)eait.next();
+	      //validate for class
+	        UMLClass argoUmlClass = argoUMLClasses.get(eapairs.getKey());
+			if(argoUmlClass==null){
+	        	errorMessage.append("Class "+eapairs.getKey()+" is not defined in ArgoUML").append("\n");
+	        }else{
+	        	//validate for attributes for each class
+	        	UMLClass eaUmlClass=(UMLClass)eapairs.getValue();
+	        	List<UMLAttribute> eaUmlAttributes=eaUmlClass.getAttributes();
+	        	List<UMLAttribute> argoUmlAttributes=argoUmlClass.getAttributes();
+	        	
+	        	List<String> attributeNames=new ArrayList<String>();
+	        	for (UMLAttribute umlAttribute : argoUmlAttributes) {
+					attributeNames.add(umlAttribute.getName());
+				}	        	
+	        	for (UMLAttribute eaUmlAttribute : eaUmlAttributes) {
+	        		boolean found=false;
+	        		for (String argoAttributeName : attributeNames) {
+						if(eaUmlAttribute.getName().equals(argoAttributeName)){
+							found=true;
+							break;
+						}
+					}
+	        		if(!found){
+	        			errorMessage.append("EA Class "+eapairs.getKey()+" with attribute "+eaUmlAttribute.getName()+" was not mapped in ArgoUML\n");
+	        		}
+				}
+	        	
+	        	//validate for associations for each class
+	        	Set<UMLAssociation> eaUmlAssociations=eaUmlClass.getAssociations();
+	        	Set<UMLAssociation> argoUmlAssociations=argoUmlClass.getAssociations();
+	        	
+	        	List<String> associationNames=new ArrayList<String>();
+	        	for (UMLAssociation argoUmlAssociation : argoUmlAssociations) {
+	        		
+	        		associationNames.add(argoUmlAssociation.getRoleName());
+					
+				}
+	        	for (UMLAssociation eaUmlAssociation : eaUmlAssociations) {
+	        		boolean found=false;
+	        		for (String argoAssociationName : associationNames) {
+						if(eaUmlAssociation.getRoleName()!=null && eaUmlAssociation.getRoleName().equals(argoAssociationName)){
+							found=true;
+							break;
+						}
+					}
+	        		if(!found && eaUmlAssociation.getRoleName()!=null){
+	        			errorMessage.append("EA Class "+eapairs.getKey()+" with Association Role Name "+eaUmlAssociation.getRoleName()+" was not mapped in ArgoUML\n");
+	        		}
+				}
+	        }
+	    }
+	    errorMessage.append("\n--------------------------------------------------------------\n");
+	    
+	    System.out.println(errorMessage);
+	}
+	
+	private static List<UMLPackage> resolveModelPackages(UMLModel eaModel,
+			UMLModel argoModel) {
+		UMLPackage rootEAPackage = null;
+		UMLPackage rootArgoPackage = null;
+
 		for (UMLPackage rootPackage : eaModel.getPackages()) {
 			if (rootPackage.getName().equals("Logical View")) {
-				rootEAPackage=rootPackage;
+				rootEAPackage = rootPackage;
 			}
 		}
 		for (UMLPackage rootPackage : argoModel.getPackages()) {
 			if (rootPackage.getName().equals("Logical View")) {
-				rootArgoPackage=rootPackage;
+				rootArgoPackage = rootPackage;
 			}
 		}
-		Map<String,UMLClass> umlClasses = new HashMap<String,UMLClass>();
-		getUMLKlassesList(rootEAPackage, umlClasses);
-		insertTaggedValues(rootArgoPackage,umlClasses);
-		DebugUtils.printModel(argoModel);		
+		List<UMLPackage> modelsPackage = new ArrayList<UMLPackage>();
+		modelsPackage.add(rootEAPackage);
+		modelsPackage.add(rootArgoPackage);
+		return modelsPackage;
 	}
 	
 	public static void insertTaggedValues(UMLPackage argoModel,Map<String,UMLClass> eaUMLClasses){		
@@ -175,13 +259,12 @@ public class ModelTagTransformerUtil{
 	
 	public static void main(String[] args) throws Exception {
 		UMLModelLoader loader1 = new UMLModelLoader(
-				"C:/Documents and Settings/Garmillas/Desktop/ISO/sdk.xmi", "EA");
+				"C:/temp/sdk.xmi", "EA");
 
 		UMLModelLoader loader2 = new UMLModelLoader(
-				"C:/Documents and Settings/Garmillas/Desktop/ISO/sdk.uml",
+				"C:/temp/sdk.uml",
 				"ARGO");
-		execute(loader1.getUMLModel(),loader2.getUMLModel());
-		loader2.getXmiHandler().save("C:/Documents and Settings/Garmillas/Desktop/ISO/sdk2.uml");
-
+		executeEAArgoValidation(loader1.getUMLModel(),loader2.getUMLModel());
+		loader2.getXmiHandler().save("C:/temp/sdk2.uml");
 	}
 }
