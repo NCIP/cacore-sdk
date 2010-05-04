@@ -407,7 +407,8 @@ public class DsetCdDataTypeTest extends SDKISOTestBase{
 			{
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
-				assertNotNull(data.getValue1().getNullFlavor());
+				assertNull(data.getValue1().getItem());
+				assertEquals(NullFlavor.NI, data.getValue1().getNullFlavor());
 				counter++;
 			}
 		}
@@ -568,7 +569,7 @@ public class DsetCdDataTypeTest extends SDKISOTestBase{
 				assertEquals("CODESYSTEMVERSION", item.getCodeSystemVersion());
 				assertNull(item.getDisplayName());
 				assertNull(item.getOriginalText());
-				assertEquals(NullFlavor.NI, item.getNullFlavor());
+				assertNull(item.getNullFlavor());
 				counter++;
 				continue;
 			}
@@ -588,7 +589,7 @@ public class DsetCdDataTypeTest extends SDKISOTestBase{
 				assertEquals("CODESYSTEMVERSION", item.getCodeSystemVersion());
 				assertNull(item.getDisplayName());
 				assertNull(item.getOriginalText());
-				assertEquals(NullFlavor.NI, item.getNullFlavor());
+				assertNull(item.getNullFlavor());
 				counter++;
 				continue;
 			}
@@ -608,7 +609,7 @@ public class DsetCdDataTypeTest extends SDKISOTestBase{
 				assertEquals("CODESYSTEMVERSION", item.getCodeSystemVersion());
 				assertNull(item.getDisplayName());
 				assertNull(item.getOriginalText());
-				assertEquals(NullFlavor.NI, item.getNullFlavor());
+				assertNull(item.getNullFlavor());
 				counter++;
 				continue;
 			}
@@ -628,7 +629,7 @@ public class DsetCdDataTypeTest extends SDKISOTestBase{
 				assertEquals("CODESYSTEMVERSION", item.getCodeSystemVersion());
 				assertNull(item.getDisplayName());
 				assertNull(item.getOriginalText());
-				assertEquals(NullFlavor.NI, item.getNullFlavor());
+				assertNull(item.getNullFlavor());
 				counter++;
 				continue;
 			}
@@ -648,7 +649,7 @@ public class DsetCdDataTypeTest extends SDKISOTestBase{
 				assertEquals("CODESYSTEMVERSION", item.getCodeSystemVersion());
 				assertNull(item.getDisplayName());
 				assertNull(item.getOriginalText());
-				assertEquals(NullFlavor.NI, item.getNullFlavor());
+				assertNull(item.getNullFlavor());
 				counter++;
 				continue;
 			}

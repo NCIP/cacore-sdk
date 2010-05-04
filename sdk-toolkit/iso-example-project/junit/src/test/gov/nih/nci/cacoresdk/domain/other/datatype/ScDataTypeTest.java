@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.LogicalExpression;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Property;
 import org.hibernate.criterion.Restrictions;
@@ -160,13 +161,14 @@ public class ScDataTypeTest extends SDKISOTestBase
 	public void testScValue3ByDetachedCriteria() throws ApplicationException
 	{
 		DetachedCriteria criteria = DetachedCriteria.forClass(ScDataType.class);
-		criteria.add(Restrictions.or(Property.forName("value3.value").isNotNull(), Property.forName("value3.code.code").isNotNull()));
+		LogicalExpression exp1 = Restrictions.or(Property.forName("value3.value").isNotNull(), Property.forName("value3.code.code").isNotNull());
+		criteria.add(Restrictions.or(Property.forName("value3.nullFlavor").isNotNull(), exp1));
 		criteria.addOrder(Order.asc("id"));
 
 		Collection<ScDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.ScDataType");
-		assertEquals(10, result.size());
+		assertEquals(11, result.size());
 		List index = new ArrayList();
-		//index.add("13");
+		index.add("13");
 		index.add("14");
 		index.add("15");
 		index.add("16");
@@ -188,11 +190,11 @@ public class ScDataTypeTest extends SDKISOTestBase
 	@SuppressWarnings("unchecked")
 	public void testScValue3ByHQLCriteria() throws ApplicationException
 	{
-		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.ScDataType a where (a.value3.code.code is not null or a.value3.value is not null) order by a.id asc asc");
+		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.ScDataType a where (a.value3.code.code is not null or a.value3.value is not null or a.value3.nullFlavor is not null) order by a.id asc asc");
 		Collection<ScDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.ScDataType");
-		assertEquals(10, result.size());
+		assertEquals(11, result.size());
 		List index = new ArrayList();
-		//index.add("13");
+		index.add("13");
 		index.add("14");
 		index.add("15");
 		index.add("16");
@@ -321,6 +323,7 @@ public class ScDataTypeTest extends SDKISOTestBase
 				assertNull(data.getValue1().getCode());
 				assertNull(data.getValue1().getValue());
 				assertNotNull(data.getValue1().getNullFlavor());
+				assertEquals(NullFlavor.NA, data.getValue1().getNullFlavor());
 				//assertValue1Constants(data);
 				counter++;
 			}
@@ -329,7 +332,6 @@ public class ScDataTypeTest extends SDKISOTestBase
 
 	private void assertValue1Constants(ScDataType data)
 	{
-		//Local constant overriding global constant
 		assertNull(data.getValue1().getNullFlavor());
 		
 		//Global constant
@@ -338,10 +340,8 @@ public class ScDataTypeTest extends SDKISOTestBase
 		assertEquals("SC CD Code System Name", data.getValue1().getCode().getCodeSystemName());
 		//Global constant
 		assertEquals("1.1 HF2", data.getValue1().getCode().getCodeSystemVersion());
-		assertNotNull(data.getValue1().getCode().getOriginalText());
-		assertNotNull(data.getValue1().getCode().getOriginalText().getNullFlavor());
-		assertNotNull(data.getValue1().getCode().getDisplayName());
-		assertNotNull(data.getValue1().getCode().getDisplayName().getNullFlavor());
+		assertNull(data.getValue1().getCode().getOriginalText());
+		assertNull(data.getValue1().getCode().getDisplayName());
 	}
 	
 	private void assertValue2(Collection<ScDataType> result, List<Integer> index)
@@ -359,7 +359,6 @@ public class ScDataTypeTest extends SDKISOTestBase
 
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
-				assertNotNull(data.getValue2().getCode());
 				
 				//From database, overriding global constant
 				assertEquals(NullFlavor.UNK, data.getValue2().getNullFlavor());
@@ -499,19 +498,7 @@ public class ScDataTypeTest extends SDKISOTestBase
 			else
 			{
 				assertNotNull(data);
-				assertNotNull(data.getValue2());
-				assertNotNull(data.getValue2().getCode());
-				assertNull(data.getValue2().getNullFlavor());
-				//Global constant
-				assertEquals("CD Code System", data.getValue2().getCode().getCodeSystem());
-				//Global constant
-				assertEquals("SC CD Code System Name", data.getValue2().getCode().getCodeSystemName());
-				//Global constant
-				assertEquals("1.1 HF2", data.getValue2().getCode().getCodeSystemVersion());
-				assertNull(data.getValue2().getCode().getCode());
-				assertNotNull(data.getValue2().getCode().getDisplayName());
-				assertNull(data.getValue2().getCode().getOriginalText());
-				assertNull(data.getValue2().getCode().getDisplayName());
+				assertNull(data.getValue2());
 				counter++;
 			}
 		}
@@ -524,7 +511,7 @@ public class ScDataTypeTest extends SDKISOTestBase
 		int counter = 1;
 		for(ScDataType data : result)
 		{
-			//Validate 7th record
+			//Validate 1st record
 			if((index == null && counter == 13) || (index != null && index.contains("13")))
 			{
 				if(index != null) 
@@ -532,16 +519,15 @@ public class ScDataTypeTest extends SDKISOTestBase
 
 				assertNotNull(data);
 				assertNotNull(data.getValue3());
-				assertNotNull(data.getValue3().getCode());
+				assertNull(data.getValue3().getCode());
 				
 				assertEquals(NullFlavor.NI, data.getValue3().getNullFlavor());
 				assertNull(data.getValue3().getValue());
-				assertNull(data.getValue3().getCode());
 
 				counter++;
 				continue;
 			}
-			//Validate 8th record
+			//Validate 2nd record
 			else if((index == null && counter == 14) || (index != null && index.contains("14")))
 			{
 				if(index != null) 
@@ -557,14 +543,14 @@ public class ScDataTypeTest extends SDKISOTestBase
 				assertEquals("VALUE3_CODE_CODE_SYSTEM1", data.getValue3().getCode().getCodeSystem());
 				assertNull(data.getValue3().getCode().getCodeSystemName());
 				assertNull(data.getValue3().getCode().getCodeSystemVersion());
-				assertNull(data.getValue3().getCode().getOriginalText());
-				//assertNotNull(data.getValue3().getCode().getOriginalText().getNullFlavor());
+				assertNotNull(data.getValue3().getCode().getOriginalText());
+				assertNull(data.getValue3().getCode().getOriginalText().getNullFlavor());
 				assertNull(data.getValue3().getCode().getDisplayName());
 				
 				counter++;
 				continue;
 			}
-			//Validate 9th record
+			//Validate 3rd record
 			else if((index == null && counter == 15) || (index != null && index.contains("15")))
 			{
 				if(index != null) 
@@ -586,7 +572,7 @@ public class ScDataTypeTest extends SDKISOTestBase
 				counter++;
 				continue;
 			}
-			//Validate 10th record
+			//Validate 4th record
 			else if((index == null && counter == 16) || (index != null && index.contains("16")))
 			{
 				if(index != null) 
@@ -610,7 +596,7 @@ public class ScDataTypeTest extends SDKISOTestBase
 				counter++;
 				continue;
 			}
-			//Validate 11th record
+			//Validate 5th record
 			else if((index == null && counter == 17) || (index != null && index.contains("17")))
 			{
 				if(index != null) 
@@ -635,7 +621,7 @@ public class ScDataTypeTest extends SDKISOTestBase
 				counter++;
 				continue;
 			}
-			//Validate 12th record
+			//Validate 6th record
 			else if((index == null && counter == 18) || (index != null && index.contains("18")))
 			{
 				if(index != null) 
@@ -659,7 +645,7 @@ public class ScDataTypeTest extends SDKISOTestBase
 				counter++;
 				continue;
 			}
-			//Validate 12th record
+			//Validate 7th record
 			else if((index == null && counter == 19) || (index != null && index.contains("19")))
 			{
 				if(index != null) 
@@ -683,7 +669,7 @@ public class ScDataTypeTest extends SDKISOTestBase
 				counter++;
 				continue;
 			}
-			//Validate 12th record
+			//Validate 8th record
 			else if((index == null && counter == 20) || (index != null && index.contains("20")))
 			{
 				if(index != null) 
@@ -707,7 +693,7 @@ public class ScDataTypeTest extends SDKISOTestBase
 				counter++;
 				continue;
 			}
-			//Validate 12th record
+			//Validate 9th record
 			else if((index == null && counter == 21) || (index != null && index.contains("21")))
 			{
 				if(index != null) 
@@ -733,7 +719,7 @@ public class ScDataTypeTest extends SDKISOTestBase
 				counter++;
 				continue;
 			}
-			//Validate 12th record
+			//Validate 10th record
 			else if((index == null && counter == 22) || (index != null && index.contains("22")))
 			{
 				if(index != null) 
@@ -760,7 +746,7 @@ public class ScDataTypeTest extends SDKISOTestBase
 				counter++;
 				continue;
 			}
-			//Validate 12th record
+			//Validate 11th record
 			else if((index == null && counter == 23) || (index != null && index.contains("23")))
 			{
 				if(index != null) 
@@ -793,11 +779,7 @@ public class ScDataTypeTest extends SDKISOTestBase
 			else
 			{
 				assertNotNull(data);
-				assertNotNull(data.getValue3());
-				//Global constant
-				assertEquals(NullFlavor.NI, data.getValue3().getCode().getNullFlavor());
-				assertNull(data.getValue3().getCode());
-				assertNull(data.getValue3().getValue());
+				assertNull(data.getValue3());
 				counter++;
 			}
 		}

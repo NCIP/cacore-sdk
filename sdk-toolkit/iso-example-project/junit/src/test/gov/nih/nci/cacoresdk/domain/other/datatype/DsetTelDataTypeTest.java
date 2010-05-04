@@ -294,7 +294,7 @@ public class DsetTelDataTypeTest extends SDKISOTestBase
 			{
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
-				assertNotNull(data.getValue1().getNullFlavor());
+				assertNull(data.getValue1().getNullFlavor());
 				counter++;
 			}
 		}
