@@ -908,24 +908,18 @@
 		</if>
 	</target>
 	<target name="-package-local-client-iso-datatype" depends="">
-		<if>
-			<equals arg1="${ISO21090_DATATYPES_ENABLED}" arg2="true" />
-			<then>
-				<echo message="ISO datatypes enabled" />
-				<copy todir="${package.client.local.lib.dir}">
-					<fileset dir="${runtime.lib.dir}">
-						<include name="iso-datatypes-*.jar"/>
-					</fileset>
-				</copy>
-				
-				<copy todir="${package.client.local.conf.dir}">
-					<fileset dir="${output.src.dir}">
-						<include name="IsoConstants.xml"/>
-					</fileset>					
-				</copy>
-				<echo message="ISO datatypes enabled - Copy Complete" />
-			</then>
-		</if>
+		<echo message="ISO datatypes enabled" />
+		<copy todir="${package.client.local.lib.dir}">
+			<fileset dir="${runtime.lib.dir}">
+				<include name="iso-datatypes-*.jar"/>
+			</fileset>
+		</copy>
+		<copy todir="${package.client.local.conf.dir}">
+			<fileset dir="${output.src.dir}">
+				<include name="IsoConstants.xml"/>
+			</fileset>					
+		</copy>
+		<echo message="ISO datatypes enabled - Copy Complete" />
 	</target>
 
 	<!-- #################################################################### -->
@@ -1123,19 +1117,14 @@
 		</if>
 	</target>
 	<target name="-package-remote-client-iso-datatype" depends="">
-		<if>
-			<equals arg1="${ISO21090_DATATYPES_ENABLED}" arg2="true" />
-			<then>
-				<echo message="ISO datatypes enabled" />
-				<copy todir="${package.client.remote.lib.dir}">
-					<fileset dir="${runtime.lib.dir}">
-						<include name="iso-datatypes-*.jar"/>
-						<exclude name="iso-datatypes-hibernate*.jar" />
-					</fileset>
-				</copy>			
-				<echo message="ISO datatypes enabled - Copy Complete" />
-			</then>
-		</if>
+		<echo message="ISO datatypes enabled" />
+		<copy todir="${package.client.remote.lib.dir}">
+			<fileset dir="${runtime.lib.dir}">
+				<include name="iso-datatypes-*.jar"/>
+				<exclude name="iso-datatypes-hibernate*.jar" />
+			</fileset>
+		</copy>			
+		<echo message="ISO datatypes enabled - Copy Complete" />
 	</target>	
 
 	<!-- #################################################################### -->
@@ -1243,18 +1232,13 @@
 				</copy>
 			</then>
 		</if>
-		<if>
-			<equals arg1="${ISO21090_DATATYPES_ENABLED}" arg2="true" />
-			<then>
-				<echo message="ISO21090 Datatypes are enabled.  Copying ISO Datatype related jar files to web app staging lib" />
-				<copy todir="${temp.webapp.staging.lib.dir}" overwrite="true">
-					<fileset dir="${runtime.lib.dir}">
-						<include name="iso-datatypes-*.jar"/>
-						<exclude name="iso-datatypes-extensions*.jar" />
-					</fileset>
-				</copy>
-			</then>
-		</if>
+		<echo message="ISO21090 Datatypes are enabled.  Copying ISO Datatype related jar files to web app staging lib" />
+		<copy todir="${temp.webapp.staging.lib.dir}" overwrite="true">
+			<fileset dir="${runtime.lib.dir}">
+				<include name="iso-datatypes-*.jar"/>
+				<exclude name="iso-datatypes-extensions*.jar" />
+			</fileset>
+		</copy>
 		<if>
 			<equals arg1="${USE_CONNECTION_POOL}" arg2="true" />
 			<then>
@@ -1367,16 +1351,11 @@
 				</copy>
 			</then>
 		</if>
-		<if>
-			<equals arg1="${ISO21090_DATATYPES_ENABLED}" arg2="true" />
-			<then>
-				<copy todir="${temp.webapp.staging.classes.dir}">
-					<fileset dir="${output.src.dir}">
-						<include name="IsoConstants.xml"/>
-					</fileset>
-				</copy>
-			</then>
-		</if>
+		<copy todir="${temp.webapp.staging.classes.dir}">
+			<fileset dir="${output.src.dir}">
+				<include name="IsoConstants.xml"/>
+			</fileset>
+		</copy>
 	</target>
 
 	<target name="-build-project-war" depends="-staging-war">
