@@ -487,6 +487,15 @@
 		<mkdir dir="${src.javadoc.dir}" />
 	</target>
 
+	<target name="-copy-iso-constants-template-file" depends="">
+		<copy todir="${output.src.dir}">
+			<fileset dir="${codegen.config.dir}">
+				<include name="IsoConstants-*.xml" />
+			</fileset>
+			<globmapper from="*-template.xml" to="*.xml" />
+		</copy>
+	</target>
+
 	<target name="-compile:application-code" depends="-init,-generate-codegen" description="Compiles all subproject code">
 		<mkdir dir="${build.classes.dir}" />
 		<javac srcdir="${src.java.dir}" destdir="${build.classes.dir}" debug="true">
@@ -543,7 +552,7 @@
 	</target>
 
 
-	<target name="-generate-codegen" depends="replacetoken-contents,-generate-codegen-validator" description="Runs the Code Generator">
+	<target name="-generate-codegen" depends="replacetoken-contents,-copy-iso-constants-template-file,-generate-codegen-validator" description="Runs the Code Generator">
 		<echo>${ant.project.name}: Running the Code Generator</echo>
 		<fail unless="IDENTITY_GENERATOR_TAG">IDENTITY_GENERATOR property must be set in codegen.properties</fail>
 		<java classname="gov.nih.nci.codegen.Generator" failonerror="true" fork="true" >
