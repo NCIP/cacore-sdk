@@ -298,7 +298,7 @@ public abstract class SDKXMLDataTestBase extends TestCase {
 	 * 
 	 * @throws Exception
 	 */
-	protected void validateAssociation(Object resultObj, String associatedKlassName, String roleName)
+	protected void validateAssociation(Object resultObj, String associatedKlassName, String roleName, boolean hasWrapperElement)
 	throws Exception {
 		
 //		log.debug("Validating Class association from: " + filepathPrefix + resultObj.getClass().getSimpleName() + filepathSuffix);
@@ -314,11 +314,14 @@ public abstract class SDKXMLDataTestBase extends TestCase {
 		assertNotNull(roleNameElt);
 		assertEquals(roleNameElt.getName(),roleName);
 		
-		children = roleNameElt.getChildren();
-		assertNotNull(children);
-
-		Element associatedKlassElt = locateChild(children,associatedKlassName);
-		assertNotNull(associatedKlassElt);
+		if(hasWrapperElement)
+		{
+			children = roleNameElt.getChildren();
+			assertNotNull(children);
+	
+			Element associatedKlassElt = locateChild(children,associatedKlassName);
+			assertNotNull(associatedKlassElt);
+		}
 	}
 	
 	/**
