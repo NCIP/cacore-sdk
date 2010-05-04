@@ -215,14 +215,14 @@ public class O2OMultipleAssociationWJoinXMLDataTest extends SDKXMLDataTestBase
 			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getName());
 			
-			validateAssociation(result,"InLaw","father");			
+			validateAssociation(result,"InLaw","father", false);			
 			
 			fatherInLaw = result2.getFather();
 			assertNotNull(fatherInLaw);
 			assertNotNull(fatherInLaw.getId());
 			assertNotNull(fatherInLaw.getName());
 			
-			validateAssociation(result,"InLaw","mother");
+			validateAssociation(result,"InLaw","mother", false);
 			
 			motherInLaw = result2.getMother();
 			assertNotNull(motherInLaw);
@@ -254,14 +254,14 @@ public class O2OMultipleAssociationWJoinXMLDataTest extends SDKXMLDataTestBase
 			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getName());
 
-			validateAssociation(result, "InLaw", "father");
+			validateAssociation(result, "InLaw", "father", false);
 
 			fatherInLaw = result2.getFather();
 			assertNotNull(fatherInLaw);
 			assertNotNull(fatherInLaw.getId());
 			assertNotNull(fatherInLaw.getName());
 
-			validateAssociation(result, "InLaw", "mother");
+			validateAssociation(result, "InLaw", "mother", false);
 
 			motherInLaw = result2.getMother();
 			assertNotNull(motherInLaw);
