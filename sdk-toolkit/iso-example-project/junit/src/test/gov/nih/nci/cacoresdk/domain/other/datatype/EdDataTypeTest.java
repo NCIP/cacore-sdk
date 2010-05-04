@@ -12,6 +12,7 @@ import java.util.List;
 
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.LogicalExpression;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Property;
 import org.hibernate.criterion.Restrictions;
 
@@ -76,11 +77,11 @@ public class EdDataTypeTest extends SDKISOTestBase{
 		assertNotNull(result);
 		assertEquals(5, result.size());
 		List indexList = new ArrayList();
-		indexList.add("1");
 		indexList.add("2");
 		indexList.add("3");
 		indexList.add("4");
 		indexList.add("5");
+		indexList.add("6");
 		assertValue1(result, indexList);
 	}
 
@@ -96,11 +97,11 @@ public class EdDataTypeTest extends SDKISOTestBase{
 		Collection<EdDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.EdDataType");
 		assertEquals(5, result.size());
 		List indexList = new ArrayList();
-		indexList.add("1");
 		indexList.add("2");
 		indexList.add("3");
 		indexList.add("4");
 		indexList.add("5");
+		indexList.add("6");
 		assertValue1(result, indexList);
 	}
 
@@ -119,11 +120,11 @@ public class EdDataTypeTest extends SDKISOTestBase{
 		assertNotNull(result);
 		assertEquals(5, result.size());
 		List indexList = new ArrayList();
-		indexList.add("6");
 		indexList.add("7");
 		indexList.add("8");
 		indexList.add("9");
 		indexList.add("10");
+		indexList.add("11");
 		assertValue2(result, indexList);
 	}
 
@@ -139,11 +140,11 @@ public class EdDataTypeTest extends SDKISOTestBase{
 		Collection<EdDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.EdDataType");
 		assertEquals(5, result.size());
 		List indexList = new ArrayList();
-		indexList.add("6");
 		indexList.add("7");
 		indexList.add("8");
 		indexList.add("9");
 		indexList.add("10");
+		indexList.add("11");
 		assertValue2(result, indexList);
 	}
 
@@ -159,16 +160,17 @@ public class EdDataTypeTest extends SDKISOTestBase{
 		LogicalExpression exp1 = Restrictions.or(Property.forName("value3.data").isNotNull(), Property.forName("value3.nullFlavor").isNotNull());
 		LogicalExpression exp2 = Restrictions.or(Property.forName("value3.value").isNotNull(), Property.forName("value3.compression").isNotNull()); 
 		criteria.add(Restrictions.or(exp1, exp2));
+		criteria.addOrder(Order.asc("id"));
 
 		Collection<EdDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.EdDataType");
 		assertNotNull(result);
 		assertEquals(5, result.size());
 		List indexList = new ArrayList();
-		indexList.add("11");
 		indexList.add("12");
 		indexList.add("13");
 		indexList.add("14");
 		indexList.add("15");
+		indexList.add("16");
 		assertValue3(result, indexList);
 	}
 
@@ -184,11 +186,11 @@ public class EdDataTypeTest extends SDKISOTestBase{
 		Collection<EdDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.EdDataType");
 		assertEquals(5, result.size());
 		List indexList = new ArrayList();
-		indexList.add("11");
 		indexList.add("12");
 		indexList.add("13");
 		indexList.add("14");
 		indexList.add("15");
+		indexList.add("16");
 		assertValue3(result, indexList);
 	}
 	
@@ -215,10 +217,10 @@ public class EdDataTypeTest extends SDKISOTestBase{
 		for(EdDataType data : result)
 		{
 			//Validate 1st record
-			if((index == null && counter == 1) || (index != null && index.contains("1")))
+			if((index == null && counter == 2) || (index != null && index.contains("2")))
 			{
 				if(index != null) 
-					index.remove("1");
+					index.remove("2");
 				
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
@@ -234,10 +236,10 @@ public class EdDataTypeTest extends SDKISOTestBase{
 				continue;
 			}
 			//Validate 2nd record
-			else if((index == null && counter == 2) || (index != null && index.contains("2")))
+			else if((index == null && counter == 3) || (index != null && index.contains("3")))
 			{
 				if(index != null) 
-					index.remove("2");
+					index.remove("3");
 
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
@@ -252,10 +254,10 @@ public class EdDataTypeTest extends SDKISOTestBase{
 				continue;
 			}
 			//Validate 3rd record
-			else if((index == null && counter == 3) || (index != null && index.contains("3")))
+			else if((index == null && counter == 4) || (index != null && index.contains("4")))
 			{
 				if(index != null) 
-					index.remove("3");
+					index.remove("4");
 
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
@@ -270,10 +272,10 @@ public class EdDataTypeTest extends SDKISOTestBase{
 				continue;
 			}
 			//Validate 4th record
-			else if((index == null && counter == 4) || (index != null && index.contains("4")))
+			else if((index == null && counter == 5) || (index != null && index.contains("5")))
 			{
 				if(index != null) 
-					index.remove("4");
+					index.remove("5");
 
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
@@ -288,10 +290,10 @@ public class EdDataTypeTest extends SDKISOTestBase{
 				continue;
 			}
 			//Validate 5th record
-			else if((index == null && counter == 5) || (index != null && index.contains("5")))
+			else if((index == null && counter == 6) || (index != null && index.contains("6")))
 			{
 				if(index != null) 
-					index.remove("5");
+					index.remove("6");
 
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
@@ -328,11 +330,11 @@ public class EdDataTypeTest extends SDKISOTestBase{
 		int counter = 1;
 		for(EdDataType data : result)
 		{
-			//Validate 6th record
-			if((index == null && counter == 6) || (index != null && index.contains("6")))
+			//Validate 7th record
+			if((index == null && counter == 7) || (index != null && index.contains("7")))
 			{
 				if(index != null) 
-					index.remove("6");
+					index.remove("7");
 
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
@@ -345,24 +347,6 @@ public class EdDataTypeTest extends SDKISOTestBase{
 				counter++;
 				continue;
 			}
-			//Validate 7th record
-			else if((index == null && counter == 7) || (index != null && index.contains("7")))
-			{
-				if(index != null) 
-					index.remove("7");
-
-				assertNotNull(data);
-				assertNotNull(data.getValue2());
-				byte[] bytes = {1,1,0,1,0,1,0,1,0,0,1};
-				org.junit.Assert.assertArrayEquals(bytes, data.getValue2().getData());
-				
-				assertNull(data.getValue2().getCompression());
-				assertNull(data.getValue2().getValue());
-				assertNull(data.getValue2().getDescription());
-				assertNull(data.getValue2().getNullFlavor());
-				counter++;
-				continue;
-			}
 			//Validate 8th record
 			else if((index == null && counter == 8) || (index != null && index.contains("8")))
 			{
@@ -371,7 +355,8 @@ public class EdDataTypeTest extends SDKISOTestBase{
 
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
-				assertNotNull(data.getValue2().getData());
+				byte[] bytes = {1,1,0,1,0,1,0,1,0,0,1};
+				org.junit.Assert.assertArrayEquals(bytes, data.getValue2().getData());
 				
 				assertNull(data.getValue2().getCompression());
 				assertNull(data.getValue2().getValue());
@@ -390,7 +375,7 @@ public class EdDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data.getValue2());
 				assertNotNull(data.getValue2().getData());
 				
-				assertEquals(Compression.GZ, data.getValue2().getCompression());
+				assertNull(data.getValue2().getCompression());
 				assertNull(data.getValue2().getValue());
 				assertNull(data.getValue2().getDescription());
 				assertNull(data.getValue2().getNullFlavor());
@@ -402,6 +387,23 @@ public class EdDataTypeTest extends SDKISOTestBase{
 			{
 				if(index != null) 
 					index.remove("10");
+
+				assertNotNull(data);
+				assertNotNull(data.getValue2());
+				assertNotNull(data.getValue2().getData());
+				
+				assertEquals(Compression.GZ, data.getValue2().getCompression());
+				assertNull(data.getValue2().getValue());
+				assertNull(data.getValue2().getDescription());
+				assertNull(data.getValue2().getNullFlavor());
+				counter++;
+				continue;
+			}
+			//Validate 10th record
+			else if((index == null && counter == 11) || (index != null && index.contains("11")))
+			{
+				if(index != null) 
+					index.remove("11");
 
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
@@ -438,11 +440,11 @@ public class EdDataTypeTest extends SDKISOTestBase{
 		int counter = 1;
 		for(EdDataType data : result)
 		{
-			//Validate 11th record
-			if((index == null && counter == 11) || (index != null && index.contains("11")))
+			//Validate 12th record
+			if((index == null && counter == 12) || (index != null && index.contains("12")))
 			{
 				if(index != null) 
-					index.remove("11");
+					index.remove("12");
 
 				assertNotNull(data);
 				assertNotNull(data.getValue3());
@@ -450,25 +452,9 @@ public class EdDataTypeTest extends SDKISOTestBase{
 				assertNull(data.getValue3().getData());
 				assertEquals(Compression.GZ, data.getValue3().getCompression());
 				assertNull(data.getValue3().getValue());
-				assertNull(data.getValue3().getDescription());
+				assertNotNull(data.getValue3().getDescription());
+				assertEquals(NullFlavor.NI, data.getValue3().getDescription().getNullFlavor());
 				assertNull(data.getValue3().getNullFlavor());
-				counter++;
-				continue;
-			}
-			//Validate 12th record
-			else if((index == null && counter == 12) || (index != null && index.contains("12")))
-			{
-				if(index != null) 
-					index.remove("12");
-
-				assertNotNull(data);
-				assertNotNull(data.getValue3());
-				assertNotNull(data.getValue3().getData());
-				
-				assertNull(data.getValue3().getCompression());
-				assertNull(data.getValue3().getValue());
-				assertNull(data.getValue3().getDescription());
-				assertEquals(NullFlavor.NI, data.getValue3().getNullFlavor());
 				counter++;
 				continue;
 			}
@@ -480,7 +466,7 @@ public class EdDataTypeTest extends SDKISOTestBase{
 
 				assertNotNull(data);
 				assertNotNull(data.getValue3());
-				assertNotNull(data.getValue3().getData());
+				assertNull(data.getValue3().getData());
 				
 				assertEquals(Compression.GZ, data.getValue3().getCompression());
 				assertNull(data.getValue3().getValue());
@@ -501,7 +487,8 @@ public class EdDataTypeTest extends SDKISOTestBase{
 				
 				assertEquals(Compression.GZ, data.getValue3().getCompression());
 				assertNull(data.getValue3().getValue());
-				assertEquals("DESCRIPTION", data.getValue3().getDescription().getValue());
+				assertNotNull(data.getValue3().getDescription());
+				assertEquals(NullFlavor.NI, data.getValue3().getDescription().getNullFlavor());
 				assertNull(data.getValue3().getNullFlavor());
 				counter++;
 				continue;
@@ -511,6 +498,23 @@ public class EdDataTypeTest extends SDKISOTestBase{
 			{
 				if(index != null) 
 					index.remove("15");
+
+				assertNotNull(data);
+				assertNotNull(data.getValue3());
+				assertNotNull(data.getValue3().getData());
+				
+				assertEquals(Compression.GZ, data.getValue3().getCompression());
+				assertNull(data.getValue3().getValue());
+				assertEquals("DESCRIPTION", data.getValue3().getDescription().getValue());
+				assertNull(data.getValue3().getNullFlavor());
+				counter++;
+				continue;
+			}
+			//Validate 16th record
+			else if((index == null && counter == 16) || (index != null && index.contains("16")))
+			{
+				if(index != null) 
+					index.remove("16");
 
 				assertNotNull(data);
 				assertNotNull(data.getValue3());

@@ -526,8 +526,6 @@ public class CdDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 				assertNull(data.getValue2().getCode());
-				
-				assertValue2Constants(data);
 				assertNull(data.getValue2().getNullFlavor());
 				counter++;
 			}

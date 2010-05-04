@@ -420,11 +420,11 @@ public class DsetIiDataTypeTest extends SDKISOTestBase{
 			{
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
-				assertNotNull(data.getValue1().getNullFlavor());
+				assertNotNull(data.getValue1().getItem());
 				Ii item = data.getValue1().getItem().iterator().next();
 				assertNotNull(item);
 				assertNull(item.getNullFlavor());
-				//Local constant
+				//global constant
 				assertEquals("2.16.12.123.456.1", item.getRoot());
 	
 				assertNull(item.getExtension());
