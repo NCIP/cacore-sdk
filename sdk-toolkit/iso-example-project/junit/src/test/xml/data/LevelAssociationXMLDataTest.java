@@ -217,7 +217,7 @@ public class LevelAssociationXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(result2.getId().getExtension());   
 		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 
-		validateAssociation(card, "Suit", "suit");
+		validateAssociation(card, "Suit", "suit", false);
 
 		Suit suit = result2.getSuit();
 		assertNotNull(suit);

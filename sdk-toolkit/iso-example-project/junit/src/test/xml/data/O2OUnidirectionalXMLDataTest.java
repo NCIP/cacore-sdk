@@ -239,7 +239,7 @@ public class O2OUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 			
 			if (new Integer(result2.getId().getExtension()) < 4){//Person id=1,2,3 have an associated Address; the others don't
 				
-				validateAssociation(result,"Address","livesAt");
+				validateAssociation(result,"Address","livesAt", false);
 				
 				address = result2.getLivesAt();
 				assertNotNull(address);
@@ -269,7 +269,7 @@ public class O2OUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 			assertNotNull(result2.getName());
 
 			if (new Integer(result2.getId().getExtension()) < 4) {//Person id=1,2,3 have an associated Address; the others don't
-				validateAssociation(result, "Address", "livesAt");
+				validateAssociation(result, "Address", "livesAt", false);
 				address = result2.getLivesAt();
 				assertNotNull(address);
 				assertNotNull(address.getId());

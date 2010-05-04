@@ -115,7 +115,7 @@ public class AllDataTypeXMLDataTest extends SDKXMLDataTestBase
 			AllDataType result2 = (AllDataType)fromXML(result);
 			
 			if (result2.getId()==1)
-				validateAssociation(result,"string","stringCollection");
+				validateAssociation(result,"string","stringCollection", true);
 
 			validateObject(result2);
 		}

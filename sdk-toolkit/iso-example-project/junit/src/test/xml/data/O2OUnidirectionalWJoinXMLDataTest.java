@@ -263,7 +263,7 @@ public class O2OUnidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 			assertNotNull(result2.getStyle());
 			
 			if (new Integer(result2.getId().getExtension()) < 11){
-				validateAssociation(result,"Handle","handle");
+				validateAssociation(result,"Handle","handle", false);
 				handle = result2.getHandle();
 				assertNotNull(handle);
 				assertNotNull(handle.getId());

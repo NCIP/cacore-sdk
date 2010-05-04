@@ -404,7 +404,7 @@ public class O2OBidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 			
 			if (new Integer(result2.getId().getExtension()) != 3){ // Pendant id = 3 does not have an associated Chain	
 				
-				validateAssociation(result,"Chain","chain");
+				validateAssociation(result,"Chain","chain", false);
 				
 				chain = result2.getChain();
 				assertNotNull(chain);
@@ -437,7 +437,7 @@ public class O2OBidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 			
 			if (new Integer(result2.getId().getExtension()) != 3){ // Chain id = 3 does not have an associated Pendant
 				
-				validateAssociation(result,"Pendant","pendant");
+				validateAssociation(result,"Pendant","pendant", false);
 				
 				pendant = result2.getPendant();
 				assertNotNull(pendant);

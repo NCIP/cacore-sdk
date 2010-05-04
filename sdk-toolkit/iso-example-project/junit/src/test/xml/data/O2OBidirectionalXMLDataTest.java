@@ -402,7 +402,7 @@ public class O2OBidirectionalXMLDataTest extends SDKXMLDataTestBase
 			assertNotNull(result2.getName());
 			
 			if (new Integer(result2.getId().getExtension()) < 3){ // Product id = 3 does not have an associated Orderline	
-				validateAssociation(result,"OrderLine","line");
+				validateAssociation(result,"OrderLine","line", false);
 				line = result2.getLine();
 				assertNotNull(line);
 				assertNotNull(line.getId());
@@ -432,7 +432,7 @@ public class O2OBidirectionalXMLDataTest extends SDKXMLDataTestBase
 			assertNotNull(result2.getName());
 			
 			if (new Integer(result2.getId().getExtension()) < 3){ // OrderLine id = 3,4, and 5 don't have an associated Product
-				validateAssociation(result,"Product","product");
+				validateAssociation(result,"Product","product", false);
 				product = result2.getProduct();
 				assertNotNull(product);
 				assertNotNull(product.getId());
