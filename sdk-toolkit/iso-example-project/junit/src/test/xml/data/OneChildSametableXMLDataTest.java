@@ -76,9 +76,9 @@ public class OneChildSametableXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			validateAttribute(result,"id",result.getId().getExtension());
-			validateAttribute(result,"country",result.getCountry());
-			validateAttribute(result,"value",result.getValue());
+			validateIso90210Element(result, "id", "extension", result.getId().getExtension());
+			validateIso90210Element(result, "country", "value", result.getCountry().getValue());
+			validateIso90210Element(result, "value", "value", result.getValue().getValue());
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
