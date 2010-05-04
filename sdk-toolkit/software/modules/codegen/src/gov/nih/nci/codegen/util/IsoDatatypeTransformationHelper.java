@@ -419,7 +419,7 @@ public class IsoDatatypeTransformationHelper
 		if("date".equals(isoType))
 			propertyType = "java.util.Date";
 		if("ENXP_qualifier".equals(isoType))
-			propertyType = "string";
+			propertyType = "gov.nih.nci.iso21090.hibernate.usertype.EntityPartNameQualifierUserType";
 		
 		if(propertyType == null)
 			throw new GenerationException("Can not determine Hibernate Type for corresponding ISO Datatype:"+isoType);
@@ -674,6 +674,8 @@ public class IsoDatatypeTransformationHelper
 				newNode.setColumnName(nodeValue);
 				currentNode.addInnerNode(newNode);
 			} else {
+				if(addGlobalConstantFlag && isInvalidConstantMapping(currentNode,nodePath[nodePath.length - 1]))
+					return;
 				ConstantNode newNode = new ConstantNode(nodePath[nodePath.length - 1]);
 				newNode.setConstantValue(nodeValue);
 				currentNode.addInnerNode(newNode);
@@ -681,6 +683,14 @@ public class IsoDatatypeTransformationHelper
 		}
 	}
 
+	private boolean isInvalidConstantMapping(ComplexNode complexNode, String childNodeName)
+	{
+		if((utils.ISO_ROOT_PACKAGE_NAME+".ED.TEXT").equals(complexNode.getIsoClassName()) && "compression".equals(childNodeName))
+			return true;
+		if((utils.ISO_ROOT_PACKAGE_NAME+".BL.NONNULL").equals(complexNode.getIsoClassName()) && "nullFlavor".equals(childNodeName))
+			return true;
+		return false;
+	}
 	
 	/**
 	 * Traverses the graph and attaches the property type to the graph nodes
