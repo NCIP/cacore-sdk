@@ -8,7 +8,9 @@ import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Property;
@@ -468,9 +470,8 @@ public class EnDataTypeTest extends SDKISOTestBase{
 			{
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
-				assertNotNull(data.getValue1().getPart());
-				assertNull(data.getValue1().getPart().get(0).getValue());
-				assertValue1Constants(data);
+				assertEquals(NullFlavor.NA, data.getValue1().getNullFlavor());
+				assertNull(data.getValue1().getPart());
 				counter++;
 			}
 		}
@@ -715,6 +716,7 @@ public class EnDataTypeTest extends SDKISOTestBase{
 		assertNull(data.getValue3().getNullFlavor());
 	}
 	
+	@SuppressWarnings("unchecked")
 	private void assertValue4(Collection<EnDataType> result, List<Integer> index)
 	{
 		assertNotNull(result);
@@ -750,7 +752,9 @@ public class EnDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data.getValue4().getPart());
 
 				assertNull(data.getValue4().getPart().get(0).getValue());
-				assertEquals(EntityNamePartQualifier.BR, data.getValue4().getPart().get(0).getQualifier());
+				Set qSet = new HashSet();
+				qSet.add(EntityNamePartQualifier.BR);
+				assertEquals(qSet, data.getValue4().getPart().get(0).getQualifier());
 				assertValue4Constants(data);
 
 				counter++;
@@ -767,7 +771,9 @@ public class EnDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data.getValue4().getPart());
 				
 				assertEquals("VALUE4_PN_VALUE3", data.getValue4().getPart().get(0).getValue());
-				assertEquals(EntityNamePartQualifier.BR, data.getValue4().getPart().get(0).getQualifier());
+				Set qSet = new HashSet();
+				qSet.add(EntityNamePartQualifier.BR);
+				assertEquals(qSet, data.getValue4().getPart().get(0).getQualifier());
 				assertValue4Constants(data);
 				counter++;
 				continue;
@@ -783,7 +789,9 @@ public class EnDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data.getValue4().getPart());
 				
 				assertEquals("VALUE4_PN_VALUE4", data.getValue4().getPart().get(0).getValue());
-				assertEquals(EntityNamePartQualifier.BR, data.getValue4().getPart().get(0).getQualifier());
+				Set qSet = new HashSet();
+				qSet.add(EntityNamePartQualifier.BR);
+				assertEquals(qSet, data.getValue4().getPart().get(0).getQualifier());
 				assertValue4Constants(data);
 				counter++;
 				continue;
@@ -798,8 +806,12 @@ public class EnDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data.getValue4());
 				assertNotNull(data.getValue4().getPart());
 				
-				assertEquals("VALUE4_PN_VALUE3", data.getValue4().getPart().get(0).getValue());
-				assertNotSame(EntityNamePartQualifier.BR, data.getValue4().getPart().get(0).getQualifier());
+				assertEquals("VALUE4_PN_VALUE1", data.getValue4().getPart().get(0).getValue());
+				Set qSet = new HashSet();
+				qSet.add(EntityNamePartQualifier.SP);
+				qSet.add(EntityNamePartQualifier.BR);
+				qSet.add(EntityNamePartQualifier.NB);
+				assertEquals(qSet, data.getValue4().getPart().get(0).getQualifier());
 				assertValue4Constants(data);
 				counter++;
 				continue;

@@ -420,19 +420,8 @@ public class DsetIiDataTypeTest extends SDKISOTestBase{
 			{
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
-				assertNotNull(data.getValue1().getItem());
-				Ii item = data.getValue1().getItem().iterator().next();
-				assertNotNull(item);
-				assertNull(item.getNullFlavor());
-				//global constant
-				assertEquals("2.16.12.123.456.1", item.getRoot());
-	
-				assertNull(item.getExtension());
-				assertNull(item.getIdentifierName());
-				//Global constants
-				assertEquals(IdentifierReliability.ISS, item.getReliability());
-				assertEquals(IdentifierScope.OBJ, item.getScope());
-				assertEquals(Boolean.TRUE, item.getDisplayable());
+				assertNull(data.getValue1().getItem());
+				assertEquals(NullFlavor.NI, data.getValue1().getNullFlavor());
 				counter++;
 			}
 		}
@@ -548,15 +537,9 @@ public class DsetIiDataTypeTest extends SDKISOTestBase{
 			else
 			{
 				assertNotNull(data);
-				Ii item = data.getValue2().getItem().iterator().next();
-				assertNotNull(item);
-				assertEquals(NullFlavor.NI, item.getNullFlavor());
-				assertNull(item.getExtension());
-				assertNull(item.getIdentifierName());
-				//Global constants
-				assertNull(item.getRoot());
-				assertNull(item.getReliability());
-				assertNull(item.getScope());
+				assertNotNull(data.getValue2());
+				assertNull(data.getValue2().getItem());
+				assertEquals(NullFlavor.NI, data.getValue2().getNullFlavor());
 				counter++;
 			}
 		}
@@ -676,17 +659,8 @@ public class DsetIiDataTypeTest extends SDKISOTestBase{
 			{
 				assertNotNull(data);
 				assertNotNull(data.getValue3());
-				Ii item = data.getValue3().getItem().iterator().next();
-				assertEquals(NullFlavor.NI, item.getNullFlavor());
-				//Global constant
-				assertEquals("2.16.12.123.456.1", item.getRoot());
-			
-				assertNull(item.getIdentifierName());
-				assertNull(item.getExtension());
-				//Global constants
-				assertEquals(IdentifierReliability.ISS, item.getReliability());
-				assertEquals(IdentifierScope.OBJ, item.getScope());
-				assertEquals(Boolean.TRUE, item.getDisplayable());
+				assertNull(data.getValue3().getItem());
+				assertEquals(NullFlavor.NI, data.getValue3().getNullFlavor());
 				counter++;
 			}
 		}
@@ -803,7 +777,8 @@ public class DsetIiDataTypeTest extends SDKISOTestBase{
 			{
 				assertNotNull(data);
 				assertNotNull(data.getValue4());
-				
+				assertNull(data.getValue4().getItem());
+				assertEquals(NullFlavor.NI, data.getValue4().getNullFlavor());
 				counter++;
 			}
 		}
@@ -916,17 +891,9 @@ public class DsetIiDataTypeTest extends SDKISOTestBase{
 			else
 			{
 				assertNotNull(data);
-				Ii item = data.getValue5().getItem().iterator().next();
-				assertNotNull(item);
-				assertEquals(NullFlavor.NI, item.getNullFlavor());
-				assertNull(item.getIdentifierName());
-				//Global constants
-				assertEquals("2.16.12.123.456.1", item.getRoot());
-				assertEquals(IdentifierReliability.ISS, item.getReliability());
-				assertEquals(IdentifierScope.OBJ, item.getScope());
-				assertEquals(Boolean.TRUE, item.getDisplayable());
-	
-				assertNull(item.getExtension());
+				assertNotNull(data.getValue5());
+				assertNull(data.getValue5().getItem());
+				assertEquals(NullFlavor.NI, data.getValue5().getNullFlavor());
 				counter++;
 			}
 		}
@@ -1038,17 +1005,9 @@ public class DsetIiDataTypeTest extends SDKISOTestBase{
 			else
 			{
 				assertNotNull(data);
-				Ii item = data.getValue6().getItem().iterator().next();
-				assertNotNull(item);
-				assertEquals(NullFlavor.NI, item.getNullFlavor());
-				assertNull(item.getNullFlavor());
-				assertNull(item.getIdentifierName());
-				//Global constants
-				assertEquals("2.16.12.123.456.1", item.getRoot());
-				assertEquals(IdentifierReliability.ISS, item.getReliability());
-				assertEquals(IdentifierScope.OBJ, item.getScope());
-				assertEquals(Boolean.TRUE, item.getDisplayable());
-				assertNull(item.getExtension());
+				assertNotNull(data.getValue6());
+				assertNull(data.getValue6().getItem());
+				assertEquals(NullFlavor.NI, data.getValue6().getNullFlavor());
 				counter++;
 			}
 		}

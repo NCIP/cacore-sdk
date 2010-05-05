@@ -1059,13 +1059,12 @@ public class AdDataTypeTest extends SDKISOTestBase{
 		assertNotNull(result);
 
 		int counter = 1;
-		int recordIndex = 29;
 		for(AdDataType data : result)
 		{
-			if((index == null && counter == recordIndex) || (index != null && index.contains(Integer.toString(recordIndex))))
+			if((index == null && counter == 29) || (index != null && index.contains("29")))
 			{
 				if(index != null) 
-					index.remove(Integer.toString(recordIndex));
+					index.remove("29");
 				
 				assertNotNull(data);
 				assertNotNull(data.getValue6());
@@ -1308,7 +1307,6 @@ public class AdDataTypeTest extends SDKISOTestBase{
 				assertEquals(NullFlavor.NI, data.getValue6().getNullFlavor());
 				counter++;
 			}
-			recordIndex++;
 		}
 	}
 
@@ -1623,6 +1621,8 @@ public class AdDataTypeTest extends SDKISOTestBase{
 			{
 				assertNotNull(data);
 				assertNotNull(data.getValue7());
+				assertNull(data.getValue7().getPart());
+
 				//Global constant
 				assertEquals(NullFlavor.NI, data.getValue7().getNullFlavor());
 				counter++;
@@ -1802,6 +1802,7 @@ public class AdDataTypeTest extends SDKISOTestBase{
 			{
 				assertNotNull(data);
 				assertNotNull(data.getValue8());
+				assertNull(data.getValue8().getPart());
 				//Global constant
 				assertEquals(NullFlavor.NI, data.getValue8().getNullFlavor());
 				counter++;
@@ -1812,11 +1813,11 @@ public class AdDataTypeTest extends SDKISOTestBase{
 	private void assertValue9(Collection<AdDataType> result, List<Integer> index)
 	{
 		assertNotNull(result);
-
+		int counter = 1;
 		for(AdDataType data : result)
 		{
 			//Validate 1st record
-			if((index == null) || (index != null && index.contains("44")))
+			if((index == null && (counter >= 44 && counter <= 48)) || (index != null && index.contains("44")))
 			{
 				assertNotNull(data);
 				assertNotNull(data.getValue9());
@@ -1849,14 +1850,17 @@ public class AdDataTypeTest extends SDKISOTestBase{
 				assertEquals("CTY_CODESYSTEM4", data.getValue9().getPart().get(2).getCodeSystem());
 
 				assertNull(data.getValue9().getNullFlavor());
+				counter++;
 			}
 			//Validate all remaining records
 			else
 			{
 				assertNotNull(data);
 				assertNotNull(data.getValue9());
+				assertNull(data.getValue9().getPart());
 				//Global constant
 				assertEquals(NullFlavor.NI, data.getValue9().getNullFlavor());
+				counter++;
 			}
 		}
 	}

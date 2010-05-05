@@ -4,6 +4,7 @@ import gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType;
 import gov.nih.nci.iso21090.Ad;
 import gov.nih.nci.iso21090.AddressPartType;
 import gov.nih.nci.iso21090.Adxp;
+import gov.nih.nci.iso21090.NullFlavor;
 import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
@@ -161,7 +162,7 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 	 * @throws ApplicationException 
 	 */
 	@SuppressWarnings("unchecked")
-	public void testAdValue6ByHQLCriteria() throws ApplicationException
+	public void testDsetAdValue6ByHQLCriteria() throws ApplicationException
 	{
 		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType a where (a.value6.item.part_0.value is not null or a.value6.part_1.value is not null or a.value6.part_2.value is not null) order by a.id asc");
 		Collection<DsetAdDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType");
@@ -189,7 +190,7 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 	 * @throws ApplicationException 
 	 */
 	@SuppressWarnings("unchecked")
-	public void testAdValue7ByHQLCriteria() throws ApplicationException
+	public void testDsetAdValue7ByHQLCriteria() throws ApplicationException
 	{
 		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType a where a.value7.item.part_0.value is not null order by a.id asc");
 		Collection<DsetAdDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType");
@@ -216,7 +217,7 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 	 * @throws ApplicationException 
 	 */
 	@SuppressWarnings("unchecked")
-	public void testAdValue8ByHQLCriteria() throws ApplicationException
+	public void testDsetAdValue8ByHQLCriteria() throws ApplicationException
 	{
 		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType a where a.value8.item.part_0.value is not null order by a.id asc");
 		Collection<DsetAdDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType");
@@ -242,7 +243,7 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 	 * @throws ApplicationException 
 	 */
 	@SuppressWarnings("unchecked")
-	public void testAdValue() throws ApplicationException
+	public void testDsetAdValue() throws ApplicationException
 	{
 		DsetAdDataType searchObject = new DsetAdDataType();
 		Collection<DsetAdDataType> result = search("gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType",searchObject );
@@ -391,14 +392,8 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data.getValue1());
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
-				assertNotNull(data.getValue1().getItem());
-				Ad address = data.getValue1().getItem().iterator().next();
-				assertNotNull(address.getPart().get(0));
-				Adxp ad = address.getPart().get(0);
-				assertNull(ad.getType());
-				assertNull(ad.getValue());
-				//Global constant
-				assertEquals("ADXP Code System", ad.getCodeSystem());
+				assertNull(data.getValue1().getItem());
+				assertEquals(NullFlavor.NI, data.getValue1().getNullFlavor());
 				counter++;
 			}
 		}

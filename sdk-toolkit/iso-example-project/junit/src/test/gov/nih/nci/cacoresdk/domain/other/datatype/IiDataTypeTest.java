@@ -389,8 +389,7 @@ public class IiDataTypeTest extends SDKISOTestBase{
 				assertNull(data.getValue3().getReliability());
 				assertNull(data.getValue3().getScope());
 				assertNull(data.getValue3().getDisplayable());
-
-				assertValue3Constants(data);
+				assertNull(data.getValue3().getRoot());
 				counter++;
 				continue;
 			}

@@ -596,8 +596,7 @@ public class IvlPqDataTypeTest extends SDKISOTestBase
 
 				assertNotNull(data.getValue3().getNullFlavor());
 				assertEquals(NullFlavor.NI, data.getValue3().getNullFlavor());
-				assertNotNull(data.getValue3().getLow());
-				assertEquals(NullFlavor.NI, data.getValue3().getLow().getNullFlavor());
+				assertNull(data.getValue3().getLow());
 				assertValue3Constants(data);
 
 				counter++;
@@ -722,17 +721,17 @@ public class IvlPqDataTypeTest extends SDKISOTestBase
 
 				//From database, overriding global constant
 				assertEquals(NullFlavor.NA, data.getValue4().getNullFlavor());
-				assertNull(data.getValue4().getHigh());
 				assertNull(data.getValue4().getHighClosed());
+				assertNotNull(data.getValue4().getHigh());
 				//From database, overriding global constant
 				assertEquals(NullFlavor.NI, data.getValue4().getHigh().getNullFlavor());
 				
-				assertNull(data.getValue4().getLow());
 				assertNull(data.getValue4().getLowClosed());
+				assertNotNull(data.getValue4().getLow());
 				//From database, overriding global constant
 				assertEquals(NullFlavor.NI, data.getValue4().getLow().getNullFlavor());
 
-				assertNull(data.getValue4().getWidth());				
+				assertNotNull(data.getValue4().getWidth());				
 				//From database, overriding global constant
 				assertEquals(NullFlavor.NI, data.getValue4().getWidth().getNullFlavor());
 				assertNull(data.getValue4().getAny());
@@ -759,7 +758,7 @@ public class IvlPqDataTypeTest extends SDKISOTestBase
 				//From database, overriding global constant
 				assertNull(data.getValue4().getHigh().getNullFlavor());
 				
-				assertNull(data.getValue4().getLow());
+				assertNotNull(data.getValue4().getLow());
 				assertEquals(Boolean.TRUE, data.getValue4().getLowClosed());
 				//From database, overriding global constant
 				assertEquals(NullFlavor.NI, data.getValue4().getLow().getNullFlavor());
@@ -801,7 +800,7 @@ public class IvlPqDataTypeTest extends SDKISOTestBase
 				//From database, overriding global constant
 				assertNull(data.getValue4().getLow().getNullFlavor());
 
-				assertNull(data.getValue4().getWidth());				
+				assertNotNull(data.getValue4().getWidth());				
 				assertEquals(NullFlavor.NI, data.getValue4().getWidth().getNullFlavor());
 				assertNull(data.getValue4().getAny());
 				
