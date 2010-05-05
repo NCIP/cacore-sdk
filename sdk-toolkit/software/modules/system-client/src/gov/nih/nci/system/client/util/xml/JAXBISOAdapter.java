@@ -15,10 +15,6 @@ import org.apache.log4j.Logger;
 public class JAXBISOAdapter extends XmlAdapter<org.iso._21090.ANY, gov.nih.nci.iso21090.Any> {
 	
 	private static Logger log = Logger.getLogger(JAXBISOAdapter.class.getName());
-	
-//	put("PQV", "Pqv");
-
-//	put("IVL<REAL>", "Ivl<Real>");
 
 	public static final String Ad_NAME="gov.nih.nci.iso21090.Ad";
 	public static final String Bl_NAME="gov.nih.nci.iso21090.Bl";	
@@ -184,8 +180,8 @@ public class JAXBISOAdapter extends XmlAdapter<org.iso._21090.ANY, gov.nih.nci.i
 			return IVLINTTransformer.INSTANCE.toDto((org.iso._21090.IVLINT)arg0);
 		else if(className.equals(IVLPQ_NAME))
 			return IVLPQTransformer.INSTANCE.toDto((org.iso._21090.IVLPQ)arg0);
-//		else if(className.equals(IVLREAL_NAME))
-//			return IVLREALTransformer.INSTANCE.toDto((org.iso._21090.IVLREAL)arg0);
+		else if(className.equals(IVLREAL_NAME))
+			return IVLREALTransformer.INSTANCE.toDto((org.iso._21090.IVLREAL)arg0);
 		else if(className.equals(IVLTS_NAME))
 			return IVLTSTransformer.INSTANCE.toDto((org.iso._21090.IVLTS)arg0);
 		else if(className.equals(PQ_NAME))
@@ -270,8 +266,8 @@ public class JAXBISOAdapter extends XmlAdapter<org.iso._21090.ANY, gov.nih.nci.i
 			return IVLINTTransformer.INSTANCE.toXml((Ivl<Int>)arg0);
 		else if(isetType.equals(Pq_NAME))
 			return IVLPQTransformer.INSTANCE.toXml((Ivl<Pq>)arg0);
-//		else if(isetType.equals(Real_NAME))
-//			return IVLREALTransformer.INSTANCE.toXml((Ivl<Real>)arg0); 
+		else if(isetType.equals(Real_NAME))
+			return IVLREALTransformer.INSTANCE.toXml((Ivl<Real>)arg0); 
 		else if(isetType.equals(Ts_NAME))
 			return IVLTSTransformer.INSTANCE.toXml((Ivl<Ts>)arg0);
 		else 
@@ -279,5 +275,4 @@ public class JAXBISOAdapter extends XmlAdapter<org.iso._21090.ANY, gov.nih.nci.i
 
 		return null;
 	}
-
 }
