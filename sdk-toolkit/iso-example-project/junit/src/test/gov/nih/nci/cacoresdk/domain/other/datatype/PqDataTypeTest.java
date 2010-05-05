@@ -749,7 +749,9 @@ public class PqDataTypeTest extends SDKISOTestBase
 			else
 			{
 				assertNotNull(data);
-				assertNull(data.getValue3());
+				assertNotNull(data.getValue3());
+				assertNull(data.getValue3().getValue());
+				assertEquals(NullFlavor.NI, data.getValue3().getNullFlavor());
 				counter++;
 			}
 		}

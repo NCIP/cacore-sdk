@@ -208,7 +208,8 @@ public class BlDataTypeTest extends SDKISOTestBase{
 		{
 			if((index == null && counter == 1) || (index != null && index.contains("1")))
 			{
-				assertNull(data.getValue2());
+				assertNotNull(data.getValue2());
+				assertEquals(NullFlavor.NI, data.getValue2().getNullFlavor());
 				if(index != null) index.remove("1");
 				counter++;
 			}
@@ -216,7 +217,8 @@ public class BlDataTypeTest extends SDKISOTestBase{
 			//Record2
 			else if((index == null && counter == 2) || (index != null && index.contains("2")))
 			{
-				assertNull(data.getValue2());
+				assertNotNull(data.getValue2());
+				assertEquals(NullFlavor.NI, data.getValue2().getNullFlavor());
 				if(index != null) index.remove("2");
 				counter++;
 			}

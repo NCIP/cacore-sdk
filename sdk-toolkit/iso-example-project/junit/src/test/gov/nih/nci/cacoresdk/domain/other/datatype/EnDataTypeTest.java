@@ -471,7 +471,8 @@ public class EnDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 				assertEquals(NullFlavor.NA, data.getValue1().getNullFlavor());
-				assertNull(data.getValue1().getPart());
+				assertNotNull(data.getValue1().getPart());
+				assertEquals(0, data.getValue1().getPart().size());
 				counter++;
 			}
 		}
@@ -582,9 +583,8 @@ public class EnDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 				assertNotNull(data.getValue2().getPart());
-				assertNull(data.getValue2().getPart().get(0).getCode());
-				assertNull(data.getValue2().getPart().get(0).getValue());
-				assertValue2Constants(data);
+				assertEquals(0, data.getValue2().getPart().size());
+				assertEquals(NullFlavor.UNK, data.getValue2().getNullFlavor());
 				counter++;
 			}
 		}
@@ -702,8 +702,10 @@ public class EnDataTypeTest extends SDKISOTestBase{
 			else
 			{
 				assertNotNull(data);
-				assertNull(data.getValue3());
-				assertEquals(NullFlavor.NI, data.getValue3());
+				assertNotNull(data.getValue3());
+				assertNotNull(data.getValue3().getPart());
+				assertEquals(0, data.getValue3().getPart().size());
+				assertEquals(NullFlavor.NI, data.getValue3().getNullFlavor());
 				counter++;
 			}
 		}
@@ -822,9 +824,8 @@ public class EnDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data);
 				assertNotNull(data.getValue4());
 				assertNotNull(data.getValue4().getPart());
-				assertNull(data.getValue4().getPart().get(0).getValue());
-				assertNull(data.getValue4().getPart().get(0).getQualifier());
-				assertValue4Constants(data);
+				assertEquals(0, data.getValue4().getPart().size());
+				assertEquals(NullFlavor.NI, data.getValue4().getNullFlavor());
 				counter++;
 			}
 		}
@@ -1129,7 +1130,9 @@ public class EnDataTypeTest extends SDKISOTestBase{
 			else
 			{
 				assertNotNull(data);
-				assertNull(data.getValue5());
+				assertNotNull(data.getValue5());
+				assertNotNull(data.getValue5().getPart());
+				assertEquals(0, data.getValue5().getPart().size());
 				assertEquals(NullFlavor.NI, data.getValue5().getNullFlavor());
 				counter++;
 			}
@@ -1424,7 +1427,8 @@ public class EnDataTypeTest extends SDKISOTestBase{
 			else
 			{
 				assertNotNull(data);
-				assertNull(data.getValue6());
+				assertNotNull(data.getValue6().getPart());
+				assertEquals(0, data.getValue6().getPart().size());
 				assertEquals(NullFlavor.NI, data.getValue6().getNullFlavor());
 				counter++;
 			}

@@ -626,7 +626,14 @@ public class IiDataTypeTest extends SDKISOTestBase{
 			else
 			{
 				assertNotNull(data);
-				assertNull(data.getValue4());
+				assertNotNull(data.getValue4());
+				assertNull(data.getValue4().getExtension());				
+				assertNull(data.getValue4().getIdentifierName());
+				assertNull(data.getValue4().getRoot());
+				assertNull(data.getValue4().getDisplayable());
+				assertNull(data.getValue4().getReliability());
+				assertNull(data.getValue4().getScope());
+				assertEquals(NullFlavor.NI, data.getValue4().getNullFlavor());
 				counter++;
 			}
 		}
