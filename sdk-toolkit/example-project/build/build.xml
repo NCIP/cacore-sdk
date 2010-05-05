@@ -57,4 +57,7 @@
 		<ant antfile="${master.build.file}" dir="${build.dir}" inheritall="false" inheritrefs="false" target="clean:all" />
 	</target>
 	
+	<target name="static-analysis:workspace-modules">
+		<ant antfile="build.xml" dir="${build.dir}" target="static-analysis:workspace-modules" inheritAll="true" />
+	</target>	
 </project>
