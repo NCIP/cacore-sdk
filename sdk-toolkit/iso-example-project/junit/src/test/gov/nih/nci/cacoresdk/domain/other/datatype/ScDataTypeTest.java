@@ -117,13 +117,16 @@ public class ScDataTypeTest extends SDKISOTestBase
 	public void testScValue2ByDetachedCriteria() throws ApplicationException
 	{
 		DetachedCriteria criteria = DetachedCriteria.forClass(ScDataType.class);
-		criteria.add(Restrictions.or(Property.forName("value2.value").isNotNull(), Property.forName("value2.code.code").isNotNull()));
+		LogicalExpression exp1 = Restrictions.or(Property.forName("value2.value").isNotNull(), Property.forName("value2.code.code").isNotNull());
+		criteria.add(Restrictions.or(Property.forName("value2.nullFlavor").isNotNull(), exp1));
+		criteria.addOrder(Order.asc("id"));
 		
 		criteria.addOrder(Order.asc("id"));
 
 		Collection<ScDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.ScDataType");
-		assertEquals(5, result.size());
+		assertEquals(6, result.size());
 		List index = new ArrayList();
+		index.add("7");
 		index.add("8");
 		index.add("9");
 		index.add("10");
@@ -140,10 +143,11 @@ public class ScDataTypeTest extends SDKISOTestBase
 	@SuppressWarnings("unchecked")
 	public void testScValue2ByHQLCriteria() throws ApplicationException
 	{
-		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.ScDataType a where (a.value2.code.code is not null or a.value2.value is not null) order by a.id asc asc");
+		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.ScDataType a where (a.value2.code.code is not null or a.value2.value is not null or a.value2.nullFlavor is not null) order by a.id asc asc");
 		Collection<ScDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.ScDataType");
-		assertEquals(5, result.size());
+		assertEquals(6, result.size());
 		List index = new ArrayList();
+		index.add("7");
 		index.add("8");
 		index.add("9");
 		index.add("10");
@@ -152,6 +156,27 @@ public class ScDataTypeTest extends SDKISOTestBase
 		assertValue2(result, index);
 	}
 
+	/**
+	 * Search Value2 by HQL criteria Test
+	 * 
+	 * @throws ApplicationException 
+	 */
+	@SuppressWarnings("unchecked")
+	public void testScValue21ByHQLCriteria() throws ApplicationException
+	{
+		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.ScDataType a where  a.value2.nullFlavor is not null order by a.id asc asc");
+		Collection<ScDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.ScDataType");
+		assertEquals(6, result.size());
+		List index = new ArrayList();
+		index.add("7");
+//		index.add("8");
+//		index.add("9");
+//		index.add("10");
+//		index.add("11");
+//		index.add("12");
+		assertValue2(result, index);
+	}
+	
 	/**
 	 * Search Value2 by detached criteria Test
 	 * 
@@ -340,12 +365,15 @@ public class ScDataTypeTest extends SDKISOTestBase
 		assertEquals("SC CD Code System Name", data.getValue1().getCode().getCodeSystemName());
 		//Global constant
 		assertEquals("1.1 HF2", data.getValue1().getCode().getCodeSystemVersion());
-		assertNull(data.getValue1().getCode().getOriginalText());
-		assertNull(data.getValue1().getCode().getDisplayName());
+		assertNotNull(data.getValue1().getCode().getOriginalText());
+		assertEquals(NullFlavor.NI, data.getValue1().getCode().getOriginalText().getNullFlavor());
+		assertNotNull(data.getValue1().getCode().getDisplayName());
+		assertEquals(NullFlavor.NI, data.getValue1().getCode().getDisplayName().getNullFlavor());
 	}
 	
 	private void assertValue2(Collection<ScDataType> result, List<Integer> index)
 	{
+
 		assertNotNull(result);
 
 		int counter = 1;
@@ -385,8 +413,10 @@ public class ScDataTypeTest extends SDKISOTestBase
 				assertNull(data.getValue2().getCode().getCodeSystemName());
 				assertNull(data.getValue2().getCode().getCodeSystemVersion());
 				assertNull(data.getValue2().getCode().getNullFlavor());
-				assertNull(data.getValue2().getCode().getOriginalText());
-				assertNull(data.getValue2().getCode().getDisplayName());
+				assertNotNull(data.getValue2().getCode().getOriginalText());
+				assertEquals(NullFlavor.NI, data.getValue2().getCode().getOriginalText().getNullFlavor());
+				assertNotNull(data.getValue2().getCode().getDisplayName());
+				assertEquals(NullFlavor.NI, data.getValue2().getCode().getDisplayName().getNullFlavor());
 
 				counter++;
 				continue;
@@ -410,8 +440,10 @@ public class ScDataTypeTest extends SDKISOTestBase
 				assertNull(data.getValue2().getCode().getCodeSystemName());
 				assertNull(data.getValue2().getCode().getCodeSystemVersion());
 				assertNull(data.getValue2().getCode().getNullFlavor());
-				assertNull(data.getValue2().getCode().getOriginalText());
-				assertNull(data.getValue2().getCode().getDisplayName());
+				assertNotNull(data.getValue2().getCode().getOriginalText());
+				assertEquals(NullFlavor.NI, data.getValue2().getCode().getOriginalText().getNullFlavor());
+				assertNotNull(data.getValue2().getCode().getDisplayName());
+				assertEquals(NullFlavor.NI, data.getValue2().getCode().getDisplayName().getNullFlavor());
 
 				counter++;
 				continue;
@@ -435,8 +467,10 @@ public class ScDataTypeTest extends SDKISOTestBase
 				assertEquals("VALUE2_CODE_CODE_SYSTEM_NAME1", data.getValue2().getCode().getCodeSystemName());
 				assertNull(data.getValue2().getCode().getCodeSystemVersion());
 				assertNull(data.getValue2().getCode().getNullFlavor());
-				assertNull(data.getValue2().getCode().getOriginalText());
-				assertNull(data.getValue2().getCode().getDisplayName());
+				assertNotNull(data.getValue2().getCode().getOriginalText());
+				assertEquals(NullFlavor.NI, data.getValue2().getCode().getOriginalText().getNullFlavor());
+				assertNotNull(data.getValue2().getCode().getDisplayName());
+				assertEquals(NullFlavor.NI, data.getValue2().getCode().getDisplayName().getNullFlavor());
 
 				counter++;
 				continue;
@@ -461,8 +495,10 @@ public class ScDataTypeTest extends SDKISOTestBase
 				assertEquals("VALUE2_CODE_CODE_SYSTEM_NAME2", data.getValue2().getCode().getCodeSystemName());
 				//From database, overriding global constant
 				assertEquals("1.1", data.getValue2().getCode().getCodeSystemVersion());
-				assertNull(data.getValue2().getCode().getOriginalText());
-				assertNull(data.getValue2().getCode().getDisplayName());
+				assertNotNull(data.getValue2().getCode().getOriginalText());
+				assertEquals(NullFlavor.NI, data.getValue2().getCode().getOriginalText().getNullFlavor());
+				assertNotNull(data.getValue2().getCode().getDisplayName());
+				assertEquals(NullFlavor.NI, data.getValue2().getCode().getDisplayName().getNullFlavor());
 
 				counter++;
 				continue;
@@ -488,8 +524,10 @@ public class ScDataTypeTest extends SDKISOTestBase
 				assertEquals("VALUE2_CODE_CODE_SYSTEM_NAME3", data.getValue2().getCode().getCodeSystemName());
 				//From database, overriding global constant
 				assertEquals("1.1", data.getValue2().getCode().getCodeSystemVersion());
-				assertNull(data.getValue2().getCode().getOriginalText());
-				assertNull(data.getValue2().getCode().getDisplayName());
+				assertNotNull(data.getValue2().getCode().getOriginalText());
+				assertEquals(NullFlavor.NI, data.getValue2().getCode().getOriginalText().getNullFlavor());
+				assertNotNull(data.getValue2().getCode().getDisplayName());
+				assertEquals(NullFlavor.NI, data.getValue2().getCode().getDisplayName().getNullFlavor());
 
 				counter++;
 				continue;
@@ -498,7 +536,9 @@ public class ScDataTypeTest extends SDKISOTestBase
 			else
 			{
 				assertNotNull(data);
-				assertNull(data.getValue2());
+				assertNotNull(data.getValue2());
+				assertEquals(NullFlavor.NI, data.getValue2().getNullFlavor());
+				
 				counter++;
 			}
 		}

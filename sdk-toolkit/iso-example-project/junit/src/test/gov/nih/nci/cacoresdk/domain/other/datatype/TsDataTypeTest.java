@@ -376,7 +376,9 @@ public class TsDataTypeTest extends SDKISOTestBase
 			else
 			{
 				assertNotNull(data);
-				assertNull(data.getValue2());
+				assertNotNull(data.getValue2());
+				assertNull(data.getValue2().getValue());
+				assertEquals(NullFlavor.NI, data.getValue2().getNullFlavor());
 				counter++;
 			}
 		}
