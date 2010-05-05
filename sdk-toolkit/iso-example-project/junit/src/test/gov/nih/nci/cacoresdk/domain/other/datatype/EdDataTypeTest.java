@@ -225,8 +225,8 @@ public class EdDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 				assertNotNull(data.getValue1().getData());
-				byte[] bytes = {1,1,0,1,0,1,0,1,0,0,1};
-				org.junit.Assert.assertArrayEquals(bytes, data.getValue1().getData());
+				byte[] bytes = {1,1,0,1,0,1,0,1,0,0,1,0};
+				org.junit.Assert.assertArrayEquals(bytes, convert(data.getValue1().getData()));
 				
 				assertNull(data.getValue1().getCompression());
 				assertNull(data.getValue1().getValue());
@@ -243,8 +243,8 @@ public class EdDataTypeTest extends SDKISOTestBase{
 
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
-				byte[] bytes = {1,0,0,1,0,1,0,1,0,0,1};
-				org.junit.Assert.assertArrayEquals(bytes, data.getValue1().getData());
+				byte[] bytes = {1,0,0,1,0,1,0,1,0,0,1,1};
+				org.junit.Assert.assertArrayEquals(bytes, convert(data.getValue1().getData()));
 				
 				assertNull(data.getValue1().getCompression());
 				assertNull(data.getValue1().getValue());
@@ -261,8 +261,8 @@ public class EdDataTypeTest extends SDKISOTestBase{
 
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
-				byte[] bytes = {1,0,0,0,0,1,0,1,0,0,1};
-				org.junit.Assert.assertArrayEquals(bytes, data.getValue1().getData());
+				byte[] bytes = {1,0,0,0,0,1,0,1,0,0,1,0};
+				org.junit.Assert.assertArrayEquals(bytes, convert(data.getValue1().getData()));
 				
 				assertNull(data.getValue1().getCompression());
 				assertNull(data.getValue1().getValue());
@@ -279,8 +279,8 @@ public class EdDataTypeTest extends SDKISOTestBase{
 
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
-				byte[] bytes = {1,1,0,0,0,1,0,1,0,0,1};
-				org.junit.Assert.assertArrayEquals(bytes, data.getValue1().getData());
+				byte[] bytes = {1,1,0,0,0,1,0,1,0,0,1,1};
+				org.junit.Assert.assertArrayEquals(bytes, convert(data.getValue1().getData()));
 				
 				assertNull(data.getValue1().getCompression());
 				assertNull(data.getValue1().getValue());
@@ -297,8 +297,8 @@ public class EdDataTypeTest extends SDKISOTestBase{
 
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
-				byte[] bytes = {1,1,0,0,0,1,0,1,1,1,1};
-				org.junit.Assert.assertArrayEquals(bytes, data.getValue1().getData());
+				byte[] bytes = {1,1,0,0,0,1,0,1,1,1,1,0};
+				org.junit.Assert.assertArrayEquals(bytes, convert(data.getValue1().getData()));
 				
 				assertNull(data.getValue1().getCompression());
 				assertNull(data.getValue1().getValue());
@@ -355,8 +355,8 @@ public class EdDataTypeTest extends SDKISOTestBase{
 
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
-				byte[] bytes = {1,1,0,1,0,1,0,1,0,0,1};
-				org.junit.Assert.assertArrayEquals(bytes, data.getValue2().getData());
+				byte[] bytes = {1,1,0,1,0,1,0,1,0,0,1,1};
+				org.junit.Assert.assertArrayEquals(bytes, convert(data.getValue2().getData()));
 				
 				assertNull(data.getValue2().getCompression());
 				assertNull(data.getValue2().getValue());
@@ -407,8 +407,8 @@ public class EdDataTypeTest extends SDKISOTestBase{
 
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
-				byte[] bytes = {1,1,0,0,0,1,0,1,0,0,1};
-				org.junit.Assert.assertArrayEquals(bytes, data.getValue2().getData());
+				byte[] bytes = {1,1,0,0,0,1,0,1,0,0,1,0};
+				org.junit.Assert.assertArrayEquals(bytes, convert(data.getValue2().getData()));
 				assertEquals(Compression.GZ, data.getValue2().getCompression());
 				
 				assertNull(data.getValue2().getValue());
@@ -422,12 +422,12 @@ public class EdDataTypeTest extends SDKISOTestBase{
 			{
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
+				assertEquals(NullFlavor.NI, data.getValue2().getNullFlavor());
 
 				assertNull(data.getValue2().getData());
 				assertNull(data.getValue2().getCompression());
 				assertNull(data.getValue2().getValue());
 				assertNull(data.getValue2().getDescription());
-				assertNull(data.getValue2().getNullFlavor());
 				counter++;
 			}
 		}
@@ -468,10 +468,10 @@ public class EdDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data.getValue3());
 				assertNull(data.getValue3().getData());
 				
-				assertEquals(Compression.GZ, data.getValue3().getCompression());
+				assertNull(data.getValue3().getCompression());
 				assertNull(data.getValue3().getValue());
 				assertNull(data.getValue3().getDescription());
-				assertNull(data.getValue3().getNullFlavor());
+				assertEquals(NullFlavor.NI, data.getValue3().getNullFlavor());
 				counter++;
 				continue;
 			}
@@ -518,8 +518,8 @@ public class EdDataTypeTest extends SDKISOTestBase{
 
 				assertNotNull(data);
 				assertNotNull(data.getValue3());
-				byte[] bytes = {1,1,0,0,0,1,0,1,0,0,1};
-				org.junit.Assert.assertArrayEquals(bytes, data.getValue3().getData());
+				byte[] bytes = {1,1,0,0,0,1,0,1,0,0,1,0};
+				org.junit.Assert.assertArrayEquals(bytes, convert(data.getValue3().getData()));
 				assertEquals(Compression.GZ, data.getValue3().getCompression());
 				assertEquals("VALUE3_VALUE_A", data.getValue3().getValue());
 				assertEquals("DESCRIPTION", data.getValue3().getDescription().getValue());
@@ -532,15 +532,28 @@ public class EdDataTypeTest extends SDKISOTestBase{
 			{
 				assertNotNull(data);
 				assertNotNull(data.getValue3());
+				assertEquals(NullFlavor.NI, data.getValue3().getNullFlavor());
 
 				assertNull(data.getValue3().getData());
 				assertNull(data.getValue3().getCompression());
 				assertNull(data.getValue3().getValue());
 				assertNull(data.getValue3().getDescription());
-				assertNull(data.getValue3().getNullFlavor());
 				counter++;
 			}
 		}
 	}
+
+    private byte[] convert(byte[] a)
+    {
+         byte[] result = new byte[a.length*2];
+         
+         for(int i=0;i<result.length;i=i+2)
+         {
+             result[i] = (byte) ((a[i/2] & 0xF0) >> 4);
+             result[i+1] = (byte) (a[i/2] & 0xF);
+         }
+         
+         return result; 
+    }
 	
 }

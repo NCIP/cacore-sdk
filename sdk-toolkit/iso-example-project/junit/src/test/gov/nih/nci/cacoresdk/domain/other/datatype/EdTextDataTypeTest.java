@@ -76,11 +76,11 @@ public class EdTextDataTypeTest extends SDKISOTestBase{
 		assertNotNull(result);
 		assertEquals(5, result.size());
 		List indexList = new ArrayList();
-		indexList.add("1");
 		indexList.add("2");
 		indexList.add("3");
 		indexList.add("4");
 		indexList.add("5");
+		indexList.add("6");
 		assertValue1(result, indexList);
 	}
 
@@ -96,11 +96,11 @@ public class EdTextDataTypeTest extends SDKISOTestBase{
 		Collection<EdTextDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.EdTextDataType");
 		assertEquals(5, result.size());
 		List indexList = new ArrayList();
-		indexList.add("1");
 		indexList.add("2");
 		indexList.add("3");
 		indexList.add("4");
 		indexList.add("5");
+		indexList.add("6");
 		assertValue1(result, indexList);
 	}
 
@@ -119,11 +119,11 @@ public class EdTextDataTypeTest extends SDKISOTestBase{
 		assertNotNull(result);
 		assertEquals(5, result.size());
 		List indexList = new ArrayList();
-		indexList.add("6");
 		indexList.add("7");
 		indexList.add("8");
 		indexList.add("9");
 		indexList.add("10");
+		indexList.add("11");
 		assertValue2(result, indexList);
 	}
 
@@ -139,11 +139,11 @@ public class EdTextDataTypeTest extends SDKISOTestBase{
 		Collection<EdTextDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.EdTextDataType");
 		assertEquals(5, result.size());
 		List indexList = new ArrayList();
-		indexList.add("6");
 		indexList.add("7");
 		indexList.add("8");
 		indexList.add("9");
 		indexList.add("10");
+		indexList.add("11");
 		assertValue2(result, indexList);
 	}
 
@@ -164,11 +164,11 @@ public class EdTextDataTypeTest extends SDKISOTestBase{
 		assertNotNull(result);
 		assertEquals(5, result.size());
 		List indexList = new ArrayList();
-		indexList.add("11");
 		indexList.add("12");
 		indexList.add("13");
 		indexList.add("14");
 		indexList.add("15");
+		indexList.add("16");
 		assertValue3(result, indexList);
 	}
 
@@ -184,11 +184,11 @@ public class EdTextDataTypeTest extends SDKISOTestBase{
 		Collection<EdTextDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.EdTextDataType");
 		assertEquals(5, result.size());
 		List indexList = new ArrayList();
-		indexList.add("11");
 		indexList.add("12");
 		indexList.add("13");
 		indexList.add("14");
 		indexList.add("15");
+		indexList.add("16");
 		assertValue3(result, indexList);
 	}
 	
@@ -215,10 +215,10 @@ public class EdTextDataTypeTest extends SDKISOTestBase{
 		for(EdTextDataType data : result)
 		{
 			//Validate 1st record
-			if((index == null && counter == 1) || (index != null && index.contains("1")))
+			if((index == null && counter == 2) || (index != null && index.contains("2")))
 			{
 				if(index != null) 
-					index.remove("1");
+					index.remove("2");
 
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
@@ -232,10 +232,10 @@ public class EdTextDataTypeTest extends SDKISOTestBase{
 				continue;
 			}
 			//Validate 2nd record
-			else if((index == null && counter == 2) || (index != null && index.contains("2")))
+			else if((index == null && counter == 3) || (index != null && index.contains("3")))
 			{
 				if(index != null) 
-					index.remove("2");
+					index.remove("3");
 
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
@@ -249,10 +249,10 @@ public class EdTextDataTypeTest extends SDKISOTestBase{
 				continue;
 			}
 			//Validate 3rd record
-			else if((index == null && counter == 3) || (index != null && index.contains("3")))
+			else if((index == null && counter == 4) || (index != null && index.contains("4")))
 			{
 				if(index != null) 
-					index.remove("3");
+					index.remove("4");
 
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
@@ -266,10 +266,10 @@ public class EdTextDataTypeTest extends SDKISOTestBase{
 				continue;
 			}
 			//Validate 4th record
-			else if((index == null && counter == 4) || (index != null && index.contains("4")))
+			else if((index == null && counter == 5) || (index != null && index.contains("5")))
 			{
 				if(index != null) 
-					index.remove("4");
+					index.remove("5");
 
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
@@ -283,10 +283,10 @@ public class EdTextDataTypeTest extends SDKISOTestBase{
 				continue;
 			}
 			//Validate 5th record
-			else if((index == null && counter == 5) || (index != null && index.contains("5")))
+			else if((index == null && counter == 6) || (index != null && index.contains("6")))
 			{
 				if(index != null) 
-					index.remove("5");
+					index.remove("6");
 
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
@@ -323,16 +323,15 @@ public class EdTextDataTypeTest extends SDKISOTestBase{
 		for(EdTextDataType data : result)
 		{
 			//Validate 6th record
-			if((index == null && counter == 6) || (index != null && index.contains("6")))
+			if((index == null && counter == 7) || (index != null && index.contains("7")))
 			{
 				if(index != null) 
-					index.remove("6");
+					index.remove("7");
 
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 
 				assertNull(data.getValue2().getData());
-				assertNull(data.getValue2().getCompression());
 				assertNull(data.getValue2().getValue());
 				assertNull(data.getValue2().getDescription());
 				assertEquals(NullFlavor.NI, data.getValue2().getNullFlavor());
@@ -340,23 +339,6 @@ public class EdTextDataTypeTest extends SDKISOTestBase{
 				continue;
 			}
 			//Validate 7th record
-			else if((index == null && counter == 7) || (index != null && index.contains("7")))
-			{
-				if(index != null) 
-					index.remove("7");
-
-				assertNotNull(data);
-				assertNotNull(data.getValue2());
-				assertNull(data.getValue2().getData());
-				
-				assertNull(data.getValue2().getCompression());
-				assertEquals("ED_TEXT_VALUE2_VALUE1", data.getValue2().getValue());
-				assertNull(data.getValue2().getDescription());
-				assertNull(data.getValue2().getNullFlavor());
-				counter++;
-				continue;
-			}
-			//Validate 8th record
 			else if((index == null && counter == 8) || (index != null && index.contains("8")))
 			{
 				if(index != null) 
@@ -366,14 +348,13 @@ public class EdTextDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data.getValue2());
 				assertNull(data.getValue2().getData());
 				
-				assertEquals(Compression.GZ, data.getValue2().getCompression());
-				assertNull(data.getValue2().getValue());
+				assertEquals("ED_TEXT_VALUE2_VALUE1", data.getValue2().getValue());
 				assertNull(data.getValue2().getDescription());
 				assertNull(data.getValue2().getNullFlavor());
 				counter++;
 				continue;
 			}
-			//Validate 9th record
+			//Validate 8th record
 			else if((index == null && counter == 9) || (index != null && index.contains("9")))
 			{
 				if(index != null) 
@@ -383,14 +364,13 @@ public class EdTextDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data.getValue2());
 				assertNull(data.getValue2().getData());
 				
-				assertEquals(Compression.GZ, data.getValue2().getCompression());
 				assertEquals("ED_TEXT_VALUE2_VALUE2", data.getValue2().getValue());
 				assertNull(data.getValue2().getDescription());
 				assertNull(data.getValue2().getNullFlavor());
 				counter++;
 				continue;
 			}
-			//Validate 10th record
+			//Validate 9th record
 			else if((index == null && counter == 10) || (index != null && index.contains("10")))
 			{
 				if(index != null) 
@@ -400,8 +380,23 @@ public class EdTextDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data.getValue2());
 				assertNull(data.getValue2().getData());
 				
-				assertEquals(Compression.GZ, data.getValue2().getCompression());
 				assertEquals("ED_TEXT_VALUE2_VALUE3", data.getValue2().getValue());
+				assertNull(data.getValue2().getDescription());
+				assertNull(data.getValue2().getNullFlavor());
+				counter++;
+				continue;
+			}
+			//Validate 10th record
+			else if((index == null && counter == 11) || (index != null && index.contains("11")))
+			{
+				if(index != null) 
+					index.remove("11");
+
+				assertNotNull(data);
+				assertNotNull(data.getValue2());
+				assertNull(data.getValue2().getData());
+				
+				assertEquals("ED_TEXT_VALUE2_VALUE4", data.getValue2().getValue());
 				assertNull(data.getValue2().getDescription());
 				assertNull(data.getValue2().getNullFlavor());
 				counter++;
@@ -413,11 +408,11 @@ public class EdTextDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 
+				assertEquals(NullFlavor.NI, data.getValue2().getNullFlavor());
 				assertNull(data.getValue2().getData());
 				assertNull(data.getValue2().getCompression());
 				assertNull(data.getValue2().getValue());
 				assertNull(data.getValue2().getDescription());
-				assertNull(data.getValue2().getNullFlavor());
 				counter++;
 			}
 		}
@@ -430,11 +425,10 @@ public class EdTextDataTypeTest extends SDKISOTestBase{
 		int counter = 1;
 		for(EdTextDataType data : result)
 		{
-			//Validate 11th record
-			if((index == null && counter == 11) || (index != null && index.contains("11")))
+			if((index == null && counter == 12) || (index != null && index.contains("12")))
 			{
 				if(index != null) 
-					index.remove("11");
+					index.remove("12");
 
 				assertNotNull(data);
 				assertNotNull(data.getValue3());
@@ -442,29 +436,12 @@ public class EdTextDataTypeTest extends SDKISOTestBase{
 				assertNull(data.getValue3().getData());
 				assertEquals(Compression.GZ, data.getValue3().getCompression());
 				assertNull(data.getValue3().getValue());
-				assertNull(data.getValue3().getDescription());
+				assertNotNull(data.getValue3().getDescription());
+				assertEquals(NullFlavor.NI, data.getValue3().getDescription().getNullFlavor());
 				assertNull(data.getValue3().getNullFlavor());
 				counter++;
 				continue;
 			}
-			//Validate 12th record
-			else if((index == null && counter == 12) || (index != null && index.contains("12")))
-			{
-				if(index != null) 
-					index.remove("12");
-
-				assertNotNull(data);
-				assertNotNull(data.getValue3());
-				assertNotNull(data.getValue3().getData());
-				
-				assertNull(data.getValue3().getCompression());
-				assertNull(data.getValue3().getValue());
-				assertNull(data.getValue3().getDescription());
-				assertEquals(NullFlavor.NI, data.getValue3().getNullFlavor());
-				counter++;
-				continue;
-			}
-			//Validate 13th record
 			else if((index == null && counter == 13) || (index != null && index.contains("13")))
 			{
 				if(index != null) 
@@ -472,17 +449,14 @@ public class EdTextDataTypeTest extends SDKISOTestBase{
 
 				assertNotNull(data);
 				assertNotNull(data.getValue3());
-				byte[] bytes = {1,1,0,0,0,1,0,1,1,0,1};
-				org.junit.Assert.assertArrayEquals(bytes, data.getValue3().getData());
-				
-				assertEquals(Compression.GZ, data.getValue3().getCompression());
+				assertNull(data.getValue3().getData());
+				assertNull(data.getValue3().getCompression());
 				assertNull(data.getValue3().getValue());
 				assertNull(data.getValue3().getDescription());
-				assertNull(data.getValue3().getNullFlavor());
+				assertEquals(NullFlavor.NI, data.getValue3().getNullFlavor());
 				counter++;
 				continue;
 			}
-			//Validate 14th record
 			else if((index == null && counter == 14) || (index != null && index.contains("14")))
 			{
 				if(index != null) 
@@ -490,8 +464,27 @@ public class EdTextDataTypeTest extends SDKISOTestBase{
 
 				assertNotNull(data);
 				assertNotNull(data.getValue3());
-				byte[] bytes = {1,1,0,1,1,1,0,1,0,0,1};
-				org.junit.Assert.assertArrayEquals(bytes, data.getValue3().getData());
+				byte[] bytes = {1,1,0,0,0,1,0,1,1,0,1,0};
+				org.junit.Assert.assertArrayEquals(bytes, convert(data.getValue3().getData()));
+				
+				assertEquals(Compression.GZ, data.getValue3().getCompression());
+				assertNull(data.getValue3().getValue());
+				assertNotNull(data.getValue3().getDescription());
+				assertNull(data.getValue3().getDescription().getValue());
+				assertEquals(NullFlavor.NI, data.getValue3().getDescription().getNullFlavor());
+				assertNull(data.getValue3().getNullFlavor());
+				counter++;
+				continue;
+			}
+			else if((index == null && counter == 15) || (index != null && index.contains("15")))
+			{
+				if(index != null) 
+					index.remove("15");
+
+				assertNotNull(data);
+				assertNotNull(data.getValue3());
+				byte[] bytes = {1,1,0,1,1,1,0,1,0,0,1,1};
+				org.junit.Assert.assertArrayEquals(bytes, convert(data.getValue3().getData()));
 				
 				assertEquals(Compression.GZ, data.getValue3().getCompression());
 				assertNull(data.getValue3().getValue());
@@ -500,16 +493,15 @@ public class EdTextDataTypeTest extends SDKISOTestBase{
 				counter++;
 				continue;
 			}
-			//Validate 10th record
-			else if((index == null && counter == 15) || (index != null && index.contains("15")))
+			else if((index == null && counter == 16) || (index != null && index.contains("16")))
 			{
 				if(index != null) 
-					index.remove("15");
+					index.remove("16");
 
 				assertNotNull(data);
 				assertNotNull(data.getValue3());
-				byte[] bytes = {1,1,0,0,0,1,0,1,0,0,1};
-				org.junit.Assert.assertArrayEquals(bytes, data.getValue3().getData());
+				byte[] bytes = {1,1,0,0,0,1,0,1,0,0,1,0};
+				org.junit.Assert.assertArrayEquals(bytes, convert(data.getValue3().getData()));
 				assertEquals(Compression.GZ, data.getValue3().getCompression());
 				assertEquals("VALUE3_VALUE_A", data.getValue3().getValue());
 				assertEquals("DESCRIPTION", data.getValue3().getDescription().getValue());
@@ -532,5 +524,18 @@ public class EdTextDataTypeTest extends SDKISOTestBase{
 			}
 		}
 	}
-	
+
+    private byte[] convert(byte[] a)
+    {
+         byte[] result = new byte[a.length*2];
+         
+         for(int i=0;i<result.length;i=i+2)
+         {
+             result[i] = (byte) ((a[i/2] & 0xF0) >> 4);
+             result[i+1] = (byte) (a[i/2] & 0xF);
+         }
+         
+         return result; 
+    }
+
 }

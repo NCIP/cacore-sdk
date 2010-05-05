@@ -214,7 +214,7 @@ public class ScDataTypeTest extends SDKISOTestBase
 	 * @throws ApplicationException 
 	 */
 	@SuppressWarnings("unchecked")
-	public void testStValue() throws ApplicationException
+	public void testScValue() throws ApplicationException
 	{
 		DetachedCriteria criteria = DetachedCriteria.forClass(ScDataType.class);
 		criteria.addOrder(Order.asc("id"));
@@ -521,7 +521,7 @@ public class ScDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue3());
 				assertNull(data.getValue3().getCode());
 				
-				assertEquals(NullFlavor.NI, data.getValue3().getNullFlavor());
+				assertEquals(NullFlavor.NA, data.getValue3().getNullFlavor());
 				assertNull(data.getValue3().getValue());
 
 				counter++;
@@ -544,8 +544,15 @@ public class ScDataTypeTest extends SDKISOTestBase
 				assertNull(data.getValue3().getCode().getCodeSystemName());
 				assertNull(data.getValue3().getCode().getCodeSystemVersion());
 				assertNotNull(data.getValue3().getCode().getOriginalText());
-				assertNull(data.getValue3().getCode().getOriginalText().getNullFlavor());
-				assertNull(data.getValue3().getCode().getDisplayName());
+				assertNull(data.getValue3().getCode().getOriginalText().getValue());
+				//Even though NullFlavor is mapped, it would use
+				//absolute constant value in case of all other values are null
+				assertEquals(NullFlavor.NI, data.getValue3().getCode().getOriginalText().getNullFlavor());
+				assertNotNull(data.getValue3().getCode().getDisplayName());
+				assertNull(data.getValue3().getCode().getDisplayName().getValue());
+				//Even though NullFlavor is mapped, it would use
+				//absolute constant value in case of all other values are null
+				assertEquals(NullFlavor.NI, data.getValue3().getCode().getDisplayName().getNullFlavor());
 				
 				counter++;
 				continue;
@@ -566,8 +573,16 @@ public class ScDataTypeTest extends SDKISOTestBase
 				assertEquals("VALUE3_CODE_CODE_SYSTEM1", data.getValue3().getCode().getCodeSystem());
 				assertEquals("VALUE3_CODE_CODE_SYSTEM_NAME1", data.getValue3().getCode().getCodeSystemName());
 				assertEquals("VALUE3_CODE_CODE_SYSTEM_VER1", data.getValue3().getCode().getCodeSystemVersion());
-				assertNull(data.getValue3().getCode().getOriginalText());
-				assertNull(data.getValue3().getCode().getDisplayName());
+				assertNotNull(data.getValue3().getCode().getOriginalText());
+				assertNull(data.getValue3().getCode().getOriginalText().getValue());
+				//Even though NullFlavor is mapped, it would use
+				//absolute constant value in case of all other values are null
+				assertEquals(NullFlavor.NI, data.getValue3().getCode().getOriginalText().getNullFlavor());
+				assertNotNull(data.getValue3().getCode().getDisplayName());
+				assertNull(data.getValue3().getCode().getDisplayName().getValue());
+				//Even though NullFlavor is mapped, it would use
+				//absolute constant value in case of all other values are null
+				assertEquals(NullFlavor.NI, data.getValue3().getCode().getDisplayName().getNullFlavor());
 				
 				counter++;
 				continue;
@@ -589,9 +604,15 @@ public class ScDataTypeTest extends SDKISOTestBase
 				assertEquals("VALUE3_CODE_CODE_SYSTEM_NAME1", data.getValue3().getCode().getCodeSystemName());
 				assertEquals("VALUE3_CODE_CODE_SYSTEM_VER1", data.getValue3().getCode().getCodeSystemVersion());
 				assertNotNull(data.getValue3().getCode().getOriginalText());
-				assertNotNull(data.getValue3().getCode().getDisplayName());
-				assertEquals(NullFlavor.NI, data.getValue3().getCode().getDisplayName().getNullFlavor());
+				assertNull(data.getValue3().getCode().getOriginalText().getValue());
+				//Even though NullFlavor is mapped, it would use
+				//absolute constant value in case of all other values are null
 				assertEquals(NullFlavor.NI, data.getValue3().getCode().getOriginalText().getNullFlavor());
+				assertNotNull(data.getValue3().getCode().getDisplayName());
+				assertNull(data.getValue3().getCode().getDisplayName().getValue());
+				//Even though NullFlavor is mapped, it would use
+				//absolute constant value in case of all other values are null
+				assertEquals(NullFlavor.NI, data.getValue3().getCode().getDisplayName().getNullFlavor());
 				
 				counter++;
 				continue;
@@ -613,9 +634,12 @@ public class ScDataTypeTest extends SDKISOTestBase
 				assertEquals("VALUE3_CODE_CODE_SYSTEM_NAME1", data.getValue3().getCode().getCodeSystemName());
 				assertEquals("VALUE3_CODE_CODE_SYSTEM_VER", data.getValue3().getCode().getCodeSystemVersion());
 				assertNotNull(data.getValue3().getCode().getDisplayName());
-				assertEquals(NullFlavor.NI, data.getValue3().getCode().getDisplayName().getNullFlavor());
-				assertEquals("VALUE3_CODE_DISPLAY_VALUE", data.getValue3().getCode().getDisplayName().getValue());
 				assertNull(data.getValue3().getCode().getDisplayName().getNullFlavor());
+				assertEquals("VALUE3_CODE_DISPLAY_VALUE", data.getValue3().getCode().getDisplayName().getValue());
+				assertNotNull(data.getValue3().getCode().getOriginalText());
+				assertNull(data.getValue3().getCode().getOriginalText().getValue());
+				//Even though NullFlavor is mapped, it would use
+				//absolute constant value in case of all other values are null
 				assertEquals(NullFlavor.NI, data.getValue3().getCode().getOriginalText().getNullFlavor());
 
 				counter++;
@@ -640,6 +664,10 @@ public class ScDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue3().getCode().getDisplayName());
 				assertEquals("VALUE3_CODE_DISPLAY_VALUE31", data.getValue3().getCode().getDisplayName().getValue());
 				assertNull(data.getValue3().getCode().getDisplayName().getNullFlavor());
+				assertNotNull(data.getValue3().getCode().getOriginalText());
+				assertNull(data.getValue3().getCode().getOriginalText().getValue());
+				//Even though NullFlavor is mapped, it would use
+				//absolute constant value in case of all other values are null
 				assertEquals(NullFlavor.NI, data.getValue3().getCode().getOriginalText().getNullFlavor());
 
 				counter++;
@@ -664,6 +692,10 @@ public class ScDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue3().getCode().getDisplayName());
 				assertEquals("VALUE3_CODE_DISPLAY_VALUE31", data.getValue3().getCode().getDisplayName().getValue());
 				assertNull(data.getValue3().getCode().getDisplayName().getNullFlavor());
+				assertNotNull(data.getValue3().getCode().getOriginalText());
+				assertNull(data.getValue3().getCode().getOriginalText().getValue());
+				//Even though NullFlavor is mapped, it would use
+				//absolute constant value in case of all other values are null
 				assertEquals(NullFlavor.NI, data.getValue3().getCode().getOriginalText().getNullFlavor());
 
 				counter++;
@@ -688,6 +720,10 @@ public class ScDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue3().getCode().getDisplayName());
 				assertEquals("VALUE3_CODE_DISPLAY_VALUE31", data.getValue3().getCode().getDisplayName().getValue());
 				assertNull(data.getValue3().getCode().getDisplayName().getNullFlavor());
+				assertNotNull(data.getValue3().getCode().getOriginalText());
+				assertNull(data.getValue3().getCode().getOriginalText().getValue());
+				//Even though NullFlavor is mapped, it would use
+				//absolute constant value in case of all other values are null
 				assertEquals(NullFlavor.NI, data.getValue3().getCode().getOriginalText().getNullFlavor());
 
 				counter++;
@@ -779,7 +815,10 @@ public class ScDataTypeTest extends SDKISOTestBase
 			else
 			{
 				assertNotNull(data);
-				assertNull(data.getValue3());
+				assertNotNull(data.getValue3());
+				//Even though NullFlavor is mapped, it would use
+				//absolute constant value in case of all other values are null
+				assertEquals(NullFlavor.NI, data.getValue3().getNullFlavor());
 				counter++;
 			}
 		}

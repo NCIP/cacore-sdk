@@ -500,7 +500,11 @@ public class CdDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data.getValue2());
 				assertNull(data.getValue2().getCode());
 				
-				assertValue2Constants(data);
+				assertNull(data.getValue2().getCodeSystem());
+				assertNull(data.getValue2().getCodeSystemName());
+				assertNull(data.getValue2().getCodeSystemVersion());
+				assertNull(data.getValue2().getDisplayName());
+				assertNull(data.getValue2().getOriginalText());
 				assertEquals(NullFlavor.NI, data.getValue2().getNullFlavor());
 				counter++;
 				continue;
@@ -515,8 +519,78 @@ public class CdDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data.getValue2());
 				assertNull(data.getValue2().getCode());
 				
-				assertValue2Constants(data);
+				assertNull(data.getValue2().getCodeSystem());
+				assertNull(data.getValue2().getCodeSystemName());
+				assertNull(data.getValue2().getCodeSystemVersion());
+				assertNull(data.getValue2().getDisplayName());
+				assertNull(data.getValue2().getOriginalText());
 				assertEquals(NullFlavor.NI, data.getValue2().getNullFlavor());
+				counter++;
+				continue;
+			}
+			else if(index == null && counter == 45)
+			{
+				assertNotNull(data);
+				assertNotNull(data.getValue2());
+				assertEquals("CODE61", data.getValue2().getCode());
+				
+				assertValue2Constants(data);
+				assertNull(data.getValue2().getNullFlavor());
+				counter++;
+				continue;
+			}
+			else if(index == null && counter == 46)
+			{
+				assertNotNull(data);
+				assertNotNull(data.getValue2());
+				assertEquals("CODE62", data.getValue2().getCode());
+				
+				assertValue2Constants(data);
+				assertNull(data.getValue2().getNullFlavor());
+				counter++;
+				continue;
+			}
+			else if(index == null && counter == 47)
+			{
+				assertNotNull(data);
+				assertNotNull(data.getValue2());
+				assertEquals("CODE63", data.getValue2().getCode());
+				
+				assertValue2Constants(data);
+				assertNull(data.getValue2().getNullFlavor());
+				counter++;
+				continue;
+			}
+			else if(index == null && counter == 48)
+			{
+				assertNotNull(data);
+				assertNotNull(data.getValue2());
+				assertEquals("CODE64", data.getValue2().getCode());
+				
+				assertValue2Constants(data);
+				assertNull(data.getValue2().getNullFlavor());
+				counter++;
+				continue;
+			}
+			else if(index == null && counter == 49)
+			{
+				assertNotNull(data);
+				assertNotNull(data.getValue2());
+				assertEquals("CODE65", data.getValue2().getCode());
+				
+				assertValue2Constants(data);
+				assertNull(data.getValue2().getNullFlavor());
+				counter++;
+				continue;
+			}
+			else if(index == null && counter == 50)
+			{
+				assertNotNull(data);
+				assertNotNull(data.getValue2());
+				assertEquals("CODE66", data.getValue2().getCode());
+				
+				assertValue2Constants(data);
+				assertNull(data.getValue2().getNullFlavor());
 				counter++;
 				continue;
 			}
@@ -526,7 +600,12 @@ public class CdDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 				assertNull(data.getValue2().getCode());
-				assertNull(data.getValue2().getNullFlavor());
+				assertNull(data.getValue2().getCodeSystem());
+				assertNull(data.getValue2().getCodeSystemName());
+				assertNull(data.getValue2().getCodeSystemVersion());
+				assertNull(data.getValue2().getDisplayName());
+				assertNull(data.getValue2().getOriginalText());
+				assertEquals(NullFlavor.NI, data.getValue2().getNullFlavor());
 				counter++;
 			}
 		}
@@ -630,9 +709,13 @@ public class CdDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data.getValue3());
 				assertNotNull(data);
 				assertNull(data.getValue3().getCode());
+				assertNull(data.getValue3().getCodeSystem());
+				assertNull(data.getValue3().getCodeSystemName());
+				assertNull(data.getValue3().getCodeSystemVersion());
+				assertNull(data.getValue3().getDisplayName());
+				assertNull(data.getValue3().getOriginalText());
 				
-				assertValue3Constants(data);
-				assertNull(data.getValue3().getNullFlavor());
+				assertEquals(NullFlavor.NI, data.getValue3().getNullFlavor());
 				counter++;
 			}
 		}
@@ -832,10 +915,7 @@ public class CdDataTypeTest extends SDKISOTestBase{
 				assertNull(data.getValue4().getCodeSystemVersion());
 				assertNull(data.getValue4().getDisplayName());
 				assertNull(data.getValue4().getOriginalText());
-				assertNull(data.getValue4().getNullFlavor());
-				assertNull(data.getValue4().getDisplayName().getNullFlavor());
-				assertNull(data.getValue4().getOriginalText().getNullFlavor());
-				assertNull(data.getValue4().getNullFlavor());
+				assertEquals(NullFlavor.NI, data.getValue4().getNullFlavor());
 				counter++;
 			}
 		}
@@ -884,7 +964,7 @@ public class CdDataTypeTest extends SDKISOTestBase{
 				assertEquals("VALUE5_DISPLAY_VALUE1", data.getValue5().getDisplayName().getValue());
 				assertNull(data.getValue5().getDisplayName().getNullFlavor());
 				assertNotNull(data.getValue5().getOriginalText());
-				assertNotNull(data.getValue5().getOriginalText().getNullFlavor());
+				assertEquals(NullFlavor.NI, data.getValue5().getOriginalText().getNullFlavor());
 				assertNull(data.getValue5().getNullFlavor());
 				counter++;
 				continue;
@@ -904,10 +984,10 @@ public class CdDataTypeTest extends SDKISOTestBase{
 				assertNull(data.getValue5().getCodeSystemVersion());
 				assertEquals("VALUE5_DISPLAY_VALUE2", data.getValue5().getDisplayName().getValue());
 				assertNull(data.getValue5().getDisplayName().getNullFlavor());
-				assertEquals("VALUE5_ORIG_TXT_DESCRIPTION1", data.getValue5().getOriginalText().getDescription().getValue());
 				assertNotNull(data.getValue5().getOriginalText());
 				assertNotNull(data.getValue5().getOriginalText().getDescription());
 				assertNotNull(data.getValue5().getOriginalText().getDescription().getValue());
+				assertEquals("VALUE5_ORIG_TXT_DESCRIPTION1", data.getValue5().getOriginalText().getDescription().getValue());
 				assertNull(data.getValue5().getNullFlavor());
 				counter++;
 				continue;
@@ -1022,6 +1102,177 @@ public class CdDataTypeTest extends SDKISOTestBase{
 				counter++;
 				continue;
 			}
+			if((index == null && counter == 32) || (index != null && index.contains("32")))
+			{
+				if(index != null) 
+					index.remove("32");
+
+				assertNotNull(data);
+				assertNotNull(data.getValue5());
+				assertEquals("CODE1", data.getValue5().getCode());
+				
+				assertEquals("VALUE5_CODE_SYSTEM1", data.getValue5().getCodeSystem());
+				assertNull(data.getValue5().getCodeSystemName());
+				assertNull(data.getValue5().getCodeSystemVersion());
+				assertNotNull(data.getValue5().getDisplayName());
+				assertEquals(NullFlavor.NI, data.getValue5().getDisplayName().getNullFlavor());
+				assertNotNull(data.getValue5().getOriginalText());
+				assertEquals(NullFlavor.NI, data.getValue5().getOriginalText().getNullFlavor());
+				assertNull(data.getValue5().getNullFlavor());
+				counter++;
+				continue;
+			}
+			else if((index == null && counter == 33) || (index != null && index.contains("33")))
+			{
+				if(index != null) 
+					index.remove("33");
+
+				assertNotNull(data);
+				assertNotNull(data.getValue5());
+				assertEquals("CODE2", data.getValue5().getCode());
+				
+				assertEquals("VALUE5_CODE_SYSTEM2", data.getValue5().getCodeSystem());
+				assertNull(data.getValue5().getCodeSystemName());
+				assertNull(data.getValue5().getCodeSystemVersion());
+				assertEquals("VALUE5_DISPLAY_VALUE1", data.getValue5().getDisplayName().getValue());
+				assertNull(data.getValue5().getDisplayName().getNullFlavor());
+				assertNotNull(data.getValue5().getOriginalText());
+				assertEquals(NullFlavor.NI, data.getValue5().getOriginalText().getNullFlavor());
+				assertNull(data.getValue5().getNullFlavor());
+				counter++;
+				continue;
+			}
+			else if((index == null && counter == 34) || (index != null && index.contains("34")))
+			{
+				if(index != null) 
+					index.remove("34");
+
+				assertNotNull(data);
+				assertNotNull(data.getValue5());
+				assertEquals("CODE3", data.getValue5().getCode());
+				
+				assertNull(data.getValue5().getCodeSystem());
+				assertEquals("VALUE5_CODE_SYSTEM_NAME1", data.getValue5().getCodeSystemName());
+				assertNull(data.getValue5().getCodeSystemVersion());
+				assertEquals("VALUE5_DISPLAY_VALUE2", data.getValue5().getDisplayName().getValue());
+				assertNull(data.getValue5().getDisplayName().getNullFlavor());
+				assertNotNull(data.getValue5().getOriginalText());
+				assertNotNull(data.getValue5().getOriginalText().getDescription());
+				assertNotNull(data.getValue5().getOriginalText().getDescription().getValue());
+				assertEquals("VALUE5_ORIG_TXT_DESCRIPTION1", data.getValue5().getOriginalText().getDescription().getValue());
+				assertNull(data.getValue5().getNullFlavor());
+				counter++;
+				continue;
+			}
+			else if((index == null && counter == 35) || (index != null && index.contains("35")))
+			{
+				if(index != null) 
+					index.remove("35");
+
+				assertNotNull(data);
+				assertNotNull(data.getValue5());
+				assertEquals("CODE4", data.getValue5().getCode());
+				
+				assertEquals("VALUE5_CODE_SYSTEM3", data.getValue5().getCodeSystem());
+				assertNull(data.getValue5().getCodeSystemName());
+				assertNull(data.getValue5().getCodeSystemVersion());
+				assertEquals("VALUE5_DISPLAY_VALUE2", data.getValue5().getDisplayName().getValue());
+				assertNull(data.getValue5().getDisplayName().getNullFlavor());
+				assertEquals("VALUE5_ORIG_TXT_DESCRIPTION2", data.getValue5().getOriginalText().getDescription().getValue());
+				assertEquals("VALUE5_ORIG_TXT_VALUE1", data.getValue5().getOriginalText().getValue());
+				assertNull(data.getValue5().getOriginalText().getNullFlavor());
+				assertNull(data.getValue5().getNullFlavor());
+				counter++;
+				continue;
+			}
+			//Validate 28th record
+			else if((index == null && counter == 36) || (index != null && index.contains("36")))
+			{
+				if(index != null) 
+					index.remove("36");
+
+				assertNotNull(data);
+				assertNotNull(data.getValue5());
+				assertEquals("CODE5", data.getValue5().getCode());
+				
+				assertEquals("VALUE5_CODE_SYSTEM", data.getValue5().getCodeSystem());
+				assertEquals("VALUE5_CODE_SYSTEM_NAME2", data.getValue5().getCodeSystemName());
+				assertNull(data.getValue5().getCodeSystemVersion());
+				assertEquals("VALUE5_DISPLAY_VALUE3", data.getValue5().getDisplayName().getValue());
+				assertNull(data.getValue5().getDisplayName().getNullFlavor());
+				assertEquals("VALUE5_ORIG_TXT_DESCRIPTION3", data.getValue5().getOriginalText().getDescription().getValue());
+				assertEquals("VALUE5_ORIG_TXT_VALUE2", data.getValue5().getOriginalText().getValue());
+				assertNull(data.getValue5().getOriginalText().getNullFlavor());
+				assertNull(data.getValue5().getNullFlavor());
+				counter++;
+				continue;
+			}
+			//Validate 29st record
+			else if((index == null && counter == 37) || (index != null && index.contains("37")))
+			{
+				if(index != null) 
+					index.remove("37");
+
+				assertNotNull(data);
+				assertNotNull(data.getValue5());
+				assertEquals("CODE6", data.getValue5().getCode());
+				
+				assertEquals("VALUE5_CODE_SYSTEM", data.getValue5().getCodeSystem());
+				assertNull(data.getValue5().getCodeSystemName());
+				assertNull(data.getValue5().getCodeSystemVersion());
+				assertEquals("VALUE5_DISPLAY_VALUE5", data.getValue5().getDisplayName().getValue());
+				assertNull(data.getValue5().getDisplayName().getNullFlavor());
+				assertEquals("VALUE5_ORIG_TXT_DESCRIPTION4", data.getValue5().getOriginalText().getDescription().getValue());
+				assertEquals("VALUE5_ORIG_TXT_VALUE3", data.getValue5().getOriginalText().getValue());
+				assertNull(data.getValue5().getOriginalText().getNullFlavor());
+				assertNull(data.getValue5().getNullFlavor());
+				counter++;
+				continue;
+			}
+			//Validate 30th record
+			else if((index == null && counter == 38) || (index != null && index.contains("38")))
+			{
+				if(index != null) 
+					index.remove("38");
+
+				assertNotNull(data);
+				assertNotNull(data.getValue5());
+				assertEquals("CODE7", data.getValue5().getCode());
+				
+				assertEquals("VALUE5_CODE_SYSTEM", data.getValue5().getCodeSystem());
+				assertNull(data.getValue5().getCodeSystemName());
+				assertEquals("VALUE5_CODE_SYSTEM_VERSION1", data.getValue5().getCodeSystemVersion());
+				assertEquals("VALUE5_DISPLAY_VALUE5", data.getValue5().getDisplayName().getValue());
+				assertNull(data.getValue5().getDisplayName().getNullFlavor());
+				assertEquals("VALUE5_ORIG_TXT_DESCRIPTION5", data.getValue5().getOriginalText().getDescription().getValue());
+				assertEquals("VALUE5_ORIG_TXT_VALUE5", data.getValue5().getOriginalText().getValue());
+				assertNull(data.getValue5().getOriginalText().getNullFlavor());
+				assertNull(data.getValue5().getNullFlavor());
+				counter++;
+				continue;
+			}
+			//Validate 31st record
+			else if((index == null && counter == 39) || (index != null && index.contains("39")))
+			{
+				if(index != null) 
+					index.remove("39");
+
+				assertNotNull(data);
+				assertNotNull(data.getValue5());
+				assertEquals("CODE8", data.getValue5().getCode());
+				
+				assertEquals("VALUE5_CODE_SYSTEM", data.getValue5().getCodeSystem());
+				assertEquals("VALUE5_CODE_SYSTEM_NAME", data.getValue5().getCodeSystemName());
+				assertEquals("VALUE5_CODE_SYSTEM_VERSION1", data.getValue5().getCodeSystemVersion());
+				assertEquals("VALUE5_DISPLAY_VALUE5", data.getValue5().getDisplayName().getValue());
+				assertNull(data.getValue5().getDisplayName().getNullFlavor());
+				assertEquals("VALUE5_ORIG_TXT_DESCRIPTION6", data.getValue5().getOriginalText().getDescription().getValue());
+				assertEquals("VALUE5_ORIG_TXT_VALUE5", data.getValue5().getOriginalText().getValue());
+				assertNull(data.getValue5().getOriginalText().getNullFlavor());
+				assertNull(data.getValue5().getNullFlavor());
+				counter++;
+				continue;
+			}
 			//Validate all remaining records
 			else
 			{
@@ -1035,7 +1286,7 @@ public class CdDataTypeTest extends SDKISOTestBase{
 				assertNull(data.getValue5().getCodeSystemVersion());
 				assertNull(data.getValue5().getDisplayName());
 				assertNull(data.getValue5().getOriginalText());
-				assertNull(data.getValue5().getNullFlavor());
+				assertEquals(NullFlavor.NI, data.getValue5().getNullFlavor());
 				counter++;
 			}
 		}
@@ -1207,8 +1458,7 @@ public class CdDataTypeTest extends SDKISOTestBase{
 				assertNull(data.getValue6().getCodeSystemVersion());
 				assertNull(data.getValue6().getDisplayName());
 				assertNull(data.getValue6().getOriginalText());
-				assertNull(data.getValue6().getNullFlavor());
-				counter++;
+				assertEquals(NullFlavor.NI, data.getValue6().getNullFlavor());				counter++;
 			}
 		}
 	}
@@ -1411,8 +1661,7 @@ public class CdDataTypeTest extends SDKISOTestBase{
 				assertNull(data.getValue7().getCodeSystemVersion());
 				assertNull(data.getValue7().getDisplayName());
 				assertNull(data.getValue7().getOriginalText());
-				assertNull(data.getValue7().getNullFlavor());
-				counter++;
+				assertEquals(NullFlavor.NI, data.getValue7().getNullFlavor());				counter++;
 			}
 		}
 	}
@@ -1425,7 +1674,7 @@ public class CdDataTypeTest extends SDKISOTestBase{
 		for(CdDataType data : result)
 		{
 			//Validate 40th record
-			if((index == null && counter == 40) || (index != null && index.contains("40")))
+			if((index == null && (counter >= 40 && counter <= 44)) || (index != null && index.contains("40")))
 			{
 				assertNotNull(data);
 				assertNotNull(data.getValue8());
@@ -1453,7 +1702,7 @@ public class CdDataTypeTest extends SDKISOTestBase{
 				assertNull(data.getValue8().getCodeSystemVersion());
 				assertNull(data.getValue8().getDisplayName());
 				assertNull(data.getValue8().getOriginalText());
-				assertNull(data.getValue8().getNullFlavor());
+				assertEquals(NullFlavor.NI, data.getValue8().getNullFlavor());				
 				counter++;
 			}
 		}

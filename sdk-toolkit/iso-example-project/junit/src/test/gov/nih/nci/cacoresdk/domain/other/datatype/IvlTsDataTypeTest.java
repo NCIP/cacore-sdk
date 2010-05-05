@@ -655,10 +655,8 @@ public class IvlTsDataTypeTest extends SDKISOTestBase
 				//From database
 				assertEquals(NullFlavor.NA, data.getValue3().getNullFlavor());
 
-				assertNull(data.getValue3().getHigh().getValue());
-				assertEquals(NullFlavor.NI, data.getValue3().getHigh().getNullFlavor());
-				assertNull(data.getValue3().getLow().getValue());
-				assertEquals(NullFlavor.NI, data.getValue3().getLow().getNullFlavor());
+				assertNull(data.getValue3().getHigh());
+				assertNull(data.getValue3().getLow());
 				assertNotNull(data.getValue3().getWidth());
 				//From database
 				assertEquals(NullFlavor.NA, data.getValue3().getWidth().getNullFlavor());
