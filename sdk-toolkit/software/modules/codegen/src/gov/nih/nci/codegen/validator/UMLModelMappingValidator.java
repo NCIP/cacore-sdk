@@ -134,6 +134,40 @@ public class UMLModelMappingValidator implements Validator
 	
 	private TransformerUtils transformerUtils;
 	
+	private static final Map<String, String[]> simpleNodeReqAttrMap = new HashMap<String, String[]>() {
+		private static final long serialVersionUID = 1L;
+		{
+			put("gov.nih.nci.iso21090.ADXP", new String[] { "value" });
+			put("gov.nih.nci.iso21090.BL", new String[] { "value" });
+			put("gov.nih.nci.iso21090.BL.NONNULL", new String[] { "value" });
+			put("gov.nih.nci.iso21090.CD", new String[] { "code" });
+			put("gov.nih.nci.iso21090.ED", new String[] { "data" });
+			put("gov.nih.nci.iso21090.ED.TEXT", new String[] { "value" });
+			put("gov.nih.nci.iso21090.ENXP", new String[] { "value" });
+			put("gov.nih.nci.iso21090.II", new String[] { "extension" });
+			put("gov.nih.nci.iso21090.INT", new String[] { "value" });
+			put("gov.nih.nci.iso21090.PQ", new String[] { "value" });
+			put("gov.nih.nci.iso21090.REAL", new String[] { "value" });
+			put("gov.nih.nci.iso21090.SC", new String[] { "value" });
+			put("gov.nih.nci.iso21090.ST", new String[] { "value" });
+			put("gov.nih.nci.iso21090.ST.NT", new String[] { "value" });
+			put("gov.nih.nci.iso21090.TEL", new String[] { "value" });
+			put("gov.nih.nci.iso21090.TEL.URL", new String[] { "value" });
+			put("gov.nih.nci.iso21090.TEL.PERSON", new String[] { "value" });
+			put("gov.nih.nci.iso21090.TEL.PHONE", new String[] { "value" });
+			put("gov.nih.nci.iso21090.TEL.EMAIL", new String[] { "value" });
+			put("gov.nih.nci.iso21090.TS", new String[] { "value" });
+		}
+	};
+	
+	private static final Map<String, String[]> simpleNodeNonReqAttrMap = new HashMap<String, String[]>() {
+		private static final long serialVersionUID = 1L;
+		{
+			put("gov.nih.nci.iso21090.ED.TEXT", new String[] { "data","compression" });
+			put("gov.nih.nci.iso21090.BL.NONNULL", new String[] { "nullFlavor" });
+		}
+	};
+
 	public void setTransformerUtils(TransformerUtils transformerUtils) {
 		this.transformerUtils = transformerUtils;
 	}
@@ -560,17 +594,73 @@ public class UMLModelMappingValidator implements Validator
 		}
 	}
 	
-	private void validateIsoAttribute(UMLModel model, UMLClass klass, UMLClass table, UMLAttribute attribute, GeneratorErrors errors)
-	{
-		
-		try
-		{
-			RootNode rootNode = transformerUtils.getDatatypeNode(klass, attribute, table);
-			validateComplexNode(rootNode,klass,attribute, "."+attribute.getName(),errors);
-		} 
-		catch (GenerationException e)
-		{
-			errors.addError(new GeneratorError(getName() + ": ISO Attribute mapping validation failed for "+transformerUtils.getFQCN(klass)+"."+attribute.getName()+" ", e));
+	private void validateIsoAttribute(UMLModel model, UMLClass klass,
+			UMLClass table, UMLAttribute attribute, GeneratorErrors errors) {
+		try {
+			RootNode rootNode = transformerUtils.getDatatypeNode(klass,attribute, table);
+			validateComplexNode(rootNode, klass, attribute, "."+ attribute.getName(), errors);
+			validateSimpleNodeRequired(rootNode, klass, attribute, errors);
+			validateSimpleNodeNotRequired(rootNode, klass, attribute, errors);
+		} catch (GenerationException e) {
+			errors.addError(new GeneratorError(getName()
+					+ ": ISO Attribute mapping validation failed for "+ transformerUtils.getFQCN(klass) + "."+ attribute.getName() + " ", e));
+		}
+	}
+
+	private void validateSimpleNodeRequired(ComplexNode complexNode, UMLClass klass,
+			 UMLAttribute attribute,GeneratorErrors errors) {
+		String names[] = getSimpelNodeFields(complexNode.getIsoClassName(),true);
+		if (names != null) {
+			for (String name : names) {
+				Boolean nameFound = false;
+				for (Node node : complexNode.getInnerNodes()) {
+					if (node instanceof SimpleNode && node.getName().equals(name)){
+						nameFound = true;
+					}						
+				}
+				if (!nameFound) {
+					errors.addError(new GeneratorError(getName()
+							+ ": Mandatory attribute" + name + " not mapped in the "
+							+ complexNode.getIsoClassName() + " iso class for "
+							+ transformerUtils.getFQCN(klass) + "."+ attribute.getName()));
+				}
+			}
+		}
+		for (Node node : complexNode.getInnerNodes()) {
+			if (node instanceof ComplexNode)
+				validateSimpleNodeRequired((ComplexNode) node, klass, attribute, errors);
+		}
+	}
+	
+	private void validateSimpleNodeNotRequired(ComplexNode complexNode, UMLClass klass,
+			 UMLAttribute attribute,GeneratorErrors errors) {
+		String names[] = getSimpelNodeFields(complexNode.getIsoClassName(),false);
+		if (names != null) {
+			for (String name : names) {
+				for (Node node : complexNode.getInnerNodes()) {
+					if (node.getName().equals(name)){
+						errors.addError(new GeneratorError(getName()
+								+ ": Restricted attribute" + name + " mapped in the "
+								+ complexNode.getIsoClassName() + " iso class for "
+								+ transformerUtils.getFQCN(klass) + "."+ attribute.getName()));
+					}						
+				}
+			}
+		}
+		for (Node node : complexNode.getInnerNodes()) {
+			if (node instanceof ComplexNode)
+				validateSimpleNodeNotRequired((ComplexNode) node, klass, attribute, errors);
+		}
+	}
+	
+	private String[] getSimpelNodeFields(String isoClassName,boolean required) {
+		if (required) {
+			if (isoClassName != null && isoClassName.startsWith("gov.nih.nci.iso21090.ADXP")) {
+				isoClassName = "gov.nih.nci.iso21090.ADXP";
+			}
+			return simpleNodeReqAttrMap.get(isoClassName);
+		} else {
+			return simpleNodeNonReqAttrMap.get(isoClassName);
 		}
 	}
 
