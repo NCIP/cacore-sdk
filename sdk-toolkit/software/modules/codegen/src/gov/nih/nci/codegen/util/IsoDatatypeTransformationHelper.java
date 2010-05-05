@@ -685,6 +685,8 @@ public class IsoDatatypeTransformationHelper
 
 	private boolean isInvalidConstantMapping(ComplexNode complexNode, String childNodeName)
 	{
+		if((utils.ISO_ROOT_PACKAGE_NAME+".ED.TEXT").equals(complexNode.getIsoClassName()) && "data".equals(childNodeName))
+			return true;
 		if((utils.ISO_ROOT_PACKAGE_NAME+".ED.TEXT").equals(complexNode.getIsoClassName()) && "compression".equals(childNodeName))
 			return true;
 		if((utils.ISO_ROOT_PACKAGE_NAME+".BL.NONNULL").equals(complexNode.getIsoClassName()) && "nullFlavor".equals(childNodeName))
