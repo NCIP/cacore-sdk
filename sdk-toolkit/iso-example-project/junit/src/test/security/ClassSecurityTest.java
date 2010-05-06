@@ -51,12 +51,15 @@ public class ClassSecurityTest extends SDKSecurityTestBase
 		Ii ii = new Ii();
 		ii.setExtension("1");
 		bank1.setId(ii);
-		ii.setExtension("2");
-		bank2.setId(ii);
-		ii.setExtension("3");
-		bank3.setId(ii);
-		ii.setExtension("4");
-		bank4.setId(ii);
+		Ii ii2 = new Ii();
+		ii2.setExtension("2");
+		bank2.setId(ii2);
+		Ii ii3 = new Ii();
+		ii3.setExtension("3");
+		bank3.setId(ii3);
+		Ii ii4 = new Ii();
+		ii4.setExtension("4");
+		bank4.setId(ii4);
 		
 		List<Bank> objList = new ArrayList<Bank>();
 		
@@ -132,12 +135,15 @@ public class ClassSecurityTest extends SDKSecurityTestBase
 		Ii ii = new Ii();
 		ii.setExtension("1");
 		bank1.setId(ii);
-		ii.setExtension("2");
-		bank2.setId(ii);
-		ii.setExtension("3");
-		bank3.setId(ii);
-		ii.setExtension("4");
-		bank4.setId(ii);
+		Ii ii2 = new Ii();
+		ii2.setExtension("2");
+		bank2.setId(ii2);
+		Ii ii3 = new Ii();
+		ii3.setExtension("3");
+		bank3.setId(ii3);
+		Ii ii4 = new Ii();
+		ii4.setExtension("4");
+		bank4.setId(ii4);
 		
 		List<Bank> objList = new ArrayList<Bank>();
 		
