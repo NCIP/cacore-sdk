@@ -30,7 +30,7 @@
 	<property name="junit.report.dir" value="${junit.home}/report"/>
 	<property name="aggregate.report.dir" value="${junit.report.dir}/aggregate-report"/>
 	<property name="cobertura.report.dir" value="${junit.report.dir}/cobertura-report"/>
-	
+
 	<property name="report.project.dir" value="${junit.report.dir}/defaultTest" />
 	<property name="build.report.dir" value="${report.project.dir}/build-report" />
 
@@ -47,7 +47,7 @@
 	<property name="report.dir.security-group-thick-client" value="${report.dir}/security-group-thick-client" />
 	<property name="report.dir.security-remote-client" value="${report.dir}/security-remote-client" />
 	<property name="report.dir.codegen" value="${report.dir}/codegen" />
-	
+
 	<property name="generate.report" value="true" />
 	<property name="cobertura.enabled" value="false" />
 	<!-- load ant contrib -->
@@ -129,18 +129,18 @@
 		<pathelement path="${package.client.ws.conf.dir}" />
 	</path>
 
-	
-		<path id="instrumented.classpath">
-			<fileset dir="${test.cobertura.dir}/instrumented/sdk">
+
+	<path id="instrumented.classpath">
+		<fileset dir="${test.cobertura.dir}/instrumented/sdk">
 			<include name="**/*.jar" />
-			</fileset>
-		</path>
-		<path id="project.test.cobertura.classpath">
-			<fileset dir="${test.cobertura.dir}">
-				<include name="**/*.jar" />
-			</fileset>
-		</path>
-		
+		</fileset>
+	</path>
+	<path id="project.test.cobertura.classpath">
+		<fileset dir="${test.cobertura.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
 	<!--***********************************************************************
 	*** Macro definitions to run JUnits
 	*********************************************************************** -->
@@ -175,25 +175,23 @@
 
 	<macrodef name="SDKRunJUnit">
 		<attribute name="junitClasspath" />
-		<attribute name="junitOutputDir" default="${junit.home}/output"/>
+		<attribute name="junitOutputDir" default="${junit.home}/output" />
 		<attribute name="includePattern" />
-		<attribute name="junitreportfile" />
 		<attribute name="excludePattern" />
-		<attribute name="loginConfig.location" default="${package.client.local.conf.dir}"/>
+		<attribute name="junitreportfile" />
+		<attribute name="loginConfig.location" default="${package.client.local.conf.dir}" />
 		<sequential>
-		<if>
-			<equals arg1="${cobertura.enabled}" arg2="true"/>
-			<then>
-				<echo message="Cobertura enabled"/>
-				<SDKRunJUnitWithCobertura junitClasspath="local-client-cp" junitOutputDir="${report.dir.thick-client}" includePattern="**/cacoresdk/**/*Test.class" excludePattern="" junitreportfile="TEST-readThickClient.xml" />
-			</then>
-			<else>
-				<echo message="Cobertura not enabled"/>
-				<SDKRunJUnitWithoutCobertura junitClasspath="local-client-cp" junitOutputDir="${report.dir.thick-client}" includePattern="**/cacoresdk/**/*Test.class" excludePattern="" junitreportfile="TEST-readThickClient.xml" />
-			</else>
-		</if>
-			
-			
+			<if>
+				<equals arg1="${cobertura.enabled}" arg2="true" />
+				<then>
+					<echo message="Cobertura enabled" />
+					<SDKRunJUnitWithCobertura junitClasspath="@{junitClasspath}" junitOutputDir="@{junitOutputDir}" includePattern="@{includePattern}" excludePattern="@{excludePattern}" junitreportfile="@{junitreportfile}" />
+				</then>
+				<else>
+					<echo message="Cobertura not enabled" />
+					<SDKRunJUnitWithoutCobertura junitClasspath="@{junitClasspath}" junitOutputDir="@{junitOutputDir}" includePattern="@{includePattern}" excludePattern="@{excludePattern}" junitreportfile="@{junitreportfile}" />
+				</else>
+			</if>
 		</sequential>
 	</macrodef>
 
@@ -222,13 +220,8 @@
 				<sysproperty key="enableCaGridLoginModule" value="${ENABLE_GRID_LOGIN_MODULE}"/>
 				<sysproperty key="outputDir" value="${junit.home}/output/"/>
 				<sysproperty key="serverURL" value="http://${SERVER_HOST_NAME}:${SERVER_HTTP_PORT}/${PROJECT_NAME}"/>
-
-				
-				
 				<classpath>
-					<!--<path refid="instrumented.classpath" />-->
 					<path refid="@{junitClasspath}"/>
-					<!--<path refid="project.test.cobertura.classpath"/>-->
 				</classpath>
 				<formatter type="xml" />
 				<batchtest haltonfailure="no" todir="@{junitOutputDir}" fork="true">
@@ -277,7 +270,7 @@
 				<sysproperty key="serverURL" value="http://${SERVER_HOST_NAME}:${SERVER_HTTP_PORT}/${PROJECT_NAME}"/>
 
 				<sysproperty key="net.sourceforge.cobertura.datafile" file="@{junitOutputDir}/cobertura.ser" />
-				
+
 				<classpath>
 					<path refid="instrumented.classpath" />
 					<path refid="@{junitClasspath}"/>
