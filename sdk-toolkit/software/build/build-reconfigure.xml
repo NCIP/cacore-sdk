@@ -960,6 +960,7 @@
 				<include name="cglib-*.jar"/>
 				<include name="cog-jglobus-*.jar"/>
 				<include name="commons-codec-*.jar"/>
+				<include name="commons-collections-*.jar"/>
 				<include name="commons-logging-*.jar"/>
 				<include name="commons-lang-*.jar"/>
 				<include name="dom4j-*.jar"/>
