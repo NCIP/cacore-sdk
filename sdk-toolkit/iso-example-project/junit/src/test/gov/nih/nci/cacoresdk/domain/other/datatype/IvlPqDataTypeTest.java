@@ -350,7 +350,7 @@ public class IvlPqDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 				assertNotNull(data.getValue1().getNullFlavor());
-				assertEquals(NullFlavor.NI, data.getValue1().getNullFlavor());
+				assertEquals(NullFlavor.NA, data.getValue1().getNullFlavor());
 				assertNull(data.getValue1().getAny());
 				assertNull(data.getValue1().getHighClosed());
 				assertNull(data.getValue1().getLowClosed());
@@ -765,9 +765,7 @@ public class IvlPqDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue4().getWidth());				
 				//From database, overriding global constant
 				assertEquals(NullFlavor.NI, data.getValue4().getWidth().getNullFlavor());
-				assertNotNull(data.getValue4().getAny());
-				assertNull(data.getValue4().getAny().getValue());
-				assertEquals(NullFlavor.NI, data.getValue4().getAny().getNullFlavor());
+				assertNull(data.getValue4().getAny());
 				
 				counter++;
 				continue;
@@ -848,7 +846,8 @@ public class IvlPqDataTypeTest extends SDKISOTestBase
 			else
 			{
 				assertNotNull(data);
-				assertNull(data.getValue4());
+				assertNotNull(data.getValue4());
+				assertEquals(NullFlavor.NI, data.getValue4().getNullFlavor());
 				counter++;
 			}
 		}

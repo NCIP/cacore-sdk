@@ -156,26 +156,6 @@ public class ScDataTypeTest extends SDKISOTestBase
 		assertValue2(result, index);
 	}
 
-	/**
-	 * Search Value2 by HQL criteria Test
-	 * 
-	 * @throws ApplicationException 
-	 */
-	@SuppressWarnings("unchecked")
-	public void testScValue21ByHQLCriteria() throws ApplicationException
-	{
-		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.ScDataType a where  a.value2.nullFlavor is not null order by a.id asc asc");
-		Collection<ScDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.ScDataType");
-		assertEquals(6, result.size());
-		List index = new ArrayList();
-		index.add("7");
-//		index.add("8");
-//		index.add("9");
-//		index.add("10");
-//		index.add("11");
-//		index.add("12");
-		assertValue2(result, index);
-	}
 	
 	/**
 	 * Search Value2 by detached criteria Test
@@ -516,7 +496,7 @@ public class ScDataTypeTest extends SDKISOTestBase
 				assertNull(data.getValue2().getNullFlavor());
 				assertEquals("VALUE2_VALUE5", data.getValue2().getValue());
 				//From database, overriding global constant
-				assertEquals(NullFlavor.NA, data.getValue2().getCode().getNullFlavor());
+				assertNull(data.getValue2().getCode().getNullFlavor());
 				assertEquals("VALUE2_CODE_CODE5", data.getValue2().getCode().getCode());
 				//From database, overriding global constant
 				assertEquals("VALUE2_CODE_CODE_SYSTEM4", data.getValue2().getCode().getCodeSystem());
