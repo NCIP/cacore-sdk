@@ -61,9 +61,10 @@ public final class SecuritySettingsPanel implements Panel, PanelValidator {
     private JTextField caGridLoginModuleNameField = null;
     private JTextField sdkGridLoginSvcNameField = null;
 	
-	public SecuritySettingsPanel(WorkbenchPropertiesManager propsMgr,TabbedPanePropertiesValidator mainPanelValidator){
-		this.propsMgr=propsMgr;
-		this.mainPanelValidator=mainPanelValidator;
+	public SecuritySettingsPanel(WorkbenchPropertiesManager propsMgr,
+			TabbedPanePropertiesValidator mainPanelValidator) {
+		this.propsMgr = propsMgr;
+		this.mainPanelValidator = mainPanelValidator;
 	}
 	
 	public void setParentContainer(CodegenPropertiesViewer parentContainer){
@@ -166,8 +167,9 @@ public final class SecuritySettingsPanel implements Panel, PanelValidator {
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
 					
-					if (parentContainer != null && (parentContainer instanceof CodegenPropertiesViewer))
-					parentContainer.confirmCsmTablesPresent();
+					if (parentContainer != null	&& (parentContainer instanceof CodegenPropertiesViewer)){
+						parentContainer.confirmCsmTablesPresent();
+					}		
 				}
         	});
 
@@ -358,8 +360,12 @@ public final class SecuritySettingsPanel implements Panel, PanelValidator {
     protected void toggleSecurityFields() {
 		if (getEnableSecurityCheckBox().isSelected()){
 			getEnableClassLevelSecurityCheckBox().setEnabled(true);
-		    getEnableInstanceLevelSecurityCheckBox().setEnabled(true);
-		    getEnableAttributeLevelSecurityCheckBox().setEnabled(true);
+			
+			if (!parentContainer.isIso21090DatatypesEnabled()){
+			    getEnableInstanceLevelSecurityCheckBox().setEnabled(true);
+			    getEnableAttributeLevelSecurityCheckBox().setEnabled(true);
+			}
+
 		    getCsmProjectNameField().setEnabled(true);
 		    getCacheProtectionElementsCheckBox().setEnabled(true);
 		    getEnableCaGridLoginModuleCheckBox().setEnabled(true);
@@ -387,6 +393,18 @@ public final class SecuritySettingsPanel implements Panel, PanelValidator {
 
     	sdkGridLoginSvcNameField.setEnabled(false);
     	caGridLoginModuleNameField.setEnabled(false);
+    }
+    
+    public void disableInstanceAndAttributeLevelSecurity(){
+	    getEnableInstanceLevelSecurityCheckBox().setEnabled(false);
+	    getEnableInstanceLevelSecurityCheckBox().setSelected(false);
+	    getEnableAttributeLevelSecurityCheckBox().setEnabled(false);
+	    getEnableAttributeLevelSecurityCheckBox().setSelected(false);
+    }
+	
+    public void enableInstanceAndAttributeLevelSecurity(){
+	    getEnableInstanceLevelSecurityCheckBox().setEnabled(true);
+	    getEnableAttributeLevelSecurityCheckBox().setEnabled(true);
     }
     
 	/**

@@ -399,6 +399,24 @@ public class CodegenPropertiesViewer extends WorkbenchViewerBaseComponent {
 					+"the same schema as the model tables. Make sure this is the case.");
 		}
     }
+    
+    
+    public void notifyOfDisabledInterfaces(){
+		if (codegenSettingsPanel.isIso21090DatatypesEnabled()){
+			JOptionPane.showMessageDialog(
+					this,
+					"Enabling ISO 21090 Datatypes causes the following to be disabled:\n"
+					+"  *  Web Service API\n"
+					+"  *  RESTful HTML and JSON API's\n"
+					+"  *  Writable API\n"
+					+"  *  CLM API\n"
+					+"  *  Castor Mapping\n"
+					+"  *  Permissible Values Validator\n"
+					+"  *  Hibernate Validator\n"
+					+"  *  WSSD Generation\n"
+					+"  *  Instance and Attribute Level Security");
+		}
+    }
 
     /**
      * This method initializes closeButton
@@ -611,6 +629,26 @@ public class CodegenPropertiesViewer extends WorkbenchViewerBaseComponent {
     public void setProjectDir(String projectDirPath){
     	projectSettingsPanel.setProjectDir(projectDirPath);
     }
+	
+    public void disableWritableAPI(){
+    	writableApiSettingsPanel.disableWritableAPI();
+    }
+	
+    public void enableWritableAPI(){
+    	writableApiSettingsPanel.enableWritableAPI();
+    }
+    
+    public void disableInstanceAndAttributeLevelSecurity(){
+    	securitySettingsPanel.disableInstanceAndAttributeLevelSecurity();
+    }
+	
+    public void enableInstanceAndAttributeLevelSecurity(){
+    	securitySettingsPanel.enableInstanceAndAttributeLevelSecurity();
+    }
+    
+    public boolean isIso21090DatatypesEnabled(){
+    	return codegenSettingsPanel.isIso21090DatatypesEnabled();
+    }
     
     public void loadCodegenProperties(){
     	
@@ -655,6 +693,7 @@ public class CodegenPropertiesViewer extends WorkbenchViewerBaseComponent {
         panelValidators.add((PanelValidator)securitySettingsPanel);
         panelValidators.add((PanelValidator)logViewerPanel);
         
+        codegenSettingsPanel.setParentContainer(this);
         securitySettingsPanel.setParentContainer(this);
     }
     

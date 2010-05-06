@@ -254,6 +254,19 @@ public final class WritableApiSettingsPanel implements Panel, PanelValidator {
 		}
     }
     
+    public void disableWritableAPI(){
+    	getEnableWritableApiExtensionCheckBox().setEnabled(false);
+    	getEnableWritableApiExtensionCheckBox().setSelected(false);
+    	
+    	toggleWritableApiFields();
+    }
+	
+    public void enableWritableAPI(){
+    	getEnableWritableApiExtensionCheckBox().setEnabled(true);
+    	
+    	toggleWritableApiFields();
+    }
+    
 	/**
 	 * This method initializes writableApiSettingsPanel	
 	 * 	
