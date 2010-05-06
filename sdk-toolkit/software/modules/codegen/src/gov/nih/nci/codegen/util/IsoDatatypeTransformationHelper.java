@@ -97,8 +97,6 @@ public class IsoDatatypeTransformationHelper
 	public RootNode getDatatypeNode(UMLClass klass, UMLAttribute attr, UMLClass table) throws GenerationException
 	{
 		RootNode rootNode = createDatatypeNode(klass, attr, table);
-		rootNode.setIsoClassName(utils.ISO_ROOT_PACKAGE_NAME+"."+attr.getDatatype().getName());
-		rootNode.setParentClassName(utils.getFQCN(klass));
 		traverseNodeAndAttachDataType(rootNode, klass, attr);
 		getGlobalConstantNode(rootNode);
 		traverseNodeAndAttachDataType(rootNode, klass, attr);
@@ -571,6 +569,9 @@ public class IsoDatatypeTransformationHelper
 		UMLClass datatypeTable = assocTableName == null? table : utils.findCollectionTable(attr, model);
 		
 		RootNode rootNode = new RootNode(attr.getName());
+		rootNode.setParentClassName(utils.getFQCN(klass));
+		rootNode.setIsoClassName(utils.ISO_ROOT_PACKAGE_NAME+"."+attr.getDatatype().getName());
+		
 		for(UMLAttribute column: datatypeTable.getAttributes())
 		{
 			for(UMLTaggedValue tv: column.getTaggedValues())

@@ -620,7 +620,7 @@ public class UMLModelMappingValidator implements Validator
 				}
 				if (!nameFound) {
 					errors.addError(new GeneratorError(getName()
-							+ ": Mandatory attribute" + name + " not mapped in the "
+							+ ": Mandatory attribute " + name + " not mapped in the "
 							+ complexNode.getIsoClassName() + " iso class for "
 							+ transformerUtils.getFQCN(klass) + "."+ attribute.getName()));
 				}
@@ -640,7 +640,7 @@ public class UMLModelMappingValidator implements Validator
 				for (Node node : complexNode.getInnerNodes()) {
 					if (node.getName().equals(name)){
 						errors.addError(new GeneratorError(getName()
-								+ ": Restricted attribute" + name + " mapped in the "
+								+ ": Restricted attribute " + name + " mapped in the "
 								+ complexNode.getIsoClassName() + " iso class for "
 								+ transformerUtils.getFQCN(klass) + "."+ attribute.getName()));
 					}						
@@ -670,15 +670,15 @@ public class UMLModelMappingValidator implements Validator
 		
 		for(Node node1: complexNode.getInnerNodes())
 		{
-			if("nullFalvor".equals(node1.getName()))
+			if("nullFlavor".equals(node1.getName()))
 			{
 				nullFlavorFound = true;
 				break;
 			}
 		}
 		
-		//if(!nullFlavorFound)
-		//	errors.addError(new GeneratorError(getName() + ": Can not find NullFlavor mapping for "+transformerUtils.getFQCN(klass)+prefix));
+		if(!nullFlavorFound && !(transformerUtils.ISO_ROOT_PACKAGE_NAME+".BL.NONNULL").equals(complexNode.getIsoClassName()) && !(transformerUtils.ISO_ROOT_PACKAGE_NAME+".ENXP").equals(complexNode.getIsoClassName()) && !complexNode.getIsoClassName().startsWith(transformerUtils.ISO_ROOT_PACKAGE_NAME+".ADXP"))
+			errors.addError(new GeneratorError(getName() + ": Can not find NullFlavor mapping for "+transformerUtils.getFQCN(klass)+prefix));
 			
 
 		boolean simpleNodeFound = false;
