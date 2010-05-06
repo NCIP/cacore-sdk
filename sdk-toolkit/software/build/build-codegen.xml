@@ -13,7 +13,7 @@
 	<property name="target.workspace.dir" location="${target.dir}/workspace" />
 	<property name="target.module.dir" location="${target.dir}/modules" />
 	<property name="test.cobertura.lib.dir" location="${target.module.dir}/lib/test-cobertura" />
-	<property name="output.dir.location" value="../target/workspace"/>
+	<property name="output.dir.location" value="../target/workspace" />
 
 	<property name="ivy.def.file" location="ivy.xml" />
 
@@ -34,6 +34,13 @@
 		CONFIGURATION
 		***********************************************************************
 	-->
+	<condition property="ISO21090_DATATYPES_ENABLED" value="true" else="false">
+		<or>
+			<equals arg1="${ENABLE_ISO21090_DATATYPES}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${ENABLE_ISO21090_DATATYPES}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
+	</condition>
+
 	<condition property="SECURITY_ENABLED" value="true" else="false">
 		<or>
 			<equals arg1="${ENABLE_SECURITY}" arg2="true" casesensitive="false" trim="true" />
@@ -75,6 +82,9 @@
 				<equals arg1="${ENABLE_INSTANCE_LEVEL_SECURITY}" arg2="yes" casesensitive="false" trim="true" />
 			</or>
 			<equals arg1="${SECURITY_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+			<not>
+				<equals arg1="${ISO21090_DATATYPES_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+			</not>
 		</and>
 	</condition>
 	<condition property="ATTRIBUTE_LEVEL_SECURITY_ENABLED" value="true" else="false">
@@ -84,6 +94,9 @@
 				<equals arg1="${ENABLE_ATTRIBUTE_LEVEL_SECURITY}" arg2="yes" casesensitive="false" trim="true" />
 			</or>
 			<equals arg1="${SECURITY_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+			<not>
+				<equals arg1="${ISO21090_DATATYPES_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+			</not>
 		</and>
 	</condition>
 	<condition property="ATTRIBUTE_LEVEL_SECURITY_START" value="" else="${xml.comment.start}">
@@ -99,10 +112,15 @@
 		</or>
 	</condition>
 	<condition property="WRITABLE_API_EXTENSION_ENABLED" value="true" else="false">
-		<or>
-			<equals arg1="${ENABLE_WRITABLE_API_EXTENSION}" arg2="true" casesensitive="false" trim="true" />
-			<equals arg1="${ENABLE_WRITABLE_API_EXTENSION}" arg2="yes" casesensitive="false" trim="true" />
-		</or>
+		<and>
+			<or>
+				<equals arg1="${ENABLE_WRITABLE_API_EXTENSION}" arg2="true" casesensitive="false" trim="true" />
+				<equals arg1="${ENABLE_WRITABLE_API_EXTENSION}" arg2="yes" casesensitive="false" trim="true" />
+			</or>
+			<not>
+				<equals arg1="${ISO21090_DATATYPES_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+			</not>
+		</and>
 	</condition>
 	<condition property="SERVICE_INTERFACE" value="${extension.api.interface}" else="${sdk.api.interface}">
 		<equals arg1="${WRITABLE_API_EXTENSION_ENABLED}" arg2="true" casesensitive="false" trim="true" />
@@ -170,12 +188,6 @@
 			<equals arg1="${GENERATE_BEANS}" arg2="yes" casesensitive="false" trim="true" />
 		</or>
 	</condition>
-	<condition property="ISO21090_DATATYPES_ENABLED" value="true" else="false">
-		<or>
-			<equals arg1="${ENABLE_ISO21090_DATATYPES}" arg2="true" casesensitive="false" trim="true" />
-			<equals arg1="${ENABLE_ISO21090_DATATYPES}" arg2="yes" casesensitive="false" trim="true" />
-		</or>
-	</condition>
 
 	<condition property="ENABLE_ISO_CONSTANT_GENERATION" value="true" else="false">
 		<and>
@@ -183,25 +195,30 @@
 			<equals arg1="${ENABLE_HIBERNATE_MAPPING_GENERATION}" arg2="true" casesensitive="false" trim="true" />
 		</and>
 	</condition>
-	
+
 	<condition property="ENABLE_CASTOR_MAPPING_GENERATION" value="true" else="false">
+		<and>
 			<or>
 				<equals arg1="${GENERATE_CASTOR_MAPPING}" arg2="true" casesensitive="false" trim="true" />
 				<equals arg1="${GENERATE_CASTOR_MAPPING}" arg2="yes" casesensitive="false" trim="true" />
-		</or>
+			</or>
+			<not>
+				<equals arg1="${ISO21090_DATATYPES_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+			</not>
+		</and>
 	</condition>
 
 	<condition property="ENABLE_JAXB_MAPPING_GENERATION" value="true" else="false">
 		<or>
 			<equals arg1="${GENERATE_JAXB_MAPPING}" arg2="true" casesensitive="false" trim="true" />
 			<equals arg1="${GENERATE_JAXB_MAPPING}" arg2="yes" casesensitive="false" trim="true" />
-			</or>
+		</or>
 	</condition>
 	<condition property="ENABLE_XSD_GENERATION" value="true" else="false">
-			<or>
-				<equals arg1="${GENERATE_XSD}" arg2="true" casesensitive="false" trim="true" />
-				<equals arg1="${GENERATE_XSD}" arg2="yes" casesensitive="false" trim="true" />
-			</or>
+		<or>
+			<equals arg1="${GENERATE_XSD}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${GENERATE_XSD}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
 	</condition>
 	<condition property="ENABLE_GENERATE_XSD_WITH_GME_TAGS" value="true" else="false">
 		<and>
@@ -219,6 +236,9 @@
 				<equals arg1="${GENERATE_XSD_WITH_PERMISSIBLE_VALUES}" arg2="yes" casesensitive="false" trim="true" />
 			</or>
 			<equals arg1="${ENABLE_XSD_GENERATION}" arg2="true" casesensitive="false" trim="true" />
+			<not>
+				<equals arg1="${ISO21090_DATATYPES_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+			</not>
 		</and>
 	</condition>
 	<condition property="ENABLE_GME_TAGS_VALIDATOR" value="true" else="false">
@@ -372,7 +392,7 @@
 			<filter token="ENABLE_HIBERNATE_VALIDATOR_START" value="${ENABLE_HIBERNATE_VALIDATOR_START}" />
 			<filter token="ENABLE_HIBERNATE_VALIDATOR_END" value="${ENABLE_HIBERNATE_VALIDATOR_END}" />
 			<filter token="CADSR_CONNECTION_URL" value="${CADSR_CONNECTION_URL}" />
-			
+
 			<filter token="CSM_PROJECT_NAME" value="${CSM_PROJECT_NAME}" />
 			<filter token="INSTANCE_LEVEL_SECURITY_ENABLED" value="${INSTANCE_LEVEL_SECURITY_ENABLED}" />
 			<filter token="ATTRIBUTE_LEVEL_SECURITY_ENABLED" value="${ATTRIBUTE_LEVEL_SECURITY_ENABLED}" />
@@ -388,7 +408,7 @@
 			<filter token="GENERATE_CLM_LOGGER_CFG" value="${ENABLE_CLM_LOGGER_CFG_GENERATION}" />
 			<filter token="READABLE_APPLICATION_SERVICE_INTERFACE" value="${sdk.api.interface}" />
 			<filter token="WRITABLE_APPLICATION_SERVICE_INTERFACE" value="${WRITABLE_APPLICATION_SERVICE_INTERFACE}" />
-			<filter token="WRITABLE_APPLICATION_SERVICE_CLASS_LEVEL_SECURITY_INTERFACE" value="${WRITABLE_APPLICATION_SERVICE_CLASS_LEVEL_SECURITY_INTERFACE}" />			
+			<filter token="WRITABLE_APPLICATION_SERVICE_CLASS_LEVEL_SECURITY_INTERFACE" value="${WRITABLE_APPLICATION_SERVICE_CLASS_LEVEL_SECURITY_INTERFACE}" />
 			<filter token="ENABLE_EMPTY_INTERCEPTOR_START" value="${ENABLE_EMPTY_INTERCEPTOR_START}" />
 			<filter token="ENABLE_EMPTY_INTERCEPTOR_END" value="${ENABLE_EMPTY_INTERCEPTOR_END}" />
 			<filter token="ATTRIBUTE_LEVEL_SECURITY_START" value="${ATTRIBUTE_LEVEL_SECURITY_START}" />
@@ -401,7 +421,7 @@
 			<filter token="CLASS_LEVEL_SECURITY_START" value="${CLASS_LEVEL_SECURITY_START}" />
 			<filter token="CLASS_LEVEL_SECURITY_END" value="${CLASS_LEVEL_SECURITY_END}" />
 			<filter token="ISO21090_DATATYPES_ENABLED" value="${ISO21090_DATATYPES_ENABLED}" />
-			
+
 		</filterset>
 		<filterset id="filtertoken2" begintoken="${xml.comment.start}@" endtoken="@${xml.comment.end}" onmissingfiltersfile="fail">
 			<filter token="SECURITY_START" value="${SECURITY_START}" />
@@ -416,8 +436,8 @@
 	</target>
 	<target name="replacetoken-contents-preconfigure" depends="-replace-templates-filter-tokens">
 
-		<delete dir="${output.codegen.config.dir}"/>
-		<delete dir="${system.config.template.dir}"/>
+		<delete dir="${output.codegen.config.dir}" />
+		<delete dir="${system.config.template.dir}" />
 
 		<copy todir="${output.codegen.config.dir}" filtering="true">
 			<fileset dir="${codegen.config.dir}" />
@@ -440,7 +460,7 @@
 	</target>
 
 
-	<target name="replacetoken-contents" depends="replacetoken-contents-preconfigure"/>
+	<target name="replacetoken-contents" depends="replacetoken-contents-preconfigure" />
 
 
 	<!-- ******************************************************************* -->
@@ -555,7 +575,7 @@
 	<target name="-generate-codegen" depends="replacetoken-contents,-copy-iso-constants-template-file,-generate-codegen-validator" description="Runs the Code Generator">
 		<echo>${ant.project.name}: Running the Code Generator</echo>
 		<fail unless="IDENTITY_GENERATOR_TAG">IDENTITY_GENERATOR property must be set in codegen.properties</fail>
-		<java classname="gov.nih.nci.codegen.Generator" failonerror="true" fork="true" >
+		<java classname="gov.nih.nci.codegen.Generator" failonerror="true" fork="true">
 			<arg value="${codegen.config.file}" />
 			<jvmarg value="-Xms256M" />
 			<jvmarg value="-Xmx512M" />
@@ -566,7 +586,7 @@
 
 	<target name="-generate-codegen-validator" description="Runs the Hibernate Validator Code Generator">
 		<echo>${ant.project.name}: Running the Hibernate Validator Code Generator</echo>
-		<java classname="gov.nih.nci.codegen.Generator" failonerror="true" fork="true" >
+		<java classname="gov.nih.nci.codegen.Generator" failonerror="true" fork="true">
 			<arg value="${codegen.config.validator.file}" />
 			<jvmarg value="-Xms256M" />
 			<jvmarg value="-Xmx512M" />
@@ -583,58 +603,63 @@
 			<classpath refid="cobertura.runtime.classpath" />
 			<bottom>
 				<![CDATA[<i>This API was generated by the <a href='http://ncicb.nci.nih.gov/NCICB/infrastructure/cacoresdk'>caCORE Software Development Kit</a>.</i>]]></bottom>
-		<fileset dir="${src.java.dir}" includes="**/*.java"/>
-	</javadoc>
-</target>
+			<fileset dir="${src.java.dir}" includes="**/*.java"/>
+		</javadoc>
+	</target>
 
-<target name="-system-doc" description="Generates javadocs for the entire system">
-	<javadoc packagenames="*" destdir="${systemdoc.dir}" author="true"
-			private="true" version="true" use="true" windowtitle="${VERSION} API Documentation"
-			doctitle="${VERSION} API Documentation" useexternalfile="yes" verbose="false" failonerror="false">
-		<bottom>
-			<![CDATA[<i>This System API was generated by the <a href='http://ncicb.nci.nih.gov/NCICB/infrastructure/cacoresdk'>caCORE Software Development Kit</a>.</i>]]></bottom>
-	<fileset dir="${modules.dir}" includes="**/*.java"/>
-</javadoc>
-</target>
+	<target name="-system-doc" description="Generates javadocs for the entire system">
+		<javadoc packagenames="*" destdir="${systemdoc.dir}" author="true"
+					private="true" version="true" use="true" windowtitle="${VERSION} API Documentation"
+					doctitle="${VERSION} API Documentation" useexternalfile="yes" verbose="false" failonerror="false">
+			<bottom>
+				<![CDATA[<i>This System API was generated by the <a href='http://ncicb.nci.nih.gov/NCICB/infrastructure/cacoresdk'>caCORE Software Development Kit</a>.</i>]]></bottom>
+			<fileset dir="${modules.dir}" includes="**/*.java"/>
+		</javadoc>
+	</target>
 
-<target name="post-clean">
-<delete dir="${build.classes.dir}" quiet="false" />
-</target>
+	<target name="post-clean">
+		<delete dir="${build.classes.dir}" quiet="false" />
+		<echo message="Writable API ${WRITABLE_API_EXTENSION_ENABLED}"/>
+		<echo message="Attribute API ${ATTRIBUTE_LEVEL_SECURITY_ENABLED}"/>
+		<echo message="Instance level security ${INSTANCE_LEVEL_SECURITY_ENABLED}"/>
+		<echo message="Castor ${ENABLE_CASTOR_MAPPING_GENERATION}"/>
+		<echo message="Permissible ${ENABLE_GENERATE_XSD_WITH_PERMISSIBLE_VALUES}"/>
+		<echo message="Hibernate Validator ${ENABLE_HIBERNATE_VALIDATOR}"/>
+	</target>
 
+	<target name="build:all" depends="-pre-clean,-init,-generate-codegen,-package-codegen-artifacts,-codegen-doc,-system-doc,post-clean" description="Default target">
+	</target>
 
-<target name="build:all" depends="-pre-clean,-init,-generate-codegen,-package-codegen-artifacts,-codegen-doc,-system-doc,post-clean" description="Default target">
-</target>
+	<target name="package-system" depends="-package-web,dist" description="Packages the system">
+		<mkdir dir="${output.project.dir}/lib" />
+		<copy todir="${output.project.dir}/lib">
+			<fileset dir="${target.module.dir}/lib">
+				<exclude name="**/compile/**" />
+			</fileset>
+		</copy>
+	</target>
 
-<target name="package-system" depends="-package-web,dist" description="Packages the system" >
-<mkdir dir="${output.project.dir}/lib"/>
-<copy todir="${output.project.dir}/lib">
-	<fileset dir="${target.module.dir}/lib">
-		<exclude name="**/compile/**"/>
-	</fileset>
-</copy>
-</target>
+	<target name="-package-web">
+		<mkdir dir="${output.project.dir}/web" />
+		<copy todir="${output.project.dir}/web">
+			<fileset dir="${workspace.dir}/web">
+				<include name="**/*" />
+			</fileset>
+		</copy>
+	</target>
 
-<target name="-package-web">
-<mkdir dir="${output.project.dir}/web"/>
-<copy todir="${output.project.dir}/web">
-	<fileset dir="${workspace.dir}/web">
-		<include name="**/*"/>
-	</fileset>
-</copy>
-</target>
-
-<target name="dist" description="target to package-system">
-<copy todir="${dist.exploded.dir}">
-	<fileset dir="${basedir}" >
-		<include name="*-reconfigure.xml"/>
-		<include name="*-taskdef.xml"/>
-		<include name="*.properties"/>
-		<include name="tools/**/*"/>
-	</fileset>
-	<fileset dir="${target.dir}/dist/exploded" >
-		<include name="ncicb-jboss*.xml"/>
-	</fileset>
-</copy>
-</target>
+	<target name="dist" description="target to package-system">
+		<copy todir="${dist.exploded.dir}">
+			<fileset dir="${basedir}">
+				<include name="*-reconfigure.xml" />
+				<include name="*-taskdef.xml" />
+				<include name="*.properties" />
+				<include name="tools/**/*" />
+			</fileset>
+			<fileset dir="${target.dir}/dist/exploded">
+				<include name="ncicb-jboss*.xml" />
+			</fileset>
+		</copy>
+	</target>
 
 </project>

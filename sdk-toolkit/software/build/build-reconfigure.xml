@@ -274,7 +274,7 @@
 		</or>
 	</condition>
 
-	<condition property="WEBSERVICE_INTERFACE_ENABLED" value="true" else="false">
+	<condition property="WEBSERVICE_INTERFACE_ENABLED" value="true">
 		<and>
 			<not>
 				<equals arg1="${ISO21090_DATATYPES_ENABLED}" arg2="true" casesensitive="false" trim="true" />
