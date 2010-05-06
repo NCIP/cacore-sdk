@@ -3,6 +3,8 @@ package gov.nih.nci.cacore.workbench.portal.panel;
 import gov.nih.nci.cacore.workbench.common.WorkbenchPropertiesManager;
 import gov.nih.nci.cacore.workbench.portal.validation.PanelValidator;
 import gov.nih.nci.cacore.workbench.portal.validation.TabbedPanePropertiesValidator;
+import gov.nih.nci.cacore.workbench.portal.viewer.CodegenPropertiesViewer;
+import gov.nih.nci.cacore.workbench.portal.viewer.DeployPropertiesViewer;
 import gov.nih.nci.cacore.workbench.common.Utils;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 
@@ -33,8 +35,9 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
 	
 	private static final Logger log = Logger.getLogger(CodegenSettingsPanel.class);
 	
-	WorkbenchPropertiesManager propsMgr = null;
-	TabbedPanePropertiesValidator mainPanelValidator = null;
+	private WorkbenchPropertiesManager propsMgr = null;
+	private TabbedPanePropertiesValidator mainPanelValidator = null;
+	private CodegenPropertiesViewer parentContainer = null;
 	
 	// Code Generation Panel Validation Message Constants
 	private static final String DAO_PAGE_SIZE = "Page Size DB";
@@ -50,7 +53,7 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
 	//private JPanel codeGenSettingsPanel = null;
 	private JPanel miscSettingsSubPanel = null;	
 	private JPanel miscSettingsSubLeftPanel = null;
-	private JPanel miscSettingsSubCenterPanel = null;
+	private JPanel miscSettingsSubCenterPanel = null;	
 	private JPanel miscSettingsSubRightPanel = null;		
 	private JPanel interfaceGenSettingsSubPanel = null;
 	private JPanel interfaceGenSettingsSubLeftPanel = null;
@@ -87,12 +90,17 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
     private JCheckBox generateHibernateValidatorCheckBox = null;
     private JTextField caDsrConnectionUrlField = null;
     
-	public CodegenSettingsPanel(WorkbenchPropertiesManager propsMgr,TabbedPanePropertiesValidator mainPanelValidator){
-		this.propsMgr=propsMgr;
-		this.mainPanelValidator=mainPanelValidator;
+    public CodegenSettingsPanel(WorkbenchPropertiesManager propsMgr,
+			TabbedPanePropertiesValidator mainPanelValidator) {
+		this.propsMgr = propsMgr;
+		this.mainPanelValidator = mainPanelValidator;
 	}
+    
+	public void setParentContainer(CodegenPropertiesViewer parentContainer){
+		this.parentContainer=parentContainer;
+	}    
 	
-    public void toggleXsdFields() {
+    private void toggleXsdFields() {
 		if (getGenerateXsdCheckBox().isSelected()){
 			validateGmeTagsCheckBox.setEnabled(true);
 			generateCastorMappingCheckBox.setEnabled(true);
@@ -105,6 +113,43 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
 			generateJaxbMappingCheckBox.setEnabled(false);
 			generateXsdWithGmeTagsCheckBox.setEnabled(false);
 			generateXsdWithPermissibleValuesCheckBox.setEnabled(false);
+		}
+    }
+    
+    public boolean isIso21090DatatypesEnabled(){
+    	return getEnableIso21090DatatypesCheckBox().isSelected();
+    }
+    
+    public void toggleIsoFields() {
+		if (getEnableIso21090DatatypesCheckBox().isSelected()){
+			enableWebServiceInterfaceCheckBox.setEnabled(false);
+			enableWebServiceInterfaceCheckBox.setSelected(false);
+			enableRestfulHtmlInterfaceCheckBox.setEnabled(false);
+			enableRestfulHtmlInterfaceCheckBox.setSelected(false);
+			enableRestfulJsonInterfaceCheckBox.setEnabled(false);
+			enableRestfulJsonInterfaceCheckBox.setSelected(false);
+			
+			generateHibernateValidatorCheckBox.setEnabled(false);
+			generateHibernateValidatorCheckBox.setSelected(false);
+			generateCastorMappingCheckBox.setEnabled(false);
+			generateCastorMappingCheckBox.setSelected(false);
+			generateXsdWithPermissibleValuesCheckBox.setEnabled(false);
+			generateXsdWithPermissibleValuesCheckBox.setSelected(false);
+			
+			parentContainer.disableWritableAPI();
+			parentContainer.disableInstanceAndAttributeLevelSecurity();
+
+		} else {
+			enableWebServiceInterfaceCheckBox.setEnabled(true);
+			enableRestfulHtmlInterfaceCheckBox.setEnabled(true);
+			enableRestfulJsonInterfaceCheckBox.setEnabled(true);
+			
+			generateHibernateValidatorCheckBox.setEnabled(true);
+			generateCastorMappingCheckBox.setEnabled(true);
+			generateXsdWithPermissibleValuesCheckBox.setEnabled(true);
+			
+			parentContainer.enableWritableAPI();
+			parentContainer.enableInstanceAndAttributeLevelSecurity();
 		}
     }
     
@@ -593,9 +638,12 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
 			
         	enableIso21090DatatypesCheckBox.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					log.debug("ENABLE_ISO21090_DATATYPES: " + Boolean.valueOf(enableIso21090DatatypesCheckBox.isSelected()).toString());
+                    toggleIsoFields();
                     mainPanelValidator.setDirty(true);
                     mainPanelValidator.validateInput();
+                    
+                    parentContainer.notifyOfDisabledInterfaces();
+
 				}
         	});
 
@@ -893,8 +941,8 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
 		return miscSettingsSubLeftPanel;
 	}	
 	
-	private JPanel getMiscSettingsSubCenterPanel() {
-		if (miscSettingsSubCenterPanel == null) {
+	private JPanel getMiscSettingsSubRightPanel() {
+		if (miscSettingsSubRightPanel == null) {
 			
 		    JLabel pageSizeDbLabel = null;
 		    JLabel pageSizeRestfulApiLabel = null;
@@ -937,24 +985,24 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
 			pageSizeRestfulApiLabel = new JLabel();
 			pageSizeRestfulApiLabel.setText("RESTful API Query Page Size:");
 
-			miscSettingsSubCenterPanel = new JPanel();
-			miscSettingsSubCenterPanel.setLayout(new GridBagLayout());
-//		    miscSettingsSubCenterPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Miscellaneous Generation Options",
+			miscSettingsSubRightPanel = new JPanel();
+			miscSettingsSubRightPanel.setLayout(new GridBagLayout());
+//		    miscSettingsSubRightPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Miscellaneous Generation Options",
 //					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 //					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 
-			miscSettingsSubCenterPanel.add(pageSizeDbLabel, gridBagConstraints10);
-			miscSettingsSubCenterPanel.add(getPageSizeDbField(), gridBagConstraints11);
-			miscSettingsSubCenterPanel.add(pageSizeRestfulApiLabel, gridBagConstraints20);
-		    miscSettingsSubCenterPanel.add(getPageSizeRestfulApiField(), gridBagConstraints21);    
+			miscSettingsSubRightPanel.add(pageSizeDbLabel, gridBagConstraints10);
+			miscSettingsSubRightPanel.add(getPageSizeDbField(), gridBagConstraints11);
+			miscSettingsSubRightPanel.add(pageSizeRestfulApiLabel, gridBagConstraints20);
+		    miscSettingsSubRightPanel.add(getPageSizeRestfulApiField(), gridBagConstraints21);    
 			
-			miscSettingsSubCenterPanel.validate();
+			miscSettingsSubRightPanel.validate();
 		}
-		return miscSettingsSubCenterPanel;
+		return miscSettingsSubRightPanel;
 	}
 	
-	private JPanel getMiscSettingsSubRightPanel() {
-		if (miscSettingsSubRightPanel == null) {
+	private JPanel getMiscSettingsSubCenterPanel() {
+		if (miscSettingsSubCenterPanel == null) {
 			
 		    JLabel generateWsddLabel = null;
 		    JLabel enableIso21090DatatypesLabel = null;
@@ -997,20 +1045,20 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
 		    enableIso21090DatatypesLabel = new JLabel();
 		    enableIso21090DatatypesLabel.setText("Enable ISO21090 Datatype Support?");
 
-		    miscSettingsSubRightPanel = new JPanel();
-		    miscSettingsSubRightPanel.setLayout(new GridBagLayout());
-//		    miscSettingsSubRightPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Miscellaneous Generation Options",
+		    miscSettingsSubCenterPanel = new JPanel();
+		    miscSettingsSubCenterPanel.setLayout(new GridBagLayout());
+//		    miscSettingsSubCenterPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Miscellaneous Generation Options",
 //					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 //					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 
-		    miscSettingsSubRightPanel.add(generateWsddLabel, gridBagConstraints10);
-		    miscSettingsSubRightPanel.add(getGenerateWsddCheckBox(), gridBagConstraints11);
-		    miscSettingsSubRightPanel.add(enableIso21090DatatypesLabel, gridBagConstraints20);
-		    miscSettingsSubRightPanel.add(getEnableIso21090DatatypesCheckBox(), gridBagConstraints21);    
+		    miscSettingsSubCenterPanel.add(generateWsddLabel, gridBagConstraints10);
+		    miscSettingsSubCenterPanel.add(getGenerateWsddCheckBox(), gridBagConstraints11);
+		    miscSettingsSubCenterPanel.add(enableIso21090DatatypesLabel, gridBagConstraints20);
+		    miscSettingsSubCenterPanel.add(getEnableIso21090DatatypesCheckBox(), gridBagConstraints21);    
 			
-		    miscSettingsSubRightPanel.validate();
+		    miscSettingsSubCenterPanel.validate();
 		}
-		return miscSettingsSubRightPanel;
+		return miscSettingsSubCenterPanel;
 	}			
 	
 	private JPanel getInterfaceSettingsSubPanel() {
@@ -2113,6 +2161,7 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
     	
     	toggleXsdFields();
     	toggleCaDsrField();
+    	toggleIsoFields();
     }
     
     public Map<String,String> getPropsMap(){
