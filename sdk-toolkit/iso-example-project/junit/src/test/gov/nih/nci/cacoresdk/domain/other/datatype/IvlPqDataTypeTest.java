@@ -490,7 +490,6 @@ public class IvlPqDataTypeTest extends SDKISOTestBase
 			{
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
-				assertValue2Constants(data);
 				assertNull(data.getValue2().getLow());
 				assertEquals(NullFlavor.NI, data.getValue2().getNullFlavor());
 				assertNull(data.getValue2().getAny());
