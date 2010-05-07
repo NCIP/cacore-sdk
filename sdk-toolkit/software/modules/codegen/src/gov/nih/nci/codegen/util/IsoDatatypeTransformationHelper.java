@@ -805,7 +805,10 @@ public class IsoDatatypeTransformationHelper
 		
 				if(attr == null)
 					throw new GenerationException("Can not find attribute "+attributeName+ " in "+ isoClassName);
-					
+				
+				if(attr.getDatatype() == null)
+					throw new GenerationException("Can not find attribute datatype for "+attributeName+ " in "+ isoClassName);
+				
 				UMLClass attrKlass = findISOClass(utils.ISO_ROOT_PACKAGE_NAME+"."+attr.getDatatype().getName());
 				
 				if(attrKlass != null)
