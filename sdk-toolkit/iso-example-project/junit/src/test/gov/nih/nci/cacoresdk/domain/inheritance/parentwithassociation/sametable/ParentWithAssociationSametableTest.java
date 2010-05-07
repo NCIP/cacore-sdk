@@ -104,7 +104,7 @@ public class ParentWithAssociationSametableTest extends SDKISOTestBase
 			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getCapacity());
 			assertNotNull(result.getExpandable());
-			assertEquals(result.getExpandable().getNullFlavor(),NullFlavor.MSK);
+			assertNull(result.getExpandable().getNullFlavor());
 		}
 	}
 	
@@ -264,7 +264,7 @@ public class ParentWithAssociationSametableTest extends SDKISOTestBase
 			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getCapacity());
 			assertNotNull(result.getExpandable());
-			assertEquals(result.getExpandable().getNullFlavor(),NullFlavor.MSK);
+			assertNull(result.getExpandable().getNullFlavor());
 		}
 	}
 
@@ -284,7 +284,7 @@ public class ParentWithAssociationSametableTest extends SDKISOTestBase
 			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getCapacity());
 			assertNotNull(result.getExpandable());
-			assertEquals(result.getExpandable().getNullFlavor(),NullFlavor.MSK);
+			assertNull(result.getExpandable().getNullFlavor());
 		}
 	}	
 
@@ -553,7 +553,7 @@ public class ParentWithAssociationSametableTest extends SDKISOTestBase
 		
 		searchObject.setWheel(wheel);
 		Int intISO2=new Int();
-		intISO.setValue(100);
+		intISO2.setValue(100);
 		searchObject.setCapacity(intISO2);
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.sametable.HardTopType",searchObject );
 		
@@ -566,9 +566,9 @@ public class ParentWithAssociationSametableTest extends SDKISOTestBase
 			assertNotNull(result);
 			assertNotNull(result.getId());
 			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
-			assertEquals(new Integer(5), result.getId());
-			assertEquals(new Integer(100), result.getCapacity());
-			assertEquals(new Integer(890), result.getKeyCode());
+			assertEquals("5", result.getId().getExtension());
+			assertEquals(new Integer(100), result.getCapacity().getValue());
+			assertEquals(new Integer(890), result.getKeyCode().getValue());
 		}
 	}
 	
