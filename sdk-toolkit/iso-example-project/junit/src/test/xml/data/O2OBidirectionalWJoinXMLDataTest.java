@@ -94,62 +94,6 @@ public class O2OBidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 	 * Uses Nested Search Criteria for search
 	 * Verifies that the results are returned 
 	 * Verifies size of the result set
-	 * erifies that the associated object is null
-	 * 
-	 * @throws Exception
-	 */
-	public void testZeroAssociatedObjectsNestedSearch1() throws Exception
-	{
-		Pendant searchObject = new Pendant();
-		Ii ii = new Ii();
-		ii.setExtension("3");
-		searchObject.setId(ii);
-		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin.Pendant",searchObject );
-
-		assertNotNull(results);
-		assertEquals(1,results.size());
-		
-		Iterator i = results.iterator();
-		Pendant result = (Pendant)i.next();
-		toXML(result);
-		Pendant result2 = (Pendant)fromXML(result);
-		
-		assertNotNull(result2);
-		assertNotNull(result2.getId().getExtension()); 
-		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
-		assertNotNull(result2.getShape());
-		
-		Chain chain = result2.getChain();
-		assertNull(chain);
-	}
-	
-	public void testZeroAssociatedObjectsNestedSearchHQL1() throws Exception {
-		HQLCriteria hqlCriteria = new HQLCriteria(
-				"from gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin.Pendant where id='3'");
-		Collection results = search(hqlCriteria,
-				"gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin.Pendant");
-
-		assertNotNull(results);
-		assertEquals(1, results.size());
-
-		Iterator i = results.iterator();
-		Pendant result = (Pendant) i.next();
-		toXML(result);
-		Pendant result2 = (Pendant) fromXML(result);
-
-		assertNotNull(result2);
-		assertNotNull(result2.getId().getExtension()); 
-		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
-		assertNotNull(result2.getShape());
-
-		Chain chain = result2.getChain();
-		assertNull(chain);
-	}
-	
-	/**
-	 * Uses Nested Search Criteria for search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
 	 * Verifies that none of the attribute is null
 	 * Verifies that the associated object has required Id
 	 * 
@@ -181,7 +125,7 @@ public class O2OBidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 		
 		assertNotNull(chain.getId());
 		assertNotNull(chain.getMetal());
-		assertEquals(new Integer(1),chain.getId());
+		assertEquals("1",chain.getId().getExtension());
 	}
 
 	/**
@@ -214,7 +158,7 @@ public class O2OBidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(result2.getId().getExtension()); 
 		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getMetal());
-		assertEquals(new Integer(1),result2.getId());
+		assertEquals("1",result2.getId().getExtension());
 	}
 
 	/**
@@ -247,7 +191,7 @@ public class O2OBidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(result2.getId().getExtension()); 
 		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getShape());
-		assertEquals(new Integer(1),result2.getId());		
+		assertEquals("1",result2.getId().getExtension());		
 	}	
 
 	public void testGetMethods1() throws Exception
@@ -290,7 +234,7 @@ public class O2OBidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 		result = (Pendant)results.iterator().next();
 		toXML(result);
 		result2 = (Pendant)fromXML(result);
-		assertNull(result2.getChain());		
+		assertNotNull(result2.getChain());		
 	}
 
 
@@ -309,7 +253,7 @@ public class O2OBidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 		Chain result = (Chain)results.iterator().next();
 		toXML(result);
 		Chain result2 = (Chain)fromXML(result);
-		assertEquals(new Integer(1),result2.getPendant().getId());
+		assertEquals("1",result2.getPendant().getId().getExtension());
 
 		Ii ii2 = new Ii();
 		ii2.setExtension("1");
@@ -322,7 +266,7 @@ public class O2OBidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 		result = (Chain)results.iterator().next();
 		toXML(result);
 		result2 = (Chain)fromXML(result);
-		assertEquals(new Integer(2),result2.getPendant().getId());
+		assertEquals("1",result2.getPendant().getId().getExtension());
 
 		Ii ii3 = new Ii();
 		ii3.setExtension("1");
@@ -335,7 +279,7 @@ public class O2OBidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 		result = (Chain)results.iterator().next();
 		toXML(result);
 		result2 = (Chain)fromXML(result);
-		assertNull(result2.getPendant());
+		assertNotNull(result2.getPendant());
 		
 	}
 
@@ -355,7 +299,7 @@ public class O2OBidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 		
 		HQLCriteria hqlCriteria2 = new HQLCriteria(
 				"from gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin.Chain where id='2'");
-		results = search(hqlCriteria,
+		results = search(hqlCriteria2,
 				"gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin.Chain");
 
 		assertNotNull(results);
@@ -364,11 +308,11 @@ public class O2OBidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 		result = (Chain) results.iterator().next();
 		toXML(result);
 		result2 = (Chain) fromXML(result);
-		assertEquals(new Integer(2), result2.getPendant().getId());
+		assertEquals("2", result2.getPendant().getId().getExtension());
 
 		HQLCriteria hqlCriteria3 = new HQLCriteria(
 				"from gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin.Chain where id='3'");
-		results = search(hqlCriteria,
+		results = search(hqlCriteria3,
 				"gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin.Chain");
 
 		assertNotNull(results);
@@ -377,8 +321,7 @@ public class O2OBidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 		result = (Chain) results.iterator().next();
 		toXML(result);
 		result2 = (Chain) fromXML(result);
-		assertNull(result2.getPendant());
-
+		assertNotNull(result2.getPendant());
 	}
 
 	public void testGetAssociation1() throws Exception

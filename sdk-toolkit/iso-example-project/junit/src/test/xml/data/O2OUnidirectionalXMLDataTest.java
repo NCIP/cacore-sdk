@@ -125,7 +125,7 @@ public class O2OUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 	
 	public void testZeroAssociatedObjectsNestedSearchHQL1() throws Exception {
 		HQLCriteria hqlCriteria = new HQLCriteria(
-				"from gov.nih.nci.cacoresdk.domain.onetoone.unidirectional.Person where id='1'");
+				"from gov.nih.nci.cacoresdk.domain.onetoone.unidirectional.Person where id='4'");
 		Collection results = search(hqlCriteria,
 				"gov.nih.nci.cacoresdk.domain.onetoone.unidirectional.Person");
 
@@ -180,7 +180,7 @@ public class O2OUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(address);
 		assertNotNull(address.getId());
 		assertNotNull(address.getZip());
-		assertEquals(new Integer(1),address.getId());
+		assertEquals("1",address.getId().getExtension());
 	}
 
 	/**

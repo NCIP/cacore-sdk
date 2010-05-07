@@ -3,7 +3,6 @@ package test.xml.data;
 import java.util.Collection;
 import java.util.Iterator;
 
-import gov.nih.nci.cacoresdk.domain.other.primarykey.FloatKey;
 import gov.nih.nci.cacoresdk.domain.other.primarykey.IntegerKey;
 
 import test.xml.mapping.SDKXMLDataTestBase;

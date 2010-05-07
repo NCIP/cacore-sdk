@@ -157,7 +157,7 @@ public class O2OBidirectionalXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(orderLine);
 		assertNotNull(orderLine.getId());
 		assertNotNull(orderLine.getName());
-		assertEquals(new Integer(1),orderLine.getId());
+		assertEquals("1",orderLine.getId().getExtension());
 	}
 
 	public void testOneAssociatedObjectNestedSearchHQL1() throws Exception {
@@ -182,7 +182,7 @@ public class O2OBidirectionalXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(orderLine);
 		assertNotNull(orderLine.getId());
 		assertNotNull(orderLine.getName());
-		assertEquals(new Integer(1), orderLine.getId());
+		assertEquals("1", orderLine.getId().getExtension());
 	}
 
 	/**
@@ -313,7 +313,7 @@ public class O2OBidirectionalXMLDataTest extends SDKXMLDataTestBase
 		assertEquals("1",result2.getProduct().getId().getExtension());
 
 		Ii ii2 = new Ii();
-		ii.setExtension("2");
+		ii2.setExtension("2");
 		searchObject.setId(ii2);
 		results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.OrderLine",searchObject );
 
@@ -323,7 +323,7 @@ public class O2OBidirectionalXMLDataTest extends SDKXMLDataTestBase
 		result = (OrderLine)results.iterator().next();
 		toXML(result);
 		result2 = (OrderLine)fromXML(result);
-		assertEquals(new Integer(2),result2.getProduct().getId());
+		assertEquals("2",result2.getProduct().getId().getExtension());
 
 		Ii ii3 = new Ii();
 		ii3.setExtension("3");
@@ -365,7 +365,7 @@ public class O2OBidirectionalXMLDataTest extends SDKXMLDataTestBase
 		result = (OrderLine) results.iterator().next();
 		toXML(result);
 		result2 = (OrderLine) fromXML(result);
-		assertEquals(new Integer(2), result2.getProduct().getId());
+		assertEquals("2", result2.getProduct().getId().getExtension());
 
 		hqlCriteria = new HQLCriteria(
 				"from gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.OrderLine where id='3'");

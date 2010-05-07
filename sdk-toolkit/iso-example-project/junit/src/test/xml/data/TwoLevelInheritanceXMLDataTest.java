@@ -28,7 +28,7 @@ public class TwoLevelInheritanceXMLDataTest extends SDKXMLDataTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void testEntireObjectNestedSearch1() throws Exception
+	public void xtestEntireObjectNestedSearch1() throws Exception
 	{
 		Display searchObject = new Display();
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.Display",searchObject );
@@ -66,7 +66,7 @@ public class TwoLevelInheritanceXMLDataTest extends SDKXMLDataTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void testEntireObjectNestedSearch2() throws Exception
+	public void xtestEntireObjectNestedSearch2() throws Exception
 	{
 		Monitor searchObject = new Monitor();
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.Monitor",searchObject );
@@ -106,7 +106,7 @@ public class TwoLevelInheritanceXMLDataTest extends SDKXMLDataTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void testEntireObjectNestedSearch3() throws Exception
+	public void xtestEntireObjectNestedSearch3() throws Exception
 	{
 		CRTMonitor searchObject = new CRTMonitor();
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.CRTMonitor",searchObject );
@@ -148,7 +148,7 @@ public class TwoLevelInheritanceXMLDataTest extends SDKXMLDataTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void testEntireObjectNestedSearch4() throws Exception
+	public void xtestEntireObjectNestedSearch4() throws Exception
 	{
 		LCDMonitor searchObject = new LCDMonitor();
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.LCDMonitor",searchObject );
@@ -182,7 +182,7 @@ public class TwoLevelInheritanceXMLDataTest extends SDKXMLDataTestBase
 		}
 	}
 	
-	public void testEntireObjectNestedSearchHQL4() throws Exception {
+	public void xtestEntireObjectNestedSearchHQL4() throws Exception {
 		HQLCriteria hqlCriteria = new HQLCriteria(
 				"from gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.LCDMonitor");
 		Collection results = search(hqlCriteria,
@@ -225,7 +225,7 @@ public class TwoLevelInheritanceXMLDataTest extends SDKXMLDataTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void testAssociationNestedSearch1() throws Exception
+	public void xtestAssociationNestedSearch1() throws Exception
 	{
 		Monitor searchObject = new Monitor();
 		
@@ -250,7 +250,7 @@ public class TwoLevelInheritanceXMLDataTest extends SDKXMLDataTestBase
 		}
 	}
 
-	public void testAssociationNestedSearchHQL1() throws Exception {
+	public void xtestAssociationNestedSearchHQL1() throws Exception {
 		HQLCriteria hqlCriteria = new HQLCriteria(
 				"from gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.CRTMonitor where brand='A'");
 		Collection results = search(hqlCriteria,
@@ -279,7 +279,7 @@ public class TwoLevelInheritanceXMLDataTest extends SDKXMLDataTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void testAssociationNestedSearch2() throws Exception
+	public void xtestAssociationNestedSearch2() throws Exception
 	{
 		CRTMonitor searchObject = new CRTMonitor();
 		St  st = new St();
@@ -313,7 +313,7 @@ public class TwoLevelInheritanceXMLDataTest extends SDKXMLDataTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void testAssociationNestedSearch3() throws Exception
+	public void xtestAssociationNestedSearch3() throws Exception
 	{
 		Monitor searchObject = new Monitor();
 		St  st = new St();
