@@ -513,6 +513,11 @@
 	<target name="buildAggregateReport" depends="createDir">
 		<delete dir="${aggregate.report.dir}" />
 		<SDKGenerateReport junitOutputDir="${aggregate.report.dir}" junitInputDir="${junit.report.dir}" includepattern="**/build-report/*.xml" generateReport="true"/>
-		<generate-report-cobertura cobertura.src.dir="${SDK_INSTALL_DIR}/software/target/modules/java-src" cobertura.rpt.dir="${cobertura.report.dir}" />
+		<if>
+			<equals arg1="${cobertura.enabled}" arg2="true" />
+			<then>
+				<generate-report-cobertura cobertura.src.dir="${SDK_INSTALL_DIR}/software/target/modules/java-src" cobertura.rpt.dir="${cobertura.report.dir}" />
+			</then>
+		</if>
 	</target>
 </project>
