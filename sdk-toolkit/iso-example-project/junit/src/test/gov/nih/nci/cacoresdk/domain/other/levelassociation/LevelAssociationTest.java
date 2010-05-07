@@ -379,7 +379,7 @@ public class LevelAssociationTest extends SDKISOTestBase
 		group.addAssociation(association1);
 		group.addAssociation(association2);
 		
-		target.setAttribute(new CQLAttribute("Name",CQLPredicate.EQUAL_TO,"Ace"));
+		target.setAttribute(new CQLAttribute("name",CQLPredicate.EQUAL_TO,"Ace"));
 		target.setGroup(group);
 		query.setTarget(target);
 		
