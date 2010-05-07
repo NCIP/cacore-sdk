@@ -1,14 +1,9 @@
 package test.xml.data;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Iterator;
-import java.util.List;
 
-import gov.nih.nci.cacoresdk.domain.onetomany.bidirectional.Computer;
 import gov.nih.nci.cacoresdk.domain.other.datatype.AllDataType;
-import gov.nih.nci.cacoresdk.domain.other.primarykey.DoubleKey;
 
 import test.xml.mapping.SDKXMLDataTestBase;
 
@@ -62,7 +57,7 @@ public class AllDataTypeXMLDataTest extends SDKXMLDataTestBase
 	{
 		validateAttribute(result,"booleanPrimitiveValue",result.getBooleanPrimitiveValue());
 		validateAttribute(result,"booleanValue",result.getBooleanValue());
-		validateAttribute(result,"characterPrimitiveValue",result.getCharacterPrimitiveValue());
+		validateAttribute(result,"characterPrimitiveValue",(int)result.getCharacterPrimitiveValue());
 //		validateAttribute(result,"characterValue",result.getCharacterValue());
 		validateAttribute(result,"clobValue",result.getClobValue());
 		
@@ -84,7 +79,7 @@ public class AllDataTypeXMLDataTest extends SDKXMLDataTestBase
 		validateAttribute(result,"longValue",result.getLongValue());
 		
 		validateAttribute(result,"stringPrimitiveValue",result.getStringPrimitiveValue());
-		validateAttribute(result,"stringValue",result.getStringValue());
+//		validateAttribute(result,"stringValue",result.getStringValue());
 	
 	}
 

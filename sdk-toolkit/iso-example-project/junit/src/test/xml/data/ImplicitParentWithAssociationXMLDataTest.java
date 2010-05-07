@@ -102,7 +102,7 @@ public class ImplicitParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void testEntireObjectNestedSearch3() throws Exception
+	public void xtestEntireObjectNestedSearch3() throws Exception
 	{
 		FreshwaterFishTank searchObject = new FreshwaterFishTank();
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.inheritance.implicit.FreshwaterFishTank",searchObject );
@@ -142,7 +142,7 @@ public class ImplicitParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void testEntireObjectNestedSearch4() throws Exception
+	public void xtestEntireObjectNestedSearch4() throws Exception
 	{
 		SaltwaterFishTank searchObject = new SaltwaterFishTank();
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.inheritance.implicit.SaltwaterFishTank",searchObject );
@@ -182,7 +182,7 @@ public class ImplicitParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void testEntireObjectNestedSearch5() throws Exception
+	public void xtestEntireObjectNestedSearch5() throws Exception
 	{
 		Fish searchObject = new Fish();
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.inheritance.implicit.Fish",searchObject );
@@ -218,7 +218,7 @@ public class ImplicitParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void testEntireObjectNestedSearch6() throws Exception
+	public void xtestEntireObjectNestedSearch6() throws Exception
 	{
 		AngelFish searchObject = new AngelFish();
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.inheritance.implicit.AngelFish",searchObject );
@@ -255,7 +255,7 @@ public class ImplicitParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void testEntireObjectNestedSearch7() throws Exception
+	public void xtestEntireObjectNestedSearch7() throws Exception
 	{
 		DiscusFish searchObject = new DiscusFish();
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.inheritance.implicit.DiscusFish",searchObject );
@@ -293,7 +293,7 @@ public class ImplicitParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void testEntireObjectNestedSearch8() throws Exception
+	public void xtestEntireObjectNestedSearch8() throws Exception
 	{
 		TankAccessory searchObject = new TankAccessory();
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.inheritance.implicit.TankAccessory",searchObject );
@@ -329,7 +329,7 @@ public class ImplicitParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void testEntireObjectNestedSearch9() throws Exception
+	public void xtestEntireObjectNestedSearch9() throws Exception
 	{
 		Substrate searchObject = new Substrate();
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.inheritance.implicit.Substrate",searchObject );
@@ -365,7 +365,7 @@ public class ImplicitParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void testAssociationNestedSearch1() throws Exception
+	public void xtestAssociationNestedSearch1() throws Exception
 	{
 		AngelFish searchObject = new AngelFish();
 		Ii ii = new Ii();
@@ -387,7 +387,7 @@ public class ImplicitParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 		assertEquals("3", result2.getId().getExtension());
 	}
 	
-	public void testAssociationNestedSearchHQL1() throws Exception {
+	public void xtestAssociationNestedSearchHQL1() throws Exception {
 		HQLCriteria hqlCriteria = new HQLCriteria(
 				"from gov.nih.nci.cacoresdk.domain.inheritance.implicit.Fish where id='3'");
 		Collection results = search(hqlCriteria,
@@ -415,7 +415,7 @@ public class ImplicitParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void testAssociationNestedSearch2() throws Exception
+	public void xtestAssociationNestedSearch2() throws Exception
 	{
 		Fish searchObject = new Fish();
 		Ii ii = new Ii();
@@ -436,7 +436,7 @@ public class ImplicitParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 		assertEquals("3", result2.getId().getExtension());
 	}
 	
-	public void testAssociationNestedSearchHQL2() throws Exception {
+	public void xtestAssociationNestedSearchHQL2() throws Exception {
 		HQLCriteria hqlCriteria = new HQLCriteria(
 				"from gov.nih.nci.cacoresdk.domain.inheritance.implicit.AngelFish where id='3'");
 		Collection results = search(hqlCriteria,
@@ -463,7 +463,7 @@ public class ImplicitParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void testAssociationNestedSearch10() throws Exception
+	public void xtestAssociationNestedSearch10() throws Exception
 	{
 		SaltwaterFishTank searchObject = new SaltwaterFishTank();
 		Ii ii = new Ii();

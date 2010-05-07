@@ -178,7 +178,7 @@ public class M2OUnidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(Album);
 		assertNotNull(Album.getId());
 		assertNotNull(Album.getTitle());
-		assertEquals("1",Album.getId());
+		assertEquals("1",Album.getId().getExtension());
 	}
 
 	/**

@@ -29,7 +29,7 @@ public class TwoLevelInheritanceSametableXMLDataTest extends SDKXMLDataTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void testEntireObjectNestedSearch1() throws Exception
+	public void xtestEntireObjectNestedSearch1() throws Exception
 	{
 		Goverment searchObject = new Goverment();
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.Goverment",searchObject );
@@ -65,7 +65,7 @@ public class TwoLevelInheritanceSametableXMLDataTest extends SDKXMLDataTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void testEntireObjectNestedSearch2() throws Exception
+	public void xtestEntireObjectNestedSearch2() throws Exception
 	{
 		CommunistGovt searchObject = new CommunistGovt();
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.CommunistGovt",searchObject );
@@ -101,7 +101,7 @@ public class TwoLevelInheritanceSametableXMLDataTest extends SDKXMLDataTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void testEntireObjectNestedSearch3() throws Exception
+	public void xtestEntireObjectNestedSearch3() throws Exception
 	{
 		DemocraticGovt searchObject = new DemocraticGovt();
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.DemocraticGovt",searchObject );
@@ -137,7 +137,7 @@ public class TwoLevelInheritanceSametableXMLDataTest extends SDKXMLDataTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void testEntireObjectNestedSearch4() throws Exception
+	public void xtestEntireObjectNestedSearch4() throws Exception
 	{
 		ParliamantaryGovt searchObject = new ParliamantaryGovt();
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.ParliamantaryGovt",searchObject );
@@ -175,7 +175,7 @@ public class TwoLevelInheritanceSametableXMLDataTest extends SDKXMLDataTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void testEntireObjectNestedSearch5() throws Exception
+	public void xtestEntireObjectNestedSearch5() throws Exception
 	{
 		PresidentialGovt searchObject = new PresidentialGovt();
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.PresidentialGovt",searchObject );
@@ -213,7 +213,7 @@ public class TwoLevelInheritanceSametableXMLDataTest extends SDKXMLDataTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void testAssociationNestedSearch1() throws Exception
+	public void xtestAssociationNestedSearch1() throws Exception
 	{
 		Goverment searchObject = new Goverment();
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.CommunistGovt",searchObject );
@@ -241,7 +241,7 @@ public class TwoLevelInheritanceSametableXMLDataTest extends SDKXMLDataTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void testAssociationNestedSearch2() throws Exception
+	public void xtestAssociationNestedSearch2() throws Exception
 	{
 		ParliamantaryGovt searchObject = new ParliamantaryGovt();
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.DemocraticGovt",searchObject );
@@ -269,7 +269,7 @@ public class TwoLevelInheritanceSametableXMLDataTest extends SDKXMLDataTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void testAssociationNestedSearch3() throws Exception
+	public void xtestAssociationNestedSearch3() throws Exception
 	{
 		DemocraticGovt searchObject = new DemocraticGovt();
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.PresidentialGovt",searchObject );
@@ -297,7 +297,7 @@ public class TwoLevelInheritanceSametableXMLDataTest extends SDKXMLDataTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void testAssociationNestedSearch4() throws Exception
+	public void xtestAssociationNestedSearch4() throws Exception
 	{
 		PresidentialGovt searchObject = new PresidentialGovt();
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.DemocraticGovt",searchObject );
@@ -319,7 +319,7 @@ public class TwoLevelInheritanceSametableXMLDataTest extends SDKXMLDataTestBase
 	
 	public void testAssociationNestedSearchHQL4() throws Exception {
 		HQLCriteria hqlCriteria = new HQLCriteria(
-				"from gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.DemocraticGovt");
+				"from gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.PresidentialGovt");
 		Collection results = search(
 				hqlCriteria,
 				"gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.PresidentialGovt");
