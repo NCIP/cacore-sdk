@@ -189,7 +189,7 @@ public class O2MBidirectionalXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(hardDrive.getId());
 		assertNotNull(hardDrive.getSize());
 
-		assertEquals(new Integer(1),hardDrive.getId());
+		assertEquals("1",hardDrive.getId());
 	}
 
 	/**

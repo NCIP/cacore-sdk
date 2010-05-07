@@ -182,7 +182,7 @@ public class O2OUnidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(handle);
 		assertNotNull(handle.getId());
 		assertNotNull(handle.getColor());
-		assertEquals(new Integer(1),handle.getId());
+		assertEquals("1",handle.getId().getExtension());
 	}
 
 	/**

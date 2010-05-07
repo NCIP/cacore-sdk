@@ -50,7 +50,7 @@ public class O2MUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 			assertNotNull(result2);
 			assertNotNull(result2.getId().getExtension()); 
 			assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
-			assertEquals(NullFlavor.MSK,result2.getName().getNullFlavor());
+			assertNull(result2.getName().getNullFlavor());
 			assertNotNull(result2.getName());
 		}
 	}
@@ -118,7 +118,7 @@ public class O2MUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(result2);
 		assertNotNull(result2.getId().getExtension()); 
 		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
-		assertEquals(NullFlavor.MSK,result2.getName().getNullFlavor());
+		assertNull(result2.getName().getNullFlavor());
 		assertNotNull(result2.getName());
 		
 		Collection keyCollection = result2.getKeyCollection();
@@ -142,7 +142,7 @@ public class O2MUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(result2);
 		assertNotNull(result2.getId().getExtension());  
 		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
-		assertEquals(NullFlavor.MSK,result2.getName().getNullFlavor());
+		assertNull(result2.getName().getNullFlavor());
 		assertNotNull(result2.getName());
 		
 		Collection keyCollection = result2.getKeyCollection();
@@ -177,7 +177,7 @@ public class O2MUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(result2);
 		assertNotNull(result2.getId().getExtension());
 		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
-		assertEquals(NullFlavor.MSK,result2.getName().getNullFlavor());
+		assertNull(result2.getName().getNullFlavor());
 		assertNotNull(result2.getName());
 		
 		validateAssociation(result,"LatchKey","keyCollection", true);

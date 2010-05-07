@@ -1,7 +1,5 @@
 package test.xml.data;
 
-import gov.nih.nci.cacoresdk.domain.manytoone.unidirectional.Chef;
-import gov.nih.nci.cacoresdk.domain.manytoone.unidirectional.Restaurant;
 import gov.nih.nci.cacoresdk.domain.onetomany.bidirectional.withjoin.Flight;
 import gov.nih.nci.cacoresdk.domain.onetomany.bidirectional.withjoin.Passanger;
 import gov.nih.nci.iso21090.Ii;
@@ -121,7 +119,7 @@ public class O2MBidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(result2.getDestination());
 		
 		Collection passangerCollection = result2.getPassangerCollection();
-		assertNull(passangerCollection);
+		assertNotNull(passangerCollection);
 	}
 	
 	
@@ -145,7 +143,7 @@ public class O2MBidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(result2.getDestination());
 		
 		Collection passangerCollection = result2.getPassangerCollection();
-		assertNull(passangerCollection);
+		assertNotNull(passangerCollection);
 	}
 	
 	/**

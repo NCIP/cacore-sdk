@@ -54,7 +54,7 @@ public class StringPrimitiveKeyXMLDataTest extends SDKXMLDataTestBase
 	
 	public void testEntireObjectNestedSearchHQL() throws Exception {
 		HQLCriteria hqlCriteria = new HQLCriteria(
-				"from gov.nih.nci.cacoresdk.domain.other.primarykey.StringPrimitiveKey where id='1'");
+				"from gov.nih.nci.cacoresdk.domain.other.primarykey.StringPrimitiveKey");
 		Collection results = search(hqlCriteria,
 				"gov.nih.nci.cacoresdk.domain.other.primarykey.StringPrimitiveKey");
 

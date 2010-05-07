@@ -57,8 +57,22 @@ public class TwoLevelInheritanceSametablerootlevelXMLDataTest extends SDKXMLData
 			
 			assertNotNull(result2);
 			assertNotNull(result2.getId().getExtension());
-			assertEquals(CALCULATOR_ROOT_LOCAL_CONSTANT_VALUE,result2.getId().getRoot());
+			
+			validateLocalConstant(result2,true,true,true,true);
 			assertNotNull(result2.getBrand());
+		}
+	}
+	
+	private void validateLocalConstant(Calculator result2,boolean isCalculator,boolean isFinancialCalc,boolean isScientificCalc,boolean graphicCalc) {
+		
+		if(isCalculator && "gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametablerootlevel.Calculator".equals(result2.getClass().getName())){
+			assertEquals(CALCULATOR_ROOT_LOCAL_CONSTANT_VALUE,result2.getId().getRoot());
+		}else if(isFinancialCalc && "gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametablerootlevel.FinancialCalculator".equals(result2.getClass().getName())){
+			assertEquals(FINANCIAL_CALCULATOR_ROOT_LOCAL_CONSTANT_VALUE,result2.getId().getRoot());
+		}else if(isScientificCalc && "gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametablerootlevel.ScientificCalculator".equals(result2.getClass().getName())){
+			assertEquals(SCIENTIFIC_CALCULATOR_ROOT_LOCAL_CONSTANT_VALUE,result2.getId().getRoot());
+		}else if(graphicCalc && "gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametablerootlevel.GraphicCalculator".equals(result2.getClass().getName())){
+			assertEquals(GRAPHIC_CALCULATOR_ROOT_LOCAL_CONSTANT_VALUE,result2.getId().getRoot());
 		}
 	}
 	
@@ -93,7 +107,7 @@ public class TwoLevelInheritanceSametablerootlevelXMLDataTest extends SDKXMLData
 			
 			assertNotNull(result2);
 			assertNotNull(result2.getId().getExtension());
-			assertEquals(FINANCIAL_CALCULATOR_ROOT_LOCAL_CONSTANT_VALUE,result2.getId().getRoot());
+			validateLocalConstant(result2,true,true,false,false);
 			assertNotNull(result2.getBrand());
 		}
 	}
@@ -129,7 +143,7 @@ public class TwoLevelInheritanceSametablerootlevelXMLDataTest extends SDKXMLData
 			
 			assertNotNull(result2);
 			assertNotNull(result2.getId().getExtension()); 
-			assertEquals(SCIENTIFIC_CALCULATOR_ROOT_LOCAL_CONSTANT_VALUE,result2.getId().getRoot());
+			validateLocalConstant(result2,false,false,true,true);
 			assertNotNull(result2.getBrand());
 		}
 	}
@@ -165,7 +179,7 @@ public class TwoLevelInheritanceSametablerootlevelXMLDataTest extends SDKXMLData
 			
 			assertNotNull(result2);
 			assertNotNull(result2.getId().getExtension());
-			assertEquals(GRAPHIC_CALCULATOR_ROOT_LOCAL_CONSTANT_VALUE,result2.getId().getRoot());
+			validateLocalConstant(result2,false,false,false,true);
 			assertNotNull(result2.getBrand());
 		}
 	}
@@ -195,7 +209,7 @@ public class TwoLevelInheritanceSametablerootlevelXMLDataTest extends SDKXMLData
 
 			assertNotNull(result2);
 			assertNotNull(result2.getId().getExtension()); 
-			assertEquals(GRAPHIC_CALCULATOR_ROOT_LOCAL_CONSTANT_VALUE,result2.getId().getRoot());
+			validateLocalConstant(result2,true,true,true,true);
 			assertNotNull(result2.getBrand());
 		}
 	}
@@ -224,7 +238,7 @@ public class TwoLevelInheritanceSametablerootlevelXMLDataTest extends SDKXMLData
 
 			assertNotNull(result2);
 			assertNotNull(result2.getId().getExtension());
-			assertEquals(SCIENTIFIC_CALCULATOR_ROOT_LOCAL_CONSTANT_VALUE,result2.getId().getRoot());
+			validateLocalConstant(result2,false,false,true,true);
 			assertNotNull(result2.getBrand());
 		}
 	}
@@ -257,6 +271,7 @@ public class TwoLevelInheritanceSametablerootlevelXMLDataTest extends SDKXMLData
 
 			assertNotNull(result2);
 			assertNotNull(result2.getId().getExtension());  
+			validateLocalConstant(result2,false,false,false,true);
 			assertEquals(GRAPHIC_CALCULATOR_ROOT_LOCAL_CONSTANT_VALUE,result2.getId().getRoot());
 			assertNotNull(result2.getBrand());
 		}
@@ -278,8 +293,8 @@ public class TwoLevelInheritanceSametablerootlevelXMLDataTest extends SDKXMLData
 			GraphicCalculator result2 = (GraphicCalculator) fromXML(result);
 
 			assertNotNull(result2);
-			assertNotNull(result2.getId().getExtension());  
-			assertEquals(GRAPHIC_CALCULATOR_ROOT_LOCAL_CONSTANT_VALUE,result2.getId().getRoot());
+			assertNotNull(result2.getId().getExtension());
+			validateLocalConstant(result2,false,true,false,false);
 			assertNotNull(result2.getBrand());
 		}
 	}
@@ -311,7 +326,7 @@ public class TwoLevelInheritanceSametablerootlevelXMLDataTest extends SDKXMLData
 
 			assertNotNull(result2);
 			assertNotNull(result2.getId().getExtension());
-			assertEquals(CALCULATOR_ROOT_LOCAL_CONSTANT_VALUE,result2.getId().getRoot());
+			validateLocalConstant(result2,false,false,true,true);
 			assertNotNull(result2.getBrand());
 		}
 	}
@@ -333,7 +348,7 @@ public class TwoLevelInheritanceSametablerootlevelXMLDataTest extends SDKXMLData
 
 			assertNotNull(result2);
 			assertNotNull(result2.getId().getExtension()); 
-			assertEquals(SCIENTIFIC_CALCULATOR_ROOT_LOCAL_CONSTANT_VALUE,result2.getId().getRoot());
+			validateLocalConstant(result2,false,false,true,true);
 			assertNotNull(result2.getBrand());
 		}
 	}

@@ -322,9 +322,8 @@ public class TwoLevelInheritanceSametableXMLDataTest extends SDKXMLDataTestBase
 				"from gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.DemocraticGovt");
 		Collection results = search(
 				hqlCriteria,
-				"gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.DemocraticGovt");
+				"gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.PresidentialGovt");
 
-		PresidentialGovt searchObject = new PresidentialGovt();
 		assertNotNull(results);
 		assertEquals(1, results.size());
 

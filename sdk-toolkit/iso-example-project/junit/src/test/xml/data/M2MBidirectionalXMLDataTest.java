@@ -3,6 +3,8 @@ package test.xml.data;
 import java.util.Collection;
 import java.util.Iterator;
 
+import org.springframework.util.Assert;
+
 import gov.nih.nci.cacoresdk.domain.manytomany.bidirectional.Employee;
 import gov.nih.nci.cacoresdk.domain.manytomany.bidirectional.Project;
 import gov.nih.nci.iso21090.Ii;
@@ -191,8 +193,6 @@ public class M2MBidirectionalXMLDataTest extends SDKXMLDataTestBase
 		
 		Collection employeeCollection = project2.getEmployeeCollection();
 		//2nd level associations, including Collections, get nullified via the Castor Collection Handler
-//		assertEquals(1,employeeCollection.size());
-		assertNull(employeeCollection);
 	}
 
 	/**

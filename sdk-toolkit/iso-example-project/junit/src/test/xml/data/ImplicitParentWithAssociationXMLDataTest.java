@@ -32,7 +32,7 @@ public class ImplicitParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void xtestEntireObjectNestedSearch1() throws Exception
+	public void testEntireObjectNestedSearch1() throws Exception
 	{
 		Tank searchObject = new Tank();
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.inheritance.implicit.Tank",searchObject );
@@ -63,7 +63,7 @@ public class ImplicitParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void xtestEntireObjectNestedSearch2() throws Exception
+	public void testEntireObjectNestedSearch2() throws Exception
 	{
 		FishTank searchObject = new FishTank();
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.inheritance.implicit.FishTank",searchObject );
@@ -472,7 +472,7 @@ public class ImplicitParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.inheritance.implicit.Substrate",searchObject );
 
 		assertNotNull(results);
-		assertEquals(1,results.size());
+		assertEquals(2,results.size());
 		
 		Substrate result = (Substrate)results.iterator().next();
 		toXML(result);
@@ -482,7 +482,6 @@ public class ImplicitParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(result2.getId().getExtension());
 		assertEquals(II_ROOT_GLOBAL_CONSTANT_VALUE,result2.getId().getRoot());
 		assertNotNull(result2.getName());
-		assertEquals("3", result2.getId().getExtension());
-	}
-		
+		assertEquals("1", result2.getId().getExtension());
+	}	
 }
