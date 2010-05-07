@@ -1,6 +1,5 @@
 package test.xml.data;
 
-import gov.nih.nci.cacoresdk.domain.manytoone.unidirectional.withjoin.Song;
 import gov.nih.nci.cacoresdk.domain.onetomany.bidirectional.Computer;
 import gov.nih.nci.cacoresdk.domain.onetomany.bidirectional.HardDrive;
 import gov.nih.nci.iso21090.Ii;
@@ -189,7 +188,7 @@ public class O2MBidirectionalXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(hardDrive.getId());
 		assertNotNull(hardDrive.getSize());
 
-		assertEquals("1",hardDrive.getId());
+		assertEquals("1",hardDrive.getId().getExtension());
 	}
 
 	/**

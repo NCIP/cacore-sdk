@@ -5,8 +5,7 @@ import java.util.Iterator;
 
 import gov.nih.nci.cacoresdk.domain.manytoone.unidirectional.Chef;
 import gov.nih.nci.cacoresdk.domain.manytoone.unidirectional.Restaurant;
-import gov.nih.nci.cacoresdk.domain.manytoone.unidirectional.withjoin.Album;
-import gov.nih.nci.cacoresdk.domain.manytoone.unidirectional.withjoin.Song;
+
 import gov.nih.nci.iso21090.Ii;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
 import test.xml.mapping.SDKXMLDataTestBase;
