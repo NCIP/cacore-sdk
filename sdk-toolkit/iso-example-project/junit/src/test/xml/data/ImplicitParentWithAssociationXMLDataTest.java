@@ -32,7 +32,7 @@ public class ImplicitParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void testEntireObjectNestedSearch1() throws Exception
+	public void xtestEntireObjectNestedSearch1() throws Exception
 	{
 		Tank searchObject = new Tank();
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.inheritance.implicit.Tank",searchObject );
@@ -63,7 +63,7 @@ public class ImplicitParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 	 * 
 	 * @throws Exception
 	 */
-	public void testEntireObjectNestedSearch2() throws Exception
+	public void xtestEntireObjectNestedSearch2() throws Exception
 	{
 		FishTank searchObject = new FishTank();
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.inheritance.implicit.FishTank",searchObject );
