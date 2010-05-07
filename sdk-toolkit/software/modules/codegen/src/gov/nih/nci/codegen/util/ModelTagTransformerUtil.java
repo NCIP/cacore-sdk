@@ -7,6 +7,7 @@ import gov.nih.nci.ncicb.xmiinout.domain.UMLAttribute;
 import gov.nih.nci.ncicb.xmiinout.domain.UMLClass;
 import gov.nih.nci.ncicb.xmiinout.domain.UMLModel;
 import gov.nih.nci.ncicb.xmiinout.domain.UMLPackage;
+import gov.nih.nci.ncicb.xmiinout.domain.UMLTaggableElement;
 import gov.nih.nci.ncicb.xmiinout.domain.UMLTaggedValue;
 
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ public class ModelTagTransformerUtil{
 		{
 			add("id-attribute");
 			add("mapped-attributes");
+			add("mapped-constant");
 			add("implements-association");
 			add("inverse-of");
 			add("discriminator");
@@ -60,8 +62,8 @@ public class ModelTagTransformerUtil{
 			UMLModel argoModel) {
 		List<UMLPackage> modelsPackage = resolveModelPackages(eaModel, argoModel);
 		Map<String, UMLClass> umlClasses = new HashMap<String, UMLClass>();
-		getUMLKlassesList(modelsPackage.get(0), umlClasses);
-		insertTaggedValues(modelsPackage.get(1), umlClasses);
+		getUMLKlassesList(modelsPackage.get(1), umlClasses);
+		insertTaggedValues2(modelsPackage.get(0), umlClasses);
 		DebugUtils.printModel(argoModel);
 	}
 
@@ -157,6 +159,110 @@ public class ModelTagTransformerUtil{
 		modelsPackage.add(rootArgoPackage);
 		return modelsPackage;
 	}
+
+	private static void removetTaggedValues(UMLTaggableElement element)
+	{
+		for (UMLTaggedValue argoUMLTaggedValue : element.getTaggedValues()) 
+		{
+			for (String customTag : sdkCustomTagValues) 
+			{
+				if (argoUMLTaggedValue.getName().startsWith(customTag)) 
+				{
+					element.removeTaggedValue(argoUMLTaggedValue.getName());
+				}
+			}
+		}
+	}
+	
+	private static int transferTaggedValues(UMLTaggableElement source, UMLTaggableElement target)
+	{
+		int count = 0;
+		for (UMLTaggedValue sourceUMLTaggedValue : source.getTaggedValues()) 
+		{	
+			for (String customTag : sdkCustomTagValues) 
+			{
+				if (sourceUMLTaggedValue.getName().startsWith(customTag)) 
+				{
+					try {
+					target.addTaggedValue(sourceUMLTaggedValue.getName(), sourceUMLTaggedValue.getValue());
+					count++;
+					} catch (Exception e)
+					{
+						log.error(e);
+					}
+				}
+			}
+		}
+		return count;
+	}
+	
+	
+	public static void insertTaggedValues2(UMLPackage eaModel,Map<String,UMLClass> argoUMLClasses){
+		for(UMLPackage pack:eaModel.getPackages()){
+			
+			for(UMLClass eaKlass:pack.getClasses()){
+				if(argoUMLClasses.containsKey(eaKlass.getName())){
+					UMLClass argoKlass = argoUMLClasses.get(eaKlass.getName());
+					log.info("Adding tag values for Class  "+eaKlass.getName());
+					
+					removetTaggedValues(argoKlass);
+					transferTaggedValues(eaKlass, argoKlass);
+					
+
+					if(eaKlass.getName().equals("ANY"))
+						System.out.println();
+					
+					for(UMLAttribute eaAttr:eaKlass.getAttributes()){
+						boolean found = false;
+						for(UMLAttribute argoAttr:argoKlass.getAttributes()){
+							if(eaAttr.getName().equals(argoAttr.getName())){
+								found = true;
+								removetTaggedValues(argoAttr);
+								int transferCOunt = transferTaggedValues(eaAttr, argoAttr);
+								log.info("Transfering Tag Value:  "+eaKlass.getName() +"."+eaAttr.getName()+" : "+transferCOunt);
+								break;
+							}
+						}
+						if(found == false)
+							log.info("Skipping attribute "+eaKlass.getName()+"."+eaAttr.getName());
+					}
+
+					
+					// add association level tags
+					for (UMLAssociation eaAssociation : eaKlass.getAssociations()) {
+						UMLAssociationEnd eaOtherEnd=getOtherEnd(eaKlass, eaAssociation);
+						boolean found = false;
+						for (UMLAssociation argoAssociation : argoKlass.getAssociations()) {
+							UMLAssociationEnd argoOtherEnd=getOtherEnd(argoKlass, argoAssociation);
+							
+							if(argoOtherEnd==null) continue;
+							if(eaOtherEnd==null) continue;
+							
+							UMLClass eaUmlClass=(UMLClass)eaOtherEnd.getUMLElement();
+							UMLClass argoUmlClass=(UMLClass)argoOtherEnd.getUMLElement();
+							
+							if(eaOtherEnd.isNavigable() && eaOtherEnd.getRoleName()!=null && eaOtherEnd.getRoleName().equals(argoOtherEnd.getRoleName()))
+							{
+								found = true;
+								removetTaggedValues(argoAssociation);
+								transferTaggedValues(eaAssociation, argoAssociation);
+								break;
+							}
+						}
+						if(found == false && eaOtherEnd !=null)
+							log.info("Skipping association "+eaKlass.getName()+"."+(eaOtherEnd.getRoleName()));
+					}
+					
+				}
+				else
+				{
+					log.info("Skipping class "+eaKlass.getName());
+				}
+			}
+			insertTaggedValues2(pack, argoUMLClasses);
+		}
+		
+	}
 	
 	public static void insertTaggedValues(UMLPackage argoModel,Map<String,UMLClass> eaUMLClasses){		
 		for(UMLPackage pack:argoModel.getPackages()){
@@ -179,8 +285,10 @@ public class ModelTagTransformerUtil{
 					}
 
 					for(UMLAttribute eaAttr:eaKlass.getAttributes()){
+						boolean found = false;
 						for(UMLAttribute argoAttr:argoKlass.getAttributes()){
-							if(eaAttr.getName().equals(argoAttr.getName())){								
+							if(eaAttr.getName().equals(argoAttr.getName())){
+								found = true;
 								Collection<UMLTaggedValue> taggedValues=eaAttr.getTaggedValues();
 								for (UMLTaggedValue umlTaggedValue : taggedValues) {									
 									for (String customTag : sdkCustomTagValues) {
@@ -194,6 +302,8 @@ public class ModelTagTransformerUtil{
 								}								
 							}
 						}
+						if(found == false)
+							log.info("Skipping attribute "+eaKlass.getName()+"."+eaAttr.getName());
 					}
 					// add association level tags
 					for (UMLAssociation eaAssociation : eaKlass.getAssociations()) {
@@ -228,6 +338,10 @@ public class ModelTagTransformerUtil{
 					}
 					log.info("\n");
 				}
+				else
+				{
+					log.info("Skipping class "+argoKlass.getName());
+				}
 			}
 			insertTaggedValues(pack, eaUMLClasses);
 		}
@@ -259,12 +373,13 @@ public class ModelTagTransformerUtil{
 	
 	public static void main(String[] args) throws Exception {
 		UMLModelLoader loader1 = new UMLModelLoader(
-				"C:/temp/sdk.xmi", "EA");
+				"C:/Satish/workspace/sdk-svn-trunk/sdk-toolkit/iso-example-project/models/sdk.xmi", "EA");
 
 		UMLModelLoader loader2 = new UMLModelLoader(
-				"C:/temp/sdk.uml",
+				"C:/Satish/workspace/sdk-svn-trunk/sdk-toolkit/iso-example-project/models/sdk.uml",
 				"ARGO");
-		executeEAArgoValidation(loader1.getUMLModel(),loader2.getUMLModel());
-		loader2.getXmiHandler().save("C:/temp/sdk2.uml");
+		//executeEAArgoValidation(loader1.getUMLModel(),loader2.getUMLModel());
+		executeTaggedValuesInsertion(loader1.getUMLModel(),loader2.getUMLModel());
+		loader2.getXmiHandler().save("C:/Satish/workspace/sdk-svn-trunk/sdk-toolkit/iso-example-project/models/sdk2.uml");
 	}
 }
