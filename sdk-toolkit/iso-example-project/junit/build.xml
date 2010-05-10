@@ -110,9 +110,6 @@
 		<fileset dir="${package.client.remote.lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
-		<fileset dir="${package.client.ws.lib.dir}">
-			<include name="**/*.jar" />
-		</fileset>
 		<path refid="junit-lib" />
 		<pathelement path="${classes.dir}" />
 		<pathelement path="${package.client.remote.conf.dir}" />
