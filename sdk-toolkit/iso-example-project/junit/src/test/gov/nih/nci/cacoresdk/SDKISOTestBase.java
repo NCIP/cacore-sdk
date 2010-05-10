@@ -48,22 +48,15 @@ public abstract class SDKISOTestBase extends TestCase {
 	private String filepathPrefix  = "c:/temp/";
 	private String filepathSuffix  = "_test.xml";
 
-	private Marshaller marshaller;
-	private Unmarshaller unmarshaller;
-	protected XMLUtility myUtil;
+	public static final String namespacePrefix = "gme://caCORE.caCORE/3.2/";
+	public static final String jaxbContextName = "gov.nih.nci.cacoresdk.domain.other.datatype";
+	static final Marshaller marshaller = new JAXBMarshaller(true,jaxbContextName,namespacePrefix);
+	static final Unmarshaller unmarshaller = new JAXBUnmarshaller(true,jaxbContextName);		
+	static final XMLUtility myUtil = new XMLUtility(marshaller, unmarshaller);
 
 	protected void setUp() throws Exception {
 		super.setUp();
 		appService = ApplicationServiceProvider.getApplicationService();
-		boolean validate = true;
-		boolean includeXmlDeclaration = true;
-		String namespacePrefix = "gme://caCORE.caCORE/3.2/";
-		String jaxbContextName = "gov.nih.nci.cacoresdk.domain.other.datatype";
-		marshaller = new JAXBMarshaller(includeXmlDeclaration,jaxbContextName,namespacePrefix);
-		unmarshaller = new JAXBUnmarshaller(validate,jaxbContextName);		
-
-		// JAXB
-		myUtil = new XMLUtility(marshaller, unmarshaller);
 		
 		useGMETags=Boolean.parseBoolean(System.getProperty("useGMETags"));
 		namespaceUriPrefix=System.getProperty("namespaceUriPrefix");
