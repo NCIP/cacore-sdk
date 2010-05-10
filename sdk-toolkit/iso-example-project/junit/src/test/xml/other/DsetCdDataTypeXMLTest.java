@@ -87,7 +87,7 @@ public class DsetCdDataTypeXMLTest extends SDKISOTestBase
 	@SuppressWarnings("unchecked")
 	public void testDsetCdValue2ByHQLCriteria() throws ApplicationException
 	{
-		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.DsetCdDataType a where a.value2.item.code is not null order by a.id asc");
+		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.DsetCdDataType a where (a.value2.item.code is not null or a.value2.item.nullFlavor is not null) order by a.id asc");
 		Collection<DsetCdDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.DsetCdDataType");
 		assertEquals(5, result.size());
 		assertValue2(result);

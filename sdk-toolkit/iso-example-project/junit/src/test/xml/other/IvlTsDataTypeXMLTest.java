@@ -2,6 +2,7 @@ package test.xml.other;
 
 
 import gov.nih.nci.cacoresdk.domain.other.datatype.IvlTsDataType;
+import gov.nih.nci.iso21090.Int;
 import gov.nih.nci.iso21090.Ivl;
 import gov.nih.nci.iso21090.Ts;
 import gov.nih.nci.system.applicationservice.ApplicationException;
@@ -179,38 +180,38 @@ public class IvlTsDataTypeXMLTest extends SDKISOTestBase
 					IvlTsDataType unmarshalledData = (IvlTsDataType)fromXML(xmlFileName);
 					
 					//Make sure date format matches
-					if(data.getValue1().getAny() != null)
+					if(data.getValue1().getAny() != null && data.getValue1().getAny().getValue() != null)
 					{
 						Date date1 = data.getValue1().getAny().getValue();
 						if(date1 != null)
 							data.getValue1().getAny().setValue(df.parse(df.format(date1)));
 					}
-					if(data.getValue1().getHigh() != null)
+					if(data.getValue1().getHigh() != null && data.getValue1().getHigh().getValue() != null)
 					{
 						Date date1 = data.getValue1().getHigh().getValue();
 						if(date1 != null)
 							data.getValue1().getHigh().setValue(df.parse(df.format(date1)));
 					}
-					if(data.getValue1().getLow() != null)
+					if(data.getValue1().getLow() != null && data.getValue1().getLow().getValue() != null)
 					{
 						Date date1 = data.getValue1().getLow().getValue();
 						if(date1 != null)
 							data.getValue1().getLow().setValue(df.parse(df.format(date1)));
 					}
 
-					if(data.getValue1().getAny() != null)
+					if(unmarshalledData.getValue1().getAny() != null && unmarshalledData.getValue1().getAny().getValue() != null)
 					{
 						Date date2 = unmarshalledData.getValue1().getAny().getValue();
 						if(date2 != null)
 							unmarshalledData.getValue1().getAny().setValue(df.parse(df.format(date2)));
 					}
-					if(data.getValue1().getHigh() != null)
+					if(unmarshalledData.getValue1().getHigh() != null && unmarshalledData.getValue1().getHigh().getValue() != null)
 					{
 						Date date2 = unmarshalledData.getValue1().getHigh().getValue();
 						if(date2 != null)
 							unmarshalledData.getValue1().getHigh().setValue(df.parse(df.format(date2)));
 					}
-					if(data.getValue1().getLow() != null)
+					if(unmarshalledData.getValue1().getLow() != null && unmarshalledData.getValue1().getLow().getValue() != null)
 					{
 						Date date2 = unmarshalledData.getValue1().getLow().getValue();
 						if(date2 != null)
@@ -263,38 +264,38 @@ public class IvlTsDataTypeXMLTest extends SDKISOTestBase
 					IvlTsDataType unmarshalledData = (IvlTsDataType)fromXML(xmlFileName);
 
 					//Make sure date format matches
-					if(data.getValue2().getAny() != null)
+					if(data.getValue2().getAny() != null && data.getValue2().getAny().getValue() != null)
 					{
 						Date date1 = data.getValue2().getAny().getValue();
 						if(date1 != null)
 							data.getValue2().getAny().setValue(df.parse(df.format(date1)));
 					}
-					if(data.getValue2().getHigh() != null)
+					if(data.getValue2().getHigh() != null && data.getValue2().getHigh().getValue() != null)
 					{
 						Date date1 = data.getValue2().getHigh().getValue();
 						if(date1 != null)
 							data.getValue2().getHigh().setValue(df.parse(df.format(date1)));
 					}
-					if(data.getValue2().getLow() != null)
+					if(data.getValue2().getLow() != null && data.getValue2().getLow().getValue() != null)
 					{
 						Date date1 = data.getValue2().getLow().getValue();
 						if(date1 != null)
 							data.getValue2().getLow().setValue(df.parse(df.format(date1)));
 					}
 
-					if(data.getValue2().getAny() != null)
+					if(unmarshalledData.getValue2().getAny() != null && unmarshalledData.getValue2().getAny().getValue() != null)
 					{
 						Date date2 = unmarshalledData.getValue2().getAny().getValue();
 						if(date2 != null)
 							unmarshalledData.getValue2().getAny().setValue(df.parse(df.format(date2)));
 					}
-					if(data.getValue2().getHigh() != null)
+					if(unmarshalledData.getValue2().getHigh() != null && unmarshalledData.getValue2().getHigh().getValue() != null)
 					{
 						Date date2 = unmarshalledData.getValue2().getHigh().getValue();
 						if(date2 != null)
 							unmarshalledData.getValue2().getHigh().setValue(df.parse(df.format(date2)));
 					}
-					if(data.getValue2().getLow() != null)
+					if(unmarshalledData.getValue2().getLow() != null && unmarshalledData.getValue2().getLow().getValue() != null)
 					{
 						Date date2 = unmarshalledData.getValue2().getLow().getValue();
 						if(date2 != null)
@@ -346,38 +347,38 @@ public class IvlTsDataTypeXMLTest extends SDKISOTestBase
 					//Unmarshall XML to data object
 					IvlTsDataType unmarshalledData = (IvlTsDataType)fromXML(xmlFileName);
 					//Make sure date format matches
-					if(data.getValue3().getAny() != null)
+					if(data.getValue3().getAny() != null && data.getValue3().getAny().getValue() != null)
 					{
 						Date date1 = data.getValue3().getAny().getValue();
 						if(date1 != null)
 							data.getValue3().getAny().setValue(df.parse(df.format(date1)));
 					}
-					if(data.getValue3().getHigh() != null)
+					if(data.getValue3().getHigh() != null && data.getValue3().getHigh().getValue() != null)
 					{
 						Date date1 = data.getValue3().getHigh().getValue();
 						if(date1 != null)
 							data.getValue3().getHigh().setValue(df.parse(df.format(date1)));
 					}
-					if(data.getValue3().getLow() != null)
+					if(data.getValue3().getLow() != null && data.getValue3().getLow().getValue() != null)
 					{
 						Date date1 = data.getValue3().getLow().getValue();
 						if(date1 != null)
 							data.getValue3().getLow().setValue(df.parse(df.format(date1)));
 					}
 
-					if(data.getValue3().getAny() != null)
+					if(unmarshalledData.getValue3().getAny() != null && unmarshalledData.getValue3().getAny().getValue() != null)
 					{
 						Date date2 = unmarshalledData.getValue3().getAny().getValue();
 						if(date2 != null)
 							unmarshalledData.getValue3().getAny().setValue(df.parse(df.format(date2)));
 					}
-					if(data.getValue3().getHigh() != null)
+					if(unmarshalledData.getValue3().getHigh() != null && unmarshalledData.getValue3().getHigh().getValue() != null)
 					{
 						Date date2 = unmarshalledData.getValue3().getHigh().getValue();
 						if(date2 != null)
 							unmarshalledData.getValue3().getHigh().setValue(df.parse(df.format(date2)));
 					}
-					if(data.getValue3().getLow() != null)
+					if(unmarshalledData.getValue3().getLow() != null && unmarshalledData.getValue3().getLow().getValue() != null)
 					{
 						Date date2 = unmarshalledData.getValue3().getLow().getValue();
 						if(date2 != null)
@@ -407,6 +408,7 @@ public class IvlTsDataTypeXMLTest extends SDKISOTestBase
 	{
 		Ivl<Ts> aVal = actual.getValue1();
 		assertNotNull(aVal);
+		handleAny(aVal);
 		Ivl<Ts> rVal = result.getValue1();
 		assertNotNull(rVal);
 		return aVal.equals(rVal);
@@ -416,18 +418,34 @@ public class IvlTsDataTypeXMLTest extends SDKISOTestBase
 	{
 		Ivl<Ts> aVal = actual.getValue2();
 		assertNotNull(aVal);
-		Ivl<Ts> rVal = result.getValue2();
+		handleAny(aVal);
+        Ivl<Ts> rVal = result.getValue2();
 		assertNotNull(rVal);
 		return aVal.equals(rVal);
 	}
 
 	private boolean compareValue3(IvlTsDataType actual, IvlTsDataType result)
 	{
-		Ivl<Ts> aVal = actual.getValue2();
+		Ivl<Ts> aVal = actual.getValue3();
 		assertNotNull(aVal);
-		Ivl<Ts> rVal = result.getValue2();
+		handleAny(aVal);
+		Ivl<Ts> rVal = result.getValue3();
 		assertNotNull(rVal);
 		return aVal.equals(rVal);
 	}
-	
+
+	private void handleAny(Ivl<Ts> aVal)
+	{
+    	//IVL Transformer strips out Any value if High and Low values are not null 
+        if ((aVal.getHigh() != null && aVal.getHigh().getNullFlavor() == null)&& (aVal.getLow() != null && aVal.getLow().getNullFlavor() == null)) {
+        	aVal.setAny(null);
+        }
+
+        if (aVal.isLowMissing() || aVal.isHighEqualLow()) {
+        	aVal.setAny(aVal.getHigh());
+        } else if (aVal.isHighMissing()) {
+        	aVal.setAny(aVal.getLow());
+        }
+		
+	}
 }

@@ -75,7 +75,7 @@ public class BlDataTypeXMLTest extends SDKISOTestBase
 	public void testBlValue2ByDetachedCriteria() throws ApplicationException
 	{
 		DetachedCriteria criteria = DetachedCriteria.forClass(BlDataType.class);
-		criteria.add(Property.forName("value2.value").eq(Boolean.FALSE));
+		criteria.add(Property.forName("value2.value").eq(Boolean.TRUE));
 
 		Collection<BlDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.BlDataType");
 		assertEquals(1, result.size());
@@ -91,13 +91,44 @@ public class BlDataTypeXMLTest extends SDKISOTestBase
 	public void testBlValue2ByHQLCriteria() throws ApplicationException
 	{
 		List params = new ArrayList(1);
-		params.add(Boolean.FALSE);
+		params.add(Boolean.TRUE);
 		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.BlDataType a where a.value2.value = ?  order by a.id", params);
 		Collection<BlDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.BlDataType");
 		assertEquals(1, result.size());
 		assertValue2(result);
 	}
 
+	/**
+	 * Search Value2 by detached criteria Test
+	 * 
+	 * @throws ApplicationException 
+	 */
+	@SuppressWarnings("unchecked")
+	public void testBlValue21ByDetachedCriteria() throws ApplicationException
+	{
+		DetachedCriteria criteria = DetachedCriteria.forClass(BlDataType.class);
+		criteria.add(Property.forName("value2.nullFlavor").isNotNull());
+
+		Collection<BlDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.BlDataType");
+		assertEquals(1, result.size());
+		assertValue2(result);
+	}
+
+	/**
+	 * Search Value2 by HQL criteria Test
+	 * 
+	 * @throws ApplicationException 
+	 */
+	@SuppressWarnings("unchecked")
+	public void testBlValue21ByHQLCriteria() throws ApplicationException
+	{
+		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.BlDataType a where a.value2.nullFlavor is not null order by a.id");
+		Collection<BlDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.BlDataType");
+		assertEquals(1, result.size());
+		assertValue2(result);
+	}
+	
+	
 	/**
 	 * Test Value1 for correct values
 	 * 

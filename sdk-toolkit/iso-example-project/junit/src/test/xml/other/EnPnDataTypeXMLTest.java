@@ -3,6 +3,7 @@ package test.xml.other;
 
 import gov.nih.nci.cacoresdk.domain.other.datatype.EnPnDataType;
 import gov.nih.nci.iso21090.EnPn;
+import gov.nih.nci.iso21090.EntityNamePartType;
 import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.client.util.xml.XMLUtilityException;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
@@ -89,6 +90,8 @@ public class EnPnDataTypeXMLTest extends SDKISOTestBase
 				
 				try
 				{
+					//Test model is not modeled to have part type 
+					//data.getValue1().getPart().get(counter-1).setType(EntityNamePartType.FAM);
 					String xmlFileName = getXMLFileName(data, counter);
 					String schemaFileName = getSchemaFileName(data.getClass());
 					//Marshall the object

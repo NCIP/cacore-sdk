@@ -4,6 +4,7 @@ package test.xml.other;
 import gov.nih.nci.cacoresdk.domain.other.datatype.IvlIntDataType;
 import gov.nih.nci.iso21090.Int;
 import gov.nih.nci.iso21090.Ivl;
+import gov.nih.nci.iso21090.Pq;
 import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.client.util.xml.XMLUtilityException;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
@@ -106,7 +107,7 @@ public class IvlIntDataTypeXMLTest extends SDKISOTestBase
 	public void testIvlIntValue3ByDetachedCriteria() throws ApplicationException
 	{
 		DetachedCriteria criteria = DetachedCriteria.forClass(IvlIntDataType.class);
-		criteria.add(Property.forName("value3.low.value").isNotNull());
+		criteria.add(Property.forName("value3.highClosed").isNotNull());
 		criteria.addOrder(Order.asc("id"));
 
 		Collection<IvlIntDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.IvlIntDataType");
@@ -122,7 +123,7 @@ public class IvlIntDataTypeXMLTest extends SDKISOTestBase
 	@SuppressWarnings("unchecked")
 	public void testIvlIntValue3ByHQLCriteria() throws ApplicationException
 	{
-		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.IvlIntDataType a where a.value3.low.value is not null order by a.id asc asc");
+		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.IvlIntDataType a where a.value3.highClosed is not null order by a.id asc asc");
 		Collection<IvlIntDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.IvlIntDataType");
 		assertEquals(5, result.size());
 		assertValue3(result);
@@ -275,6 +276,7 @@ public class IvlIntDataTypeXMLTest extends SDKISOTestBase
 	{
 		Ivl<Int> aVal = actual.getValue1();
 		assertNotNull(aVal);
+		handleAny(aVal);
 		Ivl<Int> rVal = result.getValue1();
 		assertNotNull(rVal);
 		return aVal.equals(rVal);
@@ -284,6 +286,7 @@ public class IvlIntDataTypeXMLTest extends SDKISOTestBase
 	{
 		Ivl<Int> aVal = actual.getValue2();
 		assertNotNull(aVal);
+		handleAny(aVal);
 		Ivl<Int> rVal = result.getValue2();
 		assertNotNull(rVal);
 		return aVal.equals(rVal);
@@ -293,8 +296,25 @@ public class IvlIntDataTypeXMLTest extends SDKISOTestBase
 	{
 		Ivl<Int> aVal = actual.getValue3();
 		assertNotNull(aVal);
+		handleAny(aVal);
 		Ivl<Int> rVal = result.getValue3();
 		assertNotNull(rVal);
 		return aVal.equals(rVal);
 	}
+
+	private void handleAny(Ivl<Int> aVal)
+	{
+    	//IVL Transformer strips out Any value if High and Low values are not null 
+        if ((aVal.getHigh() != null && aVal.getHigh().getNullFlavor() == null)&& (aVal.getLow() != null && aVal.getLow().getNullFlavor() == null)) {
+        	aVal.setAny(null);
+        }
+
+        if (aVal.isLowMissing() || aVal.isHighEqualLow()) {
+        	aVal.setAny(aVal.getHigh());
+        } else if (aVal.isHighMissing()) {
+        	aVal.setAny(aVal.getLow());
+        }
+		
+	}
+
 }
