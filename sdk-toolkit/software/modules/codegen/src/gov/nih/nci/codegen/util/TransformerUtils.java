@@ -632,6 +632,10 @@ public class TransformerUtils
 			
 			if(isISO21090Enabled) {
 				sb.append("import gov.nih.nci.system.client.util.xml.JAXBISOAdapter;\n");
+				sb.append("import gov.nih.nci.system.client.util.xml.JAXBISOIvlPqAdapter;\n");
+				sb.append("import gov.nih.nci.system.client.util.xml.JAXBISOIvlRealAdapter;\n");
+				sb.append("import gov.nih.nci.system.client.util.xml.JAXBISOIvlTsAdapter;\n");
+				sb.append("import gov.nih.nci.system.client.util.xml.JAXBISOIvlIntAdapter;\n");
 			}
 			
 			sb.append("import javax.xml.bind.annotation.XmlAccessType;\n");
@@ -2015,7 +2019,7 @@ public class TransformerUtils
 		return name;
 	}
 	
-	public String getJaxbXmlAttributeAnnotation(UMLClass klass, UMLAttribute attr){
+	public String getJaxbXmlAttributeAnnotation(UMLClass klass, UMLAttribute attr) throws GenerationException{
 		String type = this.getDataType(attr);
 		log.debug("* * * datatype for attribute " + attr.getName()+": " + type);
 		String collectionType = "";
@@ -2042,7 +2046,24 @@ public class TransformerUtils
 			if (!isJavaDataType(attr)) {
 				log.debug("* * * Detected attribute " + attr.getName()+" is of ISO Datatype: " + isoDatatypeValue);
 				sb.append("    @XmlElement(namespace=\"").append(getNamespaceUriPrefix()).append(getFullPackageName(klass)).append("\")"); 
-				sb.append("    @XmlJavaTypeAdapter(JAXBISOAdapter.class)");
+				if(isIvlDataType(attr))
+				{
+					String ivlDataType = getIvlDataType(attr);
+					if("PQ".equals(ivlDataType))
+							sb.append("    @XmlJavaTypeAdapter(JAXBISOIvlPqAdapter.class)");
+					else if("REAL".equals(ivlDataType))
+							sb.append("    @XmlJavaTypeAdapter(JAXBISOIvlRealAdapter.class)");
+					else if("TS".equals(ivlDataType))
+							sb.append("    @XmlJavaTypeAdapter(JAXBISOIvlTsAdapter.class)");
+					else if("INT".equals(ivlDataType))
+							sb.append("    @XmlJavaTypeAdapter(JAXBISOIvlIntAdapter.class)");
+					else
+						throw new GenerationException("Invalid Ivl type defined: " + attr.getDatatype().getName());
+				}
+				else
+				{
+					sb.append("    @XmlJavaTypeAdapter(JAXBISOAdapter.class)");
+				}
 					
 				return sb.toString();
 			}
@@ -2717,6 +2738,23 @@ public class TransformerUtils
 		
 		return javaDatatypeMap.containsKey(originalType.toLowerCase());
 	}
+
+	public boolean isIvlDataType(UMLAttribute attr)
+	{
+		String originalType = attr.getDatatype().getName();
+
+		if(originalType.startsWith("IVL"))
+			return true;
+		
+		return false;
+	}
+	
+	public String getIvlDataType(UMLAttribute attr)
+	{
+		String originalType = attr.getDatatype().getName();
+		return originalType.substring(originalType.indexOf("<")+1, originalType.indexOf(">"));
+	}
+	
 	
 	public Collection getSortedByJoinUMLAttribute(UMLClass klass, UMLAttribute idAttribute, UMLClass table) throws GenerationException
 	{
