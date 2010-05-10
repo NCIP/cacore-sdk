@@ -1,6 +1,7 @@
 package test.gov.nih.nci.cacoresdk.domain.other.datatype;
 
 import gov.nih.nci.cacoresdk.domain.other.datatype.EnPnDataType;
+import gov.nih.nci.iso21090.EntityNamePartType;
 import gov.nih.nci.iso21090.NullFlavor;
 import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
@@ -225,6 +226,7 @@ public class EnPnDataTypeTest extends SDKISOTestBase{
 		//Global constant
 		assertEquals("ENXP Code System Version", data.getValue1().getPart().get(0).getCodeSystemVersion());
 		assertNull(data.getValue1().getPart().get(0).getQualifier());
-		assertNull(data.getValue1().getPart().get(0).getType());
+		assertNotNull(data.getValue1().getPart().get(0).getType());
+		assertEquals(EntityNamePartType.FAM, data.getValue1().getPart().get(0).getType());
 	}
 }

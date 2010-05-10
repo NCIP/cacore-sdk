@@ -122,7 +122,7 @@ public class BlNonNullDataTypeTest extends SDKISOTestBase{
 			if((index == null && counter == 1) || (index != null && index.contains("1")))
 			{
 				assertNotNull(data.getValue1());
-				assertNull(data.getValue1().getValue());
+				assertEquals(Boolean.FALSE, data.getValue1().getValue());
 				//BL NON NULL does not support a null flavor.
 				assertNull(data.getValue1().getNullFlavor());
 				if(index != null) index.remove("1");

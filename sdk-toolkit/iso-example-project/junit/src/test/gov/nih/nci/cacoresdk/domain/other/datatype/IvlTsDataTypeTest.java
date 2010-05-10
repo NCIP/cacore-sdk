@@ -3,12 +3,9 @@ package test.gov.nih.nci.cacoresdk.domain.other.datatype;
 
 import gov.nih.nci.cacoresdk.domain.other.datatype.IvlTsDataType;
 import gov.nih.nci.iso21090.NullFlavor;
-import gov.nih.nci.iso21090.Pq;
 import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
-import java.math.BigDecimal;
-import java.math.MathContext;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -498,7 +495,6 @@ public class IvlTsDataTypeTest extends SDKISOTestBase
 
 		int counter = 1;
 		SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss a");
-		MathContext decimalContext = new MathContext(4);
 		for(IvlTsDataType data : result)
 		{
 			//Validate 2nd record
@@ -514,7 +510,7 @@ public class IvlTsDataTypeTest extends SDKISOTestBase
 				assertEquals(df.parse("03/11/2010 12:00:00 AM"), df.parse(df.format(data.getValue3().getHigh().getValue())));
 				assertEquals(df.parse("03/01/2010 12:00:00 AM"), df.parse(df.format(data.getValue3().getLow().getValue())));
 				assertTrue(data.getValue3().getHigh().getValue().compareTo(data.getValue3().getLow().getValue()) > 0);
-				assertEquals(new BigDecimal(4, decimalContext), ((gov.nih.nci.iso21090.Pq)data.getValue3().getWidth()).getValue());
+				assertEquals(new Double(4), ((gov.nih.nci.iso21090.Pq)data.getValue3().getWidth()).getValue());
 				//From database
 				assertNull(data.getValue3().getWidth().getNullFlavor());
 				assertValue3Constants(data);
@@ -535,7 +531,7 @@ public class IvlTsDataTypeTest extends SDKISOTestBase
 				assertEquals(df.parse("03/12/2010 12:00:00 AM"), df.parse(df.format(data.getValue3().getHigh().getValue())));
 				assertEquals(df.parse("03/02/2010 12:00:00 AM"), df.parse(df.format(data.getValue3().getLow().getValue())));
 				assertFalse(data.getValue3().getHigh().getValue().compareTo(data.getValue3().getLow().getValue()) == 0);
-				assertEquals(new BigDecimal(4, decimalContext), ((gov.nih.nci.iso21090.Pq)data.getValue3().getWidth()).getValue());
+				assertEquals(new Double(4), ((gov.nih.nci.iso21090.Pq)data.getValue3().getWidth()).getValue());
 				//From database
 				assertNull(data.getValue3().getWidth().getNullFlavor());
 				assertValue3Constants(data);
@@ -556,7 +552,7 @@ public class IvlTsDataTypeTest extends SDKISOTestBase
 				assertEquals(df.parse("03/13/2010 12:00:00 AM"), df.parse(df.format(data.getValue3().getHigh().getValue())));
 				assertEquals(df.parse("03/03/2010 12:00:00 AM"), df.parse(df.format(data.getValue3().getLow().getValue())));
 				assertFalse(data.getValue3().getHigh().getValue().compareTo(data.getValue3().getLow().getValue()) == 0);
-				assertEquals(new BigDecimal(4, decimalContext), ((gov.nih.nci.iso21090.Pq)data.getValue3().getWidth()).getValue());
+				assertEquals(new Double(4), ((gov.nih.nci.iso21090.Pq)data.getValue3().getWidth()).getValue());
 				//From database
 				assertNull(data.getValue3().getWidth().getNullFlavor());
 				assertValue3Constants(data);
@@ -618,7 +614,7 @@ public class IvlTsDataTypeTest extends SDKISOTestBase
 				assertNull(data.getValue3().getHigh().getValue());
 				assertEquals(NullFlavor.NI, data.getValue3().getHigh().getNullFlavor());
 				assertEquals(df.parse("03/01/2010 12:00:00 AM"), df.parse(df.format(data.getValue3().getLow().getValue())));
-				assertEquals(new BigDecimal(4, decimalContext), ((gov.nih.nci.iso21090.Pq)data.getValue3().getWidth()).getValue());
+				assertEquals(new Double(4), ((gov.nih.nci.iso21090.Pq)data.getValue3().getWidth()).getValue());
 				//From database
 				assertNull(data.getValue3().getWidth().getNullFlavor());
 				assertValue3Constants(data);
@@ -685,7 +681,7 @@ public class IvlTsDataTypeTest extends SDKISOTestBase
 
 				assertEquals(df.parse("03/24/2010 12:00:00 AM"), df.parse(df.format(data.getValue3().getHigh().getValue())));
 				assertEquals(df.parse("03/04/2010 12:00:00 AM"), df.parse(df.format(data.getValue3().getLow().getValue())));
-				assertEquals(new BigDecimal(4, decimalContext), ((gov.nih.nci.iso21090.Pq)data.getValue3().getWidth()).getValue());
+				assertEquals(new Double(4), ((gov.nih.nci.iso21090.Pq)data.getValue3().getWidth()).getValue());
 				//From database
 				assertNull(data.getValue3().getWidth().getNullFlavor());
 				assertValue3Constants(data);

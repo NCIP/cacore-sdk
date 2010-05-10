@@ -5,8 +5,6 @@ import gov.nih.nci.iso21090.NullFlavor;
 import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
-import java.math.BigDecimal;
-import java.math.MathContext;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -237,7 +235,6 @@ public class PqDataTypeTest extends SDKISOTestBase
 	private void assertValue1(Collection<PqDataType> result, List<Integer> index) throws ParseException
 	{
 		assertNotNull(result);
-		MathContext decimalContext = new MathContext(3);
 		int counter = 1;
 		for(PqDataType data : result)
 		{
@@ -251,9 +248,9 @@ public class PqDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue1());
 
 				assertNull(data.getValue1().getNullFlavor());
-				assertEquals(new BigDecimal(1.12, decimalContext), data.getValue1().getValue());
+				assertEquals(new Double(1.12), data.getValue1().getValue());
 				assertNull(data.getValue1().getUnit());
-				assertNull(data.getValue1().getPrecision());
+				assertEquals(new Integer(0), data.getValue1().getPrecision());
 
 				counter++;
 				continue;
@@ -268,9 +265,9 @@ public class PqDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue1());
 
 				assertNull(data.getValue1().getNullFlavor());
-				assertEquals(new BigDecimal(2.12, decimalContext), data.getValue1().getValue());
+				assertEquals(new Double(2.12), data.getValue1().getValue());
 				assertNull(data.getValue1().getUnit());
-				assertNull(data.getValue1().getPrecision());
+				assertEquals(new Integer(0), data.getValue1().getPrecision());
 
 				counter++;
 				continue;
@@ -285,9 +282,9 @@ public class PqDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue1());
 
 				assertNull(data.getValue1().getNullFlavor());
-				assertEquals(new BigDecimal(3.12, decimalContext), data.getValue1().getValue());
+				assertEquals(new Double(3.12), data.getValue1().getValue());
 				assertNull(data.getValue1().getUnit());
-				assertNull(data.getValue1().getPrecision());
+				assertEquals(new Integer(0), data.getValue1().getPrecision());
 				
 				counter++;
 				continue;
@@ -302,9 +299,9 @@ public class PqDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue1());
 
 				assertNull(data.getValue1().getNullFlavor());
-				assertEquals(new BigDecimal(4.12, decimalContext), data.getValue1().getValue());
+				assertEquals(new Double(4.12), data.getValue1().getValue());
 				assertNull(data.getValue1().getUnit());
-				assertNull(data.getValue1().getPrecision());
+				assertEquals(new Integer(0), data.getValue1().getPrecision());
 
 				counter++;
 				continue;
@@ -319,9 +316,9 @@ public class PqDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue1());
 
 				assertNull(data.getValue1().getNullFlavor());
-				assertEquals(new BigDecimal(5.12, decimalContext), data.getValue1().getValue());
+				assertEquals(new Double(5.12), data.getValue1().getValue());
 				assertNull(data.getValue1().getUnit());
-				assertNull(data.getValue1().getPrecision());
+				assertEquals(new Integer(0), data.getValue1().getPrecision());
 
 				counter++;
 				continue;
@@ -336,10 +333,10 @@ public class PqDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue1());
 
 				assertNull(data.getValue1().getNullFlavor());
-				assertEquals(new BigDecimal(1.12, decimalContext), data.getValue1().getValue());
+				assertEquals(new Double(1.12), data.getValue1().getValue());
 				//From database, overriding global constant
 				assertEquals("GALLON", data.getValue1().getUnit());
-				assertNull(data.getValue1().getPrecision());
+				assertEquals(new Integer(0), data.getValue1().getPrecision());
 
 				counter++;
 				continue;
@@ -354,10 +351,10 @@ public class PqDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue1());
 
 				assertNull(data.getValue1().getNullFlavor());
-				assertEquals(new BigDecimal(2.12, decimalContext), data.getValue1().getValue());
+				assertEquals(new Double(2.12), data.getValue1().getValue());
 				//From database, overriding global constant
 				assertEquals("GALLON", data.getValue1().getUnit());
-				assertNull(data.getValue1().getPrecision());
+				assertEquals(new Integer(0), data.getValue1().getPrecision());
 
 				counter++;
 				continue;
@@ -372,10 +369,10 @@ public class PqDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue1());
 
 				assertNull(data.getValue1().getNullFlavor());
-				assertEquals(new BigDecimal(3.12, decimalContext), data.getValue1().getValue());
+				assertEquals(new Double(3.12), data.getValue1().getValue());
 				//From database, overriding global constant
 				assertEquals("GALLON", data.getValue1().getUnit());
-				assertNull(data.getValue1().getPrecision());
+				assertEquals(new Integer(0), data.getValue1().getPrecision());
 				
 				counter++;
 				continue;
@@ -390,10 +387,10 @@ public class PqDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue1());
 
 				assertNull(data.getValue1().getNullFlavor());
-				assertEquals(new BigDecimal(4.12, decimalContext), data.getValue1().getValue());
+				assertEquals(new Double(4.12), data.getValue1().getValue());
 				//From database, overriding global constant
 				assertEquals("GALLON", data.getValue1().getUnit());
-				assertNull(data.getValue1().getPrecision());
+				assertEquals(new Integer(0), data.getValue1().getPrecision());
 
 				counter++;
 				continue;
@@ -408,10 +405,10 @@ public class PqDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue1());
 
 				assertNull(data.getValue1().getNullFlavor());
-				assertEquals(new BigDecimal(5.12, decimalContext), data.getValue1().getValue());
+				assertEquals(new Double(5.12), data.getValue1().getValue());
 				//From database, overriding global constant
 				assertEquals("GALLON", data.getValue1().getUnit());
-				assertNull(data.getValue1().getPrecision());
+				assertEquals(new Integer(0), data.getValue1().getPrecision());
 
 				counter++;
 				continue;
@@ -423,7 +420,7 @@ public class PqDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue1());
 				assertNull(data.getValue1().getValue());
 				assertNull(data.getValue1().getUnit());
-				assertNull(data.getValue1().getPrecision());
+				assertEquals(new Integer(0), data.getValue1().getPrecision());
 				//Local constant overriding global constant
 				assertEquals(NullFlavor.NA, data.getValue1().getNullFlavor());
 				counter++;
@@ -434,7 +431,6 @@ public class PqDataTypeTest extends SDKISOTestBase
 	private void assertValue2(Collection<PqDataType> result, List<Integer> index) throws ParseException
 	{
 		assertNotNull(result);
-		MathContext decimalContext = new MathContext(3);
 		int counter = 1;
 		for(PqDataType data : result)
 		{
@@ -448,10 +444,10 @@ public class PqDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue2());
 
 				assertNull(data.getValue2().getNullFlavor());
-				assertEquals(new BigDecimal(1.23, decimalContext), data.getValue2().getValue());
+				assertEquals(new Double(1.23), data.getValue2().getValue());
 				//Local constant
 				assertEquals("UNIT", data.getValue2().getUnit());
-				assertNull(data.getValue2().getPrecision());
+				assertEquals(new Integer(0), data.getValue2().getPrecision());
 
 				counter++;
 				continue;
@@ -466,10 +462,10 @@ public class PqDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue2());
 
 				assertNull(data.getValue2().getNullFlavor());
-				assertEquals(new BigDecimal(2.23, decimalContext), data.getValue2().getValue());
+				assertEquals(new Double(2.23), data.getValue2().getValue());
 				//Local constant
 				assertEquals("UNIT", data.getValue2().getUnit());
-				assertNull(data.getValue2().getPrecision());
+				assertEquals(new Integer(0), data.getValue2().getPrecision());
 
 				counter++;
 				continue;
@@ -484,10 +480,10 @@ public class PqDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue2());
 
 				assertNull(data.getValue2().getNullFlavor());
-				assertEquals(new BigDecimal(3.23, decimalContext), data.getValue2().getValue());
+				assertEquals(new Double(3.23), data.getValue2().getValue());
 				//Local constant
 				assertEquals("UNIT", data.getValue2().getUnit());
-				assertNull(data.getValue2().getPrecision());
+				assertEquals(new Integer(0), data.getValue2().getPrecision());
 				
 				counter++;
 				continue;
@@ -502,10 +498,10 @@ public class PqDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue2());
 
 				assertNull(data.getValue2().getNullFlavor());
-				assertEquals(new BigDecimal(4.23, decimalContext), data.getValue2().getValue());
+				assertEquals(new Double(4.23), data.getValue2().getValue());
 				//Local constant
 				assertEquals("UNIT", data.getValue2().getUnit());
-				assertNull(data.getValue2().getPrecision());
+				assertEquals(new Integer(0), data.getValue2().getPrecision());
 
 				counter++;
 				continue;
@@ -520,10 +516,10 @@ public class PqDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue2());
 
 				assertNull(data.getValue2().getNullFlavor());
-				assertEquals(new BigDecimal(5.23, decimalContext), data.getValue2().getValue());
+				assertEquals(new Double(5.23), data.getValue2().getValue());
 				//Local constant
 				assertEquals("UNIT", data.getValue2().getUnit());
-				assertNull(data.getValue2().getPrecision());
+				assertEquals(new Integer(0), data.getValue2().getPrecision());
 
 				counter++;
 				continue;
@@ -535,7 +531,7 @@ public class PqDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue2());
 				assertEquals(NullFlavor.NI, data.getValue2().getNullFlavor());
 				assertNull(data.getValue2().getUnit());
-				assertNull(data.getValue2().getPrecision());
+				assertEquals(new Integer(0), data.getValue2().getPrecision());
 				assertNull(data.getValue2().getValue());
 				counter++;
 			}
@@ -545,7 +541,6 @@ public class PqDataTypeTest extends SDKISOTestBase
 	private void assertValue3(Collection<PqDataType> result, List<Integer> index) throws ParseException
 	{
 		assertNotNull(result);
-		MathContext decimalContext = new MathContext(3);
 		int counter = 1;
 		for(PqDataType data : result)
 		{
@@ -559,9 +554,9 @@ public class PqDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue3());
 
 				assertNull(data.getValue3().getNullFlavor());
-				assertEquals(new BigDecimal(1.34, decimalContext), data.getValue3().getValue());
+				assertEquals(new Double(1.34), data.getValue3().getValue());
 				assertNull(data.getValue3().getUnit());
-				assertNull(data.getValue3().getPrecision());
+				assertEquals(new Integer(0), data.getValue3().getPrecision());
 
 				counter++;
 				continue;
@@ -576,9 +571,9 @@ public class PqDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue3());
 
 				assertNull(data.getValue3().getNullFlavor());
-				assertEquals(new BigDecimal(2.34, decimalContext), data.getValue3().getValue());
+				assertEquals(new Double(2.34), data.getValue3().getValue());
 				assertNull(data.getValue3().getUnit());
-				assertNull(data.getValue3().getPrecision());
+				assertEquals(new Integer(0), data.getValue3().getPrecision());
 
 				counter++;
 				continue;
@@ -593,10 +588,10 @@ public class PqDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue3());
 
 				assertNull(data.getValue3().getNullFlavor());
-				assertEquals(new BigDecimal(1.37, decimalContext), data.getValue3().getValue());
+				assertEquals(new Double(1.37), data.getValue3().getValue());
 				//From database
 				assertEquals("LITER", data.getValue3().getUnit());
-				assertNull(data.getValue3().getPrecision());
+				assertEquals(new Integer(0), data.getValue3().getPrecision());
 				
 				counter++;
 				continue;
@@ -611,10 +606,10 @@ public class PqDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue3());
 
 				assertNull(data.getValue3().getNullFlavor());
-				assertEquals(new BigDecimal(2.37, decimalContext), data.getValue3().getValue());
+				assertEquals(new Double(2.37), data.getValue3().getValue());
 				//From database, overriding global and local constants
 				assertEquals("LITER", data.getValue3().getUnit());
-				assertNull(data.getValue3().getPrecision());
+				assertEquals(new Integer(0), data.getValue3().getPrecision());
 
 				counter++;
 				continue;
@@ -629,10 +624,10 @@ public class PqDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue3());
 
 				assertNull(data.getValue3().getNullFlavor());
-				assertEquals(new BigDecimal(3.37, decimalContext), data.getValue3().getValue());
+				assertEquals(new Double(3.37), data.getValue3().getValue());
 				//From database, overriding global and local constants
 				assertEquals("LITER", data.getValue3().getUnit());
-				assertNull(data.getValue3().getPrecision());
+				assertEquals(new Integer(0), data.getValue3().getPrecision());
 
 				counter++;
 				continue;
@@ -647,7 +642,7 @@ public class PqDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue3());
 
 				assertNull(data.getValue3().getNullFlavor());
-				assertEquals(new BigDecimal(1.38, decimalContext), data.getValue3().getValue());
+				assertEquals(new Double(1.38), data.getValue3().getValue());
 				//From database, overriding global and local constants
 				assertEquals("LITER", data.getValue3().getUnit());
 				assertEquals(new Integer(2), data.getValue3().getPrecision());
@@ -665,7 +660,7 @@ public class PqDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue3());
 
 				assertNull(data.getValue3().getNullFlavor());
-				assertEquals(new BigDecimal(2.38, decimalContext), data.getValue3().getValue());
+				assertEquals(new Double(2.38), data.getValue3().getValue());
 				//From database, overriding global and local constants
 				assertEquals("LITER", data.getValue3().getUnit());
 				assertEquals(new Integer(2), data.getValue3().getPrecision());
@@ -683,7 +678,7 @@ public class PqDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue3());
 
 				assertNull(data.getValue3().getNullFlavor());
-				assertEquals(new BigDecimal(3.38, decimalContext), data.getValue3().getValue());
+				assertEquals(new Double(3.38), data.getValue3().getValue());
 				//From database, overriding global and local constants
 				assertEquals("LITER", data.getValue3().getUnit());
 				assertEquals(new Integer(2), data.getValue3().getPrecision());
@@ -704,7 +699,7 @@ public class PqDataTypeTest extends SDKISOTestBase
 				assertEquals(NullFlavor.NA, data.getValue3().getNullFlavor());
 				assertNull(data.getValue3().getValue());
 				assertNull(data.getValue3().getUnit());
-				assertNull(data.getValue3().getPrecision());
+				assertEquals(new Integer(0), data.getValue3().getPrecision());
 
 				counter++;
 				continue;
@@ -722,7 +717,7 @@ public class PqDataTypeTest extends SDKISOTestBase
 				assertEquals(NullFlavor.NA, data.getValue3().getNullFlavor());
 				assertNull(data.getValue3().getValue());
 				assertNull(data.getValue3().getUnit());
-				assertNull(data.getValue3().getPrecision());
+				assertEquals(new Integer(0), data.getValue3().getPrecision());
 
 				counter++;
 				continue;
@@ -740,7 +735,7 @@ public class PqDataTypeTest extends SDKISOTestBase
 				assertEquals(NullFlavor.NA, data.getValue3().getNullFlavor());
 				assertNull(data.getValue3().getValue());
 				assertNull(data.getValue3().getUnit());
-				assertNull(data.getValue3().getPrecision());
+				assertEquals(new Integer(0), data.getValue3().getPrecision());
 
 				counter++;
 				continue;
