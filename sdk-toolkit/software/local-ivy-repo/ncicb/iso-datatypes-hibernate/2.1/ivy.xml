@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ivy-module version="1.0">
-   <info organisation="ncicb" module="iso-datatypes-hibernate" revision="2.1" status="release" publication="20100506102935"/>
+   <info organisation="ncicb" module="iso-datatypes-hibernate" revision="2.1" status="release" publication="20100510142007"/>
 	<configurations>
 		<conf name="default" visibility="public" description="runtime dependencies and master artifact can be used with this conf" extends="runtime,master"/>
 		<conf name="master" visibility="public" description="contains only the artifact published by this module itself, with no transitive dependencies"/>
@@ -20,7 +20,7 @@
 	<dependencies>
 		<dependency org="ncicb" name="iso-datatypes" rev="2.1" force="true" conf="compile->compile(*),master(*);runtime->runtime(*)"/>
 		
-		<dependency org="org.hibernate" name="hibernate" rev="3.2.0.ga" force="true" conf="compile->compile(*),master(*);runtime->runtime(*)">
+		<dependency org="org.hibernate" name="hibernate" rev="3.2.0.ga-modified" force="true" conf="compile->compile(*),master(*);runtime->runtime(*)">
 			<exclude org="javax.transaction"/>
 		</dependency>
 		<dependency org="org.springframework" name="spring" rev="2.0.2" conf="compile->compile(*),master(*);runtime->runtime(*)"/>
