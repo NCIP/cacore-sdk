@@ -411,7 +411,7 @@ public class IsoDatatypeTransformationHelper
 		if("Integer".equals(isoType)) 
 			propertyType = "integer";
 		if("Real".equals(isoType))
-			propertyType = "big_decimal";
+			propertyType = "double";
 		if("Boolean".equals(isoType))
 			propertyType = "boolean";
 		if("date".equals(isoType))
