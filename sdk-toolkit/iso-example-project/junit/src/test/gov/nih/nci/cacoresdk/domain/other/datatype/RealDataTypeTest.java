@@ -5,8 +5,6 @@ import gov.nih.nci.iso21090.NullFlavor;
 import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
-import java.math.BigDecimal;
-import java.math.MathContext;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -174,7 +172,6 @@ public class RealDataTypeTest extends SDKISOTestBase
 	private void assertValue1(Collection<RealDataType> result, List<Integer> index) throws ParseException
 	{
 		assertNotNull(result);
-		MathContext decimalContext = new MathContext(6);
 		int counter = 1;
 		for(RealDataType data : result)
 		{
@@ -187,7 +184,7 @@ public class RealDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 
-				assertEquals(new BigDecimal(1001.15, decimalContext), data.getValue1().getValue());
+				assertEquals(new Double(1001.15), data.getValue1().getValue());
 				assertNull(data.getValue1().getNullFlavor());
 
 				counter++;
@@ -202,7 +199,7 @@ public class RealDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 
-				assertEquals(new BigDecimal(1002.15, decimalContext), data.getValue1().getValue());
+				assertEquals(new Double(1002.15), data.getValue1().getValue());
 				assertNull(data.getValue1().getNullFlavor());
 
 				counter++;
@@ -217,7 +214,7 @@ public class RealDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 
-				assertEquals(new BigDecimal(-1003), data.getValue1().getValue());
+				assertEquals(new Double(-1003), data.getValue1().getValue());
 				assertNull(data.getValue1().getNullFlavor());
 				
 				counter++;
@@ -232,7 +229,7 @@ public class RealDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 
-				assertEquals(new BigDecimal(1004), data.getValue1().getValue());
+				assertEquals(new Double(1004), data.getValue1().getValue());
 				assertNull(data.getValue1().getNullFlavor());
 
 				counter++;
@@ -247,7 +244,7 @@ public class RealDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 
-				assertEquals(new BigDecimal(1005.15, decimalContext), data.getValue1().getValue());
+				assertEquals(new Double(1005.15), data.getValue1().getValue());
 				assertNull(data.getValue1().getNullFlavor());
 
 				counter++;
@@ -269,7 +266,6 @@ public class RealDataTypeTest extends SDKISOTestBase
 	private void assertValue2(Collection<RealDataType> result, List<Integer> index) throws ParseException
 	{
 		assertNotNull(result);
-		MathContext decimalContext = new MathContext(6);
 		int counter = 1;
 		for(RealDataType data : result)
 		{
@@ -282,7 +278,7 @@ public class RealDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 
-				assertEquals(new BigDecimal(1101.15, decimalContext), data.getValue2().getValue());
+				assertEquals(new Double(1101.15), data.getValue2().getValue());
 				//From the database
 				assertNull(data.getValue2().getNullFlavor());
 				counter++;
@@ -297,7 +293,7 @@ public class RealDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 
-				assertEquals(new BigDecimal(1102), data.getValue2().getValue());
+				assertEquals(new Double(1102), data.getValue2().getValue());
 				//From the database
 				assertNull(data.getValue2().getNullFlavor());
 
@@ -313,7 +309,7 @@ public class RealDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
 
-				assertEquals(new BigDecimal(-1201.15, decimalContext), data.getValue2().getValue());
+				assertEquals(new Double(-1201.15), data.getValue2().getValue());
 				//From the database
 				assertNull(data.getValue2().getNullFlavor());
 
