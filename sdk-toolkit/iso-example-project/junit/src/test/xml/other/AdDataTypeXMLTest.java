@@ -8,7 +8,9 @@ import gov.nih.nci.system.client.util.xml.XMLUtilityException;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.jdom.Document;
 
@@ -576,6 +578,12 @@ public class AdDataTypeXMLTest extends SDKISOTestBase
 	{
 		Ad aVal = actual.getValue1();
 		assertNotNull(aVal);
+		//ADTransformer returns empty parts list
+		if(aVal.getNullFlavor() != null && aVal.getPart() == null)
+		{
+			List<gov.nih.nci.iso21090.Adxp> targetPart = new ArrayList<gov.nih.nci.iso21090.Adxp>(0);
+			aVal.setPart(targetPart);
+		}
 		Ad rVal = result.getValue1();
 		assertNotNull(rVal);
 		return aVal.equals(rVal);
@@ -585,6 +593,12 @@ public class AdDataTypeXMLTest extends SDKISOTestBase
 	{
 		Ad aVal = actual.getValue2();
 		assertNotNull(aVal);
+		//ADTransformer returns empty parts list
+		if(aVal.getNullFlavor() != null && aVal.getPart() == null)
+		{
+			List<gov.nih.nci.iso21090.Adxp> targetPart = new ArrayList<gov.nih.nci.iso21090.Adxp>(0);
+			aVal.setPart(targetPart);
+		}
 		Ad rVal = result.getValue2();
 		assertNotNull(rVal);
 		return aVal.equals(rVal);
@@ -594,6 +608,12 @@ public class AdDataTypeXMLTest extends SDKISOTestBase
 	{
 		Ad aVal = actual.getValue3();
 		assertNotNull(aVal);
+		//ADTransformer returns empty parts list
+		if(aVal.getNullFlavor() != null && aVal.getPart() == null)
+		{
+			List<gov.nih.nci.iso21090.Adxp> targetPart = new ArrayList<gov.nih.nci.iso21090.Adxp>(0);
+			aVal.setPart(targetPart);
+		}
 		Ad rVal = result.getValue3();
 		assertNotNull(rVal);
 		return aVal.equals(rVal);
@@ -603,6 +623,12 @@ public class AdDataTypeXMLTest extends SDKISOTestBase
 	{
 		Ad aVal = actual.getValue4();
 		assertNotNull(aVal);
+		//ADTransformer returns empty parts list
+		if(aVal.getNullFlavor() != null && aVal.getPart() == null)
+		{
+			List<gov.nih.nci.iso21090.Adxp> targetPart = new ArrayList<gov.nih.nci.iso21090.Adxp>(0);
+			aVal.setPart(targetPart);
+		}
 		Ad rVal = result.getValue4();
 		assertNotNull(rVal);
 		return aVal.equals(rVal);
@@ -611,6 +637,12 @@ public class AdDataTypeXMLTest extends SDKISOTestBase
 	{
 		Ad aVal = actual.getValue5();
 		assertNotNull(aVal);
+		//ADTransformer returns empty parts list
+		if(aVal.getNullFlavor() != null && aVal.getPart() == null)
+		{
+			List<gov.nih.nci.iso21090.Adxp> targetPart = new ArrayList<gov.nih.nci.iso21090.Adxp>(0);
+			aVal.setPart(targetPart);
+		}
 		Ad rVal = result.getValue5();
 		assertNotNull(rVal);
 		return aVal.equals(rVal);
@@ -620,6 +652,12 @@ public class AdDataTypeXMLTest extends SDKISOTestBase
 	{
 		Ad aVal = actual.getValue6();
 		assertNotNull(aVal);
+		//ADTransformer returns empty parts list
+		if(aVal.getNullFlavor() != null && aVal.getPart() == null)
+		{
+			List<gov.nih.nci.iso21090.Adxp> targetPart = new ArrayList<gov.nih.nci.iso21090.Adxp>(0);
+			aVal.setPart(targetPart);
+		}
 		Ad rVal = result.getValue6();
 		assertNotNull(rVal);
 		return aVal.equals(rVal);
@@ -628,6 +666,12 @@ public class AdDataTypeXMLTest extends SDKISOTestBase
 	{
 		Ad aVal = actual.getValue7();
 		assertNotNull(aVal);
+		//ADTransformer returns empty parts list
+		if(aVal.getNullFlavor() != null && aVal.getPart() == null)
+		{
+			List<gov.nih.nci.iso21090.Adxp> targetPart = new ArrayList<gov.nih.nci.iso21090.Adxp>(0);
+			aVal.setPart(targetPart);
+		}
 		Ad rVal = result.getValue7();
 		assertNotNull(rVal);
 		return aVal.equals(rVal);
@@ -637,6 +681,12 @@ public class AdDataTypeXMLTest extends SDKISOTestBase
 	{
 		Ad aVal = actual.getValue8();
 		assertNotNull(aVal);
+		//ADTransformer returns empty parts list
+		if(aVal.getNullFlavor() != null && aVal.getPart() == null)
+		{
+			List<gov.nih.nci.iso21090.Adxp> targetPart = new ArrayList<gov.nih.nci.iso21090.Adxp>(0);
+			aVal.setPart(targetPart);
+		}
 		Ad rVal = result.getValue8();
 		assertNotNull(rVal);
 		return aVal.equals(rVal);
@@ -646,6 +696,12 @@ public class AdDataTypeXMLTest extends SDKISOTestBase
 	{
 		Ad aVal = actual.getValue9();
 		assertNotNull(aVal);
+		//ADTransformer returns empty parts list
+		if(aVal.getNullFlavor() != null && aVal.getPart() == null)
+		{
+			List<gov.nih.nci.iso21090.Adxp> targetPart = new ArrayList<gov.nih.nci.iso21090.Adxp>(0);
+			aVal.setPart(targetPart);
+		}
 		Ad rVal = result.getValue9();
 		assertNotNull(rVal);
 		return aVal.equals(rVal);

@@ -2,6 +2,7 @@ package test.xml.other;
 
 
 import gov.nih.nci.cacoresdk.domain.other.datatype.IvlRealDataType;
+import gov.nih.nci.iso21090.Int;
 import gov.nih.nci.iso21090.Ivl;
 import gov.nih.nci.iso21090.Real;
 import gov.nih.nci.system.applicationservice.ApplicationException;
@@ -281,6 +282,7 @@ public class IvlRealDataTypeXMLTest extends SDKISOTestBase
 	{
 		Ivl<Real> aVal = actual.getValue1();
 		assertNotNull(aVal);
+		handleAny(aVal);
 		Ivl<Real> rVal = result.getValue1();
 		assertNotNull(rVal);
 		return aVal.equals(rVal);
@@ -290,6 +292,7 @@ public class IvlRealDataTypeXMLTest extends SDKISOTestBase
 	{
 		Ivl<Real> aVal = actual.getValue2();
 		assertNotNull(aVal);
+		handleAny(aVal);
 		Ivl<Real> rVal = result.getValue2();
 		assertNotNull(rVal);
 		return aVal.equals(rVal);
@@ -299,9 +302,26 @@ public class IvlRealDataTypeXMLTest extends SDKISOTestBase
 	{
 		Ivl<Real> aVal = actual.getValue3();
 		assertNotNull(aVal);
+		handleAny(aVal);
 		Ivl<Real> rVal = result.getValue3();
 		assertNotNull(rVal);
 		return aVal.equals(rVal);
 	}
+	
+	private void handleAny(Ivl<Real> aVal)
+	{
+    	//IVL Transformer strips out Any value if High and Low values are not null 
+        if ((aVal.getHigh() != null && aVal.getHigh().getNullFlavor() == null)&& (aVal.getLow() != null && aVal.getLow().getNullFlavor() == null)) {
+        	aVal.setAny(null);
+        }
+
+        if (aVal.isLowMissing() || aVal.isHighEqualLow()) {
+        	aVal.setAny(aVal.getHigh());
+        } else if (aVal.isHighMissing()) {
+        	aVal.setAny(aVal.getLow());
+        }
+		
+	}
+
 	
 }

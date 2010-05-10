@@ -139,7 +139,7 @@ public class IvlPqDataTypeXMLTest extends SDKISOTestBase
 	public void testIvlPqValue4ByDetachedCriteria() throws ApplicationException
 	{
 		DetachedCriteria criteria = DetachedCriteria.forClass(IvlPqDataType.class);
-		criteria.add(Restrictions.or(Property.forName("value4.high.value").isNotNull(), Property.forName("value2.high.nullFlavor").isNotNull()));
+		criteria.add(Restrictions.or(Property.forName("value4.high.value").isNotNull(), Property.forName("value4.high.nullFlavor").isNotNull()));
 		criteria.addOrder(Order.asc("id"));
 
 		Collection<IvlPqDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.IvlPqDataType");
@@ -351,6 +351,16 @@ public class IvlPqDataTypeXMLTest extends SDKISOTestBase
 	{
 		Ivl<Pq> aVal = actual.getValue1();
 		assertNotNull(aVal);
+    	//IVL Transformer strips out Any value if High and Low values are not null 
+        if ((aVal.getHigh() != null && aVal.getHigh().getNullFlavor() == null)&& (aVal.getLow() != null && aVal.getLow().getNullFlavor() == null)) {
+        	aVal.setAny(null);
+        }
+
+        if (aVal.isLowMissing() || aVal.isHighEqualLow()) {
+        	aVal.setAny(aVal.getHigh());
+        } else if (aVal.isHighMissing()) {
+        	aVal.setAny(aVal.getLow());
+        }
 		Ivl<Pq> rVal = result.getValue1();
 		assertNotNull(rVal);
 		return aVal.equals(rVal);
@@ -360,6 +370,7 @@ public class IvlPqDataTypeXMLTest extends SDKISOTestBase
 	{
 		Ivl<Pq> aVal = actual.getValue2();
 		assertNotNull(aVal);
+		handleAny(aVal);
 		Ivl<Pq> rVal = result.getValue2();
 		assertNotNull(rVal);
 		return aVal.equals(rVal);
@@ -369,6 +380,7 @@ public class IvlPqDataTypeXMLTest extends SDKISOTestBase
 	{
 		Ivl<Pq> aVal = actual.getValue3();
 		assertNotNull(aVal);
+		handleAny(aVal);
 		Ivl<Pq> rVal = result.getValue3();
 		assertNotNull(rVal);
 		return aVal.equals(rVal);
@@ -377,9 +389,25 @@ public class IvlPqDataTypeXMLTest extends SDKISOTestBase
 	{
 		Ivl<Pq> aVal = actual.getValue4();
 		assertNotNull(aVal);
+		handleAny(aVal);
 		Ivl<Pq> rVal = result.getValue4();
 		assertNotNull(rVal);
 		return aVal.equals(rVal);
+	}
+	
+	private void handleAny(Ivl<Pq> aVal)
+	{
+    	//IVL Transformer strips out Any value if High and Low values are not null 
+        if ((aVal.getHigh() != null && aVal.getHigh().getNullFlavor() == null)&& (aVal.getLow() != null && aVal.getLow().getNullFlavor() == null)) {
+        	aVal.setAny(null);
+        }
+
+        if (aVal.isLowMissing() || aVal.isHighEqualLow()) {
+        	aVal.setAny(aVal.getHigh());
+        } else if (aVal.isHighMissing()) {
+        	aVal.setAny(aVal.getLow());
+        }
+		
 	}
 	
 }

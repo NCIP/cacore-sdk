@@ -42,7 +42,7 @@ public class BlNonNullDataTypeXMLTest extends SDKISOTestBase
 	public void testBlNonNullValue1ByDetachedCriteria() throws ApplicationException
 	{
 		DetachedCriteria criteria = DetachedCriteria.forClass(BlNonNullDataType.class);
-		criteria.add(Property.forName("value1.value").isNull());
+		criteria.add(Property.forName("value1.value").eq(Boolean.FALSE));
 
 		Collection<BlNonNullDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.BlNonNullDataType");
 		assertEquals(1, result.size());
@@ -57,7 +57,7 @@ public class BlNonNullDataTypeXMLTest extends SDKISOTestBase
 	@SuppressWarnings("unchecked")
 	public void testBlNonNullValue1ByHQLCriteria() throws ApplicationException
 	{
-		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.BlNonNullDataType a where a.value1.value is null");
+		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.BlNonNullDataType a where a.value1.value = '0'");
 		Collection<BlNonNullDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.BlNonNullDataType");
 		assertEquals(1, result.size());
 		assertValue1(result);

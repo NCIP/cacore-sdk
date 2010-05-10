@@ -98,7 +98,7 @@ public class DsetIiDataTypeXMLTest extends SDKISOTestBase
 		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.DsetIiDataType a where a.value2.item.extension like ? order by a.id asc", params);
 		Collection<DsetIiDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.DsetIiDataType");
 		assertNotNull(result);
-		assertEquals(5, result.size());
+		assertEquals(4, result.size());
 		assertValue2(result);
 	}
 
