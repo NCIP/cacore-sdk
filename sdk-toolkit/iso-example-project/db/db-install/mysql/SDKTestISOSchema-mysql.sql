@@ -1,5 +1,3 @@
-use sdktemp;
-
 CREATE TABLE ad_datatype_value8 (
   id int(8) NOT NULL,
   al_value varchar(50)  default NULL,
