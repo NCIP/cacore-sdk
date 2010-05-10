@@ -122,7 +122,7 @@
 						<else>
 							<post to="http://${jboss.server.hostname}:${jboss.server.port}/coberturaFlush/flushCobertura" verbose="true" />
 							<ant antfile="build.xml" dir="${dist.exploded.dir}" target="install:jboss:stop" inheritAll="true" />
-							<copy file="${jboss.home}/bin/cobertura.ser" tofile="${junit.dir}/report/@{REPORT.PROJECT.DIR}/jboss-cobertura.ser" overwrite="true" />
+							<copy file="${jboss.home}/bin/cobertura.ser" tofile="${junit.dir}/report/@{REPORT.PROJECT.DIR}/jboss-cobertura.ser" overwrite="true" failonerror="false" />
 						</else>
 					</if>
 				</then>
