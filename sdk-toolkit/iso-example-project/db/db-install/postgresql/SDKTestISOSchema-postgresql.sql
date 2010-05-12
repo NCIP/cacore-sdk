@@ -14,10 +14,11 @@ SET escape_string_warning = off;
 -- Name: iso21090schema; Type: SCHEMA; Schema: -; Owner: -
 --
 
-CREATE SCHEMA iso21090schema;
+-- CREATE SCHEMA iso21090schema;
 
+SET search_path TO public;
 
-SET search_path = iso21090schema, pg_catalog;
+-- SET search_path = iso21090schema, pg_catalog;
 
 SET default_tablespace = '';
 
@@ -163,9 +164,9 @@ CREATE TABLE ad_datatype_value9 (
 
 CREATE TABLE bl_datatype (
     id integer NOT NULL,
-    value1_value character varying(1),
+    value1_value boolean,
     value2_null_flavor character varying(50),
-    value2_value character varying(1)
+    value2_value boolean
 );
 
 
@@ -175,7 +176,7 @@ CREATE TABLE bl_datatype (
 
 CREATE TABLE bl_nonnull_datatype (
     id integer NOT NULL,
-    value1_value character varying(1)
+    value1_value boolean
 );
 
 
@@ -1420,7 +1421,7 @@ INSERT INTO ad_datatype_value9 (id, al_value, al_code, al_codesystem, dal_code, 
 INSERT INTO bl_datatype (id, value1_value, value2_null_flavor, value2_value) VALUES (1, NULL, NULL, NULL);
 INSERT INTO bl_datatype (id, value1_value, value2_null_flavor, value2_value) VALUES (2, '1', NULL, NULL);
 INSERT INTO bl_datatype (id, value1_value, value2_null_flavor, value2_value) VALUES (3, NULL, NULL, '1');
-INSERT INTO bl_datatype (id, value1_value, value2_null_flavor, value2_value) VALUES (4, NULL, 'INV', '0');
+INSERT INTO bl_datatype (id, value1_value, value2_null_flavor, value2_value) VALUES (4, NULL, 'INV', NULL);
 
 
 --
@@ -2273,22 +2274,21 @@ INSERT INTO dset_tel_value3 (id, tel_value) VALUES (1, 'tel://123-456-7892');
 --
 
 INSERT INTO ed_datatype (id, value1_data, value2_null_flavor, value2_data, value2_compression, value3_null_flavor, value3_data, value3_compression, value3_description, value3_value) VALUES (1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO ed_datatype (id, value1_data, value2_null_flavor, value2_data, value2_compression, value3_null_flavor, value3_data, value3_compression, value3_description, value3_value) VALUES (2, '0110101010010', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO ed_datatype (id, value1_data, value2_null_flavor, value2_data, value2_compression, value3_null_flavor, value3_data, value3_compression, value3_description, value3_value) VALUES (3, '0100101010011', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO ed_datatype (id, value1_data, value2_null_flavor, value2_data, value2_compression, value3_null_flavor, value3_data, value3_compression, value3_description, value3_value) VALUES (4, '0100001010010', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO ed_datatype (id, value1_data, value2_null_flavor, value2_data, value2_compression, value3_null_flavor, value3_data, value3_compression, value3_description, value3_value) VALUES (5, '0110001010011', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO ed_datatype (id, value1_data, value2_null_flavor, value2_data, value2_compression, value3_null_flavor, value3_data, value3_compression, value3_description, value3_value) VALUES (6, '0110001011110', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ed_datatype (id, value1_data, value2_null_flavor, value2_data, value2_compression, value3_null_flavor, value3_data, value3_compression, value3_description, value3_value) VALUES (2, '110101010010', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ed_datatype (id, value1_data, value2_null_flavor, value2_data, value2_compression, value3_null_flavor, value3_data, value3_compression, value3_description, value3_value) VALUES (3, '100101010011', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ed_datatype (id, value1_data, value2_null_flavor, value2_data, value2_compression, value3_null_flavor, value3_data, value3_compression, value3_description, value3_value) VALUES (4, '100001010010', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ed_datatype (id, value1_data, value2_null_flavor, value2_data, value2_compression, value3_null_flavor, value3_data, value3_compression, value3_description, value3_value) VALUES (5, '110001010011', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ed_datatype (id, value1_data, value2_null_flavor, value2_data, value2_compression, value3_null_flavor, value3_data, value3_compression, value3_description, value3_value) VALUES (6, '110001011110', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO ed_datatype (id, value1_data, value2_null_flavor, value2_data, value2_compression, value3_null_flavor, value3_data, value3_compression, value3_description, value3_value) VALUES (7, NULL, 'NI', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO ed_datatype (id, value1_data, value2_null_flavor, value2_data, value2_compression, value3_null_flavor, value3_data, value3_compression, value3_description, value3_value) VALUES (8, NULL, NULL, '0110001010010', NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO ed_datatype (id, value1_data, value2_null_flavor, value2_data, value2_compression, value3_null_flavor, value3_data, value3_compression, value3_description, value3_value) VALUES (9, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO ed_datatype (id, value1_data, value2_null_flavor, value2_data, value2_compression, value3_null_flavor, value3_data, value3_compression, value3_description, value3_value) VALUES (10, NULL, NULL, NULL, 'GZ', NULL, NULL, NULL, NULL, NULL);
-INSERT INTO ed_datatype (id, value1_data, value2_null_flavor, value2_data, value2_compression, value3_null_flavor, value3_data, value3_compression, value3_description, value3_value) VALUES (11, NULL, NULL, '0110001010010', 'GZ', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ed_datatype (id, value1_data, value2_null_flavor, value2_data, value2_compression, value3_null_flavor, value3_data, value3_compression, value3_description, value3_value) VALUES (8, NULL, NULL, '110101010011', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ed_datatype (id, value1_data, value2_null_flavor, value2_data, value2_compression, value3_null_flavor, value3_data, value3_compression, value3_description, value3_value) VALUES (9, NULL, NULL, '010101010011', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ed_datatype (id, value1_data, value2_null_flavor, value2_data, value2_compression, value3_null_flavor, value3_data, value3_compression, value3_description, value3_value) VALUES (10, NULL, NULL, '000101010011', 'GZ', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO ed_datatype (id, value1_data, value2_null_flavor, value2_data, value2_compression, value3_null_flavor, value3_data, value3_compression, value3_description, value3_value) VALUES (11, NULL, NULL, '110001010010', 'GZ', NULL, NULL, NULL, NULL, NULL);
 INSERT INTO ed_datatype (id, value1_data, value2_null_flavor, value2_data, value2_compression, value3_null_flavor, value3_data, value3_compression, value3_description, value3_value) VALUES (12, NULL, NULL, NULL, NULL, NULL, NULL, 'GZ', NULL, NULL);
 INSERT INTO ed_datatype (id, value1_data, value2_null_flavor, value2_data, value2_compression, value3_null_flavor, value3_data, value3_compression, value3_description, value3_value) VALUES (13, NULL, NULL, NULL, NULL, 'NI', NULL, NULL, NULL, NULL);
-INSERT INTO ed_datatype (id, value1_data, value2_null_flavor, value2_data, value2_compression, value3_null_flavor, value3_data, value3_compression, value3_description, value3_value) VALUES (14, NULL, NULL, NULL, NULL, NULL, NULL, 'GZ', NULL, NULL);
-INSERT INTO ed_datatype (id, value1_data, value2_null_flavor, value2_data, value2_compression, value3_null_flavor, value3_data, value3_compression, value3_description, value3_value) VALUES (15, NULL, NULL, NULL, NULL, NULL, NULL, 'GZ', 'DESCRIPTION', NULL);
-INSERT INTO ed_datatype (id, value1_data, value2_null_flavor, value2_data, value2_compression, value3_null_flavor, value3_data, value3_compression, value3_description, value3_value) VALUES (16, NULL, NULL, NULL, NULL, NULL, '0110001010010', 'GZ', 'DESCRIPTION', 'VALUE3_VALUE_A');
-
+INSERT INTO ed_datatype (id, value1_data, value2_null_flavor, value2_data, value2_compression, value3_null_flavor, value3_data, value3_compression, value3_description, value3_value) VALUES (14, NULL, NULL, NULL, NULL, NULL, '110001010111', 'GZ', NULL, NULL);
+INSERT INTO ed_datatype (id, value1_data, value2_null_flavor, value2_data, value2_compression, value3_null_flavor, value3_data, value3_compression, value3_description, value3_value) VALUES (15, NULL, NULL, NULL, NULL, NULL, '110001010011', 'GZ', 'DESCRIPTION', NULL);
+INSERT INTO ed_datatype (id, value1_data, value2_null_flavor, value2_data, value2_compression, value3_null_flavor, value3_data, value3_compression, value3_description, value3_value) VALUES (16, NULL, NULL, NULL, NULL, NULL, '110001010010', 'GZ', 'DESCRIPTION', 'VALUE3_VALUE_A');
 
 --
 -- TOC entry 2285 (class 0 OID 18689)
@@ -2309,9 +2309,9 @@ INSERT INTO ed_text_datatype (id, value1_value, value2_null_flavor, value2_value
 INSERT INTO ed_text_datatype (id, value1_value, value2_null_flavor, value2_value, value3_null_flavor, value3_data, value3_compression, value3_description, value3_value) VALUES (27, NULL, NULL, 'ED_TEXT_VALUE2_VALUE4', NULL, NULL, NULL, NULL, NULL);
 INSERT INTO ed_text_datatype (id, value1_value, value2_null_flavor, value2_value, value3_null_flavor, value3_data, value3_compression, value3_description, value3_value) VALUES (28, NULL, NULL, NULL, NULL, NULL, 'GZ', NULL, NULL);
 INSERT INTO ed_text_datatype (id, value1_value, value2_null_flavor, value2_value, value3_null_flavor, value3_data, value3_compression, value3_description, value3_value) VALUES (29, NULL, NULL, NULL, 'NI', NULL, NULL, NULL, NULL);
-INSERT INTO ed_text_datatype (id, value1_value, value2_null_flavor, value2_value, value3_null_flavor, value3_data, value3_compression, value3_description, value3_value) VALUES (30, NULL, NULL, NULL, NULL, '0110001011010', 'GZ', NULL, NULL);
-INSERT INTO ed_text_datatype (id, value1_value, value2_null_flavor, value2_value, value3_null_flavor, value3_data, value3_compression, value3_description, value3_value) VALUES (31, NULL, NULL, NULL, NULL, '0110111010011', 'GZ', 'DESCRIPTION', NULL);
-INSERT INTO ed_text_datatype (id, value1_value, value2_null_flavor, value2_value, value3_null_flavor, value3_data, value3_compression, value3_description, value3_value) VALUES (32, NULL, NULL, NULL, NULL, '0110001010010', 'GZ', 'DESCRIPTION', 'VALUE3_VALUE_A');
+INSERT INTO ed_text_datatype (id, value1_value, value2_null_flavor, value2_value, value3_null_flavor, value3_data, value3_compression, value3_description, value3_value) VALUES (30, NULL, NULL, NULL, NULL, '110001011010', 'GZ', NULL, NULL);
+INSERT INTO ed_text_datatype (id, value1_value, value2_null_flavor, value2_value, value3_null_flavor, value3_data, value3_compression, value3_description, value3_value) VALUES (31, NULL, NULL, NULL, NULL, '110111010011', 'GZ', 'DESCRIPTION', NULL);
+INSERT INTO ed_text_datatype (id, value1_value, value2_null_flavor, value2_value, value3_null_flavor, value3_data, value3_compression, value3_description, value3_value) VALUES (32, NULL, NULL, NULL, NULL, '110001010010', 'GZ', 'DESCRIPTION', 'VALUE3_VALUE_A');
 
 
 --
@@ -2722,7 +2722,7 @@ INSERT INTO sc_datatype (id, value1_value, value1_code_code, value2_null_flavor,
 INSERT INTO sc_datatype (id, value1_value, value1_code_code, value2_null_flavor, value2_value, value2_code_null_flavor, value2_code_code, value2_code_code_system, value2_code_code_system_name, value2_code_code_system_ver, value3_null_flavor, value3_value, value3_code_null_flavor, value3_code_code, value3_code_code_system, value3_code_code_system_name, value3_code_code_system_ver, value3_code_display_nflavor, value3_code_display_value, value3_code_orig_txt_nflavor, value3_code_orig_txt_desc, value3_code_orig_txt_value) VALUES (9, NULL, NULL, NULL, 'VALUE2_VALUE2', NULL, 'VALUE2_CODE_CODE2', 'VALUE2_CODE_CODE_SYSTEM1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO sc_datatype (id, value1_value, value1_code_code, value2_null_flavor, value2_value, value2_code_null_flavor, value2_code_code, value2_code_code_system, value2_code_code_system_name, value2_code_code_system_ver, value3_null_flavor, value3_value, value3_code_null_flavor, value3_code_code, value3_code_code_system, value3_code_code_system_name, value3_code_code_system_ver, value3_code_display_nflavor, value3_code_display_value, value3_code_orig_txt_nflavor, value3_code_orig_txt_desc, value3_code_orig_txt_value) VALUES (10, NULL, NULL, NULL, 'VALUE2_VALUE3', NULL, 'VALUE2_CODE_CODE3', 'VALUE2_CODE_CODE_SYSTEM2', 'VALUE2_CODE_CODE_SYSTEM_NAME1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO sc_datatype (id, value1_value, value1_code_code, value2_null_flavor, value2_value, value2_code_null_flavor, value2_code_code, value2_code_code_system, value2_code_code_system_name, value2_code_code_system_ver, value3_null_flavor, value3_value, value3_code_null_flavor, value3_code_code, value3_code_code_system, value3_code_code_system_name, value3_code_code_system_ver, value3_code_display_nflavor, value3_code_display_value, value3_code_orig_txt_nflavor, value3_code_orig_txt_desc, value3_code_orig_txt_value) VALUES (11, NULL, NULL, NULL, 'VALUE2_VALUE4', NULL, 'VALUE2_CODE_CODE4', 'VALUE2_CODE_CODE_SYSTEM3', 'VALUE2_CODE_CODE_SYSTEM_NAME2', '1.1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO sc_datatype (id, value1_value, value1_code_code, value2_null_flavor, value2_value, value2_code_null_flavor, value2_code_code, value2_code_code_system, value2_code_code_system_name, value2_code_code_system_ver, value3_null_flavor, value3_value, value3_code_null_flavor, value3_code_code, value3_code_code_system, value3_code_code_system_name, value3_code_code_system_ver, value3_code_display_nflavor, value3_code_display_value, value3_code_orig_txt_nflavor, value3_code_orig_txt_desc, value3_code_orig_txt_value) VALUES (12, NULL, NULL, NULL, 'VALUE2_VALUE5', 'NA', 'VALUE2_CODE_CODE5', 'VALUE2_CODE_CODE_SYSTEM4', 'VALUE2_CODE_CODE_SYSTEM_NAME3', '1.1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO sc_datatype (id, value1_value, value1_code_code, value2_null_flavor, value2_value, value2_code_null_flavor, value2_code_code, value2_code_code_system, value2_code_code_system_name, value2_code_code_system_ver, value3_null_flavor, value3_value, value3_code_null_flavor, value3_code_code, value3_code_code_system, value3_code_code_system_name, value3_code_code_system_ver, value3_code_display_nflavor, value3_code_display_value, value3_code_orig_txt_nflavor, value3_code_orig_txt_desc, value3_code_orig_txt_value) VALUES (12, NULL, NULL, NULL, 'VALUE2_VALUE5', 'NULL, 'VALUE2_CODE_CODE5', 'VALUE2_CODE_CODE_SYSTEM4', 'VALUE2_CODE_CODE_SYSTEM_NAME3', '1.1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO sc_datatype (id, value1_value, value1_code_code, value2_null_flavor, value2_value, value2_code_null_flavor, value2_code_code, value2_code_code_system, value2_code_code_system_name, value2_code_code_system_ver, value3_null_flavor, value3_value, value3_code_null_flavor, value3_code_code, value3_code_code_system, value3_code_code_system_name, value3_code_code_system_ver, value3_code_display_nflavor, value3_code_display_value, value3_code_orig_txt_nflavor, value3_code_orig_txt_desc, value3_code_orig_txt_value) VALUES (13, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'NA', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO sc_datatype (id, value1_value, value1_code_code, value2_null_flavor, value2_value, value2_code_null_flavor, value2_code_code, value2_code_code_system, value2_code_code_system_name, value2_code_code_system_ver, value3_null_flavor, value3_value, value3_code_null_flavor, value3_code_code, value3_code_code_system, value3_code_code_system_name, value3_code_code_system_ver, value3_code_display_nflavor, value3_code_display_value, value3_code_orig_txt_nflavor, value3_code_orig_txt_desc, value3_code_orig_txt_value) VALUES (14, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'VALUE3_VALUE1', NULL, 'VALUE3_CODE_CODE1', 'VALUE3_CODE_CODE_SYSTEM1', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO sc_datatype (id, value1_value, value1_code_code, value2_null_flavor, value2_value, value2_code_null_flavor, value2_code_code, value2_code_code_system, value2_code_code_system_name, value2_code_code_system_ver, value3_null_flavor, value3_value, value3_code_null_flavor, value3_code_code, value3_code_code_system, value3_code_code_system_name, value3_code_code_system_ver, value3_code_display_nflavor, value3_code_display_value, value3_code_orig_txt_nflavor, value3_code_orig_txt_desc, value3_code_orig_txt_value) VALUES (15, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'VALUE3_VALUE2', NULL, 'VALUE3_CODE_CODE1', 'VALUE3_CODE_CODE_SYSTEM1', 'VALUE3_CODE_CODE_SYSTEM_NAME1', 'VALUE3_CODE_CODE_SYSTEM_VER1', NULL, NULL, NULL, NULL, NULL);
