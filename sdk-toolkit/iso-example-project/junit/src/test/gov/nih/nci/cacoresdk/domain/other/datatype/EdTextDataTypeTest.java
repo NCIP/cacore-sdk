@@ -482,8 +482,9 @@ public class EdTextDataTypeTest extends SDKISOTestBase{
 
 				assertNotNull(data);
 				assertNotNull(data.getValue3());
-				byte[] bytes = {1,1,0,0,0,1,0,1,1,0,1,0};
-				org.junit.Assert.assertArrayEquals(bytes, convert(data.getValue3().getData()));
+				String aVal = "110001011010";
+				byte[] bytes = aVal.getBytes();
+				org.junit.Assert.assertArrayEquals(bytes, data.getValue3().getData());
 				
 				assertEquals(Compression.GZ, data.getValue3().getCompression());
 				assertNull(data.getValue3().getValue());
@@ -501,8 +502,9 @@ public class EdTextDataTypeTest extends SDKISOTestBase{
 
 				assertNotNull(data);
 				assertNotNull(data.getValue3());
-				byte[] bytes = {1,1,0,1,1,1,0,1,0,0,1,1};
-				org.junit.Assert.assertArrayEquals(bytes, convert(data.getValue3().getData()));
+				String aVal = "110111010011";
+				byte[] bytes = aVal.getBytes();
+				org.junit.Assert.assertArrayEquals(bytes, data.getValue3().getData());
 				
 				assertEquals(Compression.GZ, data.getValue3().getCompression());
 				assertNull(data.getValue3().getValue());
@@ -518,8 +520,9 @@ public class EdTextDataTypeTest extends SDKISOTestBase{
 
 				assertNotNull(data);
 				assertNotNull(data.getValue3());
-				byte[] bytes = {1,1,0,0,0,1,0,1,0,0,1,0};
-				org.junit.Assert.assertArrayEquals(bytes, convert(data.getValue3().getData()));
+				String aVal = "110001010010";
+				byte[] bytes = aVal.getBytes();
+				org.junit.Assert.assertArrayEquals(bytes, data.getValue3().getData());
 				assertEquals(Compression.GZ, data.getValue3().getCompression());
 				assertEquals("VALUE3_VALUE_A", data.getValue3().getValue());
 				assertEquals("DESCRIPTION", data.getValue3().getDescription().getValue());
@@ -557,4 +560,16 @@ public class EdTextDataTypeTest extends SDKISOTestBase{
          return result; 
     }
 
+    private byte[] convertMySql(byte[] a)
+    {
+         byte[] result = new byte[a.length];
+         
+         for(int i=0;i<result.length;i=i+1)
+         {
+             result[i] = (byte) ((a[i] & 0xF) >> 4);
+         }
+         
+         return result; 
+    }
+    
 }

@@ -225,8 +225,9 @@ public class EdDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 				assertNotNull(data.getValue1().getData());
-				byte[] bytes = {1,1,0,1,0,1,0,1,0,0,1,0};
-				org.junit.Assert.assertArrayEquals(bytes, convert(data.getValue1().getData()));
+				String aVal = "110101010010";
+				byte[] bytes = aVal.getBytes();
+				org.junit.Assert.assertArrayEquals(bytes, data.getValue1().getData());
 				
 				assertNull(data.getValue1().getCompression());
 				assertNull(data.getValue1().getValue());
@@ -245,9 +246,10 @@ public class EdDataTypeTest extends SDKISOTestBase{
 
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
-				byte[] bytes = {1,0,0,1,0,1,0,1,0,0,1,1};
-				org.junit.Assert.assertArrayEquals(bytes, convert(data.getValue1().getData()));
-				
+				String aVal = "100101010011";
+				byte[] bytes = aVal.getBytes();
+				org.junit.Assert.assertArrayEquals(bytes, data.getValue1().getData());
+
 				assertNull(data.getValue1().getCompression());
 				assertNull(data.getValue1().getValue());
 				assertNotNull(data.getValue1().getDescription());
@@ -265,8 +267,9 @@ public class EdDataTypeTest extends SDKISOTestBase{
 
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
-				byte[] bytes = {1,0,0,0,0,1,0,1,0,0,1,0};
-				org.junit.Assert.assertArrayEquals(bytes, convert(data.getValue1().getData()));
+				String aVal = "100001010010";
+				byte[] bytes = aVal.getBytes();
+				org.junit.Assert.assertArrayEquals(bytes, data.getValue1().getData());
 				
 				assertNull(data.getValue1().getCompression());
 				assertNull(data.getValue1().getValue());
@@ -285,8 +288,9 @@ public class EdDataTypeTest extends SDKISOTestBase{
 
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
-				byte[] bytes = {1,1,0,0,0,1,0,1,0,0,1,1};
-				org.junit.Assert.assertArrayEquals(bytes, convert(data.getValue1().getData()));
+				String aVal = "110001010011";
+				byte[] bytes = aVal.getBytes();
+				org.junit.Assert.assertArrayEquals(bytes, data.getValue1().getData());
 				
 				assertNull(data.getValue1().getCompression());
 				assertNull(data.getValue1().getValue());
@@ -305,8 +309,9 @@ public class EdDataTypeTest extends SDKISOTestBase{
 
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
-				byte[] bytes = {1,1,0,0,0,1,0,1,1,1,1,0};
-				org.junit.Assert.assertArrayEquals(bytes, convert(data.getValue1().getData()));
+				String aVal = "110001011110";
+				byte[] bytes = aVal.getBytes();
+				org.junit.Assert.assertArrayEquals(bytes, data.getValue1().getData());
 				
 				assertNull(data.getValue1().getCompression());
 				assertNull(data.getValue1().getValue());
@@ -365,8 +370,9 @@ public class EdDataTypeTest extends SDKISOTestBase{
 
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
-				byte[] bytes = {1,1,0,1,0,1,0,1,0,0,1,1};
-				org.junit.Assert.assertArrayEquals(bytes, convert(data.getValue2().getData()));
+				String aVal = "110101010011";
+				byte[] bytes = aVal.getBytes();
+				org.junit.Assert.assertArrayEquals(bytes, data.getValue2().getData());
 				
 				assertNull(data.getValue2().getCompression());
 				assertNull(data.getValue2().getValue());
@@ -385,7 +391,9 @@ public class EdDataTypeTest extends SDKISOTestBase{
 
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
-				assertNotNull(data.getValue2().getData());
+				String aVal = "010101010011";
+				byte[] bytes = aVal.getBytes();
+				org.junit.Assert.assertArrayEquals(bytes, data.getValue2().getData());
 				
 				assertNull(data.getValue2().getCompression());
 				assertNull(data.getValue2().getValue());
@@ -404,7 +412,9 @@ public class EdDataTypeTest extends SDKISOTestBase{
 
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
-				assertNotNull(data.getValue2().getData());
+				String aVal = "000101010011";
+				byte[] bytes = aVal.getBytes();
+				org.junit.Assert.assertArrayEquals(bytes, data.getValue2().getData());
 				
 				assertEquals(Compression.GZ, data.getValue2().getCompression());
 				assertNull(data.getValue2().getValue());
@@ -423,10 +433,11 @@ public class EdDataTypeTest extends SDKISOTestBase{
 
 				assertNotNull(data);
 				assertNotNull(data.getValue2());
-				byte[] bytes = {1,1,0,0,0,1,0,1,0,0,1,0};
-				org.junit.Assert.assertArrayEquals(bytes, convert(data.getValue2().getData()));
+
+				String aVal = "110001010010";
+				byte[] bytes = aVal.getBytes();
+				org.junit.Assert.assertArrayEquals(bytes, data.getValue2().getData());
 				assertEquals(Compression.GZ, data.getValue2().getCompression());
-				
 				assertNull(data.getValue2().getValue());
 				assertNotNull(data.getValue2().getDescription());
 				assertNull(data.getValue2().getDescription().getValue());
@@ -501,7 +512,9 @@ public class EdDataTypeTest extends SDKISOTestBase{
 
 				assertNotNull(data);
 				assertNotNull(data.getValue3());
-				assertNotNull(data.getValue3().getData());
+				String aVal = "110001010111";
+				byte[] bytes = aVal.getBytes();
+				org.junit.Assert.assertArrayEquals(bytes, data.getValue3().getData());
 				
 				assertEquals(Compression.GZ, data.getValue3().getCompression());
 				assertNull(data.getValue3().getValue());
@@ -519,7 +532,9 @@ public class EdDataTypeTest extends SDKISOTestBase{
 
 				assertNotNull(data);
 				assertNotNull(data.getValue3());
-				assertNotNull(data.getValue3().getData());
+				String aVal = "110001010011";
+				byte[] bytes = aVal.getBytes();
+				org.junit.Assert.assertArrayEquals(bytes, data.getValue3().getData());
 				
 				assertEquals(Compression.GZ, data.getValue3().getCompression());
 				assertNull(data.getValue3().getValue());
@@ -536,8 +551,9 @@ public class EdDataTypeTest extends SDKISOTestBase{
 
 				assertNotNull(data);
 				assertNotNull(data.getValue3());
-				byte[] bytes = {1,1,0,0,0,1,0,1,0,0,1,0};
-				org.junit.Assert.assertArrayEquals(bytes, convert(data.getValue3().getData()));
+				String aVal = "110001010010";
+				byte[] bytes = aVal.getBytes();
+				org.junit.Assert.assertArrayEquals(bytes, data.getValue3().getData());
 				assertEquals(Compression.GZ, data.getValue3().getCompression());
 				assertEquals("VALUE3_VALUE_A", data.getValue3().getValue());
 				assertEquals("DESCRIPTION", data.getValue3().getDescription().getValue());
@@ -560,18 +576,4 @@ public class EdDataTypeTest extends SDKISOTestBase{
 			}
 		}
 	}
-
-    private byte[] convert(byte[] a)
-    {
-         byte[] result = new byte[a.length*2];
-         
-         for(int i=0;i<result.length;i=i+2)
-         {
-             result[i] = (byte) ((a[i/2] & 0xF0) >> 4);
-             result[i+1] = (byte) (a[i/2] & 0xF);
-         }
-         
-         return result; 
-    }
-	
 }
