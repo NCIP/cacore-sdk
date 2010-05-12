@@ -90,8 +90,6 @@ public class JAXBISOAdapter<T1 extends org.iso._21090.ANY, T2 extends gov.nih.nc
 			return (T1)CDTransformer.INSTANCE.toXml((Cd)arg0);
 		else if(className.equals(Cd_NAME))
 			return (T1)CDTransformer.INSTANCE.toXml((Cd)arg0);
-		else if(className.equals(DSet_NAME))
-			return (T1)dsetTransformerXml(arg0);
 		else if(className.equals(Ed_NAME))
 			return (T1)EDTransformer.INSTANCE.toXml((Ed)arg0);	
 		else if(className.equals(EdText_NAME))
@@ -150,14 +148,6 @@ public class JAXBISOAdapter<T1 extends org.iso._21090.ANY, T2 extends gov.nih.nc
 			return (T2)BLNONNULLTransformer.INSTANCE.toDto((org.iso._21090.BlNonNull)arg0);	
 		else if(className.equals(CD_NAME))
 			return (T2)CDTransformer.INSTANCE.toDto((org.iso._21090.CD)arg0);
-		else if(className.equals(DSETAD_NAME))
-			return (T2)DSETADTransformer.INSTANCE.toDto((org.iso._21090.DSetAd)arg0);	
-		else if(className.equals(DSETCD_NAME))
-			return (T2)DSETCDTransformer.INSTANCE.toDto((org.iso._21090.DSetCd)arg0);
-		else if(className.equals(DSETII_NAME))
-			return (T2)DSETIITransformer.INSTANCE.toDto((org.iso._21090.DSetII)arg0);
-		else if(className.equals(DSETTEL_NAME))
-			return (T2)DSETTELTransformer.INSTANCE.toDto((org.iso._21090.DSetTel)arg0);	
 		else if(className.equals(ED_NAME))
 			return (T2)EDTransformer.INSTANCE.toDto((org.iso._21090.ED)arg0);
 		else if(className.equals(EDText_NAME))
@@ -198,33 +188,5 @@ public class JAXBISOAdapter<T1 extends org.iso._21090.ANY, T2 extends gov.nih.nc
 			log.debug(" * * * Class " + className + " did not match any ISO Datatype classes.");
 			return null;
 		}
-	}
-	
-	@SuppressWarnings("unchecked")
-	private org.iso._21090.ANY dsetTransformerXml(Any arg0) throws Exception {
-		Set dsetItem = (Set)(((DSet)arg0).getItem());
-		
-		String dsetType=null;
-		for (Object obj : dsetItem){
-			dsetType = obj.getClass().getName();
-			break;
-		}
-		
-		log.debug( "DSet class detected of type: " + dsetType );
-		
-		if (dsetType==null)
-			return null;
-		else if(dsetType.equals(Ad_NAME))
-			return DSETADTransformer.INSTANCE.toXml((DSet<Ad>)arg0);
-		else if(dsetType.equals(Cd_NAME))
-			return DSETCDTransformer.INSTANCE.toXml((DSet<Cd>)arg0);
-		else if(dsetType.equals(Ii_NAME))
-			return DSETIITransformer.INSTANCE.toXml((DSet<Ii>)arg0); 
-		else if(dsetType.equals(Tel_NAME))
-			return DSETTELTransformer.INSTANCE.toXml((DSet<Tel>)arg0);
-		else 
-			log.error( "Error: Unsupported DSet class detected of type: " + dsetType + "; skipping processing");
-
-		return null;
 	}
 }
