@@ -636,6 +636,10 @@ public class TransformerUtils
 				sb.append("import gov.nih.nci.system.client.util.xml.JAXBISOIvlRealAdapter;\n");
 				sb.append("import gov.nih.nci.system.client.util.xml.JAXBISOIvlTsAdapter;\n");
 				sb.append("import gov.nih.nci.system.client.util.xml.JAXBISOIvlIntAdapter;\n");
+				sb.append("import gov.nih.nci.system.client.util.xml.JAXBISODsetAdAdapter;\n");
+				sb.append("import gov.nih.nci.system.client.util.xml.JAXBISODsetIiAdapter;\n");
+				sb.append("import gov.nih.nci.system.client.util.xml.JAXBISODsetCdAdapter;\n");
+				sb.append("import gov.nih.nci.system.client.util.xml.JAXBISODsetTelAdapter;\n");
 			}
 			
 			sb.append("import javax.xml.bind.annotation.XmlAccessType;\n");
@@ -2045,10 +2049,11 @@ public class TransformerUtils
 			
 			if (!isJavaDataType(attr)) {
 				log.debug("* * * Detected attribute " + attr.getName()+" is of ISO Datatype: " + isoDatatypeValue);
-				sb.append("    @XmlElement(namespace=\"").append(getNamespaceUriPrefix()).append(getFullPackageName(klass)).append("\")"); 
+				sb.append("    @XmlElement(namespace=\"").append(getNamespaceUriPrefix()).append(getFullPackageName(klass)).append("\")");
+				sb.append("\n");
 				if(isIvlDataType(attr))
 				{
-					String ivlDataType = getIvlDataType(attr);
+					String ivlDataType = getISODataType(attr);
 					if("PQ".equals(ivlDataType))
 							sb.append("    @XmlJavaTypeAdapter(JAXBISOIvlPqAdapter.class)");
 					else if("REAL".equals(ivlDataType))
@@ -2059,6 +2064,20 @@ public class TransformerUtils
 							sb.append("    @XmlJavaTypeAdapter(JAXBISOIvlIntAdapter.class)");
 					else
 						throw new GenerationException("Invalid Ivl type defined: " + attr.getDatatype().getName());
+				}
+				else if(isDsetDataType(attr))
+				{
+					String dsetDataType = getISODataType(attr);
+					if("AD".equals(dsetDataType))
+							sb.append("    @XmlJavaTypeAdapter(JAXBISODsetAdAdapter.class)");
+					else if("CD".equals(dsetDataType))
+							sb.append("    @XmlJavaTypeAdapter(JAXBISODsetCdAdapter.class)");
+					else if("II".equals(dsetDataType))
+							sb.append("    @XmlJavaTypeAdapter(JAXBISODsetIiAdapter.class)");
+					else if("TEL".equals(dsetDataType))
+							sb.append("    @XmlJavaTypeAdapter(JAXBISODsetTelAdapter.class)");
+					else
+						throw new GenerationException("Invalid Dset type defined: " + attr.getDatatype().getName());
 				}
 				else
 				{
@@ -2739,6 +2758,23 @@ public class TransformerUtils
 		return javaDatatypeMap.containsKey(originalType.toLowerCase());
 	}
 
+	public boolean isDsetDataType(UMLAttribute attr)
+	{
+		String originalType = attr.getDatatype().getName();
+
+		if(originalType.startsWith("DSET"))
+			return true;
+		
+		return false;
+	}
+	
+	public String getISODataType(UMLAttribute attr)
+	{
+		String originalType = attr.getDatatype().getName();
+		return originalType.substring(originalType.indexOf("<")+1, originalType.indexOf(">"));
+	}
+	
+
 	public boolean isIvlDataType(UMLAttribute attr)
 	{
 		String originalType = attr.getDatatype().getName();
@@ -2748,13 +2784,6 @@ public class TransformerUtils
 		
 		return false;
 	}
-	
-	public String getIvlDataType(UMLAttribute attr)
-	{
-		String originalType = attr.getDatatype().getName();
-		return originalType.substring(originalType.indexOf("<")+1, originalType.indexOf(">"));
-	}
-	
 	
 	public Collection getSortedByJoinUMLAttribute(UMLClass klass, UMLAttribute idAttribute, UMLClass table) throws GenerationException
 	{
