@@ -548,9 +548,6 @@ public class CdDataTypeXMLTest extends SDKISOTestBase
 	{
 		Cd aVal = actual.getValue1();
 		assertNotNull(aVal);
-		//Work around for Description as it does not exist in ISO impl.
-		if(aVal.getOriginalText() != null && aVal.getOriginalText().getDescription() != null)
-			aVal.getOriginalText().setDescription(null);
 		Cd rVal = result.getValue1();
 		assertNotNull(rVal);
 		return aVal.equals(rVal);
@@ -560,9 +557,6 @@ public class CdDataTypeXMLTest extends SDKISOTestBase
 	{
 		Cd aVal = actual.getValue2();
 		assertNotNull(aVal);
-		//Work around for Description as it does not exist in ISO impl.
-		if(aVal.getOriginalText() != null && aVal.getOriginalText().getDescription() != null)
-			aVal.getOriginalText().setDescription(null);
 		Cd rVal = result.getValue2();
 		assertNotNull(rVal);
 		return aVal.equals(rVal);
@@ -572,9 +566,6 @@ public class CdDataTypeXMLTest extends SDKISOTestBase
 	{
 		Cd aVal = actual.getValue3();
 		assertNotNull(aVal);
-		//Work around for Description as it does not exist in ISO impl.
-		if(aVal.getOriginalText() != null && aVal.getOriginalText().getDescription() != null)
-			aVal.getOriginalText().setDescription(null);
 		Cd rVal = result.getValue3();
 		assertNotNull(rVal);
 		return aVal.equals(rVal);
@@ -584,10 +575,6 @@ public class CdDataTypeXMLTest extends SDKISOTestBase
 	{
 		Cd aVal = actual.getValue4();
 		assertNotNull(aVal);
-		//Work around for Description as it does not exist in ISO impl.
-		if(aVal.getOriginalText() != null && aVal.getOriginalText().getDescription() != null)
-			aVal.getOriginalText().setDescription(null);
-		
 		Cd rVal = result.getValue4();
 		assertNotNull(rVal);
 		return aVal.equals(rVal);
@@ -596,9 +583,6 @@ public class CdDataTypeXMLTest extends SDKISOTestBase
 	{
 		Cd aVal = actual.getValue5();
 		assertNotNull(aVal);
-		//Work around for Description as it does not exist in ISO impl.
-		if(aVal.getOriginalText() != null && aVal.getOriginalText().getDescription() != null)
-			aVal.getOriginalText().setDescription(null);
 		Cd rVal = result.getValue5();
 		assertNotNull(rVal);
 		return aVal.equals(rVal);
@@ -608,9 +592,6 @@ public class CdDataTypeXMLTest extends SDKISOTestBase
 	{
 		Cd aVal = actual.getValue6();
 		assertNotNull(aVal);
-		//Work around for Description as it does not exist in ISO impl.
-		if(aVal.getOriginalText() != null && aVal.getOriginalText().getDescription() != null)
-			aVal.getOriginalText().setDescription(null);
 		Cd rVal = result.getValue6();
 		assertNotNull(rVal);
 		return aVal.equals(rVal);
@@ -619,9 +600,6 @@ public class CdDataTypeXMLTest extends SDKISOTestBase
 	{
 		Cd aVal = actual.getValue7();
 		assertNotNull(aVal);
-		//Work around for Description as it does not exist in ISO impl.
-		if(aVal.getOriginalText() != null && aVal.getOriginalText().getDescription() != null)
-			aVal.getOriginalText().setDescription(null);
 		Cd rVal = result.getValue7();
 		assertNotNull(rVal);
 		return aVal.equals(rVal);
@@ -631,9 +609,6 @@ public class CdDataTypeXMLTest extends SDKISOTestBase
 	{
 		Cd aVal = actual.getValue8();
 		assertNotNull(aVal);
-		//Work around for Description as it does not exist in ISO impl.
-		if(aVal.getOriginalText() != null && aVal.getOriginalText().getDescription() != null)
-			aVal.getOriginalText().setDescription(null);
 		Cd rVal = result.getValue8();
 		assertNotNull(rVal);
 		return aVal.equals(rVal);
