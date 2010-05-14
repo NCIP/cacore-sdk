@@ -1600,22 +1600,23 @@ INSERT INTO dset_ad_datatype (id) VALUES (55);
 INSERT INTO dset_ad_datatype (id) VALUES (56);
 INSERT INTO dset_ad_datatype (id) VALUES (57);
 INSERT INTO dset_ad_datatype (id) VALUES (58);
+INSERT INTO dset_ad_datatype (id) VALUES (59);
+INSERT INTO dset_ad_datatype (id) VALUES (60);
+INSERT INTO dset_ad_datatype (id) VALUES (61);
+INSERT INTO dset_ad_datatype (id) VALUES (62);
 
 
 --
 -- Data for Name: dset_ad_dset_ad_value8; Type: TABLE DATA; 
 --
 
-INSERT INTO dset_ad_dset_ad_value8 (dset_ad_datatype_id, dset_ad_value8_id) VALUES (48, 1);
-INSERT INTO dset_ad_dset_ad_value8 (dset_ad_datatype_id, dset_ad_value8_id) VALUES (48, 2);
-INSERT INTO dset_ad_dset_ad_value8 (dset_ad_datatype_id, dset_ad_value8_id) VALUES (48, 3);
-INSERT INTO dset_ad_dset_ad_value8 (dset_ad_datatype_id, dset_ad_value8_id) VALUES (48, 4);
-INSERT INTO dset_ad_dset_ad_value8 (dset_ad_datatype_id, dset_ad_value8_id) VALUES (48, 5);
-INSERT INTO dset_ad_dset_ad_value8 (dset_ad_datatype_id, dset_ad_value8_id) VALUES (48, 6);
-INSERT INTO dset_ad_dset_ad_value8 (dset_ad_datatype_id, dset_ad_value8_id) VALUES (48, 7);
-INSERT INTO dset_ad_dset_ad_value8 (dset_ad_datatype_id, dset_ad_value8_id) VALUES (48, 8);
-INSERT INTO dset_ad_dset_ad_value8 (dset_ad_datatype_id, dset_ad_value8_id) VALUES (48, 9);
-INSERT INTO dset_ad_dset_ad_value8 (dset_ad_datatype_id, dset_ad_value8_id) VALUES (48, 10);
+INSERT INTO dset_ad_dset_ad_value8 (dset_ad_datatype_id, dset_ad_value8_id) VALUES (59, 1);
+INSERT INTO dset_ad_dset_ad_value8 (dset_ad_datatype_id, dset_ad_value8_id) VALUES (60, 1);
+INSERT INTO dset_ad_dset_ad_value8 (dset_ad_datatype_id, dset_ad_value8_id) VALUES (61, 1);
+INSERT INTO dset_ad_dset_ad_value8 (dset_ad_datatype_id, dset_ad_value8_id) VALUES (62, 7);
+INSERT INTO dset_ad_dset_ad_value8 (dset_ad_datatype_id, dset_ad_value8_id) VALUES (62, 8);
+INSERT INTO dset_ad_dset_ad_value8 (dset_ad_datatype_id, dset_ad_value8_id) VALUES (62, 9);
+INSERT INTO dset_ad_dset_ad_value8 (dset_ad_datatype_id, dset_ad_value8_id) VALUES (62, 10);
 
 
 --
