@@ -1252,19 +1252,20 @@ VALUES (1),
   (55),
   (56),
   (57),
-  (58);
+  (58),
+  (59),
+  (60),
+  (61),
+  (62);
 
 INSERT INTO dset_ad_dset_ad_value8(dset_ad_datatype_id, dset_ad_value8_id)
-VALUES (48, 1),
-  (48, 2),
-  (48, 3),
-  (48, 4),
-  (48, 5),
-  (48, 6),
-  (48, 7),
-  (48, 8),
-  (48, 9),
-  (48, 10);
+VALUES (59, 1),
+  (60, 1),
+  (61, 1),
+  (62, 7),
+  (62, 8),
+  (62, 9),
+  (62, 10);
 
 INSERT INTO dset_ad_value1(dset_ad_datatype_id, adxp_al_value)
 VALUES (1, NULL),
