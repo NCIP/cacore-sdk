@@ -229,7 +229,6 @@ public class TransformerUtils
 			put("ADXP.STB", "AdxpStb");			
 			put("ADXP.STTYP", "AdxpSttyp");			
 			put("ADXP.DIR", "AdxpDir");			
-			put("ADXP.INT", "AdxpInt");			
 			put("ADXP.CAR", "AdxpCar");			
 			put("ADXP.CEN", "AdxpCen");			
 			put("ADXP.CNT", "AdxpCnt");			
