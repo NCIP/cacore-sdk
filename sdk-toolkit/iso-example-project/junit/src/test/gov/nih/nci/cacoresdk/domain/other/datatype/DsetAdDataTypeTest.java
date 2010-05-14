@@ -4,13 +4,23 @@ import gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType;
 import gov.nih.nci.iso21090.Ad;
 import gov.nih.nci.iso21090.AddressPartType;
 import gov.nih.nci.iso21090.Adxp;
+import gov.nih.nci.iso21090.Any;
 import gov.nih.nci.iso21090.NullFlavor;
 import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.LogicalExpression;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Property;
+import org.hibernate.criterion.Restrictions;
 
 import test.gov.nih.nci.cacoresdk.SDKISOTestBase;
 
@@ -39,7 +49,7 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 	{
 		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType");
 		int count = getApplicationService().getQueryRowCount(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType");
-		assertEquals(58,count);
+		assertEquals(62,count);
 	}
 
 	/**
@@ -50,7 +60,7 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 	@SuppressWarnings("unchecked")
 	public void testDsetAdValue1ByHQLCriteria() throws ApplicationException
 	{
-		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType a where a.value1.item.part_0.value is not null order by a.id asc");
+		HQLCriteria criteria = new HQLCriteria("select dest from gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType dest inner join dest.value1.item item  where  item.part_0.value is not null order by dest.id asc");
 		Collection<DsetAdDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType");
 		assertNotNull(result);
 		assertEquals(5, result.size());
@@ -71,7 +81,7 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 	@SuppressWarnings("unchecked")
 	public void testDsetAdValue2ByHQLCriteria() throws ApplicationException
 	{
-		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType a where (a.value2.item.part_0.value is not null or a.value2.item.part_0.code is not null) order by a.id asc");
+		HQLCriteria criteria = new HQLCriteria("select dest from gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType dest inner join dest.value2.item item  where (item.part_0.code is not null or item.part_0.value is not null) order by dest.id asc");
 		Collection<DsetAdDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType");
 		assertNotNull(result);
 		assertEquals(5, result.size());
@@ -92,7 +102,7 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 	@SuppressWarnings("unchecked")
 	public void testDsetAdValue3ByHQLCriteria() throws ApplicationException
 	{
-		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType a where (a.value3.item.part_0.value is not null or a.value3.item.part_0.code is not null or a.value3.item.part_0.codeSystem is not null) order by a.id asc");
+		HQLCriteria criteria = new HQLCriteria("select dest from gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType dest inner join dest.value3.item item  where  (item.part_0.value is not null or item.part_0.code is not null or item.part_0.codeSystem is not null) order by dest.id asc");
 		Collection<DsetAdDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType");
 		assertNotNull(result);
 		assertEquals(5, result.size());
@@ -113,7 +123,7 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 	@SuppressWarnings("unchecked")
 	public void testDsetAdValue4ByHQLCriteria() throws ApplicationException
 	{
-		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType a where (a.value4.item.part_0.value or a.value4.item.part_1.value) is not null order by a.id asc");
+		HQLCriteria criteria = new HQLCriteria("select dest from gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType dest inner join dest.value4.item item  where  (item.part_0.value is not null or item.part_1.value is not null) order by dest.id asc");
 		Collection<DsetAdDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType");
 		assertNotNull(result);
 		assertEquals(9, result.size());
@@ -138,7 +148,7 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 	@SuppressWarnings("unchecked")
 	public void testDsetAdValue5ByHQLCriteria() throws ApplicationException
 	{
-		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType a where a.value5.item.part_0.value is not null order by a.id asc");
+		HQLCriteria criteria = new HQLCriteria("select dest from gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType dest inner join dest.value5.item item  where item.part_0.value is not null order by dest.id asc");
 		Collection<DsetAdDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType");
 		assertNotNull(result);
 		assertEquals(10, result.size());
@@ -164,7 +174,8 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 	@SuppressWarnings("unchecked")
 	public void testDsetAdValue6ByHQLCriteria() throws ApplicationException
 	{
-		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType a where (a.value6.item.part_0.value is not null or a.value6.part_1.value is not null or a.value6.part_2.value is not null) order by a.id asc");
+		HQLCriteria criteria = new HQLCriteria("select dest from gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType dest inner join dest.value6.item item  where  (item.part_0.value is not null or item.part_1.value is not null or item.part_2.value is not null) order by dest.id asc");
+		
 		Collection<DsetAdDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType");
 		assertNotNull(result);
 		assertEquals(12, result.size());
@@ -192,7 +203,8 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 	@SuppressWarnings("unchecked")
 	public void testDsetAdValue7ByHQLCriteria() throws ApplicationException
 	{
-		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType a where a.value7.item.part_0.value is not null order by a.id asc");
+		HQLCriteria criteria = new HQLCriteria("select dest from gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType dest inner join dest.value7.item item  where item.part_0.value is not null order by dest.id asc");
+		
 		Collection<DsetAdDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType");
 		assertNotNull(result);
 		assertEquals(10, result.size());
@@ -219,21 +231,16 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 	@SuppressWarnings("unchecked")
 	public void testDsetAdValue8ByHQLCriteria() throws ApplicationException
 	{
-		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType a where a.value8.item.part_0.value is not null order by a.id asc");
+		HQLCriteria criteria = new HQLCriteria("select distinct dest from gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType dest inner join dest.value8.item item  where item.part_0.value is not null order by dest.id asc");
+		
 		Collection<DsetAdDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType");
 		assertNotNull(result);
-		assertEquals(5, result.size());
+		assertEquals(4, result.size());
 		List indexList = new ArrayList();
 		indexList.add("58");
 		indexList.add("59");
 		indexList.add("60");
 		indexList.add("61");
-		indexList.add("62");
-		indexList.add("63");
-		indexList.add("64");
-		indexList.add("65");
-		indexList.add("66");
-		indexList.add("67");
 		assertValue8(result, indexList);
 	}
 
@@ -281,9 +288,8 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 
 				assertEquals(AddressPartType.AL, ad.getType());
 				assertEquals("1 Jefferson Street", ad.getValue());
-				assertNull(ad.getCode());
-				//Global constant
-				assertEquals("ADXP Code System", ad.getCodeSystem());
+				assertEquals("CODE", ad.getCode());
+				assertEquals("CODESYSTEM", ad.getCodeSystem());
 				
 				assertNull(data.getValue1().getItem().iterator().next().getNullFlavor());
 				counter++;
@@ -306,9 +312,8 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 
 				assertEquals(AddressPartType.AL, ad.getType());
 				assertEquals("2 Jefferson Street", ad.getValue());
-				assertNull(ad.getCode());
-				//Global constant
-				assertEquals("ADXP Code System", ad.getCodeSystem());
+				assertEquals("CODE", ad.getCode());
+				assertEquals("CODESYSTEM", ad.getCodeSystem());
 				assertNull(data.getValue1().getItem().iterator().next().getNullFlavor());
 				counter++;
 				continue;
@@ -330,9 +335,8 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 
 				assertEquals(AddressPartType.AL, ad.getType());
 				assertEquals("3 Jefferson Street", ad.getValue());
-				assertNull(ad.getCode());
-				//Global constant
-				assertEquals("ADXP Code System", ad.getCodeSystem());
+				assertEquals("CODE", ad.getCode());
+				assertEquals("CODESYSTEM", ad.getCodeSystem());
 				assertNull(data.getValue1().getItem().iterator().next().getNullFlavor());
 				counter++;
 				continue;
@@ -354,9 +358,8 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 
 				assertEquals(AddressPartType.AL, ad.getType());
 				assertEquals("4 Sun Street", ad.getValue());
-				assertNull(ad.getCode());
-				//Global constant
-				assertEquals("ADXP Code System", ad.getCodeSystem());
+				assertEquals("CODE", ad.getCode());
+				assertEquals("CODESYSTEM", ad.getCodeSystem());
 				assertNull(data.getValue1().getItem().iterator().next().getNullFlavor());
 				counter++;
 				continue;
@@ -378,9 +381,8 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 
 				assertEquals(AddressPartType.AL, ad.getType());
 				assertEquals("5 Sun Street", ad.getValue());
-				assertNull(ad.getCode());
-				//Global constant
-				assertEquals("ADXP Code System", ad.getCodeSystem());
+				assertEquals("CODE", ad.getCode());
+				assertEquals("CODESYSTEM", ad.getCodeSystem());
 				assertNull(data.getValue1().getItem().iterator().next().getNullFlavor());
 				counter++;
 				continue;
@@ -424,7 +426,7 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 				assertEquals(AddressPartType.DAL, ad.getType());
 				assertEquals("Suite 100", ad.getValue());
 				assertNull(ad.getCode());
-				assertNull(ad.getCodeSystem());
+				assertEquals("ADXP Code System", ad.getCodeSystem());
 				assertNull(data.getValue2().getItem().iterator().next().getNullFlavor());
 				counter++;
 				continue;
@@ -447,7 +449,7 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 				assertEquals(AddressPartType.DAL, ad.getType());
 				assertEquals("Suite 101", ad.getValue());
 				assertNull(ad.getCode());
-				assertNull(ad.getCodeSystem());
+				assertEquals("ADXP Code System", ad.getCodeSystem());
 				assertNull(data.getValue2().getItem().iterator().next().getNullFlavor());
 				counter++;
 				continue;
@@ -465,12 +467,12 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 				assertNotNull(address.getPart().get(0));
 				Adxp ad = address.getPart().get(0);
 				assertNotNull(ad.getType());
-				assertNotNull(ad.getValue());
+				assertNull(ad.getValue());
 
 				assertEquals(AddressPartType.DAL, ad.getType());
-				assertEquals("CODE", ad.getCode());
+				assertEquals("CODE1", ad.getCode());
 				assertNull(ad.getValue());
-				assertNull(ad.getCodeSystem());
+				assertEquals("ADXP Code System", ad.getCodeSystem());
 				assertNull(data.getValue2().getItem().iterator().next().getNullFlavor());
 				counter++;
 				continue;
@@ -493,7 +495,7 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 				assertEquals(AddressPartType.DAL, ad.getType());
 				assertEquals("Suite 103", ad.getValue());
 				assertEquals("CODE2", ad.getCode());
-				assertNull(ad.getCodeSystem());
+				assertEquals("ADXP Code System", ad.getCodeSystem());
 				assertNull(data.getValue2().getItem().iterator().next().getNullFlavor());
 				counter++;
 				continue;
@@ -516,7 +518,7 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 				assertEquals(AddressPartType.DAL, ad.getType());
 				assertEquals("Suite 104", ad.getValue());
 				assertEquals("CODE3", ad.getCode());
-				assertNull(ad.getCodeSystem());
+				assertEquals("ADXP Code System", ad.getCodeSystem());
 				assertNull(data.getValue2().getItem().iterator().next().getNullFlavor());
 				counter++;
 				continue;
@@ -525,7 +527,8 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 			else
 			{
 				assertNotNull(data);
-				assertNull(data.getValue2());
+				assertNotNull(data.getValue2());
+				assertEquals(NullFlavor.NI, data.getValue2().getNullFlavor());
 				counter++;
 			}
 		}
@@ -597,7 +600,7 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 				assertNotNull(address.getPart().get(0));
 				Adxp ad = address.getPart().get(0);
 				assertNotNull(ad.getType());
-				assertNotNull(ad.getValue());
+				assertNull(ad.getValue());
 
 				assertEquals(AddressPartType.AL, ad.getType());
 				assertEquals("CODE2", ad.getCode());
@@ -657,7 +660,8 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 			else
 			{
 				assertNotNull(data);
-				assertNull(data.getValue3());
+				assertNotNull(data.getValue3());
+				assertEquals(NullFlavor.NI, data.getValue3().getNullFlavor());
 				counter++;
 			}
 		}
@@ -865,7 +869,7 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 				assertEquals("NCI101", ad0.getCode());
 				assertNull(ad0.getCodeSystem());
 				assertEquals(AddressPartType.AL, ad1.getType());
-				assertEquals("200 Executive Blvd", ad1.getValue());
+				assertEquals("201 Executive Blvd", ad1.getValue());
 				assertEquals("NCI201", ad1.getCode());
 				assertNull(ad1.getCodeSystem());
 
@@ -909,7 +913,8 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 			else
 			{
 				assertNotNull(data);
-				assertNull(data.getValue4());
+				assertNotNull(data.getValue4());
+				assertEquals(NullFlavor.NI, data.getValue4().getNullFlavor());
 				counter++;
 			}
 		}
@@ -1009,7 +1014,7 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 				assertNotNull(address.getPart().get(1));
 				Adxp ad1 = address.getPart().get(1);
 				assertNotNull(ad1.getType());
-				assertNotNull(ad1.getValue());
+				assertNull(ad1.getValue());
 				
 				assertEquals(AddressPartType.AL, ad0.getType());
 				assertEquals("103 Jefferson Street", ad0.getValue());
@@ -1043,17 +1048,17 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 				assertNotNull(address.getPart().get(1));
 				Adxp ad1 = address.getPart().get(1);
 				assertNotNull(ad1.getType());
-				assertNotNull(ad1.getValue());
+				assertNull(ad1.getValue());
 				
 				assertEquals(AddressPartType.AL, ad0.getType());
-				assertEquals("103 Jefferson Street", ad0.getValue());
-				assertEquals("NCIAL103", ad0.getCode());
-				assertEquals("ADXP_AL_CODESYSTEM2", ad0.getCodeSystem());
+				assertEquals("104 Jefferson Street", ad0.getValue());
+				assertEquals("NCIAL104", ad0.getCode());
+				assertEquals("ADXP_AL_CODESYSTEM3", ad0.getCodeSystem());
 
 				assertEquals(AddressPartType.DAL, ad1.getType());
 				assertNull(ad1.getValue());
-				assertEquals("NCIDAL100", ad1.getCode());
-				assertNull("ADXP_DAL_CODESYSTEM1", ad1.getCodeSystem());
+				assertEquals("NCIDAL101", ad1.getCode());
+				assertEquals("ADXP_DAL_CODESYSTEM1", ad1.getCodeSystem());
 
 				assertNull(data.getValue5().getItem().iterator().next().getNullFlavor());
 				counter++;
@@ -1079,14 +1084,14 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 				assertNotNull(ad1.getValue());
 				
 				assertEquals(AddressPartType.AL, ad0.getType());
-				assertEquals("103 Jefferson Street", ad0.getValue());
-				assertEquals("NCIAL103", ad0.getCode());
-				assertEquals("ADXP_AL_CODESYSTEM2", ad0.getCodeSystem());
+				assertEquals("105 Jefferson Street", ad0.getValue());
+				assertEquals("NCIAL105", ad0.getCode());
+				assertEquals("ADXP_AL_CODESYSTEM4", ad0.getCodeSystem());
 
 				assertEquals(AddressPartType.DAL, ad1.getType());
 				assertEquals("Suite 500", ad1.getValue());
-				assertEquals("NCIDAL100", ad1.getCode());
-				assertEquals("ADXP_DAL_CODESYSTEM1", ad1.getCodeSystem());
+				assertEquals("NCIDAL102", ad1.getCode());
+				assertEquals("ADXP_DAL_CODESYSTEM2", ad1.getCodeSystem());
 
 				assertNull(data.getValue5().getItem().iterator().next().getNullFlavor());
 				counter++;
@@ -1117,14 +1122,14 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 				assertNotNull(ad2.getValue());
 
 				assertEquals(AddressPartType.AL, ad0.getType());
-				assertEquals("103 Jefferson Street", ad0.getValue());
-				assertEquals("NCIAL103", ad0.getCode());
-				assertEquals("ADXP_AL_CODESYSTEM2", ad0.getCodeSystem());
+				assertEquals("106 Jefferson Street", ad0.getValue());
+				assertEquals("NCIAL106", ad0.getCode());
+				assertEquals("ADXP_AL_CODESYSTEM5", ad0.getCodeSystem());
 
 				assertEquals(AddressPartType.DAL, ad1.getType());
-				assertEquals("Suite 500", ad1.getValue());
-				assertEquals("NCIDAL100", ad1.getCode());
-				assertEquals("ADXP_DAL_CODESYSTEM1", ad1.getCodeSystem());
+				assertEquals("Suite 501", ad1.getValue());
+				assertEquals("NCIDAL103", ad1.getCode());
+				assertEquals("ADXP_DAL_CODESYSTEM3", ad1.getCodeSystem());
 
 				assertEquals(AddressPartType.CTY, ad2.getType());
 				assertEquals("Rockville", ad2.getValue());
@@ -1160,14 +1165,14 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 				assertNotNull(ad2.getValue());
 
 				assertEquals(AddressPartType.AL, ad0.getType());
-				assertEquals("103 Jefferson Street", ad0.getValue());
-				assertEquals("NCIAL103", ad0.getCode());
-				assertEquals("ADXP_AL_CODESYSTEM2", ad0.getCodeSystem());
+				assertEquals("107 Jefferson Street", ad0.getValue());
+				assertEquals("NCIAL107", ad0.getCode());
+				assertEquals("ADXP_AL_CODESYSTEM6", ad0.getCodeSystem());
 
 				assertEquals(AddressPartType.DAL, ad1.getType());
-				assertEquals("Suite 500", ad1.getValue());
-				assertEquals("NCIDAL100", ad1.getCode());
-				assertEquals("ADXP_DAL_CODESYSTEM1", ad1.getCodeSystem());
+				assertEquals("Suite 502", ad1.getValue());
+				assertEquals("NCIDAL104", ad1.getCode());
+				assertEquals("ADXP_DAL_CODESYSTEM4", ad1.getCodeSystem());
 
 				assertEquals(AddressPartType.CTY, ad2.getType());
 				assertEquals("Rockville", ad2.getValue());
@@ -1203,14 +1208,14 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 				assertNotNull(ad2.getValue());
 
 				assertEquals(AddressPartType.AL, ad0.getType());
-				assertEquals("103 Jefferson Street", ad0.getValue());
-				assertEquals("NCIAL103", ad0.getCode());
-				assertEquals("ADXP_AL_CODESYSTEM2", ad0.getCodeSystem());
+				assertEquals("108 Jefferson Street", ad0.getValue());
+				assertEquals("NCIAL108", ad0.getCode());
+				assertEquals("ADXP_AL_CODESYSTEM7", ad0.getCodeSystem());
 
 				assertEquals(AddressPartType.DAL, ad1.getType());
-				assertEquals("Suite 500", ad1.getValue());
-				assertEquals("NCIDAL100", ad1.getCode());
-				assertEquals("ADXP_DAL_CODESYSTEM1", ad1.getCodeSystem());
+				assertEquals("Suite 503", ad1.getValue());
+				assertEquals("NCIDAL105", ad1.getCode());
+				assertEquals("ADXP_DAL_CODESYSTEM5", ad1.getCodeSystem());
 
 				assertEquals(AddressPartType.CTY, ad2.getType());
 				assertEquals("Rockville", ad2.getValue());
@@ -1246,14 +1251,14 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 				assertNotNull(ad2.getValue());
 
 				assertEquals(AddressPartType.AL, ad0.getType());
-				assertEquals("103 Jefferson Street", ad0.getValue());
-				assertEquals("NCIAL103", ad0.getCode());
-				assertEquals("ADXP_AL_CODESYSTEM2", ad0.getCodeSystem());
+				assertEquals("108 Jefferson Street", ad0.getValue());
+				assertEquals("NCIAL108", ad0.getCode());
+				assertEquals("ADXP_AL_CODESYSTEM7", ad0.getCodeSystem());
 
 				assertEquals(AddressPartType.DAL, ad1.getType());
-				assertEquals("Suite 500", ad1.getValue());
-				assertEquals("NCIDAL100", ad1.getCode());
-				assertEquals("ADXP_DAL_CODESYSTEM1", ad1.getCodeSystem());
+				assertEquals("Suite 503", ad1.getValue());
+				assertEquals("NCIDAL105", ad1.getCode());
+				assertEquals("ADXP_DAL_CODESYSTEM5", ad1.getCodeSystem());
 
 				assertEquals(AddressPartType.CTY, ad2.getType());
 				assertEquals("Rockville", ad2.getValue());
@@ -1268,7 +1273,8 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 			else
 			{
 				assertNotNull(data);
-				assertNull(data.getValue5());
+				assertNotNull(data.getValue5());
+				assertEquals(NullFlavor.NI, data.getValue5().getNullFlavor());
 				counter++;
 			}
 		}
@@ -1623,8 +1629,6 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 			return AddressPartType.DMOD;
 		case 16:
 			return AddressPartType.DMODID;
-		case 17:
-			return AddressPartType.INT;
 		case 18:
 			return AddressPartType.POB;
 		case 19:
@@ -1658,7 +1662,7 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 		for(DsetAdDataType data : result)
 		{
 			//Validate 1st record
-			if((index == null && counter == 48) || (index != null && index.contains("48")))
+			if((index == null && counter == 49) || (index != null && index.contains("48")))
 			{
 				if(index != null) 
 					index.remove("48");
@@ -1682,7 +1686,7 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 				continue;
 			}
 			//Validate 2nd record
-			else if((index == null && counter == 49) || (index != null && index.contains("49")))
+			else if((index == null && counter == 50) || (index != null && index.contains("49")))
 			{
 				if(index != null) 
 					index.remove("49");
@@ -1706,7 +1710,7 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 				continue;
 			}
 			//Validate 3rd record
-			else if((index == null && counter == 50) || (index != null && index.contains("50")))
+			else if((index == null && counter == 51) || (index != null && index.contains("50")))
 			{
 				if(index != null) 
 					index.remove("50");
@@ -1729,8 +1733,7 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 				counter++;
 				continue;
 			}
-			//Validate 4th record
-			else if((index == null && counter == 51) || (index != null && index.contains("51")))
+			else if((index == null && counter == 52) || (index != null && index.contains("51")))
 			{
 				if(index != null) 
 					index.remove("51");
@@ -1747,7 +1750,6 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 				assertNotNull(address.getPart().get(1));
 				Adxp ad1 = address.getPart().get(1);
 				assertNotNull(ad1.getType());
-				assertNotNull(ad1.getValue());
 				
 				assertEquals(AddressPartType.AL, ad0.getType());
 				assertEquals("103 Jefferson Street", ad0.getValue());
@@ -1763,8 +1765,7 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 				counter++;
 				continue;
 			}
-			//Validate 5th record
-			else if((index == null && counter == 52) || (index != null && index.contains("52")))
+			else if((index == null && counter == 53) || (index != null && index.contains("52")))
 			{
 				if(index != null) 
 					index.remove("52");
@@ -1781,7 +1782,6 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 				assertNotNull(address.getPart().get(1));
 				Adxp ad1 = address.getPart().get(1);
 				assertNotNull(ad1.getType());
-				assertNotNull(ad1.getValue());
 				
 				assertEquals(AddressPartType.AL, ad0.getType());
 				assertEquals("104 Jefferson Street", ad0.getValue());
@@ -1791,13 +1791,13 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 				assertEquals(AddressPartType.DAL, ad1.getType());
 				assertNull(ad1.getValue());
 				assertEquals("NCIDAL102", ad1.getCode());
-				assertNull("ADXP_DAL_CODESYSTEM5", ad1.getCodeSystem());
-
+				assertEquals("ADXP_DAL_CODESYSTEM5", ad1.getCodeSystem());
+				
 				assertNull(data.getValue7().getItem().iterator().next().getNullFlavor());
 				counter++;
 				continue;
 			}
-			else if((index == null && counter == 53) || (index != null && index.contains("53")))
+			else if((index == null && counter == 54) || (index != null && index.contains("53")))
 			{
 				if(index != null) 
 					index.remove("53");
@@ -1830,7 +1830,7 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 				counter++;
 				continue;
 			}
-			else if((index == null && counter == 54) || (index != null && index.contains("54")))
+			else if((index == null && counter == 55) || (index != null && index.contains("54")))
 			{
 				if(index != null) 
 					index.remove("54");
@@ -1873,7 +1873,7 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 				counter++;
 				continue;
 			}
-			else if((index == null && counter == 55) || (index != null && index.contains("55")))
+			else if((index == null && counter == 56) || (index != null && index.contains("55")))
 			{
 				if(index != null) 
 					index.remove("55");
@@ -1916,7 +1916,7 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 				counter++;
 				continue;
 			}
-			else if((index == null && counter == 56) || (index != null && index.contains("56")))
+			else if((index == null && counter == 57) || (index != null && index.contains("56")))
 			{
 				if(index != null) 
 					index.remove("56");
@@ -1959,7 +1959,7 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 				counter++;
 				continue;
 			}
-			else if((index == null && counter == 57) || (index != null && index.contains("57")))
+			else if((index == null && counter == 58) || (index != null && index.contains("57")))
 			{
 				if(index != null) 
 					index.remove("57");
@@ -1985,7 +1985,7 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 
 				assertEquals(AddressPartType.AL, ad0.getType());
 				assertEquals("109 Jefferson Street", ad0.getValue());
-				assertEquals("NCIAL109", ad0.getCode());
+				assertEquals("NCIAL108", ad0.getCode());
 				assertEquals("ADXP_AL_CODESYSTEM8", ad0.getCodeSystem());
 
 				assertEquals(AddressPartType.DAL, ad1.getType());
@@ -2006,12 +2006,14 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 			else
 			{
 				assertNotNull(data);
-				assertNull(data.getValue7());
+				assertNotNull(data.getValue7());
+				assertEquals(NullFlavor.NI, data.getValue7().getNullFlavor());
 				counter++;
 			}
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private void assertValue8(Collection<DsetAdDataType> result, List<Integer> index)
 	{
 		assertNotNull(result);
@@ -2020,7 +2022,7 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 		for(DsetAdDataType data : result)
 		{
 			//Validate 1st record
-			if((index == null && counter == 58) || (index != null && index.contains("58")))
+			if((index == null && counter == 59) || (index != null && index.contains("58")))
 			{
 				if(index != null) 
 					index.remove("58");
@@ -2044,7 +2046,7 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 				continue;
 			}
 			//Validate 2nd record
-			else if((index == null && counter == 59) || (index != null && index.contains("59")))
+			else if((index == null && counter == 60) || (index != null && index.contains("59")))
 			{
 				if(index != null) 
 					index.remove("59");
@@ -2059,8 +2061,8 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 				assertNotNull(ad0.getValue());
 
 				assertEquals(AddressPartType.AL, ad0.getType());
-				assertEquals("101 Jefferson Street", ad0.getValue());
-				assertEquals("NCIAL101", ad0.getCode());
+				assertEquals("100 Jefferson Street", ad0.getValue());
+				assertNull(ad0.getCode());
 				assertNull(ad0.getCodeSystem());
 
 				assertNull(data.getValue8().getItem().iterator().next().getNullFlavor());
@@ -2068,7 +2070,7 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 				continue;
 			}
 			//Validate 3rd record
-			else if((index == null && counter == 60) || (index != null && index.contains("60")))
+			else if((index == null && counter == 61) || (index != null && index.contains("60")))
 			{
 				if(index != null) 
 					index.remove("60");
@@ -2083,16 +2085,15 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 				assertNotNull(ad0.getValue());
 
 				assertEquals(AddressPartType.AL, ad0.getType());
-				assertEquals("102 Jefferson Street", ad0.getValue());
-				assertEquals("NCIAL102", ad0.getCode());
-				assertEquals("ADXP_AL_CODESYSTEM1", ad0.getCodeSystem());
+				assertEquals("100 Jefferson Street", ad0.getValue());
+				assertNull(ad0.getCode());
+				assertNull(ad0.getCodeSystem());
 
 				assertNull(data.getValue8().getItem().iterator().next().getNullFlavor());
 				counter++;
 				continue;
 			}
-			//Validate 4th record
-			else if((index == null && counter == 61) || (index != null && index.contains("61")))
+			else if((index == null && counter == 62) || (index != null && index.contains("61")))
 			{
 				if(index != null) 
 					index.remove("61");
@@ -2100,267 +2101,104 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 				assertNotNull(data);
 				assertNotNull(data.getValue8());
 				assertNotNull(data.getValue8().getItem());
-				Ad address = data.getValue8().getItem().iterator().next();
-				assertNotNull(address.getPart().get(0));
-				Adxp ad0 = address.getPart().get(0);
-				assertNotNull(ad0.getType());
-				assertNotNull(ad0.getValue());
+				Set<Ad> items = data.getValue8().getItem();
 
-				assertNotNull(address.getPart().get(1));
-				Adxp ad1 = address.getPart().get(1);
-				assertNotNull(ad1.getType());
-				assertNotNull(ad1.getValue());
 				
-				assertEquals(AddressPartType.AL, ad0.getType());
-				assertEquals("103 Jefferson Street", ad0.getValue());
-				assertEquals("NCIAL103", ad0.getCode());
-				assertEquals("ADXP_AL_CODESYSTEM2", ad0.getCodeSystem());
+					Ad address = getAddress("106 Jefferson Street", items);
+					assertNotNull(address.getPart().get(0));
+					Adxp ad0 = address.getPart().get(0);
+					assertNotNull(ad0.getType());
+					assertNotNull(ad0.getValue());
+	
+					assertNotNull(address.getPart().get(1));
+					Adxp ad1 = address.getPart().get(1);
+					assertNotNull(ad1.getType());
+					assertNotNull(ad1.getValue());
+					
+					assertNotNull(address.getPart().get(2));
+					Adxp ad2 = address.getPart().get(2);
+					assertNotNull(ad2.getType());
+					assertNotNull(ad2.getValue());
+	
+					assertEquals(AddressPartType.AL, ad0.getType());
+					assertEquals("106 Jefferson Street", ad0.getValue());
+					assertEquals("NCIAL106", ad0.getCode());
+					assertEquals("ADXP_AL_CODESYSTEM5", ad0.getCodeSystem());
+	
+					assertEquals(AddressPartType.DAL, ad1.getType());
+					assertEquals("Suite 501", ad1.getValue());
+					assertEquals("NCIDAL103", ad1.getCode());
+					assertEquals("ADXP_DAL_CODESYSTEM3", ad1.getCodeSystem());
+	
+					assertEquals(AddressPartType.CTY, ad2.getType());
+					assertEquals("Rockville", ad2.getValue());
+					assertNull(ad2.getCode());
+					assertNull(ad2.getCodeSystem());
 
-				assertEquals(AddressPartType.DAL, ad1.getType());
-				assertNull(ad1.getValue());
-				assertEquals("NCIDAL101", ad1.getCode());
-				assertNull(ad1.getCodeSystem());
+					Ad address2 = getAddress("107 Jefferson Street", items);
+					assertNotNull(address2.getPart().get(0));
+					ad0 = address2.getPart().get(0);
+					assertNotNull(ad0.getType());
+					assertNotNull(ad0.getValue());
 
-				assertNull(data.getValue8().getItem().iterator().next().getNullFlavor());
-				counter++;
-				continue;
-			}
-			//Validate 5th record
-			else if((index == null && counter == 62) || (index != null && index.contains("62")))
-			{
-				if(index != null) 
-					index.remove("62");
+					assertNotNull(address.getPart().get(1));
+					ad1 = address2.getPart().get(1);
+					assertNotNull(ad1.getType());
+					assertNotNull(ad1.getValue());
+					
+					assertNotNull(address.getPart().get(2));
+					ad2 = address2.getPart().get(2);
+					assertNotNull(ad2.getType());
+					assertNotNull(ad2.getValue());
 
-				assertNotNull(data);
-				assertNotNull(data.getValue8());
-				assertNotNull(data.getValue8().getItem());
-				Ad address = data.getValue8().getItem().iterator().next();
-				assertNotNull(address.getPart().get(0));
-				Adxp ad0 = address.getPart().get(0);
-				assertNotNull(ad0.getType());
-				assertNotNull(ad0.getValue());
+					assertEquals(AddressPartType.AL, ad0.getType());
+					assertEquals("107 Jefferson Street", ad0.getValue());
+					assertEquals("NCIAL107", ad0.getCode());
+					assertEquals("ADXP_AL_CODESYSTEM6", ad0.getCodeSystem());
 
-				assertNotNull(address.getPart().get(1));
-				Adxp ad1 = address.getPart().get(1);
-				assertNotNull(ad1.getType());
-				assertNotNull(ad1.getValue());
-				
-				assertEquals(AddressPartType.AL, ad0.getType());
-				assertEquals("104 Jefferson Street", ad0.getValue());
-				assertEquals("NCIAL104", ad0.getCode());
-				assertEquals("ADXP_AL_CODESYSTEM3", ad0.getCodeSystem());
+					assertEquals(AddressPartType.DAL, ad1.getType());
+					assertEquals("Suite 502", ad1.getValue());
+					assertEquals("NCIDAL104", ad1.getCode());
+					assertEquals("ADXP_DAL_CODESYSTEM4", ad1.getCodeSystem());
 
-				assertEquals(AddressPartType.DAL, ad1.getType());
-				assertNull(ad1.getValue());
-				assertEquals("NCIDAL102", ad1.getCode());
-				assertNull("ADXP_DAL_CODESYSTEM5", ad1.getCodeSystem());
+					assertEquals(AddressPartType.CTY, ad2.getType());
+					assertEquals("Rockville", ad2.getValue());
+					assertEquals("RCK", ad2.getCode());
+					assertNull(ad2.getCodeSystem());
 
-				assertNull(data.getValue8().getItem().iterator().next().getNullFlavor());
-				counter++;
-				continue;
-			}
-			else if((index == null && counter == 63) || (index != null && index.contains("63")))
-			{
-				if(index != null) 
-					index.remove("63");
+					Ad address3 = getAddress("108 Jefferson Street", items);
+					assertNotNull(address3.getPart().get(0));
+					ad0 = address3.getPart().get(0);
+					assertNotNull(ad0.getType());
+					assertNotNull(ad0.getValue());
 
-				assertNotNull(data);
-				assertNotNull(data.getValue8());
-				assertNotNull(data.getValue8().getItem());
-				Ad address = data.getValue8().getItem().iterator().next();
-				assertNotNull(address.getPart().get(0));
-				Adxp ad0 = address.getPart().get(0);
-				assertNotNull(ad0.getType());
-				assertNotNull(ad0.getValue());
+					assertNotNull(address.getPart().get(1));
+					ad1 = address3.getPart().get(1);
+					assertNotNull(ad1.getType());
+					assertNotNull(ad1.getValue());
+					
+					assertNotNull(address.getPart().get(2));
+					ad2 = address3.getPart().get(2);
+					assertNotNull(ad2.getType());
+					assertNotNull(ad2.getValue());
 
-				assertNotNull(address.getPart().get(1));
-				Adxp ad1 = address.getPart().get(1);
-				assertNotNull(ad1.getType());
-				assertNotNull(ad1.getValue());
-				
-				assertEquals(AddressPartType.AL, ad0.getType());
-				assertEquals("105 Jefferson Street", ad0.getValue());
-				assertEquals("NCIAL105", ad0.getCode());
-				assertEquals("ADXP_AL_CODESYSTEM4", ad0.getCodeSystem());
+					assertEquals(AddressPartType.AL, ad0.getType());
+					assertEquals("108 Jefferson Street", ad0.getValue());
+					assertEquals("NCIAL108", ad0.getCode());
+					assertEquals("ADXP_AL_CODESYSTEM7", ad0.getCodeSystem());
 
-				assertEquals(AddressPartType.DAL, ad1.getType());
-				assertEquals("Suite 501", ad1.getValue());
-				assertEquals("NCIDAL103", ad1.getCode());
-				assertEquals("ADXP_DAL_CODESYSTEM5", ad1.getCodeSystem());
+					assertEquals(AddressPartType.DAL, ad1.getType());
+					assertEquals("Suite 503", ad1.getValue());
+					assertEquals("NCIDAL105", ad1.getCode());
+					assertEquals("ADXP_DAL_CODESYSTEM5", ad1.getCodeSystem());
 
-				assertNull(data.getValue8().getItem().iterator().next().getNullFlavor());
-				counter++;
-				continue;
-			}
-			else if((index == null && counter == 64) || (index != null && index.contains("64")))
-			{
-				if(index != null) 
-					index.remove("64");
+					assertEquals(AddressPartType.CTY, ad2.getType());
+					assertEquals("Rockville", ad2.getValue());
+					assertEquals("RCK", ad2.getCode());
+					assertEquals("RCK_CODE_SYS", ad2.getCodeSystem());
+					
+					assertNull(data.getValue8().getItem().iterator().next().getNullFlavor());
 
-				assertNotNull(data);
-				assertNotNull(data.getValue8());
-				assertNotNull(data.getValue8().getItem());
-				Ad address = data.getValue8().getItem().iterator().next();
-				assertNotNull(address.getPart().get(0));
-				Adxp ad0 = address.getPart().get(0);
-				assertNotNull(ad0.getType());
-				assertNotNull(ad0.getValue());
-
-				assertNotNull(address.getPart().get(1));
-				Adxp ad1 = address.getPart().get(1);
-				assertNotNull(ad1.getType());
-				assertNotNull(ad1.getValue());
-				
-				assertNotNull(address.getPart().get(2));
-				Adxp ad2 = address.getPart().get(2);
-				assertNotNull(ad2.getType());
-				assertNotNull(ad2.getValue());
-
-				assertEquals(AddressPartType.AL, ad0.getType());
-				assertEquals("106 Jefferson Street", ad0.getValue());
-				assertEquals("NCIAL106", ad0.getCode());
-				assertEquals("ADXP_AL_CODESYSTEM5", ad0.getCodeSystem());
-
-				assertEquals(AddressPartType.DAL, ad1.getType());
-				assertEquals("Suite 502", ad1.getValue());
-				assertEquals("NCIDAL104", ad1.getCode());
-				assertEquals("ADXP_DAL_CODESYSTEM5", ad1.getCodeSystem());
-
-				assertEquals(AddressPartType.CTY, ad2.getType());
-				assertEquals("Rockville", ad2.getValue());
-				assertNull(ad2.getCode());
-				assertNull(ad2.getCodeSystem());
-
-				assertNull(data.getValue8().getItem().iterator().next().getNullFlavor());
-				counter++;
-				continue;
-			}
-			else if((index == null && counter == 65) || (index != null && index.contains("65")))
-			{
-				if(index != null) 
-					index.remove("65");
-
-				assertNotNull(data);
-				assertNotNull(data.getValue8());
-				assertNotNull(data.getValue8().getItem());
-				Ad address = data.getValue8().getItem().iterator().next();
-				assertNotNull(address.getPart().get(0));
-				Adxp ad0 = address.getPart().get(0);
-				assertNotNull(ad0.getType());
-				assertNotNull(ad0.getValue());
-
-				assertNotNull(address.getPart().get(1));
-				Adxp ad1 = address.getPart().get(1);
-				assertNotNull(ad1.getType());
-				assertNotNull(ad1.getValue());
-				
-				assertNotNull(address.getPart().get(2));
-				Adxp ad2 = address.getPart().get(2);
-				assertNotNull(ad2.getType());
-				assertNotNull(ad2.getValue());
-
-				assertEquals(AddressPartType.AL, ad0.getType());
-				assertEquals("107 Jefferson Street", ad0.getValue());
-				assertEquals("NCIAL107", ad0.getCode());
-				assertEquals("ADXP_AL_CODESYSTEM6", ad0.getCodeSystem());
-
-				assertEquals(AddressPartType.DAL, ad1.getType());
-				assertEquals("Suite 503", ad1.getValue());
-				assertEquals("NCIDAL105", ad1.getCode());
-				assertEquals("ADXP_DAL_CODESYSTEM5", ad1.getCodeSystem());
-
-				assertEquals(AddressPartType.CTY, ad2.getType());
-				assertEquals("Rockville", ad2.getValue());
-				assertEquals("RCK", ad2.getCode());
-				assertNull(ad2.getCodeSystem());
-
-				assertNull(data.getValue8().getItem().iterator().next().getNullFlavor());
-				counter++;
-				continue;
-			}
-			else if((index == null && counter == 66) || (index != null && index.contains("66")))
-			{
-				if(index != null) 
-					index.remove("66");
-
-				assertNotNull(data);
-				assertNotNull(data.getValue8());
-				assertNotNull(data.getValue8().getItem());
-				Ad address = data.getValue8().getItem().iterator().next();
-				assertNotNull(address.getPart().get(0));
-				Adxp ad0 = address.getPart().get(0);
-				assertNotNull(ad0.getType());
-				assertNotNull(ad0.getValue());
-
-				assertNotNull(address.getPart().get(1));
-				Adxp ad1 = address.getPart().get(1);
-				assertNotNull(ad1.getType());
-				assertNotNull(ad1.getValue());
-				
-				assertNotNull(address.getPart().get(2));
-				Adxp ad2 = address.getPart().get(2);
-				assertNotNull(ad2.getType());
-				assertNotNull(ad2.getValue());
-
-				assertEquals(AddressPartType.AL, ad0.getType());
-				assertEquals("108 Jefferson Street", ad0.getValue());
-				assertEquals("NCIAL108", ad0.getCode());
-				assertEquals("ADXP_AL_CODESYSTEM7", ad0.getCodeSystem());
-
-				assertEquals(AddressPartType.DAL, ad1.getType());
-				assertEquals("Suite 504", ad1.getValue());
-				assertEquals("NCIDAL106", ad1.getCode());
-				assertEquals("ADXP_DAL_CODESYSTEM5", ad1.getCodeSystem());
-
-				assertEquals(AddressPartType.CTY, ad2.getType());
-				assertEquals("Rockville", ad2.getValue());
-				assertEquals("RCK", ad2.getCode());
-				assertEquals("RCK_CODE_SYS", ad2.getCodeSystem());
-
-				assertNull(data.getValue8().getItem().iterator().next().getNullFlavor());
-				counter++;
-				continue;
-			}
-			else if((index == null && counter == 67) || (index != null && index.contains("67")))
-			{
-				if(index != null) 
-					index.remove("67");
-
-				assertNotNull(data);
-				assertNotNull(data.getValue8());
-				assertNotNull(data.getValue8().getItem());
-				Ad address = data.getValue8().getItem().iterator().next();
-				assertNotNull(address.getPart().get(0));
-				Adxp ad0 = address.getPart().get(0);
-				assertNotNull(ad0.getType());
-				assertNotNull(ad0.getValue());
-
-				assertNotNull(address.getPart().get(1));
-				Adxp ad1 = address.getPart().get(1);
-				assertNotNull(ad1.getType());
-				assertNotNull(ad1.getValue());
-				
-				assertNotNull(address.getPart().get(2));
-				Adxp ad2 = address.getPart().get(2);
-				assertNotNull(ad2.getType());
-				assertNotNull(ad2.getValue());
-
-				assertEquals(AddressPartType.AL, ad0.getType());
-				assertEquals("109 Jefferson Street", ad0.getValue());
-				assertEquals("NCIAL109", ad0.getCode());
-				assertEquals("ADXP_AL_CODESYSTEM8", ad0.getCodeSystem());
-
-				assertEquals(AddressPartType.DAL, ad1.getType());
-				assertEquals("Suite 505", ad1.getValue());
-				assertEquals("NCIDAL107", ad1.getCode());
-				assertEquals("ADXP_DAL_CODESYSTEM5", ad1.getCodeSystem());
-
-				assertEquals(AddressPartType.CTY, ad2.getType());
-				assertEquals("Rockville", ad2.getValue());
-				assertEquals("RCK", ad2.getCode());
-				assertEquals("RCK_CODE_SYS", ad2.getCodeSystem());
-
-				assertNull(data.getValue8().getItem().iterator().next().getNullFlavor());
 				counter++;
 				continue;
 			}
@@ -2368,10 +2206,22 @@ public class DsetAdDataTypeTest extends SDKISOTestBase{
 			else
 			{
 				assertNotNull(data);
-				assertNull(data.getValue8());
+				assertNotNull(data.getValue8());
+				assertEquals(NullFlavor.NI, data.getValue8().getNullFlavor());
 				counter++;
 			}
 		}
+	}
+	
+	private Ad getAddress(String adxpAlValue, Set<Ad> items)
+	{
+		for(Ad address : items)
+		{
+			Adxp adxp = address.getPart().get(0);
+			if(adxp.getValue().equals(adxpAlValue))
+				return address;
+		}
+		return null;
 	}
 	
 }
