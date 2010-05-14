@@ -136,7 +136,7 @@ public class IsoDatatypeTransformationHelper
 		String className = converteIsoClassNameToJavaClassName(processingNode.getIsoClassName());
 		
 		buffer.append(prefix+"<class name=\""+className+"\" table=\""+rootNode.getTargetTableName()+"\" entity-name=\""+entityName+"\">");
-		if(((utils.ISO_ROOT_PACKAGE_NAME+".AD").equals(className)) || (className.startsWith(utils.ISO_ROOT_PACKAGE_NAME+".EN") && !className.equals(utils.ISO_ROOT_PACKAGE_NAME+".ENXP")))
+		if(((utils.ISO_ROOT_PACKAGE_NAME+".Ad").equals(className)) || (className.startsWith(utils.ISO_ROOT_PACKAGE_NAME+".En") && !className.equals(utils.ISO_ROOT_PACKAGE_NAME+".Enxp")))
 			buffer.append(prefix+"\t<tuplizer entity-mode=\"pojo\" class=\"gov.nih.nci.iso21090.hibernate.tuple.PartCollectionEntityTuplizer\"/>");
 		//buffer.append(prefix+"\t<tuplizer entity-mode=\"pojo\" class=\"gov.nih.nci.iso21090.hibernate.tuple.IsoCustomEntityTuplizer\"/>");
 		buffer.append(prefix+"\t<id column=\""+rootNode.getTargetTablePrimaryKey()+"\" type=\"int\"/>");
