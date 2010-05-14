@@ -769,8 +769,7 @@ public class ScDataTypeTest extends SDKISOTestBase
 				assertNull(data.getValue3().getCode().getDisplayName().getNullFlavor());
 				assertEquals("VALUE3_CODE_DISPLAY_VALUE31", data.getValue3().getCode().getDisplayName().getValue());
 				assertNotNull(data.getValue3().getCode().getOriginalText());
-				assertEquals("VALUE3_CODE_ORIG_TXT_DESC1", data.getValue3().getCode().getOriginalText().getDescription().getValue());
-				assertNull(data.getValue3().getCode().getOriginalText().getNullFlavor());
+				assertEquals(NullFlavor.NI, data.getValue3().getCode().getOriginalText().getNullFlavor());
 
 				counter++;
 				continue;
@@ -796,7 +795,6 @@ public class ScDataTypeTest extends SDKISOTestBase
 				assertEquals("VALUE3_CODE_DISPLAY_VALUE31", data.getValue3().getCode().getDisplayName().getValue());
 				assertNotNull(data.getValue3().getCode().getOriginalText());
 				assertNull(data.getValue3().getCode().getOriginalText().getNullFlavor());
-				assertEquals("VALUE3_CODE_ORIG_TXT_DESC31", data.getValue3().getCode().getOriginalText().getDescription().getValue());
 				assertEquals("VALUE3_CODE_ORIG_TXT_VALUE31", data.getValue3().getCode().getOriginalText().getValue());
 
 				counter++;
@@ -823,7 +821,6 @@ public class ScDataTypeTest extends SDKISOTestBase
 				assertEquals("VALUE3_CODE_DISPLAY_VALUE31", data.getValue3().getCode().getDisplayName().getValue());
 				assertNotNull(data.getValue3().getCode().getOriginalText());
 				assertNull(data.getValue3().getCode().getOriginalText().getNullFlavor());
-				assertEquals("VALUE3_CODE_ORIG_TXT_DESC31", data.getValue3().getCode().getOriginalText().getDescription().getValue());
 				assertEquals("VALUE3_CODE_ORIG_TXT_VALUE31", data.getValue3().getCode().getOriginalText().getValue());
 				//Global constant
 				assertEquals(NullFlavor.NI, data.getValue3().getCode().getNullFlavor());
