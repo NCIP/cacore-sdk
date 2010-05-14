@@ -740,7 +740,6 @@ public class DsetCdDataTypeTest extends SDKISOTestBase{
 				assertNull(item.getDisplayName().getNullFlavor());
 				assertNull(item.getNullFlavor());
 				assertEquals("OrgTextVal1", item.getOriginalText().getValue());
-				assertEquals("OrgTextDesc1", item.getOriginalText().getDescription().getValue());
 				counter++;
 				continue;
 			}
@@ -762,7 +761,6 @@ public class DsetCdDataTypeTest extends SDKISOTestBase{
 				assertNull(item.getDisplayName().getNullFlavor());
 				assertNull(item.getNullFlavor());
 				assertEquals("OrgTextVal2", item.getOriginalText().getValue());
-				assertEquals("OrgTextDesc2", item.getOriginalText().getDescription().getValue());
 				counter++;
 				continue;
 			}
@@ -784,7 +782,6 @@ public class DsetCdDataTypeTest extends SDKISOTestBase{
 				assertNull(item.getDisplayName().getNullFlavor());
 				assertNull(item.getNullFlavor());
 				assertEquals("OrgTextVal3", item.getOriginalText().getValue());
-				assertEquals("OrgTextDesc3", item.getOriginalText().getDescription().getValue());
 				counter++;
 				continue;
 			}
@@ -806,7 +803,6 @@ public class DsetCdDataTypeTest extends SDKISOTestBase{
 				assertNull(item.getDisplayName().getNullFlavor());
 				assertNull(item.getNullFlavor());
 				assertEquals("OrgTextVal4", item.getOriginalText().getValue());
-				assertEquals("OrgTextDesc4", item.getOriginalText().getDescription().getValue());
 				counter++;
 				continue;
 			}
@@ -828,7 +824,6 @@ public class DsetCdDataTypeTest extends SDKISOTestBase{
 				assertNull(item.getDisplayName().getNullFlavor());
 				assertNull(item.getNullFlavor());
 				assertEquals("OrgTextVal5", item.getOriginalText().getValue());
-				assertEquals("OrgTextDesc5", item.getOriginalText().getDescription().getValue());
 				counter++;
 				continue;
 			}
@@ -869,7 +864,6 @@ public class DsetCdDataTypeTest extends SDKISOTestBase{
 				assertNull(item.getDisplayName().getNullFlavor());
 				assertNull(item.getNullFlavor());
 				assertEquals("OrgTextVal1", item.getOriginalText().getValue());
-				assertEquals("OrgTextDesc1", item.getOriginalText().getDescription().getValue());
 				counter++;
 				continue;
 			}
@@ -891,7 +885,6 @@ public class DsetCdDataTypeTest extends SDKISOTestBase{
 				assertNull(item.getDisplayName().getNullFlavor());
 				assertNull(item.getNullFlavor());
 				assertEquals("OrgTextVal2", item.getOriginalText().getValue());
-				assertEquals("OrgTextDesc2", item.getOriginalText().getDescription().getValue());
 				counter++;
 				continue;
 			}
@@ -913,7 +906,6 @@ public class DsetCdDataTypeTest extends SDKISOTestBase{
 				assertNull(item.getDisplayName().getNullFlavor());
 				assertNull(item.getNullFlavor());
 				assertEquals("OrgTextVal3", item.getOriginalText().getValue());
-				assertEquals("OrgTextDesc3", item.getOriginalText().getDescription().getValue());
 				counter++;
 				continue;
 			}
@@ -935,7 +927,6 @@ public class DsetCdDataTypeTest extends SDKISOTestBase{
 				assertNull(item.getDisplayName().getNullFlavor());
 				assertNull(item.getNullFlavor());
 				assertEquals("OrgTextVal4", item.getOriginalText().getValue());
-				assertEquals("OrgTextDesc4", item.getOriginalText().getDescription().getValue());
 				counter++;
 				continue;
 			}
@@ -957,7 +948,6 @@ public class DsetCdDataTypeTest extends SDKISOTestBase{
 				assertNull(item.getDisplayName().getNullFlavor());
 				assertNull(item.getNullFlavor());
 				assertEquals("OrgTextVal5", item.getOriginalText().getValue());
-				assertEquals("OrgTextDesc5", item.getOriginalText().getDescription().getValue());
 				counter++;
 				continue;
 			}
