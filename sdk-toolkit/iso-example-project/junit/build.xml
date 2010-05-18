@@ -410,14 +410,14 @@
 	<!-- ************************************************************************************************-->
 
 	<target name="xmlDataThickClientTest" depends="createDir">
-		<SDKCompileJUnit compileClasspath="local-client-cp" includePattern="**/*XMLData*.java" excludePattern="" />
-		<SDKRunJUnit junitClasspath="local-client-cp" junitOutputDir="${report.dir.xml-thick-data-client}" includePattern="**/*XMLData*Test.class" excludePattern="" junitreportfile="TEST-xmlDataThickClient.xml"/>
+		<SDKCompileJUnit compileClasspath="local-client-cp" includePattern="**/*XML*Test.java" excludePattern="" />
+		<SDKRunJUnit junitClasspath="local-client-cp" junitOutputDir="${report.dir.xml-thick-data-client}" includePattern="**/*XML*Test.class" excludePattern="" junitreportfile="TEST-xmlDataThickClient.xml"/>
 		<SDKGenerateReport junitOutputDir="${report.dir.xml-thick-data-client}" />
 	</target>
 
 	<target name="xmlDataRemoteClientTest" depends="createDir">
-		<SDKCompileJUnit compileClasspath="remote-client-cp" includePattern="**/*XMLData*.java" excludePattern="" />
-		<SDKRunJUnit junitClasspath="remote-client-cp" junitOutputDir="${report.dir.xml-remote-data-client}" includePattern="**/*XMLData*Test.class" excludePattern="" junitreportfile="TEST-xmlDataRemoteClient.xml"/>
+		<SDKCompileJUnit compileClasspath="remote-client-cp" includePattern="**/*XML*Test.java" excludePattern="" />
+		<SDKRunJUnit junitClasspath="remote-client-cp" junitOutputDir="${report.dir.xml-remote-data-client}" includePattern="**/*XML*Test.class" excludePattern="" junitreportfile="TEST-xmlDataRemoteClient.xml"/>
 		<SDKGenerateReport junitOutputDir="${report.dir.xml-remote-data-client}" />
 	</target>
 
