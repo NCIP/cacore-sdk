@@ -280,8 +280,6 @@ public class EdTextDataTypeXMLTest extends SDKISOTestBase
 	{
 		EdText aVal = actual.getValue1();
 		assertNotNull(aVal);
-		//Work around for Description as it does not exist in ISO impl.
-		aVal.setDescription(null);
 		EdText rVal = result.getValue1();
 		assertNotNull(rVal);
 		return aVal.equals(rVal);
@@ -291,8 +289,6 @@ public class EdTextDataTypeXMLTest extends SDKISOTestBase
 	{
 		EdText aVal = actual.getValue2();
 		assertNotNull(aVal);
-		//Work around for Description as it does not exist in ISO impl.
-		aVal.setDescription(null);
 		EdText rVal = result.getValue2();
 		assertNotNull(rVal);
 		return aVal.equals(rVal);
@@ -302,8 +298,6 @@ public class EdTextDataTypeXMLTest extends SDKISOTestBase
 	{
 		Ed aVal = actual.getValue3();
 		assertNotNull(aVal);
-		//Work around for Description as it does not exist in ISO impl.
-		aVal.setDescription(null);
 		Ed rVal = result.getValue3();
 		assertNotNull(rVal);
 		return aVal.equals(rVal);
