@@ -4,12 +4,15 @@ package test.xml.other;
 import gov.nih.nci.cacoresdk.domain.other.datatype.DsetCdDataType;
 import gov.nih.nci.iso21090.Cd;
 import gov.nih.nci.iso21090.DSet;
+import gov.nih.nci.iso21090.Ii;
 import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.client.util.xml.XMLUtilityException;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.Set;
 
 import org.jdom.Document;
 
@@ -507,8 +510,17 @@ public class DsetCdDataTypeXMLTest extends SDKISOTestBase
 		DSet<Cd> aVal = actual.getValue1();
 		assertNotNull(aVal);
 		DSet<Cd> rVal = result.getValue1();
-		assertNotNull(rVal);
-		return aVal.equals(rVal);
+		//XSD rule: all elements of set must be non-null
+		if(aVal.getNullFlavor() != null || checkAllNullItems(aVal))
+		{
+			assertNull(rVal);
+			return true;
+		}
+		else
+		{
+			assertNotNull(rVal);
+			return aVal.equals(rVal);
+		}
 	}
 	
 	private boolean compareValue2(DsetCdDataType actual, DsetCdDataType result)
@@ -516,8 +528,17 @@ public class DsetCdDataTypeXMLTest extends SDKISOTestBase
 		DSet<Cd> aVal = actual.getValue2();
 		assertNotNull(aVal);
 		DSet<Cd> rVal = result.getValue2();
-		assertNotNull(rVal);
-		return aVal.equals(rVal);
+		//XSD rule: all elements of set must be non-null
+		if(aVal.getNullFlavor() != null || checkAllNullItems(aVal))
+		{
+			assertNull(rVal);
+			return true;
+		}
+		else
+		{
+			assertNotNull(rVal);
+			return aVal.equals(rVal);
+		}
 	}
 
 	private boolean compareValue3(DsetCdDataType actual, DsetCdDataType result)
@@ -525,8 +546,17 @@ public class DsetCdDataTypeXMLTest extends SDKISOTestBase
 		DSet<Cd> aVal = actual.getValue3();
 		assertNotNull(aVal);
 		DSet<Cd> rVal = result.getValue3();
-		assertNotNull(rVal);
-		return aVal.equals(rVal);
+		//XSD rule: all elements of set must be non-null
+		if(aVal.getNullFlavor() != null || checkAllNullItems(aVal))
+		{
+			assertNull(rVal);
+			return true;
+		}
+		else
+		{
+			assertNotNull(rVal);
+			return aVal.equals(rVal);
+		}
 	}
 
 	private boolean compareValue4(DsetCdDataType actual, DsetCdDataType result)
@@ -534,16 +564,34 @@ public class DsetCdDataTypeXMLTest extends SDKISOTestBase
 		DSet<Cd> aVal = actual.getValue4();
 		assertNotNull(aVal);
 		DSet<Cd> rVal = result.getValue4();
-		assertNotNull(rVal);
-		return aVal.equals(rVal);
+		//XSD rule: all elements of set must be non-null
+		if(aVal.getNullFlavor() != null || checkAllNullItems(aVal))
+		{
+			assertNull(rVal);
+			return true;
+		}
+		else
+		{
+			assertNotNull(rVal);
+			return aVal.equals(rVal);
+		}
 	}
 	private boolean compareValue5(DsetCdDataType actual, DsetCdDataType result)
 	{
 		DSet<Cd> aVal = actual.getValue5();
 		assertNotNull(aVal);
 		DSet<Cd> rVal = result.getValue5();
-		assertNotNull(rVal);
-		return aVal.equals(rVal);
+		//XSD rule: all elements of set must be non-null
+		if(aVal.getNullFlavor() != null || checkAllNullItems(aVal))
+		{
+			assertNull(rVal);
+			return true;
+		}
+		else
+		{
+			assertNotNull(rVal);
+			return aVal.equals(rVal);
+		}
 	}
 
 	private boolean compareValue6(DsetCdDataType actual, DsetCdDataType result)
@@ -551,8 +599,17 @@ public class DsetCdDataTypeXMLTest extends SDKISOTestBase
 		DSet<Cd> aVal = actual.getValue6();
 		assertNotNull(aVal);
 		DSet<Cd> rVal = result.getValue6();
-		assertNotNull(rVal);
-		return aVal.equals(rVal);
+		//XSD rule: all elements of set must be non-null
+		if(aVal.getNullFlavor() != null || checkAllNullItems(aVal))
+		{
+			assertNull(rVal);
+			return true;
+		}
+		else
+		{
+			assertNotNull(rVal);
+			return aVal.equals(rVal);
+		}
 	}
 	
 	private boolean compareValue7(DsetCdDataType actual, DsetCdDataType result)
@@ -560,8 +617,33 @@ public class DsetCdDataTypeXMLTest extends SDKISOTestBase
 		DSet<Cd> aVal = actual.getValue7();
 		assertNotNull(aVal);
 		DSet<Cd> rVal = result.getValue7();
-		assertNotNull(rVal);
-		return aVal.equals(rVal);
+		//XSD rule: all elements of set must be non-null
+		if(aVal.getNullFlavor() != null || checkAllNullItems(aVal))
+		{
+			assertNull(rVal);
+			return true;
+		}
+		else
+		{
+			assertNotNull(rVal);
+			return aVal.equals(rVal);
+		}
+	}
+
+	private boolean checkAllNullItems(DSet<Cd> rVal)
+	{
+		Set<Cd> item = rVal.getItem();
+		if(item != null)
+		{
+			Iterator<Cd> list = item.iterator();
+			while(list.hasNext())
+			{
+				Cd cd = list.next();
+				if(cd.getNullFlavor() == null)
+					return false;
+			}
+		}
+		return true;
 	}
 	
 }

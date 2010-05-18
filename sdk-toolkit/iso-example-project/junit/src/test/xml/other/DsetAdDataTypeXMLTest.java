@@ -4,12 +4,15 @@ package test.xml.other;
 import gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType;
 import gov.nih.nci.iso21090.Ad;
 import gov.nih.nci.iso21090.DSet;
+import gov.nih.nci.iso21090.Ii;
 import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.client.util.xml.XMLUtilityException;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.Set;
 
 import org.jdom.Document;
 
@@ -38,7 +41,7 @@ public class DsetAdDataTypeXMLTest extends SDKISOTestBase
 	@SuppressWarnings("unchecked")
 	public void testDsetAdValue1ByHQLCriteria() throws ApplicationException
 	{
-		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType a where a.value1.item.part_0.value is not null order by a.id asc");
+		HQLCriteria criteria = new HQLCriteria("select dest from gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType dest inner join dest.value1.item item  where  item.part_0.value is not null order by dest.id asc");
 		Collection<DsetAdDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType");
 		assertNotNull(result);
 		assertEquals(5, result.size());
@@ -53,7 +56,7 @@ public class DsetAdDataTypeXMLTest extends SDKISOTestBase
 	@SuppressWarnings("unchecked")
 	public void testDsetAdValue2ByHQLCriteria() throws ApplicationException
 	{
-		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType a where (a.value2.item.part_0.value is not null or a.value2.item.part_0.code is not null) order by a.id asc");
+		HQLCriteria criteria = new HQLCriteria("select dest from gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType dest inner join dest.value2.item item  where (item.part_0.code is not null or item.part_0.value is not null) order by dest.id asc");
 		Collection<DsetAdDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType");
 		assertNotNull(result);
 		assertEquals(5, result.size());
@@ -68,7 +71,7 @@ public class DsetAdDataTypeXMLTest extends SDKISOTestBase
 	@SuppressWarnings("unchecked")
 	public void testDsetAdValue3ByHQLCriteria() throws ApplicationException
 	{
-		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType a where (a.value3.item.part_0.value is not null or a.value3.item.part_0.code is not null or a.value3.item.part_0.codeSystem is not null) order by a.id asc");
+		HQLCriteria criteria = new HQLCriteria("select dest from gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType dest inner join dest.value3.item item  where  (item.part_0.value is not null or item.part_0.code is not null or item.part_0.codeSystem is not null) order by dest.id asc");
 		Collection<DsetAdDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType");
 		assertNotNull(result);
 		assertEquals(5, result.size());
@@ -83,7 +86,7 @@ public class DsetAdDataTypeXMLTest extends SDKISOTestBase
 	@SuppressWarnings("unchecked")
 	public void testDsetAdValue4ByHQLCriteria() throws ApplicationException
 	{
-		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType a where (a.value4.item.part_0.value or a.value4.item.part_1.value) is not null order by a.id asc");
+		HQLCriteria criteria = new HQLCriteria("select dest from gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType dest inner join dest.value4.item item  where  (item.part_0.value is not null or item.part_1.value is not null) order by dest.id asc");
 		Collection<DsetAdDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType");
 		assertNotNull(result);
 		assertEquals(9, result.size());
@@ -98,7 +101,7 @@ public class DsetAdDataTypeXMLTest extends SDKISOTestBase
 	@SuppressWarnings("unchecked")
 	public void testDsetAdValue5ByHQLCriteria() throws ApplicationException
 	{
-		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType a where a.value5.item.part_0.value is not null order by a.id asc");
+		HQLCriteria criteria = new HQLCriteria("select dest from gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType dest inner join dest.value5.item item  where item.part_0.value is not null order by dest.id asc");
 		Collection<DsetAdDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType");
 		assertNotNull(result);
 		assertEquals(10, result.size());
@@ -113,7 +116,7 @@ public class DsetAdDataTypeXMLTest extends SDKISOTestBase
 	@SuppressWarnings("unchecked")
 	public void testAdValue6ByHQLCriteria() throws ApplicationException
 	{
-		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType a where (a.value6.item.part_0.value is not null or a.value6.part_1.value is not null or a.value6.part_2.value is not null) order by a.id asc");
+		HQLCriteria criteria = new HQLCriteria("select dest from gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType dest inner join dest.value6.item item  where  (item.part_0.value is not null or item.part_1.value is not null or item.part_2.value is not null) order by dest.id asc");
 		Collection<DsetAdDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType");
 		assertNotNull(result);
 		assertEquals(12, result.size());
@@ -128,7 +131,7 @@ public class DsetAdDataTypeXMLTest extends SDKISOTestBase
 	@SuppressWarnings("unchecked")
 	public void testAdValue7ByHQLCriteria() throws ApplicationException
 	{
-		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType a where a.value7.item.part_0.value is not null order by a.id asc");
+		HQLCriteria criteria = new HQLCriteria("select dest from gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType dest inner join dest.value7.item item  where item.part_0.value is not null order by dest.id asc");
 		Collection<DsetAdDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType");
 		assertNotNull(result);
 		assertEquals(10, result.size());
@@ -144,10 +147,10 @@ public class DsetAdDataTypeXMLTest extends SDKISOTestBase
 	@SuppressWarnings("unchecked")
 	public void testAdValue8ByHQLCriteria() throws ApplicationException
 	{
-		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType a where a.value8.item.part_0.value is not null order by a.id asc");
+		HQLCriteria criteria = new HQLCriteria("select distinct dest from gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType dest inner join dest.value8.item item  where item.part_0.value is not null order by dest.id asc");
 		Collection<DsetAdDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType");
 		assertNotNull(result);
-		assertEquals(5, result.size());
+		assertEquals(4, result.size());
 		assertValue8(result);
 	}
 
@@ -521,8 +524,17 @@ public class DsetAdDataTypeXMLTest extends SDKISOTestBase
 		DSet<Ad> aVal = actual.getValue1();
 		assertNotNull(aVal);
 		DSet<Ad> rVal = result.getValue1();
-		assertNotNull(rVal);
-		return aVal.equals(rVal);
+		//XSD rule: all elements of set must be non-null
+		if(aVal.getNullFlavor() != null || checkAllNullItems(aVal))
+		{
+			assertNull(rVal);
+			return true;
+		}
+		else
+		{
+			assertNotNull(rVal);
+			return aVal.equals(rVal);
+		}
 	}
 	
 	private boolean compareValue2(DsetAdDataType actual, DsetAdDataType result)
@@ -530,8 +542,17 @@ public class DsetAdDataTypeXMLTest extends SDKISOTestBase
 		DSet<Ad> aVal = actual.getValue2();
 		assertNotNull(aVal);
 		DSet<Ad> rVal = result.getValue2();
-		assertNotNull(rVal);
-		return aVal.equals(rVal);
+		//XSD rule: all elements of set must be non-null
+		if(aVal.getNullFlavor() != null || checkAllNullItems(aVal))
+		{
+			assertNull(rVal);
+			return true;
+		}
+		else
+		{
+			assertNotNull(rVal);
+			return aVal.equals(rVal);
+		}
 	}
 
 	private boolean compareValue3(DsetAdDataType actual, DsetAdDataType result)
@@ -539,8 +560,17 @@ public class DsetAdDataTypeXMLTest extends SDKISOTestBase
 		DSet<Ad> aVal = actual.getValue3();
 		assertNotNull(aVal);
 		DSet<Ad> rVal = result.getValue3();
-		assertNotNull(rVal);
-		return aVal.equals(rVal);
+		//XSD rule: all elements of set must be non-null
+		if(aVal.getNullFlavor() != null || checkAllNullItems(aVal))
+		{
+			assertNull(rVal);
+			return true;
+		}
+		else
+		{
+			assertNotNull(rVal);
+			return aVal.equals(rVal);
+		}
 	}
 
 	private boolean compareValue4(DsetAdDataType actual, DsetAdDataType result)
@@ -548,16 +578,34 @@ public class DsetAdDataTypeXMLTest extends SDKISOTestBase
 		DSet<Ad> aVal = actual.getValue4();
 		assertNotNull(aVal);
 		DSet<Ad> rVal = result.getValue4();
-		assertNotNull(rVal);
-		return aVal.equals(rVal);
+		//XSD rule: all elements of set must be non-null
+		if(aVal.getNullFlavor() != null || checkAllNullItems(aVal))
+		{
+			assertNull(rVal);
+			return true;
+		}
+		else
+		{
+			assertNotNull(rVal);
+			return aVal.equals(rVal);
+		}
 	}
 	private boolean compareValue5(DsetAdDataType actual, DsetAdDataType result)
 	{
 		DSet<Ad> aVal = actual.getValue5();
 		assertNotNull(aVal);
 		DSet<Ad> rVal = result.getValue5();
-		assertNotNull(rVal);
-		return aVal.equals(rVal);
+		//XSD rule: all elements of set must be non-null
+		if(aVal.getNullFlavor() != null || checkAllNullItems(aVal))
+		{
+			assertNull(rVal);
+			return true;
+		}
+		else
+		{
+			assertNotNull(rVal);
+			return aVal.equals(rVal);
+		}
 	}
 
 	private boolean compareValue6(DsetAdDataType actual, DsetAdDataType result)
@@ -565,8 +613,17 @@ public class DsetAdDataTypeXMLTest extends SDKISOTestBase
 		DSet<Ad> aVal = actual.getValue6();
 		assertNotNull(aVal);
 		DSet<Ad> rVal = result.getValue6();
-		assertNotNull(rVal);
-		return aVal.equals(rVal);
+		//XSD rule: all elements of set must be non-null
+		if(aVal.getNullFlavor() != null || checkAllNullItems(aVal))
+		{
+			assertNull(rVal);
+			return true;
+		}
+		else
+		{
+			assertNotNull(rVal);
+			return aVal.equals(rVal);
+		}
 	}
 	
 	private boolean compareValue7(DsetAdDataType actual, DsetAdDataType result)
@@ -574,8 +631,17 @@ public class DsetAdDataTypeXMLTest extends SDKISOTestBase
 		DSet<Ad> aVal = actual.getValue7();
 		assertNotNull(aVal);
 		DSet<Ad> rVal = result.getValue7();
-		assertNotNull(rVal);
-		return aVal.equals(rVal);
+		//XSD rule: all elements of set must be non-null
+		if(aVal.getNullFlavor() != null || checkAllNullItems(aVal))
+		{
+			assertNull(rVal);
+			return true;
+		}
+		else
+		{
+			assertNotNull(rVal);
+			return aVal.equals(rVal);
+		}
 	}
 
 	private boolean compareValue8(DsetAdDataType actual, DsetAdDataType result)
@@ -583,8 +649,33 @@ public class DsetAdDataTypeXMLTest extends SDKISOTestBase
 		DSet<Ad> aVal = actual.getValue8();
 		assertNotNull(aVal);
 		DSet<Ad> rVal = result.getValue8();
-		assertNotNull(rVal);
-		return aVal.equals(rVal);
+		//XSD rule: all elements of set must be non-null
+		if(aVal.getNullFlavor() != null || checkAllNullItems(aVal))
+		{
+			assertNull(rVal);
+			return true;
+		}
+		else
+		{
+			assertNotNull(rVal);
+			return aVal.equals(rVal);
+		}
+	}
+
+	private boolean checkAllNullItems(DSet<Ad> rVal)
+	{
+		Set<Ad> item = rVal.getItem();
+		if(item != null)
+		{
+			Iterator<Ad> list = item.iterator();
+			while(list.hasNext())
+			{
+				Ad ad = list.next();
+				if(ad.getNullFlavor() == null)
+					return false;
+			}
+		}
+		return true;
 	}
 	
 }

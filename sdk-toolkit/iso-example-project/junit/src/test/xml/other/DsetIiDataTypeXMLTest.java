@@ -11,7 +11,9 @@ import gov.nih.nci.system.query.hibernate.HQLCriteria;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.jdom.Document;
 
@@ -480,8 +482,17 @@ public class DsetIiDataTypeXMLTest extends SDKISOTestBase
 		DSet<Ii> aVal = actual.getValue1();
 		assertNotNull(aVal);
 		DSet<Ii> rVal = result.getValue1();
-		assertNotNull(rVal);
-		return aVal.equals(rVal);
+		//XSD rule: all elements of set must be non-null
+		if(aVal.getNullFlavor() != null || checkAllNullItems(aVal))
+		{
+			assertNull(rVal);
+			return true;
+		}
+		else
+		{
+			assertNotNull(rVal);
+			return aVal.equals(rVal);
+		}
 	}
 	
 	private boolean compareValue2(DsetIiDataType actual, DsetIiDataType result)
@@ -489,8 +500,17 @@ public class DsetIiDataTypeXMLTest extends SDKISOTestBase
 		DSet<Ii> aVal = actual.getValue2();
 		assertNotNull(aVal);
 		DSet<Ii> rVal = result.getValue2();
-		assertNotNull(rVal);
-		return aVal.equals(rVal);
+		//XSD rule: all elements of set must be non-null
+		if(aVal.getNullFlavor() != null || checkAllNullItems(aVal))
+		{
+			assertNull(rVal);
+			return true;
+		}
+		else
+		{
+			assertNotNull(rVal);
+			return aVal.equals(rVal);
+		}
 	}
 
 	private boolean compareValue3(DsetIiDataType actual, DsetIiDataType result)
@@ -498,8 +518,17 @@ public class DsetIiDataTypeXMLTest extends SDKISOTestBase
 		DSet<Ii> aVal = actual.getValue3();
 		assertNotNull(aVal);
 		DSet<Ii> rVal = result.getValue3();
-		assertNotNull(rVal);
-		return aVal.equals(rVal);
+		//XSD rule: all elements of set must be non-null
+		if(aVal.getNullFlavor() != null || checkAllNullItems(aVal))
+		{
+			assertNull(rVal);
+			return true;
+		}
+		else
+		{
+			assertNotNull(rVal);
+			return aVal.equals(rVal);
+		}
 	}
 
 	private boolean compareValue4(DsetIiDataType actual, DsetIiDataType result)
@@ -507,24 +536,66 @@ public class DsetIiDataTypeXMLTest extends SDKISOTestBase
 		DSet<Ii> aVal = actual.getValue4();
 		assertNotNull(aVal);
 		DSet<Ii> rVal = result.getValue4();
-		assertNotNull(rVal);
-		return aVal.equals(rVal);
+		//XSD rule: all elements of set must be non-null
+		if(aVal.getNullFlavor() != null || checkAllNullItems(aVal))
+		{
+			assertNull(rVal);
+			return true;
+		}
+		else
+		{
+			assertNotNull(rVal);
+			return aVal.equals(rVal);
+		}
 	}
 	private boolean compareValue5(DsetIiDataType actual, DsetIiDataType result)
 	{
 		DSet<Ii> aVal = actual.getValue5();
 		assertNotNull(aVal);
 		DSet<Ii> rVal = result.getValue5();
-		assertNotNull(rVal);
-		return aVal.equals(rVal);
+		//XSD rule: all elements of set must be non-null
+		if(aVal.getNullFlavor() != null || checkAllNullItems(aVal))
+		{
+			assertNull(rVal);
+			return true;
+		}
+		else
+		{
+			assertNotNull(rVal);
+			return aVal.equals(rVal);
+		}
 	}
 	private boolean compareValue6(DsetIiDataType actual, DsetIiDataType result)
 	{
 		DSet<Ii> aVal = actual.getValue6();
 		assertNotNull(aVal);
 		DSet<Ii> rVal = result.getValue6();
-		assertNotNull(rVal);
-		return aVal.equals(rVal);
+		//XSD rule: all elements of set must be non-null
+		if(aVal.getNullFlavor() != null || checkAllNullItems(aVal))
+		{
+			assertNull(rVal);
+			return true;
+		}
+		else
+		{
+			assertNotNull(rVal);
+			return aVal.equals(rVal);
+		}
 	}
-	
+
+	private boolean checkAllNullItems(DSet<Ii> rVal)
+	{
+		Set<Ii> item = rVal.getItem();
+		if(item != null)
+		{
+			Iterator<Ii> list = item.iterator();
+			while(list.hasNext())
+			{
+				Ii ii = list.next();
+				if(ii.getNullFlavor() == null)
+					return false;
+			}
+		}
+		return true;
+	}
 }
