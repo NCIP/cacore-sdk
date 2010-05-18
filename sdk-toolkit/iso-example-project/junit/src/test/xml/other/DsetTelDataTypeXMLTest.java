@@ -274,8 +274,18 @@ public class DsetTelDataTypeXMLTest extends SDKISOTestBase
 		DSet<Tel> aVal = actual.getValue1();
 		assertNotNull(aVal);
 		DSet<Tel> rVal = result.getValue1();
-		assertNotNull(rVal);
-		return aVal.equals(rVal);
+		//XSD rule: all elements of set must be non-null
+		if(aVal.getNullFlavor() != null)
+		{
+			assertNull(rVal);
+			return true;
+		}
+		else
+		{
+			assertNotNull(rVal);
+			return aVal.equals(rVal);
+		}
+			
 	}
 	
 	private boolean compareValue2(DsetTelDataType actual, DsetTelDataType result)
@@ -283,8 +293,17 @@ public class DsetTelDataTypeXMLTest extends SDKISOTestBase
 		DSet<Tel> aVal = actual.getValue2();
 		assertNotNull(aVal);
 		DSet<Tel> rVal = result.getValue2();
-		assertNotNull(rVal);
-		return aVal.equals(rVal);
+		//XSD rule: all elements of set must be non-null
+		if(aVal.getNullFlavor() != null)
+		{
+			assertNull(rVal);
+			return true;
+		}
+		else
+		{
+			assertNotNull(rVal);
+			return aVal.equals(rVal);
+		}
 	}
 
 	private boolean compareValue3(DsetTelDataType actual, DsetTelDataType result)
@@ -292,8 +311,17 @@ public class DsetTelDataTypeXMLTest extends SDKISOTestBase
 		DSet<Tel> aVal = actual.getValue3();
 		assertNotNull(aVal);
 		DSet<Tel> rVal = result.getValue3();
-		assertNotNull(rVal);
-		return aVal.equals(rVal);
+		//XSD rule: all elements of set must be non-null
+		if(aVal.getNullFlavor() != null)
+		{
+			assertNull(rVal);
+			return true;
+		}
+		else
+		{
+			assertNotNull(rVal);
+			return aVal.equals(rVal);
+		}
 	}
 	
 }
