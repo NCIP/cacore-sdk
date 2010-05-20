@@ -1,34 +1,63 @@
 package gov.nih.nci.system.web.util;
 
+import gov.nih.nci.iso21090.Any;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 import gov.nih.nci.system.client.proxy.ListProxy;
+import gov.nih.nci.system.client.util.xml.JAXBISOAdapter;
+import gov.nih.nci.system.client.util.xml.JAXBISODsetCdAdapter;
+import gov.nih.nci.system.client.util.xml.JAXBISODsetIiAdapter;
+import gov.nih.nci.system.client.util.xml.JAXBISODsetTelAdapter;
+import gov.nih.nci.system.client.util.xml.JAXBISOIvlIntAdapter;
+import gov.nih.nci.system.client.util.xml.JAXBISOIvlPqAdapter;
+import gov.nih.nci.system.client.util.xml.JAXBISOIvlRealAdapter;
+import gov.nih.nci.system.client.util.xml.JAXBISOIvlTsAdapter;
 import gov.nih.nci.system.util.ClassCache;
 import gov.nih.nci.system.util.SystemConstant;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
+import java.io.StringWriter;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Properties;
+import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.annotation.adapters.XmlAdapter;
+import javax.xml.transform.Templates;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 
 import org.apache.log4j.Logger;
+import org.iso._21090.ANY;
+import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Namespace;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
+import org.jdom.output.Format;
+import org.jdom.output.XMLOutputter;
+import org.jdom.transform.JDOMSource;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.core.io.ClassPathResource;
 
 /**
  * HTTPUtils presents various methods to generate search criteria from xquery like syntax.
@@ -56,27 +85,31 @@ public class HTTPUtils implements Serializable{
 	private String targetClassName;
 	private String servletName;
 	private String targetPackageName;
-	private String roleName;	
+	private String roleName;
 	private List results = new ArrayList();
 	private Namespace namespace = Namespace.getNamespace("xlink", SystemConstant.XLINK_URL);
 
-	public HTTPUtils(ServletContext context) {
-		WebApplicationContext ctx =  WebApplicationContextUtils.getWebApplicationContext(context);
-		this.classCache = (ClassCache)ctx.getBean("ClassCache");
-		this.applicationService = (ApplicationService)ctx.getBean("ApplicationServiceImpl");
-		
-		Properties systemProperties = (Properties) ctx.getBean("WebSystemProperties");
-		
-		try {
-			String rowCounter = systemProperties.getProperty("rowCounter");
-			log.debug("rowCounter: " + rowCounter);
-			if (rowCounter != null) {
-				this.resultCounter = rowCounter;
-			}
-		} catch (Exception ex) {
-			log.error("Exception: ", ex);
+	private Map<String , XmlAdapter<ANY,Any>> jaxbISOAdapterMap = new HashMap<String, XmlAdapter<ANY,Any>>() {
+		private static final long serialVersionUID = 1L;
+
+		{
+			put("gov.nih.nci.iso21090.DSet<gov.nih.nci.iso21090.Ad>",new JAXBISOAdapter<ANY, Any>());
+			put("gov.nih.nci.iso21090.DSet<gov.nih.nci.iso21090.Cd>",new JAXBISODsetCdAdapter<ANY, Any>());
+			put("gov.nih.nci.iso21090.DSet<gov.nih.nci.iso21090.Ii>",new JAXBISODsetIiAdapter<ANY, Any>());
+			put("gov.nih.nci.iso21090.DSet<gov.nih.nci.iso21090.Tel>",new JAXBISODsetTelAdapter<ANY, Any>());
+			put("gov.nih.nci.iso21090.DSet<gov.nih.nci.iso21090.Pq>",new JAXBISOIvlPqAdapter<ANY, Any>());
+			put("gov.nih.nci.iso21090.Ivl<gov.nih.nci.iso21090.Real",new JAXBISOIvlRealAdapter<ANY, Any>());
+			put("gov.nih.nci.iso21090.Ivl<gov.nih.nci.iso21090.Ts",new JAXBISOIvlTsAdapter<ANY, Any>());
+			put("gov.nih.nci.iso21090.Ivl<gov.nih.nci.iso21090.Int",new JAXBISOIvlIntAdapter<ANY, Any>());
 		}
-	}	
+	};	
+
+	public HTTPUtils(ApplicationService applicationService,ClassCache classCache,int rowCounter) {
+		log.debug("rowCounter: " + rowCounter);
+		this.applicationService=applicationService;
+		this.classCache=classCache;
+		this.resultCounter = rowCounter+"";
+	}
 
 	/**
 	 * Sets the http Servlet name
@@ -502,7 +535,10 @@ public class HTTPUtils implements Serializable{
 						Object result = subResults.get(i);
 						int recNum = index + i + 1;
 						recordNum = String.valueOf(recNum);
-						xmlElement.addContent(getElement(result, recordNum));
+						
+						Element element = getElement(result, recordNum);
+						xmlElement.addContent(element);
+						
 					}
 
 				}
@@ -697,8 +733,9 @@ public class HTTPUtils implements Serializable{
 
 					}
 					else{
-						if(this.getFieldValue(field,result)!= null){
-							value = getFieldValue(field,result);
+						Object tempFieldValue = this.getFieldValue(field,result);
+						if(tempFieldValue!= null){
+							value = tempFieldValue;
 							fieldValue = String.valueOf(value);
 						}
 						fieldElement.setText(fieldValue);
@@ -814,6 +851,7 @@ public class HTTPUtils implements Serializable{
 	 * @return
 	 * @throws Exception
 	 */
+	@SuppressWarnings("static-access")
 	private Object getFieldValue(Field field, Object domain) throws Exception{
 		Object value = null;
 		if(field.get(domain)!= null){
@@ -822,12 +860,34 @@ public class HTTPUtils implements Serializable{
 				value = date.format((Date)field.get(domain));
 			}
 			else{
-				value = field.get(domain);
+				value = marshalISOObjectTOXml(field, domain);
 			}
 		}
 		return value;
 	}
 
+	private Object marshalISOObjectTOXml(Field field, Object domain)
+			throws Exception {
+		Object value= field.get(domain);
+		if (field.getType().getName().startsWith("gov.nih.nci.iso21090.")) {
+			JAXBContext jaxbContext = JAXBContext.newInstance("org.iso._21090");
+			Marshaller marshaller = jaxbContext.createMarshaller();
+			marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+			StringWriter stringWriter = new StringWriter();
+			
+			XmlAdapter<ANY,Any> jaxbAdapter=jaxbISOAdapterMap.get(field.getGenericType().toString());
+			if(jaxbAdapter==null){
+				jaxbAdapter= new JAXBISOAdapter<ANY, Any>();
+			}
+			System.out.println(field.getGenericType().toString());
+			org.iso._21090.ANY anyJaxb = jaxbAdapter.marshal((Any) value);
+			marshaller.marshal(anyJaxb, stringWriter);
+			value = stringWriter;
+		}
+		return value;
+	}
+	
 	/**
 	 * Returns an array of result objects
 	 * @return
@@ -895,6 +955,34 @@ public class HTTPUtils implements Serializable{
 			match = true;
 		}
 		return match;
+	}
+
+	/**
+	 * Generates an XML or HTML document based on a given stylesheet
+	 * @param xmlDoc Specifies the xml document
+	 * @param styleIn specifies the stylesheet
+	 * @return
+	 * @throws Exception 
+	 */
+
+	public void transform(Document xmlDoc, InputStream styleIn, OutputStream out)
+			throws Exception {
+
+        if (styleIn == null) throw new ServletException("No stylesheet configued");
+        
+		JDOMSource source = new JDOMSource(xmlDoc);
+		StreamResult result = new StreamResult(out);
+		
+		try {
+			TransformerFactory tFactory = TransformerFactory.newInstance();
+			Templates stylesheet = tFactory.newTemplates(new StreamSource(styleIn));
+			Transformer processor = stylesheet.newTransformer();
+			processor.transform(source, result);
+
+		} catch (Exception ex) {
+			log.error(ex.getMessage());
+			throw new Exception("XSLTTransformer Exception: " + ex.getMessage());
+		}
 	}
 
 	/*
@@ -1057,8 +1145,4 @@ public class HTTPUtils implements Serializable{
 		recordNum++;
 		out.println("</TR>");
 	}
-
-
 }
-
-
