@@ -41,7 +41,7 @@ public class AllDataTypeXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(result.getLongPrimitiveValue());
 		assertNotNull(result.getLongValue());
 		
-		if (result.getId()==1)
+		if (result.getId().equals(1))
 			assertNotNull(result.getStringCollection());
 		
 		assertNotNull(result.getStringPrimitiveValue());
@@ -109,7 +109,7 @@ public class AllDataTypeXMLDataTest extends SDKXMLDataTestBase
 						
 			AllDataType result2 = (AllDataType)fromXML(result);
 			
-			if (result2.getId()==1)
+			if (result2.getId().equals(1))
 				validateAssociation(result,"string","stringCollection", true);
 
 			validateObject(result2);
