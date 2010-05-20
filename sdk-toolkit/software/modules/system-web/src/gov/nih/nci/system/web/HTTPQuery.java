@@ -1,5 +1,7 @@
 package gov.nih.nci.system.web;
 
+import gov.nih.nci.system.applicationservice.ApplicationService;
+import gov.nih.nci.system.util.ClassCache;
 import gov.nih.nci.system.util.SystemConstant;
 import gov.nih.nci.system.web.util.HTTPUtils;
 
@@ -19,7 +21,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.log4j.Logger;
@@ -51,16 +52,16 @@ public class HTTPQuery extends HttpServlet {
 
 	private int pageSize = 1000; //default
 
-	ServletContext context;
+	WebApplicationContext ctx;
 
 	/**
 	 * Initialize the servlet
 	 */
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
-		context = config.getServletContext();
+		ServletContext context = config.getServletContext();
 		
-		WebApplicationContext ctx =  WebApplicationContextUtils.getWebApplicationContext(context);
+		ctx =  WebApplicationContextUtils.getWebApplicationContext(context);
 		Properties systemProperties = (Properties) ctx.getBean("WebSystemProperties");
 
 		cacoreStyleSheet = systemProperties.getProperty("resultOutputFormatter");
@@ -106,7 +107,9 @@ public class HTTPQuery extends HttpServlet {
 		Object[] resultSet = null;
 		int pageNumber = 1;
 		
-		HTTPUtils httpUtils = new HTTPUtils(context);
+		ApplicationService applicationService = (ApplicationService)ctx.getBean("ApplicationServiceImpl");
+		ClassCache classCache= (ClassCache)ctx.getBean("ClassCache");
+		HTTPUtils httpUtils = new HTTPUtils(applicationService,classCache,pageSize);
 		String queryType = httpUtils.getQueryType(request.getRequestURL().toString());
 		
 		String query = null;
@@ -144,32 +147,7 @@ public class HTTPQuery extends HttpServlet {
 				log.error("Get ResultSet Exception: " + ex.getMessage());
 				throw ex;
 			}
-			try {
-
-				XMLOutputter xout = new XMLOutputter();
-				org.jdom.Document domDoc = httpUtils.getXMLDocument(resultSet,
-						pageNumber);
-
-				if (queryType.endsWith("XML")) {
-					response.setContentType("text/xml");
-					xout.output(domDoc, out);
-				} else if (queryType.endsWith("JSON")) {
-                    response.setContentType("application/x-javascript");
-                    if (httpUtils.getTargetPackageName() != null) {
-                        printDocument(domDoc, jsonStyleSheet, out);
-                        
-                    }
-				} else {
-					response.setContentType("text/html");
-					if (httpUtils.getTargetPackageName() != null) {
-					    printDocument(domDoc, cacoreStyleSheet, out);
-					}
-				}
-
-			} catch (Exception ex) {
-				log.error("Print Results Exception: " + ex.getMessage());
-				throw ex;
-			}
+			executeFormatOutput(response, out, resultSet, pageNumber,httpUtils, queryType);
 		} catch (Exception ex) {
 			log.error("Exception: ", ex);
 			
@@ -184,6 +162,37 @@ public class HTTPQuery extends HttpServlet {
 			// Need to add JSON error output???
 		}
 
+	}
+
+	private void executeFormatOutput(HttpServletResponse response,
+			ServletOutputStream out, Object[] resultSet, int pageNumber,
+			HTTPUtils httpUtils, String queryType) throws Exception {
+		try {
+
+			XMLOutputter xout = new XMLOutputter();
+			org.jdom.Document domDoc = httpUtils.getXMLDocument(resultSet,
+					pageNumber);
+
+			if (queryType.endsWith("XML")) {
+				response.setContentType("text/xml");
+				xout.output(domDoc, out);
+			} else if (queryType.endsWith("JSON")) {
+		        response.setContentType("application/x-javascript");
+		        if (httpUtils.getTargetPackageName() != null) {
+		            printDocument(domDoc, jsonStyleSheet, out,httpUtils);
+		            
+		        }
+			} else {
+				response.setContentType("text/html");
+				if (httpUtils.getTargetPackageName() != null) {
+				    printDocument(domDoc, cacoreStyleSheet, out,httpUtils);
+				}
+			}
+
+		} catch (Exception ex) {
+			log.error("Print Results Exception: " + ex.getMessage());
+			throw ex;
+		}
 	}
 
 	/**
@@ -310,14 +319,14 @@ public class HTTPQuery extends HttpServlet {
 	 * @return
 	 * @throws Exception
 	 */
-	public void printDocument(Document doc, String styleSheet, OutputStream out)
+	public void printDocument(Document doc, String styleSheet, OutputStream out,HTTPUtils httpUtils)
 			throws Exception {
 
 		try {
 			InputStream styleIn = Thread.currentThread()
 					.getContextClassLoader().getResourceAsStream(styleSheet);
 			if (styleIn != null) {
-			    transform(doc, styleIn, out);
+				httpUtils.transform(doc, styleIn, out);
 			}
 
 		} catch (Exception ex) {
@@ -326,34 +335,6 @@ public class HTTPQuery extends HttpServlet {
 		}
 	} 
 	
-	/**
-	 * Generates an XML or HTML document based on a given stylesheet
-	 * @param xmlDoc Specifies the xml document
-	 * @param styleIn specifies the stylesheet
-	 * @return
-	 * @throws Exception 
-	 */
-
-	public void transform(Document xmlDoc, InputStream styleIn, OutputStream out)
-			throws Exception {
-
-        if (styleIn == null) throw new ServletException("No stylesheet configued");
-        
-		JDOMSource source = new JDOMSource(xmlDoc);
-		StreamResult result = new StreamResult(out);
-		
-		try {
-			TransformerFactory tFactory = TransformerFactory.newInstance();
-			Templates stylesheet = tFactory.newTemplates(new StreamSource(styleIn));
-			Transformer processor = stylesheet.newTransformer();
-			processor.transform(source, result);
-
-		} catch (Exception ex) {
-			log.error(ex.getMessage());
-			throw new Exception("XSLTTransformer Exception: " + ex.getMessage());
-		}
-	}
-
 	/**
 	 * Generates an XML or HTML document based on a given stylesheet
 	 * @param xmlDoc Specifies the xml document
@@ -441,5 +422,4 @@ public class HTTPQuery extends HttpServlet {
 		return syntax;
 
 	}
-
 }

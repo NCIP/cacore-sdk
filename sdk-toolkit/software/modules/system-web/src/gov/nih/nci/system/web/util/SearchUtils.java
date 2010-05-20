@@ -7,7 +7,10 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.StringTokenizer;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
@@ -159,56 +162,46 @@ public class SearchUtils {
 		Object criteriaObject = null;
 		Object assObject = null;
 		int counter = criteriaList.size();
-		try{
-
-			if(criteriaList.size()>1){
-				criteriaObject = getCriteria((String)criteriaList.get(counter-1),packageName);
-				for(int i=counter-2; i>=0; i--){
+		try {
+			if (criteriaList.size() > 1) {
+				criteriaObject = getCriteria((String) criteriaList.get(counter - 1), packageName);
+				for (int i = counter - 2; i >= 0; i--) {
 					assObject = criteriaObject;
-					String critString = (String)criteriaList.get(i);
-					log.debug("Crit string: "+ critString);
-					criteriaObject= getCriteria(critString, packageName);
-					if(criteriaObject.getClass().getName().equals(assObject.getClass().getName())){
-						criteriaObject = getCriteriaValue(criteriaObject, assObject);                         
-					}
-					else{
+					String critString = (String) criteriaList.get(i);
+					log.debug("Crit string: " + critString);
+					criteriaObject = getCriteria(critString, packageName);
+					if (criteriaObject.getClass().getName().equals(assObject.getClass().getName())) {
+						criteriaObject = getCriteriaValue(criteriaObject,assObject);
+					} else {
 						Method method = null;
-						try{
+						try {
 							method = getRoleMethod(criteriaObject, assObject);
-						}catch(Exception ex){
-							throw new Exception( critString +" is not an association of "+ criteriaObject.getClass().getName());
+						} catch (Exception ex) {
+							throw new Exception(critString+ " is not an association of "+ criteriaObject.getClass().getName());
 						}
 
-
-						if(method != null){                          
+						if (method != null) {
 							Class[] types = method.getParameterTypes();
-							if(types.length > 0){
-								if(types[0].getName().endsWith("Collection")){                                  
+							if (types.length > 0) {
+								if (types[0].getName().endsWith("Collection")) {
 									List<Object> assObjectList = new ArrayList<Object>();
 									assObjectList.add(assObject);
-									method.invoke(criteriaObject, new Object[]{assObjectList});
-								}
-								else{
-									method.invoke(criteriaObject, new Object[]{assObject});
+									method.invoke(criteriaObject,new Object[] { assObjectList });
+								} else {
+									method.invoke(criteriaObject,new Object[] { assObject });
 								}
 							}
-
 						}
 					}
-
 				}
-
-			}
-			else if(criteriaList.size()==1){
-				criteriaObject = getCriteria((String)criteriaList.get(0),packageName);
-			}
-			else{
+			} else if (criteriaList.size() == 1) {
+				criteriaObject = getCriteria((String) criteriaList.get(0),packageName);
+			} else {
 				throw new Exception("Criteria not defined");
 			}
-
-		}catch(Exception ex){
-			log.error("ERROR : "+ ex.getMessage());
-			throw new Exception("ERROR :  "+ ex.getMessage());
+		} catch (Exception ex) {
+			log.error("ERROR : " + ex.getMessage());
+			throw new Exception("ERROR :  " + ex.getMessage());
 		}
 		return criteriaObject;
 	}
@@ -302,59 +295,56 @@ public class SearchUtils {
 	 * @throws Exception
 	 */
 	private List getAttributeCollection(String attString) throws Exception{
-
 		List<String> attList = new ArrayList<String>();
-		int startCounter =0;
-		int startIndex =0;
-		int endCounter =0;
-		for(int i=0; i<attString.length(); i++){
-			if(attString.charAt(i)==SystemConstant.LEFT_BRACKET){
+		int startCounter = 0;
+		int startIndex = 0;
+		int endCounter = 0;
+		for (int i = 0; i < attString.length(); i++) {
+			if (attString.charAt(i) == SystemConstant.LEFT_BRACKET) {
 				startCounter++;
-			}
-			else if(attString.charAt(i)==SystemConstant.RIGHT_BRACKET){
+			} else if (attString.charAt(i) == SystemConstant.RIGHT_BRACKET) {
 				endCounter++;
 			}
 		}
-		if(startCounter != endCounter){
-			throw new Exception("Invalid format: '[' parenthesis does not match number of ']' parenthesis");
+		if (startCounter != endCounter) {
+			throw new Exception(
+					"Invalid format: '[' parenthesis does not match number of ']' parenthesis");
 		}
-		try{
-			if(attString.indexOf("][")<1){
-				String att = attString.substring(1,attString.lastIndexOf(SystemConstant.RIGHT_BRACKET));           
+		try {
+			if (attString.indexOf("][") < 1) {
+				String att = attString.substring(1, attString
+						.lastIndexOf(SystemConstant.RIGHT_BRACKET));
 				attList.add(att);
-			}
-			else{
-				if(attString.charAt(0)==SystemConstant.LEFT_BRACKET){                
+			} else {
+				if (attString.charAt(0) == SystemConstant.LEFT_BRACKET) {
 					startCounter = 1;
-					endCounter =0;
+					endCounter = 0;
 					startIndex = 1;
-				}
-				else{
+				} else {
 					throw new Exception("Invalid Query format " + attString);
 				}
 
 				int count = attString.length();
-				for(int i=1; i<count;i++){                
-					if(attString.charAt(i)==SystemConstant.RIGHT_BRACKET){
+				for (int i = 1; i < count; i++) {
+					if (attString.charAt(i) == SystemConstant.RIGHT_BRACKET) {
 						endCounter++;
-						if(startCounter == endCounter){                        
-							String att = attString.substring(startIndex,i);
-							attList.add(att);                        
-							startIndex = i+2;
-							if(startIndex < count){
+						if (startCounter == endCounter) {
+							String att = attString.substring(startIndex, i);
+							attList.add(att);
+							startIndex = i + 2;
+							if (startIndex < count) {
 								startCounter = 0;
-								endCounter =0;
+								endCounter = 0;
 							}
 
 						}
-					}
-					else if(attString.charAt(i)==SystemConstant.LEFT_BRACKET){
+					} else if (attString.charAt(i) == SystemConstant.LEFT_BRACKET) {
 						startCounter++;
-					}                
+					}
 				}
 			}
 
-		}catch(Exception ex){
+		} catch (Exception ex) {
 			throw new Exception(ex.getMessage());
 		}
 		return attList;
@@ -372,31 +362,42 @@ public class SearchUtils {
 
 		try{
 			String attRole = null;
-			if(att.indexOf(SystemConstant.LEFT_BRACKET)>1){
-				attRole = att.substring(0,att.indexOf(SystemConstant.LEFT_BRACKET));    
-			}
+			//@id=3 example-project
+			//@id=[@extension=1] iso-example
+			//Deck[@id=[@extension=1]] --- nested criteria multiple params
+			System.out.println(att.indexOf("@"));
+			boolean condition1 = att.indexOf(Character.toString(SystemConstant.EQUAL)+Character.toString(SystemConstant.LEFT_BRACKET))>0;
+			boolean condition2 = att.indexOf(SystemConstant.LEFT_BRACKET)>1;
+			boolean isISOProjectWithRole=att.indexOf("@")>0;
+			boolean isExampleProjectWithRole = !condition1 && condition2;
 
-			Method critAttMethod = null;
+			if (isExampleProjectWithRole || isISOProjectWithRole) {
+				attRole = att.substring(0, att.indexOf(SystemConstant.LEFT_BRACKET));
+			}
 			if(attRole == null){
-				String attName = att.substring(att.indexOf(SystemConstant.AT)+1, att.indexOf(SystemConstant.EQUAL));
-				String attValue = att.substring(att.indexOf(SystemConstant.EQUAL)+1);
-				Field critField = getField(critObject.getClass(), attName);
-				critAttMethod = getAttributeSetMethodName(critObject, attName);                
-				Object value = getFieldValue(critField, attValue);
-				if( critAttMethod!= null){                    
-					critAttMethod.invoke(critObject,new Object[]{value});
-				}                
+				//@TODO updated for ISO-Example project
+				/*				
+	 				String attName = att.substring(att.indexOf(SystemConstant.AT)+1, att.indexOf(SystemConstant.EQUAL));
+					String attValue = att.substring(att.indexOf(SystemConstant.EQUAL)+1);
+					Field critField = getField(critObject.getClass(), attName);
+					critAttMethod = getAttributeSetMethodName(critObject, attName);                
+					Object value = getFieldValue(critField, attValue);
+					if( critAttMethod!= null){                    
+						critAttMethod.invoke(critObject,new Object[]{value});
+					}
+				*/
+				//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+					critObject= getCriteriaObject(att,critObject);
+				//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 			}
 			else{
 				String roleClassName = getRoleClassName(attRole);
-
 				if(roleClassName.indexOf(SystemConstant.DOT)<0){
 					roleClassName = packageName +SystemConstant.DOT + roleClassName;                            
 				}                
 				Method roleMethod = null;
-				roleMethod = getMethod(critObject.getClass(), "set"+ attRole.substring(0,1).toUpperCase() + attRole.substring(1));
-
-
+				String methodName = attRole.substring(0,1).toUpperCase() + attRole.substring(1);
+				roleMethod = getMethod(critObject.getClass(), "set" + methodName);
 				Object roleObject = Class.forName(roleClassName).newInstance();
 				List<Object> roleClassCollection = new ArrayList<Object>();
 				int count = 0;
@@ -405,11 +406,16 @@ public class SearchUtils {
 						count++;
 					}
 				}
-				if(count>1){                    
+				if(count>1){   
+					//att= Deck[@id=[@extension=1]]
+					//attr= [@id=[@extension=1]]
 					List attList = getAttributeCollection(att.substring(att.indexOf(SystemConstant.LEFT_BRACKET)));
 					for(int i=0; i<attList.size(); i++){
-						String critAtt = (String)attList.get(i);                        
-						String attName = critAtt.substring(1, critAtt.indexOf(SystemConstant.EQUAL));
+						String critAtt = (String)attList.get(i);  						
+						roleObject=getCriteriaObject(critAtt, roleObject);
+						
+/*						@TODO needs to removed
+ 						String attName = critAtt.substring(1, critAtt.indexOf(SystemConstant.EQUAL));
 						String attValue = critAtt.substring(critAtt.indexOf(SystemConstant.EQUAL)+1);
 						Field roleAttField = getField(Class.forName(roleClassName), attName);
 						Method roleAttMethod = getAttributeSetMethodName(Class.forName(roleClassName).newInstance(), attName);
@@ -422,14 +428,20 @@ public class SearchUtils {
 								}
 							}
 						}
-
+*/						
 						if(roleObject != null && attRole.indexOf("Collection")>0){
 							roleClassCollection.add(roleObject);
 						}
 					}
-				}
-				else{
-					String attName = att.substring(att.indexOf(SystemConstant.AT)+1, att.indexOf(SystemConstant.EQUAL));
+				}else{					
+					String critAttr = att.substring(att.indexOf(SystemConstant.AT), att.indexOf(SystemConstant.RIGHT_BRACKET));
+					roleObject=getCriteriaObject(critAttr, roleObject);
+					if(attRole.indexOf("Collection")>0){
+						roleClassCollection.add(roleObject);
+					}					
+/*					
+ 					@TODO needs to removed
+ 					String attName = att.substring(att.indexOf(SystemConstant.AT)+1, att.indexOf(SystemConstant.EQUAL));
 					String attValue = att.substring(att.indexOf(SystemConstant.EQUAL)+1, att.indexOf(SystemConstant.RIGHT_BRACKET));
 					Field roleAttField = getField(roleObject.getClass(), attName);
 					Method roleAttMethod = getAttributeSetMethodName(roleObject, attName);
@@ -442,9 +454,8 @@ public class SearchUtils {
 						Object value = getFieldValue(roleAttField, attValue);
 						roleAttMethod.invoke(roleObject,new Object[]{value});
 					}
-
+*/
 				}
-
 				if(attRole.indexOf("Collection")<1 && roleObject != null){                    
 					roleMethod.invoke(critObject, new Object[]{roleObject});                        
 				}else if(roleClassCollection.size()>0){                    
@@ -457,28 +468,86 @@ public class SearchUtils {
 									vector.add(roleClassCollection.get(i));
 								} 
 								roleMethod.invoke(critObject, new Object[] {vector});
-							}
-							else{
+							}else{
 								roleMethod.invoke(critObject, new Object[] {roleClassCollection});
 							}
-						}
-						else{
+						}else{
 							throw new Exception("Invalid arguments passed over to method : "+ roleMethod);
 						}
-
 					}catch(Exception ex){
 						throw new Exception("Cannot invoke method - " + roleMethod.getName());
 					}
 				}else{
 					throw new Exception("Unable to generate search criteria");
 				}
-
 			}
-
 		}catch(Exception ex){
 			throw new Exception(ex.getMessage());
 		}
 		return critObject;
+	}	
+	
+	private Object getCriteriaObject(String att,Object rootObject) throws Exception{
+		StringTokenizer tokenizer = new StringTokenizer(att,"@");
+		boolean flag=true;
+		Object tempObject=null;
+		while(tokenizer.hasMoreTokens()){
+			
+			String tempToken=tokenizer.nextToken();
+			String attribute = tempToken.substring(0, tempToken.indexOf(SystemConstant.EQUAL));
+			int equalIndex = tempToken.indexOf(SystemConstant.EQUAL)+1;
+			
+			if(flag){
+				//@id=3 - example-project
+				boolean isExampleProject = !(tempToken.indexOf(SystemConstant.LEFT_BRACKET) > 0);
+				if (isExampleProject) {
+					String attributeValue = tempToken.substring(equalIndex,tempToken.length());
+					createObject(rootObject, attribute, attributeValue);
+					return rootObject;
+				}
+				//start: @id=[ iso-project
+				Object tempObject2=createObject(rootObject, attribute,null);
+				Method m=getAttributeGetMethodName(tempObject2, attribute);
+				tempObject=m.invoke(tempObject2);				
+				flag=false;
+			}else{
+				boolean isAttValue = tempToken.indexOf(SystemConstant.RIGHT_BRACKET)>0;
+				if(isAttValue){
+					//end: set the value of iso object
+					String attributeValue=tempToken.substring(equalIndex,tempToken.indexOf(SystemConstant.RIGHT_BRACKET));
+					Method m=getAttributeSetMethodName(tempObject, attribute);
+					m.invoke(tempObject,attributeValue);
+					return rootObject;
+				}
+				Object tempObject2=createObject(tempObject, attribute,null);
+				Method m=getAttributeGetMethodName(tempObject2, attribute);
+				tempObject=m.invoke(tempObject2);	
+			}			
+		}
+		return att;
+	}
+	
+	private Object createObject(Object childObject, String attribute,
+			String attributeValue) throws Exception{
+		// using reflection, for the rootObject, set the attribute
+		Field field = getField(childObject.getClass(), attribute);
+		Method attMethod = getAttributeSetMethodName(childObject, attribute);
+
+		Object value = null;
+		if (field.getType().getName().startsWith("gov.nih.nci.iso21090")) {
+			value = Class.forName(field.getType().getName()).newInstance();
+		} else {
+			value = getFieldValue(field, attributeValue);
+		}
+		if (attMethod != null) {
+			attMethod.invoke(childObject, new Object[] { value });
+		}
+		return childObject;
+	}
+	
+	private Method getAttributeGetMethodName(Object attObject, String attName){    
+		Method m = getMethod(attObject.getClass(), "get"+ attName.substring(0,1).toUpperCase() + attName.substring(1));
+		return m;
 	}
 
 	/**
