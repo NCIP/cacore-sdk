@@ -2872,11 +2872,11 @@ INSERT INTO tel_url_datatype (id, value1_value, value2_null_flavor, value2_value
 INSERT INTO tel_url_datatype (id, value1_value, value2_null_flavor, value2_value) VALUES (2, 'https://www.cancer.gov', NULL, NULL);
 INSERT INTO tel_url_datatype (id, value1_value, value2_null_flavor, value2_value) VALUES (3, 'file://test.xml', NULL, NULL);
 INSERT INTO tel_url_datatype (id, value1_value, value2_null_flavor, value2_value) VALUES (4, 'ftp://cancer.gov', NULL, NULL);
-INSERT INTO tel_url_datatype (id, value1_value, value2_null_flavor, value2_value) VALUES (5, 'cid://www.cancer3.gov', NULL, NULL);
+INSERT INTO tel_url_datatype (id, value1_value, value2_null_flavor, value2_value) VALUES (5, 'file://www.cancer3.gov', NULL, NULL);
 INSERT INTO tel_url_datatype (id, value1_value, value2_null_flavor, value2_value) VALUES (6, 'http://www.cancer4.gov', NULL, NULL);
 INSERT INTO tel_url_datatype (id, value1_value, value2_null_flavor, value2_value) VALUES (7, NULL, NULL, 'https://www.cancer.gov');
 INSERT INTO tel_url_datatype (id, value1_value, value2_null_flavor, value2_value) VALUES (8, NULL, NULL, 'nfs://d/test.xml');
-INSERT INTO tel_url_datatype (id, value1_value, value2_null_flavor, value2_value) VALUES (9, NULL, NULL, 'cid://www.cancer3.gov');
+INSERT INTO tel_url_datatype (id, value1_value, value2_null_flavor, value2_value) VALUES (9, NULL, NULL, 'file://www.cancer3.gov');
 INSERT INTO tel_url_datatype (id, value1_value, value2_null_flavor, value2_value) VALUES (10, NULL, NULL, 'ftp://cancer.gov');
 INSERT INTO tel_url_datatype (id, value1_value, value2_null_flavor, value2_value) VALUES (11, NULL, NULL, 'http://www.cancer4.gov');
 
