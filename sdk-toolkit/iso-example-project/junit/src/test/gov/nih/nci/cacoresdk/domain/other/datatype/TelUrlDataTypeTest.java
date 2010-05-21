@@ -229,7 +229,7 @@ public class TelUrlDataTypeTest extends SDKISOTestBase
 				assertNotNull(data);
 				assertNotNull(data.getValue1());
 
-				assertEquals(new URI("cid://www.cancer3.gov"), data.getValue1().getValue());
+				assertEquals(new URI("file://www.cancer3.gov"), data.getValue1().getValue());
 				assertValue1Constants(data);
 
 				counter++;
@@ -316,7 +316,7 @@ public class TelUrlDataTypeTest extends SDKISOTestBase
 				assertNotNull(data.getValue2());
 
 				assertNull(data.getValue2().getNullFlavor());
-				assertEquals(new URI("cid://www.cancer3.gov"), data.getValue2().getValue());
+				assertEquals(new URI("file://www.cancer3.gov"), data.getValue2().getValue());
 
 				counter++;
 				continue;
