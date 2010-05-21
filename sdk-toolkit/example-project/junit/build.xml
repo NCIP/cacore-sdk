@@ -6,10 +6,11 @@
 
 <project name="caCORE SDK Test" default="readThickClientTest" basedir=".">
 
+
 	<!-- load properties files -->
 	<property name="project.home" location="${basedir}/.." />
 	<property name="project.build.home" location="${project.home}/build" />
-	
+
 	<property name="output.dir.location" value="${project.home}/target/dist/exploded"/>
 	<property file="${project.build.home}/codegen.properties" />
 	<property file="${project.build.home}/install.properties" />
@@ -21,6 +22,8 @@
 	<property name="classes.dir" value="${junit.home}/classes"/>
 	<property name="test.cobertura.dir" value="${SDK_INSTALL_DIR}/software/target/modules/lib/test-cobertura"/>
 
+	<property name="modules.lib.dir" value="${SDK_INSTALL_DIR}/software/target/modules/lib"/>
+
 	<property name="project.target.dir" value="${project.home}/target"/>
 	<property name="dist.dir" value="${project.target.dir}/dist"/>
 	<property name="dist.exploded.dir" value="${dist.dir}/exploded"/>
@@ -28,33 +31,26 @@
 	<property name="junit.report.dir" value="${junit.home}/report"/>
 	<property name="aggregate.report.dir" value="${junit.report.dir}/aggregate-report"/>
 	<property name="cobertura.report.dir" value="${junit.report.dir}/cobertura-report"/>
-	
+
 	<property name="report.project.dir" value="${junit.report.dir}/defaultTest" />
 	<property name="build.report.dir" value="${report.project.dir}/build-report" />
 
 	<property name="report.dir" value="${report.project.dir}" />
-	<property name="report.dir.app.service" value="${report.dir}/appservice" />
 	<property name="report.dir.thick-client.cql.query" value="${report.dir}/thick-client-cql" />
 	<property name="report.dir.remote-client.cql.query" value="${report.dir}/remote-client-cql" />
 	<property name="report.dir.thick-client" value="${report.dir}/thick-client" />
 	<property name="report.dir.remote-client" value="${report.dir}/remote-client" />
 	<property name="report.dir.hv-client" value="${report.dir}/hibernate-validator-client" />
-	<property name="report.dir.ws-client" value="${report.dir}/ws-client" />
 	<property name="report.dir.xsd-client" value="${report.dir}/xsd-client" />
-	<property name="report.dir.xml-mapping-client" value="${report.dir}/xml-mapping-client" />
 	<property name="report.dir.xml-thick-data-client" value="${report.dir}/xml-local-data-client" />
 	<property name="report.dir.xml-remote-data-client" value="${report.dir}/xml-remote-data-client" />
 	<property name="report.dir.security-thick-client" value="${report.dir}/security-thick-client" />
 	<property name="report.dir.security-group-thick-client" value="${report.dir}/security-group-thick-client" />
 	<property name="report.dir.security-remote-client" value="${report.dir}/security-remote-client" />
-	<property name="report.dir.hbm-mapping-client" value="${report.dir}/hbm-mapping-client" />
-	<property name="report.dir.thickclient-writableapi" value="${report.dir}/writable-api-thick-client" />
-	<property name="report.dir.thickclient-writableapi-cleanup" value="${report.dir}/writable-api-thick-client-cleanup" />
-	<property name="report.dir.remoteclient-writableapi" value="${report.dir}/writable-api-remote-client" />
 	<property name="report.dir.codegen" value="${report.dir}/codegen" />
-	
-	<property name="generate.report" value="true" />
 
+	<property name="generate.report" value="true" />
+	<property name="cobertura.enabled" value="false" />
 	<!-- load ant contrib -->
 	<path id="taskdef.cp">
 		<fileset dir="lib">
@@ -115,9 +111,6 @@
 		<fileset dir="${package.client.remote.lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
-		<fileset dir="${package.client.ws.lib.dir}">
-			<include name="**/*.jar" />
-		</fileset>
 		<path refid="junit-lib" />
 		<pathelement path="${classes.dir}" />
 		<pathelement path="${package.client.remote.conf.dir}" />
@@ -134,6 +127,7 @@
 		<pathelement path="${package.client.ws.conf.dir}" />
 	</path>
 
+
 	<path id="instrumented.classpath">
 		<fileset dir="${test.cobertura.dir}/instrumented/sdk">
 			<include name="**/*.jar" />
@@ -144,6 +138,7 @@
 			<include name="**/*.jar" />
 		</fileset>
 	</path>
+
 	<!--***********************************************************************
 	*** Macro definitions to run JUnits
 	*********************************************************************** -->
@@ -178,6 +173,76 @@
 
 	<macrodef name="SDKRunJUnit">
 		<attribute name="junitClasspath" />
+		<attribute name="junitOutputDir" default="${junit.home}/output" />
+		<attribute name="includePattern" />
+		<attribute name="excludePattern" />
+		<attribute name="junitreportfile" />
+		<attribute name="loginConfig.location" default="${package.client.local.conf.dir}" />
+		<sequential>
+			<if>
+				<equals arg1="${cobertura.enabled}" arg2="true" />
+				<then>
+					<echo message="Cobertura enabled" />
+					<SDKRunJUnitWithCobertura junitClasspath="@{junitClasspath}" junitOutputDir="@{junitOutputDir}" includePattern="@{includePattern}" excludePattern="@{excludePattern}" junitreportfile="@{junitreportfile}" />
+				</then>
+				<else>
+					<echo message="Cobertura not enabled" />
+					<SDKRunJUnitWithoutCobertura junitClasspath="@{junitClasspath}" junitOutputDir="@{junitOutputDir}" includePattern="@{includePattern}" excludePattern="@{excludePattern}" junitreportfile="@{junitreportfile}" />
+				</else>
+			</if>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="SDKRunJUnitWithoutCobertura">
+		<attribute name="junitClasspath" />
+		<attribute name="junitOutputDir" default="${junit.home}/output"/>
+		<attribute name="includePattern" />
+		<attribute name="junitreportfile" />
+		<attribute name="excludePattern" />
+		<attribute name="loginConfig.location" default="${package.client.local.conf.dir}"/>
+		<sequential>
+			<delete dir="@{junitOutputDir}" />
+			<mkdir dir="@{junitOutputDir}" />
+			<delete dir="${junit.home}/output"/>
+			<mkdir dir="${junit.home}/output"/>
+			<mkdir dir="${build.report.dir}" />
+			<junit printsummary="yes" maxmemory="512m" showoutput="false" failureproperty="fail-prop" errorproperty="error-prop">
+				<sysproperty key="java.security.auth.login.config" value="@{loginConfig.location}/login.config" />
+				<sysproperty key="webservice.url" value="${SERVER_URL}/services/${WEBSERVICE_NAME}" />
+				<sysproperty key="log4j.configuration" value="./conf/log4j.xml"/>
+				<sysproperty key="useGMETags" value="${GENERATE_XSD_WITH_GME_TAGS}"/>
+				<sysproperty key="usePermissibleValues" value="${GENERATE_XSD_WITH_PERMISSIBLE_VALUES}"/>
+				<sysproperty key="namespaceUriPrefix" value="${NAMESPACE_PREFIX}"/>
+				<sysproperty key="enableAttributeLevelSecurity" value="${ENABLE_ATTRIBUTE_LEVEL_SECURITY}"/>
+				<sysproperty key="enableInstanceLevelSecurity" value="${ENABLE_INSTANCE_LEVEL_SECURITY}"/>
+				<sysproperty key="enableCaGridLoginModule" value="${ENABLE_GRID_LOGIN_MODULE}"/>
+				<sysproperty key="outputDir" value="${junit.home}/output/"/>
+				<sysproperty key="serverURL" value="http://${SERVER_HOST_NAME}:${SERVER_HTTP_PORT}/${PROJECT_NAME}"/>
+				<classpath>
+					<path refid="@{junitClasspath}"/>
+				</classpath>
+				<formatter type="xml" />
+				<batchtest haltonfailure="no" todir="@{junitOutputDir}" fork="true">
+					<fileset dir="${classes.dir}">
+						<include name="@{includePattern}" />
+						<exclude name="@{excludePattern}" />
+					</fileset>
+				</batchtest>
+			</junit>
+			<java classname="test.junit.report.JunitReportHelper">
+				<arg  value="@{junitOutputDir}" />
+				<arg  value="${build.report.dir}/@{junitreportfile}" />
+				<jvmarg value="-Xms256M" />
+				<jvmarg value="-Xmx512M" />
+				<classpath>
+					<path refid="@{junitClasspath}" />
+				</classpath>
+			</java>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="SDKRunJUnitWithCobertura">
+		<attribute name="junitClasspath" />
 		<attribute name="junitOutputDir" default="${junit.home}/output"/>
 		<attribute name="includePattern" />
 		<attribute name="junitreportfile" />
@@ -203,7 +268,7 @@
 				<sysproperty key="serverURL" value="http://${SERVER_HOST_NAME}:${SERVER_HTTP_PORT}/${PROJECT_NAME}"/>
 
 				<sysproperty key="net.sourceforge.cobertura.datafile" file="@{junitOutputDir}/cobertura.ser" />
-				
+
 				<classpath>
 					<path refid="instrumented.classpath" />
 					<path refid="@{junitClasspath}"/>
@@ -342,16 +407,6 @@
 	</target>
 
 	<!-- ************************************************************************************************-->
-	<!--                                Run JUnits for ApplicationService Tests                             	                            -->
-	<!-- ************************************************************************************************-->
-
-	<target name="appServiceTest" depends="createDir">
-		<SDKCompileJUnit compileClasspath="remote-client-cp" includePattern="**/*AppService*.java" excludePattern="" />
-		<SDKRunJUnit junitClasspath="remote-client-cp" junitOutputDir="${report.dir.app.service}" includePattern="**/*AppService*Test.class" excludePattern="" junitreportfile="TEST-appService.xml" />
-		<SDKGenerateReport junitOutputDir="${report.dir.app.service}" />
-	</target>
-
-	<!-- ************************************************************************************************-->
 	<!--                                Run JUnits for XML Data client   	                             -->
 	<!-- ************************************************************************************************-->
 
@@ -382,16 +437,6 @@
 		<SDKCompileJUnit compileClasspath="local-client-cp" includePattern="**/*HibernateValidator*.java" excludePattern="" />
 		<SDKRunJUnit junitClasspath="local-client-cp" junitOutputDir="${report.dir.hv-client}" includePattern="**/*HibernateValidatorTest.class" excludePattern="" junitreportfile="TEST-hibernateValidator.xml"/>
 		<SDKGenerateReport junitOutputDir="${report.dir.hv-client}" />
-	</target>
-
-	<!-- ************************************************************************************************-->
-	<!--                                Run JUnits for Web Service (WS) client 	                         -->
-	<!-- ************************************************************************************************-->
-
-	<target name="webServicesTest" depends="createDir">
-		<SDKCompileJUnit compileClasspath="ws-client-cp" includePattern="**/*WS*.java" excludePattern="" />
-		<SDKRunJUnit junitClasspath="ws-client-cp" junitOutputDir="${report.dir.ws-client}" includePattern="**/*WS*Test.class" excludePattern="" junitreportfile="TEST-webServices.xml"/>
-		<SDKGenerateReport junitOutputDir="${report.dir.ws-client}" />
 	</target>
 
 	<!-- ************************************************************************************************-->
@@ -530,6 +575,7 @@
 		<SDKGenerateReport junitOutputDir="${report.dir.codegen}" />
 	</target>
 
+
 	<target name="builldTestAggregateReport" depends="createDir">
 		<delete dir="${build.report.dir}/report" />
 		<SDKGenerateReport junitOutputDir="${report.dir}" generateReport="true" />
@@ -538,6 +584,11 @@
 	<target name="buildAggregateReport" depends="createDir">
 		<delete dir="${aggregate.report.dir}" />
 		<SDKGenerateReport junitOutputDir="${aggregate.report.dir}" junitInputDir="${junit.report.dir}" includepattern="**/build-report/*.xml" generateReport="true"/>
-		<generate-report-cobertura cobertura.src.dir="${SDK_INSTALL_DIR}/software/target/modules/java-src" cobertura.rpt.dir="${cobertura.report.dir}" />
+		<if>
+			<equals arg1="${cobertura.enabled}" arg2="true" />
+			<then>
+				<generate-report-cobertura cobertura.src.dir="${SDK_INSTALL_DIR}/software/target/modules/java-src" cobertura.rpt.dir="${cobertura.report.dir}" />
+			</then>
+		</if>
 	</target>
 </project>
