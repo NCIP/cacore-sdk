@@ -24,6 +24,11 @@ public class ImplicitParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 		return "Implicit Parent With Association XML Data Test Case";
 	}
 	
+	public void testDummy()
+	{
+		assertTrue(true);
+	}
+	
 	/**
 	 * Uses Nested Search Criteria for search
 	 * Verifies that the results are returned 
