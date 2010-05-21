@@ -2096,11 +2096,11 @@ VALUES (1, NULL, NULL, NULL),
   (2, 'https://www.cancer.gov', NULL, NULL),
   (3, 'file://test.xml', NULL, NULL),
   (4, 'ftp://cancer.gov', NULL, NULL),
-  (5, 'cid://www.cancer3.gov', NULL, NULL),
+  (5, 'file://www.cancer3.gov', NULL, NULL),
   (6, 'http://www.cancer4.gov', NULL, NULL),
   (7, NULL, NULL, 'https://www.cancer.gov'),
   (8, NULL, NULL, 'nfs://d/test.xml'),
-  (9, NULL, NULL, 'cid://www.cancer3.gov'),
+  (9, NULL, NULL, 'file://www.cancer3.gov'),
   (10, NULL, NULL, 'ftp://cancer.gov'),
   (11, NULL, NULL, 'http://www.cancer4.gov');
 
