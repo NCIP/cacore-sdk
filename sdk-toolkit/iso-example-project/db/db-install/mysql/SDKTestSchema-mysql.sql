@@ -62,8 +62,8 @@ CREATE TABLE `ALBUM` (
 /*!40000 ALTER TABLE `ALBUM` DISABLE KEYS */;
 SET AUTOCOMMIT=0;
 INSERT INTO `ALBUM` (`ID`,`TITLE`) VALUES 
- ('1.00','Venetian Oboe Concertos'),
- ('2.00','The Cello');
+ ('1','Venetian Oboe Concertos'),
+ ('2','The Cello');
 COMMIT;
 /*!40000 ALTER TABLE `ALBUM` ENABLE KEYS */;
 
