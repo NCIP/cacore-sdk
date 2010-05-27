@@ -62,6 +62,7 @@
 						<then>
 							<ant antfile="build.xml" dir="${junit.dir}" target="readThickClientTest" inheritAll="true" />
 							<ant antfile="build.xml" dir="${junit.dir}" target="cqlQueryThickClientTest" inheritAll="true" />
+							<ant antfile="build.xml" dir="${junit.dir}" target="xmlDataThickClientTest" inheritAll="true" />
 						</then>
 						<else>
 							<ant antfile="build.xml" dir="${junit.dir}" target="securityThickClientTest" inheritAll="true" />
