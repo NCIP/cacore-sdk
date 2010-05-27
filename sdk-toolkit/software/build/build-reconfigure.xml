@@ -1238,7 +1238,7 @@
 		<copy todir="${temp.webapp.staging.lib.dir}" overwrite="true">
 			<fileset dir="${runtime.lib.dir}">
 				<include name="iso-datatypes-*.jar"/>
-				<exclude name="iso-datatypes-extensions*.jar" />
+				<!--<exclude name="iso-datatypes-extensions*.jar" />-->
 			</fileset>
 		</copy>
 		<if>
