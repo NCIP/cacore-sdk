@@ -53,9 +53,10 @@ public abstract class SDKXMLDataTestBase extends TestCase {
 
 	protected void setUp() throws Exception {
 		super.setUp();
+		//appService = ApplicationServiceProvider.getApplicationService("SDKUser1","Psat123!@#");
 		appService = ApplicationServiceProvider.getApplicationService();
-//		String url = "http://localhost:8080/example";
-//		appService = ApplicationServiceProvider.getApplicationServiceFromUrl(url);
+		//String url = "http://localhost:21080/example";
+		//appService = ApplicationServiceProvider.getApplicationServiceFromUrl(url);
 		
 		marshaller = new caCOREMarshaller("xml-mapping.xml", false);
 		unmarshaller = new caCOREUnmarshaller("unmarshaller-xml-mapping.xml", false);		
@@ -86,12 +87,34 @@ public abstract class SDKXMLDataTestBase extends TestCase {
 		return "SDK Base Test Case";
 	}
 	
-	protected void toXML(Object resultObj) throws Exception {
+/*	protected void toXML(Object resultObj) throws Exception {
 		File myFile = new File(filepathPrefix + resultObj.getClass().getSimpleName() + filepathSuffix);						
 		log.info("writing data to file "+myFile.getAbsolutePath());
 		FileWriter myWriter = new FileWriter(myFile);
 		
 		myUtil.toXML(resultObj, myWriter);
+		myWriter.close();
+	}
+*/
+	
+	protected void toXML(Object resultObj) throws Exception {
+		toXML(resultObj,0);
+	}
+	
+	protected void toXML(Object resultObj, int counter) throws Exception {
+		String filename = filepathPrefix + resultObj.getClass().getSimpleName();
+		
+		if (counter != 0){
+			filename += ("_test"+counter+".xml");
+		} else {
+			filename += filepathSuffix;
+		}
+		
+		File myFile = new File(filename);						
+		log.info("writing data to file "+myFile.getAbsolutePath());
+		FileWriter myWriter = new FileWriter(myFile);
+		Object convertedObject=myUtil.convertFromProxy(resultObj, true);
+		myUtil.toXML(convertedObject, myWriter);
 		myWriter.close();
 	}
 	
@@ -266,6 +289,18 @@ public abstract class SDKXMLDataTestBase extends TestCase {
 	 */
 	protected void validateAssociation(Object resultObj, String associatedKlassName, String roleName)
 	throws Exception {
+		validateAssociation(resultObj, associatedKlassName, roleName, true);
+	}
+
+	/**
+	 * Uses xpath to query the generated XSD Verifies that common elements
+	 * attributes(name, type) are present Verifies that the element 'name'
+	 * attribute matches the class name
+	 * 
+	 * @throws Exception
+	 */
+	protected void validateAssociation(Object resultObj, String associatedKlassName, String roleName, boolean hasAssociation, boolean hasWrapperElement)
+	throws Exception {
 		
 //		log.debug("Validating Class association from: " + filepathPrefix + resultObj.getClass().getSimpleName() + filepathSuffix);
 		org.jdom.Document doc = getDocument(filepathPrefix + resultObj.getClass().getSimpleName() + filepathSuffix);
@@ -280,11 +315,22 @@ public abstract class SDKXMLDataTestBase extends TestCase {
 		assertNotNull(roleNameElt);
 		assertEquals(roleNameElt.getName(),roleName);
 		
-		children = roleNameElt.getChildren();
-		assertNotNull(children);
-
-		Element associatedKlassElt = locateChild(children,associatedKlassName);
-		assertNotNull(associatedKlassElt);
+		if(hasWrapperElement)
+		{
+			children = roleNameElt.getChildren();
+			assertNotNull(children);
+	
+			Element associatedKlassElt = locateChild(children,associatedKlassName);
+			if(hasAssociation)
+				assertNotNull(associatedKlassElt);
+			else
+				assertNull(associatedKlassElt);
+		}
+	}
+	
+	protected void validateAssociation(Object resultObj, String associatedKlassName, String roleName, boolean hasAssociation)
+	throws Exception {
+		validateAssociation(resultObj, associatedKlassName, roleName, true, true);
 	}
 	
 	private Element locateChild(List<Element> eltList, String roleName){
