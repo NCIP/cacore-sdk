@@ -155,8 +155,14 @@
 				</then>
 			</if>
 			
-			<copy file="${SDK_INSTALL_DIR}/software/build/cobertura.ser" tofile="${junit.dir}/report/@{REPORT.PROJECT.DIR}/codegen-cobertura.ser" overwrite="true" failonerror="false"/>
-			<delete file="${SDK_INSTALL_DIR}/software/build/cobertura.ser"  failonerror="false"/>
+			<if>
+				<equals arg1="${cobertura.enabled}" arg2="true" />
+				<then>
+					<copy file="${SDK_INSTALL_DIR}/software/build/cobertura.ser" tofile="${junit.dir}/report/@{REPORT.PROJECT.DIR}/codegen-cobertura.ser" overwrite="true" failonerror="false"/>
+					<delete file="${SDK_INSTALL_DIR}/software/build/cobertura.ser"  failonerror="false"/>
+				</then>
+			</if>
+
 			<condition property="application.base.path" value="${application.base.path.linux}">
 				<or>
 					<os family="unix" />
@@ -174,12 +180,23 @@
 				<then>
 					<post to="http://${tomcat.hostname}:${tomcat.port.http}/coberturaFlush/flushCobertura" verbose="true"/>
 					<ant antfile="build.xml" dir="${dist.exploded.dir}" target="install:tomcat:stop" inheritAll="true" />
-					<copy file="${tomcat.home}/bin/cobertura.ser" tofile="${junit.dir}/report/@{REPORT.PROJECT.DIR}/tomcat-cobertura.ser" overwrite="true" />
+					<if>
+						<equals arg1="${cobertura.enabled}" arg2="true" />
+						<then>
+							<copy file="${tomcat.home}/bin/cobertura.ser" tofile="${junit.dir}/report/@{REPORT.PROJECT.DIR}/tomcat-cobertura.ser" overwrite="true" />
+						</then>
+					</if>
+					
 				</then>
 				<else>
 					<post to="http://${jboss.server.hostname}:${jboss.server.port}/coberturaFlush/flushCobertura"  verbose="true"/>
 					<ant antfile="build.xml" dir="${dist.exploded.dir}" target="install:jboss:stop" inheritAll="true" />
-					<copy file="${jboss.home}/bin/cobertura.ser" tofile="${junit.dir}/report/@{REPORT.PROJECT.DIR}/jboss-cobertura.ser" overwrite="true" />
+					<if>
+						<equals arg1="${cobertura.enabled}" arg2="true" />
+						<then>
+							<copy file="${jboss.home}/bin/cobertura.ser" tofile="${junit.dir}/report/@{REPORT.PROJECT.DIR}/jboss-cobertura.ser" overwrite="true" />
+						</then>
+					</if>
 				</else>
 			</if>
 		</sequential>
