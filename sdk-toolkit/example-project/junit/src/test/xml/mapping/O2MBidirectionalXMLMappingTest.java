@@ -84,7 +84,7 @@ public class O2MBidirectionalXMLMappingTest extends SDKXMLMappingTestBase
 		Class targetClass = HardDrive.class;
 		Class associatedClass = Computer.class;
 
-		validateClassAssociationElements(targetClass, associatedClass, "computer",false);
+		validateClassAssociationElements(targetClass, targetClass.getSimpleName(), associatedClass, "computer", "computer", null, false);
 	}	
 	
 	
@@ -100,6 +100,6 @@ public class O2MBidirectionalXMLMappingTest extends SDKXMLMappingTestBase
 		Class targetClass = Computer.class;
 		Class associatedClass = HardDrive.class;
 
-		validateClassAssociationElements(targetClass, associatedClass, "hardDriveCollection",true);
+		validateClassAssociationElements(targetClass, targetClass.getSimpleName(), associatedClass, "HardDrive", "hardDriveCollection", "hardDriveCollection", true);
 	}	
 }

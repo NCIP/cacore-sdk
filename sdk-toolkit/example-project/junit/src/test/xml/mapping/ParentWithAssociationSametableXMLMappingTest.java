@@ -116,7 +116,8 @@ public class ParentWithAssociationSametableXMLMappingTest extends SDKXMLMappingT
 		Class targetClass = Luggage.class;
 		Class associatedClass = Wheel.class;
 
-		validateClassAssociationElements(targetClass, associatedClass, "wheel",false);
+		validateClassAssociationElements(targetClass, targetClass.getSimpleName(), associatedClass, "wheel", "wheel", null, false);
+		
 	}
 	
 	

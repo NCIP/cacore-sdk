@@ -323,9 +323,9 @@ public class ChildWithAssociationXMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			if (useGMETags){
-				validateAssociation(result,"BankGMEAlias","bankAliasRolename");
+				validateAssociation(result,"BankGMEAlias","bankAliasRolename", true, false);
 			} else{
-				validateAssociation(result,"Bank","issuingBank");
+				validateAssociation(result,"Bank","issuingBank", true, false);
 			}
 
 			Credit result2 = (Credit)fromXML(result);

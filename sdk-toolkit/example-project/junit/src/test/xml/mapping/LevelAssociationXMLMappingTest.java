@@ -70,7 +70,7 @@ public class LevelAssociationXMLMappingTest extends SDKXMLMappingTestBase
 
 		validateFieldElement(targetClass, "id", "Integer");
 		validateFieldElement(targetClass, "image", "String");
-		validateFieldElement(targetClass, "Name", "String");
+		validateFieldElement(targetClass, "name", "String");
 	}
 	
 	
@@ -116,7 +116,7 @@ public class LevelAssociationXMLMappingTest extends SDKXMLMappingTestBase
 		Class targetClass = Hand.class;
 		Class associatedClass = Card.class;
 
-		validateClassAssociationElements(targetClass, associatedClass, "cardCollection",true);
+		validateClassAssociationElements(targetClass, targetClass.getSimpleName(), associatedClass, "Card", "cardCollection", "cardCollection", true);
 	}	
 	
 	
@@ -132,7 +132,7 @@ public class LevelAssociationXMLMappingTest extends SDKXMLMappingTestBase
 		Class targetClass = Card.class;
 		Class associatedClass = Suit.class;
 
-		validateClassAssociationElements(targetClass, associatedClass, "suit",false);
+		validateClassAssociationElements(targetClass, targetClass.getSimpleName(), associatedClass, "suit", "suit", null, false);
 	}	
 	
 	/**
@@ -147,7 +147,7 @@ public class LevelAssociationXMLMappingTest extends SDKXMLMappingTestBase
 		Class targetClass = Suit.class;
 		Class associatedClass = Card.class;
 
-		validateClassAssociationElements(targetClass, associatedClass, "cardCollection",true);
+		validateClassAssociationElements(targetClass, targetClass.getSimpleName(), associatedClass, "Card", "cardCollection", "cardCollection", true);
 	}	
 	
 	/**
@@ -162,7 +162,7 @@ public class LevelAssociationXMLMappingTest extends SDKXMLMappingTestBase
 		Class targetClass = Suit.class;
 		Class associatedClass = Deck.class;
 
-		validateClassAssociationElements(targetClass, associatedClass, "deck",false);
+		validateClassAssociationElements(targetClass, targetClass.getSimpleName(), associatedClass, "deck", "deck", null, false);
 	}	
 	
 	/**
@@ -177,6 +177,6 @@ public class LevelAssociationXMLMappingTest extends SDKXMLMappingTestBase
 		Class targetClass = Deck.class;
 		Class associatedClass = Suit.class;
 
-		validateClassAssociationElements(targetClass, associatedClass, "suitCollection",true);
+		validateClassAssociationElements(targetClass, targetClass.getSimpleName(), associatedClass, "Suit", "suitCollection", "suitCollection", true);
 	}		
 }

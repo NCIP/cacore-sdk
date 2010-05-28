@@ -84,7 +84,7 @@ public class O2MBidirectionalWJoinXMLMappingTest extends SDKXMLMappingTestBase
 		Class targetClass = Passanger.class;
 		Class associatedClass = Flight.class;
 
-		validateClassAssociationElements(targetClass, associatedClass, "flight",false);
+		validateClassAssociationElements(targetClass, targetClass.getSimpleName(), associatedClass, "flight", "flight", null, false);
 	}	
 	
 	

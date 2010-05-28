@@ -87,7 +87,8 @@ public class O2OUnidirectionalWJoinXMLMappingTest extends SDKXMLMappingTestBase
 		Class targetClass = Bag.class;
 		Class associatedClass = Handle.class;
 
-		validateClassAssociationElements(targetClass, associatedClass, "handle",false);
+		validateClassAssociationElements(targetClass, targetClass.getSimpleName(), associatedClass, "handle", "handle", null, false);
+		
 	}	
 	
 	

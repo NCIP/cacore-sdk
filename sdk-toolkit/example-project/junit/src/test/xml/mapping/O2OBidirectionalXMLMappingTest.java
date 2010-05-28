@@ -85,7 +85,7 @@ public class O2OBidirectionalXMLMappingTest extends SDKXMLMappingTestBase
 		Class targetClass = Product.class;
 		Class associatedClass = OrderLine.class;
 
-		validateClassAssociationElements(targetClass, associatedClass, "line",false);
+		validateClassAssociationElements(targetClass, targetClass.getSimpleName(), associatedClass, "line", "line", null, false);
 	}	
 	
 	
@@ -100,7 +100,7 @@ public class O2OBidirectionalXMLMappingTest extends SDKXMLMappingTestBase
 	{
 		Class targetClass = OrderLine.class;
 		Class associatedClass = Product.class;
-
-		validateClassAssociationElements(targetClass, associatedClass, "product",false);
+		
+		validateClassAssociationElements(targetClass, targetClass.getSimpleName(), associatedClass, "product", "product", null, false);
 	}	
 }

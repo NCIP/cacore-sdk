@@ -87,7 +87,7 @@ public class O2OMultipleAssociationWJoinXMLMappingTest extends SDKXMLMappingTest
 		Class targetClass = Bride.class;
 		Class associatedClass = InLaw.class;
 
-		validateClassAssociationElements(targetClass, associatedClass, "father",false);
+		validateClassAssociationElements(targetClass, targetClass.getSimpleName(), associatedClass, "father", "father", null, false);
 	}	
 	
 	
@@ -103,7 +103,7 @@ public class O2OMultipleAssociationWJoinXMLMappingTest extends SDKXMLMappingTest
 		Class targetClass = Bride.class;
 		Class associatedClass = InLaw.class;
 
-		validateClassAssociationElements(targetClass, associatedClass, "mother",false);
+		validateClassAssociationElements(targetClass, targetClass.getSimpleName(), associatedClass, "mother", "mother", null, false);
 	}	
 		
 	/**

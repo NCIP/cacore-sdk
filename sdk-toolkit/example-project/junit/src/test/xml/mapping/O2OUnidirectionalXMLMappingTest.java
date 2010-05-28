@@ -87,7 +87,7 @@ public class O2OUnidirectionalXMLMappingTest extends SDKXMLMappingTestBase
 		Class targetClass = Person.class;
 		Class associatedClass = Address.class;
 
-		validateClassAssociationElements(targetClass, associatedClass, "livesAt",false);
+		validateClassAssociationElements(targetClass, targetClass.getSimpleName(), associatedClass, "livesAt", "livesAt", null, false);
 	}	
 	
 	

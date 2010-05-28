@@ -234,7 +234,7 @@ public class O2MBidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 			assertNotNull(result2.getId());
 			assertNotNull(result2.getName());
 			
-			validateAssociation(result,"Flight","flight");
+			validateAssociation(result,"Flight","flight", true, false);
 			
 			flight = result2.getFlight();
 			assertNotNull(flight);
