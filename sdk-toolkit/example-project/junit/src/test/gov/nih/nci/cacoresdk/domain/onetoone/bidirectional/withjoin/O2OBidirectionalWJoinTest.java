@@ -79,7 +79,8 @@ public class O2OBidirectionalWJoinTest extends SDKTestBase
 	 * 
 	 * @throws ApplicationException
 	 */
-	public void testZeroAssociatedObjectsNestedSearch1() throws ApplicationException
+	
+	public void testAssociatedObjectsNestedSearch1() throws ApplicationException
 	{
 		Pendant searchObject = new Pendant();
 		searchObject.setId(new Integer(3));
@@ -95,7 +96,7 @@ public class O2OBidirectionalWJoinTest extends SDKTestBase
 		assertNotNull(result.getShape());
 		
 		Chain chain = result.getChain();
-		assertNull(chain);
+		assertNotNull(chain);
 	}
 
 	/**
@@ -105,14 +106,14 @@ public class O2OBidirectionalWJoinTest extends SDKTestBase
 	 * 
 	 * @throws ApplicationException
 	 */
-	public void testZeroAssociatedObjectsNestedSearch2() throws ApplicationException
+	public void testAssociatedObjectsNestedSearch2() throws ApplicationException
 	{
 		Pendant searchObject = new Pendant();
 		searchObject.setId(new Integer(3));
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin.Chain",searchObject );
 
 		assertNotNull(results);
-		assertEquals(0,results.size());
+		assertEquals(1,results.size());
 	}		
 
 	
@@ -285,11 +286,11 @@ public class O2OBidirectionalWJoinTest extends SDKTestBase
 	/**
 	 * Uses CQL Criteria for search
 	 * Verifies that the results are returned 
-	 * Verifies size of the result set is 0
+	 * Verifies size of the result set is 1
 	 * 
 	 * @throws ApplicationException
 	 */
-	public void testZeroAssociatedObjectCQL() throws ApplicationException
+	public void testAssociatedObjectCQL() throws ApplicationException
 	{
 		CQLQuery cqlQuery = new CQLQuery();
 		CQLObject target = new CQLObject();
@@ -306,7 +307,7 @@ public class O2OBidirectionalWJoinTest extends SDKTestBase
 		Collection results = getApplicationService().query(cqlQuery);
 
 		assertNotNull(results);
-		assertEquals(0,results.size());
+		assertEquals(1,results.size());
 	}
 	
 	public void testGetMethods1() throws ApplicationException
@@ -338,7 +339,7 @@ public class O2OBidirectionalWJoinTest extends SDKTestBase
 		assertEquals(1,results.size());
 		
 		result = (Pendant)results.iterator().next();
-		assertNull(result.getChain());
+		assertNotNull(result.getChain());
 		
 	}
 
@@ -372,7 +373,7 @@ public class O2OBidirectionalWJoinTest extends SDKTestBase
 		assertEquals(1,results.size());
 		
 		result = (Chain)results.iterator().next();
-		assertNull(result.getPendant());
+		assertNotNull(result.getPendant());
 		
 	}
 	
