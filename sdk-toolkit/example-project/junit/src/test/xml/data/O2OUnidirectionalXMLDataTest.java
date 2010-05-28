@@ -202,7 +202,7 @@ public class O2OUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 			
 			if (result2.getId() < 4){//Person id=1,2,3 have an associated Address; the others don't
 				
-				validateAssociation(result,"Address","livesAt");
+				validateAssociation(result,"Address","livesAt", true, false);
 				
 				address = result2.getLivesAt();
 				assertNotNull(address);

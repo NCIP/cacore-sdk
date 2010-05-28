@@ -201,7 +201,7 @@ public class M2OUnidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 
 			if (result2.getId() != 12) { //Song id=12 has no Album associated with it
 				
-				validateAssociation(result,"Album","album");
+				validateAssociation(result,"Album","album", true, false);
 				
 				album = result2.getAlbum();
 				assertNotNull(album);

@@ -202,7 +202,7 @@ public class M2OUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 			if (result2.getId() != 4) { //Chef id=4 has no Restaurant associated with it
 				restaurant = result2.getRestaurant();
 				
-				validateAssociation(result,"Restaurant","restaurant");
+				validateAssociation(result,"Restaurant","restaurant", true, false);
 				
 				assertNotNull(restaurant);
 				assertNotNull(restaurant.getId());

@@ -141,7 +141,7 @@ public class ChildWithAssociationXMLMappingTest extends SDKXMLMappingTestBase
 		if (useGMETags){
 			validateClassAssociationElements(targetClass,"CreditGMEAlias", associatedClass,"BankGMEAlias","issuingBank","bankAliasRolename", false);
 		} else{
-			validateClassAssociationElements(targetClass, associatedClass,"issuingBank", false);
+			validateClassAssociationElements(targetClass, targetClass.getSimpleName(), associatedClass, "issuingBank", "issuingBank", null, false);
 		}
 	}	
 }

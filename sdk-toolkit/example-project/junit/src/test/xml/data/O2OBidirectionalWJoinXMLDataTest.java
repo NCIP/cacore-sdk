@@ -112,7 +112,7 @@ public class O2OBidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(result2.getShape());
 		
 		Chain chain = result2.getChain();
-		assertNull(chain);
+		assertNotNull(chain);
 	}
 	
 	/**
@@ -244,7 +244,7 @@ public class O2OBidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 		result = (Pendant)results.iterator().next();
 		toXML(result);
 		result2 = (Pendant)fromXML(result);
-		assertNull(result2.getChain());
+		assertNotNull(result2.getChain());
 		
 	}
 
@@ -283,7 +283,7 @@ public class O2OBidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 		result = (Chain)results.iterator().next();
 		toXML(result);
 		result2 = (Chain)fromXML(result);
-		assertNull(result2.getPendant());
+		assertNotNull(result2.getPendant());
 		
 	}
 	
@@ -309,7 +309,7 @@ public class O2OBidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 			
 			if (result2.getId() != 3){ // Pendant id = 3 does not have an associated Chain	
 				
-				validateAssociation(result,"Chain","chain");
+				validateAssociation(result,"Chain","chain", true, false);
 				
 				chain = result2.getChain();
 				assertNotNull(chain);
@@ -341,7 +341,7 @@ public class O2OBidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 			
 			if (result2.getId() != 3){ // Chain id = 3 does not have an associated Pendant
 				
-				validateAssociation(result,"Pendant","pendant");
+				validateAssociation(result,"Pendant","pendant", true, false);
 				
 				pendant = result2.getPendant();
 				assertNotNull(pendant);

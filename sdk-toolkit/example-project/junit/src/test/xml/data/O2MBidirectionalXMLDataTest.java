@@ -142,7 +142,7 @@ public class O2MBidirectionalXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(result2.getId());
 		assertNotNull(result2.getType());
 		
-		validateAssociation(result,"HardDrive","hardDriveCollection");
+		validateAssociation(result,"HardDrive","hardDriveCollection", true, false);
 		
 		Collection hardDriveCollection = result2.getHardDriveCollection();
 		Iterator j = hardDriveCollection.iterator();
@@ -236,7 +236,7 @@ public class O2MBidirectionalXMLDataTest extends SDKXMLDataTestBase
 			assertNotNull(result2.getId());
 			assertNotNull(result2.getSize());
 			
-			validateAssociation(result,"Computer","computer");
+			validateAssociation(result,"Computer","computer", true, false);
 			
 			computer = result2.getComputer();
 			assertNotNull(computer);

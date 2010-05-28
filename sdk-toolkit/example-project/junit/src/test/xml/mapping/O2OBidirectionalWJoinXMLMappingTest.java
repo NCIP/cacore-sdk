@@ -84,7 +84,7 @@ public class O2OBidirectionalWJoinXMLMappingTest extends SDKXMLMappingTestBase
 		Class targetClass = Pendant.class;
 		Class associatedClass = Chain.class;
 
-		validateClassAssociationElements(targetClass, associatedClass, "chain",false);
+		validateClassAssociationElements(targetClass, targetClass.getSimpleName(), associatedClass, "chain", "chain", null, false);
 	}	
 	
 	
@@ -100,6 +100,7 @@ public class O2OBidirectionalWJoinXMLMappingTest extends SDKXMLMappingTestBase
 		Class targetClass = Chain.class;
 		Class associatedClass = Pendant.class;
 
-		validateClassAssociationElements(targetClass, associatedClass, "pendant",false);
+		validateClassAssociationElements(targetClass, targetClass.getSimpleName(), associatedClass, "pendant", "pendant", null, false);
+		
 	}	
 }

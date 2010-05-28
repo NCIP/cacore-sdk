@@ -199,14 +199,14 @@ public class O2OMultipleAssociationXMLDataTest extends SDKXMLDataTestBase
 			assertNotNull(result2.getId());
 			assertNotNull(result2.getName());
 			
-			validateAssociation(result,"Parent","father");
+			validateAssociation(result,"Parent","father", true, false);
 			
 			father = result2.getFather();
 			assertNotNull(father);
 			assertNotNull(father.getId());
 			assertNotNull(father.getName());
 			
-			validateAssociation(result,"Parent","mother");
+			validateAssociation(result,"Parent","mother", true, false);
 			
 			mother = result2.getMother();
 			assertNotNull(mother);

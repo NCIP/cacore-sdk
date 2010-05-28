@@ -16,12 +16,17 @@ public abstract class SDKWSTestBase extends TestCase {
 
 
 	private static String url =null;
+	private static String serverType =null;
 	
 	protected void setUp() throws Exception {
 		super.setUp();
 		url = System.getProperty("webservice.url");
 		if (url == null || "".equals(url)) {
-			url="http://localhost:21080/example/services/exampleService";
+			
+			if(serverType != null && serverType.equalsIgnoreCase("jboss"))
+				url="http://localhost:19280/example/services/exampleService";
+			else
+				url="http://localhost:21080/example/services/exampleService";
 		}
 	}
 	

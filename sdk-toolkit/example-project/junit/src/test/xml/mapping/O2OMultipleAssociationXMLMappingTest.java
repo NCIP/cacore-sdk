@@ -87,7 +87,8 @@ public class O2OMultipleAssociationXMLMappingTest extends SDKXMLMappingTestBase
 		Class targetClass = Child.class;
 		Class associatedClass = Parent.class;
 
-		validateClassAssociationElements(targetClass, associatedClass, "father",false);
+		validateClassAssociationElements(targetClass, targetClass.getSimpleName(), associatedClass, "father", "father", null, false);
+		
 	}	
 	
 	
@@ -103,7 +104,8 @@ public class O2OMultipleAssociationXMLMappingTest extends SDKXMLMappingTestBase
 		Class targetClass = Child.class;
 		Class associatedClass = Parent.class;
 
-		validateClassAssociationElements(targetClass, associatedClass, "mother",false);
+		validateClassAssociationElements(targetClass, targetClass.getSimpleName(), associatedClass, "mother", "mother", null, false);
+		
 	}	
 		
 	/**

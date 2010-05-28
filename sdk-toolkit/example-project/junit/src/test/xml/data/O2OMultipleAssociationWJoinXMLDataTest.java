@@ -200,14 +200,14 @@ public class O2OMultipleAssociationWJoinXMLDataTest extends SDKXMLDataTestBase
 			assertNotNull(result2.getId());
 			assertNotNull(result2.getName());
 			
-			validateAssociation(result,"InLaw","father");			
+			validateAssociation(result,"InLaw","father", true, false);			
 			
 			fatherInLaw = result2.getFather();
 			assertNotNull(fatherInLaw);
 			assertNotNull(fatherInLaw.getId());
 			assertNotNull(fatherInLaw.getName());
 			
-			validateAssociation(result,"InLaw","mother");
+			validateAssociation(result,"InLaw","mother", true, false);
 			
 			motherInLaw = result2.getMother();
 			assertNotNull(motherInLaw);

@@ -75,7 +75,7 @@ public class LevelAssociationXMLDataTest extends SDKXMLDataTestBase
 			validateClassElements(result);
 			validateAttribute(result,"id",result.getId());
 			validateAttribute(result,"image",result.getImage());
-			validateAttribute(result,"Name",result.getName());
+			validateAttribute(result,"name",result.getName());
 			
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
@@ -208,7 +208,7 @@ public class LevelAssociationXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(result2);
 		assertNotNull(result2.getId());
 		
-		validateAssociation(card,"Suit","suit");
+		validateAssociation(card,"Suit","suit", true, false);
 		
 		Suit suit = result2.getSuit();
 		

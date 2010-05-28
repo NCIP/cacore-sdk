@@ -142,7 +142,7 @@ public class O2MUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 		assertNotNull(result2.getId());
 		assertNotNull(result2.getName());
 		
-		validateAssociation(result,"LatchKey","keyCollection");
+		validateAssociation(result,"LatchKey","keyCollection", true, false);
 		
 		Collection keyCollection = result2.getKeyCollection();
 		assertEquals(true, keyCollection.size()>0);
