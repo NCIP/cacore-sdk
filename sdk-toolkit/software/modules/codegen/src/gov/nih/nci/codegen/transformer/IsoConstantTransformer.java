@@ -97,8 +97,8 @@ public class IsoConstantTransformer implements Transformer{
 			{
 				for (UMLAttribute attribute : currentKlass.getAttributes()){
 					if(!transformerUtils.isJavaDataType(attribute)){
-						RootNode rootNode = isoDatatypeTransformationHelper.getDatatypeNode(klas,attribute,table);
-						stringBuffer.append(convertToAnnotation(transformerUtils.getFQCN(klas)+"."+attribute.getName(), rootNode));
+						RootNode rootNode = isoDatatypeTransformationHelper.getDatatypeNode(currentKlass,attribute,table);
+						stringBuffer.append(convertToAnnotation(transformerUtils.getFQCN(currentKlass)+"."+attribute.getName(), rootNode));
 						
 					}
 				}
