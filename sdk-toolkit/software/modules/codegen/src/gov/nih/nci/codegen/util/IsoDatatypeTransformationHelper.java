@@ -94,13 +94,14 @@ public class IsoDatatypeTransformationHelper
 	 * @param table
 	 * @throws GenerationException
 	 */
-	public RootNode getDatatypeNode(UMLClass klass, UMLAttribute attr, UMLClass table) throws GenerationException
+	public RootNode getDatatypeNode(UMLClass klass, UMLAttribute attr, UMLClass table, boolean skipDataModelInformation) throws GenerationException
 	{
 		RootNode rootNode = createDatatypeNode(klass, attr, table);
 		traverseNodeAndAttachDataType(rootNode, klass, attr);
 		getGlobalConstantNode(rootNode);
 		traverseNodeAndAttachDataType(rootNode, klass, attr);
-		attachDataModelInformation(rootNode,klass, attr, table);
+		if(!skipDataModelInformation)
+			attachDataModelInformation(rootNode,klass, attr, table);
 		//printNode(rootNode, "");
 		return rootNode;
 	}
@@ -524,15 +525,21 @@ public class IsoDatatypeTransformationHelper
 		{
 			for(UMLAttribute attribute:currentKlass.getAttributes())
 			{
-				String tagValuePrefix = utils.TV_MAPPED_ATTR_CONSTANT+":"+utils.getFQCN(currentKlass)+".";
-				for(UMLTaggedValue tv: attribute.getTaggedValues())
+				UMLClass innerCurrentClass = datatypeClass;
+				
+				while(innerCurrentClass != null)
 				{
-					if (tv.getName().startsWith(tagValuePrefix))
+					String tagValuePrefix = utils.TV_MAPPED_ATTR_CONSTANT+":"+utils.getFQCN(innerCurrentClass)+".";
+					for(UMLTaggedValue tv: attribute.getTaggedValues())
 					{
-						String tvName = tv.getName();
-						parseAndAddNode(rootNode,tvName.substring(tagValuePrefix.length())
-								,tv.getValue(),false,true);
+						if (tv.getName().startsWith(tagValuePrefix))
+						{
+							String tvName = tv.getName();
+							parseAndAddNode(rootNode,tvName.substring(tagValuePrefix.length())
+									,tv.getValue(),false,true);
+						}
 					}
+					innerCurrentClass = utils.getSuperClass(innerCurrentClass);
 				}
 				//Locate the child node and if it exist then proceed recursively
 				for(Node node: rootNode.getInnerNodes())
@@ -944,14 +951,14 @@ public class IsoDatatypeTransformationHelper
 				
 				for(UMLAttribute attr: attributes)
 				{
-					RootNode rootNode = getDatatypeNode(klass, attr, table);
+					RootNode rootNode = getDatatypeNode(klass, attr, table,false);
 					printNode(rootNode, "");
 					StringBuffer buffer = convertToHibernateComponent(rootNode,"\n");
 					System.out.print(buffer);
 				}
 				for(UMLAttribute attr: attributes)
 				{
-					RootNode rootNode = getDatatypeNode(klass, attr, table);
+					RootNode rootNode = getDatatypeNode(klass, attr, table,false);
 					if(requiresSeperateClassMapping(rootNode))
 					{
 						StringBuffer buffer = convertToHibernateClass(rootNode,"\n");
@@ -983,7 +990,7 @@ public class IsoDatatypeTransformationHelper
 		{
 			if(!attr.getName().equals("id"))
 			{
-				RootNode rootNode = getDatatypeNode(klass, attr, table);
+				RootNode rootNode = getDatatypeNode(klass, attr, table,false);
 				if(requiresJoin(rootNode))
 					joinCollection.add(attr);
 				else
