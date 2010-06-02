@@ -93,17 +93,17 @@ public class IsoConstantTransformer implements Transformer{
 			UMLAttribute idAttr = transformerUtils.getClassIdAttr(klas);
 			
 			UMLClass currentKlass = klas;
-			do//while (currentKlass!= null)
+			while (currentKlass!= null)
 			{
 				for (UMLAttribute attribute : currentKlass.getAttributes()){
 					if(!transformerUtils.isJavaDataType(attribute)){
-						RootNode rootNode = isoDatatypeTransformationHelper.getDatatypeNode(klas,attribute,table);
+						RootNode rootNode = isoDatatypeTransformationHelper.getDatatypeNode(currentKlass,attribute,table);
 						stringBuffer.append(convertToAnnotation(transformerUtils.getFQCN(klas)+"."+attribute.getName(), rootNode));
 						
 					}
 				}
 				currentKlass = transformerUtils.getSuperClass(currentKlass);
-			}while(currentKlass!=null && transformerUtils.isImplicitParent(currentKlass));
+			}//while(currentKlass!=null && transformerUtils.isImplicitParent(currentKlass));
 		}
 		stringBuffer.append("\n</beans>");
 		return stringBuffer.toString();
@@ -113,7 +113,7 @@ public class IsoConstantTransformer implements Transformer{
 
 		StringBuffer sb = new StringBuffer();
 		
-		if(convertToAnnotationNew(rootNode,"",sb,"   ",true))
+		if(convertToAnnotationNew(dataTypeClassName,rootNode,"",sb,"   ",true))
 		{
 			return sb;
 		}
@@ -125,7 +125,7 @@ public class IsoConstantTransformer implements Transformer{
 		
 	}
 	
-	private boolean convertToAnnotationNew(Node node, String prefixBeanString, StringBuffer strBuffer, String spacer, boolean useBeansFullName ) throws GenerationException {
+	private boolean convertToAnnotationNew(String dataTypeClassName, Node node, String prefixBeanString, StringBuffer strBuffer, String spacer, boolean useBeansFullName ) throws GenerationException {
 		boolean printSomethingAlready = false;
 		String spacer2 = spacer + "   ";
 		if (node instanceof ConstantNode)
@@ -150,7 +150,8 @@ public class IsoConstantTransformer implements Transformer{
 			if (hasConstant || hasComplex)
 			{
 				if (useBeansFullName)
-					strBuffer.append("\n" + spacer2 + "<bean id=\"" + ((RootNode) node).getParentClassName() + "." + node.getName() + "\" class=\"gov.nih.nci.iso21090.hibernate.node.ComplexNode\">");
+					//strBuffer.append("\n" + spacer2 + "<bean id=\"" + ((RootNode) node).getParentClassName() + "." + node.getName() + "\" class=\"gov.nih.nci.iso21090.hibernate.node.ComplexNode\">");
+					strBuffer.append("\n" + spacer2 + "<bean id=\"" +dataTypeClassName+ "\" class=\"gov.nih.nci.iso21090.hibernate.node.ComplexNode\">");
 				else
 					strBuffer.append("\n" + spacer2 + "<bean  class=\"gov.nih.nci.iso21090.hibernate.node.ComplexNode\">");
 				
@@ -161,7 +162,7 @@ public class IsoConstantTransformer implements Transformer{
 				StringBuffer sbInner = new StringBuffer();
 				for (Node nde : ((ComplexNode) node).getInnerNodes())
 				{
-					if (convertToAnnotationNew(nde, "", sbInner, spacer2 + "        ", false))
+					if (convertToAnnotationNew(null,nde, "", sbInner, spacer2 + "        ", false))
 					{
 						printSomethingAlready = true;
 					} else
