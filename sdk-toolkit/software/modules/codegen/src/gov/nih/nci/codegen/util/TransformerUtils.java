@@ -1742,7 +1742,8 @@ public class TransformerUtils
 				}
 			}
 		}
-		if(count < minOccurrence) throw new GenerationException("No value of "+value+" found for "+key+" tag in class : "+getFQCN(klass));
+		if(count < minOccurrence) 
+			throw new GenerationException("No value of "+value+" found for "+key+" tag in class : "+getFQCN(klass));
 		if(count > maxOccurrence) throw new GenerationException("More than one values found for "+key+" tag in class : "+getFQCN(klass));
 		
 		return result;
@@ -1781,7 +1782,8 @@ public class TransformerUtils
 			}
 		}
 		
-		if(count < minOccurrence) throw new GenerationException("No value of "+value+" found for "+key+" tag in class : "+getFQCN(klass));
+		if(count < minOccurrence) 
+			throw new GenerationException("No value of "+value+" found for "+key+" tag in class : "+getFQCN(klass));
 		if(count > maxOccurrence) throw new GenerationException("More than one values found for "+key+" tag in class : "+getFQCN(klass));
 	
 		return result;
@@ -2810,7 +2812,7 @@ public class TransformerUtils
 						isoDatatypeTransformationHelper.setModel(model);
 						isoDatatypeTransformationHelper.setUtils(this);
 
-						RootNode rootNode = isoDatatypeTransformationHelper.getDatatypeNode(klass, attr, table);
+						RootNode rootNode = isoDatatypeTransformationHelper.getDatatypeNode(klass, attr, table,false);
 
 						if (isoDatatypeTransformationHelper.requiresJoin(rootNode))
 							joinRequired.add(attr);
@@ -2878,7 +2880,7 @@ public class TransformerUtils
 		IsoDatatypeTransformationHelper isoDatatypeTransformationHelper = new IsoDatatypeTransformationHelper();
 		isoDatatypeTransformationHelper.setModel(model);
 		isoDatatypeTransformationHelper.setUtils(this);
-		RootNode rootNode = isoDatatypeTransformationHelper.getDatatypeNode(klass, attribute, table);
+		RootNode rootNode = isoDatatypeTransformationHelper.getDatatypeNode(klass, attribute, table,false);
 		return rootNode;
 	}
 
