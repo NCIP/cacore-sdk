@@ -93,17 +93,17 @@ public class IsoConstantTransformer implements Transformer{
 			UMLAttribute idAttr = transformerUtils.getClassIdAttr(klas);
 			
 			UMLClass currentKlass = klas;
-			while (currentKlass!= null)
+			do//while (currentKlass!= null)
 			{
 				for (UMLAttribute attribute : currentKlass.getAttributes()){
 					if(!transformerUtils.isJavaDataType(attribute)){
-						RootNode rootNode = isoDatatypeTransformationHelper.getDatatypeNode(currentKlass,attribute,table);
-						stringBuffer.append(convertToAnnotation(transformerUtils.getFQCN(currentKlass)+"."+attribute.getName(), rootNode));
+						RootNode rootNode = isoDatatypeTransformationHelper.getDatatypeNode(klas,attribute,table);
+						stringBuffer.append(convertToAnnotation(transformerUtils.getFQCN(klas)+"."+attribute.getName(), rootNode));
 						
 					}
 				}
 				currentKlass = transformerUtils.getSuperClass(currentKlass);
-			}
+			}while(currentKlass!=null && transformerUtils.isImplicitParent(currentKlass));
 		}
 		stringBuffer.append("\n</beans>");
 		return stringBuffer.toString();
