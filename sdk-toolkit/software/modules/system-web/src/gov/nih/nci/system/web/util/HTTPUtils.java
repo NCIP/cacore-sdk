@@ -98,9 +98,9 @@ public class HTTPUtils implements Serializable{
 			put("gov.nih.nci.iso21090.DSet<gov.nih.nci.iso21090.Ii>",new JAXBISODsetIiAdapter<ANY, Any>());
 			put("gov.nih.nci.iso21090.DSet<gov.nih.nci.iso21090.Tel>",new JAXBISODsetTelAdapter<ANY, Any>());
 			put("gov.nih.nci.iso21090.DSet<gov.nih.nci.iso21090.Pq>",new JAXBISOIvlPqAdapter<ANY, Any>());
-			put("gov.nih.nci.iso21090.Ivl<gov.nih.nci.iso21090.Real",new JAXBISOIvlRealAdapter<ANY, Any>());
-			put("gov.nih.nci.iso21090.Ivl<gov.nih.nci.iso21090.Ts",new JAXBISOIvlTsAdapter<ANY, Any>());
-			put("gov.nih.nci.iso21090.Ivl<gov.nih.nci.iso21090.Int",new JAXBISOIvlIntAdapter<ANY, Any>());
+			put("gov.nih.nci.iso21090.Ivl<gov.nih.nci.iso21090.Real>",new JAXBISOIvlRealAdapter<ANY, Any>());
+			put("gov.nih.nci.iso21090.Ivl<gov.nih.nci.iso21090.Ts>",new JAXBISOIvlTsAdapter<ANY, Any>());
+			put("gov.nih.nci.iso21090.Ivl<gov.nih.nci.iso21090.Int>",new JAXBISOIvlIntAdapter<ANY, Any>());
 		}
 	};	
 
@@ -226,7 +226,6 @@ public class HTTPUtils implements Serializable{
 						}
 					}
 				}
-
 			}
 		}catch(Exception ex){
 			log.error("Exception: ", ex);
@@ -378,7 +377,6 @@ public class HTTPUtils implements Serializable{
 
 		StringBuffer critString = new StringBuffer();
 		for (StringTokenizer st = new StringTokenizer(criteria, delimiter); st.hasMoreElements();) {
-
 			String crit = st.nextToken().trim();
 			critString.append(crit);
 
@@ -399,15 +397,12 @@ public class HTTPUtils implements Serializable{
 			}
 		}
 		return criteriaList;
-
 	}
 
 	private boolean validateSyntax(String query) {
-
 		boolean valid = false;
 		int startCounter = 0;
 		int endCounter = 0;
-
 		for (int i = 0; i < query.length(); i++) {
 			if (query.charAt(i) == '[') {
 				startCounter++;
@@ -416,11 +411,9 @@ public class HTTPUtils implements Serializable{
 			}
 
 		}
-
 		if (startCounter == endCounter) {
 			valid = true;
 		}
-
 		return valid;
 	}
 
@@ -542,10 +535,7 @@ public class HTTPUtils implements Serializable{
 					}
 
 				}
-
-
 			} else{
-
 				for(int i = start; i< end; i++){
 					int recNum = index + i + 1;
 					recordNum = String.valueOf(recNum);
@@ -851,7 +841,6 @@ public class HTTPUtils implements Serializable{
 	 * @return
 	 * @throws Exception
 	 */
-	@SuppressWarnings("static-access")
 	private Object getFieldValue(Field field, Object domain) throws Exception{
 		Object value = null;
 		if(field.get(domain)!= null){
@@ -880,7 +869,6 @@ public class HTTPUtils implements Serializable{
 			if(jaxbAdapter==null){
 				jaxbAdapter= new JAXBISOAdapter<ANY, Any>();
 			}
-			System.out.println(field.getGenericType().toString());
 			org.iso._21090.ANY anyJaxb = jaxbAdapter.marshal((Any) value);
 			marshaller.marshal(anyJaxb, stringWriter);
 			value = stringWriter;
@@ -1099,26 +1087,17 @@ public class HTTPUtils implements Serializable{
 				if(!fieldType.startsWith("java.")){
 					bean = locateClass(fieldType);
 				}
-
 			}
-
-
 			String methName = "get"+ fieldName.substring(0,1).toUpperCase() + fieldName.substring(1);
-
 			String beanName = null;
-
 			if(bean){
 				beanName = fieldType.substring(fieldType.lastIndexOf(SystemConstant.DOT)+1);
 			}
-
-
-
 			String returnObjectName = fields[f].getName();
 			boolean collectionType = false;
 			if(returnObjectName.endsWith("Collection")|| fieldType.endsWith("Vector")|| fieldType.endsWith("HashSet")){
 				collectionType = true;
 			}
-
 			if((fieldType.startsWith("java.")&& !(collectionType)) || fields[f].getType().isPrimitive()){
 				String strValue = " ";
 				if(value != null){
@@ -1139,8 +1118,6 @@ public class HTTPUtils implements Serializable{
 
 				out.println(disp);
 			}
-
-
 		}
 		recordNum++;
 		out.println("</TR>");

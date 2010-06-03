@@ -1,10 +1,20 @@
 package gov.nih.nci.system.web.util;
 
+import gov.nih.nci.iso21090.Ad;
+import gov.nih.nci.iso21090.DSet;
+import gov.nih.nci.iso21090.Int;
+import gov.nih.nci.iso21090.Ivl;
+import gov.nih.nci.iso21090.Pq;
+import gov.nih.nci.iso21090.Real;
+import gov.nih.nci.iso21090.Ts;
 import gov.nih.nci.system.util.ClassCache;
 import gov.nih.nci.system.util.SystemConstant;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,8 +33,25 @@ import org.apache.log4j.Logger;
 public class SearchUtils {
 
 	private static Logger log = Logger.getLogger(SearchUtils.class.getName());
-	
+	String isoprefix = "gov.nih.nci.iso21090.";
 	private ClassCache classCache;	
+
+	private static Map<String, Object> isoTypeObjects = new HashMap<String, Object>() {
+		private static final long serialVersionUID = 1L;
+		{
+			put("gov.nih.nci.iso21090.Int", new Int());
+			put("gov.nih.nci.iso21090.Real", new Real());
+			put("gov.nih.nci.iso21090.Pq", new Pq());
+			put("gov.nih.nci.iso21090.Ts", new Ts());
+			put("gov.nih.nci.iso21090.Ad", new Ad());
+			put("gov.nih.nci.iso21090.Ivl<gov.nih.nci.iso21090.Int>",new Ivl<Int>());
+			put("gov.nih.nci.iso21090.Ivl<gov.nih.nci.iso21090.Real>",new Ivl<Real>());
+			put("gov.nih.nci.iso21090.Ivl<gov.nih.nci.iso21090.Pq>",new Ivl<Pq>());
+			put("gov.nih.nci.iso21090.Ivl<gov.nih.nci.iso21090.Ts>",new Ivl<Ts>());
+			put("gov.nih.nci.iso21090.DSet<gov.nih.nci.iso21090.Ad>",new DSet<Ad>());
+			
+		}
+	};
 	
 	public SearchUtils(ClassCache classCache){
 		this.classCache = classCache;
@@ -375,20 +402,7 @@ public class SearchUtils {
 				attRole = att.substring(0, att.indexOf(SystemConstant.LEFT_BRACKET));
 			}
 			if(attRole == null){
-				//@TODO updated for ISO-Example project
-				/*				
-	 				String attName = att.substring(att.indexOf(SystemConstant.AT)+1, att.indexOf(SystemConstant.EQUAL));
-					String attValue = att.substring(att.indexOf(SystemConstant.EQUAL)+1);
-					Field critField = getField(critObject.getClass(), attName);
-					critAttMethod = getAttributeSetMethodName(critObject, attName);                
-					Object value = getFieldValue(critField, attValue);
-					if( critAttMethod!= null){                    
-						critAttMethod.invoke(critObject,new Object[]{value});
-					}
-				*/
-				//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 					critObject= getCriteriaObject(att,critObject);
-				//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 			}
 			else{
 				String roleClassName = getRoleClassName(attRole);
@@ -413,22 +427,6 @@ public class SearchUtils {
 					for(int i=0; i<attList.size(); i++){
 						String critAtt = (String)attList.get(i);  						
 						roleObject=getCriteriaObject(critAtt, roleObject);
-						
-/*						@TODO needs to removed
- 						String attName = critAtt.substring(1, critAtt.indexOf(SystemConstant.EQUAL));
-						String attValue = critAtt.substring(critAtt.indexOf(SystemConstant.EQUAL)+1);
-						Field roleAttField = getField(Class.forName(roleClassName), attName);
-						Method roleAttMethod = getAttributeSetMethodName(Class.forName(roleClassName).newInstance(), attName);
-						if(attValue.indexOf(SystemConstant.COMMA)<1){
-							if(roleMethod != null){
-								try{
-									roleAttMethod.invoke(roleObject,new Object[]{getFieldValue(roleAttField, attValue)});
-								}catch(Exception e){
-									throw new Exception("Unable to set value for " + attName +" - "+e.getMessage());
-								}
-							}
-						}
-*/						
 						if(roleObject != null && attRole.indexOf("Collection")>0){
 							roleClassCollection.add(roleObject);
 						}
@@ -439,22 +437,6 @@ public class SearchUtils {
 					if(attRole.indexOf("Collection")>0){
 						roleClassCollection.add(roleObject);
 					}					
-/*					
- 					@TODO needs to removed
- 					String attName = att.substring(att.indexOf(SystemConstant.AT)+1, att.indexOf(SystemConstant.EQUAL));
-					String attValue = att.substring(att.indexOf(SystemConstant.EQUAL)+1, att.indexOf(SystemConstant.RIGHT_BRACKET));
-					Field roleAttField = getField(roleObject.getClass(), attName);
-					Method roleAttMethod = getAttributeSetMethodName(roleObject, attName);
-					if(attRole.indexOf("Collection")>0){
-						Object value = getFieldValue(roleAttField,attValue);
-						roleAttMethod.invoke(roleObject,new Object[]{value});
-						roleClassCollection.add(roleObject);
-					}
-					else{                        
-						Object value = getFieldValue(roleAttField, attValue);
-						roleAttMethod.invoke(roleObject,new Object[]{value});
-					}
-*/
 				}
 				if(attRole.indexOf("Collection")<1 && roleObject != null){                    
 					roleMethod.invoke(critObject, new Object[]{roleObject});                        
@@ -491,8 +473,9 @@ public class SearchUtils {
 		StringTokenizer tokenizer = new StringTokenizer(att,"@");
 		boolean flag=true;
 		Object tempObject=null;
-		while(tokenizer.hasMoreTokens()){
-			
+		//required by IVL datatype to keep track of class level parameters
+		StringBuffer tempISOParamType = new StringBuffer();
+		while(tokenizer.hasMoreTokens()){			
 			String tempToken=tokenizer.nextToken();
 			String attribute = tempToken.substring(0, tempToken.indexOf(SystemConstant.EQUAL));
 			int equalIndex = tempToken.indexOf(SystemConstant.EQUAL)+1;
@@ -502,11 +485,11 @@ public class SearchUtils {
 				boolean isExampleProject = !(tempToken.indexOf(SystemConstant.LEFT_BRACKET) > 0);
 				if (isExampleProject) {
 					String attributeValue = tempToken.substring(equalIndex,tempToken.length());
-					createObject(rootObject, attribute, attributeValue);
+					createObject(rootObject, attribute, attributeValue,tempISOParamType);
 					return rootObject;
 				}
 				//start: @id=[ iso-project
-				Object tempObject2=createObject(rootObject, attribute,null);
+				Object tempObject2=createObject(rootObject, attribute,null,tempISOParamType);
 				Method m=getAttributeGetMethodName(tempObject2, attribute);
 				tempObject=m.invoke(tempObject2);				
 				flag=false;
@@ -514,37 +497,76 @@ public class SearchUtils {
 				boolean isAttValue = tempToken.indexOf(SystemConstant.RIGHT_BRACKET)>0;
 				if(isAttValue){
 					//end: set the value of iso object
-					String attributeValue=tempToken.substring(equalIndex,tempToken.indexOf(SystemConstant.RIGHT_BRACKET));
+					String tempAttributeValue=tempToken.substring(equalIndex,tempToken.indexOf(SystemConstant.RIGHT_BRACKET));
 					Method m=getAttributeSetMethodName(tempObject, attribute);
+					Field field = getField(tempObject.getClass(), attribute);
+					Object attributeValue=getFieldValue(field,tempAttributeValue);
 					m.invoke(tempObject,attributeValue);
 					return rootObject;
 				}
-				Object tempObject2=createObject(tempObject, attribute,null);
+				Object tempObject2=createObject(tempObject, attribute,null,tempISOParamType);
 				Method m=getAttributeGetMethodName(tempObject2, attribute);
 				tempObject=m.invoke(tempObject2);	
 			}			
 		}
-		return att;
+		return rootObject;
 	}
 	
+	// using reflection, for the rootObject, set the attribute
 	private Object createObject(Object childObject, String attribute,
-			String attributeValue) throws Exception{
-		// using reflection, for the rootObject, set the attribute
+			String attributeValue,StringBuffer tempISOParamType) throws Exception{
 		Field field = getField(childObject.getClass(), attribute);
 		Method attMethod = getAttributeSetMethodName(childObject, attribute);
-
 		Object value = null;
-		if (field.getType().getName().startsWith("gov.nih.nci.iso21090")) {
-			value = Class.forName(field.getType().getName()).newInstance();
+		if (field.getType().getName().startsWith(isoprefix)) {
+			Method getterMethod = getAttributeGetMethodName(childObject,attribute);
+			value = getterMethod.invoke(childObject);
+			if (value == null) {
+				value = getFieldTypeObject(attMethod,field,tempISOParamType); 
+			}
 		} else {
 			value = getFieldValue(field, attributeValue);
 		}
-		if (attMethod != null) {
+		try {
 			attMethod.invoke(childObject, new Object[] { value });
-		}
+		} catch (Exception e) {
+		    log.error("Exception: ", e);
+		    throw e;
+		}		
 		return childObject;
 	}
+
+	private Object getFieldTypeObject(Method attMethod,Field field,StringBuffer classISOParamType) throws Exception{		
+		Type[] genericParameterTypes = attMethod.getGenericParameterTypes();
+		Object fieldTypeObject=null;				
+		for(Type genericParameterType : genericParameterTypes){
+			if (genericParameterType instanceof TypeVariable<?>) {				
+				fieldTypeObject = getGenericParamISOTypeObject(classISOParamType.toString());
+			} else if(genericParameterType instanceof ParameterizedType){
+			    ParameterizedType pType = (ParameterizedType) genericParameterType;
+			    String paramString = pType.toString();
+			    int beginIndex=paramString.indexOf("<");
+			    int lastIndex=paramString.indexOf(">");
+				fieldTypeObject = getGenericParamISOTypeObject(paramString);
+			    String isoParameter = paramString.substring(beginIndex+1,lastIndex);
+				classISOParamType.append(isoParameter);
+			}
+		}
+		if(fieldTypeObject==null){
+			String fieldName = field.getType().getName();
+			fieldTypeObject=Class.forName(fieldName).newInstance();
+		}
+		return fieldTypeObject;
+	}
 	
+	private Object getGenericParamISOTypeObject(String isoTypeObjectName) {
+		Object isoObject = isoTypeObjects.get(isoTypeObjectName);
+		if(isoObject==null){
+			log.error(" Add mapping for "+isoTypeObjectName +" in SearchUtils.java");
+		}
+		return isoObject;
+	}
+
 	private Method getAttributeGetMethodName(Object attObject, String attName){    
 		Method m = getMethod(attObject.getClass(), "get"+ attName.substring(0,1).toUpperCase() + attName.substring(1));
 		return m;
@@ -610,50 +632,44 @@ public class SearchUtils {
 	 * @return  returns an object with the new value
 	 * @throws Exception
 	 */
-	public Object convertValues(Field field, Object value) throws Exception{
+	public Object convertValues(Field field, Object value) throws Exception {
 		String fieldType = field.getType().getName();
 		String valueType = value.getClass().getName();
 		Object convertedValue = null;
-		try{
-			if(fieldType.equals("java.lang.Long")){
-				if(valueType.equals("java.lang.String")){
-					convertedValue = new Long((String)value);
+		try {
+			if (fieldType.equals("java.lang.Long")) {
+				if (valueType.equals("java.lang.String")) {
+					convertedValue = new Long((String) value);
 				}
-			}
-			else if(fieldType.equals("java.lang.Integer")){
-				if(valueType.equals("java.lang.String")){
-					convertedValue = new Integer((String)value);
+			} else if (fieldType.equals("java.lang.Integer")) {
+				if (valueType.equals("java.lang.String")) {
+					convertedValue = new Integer((String) value);
 				}
-			}
-			else if(fieldType.equals("java.lang.Float")){
-				if(valueType.equals("java.lang.String")){
-					convertedValue = new Float((String)value);
+			} else if (fieldType.equals("java.lang.Float")) {
+				if (valueType.equals("java.lang.String")) {
+					convertedValue = new Float((String) value);
 				}
-			}
-			else if(fieldType.equals("java.lang.Double")){
-				if(valueType.equals("java.lang.String")){
-					convertedValue = new Double((String)value);
+			} else if (fieldType.equals("java.lang.Double")) {
+				if (valueType.equals("java.lang.String")) {
+					convertedValue = new Double((String) value);
 				}
-			}
-			else if(fieldType.equals("java.lang.Boolean")){
-				if(valueType.equals("java.lang.String")){
-					convertedValue = new Boolean((String)value);
+			} else if (fieldType.equals("java.lang.Boolean")) {
+				if (valueType.equals("java.lang.String")) {
+					convertedValue = new Boolean((String) value);
 				}
-			}
-			else if(fieldType.equals("java.util.Date")){
+			} else if (fieldType.equals("java.util.Date")) {
 				SimpleDateFormat format = new SimpleDateFormat("MM-dd-yyyy");
-				if(valueType.equals("java.lang.String")){
-					convertedValue = format.parse((String)value);
+				if (valueType.equals("java.lang.String")) {
+					convertedValue = format.parse((String) value);
 				}
-			}
-			else{
-				throw new Exception("type mismatch - "+valueType);
+			} else {
+				throw new Exception("type mismatch - " + valueType);
 			}
 
-
-		}catch(Exception ex){
-			String msg = "type mismatch " + field.getName() + " is of type - "+ fieldType + " \n "+ ex.getMessage();
-			log.error("ERROR : "+ msg);
+		} catch (Exception ex) {
+			String msg = "type mismatch " + field.getName() + " is of type - "
+					+ fieldType + " \n " + ex.getMessage();
+			log.error("ERROR : " + msg);
 			throw new Exception(msg);
 		}
 
@@ -721,6 +737,5 @@ public class SearchUtils {
 	public String getTargetClassName(String className, String roleName) throws Exception{	
 		return classCache.getReturnType(className, roleName);
 	}
-
 }
 
