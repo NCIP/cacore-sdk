@@ -457,6 +457,7 @@ public class SearchUtils {
 							throw new Exception("Invalid arguments passed over to method : "+ roleMethod);
 						}
 					}catch(Exception ex){
+						 log.error("Exception: ", ex);
 						throw new Exception("Cannot invoke method - " + roleMethod.getName());
 					}
 				}else{
@@ -464,7 +465,8 @@ public class SearchUtils {
 				}
 			}
 		}catch(Exception ex){
-			throw new Exception(ex.getMessage());
+			 log.error("Exception: ", ex);
+			throw ex;
 		}
 		return critObject;
 	}	
