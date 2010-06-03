@@ -221,7 +221,7 @@ public class UMLModelMappingValidator implements Validator
 		try 
 		{
 			UMLAttribute idAttr = transformerUtils.getClassIdAttr(klass);
-			log.debug("idAttr: " + idAttr.getName());
+//			log.debug("idAttr: " + idAttr.getName());
 			String discriminatorColumnName = transformerUtils.findDiscriminatingColumnName(klass);		
 			log.debug("discriminatorColumnName: " + discriminatorColumnName);
 			if(discriminatorColumnName == null || "".equals(discriminatorColumnName))
