@@ -93,7 +93,7 @@ public class AntTools {
 		
 		File buildFile = ResourceManager.getProjectBuildFile(projectDirPath);
 		
-		String target = "build-system";
+		String target = "dist";
 
 		Map<String,String> propsMap=new TreeMap<String,String>();
 		propsMap.put("install.properties", "");
