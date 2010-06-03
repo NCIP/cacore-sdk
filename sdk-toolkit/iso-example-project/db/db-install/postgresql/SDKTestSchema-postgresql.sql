@@ -706,8 +706,8 @@ INSERT INTO address (ID, ZIP) VALUES (3, 'Zip3');
 INSERT INTO address (ID, ZIP) VALUES (4, 'Zip4');
 INSERT INTO address (ID, ZIP) VALUES (5, 'Zip5');
 
-INSERT INTO album (ID, TITLE) VALUES (1.0, 'Venetian Oboe Concertos');
-INSERT INTO album (ID, TITLE) VALUES (2.0, 'The Cello');
+INSERT INTO album (ID, TITLE) VALUES (1, 'Venetian Oboe Concertos');
+INSERT INTO album (ID, TITLE) VALUES (2, 'The Cello');
 
 INSERT INTO album_song (ALBUM_ID, SONG_ID) VALUES (1, 1);
 INSERT INTO album_song (ALBUM_ID, SONG_ID) VALUES (1, 2);
@@ -1062,7 +1062,7 @@ INSERT INTO hard_drive (ID, DRIVE_SIZE, COMPUTER_ID) VALUES (1, 1, 1);
 INSERT INTO hard_drive (ID, DRIVE_SIZE, COMPUTER_ID) VALUES (2, 2, 2);
 INSERT INTO hard_drive (ID, DRIVE_SIZE, COMPUTER_ID) VALUES (3, 3, 2);
 
-INSERT INTO hi_value (NEXT_VALUE) VALUES (8.0);
+INSERT INTO hi_value (NEXT_VALUE) VALUES (8);
 
 INSERT INTO hl7_data_type (ID, ROOT, EXTENSION, XML) VALUES (1, 'My Root', 'My Ext', NULL);
 INSERT INTO hl7_data_type (ID, ROOT, EXTENSION, XML) VALUES (2, 'My Root 2', 'My Ext 2', NULL);
