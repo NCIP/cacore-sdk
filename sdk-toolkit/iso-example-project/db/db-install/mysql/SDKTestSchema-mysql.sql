@@ -50,7 +50,7 @@ COMMIT;
 
 DROP TABLE IF EXISTS `ALBUM`;
 CREATE TABLE `ALBUM` (
-  `ID` decimal(8,2) NOT NULL,
+  `ID` int(8) NOT NULL,
   `TITLE` varchar(50) default NULL,
   PRIMARY KEY  (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
