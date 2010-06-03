@@ -19,7 +19,6 @@ import org.hibernate.mapping.Property;
 
 public class NestedCriteria2HQL
 {
-
 	private NestedCriteria criteria;
 	private Configuration cfg;
 	private boolean caseSensitive;	
@@ -28,6 +27,7 @@ public class NestedCriteria2HQL
 	private static Logger log = Logger.getLogger(NestedCriteria2HQL.class);
 
 	private List paramList = new ArrayList();
+	String isoprefix = "gov.nih.nci.iso21090.";
 
 	public NestedCriteria2HQL(NestedCriteria crit, Configuration cfg,boolean caseSensitive)
 	{
@@ -513,32 +513,53 @@ public class NestedCriteria2HQL
 		return false;
 	}
 
-
-
-	private String getObjectAttributeCriterion(String sourceAlias, Object obj, Configuration cfg) throws Exception 
-	{
+	@SuppressWarnings("unchecked")
+	private String getObjectAttributeCriterion(String sourceAlias, Object obj,
+			Configuration cfg) throws Exception {
 		StringBuffer whereClause = new StringBuffer();
-		HashMap criterionMap = getObjAttrCriterion(obj, cfg);
-		if (criterionMap != null)
-		{
+		HashMap<String,Object> criterionMap = getObjAttrCriterion(obj, cfg);
+		if (criterionMap != null) {
 			Iterator keys = criterionMap.keySet().iterator();
-			while (keys.hasNext())
-			{
+			while (keys.hasNext()) {
 				String key = (String) keys.next();
 				Object value = criterionMap.get(key);
-				if (!key.equals("id") && (value instanceof String))
-				{
-					if (isCaseSensitive())
-					{
-						whereClause.append(sourceAlias + SystemConstant.DOT + key + getOperator(value) + "? ");
+				if (!key.equals("id") && (value instanceof String)) {
+					if (isCaseSensitive()) {
+						whereClause.append(sourceAlias + SystemConstant.DOT+ key + getOperator(value) + "? ");
 						paramList.add(((String) value).replaceAll("\\*", "\\%"));
-					} else
-					{
-						whereClause.append("lower(" + sourceAlias + SystemConstant.DOT + key + ") " + getOperator(value) + "? ");
+					} else {
+						whereClause.append("lower(" + sourceAlias+ SystemConstant.DOT + key + ") "+ getOperator(value) + "? ");
 						paramList.add(((String) value).toLowerCase().replaceAll("\\*", "\\%"));
 					}
-				} else
-				{
+				}else if(!key.equals("id") && (value.getClass().getName().startsWith(isoprefix))){
+					StringBuffer tempBuffer=new StringBuffer();
+					List<WhereQueryObject> whereQueryObjects = new ArrayList<WhereQueryObject>();
+					generateISOWhereQuery(value, tempBuffer, whereQueryObjects);
+					int count=0;
+					for (WhereQueryObject whereQueryObject : whereQueryObjects) {
+						String whereQuery = whereQueryObject.getQuery();
+						Object whereParam = whereQueryObject.getParam();					
+						if (isCaseSensitive()) {
+							whereClause.append(sourceAlias + SystemConstant.DOT+ key + whereQuery+ getOperator(whereParam) + "? ");
+							if(whereParam instanceof String){
+								paramList.add(((String) whereParam).replaceAll("\\*", "\\%"));
+							}else{
+								paramList.add(whereParam);
+							}
+						} else {
+							whereClause.append("lower(" + sourceAlias+SystemConstant.DOT+key+ whereQuery + ") "+ getOperator(whereParam) + "? ");
+							if(whereParam instanceof String){
+								paramList.add(((String) whereParam).toLowerCase().replaceAll("\\*", "\\%"));
+							}else{
+								paramList.add(whereParam);
+							}
+						}
+						count++;						
+						if(count<whereQueryObjects.size()){
+							whereClause.append(" and ");
+						}
+					}
+				}else {
 					whereClause.append(sourceAlias).append(SystemConstant.DOT).append(key).append(getOperator(value)).append("? ");
 					paramList.add(value);
 				}
@@ -548,15 +569,50 @@ public class NestedCriteria2HQL
 		}
 		return whereClause.toString();
 	}
-
-	private HashMap getObjAttrCriterion(Object obj, Configuration cfg) throws Exception
+	
+	@SuppressWarnings("unchecked")
+	private void generateISOWhereQuery(Object obj, StringBuffer query,List<WhereQueryObject> whereQueryObjects) {
+		Class klass = obj.getClass();
+		while (!klass.getName().equals("java.lang.Object")) {
+			for (Field field : klass.getDeclaredFields()) {
+				int modifier = field.getModifiers();
+				if (!Modifier.isStatic(modifier)) {
+					try {
+						field.setAccessible(true);
+						Object value = field.get(obj);
+						if (value != null){
+							query.append(SystemConstant.DOT).append(field.getName());
+							if(!value.getClass().getName().startsWith(isoprefix)){
+								WhereQueryObject queryObject= new WhereQueryObject();
+								queryObject.setParam(value);
+								queryObject.setQuery(query.toString());
+								whereQueryObjects.add(queryObject);
+								return;
+							}	
+							generateISOWhereQuery(value,query,whereQueryObjects);
+							//delete the extra field names which are added during recursion
+							int startIndex=query.indexOf(SystemConstant.DOT+field.getName());
+							query.delete(startIndex, query.length());
+						}
+					} catch (IllegalArgumentException e) {
+						// No action
+					} catch (IllegalAccessException e) {
+						// No action
+					}
+				}
+			}
+			klass = klass.getSuperclass();
+		}
+	}
+	
+	private HashMap<String,Object> getObjAttrCriterion(Object obj, Configuration cfg) throws Exception
 	{
-		HashMap criterions = new HashMap();
+		HashMap<String,Object> criterions = new HashMap<String,Object>();
 		String objClassName = obj.getClass().getName();
 		PersistentClass pclass = getPersistentClass(objClassName);
 		
+		setAttrCriterion(obj, pclass, criterions);
 		if (pclass != null){
-			setAttrCriterion(obj, pclass, criterions);
 
 			while (pclass.getSuperclass() != null)
 			{
@@ -565,8 +621,12 @@ public class NestedCriteria2HQL
 					setAttrCriterion(obj, pclass, criterions);
 				}
 			}
-
-			String identifier = pclass.getIdentifierProperty().getName();
+			Property identifierProperty = pclass.getIdentifierProperty();
+			// in case of iso-datatypes identifier property is hidden.
+			if(identifierProperty==null){
+				return criterions;
+			}
+			String identifier = identifierProperty.getName();		
 			Field idField = getDeclaredField(pclass.getMappedClass(), identifier);
 			idField.setAccessible(true);
 			try {
@@ -577,7 +637,6 @@ public class NestedCriteria2HQL
 				// and the identifier field might be in a subclass of obj				
 			}
 		}
-
 		return criterions;
 	}
 
@@ -617,10 +676,10 @@ public class NestedCriteria2HQL
 		if(!skipAssociations)
 		{
 		associationCritMap = getObjAssocCriterion(obj, cfg);
-
+		PersistentClass tempPclass = getPersistentClass(obj.getClass().getName());
 		hql.append("select ");
 		hql.append(srcAlias);
-		hql.append(" from ").append(obj.getClass().getName()).append(" ").append(srcAlias);
+		hql.append(" from ").append(tempPclass.getDiscriminatorValue()).append(" ").append(srcAlias);
 
 		// get association value
 		if (associationCritMap != null && associationCritMap.size() > 0)
@@ -637,13 +696,15 @@ public class NestedCriteria2HQL
 					Object[] objs = ((Collection) roleValue).toArray();
 					for (int i = 0; i < objs.length; i++)
 					{
+						PersistentClass tempRolePclass = getPersistentClass(objs[i].getClass().getName());
 						String alias = getAlias(objs[i].getClass().getName(),counter++);
-						hql.append(",").append(objs[i].getClass().getName()).append(" ").append(alias);
+						hql.append(",").append(tempRolePclass.getDiscriminatorValue()).append(" ").append(alias);
 					}
 				} else
 				{
+					PersistentClass tempRolePclass = getPersistentClass(roleValue.getClass().getName());
 					String alias = getAlias(roleValue.getClass().getName(),counter++);
-					hql.append(",").append(roleValue.getClass().getName()).append(" ").append(alias);
+					hql.append(",").append(tempRolePclass.getDiscriminatorValue()).append(" ").append(alias);
 				}
 			}
 			hql.append(" where ");
@@ -873,5 +934,26 @@ public class NestedCriteria2HQL
 			klass = klass.getSuperclass();
 		}
 		return true;
-	}	
+	}
+	
+	private class WhereQueryObject {
+		String query;
+		Object param;
+
+		public void setParam(Object param) {
+			this.param = param;
+		}
+
+		public void setQuery(String query) {
+			this.query = query;
+		}
+
+		public String getQuery() {
+			return query;
+		}
+
+		public Object getParam() {
+			return param;
+		}
+	}
 }
