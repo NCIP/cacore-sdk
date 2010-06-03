@@ -872,19 +872,19 @@ public class TransformerUtils
 	{
 		
 		String fqcn = getFQCN(klass);
-		
 		UMLAttribute idAttr = getColumn(klass,TV_ID_ATTR_COLUMN, fqcn,true,0,1);
-		
 		if(idAttr !=null) return idAttr;
 		
 		String idAttrName = "id";
 		for(UMLAttribute attribute:klass.getAttributes())
+		{
 			if(idAttrName.equals(attribute.getName()))
 				return attribute;
-
+		}
+		
 		for(UMLGeneralization gen: klass.getGeneralizations())
 		{
-			if(gen.getSubtype() == klass && gen.getSupertype() != klass)
+			if(gen.getSubtype().equals(klass) && !gen.getSupertype().equals(klass))
 			{
 				UMLAttribute superId = getClassIdAttr((UMLClass)gen.getSupertype());
 				if(superId != null)
