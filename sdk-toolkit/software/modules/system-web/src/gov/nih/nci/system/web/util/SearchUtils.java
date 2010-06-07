@@ -1,11 +1,14 @@
 package gov.nih.nci.system.web.util;
 
 import gov.nih.nci.iso21090.Ad;
+import gov.nih.nci.iso21090.Cd;
 import gov.nih.nci.iso21090.DSet;
+import gov.nih.nci.iso21090.Ii;
 import gov.nih.nci.iso21090.Int;
 import gov.nih.nci.iso21090.Ivl;
 import gov.nih.nci.iso21090.Pq;
 import gov.nih.nci.iso21090.Real;
+import gov.nih.nci.iso21090.Tel;
 import gov.nih.nci.iso21090.Ts;
 import gov.nih.nci.system.util.ClassCache;
 import gov.nih.nci.system.util.SystemConstant;
@@ -15,11 +18,16 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
+import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.Stack;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
@@ -39,16 +47,18 @@ public class SearchUtils {
 	private static Map<String, Object> isoTypeObjects = new HashMap<String, Object>() {
 		private static final long serialVersionUID = 1L;
 		{
-			put("gov.nih.nci.iso21090.Int", new Int());
-			put("gov.nih.nci.iso21090.Real", new Real());
-			put("gov.nih.nci.iso21090.Pq", new Pq());
-			put("gov.nih.nci.iso21090.Ts", new Ts());
-			put("gov.nih.nci.iso21090.Ad", new Ad());
 			put("gov.nih.nci.iso21090.Ivl<gov.nih.nci.iso21090.Int>",new Ivl<Int>());
 			put("gov.nih.nci.iso21090.Ivl<gov.nih.nci.iso21090.Real>",new Ivl<Real>());
 			put("gov.nih.nci.iso21090.Ivl<gov.nih.nci.iso21090.Pq>",new Ivl<Pq>());
 			put("gov.nih.nci.iso21090.Ivl<gov.nih.nci.iso21090.Ts>",new Ivl<Ts>());
 			put("gov.nih.nci.iso21090.DSet<gov.nih.nci.iso21090.Ad>",new DSet<Ad>());
+			put("gov.nih.nci.iso21090.DSet<gov.nih.nci.iso21090.Cd>",new DSet<Cd>());
+			put("gov.nih.nci.iso21090.DSet<gov.nih.nci.iso21090.Ii>",new DSet<Ii>());
+			put("gov.nih.nci.iso21090.DSet<gov.nih.nci.iso21090.Tel>",new DSet<Tel>());
+			put("java.util.Set<gov.nih.nci.iso21090.Cd>",new HashSet<Cd>());
+			put("java.util.Set<gov.nih.nci.iso21090.Ad>",new HashSet<Ad>());
+			put("java.util.Set<gov.nih.nci.iso21090.Ii>",new HashSet<Ii>());
+			put("java.util.Set<gov.nih.nci.iso21090.Tel>",new HashSet<Tel>());
 			
 		}
 	};
@@ -184,8 +194,7 @@ public class SearchUtils {
 	 * @return
 	 * @throws Exception
 	 */
-	public Object buildSearchCriteria(String packageName, List criteriaList) throws Exception{
-
+	public Object buildSearchCriteria(String packageName, List<String> criteriaList) throws Exception{
 		Object criteriaObject = null;
 		Object assObject = null;
 		int counter = criteriaList.size();
@@ -321,11 +330,12 @@ public class SearchUtils {
 	 * @return
 	 * @throws Exception
 	 */
-	private List getAttributeCollection(String attString) throws Exception{
+	private List getAttributeCollection(String attString) throws Exception {
 		List<String> attList = new ArrayList<String>();
 		int startCounter = 0;
 		int startIndex = 0;
 		int endCounter = 0;
+		//left;right brackets validation
 		for (int i = 0; i < attString.length(); i++) {
 			if (attString.charAt(i) == SystemConstant.LEFT_BRACKET) {
 				startCounter++;
@@ -337,10 +347,10 @@ public class SearchUtils {
 			throw new Exception(
 					"Invalid format: '[' parenthesis does not match number of ']' parenthesis");
 		}
+		
 		try {
 			if (attString.indexOf("][") < 1) {
-				String att = attString.substring(1, attString
-						.lastIndexOf(SystemConstant.RIGHT_BRACKET));
+				String att = attString.substring(1, attString.lastIndexOf(SystemConstant.RIGHT_BRACKET));
 				attList.add(att);
 			} else {
 				if (attString.charAt(0) == SystemConstant.LEFT_BRACKET) {
@@ -350,7 +360,6 @@ public class SearchUtils {
 				} else {
 					throw new Exception("Invalid Query format " + attString);
 				}
-
 				int count = attString.length();
 				for (int i = 1; i < count; i++) {
 					if (attString.charAt(i) == SystemConstant.RIGHT_BRACKET) {
@@ -363,19 +372,18 @@ public class SearchUtils {
 								startCounter = 0;
 								endCounter = 0;
 							}
-
 						}
 					} else if (attString.charAt(i) == SystemConstant.LEFT_BRACKET) {
 						startCounter++;
 					}
 				}
 			}
-
 		} catch (Exception ex) {
 			throw new Exception(ex.getMessage());
 		}
 		return attList;
 	}
+
 
 	/**
 	 * Generates a criteria object
@@ -385,6 +393,7 @@ public class SearchUtils {
 	 * @return
 	 * @throws Exception
 	 */
+	@SuppressWarnings("unchecked")
 	private Object getAttributeCriteria(String att, Object critObject, String packageName)throws Exception{
 
 		try{
@@ -392,7 +401,6 @@ public class SearchUtils {
 			//@id=3 example-project
 			//@id=[@extension=1] iso-example
 			//Deck[@id=[@extension=1]] --- nested criteria multiple params
-			System.out.println(att.indexOf("@"));
 			boolean condition1 = att.indexOf(Character.toString(SystemConstant.EQUAL)+Character.toString(SystemConstant.LEFT_BRACKET))>0;
 			boolean condition2 = att.indexOf(SystemConstant.LEFT_BRACKET)>1;
 			boolean isISOProjectWithRole=att.indexOf("@")>0;
@@ -470,47 +478,63 @@ public class SearchUtils {
 		}
 		return critObject;
 	}	
+
+	private String[] splitQueryCriteria(String queryCriteria) {
+		ArrayList<String> subCriteria = new ArrayList<String>();
+		char[] characters = queryCriteria.toCharArray();
+		int count = 0;
+		int lastIndex = 0;
+		for (int i = 0; i < characters.length; i++) {
+			if (characters[i] == '[')
+				count++;
+			if (characters[i] == ']')
+				count--;
+			if (count == 0) {
+				String temp = queryCriteria.substring(lastIndex, i + 1);
+				lastIndex = i + 1;
+				subCriteria.add(temp);
+			}
+		}
+		String temp[] = new String[subCriteria.size()];
+		subCriteria.toArray(temp);
+		return temp;
+	}
+
+	@SuppressWarnings("unchecked")
+	private void processQueryCriteria(String queryCriteria,Object rootObject,StringBuffer tempISOParamType) throws Exception{
+		String[] splitCriteria = splitQueryCriteria(queryCriteria);		
+		for (String criteria : splitCriteria) {
+			String temp = criteria;
+			if (temp.startsWith("[@")) {
+				temp = temp.substring(2);
+			}
+			if (temp.endsWith("]")) {
+				temp = temp.substring(0, temp.length() - 1);
+			}
+			String attrName = temp.substring(0, temp.indexOf('='));
+			String value = temp.substring(temp.indexOf('=') + 1);
+			if (value.indexOf('[') >= 0) {
+				Object tempObject2=createObject(rootObject, attrName,null,tempISOParamType);
+				Method m=getAttributeGetMethodName(tempObject2, attrName);
+				Object tempObject=m.invoke(tempObject2);
+				Class klass=tempObject.getClass();
+				if (klass.getName().startsWith("java.util.HashSet")) {
+					Set set = (Set) tempObject;
+					tempObject=Class.forName(tempISOParamType.toString().trim()).newInstance();
+					set.add(tempObject);					
+				}
+				processQueryCriteria(value, tempObject, tempISOParamType);
+			}else{
+				Object tempObject2=createObject(rootObject, attrName,value,tempISOParamType);
+				Method m=getAttributeGetMethodName(tempObject2, attrName);
+				m.invoke(tempObject2);				
+			}
+		}
+	}
 	
 	private Object getCriteriaObject(String att,Object rootObject) throws Exception{
-		StringTokenizer tokenizer = new StringTokenizer(att,"@");
-		boolean flag=true;
-		Object tempObject=null;
-		//required by IVL datatype to keep track of class level parameters
 		StringBuffer tempISOParamType = new StringBuffer();
-		while(tokenizer.hasMoreTokens()){			
-			String tempToken=tokenizer.nextToken();
-			String attribute = tempToken.substring(0, tempToken.indexOf(SystemConstant.EQUAL));
-			int equalIndex = tempToken.indexOf(SystemConstant.EQUAL)+1;
-			
-			if(flag){
-				//@id=3 - example-project
-				boolean isExampleProject = !(tempToken.indexOf(SystemConstant.LEFT_BRACKET) > 0);
-				if (isExampleProject) {
-					String attributeValue = tempToken.substring(equalIndex,tempToken.length());
-					createObject(rootObject, attribute, attributeValue,tempISOParamType);
-					return rootObject;
-				}
-				//start: @id=[ iso-project
-				Object tempObject2=createObject(rootObject, attribute,null,tempISOParamType);
-				Method m=getAttributeGetMethodName(tempObject2, attribute);
-				tempObject=m.invoke(tempObject2);				
-				flag=false;
-			}else{
-				boolean isAttValue = tempToken.indexOf(SystemConstant.RIGHT_BRACKET)>0;
-				if(isAttValue){
-					//end: set the value of iso object
-					String tempAttributeValue=tempToken.substring(equalIndex,tempToken.indexOf(SystemConstant.RIGHT_BRACKET));
-					Method m=getAttributeSetMethodName(tempObject, attribute);
-					Field field = getField(tempObject.getClass(), attribute);
-					Object attributeValue=getFieldValue(field,tempAttributeValue);
-					m.invoke(tempObject,attributeValue);
-					return rootObject;
-				}
-				Object tempObject2=createObject(tempObject, attribute,null,tempISOParamType);
-				Method m=getAttributeGetMethodName(tempObject2, attribute);
-				tempObject=m.invoke(tempObject2);	
-			}			
-		}
+		processQueryCriteria("["+att+"]",rootObject,tempISOParamType);
 		return rootObject;
 	}
 	
@@ -524,7 +548,19 @@ public class SearchUtils {
 			Method getterMethod = getAttributeGetMethodName(childObject,attribute);
 			value = getterMethod.invoke(childObject);
 			if (value == null) {
-				value = getFieldTypeObject(attMethod,field,tempISOParamType); 
+				Type[] genericParameterTypes = attMethod.getGenericParameterTypes();
+				value = getFieldTypeObject(genericParameterTypes,field,tempISOParamType); 
+			}
+		} else if (field.getType().getName().startsWith("java.util.Set")) {
+			Method getterMethod = getAttributeGetMethodName(childObject,attribute);
+			value = getterMethod.invoke(childObject);
+			if (value == null) {
+				String key = field.getType().getName()+"<"+tempISOParamType+">";
+				Set<?> set=(Set<?>)isoTypeObjects.get(key.trim());
+				if(set==null){
+					log.error("Add mapping for "+key+" in isoTypeObjects Map");
+				}
+				value=set;
 			}
 		} else {
 			value = getFieldValue(field, attributeValue);
@@ -538,8 +574,7 @@ public class SearchUtils {
 		return childObject;
 	}
 
-	private Object getFieldTypeObject(Method attMethod,Field field,StringBuffer classISOParamType) throws Exception{		
-		Type[] genericParameterTypes = attMethod.getGenericParameterTypes();
+	private Object getFieldTypeObject(Type[] genericParameterTypes,Field field,StringBuffer classISOParamType) throws Exception{				
 		Object fieldTypeObject=null;				
 		for(Type genericParameterType : genericParameterTypes){
 			if (genericParameterType instanceof TypeVariable<?>) {				
@@ -626,7 +661,6 @@ public class SearchUtils {
 		return value;
 	}
 
-
 	/**
 	 * Converts the specified value to the field class type
 	 * @param field  Specifies the field
@@ -664,6 +698,10 @@ public class SearchUtils {
 				if (valueType.equals("java.lang.String")) {
 					convertedValue = format.parse((String) value);
 				}
+			} else if (fieldType.equals("java.net.URI")) {
+				if (valueType.equals("java.lang.String")) {
+					convertedValue = new URI((String)value);
+				}
 			} else {
 				throw new Exception("type mismatch - " + valueType);
 			}
@@ -693,7 +731,6 @@ public class SearchUtils {
 		}        
 		return attClassName;
 	}
-
 
 	/**
 	 * Gets all the methods for a given class
@@ -740,4 +777,3 @@ public class SearchUtils {
 		return classCache.getReturnType(className, roleName);
 	}
 }
-

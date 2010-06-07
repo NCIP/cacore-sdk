@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.hibernate.cfg.Configuration;
@@ -582,17 +583,29 @@ public class NestedCriteria2HQL
 						Object value = field.get(obj);
 						if (value != null){
 							query.append(SystemConstant.DOT).append(field.getName());
-							if(!value.getClass().getName().startsWith(isoprefix)){
+							boolean notOfTypeISOAndSet = !value.getClass().getName().startsWith(isoprefix) && !value.getClass().getName().startsWith("java.util.HashSet");
+							if(notOfTypeISOAndSet){
 								WhereQueryObject queryObject= new WhereQueryObject();
 								queryObject.setParam(value);
 								queryObject.setQuery(query.toString());
 								whereQueryObjects.add(queryObject);
-								return;
-							}	
-							generateISOWhereQuery(value,query,whereQueryObjects);
-							//delete the extra field names which are added during recursion
-							int startIndex=query.indexOf(SystemConstant.DOT+field.getName());
-							query.delete(startIndex, query.length());
+								//delete the extra field names which are added during recursion: trail and error logic
+								int startIndex=query.indexOf(SystemConstant.DOT+field.getName());
+								query.delete(startIndex, query.length());							
+							}
+							//parse the set and create an hql Set<CD>							
+							boolean isSetObject = value.getClass().getName().startsWith("java.util.HashSet");
+							if(isSetObject){
+								Set set=(Set)value;
+								value=set.iterator().next();
+							}
+							boolean isoObject = value.getClass().getName().startsWith(isoprefix);
+							if(isoObject){
+								generateISOWhereQuery(value,query,whereQueryObjects);
+								//delete the extra field names which are added during recursion
+								int startIndex=query.indexOf(SystemConstant.DOT+field.getName());
+								query.delete(startIndex, query.length());
+							}
 						}
 					} catch (IllegalArgumentException e) {
 						// No action
@@ -746,7 +759,7 @@ public class NestedCriteria2HQL
 		if (associationCritMap != null && associationCritMap.size() > 0 && attributeCriteria != null && attributeCriteria.trim().length() > 0)
 			hql.append(" ").append(" and ");
 		hql.append(attributeCriteria);
-
+		log.info("HQL query "+hql.toString());
 		return hql.toString();
 	}
 
