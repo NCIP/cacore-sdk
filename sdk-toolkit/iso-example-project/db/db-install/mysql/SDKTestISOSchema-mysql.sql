@@ -149,7 +149,7 @@ CREATE TABLE cd_datatype_value7 (
   display_null_flavor varchar(50)  default NULL,
   display_value varchar(50)  default NULL,
   orig_txt_null_flavor varchar(50)  default NULL,
-  orig_txt_value longtext ,
+  orig_txt_value varchar(50)  default NULL ,
   orig_txt_description varchar(50)  default NULL,
   PRIMARY KEY  (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -164,7 +164,7 @@ CREATE TABLE cd_datatype_value8 (
   display_null_flavor varchar(50)  default NULL,
   display_value varchar(50)  default NULL,
   orig_txt_null_flavor varchar(50)  default NULL,
-  orig_txt_value longtext ,
+  orig_txt_value varchar(50)  default NULL ,
   orig_txt_description varchar(50)  default NULL,
   PRIMARY KEY  (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -183,7 +183,7 @@ CREATE TABLE cd_datatype (
   value4_display_null_flavor varchar(50)  default NULL,
   value4_display_value varchar(50)  default NULL,
   value4_orig_txt_null_flavor varchar(50)  default NULL,
-  value4_orig_txt_value longtext ,
+  value4_orig_txt_value varchar(50)  default NULL ,
   value4_orig_txt_description varchar(50)  default NULL,
   value5_null_flavor varchar(50)  default NULL,
   value5_code varchar(50)  default NULL,
@@ -193,7 +193,7 @@ CREATE TABLE cd_datatype (
   value5_display_null_flavor varchar(50)  default NULL,
   value5_display_value varchar(50)  default NULL,
   value5_orig_txt_null_flavor varchar(50)  default NULL,
-  value5_orig_txt_value longtext ,
+  value5_orig_txt_value varchar(50)  default NULL ,
   value5_orig_txt_description varchar(50)  default NULL,
   cd_datatype_value7_id int(8) default NULL,
   PRIMARY KEY  (id),
@@ -211,7 +211,7 @@ CREATE TABLE cd_datatype_value6 (
   display_null_flavor varchar(50)  default NULL,
   display_value varchar(50)  default NULL,
   orig_txt_null_flavor varchar(50)  default NULL,
-  orig_txt_value longtext ,
+  orig_txt_value varchar(50)  default NULL ,
   orig_txt_description varchar(50)  default NULL,
   PRIMARY KEY  (cd_datatype_id),
   CONSTRAINT fk_cd_datatype_val_cd_datatype FOREIGN KEY (cd_datatype_id) REFERENCES cd_datatype (id) ON DELETE NO ACTION ON UPDATE NO ACTION

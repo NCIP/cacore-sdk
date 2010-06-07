@@ -208,7 +208,7 @@ CREATE TABLE cd_datatype (
     value4_display_null_flavor character varying(50),
     value4_display_value character varying(50),
     value4_orig_txt_null_flavor character varying(50),
-    value4_orig_txt_value text,
+    value4_orig_txt_value  character varying(50),
     value4_orig_txt_description character varying(50),
     value5_null_flavor character varying(50),
     value5_code character varying(50),
@@ -218,7 +218,7 @@ CREATE TABLE cd_datatype (
     value5_display_null_flavor character varying(50),
     value5_display_value character varying(50),
     value5_orig_txt_null_flavor character varying(50),
-    value5_orig_txt_value text,
+    value5_orig_txt_value  character varying(50),
     value5_orig_txt_description character varying(50),
     cd_datatype_value7_id integer
 );
@@ -238,7 +238,7 @@ CREATE TABLE cd_datatype_value6 (
     display_null_flavor character varying(50),
     display_value character varying(50),
     orig_txt_null_flavor character varying(50),
-    orig_txt_value text,
+    orig_txt_value  character varying(50),
     orig_txt_description character varying(50)
 );
 
@@ -257,7 +257,7 @@ CREATE TABLE cd_datatype_value7 (
     display_null_flavor character varying(50),
     display_value character varying(50),
     orig_txt_null_flavor character varying(50),
-    orig_txt_value text,
+    orig_txt_value  character varying(50),
     orig_txt_description character varying(50)
 );
 
@@ -276,7 +276,7 @@ CREATE TABLE cd_datatype_value8 (
     display_null_flavor character varying(50),
     display_value character varying(50),
     orig_txt_null_flavor character varying(50),
-    orig_txt_value text,
+    orig_txt_value  character varying(50),
     orig_txt_description character varying(50)
 );
 
