@@ -689,10 +689,9 @@ public class NestedCriteria2HQL
 		if(!skipAssociations)
 		{
 		associationCritMap = getObjAssocCriterion(obj, cfg);
-		PersistentClass tempPclass = getPersistentClass(obj.getClass().getName());
 		hql.append("select ");
 		hql.append(srcAlias);
-		hql.append(" from ").append(tempPclass.getDiscriminatorValue()).append(" ").append(srcAlias);
+		hql.append(" from ").append(obj.getClass().getName()).append(" ").append(srcAlias);
 
 		// get association value
 		if (associationCritMap != null && associationCritMap.size() > 0)
