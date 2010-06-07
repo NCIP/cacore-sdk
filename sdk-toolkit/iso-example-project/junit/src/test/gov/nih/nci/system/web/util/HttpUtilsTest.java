@@ -9,6 +9,7 @@ import java.io.IOException;
 import junit.framework.TestCase;
 
 import gov.nih.nci.system.applicationservice.ApplicationService;
+import gov.nih.nci.system.query.hibernate.HQLCriteria;
 import gov.nih.nci.system.util.ClassCache;
 import gov.nih.nci.system.util.SystemConstant;
 import gov.nih.nci.system.web.util.HTTPUtils;
@@ -103,16 +104,22 @@ public class HttpUtilsTest extends TestCase{
 		String queryText="query=CdDataType&CdDataType[@value8=[@displayName=[@value=VALUE8_DISPLAY_VALUE1]]]";
 		process(queryText,"test1");
 	}
-	
-	
+
+	//String queryText="query=CdDataType&CdDataType[@value4=[@displayName=[@value=VALUE4_DISPLAY_VALUE2]]][@value4=[@originalText=[@value=VALUE4_ORIG_TXT_VALUE1]]]";
 	public void xtestISOComplexDataTypeWithAndQuery() throws Exception{
-		String queryText="query=CdDataType&CdDataType[@value4=[@displayName=[@value=VALUE4_DISPLAY_VALUE2]]][@value4=[@originalText=[@value=VALUE4_ORIG_TXT_VALUE1]]]";
+		String queryText="query=CdDataType&CdDataType[@value4=[@displayName=[@value=VALUE4_DISPLAY_VALUE2]][@originalText=[@value=VALUE4_ORIG_TXT_VALUE1]]]";
 		process(queryText,"test1");
 	}
 	
 	//fails sql script needs to be changed to add data
 	public void xtestISOComplexDataTypeWithAndQuery2() throws Exception{
-		String queryText="query=CdDataType&CdDataType[@value2=[@code=CODE4]][@value1=[@code=CODE1]][@value4=[@displayName=[@value=VALUE4_DISPLAY_VALUE2]]][@value4=[@originalText=[@value=VALUE4_ORIG_TXT_VALUE1]]]";
+		String queryText="query=CdDataType&CdDataType[@value2=[@code=CODE4]][@value1=[@code=CODE1]][@value4=[@displayName=[@value=VALUE4_DISPLAY_VALUE2]][@originalText=[@value=VALUE4_ORIG_TXT_VALUE1]]]";
+		process(queryText,"test1");
+	}
+	
+	//fails bug in code : needs to be fixed
+	public void xtestISOComplexDataTypeWithAndQuery3() throws Exception{
+		String queryText="query=CdDataType&CdDataType[@value4=[@code=CODE8][@codeSystem=VALUE4_CODE_SYSTEM]]";
 		process(queryText,"test1");
 	}
 	
@@ -142,12 +149,50 @@ public class HttpUtilsTest extends TestCase{
 		String queryText="query=IvlTsDataType&IvlTsDataType[@value1=[@low=[@value=03-11-2010]]]";
 		process(queryText,"test1");
 	}		
-	/*###################################################################################*/
+	/*###################################################################################*/		
 	
-	public void testISOComplexDsetAdDataType() throws Exception{
-		String queryText="query=DsetAdDataType&DsetAdDataType[@value1=[@item=10]]";
+	public void xtestISOComplexDsetCdDataSetType() throws Exception{
+		String queryText="query=DsetCdDataType&DsetCdDataType[@value1=[@item=[@code=CODE1]]]";
 		process(queryText,"test1");
-	}		
+	}
+
+	public void xtestISOComplexDsetIiDataSetType() throws Exception{
+		String queryText="query=DsetIiDataType&DsetIiDataType[@value1=[@item=[@extension=Extension1]]]";
+		process(queryText,"test1");
+	}
+
+	public void xtestISOComplexDsetTelDataSetType() throws Exception{
+		String queryText="query=DsetTelDataType&DsetTelDataType[@value1=[@item=[@value=tel://123-456-7891]]]";
+		process(queryText,"test1");
+	}
+	
+	public void xtestISOComplexDsetCdDataSetType2() throws Exception{
+		String queryText="query=DsetCdDataType&DsetCdDataType[@value5=[@item=[@code=CODE1][@codeSystem=CODE_SYSTEM1]]]";
+		process(queryText,"test1");
+	}
+	
+	//needs to be done
+	public void xtestISOComplexDsetCdDataMultipleSetType() throws Exception{
+		String	queryText="query=DsetCdDataType&DsetCdDataType[@value5=[@item=[@code=CODE1][@codeSystem=CODE_SYSTEM1]]]";
+		process(queryText,"test1");
+	}
+	
+	public void xtestISOComplexDsetCdDataMultipleSetType2() throws Exception{
+		String	queryText="query=DsetCdDataType&DsetCdDataType[@value5=[@item=[@code=CODE1]][@item=[@codeSystem=CODE_SYSTEM1]]]";
+		process(queryText,"test1");
+	}	
+
+	public void testISOComplexDsetCdDataMultipleSetType3() throws Exception{
+		String	queryText="query=DsetCdDataType&DsetCdDataType[@value5=[@item=[@code=CODE1][@codeSystem=CODE_SYSTEM1]][@item=[@codeSystem=CODE_SYSTEM2]]]";
+		process(queryText,"test1");
+	}	
+
+
+	//needs to be done fix for enumerations fails
+	public void xtestISOComplexEnumDataType() throws Exception{
+		String queryText="query=CdDataType&CdDataType[@value1=[@nullFlavor=[@description=NI]]]";
+		process(queryText,"test1");
+	}
 	
 	private void process(String queryText,String fileName) throws Exception, IOException,
 			FileNotFoundException {
