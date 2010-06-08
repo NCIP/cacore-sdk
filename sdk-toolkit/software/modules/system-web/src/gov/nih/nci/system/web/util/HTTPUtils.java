@@ -101,6 +101,7 @@ public class HTTPUtils implements Serializable{
 			put("gov.nih.nci.iso21090.Ivl<gov.nih.nci.iso21090.Real>",new JAXBISOIvlRealAdapter<ANY, Any>());
 			put("gov.nih.nci.iso21090.Ivl<gov.nih.nci.iso21090.Ts>",new JAXBISOIvlTsAdapter<ANY, Any>());
 			put("gov.nih.nci.iso21090.Ivl<gov.nih.nci.iso21090.Int>",new JAXBISOIvlIntAdapter<ANY, Any>());
+			put("gov.nih.nci.iso21090.Ivl<gov.nih.nci.iso21090.Pq>",new JAXBISOIvlPqAdapter<ANY, Any>());
 		}
 	};	
 

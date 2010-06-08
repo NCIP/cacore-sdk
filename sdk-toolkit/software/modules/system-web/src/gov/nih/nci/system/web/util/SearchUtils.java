@@ -2,14 +2,9 @@ package gov.nih.nci.system.web.util;
 
 import gov.nih.nci.iso21090.Ad;
 import gov.nih.nci.iso21090.Cd;
-import gov.nih.nci.iso21090.DSet;
 import gov.nih.nci.iso21090.Ii;
-import gov.nih.nci.iso21090.Int;
-import gov.nih.nci.iso21090.Ivl;
-import gov.nih.nci.iso21090.Pq;
-import gov.nih.nci.iso21090.Real;
+
 import gov.nih.nci.iso21090.Tel;
-import gov.nih.nci.iso21090.Ts;
 import gov.nih.nci.system.util.ClassCache;
 import gov.nih.nci.system.util.SystemConstant;
 
@@ -23,12 +18,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Stack;
-import java.util.StringTokenizer;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
@@ -47,19 +39,10 @@ public class SearchUtils {
 	private static Map<String, Object> isoTypeObjects = new HashMap<String, Object>() {
 		private static final long serialVersionUID = 1L;
 		{
-			put("gov.nih.nci.iso21090.Ivl<gov.nih.nci.iso21090.Int>",new Ivl<Int>());
-			put("gov.nih.nci.iso21090.Ivl<gov.nih.nci.iso21090.Real>",new Ivl<Real>());
-			put("gov.nih.nci.iso21090.Ivl<gov.nih.nci.iso21090.Pq>",new Ivl<Pq>());
-			put("gov.nih.nci.iso21090.Ivl<gov.nih.nci.iso21090.Ts>",new Ivl<Ts>());
-			put("gov.nih.nci.iso21090.DSet<gov.nih.nci.iso21090.Ad>",new DSet<Ad>());
-			put("gov.nih.nci.iso21090.DSet<gov.nih.nci.iso21090.Cd>",new DSet<Cd>());
-			put("gov.nih.nci.iso21090.DSet<gov.nih.nci.iso21090.Ii>",new DSet<Ii>());
-			put("gov.nih.nci.iso21090.DSet<gov.nih.nci.iso21090.Tel>",new DSet<Tel>());
 			put("java.util.Set<gov.nih.nci.iso21090.Cd>",new HashSet<Cd>());
 			put("java.util.Set<gov.nih.nci.iso21090.Ad>",new HashSet<Ad>());
 			put("java.util.Set<gov.nih.nci.iso21090.Ii>",new HashSet<Ii>());
-			put("java.util.Set<gov.nih.nci.iso21090.Tel>",new HashSet<Tel>());
-			
+			put("java.util.Set<gov.nih.nci.iso21090.Tel>",new HashSet<Tel>());			
 		}
 	};
 	
@@ -518,16 +501,14 @@ public class SearchUtils {
 				Method m=getAttributeGetMethodName(tempObject2, attrName);
 				Object tempObject=m.invoke(tempObject2);
 				Class klass=tempObject.getClass();
-				if (klass.getName().startsWith("java.util.HashSet")) {
+				if (klass.isAssignableFrom(java.util.HashSet.class)) {
 					Set set = (Set) tempObject;
 					tempObject=Class.forName(tempISOParamType.toString().trim()).newInstance();
 					set.add(tempObject);					
 				}
 				processQueryCriteria(value, tempObject, tempISOParamType);
 			}else{
-				Object tempObject2=createObject(rootObject, attrName,value,tempISOParamType);
-				Method m=getAttributeGetMethodName(tempObject2, attrName);
-				m.invoke(tempObject2);				
+				createObject(rootObject, attrName,value,tempISOParamType);
 			}
 		}
 	}
@@ -538,13 +519,16 @@ public class SearchUtils {
 		return rootObject;
 	}
 	
-	// using reflection, for the rootObject, set the attribute
 	private Object createObject(Object childObject, String attribute,
 			String attributeValue,StringBuffer tempISOParamType) throws Exception{
 		Field field = getField(childObject.getClass(), attribute);
 		Method attMethod = getAttributeSetMethodName(childObject, attribute);
 		Object value = null;
-		if (field.getType().getName().startsWith(isoprefix)) {
+		String fieldName = field.getType().getName();
+		
+		if(field.getType().isEnum()){
+			value = getFieldValue(field, attributeValue);
+		}else if (fieldName.startsWith(isoprefix)) {
 			Method getterMethod = getAttributeGetMethodName(childObject,attribute);
 			value = getterMethod.invoke(childObject);
 			if (value == null) {
@@ -557,9 +541,6 @@ public class SearchUtils {
 			if (value == null) {
 				String key = field.getType().getName()+"<"+tempISOParamType+">";
 				Set<?> set=(Set<?>)isoTypeObjects.get(key.trim());
-				if(set==null){
-					log.error("Add mapping for "+key+" in isoTypeObjects Map");
-				}
 				value=set;
 			}
 		} else {
@@ -577,31 +558,29 @@ public class SearchUtils {
 	private Object getFieldTypeObject(Type[] genericParameterTypes,Field field,StringBuffer classISOParamType) throws Exception{				
 		Object fieldTypeObject=null;				
 		for(Type genericParameterType : genericParameterTypes){
-			if (genericParameterType instanceof TypeVariable<?>) {				
-				fieldTypeObject = getGenericParamISOTypeObject(classISOParamType.toString());
-			} else if(genericParameterType instanceof ParameterizedType){
+			if (genericParameterType instanceof TypeVariable<?>) {
+				fieldTypeObject = Class.forName(classISOParamType.toString()).newInstance();				
+			}else if(genericParameterType instanceof ParameterizedType){
 			    ParameterizedType pType = (ParameterizedType) genericParameterType;
 			    String paramString = pType.toString();
 			    int beginIndex=paramString.indexOf("<");
 			    int lastIndex=paramString.indexOf(">");
-				fieldTypeObject = getGenericParamISOTypeObject(paramString);
 			    String isoParameter = paramString.substring(beginIndex+1,lastIndex);
 				classISOParamType.append(isoParameter);
+
+				int index=paramString.indexOf('<');
+				fieldTypeObject = Class.forName(paramString.substring(0,index)).newInstance();
+			}else{
+				String fieldName = field.getType().getName();
+				boolean isSpecificScenarioTrue = fieldName.equals("gov.nih.nci.iso21090.Qty") && classISOParamType.toString().equals("gov.nih.nci.iso21090.Ts");
+				if(isSpecificScenarioTrue){
+					fieldName="gov.nih.nci.iso21090.Pq";
+				}
+				fieldTypeObject=Class.forName(fieldName).newInstance();
 			}
-		}
-		if(fieldTypeObject==null){
-			String fieldName = field.getType().getName();
-			fieldTypeObject=Class.forName(fieldName).newInstance();
+			break;
 		}
 		return fieldTypeObject;
-	}
-	
-	private Object getGenericParamISOTypeObject(String isoTypeObjectName) {
-		Object isoObject = isoTypeObjects.get(isoTypeObjectName);
-		if(isoObject==null){
-			log.error(" Add mapping for "+isoTypeObjectName +" in SearchUtils.java");
-		}
-		return isoObject;
 	}
 
 	private Method getAttributeGetMethodName(Object attObject, String attName){    
@@ -668,6 +647,7 @@ public class SearchUtils {
 	 * @return  returns an object with the new value
 	 * @throws Exception
 	 */
+	@SuppressWarnings("unchecked")
 	public Object convertValues(Field field, Object value) throws Exception {
 		String fieldType = field.getType().getName();
 		String valueType = value.getClass().getName();
@@ -701,6 +681,11 @@ public class SearchUtils {
 			} else if (fieldType.equals("java.net.URI")) {
 				if (valueType.equals("java.lang.String")) {
 					convertedValue = new URI((String)value);
+				}
+			} else if (field.getType().isEnum()) {
+				if (valueType.equals("java.lang.String")) {
+					Class enumKlass=Class.forName(fieldType);
+					convertedValue = Enum.valueOf(enumKlass, (String)value);
 				}
 			} else {
 				throw new Exception("type mismatch - " + valueType);

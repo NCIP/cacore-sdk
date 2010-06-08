@@ -14,9 +14,13 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.hibernate.HibernateException;
+import org.hibernate.MappingException;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.mapping.Component;
 import org.hibernate.mapping.PersistentClass;
 import org.hibernate.mapping.Property;
+import org.hibernate.mapping.Value;
 
 public class NestedCriteria2HQL
 {
@@ -519,12 +523,16 @@ public class NestedCriteria2HQL
 			Configuration cfg) throws Exception {
 		StringBuffer whereClause = new StringBuffer();
 		HashMap<String,Object> criterionMap = getObjAttrCriterion(obj, cfg);
+		PersistentClass pclass = getPersistentClass(obj.getClass().getName());
+		
 		if (criterionMap != null) {
 			Iterator keys = criterionMap.keySet().iterator();
 			while (keys.hasNext()) {
 				String key = (String) keys.next();
 				Object value = criterionMap.get(key);
-				if (!key.equals("id") && (value instanceof String)) {
+				boolean isStringObject = !key.equals("id") && (value instanceof String);
+				
+				if (isStringObject) {
 					if (isCaseSensitive()) {
 						whereClause.append(sourceAlias + SystemConstant.DOT+ key + getOperator(value) + "? ");
 						paramList.add(((String) value).replaceAll("\\*", "\\%"));
@@ -532,37 +540,20 @@ public class NestedCriteria2HQL
 						whereClause.append("lower(" + sourceAlias+ SystemConstant.DOT + key + ") "+ getOperator(value) + "? ");
 						paramList.add(((String) value).toLowerCase().replaceAll("\\*", "\\%"));
 					}
-				}else if(!key.equals("id") && (value.getClass().getName().startsWith(isoprefix))){
-					StringBuffer tempBuffer=new StringBuffer();
-					List<WhereQueryObject> whereQueryObjects = new ArrayList<WhereQueryObject>();
-					generateISOWhereQuery(value, tempBuffer, whereQueryObjects);
-					int count=0;
-					for (WhereQueryObject whereQueryObject : whereQueryObjects) {
-						String whereQuery = whereQueryObject.getQuery();
-						Object whereParam = whereQueryObject.getParam();					
-						if (isCaseSensitive()) {
-							whereClause.append(sourceAlias + SystemConstant.DOT+ key + whereQuery+ getOperator(whereParam) + "? ");
-							if(whereParam instanceof String){
-								paramList.add(((String) whereParam).replaceAll("\\*", "\\%"));
-							}else{
-								paramList.add(whereParam);
-							}
-						} else {
-							whereClause.append("lower(" + sourceAlias+SystemConstant.DOT+key+ whereQuery + ") "+ getOperator(whereParam) + "? ");
-							if(whereParam instanceof String){
-								paramList.add(((String) whereParam).toLowerCase().replaceAll("\\*", "\\%"));
-							}else{
-								paramList.add(whereParam);
-							}
-						}
-						count++;						
-						if(count<whereQueryObjects.size()){
-							whereClause.append(" and ");
-						}
+				} else {
+					boolean isIsoObject = !key.equals("id") && (value.getClass().getName().startsWith(isoprefix));
+					if(isIsoObject){
+						StringBuffer tempBuffer=new StringBuffer();
+						List<WhereQueryObject> whereQueryObjects = new ArrayList<WhereQueryObject>();
+						
+						Value componentValue=locateComponent(pclass,key);
+						
+						generateISOWhereQueryObjects(value, tempBuffer, whereQueryObjects,componentValue);
+						generateISOWhereQuery(sourceAlias, whereClause, key,whereQueryObjects);
+					}else {
+						whereClause.append(sourceAlias).append(SystemConstant.DOT).append(key).append(getOperator(value)).append("? ");
+						paramList.add(value);
 					}
-				}else {
-					whereClause.append(sourceAlias).append(SystemConstant.DOT).append(key).append(getOperator(value)).append("? ");
-					paramList.add(value);
 				}
 				if (keys.hasNext())
 					whereClause.append(" and ");
@@ -570,41 +561,101 @@ public class NestedCriteria2HQL
 		}
 		return whereClause.toString();
 	}
+
+	private Value locateComponent(Object pV, String key) {
+		Property property=null;
+		if(pV instanceof Component){
+			property = ((Component)pV).getProperty(key);
+			
+		}else if(pV instanceof PersistentClass){
+			 
+			property = ((PersistentClass)pV).getProperty(key);
+		}
+		if(property==null){
+			return null;
+		}
+		
+		Value value = property.getValue();
+		return value;
+	}
+
+	@SuppressWarnings("unchecked")
+	private void generateISOWhereQuery(String sourceAlias,
+			StringBuffer whereClause, String key,
+			List<WhereQueryObject> whereQueryObjects) {
+		int count=0;
+		for (WhereQueryObject whereQueryObject : whereQueryObjects) {
+			String whereQuery = whereQueryObject.getQuery();
+			Object whereParam = whereQueryObject.getParam();					
+			if (isCaseSensitive()) {
+				whereClause.append(sourceAlias + SystemConstant.DOT+ key + whereQuery+ getOperator(whereParam) + "? ");
+				if(whereParam instanceof String){
+					paramList.add(((String) whereParam).replaceAll("\\*", "\\%"));
+				}else{
+					paramList.add(whereParam);
+				}
+			} else {
+				whereClause.append("lower(" + sourceAlias+SystemConstant.DOT+key+ whereQuery + ") "+ getOperator(whereParam) + "? ");
+				if(whereParam instanceof String){
+					paramList.add(((String) whereParam).toLowerCase().replaceAll("\\*", "\\%"));
+				}else{
+					paramList.add(whereParam);
+				}
+			}
+			count++;						
+			if(count<whereQueryObjects.size()){
+				whereClause.append(" and ");
+			}
+		}
+	}
 	
 	@SuppressWarnings("unchecked")
-	private void generateISOWhereQuery(Object obj, StringBuffer query,List<WhereQueryObject> whereQueryObjects) {
+	private void generateISOWhereQueryObjects(Object obj, StringBuffer query,List<WhereQueryObject> whereQueryObjects,Value componentValue) {
+
 		Class klass = obj.getClass();
 		while (!klass.getName().equals("java.lang.Object")) {
+			
 			for (Field field : klass.getDeclaredFields()) {
 				int modifier = field.getModifiers();
 				if (!Modifier.isStatic(modifier)) {
 					try {
 						field.setAccessible(true);
 						Object value = field.get(obj);
-						if (value != null){
-							query.append(SystemConstant.DOT).append(field.getName());
-							boolean notOfTypeISOAndSet = !value.getClass().getName().startsWith(isoprefix) && !value.getClass().getName().startsWith("java.util.HashSet");
-							if(notOfTypeISOAndSet){
-								WhereQueryObject queryObject= new WhereQueryObject();
-								queryObject.setParam(value);
-								queryObject.setQuery(query.toString());
-								whereQueryObjects.add(queryObject);
-								//delete the extra field names which are added during recursion: trail and error logic
-								int startIndex=query.indexOf(SystemConstant.DOT+field.getName());
-								query.delete(startIndex, query.length());							
-							}
+						if (value != null){								
+							//get Class for this attribute:?							
+							String objectClassName = value.getClass().getName();
+							query.append(SystemConstant.DOT).append(field.getName());							
+							boolean isoObject = objectClassName.startsWith(isoprefix);
 							//parse the set and create an hql Set<CD>							
-							boolean isSetObject = value.getClass().getName().startsWith("java.util.HashSet");
-							if(isSetObject){
-								Set set=(Set)value;
-								value=set.iterator().next();
+							boolean isSetObject = objectClassName.startsWith("java.util.HashSet");
+							boolean isEnumObject = value.getClass().isEnum();
+							
+							Value childvalue=null;
+							try{
+								childvalue=locateComponent(componentValue, field.getName());
+							}catch(HibernateException ex){
+								log.info("not found mapping for "+field.getName()+"  ignoring");
+								continue;
 							}
-							boolean isoObject = value.getClass().getName().startsWith(isoprefix);
-							if(isoObject){
-								generateISOWhereQuery(value,query,whereQueryObjects);
+							
+							if(isoObject & !isEnumObject){
+								generateISOWhereQueryObjects(value,query,whereQueryObjects,childvalue);
 								//delete the extra field names which are added during recursion
 								int startIndex=query.indexOf(SystemConstant.DOT+field.getName());
 								query.delete(startIndex, query.length());
+							}else if(isSetObject){
+								Set set=(Set)value;
+								for (Object object : set) {
+									generateISOWhereQueryObjects(object,query,whereQueryObjects,childvalue);
+								}
+								//delete the extra field names which are added during recursion
+								int startIndex=query.indexOf(SystemConstant.DOT+field.getName());
+								query.delete(startIndex, query.length());									
+							}else{
+								WhereQueryObject queryObject= new WhereQueryObject();
+								queryObject.setParam(value);
+								queryObject.setQuery(query.toString());
+								whereQueryObjects.add(queryObject);							
 							}
 						}
 					} catch (IllegalArgumentException e) {
@@ -617,16 +668,29 @@ public class NestedCriteria2HQL
 			klass = klass.getSuperclass();
 		}
 	}
-	
+
+	@SuppressWarnings("unchecked")
+	private boolean isObjectPrimitive(Object value) {
+		if(value instanceof Collection && ((Collection)value).size()>0){
+			return false;
+		}			
+    	if(!(value instanceof Integer || value instanceof Float || value instanceof Double
+    			|| value instanceof Character || value instanceof Long || value instanceof Boolean
+    			|| value instanceof Byte ||  value instanceof Short  
+    			|| value instanceof String || value instanceof Date)){
+    		return false;
+    	}
+    	return true;
+	}
+
 	private HashMap<String,Object> getObjAttrCriterion(Object obj, Configuration cfg) throws Exception
 	{
 		HashMap<String,Object> criterions = new HashMap<String,Object>();
 		String objClassName = obj.getClass().getName();
 		PersistentClass pclass = getPersistentClass(objClassName);
 		
-		setAttrCriterion(obj, pclass, criterions);
 		if (pclass != null){
-
+			setAttrCriterion(obj, pclass, criterions);
 			while (pclass.getSuperclass() != null)
 			{
 				pclass = pclass.getSuperclass();
@@ -758,7 +822,8 @@ public class NestedCriteria2HQL
 		if (associationCritMap != null && associationCritMap.size() > 0 && attributeCriteria != null && attributeCriteria.trim().length() > 0)
 			hql.append(" ").append(" and ");
 		hql.append(attributeCriteria);
-		log.info("HQL query "+hql.toString());
+		log.info("HQL query: "+hql.toString());
+		System.out.println("HQL query: "+hql.toString());
 		return hql.toString();
 	}
 
@@ -928,13 +993,7 @@ public class NestedCriteria2HQL
 						Object value = field.get(obj);
 						if(value!=null)
 						{
-							if(value instanceof Collection && ((Collection)value).size()>0)
-								return false;
-					    	if(!(value instanceof Integer || value instanceof Float || value instanceof Double
-					    			|| value instanceof Character || value instanceof Long || value instanceof Boolean
-					    			|| value instanceof Byte ||  value instanceof Short  
-					    			|| value instanceof String || value instanceof Date))
-							return false;
+							isObjectPrimitive(value);
 						}
 					} catch (IllegalArgumentException e) {
 						//No action
