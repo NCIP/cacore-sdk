@@ -32,17 +32,17 @@ public class HttpUtilsTest extends TestCase{
 		classCache = (ClassCache) ctx.getBean("ClassCache");
 	}
 	
-	public void xtestExampleIDQuery() throws Exception{
+	public void testExampleIDQuery() throws Exception{
 		String queryText="query=Bank&Credit[@id=3]";
 		process(queryText,"test1");
 	}
 	
-	public void xtestExampleMultipleAssociation() throws Exception{
+	public void testExampleMultipleAssociation() throws Exception{
 		String queryText="query=Card,Suit&Deck[@id=1]";
 		process(queryText,"test1");
 	}
 	
-	public void xtestExampleMultipleAssociation2() throws Exception{
+	public void testExampleMultipleAssociation2() throws Exception{
 		String queryText="query=Deck,Suit&Card[@id=1]";
 		process(queryText,"test1");
 	}
@@ -52,27 +52,27 @@ public class HttpUtilsTest extends TestCase{
 		process(queryText,"test1");
 	}
 	
-	public void xtestExampleAssociationWithDelimLeftBracket2() throws Exception{
+	public void testExampleAssociationWithDelimLeftBracket2() throws Exception{
 		String queryText="query=Deck&Suit[@id=1][cardCollection[@id=1]]";
 		process(queryText,"test1");
 	}
 	
-	public void xtestExampleMultiParamsAssociationWithDelimLeftBracket() throws Exception{
+	public void testExampleMultiParamsAssociationWithDelimLeftBracket() throws Exception{
 		String queryText="query=Deck&Suit[@id=1][cardCollection[@id=1][@name=Ace]]";
 		process(queryText,"test1");
 	}
 	
-	public void xtestExampleAssociationWithDelimSlash() throws Exception{
+	public void testExampleAssociationWithDelimSlash() throws Exception{
 		String queryText="query=Deck&Suit[@id=1]"+SystemConstant.FORWARD_SLASH+"Card[@id=1]";
 		process(queryText,"test1");
 	}
 	
-	public void xtestExampleIDQueryWithMultipleParams() throws Exception{
+	public void testExampleIDQueryWithMultipleParams() throws Exception{
 		String queryText="query=Pupil&Pupil[@name=Pupil_Name_1][@id=1]";
 		process(queryText,"test1");
 	}
 	
-	public void xtestExampleIDQueryWithAssociation() throws Exception{
+	public void testExampleIDQueryWithAssociation() throws Exception{
 		String queryText="query=Card&Suit[@id=1]&roleName=cardCollection";
 		process(queryText,"test1");
 	}
@@ -89,7 +89,7 @@ public class HttpUtilsTest extends TestCase{
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		XMLOutputter xout = new XMLOutputter(Format.getPrettyFormat());
 		xout.output(domDoc, outputStream);		
-		File file = new File("C:/devroot/sdk-svn/cacoresdk/sdk-toolkit/software/modules/system-web/src/"+fileName+".xml");
+		File file = new File("C:/temp/"+fileName+".xml");
 		FileOutputStream foStream = new FileOutputStream(file);
 		outputStream.writeTo(foStream);
 	}

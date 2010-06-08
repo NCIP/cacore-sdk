@@ -10,6 +10,7 @@ import gov.nih.nci.cacoresdk.domain.inheritance.childwithassociation.Credit;
 
 import gov.nih.nci.cacoresdk.domain.other.datatype.CdDataType;
 import gov.nih.nci.cacoresdk.domain.other.datatype.DsetCdDataType;
+import gov.nih.nci.cacoresdk.domain.other.datatype.IvlTsDataType;
 import gov.nih.nci.iso21090.Cd;
 import gov.nih.nci.system.util.ClassCache;
 import gov.nih.nci.system.web.util.SearchUtils;
@@ -83,7 +84,7 @@ public class SearchUtilsTest extends TestCase {
 		}
 	}
 
-	public void xtestISOExampleComplexQuery(){
+	public void xtestISOExampleComplexCdQuery(){
 		List<String> criteriaList=new ArrayList<String>();
 		String queryText="CdDataType[@value1=[@originalText=[@value=value]]]";
 		criteriaList.add(queryText);
@@ -98,7 +99,36 @@ public class SearchUtilsTest extends TestCase {
 		}
 	}
 
-	public void testISOExampleComplexQuery2(){
+	public void xtestISOExampleComplexCdQuery2(){
+		List<String> criteriaList=new ArrayList<String>();
+		String queryText="CdDataType[@value1=[@originalText=[@value=value]]][@value2=[@code=value]]";
+		criteriaList.add(queryText);
+		try {
+			CdDataType cdDataType=(CdDataType)searchUtils.buildSearchCriteria("gov.nih.nci.cacoresdk.domain.other.datatype",criteriaList);
+			assertNotNull(cdDataType.getValue1());
+			assertNotNull(cdDataType.getValue1().getOriginalText());
+			assertNotNull(cdDataType.getValue1().getOriginalText().getValue());
+			assertNotNull(cdDataType.getValue2().getCode());
+		} catch (Exception ex) {
+			String message=getStackTrace(ex);
+			fail(message);
+		}
+	}
+	
+	public void xtestISOExampleComplexCdQueryNullFlavor(){
+		List<String> criteriaList=new ArrayList<String>();
+		String queryText="CdDataType[@value2=[@nullFlavor=NI]]";
+		criteriaList.add(queryText);
+		try {
+			CdDataType cdDataType=(CdDataType)searchUtils.buildSearchCriteria("gov.nih.nci.cacoresdk.domain.other.datatype",criteriaList);
+			assertNotNull(cdDataType.getValue2().getNullFlavor());
+		} catch (Exception ex) {
+			String message=getStackTrace(ex);
+			fail(message);
+		}
+	}
+	
+	public void xtestISOExampleComplexDsetQuery(){
 		List<String> criteriaList=new ArrayList<String>();
 		String queryText = "DsetCdDataType[@value5=[@item=[@code=CODE1][@codeSystem=CODE_SYSTEM1]][@item=[@codeSystem=CODE_SYSTEM2]]]";
 		criteriaList.add(queryText);
@@ -108,17 +138,22 @@ public class SearchUtilsTest extends TestCase {
 			Iterator<Cd> iterator = dsetCdDataType.getValue5().getItem().iterator();
 			Cd next = iterator.next();
 			Cd next2 = iterator.next();
-			assertEquals("CODE1",next.getCode());
-			assertEquals("CODE_SYSTEM2",next.getCodeSystem());
-			assertEquals("CODE1",next2.getCode());
-			assertEquals("CODE_SYSTEM2",next2.getCodeSystem());
+			if(next2.getCode()==null){
+				assertEquals("CODE_SYSTEM2",next2.getCodeSystem());
+				assertEquals("CODE1",next.getCode());
+				assertEquals("CODE_SYSTEM1",next.getCodeSystem());
+			}else{
+				assertEquals("CODE_SYSTEM2",next.getCodeSystem());
+				assertEquals("CODE1",next2.getCode());
+				assertEquals("CODE_SYSTEM1",next2.getCodeSystem());
+			}
 		} catch (Exception ex) {
 			String message=getStackTrace(ex);
 			fail(message);
 		}
 	}
 	
-	public void xtestISOExampleComplexQuery3(){
+	public void xtestISOExampleComplexDsetQuery2(){
 		List<String> criteriaList=new ArrayList<String>();
 		String queryText = "DsetCdDataType[@value5=[@item=[@code=CODE1][@codeSystem=CODESYSTEM1]]]";
 		criteriaList.add(queryText);
@@ -134,6 +169,20 @@ public class SearchUtilsTest extends TestCase {
 			fail(message);
 		}
 	}
+	
+	public void testISOComplexIVLPQDataWidthType(){
+		List<String> criteriaList=new ArrayList<String>();
+		String queryText = "IvlTsDataType[@value3=[@width=[@value=1]]]";
+		criteriaList.add(queryText);
+		try {
+			IvlTsDataType ivlTsDataType=(IvlTsDataType)searchUtils.buildSearchCriteria("gov.nih.nci.cacoresdk.domain.other.datatype",criteriaList);
+			assertNotNull(ivlTsDataType.getValue3().getWidth());
+		} catch (Exception ex) {
+			String message=getStackTrace(ex);
+			fail(message);
+		}
+	}
+
 
 	private String getStackTrace(Exception ex) {
 		StringWriter sw = new StringWriter();
