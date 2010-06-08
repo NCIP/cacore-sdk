@@ -752,9 +752,10 @@ public class NestedCriteria2HQL
 		if(!skipAssociations)
 		{
 		associationCritMap = getObjAssocCriterion(obj, cfg);
+		PersistentClass tempPclass = getPersistentClass(obj.getClass().getName());
 		hql.append("select ");
 		hql.append(srcAlias);
-		hql.append(" from ").append(obj.getClass().getName()).append(" ").append(srcAlias);
+		hql.append(" from ").append(tempPclass.getEntityName()).append(" ").append(srcAlias);
 
 		// get association value
 		if (associationCritMap != null && associationCritMap.size() > 0)
@@ -773,13 +774,13 @@ public class NestedCriteria2HQL
 					{
 						PersistentClass tempRolePclass = getPersistentClass(objs[i].getClass().getName());
 						String alias = getAlias(objs[i].getClass().getName(),counter++);
-						hql.append(",").append(tempRolePclass.getDiscriminatorValue()).append(" ").append(alias);
+						hql.append(",").append(tempRolePclass.getEntityName()).append(" ").append(alias);
 					}
 				} else
 				{
 					PersistentClass tempRolePclass = getPersistentClass(roleValue.getClass().getName());
 					String alias = getAlias(roleValue.getClass().getName(),counter++);
-					hql.append(",").append(tempRolePclass.getDiscriminatorValue()).append(" ").append(alias);
+					hql.append(",").append(tempRolePclass.getEntityName()).append(" ").append(alias);
 				}
 			}
 			hql.append(" where ");
