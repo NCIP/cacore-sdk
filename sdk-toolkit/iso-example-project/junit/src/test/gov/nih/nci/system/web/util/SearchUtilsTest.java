@@ -8,10 +8,14 @@ import java.util.List;
 
 import gov.nih.nci.cacoresdk.domain.inheritance.childwithassociation.Credit;
 
+import gov.nih.nci.cacoresdk.domain.other.datatype.AdDataType;
 import gov.nih.nci.cacoresdk.domain.other.datatype.CdDataType;
 import gov.nih.nci.cacoresdk.domain.other.datatype.DsetCdDataType;
+import gov.nih.nci.cacoresdk.domain.other.datatype.EnDataType;
 import gov.nih.nci.cacoresdk.domain.other.datatype.IvlTsDataType;
+import gov.nih.nci.iso21090.Adxp;
 import gov.nih.nci.iso21090.Cd;
+import gov.nih.nci.iso21090.Enxp;
 import gov.nih.nci.system.util.ClassCache;
 import gov.nih.nci.system.web.util.SearchUtils;
 import junit.framework.TestCase;
@@ -170,7 +174,7 @@ public class SearchUtilsTest extends TestCase {
 		}
 	}
 	
-	public void testISOComplexIVLPQDataWidthType(){
+	public void xtestISOComplexIVLPQDataWidthType(){
 		List<String> criteriaList=new ArrayList<String>();
 		String queryText = "IvlTsDataType[@value3=[@width=[@value=1]]]";
 		criteriaList.add(queryText);
@@ -183,6 +187,35 @@ public class SearchUtilsTest extends TestCase {
 		}
 	}
 
+	public void xtestISOComplexAdDataType() throws Exception{
+		List<String> criteriaList=new ArrayList<String>();
+		String queryText="AdDataType[@value1=[@part=[@value=1][@type=ZIP]]]";
+		criteriaList.add(queryText);
+		try {
+			AdDataType adDataType=(AdDataType)searchUtils.buildSearchCriteria("gov.nih.nci.cacoresdk.domain.other.datatype",criteriaList);
+			Adxp next = adDataType.getValue1().getPart().iterator().next();
+			assertNotNull(next.getValue());
+			assertNotNull(next.getType());
+		} catch (Exception ex) {
+			String message=getStackTrace(ex);
+			fail(message);
+		}
+	}
+	
+	public void testISOComplexEnDataType() throws Exception{
+		List<String> criteriaList=new ArrayList<String>();
+		String queryText="EnDataType[@value1=[@part=[@value=1][@type=FAM]]]";
+		criteriaList.add(queryText);
+		try {
+			EnDataType enDataType=(EnDataType)searchUtils.buildSearchCriteria("gov.nih.nci.cacoresdk.domain.other.datatype",criteriaList);
+			Enxp next = enDataType.getValue1().getPart().iterator().next();
+			assertNotNull(next.getValue());
+			assertNotNull(next.getType());
+		} catch (Exception ex) {
+			String message=getStackTrace(ex);
+			fail(message);
+		}
+	}
 
 	private String getStackTrace(Exception ex) {
 		StringWriter sw = new StringWriter();

@@ -14,9 +14,6 @@ import gov.nih.nci.system.client.util.xml.JAXBISOIvlTsAdapter;
 import gov.nih.nci.system.util.ClassCache;
 import gov.nih.nci.system.util.SystemConstant;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -39,7 +36,9 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.PropertyException;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
@@ -93,7 +92,7 @@ public class HTTPUtils implements Serializable{
 		private static final long serialVersionUID = 1L;
 
 		{
-			put("gov.nih.nci.iso21090.DSet<gov.nih.nci.iso21090.Ad>",new JAXBISOAdapter<ANY, Any>());
+			put("defaultAdapter",new JAXBISOAdapter<ANY, Any>());
 			put("gov.nih.nci.iso21090.DSet<gov.nih.nci.iso21090.Cd>",new JAXBISODsetCdAdapter<ANY, Any>());
 			put("gov.nih.nci.iso21090.DSet<gov.nih.nci.iso21090.Ii>",new JAXBISODsetIiAdapter<ANY, Any>());
 			put("gov.nih.nci.iso21090.DSet<gov.nih.nci.iso21090.Tel>",new JAXBISODsetTelAdapter<ANY, Any>());
@@ -101,9 +100,23 @@ public class HTTPUtils implements Serializable{
 			put("gov.nih.nci.iso21090.Ivl<gov.nih.nci.iso21090.Real>",new JAXBISOIvlRealAdapter<ANY, Any>());
 			put("gov.nih.nci.iso21090.Ivl<gov.nih.nci.iso21090.Ts>",new JAXBISOIvlTsAdapter<ANY, Any>());
 			put("gov.nih.nci.iso21090.Ivl<gov.nih.nci.iso21090.Int>",new JAXBISOIvlIntAdapter<ANY, Any>());
-			put("gov.nih.nci.iso21090.Ivl<gov.nih.nci.iso21090.Pq>",new JAXBISOIvlPqAdapter<ANY, Any>());
+			put("gov.nih.nci.iso21090.Ivl<gov.nih.nci.iso21090.Pq>",new JAXBISOIvlPqAdapter<ANY, Any>());			
 		}
 	};	
+	
+	private static Marshaller marshaller=null;
+	
+	static{
+		try {
+			JAXBContext jaxbContext = JAXBContext.newInstance("org.iso._21090");
+			marshaller=jaxbContext.createMarshaller();
+			marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+		} catch (JAXBException e) {
+			log.error(e);
+			throw new RuntimeException(e);
+		}
+	}
 
 	public HTTPUtils(ApplicationService applicationService,ClassCache classCache,int rowCounter) {
 		log.debug("rowCounter: " + rowCounter);
@@ -858,23 +871,26 @@ public class HTTPUtils implements Serializable{
 
 	private Object marshalISOObjectTOXml(Field field, Object domain)
 			throws Exception {
-		Object value= field.get(domain);
-		if (field.getType().getName().startsWith("gov.nih.nci.iso21090.")) {
-			JAXBContext jaxbContext = JAXBContext.newInstance("org.iso._21090");
-			Marshaller marshaller = jaxbContext.createMarshaller();
-			marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
-			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+		Object value= field.get(domain);		
+		Marshaller isoMarshaller = getJaxbMarshaller(field.getType().getName());
+		if (isoMarshaller != null) {
 			StringWriter stringWriter = new StringWriter();
-			
-			XmlAdapter<ANY,Any> jaxbAdapter=jaxbISOAdapterMap.get(field.getGenericType().toString());
-			if(jaxbAdapter==null){
-				jaxbAdapter= new JAXBISOAdapter<ANY, Any>();
+			XmlAdapter<ANY, Any> jaxbAdapter = jaxbISOAdapterMap.get(field
+					.getGenericType().toString());
+			if (jaxbAdapter == null) {
+				jaxbAdapter = jaxbISOAdapterMap.get("defaultAdapter");
 			}
 			org.iso._21090.ANY anyJaxb = jaxbAdapter.marshal((Any) value);
-			marshaller.marshal(anyJaxb, stringWriter);
+			isoMarshaller.marshal(anyJaxb, stringWriter);
 			value = stringWriter;
 		}
 		return value;
+	}
+	
+	private Marshaller getJaxbMarshaller(String fieldName) throws JAXBException,
+			PropertyException {
+		if(!fieldName.startsWith("gov.nih.nci.iso21090.")) return null;		
+		return marshaller;
 	}
 	
 	/**

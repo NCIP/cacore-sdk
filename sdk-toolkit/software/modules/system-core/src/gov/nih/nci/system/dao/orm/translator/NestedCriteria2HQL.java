@@ -612,8 +612,8 @@ public class NestedCriteria2HQL
 	private void generateISOWhereQueryObjects(Object obj, StringBuffer query,List<WhereQueryObject> whereQueryObjects,Value componentValue) {
 
 		Class klass = obj.getClass();
-		while (!klass.getName().equals("java.lang.Object")) {
-			
+		int count=0;
+		while (!klass.getName().equals("java.lang.Object")) {			
 			for (Field field : klass.getDeclaredFields()) {
 				int modifier = field.getModifiers();
 				if (!Modifier.isStatic(modifier)) {
@@ -623,7 +623,8 @@ public class NestedCriteria2HQL
 						if (value != null){								
 							//get Class for this attribute:?							
 							String objectClassName = value.getClass().getName();
-							query.append(SystemConstant.DOT).append(field.getName());							
+							StringBuffer newQuery = new StringBuffer(query.toString());
+							newQuery.append(SystemConstant.DOT).append(field.getName());							
 							boolean isoObject = objectClassName.startsWith(isoprefix);
 							//parse the set and create an hql Set<CD>							
 							boolean isSetObject = objectClassName.startsWith("java.util.HashSet");
@@ -636,25 +637,18 @@ public class NestedCriteria2HQL
 								log.info("not found mapping for "+field.getName()+"  ignoring");
 								continue;
 							}
-							
 							if(isoObject & !isEnumObject){
-								generateISOWhereQueryObjects(value,query,whereQueryObjects,childvalue);
-								//delete the extra field names which are added during recursion
-								int startIndex=query.indexOf(SystemConstant.DOT+field.getName());
-								query.delete(startIndex, query.length());
+								generateISOWhereQueryObjects(value,newQuery,whereQueryObjects,childvalue);
 							}else if(isSetObject){
 								Set set=(Set)value;
 								for (Object object : set) {
-									generateISOWhereQueryObjects(object,query,whereQueryObjects,childvalue);
-								}
-								//delete the extra field names which are added during recursion
-								int startIndex=query.indexOf(SystemConstant.DOT+field.getName());
-								query.delete(startIndex, query.length());									
+									generateISOWhereQueryObjects(object,newQuery,whereQueryObjects,childvalue);
+								}								
 							}else{
 								WhereQueryObject queryObject= new WhereQueryObject();
 								queryObject.setParam(value);
-								queryObject.setQuery(query.toString());
-								whereQueryObjects.add(queryObject);							
+								queryObject.setQuery(newQuery.toString());
+								whereQueryObjects.add(queryObject);
 							}
 						}
 					} catch (IllegalArgumentException e) {
