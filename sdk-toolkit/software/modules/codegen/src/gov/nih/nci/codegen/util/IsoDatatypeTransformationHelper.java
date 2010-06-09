@@ -256,7 +256,7 @@ public class IsoDatatypeTransformationHelper
 	private void convertComplexNodeToHibernateManyToOne(RootNode rootNode, StringBuffer buffer, String prefix, String keyColumnName)
 	{
 		String entityName = converteIsoPropertyToEntityName(rootNode.getParentClassName(),rootNode.getName());
-		buffer.append(prefix+"<many-to-one name=\""+rootNode.getName()+"\" entity-name=\""+entityName+"\" column=\""+keyColumnName+"\" lazy=\"false\" cascade=\"all\"/>");
+		buffer.append(prefix+"<many-to-one name=\""+rootNode.getName()+"\" entity-name=\""+entityName+"\" column=\""+keyColumnName+"\" lazy=\"false\" cascade=\"none\"/>");
 		
 	}
 	
@@ -291,7 +291,7 @@ public class IsoDatatypeTransformationHelper
 			{
 				ComplexNode collectionNode = (ComplexNode) innerNode;
 				String tableNameString = "table=\""+tableName+"\"";
-				buffer.append(prefix+"\t<set name=\""+collectionNode.getName()+"\" lazy=\"false\" "+tableNameString+" cascade=\"all\">");
+				buffer.append(prefix+"\t<set name=\""+collectionNode.getName()+"\" lazy=\"false\" "+tableNameString+" cascade=\"none\">");
 				buffer.append(prefix+"\t\t<key column=\""+inverseColumnName+"\" not-null=\"false\"/>");
 				switch(collectionNodeProcessingInstruction)
 				{
