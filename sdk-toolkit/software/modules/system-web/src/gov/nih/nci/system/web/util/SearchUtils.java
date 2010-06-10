@@ -572,9 +572,14 @@ public class SearchUtils {
 				fieldTypeObject = Class.forName(paramString.substring(0,index)).newInstance();
 			}else{
 				String fieldName = field.getType().getName();
-				boolean isSpecificScenarioTrue = fieldName.equals("gov.nih.nci.iso21090.Qty") && classISOParamType.toString().equals("gov.nih.nci.iso21090.Ts");
-				if(isSpecificScenarioTrue){
-					fieldName="gov.nih.nci.iso21090.Pq";
+				boolean isClassISOParamTS = fieldName.equals("gov.nih.nci.iso21090.Qty") && classISOParamType.toString().equals("gov.nih.nci.iso21090.Ts");
+				boolean isClassISOParamPQ = fieldName.equals("gov.nih.nci.iso21090.Qty") && classISOParamType.toString().equals("gov.nih.nci.iso21090.Pq");
+				boolean isClassISOParamReal = fieldName.equals("gov.nih.nci.iso21090.Qty") && classISOParamType.toString().equals("gov.nih.nci.iso21090.Real");
+				boolean isClassISOParamInt = fieldName.equals("gov.nih.nci.iso21090.Qty") && classISOParamType.toString().equals("gov.nih.nci.iso21090.Int");
+				if (isClassISOParamTS || isClassISOParamPQ) {
+					fieldName = "gov.nih.nci.iso21090.Pq";
+				} else if (isClassISOParamReal || isClassISOParamInt) {
+					fieldName = classISOParamType.toString();
 				}
 				fieldTypeObject=Class.forName(fieldName).newInstance();
 			}

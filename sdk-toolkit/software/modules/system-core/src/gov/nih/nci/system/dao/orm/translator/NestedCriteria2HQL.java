@@ -420,45 +420,38 @@ public class NestedCriteria2HQL
 		return distinct;
 	}
 	
-	private boolean inRequired()
-	{
+	private boolean inRequired() {
 		boolean condition2 = condition2(criteria);
 		boolean condition3 = condition3(criteria);
-		
 		boolean condition1 = false;
-		
-		// Verify if it is condition1() and it contains one object in the list with no associations 
-		if(condition1(criteria))
-		{
+		// Verify if it is condition1() and it contains one object in the list
+		// with no associations
+		if (condition1(criteria)) {
 			condition1 = true;
-			
 			List objects = criteria.getSourceObjectList();
-			
-			if(objects == null)
-			{
+			if (objects == null) {
 				condition1 = false;
-			}
-			else if(objects.size() == 1)
-			{
-				try
-				{
-					HashMap map = getObjAssocCriterion(objects.get(0),cfg);
-					if(map == null || map.size() == 0)
-						condition1=false;
-				}
-				catch(Exception e)
-				{
-					//Ignore exception
+			} else if (objects.size() == 1) {
+				try {
+					HashMap map = getObjAssocCriterion(objects.get(0), cfg,null,null);
+					if (map == null || map.size() == 0)
+						condition1 = false;
+				} catch (Exception e) {
+					// Ignore exception
 				}
 			}
 		}
-		if(condition2)
-		{
+		if (condition2) {
 			try {
-				if(criteria.isTargetCollection() && !criteria.isSourceCollection() && criteria.getSourceRoleName()!=null && criteria.getSourceObjectList().size()==1 && isObjectAssociationEmpty(criteria.getSourceObjectList().iterator().next()))
-					condition2=false;
+				if (criteria.isTargetCollection()
+						&& !criteria.isSourceCollection()
+						&& criteria.getSourceRoleName() != null
+						&& criteria.getSourceObjectList().size() == 1
+						&& isObjectAssociationEmpty(criteria
+								.getSourceObjectList().iterator().next()))
+					condition2 = false;
 			} catch (Exception e) {
-				//do nothing. In will be added
+				// do nothing. In will be added
 			}
 		}
 		return condition1 || condition2 || condition3;
@@ -468,7 +461,6 @@ public class NestedCriteria2HQL
 	{
 		//Check if the target contains any CLOB. If yes then do a subselect with distinct else do plain distinct
 		String destalias = getAlias(criteria.getTargetObjectName(), 1);
-		boolean containsCLOB = true;//checkClobAttribute(criteria.getTargetObjectName());
 		String countQ="";
 		String normalQ="";
 		String originalQ = hql.toString();
@@ -519,10 +511,10 @@ public class NestedCriteria2HQL
 
 	@SuppressWarnings("unchecked")
 	private String getObjectAttributeCriterion(String sourceAlias, Object obj,
-			Configuration cfg) throws Exception {
+			Configuration cfg,String parentClassName,String parentRoleName) throws Exception {
 		StringBuffer whereClause = new StringBuffer();
-		HashMap<String,Object> criterionMap = getObjAttrCriterion(obj, cfg);
-		PersistentClass pclass = getPersistentClass(obj.getClass().getName());
+		HashMap<String,Object> criterionMap = getObjAttrCriterion(obj, cfg,parentClassName,parentRoleName);
+		PersistentClass pclass = getPersistentClass(obj.getClass().getName(),parentClassName,parentRoleName);
 		
 		if (criterionMap != null) {
 			Iterator keys = criterionMap.keySet().iterator();
@@ -676,11 +668,11 @@ public class NestedCriteria2HQL
     	return true;
 	}
 
-	private HashMap<String,Object> getObjAttrCriterion(Object obj, Configuration cfg) throws Exception
+	private HashMap<String,Object> getObjAttrCriterion(Object obj, Configuration cfg,String parentClassName,String parentRoleName) throws Exception
 	{
 		HashMap<String,Object> criterions = new HashMap<String,Object>();
 		String objClassName = obj.getClass().getName();
-		PersistentClass pclass = getPersistentClass(objClassName);
+		PersistentClass pclass = getPersistentClass(objClassName,parentClassName,parentRoleName);
 		
 		if (pclass != null){
 			setAttrCriterion(obj, pclass, criterions);
@@ -737,87 +729,99 @@ public class NestedCriteria2HQL
 		}
 	}
 
-	private String getObjectCriterion(Object obj, Configuration cfg, boolean skipAssociations) throws Exception
-	{
-		String srcAlias = getAlias(obj.getClass().getName(),1);
-		
+	private String getObjectCriterion(Object obj, Configuration cfg,
+			boolean skipAssociations) throws Exception {
+		return getObjectCriterion(obj, cfg,skipAssociations,null,null);
+	}	
+	
+	@SuppressWarnings("unchecked")
+	private String getObjectCriterion(Object obj, Configuration cfg,
+			boolean skipAssociations,String parentClass,String parentRoleName) throws Exception {
+		String srcAlias = getAlias(obj.getClass().getName(), 1);
+
 		StringBuffer hql = new StringBuffer();
 		HashMap associationCritMap = null;
-		if(!skipAssociations)
-		{
-		associationCritMap = getObjAssocCriterion(obj, cfg);
-		PersistentClass tempPclass = getPersistentClass(obj.getClass().getName());
-		hql.append("select ");
-		hql.append(srcAlias);
-		hql.append(" from ").append(tempPclass.getEntityName()).append(" ").append(srcAlias);
+		if (!skipAssociations) {
+			associationCritMap = getObjAssocCriterion(obj, cfg,parentClass,parentRoleName);
+			PersistentClass tempPclass = getPersistentClass(obj.getClass().getName(),parentClass,parentRoleName);
+			hql.append("select ");
+			hql.append(srcAlias);
+			hql.append(" from ").append(tempPclass.getEntityName()).append(" ").append(srcAlias);
 
 		// get association value
-		if (associationCritMap != null && associationCritMap.size() > 0)
-		{
-			Iterator associationKeys = associationCritMap.keySet().iterator();
-			int counter = 0;
-			while (associationKeys.hasNext())
-			{
-				String roleName = (String) associationKeys.next();
-				Object roleValue = associationCritMap.get(roleName);
-
-				if (roleValue instanceof Collection)
-				{
-					Object[] objs = ((Collection) roleValue).toArray();
-					for (int i = 0; i < objs.length; i++)
-					{
-						PersistentClass tempRolePclass = getPersistentClass(objs[i].getClass().getName());
-						String alias = getAlias(objs[i].getClass().getName(),counter++);
+			if (associationCritMap != null && associationCritMap.size() > 0) {
+				Iterator associationKeys = associationCritMap.keySet().iterator();
+				int counter = 0;
+				while (associationKeys.hasNext()) {
+					String roleName = (String) associationKeys.next();
+					Object roleValue = associationCritMap.get(roleName);
+					if (roleValue instanceof Collection) {
+						Object[] objs = ((Collection) roleValue).toArray();
+						for (int i = 0; i < objs.length; i++) {
+							PersistentClass tempRolePclass = getPersistentClass(
+									objs[i].getClass().getName(), 
+									tempPclass.getEntityName(), roleName);
+							String alias = getAlias(objs[i].getClass()
+									.getName(), counter++);
+							hql.append(",").append(
+									tempRolePclass.getEntityName()).append(" ").append(alias);
+						}
+					} else {
+						PersistentClass tempRolePclass = getPersistentClass(
+								roleValue.getClass().getName(), tempPclass.getEntityName(), roleName);
+						String alias = getAlias(roleValue.getClass().getName(),counter++);
 						hql.append(",").append(tempRolePclass.getEntityName()).append(" ").append(alias);
 					}
-				} else
-				{
-					PersistentClass tempRolePclass = getPersistentClass(roleValue.getClass().getName());
-					String alias = getAlias(roleValue.getClass().getName(),counter++);
-					hql.append(",").append(tempRolePclass.getEntityName()).append(" ").append(alias);
 				}
-			}
-			hql.append(" where ");
-			associationKeys = associationCritMap.keySet().iterator();
-			counter = 0;
-			while (associationKeys.hasNext())
-			{
-				String roleName = (String) associationKeys.next();
-				Object roleValue = associationCritMap.get(roleName);
-
-				if (roleValue instanceof Collection)
-				{
-					Object[] objs = ((Collection) roleValue).toArray();
-					for (int i = 0; i < objs.length; i++)
-					{
-						String alias = getAlias(objs[i].getClass().getName(),counter++);
-						hql.append(alias).append(" in elements(").append(srcAlias).append(".").append(roleName).append(")");
-						hql.append(" and ");
-						hql.append(alias).append(" in (").append(getObjectCriterion(objs[i], cfg, false)).append(") ");
-						if (i < objs.length-1)
+				hql.append(" where ");
+				associationKeys = associationCritMap.keySet().iterator();
+				counter = 0;
+				while (associationKeys.hasNext()) {
+					String roleName = (String) associationKeys.next();
+					Object roleValue = associationCritMap.get(roleName);
+					if (roleValue instanceof Collection) {
+						Object[] objs = ((Collection) roleValue).toArray();
+						for (int i = 0; i < objs.length; i++) {
+							String alias = getAlias(objs[i].getClass().getName(), counter++);
+							hql.append(alias).append(" in elements(").append(
+									srcAlias).append(".").append(roleName).append(")");
 							hql.append(" and ");
+							String objectCriterion = getObjectCriterion(objs[i], cfg, false,tempPclass.getEntityName(),roleName);
+							hql.append(alias).append(" in (").append(
+									objectCriterion).append(") ");
+							if (i < objs.length - 1)
+								hql.append(" and ");
+						}
+					} else {
+						String alias = getAlias(roleValue.getClass().getName(),
+								counter++);
+						hql.append(alias).append(".id").append("=").append(
+								srcAlias).append(".").append(roleName).append(".id");
+						hql.append(" and ");
+						String objectCriterion = getObjectCriterion(roleValue,cfg, false,tempPclass.getEntityName(),roleName);
+						hql.append(alias).append(" in (").append(
+								objectCriterion).append(") ");
 					}
-				} else
-				{
-					String alias = getAlias(roleValue.getClass().getName(),counter++);
-					hql.append(alias).append(".id").append("=").append(srcAlias).append(".").append(roleName).append(".id");
-					hql.append(" and ");
-					hql.append(alias).append(" in (").append(getObjectCriterion(roleValue, cfg, false)).append(") ");
+					hql.append(" ");
+					if (associationKeys.hasNext())
+						hql.append(" and ");
 				}
-				hql.append(" ");
-				if (associationKeys.hasNext())
-					hql.append(" and ");
 			}
 		}
-		}
-		String attributeCriteria = getObjectAttributeCriterion(srcAlias, obj, cfg);
-		if ((associationCritMap == null || associationCritMap.size() == 0 && attributeCriteria != null && attributeCriteria.trim().length() > 0) && !skipAssociations)
+		String attributeCriteria = getObjectAttributeCriterion(srcAlias, obj,cfg,parentClass,parentRoleName);
+		if ((associationCritMap == null || associationCritMap.size() == 0
+				&& attributeCriteria != null
+				&& attributeCriteria.trim().length() > 0)
+				&& !skipAssociations)
 			hql.append(" where ");
-		if (associationCritMap != null && associationCritMap.size() > 0 && attributeCriteria != null && attributeCriteria.trim().length() > 0)
+		if (associationCritMap != null && associationCritMap.size() > 0
+				&& attributeCriteria != null
+				&& attributeCriteria.trim().length() > 0)
 			hql.append(" ").append(" and ");
+		
 		hql.append(attributeCriteria);
-		log.info("HQL query: "+hql.toString());
-		System.out.println("HQL query: "+hql.toString());
+		log.info("HQL query: " + hql.toString());
+		System.out.println("HQL query: " + hql.toString());
 		return hql.toString();
 	}
 
@@ -844,12 +848,13 @@ public class NestedCriteria2HQL
 		}
 	}
 
-	private HashMap getObjAssocCriterion(Object obj, Configuration cfg) throws Exception
+	@SuppressWarnings("unchecked")
+	private HashMap getObjAssocCriterion(Object obj, Configuration cfg,String parentClassName,String parentRoleName) throws Exception
 	{
 		HashMap criterions = new HashMap();
 		String objClassName = obj.getClass().getName();
 
-		PersistentClass pclass = getPersistentClass(objClassName);
+		PersistentClass pclass = getPersistentClass(objClassName,parentClassName,parentRoleName);
 		if (pclass != null){
 			setAssocCriterion(obj, pclass, criterions);
 			
@@ -912,11 +917,31 @@ public class NestedCriteria2HQL
 		return field;
 	}
 	
-	private PersistentClass getPersistentClass(String objClassName){
+	private PersistentClass getPersistentClass(String objClassName,String parentObjectClassName,String parentRoleName) throws Exception {
+		List<PersistentClass> pClasses=getPersistentClassList(objClassName);
+		if(pClasses.size()==1){
+			return pClasses.iterator().next();
+		}
+		if (parentObjectClassName == null || parentRoleName == null && pClasses.size()>0) {
+			log.error("Object Class name "+objClassName +" has multiple persistent classes and it's an parent class");
+			throw new Exception("NestedCriteria Object to HQL conversion error");
+		}
+		for (PersistentClass persistentClass : pClasses) {
+			parentObjectClassName = parentObjectClassName.replace('.', '_');
+			String tempSubString = parentObjectClassName + "_" + parentRoleName;
+			String childPClassName = persistentClass.getEntityName();
+			if (childPClassName.contains(tempSubString)) {
+				return persistentClass;
+			}
+		}
+		return null;
+	}
+	
+	@SuppressWarnings("unchecked")
+	private List<PersistentClass> getPersistentClassList(String objClassName) {
+		List<PersistentClass> pClasses=new ArrayList<PersistentClass>();
 		PersistentClass pclass = cfg.getClassMapping(objClassName);
-		
-		if (pclass == null) {//might be dealing with an implicit class.  Check to see if we have a persistent subclass mapping we can use instead
-			
+		if (pclass == null) {// might be dealing with an implicit class. Check to see if we have a persistent subclass mapping we can use instead
 			Iterator iter = cfg.getClassMappings();
 			Class objClass = null;
 			try {
@@ -925,22 +950,20 @@ public class NestedCriteria2HQL
 				log.error("Class not found for " + objClassName);
 				return null;
 			}
-			
-			while (iter.hasNext()){
-				pclass = (PersistentClass)iter.next();
-				
-				try { 
+			while (iter.hasNext()) {
+				pclass = (PersistentClass) iter.next();
+				try {
 					(pclass.getMappedClass()).asSubclass(objClass);
-					log.debug("Searching for persistent subclass of " + objClassName +"; found " + pclass.getClassName());
-					return pclass;
+					log.debug("Searching for persistent subclass of "+ objClassName + "; found "+ pclass.getClassName());
+					pClasses.add(pclass);
 				} catch (Exception e) {
-					//do nothing
+					// do nothing
 				}
-
 			}// while
+		}else{
+			pClasses.add(pclass);
 		}
-		
-		return pclass;
+		return pClasses;
 	}
 	
 	private boolean isObjectEmpty(Object obj)
