@@ -12,6 +12,8 @@ import gov.nih.nci.cacoresdk.domain.other.datatype.AdDataType;
 import gov.nih.nci.cacoresdk.domain.other.datatype.CdDataType;
 import gov.nih.nci.cacoresdk.domain.other.datatype.DsetCdDataType;
 import gov.nih.nci.cacoresdk.domain.other.datatype.EnDataType;
+import gov.nih.nci.cacoresdk.domain.other.datatype.IvlIntDataType;
+import gov.nih.nci.cacoresdk.domain.other.datatype.IvlRealDataType;
 import gov.nih.nci.cacoresdk.domain.other.datatype.IvlTsDataType;
 import gov.nih.nci.iso21090.Adxp;
 import gov.nih.nci.iso21090.Cd;
@@ -31,7 +33,7 @@ public class SearchUtilsTest extends TestCase {
 		searchUtils = new SearchUtils(classCache);
 	}
 	
-	public void xtestExampleBasicQuery(){
+	public void testExampleBasicQuery(){
 		List<String> criteriaList=new ArrayList<String>();
 		String query = "Credit[@id=[@extension=3]]";
 		criteriaList.add(query);
@@ -45,7 +47,7 @@ public class SearchUtilsTest extends TestCase {
 		}
 	}
 
-	public void xtestExampleBasicQueryWithRoleName(){
+	public void testExampleBasicQueryWithRoleName(){
 		List<String> criteriaList=new ArrayList<String>();
 		String query = "Credit[@id=[@extension=3]]&roleName=issuingBank";
 		criteriaList.add(query);
@@ -59,7 +61,7 @@ public class SearchUtilsTest extends TestCase {
 		}
 	}
 
-	public void xtestISOExampleBasicQuery(){
+	public void testISOExampleBasicQuery(){
 		List<String> criteriaList=new ArrayList<String>();
 		String query = "Credit[@id=[@extension=3]]";
 		criteriaList.add(query);
@@ -73,7 +75,7 @@ public class SearchUtilsTest extends TestCase {
 		}
 	}
 
-	public void xtestISOExampleBasicQueryWithRoleName(){
+	public void testISOExampleBasicQueryWithRoleName(){
 		List<String> criteriaList=new ArrayList<String>();
 		String query = "CdDataType[@value1=[@code=CODE1]]";
 		criteriaList.add(query);
@@ -88,7 +90,7 @@ public class SearchUtilsTest extends TestCase {
 		}
 	}
 
-	public void xtestISOExampleComplexCdQuery(){
+	public void testISOExampleComplexCdQuery(){
 		List<String> criteriaList=new ArrayList<String>();
 		String queryText="CdDataType[@value1=[@originalText=[@value=value]]]";
 		criteriaList.add(queryText);
@@ -103,7 +105,7 @@ public class SearchUtilsTest extends TestCase {
 		}
 	}
 
-	public void xtestISOExampleComplexCdQuery2(){
+	public void testISOExampleComplexCdQuery2(){
 		List<String> criteriaList=new ArrayList<String>();
 		String queryText="CdDataType[@value1=[@originalText=[@value=value]]][@value2=[@code=value]]";
 		criteriaList.add(queryText);
@@ -119,7 +121,22 @@ public class SearchUtilsTest extends TestCase {
 		}
 	}
 	
-	public void xtestISOExampleComplexCdQueryNullFlavor(){
+	public void testISOExampleComplexCdQuery7(){
+		List<String> criteriaList=new ArrayList<String>();
+		String queryText="CdDataType[@value7=[@codeSystem=CODE_SYSTEM_1]]";
+		criteriaList.add(queryText);
+		try {
+			CdDataType cdDataType=(CdDataType)searchUtils.buildSearchCriteria("gov.nih.nci.cacoresdk.domain.other.datatype",criteriaList);
+			assertNotNull(cdDataType.getValue7());
+			assertNotNull(cdDataType.getValue7().getCodeSystem());
+		} catch (Exception ex) {
+			String message=getStackTrace(ex);
+			fail(message);
+		}
+	}
+		
+	
+	public void testISOExampleComplexCdQueryNullFlavor(){
 		List<String> criteriaList=new ArrayList<String>();
 		String queryText="CdDataType[@value2=[@nullFlavor=NI]]";
 		criteriaList.add(queryText);
@@ -132,7 +149,7 @@ public class SearchUtilsTest extends TestCase {
 		}
 	}
 	
-	public void xtestISOExampleComplexDsetQuery(){
+	public void testISOExampleComplexDsetQuery(){
 		List<String> criteriaList=new ArrayList<String>();
 		String queryText = "DsetCdDataType[@value5=[@item=[@code=CODE1][@codeSystem=CODE_SYSTEM1]][@item=[@codeSystem=CODE_SYSTEM2]]]";
 		criteriaList.add(queryText);
@@ -157,7 +174,7 @@ public class SearchUtilsTest extends TestCase {
 		}
 	}
 	
-	public void xtestISOExampleComplexDsetQuery2(){
+	public void testISOExampleComplexDsetQuery2(){
 		List<String> criteriaList=new ArrayList<String>();
 		String queryText = "DsetCdDataType[@value5=[@item=[@code=CODE1][@codeSystem=CODESYSTEM1]]]";
 		criteriaList.add(queryText);
@@ -174,7 +191,33 @@ public class SearchUtilsTest extends TestCase {
 		}
 	}
 	
-	public void xtestISOComplexIVLPQDataWidthType(){
+	public void testISOComplexIVLRealDataWidthType(){
+		List<String> criteriaList=new ArrayList<String>();
+		String queryText = "IvlRealDataType[@value3=[@width=[@value=1]]]";
+		criteriaList.add(queryText);
+		try {
+			IvlRealDataType ivlRealDataType=(IvlRealDataType)searchUtils.buildSearchCriteria("gov.nih.nci.cacoresdk.domain.other.datatype",criteriaList);
+			assertNotNull(ivlRealDataType.getValue3().getWidth());
+		} catch (Exception ex) {
+			String message=getStackTrace(ex);
+			fail(message);
+		}
+	}
+	
+	public void testISOComplexIVLIntDataWidthType(){
+		List<String> criteriaList=new ArrayList<String>();
+		String queryText = "IvlIntDataType[@value3=[@width=[@value=1]]]";
+		criteriaList.add(queryText);
+		try {
+			IvlIntDataType ivlIntDataType=(IvlIntDataType)searchUtils.buildSearchCriteria("gov.nih.nci.cacoresdk.domain.other.datatype",criteriaList);
+			assertNotNull(ivlIntDataType.getValue3().getWidth());
+		} catch (Exception ex) {
+			String message=getStackTrace(ex);
+			fail(message);
+		}
+	}
+	
+	public void testISOComplexIVLTsDataWidthType(){
 		List<String> criteriaList=new ArrayList<String>();
 		String queryText = "IvlTsDataType[@value3=[@width=[@value=1]]]";
 		criteriaList.add(queryText);
@@ -202,7 +245,7 @@ public class SearchUtilsTest extends TestCase {
 		}
 	}
 	
-	public void testISOComplexEnDataType() throws Exception{
+	public void xtestISOComplexEnDataType() throws Exception{
 		List<String> criteriaList=new ArrayList<String>();
 		String queryText="EnDataType[@value1=[@part=[@value=1][@type=FAM]]]";
 		criteriaList.add(queryText);
