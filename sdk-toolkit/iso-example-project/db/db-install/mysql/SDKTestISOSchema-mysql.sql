@@ -1,4 +1,4 @@
-CREATE TABLE ad_datatype_value8 (
+CREATE TABLE AD_DATATYPE_VALUE8 (
   id int(8) NOT NULL,
   al_value varchar(50)  default NULL,
   al_code varchar(50)  default NULL,
@@ -12,7 +12,7 @@ CREATE TABLE ad_datatype_value8 (
   PRIMARY KEY  (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE ad_datatype_value9 (
+CREATE TABLE AD_DATATYPE_VALUE9 (
   id int(8) NOT NULL,
   al_value varchar(50)  default NULL,
   al_code varchar(50)  default NULL,
@@ -27,7 +27,7 @@ CREATE TABLE ad_datatype_value9 (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
-CREATE TABLE ad_datatype (
+CREATE TABLE AD_DATATYPE (
   id int(8) NOT NULL,
   value1_al_value varchar(50)  default NULL,
   value2_dal_value varchar(50)  default NULL,
@@ -95,7 +95,7 @@ CREATE TABLE ad_datatype (
   CONSTRAINT fk_ad_datatype_value8 FOREIGN KEY (ad_datatype_value8_id) REFERENCES ad_datatype_value8 (id) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE ad_datatype_value7 (
+CREATE TABLE AD_DATATYPE_VALUE7 (
   ad_datatype_id int(8) default NULL,
   al_value varchar(50)  default NULL,
   al_code varchar(50)  default NULL,
@@ -113,7 +113,7 @@ CREATE TABLE ad_datatype_value7 (
 
 
 
-CREATE TABLE ad_ad_datatype_value9 (
+CREATE TABLE AD_AD_DATATYPE_VALUE9 (
   ad_datatype_id int(8) NOT NULL,
   ad_datatype_value9_id int(8) NOT NULL,
   PRIMARY KEY  (ad_datatype_value9_id,ad_datatype_id),
@@ -123,7 +123,7 @@ CREATE TABLE ad_ad_datatype_value9 (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
-CREATE TABLE bl_datatype (
+CREATE TABLE BL_DATATYPE (
   id int(8) NOT NULL,
   value1_value varchar(1)  default NULL,
   value2_null_flavor varchar(50)  default NULL,
@@ -131,7 +131,7 @@ CREATE TABLE bl_datatype (
   PRIMARY KEY  (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE bl_nonnull_datatype (
+CREATE TABLE BL_NONNULL_DATATYPE (
   id int(8) NOT NULL,
   value1_value varchar(1)  default NULL,
   PRIMARY KEY  (id)
@@ -139,7 +139,7 @@ CREATE TABLE bl_nonnull_datatype (
 
 
 
-CREATE TABLE cd_datatype_value7 (
+CREATE TABLE CD_DATATYPE_VALUE7 (
   id int(8) NOT NULL,
   null_flavor varchar(50)  default NULL,
   code varchar(50)  default NULL,
@@ -149,12 +149,12 @@ CREATE TABLE cd_datatype_value7 (
   display_null_flavor varchar(50)  default NULL,
   display_value varchar(50)  default NULL,
   orig_txt_null_flavor varchar(50)  default NULL,
-  orig_txt_value varchar(50)  default NULL ,
+  orig_txt_value varchar(50)  default NULL,
   orig_txt_description varchar(50)  default NULL,
   PRIMARY KEY  (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE cd_datatype_value8 (
+CREATE TABLE CD_DATATYPE_VALUE8 (
   id int(8) NOT NULL,
   null_flavor varchar(50)  default NULL,
   code varchar(50)  default NULL,
@@ -164,12 +164,12 @@ CREATE TABLE cd_datatype_value8 (
   display_null_flavor varchar(50)  default NULL,
   display_value varchar(50)  default NULL,
   orig_txt_null_flavor varchar(50)  default NULL,
-  orig_txt_value varchar(50)  default NULL ,
+  orig_txt_value varchar(50)  default NULL,
   orig_txt_description varchar(50)  default NULL,
   PRIMARY KEY  (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE cd_datatype (
+CREATE TABLE CD_DATATYPE (
   id int(8) NOT NULL,
   value1_code varchar(50)  default NULL,
   value2_null_flavor varchar(50)  default NULL,
@@ -183,7 +183,7 @@ CREATE TABLE cd_datatype (
   value4_display_null_flavor varchar(50)  default NULL,
   value4_display_value varchar(50)  default NULL,
   value4_orig_txt_null_flavor varchar(50)  default NULL,
-  value4_orig_txt_value varchar(50)  default NULL ,
+  value4_orig_txt_value varchar(50)  default NULL,
   value4_orig_txt_description varchar(50)  default NULL,
   value5_null_flavor varchar(50)  default NULL,
   value5_code varchar(50)  default NULL,
@@ -193,7 +193,7 @@ CREATE TABLE cd_datatype (
   value5_display_null_flavor varchar(50)  default NULL,
   value5_display_value varchar(50)  default NULL,
   value5_orig_txt_null_flavor varchar(50)  default NULL,
-  value5_orig_txt_value varchar(50)  default NULL ,
+  value5_orig_txt_value varchar(50)  default NULL,
   value5_orig_txt_description varchar(50)  default NULL,
   cd_datatype_value7_id int(8) default NULL,
   PRIMARY KEY  (id),
@@ -201,7 +201,7 @@ CREATE TABLE cd_datatype (
   CONSTRAINT fk_cd_datatype_value7 FOREIGN KEY (cd_datatype_value7_id) REFERENCES cd_datatype_value7 (id) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE cd_datatype_value6 (
+CREATE TABLE CD_DATATYPE_VALUE6 (
   cd_datatype_id int(8) NOT NULL,
   null_flavor varchar(50)  default NULL,
   code varchar(50)  default NULL,
@@ -211,13 +211,13 @@ CREATE TABLE cd_datatype_value6 (
   display_null_flavor varchar(50)  default NULL,
   display_value varchar(50)  default NULL,
   orig_txt_null_flavor varchar(50)  default NULL,
-  orig_txt_value varchar(50)  default NULL ,
+  orig_txt_value varchar(50)  default NULL,
   orig_txt_description varchar(50)  default NULL,
   PRIMARY KEY  (cd_datatype_id),
   CONSTRAINT fk_cd_datatype_val_cd_datatype FOREIGN KEY (cd_datatype_id) REFERENCES cd_datatype (id) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE cd_cd_datatype_value8 (
+CREATE TABLE CD_CD_DATATYPE_VALUE8 (
   cd_data_type_id int(8) NOT NULL,
   cd_datatype_value8_id int(8) NOT NULL,
   PRIMARY KEY  (cd_datatype_value8_id,cd_data_type_id),
@@ -227,21 +227,21 @@ CREATE TABLE cd_cd_datatype_value8 (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
-CREATE TABLE dset_ad_datatype (
+CREATE TABLE DSET_AD_DATATYPE (
   id int(8) NOT NULL,
   PRIMARY KEY  (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
 
-CREATE TABLE dset_ad_value1 (
+CREATE TABLE DSET_AD_VALUE1 (
   dset_ad_datatype_id int(8) NOT NULL,
   adxp_al_value varchar(50)  default NULL,
   PRIMARY KEY  (dset_ad_datatype_id),
   CONSTRAINT fk_dser_ad_dataty_val_ad_da FOREIGN KEY (dset_ad_datatype_id) REFERENCES dset_ad_datatype (id) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE dset_ad_value2 (
+CREATE TABLE DSET_AD_VALUE2 (
   dset_ad_datatype_id int(8) NOT NULL,
   adxp_dal_value varchar(50)  default NULL,
   adxp_dal_code varchar(50)  default NULL,
@@ -249,7 +249,7 @@ CREATE TABLE dset_ad_value2 (
   CONSTRAINT fk_dser_ad_datat_val_ad_datat FOREIGN KEY (dset_ad_datatype_id) REFERENCES dset_ad_datatype (id) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE dset_ad_value3 (
+CREATE TABLE DSET_AD_VALUE3 (
   dset_ad_datatype_id int(8) NOT NULL,
   adxp_al_value varchar(50)  default NULL,
   adxp_al_code varchar(50)  default NULL,
@@ -258,7 +258,7 @@ CREATE TABLE dset_ad_value3 (
   CONSTRAINT fk_dser_ad_datat_val_ad3 FOREIGN KEY (dset_ad_datatype_id) REFERENCES dset_ad_datatype (id) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE dset_ad_value4 (
+CREATE TABLE DSET_AD_VALUE4 (
   dset_ad_datatype_id int(8) NOT NULL,
   adxp_al1_value varchar(50)  default NULL,
   adxp_al2_value varchar(50)  default NULL,
@@ -270,7 +270,7 @@ CREATE TABLE dset_ad_value4 (
   CONSTRAINT fk_dser_ad_type_val_ad4 FOREIGN KEY (dset_ad_datatype_id) REFERENCES dset_ad_datatype (id) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE dset_ad_value5 (
+CREATE TABLE DSET_AD_VALUE5 (
   dset_ad_datatype_id int(8) NOT NULL,
   adxp_al_value varchar(50)  default NULL,
   adxp_al_code varchar(50)  default NULL,
@@ -285,7 +285,7 @@ CREATE TABLE dset_ad_value5 (
   CONSTRAINT fk_dser_ad_datat_val_ad5 FOREIGN KEY (dset_ad_datatype_id) REFERENCES dset_ad_datatype (id) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE dset_ad_value6 (
+CREATE TABLE DSET_AD_VALUE6 (
   dset_ad_datatype_id int(8) NOT NULL,
   adxp_adl_value varchar(50)  default NULL,
   adxp_al_value varchar(50)  default NULL,
@@ -330,7 +330,7 @@ CREATE TABLE dset_ad_value6 (
   CONSTRAINT fk_dser_ad_type_val_ad6 FOREIGN KEY (dset_ad_datatype_id) REFERENCES dset_ad_datatype (id) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE dset_ad_value7 (
+CREATE TABLE DSET_AD_VALUE7 (
   id int(8) NOT NULL,
   dset_ad_datatype_id int(8) default NULL,
   adxp_al_value varchar(50)  default NULL,
@@ -347,7 +347,7 @@ CREATE TABLE dset_ad_value7 (
   CONSTRAINT fk_dset_ad_value_dset_ad7 FOREIGN KEY (dset_ad_datatype_id) REFERENCES dset_ad_datatype (id) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE dset_ad_value8 (
+CREATE TABLE DSET_AD_VALUE8 (
   id int(8) NOT NULL,
   adxp_al_value varchar(50)  default NULL,
   adxp_al_code varchar(50)  default NULL,
@@ -361,7 +361,7 @@ CREATE TABLE dset_ad_value8 (
   PRIMARY KEY  (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE dset_ad_dset_ad_value8 (
+CREATE TABLE DSET_AD_DSET_AD_VALUE8 (
   dset_ad_datatype_id int(8) NOT NULL,
   dset_ad_value8_id int(8) NOT NULL,
   PRIMARY KEY  (dset_ad_value8_id,dset_ad_datatype_id),
@@ -370,20 +370,20 @@ CREATE TABLE dset_ad_dset_ad_value8 (
   CONSTRAINT fk_dser_ad_dset__dset_ad_valu FOREIGN KEY (dset_ad_value8_id) REFERENCES dset_ad_value8 (id) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE dset_cd (
+CREATE TABLE DSET_CD (
   id int(8) NOT NULL,
   PRIMARY KEY  (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
-CREATE TABLE dset_cd_value1 (
+CREATE TABLE DSET_CD_VALUE1 (
   dset_cd_id int(8) NOT NULL,
   code varchar(50)  default NULL,
   PRIMARY KEY  (dset_cd_id),
   CONSTRAINT fk_dset_cd_value1_dset_cd FOREIGN KEY (dset_cd_id) REFERENCES dset_cd (id) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE dset_cd_value2 (
+CREATE TABLE DSET_CD_VALUE2 (
   dset_cd_id int(8) NOT NULL,
   code varchar(50)  default NULL,
   null_flavor varchar(50)  default NULL,
@@ -391,7 +391,7 @@ CREATE TABLE dset_cd_value2 (
   CONSTRAINT fk_dset_cd_value2_dset_cd FOREIGN KEY (dset_cd_id) REFERENCES dset_cd (id) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE dset_cd_value3 (
+CREATE TABLE DSET_CD_VALUE3 (
   dset_cd_id int(8) NOT NULL,
   code varchar(50)  default NULL,
   code_system varchar(50)  default NULL,
@@ -400,7 +400,7 @@ CREATE TABLE dset_cd_value3 (
   CONSTRAINT fk_dset_cd_value3_dset_cd FOREIGN KEY (dset_cd_id) REFERENCES dset_cd (id) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE dset_cd_value4 (
+CREATE TABLE DSET_CD_VALUE4 (
   dset_cd_id int(8) NOT NULL,
   code varchar(50)  default NULL,
   code_system varchar(50)  default NULL,
@@ -413,7 +413,7 @@ CREATE TABLE dset_cd_value4 (
   CONSTRAINT fk_dset_cd_value4_dset_cd FOREIGN KEY (dset_cd_id) REFERENCES dset_cd (id) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE dset_cd_value5 (
+CREATE TABLE DSET_CD_VALUE5 (
   dset_cd_id int(8) NOT NULL,
   code varchar(50)  default NULL,
   code_system varchar(50)  default NULL,
@@ -426,7 +426,7 @@ CREATE TABLE dset_cd_value5 (
   CONSTRAINT fk_dset_cd_value5_dset_cd FOREIGN KEY (dset_cd_id) REFERENCES dset_cd (id) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE dset_cd_value6 (
+CREATE TABLE DSET_CD_VALUE6 (
   id int(8) NOT NULL,
   dset_cd_id int(8) default NULL,
   code varchar(50)  default NULL,
@@ -435,13 +435,13 @@ CREATE TABLE dset_cd_value6 (
   CONSTRAINT fk_dset_cd_value6_dset_cd FOREIGN KEY (dset_cd_id) REFERENCES dset_cd (id) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE dset_cd_value7 (
+CREATE TABLE DSET_CD_VALUE7 (
   id int(8) NOT NULL,
   code varchar(50)  default NULL,
   PRIMARY KEY  (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE dset_cd_cd_value7 (
+CREATE TABLE DSET_CD_CD_VALUE7 (
   dset_cd_id int(8) NOT NULL,
   dset_cd_value7_id int(8) NOT NULL,
   PRIMARY KEY  (dset_cd_id,dset_cd_value7_id),
@@ -450,19 +450,19 @@ CREATE TABLE dset_cd_cd_value7 (
   CONSTRAINT fk_dset_cd_cd_va_dset_cd5 FOREIGN KEY (dset_cd_value7_id) REFERENCES dset_cd_value7 (id) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE dset_en (
+CREATE TABLE DSET_EN (
   id int(8) NOT NULL,
   PRIMARY KEY  (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE dset_en_value1 (
+CREATE TABLE DSET_EN_VALUE1 (
   dset_en_datatype_id int(8) NOT NULL,
   enxp_pn_value varchar(50)  default NULL,
   PRIMARY KEY  (dset_en_datatype_id),
   CONSTRAINT fk_en_type_val_en_type FOREIGN KEY (dset_en_datatype_id) REFERENCES dset_en (id) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE dset_en_value2 (
+CREATE TABLE DSET_EN_VALUE2 (
   dset_en_datatype_id int(8) NOT NULL,
   enxp_pn_value varchar(50)  default NULL,
   enxp_pn_code varchar(50)  default NULL,
@@ -470,7 +470,7 @@ CREATE TABLE dset_en_value2 (
   CONSTRAINT fk_en_type_val2_en_type FOREIGN KEY (dset_en_datatype_id) REFERENCES dset_en (id) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE dset_en_value3 (
+CREATE TABLE DSET_EN_VALUE3 (
   dset_en_datatype_id int(8) NOT NULL,
   enxp_pn_code varchar(50)  default NULL,
   enxp_pn_value varchar(50)  default NULL,
@@ -480,7 +480,7 @@ CREATE TABLE dset_en_value3 (
   CONSTRAINT fk_en_type_val3_en_type FOREIGN KEY (dset_en_datatype_id) REFERENCES dset_en (id) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE dset_en_value4 (
+CREATE TABLE DSET_EN_VALUE4 (
   dset_en_datatype_id int(8) NOT NULL,
   enxp_pn_value varchar(50)  default NULL,
   enxp_pn_enpq varchar(50)  default NULL,
@@ -488,7 +488,7 @@ CREATE TABLE dset_en_value4 (
   CONSTRAINT fk_en_datatype_val4_en_datat FOREIGN KEY (dset_en_datatype_id) REFERENCES dset_en (id) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE dset_en_value5 (
+CREATE TABLE DSET_EN_VALUE5 (
   dset_en_datatype_id int(8) NOT NULL,
   enxp_pn_value varchar(50)  default NULL,
   enxp_pn2_value varchar(50)  default NULL,
@@ -501,7 +501,7 @@ CREATE TABLE dset_en_value5 (
   PRIMARY KEY  (dset_en_datatype_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE dset_en_value6 (
+CREATE TABLE DSET_EN_VALUE6 (
   dset_en_datatype_id int(8) NOT NULL,
   enxp_pn_value varchar(50)  default NULL,
   enxp_pn_code varchar(50)  default NULL,
@@ -515,7 +515,7 @@ CREATE TABLE dset_en_value6 (
   CONSTRAINT fk_en_datatype_val6_en_datat FOREIGN KEY (dset_en_datatype_id) REFERENCES dset_en (id) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE dset_en_value7 (
+CREATE TABLE DSET_EN_VALUE7 (
   dset_en_datatype_id int(8) NOT NULL,
   enxp_pn_code varchar(50)  default NULL,
   enxp_on_code varchar(50)  default NULL,
@@ -529,20 +529,20 @@ CREATE TABLE dset_en_value7 (
   CONSTRAINT fk_en_datatype_val7_en_datat FOREIGN KEY (dset_en_datatype_id) REFERENCES dset_en (id) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE dset_ii (
+CREATE TABLE DSET_II (
   id int(8) NOT NULL,
   PRIMARY KEY  (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
-CREATE TABLE dset_ii_value1 (
+CREATE TABLE DSET_II_VALUE1 (
   dset_ii_id int(8) NOT NULL,
   extension varchar(50)  default NULL,
   PRIMARY KEY  (dset_ii_id),
   CONSTRAINT fk_dset_ii_value1_dsetii FOREIGN KEY (dset_ii_id) REFERENCES dset_ii (id) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE dset_ii_value2 (
+CREATE TABLE DSET_II_VALUE2 (
   dset_ii_id int(8) NOT NULL,
   extension varchar(50)  default NULL,
   root varchar(50)  default NULL,
@@ -551,7 +551,7 @@ CREATE TABLE dset_ii_value2 (
   CONSTRAINT fk_dset_ii_value2_dsetii FOREIGN KEY (dset_ii_id) REFERENCES dset_ii (id) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE dset_ii_value3 (
+CREATE TABLE DSET_II_VALUE3 (
   dset_ii_id int(8) NOT NULL,
   extension varchar(50)  default NULL,
   identifier_name varchar(50)  default NULL,
@@ -562,7 +562,7 @@ CREATE TABLE dset_ii_value3 (
   CONSTRAINT fk_dset_ii_value3_dsetii FOREIGN KEY (dset_ii_id) REFERENCES dset_ii (id) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE dset_ii_value4 (
+CREATE TABLE DSET_II_VALUE4 (
   dset_ii_id int(8) NOT NULL,
   root varchar(50)  default NULL,
   extension varchar(50)  default NULL,
@@ -575,7 +575,7 @@ CREATE TABLE dset_ii_value4 (
   CONSTRAINT fk_dset_ii_value4_dsetii FOREIGN KEY (dset_ii_id) REFERENCES dset_ii (id) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE dset_ii_value5 (
+CREATE TABLE DSET_II_VALUE5 (
   id int(8) NOT NULL,
   dset_ii_id int(8) default NULL,
   extension varchar(50)  default NULL,
@@ -584,13 +584,13 @@ CREATE TABLE dset_ii_value5 (
   CONSTRAINT fk_dset_ii_value5_dset_ii FOREIGN KEY (dset_ii_id) REFERENCES dset_ii (id) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE dset_ii_value6 (
+CREATE TABLE DSET_II_VALUE6 (
   id int(8) NOT NULL,
   extension varchar(50)  default NULL,
   PRIMARY KEY  (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE dset_ii_ii_value6 (
+CREATE TABLE DSET_II_II_VALUE6 (
   dset_ii_id int(8) NOT NULL,
   dset_ii_value6_id int(8) NOT NULL,
   PRIMARY KEY  (dset_ii_value6_id,dset_ii_id),
@@ -600,26 +600,26 @@ CREATE TABLE dset_ii_ii_value6 (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
-CREATE TABLE dset_tel (
+CREATE TABLE DSET_TEL (
   id int(8) NOT NULL,
   null_flavor varchar(50)  default NULL,
   PRIMARY KEY  (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE dset_tel_email (
+CREATE TABLE DSET_TEL_EMAIL (
   id int(8) NOT NULL,
   null_flavor varchar(50)  default NULL,
   PRIMARY KEY  (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE dset_tel_email_value1 (
+CREATE TABLE DSET_TEL_EMAIL_VALUE1 (
   dset_tel_email_id int(8) NOT NULL,
   tel_email_value varchar(50)  default NULL,
   PRIMARY KEY  (dset_tel_email_id),
   CONSTRAINT fk_dset_tel_emai_dset_tel_ema FOREIGN KEY (dset_tel_email_id) REFERENCES dset_tel_email (id) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE dset_tel_email_value2 (
+CREATE TABLE DSET_TEL_EMAIL_VALUE2 (
   dset_tel_email_id int(8) default NULL,
   tel_email_value varchar(50)  default NULL,
   tel_email_null_flavor varchar(50)  default NULL,
@@ -627,59 +627,59 @@ CREATE TABLE dset_tel_email_value2 (
   CONSTRAINT fk_tel_email_val_dset_tel_ema FOREIGN KEY (dset_tel_email_id) REFERENCES dset_tel_email (id) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE dset_tel_person (
+CREATE TABLE DSET_TEL_PERSON (
   id int(8) NOT NULL,
   null_flavor varchar(50)  default NULL,
   PRIMARY KEY  (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE dset_tel_person_value1 (
+CREATE TABLE DSET_TEL_PERSON_VALUE1 (
   dset_tel_person_id int(8) NOT NULL,
   tel_person_value varchar(50)  default NULL,
   PRIMARY KEY  (dset_tel_person_id),
   CONSTRAINT fk_dset_tel_pers_dset_tel_per FOREIGN KEY (dset_tel_person_id) REFERENCES dset_tel_person (id) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE dset_tel_phone (
+CREATE TABLE DSET_TEL_PHONE (
   id int(8) NOT NULL,
   null_flavor varchar(50)  default NULL,
   PRIMARY KEY  (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE dset_tel_phone_value1 (
+CREATE TABLE DSET_TEL_PHONE_VALUE1 (
   dset_tel_phone_id int(8) NOT NULL,
   tel_phone_value varchar(50)  default NULL,
   PRIMARY KEY  (dset_tel_phone_id),
   CONSTRAINT fk_dset_tel_phon_dset_tel_pho FOREIGN KEY (dset_tel_phone_id) REFERENCES dset_tel_phone (id) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE dset_tel_url (
+CREATE TABLE DSET_TEL_URL (
   id int(8) NOT NULL,
   null_flavor varchar(50)  default NULL,
   PRIMARY KEY  (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE dset_tel_url_value1 (
+CREATE TABLE DSET_TEL_URL_VALUE1 (
   dset_tel_url_id int(8) NOT NULL,
   tel_url_value varchar(50)  default NULL,
   PRIMARY KEY  (dset_tel_url_id),
   CONSTRAINT fk_dset_tel_url_v_dset_tel_url FOREIGN KEY (dset_tel_url_id) REFERENCES dset_tel_url (id) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE dset_tel_value1 (
+CREATE TABLE DSET_TEL_VALUE1 (
   dset_tel_id int(8) NOT NULL,
   tel_value varchar(50)  default NULL,
   PRIMARY KEY  (dset_tel_id),
   CONSTRAINT fk_dset_tel_value1_dset_tel FOREIGN KEY (dset_tel_id) REFERENCES dset_tel (id) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE dset_tel_value3 (
+CREATE TABLE DSET_TEL_VALUE3 (
   id int(8) NOT NULL,
   tel_value varchar(50)  default NULL,
   PRIMARY KEY  (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE dset_tel_tel_value_3 (
+CREATE TABLE DSET_TEL_TEL_VALUE_3 (
   dset_tel_id int(8) NOT NULL,
   dset_tel_value3_id int(8) NOT NULL,
   PRIMARY KEY  (dset_tel_id,dset_tel_value3_id),
@@ -689,7 +689,7 @@ CREATE TABLE dset_tel_tel_value_3 (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
-CREATE TABLE dset_tel_value2 (
+CREATE TABLE DSET_TEL_VALUE2 (
   id int(8) NOT NULL,
   dset_tel_id int(8) default NULL,
   tel_value varchar(50)  default NULL,
@@ -700,7 +700,7 @@ CREATE TABLE dset_tel_value2 (
 
 
 
-CREATE TABLE ed_datatype (
+CREATE TABLE ED_DATATYPE (
   id int(8) NOT NULL,
   value1_data longblob,
   value2_null_flavor varchar(50)  default NULL,
@@ -714,7 +714,7 @@ CREATE TABLE ed_datatype (
   PRIMARY KEY  (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE ed_text_datatype (
+CREATE TABLE ED_TEXT_DATATYPE (
   id int(8) NOT NULL,
   value1_value varchar(50)  default NULL,
   value2_null_flavor varchar(50)  default NULL,
@@ -727,7 +727,7 @@ CREATE TABLE ed_text_datatype (
   PRIMARY KEY  (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE en_datatype (
+CREATE TABLE EN_DATATYPE (
   id int(8) NOT NULL,
   value1_pn_value varchar(50)  default NULL,
   value2_pn_value varchar(50)  default NULL,
@@ -757,19 +757,19 @@ CREATE TABLE en_datatype (
   PRIMARY KEY  (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE en_on_datatype (
+CREATE TABLE EN_ON_DATATYPE (
   id int(8) NOT NULL,
   value1_on_value varchar(50)  default NULL,
   PRIMARY KEY  (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE en_pn_datatype (
+CREATE TABLE EN_PN_DATATYPE (
   id int(8) NOT NULL,
   value1_pn_value varchar(50)  default NULL,
   PRIMARY KEY  (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE ii_datatype (
+CREATE TABLE II_DATATYPE (
   id int(8) NOT NULL,
   value1_extension varchar(50)  default NULL,
   value2_null_flavor varchar(50)  default NULL,
@@ -791,7 +791,7 @@ CREATE TABLE ii_datatype (
   PRIMARY KEY  (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE int_datatype (
+CREATE TABLE INT_DATATYPE (
   id int(8) NOT NULL,
   value1_value decimal(22,0) default NULL,
   value2_null_flavor varchar(50)  default NULL,
@@ -799,7 +799,7 @@ CREATE TABLE int_datatype (
   PRIMARY KEY  (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE ivl_int (
+CREATE TABLE IVL_INT (
   id int(8) NOT NULL,
   value1_low_value decimal(22,0) default NULL,
   value1_high_value decimal(22,0) default NULL,
@@ -815,7 +815,7 @@ CREATE TABLE ivl_int (
   PRIMARY KEY  (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE ivl_pq (
+CREATE TABLE IVL_PQ (
   id int(8) NOT NULL,
   value1_low_value decimal(8,2) default NULL,
   value2_low_value decimal(8,2) default NULL,
@@ -843,7 +843,7 @@ CREATE TABLE ivl_pq (
   PRIMARY KEY  (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE ivl_pqv (
+CREATE TABLE IVL_PQV (
   id int(8) NOT NULL,
   value1_low_value decimal(8,2) default NULL,
   value1_high_value decimal(8,2) default NULL,
@@ -867,7 +867,7 @@ CREATE TABLE ivl_pqv (
   PRIMARY KEY  (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE ivl_real (
+CREATE TABLE IVL_REAL (
   id int(8) default NULL,
   value1_low_value double default NULL,
   value1_high_value double default NULL,
@@ -883,7 +883,7 @@ CREATE TABLE ivl_real (
   value3_null_flavor varchar(50)  default NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE ivl_ts (
+CREATE TABLE IVL_TS (
   id int(8) default NULL,
   value1_low_value datetime default NULL,
   value1_high_value datetime default NULL,
@@ -896,7 +896,7 @@ CREATE TABLE ivl_ts (
   value3_null_flavor varchar(50)  default NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE pqv_datatype (
+CREATE TABLE PQV_DATATYPE (
   id int(8) NOT NULL,
   value1_value decimal(8,2) default NULL,
   value2_null_flavor varchar(50)  default NULL,
@@ -910,7 +910,7 @@ CREATE TABLE pqv_datatype (
   PRIMARY KEY  (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE pq_datatype (
+CREATE TABLE PQ_DATATYPE (
   id int(8) NOT NULL,
   value1_value decimal(8,2) default NULL,
   value1_unit varchar(50)  default NULL,
@@ -922,7 +922,7 @@ CREATE TABLE pq_datatype (
   PRIMARY KEY  (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE real_datatype (
+CREATE TABLE REAL_DATATYPE (
   id int(8) NOT NULL,
   value1_value double default NULL,
   value2_null_flavor varchar(50)  default NULL,
@@ -930,7 +930,7 @@ CREATE TABLE real_datatype (
   PRIMARY KEY  (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE sc_datatype (
+CREATE TABLE SC_DATATYPE (
   id int(8) NOT NULL,
   value1_value varchar(50)  default NULL,
   value1_code_code varchar(50)  default NULL,
@@ -956,7 +956,7 @@ CREATE TABLE sc_datatype (
   PRIMARY KEY  (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE st_datatype (
+CREATE TABLE ST_DATATYPE (
   id int(8) NOT NULL,
   value1_value varchar(50)  default NULL,
   value2_null_flavor varchar(50)  default NULL,
@@ -964,7 +964,7 @@ CREATE TABLE st_datatype (
   PRIMARY KEY  (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE st_nt_datatype (
+CREATE TABLE ST_NT_DATATYPE (
   id int(8) NOT NULL,
   value1_value varchar(50)  default NULL,
   value2_null_flavor varchar(50)  default NULL,
@@ -972,7 +972,7 @@ CREATE TABLE st_nt_datatype (
   PRIMARY KEY  (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE tel_datatype (
+CREATE TABLE TEL_DATATYPE (
   id int(8) NOT NULL,
   value1_value varchar(50)  default NULL,
   value2_null_flavor varchar(50)  default NULL,
@@ -980,7 +980,7 @@ CREATE TABLE tel_datatype (
   PRIMARY KEY  (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE tel_email_datatype (
+CREATE TABLE TEL_EMAIL_DATATYPE (
   id int(8) NOT NULL,
   value1_value varchar(50)  default NULL,
   value2_null_flavor varchar(50)  default NULL,
@@ -988,7 +988,7 @@ CREATE TABLE tel_email_datatype (
   PRIMARY KEY  (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE tel_person_datatype (
+CREATE TABLE TEL_PERSON_DATATYPE (
   id int(8) NOT NULL,
   value1_value varchar(50)  default NULL,
   value2_null_flavor varchar(50)  default NULL,
@@ -996,7 +996,7 @@ CREATE TABLE tel_person_datatype (
   PRIMARY KEY  (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE tel_phone_datatype (
+CREATE TABLE TEL_PHONE_DATATYPE (
   id int(8) NOT NULL,
   value1_value varchar(50)  default NULL,
   value2_null_flavor varchar(50)  default NULL,
@@ -1004,7 +1004,7 @@ CREATE TABLE tel_phone_datatype (
   PRIMARY KEY  (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE tel_url_datatype (
+CREATE TABLE TEL_URL_DATATYPE (
   id int(8) NOT NULL,
   value1_value varchar(50)  default NULL,
   value2_null_flavor varchar(50)  default NULL,
@@ -1012,7 +1012,7 @@ CREATE TABLE tel_url_datatype (
   PRIMARY KEY  (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE ts_datatype (
+CREATE TABLE TS_DATATYPE (
   id int(8) NOT NULL,
   value1_value datetime default NULL,
   value2_null_flavor varchar(50)  default NULL,
