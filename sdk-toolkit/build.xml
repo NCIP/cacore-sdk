@@ -50,7 +50,6 @@
 				<exclude name="**/bin/**"/>
 				<exclude name="dist/**"/>
 				<exclude name="**/*.svn"/>
-				<exclude name="docs/**"/>
 				<exclude name="**/*.svn/**/*"/>
 				<exclude name="**/example-project/target/**"/>
 				<exclude name="**/example-project/junit/report/**"/>
