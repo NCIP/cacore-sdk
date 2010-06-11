@@ -58,7 +58,7 @@
 				<exclude name="**/modules/lib/compile/**"/>
 				<exclude name="tools/**"/>
 				<exclude name="**/bda-local-ivy-repo/**"/>
-				<!--<exclude name="**/local-ivy-repo/**"/>-->
+				<exclude name="**/local-ivy-repo/**"/>
 				<exclude name=".project"/>
 				<exclude name=".classpath"/>
 				<exclude name="build.xml"/>
