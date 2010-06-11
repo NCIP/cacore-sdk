@@ -1,10 +1,5 @@
 package gov.nih.nci.system.web.util;
 
-import gov.nih.nci.iso21090.Ad;
-import gov.nih.nci.iso21090.Cd;
-import gov.nih.nci.iso21090.Ii;
-
-import gov.nih.nci.iso21090.Tel;
 import gov.nih.nci.system.util.ClassCache;
 import gov.nih.nci.system.util.SystemConstant;
 
@@ -16,10 +11,8 @@ import java.lang.reflect.TypeVariable;
 import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
@@ -35,16 +28,6 @@ public class SearchUtils {
 	private static Logger log = Logger.getLogger(SearchUtils.class.getName());
 	String isoprefix = "gov.nih.nci.iso21090.";
 	private ClassCache classCache;	
-
-	private static Map<String, Object> isoTypeObjects = new HashMap<String, Object>() {
-		private static final long serialVersionUID = 1L;
-		{
-			put("java.util.Set<gov.nih.nci.iso21090.Cd>",new HashSet<Cd>());
-			put("java.util.Set<gov.nih.nci.iso21090.Ad>",new HashSet<Ad>());
-			put("java.util.Set<gov.nih.nci.iso21090.Ii>",new HashSet<Ii>());
-			put("java.util.Set<gov.nih.nci.iso21090.Tel>",new HashSet<Tel>());			
-		}
-	};
 	
 	public SearchUtils(ClassCache classCache){
 		this.classCache = classCache;
@@ -539,9 +522,7 @@ public class SearchUtils {
 			Method getterMethod = getAttributeGetMethodName(childObject,attribute);
 			value = getterMethod.invoke(childObject);
 			if (value == null) {
-				String key = field.getType().getName()+"<"+tempISOParamType+">";
-				Set<?> set=(Set<?>)isoTypeObjects.get(key.trim());
-				value=set;
+				value=new HashSet();
 			}
 		} else {
 			value = getFieldValue(field, attributeValue);
