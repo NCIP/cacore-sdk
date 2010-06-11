@@ -1210,7 +1210,13 @@ public class DeployPropertiesViewer extends WorkbenchViewerBaseComponent {
 		
 		// Retrieve and add 'Additional' deploy properties not managed by the Workbench but 
 		// still required by the SDK deploy process
-		Properties addlProps = ResourceManager.getAdditionalDeployPropertiesManager().getDeployProperties();
+		Properties addlProps = new Properties();
+		String serverType = appServerSettingsPanel.getServerType();
+		if (serverType.equalsIgnoreCase(appServerSettingsPanel.JBOSS)){
+			addlProps = ResourceManager.getJbossAdditionalDeployPropertiesManager().getDeployProperties();
+		} else if (serverType.equalsIgnoreCase(appServerSettingsPanel.TOMCAT)){
+			addlProps = ResourceManager.getTomcatAdditionalDeployPropertiesManager().getDeployProperties();
+		}
 
 		Iterator<Object> keys = addlProps.keySet().iterator();
 		while (keys.hasNext())

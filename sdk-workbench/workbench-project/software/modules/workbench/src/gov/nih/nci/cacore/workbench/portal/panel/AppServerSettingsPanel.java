@@ -167,8 +167,12 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
     	return serverTypeComboBox; 
     }
     
+    public String getServerType() {
+    	return getServerTypeComboBox().getSelectedItem().toString();
+    }
+    
     protected void toggleServerFields() {
-    	String serverType = getServerTypeComboBox().getSelectedItem().toString();
+    	String serverType = getServerType();
 
     	log.debug("Toggling Server Fields:  serverType: " + serverType);
 		if (serverType.equalsIgnoreCase(TOMCAT)){
@@ -1305,7 +1309,7 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
             gridBagConstraints71.weighty = 1.0D;
             gridBagConstraints71.weightx = 1.0;
 		    
-        	String serverType = getServerTypeComboBox().getSelectedItem().toString();
+        	String serverType = getServerType();
         	if (serverType.equalsIgnoreCase(TOMCAT)){
         		
         		tomcatHostnameLabel = new JLabel();
@@ -1412,7 +1416,7 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
 //			result.add(new SimpleValidationMessage(SERVER_HTTP_URL + " must not be blank.", Severity.ERROR, SERVER_HTTP_URL));
 //		} 
     	
-    	String serverType = getServerTypeComboBox().getSelectedItem().toString();
+    	String serverType = getServerType();
 		if (ValidationUtils.isBlank(serverType)) {
 			result.add(new SimpleValidationMessage(SERVER_TYPE + " must not be blank.", Severity.ERROR, SERVER_TYPE));
 		} 
@@ -1550,7 +1554,7 @@ public final class AppServerSettingsPanel implements Panel, PanelValidator {
     public Map<String,String> getPropsMap(){
     	Map<String,String> propsMap = new HashMap<String,String>();
     	
-    	String serverType = getServerTypeComboBox().getSelectedItem().toString();
+    	String serverType = getServerType();
     	
 		// Application Server Properties
     	

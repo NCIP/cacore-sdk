@@ -1,0 +1,12 @@
+########################
+###  JBOSS SETTINGS  ###
+########################
+exclude.jboss.backup=true
+jboss.ncicb-standard.port-config=true
+
+###################################
+#  PRE-POST VALIDATION PROPERTIES #
+###################################
+validation.pre.port.list=${jboss.server.port},${jboss.server.jndi.port}
+validation.post.http.list=${jboss.server.port}
+validation.post.socket.list=${jboss.server.jndi.port}
