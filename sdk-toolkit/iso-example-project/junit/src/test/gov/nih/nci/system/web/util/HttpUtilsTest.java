@@ -161,7 +161,12 @@ public class HttpUtilsTest extends TestCase{
 		String queryText="query=IvlPqDataType&IvlPqDataType[@value3=[@width=[@value=1]]]";
 		process(queryText,"test25");
 	}
-	
+
+	public void testISOComplexPQDataType() throws Exception{
+		String queryText="query=PqDataType&PqDataType[@value3=[@nullFlavor=NA]]";
+		process(queryText,"test25");
+	}
+
 	public void xtestISOComplexIVLTSDataWidthType() throws Exception{
 		String queryText="query=IvlTsDataType&IvlTsDataType[@value3=[@width=[@value=1]]]";
 		process(queryText,"test26");
@@ -188,8 +193,8 @@ public class HttpUtilsTest extends TestCase{
 		process(queryText,"test30");
 	}
 	//gov.nih.nci.cacoresdk.domain.other.datatype.DsetIiDataType&DsetIiDataType[@value4=[@item=[@identifierName=IDENTIFIER_NAME2]]]
-	public void testISOComplexDsetIiDataSetType() throws Exception{
-		String queryText="query=gov.nih.nci.cacoresdk.domain.other.datatype.DsetIiDataType&DsetIiDataType[@value3=[@item=[@extension=Extension5][@identifierName=IDENTIFIER_NAME5]]]";
+	public void xtestISOComplexDsetIiDataSetType() throws Exception{
+		String queryText="query=gov.nih.nci.cacoresdk.domain.other.datatype.DsetIiDataType&DsetIiDataType[@value1=[@item=[@extension=Extension1]]]";
 		process(queryText,"test31");
 	}
 
