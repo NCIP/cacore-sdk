@@ -48,12 +48,16 @@
 		<zip destfile="${output.dir}/${sdk.src.file}" whenempty="skip">
 			<zipfileset dir="${sdk.toolkit.dir}">
 				<exclude name="**/bin/**"/>
-				<exclude name="dist/**/*.*"/>
+				<exclude name="dist/**"/>
 				<exclude name="**/*.svn"/>
+				<exclude name="docs/**"/>
 				<exclude name="**/*.svn/**/*"/>
 				<exclude name="**/example-project/target/**"/>
 				<exclude name="**/example-project/junit/report/**"/>
 				<exclude name="**/example-project/junit/output/**"/>
+				<exclude name="**/iso-example-project/target/**"/>
+				<exclude name="**/iso-example-project/junit/report/**"/>
+				<exclude name="**/iso-example-project/junit/output/**"/>
 				<exclude name="**/target/logs/**"/>
 				<exclude name="**/modules/lib/compile/**"/>
 				<exclude name="tools/**"/>
