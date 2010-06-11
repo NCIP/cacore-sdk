@@ -956,6 +956,7 @@
 				<include name="castor-*.jar"/>
 				<include name="cglib-*.jar"/>
 				<include name="cog-jglobus-*.jar"/>
+				<include name="commons-beanutils-*.jar"/>
 				<include name="commons-codec-*.jar"/>
 				<include name="commons-collections-*.jar"/>
 				<include name="commons-logging-*.jar"/>
