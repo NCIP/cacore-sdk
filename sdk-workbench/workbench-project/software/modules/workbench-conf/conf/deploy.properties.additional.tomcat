@@ -1,0 +1,18 @@
+#################################################################
+########### SDK Specific Properties #############################
+#################################################################
+#exclude.database=true
+#database.re-create=false
+
+##############
+### TOMCAT ###
+##############
+exclude.tomcat.backup=true
+tomcat.relative.path=${tomcat.binaries.relative.dir}
+
+###################################
+#  PRE-POST VALIDATION PROPERTIES #
+###################################
+validation.pre.port.list=${tomcat.port.http}
+validation.post.http.list=${tomcat.port.http}
+validation.post.socket.list=${tomcat.port.http}
