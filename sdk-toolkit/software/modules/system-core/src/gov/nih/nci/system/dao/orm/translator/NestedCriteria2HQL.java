@@ -577,20 +577,21 @@ public class NestedCriteria2HQL
 		int count=0;
 		for (WhereQueryObject whereQueryObject : whereQueryObjects) {
 			String whereQuery = whereQueryObject.getQuery();
-			Object whereParam = whereQueryObject.getParam();					
+			Object paramValue = whereQueryObject.getParamValue();					
 			if (isCaseSensitive()) {
-				whereClause.append(sourceAlias + SystemConstant.DOT+ key + whereQuery+ getOperator(whereParam) + "? ");
-				if(whereParam instanceof String){
-					paramList.add(((String) whereParam).replaceAll("\\*", "\\%"));
+				whereClause.append(sourceAlias + SystemConstant.DOT+ key + whereQuery+ getOperator(paramValue) + "? ");
+				if(paramValue instanceof String){
+					paramList.add(((String) paramValue).replaceAll("\\*", "\\%"));
 				}else{
-					paramList.add(whereParam);
+					paramList.add(paramValue);
 				}
 			} else {
-				whereClause.append("lower(" + sourceAlias+SystemConstant.DOT+key+ whereQuery + ") "+ getOperator(whereParam) + "? ");
-				if(whereParam instanceof String){
-					paramList.add(((String) whereParam).toLowerCase().replaceAll("\\*", "\\%"));
+				if(paramValue instanceof String){
+					whereClause.append("lower(" + sourceAlias+SystemConstant.DOT+key+ whereQuery + ") "+ getOperator(paramValue) + "? ");
+					paramList.add(((String) paramValue).toLowerCase().replaceAll("\\*", "\\%"));
 				}else{
-					paramList.add(whereParam);
+					whereClause.append(sourceAlias + SystemConstant.DOT+ key + whereQuery+ getOperator(paramValue) + "? ");
+					paramList.add(paramValue);
 				}
 			}
 			count++;						
@@ -637,8 +638,13 @@ public class NestedCriteria2HQL
 									generateISOWhereQueryObjects(object,newQuery,whereQueryObjects,childvalue);
 								}								
 							}else{
+								if (field.getName().equals("precision")
+										&& value instanceof Integer
+										&& ((Integer) value) == 0) {
+									continue;
+								}
 								WhereQueryObject queryObject= new WhereQueryObject();
-								queryObject.setParam(value);
+								queryObject.setParamValue(value);
 								queryObject.setQuery(newQuery.toString());
 								whereQueryObjects.add(queryObject);
 							}
@@ -1026,22 +1032,18 @@ public class NestedCriteria2HQL
 	
 	private class WhereQueryObject {
 		String query;
-		Object param;
-
-		public void setParam(Object param) {
-			this.param = param;
-		}
-
-		public void setQuery(String query) {
-			this.query = query;
-		}
-
+		Object paramValue;
 		public String getQuery() {
 			return query;
 		}
-
-		public Object getParam() {
-			return param;
+		public void setQuery(String query) {
+			this.query = query;
+		}
+		public Object getParamValue() {
+			return paramValue;
+		}
+		public void setParamValue(Object paramValue) {
+			this.paramValue = paramValue;
 		}
 	}
 }
