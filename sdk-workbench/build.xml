@@ -56,6 +56,7 @@
 			<zipfileset dir="${workbench.base.dir}">
 				<exclude name="**/bin/**"/>
 				<exclude name="**/target/**"/>
+				<exclude name="docs/**"/>
 				<exclude name="tools/**"/>
 				<exclude name="**/bda-local-ivy-repo/**"/>
 				<exclude name="**/local-ivy-repo/**"/>
