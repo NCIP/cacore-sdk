@@ -1,1024 +1,1024 @@
 CREATE TABLE AD_DATATYPE_VALUE8 (
-  id int(8) NOT NULL,
-  al_value varchar(50)  default NULL,
-  al_code varchar(50)  default NULL,
-  al_codesystem varchar(50)  default NULL,
-  dal_code varchar(50)  default NULL,
-  dal_value varchar(50)  default NULL,
-  dal_codesystem varchar(50)  default NULL,
-  cty_value varchar(50)  default NULL,
-  cty_code varchar(50)  default NULL,
-  cty_codesystem varchar(50)  default NULL,
-  PRIMARY KEY  (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  ID INT(8) NOT NULL,
+  AL_VALUE VARCHAR(50)  DEFAULT NULL,
+  AL_CODE VARCHAR(50)  DEFAULT NULL,
+  AL_CODESYSTEM VARCHAR(50)  DEFAULT NULL,
+  DAL_CODE VARCHAR(50)  DEFAULT NULL,
+  DAL_VALUE VARCHAR(50)  DEFAULT NULL,
+  DAL_CODESYSTEM VARCHAR(50)  DEFAULT NULL,
+  CTY_VALUE VARCHAR(50)  DEFAULT NULL,
+  CTY_CODE VARCHAR(50)  DEFAULT NULL,
+  CTY_CODESYSTEM VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (ID)
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE AD_DATATYPE_VALUE9 (
-  id int(8) NOT NULL,
-  al_value varchar(50)  default NULL,
-  al_code varchar(50)  default NULL,
-  al_codesystem varchar(50)  default NULL,
-  dal_code varchar(50)  default NULL,
-  dal_value varchar(50)  default NULL,
-  dal_codesystem varchar(50)  default NULL,
-  cty_value varchar(50)  default NULL,
-  cty_code varchar(50)  default NULL,
-  cty_codesystem varchar(50)  default NULL,
-  PRIMARY KEY  (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  ID INT(8) NOT NULL,
+  AL_VALUE VARCHAR(50)  DEFAULT NULL,
+  AL_CODE VARCHAR(50)  DEFAULT NULL,
+  AL_CODESYSTEM VARCHAR(50)  DEFAULT NULL,
+  DAL_CODE VARCHAR(50)  DEFAULT NULL,
+  DAL_VALUE VARCHAR(50)  DEFAULT NULL,
+  DAL_CODESYSTEM VARCHAR(50)  DEFAULT NULL,
+  CTY_VALUE VARCHAR(50)  DEFAULT NULL,
+  CTY_CODE VARCHAR(50)  DEFAULT NULL,
+  CTY_CODESYSTEM VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (ID)
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 
 CREATE TABLE AD_DATATYPE (
-  id int(8) NOT NULL,
-  value1_al_value varchar(50)  default NULL,
-  value2_dal_value varchar(50)  default NULL,
-  value2_dal_code varchar(50)  default NULL,
-  value3_al_value varchar(50)  default NULL,
-  value3_al_code varchar(50)  default NULL,
-  value3_al_codesystem varchar(50)  default NULL,
-  value4_al1_value varchar(50)  default NULL,
-  value4_al2_value varchar(50)  default NULL,
-  value4_al1_code varchar(50)  default NULL,
-  value4_al2_code varchar(50)  default NULL,
-  value4_al1_codesystem varchar(50)  default NULL,
-  value4_al2_codesystem varchar(50)  default NULL,
-  value5_al_value varchar(50)  default NULL,
-  value5_al_code varchar(50)  default NULL,
-  value5_al_codesystem varchar(50)  default NULL,
-  value5_dal_code varchar(50)  default NULL,
-  value5_dal_value varchar(50)  default NULL,
-  value5_dal_codesystem varchar(50)  default NULL,
-  value5_cty_value varchar(50)  default NULL,
-  value5_cty_code varchar(50)  default NULL,
-  value5_cty_codesystem varchar(50)  default NULL,
-  value6_adl_value varchar(50)  default NULL,
-  value6_al_value varchar(50)  default NULL,
-  value6_bnn_value varchar(50)  default NULL,
-  value6_bnr_value varchar(50)  default NULL,
-  value6_bns_value varchar(50)  default NULL,
-  value6_car_value varchar(50)  default NULL,
-  value6_cen_value varchar(50)  default NULL,
-  value6_cnt_value varchar(50)  default NULL,
-  value6_cpa_value varchar(50)  default NULL,
-  value6_cty_value varchar(50)  default NULL,
-  value6_dal_value varchar(50)  default NULL,
-  value6_del_value varchar(50)  default NULL,
-  value6_dinsta_value varchar(50)  default NULL,
-  value6_dinstq_value varchar(50)  default NULL,
-  value6_dir_value varchar(50)  default NULL,
-  value6_dmod_value varchar(50)  default NULL,
-  value6_dmodid_value varchar(50)  default NULL,
-  value6_int_value varchar(50)  default NULL,
-  value6_pob_value varchar(50)  default NULL,
-  value6_pre_value varchar(50)  default NULL,
-  value6_sal_value varchar(50)  default NULL,
-  value6_sta_value varchar(50)  default NULL,
-  value6_stb_value varchar(50)  default NULL,
-  value6_str_value varchar(50)  default NULL,
-  value6_sttyp_value varchar(50)  default NULL,
-  value6_unid_value varchar(50)  default NULL,
-  value6_unit_value varchar(50)  default NULL,
-  value6_zip_value varchar(50)  default NULL,
-  value6_adl_code varchar(50)  default NULL,
-  value6_bns_code varchar(50)  default NULL,
-  value6_bns_codesystem varchar(50)  default NULL,
-  value6_dal_code varchar(50)  default NULL,
-  value6_dal_codesystem varchar(50)  default NULL,
-  value6_int_code varchar(50)  default NULL,
-  value6_int_codesystem varchar(50)  default NULL,
-  value6_stb_code varchar(50)  default NULL,
-  value6_stb_codesystem varchar(50)  default NULL,
-  value6_zip_codesystem varchar(50)  default NULL,
-  value6_zip_code varchar(50)  default NULL,
-  ad_datatype_value8_id int(8) default NULL,
-  PRIMARY KEY  (id),
-  KEY fk_ad_datatype_value8 (ad_datatype_value8_id),
-  CONSTRAINT fk_ad_datatype_value8 FOREIGN KEY (ad_datatype_value8_id) REFERENCES ad_datatype_value8 (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  ID INT(8) NOT NULL,
+  VALUE1_AL_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE2_DAL_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE2_DAL_CODE VARCHAR(50)  DEFAULT NULL,
+  VALUE3_AL_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE3_AL_CODE VARCHAR(50)  DEFAULT NULL,
+  VALUE3_AL_CODESYSTEM VARCHAR(50)  DEFAULT NULL,
+  VALUE4_AL1_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE4_AL2_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE4_AL1_CODE VARCHAR(50)  DEFAULT NULL,
+  VALUE4_AL2_CODE VARCHAR(50)  DEFAULT NULL,
+  VALUE4_AL1_CODESYSTEM VARCHAR(50)  DEFAULT NULL,
+  VALUE4_AL2_CODESYSTEM VARCHAR(50)  DEFAULT NULL,
+  VALUE5_AL_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE5_AL_CODE VARCHAR(50)  DEFAULT NULL,
+  VALUE5_AL_CODESYSTEM VARCHAR(50)  DEFAULT NULL,
+  VALUE5_DAL_CODE VARCHAR(50)  DEFAULT NULL,
+  VALUE5_DAL_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE5_DAL_CODESYSTEM VARCHAR(50)  DEFAULT NULL,
+  VALUE5_CTY_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE5_CTY_CODE VARCHAR(50)  DEFAULT NULL,
+  VALUE5_CTY_CODESYSTEM VARCHAR(50)  DEFAULT NULL,
+  VALUE6_ADL_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE6_AL_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE6_BNN_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE6_BNR_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE6_BNS_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE6_CAR_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE6_CEN_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE6_CNT_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE6_CPA_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE6_CTY_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE6_DAL_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE6_DEL_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE6_DINSTA_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE6_DINSTQ_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE6_DIR_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE6_DMOD_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE6_DMODID_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE6_INT_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE6_POB_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE6_PRE_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE6_SAL_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE6_STA_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE6_STB_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE6_STR_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE6_STTYP_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE6_UNID_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE6_UNIT_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE6_ZIP_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE6_ADL_CODE VARCHAR(50)  DEFAULT NULL,
+  VALUE6_BNS_CODE VARCHAR(50)  DEFAULT NULL,
+  VALUE6_BNS_CODESYSTEM VARCHAR(50)  DEFAULT NULL,
+  VALUE6_DAL_CODE VARCHAR(50)  DEFAULT NULL,
+  VALUE6_DAL_CODESYSTEM VARCHAR(50)  DEFAULT NULL,
+  VALUE6_INT_CODE VARCHAR(50)  DEFAULT NULL,
+  VALUE6_INT_CODESYSTEM VARCHAR(50)  DEFAULT NULL,
+  VALUE6_STB_CODE VARCHAR(50)  DEFAULT NULL,
+  VALUE6_STB_CODESYSTEM VARCHAR(50)  DEFAULT NULL,
+  VALUE6_ZIP_CODESYSTEM VARCHAR(50)  DEFAULT NULL,
+  VALUE6_ZIP_CODE VARCHAR(50)  DEFAULT NULL,
+  AD_DATATYPE_VALUE8_ID INT(8) DEFAULT NULL,
+  PRIMARY KEY  (ID),
+  KEY FK_AD_DATATYPE_VALUE8 (AD_DATATYPE_VALUE8_ID),
+  CONSTRAINT FK_AD_DATATYPE_VALUE8 FOREIGN KEY (AD_DATATYPE_VALUE8_ID) REFERENCES AD_DATATYPE_VALUE8 (ID) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE AD_DATATYPE_VALUE7 (
-  ad_datatype_id int(8) default NULL,
-  al_value varchar(50)  default NULL,
-  al_code varchar(50)  default NULL,
-  al_codesystem varchar(50)  default NULL,
-  dal_code varchar(50)  default NULL,
-  dal_value varchar(50)  default NULL,
-  dal_codesystem varchar(50)  default NULL,
-  cty_value varchar(50)  default NULL,
-  cty_code varchar(50)  default NULL,
-  cty_codesystem varchar(50)  default NULL,
-  KEY fk_ad_datatype_val_ad_datatype (ad_datatype_id),
-  CONSTRAINT fk_ad_datatype_val_ad_datatype FOREIGN KEY (ad_datatype_id) REFERENCES ad_datatype (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  AD_DATATYPE_ID INT(8) DEFAULT NULL,
+  AL_VALUE VARCHAR(50)  DEFAULT NULL,
+  AL_CODE VARCHAR(50)  DEFAULT NULL,
+  AL_CODESYSTEM VARCHAR(50)  DEFAULT NULL,
+  DAL_CODE VARCHAR(50)  DEFAULT NULL,
+  DAL_VALUE VARCHAR(50)  DEFAULT NULL,
+  DAL_CODESYSTEM VARCHAR(50)  DEFAULT NULL,
+  CTY_VALUE VARCHAR(50)  DEFAULT NULL,
+  CTY_CODE VARCHAR(50)  DEFAULT NULL,
+  CTY_CODESYSTEM VARCHAR(50)  DEFAULT NULL,
+  KEY FK_AD_DATATYPE_VAL_AD_DATATYPE (AD_DATATYPE_ID),
+  CONSTRAINT FK_AD_DATATYPE_VAL_AD_DATATYPE FOREIGN KEY (AD_DATATYPE_ID) REFERENCES AD_DATATYPE (ID) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 
 
 
 CREATE TABLE AD_AD_DATATYPE_VALUE9 (
-  ad_datatype_id int(8) NOT NULL,
-  ad_datatype_value9_id int(8) NOT NULL,
-  PRIMARY KEY  (ad_datatype_value9_id,ad_datatype_id),
-  KEY fk_ad_ad_datatype__ad_datatype (ad_datatype_id),
-  CONSTRAINT fk_ad_ad_datatype__ad_datatype FOREIGN KEY (ad_datatype_id) REFERENCES ad_datatype (id) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT fk_ad_ad_datatyp_ad_datatype_v FOREIGN KEY (ad_datatype_value9_id) REFERENCES ad_datatype_value9 (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  AD_DATATYPE_ID INT(8) NOT NULL,
+  AD_DATATYPE_VALUE9_ID INT(8) NOT NULL,
+  PRIMARY KEY  (AD_DATATYPE_VALUE9_ID,AD_DATATYPE_ID),
+  KEY FK_AD_AD_DATATYPE__AD_DATATYPE (AD_DATATYPE_ID),
+  CONSTRAINT FK_AD_AD_DATATYPE__AD_DATATYPE FOREIGN KEY (AD_DATATYPE_ID) REFERENCES AD_DATATYPE (ID) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT FK_AD_AD_DATATYP_AD_DATATYPE_V FOREIGN KEY (AD_DATATYPE_VALUE9_ID) REFERENCES AD_DATATYPE_VALUE9 (ID) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 
 CREATE TABLE BL_DATATYPE (
-  id int(8) NOT NULL,
-  value1_value varchar(1)  default NULL,
-  value2_null_flavor varchar(50)  default NULL,
-  value2_value varchar(1)  default NULL,
-  PRIMARY KEY  (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  ID INT(8) NOT NULL,
+  VALUE1_VALUE VARCHAR(1)  DEFAULT NULL,
+  VALUE2_NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  VALUE2_VALUE VARCHAR(1)  DEFAULT NULL,
+  PRIMARY KEY  (ID)
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE BL_NONNULL_DATATYPE (
-  id int(8) NOT NULL,
-  value1_value varchar(1)  default NULL,
-  PRIMARY KEY  (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  ID INT(8) NOT NULL,
+  VALUE1_VALUE VARCHAR(1)  DEFAULT NULL,
+  PRIMARY KEY  (ID)
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 
 
 CREATE TABLE CD_DATATYPE_VALUE7 (
-  id int(8) NOT NULL,
-  null_flavor varchar(50)  default NULL,
-  code varchar(50)  default NULL,
-  code_system varchar(50)  default NULL,
-  code_system_name varchar(50)  default NULL,
-  code_system_version varchar(50)  default NULL,
-  display_null_flavor varchar(50)  default NULL,
-  display_value varchar(50)  default NULL,
-  orig_txt_null_flavor varchar(50)  default NULL,
-  orig_txt_value varchar(50)  default NULL,
-  orig_txt_description varchar(50)  default NULL,
-  PRIMARY KEY  (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  ID INT(8) NOT NULL,
+  NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  CODE VARCHAR(50)  DEFAULT NULL,
+  CODE_SYSTEM VARCHAR(50)  DEFAULT NULL,
+  CODE_SYSTEM_NAME VARCHAR(50)  DEFAULT NULL,
+  CODE_SYSTEM_VERSION VARCHAR(50)  DEFAULT NULL,
+  DISPLAY_NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  DISPLAY_VALUE VARCHAR(50)  DEFAULT NULL,
+  ORIG_TXT_NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  ORIG_TXT_VALUE VARCHAR(50)  DEFAULT NULL,
+  ORIG_TXT_DESCRIPTION VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (ID)
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE CD_DATATYPE_VALUE8 (
-  id int(8) NOT NULL,
-  null_flavor varchar(50)  default NULL,
-  code varchar(50)  default NULL,
-  code_system varchar(50)  default NULL,
-  code_system_name varchar(50)  default NULL,
-  code_system_version varchar(50)  default NULL,
-  display_null_flavor varchar(50)  default NULL,
-  display_value varchar(50)  default NULL,
-  orig_txt_null_flavor varchar(50)  default NULL,
-  orig_txt_value varchar(50)  default NULL,
-  orig_txt_description varchar(50)  default NULL,
-  PRIMARY KEY  (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  ID INT(8) NOT NULL,
+  NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  CODE VARCHAR(50)  DEFAULT NULL,
+  CODE_SYSTEM VARCHAR(50)  DEFAULT NULL,
+  CODE_SYSTEM_NAME VARCHAR(50)  DEFAULT NULL,
+  CODE_SYSTEM_VERSION VARCHAR(50)  DEFAULT NULL,
+  DISPLAY_NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  DISPLAY_VALUE VARCHAR(50)  DEFAULT NULL,
+  ORIG_TXT_NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  ORIG_TXT_VALUE VARCHAR(50)  DEFAULT NULL,
+  ORIG_TXT_DESCRIPTION VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (ID)
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE CD_DATATYPE (
-  id int(8) NOT NULL,
-  value1_code varchar(50)  default NULL,
-  value2_null_flavor varchar(50)  default NULL,
-  value2_code varchar(50)  default NULL,
-  value3_code varchar(50)  default NULL,
-  value4_null_flavor varchar(50)  default NULL,
-  value4_code varchar(50)  default NULL,
-  value4_code_system varchar(50)  default NULL,
-  value4_code_system_version varchar(50)  default NULL,
-  value4_code_system_name varchar(50)  default NULL,
-  value4_display_null_flavor varchar(50)  default NULL,
-  value4_display_value varchar(50)  default NULL,
-  value4_orig_txt_null_flavor varchar(50)  default NULL,
-  value4_orig_txt_value varchar(50)  default NULL,
-  value4_orig_txt_description varchar(50)  default NULL,
-  value5_null_flavor varchar(50)  default NULL,
-  value5_code varchar(50)  default NULL,
-  value5_code_system varchar(50)  default NULL,
-  value5_code_system_name varchar(50)  default NULL,
-  value5_code_system_version varchar(50)  default NULL,
-  value5_display_null_flavor varchar(50)  default NULL,
-  value5_display_value varchar(50)  default NULL,
-  value5_orig_txt_null_flavor varchar(50)  default NULL,
-  value5_orig_txt_value varchar(50)  default NULL,
-  value5_orig_txt_description varchar(50)  default NULL,
-  cd_datatype_value7_id int(8) default NULL,
-  PRIMARY KEY  (id),
-  KEY fk_cd_datatype_value7 (cd_datatype_value7_id),
-  CONSTRAINT fk_cd_datatype_value7 FOREIGN KEY (cd_datatype_value7_id) REFERENCES cd_datatype_value7 (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  ID INT(8) NOT NULL,
+  VALUE1_CODE VARCHAR(50)  DEFAULT NULL,
+  VALUE2_NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  VALUE2_CODE VARCHAR(50)  DEFAULT NULL,
+  VALUE3_CODE VARCHAR(50)  DEFAULT NULL,
+  VALUE4_NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  VALUE4_CODE VARCHAR(50)  DEFAULT NULL,
+  VALUE4_CODE_SYSTEM VARCHAR(50)  DEFAULT NULL,
+  VALUE4_CODE_SYSTEM_VERSION VARCHAR(50)  DEFAULT NULL,
+  VALUE4_CODE_SYSTEM_NAME VARCHAR(50)  DEFAULT NULL,
+  VALUE4_DISPLAY_NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  VALUE4_DISPLAY_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE4_ORIG_TXT_NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  VALUE4_ORIG_TXT_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE4_ORIG_TXT_DESCRIPTION VARCHAR(50)  DEFAULT NULL,
+  VALUE5_NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  VALUE5_CODE VARCHAR(50)  DEFAULT NULL,
+  VALUE5_CODE_SYSTEM VARCHAR(50)  DEFAULT NULL,
+  VALUE5_CODE_SYSTEM_NAME VARCHAR(50)  DEFAULT NULL,
+  VALUE5_CODE_SYSTEM_VERSION VARCHAR(50)  DEFAULT NULL,
+  VALUE5_DISPLAY_NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  VALUE5_DISPLAY_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE5_ORIG_TXT_NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  VALUE5_ORIG_TXT_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE5_ORIG_TXT_DESCRIPTION VARCHAR(50)  DEFAULT NULL,
+  CD_DATATYPE_VALUE7_ID INT(8) DEFAULT NULL,
+  PRIMARY KEY  (ID),
+  KEY FK_CD_DATATYPE_VALUE7 (CD_DATATYPE_VALUE7_ID),
+  CONSTRAINT FK_CD_DATATYPE_VALUE7 FOREIGN KEY (CD_DATATYPE_VALUE7_ID) REFERENCES CD_DATATYPE_VALUE7 (ID) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE CD_DATATYPE_VALUE6 (
-  cd_datatype_id int(8) NOT NULL,
-  null_flavor varchar(50)  default NULL,
-  code varchar(50)  default NULL,
-  code_system varchar(50)  default NULL,
-  code_system_name varchar(50)  default NULL,
-  code_system_version varchar(50)  default NULL,
-  display_null_flavor varchar(50)  default NULL,
-  display_value varchar(50)  default NULL,
-  orig_txt_null_flavor varchar(50)  default NULL,
-  orig_txt_value varchar(50)  default NULL,
-  orig_txt_description varchar(50)  default NULL,
-  PRIMARY KEY  (cd_datatype_id),
-  CONSTRAINT fk_cd_datatype_val_cd_datatype FOREIGN KEY (cd_datatype_id) REFERENCES cd_datatype (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  CD_DATATYPE_ID INT(8) NOT NULL,
+  NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  CODE VARCHAR(50)  DEFAULT NULL,
+  CODE_SYSTEM VARCHAR(50)  DEFAULT NULL,
+  CODE_SYSTEM_NAME VARCHAR(50)  DEFAULT NULL,
+  CODE_SYSTEM_VERSION VARCHAR(50)  DEFAULT NULL,
+  DISPLAY_NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  DISPLAY_VALUE VARCHAR(50)  DEFAULT NULL,
+  ORIG_TXT_NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  ORIG_TXT_VALUE VARCHAR(50)  DEFAULT NULL,
+  ORIG_TXT_DESCRIPTION VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (CD_DATATYPE_ID),
+  CONSTRAINT FK_CD_DATATYPE_VAL_CD_DATATYPE FOREIGN KEY (CD_DATATYPE_ID) REFERENCES CD_DATATYPE (ID) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE CD_CD_DATATYPE_VALUE8 (
-  cd_data_type_id int(8) NOT NULL,
-  cd_datatype_value8_id int(8) NOT NULL,
-  PRIMARY KEY  (cd_datatype_value8_id,cd_data_type_id),
-  KEY fk_cd_cd_datatype__cd_datatype (cd_data_type_id),
-  CONSTRAINT fk_cd_cd_datatype__cd_datatype FOREIGN KEY (cd_data_type_id) REFERENCES cd_datatype (id) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT fk_cd_cd_datatyp_cd_datatype_v FOREIGN KEY (cd_datatype_value8_id) REFERENCES cd_datatype_value8 (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  CD_DATA_TYPE_ID INT(8) NOT NULL,
+  CD_DATATYPE_VALUE8_ID INT(8) NOT NULL,
+  PRIMARY KEY  (CD_DATATYPE_VALUE8_ID,CD_DATA_TYPE_ID),
+  KEY FK_CD_CD_DATATYPE__CD_DATATYPE (CD_DATA_TYPE_ID),
+  CONSTRAINT FK_CD_CD_DATATYPE__CD_DATATYPE FOREIGN KEY (CD_DATA_TYPE_ID) REFERENCES CD_DATATYPE (ID) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT FK_CD_CD_DATATYP_CD_DATATYPE_V FOREIGN KEY (CD_DATATYPE_VALUE8_ID) REFERENCES CD_DATATYPE_VALUE8 (ID) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 
 CREATE TABLE DSET_AD_DATATYPE (
-  id int(8) NOT NULL,
-  PRIMARY KEY  (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  ID INT(8) NOT NULL,
+  PRIMARY KEY  (ID)
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 
 
 CREATE TABLE DSET_AD_VALUE1 (
-  dset_ad_datatype_id int(8) NOT NULL,
-  adxp_al_value varchar(50)  default NULL,
-  PRIMARY KEY  (dset_ad_datatype_id),
-  CONSTRAINT fk_dser_ad_dataty_val_ad_da FOREIGN KEY (dset_ad_datatype_id) REFERENCES dset_ad_datatype (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  DSET_AD_DATATYPE_ID INT(8) NOT NULL,
+  ADXP_AL_VALUE VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (DSET_AD_DATATYPE_ID),
+  CONSTRAINT FK_DSER_AD_DATATY_VAL_AD_DA FOREIGN KEY (DSET_AD_DATATYPE_ID) REFERENCES DSET_AD_DATATYPE (ID) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE DSET_AD_VALUE2 (
-  dset_ad_datatype_id int(8) NOT NULL,
-  adxp_dal_value varchar(50)  default NULL,
-  adxp_dal_code varchar(50)  default NULL,
-  PRIMARY KEY  (dset_ad_datatype_id),
-  CONSTRAINT fk_dser_ad_datat_val_ad_datat FOREIGN KEY (dset_ad_datatype_id) REFERENCES dset_ad_datatype (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  DSET_AD_DATATYPE_ID INT(8) NOT NULL,
+  ADXP_DAL_VALUE VARCHAR(50)  DEFAULT NULL,
+  ADXP_DAL_CODE VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (DSET_AD_DATATYPE_ID),
+  CONSTRAINT FK_DSER_AD_DATAT_VAL_AD_DATAT FOREIGN KEY (DSET_AD_DATATYPE_ID) REFERENCES DSET_AD_DATATYPE (ID) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE DSET_AD_VALUE3 (
-  dset_ad_datatype_id int(8) NOT NULL,
-  adxp_al_value varchar(50)  default NULL,
-  adxp_al_code varchar(50)  default NULL,
-  adxp_al_codesystem varchar(50)  default NULL,
-  PRIMARY KEY  (dset_ad_datatype_id),
-  CONSTRAINT fk_dser_ad_datat_val_ad3 FOREIGN KEY (dset_ad_datatype_id) REFERENCES dset_ad_datatype (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  DSET_AD_DATATYPE_ID INT(8) NOT NULL,
+  ADXP_AL_VALUE VARCHAR(50)  DEFAULT NULL,
+  ADXP_AL_CODE VARCHAR(50)  DEFAULT NULL,
+  ADXP_AL_CODESYSTEM VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (DSET_AD_DATATYPE_ID),
+  CONSTRAINT FK_DSER_AD_DATAT_VAL_AD3 FOREIGN KEY (DSET_AD_DATATYPE_ID) REFERENCES DSET_AD_DATATYPE (ID) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE DSET_AD_VALUE4 (
-  dset_ad_datatype_id int(8) NOT NULL,
-  adxp_al1_value varchar(50)  default NULL,
-  adxp_al2_value varchar(50)  default NULL,
-  adxp_al1_code varchar(50)  default NULL,
-  adxp_al2_code varchar(50)  default NULL,
-  adxp_al2_codesystem varchar(50)  default NULL,
-  adxp_al1_codesystem varchar(50)  default NULL,
-  PRIMARY KEY  (dset_ad_datatype_id),
-  CONSTRAINT fk_dser_ad_type_val_ad4 FOREIGN KEY (dset_ad_datatype_id) REFERENCES dset_ad_datatype (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  DSET_AD_DATATYPE_ID INT(8) NOT NULL,
+  ADXP_AL1_VALUE VARCHAR(50)  DEFAULT NULL,
+  ADXP_AL2_VALUE VARCHAR(50)  DEFAULT NULL,
+  ADXP_AL1_CODE VARCHAR(50)  DEFAULT NULL,
+  ADXP_AL2_CODE VARCHAR(50)  DEFAULT NULL,
+  ADXP_AL2_CODESYSTEM VARCHAR(50)  DEFAULT NULL,
+  ADXP_AL1_CODESYSTEM VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (DSET_AD_DATATYPE_ID),
+  CONSTRAINT FK_DSER_AD_TYPE_VAL_AD4 FOREIGN KEY (DSET_AD_DATATYPE_ID) REFERENCES DSET_AD_DATATYPE (ID) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE DSET_AD_VALUE5 (
-  dset_ad_datatype_id int(8) NOT NULL,
-  adxp_al_value varchar(50)  default NULL,
-  adxp_al_code varchar(50)  default NULL,
-  adxp_al_codesystem varchar(50)  default NULL,
-  adxp_dal_code varchar(50)  default NULL,
-  adxp_dal_codesystem varchar(50)  default NULL,
-  adxp_dal_value varchar(50)  default NULL,
-  adxp_cty_value varchar(50)  default NULL,
-  adxp_cty_code varchar(50)  default NULL,
-  adxp_cty_codesystem varchar(50)  default NULL,
-  PRIMARY KEY  (dset_ad_datatype_id),
-  CONSTRAINT fk_dser_ad_datat_val_ad5 FOREIGN KEY (dset_ad_datatype_id) REFERENCES dset_ad_datatype (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  DSET_AD_DATATYPE_ID INT(8) NOT NULL,
+  ADXP_AL_VALUE VARCHAR(50)  DEFAULT NULL,
+  ADXP_AL_CODE VARCHAR(50)  DEFAULT NULL,
+  ADXP_AL_CODESYSTEM VARCHAR(50)  DEFAULT NULL,
+  ADXP_DAL_CODE VARCHAR(50)  DEFAULT NULL,
+  ADXP_DAL_CODESYSTEM VARCHAR(50)  DEFAULT NULL,
+  ADXP_DAL_VALUE VARCHAR(50)  DEFAULT NULL,
+  ADXP_CTY_VALUE VARCHAR(50)  DEFAULT NULL,
+  ADXP_CTY_CODE VARCHAR(50)  DEFAULT NULL,
+  ADXP_CTY_CODESYSTEM VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (DSET_AD_DATATYPE_ID),
+  CONSTRAINT FK_DSER_AD_DATAT_VAL_AD5 FOREIGN KEY (DSET_AD_DATATYPE_ID) REFERENCES DSET_AD_DATATYPE (ID) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE DSET_AD_VALUE6 (
-  dset_ad_datatype_id int(8) NOT NULL,
-  adxp_adl_value varchar(50)  default NULL,
-  adxp_al_value varchar(50)  default NULL,
-  adxp_bnn_value varchar(50)  default NULL,
-  adxp_bnr_value varchar(50)  default NULL,
-  adxp_bns_value varchar(50)  default NULL,
-  adxp_car_value varchar(50)  default NULL,
-  adxp_cen_value varchar(50)  default NULL,
-  adxp_cnt_value varchar(50)  default NULL,
-  adxp_cpa_value varchar(50)  default NULL,
-  adxp_cty_value varchar(50)  default NULL,
-  adxp_dal_value varchar(50)  default NULL,
-  adxp_del_value varchar(50)  default NULL,
-  adxp_dinsta_value varchar(50)  default NULL,
-  adxp_dinstq_value varchar(50)  default NULL,
-  adxp_dir_value varchar(50)  default NULL,
-  adxp_dmod_value varchar(50)  default NULL,
-  adxp_dmodid_value varchar(50)  default NULL,
-  adxp_int_value varchar(50)  default NULL,
-  adxp_pob_value varchar(50)  default NULL,
-  adxp_pre_value varchar(50)  default NULL,
-  adxp_sal_value varchar(50)  default NULL,
-  adxp_sta_value varchar(50)  default NULL,
-  adxp_stb_value varchar(50)  default NULL,
-  adxp_str_value varchar(50)  default NULL,
-  adxp_sttyp_value varchar(50)  default NULL,
-  adxp_unid_value varchar(50)  default NULL,
-  adxp_unit_value varchar(50)  default NULL,
-  adxp_zip_value varchar(50)  default NULL,
-  adxp_adl_code varchar(50)  default NULL,
-  adxp_bns_code varchar(50)  default NULL,
-  adxp_bns_codesystem varchar(50)  default NULL,
-  adxp_dal_code varchar(50)  default NULL,
-  adxp_dal_codesystem varchar(50)  default NULL,
-  adxp_int_code varchar(50)  default NULL,
-  adxp_int_codesystem varchar(50)  default NULL,
-  adxp_stb_code varchar(50)  default NULL,
-  adxp_stb_codesystem varchar(50)  default NULL,
-  adxp_zip_codesystem varchar(50)  default NULL,
-  adxp_zip_code varchar(50)  default NULL,
-  PRIMARY KEY  (dset_ad_datatype_id),
-  CONSTRAINT fk_dser_ad_type_val_ad6 FOREIGN KEY (dset_ad_datatype_id) REFERENCES dset_ad_datatype (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  DSET_AD_DATATYPE_ID INT(8) NOT NULL,
+  ADXP_ADL_VALUE VARCHAR(50)  DEFAULT NULL,
+  ADXP_AL_VALUE VARCHAR(50)  DEFAULT NULL,
+  ADXP_BNN_VALUE VARCHAR(50)  DEFAULT NULL,
+  ADXP_BNR_VALUE VARCHAR(50)  DEFAULT NULL,
+  ADXP_BNS_VALUE VARCHAR(50)  DEFAULT NULL,
+  ADXP_CAR_VALUE VARCHAR(50)  DEFAULT NULL,
+  ADXP_CEN_VALUE VARCHAR(50)  DEFAULT NULL,
+  ADXP_CNT_VALUE VARCHAR(50)  DEFAULT NULL,
+  ADXP_CPA_VALUE VARCHAR(50)  DEFAULT NULL,
+  ADXP_CTY_VALUE VARCHAR(50)  DEFAULT NULL,
+  ADXP_DAL_VALUE VARCHAR(50)  DEFAULT NULL,
+  ADXP_DEL_VALUE VARCHAR(50)  DEFAULT NULL,
+  ADXP_DINSTA_VALUE VARCHAR(50)  DEFAULT NULL,
+  ADXP_DINSTQ_VALUE VARCHAR(50)  DEFAULT NULL,
+  ADXP_DIR_VALUE VARCHAR(50)  DEFAULT NULL,
+  ADXP_DMOD_VALUE VARCHAR(50)  DEFAULT NULL,
+  ADXP_DMODID_VALUE VARCHAR(50)  DEFAULT NULL,
+  ADXP_INT_VALUE VARCHAR(50)  DEFAULT NULL,
+  ADXP_POB_VALUE VARCHAR(50)  DEFAULT NULL,
+  ADXP_PRE_VALUE VARCHAR(50)  DEFAULT NULL,
+  ADXP_SAL_VALUE VARCHAR(50)  DEFAULT NULL,
+  ADXP_STA_VALUE VARCHAR(50)  DEFAULT NULL,
+  ADXP_STB_VALUE VARCHAR(50)  DEFAULT NULL,
+  ADXP_STR_VALUE VARCHAR(50)  DEFAULT NULL,
+  ADXP_STTYP_VALUE VARCHAR(50)  DEFAULT NULL,
+  ADXP_UNID_VALUE VARCHAR(50)  DEFAULT NULL,
+  ADXP_UNIT_VALUE VARCHAR(50)  DEFAULT NULL,
+  ADXP_ZIP_VALUE VARCHAR(50)  DEFAULT NULL,
+  ADXP_ADL_CODE VARCHAR(50)  DEFAULT NULL,
+  ADXP_BNS_CODE VARCHAR(50)  DEFAULT NULL,
+  ADXP_BNS_CODESYSTEM VARCHAR(50)  DEFAULT NULL,
+  ADXP_DAL_CODE VARCHAR(50)  DEFAULT NULL,
+  ADXP_DAL_CODESYSTEM VARCHAR(50)  DEFAULT NULL,
+  ADXP_INT_CODE VARCHAR(50)  DEFAULT NULL,
+  ADXP_INT_CODESYSTEM VARCHAR(50)  DEFAULT NULL,
+  ADXP_STB_CODE VARCHAR(50)  DEFAULT NULL,
+  ADXP_STB_CODESYSTEM VARCHAR(50)  DEFAULT NULL,
+  ADXP_ZIP_CODESYSTEM VARCHAR(50)  DEFAULT NULL,
+  ADXP_ZIP_CODE VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (DSET_AD_DATATYPE_ID),
+  CONSTRAINT FK_DSER_AD_TYPE_VAL_AD6 FOREIGN KEY (DSET_AD_DATATYPE_ID) REFERENCES DSET_AD_DATATYPE (ID) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE DSET_AD_VALUE7 (
-  id int(8) NOT NULL,
-  dset_ad_datatype_id int(8) default NULL,
-  adxp_al_value varchar(50)  default NULL,
-  adxp_al_code varchar(50)  default NULL,
-  adxp_al_codesystem varchar(50)  default NULL,
-  adxp_dal_code varchar(50)  default NULL,
-  adxp_dal_codesystem varchar(50)  default NULL,
-  adxp_dal_value varchar(50)  default NULL,
-  adxp_cty_value varchar(50)  default NULL,
-  adxp_cty_code varchar(50)  default NULL,
-  adxp_cty_codesystem varchar(50)  default NULL,
-  PRIMARY KEY  (id),
-  KEY fk_dset_ad_value_dset_ad7 (dset_ad_datatype_id),
-  CONSTRAINT fk_dset_ad_value_dset_ad7 FOREIGN KEY (dset_ad_datatype_id) REFERENCES dset_ad_datatype (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  ID INT(8) NOT NULL,
+  DSET_AD_DATATYPE_ID INT(8) DEFAULT NULL,
+  ADXP_AL_VALUE VARCHAR(50)  DEFAULT NULL,
+  ADXP_AL_CODE VARCHAR(50)  DEFAULT NULL,
+  ADXP_AL_CODESYSTEM VARCHAR(50)  DEFAULT NULL,
+  ADXP_DAL_CODE VARCHAR(50)  DEFAULT NULL,
+  ADXP_DAL_CODESYSTEM VARCHAR(50)  DEFAULT NULL,
+  ADXP_DAL_VALUE VARCHAR(50)  DEFAULT NULL,
+  ADXP_CTY_VALUE VARCHAR(50)  DEFAULT NULL,
+  ADXP_CTY_CODE VARCHAR(50)  DEFAULT NULL,
+  ADXP_CTY_CODESYSTEM VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (ID),
+  KEY FK_DSET_AD_VALUE_DSET_AD7 (DSET_AD_DATATYPE_ID),
+  CONSTRAINT FK_DSET_AD_VALUE_DSET_AD7 FOREIGN KEY (DSET_AD_DATATYPE_ID) REFERENCES DSET_AD_DATATYPE (ID) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE DSET_AD_VALUE8 (
-  id int(8) NOT NULL,
-  adxp_al_value varchar(50)  default NULL,
-  adxp_al_code varchar(50)  default NULL,
-  adxp_al_codesystem varchar(50)  default NULL,
-  adxp_dal_code varchar(50)  default NULL,
-  adxp_dal_codesystem varchar(50)  default NULL,
-  adxp_dal_value varchar(50)  default NULL,
-  adxp_cty_value varchar(50)  default NULL,
-  adxp_cty_code varchar(50)  default NULL,
-  adxp_cty_codesystem varchar(50)  default NULL,
-  PRIMARY KEY  (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  ID INT(8) NOT NULL,
+  ADXP_AL_VALUE VARCHAR(50)  DEFAULT NULL,
+  ADXP_AL_CODE VARCHAR(50)  DEFAULT NULL,
+  ADXP_AL_CODESYSTEM VARCHAR(50)  DEFAULT NULL,
+  ADXP_DAL_CODE VARCHAR(50)  DEFAULT NULL,
+  ADXP_DAL_CODESYSTEM VARCHAR(50)  DEFAULT NULL,
+  ADXP_DAL_VALUE VARCHAR(50)  DEFAULT NULL,
+  ADXP_CTY_VALUE VARCHAR(50)  DEFAULT NULL,
+  ADXP_CTY_CODE VARCHAR(50)  DEFAULT NULL,
+  ADXP_CTY_CODESYSTEM VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (ID)
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE DSET_AD_DSET_AD_VALUE8 (
-  dset_ad_datatype_id int(8) NOT NULL,
-  dset_ad_value8_id int(8) NOT NULL,
-  PRIMARY KEY  (dset_ad_value8_id,dset_ad_datatype_id),
-  KEY fk_dser_ad_dset__dset_ad_data (dset_ad_datatype_id),
-  CONSTRAINT fk_dser_ad_dset__dset_ad_data FOREIGN KEY (dset_ad_datatype_id) REFERENCES dset_ad_datatype (id) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT fk_dser_ad_dset__dset_ad_valu FOREIGN KEY (dset_ad_value8_id) REFERENCES dset_ad_value8 (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  DSET_AD_DATATYPE_ID INT(8) NOT NULL,
+  DSET_AD_VALUE8_ID INT(8) NOT NULL,
+  PRIMARY KEY  (DSET_AD_VALUE8_ID,DSET_AD_DATATYPE_ID),
+  KEY FK_DSER_AD_DSET__DSET_AD_DATA (DSET_AD_DATATYPE_ID),
+  CONSTRAINT FK_DSER_AD_DSET__DSET_AD_DATA FOREIGN KEY (DSET_AD_DATATYPE_ID) REFERENCES DSET_AD_DATATYPE (ID) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT FK_DSER_AD_DSET__DSET_AD_VALU FOREIGN KEY (DSET_AD_VALUE8_ID) REFERENCES DSET_AD_VALUE8 (ID) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE DSET_CD (
-  id int(8) NOT NULL,
-  PRIMARY KEY  (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  ID INT(8) NOT NULL,
+  PRIMARY KEY  (ID)
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 
 CREATE TABLE DSET_CD_VALUE1 (
-  dset_cd_id int(8) NOT NULL,
-  code varchar(50)  default NULL,
-  PRIMARY KEY  (dset_cd_id),
-  CONSTRAINT fk_dset_cd_value1_dset_cd FOREIGN KEY (dset_cd_id) REFERENCES dset_cd (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  DSET_CD_ID INT(8) NOT NULL,
+  CODE VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (DSET_CD_ID),
+  CONSTRAINT FK_DSET_CD_VALUE1_DSET_CD FOREIGN KEY (DSET_CD_ID) REFERENCES DSET_CD (ID) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE DSET_CD_VALUE2 (
-  dset_cd_id int(8) NOT NULL,
-  code varchar(50)  default NULL,
-  null_flavor varchar(50)  default NULL,
-  PRIMARY KEY  (dset_cd_id),
-  CONSTRAINT fk_dset_cd_value2_dset_cd FOREIGN KEY (dset_cd_id) REFERENCES dset_cd (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  DSET_CD_ID INT(8) NOT NULL,
+  CODE VARCHAR(50)  DEFAULT NULL,
+  NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (DSET_CD_ID),
+  CONSTRAINT FK_DSET_CD_VALUE2_DSET_CD FOREIGN KEY (DSET_CD_ID) REFERENCES DSET_CD (ID) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE DSET_CD_VALUE3 (
-  dset_cd_id int(8) NOT NULL,
-  code varchar(50)  default NULL,
-  code_system varchar(50)  default NULL,
-  code_system_name varchar(50)  default NULL,
-  PRIMARY KEY  (dset_cd_id),
-  CONSTRAINT fk_dset_cd_value3_dset_cd FOREIGN KEY (dset_cd_id) REFERENCES dset_cd (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  DSET_CD_ID INT(8) NOT NULL,
+  CODE VARCHAR(50)  DEFAULT NULL,
+  CODE_SYSTEM VARCHAR(50)  DEFAULT NULL,
+  CODE_SYSTEM_NAME VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (DSET_CD_ID),
+  CONSTRAINT FK_DSET_CD_VALUE3_DSET_CD FOREIGN KEY (DSET_CD_ID) REFERENCES DSET_CD (ID) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE DSET_CD_VALUE4 (
-  dset_cd_id int(8) NOT NULL,
-  code varchar(50)  default NULL,
-  code_system varchar(50)  default NULL,
-  code_system_name varchar(50)  default NULL,
-  code_system_version varchar(50)  default NULL,
-  displayable_value varchar(50)  default NULL,
-  originaltext_value varchar(50)  default NULL,
-  originaltext_desc varchar(50)  default NULL,
-  PRIMARY KEY  (dset_cd_id),
-  CONSTRAINT fk_dset_cd_value4_dset_cd FOREIGN KEY (dset_cd_id) REFERENCES dset_cd (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  DSET_CD_ID INT(8) NOT NULL,
+  CODE VARCHAR(50)  DEFAULT NULL,
+  CODE_SYSTEM VARCHAR(50)  DEFAULT NULL,
+  CODE_SYSTEM_NAME VARCHAR(50)  DEFAULT NULL,
+  CODE_SYSTEM_VERSION VARCHAR(50)  DEFAULT NULL,
+  DISPLAYABLE_VALUE VARCHAR(50)  DEFAULT NULL,
+  ORIGINALTEXT_VALUE VARCHAR(50)  DEFAULT NULL,
+  ORIGINALTEXT_DESC VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (DSET_CD_ID),
+  CONSTRAINT FK_DSET_CD_VALUE4_DSET_CD FOREIGN KEY (DSET_CD_ID) REFERENCES DSET_CD (ID) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE DSET_CD_VALUE5 (
-  dset_cd_id int(8) NOT NULL,
-  code varchar(50)  default NULL,
-  code_system varchar(50)  default NULL,
-  code_system_name varchar(50)  default NULL,
-  code_system_version varchar(50)  default NULL,
-  displayable_value varchar(50)  default NULL,
-  originaltext_value varchar(50)  default NULL,
-  originaltext_desc varchar(50)  default NULL,
-  PRIMARY KEY  (dset_cd_id),
-  CONSTRAINT fk_dset_cd_value5_dset_cd FOREIGN KEY (dset_cd_id) REFERENCES dset_cd (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  DSET_CD_ID INT(8) NOT NULL,
+  CODE VARCHAR(50)  DEFAULT NULL,
+  CODE_SYSTEM VARCHAR(50)  DEFAULT NULL,
+  CODE_SYSTEM_NAME VARCHAR(50)  DEFAULT NULL,
+  CODE_SYSTEM_VERSION VARCHAR(50)  DEFAULT NULL,
+  DISPLAYABLE_VALUE VARCHAR(50)  DEFAULT NULL,
+  ORIGINALTEXT_VALUE VARCHAR(50)  DEFAULT NULL,
+  ORIGINALTEXT_DESC VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (DSET_CD_ID),
+  CONSTRAINT FK_DSET_CD_VALUE5_DSET_CD FOREIGN KEY (DSET_CD_ID) REFERENCES DSET_CD (ID) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE DSET_CD_VALUE6 (
-  id int(8) NOT NULL,
-  dset_cd_id int(8) default NULL,
-  code varchar(50)  default NULL,
-  PRIMARY KEY  (id),
-  KEY fk_dset_cd_value6_dset_cd (dset_cd_id),
-  CONSTRAINT fk_dset_cd_value6_dset_cd FOREIGN KEY (dset_cd_id) REFERENCES dset_cd (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  ID INT(8) NOT NULL,
+  DSET_CD_ID INT(8) DEFAULT NULL,
+  CODE VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (ID),
+  KEY FK_DSET_CD_VALUE6_DSET_CD (DSET_CD_ID),
+  CONSTRAINT FK_DSET_CD_VALUE6_DSET_CD FOREIGN KEY (DSET_CD_ID) REFERENCES DSET_CD (ID) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE DSET_CD_VALUE7 (
-  id int(8) NOT NULL,
-  code varchar(50)  default NULL,
-  PRIMARY KEY  (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  ID INT(8) NOT NULL,
+  CODE VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (ID)
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE DSET_CD_CD_VALUE7 (
-  dset_cd_id int(8) NOT NULL,
-  dset_cd_value7_id int(8) NOT NULL,
-  PRIMARY KEY  (dset_cd_id,dset_cd_value7_id),
-  KEY fk_dset_cd_cd_va_dset_cd5 (dset_cd_value7_id),
-  CONSTRAINT fk_dset_cd_cd_value7_dset_cd FOREIGN KEY (dset_cd_id) REFERENCES dset_cd (id) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT fk_dset_cd_cd_va_dset_cd5 FOREIGN KEY (dset_cd_value7_id) REFERENCES dset_cd_value7 (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  DSET_CD_ID INT(8) NOT NULL,
+  DSET_CD_VALUE7_ID INT(8) NOT NULL,
+  PRIMARY KEY  (DSET_CD_ID,DSET_CD_VALUE7_ID),
+  KEY FK_DSET_CD_CD_VA_DSET_CD5 (DSET_CD_VALUE7_ID),
+  CONSTRAINT FK_DSET_CD_CD_VALUE7_DSET_CD FOREIGN KEY (DSET_CD_ID) REFERENCES DSET_CD (ID) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT FK_DSET_CD_CD_VA_DSET_CD5 FOREIGN KEY (DSET_CD_VALUE7_ID) REFERENCES DSET_CD_VALUE7 (ID) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE DSET_EN (
-  id int(8) NOT NULL,
-  PRIMARY KEY  (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  ID INT(8) NOT NULL,
+  PRIMARY KEY  (ID)
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE DSET_EN_VALUE1 (
-  dset_en_datatype_id int(8) NOT NULL,
-  enxp_pn_value varchar(50)  default NULL,
-  PRIMARY KEY  (dset_en_datatype_id),
-  CONSTRAINT fk_en_type_val_en_type FOREIGN KEY (dset_en_datatype_id) REFERENCES dset_en (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  DSET_EN_DATATYPE_ID INT(8) NOT NULL,
+  ENXP_PN_VALUE VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (DSET_EN_DATATYPE_ID),
+  CONSTRAINT FK_EN_TYPE_VAL_EN_TYPE FOREIGN KEY (DSET_EN_DATATYPE_ID) REFERENCES DSET_EN (ID) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE DSET_EN_VALUE2 (
-  dset_en_datatype_id int(8) NOT NULL,
-  enxp_pn_value varchar(50)  default NULL,
-  enxp_pn_code varchar(50)  default NULL,
-  PRIMARY KEY  (dset_en_datatype_id),
-  CONSTRAINT fk_en_type_val2_en_type FOREIGN KEY (dset_en_datatype_id) REFERENCES dset_en (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  DSET_EN_DATATYPE_ID INT(8) NOT NULL,
+  ENXP_PN_VALUE VARCHAR(50)  DEFAULT NULL,
+  ENXP_PN_CODE VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (DSET_EN_DATATYPE_ID),
+  CONSTRAINT FK_EN_TYPE_VAL2_EN_TYPE FOREIGN KEY (DSET_EN_DATATYPE_ID) REFERENCES DSET_EN (ID) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE DSET_EN_VALUE3 (
-  dset_en_datatype_id int(8) NOT NULL,
-  enxp_pn_code varchar(50)  default NULL,
-  enxp_pn_value varchar(50)  default NULL,
-  enxp_pn_codesystem varchar(50)  default NULL,
-  enxp_pn_codesystemversion varchar(50)  default NULL,
-  PRIMARY KEY  (dset_en_datatype_id),
-  CONSTRAINT fk_en_type_val3_en_type FOREIGN KEY (dset_en_datatype_id) REFERENCES dset_en (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  DSET_EN_DATATYPE_ID INT(8) NOT NULL,
+  ENXP_PN_CODE VARCHAR(50)  DEFAULT NULL,
+  ENXP_PN_VALUE VARCHAR(50)  DEFAULT NULL,
+  ENXP_PN_CODESYSTEM VARCHAR(50)  DEFAULT NULL,
+  ENXP_PN_CODESYSTEMVERSION VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (DSET_EN_DATATYPE_ID),
+  CONSTRAINT FK_EN_TYPE_VAL3_EN_TYPE FOREIGN KEY (DSET_EN_DATATYPE_ID) REFERENCES DSET_EN (ID) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE DSET_EN_VALUE4 (
-  dset_en_datatype_id int(8) NOT NULL,
-  enxp_pn_value varchar(50)  default NULL,
-  enxp_pn_enpq varchar(50)  default NULL,
-  PRIMARY KEY  (dset_en_datatype_id),
-  CONSTRAINT fk_en_datatype_val4_en_datat FOREIGN KEY (dset_en_datatype_id) REFERENCES dset_en (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  DSET_EN_DATATYPE_ID INT(8) NOT NULL,
+  ENXP_PN_VALUE VARCHAR(50)  DEFAULT NULL,
+  ENXP_PN_ENPQ VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (DSET_EN_DATATYPE_ID),
+  CONSTRAINT FK_EN_DATATYPE_VAL4_EN_DATAT FOREIGN KEY (DSET_EN_DATATYPE_ID) REFERENCES DSET_EN (ID) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE DSET_EN_VALUE5 (
-  dset_en_datatype_id int(8) NOT NULL,
-  enxp_pn_value varchar(50)  default NULL,
-  enxp_pn2_value varchar(50)  default NULL,
-  enxp_pn_code varchar(50)  default NULL,
-  enxp_pn2_code varchar(50)  default NULL,
-  enxp_pn_codesystem varchar(50)  default NULL,
-  enxp_pn2_codesystem varchar(50)  default NULL,
-  enxp_pn2_codesystemversion varchar(50)  default NULL,
-  enxp_pn_codesystemversion varchar(50)  default NULL,
-  PRIMARY KEY  (dset_en_datatype_id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  DSET_EN_DATATYPE_ID INT(8) NOT NULL,
+  ENXP_PN_VALUE VARCHAR(50)  DEFAULT NULL,
+  ENXP_PN2_VALUE VARCHAR(50)  DEFAULT NULL,
+  ENXP_PN_CODE VARCHAR(50)  DEFAULT NULL,
+  ENXP_PN2_CODE VARCHAR(50)  DEFAULT NULL,
+  ENXP_PN_CODESYSTEM VARCHAR(50)  DEFAULT NULL,
+  ENXP_PN2_CODESYSTEM VARCHAR(50)  DEFAULT NULL,
+  ENXP_PN2_CODESYSTEMVERSION VARCHAR(50)  DEFAULT NULL,
+  ENXP_PN_CODESYSTEMVERSION VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (DSET_EN_DATATYPE_ID)
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE DSET_EN_VALUE6 (
-  dset_en_datatype_id int(8) NOT NULL,
-  enxp_pn_value varchar(50)  default NULL,
-  enxp_pn_code varchar(50)  default NULL,
-  enxp_pn_codesystem varchar(50)  default NULL,
-  enxp_pn_codesystemversion varchar(50)  default NULL,
-  enxp_on_value varchar(50)  default NULL,
-  enxp_on_code varchar(50)  default NULL,
-  enxp_on_codesystem varchar(50)  default NULL,
-  enxp_on_codesystemversion varchar(50)  default NULL,
-  PRIMARY KEY  (dset_en_datatype_id),
-  CONSTRAINT fk_en_datatype_val6_en_datat FOREIGN KEY (dset_en_datatype_id) REFERENCES dset_en (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  DSET_EN_DATATYPE_ID INT(8) NOT NULL,
+  ENXP_PN_VALUE VARCHAR(50)  DEFAULT NULL,
+  ENXP_PN_CODE VARCHAR(50)  DEFAULT NULL,
+  ENXP_PN_CODESYSTEM VARCHAR(50)  DEFAULT NULL,
+  ENXP_PN_CODESYSTEMVERSION VARCHAR(50)  DEFAULT NULL,
+  ENXP_ON_VALUE VARCHAR(50)  DEFAULT NULL,
+  ENXP_ON_CODE VARCHAR(50)  DEFAULT NULL,
+  ENXP_ON_CODESYSTEM VARCHAR(50)  DEFAULT NULL,
+  ENXP_ON_CODESYSTEMVERSION VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (DSET_EN_DATATYPE_ID),
+  CONSTRAINT FK_EN_DATATYPE_VAL6_EN_DATAT FOREIGN KEY (DSET_EN_DATATYPE_ID) REFERENCES DSET_EN (ID) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE DSET_EN_VALUE7 (
-  dset_en_datatype_id int(8) NOT NULL,
-  enxp_pn_code varchar(50)  default NULL,
-  enxp_on_code varchar(50)  default NULL,
-  enxp_pn_value varchar(50)  default NULL,
-  enxp_on_value varchar(50)  default NULL,
-  enxp_on_codesystem varchar(50)  default NULL,
-  enxp_pn_codesystem varchar(50)  default NULL,
-  enxp_on_codesystemversion varchar(50)  default NULL,
-  enxp_pn_codesystemversion varchar(50)  default NULL,
-  PRIMARY KEY  (dset_en_datatype_id),
-  CONSTRAINT fk_en_datatype_val7_en_datat FOREIGN KEY (dset_en_datatype_id) REFERENCES dset_en (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  DSET_EN_DATATYPE_ID INT(8) NOT NULL,
+  ENXP_PN_CODE VARCHAR(50)  DEFAULT NULL,
+  ENXP_ON_CODE VARCHAR(50)  DEFAULT NULL,
+  ENXP_PN_VALUE VARCHAR(50)  DEFAULT NULL,
+  ENXP_ON_VALUE VARCHAR(50)  DEFAULT NULL,
+  ENXP_ON_CODESYSTEM VARCHAR(50)  DEFAULT NULL,
+  ENXP_PN_CODESYSTEM VARCHAR(50)  DEFAULT NULL,
+  ENXP_ON_CODESYSTEMVERSION VARCHAR(50)  DEFAULT NULL,
+  ENXP_PN_CODESYSTEMVERSION VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (DSET_EN_DATATYPE_ID),
+  CONSTRAINT FK_EN_DATATYPE_VAL7_EN_DATAT FOREIGN KEY (DSET_EN_DATATYPE_ID) REFERENCES DSET_EN (ID) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE DSET_II (
-  id int(8) NOT NULL,
-  PRIMARY KEY  (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  ID INT(8) NOT NULL,
+  PRIMARY KEY  (ID)
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 
 CREATE TABLE DSET_II_VALUE1 (
-  dset_ii_id int(8) NOT NULL,
-  extension varchar(50)  default NULL,
-  PRIMARY KEY  (dset_ii_id),
-  CONSTRAINT fk_dset_ii_value1_dsetii FOREIGN KEY (dset_ii_id) REFERENCES dset_ii (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  DSET_II_ID INT(8) NOT NULL,
+  EXTENSION VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (DSET_II_ID),
+  CONSTRAINT FK_DSET_II_VALUE1_DSETII FOREIGN KEY (DSET_II_ID) REFERENCES DSET_II (ID) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE DSET_II_VALUE2 (
-  dset_ii_id int(8) NOT NULL,
-  extension varchar(50)  default NULL,
-  root varchar(50)  default NULL,
-  null_flavor varchar(50)  default NULL,
-  PRIMARY KEY  (dset_ii_id),
-  CONSTRAINT fk_dset_ii_value2_dsetii FOREIGN KEY (dset_ii_id) REFERENCES dset_ii (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  DSET_II_ID INT(8) NOT NULL,
+  EXTENSION VARCHAR(50)  DEFAULT NULL,
+  ROOT VARCHAR(50)  DEFAULT NULL,
+  NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (DSET_II_ID),
+  CONSTRAINT FK_DSET_II_VALUE2_DSETII FOREIGN KEY (DSET_II_ID) REFERENCES DSET_II (ID) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE DSET_II_VALUE3 (
-  dset_ii_id int(8) NOT NULL,
-  extension varchar(50)  default NULL,
-  identifier_name varchar(50)  default NULL,
-  displayable_value varchar(1)  default NULL,
-  reliability varchar(50)  default NULL,
-  scope varchar(50)  default NULL,
-  PRIMARY KEY  (dset_ii_id),
-  CONSTRAINT fk_dset_ii_value3_dsetii FOREIGN KEY (dset_ii_id) REFERENCES dset_ii (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  DSET_II_ID INT(8) NOT NULL,
+  EXTENSION VARCHAR(50)  DEFAULT NULL,
+  IDENTIFIER_NAME VARCHAR(50)  DEFAULT NULL,
+  DISPLAYABLE_VALUE VARCHAR(1)  DEFAULT NULL,
+  RELIABILITY VARCHAR(50)  DEFAULT NULL,
+  SCOPE VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (DSET_II_ID),
+  CONSTRAINT FK_DSET_II_VALUE3_DSETII FOREIGN KEY (DSET_II_ID) REFERENCES DSET_II (ID) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE DSET_II_VALUE4 (
-  dset_ii_id int(8) NOT NULL,
-  root varchar(50)  default NULL,
-  extension varchar(50)  default NULL,
-  identifier_name varchar(50)  default NULL,
-  reliability varchar(50)  default NULL,
-  scope varchar(50)  default NULL,
-  displayable_value varchar(1)  default NULL,
-  null_flavor varchar(50)  default NULL,
-  PRIMARY KEY  (dset_ii_id),
-  CONSTRAINT fk_dset_ii_value4_dsetii FOREIGN KEY (dset_ii_id) REFERENCES dset_ii (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  DSET_II_ID INT(8) NOT NULL,
+  ROOT VARCHAR(50)  DEFAULT NULL,
+  EXTENSION VARCHAR(50)  DEFAULT NULL,
+  IDENTIFIER_NAME VARCHAR(50)  DEFAULT NULL,
+  RELIABILITY VARCHAR(50)  DEFAULT NULL,
+  SCOPE VARCHAR(50)  DEFAULT NULL,
+  DISPLAYABLE_VALUE VARCHAR(1)  DEFAULT NULL,
+  NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (DSET_II_ID),
+  CONSTRAINT FK_DSET_II_VALUE4_DSETII FOREIGN KEY (DSET_II_ID) REFERENCES DSET_II (ID) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE DSET_II_VALUE5 (
-  id int(8) NOT NULL,
-  dset_ii_id int(8) default NULL,
-  extension varchar(50)  default NULL,
-  PRIMARY KEY  (id),
-  KEY fk_dset_ii_value5_dset_ii (dset_ii_id),
-  CONSTRAINT fk_dset_ii_value5_dset_ii FOREIGN KEY (dset_ii_id) REFERENCES dset_ii (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  ID INT(8) NOT NULL,
+  DSET_II_ID INT(8) DEFAULT NULL,
+  EXTENSION VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (ID),
+  KEY FK_DSET_II_VALUE5_DSET_II (DSET_II_ID),
+  CONSTRAINT FK_DSET_II_VALUE5_DSET_II FOREIGN KEY (DSET_II_ID) REFERENCES DSET_II (ID) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE DSET_II_VALUE6 (
-  id int(8) NOT NULL,
-  extension varchar(50)  default NULL,
-  PRIMARY KEY  (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  ID INT(8) NOT NULL,
+  EXTENSION VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (ID)
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE DSET_II_II_VALUE6 (
-  dset_ii_id int(8) NOT NULL,
-  dset_ii_value6_id int(8) NOT NULL,
-  PRIMARY KEY  (dset_ii_value6_id,dset_ii_id),
-  KEY fk_dset_ii_ii_value6_dset_ii (dset_ii_id),
-  CONSTRAINT fk_dset_ii_ii_value6_dset_ii FOREIGN KEY (dset_ii_id) REFERENCES dset_ii (id) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT fk_dset_ii_ii_va_dset_ii_val FOREIGN KEY (dset_ii_value6_id) REFERENCES dset_ii_value6 (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  DSET_II_ID INT(8) NOT NULL,
+  DSET_II_VALUE6_ID INT(8) NOT NULL,
+  PRIMARY KEY  (DSET_II_VALUE6_ID,DSET_II_ID),
+  KEY FK_DSET_II_II_VALUE6_DSET_II (DSET_II_ID),
+  CONSTRAINT FK_DSET_II_II_VALUE6_DSET_II FOREIGN KEY (DSET_II_ID) REFERENCES DSET_II (ID) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT FK_DSET_II_II_VA_DSET_II_VAL FOREIGN KEY (DSET_II_VALUE6_ID) REFERENCES DSET_II_VALUE6 (ID) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 
 CREATE TABLE DSET_TEL (
-  id int(8) NOT NULL,
-  null_flavor varchar(50)  default NULL,
-  PRIMARY KEY  (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  ID INT(8) NOT NULL,
+  NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (ID)
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE DSET_TEL_EMAIL (
-  id int(8) NOT NULL,
-  null_flavor varchar(50)  default NULL,
-  PRIMARY KEY  (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  ID INT(8) NOT NULL,
+  NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (ID)
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE DSET_TEL_EMAIL_VALUE1 (
-  dset_tel_email_id int(8) NOT NULL,
-  tel_email_value varchar(50)  default NULL,
-  PRIMARY KEY  (dset_tel_email_id),
-  CONSTRAINT fk_dset_tel_emai_dset_tel_ema FOREIGN KEY (dset_tel_email_id) REFERENCES dset_tel_email (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  DSET_TEL_EMAIL_ID INT(8) NOT NULL,
+  TEL_EMAIL_VALUE VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (DSET_TEL_EMAIL_ID),
+  CONSTRAINT FK_DSET_TEL_EMAI_DSET_TEL_EMA FOREIGN KEY (DSET_TEL_EMAIL_ID) REFERENCES DSET_TEL_EMAIL (ID) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE DSET_TEL_EMAIL_VALUE2 (
-  dset_tel_email_id int(8) default NULL,
-  tel_email_value varchar(50)  default NULL,
-  tel_email_null_flavor varchar(50)  default NULL,
-  KEY fk_tel_email_val_dset_tel_ema (dset_tel_email_id),
-  CONSTRAINT fk_tel_email_val_dset_tel_ema FOREIGN KEY (dset_tel_email_id) REFERENCES dset_tel_email (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  DSET_TEL_EMAIL_ID INT(8) DEFAULT NULL,
+  TEL_EMAIL_VALUE VARCHAR(50)  DEFAULT NULL,
+  TEL_EMAIL_NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  KEY FK_TEL_EMAIL_VAL_DSET_TEL_EMA (DSET_TEL_EMAIL_ID),
+  CONSTRAINT FK_TEL_EMAIL_VAL_DSET_TEL_EMA FOREIGN KEY (DSET_TEL_EMAIL_ID) REFERENCES DSET_TEL_EMAIL (ID) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE DSET_TEL_PERSON (
-  id int(8) NOT NULL,
-  null_flavor varchar(50)  default NULL,
-  PRIMARY KEY  (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  ID INT(8) NOT NULL,
+  NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (ID)
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE DSET_TEL_PERSON_VALUE1 (
-  dset_tel_person_id int(8) NOT NULL,
-  tel_person_value varchar(50)  default NULL,
-  PRIMARY KEY  (dset_tel_person_id),
-  CONSTRAINT fk_dset_tel_pers_dset_tel_per FOREIGN KEY (dset_tel_person_id) REFERENCES dset_tel_person (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  DSET_TEL_PERSON_ID INT(8) NOT NULL,
+  TEL_PERSON_VALUE VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (DSET_TEL_PERSON_ID),
+  CONSTRAINT FK_DSET_TEL_PERS_DSET_TEL_PER FOREIGN KEY (DSET_TEL_PERSON_ID) REFERENCES DSET_TEL_PERSON (ID) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE DSET_TEL_PHONE (
-  id int(8) NOT NULL,
-  null_flavor varchar(50)  default NULL,
-  PRIMARY KEY  (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  ID INT(8) NOT NULL,
+  NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (ID)
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE DSET_TEL_PHONE_VALUE1 (
-  dset_tel_phone_id int(8) NOT NULL,
-  tel_phone_value varchar(50)  default NULL,
-  PRIMARY KEY  (dset_tel_phone_id),
-  CONSTRAINT fk_dset_tel_phon_dset_tel_pho FOREIGN KEY (dset_tel_phone_id) REFERENCES dset_tel_phone (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  DSET_TEL_PHONE_ID INT(8) NOT NULL,
+  TEL_PHONE_VALUE VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (DSET_TEL_PHONE_ID),
+  CONSTRAINT FK_DSET_TEL_PHON_DSET_TEL_PHO FOREIGN KEY (DSET_TEL_PHONE_ID) REFERENCES DSET_TEL_PHONE (ID) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE DSET_TEL_URL (
-  id int(8) NOT NULL,
-  null_flavor varchar(50)  default NULL,
-  PRIMARY KEY  (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  ID INT(8) NOT NULL,
+  NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (ID)
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE DSET_TEL_URL_VALUE1 (
-  dset_tel_url_id int(8) NOT NULL,
-  tel_url_value varchar(50)  default NULL,
-  PRIMARY KEY  (dset_tel_url_id),
-  CONSTRAINT fk_dset_tel_url_v_dset_tel_url FOREIGN KEY (dset_tel_url_id) REFERENCES dset_tel_url (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  DSET_TEL_URL_ID INT(8) NOT NULL,
+  TEL_URL_VALUE VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (DSET_TEL_URL_ID),
+  CONSTRAINT FK_DSET_TEL_URL_V_DSET_TEL_URL FOREIGN KEY (DSET_TEL_URL_ID) REFERENCES DSET_TEL_URL (ID) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE DSET_TEL_VALUE1 (
-  dset_tel_id int(8) NOT NULL,
-  tel_value varchar(50)  default NULL,
-  PRIMARY KEY  (dset_tel_id),
-  CONSTRAINT fk_dset_tel_value1_dset_tel FOREIGN KEY (dset_tel_id) REFERENCES dset_tel (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  DSET_TEL_ID INT(8) NOT NULL,
+  TEL_VALUE VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (DSET_TEL_ID),
+  CONSTRAINT FK_DSET_TEL_VALUE1_DSET_TEL FOREIGN KEY (DSET_TEL_ID) REFERENCES DSET_TEL (ID) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE DSET_TEL_VALUE3 (
-  id int(8) NOT NULL,
-  tel_value varchar(50)  default NULL,
-  PRIMARY KEY  (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  ID INT(8) NOT NULL,
+  TEL_VALUE VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (ID)
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE DSET_TEL_TEL_VALUE_3 (
-  dset_tel_id int(8) NOT NULL,
-  dset_tel_value3_id int(8) NOT NULL,
-  PRIMARY KEY  (dset_tel_id,dset_tel_value3_id),
-  KEY fk_dset_tel_tel__dset_tel_val (dset_tel_value3_id),
-  CONSTRAINT fk_dset_tel_tel_valu_dset_tel FOREIGN KEY (dset_tel_id) REFERENCES dset_tel (id) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT fk_dset_tel_tel__dset_tel_val FOREIGN KEY (dset_tel_value3_id) REFERENCES dset_tel_value3 (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  DSET_TEL_ID INT(8) NOT NULL,
+  DSET_TEL_VALUE3_ID INT(8) NOT NULL,
+  PRIMARY KEY  (DSET_TEL_ID,DSET_TEL_VALUE3_ID),
+  KEY FK_DSET_TEL_TEL__DSET_TEL_VAL (DSET_TEL_VALUE3_ID),
+  CONSTRAINT FK_DSET_TEL_TEL_VALU_DSET_TEL FOREIGN KEY (DSET_TEL_ID) REFERENCES DSET_TEL (ID) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT FK_DSET_TEL_TEL__DSET_TEL_VAL FOREIGN KEY (DSET_TEL_VALUE3_ID) REFERENCES DSET_TEL_VALUE3 (ID) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 
 CREATE TABLE DSET_TEL_VALUE2 (
-  id int(8) NOT NULL,
-  dset_tel_id int(8) default NULL,
-  tel_value varchar(50)  default NULL,
-  PRIMARY KEY  (id),
-  KEY fk_dset_tel_value2_dset_tel (dset_tel_id),
-  CONSTRAINT fk_dset_tel_value2_dset_tel FOREIGN KEY (dset_tel_id) REFERENCES dset_tel (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  ID INT(8) NOT NULL,
+  DSET_TEL_ID INT(8) DEFAULT NULL,
+  TEL_VALUE VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (ID),
+  KEY FK_DSET_TEL_VALUE2_DSET_TEL (DSET_TEL_ID),
+  CONSTRAINT FK_DSET_TEL_VALUE2_DSET_TEL FOREIGN KEY (DSET_TEL_ID) REFERENCES DSET_TEL (ID) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 
 
 CREATE TABLE ED_DATATYPE (
-  id int(8) NOT NULL,
-  value1_data longblob,
-  value2_null_flavor varchar(50)  default NULL,
-  value2_data longblob,
-  value2_compression varchar(50)  default NULL,
-  value3_null_flavor varchar(50)  default NULL,
-  value3_data longblob,
-  value3_compression varchar(50)  default NULL,
-  value3_description varchar(50)  default NULL,
-  value3_value varchar(50)  default NULL,
-  PRIMARY KEY  (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  ID INT(8) NOT NULL,
+  VALUE1_DATA LONGBLOB,
+  VALUE2_NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  VALUE2_DATA LONGBLOB,
+  VALUE2_COMPRESSION VARCHAR(50)  DEFAULT NULL,
+  VALUE3_NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  VALUE3_DATA LONGBLOB,
+  VALUE3_COMPRESSION VARCHAR(50)  DEFAULT NULL,
+  VALUE3_DESCRIPTION VARCHAR(50)  DEFAULT NULL,
+  VALUE3_VALUE VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (ID)
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE ED_TEXT_DATATYPE (
-  id int(8) NOT NULL,
-  value1_value varchar(50)  default NULL,
-  value2_null_flavor varchar(50)  default NULL,
-  value2_value varchar(50)  default NULL,
-  value3_null_flavor varchar(50)  default NULL,
-  value3_data longblob,
-  value3_compression varchar(50)  default NULL,
-  value3_description varchar(50)  default NULL,
-  value3_value varchar(50)  default NULL,
-  PRIMARY KEY  (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  ID INT(8) NOT NULL,
+  VALUE1_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE2_NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  VALUE2_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE3_NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  VALUE3_DATA LONGBLOB,
+  VALUE3_COMPRESSION VARCHAR(50)  DEFAULT NULL,
+  VALUE3_DESCRIPTION VARCHAR(50)  DEFAULT NULL,
+  VALUE3_VALUE VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (ID)
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE EN_DATATYPE (
-  id int(8) NOT NULL,
-  value1_pn_value varchar(50)  default NULL,
-  value2_pn_value varchar(50)  default NULL,
-  value2_pn_code varchar(50)  default NULL,
-  value3_pn_value varchar(50)  default NULL,
-  value3_pn_code varchar(50)  default NULL,
-  value3_pn_code_system varchar(50)  default NULL,
-  value3_pn_code_system_version varchar(50)  default NULL,
-  value4_pn_value varchar(50)  default NULL,
-  value4_pn_enpq varchar(50)  default NULL,
-  value5_pn_value varchar(50)  default NULL,
-  value5_pn2_value varchar(50)  default NULL,
-  value5_pn_code varchar(50)  default NULL,
-  value5_pn2_code varchar(50)  default NULL,
-  value5_pn_code_system varchar(50)  default NULL,
-  value5_pn2_code_system varchar(50)  default NULL,
-  value5_pn_code_system_version varchar(50)  default NULL,
-  value5_pn2_code_system_version varchar(50)  default NULL,
-  value6_pn_value varchar(50)  default NULL,
-  value6_on_value varchar(50)  default NULL,
-  value6_pn_code varchar(50)  default NULL,
-  value6_on_code varchar(50)  default NULL,
-  value6_pn_code_system varchar(50)  default NULL,
-  value6_on_code_system varchar(50)  default NULL,
-  value6_pn_code_system_version varchar(50)  default NULL,
-  value6_on_code_system_version varchar(50)  default NULL,
-  PRIMARY KEY  (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  ID INT(8) NOT NULL,
+  VALUE1_PN_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE2_PN_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE2_PN_CODE VARCHAR(50)  DEFAULT NULL,
+  VALUE3_PN_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE3_PN_CODE VARCHAR(50)  DEFAULT NULL,
+  VALUE3_PN_CODE_SYSTEM VARCHAR(50)  DEFAULT NULL,
+  VALUE3_PN_CODE_SYSTEM_VERSION VARCHAR(50)  DEFAULT NULL,
+  VALUE4_PN_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE4_PN_ENPQ VARCHAR(50)  DEFAULT NULL,
+  VALUE5_PN_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE5_PN2_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE5_PN_CODE VARCHAR(50)  DEFAULT NULL,
+  VALUE5_PN2_CODE VARCHAR(50)  DEFAULT NULL,
+  VALUE5_PN_CODE_SYSTEM VARCHAR(50)  DEFAULT NULL,
+  VALUE5_PN2_CODE_SYSTEM VARCHAR(50)  DEFAULT NULL,
+  VALUE5_PN_CODE_SYSTEM_VERSION VARCHAR(50)  DEFAULT NULL,
+  VALUE5_PN2_CODE_SYSTEM_VERSION VARCHAR(50)  DEFAULT NULL,
+  VALUE6_PN_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE6_ON_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE6_PN_CODE VARCHAR(50)  DEFAULT NULL,
+  VALUE6_ON_CODE VARCHAR(50)  DEFAULT NULL,
+  VALUE6_PN_CODE_SYSTEM VARCHAR(50)  DEFAULT NULL,
+  VALUE6_ON_CODE_SYSTEM VARCHAR(50)  DEFAULT NULL,
+  VALUE6_PN_CODE_SYSTEM_VERSION VARCHAR(50)  DEFAULT NULL,
+  VALUE6_ON_CODE_SYSTEM_VERSION VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (ID)
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE EN_ON_DATATYPE (
-  id int(8) NOT NULL,
-  value1_on_value varchar(50)  default NULL,
-  PRIMARY KEY  (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  ID INT(8) NOT NULL,
+  VALUE1_ON_VALUE VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (ID)
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE EN_PN_DATATYPE (
-  id int(8) NOT NULL,
-  value1_pn_value varchar(50)  default NULL,
-  PRIMARY KEY  (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  ID INT(8) NOT NULL,
+  VALUE1_PN_VALUE VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (ID)
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE II_DATATYPE (
-  id int(8) NOT NULL,
-  value1_extension varchar(50)  default NULL,
-  value2_null_flavor varchar(50)  default NULL,
-  value2_root varchar(50)  default NULL,
-  value2_extension varchar(50)  default NULL,
-  value3_null_flavor varchar(50)  default NULL,
-  value3_extension varchar(50)  default NULL,
-  value3_identifier_name varchar(50)  default NULL,
-  value3_reliability varchar(50)  default NULL,
-  value3_scope varchar(50)  default NULL,
-  value3_displayable varchar(1)  default NULL,
-  value4_null_flavor varchar(50)  default NULL,
-  value4_root varchar(50)  default NULL,
-  value4_extension varchar(50)  default NULL,
-  value4_identifier_name varchar(50)  default NULL,
-  value4_reliability varchar(50)  default NULL,
-  value4_scope varchar(50)  default NULL,
-  value4_displayable varchar(1)  default NULL,
-  PRIMARY KEY  (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  ID INT(8) NOT NULL,
+  VALUE1_EXTENSION VARCHAR(50)  DEFAULT NULL,
+  VALUE2_NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  VALUE2_ROOT VARCHAR(50)  DEFAULT NULL,
+  VALUE2_EXTENSION VARCHAR(50)  DEFAULT NULL,
+  VALUE3_NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  VALUE3_EXTENSION VARCHAR(50)  DEFAULT NULL,
+  VALUE3_IDENTIFIER_NAME VARCHAR(50)  DEFAULT NULL,
+  VALUE3_RELIABILITY VARCHAR(50)  DEFAULT NULL,
+  VALUE3_SCOPE VARCHAR(50)  DEFAULT NULL,
+  VALUE3_DISPLAYABLE VARCHAR(1)  DEFAULT NULL,
+  VALUE4_NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  VALUE4_ROOT VARCHAR(50)  DEFAULT NULL,
+  VALUE4_EXTENSION VARCHAR(50)  DEFAULT NULL,
+  VALUE4_IDENTIFIER_NAME VARCHAR(50)  DEFAULT NULL,
+  VALUE4_RELIABILITY VARCHAR(50)  DEFAULT NULL,
+  VALUE4_SCOPE VARCHAR(50)  DEFAULT NULL,
+  VALUE4_DISPLAYABLE VARCHAR(1)  DEFAULT NULL,
+  PRIMARY KEY  (ID)
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE INT_DATATYPE (
-  id int(8) NOT NULL,
-  value1_value decimal(22,0) default NULL,
-  value2_null_flavor varchar(50)  default NULL,
-  value2_value decimal(22,0) default NULL,
-  PRIMARY KEY  (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  ID INT(8) NOT NULL,
+  VALUE1_VALUE DECIMAL(22,0) DEFAULT NULL,
+  VALUE2_NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  VALUE2_VALUE DECIMAL(22,0) DEFAULT NULL,
+  PRIMARY KEY  (ID)
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE IVL_INT (
-  id int(8) NOT NULL,
-  value1_low_value decimal(22,0) default NULL,
-  value1_high_value decimal(22,0) default NULL,
-  value2_high_value decimal(22,0) default NULL,
-  value2_lowclosed varchar(1)  default NULL,
-  value3_any_value decimal(22,0) default NULL,
-  value3_low_value decimal(22,0) default NULL,
-  value3_high_closed varchar(1)  default NULL,
-  value4_low_value decimal(22,0) default NULL,
-  value4_high_value decimal(22,0) default NULL,
-  value4_width_value int(8) default NULL,
-  value4_null_flavor varchar(50)  default NULL,
-  PRIMARY KEY  (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  ID INT(8) NOT NULL,
+  VALUE1_LOW_VALUE DECIMAL(22,0) DEFAULT NULL,
+  VALUE1_HIGH_VALUE DECIMAL(22,0) DEFAULT NULL,
+  VALUE2_HIGH_VALUE DECIMAL(22,0) DEFAULT NULL,
+  VALUE2_LOWCLOSED VARCHAR(1)  DEFAULT NULL,
+  VALUE3_ANY_VALUE DECIMAL(22,0) DEFAULT NULL,
+  VALUE3_LOW_VALUE DECIMAL(22,0) DEFAULT NULL,
+  VALUE3_HIGH_CLOSED VARCHAR(1)  DEFAULT NULL,
+  VALUE4_LOW_VALUE DECIMAL(22,0) DEFAULT NULL,
+  VALUE4_HIGH_VALUE DECIMAL(22,0) DEFAULT NULL,
+  VALUE4_WIDTH_VALUE INT(8) DEFAULT NULL,
+  VALUE4_NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (ID)
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE IVL_PQ (
-  id int(8) NOT NULL,
-  value1_low_value decimal(8,2) default NULL,
-  value2_low_value decimal(8,2) default NULL,
-  value2_low_precision decimal(22,0) default NULL,
-  value2_low_unit varchar(50)  default NULL,
-  value3_low_value decimal(8,2) default NULL,
-  value3_low_precision decimal(22,0) default NULL,
-  value3_low_unit varchar(50)  default NULL,
-  value3_null_flavor varchar(50)  default NULL,
-  value4_high_value decimal(8,2) default NULL,
-  value4_high_precision decimal(22,0) default NULL,
-  value4_high_unit varchar(50)  default NULL,
-  value4_high_closed varchar(1)  default NULL,
-  value4_high_null_flavor varchar(50)  default NULL,
-  value4_low_value decimal(8,2) default NULL,
-  value4_low_precision decimal(22,0) default NULL,
-  value4_low_unit varchar(50)  default NULL,
-  value4_low_null_flavor varchar(50)  default NULL,
-  value4_low_closed varchar(1)  default NULL,
-  value4_width_value decimal(8,2) default NULL,
-  value4_width_precision decimal(22,0) default NULL,
-  value4_width_unit varchar(50)  default NULL,
-  value4_width_null_flavor varchar(50)  default NULL,
-  value4_null_flavor varchar(50)  default NULL,
-  PRIMARY KEY  (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  ID INT(8) NOT NULL,
+  VALUE1_LOW_VALUE DECIMAL(8,2) DEFAULT NULL,
+  VALUE2_LOW_VALUE DECIMAL(8,2) DEFAULT NULL,
+  VALUE2_LOW_PRECISION DECIMAL(22,0) DEFAULT NULL,
+  VALUE2_LOW_UNIT VARCHAR(50)  DEFAULT NULL,
+  VALUE3_LOW_VALUE DECIMAL(8,2) DEFAULT NULL,
+  VALUE3_LOW_PRECISION DECIMAL(22,0) DEFAULT NULL,
+  VALUE3_LOW_UNIT VARCHAR(50)  DEFAULT NULL,
+  VALUE3_NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  VALUE4_HIGH_VALUE DECIMAL(8,2) DEFAULT NULL,
+  VALUE4_HIGH_PRECISION DECIMAL(22,0) DEFAULT NULL,
+  VALUE4_HIGH_UNIT VARCHAR(50)  DEFAULT NULL,
+  VALUE4_HIGH_CLOSED VARCHAR(1)  DEFAULT NULL,
+  VALUE4_HIGH_NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  VALUE4_LOW_VALUE DECIMAL(8,2) DEFAULT NULL,
+  VALUE4_LOW_PRECISION DECIMAL(22,0) DEFAULT NULL,
+  VALUE4_LOW_UNIT VARCHAR(50)  DEFAULT NULL,
+  VALUE4_LOW_NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  VALUE4_LOW_CLOSED VARCHAR(1)  DEFAULT NULL,
+  VALUE4_WIDTH_VALUE DECIMAL(8,2) DEFAULT NULL,
+  VALUE4_WIDTH_PRECISION DECIMAL(22,0) DEFAULT NULL,
+  VALUE4_WIDTH_UNIT VARCHAR(50)  DEFAULT NULL,
+  VALUE4_WIDTH_NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  VALUE4_NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (ID)
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE IVL_PQV (
-  id int(8) NOT NULL,
-  value1_low_value decimal(8,2) default NULL,
-  value1_high_value decimal(8,2) default NULL,
-  value2_low_value decimal(8,2) default NULL,
-  value2_low_precision decimal(22,0) default NULL,
-  value2_high_closed varchar(1)  default NULL,
-  value3_low_value decimal(8,2) default NULL,
-  value3_low_precision decimal(22,0) default NULL,
-  value3_high_value decimal(8,2) default NULL,
-  value3_high_precision decimal(22,0) default NULL,
-  value3_high_null_flavor varchar(50)  default NULL,
-  value4_high_value decimal(8,2) default NULL,
-  value4_high_precision decimal(22,0) default NULL,
-  value4_high_null_flavor varchar(50)  default NULL,
-  value4_low_value decimal(8,2) default NULL,
-  value4_low_precision decimal(22,0) default NULL,
-  value4_low_null_flavor varchar(50)  default NULL,
-  value4_width_value decimal(8,2) default NULL,
-  value4_width_precision decimal(22,0) default NULL,
-  value4_width_null_flavor varchar(50)  default NULL,
-  PRIMARY KEY  (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  ID INT(8) NOT NULL,
+  VALUE1_LOW_VALUE DECIMAL(8,2) DEFAULT NULL,
+  VALUE1_HIGH_VALUE DECIMAL(8,2) DEFAULT NULL,
+  VALUE2_LOW_VALUE DECIMAL(8,2) DEFAULT NULL,
+  VALUE2_LOW_PRECISION DECIMAL(22,0) DEFAULT NULL,
+  VALUE2_HIGH_CLOSED VARCHAR(1)  DEFAULT NULL,
+  VALUE3_LOW_VALUE DECIMAL(8,2) DEFAULT NULL,
+  VALUE3_LOW_PRECISION DECIMAL(22,0) DEFAULT NULL,
+  VALUE3_HIGH_VALUE DECIMAL(8,2) DEFAULT NULL,
+  VALUE3_HIGH_PRECISION DECIMAL(22,0) DEFAULT NULL,
+  VALUE3_HIGH_NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  VALUE4_HIGH_VALUE DECIMAL(8,2) DEFAULT NULL,
+  VALUE4_HIGH_PRECISION DECIMAL(22,0) DEFAULT NULL,
+  VALUE4_HIGH_NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  VALUE4_LOW_VALUE DECIMAL(8,2) DEFAULT NULL,
+  VALUE4_LOW_PRECISION DECIMAL(22,0) DEFAULT NULL,
+  VALUE4_LOW_NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  VALUE4_WIDTH_VALUE DECIMAL(8,2) DEFAULT NULL,
+  VALUE4_WIDTH_PRECISION DECIMAL(22,0) DEFAULT NULL,
+  VALUE4_WIDTH_NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (ID)
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE IVL_REAL (
-  id int(8) default NULL,
-  value1_low_value double default NULL,
-  value1_high_value double default NULL,
-  value2_high_value double default NULL,
-  value2_low_closed varchar(1)  default NULL,
-  value3_any_value double default NULL,
-  value3_high_value double default NULL,
-  value3_high_closed varchar(1)  default NULL,
-  value3_low_value double default NULL,
-  value3_low_closed varchar(1)  default NULL,
-  value3_width_value double default NULL,
-  value3_width_null_flavor varchar(50)  default NULL,
-  value3_null_flavor varchar(50)  default NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  ID INT(8) DEFAULT NULL,
+  VALUE1_LOW_VALUE DOUBLE DEFAULT NULL,
+  VALUE1_HIGH_VALUE DOUBLE DEFAULT NULL,
+  VALUE2_HIGH_VALUE DOUBLE DEFAULT NULL,
+  VALUE2_LOW_CLOSED VARCHAR(1)  DEFAULT NULL,
+  VALUE3_ANY_VALUE DOUBLE DEFAULT NULL,
+  VALUE3_HIGH_VALUE DOUBLE DEFAULT NULL,
+  VALUE3_HIGH_CLOSED VARCHAR(1)  DEFAULT NULL,
+  VALUE3_LOW_VALUE DOUBLE DEFAULT NULL,
+  VALUE3_LOW_CLOSED VARCHAR(1)  DEFAULT NULL,
+  VALUE3_WIDTH_VALUE DOUBLE DEFAULT NULL,
+  VALUE3_WIDTH_NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  VALUE3_NULL_FLAVOR VARCHAR(50)  DEFAULT NULL
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE IVL_TS (
-  id int(8) default NULL,
-  value1_low_value datetime default NULL,
-  value1_high_value datetime default NULL,
-  value2_high_value datetime default NULL,
-  value2_low_closed varchar(1)  default NULL,
-  value3_high_value datetime default NULL,
-  value3_low_value datetime default NULL,
-  value3_width_null_flavor varchar(50)  default NULL,
-  value3_width_value int(8) default NULL,
-  value3_null_flavor varchar(50)  default NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  ID INT(8) DEFAULT NULL,
+  VALUE1_LOW_VALUE DATETIME DEFAULT NULL,
+  VALUE1_HIGH_VALUE DATETIME DEFAULT NULL,
+  VALUE2_HIGH_VALUE DATETIME DEFAULT NULL,
+  VALUE2_LOW_CLOSED VARCHAR(1)  DEFAULT NULL,
+  VALUE3_HIGH_VALUE DATETIME DEFAULT NULL,
+  VALUE3_LOW_VALUE DATETIME DEFAULT NULL,
+  VALUE3_WIDTH_NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  VALUE3_WIDTH_VALUE INT(8) DEFAULT NULL,
+  VALUE3_NULL_FLAVOR VARCHAR(50)  DEFAULT NULL
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE PQV_DATATYPE (
-  id int(8) NOT NULL,
-  value1_value decimal(8,2) default NULL,
-  value2_null_flavor varchar(50)  default NULL,
-  value2_value decimal(8,2) default NULL,
-  value2_precision decimal(22,0) default NULL,
-  value3_value decimal(8,2) default NULL,
-  value3_precision decimal(22,0) default NULL,
-  value4_null_flavor varchar(50)  default NULL,
-  value4_precision decimal(22,0) default NULL,
-  value4_value decimal(8,2) default NULL,
-  PRIMARY KEY  (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  ID INT(8) NOT NULL,
+  VALUE1_VALUE DECIMAL(8,2) DEFAULT NULL,
+  VALUE2_NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  VALUE2_VALUE DECIMAL(8,2) DEFAULT NULL,
+  VALUE2_PRECISION DECIMAL(22,0) DEFAULT NULL,
+  VALUE3_VALUE DECIMAL(8,2) DEFAULT NULL,
+  VALUE3_PRECISION DECIMAL(22,0) DEFAULT NULL,
+  VALUE4_NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  VALUE4_PRECISION DECIMAL(22,0) DEFAULT NULL,
+  VALUE4_VALUE DECIMAL(8,2) DEFAULT NULL,
+  PRIMARY KEY  (ID)
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE PQ_DATATYPE (
-  id int(8) NOT NULL,
-  value1_value decimal(8,2) default NULL,
-  value1_unit varchar(50)  default NULL,
-  value2_value decimal(8,2) default NULL,
-  value3_null_flavor varchar(50)  default NULL,
-  value3_unit varchar(50)  default NULL,
-  value3_value decimal(8,2) default NULL,
-  value3_precision decimal(22,0) default NULL,
-  PRIMARY KEY  (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  ID INT(8) NOT NULL,
+  VALUE1_VALUE DECIMAL(8,2) DEFAULT NULL,
+  VALUE1_UNIT VARCHAR(50)  DEFAULT NULL,
+  VALUE2_VALUE DECIMAL(8,2) DEFAULT NULL,
+  VALUE3_NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  VALUE3_UNIT VARCHAR(50)  DEFAULT NULL,
+  VALUE3_VALUE DECIMAL(8,2) DEFAULT NULL,
+  VALUE3_PRECISION DECIMAL(22,0) DEFAULT NULL,
+  PRIMARY KEY  (ID)
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE REAL_DATATYPE (
-  id int(8) NOT NULL,
-  value1_value double default NULL,
-  value2_null_flavor varchar(50)  default NULL,
-  value2_value double default NULL,
-  PRIMARY KEY  (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  ID INT(8) NOT NULL,
+  VALUE1_VALUE DOUBLE DEFAULT NULL,
+  VALUE2_NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  VALUE2_VALUE DOUBLE DEFAULT NULL,
+  PRIMARY KEY  (ID)
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE SC_DATATYPE (
-  id int(8) NOT NULL,
-  value1_value varchar(50)  default NULL,
-  value1_code_code varchar(50)  default NULL,
-  value2_null_flavor varchar(50)  default NULL,
-  value2_value varchar(50)  default NULL,
-  value2_code_null_flavor varchar(50)  default NULL,
-  value2_code_code varchar(50)  default NULL,
-  value2_code_code_system varchar(50)  default NULL,
-  value2_code_code_system_name varchar(50)  default NULL,
-  value2_code_code_system_ver varchar(50)  default NULL,
-  value3_null_flavor varchar(50)  default NULL,
-  value3_value varchar(50)  default NULL,
-  value3_code_null_flavor varchar(50)  default NULL,
-  value3_code_code varchar(50)  default NULL,
-  value3_code_code_system varchar(50)  default NULL,
-  value3_code_code_system_name varchar(50)  default NULL,
-  value3_code_code_system_ver varchar(50)  default NULL,
-  value3_code_display_nflavor varchar(50)  default NULL,
-  value3_code_display_value varchar(50)  default NULL,
-  value3_code_orig_txt_nflavor varchar(50)  default NULL,
-  value3_code_orig_txt_desc varchar(50)  default NULL,
-  value3_code_orig_txt_value varchar(50)  default NULL,
-  PRIMARY KEY  (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  ID INT(8) NOT NULL,
+  VALUE1_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE1_CODE_CODE VARCHAR(50)  DEFAULT NULL,
+  VALUE2_NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  VALUE2_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE2_CODE_NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  VALUE2_CODE_CODE VARCHAR(50)  DEFAULT NULL,
+  VALUE2_CODE_CODE_SYSTEM VARCHAR(50)  DEFAULT NULL,
+  VALUE2_CODE_CODE_SYSTEM_NAME VARCHAR(50)  DEFAULT NULL,
+  VALUE2_CODE_CODE_SYSTEM_VER VARCHAR(50)  DEFAULT NULL,
+  VALUE3_NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  VALUE3_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE3_CODE_NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  VALUE3_CODE_CODE VARCHAR(50)  DEFAULT NULL,
+  VALUE3_CODE_CODE_SYSTEM VARCHAR(50)  DEFAULT NULL,
+  VALUE3_CODE_CODE_SYSTEM_NAME VARCHAR(50)  DEFAULT NULL,
+  VALUE3_CODE_CODE_SYSTEM_VER VARCHAR(50)  DEFAULT NULL,
+  VALUE3_CODE_DISPLAY_NFLAVOR VARCHAR(50)  DEFAULT NULL,
+  VALUE3_CODE_DISPLAY_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE3_CODE_ORIG_TXT_NFLAVOR VARCHAR(50)  DEFAULT NULL,
+  VALUE3_CODE_ORIG_TXT_DESC VARCHAR(50)  DEFAULT NULL,
+  VALUE3_CODE_ORIG_TXT_VALUE VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (ID)
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE ST_DATATYPE (
-  id int(8) NOT NULL,
-  value1_value varchar(50)  default NULL,
-  value2_null_flavor varchar(50)  default NULL,
-  value2_value varchar(50)  default NULL,
-  PRIMARY KEY  (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  ID INT(8) NOT NULL,
+  VALUE1_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE2_NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  VALUE2_VALUE VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (ID)
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE ST_NT_DATATYPE (
-  id int(8) NOT NULL,
-  value1_value varchar(50)  default NULL,
-  value2_null_flavor varchar(50)  default NULL,
-  value2_value varchar(50)  default NULL,
-  PRIMARY KEY  (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  ID INT(8) NOT NULL,
+  VALUE1_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE2_NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  VALUE2_VALUE VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (ID)
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE TEL_DATATYPE (
-  id int(8) NOT NULL,
-  value1_value varchar(50)  default NULL,
-  value2_null_flavor varchar(50)  default NULL,
-  value2_value varchar(50)  default NULL,
-  PRIMARY KEY  (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  ID INT(8) NOT NULL,
+  VALUE1_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE2_NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  VALUE2_VALUE VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (ID)
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE TEL_EMAIL_DATATYPE (
-  id int(8) NOT NULL,
-  value1_value varchar(50)  default NULL,
-  value2_null_flavor varchar(50)  default NULL,
-  value2_value varchar(50)  default NULL,
-  PRIMARY KEY  (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  ID INT(8) NOT NULL,
+  VALUE1_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE2_NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  VALUE2_VALUE VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (ID)
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE TEL_PERSON_DATATYPE (
-  id int(8) NOT NULL,
-  value1_value varchar(50)  default NULL,
-  value2_null_flavor varchar(50)  default NULL,
-  value2_value varchar(50)  default NULL,
-  PRIMARY KEY  (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  ID INT(8) NOT NULL,
+  VALUE1_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE2_NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  VALUE2_VALUE VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (ID)
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE TEL_PHONE_DATATYPE (
-  id int(8) NOT NULL,
-  value1_value varchar(50)  default NULL,
-  value2_null_flavor varchar(50)  default NULL,
-  value2_value varchar(50)  default NULL,
-  PRIMARY KEY  (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  ID INT(8) NOT NULL,
+  VALUE1_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE2_NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  VALUE2_VALUE VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (ID)
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE TEL_URL_DATATYPE (
-  id int(8) NOT NULL,
-  value1_value varchar(50)  default NULL,
-  value2_null_flavor varchar(50)  default NULL,
-  value2_value varchar(50)  default NULL,
-  PRIMARY KEY  (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  ID INT(8) NOT NULL,
+  VALUE1_VALUE VARCHAR(50)  DEFAULT NULL,
+  VALUE2_NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  VALUE2_VALUE VARCHAR(50)  DEFAULT NULL,
+  PRIMARY KEY  (ID)
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 CREATE TABLE TS_DATATYPE (
-  id int(8) NOT NULL,
-  value1_value datetime default NULL,
-  value2_null_flavor varchar(50)  default NULL,
-  value2_value datetime default NULL,
-  PRIMARY KEY  (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  ID INT(8) NOT NULL,
+  VALUE1_VALUE DATETIME DEFAULT NULL,
+  VALUE2_NULL_FLAVOR VARCHAR(50)  DEFAULT NULL,
+  VALUE2_VALUE DATETIME DEFAULT NULL,
+  PRIMARY KEY  (ID)
+) ENGINE=INNODB DEFAULT CHARSET=LATIN1;
 
 
 
