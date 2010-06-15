@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="gov.nih.nci.cabio.domain.impl">
+  <class name="TaxonImpl" table="TAXON" lazy="true">
+    <cache usage="read-write" />
+    <id name="id" type="java.lang.Long" column="TAXON_ID">
+      <generator class="assigned" />
+    </id>
+    <property name="scientificName" type="java.lang.String" column="SCIENTIFIC_NAME" />
+    <property name="ethnicityOrStrain" type="java.lang.String" column="STRAIN_OR_ETHNICITY" />
+    <property name="abbreviation" type="java.lang.String" column="ABBREVIATION" />
+    <property name="commonName" type="java.lang.String" column="COMMON_NAME" />
+    <property name="isPreferred" type="java.lang.Boolean" column="PREFERRED" />
+    <set name="geneCollection" lazy="true" inverse="true">
+      <cache usage="read-write" />
+      <key column="TAXON_ID" />
+      <one-to-many class="gov.nih.nci.cabio.domain.impl.GeneImpl" />
+    </set>
+    <set name="chromosomeCollection" lazy="true" inverse="true">
+      <cache usage="read-write" />
+      <key column="TAXON_ID" />
+      <one-to-many class="gov.nih.nci.cabio.domain.impl.ChromosomeImpl" />
+    </set>
+  </class>
+</hibernate-mapping>
+

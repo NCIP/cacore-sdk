@@ -1,0 +1,3 @@
+grant all privileges on @DBNAME@.* to '@DBUSER@'@'@SERVERNAME@' identified by '@DBPASSWD@' with grant option;
+grant all privileges on @DBNAME@.* to '@DBUSER@'@'@localhost@' identified by '@DBPASSWD@' with grant option;
+grant all privileges on @DBNAME@.* to '@DBUSER@'@'*' identified by '@DBPASSWD@' with grant option;

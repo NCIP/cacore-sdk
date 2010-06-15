@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="caCOREos" basedir=".">
+
+	<target name="start-jboss"> 
+		<exec dir="${j2se_container_home}/bin" executable="nohup" spawn="true">
+			<arg line="run.sh -c ${jboss_configuration}"/>
+		</exec>
+	</target>
+
+	<target name="start-tomcat"> 
+		<exec dir="${j2se_container_home}/bin" executable="nohup" spawn="true">
+			<arg line="startup.sh"/>
+		</exec>
+	</target>
+	
+	<target name="start-container" if="start-container-yes">
+		<antcall target="start-${container_type}"/>
+	</target>
+
+	<target name="start-mysql" if="start-mysql-yes">
+	</target>
+	
+	
+<!--***********************************************************************
+	*** MYSQL DOWNLOAD AND EXTRACTION TARGETS (see install.xml)
+	*********************************************************************** -->
+	<target name="-download-mysql-primary.main">
+		<fail>Unable to download MySQL - Unix download not supported</fail>
+	</target>
+
+	<target name="-download-mysql-mirror.main" unless="mysql-downloaded">
+	</target>
+
+	<target name="-download-mysql-verify.main" unless="mysql-downloaded">
+	</target>
+	
+	<target name="-unpack-mysql-extract.main">
+	</target>
+	
+	
+</project>
+
+

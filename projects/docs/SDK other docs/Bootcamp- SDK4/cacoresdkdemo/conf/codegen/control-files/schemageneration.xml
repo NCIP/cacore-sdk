@@ -1,0 +1,32 @@
+<transformation>
+	<model-access
+		className="gov.nih.nci.codegen.core.access.UML13ModelAccess"
+		xmiURI="file:@LOGICAL_MODEL@"
+		modelName="EA Model"/>
+	<filter-chain>
+     <filter
+     	name="model-filter"
+     	className="gov.nih.nci.codegen.core.filter.UML13ModelFilter">
+			<param name="modelName" value="EA Model"/>
+     	</filter>
+	</filter-chain>
+
+	<transformer-chain>
+	 <transformer name="schema"
+	 	className="gov.nih.nci.codegen.core.transformer.UML13SchemaTransformer">
+	 	<param name="basePackage" value="Logical View.Logical Model"/>
+	  <filter name="classifier" className="gov.nih.nci.codegen.core.filter.UML13ClassifierFilter">
+	   <package>
+	    <include>@INCLUDE_PACKAGE@</include>
+	   </package>
+	  </filter>
+	 </transformer>
+	</transformer-chain>
+
+	<artifact-handler
+		className="gov.nih.nci.codegen.core.handler.SimpleFileHandler">
+		<param name="outputDir" value="@OUTPUTDIR@"/>
+		<param name="suffix" value=".xsd"/>
+	</artifact-handler>
+
+</transformation>

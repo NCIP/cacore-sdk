@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="caCOREos" basedir=".">
+
+	<target name="start-jboss"> 
+		<chmod dir="${j2se_container_home}/bin" includes="*.*" perm="u+x"/>
+		<chmod dir="${j2se_container_home}/bin" includes="*" perm="u+x"/>
+		<exec dir="${j2se_container_home}/bin" executable="nohup" spawn="true">
+			<arg line="run.sh -c ${jboss_configuration}"/>
+		</exec>
+	</target>
+
+	<target name="start-tomcat"> 
+		<chmod dir="${j2se_container_home}/bin" includes="*.*" perm="u+x"/>
+		<chmod dir="${j2se_container_home}/bin" includes="*" perm="u+x"/>
+		<exec dir="${j2se_container_home}/bin" executable="nohup" spawn="true">
+			<arg line="startup.sh"/>
+		</exec>
+	</target>
+	
+	<target name="start-container" if="start-container-yes">
+		<antcall target="start-${container_type}"/>
+	</target>
+	
+	<target name="start-mysql" if="start-mysql-yes">
+		<chmod dir="${mysql_home}/bin/" includes="*" perm="u+x"/>
+		<chmod dir="${mysql_home}/bin/" includes="*.*" perm="u+x"/>
+		<chmod dir="${mysql_home}/scripts/" includes="*" perm="u+x"/>
+		<exec dir="${mysql_home}" executable="nohup" spawn="true">
+			<arg line="scripts/mysql_install_db --user==mysql"/>
+		</exec>
+		<sleep seconds="2"/>
+		<exec dir="${mysql_home}" executable="nohup" spawn="true">
+			<arg line="bin/mysqld_safe"/>
+		</exec>
+		<sleep seconds="2"/>	
+	</target>	
+	
+<!--***********************************************************************
+	*** MYSQL DOWNLOAD AND EXTRACTION TARGETS (see install.xml)
+	*********************************************************************** -->
+	<target name="-download-mysql-primary.main">
+		<get src="${mysql.url.primary.linux}" dest="${dir.temp}/${mysql.file.linux}" verbose="yes" ignoreerrors="yes"/>
+		<available file="${dir.temp}/${mysql.file}" property="mysql-downloaded"/>
+	</target>
+
+	<target name="-download-mysql-mirror.main" unless="mysql-downloaded">
+		<get src="${mysql.url.mirror.linux}" dest="${dir.temp}/${mysql.file.linux}" verbose="yes" ignoreerrors="yes"/>
+		<available file="${dir.temp}/${mysql.file.linux}" property="mysql-downloaded"/>
+	</target>
+
+	<target name="-download-mysql-verify.main" unless="mysql-downloaded">
+		<fail>Unable to download MySQL</fail>
+	</target>
+	
+	<target name="-unpack-mysql-extract.main">
+		<mkdir dir="${mysql_home}"/>
+		<untar compression="gzip" src="${dir.temp}/${mysql.file.linux}" dest="${dir.temp}"/>
+		<move todir="${mysql_home}">
+			<fileset dir="${dir.temp}/${mysql.unzip.path.linux}"/>
+		</move>		
+	</target>
+
+	
+	
+</project>

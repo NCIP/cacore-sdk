@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ****************************************************************************************************-->
+<!--                                     caCORE ToolKit Demo Build Script					                 -->
+<!-- ****************************************************************************************************-->
+
+
+<project name="caCORE SDK Client Demo" default="rundemo" basedir=".">
+
+	<property name="conf.dir" value="conf" />
+	<property name="log4j.dir" value="conf/resources/client" />
+	<property name="lib.dir" value="lib" />
+	<property name="src.dir" value="." />
+
+	<path id="cp">
+		<fileset dir="lib">
+			<include name="**/*.jar"/>
+		</fileset>
+		<pathelement path="${conf.dir}"/>
+	</path>
+
+	<!-- ************************************************************************************************-->
+	<!--                                             Run Java Client Demo                                -->
+	<!-- ************************************************************************************************-->
+
+	<target name="rundemo">
+		<javac srcdir="." >
+			<include name="TestClient.java"/>
+			<classpath refid="cp"/>
+			<classpath>
+				<pathelement location="${src.dir}"/>
+			</classpath>
+		</javac>
+		<java classname="TestClient" fork="true">
+			<classpath refid="cp"/>
+			<classpath>
+				<pathelement location="${src.dir}"/>
+			</classpath>
+			<sysproperty key="log4j.configuration"
+						value="${log4j.dir}/log4j.properties"/>
+		</java>
+
+	</target>
+	<!-- ************************************************************************************************-->
+	<!--                                        Run XML Utility Demo                                     -->
+	<!-- ************************************************************************************************-->
+
+	<target name="runXMLdemo">
+		<javac srcdir="." >
+			<include name="TestXML.java"/>
+			<classpath refid="cp"/>
+			<classpath>
+				<pathelement location="${src.dir}"/>
+			</classpath>
+		</javac>
+		<java classname="TestXML" fork="true">
+			<classpath refid="cp"/>
+			<classpath>
+				<pathelement location="${src.dir}"/>
+			</classpath>
+			<sysproperty key="log4j.configuration"
+						value="${log4j.dir}/log4j.properties"/>
+		</java>
+
+	</target>
+
+	<!-- ************************************************************************************************-->
+	<!--                                Run Web Services Client Demo                                     -->
+	<!-- ************************************************************************************************-->
+
+	<target name="runWSdemo">
+		<javac srcdir="." >
+			<include name="WSTestClient.java"/>
+			<classpath refid="cp"/>
+			<classpath>
+				<pathelement location="${src.dir}"/>
+			</classpath>
+		</javac>
+		<java classname="WSTestClient" fork="true">
+			<classpath refid="cp"/>
+			<classpath>
+				<pathelement location="${src.dir}"/>
+			</classpath>
+			<sysproperty key="log4j.configuration"
+						value="${log4j.dir}/log4j.properties"/>
+		</java>
+
+	</target>
+	
+	<!-- ************************************************************************************************-->
+	<!--                                             Run Web Services Security Demo                                -->
+	<!-- ************************************************************************************************-->
+
+	<target name="WSTestClient">
+		<javac srcdir="." >
+			<include name="WSTestClient.java"/>
+			<classpath refid="cp"/>
+			<classpath>
+				<pathelement location="${src.dir}"/>
+			</classpath>
+		</javac>
+		<java classname="WSTestClient" fork="true">
+			<classpath refid="cp"/>
+			<classpath>
+				<pathelement location="${src.dir}"/>
+			</classpath>
+			<sysproperty key="log4j.configuration"
+						value="${log4j.dir}/log4j.properties"/>
+		</java>
+
+	</target>
+		
+	<!-- ************************************************************************************************-->
+	<!--                                             Run Security Demo                                -->
+	<!-- ************************************************************************************************-->
+
+	<target name="TestSecurity">
+		<javac srcdir="." >
+			<include name="TestSecurity.java"/>
+			<classpath refid="cp"/>
+			<classpath>
+				<pathelement location="${src.dir}"/>
+			</classpath>
+		</javac>
+		<java classname="TestSecurity" fork="true">
+			<classpath refid="cp"/>
+			<classpath>
+				<pathelement location="${src.dir}"/>
+			</classpath>
+			<sysproperty key="log4j.configuration"
+						value="${log4j.dir}/log4j.properties"/>
+		</java>
+
+	</target>
+
+	<!-- ************************************************************************************************-->
+	<!--                                             Run Writable API Demo                                -->
+	<!-- ************************************************************************************************-->
+
+	<target name="TestWritableAPI">
+		<javac srcdir="." >
+			<include name="TestWritableAPIClient.java"/>
+			<classpath refid="cp"/>
+			<classpath>
+				<pathelement location="${src.dir}"/>
+			</classpath>
+		</javac>
+		<java classname="TestWritableAPIClient" fork="true">
+			<classpath refid="cp"/>
+			<classpath>
+				<pathelement location="${src.dir}"/>
+			</classpath>
+			<sysproperty key="log4j.configuration"
+						value="${log4j.dir}/log4j.properties"/>
+		</java>
+
+	</target>	
+</project>

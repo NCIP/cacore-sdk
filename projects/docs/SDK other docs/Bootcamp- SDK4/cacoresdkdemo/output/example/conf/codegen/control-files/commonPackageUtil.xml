@@ -1,0 +1,40 @@
+<transformation>
+	<model-access
+		className="gov.nih.nci.codegen.core.access.UML13ModelAccess"
+		xmiURI="file:models/xmi/fixed_cabioExampleDomainModel.xmi"
+		modelName="EA Model"/>
+
+	<filter-chain>
+     <filter
+     	name="model-filter"
+     	className="gov.nih.nci.codegen.core.filter.UML13ModelFilter">
+			<param name="modelName" value="EA Model"/>
+     	</filter>
+	</filter-chain>
+
+	<transformer-chain>
+	 <transformer name="commonpackageutil"
+	 	className="gov.nih.nci.codegen.core.transformer.UML13CommonPackageUtilTransformer">
+
+	 	<param name="basePackage" value="Logical View.Logical Model"/>
+	 	<param name="database" value="oracle"/>
+	  <filter name="classifier" className="gov.nih.nci.codegen.core.filter.UML13ClassifierFilter">
+	   <package>
+	    <include>.*domain.*</include>
+	   </package>
+	  </filter>
+	 </transformer>
+	</transformer-chain>
+
+	<artifact-handler
+		className="gov.nih.nci.codegen.core.handler.SimpleFileHandler">
+
+		<param name="outputDir" value="output/example/src"/>
+		<param name="fileName" value="cacoreBeans.properties"/>
+	</artifact-handler>
+
+</transformation>
+
+
+
+

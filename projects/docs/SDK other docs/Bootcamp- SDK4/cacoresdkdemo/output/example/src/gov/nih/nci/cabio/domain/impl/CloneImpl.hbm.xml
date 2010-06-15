@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="gov.nih.nci.cabio.domain.impl">
+  <class name="CloneImpl" table="CLONE" lazy="true">
+    <cache usage="read-write" />
+    <id name="id" type="java.lang.Long" column="CLONE_ID">
+      <generator class="assigned" />
+    </id>
+    <property name="verified" type="java.lang.Boolean" column="VERIFIED" />
+    <property name="insertSize" type="java.lang.Long" column="INSERT_SIZE" />
+    <property name="accessionNumber" type="java.lang.String" column="ACCESSION_NUMBER" />
+    <property name="name" type="java.lang.String" column="CLONE_NAME" />
+    <property name="version" type="java.lang.String" column="VERSION" />
+    <property name="strain" type="java.lang.String" column="CLONE_STRAIN" />
+    <many-to-one name="library" class="gov.nih.nci.cabio.domain.impl.LibraryImpl" column="LIBRARY_ID" lazy="proxy" />
+    <set name="sequenceCollection" lazy="true" inverse="true">
+      <cache usage="read-write" />
+      <key column="CLONE_ID" />
+      <one-to-many class="gov.nih.nci.cabio.domain.impl.SequenceImpl" />
+    </set>
+  </class>
+</hibernate-mapping>
+

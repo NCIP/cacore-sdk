@@ -1,0 +1,35 @@
+<transformation>
+	<model-access className="gov.nih.nci.codegen.core.access.UML13ModelAccess"
+		xmiURI="file:models/xmi/fixed_cabioExampleDomainModel.xmi"
+		modelName="EA Model"/>
+
+	<filter-chain>
+		<filter name="mef"
+			className="gov.nih.nci.codegen.core.filter.UML13ModelElementFilter"/>
+		<filter name="cf"
+			className="gov.nih.nci.codegen.core.filter.UML13ClassifierFilter">
+			<package>
+				<include>.*domain.*</include>
+			</package>
+			<name>
+			    <exclude></exclude>
+			</name>
+		</filter>
+	</filter-chain>
+	<transformer-chain>
+		<transformer name="hbm"
+			className="gov.nih.nci.codegen.core.transformer.UML13HBMImplTransformer">
+			<param name="omPackage" value="Logical View.Logical Model"/>
+			<param name="dmPackage" value="Logical View.Data Model"/>
+			<generator class="assigned"/>
+	      </transformer>
+	</transformer-chain>
+	<artifact-handler className="gov.nih.nci.codegen.core.handler.ResourceFileHandler">
+		<param name="outputDir" value="output/example/src"/>
+		<param name="basePackage" value="Logical View.Logical Model"/>
+		<param name="classSuffix" value="Impl"/>
+		<param name="fileSuffix" value="hbm.xml"/>
+		<param name="interfaceFlag" value="no"/>
+		<param name="wsFlag" value="no"/>
+	</artifact-handler>
+</transformation>

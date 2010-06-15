@@ -1,0 +1,35 @@
+<transformation>
+	<model-access
+		className="gov.nih.nci.codegen.core.access.UML13ModelAccess"
+		xmiURI="file:@LOGICAL_MODEL@"
+		modelName="EA Model"/>
+	<filter-chain>
+     <filter
+     	name="model-filter"
+     	className="gov.nih.nci.codegen.core.filter.UML13ModelFilter">
+			<param name="modelName" value="EA Model"/>
+     	</filter>
+	</filter-chain>
+
+	<transformer-chain>
+	 <transformer name="mapping"
+	 	className="gov.nih.nci.codegen.core.transformer.UML13CastorMappingTransformer">
+	 	<param name="basePackage" value="Logical View.Logical Model"/>
+	 	<param name="includeAssociations" value="true"/>
+<!-- NOTE!!!  includeFieldHandler should be left as "false" for the unmarshaller -->	 		
+	 	<param name="includeFieldHandler" value="false"/>	
+	  <filter name="classifier" className="gov.nih.nci.codegen.core.filter.UML13ClassifierFilter">
+	   <package>
+	    <include>@INCLUDE_PACKAGE@</include>
+	   </package>
+	  </filter>
+	 </transformer>
+	</transformer-chain>
+
+	<artifact-handler
+		className="gov.nih.nci.codegen.core.handler.SimpleFileHandler">
+		<param name="outputDir" value="@OUTPUTDIR@"/>
+		<param name="fileName" value="unmarshaller-xml-mapping.xml"/>
+	</artifact-handler>
+
+</transformation>

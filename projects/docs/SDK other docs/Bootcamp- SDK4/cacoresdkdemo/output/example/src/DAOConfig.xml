@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DAOConfiguration>
+  <domainObjects name="gov.nih.nci.cabio.domain.Gene,gov.nih.nci.cabio.domain.impl.GeneImpl, gov.nih.nci.cabio.domain.Chromosome,gov.nih.nci.cabio.domain.impl.ChromosomeImpl, gov.nih.nci.cabio.domain.Taxon,gov.nih.nci.cabio.domain.impl.TaxonImpl, gov.nih.nci.cabio.domain.Library,gov.nih.nci.cabio.domain.impl.LibraryImpl, gov.nih.nci.cabio.domain.Clone,gov.nih.nci.cabio.domain.impl.CloneImpl, gov.nih.nci.cabio.domain.Sequence,gov.nih.nci.cabio.domain.impl.SequenceImpl, gov.nih.nci.cabio.domain.Target,gov.nih.nci.cabio.domain.impl.TargetImpl">
+    <DataSource>ORM1</DataSource>
+    <tool>hibernate</tool>
+    <database>oracle</database>
+  </domainObjects>
+  <domainObjects name="gov.nih.nci.XYZ">
+    <DataSource>EXTERNALSERVER</DataSource>
+    <server />
+  </domainObjects>
+</DAOConfiguration>
+

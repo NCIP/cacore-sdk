@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="hqlbuild" default = "all" basedir=".">		
+	<target name="package-system-hql" depends="init-project">
+	    <antcall target="clean"/>
+		<antcall target="download-libs"/>
+                <antcall target="init-project"/>
+                <antcall target="compile-framework-core"/>
+                <antcall target="jar-framework-core"/>
+                <antcall target="fix-ea-core"/>
+                <antcall target="jetc-hql"/>
+		<antcall target="generate-beans-core-hql"/>
+		<antcall target="compile-codegen-core"/>
+		<antcall target="generate-common-role-util-core"/>
+		<antcall target="generate-ehcache-core"/>
+		<antcall target="generate-wsdd-core"/>
+		<!--<antcall target="generate-junit"/> -->
+		<antcall target="generate-hibernate-conf"/>
+		<antcall target="generate-dao-conf-core"/>
+		<antcall target="generate-OR-mapping-core"/>
+		<!--antcall target="add-license"/ -->
+		<antcall target="pack-application"/>
+		<!-- <antcall target="deploy"/> -->
+	</target>
+		<target name="generate-beans-hql" depends="compile-framework,fix-ea,jetc">
+		<antcall target="generate-beans-core-hql"/>
+	</target>
+	<target name="generate-beans-core-hql">
+		<echo message="*****************************************************"/>
+		<echo message="**   Generating Beans ... ...                      **"/>
+		<echo message="*****************************************************"/>
+
+
+		<java classname="gov.nih.nci.codegen.core.GeneratorImpl" fork="true">
+			<classpath refid="cp"/>
+			<classpath>
+				<pathelement location="."/>
+				<pathelement location="build"/>
+			</classpath>
+			<arg value="${properties.dir}/beangeneration.xml"/>
+		</java>
+
+
+		<java classname="gov.nih.nci.codegen.core.GeneratorImpl" fork="true">
+			<classpath refid="cp"/>
+			<classpath>
+				<pathelement location="."/>
+				<pathelement location="build"/>
+			</classpath>
+			<arg value="${properties.dir}/interfacegeneration.xml"/>
+		</java>
+		<copy todir="output/${project_name}/java/gov/nih/nci/cabio/domain">
+							<fileset dir="${conf.dir}">
+								<include name="Ontology.java" />
+								<include name="OntologyRelationship.java" />
+							</fileset>
+		</copy>
+                <copy todir="output/${project_name}/java/gov/nih/nci/cabio/domain/impl" overwrite="true">
+                                                        <fileset dir="${conf.dir}">
+                                                                <include name="GeneImpl.java" />
+                                                                <include name="SNPImpl.java" />
+                                                        </fileset>
+                </copy>
+
+		<java classname="gov.nih.nci.codegen.core.GeneratorImpl" fork="true">
+					<classpath refid="cp"/>
+					<classpath>
+						<pathelement location="."/>
+						<pathelement location="build"/>
+					</classpath>
+					<arg value="${properties.dir}/beanwsgeneration.xml"/>
+		</java>
+
+		<javac srcdir="${model.src.dir}" destdir="${model.build.dir}">
+			<classpath refid="cp"/>
+		</javac>
+	</target>
+	
+	<target name="jetc-hql" unless="jetc-exec">
+                <property name="jetc-exec" value="true" />
+		<jetc template="${javajet.dir}/hqlBeanImpl.javajet" destdir="${model.src.dir}"/>
+		<jetc template="${javajet.dir}/BeanWSImpl.javajet" destdir="${model.src.dir}"/>
+		<jetc template="${javajet.dir}/BeanInterface.javajet" destdir="${model.src.dir}"/>
+		<jetc template="${javajet.dir}/BeanHBJunit.javajet" destdir="${model.src.dir}"/>
+		<javac srcdir="${model.src.dir}" destdir="${model.build.dir}">
+			<classpath refid="cp"/>
+		</javac>
+	</target>
+
+</project>

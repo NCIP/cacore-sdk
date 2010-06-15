@@ -1,0 +1,27 @@
+<deployment xmlns="http://xml.apache.org/axis/wsdd/"
+	xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+<handler name="CSMSOAPHandler" type="java:gov.nih.nci.system.webservice.CSMSOAPHandler"/>
+<service name="exampleService" style="java:RPC" use="literal">
+	<requestFlow>
+		<handler name="CSMSOAPHandler" type="java:gov.nih.nci.system.webservice.CSMSOAPHandler"/>
+	</requestFlow>
+	<parameter name="className" value="gov.nih.nci.system.webservice.WSQuery"/>
+	<parameter name="allowedMethods" value="*"/>
+	<parameter name="extraClasses"
+	value="gov.nih.nci.cabio.domain.ws.Gene,gov.nih.nci.cabio.domain.ws.GeneImpl,gov.nih.nci.cabio.domain.ws.Chromosome,gov.nih.nci.cabio.domain.ws.ChromosomeImpl,gov.nih.nci.cabio.domain.ws.Taxon,gov.nih.nci.cabio.domain.ws.TaxonImpl,gov.nih.nci.cabio.domain.ws.Library,gov.nih.nci.cabio.domain.ws.LibraryImpl,gov.nih.nci.cabio.domain.ws.Clone,gov.nih.nci.cabio.domain.ws.CloneImpl,gov.nih.nci.cabio.domain.ws.Sequence,gov.nih.nci.cabio.domain.ws.SequenceImpl,gov.nih.nci.cabio.domain.ws.Target,gov.nih.nci.cabio.domain.ws.TargetImpl"/>
+<beanMapping xmlns:myNS="urn:ws.domain.cabio.nci.nih.gov"  qname="myNS:Gene" languageSpecificType="java:gov.nih.nci.cabio.domain.ws.Gene" />
+<beanMapping xmlns:myNS="urn:ws.domain.cabio.nci.nih.gov"  qname="myNS:GeneImpl" languageSpecificType="java:gov.nih.nci.cabio.domain.ws.GeneImpl" />
+<beanMapping xmlns:myNS="urn:ws.domain.cabio.nci.nih.gov"  qname="myNS:Chromosome" languageSpecificType="java:gov.nih.nci.cabio.domain.ws.Chromosome" />
+<beanMapping xmlns:myNS="urn:ws.domain.cabio.nci.nih.gov"  qname="myNS:ChromosomeImpl" languageSpecificType="java:gov.nih.nci.cabio.domain.ws.ChromosomeImpl" />
+<beanMapping xmlns:myNS="urn:ws.domain.cabio.nci.nih.gov"  qname="myNS:Taxon" languageSpecificType="java:gov.nih.nci.cabio.domain.ws.Taxon" />
+<beanMapping xmlns:myNS="urn:ws.domain.cabio.nci.nih.gov"  qname="myNS:TaxonImpl" languageSpecificType="java:gov.nih.nci.cabio.domain.ws.TaxonImpl" />
+<beanMapping xmlns:myNS="urn:ws.domain.cabio.nci.nih.gov"  qname="myNS:Library" languageSpecificType="java:gov.nih.nci.cabio.domain.ws.Library" />
+<beanMapping xmlns:myNS="urn:ws.domain.cabio.nci.nih.gov"  qname="myNS:LibraryImpl" languageSpecificType="java:gov.nih.nci.cabio.domain.ws.LibraryImpl" />
+<beanMapping xmlns:myNS="urn:ws.domain.cabio.nci.nih.gov"  qname="myNS:Clone" languageSpecificType="java:gov.nih.nci.cabio.domain.ws.Clone" />
+<beanMapping xmlns:myNS="urn:ws.domain.cabio.nci.nih.gov"  qname="myNS:CloneImpl" languageSpecificType="java:gov.nih.nci.cabio.domain.ws.CloneImpl" />
+<beanMapping xmlns:myNS="urn:ws.domain.cabio.nci.nih.gov"  qname="myNS:Sequence" languageSpecificType="java:gov.nih.nci.cabio.domain.ws.Sequence" />
+<beanMapping xmlns:myNS="urn:ws.domain.cabio.nci.nih.gov"  qname="myNS:SequenceImpl" languageSpecificType="java:gov.nih.nci.cabio.domain.ws.SequenceImpl" />
+<beanMapping xmlns:myNS="urn:ws.domain.cabio.nci.nih.gov"  qname="myNS:Target" languageSpecificType="java:gov.nih.nci.cabio.domain.ws.Target" />
+<beanMapping xmlns:myNS="urn:ws.domain.cabio.nci.nih.gov"  qname="myNS:TargetImpl" languageSpecificType="java:gov.nih.nci.cabio.domain.ws.TargetImpl" />
+</service>
+</deployment>

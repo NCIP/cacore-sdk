@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="caCOREos" basedir=".">
+
+
+<!--***********************************************************************
+	***  J2SE CONTAINER INSTANTIATION TARGETS (see build.xml#deploy-server)
+	*********************************************************************** -->
+	
+	<target name="start-jboss"> 
+		<exec dir="${j2se_container_home}/bin" executable="cmd" spawn="true">
+			<arg line="/C start ${j2se_container_home}/bin/run.bat -c ${jboss_configuration}"/>
+		</exec>
+	</target>
+
+	<target name="start-tomcat"> 
+		<exec dir="${j2se_container_home}/bin" executable="cmd" spawn="true">
+			<arg line="/C start ${j2se_container_home}/bin/startup.bat"/>
+			<env key="JAVA_HOME" value="${java_home}" />
+		</exec>
+	</target>
+	
+	<target name="start-container" if="start-container-yes">
+		<SDKecho message="Starting container"/>
+		<antcall target="start-${container_type}"/>
+	</target>
+
+	<target name="start-mysql" if="start-mysql-yes">
+		<SDKecho message="Starting MySQL"/>
+		<exec dir="${mysql_home}/bin" executable="cmd" spawn="true">
+			<arg line="/C start &quot;${mysql_home}/bin/mysqld.exe --remove&quot;"/>
+		</exec>
+
+		<exec dir="${mysql_home}/bin" executable="cmd" spawn="true">
+			<arg line="/C start &quot;${mysql_home}/bin/mysqld-nt.exe&quot; --defaults-file=&quot;${mysql_home}/my.ini&quot;"/>
+		</exec>
+	</target>
+	
+<!--***********************************************************************
+	*** MYSQL DOWNLOAD AND EXTRACTION TARGETS (see install.xml)
+	*********************************************************************** -->
+	<target name="-download-mysql-primary.main">
+		<SDKecho message="Downloading MySQL"/>
+		<get src="${mysql.url.primary.windows}" dest="${dir.temp}/${mysql.file.windows}" verbose="yes" ignoreerrors="yes"/>
+		<available file="${dir.temp}/${mysql.file}" property="mysql-downloaded"/>
+	</target>
+
+	<target name="-download-mysql-mirror.main" unless="mysql-downloaded">
+		<get src="${mysql.url.mirror.windows}" dest="${dir.temp}/${mysql.file.windows}" verbose="yes" ignoreerrors="yes"/>
+		<available file="${dir.temp}/${mysql.file.windows}" property="mysql-downloaded"/>
+	</target>
+
+	<target name="-download-mysql-verify.main" unless="mysql-downloaded">
+		<fail>Unable to download MySQL</fail>
+	</target>
+		
+	<target name="-unpack-mysql-extract.main">
+		<SDKecho message="Unpacking MySQL"/>
+		<mkdir dir="${mysql_home}"/>
+		<unzip src="${dir.temp}/${mysql.file.windows}" dest="${dir.temp}"/>
+		<move todir="${mysql_home}">
+			<fileset dir="${dir.temp}/${mysql.unzip.path.windows}"/>
+		</move>		
+
+<!--	
+		<delete file="${dir.conf.download}/my.cnf"/>	
+	    <copy file="${dir.conf.download}/my.cnf.template" tofile="c:/my.cnf" overwrite="yes">
+	    	<filterset>
+	    		<filter token="MYSQL_HOME" value="${mysql_home}"/>
+	    	</filterset>
+	    </copy>
+-->	    
+	    <copy file="${dir.conf.download}/my.ini.template" tofile="${mysql_home}/my.ini" overwrite="yes">
+	    	<filterset>
+	    		<filter token="MYSQL_HOME" value="${mysql_home}"/>
+	    	</filterset>
+	    </copy>		
+	</target>
+	
+
+
+</project>

@@ -1,0 +1,57 @@
+
+
+JBoss daily test results
+
+SUMMARY
+
+Number of tests run:   3592
+
+--------------------------------------------
+
+Successful tests:      3591
+
+Errors:                0
+
+Failures:              1
+
+--------------------------------------------
+
+
+
+[time of test: 2006-05-13.22-57 GMT]
+[java.version: 1.4.1_07]
+[java.vendor: Sun Microsystems Inc.]
+[java.vm.version: 1.4.1_07-b02]
+[java.vm.name: Java HotSpot(TM) Client VM]
+[java.vm.info: mixed mode]
+[os.name: Linux]
+[os.arch: i386]
+[os.version: 2.4.21-40.ELsmp]
+
+Useful resources:
+
+- http://jboss.sourceforge.net/junit-results/32/2006-05-13.22-57 for
+the junit report of this test.
+
+
+NOTE: If there are any errors shown above - this mail is only highlighting 
+them - it is NOT indicating that they are being looked at by anyone.
+
+It is assumed that whoever makes change(s) to jboss that 
+break the test will be fixing the test or jboss, as appropriate!
+
+--------------------------------------------
+
+
+
+DETAILS OF ERRORS
+
+
+
+Suite:       org.jboss.test.cluster.test.DRMTestCase(Default-UDP)
+Test:        testNonConflictingAddRemoveDeadlock
+Type:        failure
+Exception:   junit.framework.AssertionFailedError
+Message:     Acquired thread 5
+---------------------------------
+

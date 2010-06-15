@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="gov.nih.nci.cabio.domain">
+  <class name="Sequence" table="SEQUENCE" lazy="true" polymorphism="explicit">
+    <cache usage="read-write" />
+    <id name="id" type="java.lang.Long" column="SEQUENCE_ID">
+      <generator class="assigned" />
+    </id>
+    <property name="length" type="java.lang.Long" column="LENGTH" />
+    <property name="isReferenceSequence" type="java.lang.Boolean" column="IS_REF_SEQUENCE" />
+    <property name="description" type="java.lang.String" column="DESCRIPTION" />
+    <property name="asciiString" type="java.lang.String" column="ASCII_STRING" />
+    <property name="accessionNumber" type="java.lang.String" column="ACCESSION_NUMBER" />
+    <property name="accessionNumberVersion" type="java.lang.String" column="VERSION" />
+    <property name="type" type="java.lang.Long" column="SEQUENCE_TYPE" />
+    <many-to-one name="clone" class="gov.nih.nci.cabio.domain.Clone" column="CLONE_ID" lazy="proxy" />
+    <set name="geneCollection" table="GENE_SEQUENCE" lazy="true" inverse="true">
+      <cache usage="read-write" />
+      <key column="SEQUENCE_ID" />
+      <many-to-many class="gov.nih.nci.cabio.domain.Gene" column="GENE_ID" />
+    </set>
+  </class>
+</hibernate-mapping>
+

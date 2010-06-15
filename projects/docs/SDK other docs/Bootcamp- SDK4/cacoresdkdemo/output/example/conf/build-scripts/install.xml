@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="caCORESDKInstall">
+	
+	<condition property="install-tomcat-yes" value="true">
+		<istrue value="${install_tomcat}"/>
+	</condition>
+	<condition property="install-mysql-yes" value="true">
+		<istrue value="${install_mysql}"/>
+	</condition>	
+	
+	<target name="install-tomcat" 
+		depends="-install-tomcat.main"/>
+
+	<target name="-install-tomcat.main" 
+		if="install-tomcat-yes">
+		<!--<property url="${url.core.install.properties}"/>-->
+		<available file="${j2se_container_home}" type="dir" property="tomcat-exists-true"/>
+		<antcall target="download-tomcat"/>
+		<antcall target="unpack-tomcat"/>
+	</target>
+	
+	<target name="download-tomcat"
+		depends="create-output-dirs,-download-tomcat-primary.main,-download-tomcat-mirror.main,-download-tomcat-verify.main"
+		if="install-tomcat-yes">
+	</target>
+
+	<target name="-download-tomcat-primary.main">
+		<get src="${tomcat.url.primary}" dest="${dir.temp}/${tomcat.file}" verbose="yes" ignoreerrors="yes"/>
+		<available file="${dir.temp}/${tomcat.file}" property="tomcat-downloaded"/>
+	</target>
+
+	<target name="-download-tomcat-mirror.main" 
+		unless="tomcat-downloaded">
+		<get src="${tomcat.url.mirror}" dest="${dir.temp}/${tomcat.file}" verbose="yes" ignoreerrors="yes"/>
+		<available file="${dir.temp}/${tomcat.file}" property="tomcat-downloaded"/>
+	</target>
+
+	<target name="-download-tomcat-verify.main" 
+		unless="tomcat-downloaded">
+		<fail>Unable to download Tomcat</fail>
+	</target>
+	
+	<target name="unpack-tomcat"
+		depends="-unpack-tomcat-confirm.main,-unpack-tomcat-extract.main"/>
+
+	<target name="-unpack-tomcat-confirm.main" 
+		if="tomcat-exists-true">
+		  <input message="The directory you have specified for Tomcat, ${j2se_container_home}, already exists.  Do you want to overwrite it?"
+		    validargs="y,n"
+		    addproperty="tomcat-overwrite"/>
+		  <condition property="tomcat-overwrite-yes">
+		    <equals arg1="y" arg2="${tomcat-overwrite}"/>
+		  </condition>
+		  <fail if="tomcat-overwrite-yes">Tomcat installation aborted</fail>
+	</target>
+	
+	<target name="-unpack-tomcat-extract.main">
+		<mkdir dir="${j2se_container_home}"/>
+		<unzip src="${dir.temp}/${tomcat.file}" dest="${dir.temp}"/>
+		<move todir="${j2se_container_home}">
+			<fileset dir="${dir.temp}/${tomcat.unzip.path}"/>
+		</move>		
+	</target>
+	
+	<target name="install-mysql"
+		depends="-install-mysql.main"/>
+
+	<target name="-install-mysql.main" if="install-mysql-yes">
+		<!--<property url="${url.core.install.properties}"/>-->
+		<available file="${mysql_home}" type="dir" property="mysql-exists-true"/>
+		<antcall target="download-mysql"/>
+		<antcall target="unpack-mysql"/>
+	</target>
+
+	<target name="download-mysql"
+		depends="create-output-dirs,-download-mysql-primary.main,-download-mysql-mirror.main,-download-mysql-verify.main">
+	</target>
+
+	<target name="unpack-mysql"
+		depends="-unpack-mysql-extract.main"/>
+	
+	
+	<!-- The following targets are OS-specific and can be found in 
+			os.${os_flavor}.xml:
+			
+			-download-mysql-primary.main  
+			-download-mysql-mirror.main
+			-download-mysql-verify.main
+			-unpack-mysql-confirm.main 
+			-unpack-mysql-extract.main 
+			
+	 -->
+
+	
+</project>
+

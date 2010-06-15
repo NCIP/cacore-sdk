@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+  <session-factory>
+    <mapping resource="gov/nih/nci/cabio/domain/Gene.hbm.xml" />
+    <mapping resource="gov/nih/nci/cabio/domain/impl/GeneImpl.hbm.xml" />
+    <mapping resource="gov/nih/nci/cabio/domain/Chromosome.hbm.xml" />
+    <mapping resource="gov/nih/nci/cabio/domain/impl/ChromosomeImpl.hbm.xml" />
+    <mapping resource="gov/nih/nci/cabio/domain/Taxon.hbm.xml" />
+    <mapping resource="gov/nih/nci/cabio/domain/impl/TaxonImpl.hbm.xml" />
+    <mapping resource="gov/nih/nci/cabio/domain/Library.hbm.xml" />
+    <mapping resource="gov/nih/nci/cabio/domain/impl/LibraryImpl.hbm.xml" />
+    <mapping resource="gov/nih/nci/cabio/domain/Clone.hbm.xml" />
+    <mapping resource="gov/nih/nci/cabio/domain/impl/CloneImpl.hbm.xml" />
+    <mapping resource="gov/nih/nci/cabio/domain/Sequence.hbm.xml" />
+    <mapping resource="gov/nih/nci/cabio/domain/impl/SequenceImpl.hbm.xml" />
+    <mapping resource="gov/nih/nci/cabio/domain/Target.hbm.xml" />
+    <mapping resource="gov/nih/nci/cabio/domain/impl/TargetImpl.hbm.xml" />
+  </session-factory>
+</hibernate-configuration>
+

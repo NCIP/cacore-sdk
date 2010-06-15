@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="caCORESDK Installation and Deployment" default="" basedir=".">
+	<description>Build script for caCORE Software Development Kit</description>
+
+<!--***********************************************************************
+*** PROPERTY FILES
+*********************************************************************** -->
+	<property file="conf/deploy.properties" />
+	<property file="build.codegen.properties" />
+	<property file="${dir.conf.scripts}}/${file.properties.custom}" />
+
+<!--***********************************************************************
+	*** OTHER INCLUDED ANT BUILD FILES
+	*********************************************************************** -->
+	<import file="build.common.xml"/>
+
+<!--***********************************************************************
+	*** THE TARGETS
+	*********************************************************************** -->
+	<target name="deployWS"
+		depends="-deployWS.main,-deployWS.custom"
+		description="Deploy Web services to system described in deploy.properties"/>
+
+	<target name="-deployWS.main" unless="deployWS.main.ignore">
+		<SDKecho message="Deploying web services"/>
+		<echo message="Deploying to ${url.project.axisservice}"/>
+		<java classname="org.apache.axis.client.AdminClient" fork="true">
+			<classpath refid="classpath"/>
+			<arg value="-l${url.project.axisservice}"/>
+			<arg value="${dir.output.project.src}/${file.wsdd.deploy}"/>
+		</java>
+	</target>
+
+	<target name="undeployWS"
+		depends="-undeployWS.main,-undeployWS.custom"
+		description="Un-deploy Web services to system described in deploy.properties"/>
+
+	<target name="-undeployWS.main" unless="undeployWS.main.ignore">
+		<SDKecho message="Undeploying web services"/>
+		<java classname="org.apache.axis.client.AdminClient" fork="true">
+			<classpath refid="classpath"/>
+			<arg value="-l${url.project.axisservice}"/>
+			<arg value="${dir.output.conf.webservice}/${file.wsdd.undeploy}"/>
+		</java>
+	</target>
+
+	<target name="deploy-server"
+		depends="-deploy-server.main,-deploy-server.custom"
+		description="Deploys system to J2EE container"/>
+
+	<target name="-deploy-server.main" depends="copy-server-file,start-container" unless="deploy-server.main.ignore"/>
+
+	<target name="copy-server-file"
+		depends="-copy-server-file.main,-copy-server-file.custom"
+		description="Copy .war file to J2EE container deployment directory"/>
+
+	<target name="-copy-server-file.main" unless="copy-server-file.main.ignore">
+		<delete dir="${container-deploy-path}/${project_name}" quiet="true"/>
+		<delete file="${container-deploy-path}/${project_name}.war" quiet="true"/>
+		<copy tofile="${container-deploy-path}/${project_name}.war">
+			<fileset dir="${dir.output.project.package}">
+				<filename name="${project_name}.war"/>
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="build-schema"
+		depends="-build-schema.main,-build-schema.custom"
+		description="Creates database user and loads schema and data (when specified in deploy.properties)"/>
+
+	<target name="-build-schema.main"
+		depends="install-mysql,start-mysql,create-user,create-schema,import-data"
+		unless="build-schema.main.ignore"/>
+
+</project>

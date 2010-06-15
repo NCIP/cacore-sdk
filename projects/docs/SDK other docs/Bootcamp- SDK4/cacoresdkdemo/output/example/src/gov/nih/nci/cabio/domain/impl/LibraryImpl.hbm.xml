@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="gov.nih.nci.cabio.domain.impl">
+  <class name="LibraryImpl" table="LIBRARY" lazy="true">
+    <cache usage="read-write" />
+    <id name="id" type="java.lang.Long" column="LIBRARY_ID">
+      <generator class="assigned" />
+    </id>
+    <property name="type" type="java.lang.String" column="LIBRARY_TYPE" />
+    <property name="name" type="java.lang.String" column="LIBRARY_NAME" />
+    <property name="keyword" type="java.lang.String" column="KEYWORD" />
+    <property name="description" type="java.lang.String" column="DESCRIPTION" />
+    <property name="RSite1" type="java.lang.String" column="R_SITE_1" />
+    <property name="RSite2" type="java.lang.String" column="R_SITE_2" />
+    <property name="unigeneId" type="java.lang.Long" column="UNIGENE_ID" />
+    <property name="creationDate" type="java.util.Date" column="CREATE_DATE" />
+    <property name="labHost" type="java.lang.String" column="LAB_HOST" />
+    <property name="clonesToDate" type="java.lang.Long" column="CLONES_TO_DATE" />
+    <property name="sequencesToDate" type="java.lang.Long" column="SEQUENCES_TO_DATE" />
+    <set name="cloneCollection" lazy="true" inverse="true">
+      <cache usage="read-write" />
+      <key column="LIBRARY_ID" />
+      <one-to-many class="gov.nih.nci.cabio.domain.impl.CloneImpl" />
+    </set>
+    <set name="geneCollection" table="LIBRARY_GENE" lazy="true" inverse="true">
+      <cache usage="read-write" />
+      <key column="LIBRARY_ID" />
+      <many-to-many class="gov.nih.nci.cabio.domain.impl.GeneImpl" column="GENE_ID" />
+    </set>
+  </class>
+</hibernate-mapping>
+

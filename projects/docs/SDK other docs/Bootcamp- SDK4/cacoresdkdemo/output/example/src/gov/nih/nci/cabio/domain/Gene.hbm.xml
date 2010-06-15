@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="gov.nih.nci.cabio.domain">
+  <class name="Gene" table="GENE" lazy="true" polymorphism="explicit">
+    <cache usage="read-write" />
+    <id name="id" type="java.lang.Long" column="GENE_ID">
+      <generator class="assigned" />
+    </id>
+    <property name="title" type="java.lang.String" column="GENE_TITLE" />
+    <property name="symbol" type="java.lang.String" column="GENE_SYMBOL" />
+    <property name="locusLinkSummary" type="java.lang.String" column="LOCUS_LINK_SUMMARY" />
+    <property name="OMIMID" type="java.lang.String" column="OMIM_ID" />
+    <property name="locusLinkId" type="java.lang.String" column="LOCUS_LINK_ID" />
+    <property name="clusterId" type="java.lang.Long" column="CLUSTER_ID" />
+    <set name="libraryCollection" table="LIBRARY_GENE" lazy="true">
+      <cache usage="read-write" />
+      <key column="GENE_ID" />
+      <many-to-many class="gov.nih.nci.cabio.domain.Library" column="LIBRARY_ID" />
+    </set>
+    <many-to-one name="chromosome" class="gov.nih.nci.cabio.domain.Chromosome" column="CHROMOSOME_ID" lazy="proxy" />
+    <many-to-one name="taxon" class="gov.nih.nci.cabio.domain.Taxon" column="TAXON_ID" lazy="proxy" />
+    <set name="sequenceCollection" table="GENE_SEQUENCE" lazy="true">
+      <cache usage="read-write" />
+      <key column="GENE_ID" />
+      <many-to-many class="gov.nih.nci.cabio.domain.Sequence" column="SEQUENCE_ID" />
+    </set>
+    <set name="targetCollection" table="GENE_TARGET" lazy="true">
+      <cache usage="read-write" />
+      <key column="GENE_ID" />
+      <many-to-many class="gov.nih.nci.cabio.domain.Target" column="TARGET_ID" />
+    </set>
+  </class>
+</hibernate-mapping>
+

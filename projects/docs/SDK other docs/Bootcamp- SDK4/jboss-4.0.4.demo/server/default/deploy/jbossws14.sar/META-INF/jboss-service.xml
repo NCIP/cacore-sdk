@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- $Id: jboss-service.xml 42 2006-03-31 09:07:47Z thomas.diesler@jboss.com $ -->
+
+<server>
+
+   <!-- ==================================================================== -->
+   <!-- JBossWS Services                                                     -->
+   <!-- ==================================================================== -->
+
+   <!--
+     The main JBossWS service, which manages the deployed service endpoints
+   -->
+   <mbean name="jboss.ws:service=ServiceEndpointManager" code="org.jboss.ws.server.ServiceEndpointManager">
+      <!--
+         The WSDL, that is a required deployment artifact for an endpoint, has a <soap:address>
+         element which points to the location of the endpoint. JBoss supports rewriting of that soap address.
+
+         If the content of <soap:address> is a valid URL, JBoss will not rewrite it unless AlwaysModifySOAPAddress=true
+         If the content of <soap:address> is not a valid URL, JBoss will rewrite it using the attribute values given below.
+      -->
+      <attribute name="WebServiceHost">${jboss.bind.address}</attribute>
+      <attribute name="WebServiceSecurePort">8443</attribute>
+      <attribute name="WebServicePort">8080</attribute>
+      <attribute name="AlwaysModifySOAPAddress">true</attribute>
+
+      <attribute name="ServiceEndpointInvokerJSE">org.jboss.ws.server.ServiceEndpointInvokerJSE</attribute>
+      <attribute name="ServiceEndpointInvokerEJB21">org.jboss.ws.server.ServiceEndpointInvokerEJB21</attribute>
+      <attribute name="ServiceEndpointInvokerEJB3">org.jboss.ws.server.ServiceEndpointInvokerEJB3</attribute>
+      <attribute name="ServiceEndpointInvokerMDB">org.jboss.ws.server.ServiceEndpointInvokerMDB</attribute>
+   </mbean>
+
+   <!--
+     A deployer service for JSE endpoints.
+   -->
+   <mbean name="jboss.ws:service=WebServiceDeployerJSE" code="org.jboss.ws.server.WebServiceDeployerJSE">
+      <depends-list optional-attribute-name="Interceptables">
+         <depends-list-element>jboss.web:service=WebServer</depends-list-element>
+      </depends-list>
+   </mbean>
+
+   <!--
+     A deployer service for EJB2.1 endpoints.
+   -->
+   <mbean name="jboss.ws:service=WebServiceDeployerEJB21" code="org.jboss.ws.server.WebServiceDeployerEJB21">
+      <depends-list optional-attribute-name="Interceptables">
+         <depends-list-element>jboss.ejb:service=EJBDeployer</depends-list-element>
+      </depends-list>
+   </mbean>
+
+   <!--
+     A deployer service for EJB3 endpoints.
+   -->
+   <!--
+   <mbean name="jboss.ws:service=WebServiceDeployerEJB3" code="org.jboss.ws.server.WebServiceDeployerEJB3">
+      <depends-list optional-attribute-name="Interceptables">
+         <depends-list-element>jboss.ejb3:service=EJB3Deployer</depends-list-element>
+      </depends-list>
+   </mbean>
+   -->
+
+   <!--
+     A deployer service for WS clients.
+   -->
+   <mbean name="jboss.ws:service=WebServiceClientDeployer" code="org.jboss.ws.server.WebServiceClientDeployer">
+      <depends>jboss:service=Naming</depends>
+   </mbean>
+
+   <!--
+     A deployer service for JSE endpoints that are nested in service archives (sar).
+   -->
+   <mbean name="jboss.ws:service=WebServiceDeployerNestedJSE" code="org.jboss.ws.server.WebServiceDeployerNestedJSE">
+      <depends optional-attribute-name="MainDeployer" proxy-type="attribute">jboss.system:service=MainDeployer</depends>
+      <depends>jboss.ws:service=WebServiceDeployerJSE</depends>
+   </mbean>
+
+   <!--
+     A subscription manager for WS-Eventing
+   -->
+   <mbean name="jboss.ws.eventing:service=SubscriptionManager" code="org.jboss.ws.eventing.mgmt.SubscriptionManager">
+      <depends>jboss:service=Naming</depends>
+   </mbean>
+
+</server>

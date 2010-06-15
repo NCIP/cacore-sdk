@@ -1,0 +1,87 @@
+<%@ jet package="gov.nih.nci.codegen.core.template.jet" 
+        class="PojoBean"
+        skeleton="BeanSkel.skeleton" %>
+<%
+	Classifier klass = (Classifier)context.get("modelElement");
+	String basePkg = (String)context.get("basePackage");
+	UmlClass superClass = UML13Utils.getSuperClass((UmlClass)klass);
+	String pkgName = UML13Utils.getNamespaceName(UML13Utils.getPackage(UML13Utils.getModel(klass), basePkg), klass);
+	String fullyQualifiedClassName = pkgName + "." + klass.getName();
+	
+%>
+package <%=pkgName%>;
+
+import <%=pkgName%>.*;
+import java.util.*;
+
+/**
+ * <!-- LICENSE_TEXT_START -->
+ * <!-- LICENSE_TEXT_END -->
+ */
+ 
+<%=UML13JavaSourceHelper.getClassJavadoc(klass)%>
+public <% if (klass.isAbstract()){%> abstract <%}%> class <%=klass.getName()%> 
+<% if(superClass != null){ %> extends <%=superClass.getName()%> <% } %>	implements java.io.Serializable 
+{
+	private static final long serialVersionUID = 1234567890L;
+<%//Iterate through all the attributes and generate getters and setters for the simple attributes%>
+<% for(Iterator i = UML13Utils.getAttributes((UmlClass)klass).iterator(); i.hasNext();){ %>
+	<% Attribute att = (Attribute)i.next(); %>
+	<% String attTypeName = (getQualifiedName(att.getType(), basePkg).startsWith("."))?getQualifiedName(att.getType(), basePkg).substring(1)+att.getName():getQualifiedName(att.getType(), basePkg); %>	
+	<%=att.getVisibility().toString().substring(3)%> <%=attTypeName%> <%=att.getName()%>;
+	public <%=attTypeName%> get<%=capFirst(att.getName())%>()
+	{
+		return <%=att.getName()%>;
+	}
+	public void set<%=capFirst(att.getName())%>(<%=attTypeName%> <%=att.getName()%>)
+	{
+		this.<%=att.getName()%> = <%=att.getName()%>;
+	}
+<% } %>
+<%//Iterate through all the association and generate getters and setters for the association%>
+<% for(Iterator i = UML13Utils.getAssociationEnds(klass).iterator(); i.hasNext();){%>
+	<% AssociationEnd thisEnd = (AssociationEnd)i.next();
+		AssociationEnd otherEnd = (AssociationEnd)UML13Utils.getOtherAssociationEnd(thisEnd);
+  		String fullyQualifiedTargetClassName = getQualifiedName(otherEnd.getType(), basePkg);
+  	%>
+	<% if(otherEnd.isNavigable()){ %>
+		<% if(UML13Utils.isMany2Many(thisEnd, otherEnd) || UML13Utils.isOne2Many(thisEnd, otherEnd)){ %>
+		<%//Other end of the association is MANY%>
+	private java.util.Collection <%=otherEnd.getName()%> = new java.util.HashSet();
+	public java.util.Collection get<%=capFirst(otherEnd.getName())%>()
+	{
+		return <%=otherEnd.getName()%>;
+	}
+	
+	public void set<%=capFirst(otherEnd.getName())%>(java.util.Collection <%=otherEnd.getName()%>)
+	{
+		this.<%=otherEnd.getName()%> = <%=otherEnd.getName()%>;
+	}	
+		<% } else if( UML13Utils.isMany2One(thisEnd, otherEnd)|| UML13Utils.isOne2One(thisEnd, otherEnd)){ %>
+		<%//Other end of the association is ONE%>
+	private <%=fullyQualifiedTargetClassName%> <%=otherEnd.getName()%>;
+	public <%=fullyQualifiedTargetClassName%> get<%=capFirst(otherEnd.getName())%>()
+	{
+		return <%=otherEnd.getName()%>;	
+	}
+
+	public void set<%=capFirst(otherEnd.getName())%>(<%=fullyQualifiedTargetClassName%> <%=otherEnd.getName()%>)
+	{
+		this.<%=otherEnd.getName()%> = <%=otherEnd.getName()%>;
+	}
+		<% }else{ %>
+			<% if(true) throw new RuntimeException("Unknown association multiplicity: " + thisEnd.getType().getName() + "." + thisEnd.getName() + ".upper=" + ((MultiplicityRange)thisEnd.getMultiplicity().getRange().iterator().next()).getUpper() + ", " + otherEnd.getType().getName() + "." + otherEnd.getName() + ".upper=" + ((MultiplicityRange)otherEnd.getMultiplicity().getRange().iterator().next()).getUpper()); %>
+		<% } %>
+	<% }else{//end if otherEnd.isNavigable() %>
+		<% if(otherEnd.getAggregation().equals(AggregationKindEnum.AK_AGGREGATE)){ %>
+	private Long <%=otherEnd.getName()%>Id;
+	public Long get<%=capFirst(otherEnd.getName())%>Id()
+	{
+		return <%=otherEnd.getName()%>Id;
+	}
+		<% } %>
+	<% } %>
+<% } %>
+
+
+}

@@ -1,0 +1,204 @@
+<%@ jet package="gov.nih.nci.codegen.core.template.jet" 
+        class="BeanImpl"
+        skeleton="BeanSkel.skeleton" %>
+
+<%
+Classifier klass = (Classifier)context.get("modelElement");
+String basePkg = (String)context.get("basePackage");
+String basePkg1 = null;
+String isAbstract = new String();
+
+if (klass.isAbstract()) {
+  isAbstract="abstract";
+} 
+if (isAbstract.equals("abstract")){
+   
+}
+%>
+
+package <%=UML13Utils.getNamespaceName(UML13Utils.getPackage(UML13Utils.getModel(klass), basePkg), klass)%>.impl;
+import <%=UML13Utils.getNamespaceName(UML13Utils.getPackage(UML13Utils.getModel(klass), basePkg), klass)%>.*;
+import gov.nih.nci.system.applicationservice.*;
+import java.util.*;
+<%
+//import org.omg.uml.modelmanagement.UmlPackage;
+%>
+
+public <% if (isAbstract.equals("abstract")) {%> <%=isAbstract%><%}%> class <%=klass.getName()%>Impl 
+<% UmlClass superClass = UML13Utils.getSuperClass((UmlClass)klass); %>
+<% if(superClass != null){ %>
+    extends <%=superClass.getName()%>Impl
+<% } %>
+	implements java.io.Serializable, <%=klass.getName()%> 
+{
+	private static final long serialVersionUID = 1234567890L;
+
+	<% for(Iterator i = UML13Utils.getAttributes((UmlClass)klass).iterator(); i.hasNext();){ %>
+	   <% Attribute att = (Attribute)i.next(); %>
+	   <%=att.getVisibility().toString().substring(3)%> <% if(getQualifiedName(att.getType(), basePkg).startsWith(".")){%><%=getQualifiedName(att.getType(), basePkg).substring(1)%> <%=att.getName()%>;<%} else {%><%=getQualifiedName(att.getType(), basePkg)%> <%=att.getName()%>;<%}%>
+	   public <%if(getQualifiedName(att.getType(), basePkg).startsWith(".")){%><%=getQualifiedName(att.getType(), basePkg).substring(1)%><%} else { %> <%=getQualifiedName(att.getType(),basePkg)%><%}%> get<%=capFirst(att.getName())%>(){
+	      return <%=att.getName()%>;
+	   }
+	   public void set<%=capFirst(att.getName())%>(<% if(getQualifiedName(att.getType(), basePkg).startsWith(".")) {%><%=getQualifiedName(att.getType(), basePkg).substring(1)%> <%=att.getName()%>)<%} else {%> <%=getQualifiedName(att.getType(), basePkg)%> <%=att.getName()%>)<% } %>{
+	      this.<%=att.getName()%> = <%=att.getName()%>;
+	   }
+	<% } %>
+
+	<% for(Iterator i = UML13Utils.getAssociationEnds(klass).iterator(); i.hasNext();){%>
+	   <% AssociationEnd thisEnd = (AssociationEnd)i.next(); %>
+	   <% AssociationEnd otherEnd = (AssociationEnd)UML13Utils.getOtherAssociationEnd(thisEnd); %>
+	   <% if(otherEnd.isNavigable()){ %>
+	      <% if(UML13Utils.isMany2Many(thisEnd, otherEnd) || UML13Utils.isOne2Many(thisEnd, otherEnd)){ %>
+			private java.util.Collection <%=otherEnd.getName()%> = new java.util.HashSet();
+			public java.util.Collection get<%=capFirst(otherEnd.getName())%>(){
+			try{
+			   if(<%=otherEnd.getName()%>.size() == 0) {}
+		           } catch(Exception e) {			     
+			      ApplicationService applicationService = ApplicationService.getApplicationService();
+			      try {
+			      
+			      <% if (!isAbstract.equals("abstract")) {%>
+			         <% if (extendsOntologyRelationship(otherEnd.getType())) { %>
+			         	<%=UML13Utils.getNamespaceName(UML13Utils.getPackage(UML13Utils.getModel(klass), basePkg), klass)%>.<%=klass.getName()%> thisIdSet = new <%=UML13Utils.getNamespaceName(UML13Utils.getPackage(UML13Utils.getModel(klass), basePkg), klass)%>.impl.<%=klass.getName()%>Impl();
+			         	thisIdSet.setId(this.getId()); 
+			         	<%=getQualifiedName(otherEnd.getType(), basePkg)%> obj = new <%=UML13Utils.getNamespaceName(UML13Utils.getPackage(UML13Utils.getModel(otherEnd.getType()), basePkg), otherEnd.getType())%>.impl.<%=otherEnd.getType().getName()%>Impl();
+				 	<%if(otherEnd.getName().startsWith("parent")) { %>
+				 		obj.setChild<%=thisEnd.getType().getName()%>(thisIdSet);
+				 	<%} else {%>
+				 	        obj.setParent<%=thisEnd.getType().getName()%>(thisIdSet);
+				 	<% } %>
+				 	java.util.Collection resultList = applicationService.hqlSearch("<%=getQualifiedName(otherEnd.getType(), basePkg)%>", obj);				 
+				 	
+				 	<%=otherEnd.getName()%> = resultList;  
+				 	return resultList;
+			         <% } else { %>
+				 	<%=UML13Utils.getNamespaceName(UML13Utils.getPackage(UML13Utils.getModel(klass), basePkg), klass)%>.<%=klass.getName()%> thisIdSet = new <%=UML13Utils.getNamespaceName(UML13Utils.getPackage(UML13Utils.getModel(klass), basePkg), klass)%>.impl.<%=klass.getName()%>Impl();
+			         	thisIdSet.setId(this.getId());
+			         	java.util.List resultList = applicationService.hqlSearch("<%=getQualifiedName(otherEnd.getType(), basePkg)%>", thisIdSet);				 
+				 	<%=otherEnd.getName()%> = resultList;  
+				 	return resultList;
+				 <% } %>
+			      <% } else { %>
+				 java.util.List resultList = applicationService.hqlSearch("<%=getQualifiedName(otherEnd.getType(), basePkg)%>", this);	
+				 return resultList;	 
+				 <% } %>
+			      }catch(Exception ex) 
+			   { }
+			   }	
+	              return <%=otherEnd.getName()%>;
+	          }
+			   
+			   
+			   
+			   
+			   
+	      <% } else if( UML13Utils.isMany2One(thisEnd, otherEnd) ){ %>
+			
+			<%
+			String fullInterfaceName=getQualifiedName(otherEnd.getType(), basePkg);
+		        String implName=fullInterfaceName.substring(fullInterfaceName.lastIndexOf(".")+1)+"Impl";
+			String fullBeanName = fullInterfaceName.substring(0, fullInterfaceName.lastIndexOf("."))+".impl."+implName;
+			%>
+			
+			
+			private <%=fullInterfaceName%> <%=otherEnd.getName()%>;
+			public <%=getQualifiedName(otherEnd.getType(), basePkg)%> get<%=capFirst(otherEnd.getName())%>(){
+                          ApplicationService applicationService = ApplicationService.getApplicationService();
+			  <%=UML13Utils.getNamespaceName(UML13Utils.getPackage(UML13Utils.getModel(klass), basePkg), klass)%>.<%=klass.getName()%> thisIdSet = new <%=UML13Utils.getNamespaceName(UML13Utils.getPackage(UML13Utils.getModel(klass), basePkg), klass)%>.impl.<%=klass.getName()%>Impl();
+			  thisIdSet.setId(this.getId());
+			  <% if(extendsOntology(otherEnd.getType()) && (extendsOntology(thisEnd.getType()) || extendsOntologyRelationship(thisEnd.getType()))) { %>
+			   List relations = new ArrayList();
+			   relations.add(thisIdSet);
+			   <%=getQualifiedName(otherEnd.getType(), basePkg)%> obj = new <%=UML13Utils.getNamespaceName(UML13Utils.getPackage(UML13Utils.getModel(otherEnd.getType()), basePkg), otherEnd.getType())%>.impl.<%=otherEnd.getType().getName()%>Impl();
+                           <%if(otherEnd.getName().startsWith("parent")) { %>
+			   	obj.setChild<%=capFirst(thisEnd.getType().getName())%>Collection(relations);
+			   <%} else {%>
+			   	obj.setParent<%=capFirst(thisEnd.getType().getName())%>Collection(relations);
+			   <% } %>
+			  try {
+			  	java.util.List resultList = applicationService.hqlSearch("<%=getQualifiedName(otherEnd.getType(), basePkg)%>", obj);				 
+			  	if (resultList!=null && resultList.size()>0) {
+			  	<%=otherEnd.getName()%> = (<%=getQualifiedName(otherEnd.getType(), basePkg)%>)resultList.get(0);
+		          }
+			  <% } else {%>
+			  try {
+			     java.util.List resultList = applicationService.hqlSearch("<%=getQualifiedName(otherEnd.getType(), basePkg)%>", thisIdSet);				 
+		             if (resultList!=null && resultList.size()>0) {
+		                <%=otherEnd.getName()%> = (<%=getQualifiedName(otherEnd.getType(), basePkg)%>)resultList.get(0);
+		             }
+		          <% } %>
+			  } catch(Exception ex) { }
+			  return <%=otherEnd.getName()%>;			
+                        }
+		   
+	      <% }else if(UML13Utils.isOne2One(thisEnd, otherEnd)){ %>
+<%
+			String fullInterfaceName=getQualifiedName(otherEnd.getType(), basePkg);
+		        String implName=fullInterfaceName.substring(fullInterfaceName.lastIndexOf(".")+1)+"Impl";
+			String fullBeanName = fullInterfaceName.substring(0, fullInterfaceName.lastIndexOf("."))+".impl."+implName;
+			%>
+			
+			
+			private <%=fullInterfaceName%> <%=otherEnd.getName()%>;
+			public <%=getQualifiedName(otherEnd.getType(), basePkg)%> get<%=capFirst(otherEnd.getName())%>(){
+                          ApplicationService applicationService = ApplicationService.getApplicationService();
+			  <%=UML13Utils.getNamespaceName(UML13Utils.getPackage(UML13Utils.getModel(klass), basePkg), klass)%>.<%=klass.getName()%> thisIdSet = new <%=UML13Utils.getNamespaceName(UML13Utils.getPackage(UML13Utils.getModel(klass), basePkg), klass)%>.impl.<%=klass.getName()%>Impl();
+			  thisIdSet.setId(this.getId());
+			  try {
+			  java.util.List resultList = applicationService.hqlSearch("<%=getQualifiedName(otherEnd.getType(), basePkg)%>", thisIdSet);				 
+			 
+			  if (resultList!=null && resultList.size()>0) {
+			     <%=otherEnd.getName()%> = (<%=getQualifiedName(otherEnd.getType(), basePkg)%>)resultList.get(0);
+			     }
+			  } catch(Exception ex) { }
+			  return <%=otherEnd.getName()%>;			
+                        }
+                        
+	      <% }else{ %>
+		     <% if(true) throw new RuntimeException("Unknown association multiplicity: " + thisEnd.getType().getName() + "." + thisEnd.getName() + ".upper=" + ((MultiplicityRange)thisEnd.getMultiplicity().getRange().iterator().next()).getUpper() + ", " + otherEnd.getType().getName() + "." + otherEnd.getName() + ".upper=" + ((MultiplicityRange)otherEnd.getMultiplicity().getRange().iterator().next()).getUpper()); %>
+	      <% } %>
+	               
+	   <% if(UML13Utils.isMany2Many(thisEnd, otherEnd) || UML13Utils.isOne2Many(thisEnd, otherEnd)){ %>
+	   	public void set<%=capFirst(otherEnd.getName())%>(java.util.Collection <%=otherEnd.getName()%>){
+	   		this.<%=otherEnd.getName()%> = <%=otherEnd.getName()%>;
+	        }	
+	   <% } else if(UML13Utils.isMany2One(thisEnd, otherEnd) || UML13Utils.isOne2One(thisEnd, otherEnd)){ %>
+	   
+	   
+	   public void set<%=capFirst(otherEnd.getName())%>(<%=getQualifiedName(otherEnd.getType(), basePkg)%> <%=otherEnd.getName()%>){
+		this.<%=otherEnd.getName()%> = <%=otherEnd.getName()%>;
+	   }	
+	   <% } %>
+	   <% }else{//end if otherEnd.isNavigable() %>
+	      <% if(otherEnd.getAggregation().equals(AggregationKindEnum.AK_AGGREGATE)){ %>
+	   private Long <%=otherEnd.getName()%>Id;
+	   public Long get<%=capFirst(otherEnd.getName())%>Id(){
+	      return <%=otherEnd.getName()%>Id;
+	   }
+	      <% } %>
+	   <% } %>
+	<% } %>
+
+	public boolean equals(Object obj){
+			boolean eq = false;
+			if(obj instanceof <%=klass.getName() %>) {
+				<%=klass.getName() %> c =(<%=klass.getName() %>)obj; 			 
+				<%=getIdAtt((UmlClass)klass).getType().getName()%> thisId = getId();			
+				if(thisId != null && thisId.equals(c.getId())) {
+					eq = true;
+				}		
+				
+			}
+			return eq;
+		}
+		
+		public int hashCode(){
+			int h = 0;
+			if(getId() != null) {
+				h += getId().hashCode();
+			}
+			return h;
+	}
+	
+	
+}

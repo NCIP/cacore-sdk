@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- $Id: axis-client-config.xml,v 1.2.2.3 2006/02/01 13:43:43 tdiesler Exp $ -->
+
+<!--
+  JBoss Axis client configuration
+-->
+<deployment name="JBoss-Axis-Client"
+  targetNameSpace="http://webservice.jboss.org/client"
+  xmlns="http://xml.apache.org/axis/wsdd/"
+  xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+
+  <documentation> The default client configuration of the JBoss Axis engine. </documentation>
+
+  <globalConfiguration>
+    
+    <requestFlow>
+      <!-- 
+        Add username/password from the SecurityAssociation as SOAP header elements 
+        Caution, this opens a security vulnerability because it echos the princiapal and credential 
+        of the calling client to any destination regardless of whether it has been configured to do so. 
+        
+        <handler name="ClientLoginHandler" type="java:org.jboss.webservice.handler.ClientLoginHandler"/>
+      -->
+    </requestFlow>
+
+    <responseFlow/>
+    
+  </globalConfiguration>
+
+  <transport name="http" pivot="java:org.jboss.axis.transport.http.HTTPSender"/>
+
+</deployment>

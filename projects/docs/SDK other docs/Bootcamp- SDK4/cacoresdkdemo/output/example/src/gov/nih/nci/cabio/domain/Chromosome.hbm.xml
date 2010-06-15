@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="gov.nih.nci.cabio.domain">
+  <class name="Chromosome" table="CHROMOSOME" lazy="true" polymorphism="explicit">
+    <cache usage="read-write" />
+    <id name="id" type="java.lang.Long" column="CHROMOSOME_ID">
+      <generator class="assigned" />
+    </id>
+    <property name="name" type="java.lang.String" column="CHROMOSOME_NUMBER" />
+    <set name="geneCollection" lazy="true" inverse="true">
+      <cache usage="read-write" />
+      <key column="CHROMOSOME_ID" />
+      <one-to-many class="gov.nih.nci.cabio.domain.Gene" />
+    </set>
+    <many-to-one name="taxon" class="gov.nih.nci.cabio.domain.Taxon" column="TAXON_ID" lazy="proxy" />
+  </class>
+</hibernate-mapping>
+

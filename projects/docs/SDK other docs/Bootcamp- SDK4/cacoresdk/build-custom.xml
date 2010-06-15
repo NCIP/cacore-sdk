@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="caCORESDKCustom">
+
+	<target name="-build-system.custom" if="build-system.custom.use"/>
+	<target name="-init-project.custom" if="init-project.custom.use"/>
+	<target name="-create-output-dirs.custom" if="create-output-dirs.custom.use"/>
+	<target name="-clean-all.custom" if="clean-all.custom.use"/>
+	<target name="-fix-xmi.custom" if="fix-xmi-yes,fix-xmi.custom.use"/>
+
+	<!-- Code Generation Targets -->
+	<target name="-generate-system.custom" if="generate-system.custom.use"/>
+	<target name="-copy-control-files.custom" if="copy-control-files.custom.use"/>
+	<target name="-compile-generator.custom" if="compile-generator.custom.use"/>
+	<target name="-generate-templates.custom" if="generate-templates.custom.use"/>
+
+	<!-- Bean Generation Targets -->
+	<target name="-build-beans.custom" if="build-beans.custom.use"/>
+	<target name="-generate-beans.custom" if="generate-beans.custom.use"/>
+	<target name="-generate-junit.custom" if="generate-junit.custom.use"/>
+	
+	<!-- ORM Generation Targets -->
+	<target name="-build-orm.custom" if="build-orm.custom.use"/>
+	<target name="-generate-OR-mapping.custom" if="generate-OR-mapping.custom.use"/>
+	<target name="-generate-orm-conf.custom" if="generate-orm-conf.custom.use"/>
+	<target name="-generate-dao-conf.custom" if="generate-dao-conf.custom.use"/>
+	<target name="-generate-cache.custom" if="generate-cache.custom.use"/>
+
+	<!-- Other Artifacts Generation Targets -->
+	<target name="-build-artifacts.custom" if="build-artifacts.custom.use"/>
+	<target name="-generate-common-package-util.custom" if="generate-common-package-util.custom.use"/>
+	<target name="-generate-common-role-util.custom" if="generate-common-role-util.custom.use"/>
+	<target name="-generate-schemas.custom" if="generate-schemas.custom.use"/>
+	<target name="-generate-wsdd.custom" if="generate-wsdd.custom.use"/>
+	<target name="-generate-xml-mapping.custom" if="generate-xml-mapping.custom.use"/>
+	
+	<!-- Others -->
+	<target name="-copy-framework.custom" if="copy-framework.custom.use"/>
+	<target name="-copy-custom-beans.custom" if="copy-custom-beans.custom.use"/>
+	<target name="-copy-custom-orm.custom" if="copy-custom-orm.custom.use"/>
+	<target name="-copy-custom-lib.custom" if="copy-custom-lib.custom.use"/>
+	
+	<target name="-copy-server-file.custom" if="copy-server-file.custom.use"/>
+	<target name="-deploy-server.custom" if="deploy-server.custom.use"/>
+	<target name="-deployWS.custom" if="deployWS.custom.use"/>
+	<target name="-undeployWS.custom" if="undeployWS.custom.use"/>
+	<target name="-build-schema.custom" if="build-schema.custom.use"/>
+
+	
+	<target name="-rundemo.custom" if="rundemo.custom.use"/>
+	<target name="-runtest.custom" if="runtest.custom.use"/>
+	<target name="-runXMLdemo.custom" if="runXMLdemo.custom.use"/>
+	<target name="-runWSdemo.custom" if="runWSdemo.custom.use"/>
+	
+	<target name="-package-system.custom" if="package-system.custom.use"/>
+	<target name="-compile-source.custom" if="compile-source.custom.use"/>
+	<target name="-package-war.custom" if="package-war.custom.use"/>
+	<target name="-package-client.custom" if="package-client.custom.use"/>
+	<target name="-package-client-jar.custom" if="package-client-jar.custom.use"/>
+	<target name="-package-client-resources.custom" if="package-client-resources.custom.use"/>
+	<target name="-package-thickclient.custom" if="package-thickclient.custom.use"/>
+	<target name="-package-thickclient-resources.custom" if="package-thickclient-resources.custom.use"/>
+
+	<target name="-doc.custom" if="doc.custom.use"/>
+	
+<!--	
+	<target name="-clean.custom" if="clean.custom.use"/>
+	<target name="-clean-generator.custom" if="clean-generator.custom.use"/>
+	<target name="-compile-beans.custom" if="compile-beans.custom.use"/>
+	<target name="-compile-framework.custom" if="compile-framework.custom.use"/>
+	<target name="-compile-templates.custom" if="compile-templates.custom.use"/>
+	<target name="-copy-project-framework.custom" if="copy-project-framework.custom.use"/>
+	<target name="-copy-template-files.custom" if="copy-template-files.custom.use"/>
+	<target name="-create-project-dirs.custom" if="create-project-dirs.custom.use"/>
+	<target name="-disable-writable-api.custom" if="disable-writable-api-yes,disable-writable-api.custom.use"/>
+	<target name="-doc-framework.custom" if="doc-framework.custom.use"/>
+	<target name="-generate-artifacts.custom" if="generate-artifacts.custom.use"/>
+	<target name="-package-server.custom" if="package-server.custom.use"/>
+	<target name="-format.custom" if="format.custom.use"/>
+-->
+
+</project>

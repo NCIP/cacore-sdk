@@ -1,0 +1,34 @@
+<transformation>
+	<model-access className="gov.nih.nci.codegen.core.access.UML13ModelAccess"
+		xmiURI="file:@LOGICAL_MODEL@"
+		modelName="EA Model"/>
+
+	<filter-chain>
+		<filter name="model-element-filter"
+			className="gov.nih.nci.codegen.core.filter.UML13ModelElementFilter"/>
+		<filter name="classifier-filter"
+			className="gov.nih.nci.codegen.core.filter.UML13ClassifierFilter">
+			<package>
+				<include>@INCLUDE_PACKAGE@</include>
+			</package>
+			<name>
+				<exclude>@EXCLUDE_NAME@</exclude>
+			</name>
+		</filter>
+	</filter-chain>
+	<transformer-chain>
+		<transformer name="jet"
+			className="gov.nih.nci.codegen.core.transformer.JETTransformer">
+			<param name="templateClassName"
+				value="gov.nih.nci.codegen.core.template.jet.PojoBean"/>
+			<param name="basePackage" value="Logical View.Logical Model"/>
+		</transformer>
+	</transformer-chain>
+	<artifact-handler className="gov.nih.nci.codegen.core.handler.ResourceFileHandler">
+		<param name="outputDir" value="@OUTPUTDIR@"/>
+		<param name="basePackage" value="Logical View.Logical Model"/>
+		<param name="fileSuffix" value="java"/>
+		<param name="interfaceFlag" value="yes"/>
+		<param name="wsFlag" value="no"/>
+	</artifact-handler>
+</transformation>

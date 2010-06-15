@@ -1,0 +1,3 @@
+grant all privileges on CAQA.* to 'cacoresdk_trn'@'cbiodb30.nci.nih.gov' identified by 'qa!sdk567' with grant option;
+grant all privileges on CAQA.* to 'cacoresdk_trn'@'@localhost@' identified by 'qa!sdk567' with grant option;
+grant all privileges on CAQA.* to 'cacoresdk_trn'@'*' identified by 'qa!sdk567' with grant option;

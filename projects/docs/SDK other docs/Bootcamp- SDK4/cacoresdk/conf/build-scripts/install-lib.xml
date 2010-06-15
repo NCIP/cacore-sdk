@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ***************************************************************************************************-->
+<!--                               caBIO ToolKit ANT Build Script Subroutine 				            -->
+<!-- ***************************************************************************************************-->
+
+<project name="install-lib" default = "all" basedir=".">
+	<!-- ************************************************************************************************-->
+	<!--                          Download and Install Projects and Libraries                            -->
+	<!-- ************************************************************************************************-->
+	
+	<target name="ExitAnt" unless="download_failed">
+		<fail/>
+	</target>
+	
+	<target name="download-libs">
+		<echo message="Starting downloading ... ..."/>
+		<mkdir dir="${temp.dir}"/>
+		<mkdir dir="${zips.dir}"/>
+		<antcall target="install-tomcat-overall"/>
+		<antcall target="install-mysql-overall"/>
+		<!--antcall target="install-hibernate-overall"/>
+		<antcall target="install-axis-overall"/-->
+                <echo message="*****************************************************"/>
+                <echo message="**   Libraries are all installed !!!!!!            **"/>
+                <echo message="*****************************************************"/>
+	</target>
+
+		<!-- ******* GET TOMCAT ******* -->		
+		<target name="install-tomcat-overall">
+			<condition property="install_tomcat_yes">
+				<istrue value="${install_tomcat}"/>
+			</condition>
+			<antcall target="tomcat-message-no"/>
+			<antcall target="tomcat-message-yes"/>
+			<delete file="${temp.dir}/tomcat.zip"/>
+			<antcall target="install-tomcat"/>
+			<antcall target="unzip-tomcat"/>
+		</target>
+		<target name="tomcat-message-yes" if="install_tomcat_yes">
+			<echo message="*****************************************************"/>
+			<echo message="**   Installing   TOMCAT                           **"/>
+			<echo message="*****************************************************"/>
+		</target>
+		<target name="tomcat-message-no" unless="install_tomcat_yes">
+			<echo message="*****************************************************"/>
+			<echo message="** TOMCAT installation is disabled                 **"/>
+			<echo message="** The following tasks may be ignored              **"/>
+			<echo message="*****************************************************"/>
+		</target>
+		<target name="install-tomcat" if="install_tomcat_yes">
+			<get src="${tomcat_url}" dest="${temp.dir}/tomcat.zip" verbose="yes" ignoreerrors="yes"/>
+			<available file="${temp.dir}/tomcat.zip" property="tomcat_downloaded"/>
+			<antcall target="install-tomcat-from-mirror"/>
+		</target>
+		<target name="install-tomcat-from-mirror" unless="tomcat_downloaded">
+			<get src="${tomcat_mirror}" dest="${temp.dir}/tomcat.zip" verbose="yes" ignoreerrors="yes"/>
+			<available file="${temp.dir}/tomcat.zip" property="download_failed"/>
+			<antcall target="ExitAnt"/>
+		</target>
+		<target name="unzip-tomcat" if="install_tomcat_yes">
+			<mkdir dir="${tomcat_home}"/>
+			<unzip src="${temp.dir}/tomcat.zip" dest="${zips.dir}"/>
+			<move todir="${tomcat_home}">
+				<fileset dir="${zips.dir}/${tomcat_path}"/>
+			</move>
+		</target>
+	
+	
+		<!-- ******* GET MYSQL ******* -->		
+
+
+		<target name="install-mysql-overall">
+			<condition property="install_mysql_yes">
+				<istrue value="${install_mysql}"/>
+			</condition>
+			<condition property="create_mysqluser_yes">
+				<istrue value="${create_mysql_user}"/>
+			</condition>
+			<condition property="windows">
+				<contains substring="windows" casesensitive="no" string="${os.name}"/>
+			</condition>
+			<condition property="linux">
+				<contains substring="linux" casesensitive="no" string="${os.name}"/>
+			</condition>
+			<condition property="unix">
+				<contains substring="unix" casesensitive="no" string="${os.name}"/>
+			</condition>
+			<antcall target="mysql-message-no"/>
+			<antcall target="mysql-message-yes"/>
+			<antcall target="install-root-mysql-windows"/>
+			<antcall target="install-root-mysql-linux"/>
+		</target>
+                <target name="mysql-message-yes" if="install_mysql_yes">
+                        <echo message="*****************************************************"/>
+                        <echo message="**   Installing   MYSQL                            **"/>
+                        <echo message="*****************************************************"/>
+                </target>
+                <target name="mysql-message-no" unless="install_mysql_yes">
+                        <echo message="*****************************************************"/>
+                        <echo message="** MYSQL  installation is disabled                 **"/>
+                        <echo message="** The following tasks may be ignored              **"/>
+                        <echo message="*****************************************************"/>
+                </target>
+
+		
+		<!-- ******* Install MYSQL for windows******* -->		
+		<target name="install-root-mysql-windows" if="windows">
+
+			<delete file="${temp.dir}/mysql.zip"/>              
+			<condition property="install_mysql_yes">
+				<istrue value="${install_mysql}"/>
+			</condition>
+			<antcall target="install-mysql-windows"/>
+			<antcall target="unzip-mysql-windows"/> 
+			<antcall target="init-mysql-windows"/>			
+			<antcall target="create-user"/>
+			<condition property="create_schema_yes">
+				<istrue value="${create_schema}"/>
+			</condition>
+			<antcall target="create-schema"/>
+			<condition property="import_data_yes">
+				<istrue value="${import_data}"/>
+			</condition>
+			<antcall target="import-data"/>
+
+		</target>
+		<target name="init-mysql-windows" if="install_mysql_yes">
+			<delete file="${conf.dir}/my.cnf"/>
+		    <copy file="${conf.dir}/my.cnf.template" tofile="${conf.dir}/my.cnf"/>
+			<replaceregexp file = "${conf.dir}/my.cnf" match="MYSQL_HOME" replace="${mysql_home}" flags="g"/>
+			 
+			<copy todir="c:\" overwrite="yes">
+				<fileset dir="${conf.dir}">
+					<include name="my.cnf"/>
+				</fileset>
+			</copy>
+
+			<exec  dir="${mysql_home}/bin" executable="cmd" spawn="true">
+				<arg line="/C start ${mysql_home}/bin/mysqld.exe --remove"/>
+			</exec>
+
+			<exec  dir="${mysql_home}/bin" executable="cmd" spawn="true">
+				<arg line="/C start ${mysql_home}/bin/mysqld.exe"/>
+			</exec>
+			<sleep seconds="2"/>
+		</target>
+		<target name="install-mysql-windows" if="install_mysql_yes">
+			<get src="${mysql_url}" dest="${temp.dir}/mysql.zip" verbose="yes" ignoreerrors="yes"/>   
+			<available file="${temp.dir}/mysql.zip" property="mysql_downloaded"/>
+			<antcall target="install-mysql-from-mirror-windows"/>
+		</target>
+		<target name="install-mysql-from-mirror-windows" unless="mysql_downloaded">
+			<get src="${mysql_mirror}" dest="${temp.dir}/mysql.zip" verbose="yes" ignoreerrors="yes"/>
+			<available file="${temp.dir}/mysql.zip" property="download_failed"/>
+			<antcall target="ExitAnt"/>
+		</target>
+		<target name="unzip-mysql-windows" if="install_mysql_yes">
+			<mkdir dir="${mysql_home}"/>
+			<unzip src="${temp.dir}/mysql.zip" dest="${zips.dir}"/>
+			<move todir="${mysql_home}">
+				<fileset dir="${zips.dir}/${mysql_path}"/>
+			</move>
+		</target>
+
+
+		
+		<!-- ******* Install MYSQL for Linux******* -->		
+		<target name="install-root-mysql-linux" if="linux">
+
+			<delete file="${temp.dir}/mysql.tar.gz"/>              
+			<condition property="install_mysql_yes">
+				<istrue value="${install_mysql}"/>
+			</condition>
+			<antcall target="install-mysql-linux"/>
+			<antcall target="unzip-mysql-linux"/> 
+			<antcall target="init-mysql-linux"/>			
+			<antcall target="create-user"/>
+			<condition property="create_schema_yes">
+				<istrue value="${create_schema}"/>
+			</condition>
+			<antcall target="create-schema"/>
+			<condition property="import_data_yes">
+				<istrue value="${import_data}"/>
+			</condition>
+			<antcall target="import-data"/>
+
+		</target>
+		<target name="init-mysql-linux" if="install_mysql_yes">
+			<delete file="${conf.dir}/create_user.sql"/>
+		    <copy file="${conf.dir}/create_user.sql.template" tofile="${conf.dir}/create_user.sql"/>
+			<replaceregexp file = "${conf.dir}/create_user.sql" match="DBNAME" replace="${schema_name}" flags="g"/>
+			<replaceregexp file = "${conf.dir}/create_user.sql" match="DBUSER" replace="${db_user}" flags="g"/>
+			<replaceregexp file = "${conf.dir}/create_user.sql" match="SERVERNAME" replace="${db_server_name}" flags="g"/>
+			<replaceregexp file = "${conf.dir}/create_user.sql" match="DBPASSWD" replace="${db_password}" flags="g"/>
+
+
+			<chmod dir="${mysql_home}/bin/" includes="*" perm="u+x"/>
+			<chmod dir="${mysql_home}/bin/" includes="*.*" perm="u+x"/>
+			<chmod dir="${mysql_home}/scripts/" includes="*" perm="u+x"/>
+			<exec  dir="${mysql_home}" executable="nohup" spawn="true">
+				<arg line="scripts/mysql_install_db --user==mysql"/>
+			</exec>
+			<sleep seconds="2"/>
+			<exec  dir="${mysql_home}" executable="nohup" spawn="true">
+				<arg line="bin/mysqld_safe"/>
+			</exec>
+			<sleep seconds="2"/>
+		</target>
+		<target name="install-mysql-linux" if="install_mysql_yes">
+			<get src="${mysql_url_linux}" dest="${temp.dir}/mysql.tar.gz" verbose="yes" ignoreerrors="yes"/>   
+			<available file="${temp.dir}/mysql.tar.gz" property="mysql_downloaded"/>
+			<antcall target="install-mysql-from-mirror-linux"/>
+		</target>
+		<target name="install-mysql-from-mirror-linux" unless="mysql_downloaded">
+			<get src="${mysql_mirror_linux}" dest="${temp.dir}/mysql.tar.gz" verbose="yes" ignoreerrors="yes"/>
+			<available file="${temp.dir}/mysql.tar.gz" property="download_failed"/>
+			<antcall target="ExitAnt"/>
+		</target>
+		<target name="unzip-mysql-linux" if="install_mysql_yes">
+			<mkdir dir="${mysql_home}"/>
+			<gunzip src="${temp.dir}/mysql.tar.gz" dest="${temp.dir}/mysql.tar"/>
+			<untar src="${temp.dir}/mysql.tar" dest="${zips.dir}"/>
+			<move todir="${mysql_home}">
+				<fileset dir="${zips.dir}/${mysql_path_linux}"/>
+			</move>
+		</target>
+
+		<!-- ******* MYSQL Common Module******* -->		
+
+
+		<target name="create-user" if="create_mysqluser_yes">
+			<delete file="${conf.dir}/create_user.sql"/>
+		    <copy file="${conf.dir}/create_user.sql.template" tofile="${conf.dir}/create_user.sql"/>
+			<replaceregexp file = "${conf.dir}/create_user.sql" match="DBNAME" replace="${schema_name}" flags="g"/>
+			<replaceregexp file = "${conf.dir}/create_user.sql" match="DBUSER" replace="${db_user}" flags="g"/>
+			<replaceregexp file = "${conf.dir}/create_user.sql" match="SERVERNAME" replace="${db_server_name}" flags="g"/>
+			<replaceregexp file = "${conf.dir}/create_user.sql" match="DBPASSWD" replace="${db_password}" flags="g"/>
+			<exec dir="${mysql_home}/bin" executable="${mysql_home}/bin/mysql" input = "${conf.dir}/create_user.sql">
+				<arg line="-u root"/>
+			</exec> 
+		</target>
+		<target name="create-schema" if="create_schema_yes">
+			<exec dir="${mysql_home}/bin" executable="${mysql_home}/bin/mysqladmin">
+				<arg line="-u root -f drop ${schema_name}"/>
+			</exec> 
+
+			<exec dir="${mysql_home}/bin" executable="${mysql_home}/bin/mysqladmin">
+				<arg line="-u root create ${schema_name}"/>
+			</exec> 
+			
+			<exec dir="${mysql_home}/bin" executable="${mysql_home}/bin/mysql" input = "${conf.dir}/${ddl_filename}">
+				<arg line="-u root ${schema_name}"/>
+			</exec> 
+		</target>
+		<target name="import-data" if="import_data_yes">
+			<exec dir="${mysql_home}/bin" executable="${mysql_home}/bin/mysql" input= "${conf.dir}/${datadump_name}">
+				<arg line="-u root ${schema_name}"/>
+			</exec> 
+		</target>
+
+		<!-- ******* GET HIBERNATE ******* -->		
+		<target name="install-hibernate-overall">
+			<delete file="${temp.dir}/hibernate.zip"/>
+			<condition property="install_hibernate_yes">
+				<istrue value="${install_hibernate}"/>
+			</condition>
+			<antcall target="install-hibernate"/>
+			<antcall target="unzip-hibernate"/>
+		</target>
+		<target name="install-hibernate" if="install_hibernate_yes">
+			<get src="${hibernate_url}" dest="${temp.dir}/hibernate.zip" verbose="yes" ignoreerrors="yes"/>
+			<available file="${temp.dir}/hibernate.zip" property="hibernate_downloaded"/>
+			<antcall target="install-hibernate-from-mirror"/>
+		</target>
+		<target name="install-hibernate-from-mirror" unless="hibernate_downloaded">
+			<get src="${hibernate_mirror}" dest="${temp.dir}/hibernate.zip" verbose="yes" ignoreerrors="yes"/>
+			<available file="${temp.dir}/hibernate.zip" property="download_failed"/>
+			<antcall target="ExitAnt"/>
+		</target>
+		<target name="unzip-hibernate" if="install_hibernate_yes">
+			<unzip src="${temp.dir}/hibernate.zip" dest="${zips.dir}"/>
+			<copy todir="${lib.dir}">
+				<fileset dir="${zips.dir}/${hibernate_path}/hibernate*.jar"/>
+			</copy>
+		</target>
+
+	<!-- ******* GET AXIS ******* -->		
+	<target name="install-axis-overall">
+		<delete file="${temp.dir}/axis.zip"/>
+		<condition property="install_axis_yes">
+			<istrue value="${install_axis}"/>
+		</condition>
+		<antcall target="install-axis"/>
+		<antcall target="unzip-axis"/>
+	</target>
+	<target name="install-axis" if="install_axis_yes">
+		<get src="${axis_url}" dest="${temp.dir}/axis.zip" verbose="yes" ignoreerrors="yes"/>
+		<available file="${temp.dir}/axis.zip" property="axis_downloaded"/>
+		<antcall target="install-axis-from-mirror"/>
+	</target>
+	<target name="install-axis-from-mirror" unless="axis_downloaded">
+		<get src="${axis_mirror}" dest="${temp.dir}/axis.zip" verbose="yes" ignoreerrors="yes"/>
+		<available file="${temp.dir}/axis.zip" property="download_failed"/>
+		<antcall target="ExitAnt"/>
+	</target>
+	<target name="unzip-axis" if="install_axis_yes">
+		<unzip src="${temp.dir}/axis.zip" dest="${zips.dir}"/>
+		<copy todir="${tomcat_home}/webapps">
+			<fileset dir="${zips.dir}/${axis_path}/webapps/"/>
+		</copy>
+	</target>
+</project>
+

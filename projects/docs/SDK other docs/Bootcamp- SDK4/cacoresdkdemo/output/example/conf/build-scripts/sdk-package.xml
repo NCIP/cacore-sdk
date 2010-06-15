@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="caCORE SDK Packaging" default="all" basedir=".">
+
+	<property name="version" value="1_1_RC15_20060316"/>
+	<property name="project_name" value="cacoretoolkit"/>
+<!--
+	<property name="url.doc.install" value="ftp://ftp1.nci.nih.gov/pub/cacore/SDK/caCORE_SDK1.1_Installation_and_Basic_Test_Guide.pdf"/>
+	<property name="url.doc.programmers" value="ftp://ftp1.nci.nih.gov/pub/cacore/SDK/caCORE_SDK1.1_Programmers_Guide.pdf"/>
+	<property name="url.doc.release" value="ftp://ftp1.nci.nih.gov/pub/cacore/SDK/caCORE_SDK1.1_notes.txt"/>
+	-->
+	<property name="path.doc.readme" value="README.txt"/>
+
+	<property name="dir.temp.download" value="temp/documentation"/>
+	<property name="dir.temp.unzip" value="temp/unzip"/>
+	<property name="dir.output" value="output/sdk_${version}"/>
+	<!--
+	<property name="file.doc.install" value="caCORE_SDK1.1_Installation_and_Basic_Test_Guide.pdf"/>
+	<property name="file.doc.programmers" value="caCORE_SDK1.1_Programmers_Guide.pdf"/>
+	<property name="file.doc.release" value="caCORE_SDK1.1_notes.txt"/>
+	-->
+	<property name="file.doc.readme" value="README.txt"/>
+
+	<property name="file.output" value="caCORE_SDK_${version}"/>
+	<property name="file.output.zip" value="caCORE-SDK1-1.zip"/>
+	<property name="file.output.tar" value="caCORE-SDK1-1.tar"/>
+	<property name="file.output.tar.gz" value="caCORE-SDK1-1.tar.gz"/>
+
+	<target name="all">
+		<delete dir="${dir.temp.download}"/>
+		<delete dir="${dir.temp.unzip}"/>
+		<delete file="${dir.output}/${file.output.zip}"/>
+
+		<mkdir dir="${dir.temp.download}"/>
+		<mkdir dir="${dir.output}"/>
+	<!--
+		<get src="${url.doc.install}" dest="${dir.temp.download}/${file.doc.install}"/>
+		<get src="${url.doc.programmers}" dest="${dir.temp.download}/${file.doc.programmers}"/>
+		<get src="${url.doc.release}" dest="${dir.temp.download}/${file.doc.release}"/>
+		<copy file="${path.doc.readme}" tofile="${dir.temp.download}/${file.doc.readme}"/>
+		-->
+		<zip destfile="${dir.output}/${file.output.zip}">
+			<zipfileset dir="${dir.temp.download}" prefix="${project_name}"/>
+			<zipfileset dir="${basedir}" prefix="${project_name}">
+				<include name="build.properties"/>
+				<include name="build.xml"/>
+				<include name="build-custom.properties"/>
+				<include name="build-custom.xml"/>
+				<include name="db.db2.xml"/>
+				<include name="db.mysql.xml"/>
+				<include name="db.oracle.xml"/>
+				<include name="install.xml"/>
+				<include name="os.linux.xml"/>
+				<include name="os.unix.xml"/>
+				<include name="os.windows.xml"/>
+				<exclude name="**/CVS/**"/>
+			</zipfileset>
+			<zipfileset dir="conf" prefix="${project_name}/conf">
+				<include name="applicationContext.xml"/>
+				<include name="applicationService.xml"/>
+				<include name="Bean.javajet"/>
+				<include name="beangeneration.xml"/>
+				<include name="BeanHBJunit.javajet"/>
+				<include name="BeanImpl.javajet"/>
+				<include name="beanimplgeneration.xml"/>
+				<include name="BeanInterface.javajet"/>
+				<include name="BeanSkel.skeleton"/>
+				<include name="BeanWS.javajet"/>
+				<include name="beanwsgeneration.xml"/>
+				<include name="BeanWSImpl.javajet"/>
+				<include name="beanwsimplgeneration.xml"/>
+				<include name="build_sdkclient.xml"/>
+				<include name="cabioexampledata.SQL"/>
+				<include name="cabioexampleschma.SQL"/>
+				<include name="castor.properties"/>
+				<include name="castormappinggeneration.xml"/>
+				<include name="Classes.jsp"/>
+				<include name="client.log"/>
+				<include name="client_log4j.properties"/>
+				<include name="commonPackageUtil.xml"/>
+				<include name="commonRoleUtil.xml"/>
+				<include name="CORESystem.properties"/>
+				<include name="create_user.sql.template"/>
+				<include name="Criteria.jsp"/>
+				<include name="daogeneration.xml"/>
+				<include name="deploy.properties"/>
+				<include name="download.properties"/>
+				<include name="ehcacheUtil.xml"/>
+				<include name="Happy.jsp"/>
+				<include name="hbcgeneration.xml"/>
+				<include name="hibernate.log"/>
+				<include name="hibernate.properties.db2"/>
+				<include name="hibernate.properties.mysql"/>
+				<include name="hibernate.properties.oracle"/>
+				<include name="hibernate-configuration-3.0.dtd"/>
+				<include name="hibernate-mapping-3.0.dtd"/>
+				<include name="hqlBeanImpl.javajet"/>
+				<include name="httpinvoker-servlet.xml"/>
+				<include name="implormgeneration.xml"/>
+				<include name="interfacegeneration.xml"/>
+				<include name="junitgeneration.xml"/>
+				<include name="log4j.properties"/>
+				<include name="mapping.dtd"/>
+				<include name="my.cnf.template"/>
+				<include name="ormgeneration.xml"/>
+				<include name="PojoBean.javajet"/>
+				<include name="pojobeangeneration.xml"/>				
+				<include name="Packages.jsp"/>
+				<include name="remoteService.xml"/>
+				<include name="Result.jsp"/>
+				<include name="ResultFrame.jsp"/>
+				<include name="Return.jsp"/>
+				<include name="schemageneration.xml"/>
+				<include name="server.log"/>
+				<include name="server-config.wsdd"/>
+				<include name="undeploy.wsdd"/>
+				<include name="web.xml"/>
+				<include name="wsddUtil.xml"/>
+				<include name="xml.properties"/>
+				<exclude name="**/CVS/**"/>
+			</zipfileset>
+			<zipfileset dir="conf/xslt" prefix="${project_name}/conf/xslt">
+				<include name="cacoreFormat.xsl"/>
+				<include name="styleSheet.css"/>
+				<exclude name="**/CVS/**"/>
+			</zipfileset>
+			<zipfileset dir="conf/xslt/images" prefix="${project_name}/conf/xslt/images">
+				<include name="*.gif"/>
+				<exclude name="**/CVS/**"/>
+			</zipfileset>
+			<zipfileset dir="demo" prefix="${project_name}/demo">
+				<include name="Example*.java"/>
+				<exclude name="**/CVS/**"/>
+			</zipfileset>
+			<zipfileset dir="lib" prefix="${project_name}/lib">
+				<exclude name="**/CVS/**"/>
+			</zipfileset>
+			<zipfileset dir="models" prefix="${project_name}/models">
+				<include name="cabio.EAP"/>
+				<include name="caCORESDKTemplate.EAP"/>
+				<exclude name="**/CVS/**"/>
+			</zipfileset>
+			<zipfileset dir="models/xmi" prefix="${project_name}/models/xmi">
+				<include name="cabioExampleDomainModel.xmi"/>
+				<include name="sdk-test.xmi"/>
+				<exclude name="**/CVS/**"/>
+			</zipfileset>
+			<zipfileset dir="src" prefix="${project_name}/src">
+				<include name="**/**"/>
+				<exclude name="**/CVS/**"/>
+			</zipfileset>
+		</zip>
+
+		<mkdir dir="${dir.temp.unzip}"/>
+		<unzip src="${dir.output}/${file.output.zip}" dest="${dir.temp.unzip}"/>
+		<tar tarfile="${dir.output}/${file.output.tar.gz}" basedir="${dir.temp.unzip}" compression="gzip"/>
+		<delete dir="${dir.temp.unzip}"/>
+
+	</target>
+
+	<target name="help">
+		<echo>
+			This ant script creates a downloadable archive of the caCORE SDK.
+
+			This file must be edited before use to set the version number
+			   and provide locations for documentation files.
+		</echo>
+	</target>
+
+</project>

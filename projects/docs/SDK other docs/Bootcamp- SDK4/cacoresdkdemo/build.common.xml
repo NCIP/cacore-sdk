@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="caCORESDK Common" default="" basedir=".">
+	<description>Build script for caCORE Software Development Kit</description>
+
+	<!--***********************************************************************
+	*** ENVIRONMENT PROPERTY
+	*********************************************************************** -->
+	<property environment="env" />
+
+	<!--***********************************************************************
+	*** PROPERTY FILES
+	*********************************************************************** -->
+	<property file="conf/download/download.properties"/>
+	<property file="conf/deploy.properties" />
+	<property file="${basedir}/build.properties" />
+	<property file="${file.conf}" />
+	<property file="${file.properties.custom}" />
+
+	<!--***********************************************************************
+	*** CONDITIONAL PROPERTIES
+	*********************************************************************** -->
+	<condition property="fix-xmi-yes">
+		<equals arg1="${fix_xmi}" arg2="yes" casesensitive="false" trim="true" />
+	</condition>
+
+	<condition property="fix-xmi-yes-custom">
+		<and>
+			<istrue value="${fix-xmi-yes}" />
+			<istrue value="${fix-xmi.custom.use}" />
+		</and>
+	</condition>
+
+	<condition property="OR-mapping-yes">
+		<not>
+			<istrue value="${manual_datamodel}" />
+		</not>
+	</condition>
+
+	<condition property="disable-writable-api-yes" value="true">
+		<istrue value="${disable_writable_api_generation}" />
+	</condition>
+
+	<condition property="os_flavor" value="windows">
+		<contains substring="windows" casesensitive="no" string="${os.name}" />
+	</condition>
+	<condition property="os_flavor" value="linux">
+		<contains substring="linux" casesensitive="no" string="${os.name}" />
+	</condition>
+	<condition property="os_flavor" value="unix">
+		<contains substring="unix" casesensitive="no" string="${os.name}" />
+	</condition>
+	<condition property="os_flavor" value="unix">
+		<not>
+			<isset property="os_flavor" />
+		</not>
+	</condition>
+
+
+	<condition property="dbtype_db2" value="">
+		<equals arg1="${database_type}" arg2="db2" casesensitive="false" trim="true" />
+	</condition>
+	<condition property="dbtype_db2" value="#">
+		<not>
+			<equals arg1="${database_type}" arg2="db2" casesensitive="false" trim="true" />
+		</not>
+	</condition>
+
+	<condition property="dbtype_mysql" value="">
+		<equals arg1="${database_type}" arg2="mysql" casesensitive="false" trim="true" />
+	</condition>
+	<condition property="dbtype_mysql" value="#">
+		<not>
+			<equals arg1="${database_type}" arg2="mysql" casesensitive="false" trim="true" />
+		</not>
+	</condition>
+
+	<condition property="dbtype_oracle" value="">
+		<equals arg1="${database_type}" arg2="oracle" casesensitive="false" trim="true" />
+	</condition>
+	<condition property="dbtype_oracle" value="#">
+		<not>
+			<equals arg1="${database_type}" arg2="oracle" casesensitive="false" trim="true" />
+		</not>
+	</condition>
+
+	<condition property="jboss-yes">
+		<contains substring="jboss" casesensitive="no" string="${container_type}" />
+	</condition>
+	<condition property="tomcat-yes">
+		<not>
+			<isset property="jboss-yes"/>
+		</not>
+	</condition>
+	<condition property="container-deploy-path" value="${j2se_container_home}/server/${jboss_configuration}/deploy">
+		<isset property="jboss-yes"/>
+	</condition>
+	<condition property="container-deploy-path" value="${j2se_container_home}/webapps">
+		<isset property="tomcat-yes"/>
+	</condition>
+	
+	<condition property="start-mysql-yes">
+		<and>
+			<contains substring="mysql" casesensitive="no" string="${database_type}"/>
+			<istrue value="${start_mysql}"/>
+		</and>
+	</condition>
+	<condition property="start-container-yes">
+		<istrue value="${start_container}"/>
+	</condition>
+
+	<condition property="server-exclude-list" value="servlet.jar,commons-logging*.jar,spring-richclient-*.jar,log4j*.jar" else="servlet.jar,commons-logging*.jar,spring-richclient*.jar">
+		<isset property="jboss-yes" />
+	</condition>
+
+	<condition property="create_mysqluser_yes">
+		<and>
+			<contains substring="mysql" casesensitive="no" string="${database_type}"/>
+			<istrue value="${create_mysql_user}"/>
+		</and>
+	</condition>
+
+	<condition property="create_schema_yes">
+		<istrue value="${create_schema}"/>
+	</condition>
+
+	<condition property="import_data_yes">
+		<istrue value="${import_data}"/>
+	</condition>
+	
+	<!--***********************************************************************
+	*** OTHER INCLUDED ANT BUILD FILES
+	*********************************************************************** -->
+	<import file="${dir.conf.scripts}/install.xml" />
+	<import file="${file.build.custom}" />
+	<import file="${dir.conf.scripts}/db.${database_type}.xml" />
+	<import file="${dir.conf.scripts}/os.${os_flavor}.xml" />
+
+
+	<!--***********************************************************************
+	*** CLASSPATH AND UNIX-STYLE BASEDIR PROPERTIES
+	*********************************************************************** -->
+	<path id="classpath">
+		<fileset dir="${dir.lib}">
+			<include name="*.jar" />
+		</fileset>
+		<pathelement location="${dir.codegen.temp.build}" />
+		<pathelement location="${dir.output.conf.resources.server}" />
+		<pathelement location="${dir.output.project.classes}" />
+	</path>
+
+	<!-- set basedir.url = basedir as unix style pathname, regardless of platform -->
+	<path id="basedir.path">
+		<pathelement path="${basedir}" />
+	</path>
+	<pathconvert targetos="unix" property="basedir.unix" refid="basedir.path" />
+
+
+	<!--***********************************************************************
+	*** ANT MACRO DEFINITIONS
+	*********************************************************************** -->
+
+	<macrodef name="SDKecho">
+		<attribute name="message" default="..." />
+		<sequential>
+			<echo>*****************************************************************</echo>
+			<echo>***  @{message}</echo>
+			<echo>*****************************************************************</echo>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="SDKgenerate">
+		<attribute name="controlfile" />
+		<sequential>
+			<java classname="gov.nih.nci.codegen.core.GeneratorImpl" fork="true" maxmemory="512m">
+				<classpath refid="classpath" />
+				<arg value="@{controlfile}" />
+			</java>
+		</sequential>
+	</macrodef>
+
+
+	<!--***********************************************************************
+	*** ANT TASK DEFINITIONS
+	*********************************************************************** -->
+
+	<taskdef name="jetc" classname="ch.paranor.epla.structure.JETCTask">
+		<classpath>
+			<pathelement location="${dir.lib}/jetc-task.jar" />
+			<fileset dir="${dir.lib}">
+				<include name="*.*jar" />
+			</fileset>
+		</classpath>
+	</taskdef>
+
+	<taskdef name="jalopy" classname="de.hunsicker.jalopy.plugin.ant.AntPlugin">
+		<classpath>
+			<fileset dir="${dir.lib}">
+				<include name="*.jar" />
+			</fileset>
+		</classpath>
+	</taskdef>
+
+	<!--***********************************************************************
+	*** FINALLY!  THE TARGETS
+	*********************************************************************** -->
+
+	<target name="title">
+		<echo>
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+                    .oooooo.    .oooooo.  ooooooooo.  oooooooooooo   .oooooo..ooooooooooo.  oooo    oooo
+                   d8P'  `Y8b  d8P'  `Y8b `888   `Y88.`888'     `8  d8P'    `Y8`888'   `Y8b `888   .8P' 
+ .ooooo.  .oooo.  888         888      888 888   .d88' 888          Y88bo.      888      888 888  d8'   
+d88' `"Y8`P  )88b 888         888      888 888ooo88P'  888oooo8      `"Y8888o.  888      888 88888[     
+888       .oP"888 888         888      888 888`88b.    888    "          `"Y88b 888      888 888`88b.   
+888   .o8d8(  888 `88b    ooo `88b    d88' 888  `88b.  888       o  oo     .d8P 888     d88' 888  `88b. 
+`Y8bod8P'`Y888""8o `Y8bood8P'  `Y8bood8P' o888o  o888oo888ooooood8  8""88888P' o888bood8P'  o888o  o888o
+
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+		</echo>
+	</target>
+
+
+	<!--***********************************************************************
+	*** Initialization and Cleanup
+	*********************************************************************** -->
+
+	<target name="clean-all" depends="-clean-all.main,-clean-all.custom" description="Removes all generated code and all artifacts related to all projects" />
+
+	<target name="-clean-all.main" unless="clean-all.main.ignore" >
+		<input message="Are you sure you want to delete ALL generated code and all project artifacts? " validargs="y,n" addproperty="do.delete" />
+		<condition property="do.abort">
+			<equals arg1="n" arg2="${do.delete}" />
+		</condition>
+		<fail if="do.abort">Cleanall aborted--no files have been removed.</fail>
+		<delete dir="${dir.output}" />
+		<SDKecho message="All generated code and artifacts have been deleted" />
+	</target>
+
+	<target name="init-project" depends="-init-project.main,-init-project.custom" description="Initialize project build by creating output directories and necessary files" />
+
+	<target name="-init-project.main" unless="init-project.main.ignore" depends="create-output-dirs,copy-control-files,rename-csm-files,replace-tokens-in-files" />
+
+	<target name="create-output-dirs" description="Create output directories for the SDK framework" depends="-create-output-dirs.main,-create-output-dirs.custom" />
+
+	<target name="-create-output-dirs.main" unless="create-output-dirs.main.ignore" >
+		<SDKecho message="Creating output directories" />
+		<mkdir dir="${dir.output}" />
+		<mkdir dir="${dir.codegen.temp.src}" />
+		<mkdir dir="${dir.codegen.temp.build}" />
+		<mkdir dir="${dir.output.conf}" />
+		<mkdir dir="${dir.output.project}" />
+		<mkdir dir="${dir.output.project.src}" />
+		<mkdir dir="${dir.output.project.web}" />
+		<mkdir dir="${dir.output.project.classes}" />
+		<mkdir dir="${dir.output.project.doc}" />
+		<mkdir dir="${dir.output.project.package}" />
+		<mkdir dir="${dir.output.project.package.client}/lib" />
+		<mkdir dir="${dir.output.project.package.thickclient}/lib" />
+		<delete dir="${dir.temp}" quiet="true"/>
+		<mkdir dir="${dir.temp}"/>
+		<mkdir dir="${dir.temp.zip}"/>
+	</target>
+
+	<!-- Control File //Revisit this section -->
+	<target name="copy-control-files" description="Create control files required by code transformers for the project specified in deploy.properties" depends="-copy-control-files.main,-copy-control-files.custom" />
+
+	<target name="-copy-control-files.main" unless="copy-control-files.main.ignore" >
+		<SDKecho message="Copying configuration files" />
+		<copy todir="${dir.output.project}" overwrite="true">
+			<fileset dir="${basedir}">
+				<include name="${dir.conf}/**/*" />
+			</fileset>
+		</copy>
+	</target>
+		
+	<target name="rename-csm-files" description="Renames the template hibernate configuration file to include the application context name in the start" >
+		<SDKecho message="Renaming CSM Hibernate Configuration File" />
+		<move file="${dir.output.conf}/resources/server/application_name.csm.new.hibernate.cfg.xml" tofile="${dir.output.conf}/resources/server/${application_name}.csm.new.hibernate.cfg.xml" />
+	</target>
+
+	<target name="replace-tokens-in-files">
+		<SDKecho message="Replacing tokens in configuration files" />
+		<replace dir="${dir.output.conf}">
+			<replacefilter token="@OUTPUTDIR@" value="${dir.output.project.src}" />
+			<replacefilter token="@LOGICAL_MODEL@" value="${dir.model}/${fixed_filename}" />
+			<replacefilter token="@INCLUDE_PACKAGE@" value="${include_package}" />
+			<replacefilter token="@EXCLUDE_PACKAGE@" value="${exclude_package}" />
+			<replacefilter token="@EXCLUDE_NAME@" value="${exclude_name}" />
+			<replacefilter token="@CACHE_PATH@" value="${cachepath}" />
+			<replacefilter token="@WEBSERVICENAME@" value="${webservice_name}" />
+			<replacefilter token="@DEPLOYWSDD@" value="${file.wsdd.deploy}" />
+			<replacefilter token="@DATABASE@" value="${database_type}" />
+			<replacefilter token="@PROJECT_NAME@" value="${project_name}" />
+			<replacefilter token="@XSLT_PATH@@" value="${project_name}" />
+			<replacefilter token="@WEB_SERVER_NAME@" value="${web_server_name}" />
+			<replacefilter token="@WEB_SERVER_PORT@" value="${web_server_port}" />
+			<replacefilter token="@APPLICATION_NAME@" value="${application_name}" />
+			<replacefilter token="@DEFAULT_SECURITY_LEVEL@" value="${default_security_level}" />
+			<replacefilter token="@DEFAULT_SESSION_TIMEOUT@" value="${default_session_timeout}" />
+			<replacefilter token="@AUTHENTICATION_DISABLED@" value="${authentication_disabled}" />
+			<replacefilter token="@CSM_DATABASE_URL@" value="${csm_database_url}" />
+			<replacefilter token="@CSM_DATABASE_USER_NAME@" value="${csm_database_user_name}" />
+			<replacefilter token="@CSM_DATABASE_PASSWORD@" value="${csm_database_password}" />
+			<replacefilter token="@CSM_DATABASE_DIALECT@" value="${csm_database_dialect}" />
+			<replacefilter token="@CSM_DATABASE_DRIVER@" value="${csm_database_driver}" />
+			<replacefilter token="@DBNAME@" value="${schema_name}" />
+			<replacefilter token="@DBUSER@" value="${db_user}" />
+			<replacefilter token="@DBPASSWD@" value="${db_password}" />
+			<replacefilter token="@SERVERNAME@" value="${db_server_name}" />
+			<replacefilter token="@SECONDLEVELCACHE@" value="${create_cache}" />
+			<replacefilter token="@SHOWSQL@" value="false" />
+			<replacefilter token="@DBTYPE_DB2@" value="${dbtype_db2}" />
+			<replacefilter token="@DBTYPE_MYSQL@" value="${dbtype_mysql}" />
+			<replacefilter token="@DBTYPE_ORACLE@" value="${dbtype_oracle}" />
+			<replacefilter token="@CLIENT_DIR@" value="${basedir.unix}/${dir.output.project.package.client}"/>
+			<replacefilter token="@SCHEMA_DIR@" value="${basedir.unix}/${dir.output.project.package.client}/conf"/>
+		</replace>
+	</target>
+
+</project>

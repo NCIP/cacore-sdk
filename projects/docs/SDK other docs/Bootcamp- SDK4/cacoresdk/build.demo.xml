@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="caCORESDK Demo" default="" basedir=".">
+	<description>Build script for caCORE Software Development Kit</description>
+
+<!--***********************************************************************
+	*** OTHER INCLUDED ANT BUILD FILES
+	*********************************************************************** -->
+	<import file="build.common.xml"/>
+
+<!--***********************************************************************
+	*** FINALLY!  THE TARGETS
+	*********************************************************************** -->
+	<target name="runWSdemo"
+		depends="-runWSdemo.main,-runWSdemo.custom"
+		description="Runs Web Services-bases demo client for provided SDK example system"/>
+
+	<target name="-runWSdemo.main" unless="runWSdemo.main.ignore">
+		<SDKecho message="Running Web Services demo"/>
+		<javac srcdir="${dir.output.project.package.client}" debug = "on">
+			<include name="${file.demoWS.class.source}"/>
+			<classpath refid="classpath-client"/>
+		</javac>
+		<java classname="${file.demoWS.class}" fork="true" dir="${dir.output.project.package.client}">
+			<classpath refid="classpath-client"/>
+			<sysproperty key="log4j.configuration" value="${dir.output.project.package.client.conf}/client_log4j.properties"/>
+		</java>
+	</target>
+
+	<target name="runXMLdemo"
+		depends="-runXMLdemo.main,-runXMLdemo.custom"
+		description="Runs demo of XML conversion utility on provided SDK example system"/>
+
+	<target name="-runXMLdemo.main" unless="runXMLdemo.main.ignore">
+		<SDKecho message="Running XML conversion utility demo"/>
+		<javac srcdir="${dir.output.project.package.client}" debug = "on">
+			<include name="${file.demoxml.class.source}"/>
+			<classpath refid="classpath-client"/>
+		</javac>
+		<java classname="${file.demoxml.class}" fork="true" dir="${dir.output.project.package.client}">
+			<classpath refid="crtlasspath-client"/>
+			<sysproperty key="log4j.configuration" value="${dir.output.project.package.client.conf}/client_log4j.properties"/>
+		</java>
+	</target>
+
+	<target name="rundemo"
+		depends="-rundemo.main,-rundemo.custom"
+		description="Runs Java-based demo client for provided SDK example system"/>
+
+	<target name="-rundemo.main" unless="rundemo.main.ignore">
+		<SDKecho message="Running Java-based client demo"/>
+		<javac srcdir="${dir.output.project.package.client}" debug = "on">
+			<include name="${file.demo.class.source}"/>
+			<classpath refid="classpath-client"/>
+		</javac>
+		<java classname="${file.demo.class}" fork="true" dir="${dir.output.project.package.client}">
+			<classpath refid="classpath-client"/>
+			<sysproperty key="log4j.configuration" value="${dir.output.project.package.client.conf}/client_log4j.properties"/>
+		</java>
+	</target>
+
+	<target name="runtest"
+		depends="-runtest.main,-runtest.custom"
+		description="Runs JUnit test"/>
+
+	<target name="-runtest.main" unless="runtest.main.ignore">
+		<SDKecho message="Running JUnit test"/>
+		<mkdir dir="${dir.output.project.junit}"/>
+		<junit printsummary="yes" fork="yes" maxmemory="512m">
+			<formatter type="plain"/>
+			<batchtest fork="true" haltonfailure="no" todir="${dir.output.project.junit}">
+				<fileset dir="${dir.output.project.src}">
+					<include name="**/impl/test/*Test.java"/>
+				</fileset>
+			</batchtest>
+			<classpath>
+				<pathelement location="${dir.output.project}"/>
+				<pathelement location="${dir.output.project.conf}"/>
+				<pathelement location="${dir.output.project.orm}"/>
+			</classpath>
+			<classpath refid="classpath"/>
+			<sysproperty key="log4j.configuration" value="${dir.output.project.package.client.conf}/client_log4j.properties"/>
+		</junit>
+	</target>
+
+	
+</project>

@@ -1,0 +1,81 @@
+<%@ jet package="gov.nih.nci.codegen.core.template.jet" 
+        class="BeanInterface"
+        skeleton="BeanSkel.skeleton" %>
+
+<%
+Classifier klass = (Classifier)context.get("modelElement");
+String basePkg = (String)context.get("basePackage");
+String isAbstract = new String();
+if (klass.isAbstract()) {
+   isAbstract="abstract";
+}
+
+ if (isAbstract.equals("abstract")){
+   
+}
+%>
+
+package <%=UML13Utils.getNamespaceName(UML13Utils.getPackage(UML13Utils.getModel(klass), basePkg), klass)%>;
+
+
+public interface <%=klass.getName()%> 
+<% UmlClass superClass = UML13Utils.getSuperClass((UmlClass)klass); 
+	String superPkgName = null;
+	if(superClass != null)
+		superPkgName = UML13Utils.getNamespaceName(UML13Utils.getPackage(UML13Utils.getModel(superClass), basePkg), superClass);
+%>
+<% if(superClass != null && !extendsOntologyRelationship(klass) && extendsOntology(klass)){ %>
+    extends <%=superPkgName%>.<%=superClass.getName()%>, Ontology
+<% } %>
+
+<% if(superClass != null && extendsOntologyRelationship(klass) && !extendsOntology(klass)){ %>
+    extends <%=superPkgName%>.<%=superClass.getName()%>, OntologyRelationship
+<% } %>
+
+<% if(superClass != null && !extendsOntology(klass) && !extendsOntologyRelationship(klass)){ %>
+    extends <%=superPkgName%>.<%=superClass.getName()%>
+<% } %>
+
+<% if(superClass == null && extendsOntology(klass) && !extendsOntologyRelationship(klass)){ %>
+    extends Ontology
+<% } %>
+
+<% if(superClass == null && !extendsOntology(klass) && extendsOntologyRelationship(klass)){ %>
+    extends OntologyRelationship
+<% } %>
+
+
+{
+	<% for(Iterator i = UML13Utils.getAttributes((UmlClass)klass).iterator(); i.hasNext();){ %>
+	   <% Attribute att = (Attribute)i.next(); %>
+	   public <%if(getQualifiedName(att.getType(), basePkg).startsWith(".")){%><%=getQualifiedName(att.getType(), basePkg).substring(1)%><%} else { %> <%=getQualifiedName(att.getType(),basePkg)%><%}%> get<%=capFirst(att.getName())%>();
+	   public void set<%=capFirst(att.getName())%>(<% if(getQualifiedName(att.getType(), basePkg).startsWith(".")) {%><%=getQualifiedName(att.getType(), basePkg).substring(1)%> <%=att.getName()%>)<%} else {%> <%=getQualifiedName(att.getType(), basePkg)%> <%=att.getName()%>)<% } %>;
+	<% } %>
+	<% for(Iterator i = UML13Utils.getAssociationEnds(klass).iterator(); i.hasNext();){%>
+	   <% AssociationEnd thisEnd = (AssociationEnd)i.next(); %>
+	   <% AssociationEnd otherEnd = (AssociationEnd)UML13Utils.getOtherAssociationEnd(thisEnd); %>
+	   <% if(otherEnd.isNavigable()){ %>
+	      <% if(UML13Utils.isMany2Many(thisEnd, otherEnd) || UML13Utils.isOne2Many(thisEnd, otherEnd)){ %>
+	
+	public java.util.Collection get<%=capFirst(otherEnd.getName())%>();
+	      <% }else if(UML13Utils.isMany2One(thisEnd, otherEnd) || UML13Utils.isOne2One(thisEnd, otherEnd)){ %>
+	
+        public <%=getQualifiedName(otherEnd.getType(), basePkg)%> get<%=capFirst(otherEnd.getName())%>();
+		  <% }else{ %>
+		     <% if(true) throw new RuntimeException("Unknown association multiplicity: " + thisEnd.getType().getName() + "." + thisEnd.getName() + ".upper=" + ((MultiplicityRange)thisEnd.getMultiplicity().getRange().iterator().next()).getUpper() + ", " + otherEnd.getType().getName() + "." + otherEnd.getName() + ".upper=" + ((MultiplicityRange)otherEnd.getMultiplicity().getRange().iterator().next()).getUpper()); %>
+		  <% } %>
+		<% if(UML13Utils.isMany2Many(thisEnd, otherEnd) || UML13Utils.isOne2Many(thisEnd, otherEnd)){ %>
+	public void set<%=capFirst(otherEnd.getName())%>(java.util.Collection <%=otherEnd.getName()%>);
+		<% }else if(UML13Utils.isMany2One(thisEnd, otherEnd) || UML13Utils.isOne2One(thisEnd, otherEnd)){ %>
+	public void set<%=capFirst(otherEnd.getName())%>(<%=getQualifiedName(otherEnd.getType(), basePkg)%> <%=otherEnd.getName()%>);
+		
+	<% } %>
+	   <% }else{//end if otherEnd.isNavigable() %>
+	      <% if(otherEnd.getAggregation().equals(AggregationKindEnum.AK_AGGREGATE)){ %>
+	   public Long <%=otherEnd.getName()%>Id;
+	   public Long get<%=capFirst(otherEnd.getName())%>Id();
+	      <% } %>
+	   <% } %>
+	<% } %>
+	
+}

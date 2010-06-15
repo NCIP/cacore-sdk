@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="caCOREdb" basedir=".">
+
+	<target name="create-user" if="create_mysqluser_yes">
+	</target>
+	<target name="create-schema" if="create_schema_yes">
+	</target>
+	<target name="import-data" if="import_data_yes">
+	</target>
+
+</project>
