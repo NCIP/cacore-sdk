@@ -2,7 +2,7 @@
     
                        caCORE Workbench
                         Version 0.1.2
-                        February, 2010
+                         June, 2010
 
        National Cancer Institute Center for Bioinformatics
 
@@ -27,7 +27,7 @@
 
     caCORE Workbench v0.1.2
 
-    --  11 June 2010
+    --  18 June 2010
 
     caCORE Workbench v0.1.1
 
