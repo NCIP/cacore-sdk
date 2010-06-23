@@ -26,8 +26,6 @@ public class HttpUtilsTest extends TestCase{
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-	
-		
 		applicationService = (ApplicationService) ctx.getBean("ApplicationService");
 		classCache = (ClassCache) ctx.getBean("ClassCache");
 	}
@@ -95,7 +93,7 @@ public class HttpUtilsTest extends TestCase{
 	}
 	
 	public void xtestISOComplexDataTypeValue6() throws Exception{
-		String queryText="query=CdDataType&CdDataType[@value6=[@displayName=[@value=VALUE6_DISPLAY_VALUE1]]]";
+		String queryText="query=CdDataType&CdDataType[@value2=[@code=CODE4]][@value1=[@code=CODE1]][@value6=[@displayName=[@value=VALUE6_DISPLAY_VALUE1]][@code=CODE1]]";
 		process(queryText,"test13");
 	}
 	
@@ -109,22 +107,29 @@ public class HttpUtilsTest extends TestCase{
 		process(queryText,"test15");
 	}
 	
+	public void xtestISOComplexDataTypeValue7_3() throws Exception{
+		String queryText="query=CdDataType&CdDataType[@value2=[@code=CODE4]][@value1=[@code=CODE1]][@value6=[@displayName=[@value=VALUE6_DISPLAY_VALUE1]][@code=CODE1]][@value7=[@codeSystem=CODE_SYSTEM_1]]";
+		process(queryText,"test41");
+	}
+	
 	public void xtestISOComplexDataTypeValue8() throws Exception{
-		String queryText="query=CdDataType&CdDataType[@value8=[@displayName=[@value=VALUE8_DISPLAY_VALUE1]]]";
+		String queryText="query=CdDataType&CdDataType[@value8=[@code=CODE8][@displayName=[@value=VALUE8_DISPLAY_VALUE1]]]";
 		process(queryText,"test16");
 	}
-
+	
 	public void xtestISOComplexDataTypeWithAndQuery() throws Exception{
 		String queryText="query=CdDataType&CdDataType[@value4=[@displayName=[@value=VALUE4_DISPLAY_VALUE2]][@originalText=[@value=VALUE4_ORIG_TXT_VALUE1]]]";
 		process(queryText,"test17");
 	}
 	
 	//fails sql script needs to be changed to add data
+	//query works fine
 	public void xtestISOComplexDataTypeWithAndQuery2() throws Exception{
 		String queryText="query=CdDataType&CdDataType[@value2=[@code=CODE4]][@value1=[@code=CODE1]][@value4=[@displayName=[@value=VALUE4_DISPLAY_VALUE2]][@originalText=[@value=VALUE4_ORIG_TXT_VALUE1]]]";
 		process(queryText,"test18");
 	}	
-	
+
+	//query works fine
 	public void xtestISOComplexDataTypeWithAndQuery3() throws Exception{
 		String queryText="query=CdDataType&CdDataType[@value4=[@code=CODE8][@codeSystem=VALUE4_CODE_SYSTEM]]";
 		process(queryText,"test19");
@@ -162,7 +167,7 @@ public class HttpUtilsTest extends TestCase{
 		process(queryText,"test25");
 	}
 
-	public void testISOComplexPQDataType() throws Exception{
+	public void xtestISOComplexPQDataType() throws Exception{
 		String queryText="query=PqDataType&PqDataType[@value3=[@nullFlavor=NA]]";
 		process(queryText,"test25");
 	}
@@ -209,7 +214,7 @@ public class HttpUtilsTest extends TestCase{
 	}
 	
 	public void xtestISOComplexDsetCdDataMultipleSetType() throws Exception{
-		String	queryText="query=DsetCdDataType&DsetCdDataType[@value5=[@item=[@code=CODE1][@codeSystem=CODE_SYSTEM1]]]";
+		String	queryText="query=DsetCdDataType&DsetCdDataType[@value7=[@item=[@code=CODE1]]][@value5=[@item=[@code=CODE1][@codeSystem=CODE_SYSTEM1]]]";
 		process(queryText,"test34");
 	}
 	
@@ -222,25 +227,36 @@ public class HttpUtilsTest extends TestCase{
 		String	queryText="query=DsetCdDataType&DsetCdDataType[@value5=[@item=[@code=CODE1][@codeSystem=CODE_SYSTEM1]][@item=[@codeSystem=CODE_SYSTEM2]]]";
 		process(queryText,"test36");
 	}	
+	
+	public void xtestISOComplexDsetCdDataMultipleSetType4() throws Exception{
+		String	queryText="query=DsetCdDataType&DsetCdDataType[@value3=[@item=[@code=CODE1]]][@value3=[@item=[@codeSystem=CODE_SYSTEM1]]]";
+		try{
+			process(queryText,"test37");
+		}catch (Exception e) {
+			assertEquals("ERROR :  Invalid Query Criteria ", e.getMessage());
+		}
+	}	
 
 	public void xtestISOComplexEnumDataType() throws Exception{
 		String queryText="query=CdDataType&CdDataType[@value2=[@nullFlavor=NI]]";
-		process(queryText,"test37");
+		process(queryText,"test38");
 	}
 	
 	public void xtestISOComplexAdAlDataType() throws Exception{
 		String queryText="query=AdDataType&AdDataType[@value1=[@part=[@value=5 Sun Street][@type=AL]]]";
-		process(queryText,"test38");
+		process(queryText,"test39");
 	}
 	
 	public void xtestISOComplexAdZipDataType() throws Exception{
 		String queryText="query=AdDataType&AdDataType[@value1=[@part=[@value=5 Sun Street][@type=ZIP]]]";
-		process(queryText,"test39");
+		process(queryText,"test40");
 	}
-
 	
 	private void process(String queryText,String fileName) throws Exception, IOException,
 			FileNotFoundException {
+//		HQLCriteria criteria= new HQLCriteria("select dsetCdDataType_1 from gov.nih.nci.cacoresdk.domain.other.datatype.DsetCdDataType as dsetCdDataType_1 inner join dsetCdDataType_1.value5.item as item1 inner join dsetCdDataType_1.value5.item as item2 where  (( item1.codeSystem='CODE_SYSTEM2' ) or ( item2.code='CODE1'  and item2.codeSystem='CODE_SYSTEM1'  ))  ");
+//		HQLCriteria criteria= new HQLCriteria("select dsetCdDataType_1 from gov.nih.nci.cacoresdk.domain.other.datatype.DsetCdDataType  dsetCdDataType_1 inner join dsetCdDataType_1.value5.item as temp_0 inner join dsetCdDataType_1.value5.item as temp_1 where  (( temp_0.codeSystem='CODE_SYSTEM2' ) or ( temp_1.code='CODE1'  and temp_1.codeSystem='CODE_SYSTEM1'  )) ");
+//		applicationService.query(criteria);
 		HTTPUtils httpUtils= new HTTPUtils(applicationService,classCache,1000);
 		httpUtils.setPageSize(1000);
 		httpUtils.setQueryArguments(queryText);
