@@ -486,6 +486,9 @@ public class SearchUtils {
 				Class klass=tempObject.getClass();
 				if (klass.isAssignableFrom(java.util.HashSet.class)) {
 					Set set = (Set) tempObject;
+					if("".equals(tempISOParamType.toString()) ){
+						throw new Exception("Invalid Query Criteria ");
+					}
 					tempObject=Class.forName(tempISOParamType.toString().trim()).newInstance();
 					set.add(tempObject);					
 				}
