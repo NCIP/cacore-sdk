@@ -21,8 +21,7 @@ import org.hibernate.mapping.PersistentClass;
 import org.hibernate.mapping.Property;
 import org.hibernate.mapping.Value;
 
-public class NestedCriteria2HQL
-{
+public class NestedCriteria2HQL {
 	private NestedCriteria criteria;
 	private Configuration cfg;
 	private boolean caseSensitive;	
@@ -45,6 +44,7 @@ public class NestedCriteria2HQL
 		processNestedCriteria(hql, criteria);
 		hqlCriteria = prepareQuery(hql);
 		log.debug("HQL Query :" + hqlCriteria.getHqlString());
+		System.out.println("HQL query: " + hql.toString());
 		return hqlCriteria;
 	}
 
@@ -399,6 +399,31 @@ public class NestedCriteria2HQL
 		return modifiedHQL;
 	}
 	
+	@SuppressWarnings("unchecked")
+	private boolean checkClobAttribute(String objClassName) {
+		PersistentClass pclass = cfg.getClassMapping(objClassName);
+		Iterator properties = pclass.getPropertyIterator();
+		while (properties.hasNext()) {
+			Property prop = (Property) properties.next();
+			if (!prop.getType().isAssociationType())
+				if (prop.getType().getName().equals("text"))
+					return true;
+		}
+		return false;
+	}
+	
+	private boolean distinctRequired() {
+		boolean distinct = true;
+		boolean containsCLOB = checkClobAttribute(criteria.getTargetObjectName());
+		boolean condition1 = condition1(criteria);
+
+		if (condition1 || containsCLOB)
+			distinct = false;
+
+		return distinct;
+	}
+	
+	@SuppressWarnings("unchecked")
 	private boolean inRequired() {
 		boolean condition2 = condition2(criteria);
 		boolean condition3 = condition3(criteria);
@@ -412,11 +437,17 @@ public class NestedCriteria2HQL
 				condition1 = false;
 			} else if (objects.size() == 1) {
 				try {
-					HashMap map = getObjAssocCriterion(objects.get(0), cfg,null,null);
-					if (map == null || map.size() == 0)
+					Object object = objects.get(0);
+					HashMap map = getObjAssocCriterion(object, cfg,
+							null, null);
+					if (map == null || map.size() == 0) {
 						condition1 = false;
+					}
+					if (!condition1) {
+						condition1 = isComponentSetCriterion(object);
+					}
 				} catch (Exception e) {
-					// Ignore exception
+					log.error(" Ignore this error ", e);
 				}
 			}
 		}
@@ -430,44 +461,43 @@ public class NestedCriteria2HQL
 								.getSourceObjectList().iterator().next()))
 					condition2 = false;
 			} catch (Exception e) {
-				// do nothing. In will be added
+				log.error(" Ignore this error ", e);
 			}
-		}
+		}		
 		return condition1 || condition2 || condition3;
 	}
 	
-	private HQLCriteria prepareQuery(StringBuffer hql)
-	{
-		//Check if the target contains any CLOB. If yes then do a subselect with distinct else do plain distinct
+	private HQLCriteria prepareQuery(StringBuffer hql) {
+		// Check if the target contains any CLOB. If yes then do a subselect
+		// with distinct else do plain distinct
+		//
 		String destalias = getAlias(criteria.getTargetObjectName(), 1);
-		String countQ="";
-		String normalQ="";
+		String countQ = "";
+		String normalQ = "";
 		String originalQ = hql.toString();
-		boolean distinctRequired = false; //distinctRequired();
-		if(!distinctRequired)
-		{
-			if(inRequired())
-			{
-				String modifiedQ = originalQ.replaceFirst(destalias,destalias+".id" );
-				String suffix = "from "+criteria.getTargetObjectName()+" as "+destalias+" where "+destalias+".id in ("+modifiedQ+")";
-				normalQ="select "+destalias+" "+suffix;
-				countQ="select count(*) "+suffix;
+		boolean distinctRequired = false; // indistinctRequired();
+		//never comes to else code, as a part of legacy code,not removed.
+		if (!distinctRequired) {
+			if (inRequired()) {
+				String modifiedQ = originalQ.replaceFirst(destalias, destalias
+						+ ".id");
+				String suffix = "from " + criteria.getTargetObjectName()
+						+ " as " + destalias + " where " + destalias
+						+ ".id in (" + modifiedQ + ")";
+				normalQ = "select " + destalias + " " + suffix;
+				countQ = "select count(*) " + suffix;
+			} else {
+				normalQ = originalQ;
+				countQ = getCountQuery(originalQ);
 			}
-			else
-			{
-				normalQ=originalQ;
-				countQ=getCountQuery(originalQ);
-			}
+		} else {
+			normalQ = originalQ.replaceFirst("select " + destalias,
+					"select distinct (" + destalias + ") ");
+			countQ = originalQ.replaceFirst("select " + destalias,
+					"select count(distinct " + destalias + ".id) ");
 		}
-		else
-		{
-			normalQ = originalQ.replaceFirst("select "+destalias, "select distinct ("+destalias+") ");
-			countQ = originalQ.replaceFirst("select "+destalias, "select count(distinct "+destalias+".id) ");
-		}
-		
 		log.debug("****** NormalQ: " + normalQ);
 		log.debug("****** CountQ: " + countQ);
-		
 		HQLCriteria hCriteria = new HQLCriteria(normalQ, countQ, paramList);
 		return hCriteria;
 	}
@@ -514,23 +544,18 @@ public class NestedCriteria2HQL
 	}
 
 	private Value locateComponent(Object pV, String key) {
-		Property property=null;
-		if(pV instanceof Component){
-			property = ((Component)pV).getProperty(key);
-			
-		}else if(pV instanceof PersistentClass){
-			 
-			property = ((PersistentClass)pV).getProperty(key);
+		Property property = null;
+		if (pV instanceof Component) {
+			property = ((Component) pV).getProperty(key);
+		} else if (pV instanceof PersistentClass) {
+			property = ((PersistentClass) pV).getProperty(key);
 		}
-		if(property==null){
+		if (property == null) {
 			return null;
 		}
-		
 		Value value = property.getValue();
 		return value;
 	}
-	
-
 	
 	@SuppressWarnings("unchecked")
 	private void generateISOWhereQuery(Object obj, StringBuffer query,
@@ -553,13 +578,19 @@ public class NestedCriteria2HQL
 							//parse the set and create an hql Set<CD>							
 							boolean isSetObject = objectClassName.startsWith("java.util.HashSet");
 							boolean isEnumObject = value.getClass().isEnum();
+							boolean isListObject = objectClassName.startsWith("java.util.ArrayList");
 							
 							Value persistChildvalue=null;
 							try{
 								persistChildvalue=locateComponent(componentValue, field.getName());
 							}catch(HibernateException ex){
-								log.info("not found mapping for "+field.getName()+"  ignoring");
-								continue;
+								try{
+									persistChildvalue=locateComponent(componentValue, field.getName()+"_"+andCount);
+									newQuery.append("_"+andCount);
+								}catch(HibernateException ex1){
+									log.info("not found mapping for "+field.getName()+"  ignoring");
+									continue;
+								}
 							}
 							if(isoObject & !isEnumObject){
 								parentheses="";
@@ -575,6 +606,12 @@ public class NestedCriteria2HQL
 									count++;
 								}
 								whereQueryClause.append(" )) ");
+							}else if(isListObject){
+								List list=(List)value;
+								for (Object object : list) {
+									parentheses="";
+									generateISOWhereQuery(object, newQuery,whereQueryClause, persistChildvalue,parentheses, queryAppender, andCount++,aliasSetBuffer);
+								}
 							}else{
 								if (field.getName().equals("precision")
 										&& value instanceof Integer
@@ -669,10 +706,8 @@ public class NestedCriteria2HQL
 			Property prop = (Property) properties.next();
 			if (!prop.getType().isAssociationType()) {
 				String fieldName = prop.getName();
-				Field field = getDeclaredField(pclass.getMappedClass(),
-						fieldName);
+				Field field = getDeclaredField(pclass.getMappedClass(),fieldName);
 				field.setAccessible(true);
-
 				try {
 					if (field.get(obj) != null) {
 						if (prop.getType().getName().equals("text"))
@@ -708,7 +743,7 @@ public class NestedCriteria2HQL
 			hql.append(srcAlias);
 			hql.append(" from ").append(tempPclass.getEntityName()).append(" ").append(srcAlias);
 
-		// get association value
+			// get association value
 			if (associationCritMap != null && associationCritMap.size() > 0) {
 				Iterator associationKeys = associationCritMap.keySet().iterator();
 				int counter = 0;
@@ -783,7 +818,6 @@ public class NestedCriteria2HQL
 		
 		hql.append(attributeCriteria);
 		log.info("HQL query: " + hql.toString());
-		System.out.println("HQL query: " + hql.toString());
 		return hql.toString();
 	}
 
@@ -810,8 +844,43 @@ public class NestedCriteria2HQL
 					// would be the concrete subclass of obj, and thus contain
 					// fields that are not in obj
 				}
+			}			
+		}
+	}
+	
+	// object--->has component---> and it has set then add distinct to it. As
+	// component set don't have primary key
+	// avoid duplication of result set.
+	@SuppressWarnings("unchecked")
+	private boolean isComponentSetCriterion(Object obj)
+			throws Exception {
+		PersistentClass pclass = getPersistentClass(obj.getClass().getName(),
+				null, null);
+		Iterator properties = pclass.getPropertyIterator();
+		while (properties.hasNext()) {
+			Property prop = (Property) properties.next();
+			//is component
+			if (prop.getType().isComponentType()) {
+				String fieldName = prop.getName();
+				Field field = getDeclaredField(pclass.getMappedClass(),fieldName);
+				field.setAccessible(true);
+				Object value = field.get(obj);
+				if (value != null) {
+					Field[] fields=value.getClass().getDeclaredFields();
+					for (Field componentField : fields) {
+						componentField.setAccessible(true);
+						Object comFieldObject = componentField.get(value);
+						//is of Type Set
+						if (comFieldObject != null
+								&& (comFieldObject instanceof Collection && ((Collection) comFieldObject)
+										.size() > 0)) {
+							return true;
+						}								
+					}
+				}
 			}
 		}
+		return false;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -864,7 +933,6 @@ public class NestedCriteria2HQL
 			throws NoSuchFieldException {
 		Field field = null;
 		do {
-
 			try {
 				field = klass.getDeclaredField(fieldName);
 			} catch (NoSuchFieldException e) {
@@ -937,6 +1005,7 @@ public class NestedCriteria2HQL
 		return pClasses;
 	}
 	
+	@SuppressWarnings("unchecked")
 	private boolean isObjectEmpty(Object obj) {
 		Class klass = obj.getClass();
 		while (!klass.getName().equals("java.lang.Object")) {
