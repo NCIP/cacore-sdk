@@ -27,7 +27,8 @@ public class NestedCriteria2HQL {
 	private boolean caseSensitive;	
 	private HQLCriteria hqlCriteria;
 	private static Logger log = Logger.getLogger(NestedCriteria2HQL.class);
-	@SuppressWarnings("unchecked")
+	
+	@SuppressWarnings("rawtypes")
 	private List paramList = new ArrayList();
 	String isoprefix = "gov.nih.nci.iso21090.";	
 	private Integer aliasCount=0;
@@ -87,7 +88,7 @@ public class NestedCriteria2HQL {
 	
 	
 	//Single Object with query by example
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	private void solveScenario1(StringBuffer hql, NestedCriteria criteria) throws Exception {
 		
 		Collection sourceObjectList = criteria.getSourceObjectList();
@@ -120,7 +121,7 @@ public class NestedCriteria2HQL {
 	}
 	
 	//Getting association for the query by example
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	private void solveScenario2(StringBuffer hql, NestedCriteria criteria) throws Exception {
 		
 		Collection sourceObjectList = criteria.getSourceObjectList();		
@@ -399,7 +400,7 @@ public class NestedCriteria2HQL {
 		return modifiedHQL;
 	}
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	private boolean checkClobAttribute(String objClassName) {
 		PersistentClass pclass = cfg.getClassMapping(objClassName);
 		Iterator properties = pclass.getPropertyIterator();
@@ -423,7 +424,7 @@ public class NestedCriteria2HQL {
 		return distinct;
 	}
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	private boolean inRequired() {
 		boolean condition2 = condition2(criteria);
 		boolean condition3 = condition3(criteria);
@@ -502,7 +503,7 @@ public class NestedCriteria2HQL {
 		return hCriteria;
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	private String getObjectAttributeCriterion(String sourceAlias, Object obj,
 			Configuration cfg,String parentClassName,String parentRoleName,StringBuffer aliasSetBuffer) throws Exception {
 		StringBuffer whereClause = new StringBuffer();
@@ -557,7 +558,7 @@ public class NestedCriteria2HQL {
 		return value;
 	}
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	private void generateISOWhereQuery(Object obj, StringBuffer query,
 			StringBuffer whereQueryClause, Value componentValue,
 			String parentheses, String queryAppender,Integer andCount,StringBuffer aliasSetBuffer) {
@@ -647,7 +648,7 @@ public class NestedCriteria2HQL {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	private boolean isObjectPrimitive(Object value) {
 		if(value instanceof Collection && ((Collection)value).size()>0){
 			return false;
@@ -698,7 +699,7 @@ public class NestedCriteria2HQL {
 		return criterions;
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	private void setAttrCriterion(Object obj, PersistentClass pclass,
 			HashMap criterions) throws Exception {
 		Iterator properties = pclass.getPropertyIterator();
@@ -729,7 +730,7 @@ public class NestedCriteria2HQL {
 		return getObjectCriterion(obj, cfg,skipAssociations,null,null);
 	}	
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	private String getObjectCriterion(Object obj, Configuration cfg,
 			boolean skipAssociations,String parentClass,String parentRoleName) throws Exception {
 		String srcAlias = getAlias(obj.getClass().getName(), 1);
@@ -821,7 +822,7 @@ public class NestedCriteria2HQL {
 		return hql.toString();
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	private void setAssocCriterion(Object obj, PersistentClass pclass,
 			HashMap criterions) throws Exception {
 		Iterator properties = pclass.getPropertyIterator();
@@ -851,7 +852,7 @@ public class NestedCriteria2HQL {
 	// object--->has component---> and it has set then add distinct to it. As
 	// component set don't have primary key
 	// avoid duplication of result set.
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	private boolean isComponentSetCriterion(Object obj)
 			throws Exception {
 		PersistentClass pclass = getPersistentClass(obj.getClass().getName(),
@@ -883,7 +884,7 @@ public class NestedCriteria2HQL {
 		return false;
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	private HashMap getObjAssocCriterion(Object obj, Configuration cfg,
 			String parentClassName, String parentRoleName) throws Exception {
 		HashMap criterions = new HashMap();
@@ -928,7 +929,7 @@ public class NestedCriteria2HQL {
 		this.caseSensitive = caseSensitive;
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	private Field getDeclaredField(Class klass, String fieldName)
 			throws NoSuchFieldException {
 		Field field = null;
@@ -973,7 +974,7 @@ public class NestedCriteria2HQL {
 		return null;
 	}
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	private List<PersistentClass> getPersistentClassList(String objClassName) {
 		List<PersistentClass> pClasses = new ArrayList<PersistentClass>();
 		PersistentClass pclass = cfg.getClassMapping(objClassName);
@@ -1005,7 +1006,7 @@ public class NestedCriteria2HQL {
 		return pClasses;
 	}
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	private boolean isObjectEmpty(Object obj) {
 		Class klass = obj.getClass();
 		while (!klass.getName().equals("java.lang.Object")) {
@@ -1032,7 +1033,7 @@ public class NestedCriteria2HQL {
 		return true;
 	}
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	private boolean isObjectAssociationEmpty(Object obj) throws Exception {
 		Class klass = obj.getClass();
 		while (!klass.getName().equals("java.lang.Object")) {
