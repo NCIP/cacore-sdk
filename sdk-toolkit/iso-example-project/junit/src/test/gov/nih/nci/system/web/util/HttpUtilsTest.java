@@ -9,6 +9,7 @@ import java.io.IOException;
 import junit.framework.TestCase;
 
 import gov.nih.nci.system.applicationservice.ApplicationService;
+import gov.nih.nci.system.query.hibernate.HQLCriteria;
 import gov.nih.nci.system.util.ClassCache;
 import gov.nih.nci.system.util.SystemConstant;
 import gov.nih.nci.system.web.util.HTTPUtils;
@@ -208,34 +209,49 @@ public class HttpUtilsTest extends TestCase{
 		process(queryText,"test32");
 	}
 	
-	public void xtestISOComplexDsetCdDataSetType2() throws Exception{
+	public void xtestISOComplexDsetCdDataSetType5() throws Exception{
 		String queryText="query=DsetCdDataType&DsetCdDataType[@value5=[@item=[@code=CODE1][@codeSystem=CODE_SYSTEM1]]]";
 		process(queryText,"test33");
 	}
 	
-	public void xtestISOComplexDsetCdDataMultipleSetType() throws Exception{
-		String	queryText="query=DsetCdDataType&DsetCdDataType[@value7=[@item=[@code=CODE1]]][@value5=[@item=[@code=CODE1][@codeSystem=CODE_SYSTEM1]]]";
+	public void xtestISOComplexDsetCdDataMultipleSetValue1() throws Exception{
+		String	queryText="query=DsetCdDataType&DsetCdDataType[@value1=[@item=[@code=CODE1]][@item=[@code=CODE2]]]";
 		process(queryText,"test34");
 	}
 	
-	public void xtestISOComplexDsetCdDataMultipleSetType2() throws Exception{
+	public void xtestISOComplexDsetCdDataMultipleSetType5_1() throws Exception{
 		String	queryText="query=DsetCdDataType&DsetCdDataType[@value5=[@item=[@code=CODE1]][@item=[@codeSystem=CODE_SYSTEM1]]]";
 		process(queryText,"test35");
 	}	
-
-	public void xtestISOComplexDsetCdDataMultipleSetType3() throws Exception{
-		String	queryText="query=DsetCdDataType&DsetCdDataType[@value5=[@item=[@code=CODE1][@codeSystem=CODE_SYSTEM1]][@item=[@codeSystem=CODE_SYSTEM2]]]";
-		process(queryText,"test36");
-	}	
 	
-	public void xtestISOComplexDsetCdDataMultipleSetType4() throws Exception{
+	public void xtestISOComplexDsetCdDataMultipleSetType5_2() throws Exception{
+		String	queryText="query=DsetCdDataType&DsetCdDataType[@value5=[@item=[@code=CODE1]][@item=[@code=CODE2]]]";
+		process(queryText,"test36");
+	}
+
+	public void xtestISOComplexDsetCdDataMultipleSetValue6() throws Exception{
+		String	queryText="query=DsetCdDataType&DsetCdDataType[@value6=[@item=[@code=CODE1]][@item=[@code=CODE1]][@item=[@code=CODE2]][@item=[@code=CODE2]]]";
+		process(queryText,"test34");
+	}
+	
+	public void xtestISOComplexDsetCdDataMultipleSetType7() throws Exception{
+		String	queryText="query=DsetCdDataType&DsetCdDataType[@value7=[@item=[@code=CODE1]][@item=[@code=CODE2]]]";
+		process(queryText,"test34");
+	}
+	
+	public void xtestISOComplexDsetCdDataInvalidSet() throws Exception{
 		String	queryText="query=DsetCdDataType&DsetCdDataType[@value3=[@item=[@code=CODE1]]][@value3=[@item=[@codeSystem=CODE_SYSTEM1]]]";
 		try{
 			process(queryText,"test37");
 		}catch (Exception e) {
 			assertEquals("ERROR :  Invalid Query Criteria ", e.getMessage());
 		}
-	}	
+	}
+	
+	public void xtestISOComplexDsetCdDataMultipleSetAllType() throws Exception{
+		String	queryText="query=DsetCdDataType&DsetCdDataType[@value1=[@item=[@code=CODE1]]][@value2=[@item=[@code=CODE1]]][@value3=[@item=[@code=CODE1]]][@value4=[@item=[@code=CODE1]]][@value5=[@item=[@code=CODE1][@codeSystem=CODE_SYSTEM1]][@item=[@codeSystem=CODE_SYSTEM2]]][@value6=[@item=[@code=CODE1]]][@value7=[@item=[@code=CODE1]]]";
+		process(queryText,"test36");
+	}
 
 	public void xtestISOComplexEnumDataType() throws Exception{
 		String queryText="query=CdDataType&CdDataType[@value2=[@nullFlavor=NI]]";
@@ -243,19 +259,28 @@ public class HttpUtilsTest extends TestCase{
 	}
 	
 	public void xtestISOComplexAdAlDataType() throws Exception{
-		String queryText="query=AdDataType&AdDataType[@value1=[@part=[@value=5 Sun Street][@type=AL]]]";
+		String queryText="query=AdDataType&AdDataType[@value1=[@part=[@value=5 Sun Street][@type=ADL]]]";
+		process(queryText,"test39");
+	}
+	
+	public void xtestISOComplexAdAlDataType2() throws Exception{
+		String queryText="query=AdDataType&AdDataType[@value9=[@part=[@value=5 Sun Street][@type=ADL]]]";
+		process(queryText,"test39");
+	}
+	
+	public void testISOComplexAdAlDataType() throws Exception{
+		String queryText="query=AdDataType&AdDataType[@value4=[@part=[@value=5 Sun Street][@type=ADL]]]";
 		process(queryText,"test39");
 	}
 	
 	public void xtestISOComplexAdZipDataType() throws Exception{
-		String queryText="query=AdDataType&AdDataType[@value1=[@part=[@value=5 Sun Street][@type=ZIP]]]";
+		String queryText="query=AdDataType&AdDataType[@value1=[@part=[@value=5 Sun Street]]]";
 		process(queryText,"test40");
 	}
 	
 	private void process(String queryText,String fileName) throws Exception, IOException,
 			FileNotFoundException {
-//		HQLCriteria criteria= new HQLCriteria("select dsetCdDataType_1 from gov.nih.nci.cacoresdk.domain.other.datatype.DsetCdDataType as dsetCdDataType_1 inner join dsetCdDataType_1.value5.item as item1 inner join dsetCdDataType_1.value5.item as item2 where  (( item1.codeSystem='CODE_SYSTEM2' ) or ( item2.code='CODE1'  and item2.codeSystem='CODE_SYSTEM1'  ))  ");
-//		HQLCriteria criteria= new HQLCriteria("select dsetCdDataType_1 from gov.nih.nci.cacoresdk.domain.other.datatype.DsetCdDataType  dsetCdDataType_1 inner join dsetCdDataType_1.value5.item as temp_0 inner join dsetCdDataType_1.value5.item as temp_1 where  (( temp_0.codeSystem='CODE_SYSTEM2' ) or ( temp_1.code='CODE1'  and temp_1.codeSystem='CODE_SYSTEM1'  )) ");
+//		HQLCriteria criteria= new HQLCriteria("select adDataType_1 from gov.nih.nci.cacoresdk.domain.other.datatype.AdDataType adDataType_1 inner join adDataType_1.value1.part_0 as adxp_0 where  (( adxp_0.value='5 Sun Street'  )) ");
 //		applicationService.query(criteria);
 		HTTPUtils httpUtils= new HTTPUtils(applicationService,classCache,1000);
 		httpUtils.setPageSize(1000);

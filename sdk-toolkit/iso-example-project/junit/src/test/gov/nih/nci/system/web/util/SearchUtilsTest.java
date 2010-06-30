@@ -5,6 +5,7 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import gov.nih.nci.cacoresdk.domain.inheritance.childwithassociation.Credit;
 
@@ -17,6 +18,7 @@ import gov.nih.nci.cacoresdk.domain.other.datatype.IvlRealDataType;
 import gov.nih.nci.cacoresdk.domain.other.datatype.IvlTsDataType;
 import gov.nih.nci.iso21090.Adxp;
 import gov.nih.nci.iso21090.Cd;
+import gov.nih.nci.iso21090.EntityNamePartQualifier;
 import gov.nih.nci.iso21090.Enxp;
 import gov.nih.nci.system.util.ClassCache;
 import gov.nih.nci.system.web.util.SearchUtils;
@@ -149,7 +151,7 @@ public class SearchUtilsTest extends TestCase {
 		}
 	}
 	
-	public void testISOExampleComplexCdQueryValue6(){
+	public void xtestISOExampleComplexCdQueryValue6(){
 		List<String> criteriaList=new ArrayList<String>();
 		String queryText="CdDataType[@value6=[@displayName=[@value=VALUE6_DISPLAY_VALUE1]][@code=CODE1]]";
 		criteriaList.add(queryText);
@@ -287,6 +289,38 @@ public class SearchUtilsTest extends TestCase {
 			Enxp next = enDataType.getValue1().getPart().iterator().next();
 			assertNotNull(next.getValue());
 			assertNotNull(next.getType());
+		} catch (Exception ex) {
+			String message=getStackTrace(ex);
+			fail(message);
+		}
+	}
+	
+	public void xtestISOComplexEnDataType2() throws Exception{
+		List<String> criteriaList=new ArrayList<String>();
+		String queryText="EnDataType[@value1=[@part=[@code=CODE1][@value=1][@type=FAM]]]";
+		criteriaList.add(queryText);
+		try {
+			EnDataType enDataType=(EnDataType)searchUtils.buildSearchCriteria("gov.nih.nci.cacoresdk.domain.other.datatype",criteriaList);
+			Enxp next = enDataType.getValue1().getPart().iterator().next();
+			assertNotNull(next.getValue());
+			assertNotNull(next.getCode());
+			assertNotNull(next.getType());
+		} catch (Exception ex) {
+			String message=getStackTrace(ex);
+			fail(message);
+		}
+	}
+	
+	public void testISOComplexEnDataType3() throws Exception{
+		List<String> criteriaList=new ArrayList<String>();
+		String queryText="EnDataType[@value1=[@part=[@qualifier=LS][@qualifier=AC]]]";
+		criteriaList.add(queryText);
+		try {
+			EnDataType enDataType=(EnDataType)searchUtils.buildSearchCriteria("gov.nih.nci.cacoresdk.domain.other.datatype",criteriaList);
+			Enxp next = enDataType.getValue1().getPart().iterator().next();
+			Iterator<EntityNamePartQualifier> itr=next.getQualifier().iterator();
+			assertNotNull(itr.next());
+			assertNotNull(itr.next());
 		} catch (Exception ex) {
 			String message=getStackTrace(ex);
 			fail(message);
