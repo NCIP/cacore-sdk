@@ -16,6 +16,7 @@ import gov.nih.nci.cacoresdk.domain.other.datatype.EnDataType;
 import gov.nih.nci.cacoresdk.domain.other.datatype.IvlIntDataType;
 import gov.nih.nci.cacoresdk.domain.other.datatype.IvlRealDataType;
 import gov.nih.nci.cacoresdk.domain.other.datatype.IvlTsDataType;
+import gov.nih.nci.iso21090.Ad;
 import gov.nih.nci.iso21090.Adxp;
 import gov.nih.nci.iso21090.Cd;
 import gov.nih.nci.iso21090.EntityNamePartQualifier;
@@ -311,7 +312,7 @@ public class SearchUtilsTest extends TestCase {
 		}
 	}
 	
-	public void testISOComplexEnDataType3() throws Exception{
+	public void xtestISOComplexEnDataType3() throws Exception{
 		List<String> criteriaList=new ArrayList<String>();
 		String queryText="EnDataType[@value1=[@part=[@qualifier=LS][@qualifier=AC]]]";
 		criteriaList.add(queryText);
@@ -326,6 +327,30 @@ public class SearchUtilsTest extends TestCase {
 			fail(message);
 		}
 	}
+	
+	public void testISOComplexEnDataType4() throws Exception{
+		List<String> criteriaList=new ArrayList<String>();
+		String queryText="AdDataType[@value9=[@part=[@value=5 Sun Street][@codeSystem=5 Sun Street][@code=5 Sun Street][@type=CTY]][@part=[@value=5 Sun Street][@codeSystem=5 Sun Street][@code=5 Sun Street][@type=ADL]]]";
+		criteriaList.add(queryText);
+		try {
+			AdDataType adDataType=(AdDataType)searchUtils.buildSearchCriteria("gov.nih.nci.cacoresdk.domain.other.datatype",criteriaList);
+			Iterator<Adxp> iterator = adDataType.getValue9().getPart().iterator();
+			Adxp next = iterator.next();
+			Adxp next2 = iterator.next();
+			assertNotNull(next.getCode());
+			assertNotNull(next.getCodeSystem());
+			assertNotNull(next.getValue());
+			assertEquals(next.getType().name(), "CTY");
+			assertNotNull(next2.getCode());
+			assertNotNull(next2.getCodeSystem());
+			assertNotNull(next2.getValue());
+			assertEquals(next2.getType().name(), "ADL");
+		} catch (Exception ex) {
+			String message=getStackTrace(ex);
+			fail(message);
+		}
+	}
+	
 
 	private String getStackTrace(Exception ex) {
 		StringWriter sw = new StringWriter();
