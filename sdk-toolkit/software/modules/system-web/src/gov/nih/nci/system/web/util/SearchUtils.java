@@ -572,7 +572,7 @@ public class SearchUtils {
 		return childObject;
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	private Object getFieldTypeObject(Type[] genericParameterTypes,Field field,StringBuffer classISOParamType) throws Exception{				
 		Object fieldTypeObject=null;				
 		for(Type genericParameterType : genericParameterTypes){
@@ -626,8 +626,8 @@ public class SearchUtils {
 	 * @param attributeName - specifies the attribute name
 	 * @return
 	 * @throws Exception
-	 */
-	@SuppressWarnings("unchecked")
+	 */	
+	@SuppressWarnings("rawtypes")
 	public Field getField(Class className, String attributeName)throws Exception {  
 		Field attribute = null;
 		Field[] fields = classCache.getAllFields(className);
