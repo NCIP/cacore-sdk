@@ -996,18 +996,22 @@ public class NestedCriteria2HQL {
 	}	
 	
 	//get the result HQL String from the Object obj
-	private String getHQLQueryFromSourceObjectWithCriterion(Object obj, Configuration cfg,
-			boolean skipAssociations,String parentClass,String parentRoleName) throws Exception {
+	private String getHQLQueryFromSourceObjectWithCriterion(Object obj,
+			Configuration cfg, boolean skipAssociations, String parentClass,
+			String parentRoleName) throws Exception {
 		String srcAlias = getAlias(obj.getClass().getName(), 1);
 
 		StringBuffer hql = new StringBuffer();
 		Map<String, Object> associationCritMap = null;
 		if (!skipAssociations) {
-			associationCritMap = getAssociatedObjectCriterion(obj, cfg,parentClass,parentRoleName);
-			PersistentClass tempPclass = getPersistentClass(obj.getClass().getName(),parentClass,parentRoleName);
+			associationCritMap = getAssociatedObjectCriterion(obj, cfg,
+					parentClass, parentRoleName);
+			PersistentClass tempPclass = getPersistentClass(obj.getClass()
+					.getName(), parentClass, parentRoleName);
 			hql.append("select ");
 			hql.append(srcAlias);
-			hql.append(" from ").append(tempPclass.getEntityName()).append(" ").append(srcAlias);
+			hql.append(" from ").append(tempPclass.getEntityName()).append(" ")
+					.append(srcAlias);
 
 			if (associationCritMap != null && associationCritMap.size() > 0) {
 				StringBuffer associationHQL = generateAssociationHQLCriteria(
@@ -1015,8 +1019,9 @@ public class NestedCriteria2HQL {
 				hql.append(associationHQL);
 			}
 		}
-		StringBuffer aliasSetBuffer=new StringBuffer();
-		String attributeCriteria = getObjectAttributeCriterion(srcAlias, obj,cfg,parentClass,parentRoleName,aliasSetBuffer);
+		StringBuffer aliasSetBuffer = new StringBuffer();
+		String attributeCriteria = getObjectAttributeCriterion(srcAlias, obj,
+				cfg, parentClass, parentRoleName, aliasSetBuffer);
 		hql.append(aliasSetBuffer.toString());
 		if ((associationCritMap == null || associationCritMap.size() == 0
 				&& attributeCriteria != null
@@ -1027,7 +1032,7 @@ public class NestedCriteria2HQL {
 				&& attributeCriteria != null
 				&& attributeCriteria.trim().length() > 0)
 			hql.append(" ").append(" and ");
-		
+
 		hql.append(attributeCriteria);
 		log.info("HQL query: " + hql.toString());
 		return hql.toString();
@@ -1168,8 +1173,9 @@ public class NestedCriteria2HQL {
 		return false;
 	}
 
-	private Map<String, Object> getAssociatedObjectCriterion(Object obj, Configuration cfg,
-			String parentClassName, String parentRoleName) throws Exception {
+	private Map<String, Object> getAssociatedObjectCriterion(Object obj,
+			Configuration cfg, String parentClassName, String parentRoleName)
+			throws Exception {
 		Map<String, Object> criterions = null;
 		Map<String, Object> superClassCriterions = null;
 		String objClassName = obj.getClass().getName();
@@ -1177,16 +1183,17 @@ public class NestedCriteria2HQL {
 		PersistentClass pclass = getPersistentClass(objClassName,
 				parentClassName, parentRoleName);
 		if (pclass != null) {
-			criterions=getAssociatedObjectWithFieldCriterion(obj, pclass);
+			criterions = getAssociatedObjectWithFieldCriterion(obj, pclass);
 
 			pclass = pclass.getSuperclass();
 			while (pclass != null) {
-				superClassCriterions=getAssociatedObjectWithFieldCriterion(obj, pclass);
+				superClassCriterions = getAssociatedObjectWithFieldCriterion(
+						obj, pclass);
 				pclass = pclass.getSuperclass();
 			}
 		}
-		if(superClassCriterions!=null)
-				criterions.putAll(superClassCriterions);
+		if (superClassCriterions != null)
+			criterions.putAll(superClassCriterions);
 		return criterions;
 	}
 
@@ -1261,7 +1268,9 @@ public class NestedCriteria2HQL {
 	private List<PersistentClass> getPersistentClassList(String objClassName) {
 		List<PersistentClass> pClasses = new ArrayList<PersistentClass>();
 		PersistentClass pclass = cfg.getClassMapping(objClassName);
-		if (pclass == null) {// might be dealing with an implicit class. Check to see if we have a persistent subclass mapping we can use instead
+		if (pclass == null) {// might be dealing with an implicit class. Check
+								// to see if we have a persistent subclass
+								// mapping we can use instead
 			Iterator iter = cfg.getClassMappings();
 			Class objClass = null;
 			try {
