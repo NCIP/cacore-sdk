@@ -19,7 +19,9 @@ import java.util.Vector;
 import org.apache.log4j.Logger;
 
 /**
- * SearchUtils presents various methods to build and modify a hibernate criteria.
+ * SearchUtils presents various methods to build and modify a hibernate
+ * criteria.
+ * 
  * @author SDK Team
  */
 
@@ -27,9 +29,9 @@ public class SearchUtils {
 
 	private static Logger log = Logger.getLogger(SearchUtils.class.getName());
 	String isoprefix = "gov.nih.nci.iso21090.";
-	private ClassCache classCache;	
-	
-	public SearchUtils(ClassCache classCache){
+	private ClassCache classCache;
+
+	public SearchUtils(ClassCache classCache) {
 		this.classCache = classCache;
 	}
 
@@ -39,52 +41,45 @@ public class SearchUtils {
 	 * @param criterion		Specifies an object
 	 * return				Returns the role between the specified class and object
 	 */
-	public String getRoleName(Class searchClass, Object criterion) throws Exception{
+	@SuppressWarnings("rawtypes")
+	public String getRoleName(Class searchClass, Object criterion)
+			throws Exception {
 
-		String criterionClassName 	= criterion.getClass().getName();
-
-		String roleName 			= null;
-		Field[] fields 				= searchClass.getDeclaredFields();
-
-		// first, check if the super class has the association with criterion object
-		if (searchClass.getSuperclass() != null)
-		{
+		String criterionClassName = criterion.getClass().getName();
+		String roleName = null;
+		Field[] fields = searchClass.getDeclaredFields();
+		// first, check if the super class has the association with criterion
+		// object
+		if (searchClass.getSuperclass() != null) {
 			roleName = getRoleName(searchClass.getSuperclass(), criterion);
 		}
-
 		// if the superclass has association with the criterionobject,
 		// use the superclass's asscoiation as the subclass.
-		if (roleName != null)
-		{
+		if (roleName != null) {
 			return roleName;
 		}
-
-		try{
+		try {
 			for (int i = 0; i < fields.length; i++) {
 				fields[i].setAccessible(true);
 
-				String fieldName 	= fields[i].getName();
-				String fieldType 	= fields[i].getType().getName();
-				Class typeClass 	= fields[i].getType();
+				String fieldName = fields[i].getName();
+				String fieldType = fields[i].getType().getName();
+				Class typeClass = fields[i].getType();
 
-				if(!typeClass.isPrimitive())
-				{
-					if(!typeClass.isArray())
-					{
-						if(isCollectionType(typeClass))
-						{
-							String returnType = classCache.getReturnType(fields[i].getGenericType().toString());
-							if ((returnType != null) && (returnType.equals(criterionClassName)))
-							{
+				if (!typeClass.isPrimitive()) {
+					if (!typeClass.isArray()) {
+						if (isCollectionType(typeClass)) {
+							String returnType = classCache
+									.getReturnType(fields[i].getGenericType()
+											.toString());
+							if ((returnType != null)
+									&& (returnType.equals(criterionClassName))) {
 								roleName = fieldName;
 								break;
 							}
 
-						} 
-						else
-						{
-							if (fieldType.equals(criterionClassName))
-							{
+						} else {
+							if (fieldType.equals(criterionClassName)) {
 								roleName = fieldName;
 								break;
 							}
@@ -92,31 +87,26 @@ public class SearchUtils {
 					}
 				}
 			}
-		}catch(Exception ex){
+		} catch (Exception ex) {
 			log.error("ERROR: ", ex);
 			throw ex;
 		}
 		return roleName;
 	}
 
-	private boolean isCollectionType(Class inputClass)
-	{
+	@SuppressWarnings("rawtypes")
+	private boolean isCollectionType(Class inputClass) {
 		boolean flag = false;
-		if (inputClass.getName().equals("java.util.Collection"))
-		{
+		if (inputClass.getName().equals("java.util.Collection")) {
 			flag = true;
-		}
-		else
-		{
+		} else {
 			Class[] interfaces = inputClass.getInterfaces();
-			for(int i= 0; i<interfaces.length; i++)
-			{
-				if (interfaces[i].getName().equals("java.util.Collection"))
-				{
+			for (int i = 0; i < interfaces.length; i++) {
+				if (interfaces[i].getName().equals("java.util.Collection")) {
 					flag = true;
 					break;
 				}
-			}			
+			}
 		}
 		return flag;
 	}
@@ -128,28 +118,30 @@ public class SearchUtils {
 	 * @return
 	 * @throws Exception
 	 */
-	public Object getCriteriaValue(Object assObject, Object critObject) throws Exception{
-		if(critObject.getClass().getName().equals(assObject.getClass().getName())){
+	public Object getCriteriaValue(Object assObject, Object critObject)
+			throws Exception {
+		if (critObject.getClass().getName()
+				.equals(assObject.getClass().getName())) {
 			Field[] assFields = classCache.getAllFields(assObject.getClass());
-			for(int i=0; i<assFields.length; i++){                
-				if(assFields[i].getName().equalsIgnoreCase("serialVersionUID")){
+			for (int i = 0; i < assFields.length; i++) {
+				if (assFields[i].getName().equalsIgnoreCase("serialVersionUID")) {
 					continue;
 				}
-				try{
-					if(assFields[i].get(assObject)!=null){                        
+				try {
+					if (assFields[i].get(assObject) != null) {
 						Object value = assFields[i].get(assObject);
-						Field critField = getField(critObject.getClass(), assFields[i].getName());
-						if(value != null){                           
-							critField.set(critObject, value);                           
+						Field critField = getField(critObject.getClass(),
+								assFields[i].getName());
+						if (value != null) {
+							critField.set(critObject, value);
 						}
-					}  
-				}catch(Exception ex){
+					}
+				} catch (Exception ex) {
 					log.error(ex.getMessage());
 				}
 
 			}
 		}
-
 		return critObject;
 	}
 
@@ -160,26 +152,33 @@ public class SearchUtils {
 	 * @return
 	 * @throws Exception
 	 */
-	public Object buildSearchCriteria(String packageName, List<String> criteriaList) throws Exception{
+	@SuppressWarnings("rawtypes")
+	public Object buildSearchCriteria(String packageName,
+			List<String> criteriaList) throws Exception {
 		Object criteriaObject = null;
 		Object assObject = null;
 		int counter = criteriaList.size();
 		try {
 			if (criteriaList.size() > 1) {
-				criteriaObject = getCriteria((String) criteriaList.get(counter - 1), packageName);
+				criteriaObject = getCriteria(
+						criteriaList.get(counter - 1), packageName);
 				for (int i = counter - 2; i >= 0; i--) {
 					assObject = criteriaObject;
-					String critString = (String) criteriaList.get(i);
+					String critString = criteriaList.get(i);
 					log.debug("Crit string: " + critString);
 					criteriaObject = getCriteria(critString, packageName);
-					if (criteriaObject.getClass().getName().equals(assObject.getClass().getName())) {
-						criteriaObject = getCriteriaValue(criteriaObject,assObject);
+					if (criteriaObject.getClass().getName()
+							.equals(assObject.getClass().getName())) {
+						criteriaObject = getCriteriaValue(criteriaObject,
+								assObject);
 					} else {
 						Method method = null;
 						try {
 							method = getRoleMethod(criteriaObject, assObject);
 						} catch (Exception ex) {
-							throw new Exception(critString+ " is not an association of "+ criteriaObject.getClass().getName());
+							throw new Exception(critString
+									+ " is not an association of "
+									+ criteriaObject.getClass().getName());
 						}
 
 						if (method != null) {
@@ -188,16 +187,19 @@ public class SearchUtils {
 								if (types[0].getName().endsWith("Collection")) {
 									List<Object> assObjectList = new ArrayList<Object>();
 									assObjectList.add(assObject);
-									method.invoke(criteriaObject,new Object[] { assObjectList });
+									method.invoke(criteriaObject,
+											new Object[]{assObjectList});
 								} else {
-									method.invoke(criteriaObject,new Object[] { assObject });
+									method.invoke(criteriaObject,
+											new Object[]{assObject});
 								}
 							}
 						}
 					}
 				}
 			} else if (criteriaList.size() == 1) {
-				criteriaObject = getCriteria((String) criteriaList.get(0),packageName);
+				criteriaObject = getCriteria(criteriaList.get(0),
+						packageName);
 			} else {
 				throw new Exception("Criteria not defined");
 			}
@@ -232,16 +234,17 @@ public class SearchUtils {
 			critObject = Class.forName(className).newInstance();
 		}
 		String attString = null;
-		List attList = new ArrayList();
+		List<String> attList = new ArrayList<String>();
 		if (indexOf >= 0) {
-			int endIndex = criteriaString.lastIndexOf(SystemConstant.RIGHT_BRACKET) + 1;
+			int endIndex = criteriaString
+					.lastIndexOf(SystemConstant.RIGHT_BRACKET) + 1;
 			attString = criteriaString.substring(indexOf, endIndex);
 		}
 		if (attString != null) {
 			attList = getAttributeCollection(attString);
 		}
 		for (int i = 0; i < attList.size(); i++) {
-			String att = (String) attList.get(i);
+			String att = attList.get(i);
 			critObject = getAttributeCriteria(att, critObject, packageName);
 		}
 		return critObject;
@@ -272,7 +275,7 @@ public class SearchUtils {
 	 * @param methodName
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	private Method getMethod(Class critClass, String methodName) {
 		Method[] methods = getAllMethods(critClass);
 		Method method = null;
@@ -291,13 +294,13 @@ public class SearchUtils {
 	 * @return
 	 * @throws Exception
 	 */
-	@SuppressWarnings("unchecked")
-	private List getAttributeCollection(String attString) throws Exception {
+	private List<String> getAttributeCollection(String attString)
+			throws Exception {
 		List<String> attList = new ArrayList<String>();
 		int startCounter = 0;
 		int startIndex = 0;
 		int endCounter = 0;
-		//left;right brackets validation
+		// left;right brackets validation
 		for (int i = 0; i < attString.length(); i++) {
 			if (attString.charAt(i) == SystemConstant.LEFT_BRACKET) {
 				startCounter++;
@@ -309,10 +312,11 @@ public class SearchUtils {
 			throw new Exception(
 					"Invalid format: '[' parenthesis does not match number of ']' parenthesis");
 		}
-		
+
 		try {
 			if (attString.indexOf("][") < 1) {
-				String att = attString.substring(1, attString.lastIndexOf(SystemConstant.RIGHT_BRACKET));
+				String att = attString.substring(1,
+						attString.lastIndexOf(SystemConstant.RIGHT_BRACKET));
 				attList.add(att);
 			} else {
 				if (attString.charAt(0) == SystemConstant.LEFT_BRACKET) {
@@ -346,7 +350,6 @@ public class SearchUtils {
 		return attList;
 	}
 
-
 	/**
 	 * Generates a criteria object
 	 * @param att - specifies the attribute
@@ -355,91 +358,105 @@ public class SearchUtils {
 	 * @return
 	 * @throws Exception
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"rawtypes"})
 	private Object getAttributeCriteria(String att, Object critObject,
 			String packageName) throws Exception {
-		try{
+		try {
 			String attRole = null;
-			//@id=3 example-project
-			//@id=[@extension=1] iso-example
-			//Deck[@id=[@extension=1]] --- nested criteria multiple params
-			boolean condition1 = att.indexOf(Character.toString(SystemConstant.EQUAL)+Character.toString(SystemConstant.LEFT_BRACKET))>0;
-			boolean condition2 = att.indexOf(SystemConstant.LEFT_BRACKET)>1;
-			boolean isISOProjectWithRole=att.indexOf("@")>0;
+			// @id=3 example-project
+			// @id=[@extension=1] iso-example
+			// Deck[@id=[@extension=1]] --- nested criteria multiple params
+			boolean condition1 = att.indexOf(Character
+					.toString(SystemConstant.EQUAL)
+					+ Character.toString(SystemConstant.LEFT_BRACKET)) > 0;
+			boolean condition2 = att.indexOf(SystemConstant.LEFT_BRACKET) > 1;
+			boolean isISOProjectWithRole = att.indexOf("@") > 0;
 			boolean isExampleProjectWithRole = !condition1 && condition2;
 
 			if (isExampleProjectWithRole || isISOProjectWithRole) {
-				attRole = att.substring(0, att.indexOf(SystemConstant.LEFT_BRACKET));
+				attRole = att.substring(0,
+						att.indexOf(SystemConstant.LEFT_BRACKET));
 			}
-			if(attRole == null){
-					critObject= getCriteriaObject(att,critObject);
-			}
-			else{
+			if (attRole == null) {
+				critObject = getCriteriaObject(att, critObject);
+			} else {
 				String roleClassName = getRoleClassName(attRole);
-				if(roleClassName.indexOf(SystemConstant.DOT)<0){
-					roleClassName = packageName +SystemConstant.DOT + roleClassName;                            
-				}                
+				if (roleClassName.indexOf(SystemConstant.DOT) < 0) {
+					roleClassName = packageName + SystemConstant.DOT
+							+ roleClassName;
+				}
 				Method roleMethod = null;
-				String methodName = attRole.substring(0,1).toUpperCase() + attRole.substring(1);
-				roleMethod = getMethod(critObject.getClass(), "set" + methodName);
+				String methodName = attRole.substring(0, 1).toUpperCase()
+						+ attRole.substring(1);
+				roleMethod = getMethod(critObject.getClass(), "set"
+						+ methodName);
 				Object roleObject = Class.forName(roleClassName).newInstance();
 				List<Object> roleClassCollection = new ArrayList<Object>();
 				int count = 0;
-				for(int i=0; i< att.length(); i++){
-					if(att.charAt(i)==SystemConstant.LEFT_BRACKET){
+				for (int i = 0; i < att.length(); i++) {
+					if (att.charAt(i) == SystemConstant.LEFT_BRACKET) {
 						count++;
 					}
 				}
-				if(count>1){   
-					//att= Deck[@id=[@extension=1]]
-					//attr= [@id=[@extension=1]]
-					List attList = getAttributeCollection(att.substring(att.indexOf(SystemConstant.LEFT_BRACKET)));
-					for(int i=0; i<attList.size(); i++){
-						String critAtt = (String)attList.get(i);  						
-						roleObject=getCriteriaObject(critAtt, roleObject);
-						if(roleObject != null && attRole.indexOf("Collection")>0){
+				if (count > 1) {
+					// att= Deck[@id=[@extension=1]]
+					// attr= [@id=[@extension=1]]
+					List<String> attList = getAttributeCollection(att.substring(att
+							.indexOf(SystemConstant.LEFT_BRACKET)));
+					for (int i = 0; i < attList.size(); i++) {
+						String critAtt = attList.get(i);
+						roleObject = getCriteriaObject(critAtt, roleObject);
+						if (roleObject != null
+								&& attRole.indexOf("Collection") > 0) {
 							roleClassCollection.add(roleObject);
 						}
 					}
-				}else{					
-					String critAttr = att.substring(att.indexOf(SystemConstant.AT), att.indexOf(SystemConstant.RIGHT_BRACKET));
-					roleObject=getCriteriaObject(critAttr, roleObject);
-					if(attRole.indexOf("Collection")>0){
+				} else {
+					String critAttr = att.substring(
+							att.indexOf(SystemConstant.AT),
+							att.indexOf(SystemConstant.RIGHT_BRACKET));
+					roleObject = getCriteriaObject(critAttr, roleObject);
+					if (attRole.indexOf("Collection") > 0) {
 						roleClassCollection.add(roleObject);
-					}					
-				}
-				if(attRole.indexOf("Collection")<1 && roleObject != null){                    
-					roleMethod.invoke(critObject, new Object[]{roleObject});                        
-				}else if(roleClassCollection.size()>0){                    
-					try{
-						Class types[] = roleMethod.getParameterTypes();
-						if(types[0] != null){
-							if(types[0].getName().endsWith("Vector")){
-								Vector vector = new Vector();
-								for(int i=0; i<roleClassCollection.size(); i++){
-									vector.add(roleClassCollection.get(i));
-								} 
-								roleMethod.invoke(critObject, new Object[] {vector});
-							}else{
-								roleMethod.invoke(critObject, new Object[] {roleClassCollection});
-							}
-						}else{
-							throw new Exception("Invalid arguments passed over to method : "+ roleMethod);
-						}
-					}catch(Exception ex){
-						 log.error("Exception: ", ex);
-						throw new Exception("Cannot invoke method - " + roleMethod.getName());
 					}
-				}else{
+				}
+				if (attRole.indexOf("Collection") < 1 && roleObject != null) {
+					roleMethod.invoke(critObject, new Object[]{roleObject});
+				} else if (roleClassCollection.size() > 0) {
+					try {
+						Class types[] = roleMethod.getParameterTypes();
+						if (types[0] != null) {
+							if (types[0].getName().endsWith("Vector")) {
+								Vector<Object> vector = new Vector<Object>();
+								for (int i = 0; i < roleClassCollection.size(); i++) {
+									vector.add(roleClassCollection.get(i));
+								}
+								roleMethod.invoke(critObject,
+										new Object[]{vector});
+							} else {
+								roleMethod.invoke(critObject,
+										new Object[]{roleClassCollection});
+							}
+						} else {
+							throw new Exception(
+									"Invalid arguments passed over to method : "
+											+ roleMethod);
+						}
+					} catch (Exception ex) {
+						log.error("Exception: ", ex);
+						throw new Exception("Cannot invoke method - "
+								+ roleMethod.getName());
+					}
+				} else {
 					throw new Exception("Unable to generate search criteria");
 				}
 			}
-		}catch(Exception ex){
-			 log.error("Exception: ", ex);
+		} catch (Exception ex) {
+			log.error("Exception: ", ex);
 			throw ex;
 		}
 		return critObject;
-	}	
+	}
 
 	private String[] splitQueryCriteria(String queryCriteria) {
 		ArrayList<String> subCriteria = new ArrayList<String>();
@@ -462,9 +479,10 @@ public class SearchUtils {
 		return temp;
 	}
 
-	@SuppressWarnings("unchecked")
-	private void processQueryCriteria(String queryCriteria,Object rootObject,StringBuffer tempISOParamType) throws Exception{
-		String[] splitCriteria = splitQueryCriteria(queryCriteria);		
+	@SuppressWarnings({"unchecked", "rawtypes"})
+	private void processQueryCriteria(String queryCriteria, Object rootObject,
+			StringBuffer tempISOParamType) throws Exception {
+		String[] splitCriteria = splitQueryCriteria(queryCriteria);
 		for (String criteria : splitCriteria) {
 			String temp = criteria;
 			if (temp.startsWith("[@")) {
@@ -476,28 +494,31 @@ public class SearchUtils {
 			String attrName = temp.substring(0, temp.indexOf('='));
 			String value = temp.substring(temp.indexOf('=') + 1);
 			if (value.indexOf('[') >= 0) {
-				Object tempObject2=createObject(rootObject, attrName,null,tempISOParamType);
-				Method m=getAttributeGetMethodName(tempObject2, attrName);
-				Object tempObject=m.invoke(tempObject2);
-				Class klass=tempObject.getClass();
+				Object tempObject2 = createObject(rootObject, attrName, null,
+						tempISOParamType);
+				Method m = getAttributeGetMethodName(tempObject2, attrName);
+				Object tempObject = m.invoke(tempObject2);
+				Class klass = tempObject.getClass();
 				if (klass.isAssignableFrom(java.util.HashSet.class)) {
 					Set set = (Set) tempObject;
-					if("".equals(tempISOParamType.toString()) ){
+					if ("".equals(tempISOParamType.toString())) {
 						throw new Exception("Invalid Query Criteria ");
 					}
-					tempObject=Class.forName(tempISOParamType.toString().trim()).newInstance();
-					set.add(tempObject);					
-				}else if(klass.isAssignableFrom(java.util.ArrayList.class)){
+					tempObject = Class.forName(
+							tempISOParamType.toString().trim()).newInstance();
+					set.add(tempObject);
+				} else if (klass.isAssignableFrom(java.util.ArrayList.class)) {
 					List list = (List) tempObject;
-					if("".equals(tempISOParamType.toString()) ){						
+					if ("".equals(tempISOParamType.toString())) {
 						throw new Exception("Invalid Query Criteria ");
 					}
-					tempObject=Class.forName(tempISOParamType.toString().trim()).newInstance();
-					list.add(tempObject);	
+					tempObject = Class.forName(
+							tempISOParamType.toString().trim()).newInstance();
+					list.add(tempObject);
 				}
 				processQueryCriteria(value, tempObject, tempISOParamType);
-			}else{
-				createObject(rootObject, attrName,value,tempISOParamType);
+			} else {
+				createObject(rootObject, attrName, value, tempISOParamType);
 			}
 		}
 	}
@@ -508,31 +529,37 @@ public class SearchUtils {
 		return rootObject;
 	}
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	private Object createObject(Object childObject, String attribute,
-			String attributeValue,StringBuffer tempISOParamType) throws Exception{
+			String attributeValue, StringBuffer tempISOParamType)
+			throws Exception {
 		Field field = getField(childObject.getClass(), attribute);
 		Method attSetMethod = getAttributeSetMethodName(childObject, attribute);
 		Object value = null;
 		String fieldName = field.getType().getName();
 		if (field.getType().isEnum()) {
 			value = getFieldValue(field, attributeValue);
-		}else if (fieldName.startsWith(isoprefix)) {
-			Method getterMethod = getAttributeGetMethodName(childObject,attribute);
+		} else if (fieldName.startsWith(isoprefix)) {
+			Method getterMethod = getAttributeGetMethodName(childObject,
+					attribute);
 			value = getterMethod.invoke(childObject);
 			if (value == null) {
-				Type[] genericParameterTypes = attSetMethod.getGenericParameterTypes();
-				value = getFieldTypeObject(genericParameterTypes,field,tempISOParamType); 
+				Type[] genericParameterTypes = attSetMethod
+						.getGenericParameterTypes();
+				value = getFieldTypeObject(genericParameterTypes, field,
+						tempISOParamType);
 			}
 		} else if (field.getType().isAssignableFrom(Set.class)) {
-			Method getterMethod = getAttributeGetMethodName(childObject,attribute);
+			Method getterMethod = getAttributeGetMethodName(childObject,
+					attribute);
 			value = getterMethod.invoke(childObject);
 			if (value == null) {
 				value = new HashSet();
 			}
-			//enum present in set
+			// enum present in set
 			if (attributeValue != null) {
-				Type[] genericParameterTypes = attSetMethod.getGenericParameterTypes();
+				Type[] genericParameterTypes = attSetMethod
+						.getGenericParameterTypes();
 				Type genericParameterType = genericParameterTypes[0];
 				ParameterizedType pType = (ParameterizedType) genericParameterType;
 				String paramString = pType.toString();
@@ -542,18 +569,21 @@ public class SearchUtils {
 						lastIndex);
 				Class<?> c = Class.forName(isoParameter);
 				if (c.isEnum()) {
-					((Set) value).add(attributeValue);
+					((Set<String>) value).add(attributeValue);
 				}
 			}
 		} else if (field.getType().isAssignableFrom(List.class)) {
-			Method getterMethod = getAttributeGetMethodName(childObject,attribute);
+			Method getterMethod = getAttributeGetMethodName(childObject,
+					attribute);
 			value = getterMethod.invoke(childObject);
-			if (value == null && attSetMethod!= null) {
-				Type[] genericParameterTypes = attSetMethod.getGenericParameterTypes();
-				value = getFieldTypeObject(genericParameterTypes,field,tempISOParamType); 
+			if (value == null && attSetMethod != null) {
+				Type[] genericParameterTypes = attSetMethod
+						.getGenericParameterTypes();
+				value = getFieldTypeObject(genericParameterTypes, field,
+						tempISOParamType);
 			}
 			if (attSetMethod == null) {
-				value=new ArrayList();
+				value = new ArrayList();
 				attSetMethod = getAttributeAddMethodName(childObject, attribute);
 				Class[] paramTypes = attSetMethod.getParameterTypes();
 				Class paramType = paramTypes[0];
@@ -568,55 +598,77 @@ public class SearchUtils {
 		} catch (Exception e) {
 			log.error("Exception: ", e);
 			throw e;
-		}		
+		}
 		return childObject;
 	}
 
 	@SuppressWarnings("rawtypes")
-	private Object getFieldTypeObject(Type[] genericParameterTypes,Field field,StringBuffer classISOParamType) throws Exception{				
-		Object fieldTypeObject=null;				
-		for(Type genericParameterType : genericParameterTypes){
+	private Object getFieldTypeObject(Type[] genericParameterTypes,
+			Field field, StringBuffer classISOParamType) throws Exception {
+		Object fieldTypeObject = null;
+		for (Type genericParameterType : genericParameterTypes) {
 			if (genericParameterType instanceof TypeVariable<?>) {
-				fieldTypeObject = Class.forName(classISOParamType.toString()).newInstance();				
-			}else if(genericParameterType instanceof ParameterizedType){
-			    ParameterizedType pType = (ParameterizedType) genericParameterType;
-			    String paramString = pType.toString();
-			    int beginIndex=paramString.indexOf("<");
-			    int lastIndex=paramString.indexOf(">");
-			    String isoParameter = paramString.substring(beginIndex+1,lastIndex);
+				fieldTypeObject = Class.forName(classISOParamType.toString())
+						.newInstance();
+			} else if (genericParameterType instanceof ParameterizedType) {
+				ParameterizedType pType = (ParameterizedType) genericParameterType;
+				String paramString = pType.toString();
+				int beginIndex = paramString.indexOf("<");
+				int lastIndex = paramString.indexOf(">");
+				String isoParameter = paramString.substring(beginIndex + 1,
+						lastIndex);
 				classISOParamType.append(isoParameter);
 
-				int index=paramString.indexOf('<');
-			    if(field.getType().isAssignableFrom(List.class)){
-			    	fieldTypeObject=new ArrayList();
-				}else{
-					fieldTypeObject = Class.forName(paramString.substring(0,index)).newInstance();
+				int index = paramString.indexOf('<');
+				if (field.getType().isAssignableFrom(List.class)) {
+					fieldTypeObject = new ArrayList();
+				} else {
+					fieldTypeObject = Class.forName(
+							paramString.substring(0, index)).newInstance();
 				}
-			}else{
+			} else {
 				String fieldName = field.getType().getName();
-				boolean isClassISOParamTS = fieldName.equals("gov.nih.nci.iso21090.Qty") && classISOParamType.toString().equals("gov.nih.nci.iso21090.Ts");
-				boolean isClassISOParamPQ = fieldName.equals("gov.nih.nci.iso21090.Qty") && classISOParamType.toString().equals("gov.nih.nci.iso21090.Pq");
-				boolean isClassISOParamReal = fieldName.equals("gov.nih.nci.iso21090.Qty") && classISOParamType.toString().equals("gov.nih.nci.iso21090.Real");
-				boolean isClassISOParamInt = fieldName.equals("gov.nih.nci.iso21090.Qty") && classISOParamType.toString().equals("gov.nih.nci.iso21090.Int");
+				boolean isClassISOParamTS = fieldName
+						.equals("gov.nih.nci.iso21090.Qty")
+						&& classISOParamType.toString().equals(
+								"gov.nih.nci.iso21090.Ts");
+				boolean isClassISOParamPQ = fieldName
+						.equals("gov.nih.nci.iso21090.Qty")
+						&& classISOParamType.toString().equals(
+								"gov.nih.nci.iso21090.Pq");
+				boolean isClassISOParamReal = fieldName
+						.equals("gov.nih.nci.iso21090.Qty")
+						&& classISOParamType.toString().equals(
+								"gov.nih.nci.iso21090.Real");
+				boolean isClassISOParamInt = fieldName
+						.equals("gov.nih.nci.iso21090.Qty")
+						&& classISOParamType.toString().equals(
+								"gov.nih.nci.iso21090.Int");
 				if (isClassISOParamTS || isClassISOParamPQ) {
 					fieldName = "gov.nih.nci.iso21090.Pq";
 				} else if (isClassISOParamReal || isClassISOParamInt) {
 					fieldName = classISOParamType.toString();
 				}
-				fieldTypeObject=Class.forName(fieldName).newInstance();
+				fieldTypeObject = Class.forName(fieldName).newInstance();
 			}
 			break;
 		}
 		return fieldTypeObject;
 	}
 
-	private Method getAttributeGetMethodName(Object attObject, String attName){    
-		Method m = getMethod(attObject.getClass(), "get"+ attName.substring(0,1).toUpperCase() + attName.substring(1));
+	private Method getAttributeGetMethodName(Object attObject, String attName) {
+		Method m = getMethod(
+				attObject.getClass(),
+				"get" + attName.substring(0, 1).toUpperCase()
+						+ attName.substring(1));
 		return m;
 	}
-	
-	private Method getAttributeAddMethodName(Object attObject, String attName){    
-		Method m = getMethod(attObject.getClass(), "add"+ attName.substring(0,1).toUpperCase() + attName.substring(1));
+
+	private Method getAttributeAddMethodName(Object attObject, String attName) {
+		Method m = getMethod(
+				attObject.getClass(),
+				"add" + attName.substring(0, 1).toUpperCase()
+						+ attName.substring(1));
 		return m;
 	}
 
@@ -628,18 +680,19 @@ public class SearchUtils {
 	 * @throws Exception
 	 */	
 	@SuppressWarnings("rawtypes")
-	public Field getField(Class className, String attributeName)throws Exception {  
+	public Field getField(Class className, String attributeName)
+			throws Exception {
 		Field attribute = null;
 		Field[] fields = classCache.getAllFields(className);
-		for(int i=0; i<fields.length; i++){           
-			if(fields[i].getName().equalsIgnoreCase(attributeName)){
+		for (int i = 0; i < fields.length; i++) {
+			if (fields[i].getName().equalsIgnoreCase(attributeName)) {
 				fields[i].setAccessible(true);
 				attribute = fields[i];
 				break;
 			}
 		}
-		if(attribute == null){
-			throw new Exception ("Invalid field name - "+ attributeName);
+		if (attribute == null) {
+			throw new Exception("Invalid field name - " + attributeName);
 		}
 		return attribute;
 	}
@@ -650,8 +703,11 @@ public class SearchUtils {
 	 * @param attName
 	 * @return
 	 */
-	private Method getAttributeSetMethodName(Object attObject, String attName){    
-		Method m = getMethod(attObject.getClass(), "set"+ attName.substring(0,1).toUpperCase() + attName.substring(1));
+	private Method getAttributeSetMethodName(Object attObject, String attName) {
+		Method m = getMethod(
+				attObject.getClass(),
+				"set" + attName.substring(0, 1).toUpperCase()
+						+ attName.substring(1));
 		return m;
 	}
 
@@ -662,12 +718,11 @@ public class SearchUtils {
 	 * @return
 	 * @throws Exception
 	 */
-	private Object getFieldValue(Field field, String attValue) throws Exception{       
+	private Object getFieldValue(Field field, String attValue) throws Exception {
 		Object value = null;
-		if(field.getType().getName().equalsIgnoreCase("java.lang.String")){
+		if (field.getType().getName().equalsIgnoreCase("java.lang.String")) {
 			value = attValue;
-		}
-		else{
+		} else {
 			value = convertValues(field, attValue);
 		}
 		return value;
@@ -680,7 +735,7 @@ public class SearchUtils {
 	 * @return  returns an object with the new value
 	 * @throws Exception
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	public Object convertValues(Field field, Object value) throws Exception {
 		String fieldType = field.getType().getName();
 		String valueType = value.getClass().getName();
@@ -713,12 +768,12 @@ public class SearchUtils {
 				}
 			} else if (fieldType.equals("java.net.URI")) {
 				if (valueType.equals("java.lang.String")) {
-					convertedValue = new URI((String)value);
+					convertedValue = new URI((String) value);
 				}
 			} else if (field.getType().isEnum()) {
 				if (valueType.equals("java.lang.String")) {
-					Class enumKlass=Class.forName(fieldType);
-					convertedValue = Enum.valueOf(enumKlass, (String)value);
+					Class enumKlass = Class.forName(fieldType);
+					convertedValue = Enum.valueOf(enumKlass, (String) value);
 				}
 			} else {
 				throw new Exception("type mismatch - " + valueType);
@@ -739,24 +794,27 @@ public class SearchUtils {
 	 * @param attRole
 	 * @return
 	 */
-	public String getRoleClassName(String attRole){
+	public String getRoleClassName(String attRole) {
 
 		String attClassName = null;
-		if(attRole.indexOf("Collection")>0){
-			attClassName = attRole.substring(0,1).toUpperCase() + attRole.substring(1,attRole.indexOf("Collection"));
-		}else{
-			attClassName = attRole.substring(0,1).toUpperCase() + attRole.substring(1);
-		}        
+		if (attRole.indexOf("Collection") > 0) {
+			attClassName = attRole.substring(0, 1).toUpperCase()
+					+ attRole.substring(1, attRole.indexOf("Collection"));
+		} else {
+			attClassName = attRole.substring(0, 1).toUpperCase()
+					+ attRole.substring(1);
+		}
 		return attClassName;
 	}
 
 	/**
 	 * Gets all the methods for a given class
-	 * @param resultClass - Specifies the class name
+	 * @param resultClass
+	 *            - Specifies the class name
 	 * @return - Returns all the methods
 	 */
-	@SuppressWarnings("unchecked")
-	public Method[] getAllMethods(Class resultClass){
+	@SuppressWarnings({"rawtypes"})
+	public Method[] getAllMethods(Class resultClass) {
 		List<Method> methodList = new ArrayList<Method>();
 		try {
 			while (resultClass != null && !resultClass.isInterface()
@@ -766,8 +824,8 @@ public class SearchUtils {
 					method[i].setAccessible(true);
 					methodList.add(method[i]);
 				}
-				if (!resultClass.getSuperclass().getName().equalsIgnoreCase(
-						"java.lang.Object")) {
+				if (!resultClass.getSuperclass().getName()
+						.equalsIgnoreCase("java.lang.Object")) {
 					resultClass = resultClass.getSuperclass();
 				} else {
 					break;
@@ -778,19 +836,22 @@ public class SearchUtils {
 		}
 		Method[] methods = new Method[methodList.size()];
 		for (int i = 0; i < methodList.size(); i++) {
-			methods[i] = (Method) methodList.get(i);
+			methods[i] = methodList.get(i);
 		}
 		return methods;
 	}
 
 	/**
 	 * Returns the target class name for the specified class and role names
-	 * @param className specifies the class name
-	 * @param roleName specifies role name
+	 * @param className
+	 *            specifies the class name
+	 * @param roleName
+	 *            specifies role name
 	 * @return
 	 * @throws Exception
 	 */
-	public String getTargetClassName(String className, String roleName) throws Exception{	
+	public String getTargetClassName(String className, String roleName)
+			throws Exception {
 		return classCache.getReturnType(className, roleName);
 	}
 }

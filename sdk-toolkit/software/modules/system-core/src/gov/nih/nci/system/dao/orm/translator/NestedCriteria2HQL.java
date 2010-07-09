@@ -32,8 +32,7 @@ public class NestedCriteria2HQL {
 	private HQLCriteria hqlCriteria;
 	private static Logger log = Logger.getLogger(NestedCriteria2HQL.class);
 	
-	@SuppressWarnings("rawtypes")
-	private List paramList = new ArrayList();
+	private List<Object> paramList = new ArrayList<Object>();
 	String isoprefix = "gov.nih.nci.iso21090.";	
 	private Integer aliasCount=0;
 
@@ -537,8 +536,8 @@ public class NestedCriteria2HQL {
 			} else if (objects.size() == 1) {
 				try {
 					Object object = objects.get(0);
-					HashMap map = getObjAssocCriterion(object, cfg,
-							null, null);
+					Map<String, Object> map = getAssociatedObjectCriterion(object, cfg, null,
+							null);
 					if (map == null || map.size() == 0) {
 						condition1 = false;
 					}
@@ -562,7 +561,7 @@ public class NestedCriteria2HQL {
 			} catch (Exception e) {
 				log.error(" Ignore this error ", e);
 			}
-		}		
+		}
 		return condition1 || condition2 || condition3;
 	}
 	
@@ -601,37 +600,52 @@ public class NestedCriteria2HQL {
 		return hCriteria;
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
 	private String getObjectAttributeCriterion(String sourceAlias, Object obj,
-			Configuration cfg,String parentClassName,String parentRoleName,StringBuffer aliasSetBuffer) throws Exception {
+			Configuration cfg, String parentClassName, String parentRoleName,
+			StringBuffer aliasSetBuffer) throws Exception {
 		StringBuffer whereClause = new StringBuffer();
-		HashMap<String,Object> criterionMap = getObjAttrCriterion(obj, cfg,parentClassName,parentRoleName);
-		PersistentClass pclass = getPersistentClass(obj.getClass().getName(),parentClassName,parentRoleName);
-		
+		HashMap<String, Object> criterionMap = getObjAttrCriterion(obj, cfg,
+				parentClassName, parentRoleName);
+		PersistentClass pclass = getPersistentClass(obj.getClass().getName(),
+				parentClassName, parentRoleName);
+
 		if (criterionMap != null) {
-			Iterator keys = criterionMap.keySet().iterator();
+			Iterator<String> keys = criterionMap.keySet().iterator();
 			while (keys.hasNext()) {
-				String key = (String) keys.next();
+				String key = keys.next();
 				Object value = criterionMap.get(key);
-				boolean isStringObject = !key.equals("id") && (value instanceof String);
-				
+				boolean isStringObject = !key.equals("id")
+						&& (value instanceof String);
+
 				if (isStringObject) {
 					if (isCaseSensitive()) {
-						whereClause.append(sourceAlias + SystemConstant.DOT+ key + getOperator(value) + "? ");
-						paramList.add(((String) value).replaceAll("\\*", "\\%"));
+						whereClause.append(sourceAlias + SystemConstant.DOT
+								+ key + getOperator(value) + "? ");
+						paramList
+								.add(((String) value).replaceAll("\\*", "\\%"));
 					} else {
-						whereClause.append("lower(" + sourceAlias+ SystemConstant.DOT + key + ") "+ getOperator(value) + "? ");
-						paramList.add(((String) value).toLowerCase().replaceAll("\\*", "\\%"));
+						whereClause.append("lower(" + sourceAlias
+								+ SystemConstant.DOT + key + ") "
+								+ getOperator(value) + "? ");
+						paramList.add(((String) value).toLowerCase()
+								.replaceAll("\\*", "\\%"));
 					}
 				} else {
-					boolean isIsoObject = !key.equals("id") && (value.getClass().getName().startsWith(isoprefix));
-					if(isIsoObject){
-						StringBuffer tempBuffer=new StringBuffer();
-						Value componentValue=locateComponent(pclass,key);						
-						String queryAppender=sourceAlias + SystemConstant.DOT+ key;
-						generateISOWhereQuery(value, tempBuffer, whereClause,componentValue,"",queryAppender,0,aliasSetBuffer);
-					}else {
-						whereClause.append(sourceAlias).append(SystemConstant.DOT).append(key).append(getOperator(value)).append("? ");
+					boolean isIsoObject = !key.equals("id")
+							&& (value.getClass().getName()
+									.startsWith(isoprefix));
+					if (isIsoObject) {
+						StringBuffer tempBuffer = new StringBuffer();
+						Value componentValue = locateComponent(pclass, key);
+						String queryAppender = sourceAlias + SystemConstant.DOT
+								+ key;
+						generateISOWhereQuery(value, tempBuffer, whereClause,
+								componentValue, "", queryAppender, 0,
+								aliasSetBuffer);
+					} else {
+						whereClause.append(sourceAlias)
+								.append(SystemConstant.DOT).append(key)
+								.append(getOperator(value)).append("? ");
 						paramList.add(value);
 					}
 				}
@@ -655,99 +669,99 @@ public class NestedCriteria2HQL {
 		Value value = property.getValue();
 		return value;
 	}
-	
+
+	/**
+	 * 
+	 * @param obj
+	 *            sourceObject
+	 * @param query
+	 *            tempStringBuffer to hold the state of HQL object
+	 *            (i.e)value1.item in recursion
+	 * @param whereQueryClause
+	 *            Final Result to be appended to the HQL
+	 * @param componentValue
+	 *            recursively parse PersistentClass to find required Component
+	 * @param parentheses
+	 *            temporary value for adding ( braces and ) braces in case of
+	 *            Set ISO Object
+	 * @param queryAppender
+	 *            temporary value to hold sourceAlias + key value
+	 * @param andCount
+	 *            temporary value to maintain state whether to add "and"
+	 *            condition or not
+	 * @param aliasSetBuffer
+	 * @throws Exception
+	 */
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	private void generateISOWhereQuery(Object obj, StringBuffer query,
 			StringBuffer whereQueryClause, Value componentValue,
-			String parentheses, String queryAppender,Integer andCount,StringBuffer aliasSetBuffer) throws Exception{
+			String parentheses, String queryAppender, Integer andCount,
+			StringBuffer aliasSetBuffer) throws Exception {
 
 		Class klass = obj.getClass();
-		while (!klass.getName().equals("java.lang.Object")) {			
+		while (!klass.getName().equals("java.lang.Object")) {
 			for (Field field : klass.getDeclaredFields()) {
 				int modifier = field.getModifiers();
 				if (!Modifier.isStatic(modifier)) {
 					try {
 						field.setAccessible(true);
 						Object value = field.get(obj);
-						if (value != null){								
+						if (value != null) {
 							String objectClassName = value.getClass().getName();
-							StringBuffer newQuery = new StringBuffer(query.toString());
-							newQuery.append(SystemConstant.DOT).append(field.getName());							
-							boolean isoObject = objectClassName.startsWith(isoprefix);
-							//parse the set and create an hql Set<CD>							
-							boolean isSetObject = objectClassName.startsWith("java.util.HashSet");
+							StringBuffer newQuery = new StringBuffer(
+									query.toString());
+							newQuery.append(SystemConstant.DOT).append(
+									field.getName());
+							boolean isoObject = objectClassName
+									.startsWith(isoprefix);
+							// parse the set and create an hql Set<CD>
+							boolean isSetObject = objectClassName
+									.startsWith("java.util.HashSet");
 							boolean isEnumObject = value.getClass().isEnum();
-							boolean isListObject = objectClassName.startsWith("java.util.ArrayList");						
-							Value persistChildvalue=null;
-							if(isListObject){
-								List list=(List)value;
-								StringBuffer tempNewQuery=null;
-								Map<String,Set<String>> addressPartTypeMap=new HashMap<String,Set<String>>();
-								for (Object object : list) {
-									Field partInstanceObjectField=null;
-									tempNewQuery=new StringBuffer(newQuery.toString());
-									partInstanceObjectField=getDeclaredField(object.getClass(), "type");
-									partInstanceObjectField.setAccessible(true);
-									AddressPartType addressPartType=(AddressPartType)partInstanceObjectField.get(object);
-									
-									Component partComponent=(Component)componentValue;
-									Iterator propertyItr=partComponent.getPropertyIterator();
-									boolean isValidAddressPartType=false;
-									while(propertyItr.hasNext()){
-										Property property=(Property)propertyItr.next();
-										String partName = property.getName();
-										Component psComp=(Component)property.getValue();
-										String psCompClassName=psComp.getComponentClassName();
-										String inputAddressPartTypeName = "gov.nih.nci.iso21090.Adxp"+addressPartType.name();
-										if(psCompClassName.equalsIgnoreCase(inputAddressPartTypeName)){
-											try {
-												if (addressPartTypeMap.keySet().contains(inputAddressPartTypeName)) {
-													Set<String> parts=addressPartTypeMap.get(inputAddressPartTypeName);
-													if(parts.contains(partName)){
-														continue;	
-													}else{
-														parts.add(partName);
-													}													
-												}else{
-													Set<String> parts=new HashSet<String>();
-													parts.add(partName);
-													addressPartTypeMap.put(inputAddressPartTypeName,parts);
-												}
-												persistChildvalue = locateComponent(componentValue,partName);
-												String componentPartName = partName.substring(partName.length()-2,partName.length());
-												tempNewQuery.append(componentPartName);
-												parentheses="";
-												generateISOWhereQuery(object, tempNewQuery,whereQueryClause, persistChildvalue,parentheses, queryAppender, andCount++,aliasSetBuffer);
-											} catch (HibernateException ex) {
-												log.info("not found mapping for "+ field.getName()+ "  ignoring");
-												continue;
-											}
-											isValidAddressPartType=true;
-											break;
-										}
-									}
-									if(!isValidAddressPartType){
-										throw new Exception(" Invalid Address PartType specified in Query");
-									}
-								}
-							}else {
-								try{
-									persistChildvalue=locateComponent(componentValue, field.getName());
-								}catch(HibernateException ex){
-									log.info("not found mapping for "+field.getName()+"  ignoring");
+							boolean isListObject = objectClassName
+									.startsWith("java.util.ArrayList");
+							Value persistChildvalue = null;
+							if (isListObject) {
+								executeIfListContainsISOObjects((List) value,
+										newQuery, (Component) componentValue,
+										whereQueryClause, queryAppender,
+										andCount, aliasSetBuffer);
+							} else {
+								try {
+									persistChildvalue = locateComponent(
+											componentValue, field.getName());
+								} catch (HibernateException ex) {
+									log.info("not found mapping for "
+											+ field.getName() + "  ignoring");
 									continue;
 								}
 								if (isoObject & !isEnumObject) {
-									parentheses="";
-									generateISOWhereQuery(value, newQuery,whereQueryClause, persistChildvalue,parentheses, queryAppender, andCount++,aliasSetBuffer);
+									parentheses = "";
+									generateISOWhereQuery(value, newQuery,
+											whereQueryClause,
+											persistChildvalue, parentheses,
+											queryAppender, andCount++,
+											aliasSetBuffer);
 								} else if (isSetObject) {
-									Set set=(Set)value;
-									int count=0;								
+									Set set = (Set) value;
+									int count = 0;
 									for (Object object : set) {
-										String setItemAlias=getAlias(object.getClass().getName(), aliasCount++);
-										aliasSetBuffer.append(" inner join "+queryAppender+newQuery.toString()+" as "+setItemAlias);
-										parentheses=(count==0)?" (( ":") or ( ";
-										generateISOWhereQuery(object,new StringBuffer(),whereQueryClause, persistChildvalue,parentheses, setItemAlias,andCount, aliasSetBuffer);
+										String setItemAlias = getAlias(object
+												.getClass().getName(),
+												aliasCount++);
+										aliasSetBuffer.append(" inner join "
+												+ queryAppender
+												+ newQuery.toString() + " as "
+												+ setItemAlias);
+										parentheses = (count == 0)
+												? " (( "
+												: ") or ( ";
+										generateISOWhereQuery(object,
+												new StringBuffer(),
+												whereQueryClause,
+												persistChildvalue, parentheses,
+												setItemAlias, andCount,
+												aliasSetBuffer);
 										count++;
 									}
 									whereQueryClause.append(" )) ");
@@ -756,19 +770,24 @@ public class NestedCriteria2HQL {
 											&& value instanceof Integer
 											&& ((Integer) value) == 0) {
 										continue;
-									}							
+									}
 									String tempQuery = null;
 									if (isCaseSensitive()) {
-										tempQuery = parentheses + "lower("+ queryAppender+ newQuery.toString() + " )";
+										tempQuery = parentheses + "lower("
+												+ queryAppender
+												+ newQuery.toString() + " )";
 									} else {
-										tempQuery = parentheses + queryAppender+ newQuery.toString();
+										tempQuery = parentheses + queryAppender
+												+ newQuery.toString();
 									}
-									parentheses="";
-									if(andCount>0)
+									parentheses = "";
+									if (andCount > 0)
 										whereQueryClause.append(" and ");
-									whereQueryClause.append(tempQuery + getOperator(value) + "? ");
+									whereQueryClause.append(tempQuery
+											+ getOperator(value) + "? ");
 									if (value instanceof String) {
-										paramList.add(((String) value).replaceAll("\\*", "\\%"));
+										paramList.add(((String) value)
+												.replaceAll("\\*", "\\%"));
 									} else {
 										paramList.add(value);
 									}
@@ -784,6 +803,77 @@ public class NestedCriteria2HQL {
 				}
 			}
 			klass = klass.getSuperclass();
+		}
+	}
+	
+	private void executeIfListContainsISOObjects(
+			List<? extends Object> valueList, StringBuffer newQuery,
+			Component componentValue, StringBuffer whereQueryClause,
+			String queryAppender, Integer andCount, StringBuffer aliasSetBuffer)
+			throws Exception {
+		StringBuffer tempNewQuery = null;
+		Map<String, Set<String>> addressPartTypeMap = new HashMap<String, Set<String>>();
+		for (Object object : valueList) {
+			Field partInstanceObjectField = null;
+			tempNewQuery = new StringBuffer(newQuery.toString());
+			partInstanceObjectField = getDeclaredField(object.getClass(),
+					"type");
+			partInstanceObjectField.setAccessible(true);
+			AddressPartType addressPartType = (AddressPartType) partInstanceObjectField
+					.get(object);
+
+			Component partComponent = (Component) componentValue;
+			@SuppressWarnings("unchecked")
+			Iterator<Property> propertyItr = partComponent
+					.getPropertyIterator();
+			boolean isValidAddressPartType = false;
+			while (propertyItr.hasNext()) {
+				Property property = propertyItr.next();
+				String partName = property.getName();
+				Component psComp = (Component) property.getValue();
+				String psCompClassName = psComp.getComponentClassName();
+				String inputAddressPartTypeName = "gov.nih.nci.iso21090.Adxp"
+						+ addressPartType.name();
+				if (psCompClassName.equalsIgnoreCase(inputAddressPartTypeName)) {
+					// search for matching part name (part_0,part_1,part_2 etc)
+					if (addressPartTypeMap.keySet().contains(
+							inputAddressPartTypeName)) {
+						Set<String> parts = addressPartTypeMap
+								.get(inputAddressPartTypeName);
+						if (parts.contains(partName)) {
+							continue;
+						} else {
+							parts.add(partName);
+						}
+					} else {
+						Set<String> parts = new HashSet<String>();
+						parts.add(partName);
+						addressPartTypeMap.put(inputAddressPartTypeName, parts);
+					}
+					Value persistChildvalue = null;
+					try {
+						persistChildvalue = locateComponent(componentValue,
+								partName);
+					} catch (HibernateException ex) {
+						log.info("not found mapping for " + partName
+								+ "  ignoring");
+						continue;
+					}
+					String componentPartName = partName.substring(
+							partName.length() - 2, partName.length());
+					tempNewQuery.append(componentPartName);
+					String parentheses = "";
+					generateISOWhereQuery(object, tempNewQuery,
+							whereQueryClause, persistChildvalue, parentheses,
+							queryAppender, andCount++, aliasSetBuffer);
+					isValidAddressPartType = true;
+					break;
+				}
+			}
+			if (!isValidAddressPartType) {
+				throw new Exception(
+						" Invalid Address PartType specified in Query");
+			}
 		}
 	}
 
@@ -838,9 +928,9 @@ public class NestedCriteria2HQL {
 		return criterions;
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
+	@SuppressWarnings({"rawtypes"})
 	private void setAttrCriterion(Object obj, PersistentClass pclass,
-			HashMap criterions) throws Exception {
+			HashMap<String, Object> criterions) throws Exception {
 		Iterator properties = pclass.getPropertyIterator();
 		Property tempProperty = (Property) pclass.getPropertyIterator().next();
 		String propertyAccessorName = tempProperty.getPropertyAccessorName();
@@ -906,23 +996,23 @@ public class NestedCriteria2HQL {
 	}	
 	
 	//get the result HQL String from the Object obj
-	@SuppressWarnings("rawtypes")
 	private String getHQLQueryFromSourceObjectWithCriterion(Object obj, Configuration cfg,
 			boolean skipAssociations,String parentClass,String parentRoleName) throws Exception {
 		String srcAlias = getAlias(obj.getClass().getName(), 1);
 
 		StringBuffer hql = new StringBuffer();
-		HashMap associationCritMap = null;
+		Map<String, Object> associationCritMap = null;
 		if (!skipAssociations) {
-			associationCritMap = getObjAssocCriterion(obj, cfg,parentClass,parentRoleName);
+			associationCritMap = getAssociatedObjectCriterion(obj, cfg,parentClass,parentRoleName);
 			PersistentClass tempPclass = getPersistentClass(obj.getClass().getName(),parentClass,parentRoleName);
 			hql.append("select ");
 			hql.append(srcAlias);
 			hql.append(" from ").append(tempPclass.getEntityName()).append(" ").append(srcAlias);
 
-			// get association value
 			if (associationCritMap != null && associationCritMap.size() > 0) {
-				generateAssociationHQLCriteria(cfg, srcAlias, hql,associationCritMap, tempPclass);
+				StringBuffer associationHQL = generateAssociationHQLCriteria(
+						cfg, srcAlias, associationCritMap, tempPclass);
+				hql.append(associationHQL);
 			}
 		}
 		StringBuffer aliasSetBuffer=new StringBuffer();
@@ -944,13 +1034,14 @@ public class NestedCriteria2HQL {
 	}
 
 	@SuppressWarnings("rawtypes")
-	private void generateAssociationHQLCriteria(Configuration cfg,
-			String srcAlias, StringBuffer hql, HashMap associationCritMap,
-			PersistentClass tempPclass) throws Exception {	
-		Iterator associationKeys = associationCritMap.keySet().iterator();
+	private StringBuffer generateAssociationHQLCriteria(Configuration cfg,
+			String srcAlias,Map<String, Object> associationCritMap,
+			PersistentClass tempPclass) throws Exception {
+		Iterator<String> associationKeys = associationCritMap.keySet().iterator();
+		StringBuffer hql=new StringBuffer(); 
 		int counter = 0;
 		while (associationKeys.hasNext()) {
-			String roleName = (String) associationKeys.next();
+			String roleName = associationKeys.next();
 			Object roleValue = associationCritMap.get(roleName);
 			if (roleValue instanceof Collection) {
 				Object[] objs = ((Collection) roleValue).toArray();
@@ -958,56 +1049,66 @@ public class NestedCriteria2HQL {
 					PersistentClass tempRolePclass = getPersistentClass(objs[i]
 							.getClass().getName(), tempPclass.getEntityName(),
 							roleName);
-					String alias = getAlias(objs[i].getClass()
-							.getName(), counter++);
-					hql.append(",").append(
-							tempRolePclass.getEntityName()).append(" ").append(alias);
+					String alias = getAlias(objs[i].getClass().getName(),
+							counter++);
+					hql.append(",").append(tempRolePclass.getEntityName())
+							.append(" ").append(alias);
 				}
 			} else {
-				PersistentClass tempRolePclass = getPersistentClass(
-						roleValue.getClass().getName(), tempPclass.getEntityName(), roleName);
-				String alias = getAlias(roleValue.getClass().getName(),counter++);
-				hql.append(",").append(tempRolePclass.getEntityName()).append(" ").append(alias);
+				PersistentClass tempRolePclass = getPersistentClass(roleValue
+						.getClass().getName(), tempPclass.getEntityName(),
+						roleName);
+				String alias = getAlias(roleValue.getClass().getName(),
+						counter++);
+				hql.append(",").append(tempRolePclass.getEntityName())
+						.append(" ").append(alias);
 			}
 		}
 		hql.append(" where ");
 		associationKeys = associationCritMap.keySet().iterator();
 		counter = 0;
 		while (associationKeys.hasNext()) {
-			String roleName = (String) associationKeys.next();
+			String roleName = associationKeys.next();
 			Object roleValue = associationCritMap.get(roleName);
 			if (roleValue instanceof Collection) {
 				Object[] objs = ((Collection) roleValue).toArray();
 				for (int i = 0; i < objs.length; i++) {
-					String alias = getAlias(objs[i].getClass().getName(), counter++);
-					hql.append(alias).append(" in elements(").append(
-							srcAlias).append(".").append(roleName).append(")");
+					String alias = getAlias(objs[i].getClass().getName(),
+							counter++);
+					hql.append(alias).append(" in elements(").append(srcAlias)
+							.append(".").append(roleName).append(")");
 					hql.append(" and ");
-					String objectCriterion = getHQLQueryFromSourceObjectWithCriterion(objs[i], cfg, false,tempPclass.getEntityName(),roleName);
-					hql.append(alias).append(" in (").append(
-							objectCriterion).append(") ");
+					String objectCriterion = getHQLQueryFromSourceObjectWithCriterion(
+							objs[i], cfg, false, tempPclass.getEntityName(),
+							roleName);
+					hql.append(alias).append(" in (").append(objectCriterion)
+							.append(") ");
 					if (i < objs.length - 1)
 						hql.append(" and ");
 				}
 			} else {
 				String alias = getAlias(roleValue.getClass().getName(),
 						counter++);
-				hql.append(alias).append(".id").append("=").append(
-						srcAlias).append(".").append(roleName).append(".id");
+				hql.append(alias).append(".id").append("=").append(srcAlias)
+						.append(".").append(roleName).append(".id");
 				hql.append(" and ");
-				String objectCriterion = getHQLQueryFromSourceObjectWithCriterion(roleValue,cfg, false,tempPclass.getEntityName(),roleName);
-				hql.append(alias).append(" in (").append(
-						objectCriterion).append(") ");
+				String objectCriterion = getHQLQueryFromSourceObjectWithCriterion(
+						roleValue, cfg, false, tempPclass.getEntityName(),
+						roleName);
+				hql.append(alias).append(" in (").append(objectCriterion)
+						.append(") ");
 			}
 			hql.append(" ");
 			if (associationKeys.hasNext())
 				hql.append(" and ");
 		}
+		return hql;
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
-	private void setAssocCriterion(Object obj, PersistentClass pclass,
-			HashMap criterions) throws Exception {
+	@SuppressWarnings({"rawtypes"})
+	private Map<String, Object> getAssociatedObjectWithFieldCriterion(Object obj,
+			PersistentClass pclass) throws Exception {
+		Map<String, Object> criterions = new HashMap<String, Object>();
 		Iterator properties = pclass.getPropertyIterator();
 		while (properties.hasNext()) {
 			Property prop = (Property) properties.next();
@@ -1020,16 +1121,16 @@ public class NestedCriteria2HQL {
 					Object value = field.get(obj);
 					if (value != null)
 						if ((value instanceof Collection && ((Collection) value)
-								.size() > 0)
-								|| !(value instanceof Collection))
+								.size() > 0) || !(value instanceof Collection))
 							criterions.put(fieldName, field.get(obj));
 				} catch (Exception e) {
 					// Do nothing - when dealing with implicit queries, pclass
 					// would be the concrete subclass of obj, and thus contain
 					// fields that are not in obj
 				}
-			}			
+			}
 		}
+		return criterions;
 	}
 	
 	// object--->has component---> and it has set then add distinct to it. As
@@ -1067,23 +1168,25 @@ public class NestedCriteria2HQL {
 		return false;
 	}
 
-	@SuppressWarnings("rawtypes")
-	private HashMap getObjAssocCriterion(Object obj, Configuration cfg,
+	private Map<String, Object> getAssociatedObjectCriterion(Object obj, Configuration cfg,
 			String parentClassName, String parentRoleName) throws Exception {
-		HashMap criterions = new HashMap();
+		Map<String, Object> criterions = null;
+		Map<String, Object> superClassCriterions = null;
 		String objClassName = obj.getClass().getName();
 
 		PersistentClass pclass = getPersistentClass(objClassName,
 				parentClassName, parentRoleName);
 		if (pclass != null) {
-			setAssocCriterion(obj, pclass, criterions);
+			criterions=getAssociatedObjectWithFieldCriterion(obj, pclass);
 
 			pclass = pclass.getSuperclass();
 			while (pclass != null) {
-				setAssocCriterion(obj, pclass, criterions);
+				superClassCriterions=getAssociatedObjectWithFieldCriterion(obj, pclass);
 				pclass = pclass.getSuperclass();
 			}
 		}
+		if(superClassCriterions!=null)
+				criterions.putAll(superClassCriterions);
 		return criterions;
 	}
 
