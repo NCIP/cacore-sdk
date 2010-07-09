@@ -165,16 +165,17 @@ public class NestedCriteria2HQL {
 				} else if (isObjectAssociationEmpty(sourceObjectList.iterator()
 						.next())) {
 					selectBuffer.append(" and ").append(
-							getHQLQueryFromSourceObjectWithCriterion(sourceObjectList.iterator()
-									.next(), cfg, true));
+							getHQLQueryFromSourceObjectWithCriterion(
+									sourceObjectList.iterator().next(), cfg,
+									true));
 				} else {
 					selectBuffer
 							.append(" and ")
 							.append(srcAlias)
 							.append(" in (")
-							.append(getHQLQueryFromSourceObjectWithCriterion(sourceObjectList
-									.iterator().next(), cfg, false))
-							.append(")");
+							.append(getHQLQueryFromSourceObjectWithCriterion(
+									sourceObjectList.iterator().next(), cfg,
+									false)).append(")");
 				}
 			} else {
 				if (criteria.isTargetCollection()) {
@@ -225,8 +226,9 @@ public class NestedCriteria2HQL {
 									.append(srcAlias)
 									.append(".id")
 									.append(" and ")
-									.append(getHQLQueryFromSourceObjectWithCriterion(sourceObjectList
-											.iterator().next(), cfg, true));
+									.append(getHQLQueryFromSourceObjectWithCriterion(
+											sourceObjectList.iterator().next(),
+											cfg, true));
 						} else {
 							selectBuffer
 									.append("select ")
@@ -242,8 +244,9 @@ public class NestedCriteria2HQL {
 									.append(" ")
 									.append(destAlias)
 									.append(" where ")
-									.append(getHQLQueryFromSourceObjectWithCriterion(sourceObjectList
-											.iterator().next(), cfg, true));
+									.append(getHQLQueryFromSourceObjectWithCriterion(
+											sourceObjectList.iterator().next(),
+											cfg, true));
 						}
 					}
 					// Attributes and associtions populated
@@ -264,9 +267,9 @@ public class NestedCriteria2HQL {
 								.append(" where ")
 								.append(srcAlias)
 								.append(" in (")
-								.append(getHQLQueryFromSourceObjectWithCriterion(sourceObjectList
-										.iterator().next(), cfg, false))
-								.append(")");
+								.append(getHQLQueryFromSourceObjectWithCriterion(
+										sourceObjectList.iterator().next(),
+										cfg, false)).append(")");
 
 					}
 				} else // Target is not collection
@@ -304,8 +307,9 @@ public class NestedCriteria2HQL {
 								.append(destAlias)
 								.append(".id")
 								.append(" and ")
-								.append(getHQLQueryFromSourceObjectWithCriterion(sourceObjectList
-										.iterator().next(), cfg, true));
+								.append(getHQLQueryFromSourceObjectWithCriterion(
+										sourceObjectList.iterator().next(),
+										cfg, true));
 					}
 					// Attributes and associtions populated
 					else {
@@ -331,9 +335,9 @@ public class NestedCriteria2HQL {
 								.append(" and ")
 								.append(srcAlias)
 								.append(" in (")
-								.append(getHQLQueryFromSourceObjectWithCriterion(sourceObjectList
-										.iterator().next(), cfg, false))
-								.append(")");
+								.append(getHQLQueryFromSourceObjectWithCriterion(
+										sourceObjectList.iterator().next(),
+										cfg, false)).append(")");
 					}
 				}
 			}
@@ -393,9 +397,10 @@ public class NestedCriteria2HQL {
 			for (Iterator i = sourceObjectList.iterator(); i.hasNext();) {
 				Object obj = i.next();
 				hql.append(
-						srcAlias + " in ("
-								+ getHQLQueryFromSourceObjectWithCriterion(obj, cfg, false)).append(
-						")");
+						srcAlias
+								+ " in ("
+								+ getHQLQueryFromSourceObjectWithCriterion(obj,
+										cfg, false)).append(")");
 				if (i.hasNext())
 					hql.append(" or ");
 			}
@@ -879,16 +884,17 @@ public class NestedCriteria2HQL {
 
 	@SuppressWarnings("rawtypes")
 	private boolean isObjectPrimitive(Object value) {
-		if(value instanceof Collection && ((Collection)value).size()>0){
+		if (value instanceof Collection && ((Collection) value).size() > 0) {
 			return false;
-		}			
-    	if(!(value instanceof Integer || value instanceof Float || value instanceof Double
-    			|| value instanceof Character || value instanceof Long || value instanceof Boolean
-    			|| value instanceof Byte ||  value instanceof Short  
-    			|| value instanceof String || value instanceof Date)){
-    		return false;
-    	}
-    	return true;
+		}
+		if (!(value instanceof Integer || value instanceof Float
+				|| value instanceof Double || value instanceof Character
+				|| value instanceof Long || value instanceof Boolean
+				|| value instanceof Byte || value instanceof Short
+				|| value instanceof String || value instanceof Date)) {
+			return false;
+		}
+		return true;
 	}
 
 	private HashMap<String, Object> getObjAttrCriterion(Object obj,
