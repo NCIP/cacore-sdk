@@ -51,7 +51,7 @@ public class NestedCriteria2HQL {
 		System.out.println("HQL query: " + hql.toString());
 		return hqlCriteria;
 	}
-
+        
 	private void processNestedCriteria(StringBuffer hql, NestedCriteria criteria)
 			throws Exception {
 		if (condition1(criteria)) {
@@ -609,7 +609,7 @@ public class NestedCriteria2HQL {
 			Configuration cfg, String parentClassName, String parentRoleName,
 			StringBuffer aliasSetBuffer) throws Exception {
 		StringBuffer whereClause = new StringBuffer();
-		HashMap<String, Object> criterionMap = getObjAttrCriterion(obj, cfg,
+		Map<String, Object> criterionMap = getObjAttrCriterion(obj, cfg,
 				parentClassName, parentRoleName);
 		PersistentClass pclass = getPersistentClass(obj.getClass().getName(),
 				parentClassName, parentRoleName);
@@ -897,20 +897,27 @@ public class NestedCriteria2HQL {
 		return true;
 	}
 
-	private HashMap<String, Object> getObjAttrCriterion(Object obj,
+	private Map<String, Object> getObjAttrCriterion(Object obj,
 			Configuration cfg, String parentClassName, String parentRoleName)
 			throws Exception {
-		HashMap<String, Object> criterions = new HashMap<String, Object>();
+		Map<String, Object> criterions = new HashMap<String, Object>();
 		String objClassName = obj.getClass().getName();
 		PersistentClass pclass = getPersistentClass(objClassName,
 				parentClassName, parentRoleName);
 
 		if (pclass != null) {
-			setAttrCriterion(obj, pclass, criterions);
+			Map<String, Object> tempObjectCriterion = getCriterionForComponentAndAttribute(
+					obj, pclass);
+			if (tempObjectCriterion != null)
+				criterions.putAll(tempObjectCriterion);
 			while (pclass.getSuperclass() != null) {
 				pclass = pclass.getSuperclass();
 				if (pclass != null) {
-					setAttrCriterion(obj, pclass, criterions);
+					Map<String, Object> tempObjectCriterion2 = getCriterionForComponentAndAttribute(
+							obj, pclass);
+					if (tempObjectCriterion2 != null)
+						criterions.putAll(tempObjectCriterion2);
+
 				}
 			}
 			Property identifierProperty = pclass.getIdentifierProperty();
@@ -935,8 +942,9 @@ public class NestedCriteria2HQL {
 	}
 
 	@SuppressWarnings({"rawtypes"})
-	private void setAttrCriterion(Object obj, PersistentClass pclass,
-			HashMap<String, Object> criterions) throws Exception {
+	private Map<String, Object> getCriterionForComponentAndAttribute(Object obj,
+			PersistentClass pclass) throws Exception {
+		Map<String, Object> criterions=new HashMap<String, Object>();
 		Iterator properties = pclass.getPropertyIterator();
 		Property tempProperty = (Property) pclass.getPropertyIterator().next();
 		String propertyAccessorName = tempProperty.getPropertyAccessorName();
@@ -994,12 +1002,14 @@ public class NestedCriteria2HQL {
 					}
 			}
 		}	
+		return criterions;
 	}
 	
-	private String getHQLQueryFromSourceObjectWithCriterion(Object obj, Configuration cfg,
-			boolean skipAssociations) throws Exception {
-		return getHQLQueryFromSourceObjectWithCriterion(obj, cfg,skipAssociations,null,null);
-	}	
+	private String getHQLQueryFromSourceObjectWithCriterion(Object obj,
+			Configuration cfg, boolean skipAssociations) throws Exception {
+		return getHQLQueryFromSourceObjectWithCriterion(obj, cfg,
+				skipAssociations, null, null);
+	}
 	
 	//get the result HQL String from the Object obj
 	private String getHQLQueryFromSourceObjectWithCriterion(Object obj,
