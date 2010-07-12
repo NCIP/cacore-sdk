@@ -9,6 +9,7 @@ import java.io.IOException;
 import junit.framework.TestCase;
 
 import gov.nih.nci.system.applicationservice.ApplicationService;
+import gov.nih.nci.system.dao.DAOException;
 import gov.nih.nci.system.util.ClassCache;
 import gov.nih.nci.system.util.SystemConstant;
 import gov.nih.nci.system.web.util.HTTPUtils;
@@ -30,7 +31,7 @@ public class HttpUtilsTest extends TestCase{
 		classCache = (ClassCache) ctx.getBean("ClassCache");
 	}
 	
-	public void testExampleIDQuery() throws Exception{
+	public void xtestExampleIDQuery() throws Exception{
 		String queryText="query=Bank&Credit[@id=[@extension=3]]";
 		process(queryText,"test1");
 	}
@@ -138,7 +139,11 @@ public class HttpUtilsTest extends TestCase{
 	//failing as properties are not mapped properly
 	public void xtestISOComplexDataTypePropertyNotMappedException() throws Exception{
 		String queryText="query=CdDataType&CdDataType[@value1=[@originalText=[@value=VALUE4_ORIG_TXT_VALUE1]]]";
-		process(queryText,"test20");
+		try{
+			process(queryText,"test20");
+			fail("Excepted Exception: property not mapped");
+		}catch (Exception e) {
+		}
 	}
 	/*###################################################################################*/
 	
@@ -163,7 +168,7 @@ public class HttpUtilsTest extends TestCase{
 	}
 	
 	public void xtestISOComplexIVLPQDataWidthType() throws Exception{
-		String queryText="query=IvlPqDataType&IvlPqDataType[@value3=[@width=[@value=1]]]";
+		String queryText="query=IvlPqDataType&IvlPqDataType[@value4=[@width=[@value=1]]]";
 		process(queryText,"test25");
 	}
 
@@ -253,7 +258,7 @@ public class HttpUtilsTest extends TestCase{
 	}
 
 	public void xtestISOComplexEnumDataType() throws Exception{
-		String queryText="query=CdDataType&CdDataType[@value2=[@nullFlavor=NI]]";
+		String queryText="query=gov.nih.nci.cacoresdk.domain.other.datatype.BlDataType&gov.nih.nci.cacoresdk.domain.other.datatype.BlDataType[@value2=[@nullFlavor=UNK]]";
 		process(queryText,"test38");
 	}
 	

@@ -712,6 +712,19 @@ public class NestedCriteria2HQL {
 						field.setAccessible(true);
 						Object value = field.get(obj);
 						if (value != null) {
+							// if precision==defaultvalue (i.e)==0,avoid HQL
+							// query building
+							if (field.getName().equals("precision")
+									&& value instanceof Integer
+									&& ((Integer) value) == 0) {
+								continue;
+							}
+							// if object instanceof AddressPartType and
+							// fieldName is type,avoid HQL query building
+							if (value instanceof AddressPartType
+									&& field.getName().equals("type")) {
+								continue;
+							}
 							String objectClassName = value.getClass().getName();
 							StringBuffer newQuery = new StringBuffer(
 									query.toString());
@@ -732,14 +745,8 @@ public class NestedCriteria2HQL {
 										whereQueryClause, queryAppender,
 										andCount, aliasSetBuffer);
 							} else {
-								try {
-									persistChildvalue = locateComponent(
-											componentValue, field.getName());
-								} catch (HibernateException ex) {
-									log.info("not found mapping for "
-											+ field.getName() + "  ignoring");
-									continue;
-								}
+								persistChildvalue = locateComponent(
+										componentValue, field.getName());
 								if (isoObject & !isEnumObject) {
 									parentheses = "";
 									generateISOWhereQuery(value, newQuery,
@@ -771,11 +778,6 @@ public class NestedCriteria2HQL {
 									}
 									whereQueryClause.append(" )) ");
 								} else {
-									if (field.getName().equals("precision")
-											&& value instanceof Integer
-											&& ((Integer) value) == 0) {
-										continue;
-									}
 									String tempQuery = null;
 									if (isCaseSensitive()) {
 										tempQuery = parentheses + "lower("
@@ -856,14 +858,8 @@ public class NestedCriteria2HQL {
 						addressPartTypeMap.put(inputAddressPartTypeName, parts);
 					}
 					Value persistChildvalue = null;
-					try {
-						persistChildvalue = locateComponent(componentValue,
-								partName);
-					} catch (HibernateException ex) {
-						log.info("not found mapping for " + partName
-								+ "  ignoring");
-						continue;
-					}
+					persistChildvalue = locateComponent(componentValue,
+							partName);
 					String componentPartName = partName.substring(
 							partName.length() - 2, partName.length());
 					tempNewQuery.append(componentPartName);
@@ -877,7 +873,7 @@ public class NestedCriteria2HQL {
 			}
 			if (!isValidAddressPartType) {
 				throw new Exception(
-						" Invalid Address PartType specified in Query");
+						" Invalid Address PartType "+addressPartType.name()+"  specified in RESTfulQuery");
 			}
 		}
 	}
