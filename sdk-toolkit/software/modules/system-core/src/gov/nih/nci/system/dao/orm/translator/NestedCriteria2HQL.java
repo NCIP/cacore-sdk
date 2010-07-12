@@ -708,104 +708,96 @@ public class NestedCriteria2HQL {
 			for (Field field : klass.getDeclaredFields()) {
 				int modifier = field.getModifiers();
 				if (!Modifier.isStatic(modifier)) {
-					try {
-						field.setAccessible(true);
-						Object value = field.get(obj);
-						if (value != null) {
-							// if precision==defaultvalue (i.e)==0,avoid HQL
-							// query building
-							if (field.getName().equals("precision")
-									&& value instanceof Integer
-									&& ((Integer) value) == 0) {
-								continue;
-							}
-							// if object instanceof AddressPartType and
-							// fieldName is type,avoid HQL query building
-							if (value instanceof AddressPartType
-									&& field.getName().equals("type")) {
-								continue;
-							}
-							String objectClassName = value.getClass().getName();
-							StringBuffer newQuery = new StringBuffer(
-									query.toString());
-							newQuery.append(SystemConstant.DOT).append(
+					field.setAccessible(true);
+					Object value = field.get(obj);
+					if (value != null) {
+						// if precision==defaultvalue (i.e)==0,avoid HQL
+						// query building
+						if (field.getName().equals("precision")
+								&& value instanceof Integer
+								&& ((Integer) value) == 0) {
+							continue;
+						}
+						// if object instanceof AddressPartType and
+						// fieldName is type,avoid HQL query building
+						if (value instanceof AddressPartType
+								&& field.getName().equals("type")) {
+							continue;
+						}
+						String objectClassName = value.getClass().getName();
+						StringBuffer newQuery = new StringBuffer(
+								query.toString());
+						newQuery.append(SystemConstant.DOT).append(
+								field.getName());
+						boolean isoObject = objectClassName
+								.startsWith(isoprefix);
+						// parse the set and create an hql Set<CD>
+						boolean isSetObject = objectClassName
+								.startsWith("java.util.HashSet");
+						boolean isEnumObject = value.getClass().isEnum();
+						boolean isListObject = objectClassName
+								.startsWith("java.util.ArrayList");
+						Value persistChildvalue = null;
+						if (isListObject) {
+							executeIfListContainsISOObjects((List) value,
+									newQuery, (Component) componentValue,
+									whereQueryClause, queryAppender, andCount,
+									aliasSetBuffer);
+						} else {
+							persistChildvalue = locateComponent(componentValue,
 									field.getName());
-							boolean isoObject = objectClassName
-									.startsWith(isoprefix);
-							// parse the set and create an hql Set<CD>
-							boolean isSetObject = objectClassName
-									.startsWith("java.util.HashSet");
-							boolean isEnumObject = value.getClass().isEnum();
-							boolean isListObject = objectClassName
-									.startsWith("java.util.ArrayList");
-							Value persistChildvalue = null;
-							if (isListObject) {
-								executeIfListContainsISOObjects((List) value,
-										newQuery, (Component) componentValue,
-										whereQueryClause, queryAppender,
-										andCount, aliasSetBuffer);
-							} else {
-								persistChildvalue = locateComponent(
-										componentValue, field.getName());
-								if (isoObject & !isEnumObject) {
-									parentheses = "";
-									generateISOWhereQuery(value, newQuery,
+							if (isoObject & !isEnumObject) {
+								parentheses = "";
+								generateISOWhereQuery(value, newQuery,
+										whereQueryClause, persistChildvalue,
+										parentheses, queryAppender, andCount++,
+										aliasSetBuffer);
+							} else if (isSetObject) {
+								Set set = (Set) value;
+								int count = 0;
+								for (Object object : set) {
+									String setItemAlias = getAlias(object
+											.getClass().getName(), aliasCount++);
+									aliasSetBuffer.append(" inner join "
+											+ queryAppender
+											+ newQuery.toString() + " as "
+											+ setItemAlias);
+									parentheses = (count == 0)
+											? " (( "
+											: ") or ( ";
+									generateISOWhereQuery(object,
+											new StringBuffer(),
 											whereQueryClause,
 											persistChildvalue, parentheses,
-											queryAppender, andCount++,
+											setItemAlias, andCount,
 											aliasSetBuffer);
-								} else if (isSetObject) {
-									Set set = (Set) value;
-									int count = 0;
-									for (Object object : set) {
-										String setItemAlias = getAlias(object
-												.getClass().getName(),
-												aliasCount++);
-										aliasSetBuffer.append(" inner join "
-												+ queryAppender
-												+ newQuery.toString() + " as "
-												+ setItemAlias);
-										parentheses = (count == 0)
-												? " (( "
-												: ") or ( ";
-										generateISOWhereQuery(object,
-												new StringBuffer(),
-												whereQueryClause,
-												persistChildvalue, parentheses,
-												setItemAlias, andCount,
-												aliasSetBuffer);
-										count++;
-									}
-									whereQueryClause.append(" )) ");
-								} else {
-									String tempQuery = null;
-									if (isCaseSensitive()) {
-										tempQuery = parentheses + "lower("
-												+ queryAppender
-												+ newQuery.toString() + " )";
-									} else {
-										tempQuery = parentheses + queryAppender
-												+ newQuery.toString();
-									}
-									parentheses = "";
-									if (andCount > 0)
-										whereQueryClause.append(" and ");
-									whereQueryClause.append(tempQuery
-											+ getOperator(value) + "? ");
-									if (value instanceof String) {
-										paramList.add(((String) value)
-												.replaceAll("\\*", "\\%"));
-									} else {
-										paramList.add(value);
-									}
-									andCount++;
+									count++;
 								}
+								whereQueryClause.append(" )) ");
+							} else {
+								String tempQuery = null;
+								if (isCaseSensitive()) {
+									tempQuery = parentheses + "lower("
+											+ queryAppender
+											+ newQuery.toString() + " )";
+								} else {
+									tempQuery = parentheses + queryAppender
+											+ newQuery.toString();
+								}
+								parentheses = "";
+								if (andCount > 0)
+									whereQueryClause.append(" and ");
+								whereQueryClause.append(tempQuery
+										+ getOperator(value) + "? ");
+								if (value instanceof String) {
+									paramList.add(((String) value).replaceAll(
+											"\\*", "\\%"));
+								} else {
+									paramList.add(value);
+								}
+								andCount++;
 							}
 						}
-					} catch (IllegalArgumentException e) {
-						// No action
-					} catch (IllegalAccessException e) {
-						// No action
 					}
 				}
 			}
