@@ -40,11 +40,8 @@ public class JSPUtils {
 		String securityEnabled = (String)systemProperties.getProperty("securityEnabled");
 		secured = "yes".equalsIgnoreCase(securityEnabled) || "true".equalsIgnoreCase(securityEnabled);
 
-		String enableISO21090DataTypes = (String)systemProperties.getProperty("enableISO21090DataTypes");
 		String enableRestfulHtmlInterface = (String)systemProperties.getProperty("enableRestfulHtmlInterface");
-		
-		disableWebinterface =   "false".equalsIgnoreCase(enableISO21090DataTypes)
-					 		 && "true".equalsIgnoreCase(enableRestfulHtmlInterface)?false:true;
+		disableWebinterface ="true".equalsIgnoreCase(enableRestfulHtmlInterface)?false:true;
 	}
 
 	/**
