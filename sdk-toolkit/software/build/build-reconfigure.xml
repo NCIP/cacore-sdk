@@ -19,7 +19,7 @@
 	<property name="temp.webapp.staging.lib.dir" location="${temp.webapp.staging.dir}/lib" />
 
 	<available file="${test.cobertura.lib.dir}" property="test.cobertura.lib.exist" />
-	
+
 	<condition property="JNDI_START" value="" else="${xml.comment.start}">
 		<or>
 			<equals arg1="${DB_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
@@ -259,7 +259,7 @@
 			<equals arg1="${ENABLE_ISO21090_DATATYPES}" arg2="yes" casesensitive="false" trim="true" />
 		</or>
 	</condition>
-	
+
 	<condition property="LOCAL_JAVA_INTERFACE_ENABLED" value="true">
 		<or>
 			<equals arg1="${ENABLE_LOCAL_JAVA_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
@@ -287,36 +287,24 @@
 	</condition>
 
 	<condition property="RESTFUL_XML_INTERFACE_ENABLED" value="true" else="false">
-		<and>
-			<or>
-				<equals arg1="${ENABLE_RESTFUL_XML_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
-				<equals arg1="${ENABLE_RESTFUL_XML_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
-			</or>
-		</and>
+		<or>
+			<equals arg1="${ENABLE_RESTFUL_XML_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${ENABLE_RESTFUL_XML_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
 	</condition>
 
 	<condition property="RESTFUL_HTML_INTERFACE_ENABLED" value="true" else="false">
-		<and>
-			<not>
-				<equals arg1="${ISO21090_DATATYPES_ENABLED}" arg2="true" casesensitive="false" trim="true" />
-			</not>
-			<or>
-				<equals arg1="${ENABLE_RESTFUL_HTML_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
-				<equals arg1="${ENABLE_RESTFUL_HTML_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
-			</or>
-		</and>
+		<or>
+			<equals arg1="${ENABLE_RESTFUL_HTML_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${ENABLE_RESTFUL_HTML_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
 	</condition>
 
 	<condition property="RESTFUL_JSON_INTERFACE_ENABLED" value="true" else="false">
-		<and>
-			<not>
-				<equals arg1="${ISO21090_DATATYPES_ENABLED}" arg2="true" casesensitive="false" trim="true" />
-			</not>
-			<or>
-				<equals arg1="${ENABLE_RESTFUL_JSON_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
-				<equals arg1="${ENABLE_RESTFUL_JSON_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
-			</or>
-		</and>
+		<or>
+			<equals arg1="${ENABLE_RESTFUL_JSON_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${ENABLE_RESTFUL_JSON_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
 	</condition>
 
 	<condition property="REMOTE_JAVA_INTERFACE_START" value="" else="${xml.comment.start}">
@@ -356,7 +344,7 @@
 	<condition property="RESTFUL_JSON_INTERFACE_END" value="" else="${xml.comment.end}">
 		<equals arg1="${RESTFUL_JSON_INTERFACE_ENABLED}" arg2="true" casesensitive="false" trim="true" />
 	</condition>
-	
+
 	<condition property="JNDI_PREFIX" value="${jboss.jndi.prefix}" else="${tomcat.jndi.prefix}">
 		<equals arg1="${SERVER_TYPE}" arg2="jboss" casesensitive="false" trim="true" />
 	</condition>
@@ -597,7 +585,7 @@
 			<globmapper from="*.java" to="*.java" />
 			<filterset refid="filtertoken3" />
 			<filterset refid="filtertoken4" />
-		</copy>		
+		</copy>
 		<copy todir="${system.config.dir}">
 			<fileset dir="${system.config.template.dir}">
 				<include name="**/*.*" />
@@ -672,7 +660,7 @@
 				<antcall target="-package-local-client-grid-security" />
 				<antcall target="-package-local-client-logging" />
 				<antcall target="-package-local-client-iso-datatype" />
-				<antcall target="-package-local-client-jaxb" />				
+				<antcall target="-package-local-client-jaxb" />
 
 				<include-db-jar target.lib.directory="${package.client.local.lib.dir}" />
 				<!-- delete if present as duplicate mysql jar was added from Grid Services-->
@@ -732,7 +720,7 @@
 				<include name="sdk-system-core-*.jar"/>
 			</fileset>
 			<fileset dir="${output.target.dir}" />
-		</copy>	
+		</copy>
 		<if>
 			<equals arg1="${USE_CONNECTION_POOL}" arg2="true" />
 			<then>
@@ -753,7 +741,7 @@
 			<fileset dir="${system.config.web.classes.dir}">
 				<include name="${application.config.file}" />
 				<include name="${application.config.security.file}" />
-			</fileset>		
+			</fileset>
 		</copy>
 	</target>
 
@@ -888,7 +876,7 @@
 				<copy tofile="${package.client.local.conf.dir}/${csm.security.config.file}" file="${system.config.security.dir}/${csm.security.config.original.file}" overwrite="true" />
 			</then>
 		</if>
-	</target>	
+	</target>
 	<target name="-package-local-client-jaxb" depends="">
 		<if>
 			<equals arg1="${GENERATE_JAXB_MAPPING}" arg2="true" />
@@ -914,7 +902,7 @@
 		<copy todir="${package.client.local.conf.dir}">
 			<fileset dir="${output.src.dir}">
 				<include name="IsoConstants.xml"/>
-			</fileset>					
+			</fileset>
 		</copy>
 		<echo message="ISO datatypes enabled - Copy Complete" />
 	</target>
@@ -932,7 +920,7 @@
 				<antcall target="-package-remote-client-security" />
 				<antcall target="-package-remote-client-grid-security" />
 				<antcall target="-package-remote-client-iso-datatype" />
-				<antcall target="-package-remote-client-jaxb" />	
+				<antcall target="-package-remote-client-jaxb" />
 			</then>
 		</if>
 	</target>
@@ -986,7 +974,7 @@
 			<fileset dir="${system.config.client.remote.dir}">
 				<exclude name="**/*template*" />
 			</fileset>
-		</copy>		
+		</copy>
 	</target>
 
 	<target name="-package-remote-client-writable-api" depends="">
@@ -1123,9 +1111,9 @@
 				<include name="iso-datatypes-*.jar"/>
 				<exclude name="iso-datatypes-hibernate*.jar" />
 			</fileset>
-		</copy>			
+		</copy>
 		<echo message="ISO datatypes enabled - Copy Complete" />
-	</target>	
+	</target>
 
 	<!-- #################################################################### -->
 	<!-- ######################## WS Client targets ######################### -->
@@ -1589,7 +1577,7 @@
 	</target>
 
 	<target name="-package-jboss-server" depends="">
-		
+
 		<if>
 			<equals arg1="${test.cobertura.lib.exist}" arg2="true"/>
 			<then>
