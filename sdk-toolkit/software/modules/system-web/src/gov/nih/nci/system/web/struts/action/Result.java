@@ -30,8 +30,6 @@ public class Result extends BaseActionSupport {
 
 	public String execute() throws Exception {
 		
-		//log.debug("Result.action instance: " + this);
-		
 		HttpServletRequest request = ServletActionContext.getRequest();
 		
 		SessionMap session = (SessionMap) ActionContext.getContext().get(ActionContext.SESSION);
@@ -52,64 +50,26 @@ public class Result extends BaseActionSupport {
 		
 		if(submitValue != null && submitValue.equalsIgnoreCase("Submit"))
 		{
-		   
 		    query = "GetHTML?query=";
 		   	
 		   	selectedSearchDomain = getSearchObj();
 		   	log.debug("selectedSearchDomain: "+ selectedSearchDomain);
 		   	   	
-		   	if(selectedSearchDomain != null && !selectedSearchDomain.equals("Please choose"))
-		   	{ query +=selectedSearchDomain + "&";
-		   	
-			   	if(className != null && !className.equals("Please choose"))
-			   	{   query += className;	
-			   		log.debug("query with search object = " + query);
-			   		Enumeration parameters = request.getParameterNames();
-		     		while(parameters.hasMoreElements())
-		     		{
-		         		String parameterName = (String)parameters.nextElement();
-		         		log.debug("param = " + parameterName);
-		         		if(!parameterName.equals("klassName") && !parameterName.equals("searchObj") && !parameterName.equals("BtnSearch") && !parameterName.equals("username") && !parameterName.equals("password") && !parameterName.equals("selectedDomain"))
-		         		{
-		         			String parameterValue = (request.getParameter(parameterName)).trim();
-		         			if(parameterValue.length() > 0)
-		         			{
-		         				log.debug("parameterValue= " + parameterValue); 
-		         				query +="[@" + parameterName + "=" + parameterValue + "]";
-		         			}
-		         		}    
-		         	}    	
-			   	
-			   	 }
-		   	} 
-		   	else
-		   	{
-		   		if(className != null && !className.equals("Please choose"))
-			   	{   query += className + "&" + className;	
-			   	    log.debug("query no search object = " + query);
-			   		Enumeration parameters = request.getParameterNames();
-		     		while(parameters.hasMoreElements())
-		     		{
-		         		String parameterName = (String)parameters.nextElement();
-		         		log.debug("param = " + parameterName);
-		         		if(!parameterName.equals("klassName") && !parameterName.equals("searchObj") && !parameterName.equals("BtnSearch")&& !parameterName.equals("username") && !parameterName.equals("password") && !parameterName.equals("selectedDomain"))
-		         		{
-		         			String parameterValue = (request.getParameter(parameterName)).trim();
-		         			if(parameterValue.length() > 0)
-		         			{
-		         				log.debug("parameterValue= " + parameterValue); 
-		         				query +="[@" + parameterName + "=" + parameterValue + "]";
-		         			}
-		         		}    
-		         	}     	
-			   	
-			   	 }
-		   	
-		   	}
-//		   	if ((request.getParameter("username") != null) && ((String)request.getParameter("username").trim()).length() > 0)
-//		   		query = query + "&username=" + request.getParameter("username");
-//		   	if ((request.getParameter("password") != null) && ((String)request.getParameter("password").trim()).length() > 0)
-//		   		query = query + "&password=" + request.getParameter("password");
+		   	if (selectedSearchDomain != null && !selectedSearchDomain.equals("Please choose")) {
+				query += selectedSearchDomain + "&";
+
+				if (className != null && !className.equals("Please choose")) {
+					query += className;
+					log.debug("query with search object = " + query);
+					query += generateQuery(request);
+				}
+			} else {
+				if (className != null && !className.equals("Please choose")) {
+					query += className + "&" + className;
+					log.debug("query with no search object = " + query);
+					query += generateQuery(request);
+				}
+			}
 		   	
 		   	String username = (String) session.get("username");
 		   	String password = (String) session.get("password");
@@ -120,6 +80,7 @@ public class Result extends BaseActionSupport {
 		   		query = query + "&password=" + password;		   	
 		   		
 		   	log.debug("query: " + query);	
+		   	System.out.println("query: " + query);
 		   	
 		 setQuery(query);
 		}
@@ -158,6 +119,54 @@ public class Result extends BaseActionSupport {
 
 	public void setSelectedDomain(String selectedDomain) {
 		this.selectedDomain = selectedDomain;
+	}
+	
+	private String generateQuery(HttpServletRequest request){
+		
+		StringBuilder sb = new StringBuilder();
+		Enumeration parameters = request.getParameterNames();
+		
+ 		while(parameters.hasMoreElements())
+ 		{
+     		String parameterName = (String)parameters.nextElement();
+     		log.debug("param = " + parameterName);
+     		if(!parameterName.equals("klassName") && !parameterName.equals("searchObj") && !parameterName.equals("BtnSearch") && !parameterName.equals("username") && !parameterName.equals("password") && !parameterName.equals("selectedDomain"))
+     		{
+     			String parameterValue = (request.getParameter(parameterName)).trim();
+				if (parameterValue.length() > 0) {
+					System.out.println("parameterValue: "
+							+ parameterValue);
+
+					if (parameterName.indexOf('.') > 0) { // ISO Data Type
+						String[] isoDataTypeParameters = parameterName
+								.split("\\.");
+						
+						System.out.println("isoDataTypeParameters: " + isoDataTypeParameters);
+						
+						for(String isoDataTypeParameter : isoDataTypeParameters){
+							sb.append("[@").append(isoDataTypeParameter).append("=");
+						}
+						
+						sb.append(parameterValue);
+						
+						for(int i=0;i<isoDataTypeParameters.length;i++){
+							sb.append("]");
+						}
+
+//						sb.append("[@").append(isoDataTypeParameters[0])
+//						.append("=[@").append(isoDataTypeParameters[1])
+//						.append("=").append(parameterValue)
+//								.append("]]");
+
+					} else {
+						sb.append("[@").append(parameterName).append("=")
+								.append(parameterValue).append("]");
+					}
+				}
+     		}    
+     	}
+ 		
+ 		return sb.toString();
 	}
 	
 }
