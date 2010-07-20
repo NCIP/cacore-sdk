@@ -9,7 +9,6 @@ import java.io.IOException;
 import junit.framework.TestCase;
 
 import gov.nih.nci.system.applicationservice.ApplicationService;
-import gov.nih.nci.system.dao.DAOException;
 import gov.nih.nci.system.util.ClassCache;
 import gov.nih.nci.system.util.SystemConstant;
 import gov.nih.nci.system.web.util.HTTPUtils;
@@ -31,113 +30,113 @@ public class HttpUtilsTest extends TestCase{
 		classCache = (ClassCache) ctx.getBean("ClassCache");
 	}
 	
-	public void xtestExampleIDQuery() throws Exception{
+	public void testExampleIDQuery() throws Exception{
 		String queryText="query=Bank&Credit[@id=[@extension=3]]";
 		process(queryText,"test1");
 	}
 	
-	public void xtestExampleMultipleAssociation() throws Exception{
+	public void testExampleMultipleAssociation() throws Exception{
 		String queryText="query=Card,Suit&Deck[@id=[@extension=1]]";
 		process(queryText,"test2");
 	}
 	
-	public void xtestExampleMultipleAssociation2() throws Exception{
+	public void testExampleMultipleAssociation2() throws Exception{
 		String queryText="query=Deck,Suit&Card[@id=[@extension=1]]";
 		process(queryText,"test3");
 	}
 	
-	public void xtestExampleAssociationWithDelimLeftBracket() throws Exception{
+	public void testExampleAssociationWithDelimLeftBracket() throws Exception{
 		String queryText="query=Card&Suit[@id=[@extension=1]][Deck[@id=[@extension=1]]]";
 		process(queryText,"test4");
 	}
 	
-	public void xtestExampleAssociationWithDelimLeftBracket2() throws Exception{
+	public void testExampleAssociationWithDelimLeftBracket2() throws Exception{
 		String queryText="query=Deck&Suit[@id=[@extension=1]][cardCollection[@id=[@extension=1]]]";
 		process(queryText,"test5");
 	}
 	
-	public void xtestExampleMultiParamsAssociationWithDelimLeftBracket() throws Exception{
+	public void testExampleMultiParamsAssociationWithDelimLeftBracket() throws Exception{
 		String queryText="query=Deck&Suit[@id=[@extension=1]][cardCollection[@id=[@extension=1]][@name=[@value=Ace]]]";
 		process(queryText,"test6");
 	}
 	
-	public void xtestExampleAssociationWithDelimSlash() throws Exception{
+	public void testExampleAssociationWithDelimSlash() throws Exception{
 		String queryText="query=Deck&Suit[@id=[@extension=1]]"+SystemConstant.FORWARD_SLASH+"Card[@id=[@extension=1]]";
 		process(queryText,"test7");
 	}
 
 	/*###################################################################################*/
-	public void xtestSimpeISODataType() throws Exception{
+	public void testSimpeISODataType() throws Exception{
 		String queryText="query=CdDataType";
 		process(queryText,"test8");
 	}
 	
-	public void xtestSimpeISODataType2() throws Exception{
+	public void testSimpeISODataType2() throws Exception{
 		String queryText="query=CdDataType&CdDataType[@id=1]";
 		process(queryText,"test9");
 	}
 	
-	public void xtestISOComplexDataType() throws Exception{
+	public void testISOComplexDataType() throws Exception{
 		String queryText="query=CdDataType&CdDataType[@value1=[@code=CODE1]]";
 		process(queryText,"test10");
 	}
 
 	
-	public void xtestISOComplexDataType2() throws Exception{
+	public void testISOComplexDataType2() throws Exception{
 		String queryText="query=CdDataType&CdDataType[@value4=[@originalText=[@value=VALUE4_ORIG_TXT_VALUE1]]]";
 		process(queryText,"test11");
 	}
 	
-	public void xtestISOComplexDataTypeValue4() throws Exception{
+	public void testISOComplexDataTypeValue4() throws Exception{
 		String queryText="query=CdDataType&CdDataType[@value4=[@displayName=[@value=VALUE4_DISPLAY_VALUE2]]]";
 		process(queryText,"test12");
 	}
 	
-	public void xtestISOComplexDataTypeValue6() throws Exception{
+	public void testISOComplexDataTypeValue6() throws Exception{
 		String queryText="query=CdDataType&CdDataType[@value2=[@code=CODE4]][@value1=[@code=CODE1]][@value6=[@displayName=[@value=VALUE6_DISPLAY_VALUE1]][@code=CODE1]]";
 		process(queryText,"test13");
 	}
 	
-	public void xtestISOComplexDataTypeValue7() throws Exception{
+	public void testISOComplexDataTypeValue7() throws Exception{
 		String queryText="query=CdDataType&CdDataType[@value7=[@displayName=[@value=VALUE7_DISPLAY_VALUE1]]]";
 		process(queryText,"test14");
 	}
 	
-	public void xtestISOComplexDataTypeValue7_2() throws Exception{
+	public void testISOComplexDataTypeValue7_2() throws Exception{
 		String queryText="query=CdDataType&CdDataType[@value7=[@codeSystem=CODE_SYSTEM_1]]";
 		process(queryText,"test15");
 	}
 	
-	public void xtestISOComplexDataTypeValue7_3() throws Exception{
+	public void testISOComplexDataTypeValue7_3() throws Exception{
 		String queryText="query=CdDataType&CdDataType[@value2=[@code=CODE4]][@value1=[@code=CODE1]][@value6=[@displayName=[@value=VALUE6_DISPLAY_VALUE1]][@code=CODE1]][@value7=[@codeSystem=CODE_SYSTEM_1]]";
 		process(queryText,"test41");
 	}
 	
-	public void xtestISOComplexDataTypeValue8() throws Exception{
+	public void testISOComplexDataTypeValue8() throws Exception{
 		String queryText="query=CdDataType&CdDataType[@value8=[@code=CODE8][@displayName=[@value=VALUE8_DISPLAY_VALUE1]]]";
 		process(queryText,"test16");
 	}
 	
-	public void xtestISOComplexDataTypeWithAndQuery() throws Exception{
+	public void testISOComplexDataTypeWithAndQuery() throws Exception{
 		String queryText="query=CdDataType&CdDataType[@value4=[@displayName=[@value=VALUE4_DISPLAY_VALUE2]][@originalText=[@value=VALUE4_ORIG_TXT_VALUE1]]]";
 		process(queryText,"test17");
 	}
 	
 	//fails sql script needs to be changed to add data
 	//query works fine
-	public void xtestISOComplexDataTypeWithAndQuery2() throws Exception{
+	public void testISOComplexDataTypeWithAndQuery2() throws Exception{
 		String queryText="query=CdDataType&CdDataType[@value2=[@code=CODE4]][@value1=[@code=CODE1]][@value4=[@displayName=[@value=VALUE4_DISPLAY_VALUE2]][@originalText=[@value=VALUE4_ORIG_TXT_VALUE1]]]";
 		process(queryText,"test18");
 	}	
 
 	//query works fine
-	public void xtestISOComplexDataTypeWithAndQuery3() throws Exception{
+	public void testISOComplexDataTypeWithAndQuery3() throws Exception{
 		String queryText="query=CdDataType&CdDataType[@value4=[@code=CODE8][@codeSystem=VALUE4_CODE_SYSTEM]]";
 		process(queryText,"test19");
 	}
 	
 	//failing as properties are not mapped properly
-	public void xtestISOComplexDataTypePropertyNotMappedException() throws Exception{
+	public void testISOComplexDataTypePropertyNotMappedException() throws Exception{
 		String queryText="query=CdDataType&CdDataType[@value1=[@originalText=[@value=VALUE4_ORIG_TXT_VALUE1]]]";
 		try{
 			process(queryText,"test20");
@@ -147,103 +146,103 @@ public class HttpUtilsTest extends TestCase{
 	}
 	/*###################################################################################*/
 	
-	public void xtestISOComplexIVLIntDataType() throws Exception{
+	public void testISOComplexIVLIntDataType() throws Exception{
 		String queryText="query=IvlIntDataType&IvlIntDataType[@value1=[@low=[@value=1]]]";
 		process(queryText,"test21");
 	}
 	
-	public void xtestISOComplexIVLRealDataType() throws Exception{
+	public void testISOComplexIVLRealDataType() throws Exception{
 		String queryText="query=IvlRealDataType&IvlRealDataType[@value1=[@low=[@value=1]]]";
 		process(queryText,"test22");
 	}
 	
-	public void xtestISOComplexIVLRealDataTypeWidth() throws Exception{
+	public void testISOComplexIVLRealDataTypeWidth() throws Exception{
 		String queryText="query=IvlRealDataType&IvlRealDataType[@value3=[@width=[@value=44.0]]]";
 		process(queryText,"test23");
 	}
 	
-	public void xtestISOComplexIVLPQDataType() throws Exception{
+	public void testISOComplexIVLPQDataType() throws Exception{
 		String queryText="query=IvlPqDataType&IvlPqDataType[@value2=[@low=[@value=221.1]]]";
 		process(queryText,"test24");
 	}
 	
-	public void xtestISOComplexIVLPQDataWidthType() throws Exception{
+	public void testISOComplexIVLPQDataWidthType() throws Exception{
 		String queryText="query=IvlPqDataType&IvlPqDataType[@value4=[@width=[@value=1]]]";
 		process(queryText,"test25");
 	}
 
-	public void xtestISOComplexPQDataType() throws Exception{
+	public void testISOComplexPQDataType() throws Exception{
 		String queryText="query=PqDataType&PqDataType[@value3=[@nullFlavor=NA]]";
 		process(queryText,"test25");
 	}
 
-	public void xtestISOComplexIVLTSDataWidthType() throws Exception{
+	public void testISOComplexIVLTSDataWidthType() throws Exception{
 		String queryText="query=IvlTsDataType&IvlTsDataType[@value3=[@width=[@value=1]]]";
 		process(queryText,"test26");
 	}	
 	
-	public void xtestISOComplexIVLTSDataType() throws Exception{
+	public void testISOComplexIVLTSDataType() throws Exception{
 		String queryText="query=IvlTsDataType&IvlTsDataType[@value1=[@low=[@value=03-11-2010]]]";
 		process(queryText,"test27");
 	}		
 	/*###################################################################################*/		
 	
-	public void xtestISOComplexDsetCdDataSetType() throws Exception{
+	public void testISOComplexDsetCdDataSetType() throws Exception{
 		String queryText="query=DsetCdDataType&DsetCdDataType[@value1=[@item=[@code=CODE1]]]";
 		process(queryText,"test28");
 	}
 		
-	public void xtestISOComplexDsetCdDataTypeValue6() throws Exception{
+	public void testISOComplexDsetCdDataTypeValue6() throws Exception{
 		String queryText="query=DsetCdDataType&DsetCdDataType[@value6=[@item=[@code=CODE1]]]";
 		process(queryText,"test29");
 	}
 	
-	public void xtestISOComplexDsetCdDataTypeValue7() throws Exception{
+	public void testISOComplexDsetCdDataTypeValue7() throws Exception{
 		String queryText="query=DsetCdDataType&DsetCdDataType[@value7=[@item=[@code=CODE1]]]";
 		process(queryText,"test30");
 	}
-	//gov.nih.nci.cacoresdk.domain.other.datatype.DsetIiDataType&DsetIiDataType[@value4=[@item=[@identifierName=IDENTIFIER_NAME2]]]
-	public void xtestISOComplexDsetIiDataSetType() throws Exception{
+	
+	public void testISOComplexDsetIiDataSetType() throws Exception{
 		String queryText="query=gov.nih.nci.cacoresdk.domain.other.datatype.DsetIiDataType&DsetIiDataType[@value1=[@item=[@extension=Extension1]]]";
 		process(queryText,"test31");
 	}
 
-	public void xtestISOComplexDsetTelDataSetType() throws Exception{
+	public void testISOComplexDsetTelDataSetType() throws Exception{
 		String queryText="query=DsetTelDataType&DsetTelDataType[@value3=[@item=[@value=tel://123-456-7891]]]";
 		process(queryText,"test32");
 	}
 	
-	public void xtestISOComplexDsetCdDataSetType5() throws Exception{
+	public void testISOComplexDsetCdDataSetType5() throws Exception{
 		String queryText="query=DsetCdDataType&DsetCdDataType[@value5=[@item=[@code=CODE1][@codeSystem=CODE_SYSTEM1]]]";
 		process(queryText,"test33");
 	}
 	
-	public void xtestISOComplexDsetCdDataMultipleSetValue1() throws Exception{
+	public void testISOComplexDsetCdDataMultipleSetValue1() throws Exception{
 		String	queryText="query=DsetCdDataType&DsetCdDataType[@value1=[@item=[@code=CODE1]][@item=[@code=CODE2]]]";
 		process(queryText,"test34");
 	}
 	
-	public void xtestISOComplexDsetCdDataMultipleSetType5_1() throws Exception{
+	public void testISOComplexDsetCdDataMultipleSetType5_1() throws Exception{
 		String	queryText="query=DsetCdDataType&DsetCdDataType[@value5=[@item=[@code=CODE1]][@item=[@codeSystem=CODE_SYSTEM1]]]";
 		process(queryText,"test35");
 	}	
 	
-	public void xtestISOComplexDsetCdDataMultipleSetType5_2() throws Exception{
+	public void testISOComplexDsetCdDataMultipleSetType5_2() throws Exception{
 		String	queryText="query=DsetCdDataType&DsetCdDataType[@value5=[@item=[@code=CODE1]][@item=[@code=CODE2]]]";
 		process(queryText,"test36");
 	}
 
-	public void xtestISOComplexDsetCdDataMultipleSetValue6() throws Exception{
+	public void testISOComplexDsetCdDataMultipleSetValue6() throws Exception{
 		String	queryText="query=DsetCdDataType&DsetCdDataType[@value6=[@item=[@code=CODE1]][@item=[@code=CODE1]][@item=[@code=CODE2]][@item=[@code=CODE2]]]";
 		process(queryText,"test34");
 	}
 	
-	public void xtestISOComplexDsetCdDataMultipleSetType7() throws Exception{
+	public void testISOComplexDsetCdDataMultipleSetType7() throws Exception{
 		String	queryText="query=DsetCdDataType&DsetCdDataType[@value7=[@item=[@code=CODE1]][@item=[@code=CODE2]]]";
 		process(queryText,"test34");
 	}
 	
-	public void xtestISOComplexDsetCdDataInvalidSet() throws Exception{
+	public void testISOComplexDsetCdDataInvalidSet() throws Exception{
 		String	queryText="query=DsetCdDataType&DsetCdDataType[@value3=[@item=[@code=CODE1]]][@value3=[@item=[@codeSystem=CODE_SYSTEM1]]]";
 		try{
 			process(queryText,"test37");
@@ -252,68 +251,86 @@ public class HttpUtilsTest extends TestCase{
 		}
 	}
 	
-	public void xtestISOComplexDsetCdDataMultipleSetAllType() throws Exception{
+	public void testISOComplexDsetCdDataMultipleSetAllType() throws Exception{
 		String	queryText="query=DsetCdDataType&DsetCdDataType[@value1=[@item=[@code=CODE1]]][@value2=[@item=[@code=CODE1]]][@value3=[@item=[@code=CODE1]]][@value4=[@item=[@code=CODE1]]][@value5=[@item=[@code=CODE1][@codeSystem=CODE_SYSTEM1]][@item=[@codeSystem=CODE_SYSTEM2]]][@value6=[@item=[@code=CODE1]]][@value7=[@item=[@code=CODE1]]]";
 		process(queryText,"test36");
 	}
 
-	public void xtestISOComplexEnumDataType() throws Exception{
+	public void testISOComplexEnumDataType() throws Exception{
 		String queryText="query=gov.nih.nci.cacoresdk.domain.other.datatype.BlDataType&gov.nih.nci.cacoresdk.domain.other.datatype.BlDataType[@value2=[@nullFlavor=UNK]]";
 		process(queryText,"test38");
 	}
 	
-	public void xtestISOComplexAdDataType() throws Exception{
+	//query=AdDataType&AdDataType[@value1=[@part=[@type=AL]]]
+	public void testISOComplexAdDataType() throws Exception{
 		String queryText="query=AdDataType&AdDataType[@value1=[@part=[@value=5 Sun Street][@type=AL]]]";
 		process(queryText,"test39");
 	}
 	//failure : Same ADXP : List[0],List[1]
-	public void xtestISOComplexAdDataType4() throws Exception{
+	public void testISOComplexAdDataType4() throws Exception{
 		String queryText="query=AdDataType&AdDataType[@value4=[@part=[@value=5 Sun Street][@type=AL]][@part=[@value=5 Sun Street][@type=AL]]]";
 		process(queryText,"test40");
 	}
 	
-	public void xtestISOComplexAdDataType5() throws Exception{
+	public void testISOComplexAdDataType5() throws Exception{
 		String queryText="query=AdDataType&AdDataType[@value5=[@part=[@value=5 Sun Street][@type=DAL]]]";
 		process(queryText,"test41");
 	}
 	
-	public void xtestISOComplexAdDataType5_2() throws Exception{
+	public void testISOComplexAdDataType5_2() throws Exception{
 		String queryText="query=AdDataType&AdDataType[@value5=[@part=[@value=5 Sun Street][@type=DAL]][@part=[@value=5 Sun Street][@type=CTY]]]";
 		process(queryText,"test42");
 	}
 	
-	public void xtestISOComplexAdDataType7() throws Exception{
+	public void testISOComplexAdDataType7() throws Exception{
 		String queryText="query=AdDataType&AdDataType[@value7=[@part=[@value=5 Sun Street][@type=DAL]]]";
 		process(queryText,"test43");
 	}
 	
-	public void xtestISOComplexAdDataType8() throws Exception{
+	public void testISOComplexAdDataType8() throws Exception{
 		String queryText="query=AdDataType&AdDataType[@value8=[@part=[@value=5 Sun Street][@type=DAL]]]";
 		process(queryText,"test44");
 	}
 
-	public void xtestISOComplexAdDataType8_2() throws Exception{
+	public void testISOComplexAdDataType8_2() throws Exception{
 		String queryText="query=AdDataType&AdDataType[@value8=[@part=[@value=5 Sun Street][@type=CTY]][@part=[@value=5 Sun Street][@type=DAL]]]";
 		process(queryText,"test45");
 	}
 
 	
-	public void xtestISOComplexAdDataType9() throws Exception{
+	public void testISOComplexAdDataType9() throws Exception{
 		String queryText="query=AdDataType&AdDataType[@value9=[@part=[@value=DAL_VALUE4][@codeSystem=DAL_CODESYSTEM4][@code=DAL_CODE4][@type=DAL]]]";
 		process(queryText,"test46");
 	}
 
-	public void xtestISOComplexAdDataType9_2() throws Exception{
+	public void testISOComplexAdDataType9_2() throws Exception{
 		String queryText="query=AdDataType&AdDataType[@value9=[@part=[@value=CTY_VALUE4][@codeSystem=CTY_CODESYSTEM4][@code=CTY_CODE4][@type=CTY]][@part=[@value=5 Sun Street][@codeSystem=5 Sun Street][@code=5 Sun Street][@type=DAL]]]";
 		process(queryText,"test47");
 	}
 	
-	public void xtestISOComplexAdDataType9_3() throws Exception{
+	public void testISOComplexAdDataType9_3() throws Exception{
 		String queryText="query=AdDataType&AdDataType[@value9=[@part=[@value=CTY_VALUE4][@type=CTY]][@part=[@codeSystem=CTY_CODESYSTEM4][@type=DAL]][@part=[@code=DAL_CODE4][@type=DAL]]]";
 		process(queryText,"test48");
 	}
 	
 	
+	public void testISOComplexIiDataSetType() throws Exception{
+		String queryText="query=IiDataType&IiDataType[@value4=[@displayable=false]]";
+		process(queryText,"test49");
+	}
+	
+	//failure,need to find solution
+	public void testISOComplexIiDataSetType_2() throws Exception{
+		String queryText="query=IiDataType&IiDataType[@value4=[@displayable=0/1]]";
+		process(queryText,"test49");
+	}
+	
+	public void testISOComplexEnDataType() throws Exception{
+		String queryText="query=EnDataType&EnDataType[@value1=[@part=[@codeSystemVersion=ENXP Code System][@type=FAM]]]";
+		process(queryText,"test39");
+	}
+	                                                                                                                    
+	                                                                                                                    
 	private void process(String queryText,String fileName) throws Exception, IOException,
 			FileNotFoundException {
 //		HQLCriteria criteria= new HQLCriteria("select adDataType_1 from gov.nih.nci.cacoresdk.domain.other.datatype.AdDataType adDataType_1 inner join adDataType_1.value1.part_0 as adxp_0 where  (( adxp_0.value='5 Sun Street'  )) ");
