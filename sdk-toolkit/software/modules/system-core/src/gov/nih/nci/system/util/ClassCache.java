@@ -19,7 +19,9 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.mapping.Component;
 import org.hibernate.mapping.PersistentClass;
+import org.hibernate.mapping.Property;
 import org.hibernate.mapping.RootClass;
 import org.hibernate.mapping.Subclass;
 
@@ -54,13 +56,12 @@ public class ClassCache {
 	private Map<String, Object> discriminatorMap = new HashMap<String, Object>();
 
 	private List<DAO> daoList;
-
 	private Map<String, List<String>> fieldCache = new HashMap<String, List<String>>();
-
 	private Map<String, Method[]> setterMethodCache;
+	private Map<String, Map<String, List<String>>> searchableFieldsMap = new HashMap<String, Map<String, List<String>>>();
 
 	public List<String> getPkgClassNames(String packageName) {
-		return (List<String>) pkgClassNamesCache.get(packageName);
+		return pkgClassNamesCache.get(packageName);
 	}
 
 	public List<String> getAllQualClassNames() {
@@ -74,13 +75,17 @@ public class ClassCache {
 	public List<String> getAllPackageNames() {
 		return (List<String>) allPackageNamesCache;
 	}
+	
+	public Map<String, Map<String, List<String>>> getSearchableFieldsMap() {
+		return searchableFieldsMap;
+	}
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings("unchecked")
 	public Class<? extends Object> getClassFromCache(String className)
 			throws ClassNotFoundException {
-		Class klass = null;
+		Class<? extends Object> klass = null;
 
-		klass = (Class) classCache.get(className);
+		klass = classCache.get(className);
 		if (klass == null) {
 			log.debug("Class " + className + " not found in ClassCache");
 			throw new ClassNotFoundException();
@@ -119,7 +124,7 @@ public class ClassCache {
 	public List<String> getFieldsOfTypeFromCache(Class klass, String typeName) {
 		String key = klass.getName() + "," + typeName;
 
-		List<String> fieldCollection = (List<String>) fieldCache.get(key);
+		List<String> fieldCollection = fieldCache.get(key);
 		if (fieldCollection == null) {
 			fieldCollection = getFieldsOfType(klass, typeName);
 			fieldCache.put(key, fieldCollection);
@@ -131,7 +136,7 @@ public class ClassCache {
 		String key = klass.getName() + "," + name;
 		if (setterMethodCache == null)
 			setterMethodCache = new HashMap<String, Method[]>();
-		Method[] methodCollection = (Method[]) setterMethodCache.get(name);
+		Method[] methodCollection = setterMethodCache.get(name);
 		if (methodCollection == null) {
 			methodCollection = getSettersForType(klass, name);
 			setterMethodCache.put(key, methodCollection);
@@ -159,9 +164,9 @@ public class ClassCache {
 			checkClass = checkClass.getSuperclass();
 		}
 		List<String> namedFields = new ArrayList<String>();
-		Iterator fieldIter = allFields.iterator();
+		Iterator<Field> fieldIter = allFields.iterator();
 		while (fieldIter.hasNext()) {
-			Field field = (Field) fieldIter.next();
+			Field field = fieldIter.next();
 			if (field.getType().getName().equals(typeName)) {
 				namedFields.add(field.getName());
 			}
@@ -528,7 +533,7 @@ public class ClassCache {
 
 		Field[] fields = new Field[fieldList.size()];
 		for (int i = 0; i < fieldList.size(); i++) {
-			fields[i] = (Field) fieldList.get(i);
+			fields[i] = fieldList.get(i);
 		}
 		return fields;
 	}
@@ -722,7 +727,7 @@ public class ClassCache {
 						pkgClassNames.add(klassName);
 						pkgClassNamesCache.put(packageName, pkgClassNames);
 					} else {
-						List<String> existingCollection = (List<String>) pkgClassNamesCache
+						List<String> existingCollection = pkgClassNamesCache
 								.get(packageName);
 						existingCollection.add(klassName);
 					}
@@ -792,6 +797,15 @@ public class ClassCache {
 					discriminatorMap.put(pklass.getClassName(), identifier);
 				}
 			}
+			if (dao instanceof ORMDAOImpl) {
+				Configuration cfg = ((ORMDAOImpl) dao).getConfig();
+				for (String className : allClassNames) {
+					Map<String, Map<String, List<String>>> tempSearchFieldForObject = getMapOfSearchFields(
+							cfg, className);
+					if (tempSearchFieldForObject != null)
+						searchableFieldsMap.putAll(tempSearchFieldForObject);
+				}
+			}
 		}
 
 		allPackageNamesCache = new ArrayList<String>(tmpPackageNames);
@@ -810,6 +824,88 @@ public class ClassCache {
 		return discriminatorMap.get(classname);
 	}
 
+	public Map<String, Map<String, List<String>>> getMapOfSearchFields(
+			Configuration cfg, String objectClassName) {
+		Map<String, Map<String, List<String>>> mapOfSearchFields = new HashMap<String, Map<String, List<String>>>();
+		Map<String, List<String>> isoFieldsMap = new HashMap<String, List<String>>();
+		PersistentClass pclass = cfg.getClassMapping(objectClassName);
+
+		if(pclass==null) return null;
+		Map<String, List<String>> isoIdentifierFieldsMap = getISOIdentifierFieldsMap(pclass);
+		Map<String, List<String>> isoPropertyFieldsMap = getISOPropertiesForObject(pclass);
+
+		isoFieldsMap.putAll(isoIdentifierFieldsMap);
+		isoFieldsMap.putAll(isoPropertyFieldsMap);
+
+		mapOfSearchFields.put(objectClassName, isoFieldsMap);
+		return mapOfSearchFields;
+	}
+
+	private Map<String, List<String>> getISOIdentifierFieldsMap(
+			PersistentClass pclass) {
+		Map<String, List<String>> isoIdentifierMap = new HashMap<String, List<String>>();
+		Property identifierProperty = pclass.getIdentifierProperty();
+		if (identifierProperty != null) {
+			List<String> identifierSearchFields = getPersistentFieldsForISOObject(
+					identifierProperty, null);
+			isoIdentifierMap.put(identifierProperty.getName(),
+					identifierSearchFields);
+		}
+		return isoIdentifierMap;
+	}
+
+	@SuppressWarnings("unchecked")
+	private Map<String, List<String>> getISOPropertiesForObject(
+			PersistentClass pclass) {
+		Map<String, List<String>> isoFieldsMap = new HashMap<String, List<String>>();
+		Iterator<? extends Object> properties = pclass.getPropertyIterator();
+		while (properties.hasNext()) {
+			Property prop = (Property) properties.next();
+			if (!prop.getType().isAssociationType()) {
+				List<String> searchableFields = getPersistentFieldsForISOObject(
+						prop, null);
+				isoFieldsMap.put(prop.getName(), searchableFields);
+			}
+		}
+		return isoFieldsMap;
+	}
+
+	@SuppressWarnings({"unchecked"})
+	private List<String> getPersistentFieldsForISOObject(Property prop,
+			String parentAppender) {
+		List<String> isoObjectPsFields = new ArrayList<String>();
+		String idUserType = prop.getType().getName();
+		String identifierUserType = "gov.nih.nci.iso21090.hibernate.usertype.IiUserType";
+		if (identifierUserType.equals(idUserType)) {
+			isoObjectPsFields.add("extension");
+		} else if ("id".equals(prop.getName())) {
+			isoObjectPsFields.add(prop.getName());
+		} else if (prop.getType().isComponentType()) {
+			Component isoComponent = (Component) prop.getValue();
+			Iterator<Property> itr = isoComponent.getPropertyIterator();
+			while (itr.hasNext()) {
+				Property property = itr.next();
+				String fieldName = property.getName();
+				if (property.getType().isComponentType()) {
+					Component childComponent = (Component) property.getValue();
+					String childCompClassName = childComponent
+							.getComponentClassName();
+					String fieldNameTokenizer = fieldName + "$"
+							+ childCompClassName + "$";
+					List<String> innerPersistentFields = getPersistentFieldsForISOObject(
+							property, fieldNameTokenizer);
+					isoObjectPsFields.addAll(innerPersistentFields);
+				} else {
+					if (parentAppender != null) {
+						fieldName = parentAppender + "." + fieldName;
+					}
+					isoObjectPsFields.add(fieldName);
+				}
+			}
+		}
+		return isoObjectPsFields;
+	}
+
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("[\n" + ClassCache.class.getName() + "[\n");
@@ -826,7 +922,7 @@ public class ClassCache {
 
 		Class klass;
 		for (String klassName : allUnqualClassNames) {
-			klass = (Class) classCache.get(klassName);
+			klass = classCache.get(klassName);
 			sb.append("\n\t\t" + klassName + ": " + klass.getName());
 		}
 		sb.append("\n\t]\n");
