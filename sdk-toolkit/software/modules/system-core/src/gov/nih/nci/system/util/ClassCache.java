@@ -24,6 +24,7 @@ import org.hibernate.mapping.PersistentClass;
 import org.hibernate.mapping.Property;
 import org.hibernate.mapping.RootClass;
 import org.hibernate.mapping.Subclass;
+import org.hibernate.mapping.Value;
 
 /**
  * ClassCache
@@ -41,7 +42,7 @@ public class ClassCache {
 	private List<String> allPackageNamesCache = new ArrayList<String>();
 	private Map<String, List<String>> pkgClassNamesCache = new HashMap<String, List<String>>();
 
-	private Map<String, Class> classCache = new HashMap<String, Class>();
+	private HashMap<String, Class> classCache = new HashMap<String, Class>();
 	private Map<String, DAO> daoCache = new HashMap<String, DAO>();
 	private Map<String, String> classIdCache = new HashMap<String, String>();
 	private List<String> allQualClassNames = new ArrayList<String>();
@@ -847,7 +848,7 @@ public class ClassCache {
 		Property identifierProperty = pclass.getIdentifierProperty();
 		if (identifierProperty != null) {
 			List<String> identifierSearchFields = getPersistentFieldsForISOObject(
-					identifierProperty, null);
+					identifierProperty, null,true);
 			isoIdentifierMap.put(identifierProperty.getName(),
 					identifierSearchFields);
 		}
@@ -863,16 +864,15 @@ public class ClassCache {
 			Property prop = (Property) properties.next();
 			if (!prop.getType().isAssociationType()) {
 				List<String> searchableFields = getPersistentFieldsForISOObject(
-						prop, null);
+						prop, null,true);
 				isoFieldsMap.put(prop.getName(), searchableFields);
 			}
 		}
 		return isoFieldsMap;
 	}
 
-	@SuppressWarnings({"unchecked"})
 	private List<String> getPersistentFieldsForISOObject(Property prop,
-			String parentAppender) {
+			String parentAppender,Boolean baseComponent) {
 		List<String> isoObjectPsFields = new ArrayList<String>();
 		String idUserType = prop.getType().getName();
 		String identifierUserType = "gov.nih.nci.iso21090.hibernate.usertype.IiUserType";
@@ -881,31 +881,78 @@ public class ClassCache {
 		} else if ("id".equals(prop.getName())) {
 			isoObjectPsFields.add(prop.getName());
 		} else if (prop.getType().isComponentType()) {
-			Component isoComponent = (Component) prop.getValue();
-			Iterator<Property> itr = isoComponent.getPropertyIterator();
-			while (itr.hasNext()) {
-				Property property = itr.next();
-				String fieldName = property.getName();
-				if (property.getType().isComponentType()) {
-					Component childComponent = (Component) property.getValue();
-					String childCompClassName = childComponent
-							.getComponentClassName();
-					String fieldNameTokenizer = fieldName + "$"
-							+ childCompClassName + "$";
-					List<String> innerPersistentFields = getPersistentFieldsForISOObject(
-							property, fieldNameTokenizer);
-					isoObjectPsFields.addAll(innerPersistentFields);
-				} else {
-					if (parentAppender != null) {
-						fieldName = parentAppender + "." + fieldName;
-					}
-					isoObjectPsFields.add(fieldName);
-				}
+			processIfComponentMapping(prop, parentAppender, isoObjectPsFields,baseComponent);
+		} else {
+			String fieldName = prop.getName();
+			if (parentAppender != null) {
+				fieldName = parentAppender + "." +fieldName;
 			}
+			isoObjectPsFields.add(fieldName);
 		}
 		return isoObjectPsFields;
 	}
 
+	@SuppressWarnings("unchecked")
+	private void processIfComponentMapping(Property prop,
+			String parentAppender, List<String> isoObjectPsFields,Boolean baseComponent) {
+		Component isoComponent = (Component) prop.getValue();
+		Iterator<Property> itr = isoComponent.getPropertyIterator();
+		String parentPropertyFieldName = prop.getName();
+		while (itr.hasNext()) {
+			Property property = itr.next();
+			String fieldName = property.getName();
+			if (property.getType().isComponentType()) {
+				List<String> innerPersistentFields = getPersistentFieldsForISOObject(
+						property, null,false);
+				isoObjectPsFields.addAll(innerPersistentFields);
+			} else if (property.getType().isAssociationType()) {
+				processIfAssociationType(isoObjectPsFields, property, fieldName);
+			} else {	
+				if (baseComponent) {
+					isoObjectPsFields.add(fieldName);
+				} else {
+					String fieldsAppender = null;
+					if (parentAppender != null) {
+						fieldsAppender = parentAppender + "." + fieldsAppender;
+					} else {
+						fieldsAppender = parentPropertyFieldName + "$"
+								+ isoComponent.getComponentClassName() + "$"
+								+ "." + fieldName;
+					}
+					isoObjectPsFields.add(fieldsAppender);
+				}
+			}
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private void processIfAssociationType(List<String> isoObjectPsFields,
+			Property property, String fieldName) {
+		org.hibernate.mapping.Set childAssociationType = (org.hibernate.mapping.Set) property
+				.getValue();
+		Class<? extends Value> elementClass = childAssociationType.getElement()
+				.getClass();
+		if (Component.class.isAssignableFrom(elementClass)) {
+			Component associationComponent = (Component) childAssociationType
+					.getElement();
+			String assoChildCompClassName = associationComponent
+					.getComponentClassName();
+			Iterator<Property> propertiesIterator = associationComponent
+					.getPropertyIterator();
+			while (propertiesIterator.hasNext()) {
+				Property tempProperty = propertiesIterator.next();
+				String fieldNameTokenizer = fieldName + "$"
+						+ assoChildCompClassName + "$";
+				List<String> innerPersistentFields = getPersistentFieldsForISOObject(
+						tempProperty, fieldNameTokenizer,false);
+				isoObjectPsFields.addAll(innerPersistentFields);
+			}
+		} else {
+			log.info("ignoring :::" + elementClass.getName());
+		}
+	}
+
+	@SuppressWarnings("rawtypes")
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("[\n" + ClassCache.class.getName() + "[\n");

@@ -102,10 +102,27 @@ public class ClassCacheTest extends TestCase {
 		processOutput(cfg, objectClassName);
 	}
 	
+	public void testCreateMapOfSearchFieldsForAPersistentClassDsetCdType() {
+		String objectClassName = "gov.nih.nci.cacoresdk.domain.other.datatype.DsetCdDataType";
+		processOutput(cfg, objectClassName);
+	}
+	
+	public void testCreateMapOfSearchFieldsForAPersistentClassDsetAdType() {
+		String objectClassName = "gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType";
+		processOutput(cfg, objectClassName);
+	}
+	
 	public void testClassCacheInitlization() {
 		Map<String, Map<String, List<String>>> mapOfSearchFields = classCache
 				.getSearchableFieldsMap();
 		processOutput(mapOfSearchFields);
+	}
+	
+	public void testReConstructObject() {
+		Map<String, Map<String, List<String>>> mapOfSearchFields = classCache
+				.getSearchableFieldsMap();
+		String objectClassName = "gov.nih.nci.cacoresdk.domain.other.datatype.CdDataType";
+		Map<String, List<String>> attributesForCDDataType=mapOfSearchFields.get(objectClassName);
 	}
 	
 	private void processOutput(Configuration cfg, String objectClassName) {
@@ -138,6 +155,5 @@ public class ClassCacheTest extends TestCase {
 				}
 			}
 		}
-
 	}
 }
