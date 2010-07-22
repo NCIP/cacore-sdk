@@ -7,12 +7,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.StringTokenizer;
 
 import gov.nih.nci.cacoresdk.domain.manytomany.unidirectional.Author;
-import gov.nih.nci.system.dao.DAO;
-import gov.nih.nci.system.dao.DAOException;
 import gov.nih.nci.system.dao.orm.HibernateConfigurationHolder;
-import gov.nih.nci.system.dao.orm.ORMDAOImpl;
 import gov.nih.nci.system.util.ClassCache;
 
 import org.hibernate.cfg.Configuration;
@@ -113,45 +111,37 @@ public class ClassCacheTest extends TestCase {
 	}
 	
 	public void testClassCacheInitlization() {
-		Map<String, Map<String, List<String>>> mapOfSearchFields = classCache
+		Map<String, Map<String, List<Object>>> mapOfSearchFields = classCache
 				.getSearchableFieldsMap();
 		processOutput(mapOfSearchFields);
 	}
 	
-	public void testReConstructObject() {
-		Map<String, Map<String, List<String>>> mapOfSearchFields = classCache
-				.getSearchableFieldsMap();
-		String objectClassName = "gov.nih.nci.cacoresdk.domain.other.datatype.CdDataType";
-		Map<String, List<String>> attributesForCDDataType=mapOfSearchFields.get(objectClassName);
-	}
-	
 	private void processOutput(Configuration cfg, String objectClassName) {
-		Map<String, Map<String, List<String>>> mapOfSearchFields = classCache
+		Map<String, Map<String, List<Object>>> mapOfSearchFields = classCache
 		.getMapOfSearchFields(cfg, objectClassName);
 		processOutput(mapOfSearchFields);
 	}
 
 	private void processOutput(
-			Map<String, Map<String, List<String>>> searchableFieldsMap) {
-		Iterator<Entry<String, Map<String, List<String>>>> isoDataTypes = searchableFieldsMap
+			Map<String, Map<String, List<Object>>> searchableFieldsMap) {
+		Iterator<Entry<String, Map<String, List<Object>>>> isoDataTypes = searchableFieldsMap
 				.entrySet().iterator();
-		
 		while (isoDataTypes.hasNext()) {
-			Entry<String, Map<String, List<String>>> objectNameMapEntry = isoDataTypes
+			Entry<String, Map<String, List<Object>>> objectNameMapEntry = isoDataTypes
 					.next();
 			String objectName = objectNameMapEntry.getKey();
-			Map<String, List<String>> isoAttributeMapList = objectNameMapEntry
+			Map<String, List<Object>> isoAttributeMapList = objectNameMapEntry
 					.getValue();
 			System.out.println("\nClass Name " + objectName);
-			Iterator<Entry<String, List<String>>> isoAttributeIterator = isoAttributeMapList
+			Iterator<Entry<String, List<Object>>> isoAttributeIterator = isoAttributeMapList
 					.entrySet().iterator();
 			while (isoAttributeIterator.hasNext()) {
-				Entry<String, List<String>> entry = isoAttributeIterator.next();
+				Entry<String, List<Object>> entry = isoAttributeIterator.next();
 				System.out.println("\nAttribute Name >> " + entry.getKey());
-				List<String> isoFields = entry.getValue();
+				List<Object> isoFields = entry.getValue();
 				System.out.print("Fields >>>> ");
-				for (String isoField : isoFields) {
-					System.out.print(isoField + " ,");
+				for (Object isoField : isoFields) {
+					System.out.print(isoField + " , ");
 				}
 			}
 		}
