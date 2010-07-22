@@ -59,7 +59,7 @@ public class ClassCache {
 	private List<DAO> daoList;
 	private Map<String, List<String>> fieldCache = new HashMap<String, List<String>>();
 	private Map<String, Method[]> setterMethodCache;
-	private Map<String, Map<String, List<String>>> searchableFieldsMap = new HashMap<String, Map<String, List<String>>>();
+	private Map<String, Map<String, List<Object>>> searchableFieldsMap = new HashMap<String, Map<String, List<Object>>>();
 
 	public List<String> getPkgClassNames(String packageName) {
 		return pkgClassNamesCache.get(packageName);
@@ -77,7 +77,7 @@ public class ClassCache {
 		return (List<String>) allPackageNamesCache;
 	}
 	
-	public Map<String, Map<String, List<String>>> getSearchableFieldsMap() {
+	public Map<String, Map<String, List<Object>>> getSearchableFieldsMap() {
 		return searchableFieldsMap;
 	}
 
@@ -798,7 +798,7 @@ public class ClassCache {
 					discriminatorMap.put(pklass.getClassName(), identifier);
 				}
 			}
-			if (dao instanceof ORMDAOImpl) {
+/*			if (dao instanceof ORMDAOImpl) {
 				Configuration cfg = ((ORMDAOImpl) dao).getConfig();
 				for (String className : allClassNames) {
 					Map<String, Map<String, List<String>>> tempSearchFieldForObject = getMapOfSearchFields(
@@ -806,7 +806,7 @@ public class ClassCache {
 					if (tempSearchFieldForObject != null)
 						searchableFieldsMap.putAll(tempSearchFieldForObject);
 				}
-			}
+			}*/
 		}
 
 		allPackageNamesCache = new ArrayList<String>(tmpPackageNames);
@@ -825,15 +825,16 @@ public class ClassCache {
 		return discriminatorMap.get(classname);
 	}
 
-	public Map<String, Map<String, List<String>>> getMapOfSearchFields(
+	public Map<String, Map<String, List<Object>>> getMapOfSearchFields(
 			Configuration cfg, String objectClassName) {
-		Map<String, Map<String, List<String>>> mapOfSearchFields = new HashMap<String, Map<String, List<String>>>();
-		Map<String, List<String>> isoFieldsMap = new HashMap<String, List<String>>();
+		Map<String, Map<String, List<Object>>> mapOfSearchFields = new HashMap<String, Map<String, List<Object>>>();
+		Map<String, List<Object>> isoFieldsMap = new HashMap<String, List<Object>>();
 		PersistentClass pclass = cfg.getClassMapping(objectClassName);
 
-		if(pclass==null) return null;
-		Map<String, List<String>> isoIdentifierFieldsMap = getISOIdentifierFieldsMap(pclass);
-		Map<String, List<String>> isoPropertyFieldsMap = getISOPropertiesForObject(pclass);
+		if (pclass == null)
+			return null;
+		Map<String, List<Object>> isoIdentifierFieldsMap = getISOIdentifierFieldsMap(pclass);
+		Map<String, List<Object>> isoPropertyFieldsMap = getISOPropertiesForObject(pclass);
 
 		isoFieldsMap.putAll(isoIdentifierFieldsMap);
 		isoFieldsMap.putAll(isoPropertyFieldsMap);
@@ -842,13 +843,12 @@ public class ClassCache {
 		return mapOfSearchFields;
 	}
 
-	private Map<String, List<String>> getISOIdentifierFieldsMap(
+	private Map<String, List<Object>> getISOIdentifierFieldsMap(
 			PersistentClass pclass) {
-		Map<String, List<String>> isoIdentifierMap = new HashMap<String, List<String>>();
+		Map<String, List<Object>> isoIdentifierMap = new HashMap<String, List<Object>>();
 		Property identifierProperty = pclass.getIdentifierProperty();
 		if (identifierProperty != null) {
-			List<String> identifierSearchFields = getPersistentFieldsForISOObject(
-					identifierProperty, null,true);
+			List<Object> identifierSearchFields = getPersistentFieldsForISOObject(identifierProperty);
 			isoIdentifierMap.put(identifierProperty.getName(),
 					identifierSearchFields);
 		}
@@ -856,24 +856,22 @@ public class ClassCache {
 	}
 
 	@SuppressWarnings("unchecked")
-	private Map<String, List<String>> getISOPropertiesForObject(
+	private Map<String, List<Object>> getISOPropertiesForObject(
 			PersistentClass pclass) {
-		Map<String, List<String>> isoFieldsMap = new HashMap<String, List<String>>();
+		Map<String, List<Object>> isoFieldsMap = new HashMap<String, List<Object>>();
 		Iterator<? extends Object> properties = pclass.getPropertyIterator();
 		while (properties.hasNext()) {
 			Property prop = (Property) properties.next();
 			if (!prop.getType().isAssociationType()) {
-				List<String> searchableFields = getPersistentFieldsForISOObject(
-						prop, null,true);
+				List<Object> searchableFields = getPersistentFieldsForISOObject(prop);
 				isoFieldsMap.put(prop.getName(), searchableFields);
 			}
 		}
 		return isoFieldsMap;
 	}
 
-	private List<String> getPersistentFieldsForISOObject(Property prop,
-			String parentAppender,Boolean baseComponent) {
-		List<String> isoObjectPsFields = new ArrayList<String>();
+	private List<Object> getPersistentFieldsForISOObject(Property prop) {
+		List<Object> isoObjectPsFields = new ArrayList<Object>();
 		String idUserType = prop.getType().getName();
 		String identifierUserType = "gov.nih.nci.iso21090.hibernate.usertype.IiUserType";
 		if (identifierUserType.equals(idUserType)) {
@@ -881,12 +879,9 @@ public class ClassCache {
 		} else if ("id".equals(prop.getName())) {
 			isoObjectPsFields.add(prop.getName());
 		} else if (prop.getType().isComponentType()) {
-			processIfComponentMapping(prop, parentAppender, isoObjectPsFields,baseComponent);
+			processIfComponentMapping(prop, isoObjectPsFields);
 		} else {
 			String fieldName = prop.getName();
-			if (parentAppender != null) {
-				fieldName = parentAppender + "." +fieldName;
-			}
 			isoObjectPsFields.add(fieldName);
 		}
 		return isoObjectPsFields;
@@ -894,40 +889,33 @@ public class ClassCache {
 
 	@SuppressWarnings("unchecked")
 	private void processIfComponentMapping(Property prop,
-			String parentAppender, List<String> isoObjectPsFields,Boolean baseComponent) {
+			List<Object> isoObjectPsFields) {
 		Component isoComponent = (Component) prop.getValue();
 		Iterator<Property> itr = isoComponent.getPropertyIterator();
-		String parentPropertyFieldName = prop.getName();
 		while (itr.hasNext()) {
 			Property property = itr.next();
 			String fieldName = property.getName();
 			if (property.getType().isComponentType()) {
-				List<String> innerPersistentFields = getPersistentFieldsForISOObject(
-						property, null,false);
-				isoObjectPsFields.addAll(innerPersistentFields);
+				List<Object> innerPersistentFields = getPersistentFieldsForISOObject(property);
+
+				Map<String, List<Object>> nestedComponent = new HashMap<String, List<Object>>();
+				nestedComponent.put(fieldName, innerPersistentFields);
+				isoObjectPsFields.add(nestedComponent);
 			} else if (property.getType().isAssociationType()) {
-				processIfAssociationType(isoObjectPsFields, property, fieldName);
-			} else {	
-				if (baseComponent) {
-					isoObjectPsFields.add(fieldName);
-				} else {
-					String fieldsAppender = null;
-					if (parentAppender != null) {
-						fieldsAppender = parentAppender + "." + fieldsAppender;
-					} else {
-						fieldsAppender = parentPropertyFieldName + "$"
-								+ isoComponent.getComponentClassName() + "$"
-								+ "." + fieldName;
-					}
-					isoObjectPsFields.add(fieldsAppender);
-				}
+				Map<String, List<Object>> nestedComponent = processIfAssociationType(
+						property, fieldName);
+				isoObjectPsFields.add(nestedComponent);
+			} else {
+				isoObjectPsFields.add(fieldName);
 			}
 		}
 	}
 
 	@SuppressWarnings("unchecked")
-	private void processIfAssociationType(List<String> isoObjectPsFields,
+	private Map<String, List<Object>> processIfAssociationType(
 			Property property, String fieldName) {
+		Map<String, List<Object>> associationPsFields = new HashMap<String, List<Object>>();
+
 		org.hibernate.mapping.Set childAssociationType = (org.hibernate.mapping.Set) property
 				.getValue();
 		Class<? extends Value> elementClass = childAssociationType.getElement()
@@ -935,21 +923,31 @@ public class ClassCache {
 		if (Component.class.isAssignableFrom(elementClass)) {
 			Component associationComponent = (Component) childAssociationType
 					.getElement();
-			String assoChildCompClassName = associationComponent
-					.getComponentClassName();
 			Iterator<Property> propertiesIterator = associationComponent
 					.getPropertyIterator();
+			String assoChildCompClassName = associationComponent
+					.getComponentClassName();
+			String key = fieldName + "<" + assoChildCompClassName + ">";
+			List<Object> isoPersistentFields = new ArrayList<Object>();
 			while (propertiesIterator.hasNext()) {
 				Property tempProperty = propertiesIterator.next();
-				String fieldNameTokenizer = fieldName + "$"
-						+ assoChildCompClassName + "$";
-				List<String> innerPersistentFields = getPersistentFieldsForISOObject(
-						tempProperty, fieldNameTokenizer,false);
-				isoObjectPsFields.addAll(innerPersistentFields);
+				List<Object> tempPersistentFields = getPersistentFieldsForISOObject(tempProperty);
+				Class<? extends Value> tempPropertyClass = tempProperty
+						.getValue().getClass();
+				if (Component.class.isAssignableFrom(tempPropertyClass)) {
+					Map<String, List<Object>> nestedComponent = new HashMap<String, List<Object>>();
+					nestedComponent.put(tempProperty.getName(),
+							tempPersistentFields);
+					isoPersistentFields.add(nestedComponent);
+				} else {
+					isoPersistentFields.add(tempPersistentFields);
+				}
 			}
+			associationPsFields.put(key, isoPersistentFields);
 		} else {
 			log.info("ignoring :::" + elementClass.getName());
 		}
+		return associationPsFields;
 	}
 
 	@SuppressWarnings("rawtypes")
