@@ -798,15 +798,15 @@ public class ClassCache {
 					discriminatorMap.put(pklass.getClassName(), identifier);
 				}
 			}
-/*			if (dao instanceof ORMDAOImpl) {
+			if (dao instanceof ORMDAOImpl) {
 				Configuration cfg = ((ORMDAOImpl) dao).getConfig();
 				for (String className : allClassNames) {
-					Map<String, Map<String, List<String>>> tempSearchFieldForObject = getMapOfSearchFields(
+					Map<String, Map<String, List<Object>>> tempSearchFieldForObject = getMapOfSearchFields(
 							cfg, className);
 					if (tempSearchFieldForObject != null)
 						searchableFieldsMap.putAll(tempSearchFieldForObject);
 				}
-			}*/
+			}
 		}
 
 		allPackageNamesCache = new ArrayList<String>(tmpPackageNames);
