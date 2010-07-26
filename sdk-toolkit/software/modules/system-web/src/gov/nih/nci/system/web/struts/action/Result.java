@@ -1,8 +1,11 @@
 package gov.nih.nci.system.web.struts.action;
 
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.ServletContext;
@@ -124,7 +127,13 @@ public class Result extends BaseActionSupport {
 	private String generateQuery(HttpServletRequest request){
 		
 		StringBuilder sb = new StringBuilder();
-		Enumeration parameters = request.getParameterNames();
+		Enumeration<String> parameters = request.getParameterNames();
+		
+		Map<String, ArrayList<HashMap<String,String>>> isoDataTypeNodes = new HashMap<String, ArrayList<HashMap<String,String>>>();
+		String isoParamPrefix = null;
+		String isoParamKey = null;
+		
+		ArrayList<HashMap<String,String>> nodeElements = null;
 		
  		while(parameters.hasMoreElements())
  		{
@@ -134,31 +143,30 @@ public class Result extends BaseActionSupport {
      		{
      			String parameterValue = (request.getParameter(parameterName)).trim();
 				if (parameterValue.length() > 0) {
-					System.out.println("parameterValue: "
-							+ parameterValue);
+					
+					System.out.println("parameterValue: " + parameterValue);
 
-					if (parameterName.indexOf('.') > 0) { // ISO Data Type
-						String[] isoDataTypeParameters = parameterName
-								.split("\\.");
+					if (parameterName.indexOf('.') > 0) { // ISO data type parameter
 						
-						System.out.println("isoDataTypeParameters: " + isoDataTypeParameters);
+						isoParamPrefix =  parameterName.substring(0, parameterName.lastIndexOf('.'));
+						System.out.println("isoParamPrefix: " + isoParamPrefix);
 						
-						for(String isoDataTypeParameter : isoDataTypeParameters){
-							sb.append("[@").append(isoDataTypeParameter).append("=");
+						nodeElements = isoDataTypeNodes.get(isoParamPrefix);
+						isoParamKey = parameterName.substring(parameterName.lastIndexOf('.')+1);
+						System.out.println("ISO data type param key: " + isoParamKey);
+						if (nodeElements != null){
+							HashMap<String,String> nodeKeyValueMap = new HashMap<String,String>();
+							nodeKeyValueMap.put(isoParamKey, parameterValue);
+							nodeElements.add(nodeKeyValueMap);
+							isoDataTypeNodes.put(isoParamPrefix,nodeElements);
+						} else {
+							HashMap<String,String> nodeKeyValueMap = new HashMap<String,String>();
+							nodeKeyValueMap.put(isoParamKey, parameterValue);
+							nodeElements = new ArrayList<HashMap<String,String>>();
+							nodeElements.add(nodeKeyValueMap);
+							isoDataTypeNodes.put(isoParamPrefix,nodeElements);
 						}
-						
-						sb.append(parameterValue);
-						
-						for(int i=0;i<isoDataTypeParameters.length;i++){
-							sb.append("]");
-						}
-
-//						sb.append("[@").append(isoDataTypeParameters[0])
-//						.append("=[@").append(isoDataTypeParameters[1])
-//						.append("=").append(parameterValue)
-//								.append("]]");
-
-					} else {
+					} else { // non-ISO data type parameter
 						sb.append("[@").append(parameterName).append("=")
 								.append(parameterValue).append("]");
 					}
@@ -166,6 +174,33 @@ public class Result extends BaseActionSupport {
      		}    
      	}
  		
+ 		Set<String> isoDataTypeNodeNames = isoDataTypeNodes.keySet();
+ 		Iterator iter = isoDataTypeNodeNames.iterator();
+
+ 		while (iter.hasNext()){
+ 			isoParamPrefix = (String)iter.next();
+ 			System.out.println("key: " + isoParamPrefix);
+ 			
+ 			String[] isoDataTypeParameters = isoParamPrefix.split("\\.");
+ 			
+ 			for(String isoDataTypeParameter : isoDataTypeParameters){
+ 				sb.append("[@").append(isoDataTypeParameter).append("=");
+ 			}
+ 			
+ 			for(HashMap<String,String> nodeElement : isoDataTypeNodes.get(isoParamPrefix)){
+ 		 		Set<String> isoDataTypeNodeName = nodeElement.keySet();
+ 		 		Iterator iter2 = isoDataTypeNodeName.iterator();
+ 		 		while (iter2.hasNext()){
+ 		 			String nodeName = (String)iter2.next();
+ 		 			sb.append("[@").append(nodeName).append("=").append(nodeElement.get(nodeName)).append("]");
+ 		 		}
+ 			}
+ 			
+ 			for(int i=0;i<isoDataTypeParameters.length;i++){
+ 				sb.append("]");
+ 			}
+ 		}
+
  		return sb.toString();
 	}
 	
