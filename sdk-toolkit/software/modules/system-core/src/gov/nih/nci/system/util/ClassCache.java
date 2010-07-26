@@ -19,12 +19,15 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.mapping.Any;
 import org.hibernate.mapping.Component;
+import org.hibernate.mapping.ManyToOne;
 import org.hibernate.mapping.PersistentClass;
 import org.hibernate.mapping.Property;
 import org.hibernate.mapping.RootClass;
 import org.hibernate.mapping.Subclass;
 import org.hibernate.mapping.Value;
+import org.springframework.beans.factory.InitializingBean;
 
 /**
  * ClassCache
@@ -35,7 +38,7 @@ import org.hibernate.mapping.Value;
  * @author Dan Dumitru
  * 
  */
-public class ClassCache {
+public class ClassCache implements InitializingBean{
 
 	private static Logger log = Logger.getLogger(ClassCache.class);
 
@@ -570,7 +573,6 @@ public class ClassCache {
 	 */
 	public void setDaoList(List<DAO> daoList) throws DAOException {
 		this.daoList = daoList;
-		initialize();
 	}
 
 	public DAO getDAOForClass(String qualClassName) {
@@ -805,7 +807,7 @@ public class ClassCache {
 							cfg, className);
 					if (tempSearchFieldForObject != null)
 						searchableFieldsMap.putAll(tempSearchFieldForObject);
-				}
+				}		
 			}
 		}
 
@@ -829,12 +831,12 @@ public class ClassCache {
 			Configuration cfg, String objectClassName) {
 		Map<String, Map<String, List<Object>>> mapOfSearchFields = new HashMap<String, Map<String, List<Object>>>();
 		Map<String, List<Object>> isoFieldsMap = new HashMap<String, List<Object>>();
-		PersistentClass pclass = cfg.getClassMapping(objectClassName);
-
-		if (pclass == null)
+		PersistentClass pClass = cfg.getClassMapping(objectClassName);
+		
+		if (pClass == null)
 			return null;
-		Map<String, List<Object>> isoIdentifierFieldsMap = getISOIdentifierFieldsMap(pclass);
-		Map<String, List<Object>> isoPropertyFieldsMap = getISOPropertiesForObject(pclass);
+		Map<String, List<Object>> isoIdentifierFieldsMap = getISOIdentifierFieldsMap(pClass,cfg);
+		Map<String, List<Object>> isoPropertyFieldsMap = getISOPropertiesForObject(pClass,cfg);
 
 		isoFieldsMap.putAll(isoIdentifierFieldsMap);
 		isoFieldsMap.putAll(isoPropertyFieldsMap);
@@ -844,7 +846,7 @@ public class ClassCache {
 	}
 
 	private Map<String, List<Object>> getISOIdentifierFieldsMap(
-			PersistentClass pclass) {
+			PersistentClass pclass,Configuration cfg) {
 		Map<String, List<Object>> isoIdentifierMap = new HashMap<String, List<Object>>();
 		Property identifierProperty = pclass.getIdentifierProperty();
 		if (identifierProperty != null) {
@@ -857,20 +859,23 @@ public class ClassCache {
 
 	@SuppressWarnings("unchecked")
 	private Map<String, List<Object>> getISOPropertiesForObject(
-			PersistentClass pclass) {
+			PersistentClass pclass, Configuration cfg) {
 		Map<String, List<Object>> isoFieldsMap = new HashMap<String, List<Object>>();
 		Iterator<? extends Object> properties = pclass.getPropertyIterator();
 		while (properties.hasNext()) {
 			Property prop = (Property) properties.next();
-			if (!prop.getType().isAssociationType()) {
-				List<Object> searchableFields = getPersistentFieldsForISOObject(prop);
-				isoFieldsMap.put(prop.getName(), searchableFields);
-			}
+			List<Object> searchableFields = getPersistentFieldsForISOObject(prop,cfg);
+			isoFieldsMap.put(prop.getName(), searchableFields);
 		}
 		return isoFieldsMap;
 	}
-
+	
 	private List<Object> getPersistentFieldsForISOObject(Property prop) {
+		return getPersistentFieldsForISOObject(prop, null);
+	}
+
+	private List<Object> getPersistentFieldsForISOObject(Property prop,
+			Configuration cfg) {
 		List<Object> isoObjectPsFields = new ArrayList<Object>();
 		String idUserType = prop.getType().getName();
 		String identifierUserType = "gov.nih.nci.iso21090.hibernate.usertype.IiUserType";
@@ -878,8 +883,28 @@ public class ClassCache {
 			isoObjectPsFields.add("extension");
 		} else if ("id".equals(prop.getName())) {
 			isoObjectPsFields.add(prop.getName());
-		} else if (prop.getType().isComponentType()) {
+		} else if (prop.getType().isComponentType()
+				&& !(prop.getValue() instanceof Any)) {
 			processIfComponentMapping(prop, isoObjectPsFields);
+		} else if (prop.getType().isAssociationType()
+				&& (prop.getValue() instanceof ManyToOne)) {
+			ManyToOne manyToOne = (ManyToOne) prop.getValue();
+			String many2OnePClassName = manyToOne.getReferencedEntityName();
+			if (!many2OnePClassName
+					.startsWith("_xxEntityxx_gov_nih_nci_cacoresdk_domain_other_datatype")) {
+				return isoObjectPsFields;
+			}
+			PersistentClass many2OnePClass = cfg
+					.getClassMapping(many2OnePClassName);
+			Map<String, List<Object>> map = getISOPropertiesForObject(
+					many2OnePClass, cfg);
+			Iterator<String> keyItr = map.keySet().iterator();
+			while (keyItr.hasNext()) {
+				String key = keyItr.next();
+				Map<String, List<Object>> tempMap = new HashMap<String, List<Object>>();
+				tempMap.put(key, map.get(key));
+				isoObjectPsFields.add(tempMap);
+			}
 		} else {
 			String fieldName = prop.getName();
 			isoObjectPsFields.add(fieldName);
@@ -981,4 +1006,7 @@ public class ClassCache {
 		return classIdCache.get(klass.getName());
 	}
 
+	public void afterPropertiesSet() throws Exception {
+		initialize();
+	}
 }
