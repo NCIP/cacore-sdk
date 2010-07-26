@@ -10,6 +10,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.servlet.ServletContext;
@@ -95,6 +96,24 @@ public class JSPUtils {
 	 */
 	public List<String> getAllFields(String className) {
 		return classCache.getAllFieldNames(className);
+	}
+	
+	public List<Object> getSearchableIsoDataTypeFields(String className, String fieldName){
+		Map<String, List<Object>> searchableFieldsMap = classCache.getSearchableFieldsMap().get(className);
+		
+		if (searchableFieldsMap == null){
+			log.error("No searchable ISO data type fields found for class: '"+className + "' and field: '"+fieldName+"'");
+			return (List<Object>)(new ArrayList<Object>());
+		}
+		
+		List<Object> searchableFields = searchableFieldsMap.get(fieldName);
+		
+		if (searchableFields == null || searchableFields.isEmpty()){
+			log.error("No searchable ISO data type fields found for class: '"+className + "' and field: '"+fieldName+"'");
+			return (List<Object>)(new ArrayList<Object>());
+		}
+		
+		return searchableFields;
 	}
 
 	/**
