@@ -89,11 +89,17 @@ if(className != null)
 			String attrName;
 			String attrNameLabel = "";
 		   	String attrType;
+		   	String attrGenericTypeClassName;
 		   	String attrTypeClassName = "";
 		   
 		   	for(int i=0; i < fieldNames.size(); i++)
 		   	{	attrName = ((Field)fieldNames.get(i)).getName();
 			   	attrType = ((Field)fieldNames.get(i)).getType().getName();
+			   	attrGenericTypeClassName = ((Field)fieldNames.get(i)).getGenericType().toString();
+			   	
+			   	System.out.println("Field Type: "+((Field)fieldNames.get(i)).getType().getName());
+			   	System.out.println("Field Generic Type: "+((Field)fieldNames.get(i)).getGenericType());
+			   	
 			   	
 			   	boolean isIsoDataTypeAttr = attrType.startsWith("gov.nih.nci.iso21090");
 			   	
@@ -103,7 +109,14 @@ if(className != null)
 						++beginIndex;
 						attrTypeClassName =  attrType.substring(beginIndex).toUpperCase();
 					}
-					
+			   		
+			   		if (attrGenericTypeClassName.indexOf('<') > 0){ // e.g. IVL<INT>
+			   			beginIndex = attrGenericTypeClassName.lastIndexOf('.') + 1;
+			   		
+			   			attrGenericTypeClassName = attrGenericTypeClassName.substring(beginIndex,attrGenericTypeClassName.length()-1).toUpperCase();
+			   			attrTypeClassName +=  "&lt;" + attrGenericTypeClassName + "&gt;";
+			   		}
+			   		
 			   		attrNameLabel = attrName + " (" + attrTypeClassName +")"; 
 			   	} else {
 			   		attrNameLabel = attrName;
@@ -121,7 +134,7 @@ if(className != null)
 			<td class="formLabel" align="right"><%=attrNameLabel%>:</td>
 		<% if (isIsoDataTypeAttr) { // ISO Data Type %>	
 			<td class="formField" width="90%">
-				<%=Iso21090DataTypeHtmlUtils.getHtmlFor(attrName,attrTypeClassName)%>
+				<%=Iso21090DataTypeHtmlUtils.getHtmlFor(attrName,attrTypeClassName,jspUtils.getSearchableIsoDataTypeFields(className,attrName))%>
 			</td>
 		<%} else if (attrType.equalsIgnoreCase("java.lang.Boolean") ) {%>
 			<td class="formField" width="90%"><SELECT <%=focusAttributes%> class="formFieldSized" NAME=<%=attrName%> > 
