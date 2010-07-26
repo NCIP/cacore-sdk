@@ -1,6 +1,12 @@
 package gov.nih.nci.system.dao.orm.translator;
 import gov.nih.nci.iso21090.AddressPartType;
 import gov.nih.nci.iso21090.Adxp;
+import gov.nih.nci.iso21090.EntityNamePartType;
+import gov.nih.nci.iso21090.Enxp;
+import gov.nih.nci.iso21090.hibernate.node.ComplexNode;
+import gov.nih.nci.iso21090.hibernate.node.ConstantNode;
+import gov.nih.nci.iso21090.hibernate.node.Node;
+import gov.nih.nci.iso21090.hibernate.tuple.IsoConstantTuplizerHelper;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
 import gov.nih.nci.system.query.nestedcriteria.NestedCriteria;
 import gov.nih.nci.system.util.SystemConstant;
@@ -18,7 +24,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.hibernate.HibernateException;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.mapping.Component;
 import org.hibernate.mapping.PersistentClass;
@@ -28,14 +33,23 @@ import org.hibernate.mapping.Value;
 public class NestedCriteria2HQL {
 	private NestedCriteria criteria;
 	private Configuration cfg;
-	private boolean caseSensitive;	
+	private boolean caseSensitive;
 	private HQLCriteria hqlCriteria;
 	private static Logger log = Logger.getLogger(NestedCriteria2HQL.class);
 	
 	private List<Object> paramList = new ArrayList<Object>();
 	String isoprefix = "gov.nih.nci.iso21090.";	
 	private Integer aliasCount=0;
-
+	
+	private final Map<String, String> partTypes = new HashMap<String, String>() {
+		private static final long serialVersionUID = 1L;
+		{
+			put("gov.nih.nci.iso21090.EntityNamePartType",
+					"gov.nih.nci.iso21090.Enxp");
+			put("gov.nih.nci.iso21090.AddressPartType",
+					"gov.nih.nci.iso21090.Adxp");
+		}
+	};
 	public NestedCriteria2HQL(NestedCriteria crit, Configuration cfg,
 			boolean caseSensitive) {
 		this.criteria = crit;
@@ -611,7 +625,8 @@ public class NestedCriteria2HQL {
 		StringBuffer whereClause = new StringBuffer();
 		Map<String, Object> criterionMap = getObjAttrCriterion(obj, cfg,
 				parentClassName, parentRoleName);
-		PersistentClass pclass = getPersistentClass(obj.getClass().getName(),
+		String rootKlass = obj.getClass().getName();
+		PersistentClass pclass = getPersistentClass(rootKlass,
 				parentClassName, parentRoleName);
 
 		if (criterionMap != null) {
@@ -644,9 +659,10 @@ public class NestedCriteria2HQL {
 						Value componentValue = locateComponent(pclass, key);
 						String queryAppender = sourceAlias + SystemConstant.DOT
 								+ key;
+						String rootKlassWithAtt = rootKlass + "." + key;
 						generateISOWhereQuery(value, tempBuffer, whereClause,
 								componentValue, "", queryAppender, 0,
-								aliasSetBuffer);
+								aliasSetBuffer,rootKlassWithAtt);
 					} else {
 						whereClause.append(sourceAlias)
 								.append(SystemConstant.DOT).append(key)
@@ -697,11 +713,11 @@ public class NestedCriteria2HQL {
 	 * @param aliasSetBuffer
 	 * @throws Exception
 	 */
-	@SuppressWarnings({"rawtypes", "unchecked"})
+	@SuppressWarnings({"rawtypes"})
 	private void generateISOWhereQuery(Object obj, StringBuffer query,
 			StringBuffer whereQueryClause, Value componentValue,
 			String parentheses, String queryAppender, Integer andCount,
-			StringBuffer aliasSetBuffer) throws Exception {
+			StringBuffer aliasSetBuffer,String rootKlassAttr) throws Exception {
 
 		Class klass = obj.getClass();
 		while (!klass.getName().equals("java.lang.Object")) {
@@ -711,47 +727,38 @@ public class NestedCriteria2HQL {
 					field.setAccessible(true);
 					Object value = field.get(obj);
 					if (value != null) {
-						// if precision==defaultvalue (i.e)==0,avoid HQL
-						// query building
-						if (field.getName().equals("precision")
+						String fieldName = field.getName();
+						if (fieldName.equals("precision")
 								&& value instanceof Integer
 								&& ((Integer) value) == 0) {
 							continue;
-						}
-						// if object instanceof AddressPartType and
-						// fieldName is type,avoid HQL query building
-						if (value instanceof AddressPartType
-								&& field.getName().equals("type")) {
+						} else if ((value instanceof AddressPartType || value instanceof EntityNamePartType)
+								&& fieldName.equals("type")) {
 							continue;
 						}
 						String objectClassName = value.getClass().getName();
-						StringBuffer newQuery = new StringBuffer(
-								query.toString());
-						newQuery.append(SystemConstant.DOT).append(
-								field.getName());
-						boolean isoObject = objectClassName
-								.startsWith(isoprefix);
+						StringBuffer newQuery = new StringBuffer(query.toString());
+						newQuery.append(SystemConstant.DOT).append(fieldName);
+						boolean isoObject = objectClassName.startsWith(isoprefix);
 						// parse the set and create an hql Set<CD>
-						boolean isSetObject = objectClassName
-								.startsWith("java.util.HashSet");
+						boolean isSetObject = objectClassName.startsWith("java.util.HashSet");
 						boolean isEnumObject = value.getClass().isEnum();
-						boolean isListObject = objectClassName
-								.startsWith("java.util.ArrayList");
-						Value persistChildvalue = null;
+						boolean isListObject = objectClassName.startsWith("java.util.ArrayList");
 						if (isListObject) {
-							executeIfListContainsISOObjects((List) value,
-									newQuery, (Component) componentValue,
-									whereQueryClause, queryAppender, andCount,
-									aliasSetBuffer);
+							if (fieldName.equals("partsInternal"))
+								continue;
+							processISOWhereQueryIfListObject(whereQueryClause,
+									componentValue, queryAppender, andCount,
+									aliasSetBuffer, rootKlassAttr, value,
+									newQuery);
 						} else {
-							persistChildvalue = locateComponent(componentValue,
-									field.getName());
+							Value persistChildvalue = locateComponent(componentValue,fieldName);
 							if (isoObject & !isEnumObject) {
 								parentheses = "";
 								generateISOWhereQuery(value, newQuery,
 										whereQueryClause, persistChildvalue,
 										parentheses, queryAppender, andCount++,
-										aliasSetBuffer);
+										aliasSetBuffer,rootKlassAttr);
 							} else if (isSetObject) {
 								Set set = (Set) value;
 								int count = 0;
@@ -770,7 +777,7 @@ public class NestedCriteria2HQL {
 											whereQueryClause,
 											persistChildvalue, parentheses,
 											setItemAlias, andCount,
-											aliasSetBuffer);
+											aliasSetBuffer, rootKlassAttr);
 									count++;
 								}
 								whereQueryClause.append(" )) ");
@@ -804,41 +811,118 @@ public class NestedCriteria2HQL {
 			klass = klass.getSuperclass();
 		}
 	}
+
+	@SuppressWarnings({"rawtypes", "unchecked"})
+	private void processISOWhereQueryIfListObject(
+			StringBuffer whereQueryClause, Value componentValue,
+			String queryAppender, Integer andCount,
+			StringBuffer aliasSetBuffer, String rootKlassAttr, Object value,
+			StringBuffer newQuery) throws Exception {
+		List list = (List) value;
+		boolean isEnDataType = list.size() > 0
+				&& list.iterator().next().getClass()
+						.isAssignableFrom(Enxp.class);
+		if (isEnDataType) {
+			resolveISOWhereQueryForEN((List) value, newQuery,
+					(Component) componentValue, whereQueryClause,
+					queryAppender, andCount, aliasSetBuffer, rootKlassAttr);
+		} else if (componentValue.getClass().isAssignableFrom(
+				org.hibernate.mapping.Set.class)) {
+			org.hibernate.mapping.Set set = (org.hibernate.mapping.Set) componentValue;
+			Component component = (Component) set.getElement();
+			resolveISOWhereQueryForAd((List) value, newQuery, component,
+					whereQueryClause, queryAppender, andCount, aliasSetBuffer,
+					rootKlassAttr);
+		} else {
+			resolveISOWhereQueryForAd((List) value, newQuery,
+					(Component) componentValue, whereQueryClause,
+					queryAppender, andCount, aliasSetBuffer, rootKlassAttr);
+		}
+	}
 	
-	private void executeIfListContainsISOObjects(
+	private void resolveISOWhereQueryForEN(List<Enxp> valueList,
+			StringBuffer newQuery, Component componentValue,
+			StringBuffer whereQueryClause, String queryAppender,
+			Integer andCount, StringBuffer aliasSetBuffer, String rootKlassAttr)
+			throws Exception {
+
+		IsoConstantTuplizerHelper tuplizerHelper = new IsoConstantTuplizerHelper();
+		ComplexNode complexNode = tuplizerHelper
+				.getComplexNodeBean(rootKlassAttr);
+		List<Node> nodes = complexNode.getInnerNodes();
+		Map<String, String> map = new HashMap<String, String>();
+		for (Node node : nodes) {
+			ComplexNode innerComplexNode = (ComplexNode) node;
+			String value = innerComplexNode.getName();
+			String key = null;
+			List<Node> innerNodes = innerComplexNode.getInnerNodes();
+			for (Node innerNode : innerNodes) {
+				if (innerNode instanceof ConstantNode
+						&& innerNode.getName().equals("type")) {
+					ConstantNode constantNode = (ConstantNode) innerNode;
+					key = constantNode.getConstantValue();
+					break;
+				}
+			}
+			if (value == null) {
+				throw new Exception(
+						"IsoConstants.xml must have a type specified for EN");
+			}
+			map.put(key, value);
+			break;
+		}
+		Set<String> keySet = map.keySet();
+		for (Enxp enxp : valueList) {
+			StringBuffer tempNewQuery = new StringBuffer(newQuery.toString());
+			EntityNamePartType entityNamePartType = enxp.getType();
+			String partNameMatch = entityNamePartType.toString();
+			if (keySet.contains(partNameMatch)) {
+				String partName = map.get(partNameMatch);
+				String componentPartName = partName.substring(
+						partName.length() - 2, partName.length());
+				tempNewQuery.append(componentPartName);
+				String parentheses = "";
+				Value persistChildvalue = locateComponent(componentValue,
+						partName);
+				generateISOWhereQuery(enxp, tempNewQuery, whereQueryClause,
+						persistChildvalue, parentheses, queryAppender,
+						andCount++, aliasSetBuffer, rootKlassAttr);
+			}
+		}
+	}
+
+	private void resolveISOWhereQueryForAd(
 			List<? extends Object> valueList, StringBuffer newQuery,
 			Component componentValue, StringBuffer whereQueryClause,
-			String queryAppender, Integer andCount, StringBuffer aliasSetBuffer)
-			throws Exception {
-		StringBuffer tempNewQuery = null;
+			String queryAppender, Integer andCount,
+			StringBuffer aliasSetBuffer, String rootKlassAttr) throws Exception {
 		Map<String, Set<String>> addressPartTypeMap = new HashMap<String, Set<String>>();
 		for (Object object : valueList) {
 			Field partInstanceObjectField = null;
-			tempNewQuery = new StringBuffer(newQuery.toString());
+			StringBuffer tempNewQuery = new StringBuffer(newQuery.toString());
 			partInstanceObjectField = getDeclaredField(object.getClass(),
 					"type");
 			partInstanceObjectField.setAccessible(true);
-			AddressPartType addressPartType = (AddressPartType) partInstanceObjectField
-					.get(object);
-
+			Object partType = partInstanceObjectField.get(object);
 			Component partComponent = (Component) componentValue;
 			@SuppressWarnings("unchecked")
 			Iterator<Property> propertyItr = partComponent
 					.getPropertyIterator();
-			boolean isValidAddressPartType = false;
+			boolean isValidPartType = false;
 			while (propertyItr.hasNext()) {
 				Property property = propertyItr.next();
 				String partName = property.getName();
 				Component psComp = (Component) property.getValue();
 				String psCompClassName = psComp.getComponentClassName();
-				String inputAddressPartTypeName = "gov.nih.nci.iso21090.Adxp"
-						+ addressPartType.name();
-				if (psCompClassName.equalsIgnoreCase(inputAddressPartTypeName)) {
+				String partTypeClassName = partType.getClass().getName();
+				String partTypeName = partTypes.get(partTypeClassName)
+						+ partType;
+
+				if (psCompClassName.equalsIgnoreCase(partTypeName)) {
 					// search for matching part name (part_0,part_1,part_2 etc)
-					if (addressPartTypeMap.keySet().contains(
-							inputAddressPartTypeName)) {
+					if (addressPartTypeMap.keySet().contains(partTypeName)) {
 						Set<String> parts = addressPartTypeMap
-								.get(inputAddressPartTypeName);
+								.get(partTypeName);
 						if (parts.contains(partName)) {
 							continue;
 						} else {
@@ -847,10 +931,9 @@ public class NestedCriteria2HQL {
 					} else {
 						Set<String> parts = new HashSet<String>();
 						parts.add(partName);
-						addressPartTypeMap.put(inputAddressPartTypeName, parts);
+						addressPartTypeMap.put(partTypeName, parts);
 					}
-					Value persistChildvalue = null;
-					persistChildvalue = locateComponent(componentValue,
+					Value persistChildvalue = locateComponent(componentValue,
 							partName);
 					String componentPartName = partName.substring(
 							partName.length() - 2, partName.length());
@@ -858,14 +941,15 @@ public class NestedCriteria2HQL {
 					String parentheses = "";
 					generateISOWhereQuery(object, tempNewQuery,
 							whereQueryClause, persistChildvalue, parentheses,
-							queryAppender, andCount++, aliasSetBuffer);
-					isValidAddressPartType = true;
+							queryAppender, andCount++, aliasSetBuffer,
+							rootKlassAttr);
+					isValidPartType = true;
 					break;
 				}
 			}
-			if (!isValidAddressPartType) {
-				throw new Exception(
-						" Invalid Address PartType "+addressPartType.name()+"  specified in RESTfulQuery");
+			if (!isValidPartType) {
+				throw new Exception(" Invalid Address PartType " + partType
+						+ "  specified in RESTfulQuery");
 			}
 		}
 	}
