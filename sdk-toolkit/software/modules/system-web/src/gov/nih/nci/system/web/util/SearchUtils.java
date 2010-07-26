@@ -617,8 +617,8 @@ public class SearchUtils {
 				int lastIndex = paramString.indexOf(">");
 				String isoParameter = paramString.substring(beginIndex + 1,
 						lastIndex);
+				classISOParamType.delete(0, classISOParamType.length());
 				classISOParamType.append(isoParameter);
-
 				int index = paramString.indexOf('<');
 				if (field.getType().isAssignableFrom(List.class)) {
 					fieldTypeObject = new ArrayList();
