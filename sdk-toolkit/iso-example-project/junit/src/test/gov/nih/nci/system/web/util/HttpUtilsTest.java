@@ -185,7 +185,13 @@ public class HttpUtilsTest extends TestCase{
 		String queryText="query=IvlTsDataType&IvlTsDataType[@value1=[@low=[@value=03-11-2010]]]";
 		process(queryText,"test27");
 	}		
-	/*###################################################################################*/		
+	/*###################################################################################*/
+	
+	
+	public void testISOComplexDsetAdDataSetType() throws Exception{
+		String queryText="query=DsetAdDataType[@value1=[@item=[@part=[@value=106 Jefferson Street][@type=AL]]]]";
+		process(queryText,"test28");
+	}
 	
 	public void testISOComplexDsetCdDataSetType() throws Exception{
 		String queryText="query=DsetCdDataType&DsetCdDataType[@value1=[@item=[@code=CODE1]]]";
@@ -319,15 +325,21 @@ public class HttpUtilsTest extends TestCase{
 		process(queryText,"test49");
 	}
 	
-	//failure,need to find solution
-	public void testISOComplexIiDataSetType_2() throws Exception{
-		String queryText="query=IiDataType&IiDataType[@value4=[@displayable=0/1]]";
-		process(queryText,"test49");
+	// failure,need to find solution
+	public void testISOComplexIiDataSetType_2() throws Exception {
+		String queryText = "query=IiDataType&IiDataType[@value4=[@displayable=0/1]]";
+		process(queryText, "test49");
 	}
-	
-	public void testISOComplexEnDataType() throws Exception{
-		String queryText="query=EnDataType&EnDataType[@value1=[@part=[@codeSystemVersion=ENXP Code System][@type=FAM]]]";
-		process(queryText,"test39");
+
+	public void testISOComplexEnDataType() throws Exception {
+		String queryText = "query=EnDataType&EnDataType[@value2=[@part=[@value=Mr. John Doe Jr1.][@type=FAM]]]";
+		process(queryText, "test50");
+	}
+
+	// failure,need to find solution
+	public void testISOComplexDsetAdDataSetType2() throws Exception {
+		String queryText = "query=DsetAdDataType[@value5=[@item=[@part=[@value=106 Jefferson Street][@type=AL]][@part=[@value=Rockville][@type=CTY]]]]";
+		process(queryText, "test51");
 	}
 	                                                                                                                    
 	                                                                                                                    
