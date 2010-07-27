@@ -36,11 +36,11 @@ public class NestedCriteria2HQL {
 	private boolean caseSensitive;
 	private HQLCriteria hqlCriteria;
 	private static Logger log = Logger.getLogger(NestedCriteria2HQL.class);
-	
+
 	private List<Object> paramList = new ArrayList<Object>();
-	String isoprefix = "gov.nih.nci.iso21090.";	
-	private Integer aliasCount=0;
-	
+	String isoprefix = "gov.nih.nci.iso21090.";
+	private Integer aliasCount = 0;
+
 	private final Map<String, String> partTypes = new HashMap<String, String>() {
 		private static final long serialVersionUID = 1L;
 		{
@@ -56,7 +56,7 @@ public class NestedCriteria2HQL {
 		this.cfg = cfg;
 		this.caseSensitive = caseSensitive;
 	}
-	
+
 	public HQLCriteria translate() throws Exception {
 		StringBuffer hql = new StringBuffer();
 		processNestedCriteria(hql, criteria);
@@ -65,7 +65,7 @@ public class NestedCriteria2HQL {
 		System.out.println("HQL query: " + hql.toString());
 		return hqlCriteria;
 	}
-        
+
 	private void processNestedCriteria(StringBuffer hql, NestedCriteria criteria)
 			throws Exception {
 		if (condition1(criteria)) {
@@ -122,7 +122,8 @@ public class NestedCriteria2HQL {
 		if (sourceObjectList.size() == 1) {
 			log.debug("Scenario1: Processing single object in source object list");
 			Object sourceObject = sourceObjectList.iterator().next();
-			String select = getHQLQueryFromSourceObjectWithCriterion(sourceObject, cfg, false);
+			String select = getHQLQueryFromSourceObjectWithCriterion(
+					sourceObject, cfg, false);
 			hql.append(select);
 			log.debug("Scenario1: Single object HQL sub-select: " + select);
 		} else {
@@ -131,14 +132,16 @@ public class NestedCriteria2HQL {
 					+ " " + destAlias + " where ");
 			for (Iterator i = sourceObjectList.iterator(); i.hasNext();) {
 				Object obj = i.next();
-				hql.append(destAlias + " in ("
-						+ getHQLQueryFromSourceObjectWithCriterion(obj, cfg, false) + " )");
+				hql.append(destAlias
+						+ " in ("
+						+ getHQLQueryFromSourceObjectWithCriterion(obj, cfg,
+								false) + " )");
 				if (i.hasNext())
 					hql.append(" or ");
 			}
 		}
 	}
-	
+
 	// Getting association for the query by example
 	@SuppressWarnings("rawtypes")
 	private void solveScenario2(StringBuffer hql, NestedCriteria criteria)
@@ -420,8 +423,8 @@ public class NestedCriteria2HQL {
 			}
 		}
 	}
-	
-	//Traversing the path of the nested search criteria
+
+	// Traversing the path of the nested search criteria
 	private void solveScenario3(StringBuffer hql, NestedCriteria criteria)
 			throws Exception {
 		String targetObjectName = criteria.getTargetObjectName();
@@ -514,7 +517,7 @@ public class NestedCriteria2HQL {
 		}
 		return modifiedHQL;
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	private boolean checkClobAttribute(String objClassName) {
 		PersistentClass pclass = cfg.getClassMapping(objClassName);
@@ -527,11 +530,12 @@ public class NestedCriteria2HQL {
 		}
 		return false;
 	}
-	
+
 	@SuppressWarnings("unused")
 	private boolean distinctRequired() {
 		boolean distinct = true;
-		boolean containsCLOB = checkClobAttribute(criteria.getTargetObjectName());
+		boolean containsCLOB = checkClobAttribute(criteria
+				.getTargetObjectName());
 		boolean condition1 = condition1(criteria);
 
 		if (condition1 || containsCLOB)
@@ -539,7 +543,7 @@ public class NestedCriteria2HQL {
 
 		return distinct;
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	private boolean inRequired() {
 		boolean condition2 = condition2(criteria);
@@ -555,8 +559,8 @@ public class NestedCriteria2HQL {
 			} else if (objects.size() == 1) {
 				try {
 					Object object = objects.get(0);
-					Map<String, Object> map = getAssociatedObjectCriterion(object, cfg, null,
-							null);
+					Map<String, Object> map = getAssociatedObjectCriterion(
+							object, cfg, null, null);
 					if (map == null || map.size() == 0) {
 						condition1 = false;
 					}
@@ -583,7 +587,7 @@ public class NestedCriteria2HQL {
 		}
 		return condition1 || condition2 || condition3;
 	}
-	
+
 	private HQLCriteria prepareQuery(StringBuffer hql) {
 		// Check if the target contains any CLOB. If yes then do a subselect
 		// with distinct else do plain distinct
@@ -593,7 +597,7 @@ public class NestedCriteria2HQL {
 		String normalQ = "";
 		String originalQ = hql.toString();
 		boolean distinctRequired = false; // indistinctRequired();
-		//never comes to else code, as a part of legacy code,not removed.
+		// never comes to else code, as a part of legacy code,not removed.
 		if (!distinctRequired) {
 			if (inRequired()) {
 				String modifiedQ = originalQ.replaceFirst(destalias, destalias
@@ -626,8 +630,8 @@ public class NestedCriteria2HQL {
 		Map<String, Object> criterionMap = getObjAttrCriterion(obj, cfg,
 				parentClassName, parentRoleName);
 		String rootKlass = obj.getClass().getName();
-		PersistentClass pclass = getPersistentClass(rootKlass,
-				parentClassName, parentRoleName);
+		PersistentClass pclass = getPersistentClass(rootKlass, parentClassName,
+				parentRoleName);
 
 		if (criterionMap != null) {
 			Iterator<String> keys = criterionMap.keySet().iterator();
@@ -662,7 +666,7 @@ public class NestedCriteria2HQL {
 						String rootKlassWithAtt = rootKlass + "." + key;
 						generateISOWhereQuery(value, tempBuffer, whereClause,
 								componentValue, "", queryAppender, 0,
-								aliasSetBuffer,rootKlassWithAtt);
+								aliasSetBuffer, rootKlassWithAtt);
 					} else {
 						whereClause.append(sourceAlias)
 								.append(SystemConstant.DOT).append(key)
@@ -717,7 +721,7 @@ public class NestedCriteria2HQL {
 	private void generateISOWhereQuery(Object obj, StringBuffer query,
 			StringBuffer whereQueryClause, Value componentValue,
 			String parentheses, String queryAppender, Integer andCount,
-			StringBuffer aliasSetBuffer,String rootKlassAttr) throws Exception {
+			StringBuffer aliasSetBuffer, String rootKlassAttr) throws Exception {
 
 		Class klass = obj.getClass();
 		while (!klass.getName().equals("java.lang.Object")) {
@@ -737,13 +741,17 @@ public class NestedCriteria2HQL {
 							continue;
 						}
 						String objectClassName = value.getClass().getName();
-						StringBuffer newQuery = new StringBuffer(query.toString());
+						StringBuffer newQuery = new StringBuffer(
+								query.toString());
 						newQuery.append(SystemConstant.DOT).append(fieldName);
-						boolean isoObject = objectClassName.startsWith(isoprefix);
+						boolean isoObject = objectClassName
+								.startsWith(isoprefix);
 						// parse the set and create an hql Set<CD>
-						boolean isSetObject = objectClassName.startsWith("java.util.HashSet");
+						boolean isSetObject = objectClassName
+								.startsWith("java.util.HashSet");
 						boolean isEnumObject = value.getClass().isEnum();
-						boolean isListObject = objectClassName.startsWith("java.util.ArrayList");
+						boolean isListObject = objectClassName
+								.startsWith("java.util.ArrayList");
 						if (isListObject) {
 							if (fieldName.equals("partsInternal"))
 								continue;
@@ -752,13 +760,14 @@ public class NestedCriteria2HQL {
 									aliasSetBuffer, rootKlassAttr, value,
 									newQuery);
 						} else {
-							Value persistChildvalue = locateComponent(componentValue,fieldName);
+							Value persistChildvalue = locateComponent(
+									componentValue, fieldName);
 							if (isoObject & !isEnumObject) {
 								parentheses = "";
 								generateISOWhereQuery(value, newQuery,
 										whereQueryClause, persistChildvalue,
 										parentheses, queryAppender, andCount++,
-										aliasSetBuffer,rootKlassAttr);
+										aliasSetBuffer, rootKlassAttr);
 							} else if (isSetObject) {
 								Set set = (Set) value;
 								int count = 0;
@@ -818,6 +827,7 @@ public class NestedCriteria2HQL {
 			String queryAppender, Integer andCount,
 			StringBuffer aliasSetBuffer, String rootKlassAttr, Object value,
 			StringBuffer newQuery) throws Exception {
+		
 		List list = (List) value;
 		boolean isEnDataType = list.size() > 0
 				&& list.iterator().next().getClass()
@@ -839,7 +849,7 @@ public class NestedCriteria2HQL {
 					queryAppender, andCount, aliasSetBuffer, rootKlassAttr);
 		}
 	}
-	
+
 	private void resolveISOWhereQueryForEN(List<Enxp> valueList,
 			StringBuffer newQuery, Component componentValue,
 			StringBuffer whereQueryClause, String queryAppender,
@@ -865,8 +875,8 @@ public class NestedCriteria2HQL {
 				}
 			}
 			if (value == null) {
-				throw new Exception(
-						"IsoConstants.xml must have a type specified for EN");
+				throw new Exception("mapped-constant 'Type' not specified for "
+						+ rootKlassAttr + " in EA-Model.");
 			}
 			map.put(key, value);
 			break;
@@ -887,15 +897,19 @@ public class NestedCriteria2HQL {
 				generateISOWhereQuery(enxp, tempNewQuery, whereQueryClause,
 						persistChildvalue, parentheses, queryAppender,
 						andCount++, aliasSetBuffer, rootKlassAttr);
+			} else {
+				throw new Exception(
+						"No matching found for the input 'type' with the mapped-constant specified in EA-Model");
 			}
 		}
 	}
 
-	private void resolveISOWhereQueryForAd(
-			List<? extends Object> valueList, StringBuffer newQuery,
-			Component componentValue, StringBuffer whereQueryClause,
-			String queryAppender, Integer andCount,
-			StringBuffer aliasSetBuffer, String rootKlassAttr) throws Exception {
+	private void resolveISOWhereQueryForAd(List<? extends Object> valueList,
+			StringBuffer newQuery, Component componentValue,
+			StringBuffer whereQueryClause, String queryAppender,
+			Integer andCount, StringBuffer aliasSetBuffer, String rootKlassAttr)
+			throws Exception {
+		
 		Map<String, Set<String>> addressPartTypeMap = new HashMap<String, Set<String>>();
 		for (Object object : valueList) {
 			Field partInstanceObjectField = null;
@@ -972,6 +986,7 @@ public class NestedCriteria2HQL {
 	private Map<String, Object> getObjAttrCriterion(Object obj,
 			Configuration cfg, String parentClassName, String parentRoleName)
 			throws Exception {
+		
 		Map<String, Object> criterions = new HashMap<String, Object>();
 		String objClassName = obj.getClass().getName();
 		PersistentClass pclass = getPersistentClass(objClassName,
@@ -1014,30 +1029,32 @@ public class NestedCriteria2HQL {
 	}
 
 	@SuppressWarnings({"rawtypes"})
-	private Map<String, Object> getCriterionForComponentAndAttribute(Object obj,
-			PersistentClass pclass) throws Exception {
-		Map<String, Object> criterions=new HashMap<String, Object>();
+	private Map<String, Object> getCriterionForComponentAndAttribute(
+			Object obj, PersistentClass pclass) throws Exception {
+		
+		Map<String, Object> criterions = new HashMap<String, Object>();
 		Iterator properties = pclass.getPropertyIterator();
 		Property tempProperty = (Property) pclass.getPropertyIterator().next();
 		String propertyAccessorName = tempProperty.getPropertyAccessorName();
 		boolean isPropertyCollectionAccessor = propertyAccessorName
-				.equals("gov.nih.nci.iso21090.hibernate.property.CollectionPropertyAccessor");				
-		
+				.equals("gov.nih.nci.iso21090.hibernate.property.CollectionPropertyAccessor");
+
 		if ((tempProperty.getType().isComponentType() && isPropertyCollectionAccessor)) {
 			String tempFieldName = tempProperty.getName();
 			Field field = null;
 			int truncatedFieldLength = tempFieldName.length() - 2;
-			String tempComFieldName = tempFieldName.substring(0, truncatedFieldLength);
+			String tempComFieldName = tempFieldName.substring(0,
+					truncatedFieldLength);
 			field = getDeclaredField(pclass.getMappedClass(), tempComFieldName);
 			field.setAccessible(true);
 			List parts = (List) field.get(obj);
-			boolean hasFoundComponent=false;
+			boolean hasFoundComponent = false;
 			while (properties.hasNext()) {
 				Property prop = (Property) properties.next();
-				String fieldName=prop.getName();
+				String fieldName = prop.getName();
 				Component psComp = (Component) prop.getValue();
 				String psCompClassName = psComp.getComponentClassName();
-				Adxp adxpPart=null;
+				Adxp adxpPart = null;
 				for (Object part : parts) {
 					adxpPart = (Adxp) part;
 					String addressPartTypeName = "gov.nih.nci.iso21090.Adxp"
@@ -1045,45 +1062,49 @@ public class NestedCriteria2HQL {
 					if (psCompClassName.equalsIgnoreCase(addressPartTypeName)) {
 						String comFieldName = fieldName;
 						criterions.put(comFieldName, adxpPart);
-						hasFoundComponent=true;
+						hasFoundComponent = true;
 						break;
 					}
 				}
 				if (hasFoundComponent)
 					parts.remove(adxpPart);
-			}			
-		}else{
+			}
+		} else {
 			while (properties.hasNext()) {
 				Property prop = (Property) properties.next();
 				if (!prop.getType().isAssociationType()) {
-						String fieldName = prop.getName();
-						Field field = getDeclaredField(pclass.getMappedClass(),fieldName);
-						field.setAccessible(true);
-						try {
-							if (field.get(obj) != null) {
-								if (prop.getType().getName().equals("text"))
-									criterions.put(fieldName, field.get(obj) + "*");
-								else
-									criterions.put(fieldName, field.get(obj));
-							}
-						} catch (Exception e) {
-							// Do nothing - when dealing with implicit queries, pclass
-							// would be the concrete subclass of obj, and thus contain
-							// fields that are not in obj
+					String fieldName = prop.getName();
+					Field field = getDeclaredField(pclass.getMappedClass(),
+							fieldName);
+					field.setAccessible(true);
+					try {
+						if (field.get(obj) != null) {
+							if (prop.getType().getName().equals("text"))
+								criterions.put(fieldName, field.get(obj) + "*");
+							else
+								criterions.put(fieldName, field.get(obj));
 						}
+					} catch (Exception e) {
+						// Do nothing - when dealing with implicit queries,
+						// pclass
+						// would be the concrete subclass of obj, and thus
+						// contain
+						// fields that are not in obj
 					}
+				}
 			}
-		}	
+		}
 		return criterions;
 	}
-	
+
 	private String getHQLQueryFromSourceObjectWithCriterion(Object obj,
 			Configuration cfg, boolean skipAssociations) throws Exception {
+		
 		return getHQLQueryFromSourceObjectWithCriterion(obj, cfg,
 				skipAssociations, null, null);
 	}
-	
-	//get the result HQL String from the Object obj
+
+	// get the result HQL String from the Object obj
 	private String getHQLQueryFromSourceObjectWithCriterion(Object obj,
 			Configuration cfg, boolean skipAssociations, String parentClass,
 			String parentRoleName) throws Exception {
@@ -1128,10 +1149,11 @@ public class NestedCriteria2HQL {
 
 	@SuppressWarnings("rawtypes")
 	private StringBuffer generateAssociationHQLCriteria(Configuration cfg,
-			String srcAlias,Map<String, Object> associationCritMap,
+			String srcAlias, Map<String, Object> associationCritMap,
 			PersistentClass tempPclass) throws Exception {
-		Iterator<String> associationKeys = associationCritMap.keySet().iterator();
-		StringBuffer hql=new StringBuffer(); 
+		Iterator<String> associationKeys = associationCritMap.keySet()
+				.iterator();
+		StringBuffer hql = new StringBuffer();
 		int counter = 0;
 		while (associationKeys.hasNext()) {
 			String roleName = associationKeys.next();
@@ -1199,8 +1221,8 @@ public class NestedCriteria2HQL {
 	}
 
 	@SuppressWarnings({"rawtypes"})
-	private Map<String, Object> getAssociatedObjectWithFieldCriterion(Object obj,
-			PersistentClass pclass) throws Exception {
+	private Map<String, Object> getAssociatedObjectWithFieldCriterion(
+			Object obj, PersistentClass pclass) throws Exception {
 		Map<String, Object> criterions = new HashMap<String, Object>();
 		Iterator properties = pclass.getPropertyIterator();
 		while (properties.hasNext()) {
@@ -1225,33 +1247,33 @@ public class NestedCriteria2HQL {
 		}
 		return criterions;
 	}
-	
+
 	// object--->has component---> and it has set then add distinct to it. As
 	// component set don't have primary key
 	// avoid duplication of result set.
 	@SuppressWarnings("rawtypes")
-	private boolean isComponentSetCriterion(Object obj)
-			throws Exception {
+	private boolean isComponentSetCriterion(Object obj) throws Exception {
 		PersistentClass pclass = getPersistentClass(obj.getClass().getName(),
 				null, null);
 		Iterator properties = pclass.getPropertyIterator();
 		while (properties.hasNext()) {
 			Property prop = (Property) properties.next();
-			//is component
+			// is component
 			if (prop.getType().isComponentType()) {
 				String fieldName = prop.getName();
-				Field field = getDeclaredField(pclass.getMappedClass(),fieldName);
+				Field field = getDeclaredField(pclass.getMappedClass(),
+						fieldName);
 				field.setAccessible(true);
 				Object value = field.get(obj);
 				if (value != null) {
-					Field[] fields=value.getClass().getDeclaredFields();
+					Field[] fields = value.getClass().getDeclaredFields();
 					for (Field componentField : fields) {
 						componentField.setAccessible(true);
 						Object comFieldObject = componentField.get(value);
-						//is of Type Set
+						// is of Type Set
 						if (comFieldObject != null
-								&& (comFieldObject instanceof Collection 
-								&& ((Collection) comFieldObject).size() > 0)) {
+								&& (comFieldObject instanceof Collection && ((Collection) comFieldObject)
+										.size() > 0)) {
 							return true;
 						}
 					}
@@ -1351,7 +1373,7 @@ public class NestedCriteria2HQL {
 		}
 		return null;
 	}
-	
+
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	private List<PersistentClass> getPersistentClassList(String objClassName) {
 		List<PersistentClass> pClasses = new ArrayList<PersistentClass>();
@@ -1383,7 +1405,7 @@ public class NestedCriteria2HQL {
 		}
 		return pClasses;
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	private boolean isObjectEmpty(Object obj) {
 		Class klass = obj.getClass();
@@ -1410,7 +1432,7 @@ public class NestedCriteria2HQL {
 		}
 		return true;
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	private boolean isObjectAssociationEmpty(Object obj) throws Exception {
 		Class klass = obj.getClass();
