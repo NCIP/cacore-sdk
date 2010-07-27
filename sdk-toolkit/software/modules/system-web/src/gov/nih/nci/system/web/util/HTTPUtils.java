@@ -4,6 +4,7 @@ import gov.nih.nci.iso21090.Any;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 import gov.nih.nci.system.client.proxy.ListProxy;
 import gov.nih.nci.system.client.util.xml.JAXBISOAdapter;
+import gov.nih.nci.system.client.util.xml.JAXBISODsetAdAdapter;
 import gov.nih.nci.system.client.util.xml.JAXBISODsetCdAdapter;
 import gov.nih.nci.system.client.util.xml.JAXBISODsetIiAdapter;
 import gov.nih.nci.system.client.util.xml.JAXBISODsetTelAdapter;
@@ -93,6 +94,7 @@ public class HTTPUtils implements Serializable{
 
 		{
 			put("defaultAdapter",new JAXBISOAdapter<ANY, Any>());
+			put("gov.nih.nci.iso21090.DSet<gov.nih.nci.iso21090.Ad>",new JAXBISODsetAdAdapter<ANY, Any>());
 			put("gov.nih.nci.iso21090.DSet<gov.nih.nci.iso21090.Cd>",new JAXBISODsetCdAdapter<ANY, Any>());
 			put("gov.nih.nci.iso21090.DSet<gov.nih.nci.iso21090.Ii>",new JAXBISODsetIiAdapter<ANY, Any>());
 			put("gov.nih.nci.iso21090.DSet<gov.nih.nci.iso21090.Tel>",new JAXBISODsetTelAdapter<ANY, Any>());
@@ -100,7 +102,7 @@ public class HTTPUtils implements Serializable{
 			put("gov.nih.nci.iso21090.Ivl<gov.nih.nci.iso21090.Real>",new JAXBISOIvlRealAdapter<ANY, Any>());
 			put("gov.nih.nci.iso21090.Ivl<gov.nih.nci.iso21090.Ts>",new JAXBISOIvlTsAdapter<ANY, Any>());
 			put("gov.nih.nci.iso21090.Ivl<gov.nih.nci.iso21090.Int>",new JAXBISOIvlIntAdapter<ANY, Any>());
-			put("gov.nih.nci.iso21090.Ivl<gov.nih.nci.iso21090.Pq>",new JAXBISOIvlPqAdapter<ANY, Any>());			
+			put("gov.nih.nci.iso21090.Ivl<gov.nih.nci.iso21090.Pq>",new JAXBISOIvlPqAdapter<ANY, Any>());
 		}
 	};	
 	
