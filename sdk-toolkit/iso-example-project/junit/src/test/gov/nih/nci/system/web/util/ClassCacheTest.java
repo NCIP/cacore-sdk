@@ -47,6 +47,14 @@ public class ClassCacheTest extends TestCase {
 		assertEquals(136, qualifiedClassNames.size());
 	}
 
+	public void testFieldNamesForPendant() {
+		List<String> fieldNames = classCache
+				.getAllFieldNames("gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin.Pendant");
+		Iterator<String> iterator = fieldNames.iterator();
+		assertEquals("id", iterator.next());
+		assertEquals("shape", iterator.next());
+	}
+	
 	public void testFieldNamesForAClass() {
 		List<String> fieldNames = classCache
 				.getAllFieldNames("gov.nih.nci.cacoresdk.domain.manytomany.unidirectional.Author");
@@ -60,7 +68,6 @@ public class ClassCacheTest extends TestCase {
 		assertEquals(3, fields.length);
 	}
 
-	@SuppressWarnings("unused")
 	public void testSearchableFieldForAClass() {
 		try {
 			Class<? extends Object> klass = classCache
@@ -73,8 +80,6 @@ public class ClassCacheTest extends TestCase {
 				if (classCache.isSearchable(fieldType)) {
 					searchableFields.add(fields[i]);
 				}
-			}
-			for (Field field : searchableFields) {
 			}
 		} catch (ClassNotFoundException ex) {
 			fail(ex.getMessage());
@@ -108,6 +113,11 @@ public class ClassCacheTest extends TestCase {
 	
 	public void testCreateMapOfSearchFieldsForAPersistentClassDsetAdType() {
 		String objectClassName = "gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType";
+		processOutput(cfg, objectClassName);
+	}
+	
+	public void testCreateMapOfSearchFieldsForAPersistentClassDsetTelType() {
+		String objectClassName = "gov.nih.nci.cacoresdk.domain.other.datatype.DsetTelDataType";
 		processOutput(cfg, objectClassName);
 	}
 	
