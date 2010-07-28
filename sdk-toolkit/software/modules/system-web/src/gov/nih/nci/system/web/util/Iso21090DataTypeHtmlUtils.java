@@ -176,12 +176,13 @@ public class Iso21090DataTypeHtmlUtils {
 	private static String getHTML_AD(List<Object> searchableFields) {
 		StringBuffer sb = new StringBuffer();
 		
+		int counter = 0;
 		for(Object fieldHashMap: searchableFields){
 			if (fieldHashMap instanceof java.util.HashMap){
 				for (Object searchableComplexField : ((HashMap)fieldHashMap).values()){
 					sb.append("<tr>");
 					sb.append("  <td class=\"isoFormLabel\">Address Part (ADXP):</td>");
-					sb.append("  <td class=\"isoFormField\">").append(getHtmlFor("part", "ADXP",(List<Object>)searchableComplexField)).append("</td>");
+					sb.append("  <td class=\"isoFormField\">").append(getHtmlFor("part" + counter++, "ADXP",(List<Object>)searchableComplexField)).append("</td>");
 					sb.append("</tr>");
 				}
 			} else {
