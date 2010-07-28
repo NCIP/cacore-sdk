@@ -800,7 +800,7 @@ public class ClassCache implements InitializingBean{
 					discriminatorMap.put(pklass.getClassName(), identifier);
 				}
 			}
-/*			if (dao instanceof ORMDAOImpl) {
+			if (dao instanceof ORMDAOImpl) {
 				Configuration cfg = ((ORMDAOImpl) dao).getConfig();
 				for (String className : allClassNames) {
 					Map<String, Map<String, List<Object>>> tempSearchFieldForObject = getMapOfSearchFields(
@@ -808,7 +808,7 @@ public class ClassCache implements InitializingBean{
 					if (tempSearchFieldForObject != null)
 						searchableFieldsMap.putAll(tempSearchFieldForObject);
 				}		
-			}*/
+			}
 		}
 
 		allPackageNamesCache = new ArrayList<String>(tmpPackageNames);
