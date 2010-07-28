@@ -1,5 +1,7 @@
 package gov.nih.nci.system.web.struts.action;
 
+import gov.nih.nci.system.util.SystemConstant;
+
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -7,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -129,11 +132,7 @@ public class Result extends BaseActionSupport {
 		StringBuilder sb = new StringBuilder();
 		Enumeration<String> parameters = request.getParameterNames();
 		
-		Map<String, ArrayList<HashMap<String,String>>> isoDataTypeNodes = new HashMap<String, ArrayList<HashMap<String,String>>>();
-		String isoParamPrefix = null;
-		String isoParamKey = null;
-		
-		ArrayList<HashMap<String,String>> nodeElements = null;
+		Map<String, Map<String, List<Object>>> isoDataTypeNodes = new HashMap<String, Map<String, List<Object>>>();
 		
  		while(parameters.hasMoreElements())
  		{
@@ -147,25 +146,7 @@ public class Result extends BaseActionSupport {
 					System.out.println("parameterValue: " + parameterValue);
 
 					if (parameterName.indexOf('.') > 0) { // ISO data type parameter
-						
-						isoParamPrefix =  parameterName.substring(0, parameterName.lastIndexOf('.'));
-						System.out.println("isoParamPrefix: " + isoParamPrefix);
-						
-						nodeElements = isoDataTypeNodes.get(isoParamPrefix);
-						isoParamKey = parameterName.substring(parameterName.lastIndexOf('.')+1);
-						System.out.println("ISO data type param key: " + isoParamKey);
-						if (nodeElements != null){
-							HashMap<String,String> nodeKeyValueMap = new HashMap<String,String>();
-							nodeKeyValueMap.put(isoParamKey, parameterValue);
-							nodeElements.add(nodeKeyValueMap);
-							isoDataTypeNodes.put(isoParamPrefix,nodeElements);
-						} else {
-							HashMap<String,String> nodeKeyValueMap = new HashMap<String,String>();
-							nodeKeyValueMap.put(isoParamKey, parameterValue);
-							nodeElements = new ArrayList<HashMap<String,String>>();
-							nodeElements.add(nodeKeyValueMap);
-							isoDataTypeNodes.put(isoParamPrefix,nodeElements);
-						}
+						saveIsoNode(isoDataTypeNodes, parameterName, parameterValue);
 					} else { // non-ISO data type parameter
 						sb.append("[@").append(parameterName).append("=")
 								.append(parameterValue).append("]");
@@ -176,34 +157,80 @@ public class Result extends BaseActionSupport {
  		
  		Set<String> isoDataTypeNodeNames = isoDataTypeNodes.keySet();
  		Iterator iter = isoDataTypeNodeNames.iterator();
-
+ 		String nodeName = null;
  		while (iter.hasNext()){
- 			isoParamPrefix = (String)iter.next();
- 			System.out.println("key: " + isoParamPrefix);
- 			
- 			String[] isoDataTypeParameters = isoParamPrefix.split("\\.");
- 			
- 			for(String isoDataTypeParameter : isoDataTypeParameters){
- 				sb.append("[@").append(isoDataTypeParameter).append("=");
- 			}
- 			
- 			for(HashMap<String,String> nodeElement : isoDataTypeNodes.get(isoParamPrefix)){
- 		 		Set<String> isoDataTypeNodeName = nodeElement.keySet();
- 		 		Iterator iter2 = isoDataTypeNodeName.iterator();
- 		 		while (iter2.hasNext()){
- 		 			String nodeName = (String)iter2.next();
- 		 			sb.append("[@").append(nodeName).append("=").append(nodeElement.get(nodeName)).append("]");
- 		 		}
- 			}
- 			
- 			for(int i=0;i<isoDataTypeParameters.length;i++){
- 				sb.append("]");
- 			}
+ 			nodeName = (String)iter.next();
+ 			sb.append("[@").append(nodeName).append("=");
+ 			generateIsoQuery(isoDataTypeNodes.get(nodeName), sb);
+ 			sb.append("]");
  		}
+ 		
+ 		//Change 'part#' references to just 'part'
+ 		return sb.toString().replaceAll("part\\d", "part");
 
- 		return sb.toString();
+	}
+
+	private void saveIsoNode(Map<String, Map<String, List<Object>>> isoDataTypeNodes, String parameterName, String parameterValue){
+
+		String isoParamPrefix =  parameterName.substring(0, parameterName.lastIndexOf('.'));
+		System.out.println("isoParamPrefix: " + isoParamPrefix);
+		String[] isoParentNodes = isoParamPrefix.split("\\.");
+		System.out.println("isoParentNodes: " + isoParentNodes);
+
+		Object childNode = null;
+		Object parentNode = isoDataTypeNodes.get(isoParentNodes[0]);
+		if (parentNode==null){ // initialize
+			Map<String,List<Object>> map = new HashMap<String,List<Object>>();
+			isoDataTypeNodes.put(isoParentNodes[0],map);
+			parentNode = isoDataTypeNodes.get(isoParentNodes[0]);
+		}
+		for(int i=1; i < isoParentNodes.length; i++){
+
+			String isoParentNodeName = isoParentNodes[i]; 
+			childNode = ((Map<String, List<Object>>)parentNode).get(isoParentNodeName);
+
+			if (childNode==null){
+				Map<String,List<Object>> map = new HashMap<String,List<Object>>();
+				ArrayList<Object> tempList = new ArrayList<Object>();
+				tempList.add(map);
+				((Map<String, List<Object>>)parentNode).put(isoParentNodeName,tempList);
+				parentNode = map;
+			} else {
+				parentNode = ((ArrayList<Object>)childNode).get(0);
+			}
+		}
+
+		String isoParamKey = parameterName.substring(parameterName.lastIndexOf('.')+1);
+		System.out.println("isoParamKey: " + isoParamKey);
+		System.out.println("parameterValue: " + parameterValue);
+
+		List<Object> nodeList = new ArrayList<Object>();
+		nodeList.add(parameterValue);
+		((Map<String, List<Object>>)parentNode).put(isoParamKey,nodeList);
 	}
 	
+	private void generateIsoQuery(Map<String, List<Object>> isoDataTypeNode, StringBuilder query){
+		String parentNodeName = null;
+ 		Set<String> isoParentNodeNames = isoDataTypeNode.keySet();
+ 		Iterator iter = isoParentNodeNames.iterator();
+ 		while (iter.hasNext()){
+ 			parentNodeName = (String)iter.next();
+ 			System.out.println("key: " + parentNodeName);
+ 			
+ 			query.append("[@").append(parentNodeName).append("=");
+
+ 			List<Object> valueList = isoDataTypeNode.get(parentNodeName);
+ 			for(Object nodeElement : valueList){
+ 				if (nodeElement instanceof String){
+ 					query.append((String)nodeElement).append("]");
+ 				} else if (nodeElement instanceof java.util.HashMap){
+ 					generateIsoQuery((Map<String, List<Object>>)nodeElement, query);
+ 		 			query.append("]");
+ 				}
+ 			}
+ 		}
+	}
+
 }
 
 
