@@ -190,7 +190,12 @@ public class HttpUtilsTest extends TestCase{
 	
 	public void testISOComplexDsetAdDataSetType() throws Exception{
 		String queryText="query=DsetAdDataType[@value1=[@item=[@part=[@value=106 Jefferson Street][@type=AL]]]]";
-		process(queryText,"test28");
+		process(queryText,"test52");
+	}
+	
+	public void testISOComplexDsetAdDataSetType_6() throws Exception{
+		String queryText="query=DsetAdDataType&DsetAdDataType[@value6=[@item=[@part=[@value=ADXP_DAL_VALUE12][@type=DAL]]]]";
+		process(queryText,"test53");
 	}
 	
 	public void testISOComplexDsetCdDataSetType() throws Exception{
@@ -335,8 +340,12 @@ public class HttpUtilsTest extends TestCase{
 		String queryText = "query=EnDataType&EnDataType[@value2=[@part=[@value=Mr. John Doe Jr1.][@type=FAM]]]";
 		process(queryText, "test50");
 	}
+	
+	public void testISOComplexEnDataType_2() throws Exception {
+		String queryText = "query=EnDataType&EnDataType[@value1=[@part=[@value=Mr. John Doe Jr1.][@type=FAM]]][@value2=[@part=[@value=Mr. John Doe Jr1.][@type=FAM]]]";
+		process(queryText, "test50");
+	}
 
-	// failure,need to find solution
 	public void testISOComplexDsetAdDataSetType2() throws Exception {
 		String queryText = "query=DsetAdDataType[@value5=[@item=[@part=[@value=106 Jefferson Street][@type=AL]][@part=[@value=Rockville][@type=CTY]]]]";
 		process(queryText, "test51");

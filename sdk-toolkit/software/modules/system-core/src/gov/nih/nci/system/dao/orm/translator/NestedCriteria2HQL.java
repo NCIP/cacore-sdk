@@ -888,8 +888,9 @@ public class NestedCriteria2HQL {
 			String partNameMatch = entityNamePartType.toString();
 			if (keySet.contains(partNameMatch)) {
 				String partName = map.get(partNameMatch);
-				String componentPartName = partName.substring(
-						partName.length() - 2, partName.length());
+				int index = partName.indexOf('_');
+				String componentPartName = partName.substring(index,
+						partName.length());
 				tempNewQuery.append(componentPartName);
 				String parentheses = "";
 				Value persistChildvalue = locateComponent(componentValue,
@@ -949,8 +950,9 @@ public class NestedCriteria2HQL {
 					}
 					Value persistChildvalue = locateComponent(componentValue,
 							partName);
-					String componentPartName = partName.substring(
-							partName.length() - 2, partName.length());
+					int index = partName.indexOf('_');
+					String componentPartName = partName.substring(index,
+							partName.length());
 					tempNewQuery.append(componentPartName);
 					String parentheses = "";
 					generateISOWhereQuery(object, tempNewQuery,
