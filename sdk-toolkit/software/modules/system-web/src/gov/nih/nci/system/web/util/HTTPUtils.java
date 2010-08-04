@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
-import java.io.StringWriter;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -41,6 +40,8 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.PropertyException;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
@@ -52,12 +53,8 @@ import org.iso._21090.ANY;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Namespace;
-import org.jdom.output.Format;
-import org.jdom.output.XMLOutputter;
+import org.jdom.input.DOMBuilder;
 import org.jdom.transform.JDOMSource;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.core.io.ClassPathResource;
 
 /**
  * HTTPUtils presents various methods to generate search criteria from xquery like syntax.
@@ -339,12 +336,6 @@ public class HTTPUtils implements Serializable{
 	 */
 	private String getSearchClassNames(String searchClasses, String packageName){
 		String path = "";
-
-		/**
-    if(packageName != null && !(targetClassName.indexOf(SystemConstant.DOT)>0) && (targetClassName.indexOf(",")<0)){
-        targetClassName = packageName +SystemConstant.DOT+targetClassName;
-    }
-		 **/
 		String delimiter = null;
 		if(searchClasses.indexOf(SystemConstant.FORWARD_SLASH)>0){
 			delimiter = SystemConstant.FORWARD_SLASH_STR;
@@ -456,7 +447,6 @@ public class HTTPUtils implements Serializable{
 		if(targetResult.indexOf(SystemConstant.DOT)<0){
 			targetResult = this.getPackageName(targetResult)+ SystemConstant.DOT +targetResult;
 		}
-
 		Element queryClass = new Element("class").setText(targetResult);
 		Element queryElement = new Element("query").addContent(queryString).addContent(queryClass);
 		queryRequest.addContent(queryElement);
@@ -486,7 +476,6 @@ public class HTTPUtils implements Serializable{
 		xmlElement.addContent(new Element("recordCounter").setText(counter));
 
 		if(resultSet.length >0){
-
 			if(pageSize != null){
 				rowCount = Integer.parseInt(pageSize);
 			}
@@ -512,15 +501,12 @@ public class HTTPUtils implements Serializable{
 					end = size;
 				}
 			}
-
 			String recordNum = "";
-
 			Set<String> resultClass = new HashSet<String>();
 			List<String> classes = new ArrayList<String>();
 			for(int x=start; x<end; x++){
 				resultClass.add(resultSet[x].getClass().getName());
 			}
-
 			if(resultClass.size() >1){
 				Object lists[] = new Object[resultClass.size()];
 				int number =0;
@@ -560,7 +546,6 @@ public class HTTPUtils implements Serializable{
 
 				}
 			}
-
 			if((index - resultCount)>=0){
 				nextStartIndex = index - resultCount;
 				String preLink = servletName +"?query="+targetClassName + SystemConstant.AMPERSAND + criteria +"&startIndex="+nextStartIndex+"&resultCounter="+resultCounter;
@@ -586,18 +571,13 @@ public class HTTPUtils implements Serializable{
 				Element pElement = new Element("page").setAttribute("number",page).setAttribute("type","simple",namespace).setAttribute("href",pageLink,namespace).setText(pageText);
 				pagesElement.addContent(pElement);
 			}
-
 			xmlElement.addContent(pagesElement);
-
 			httpQuery.addContent(xmlElement);
 			xmlElement.addContent(new Element("recordCounter").setText(counter));
-
 		}
 		else{
-
 			xmlElement.addContent(new Element("recordCounter").setText("0"));
 		}
-
 		if((pageNumber -1)> 0){
 			index += ((pageNumber -1)* rowCount) + 1;
 		}
@@ -608,7 +588,6 @@ public class HTTPUtils implements Serializable{
 		if(endRecordNum > totalNumRecords){
 			endRecordNum = totalNumRecords;
 		}
-
 		String startCounter = String.valueOf(index);
 		String endCounter = String.valueOf(endRecordNum);
 		Element startElement = new Element("start").setText(startCounter);
@@ -616,7 +595,6 @@ public class HTTPUtils implements Serializable{
 		xmlElement.addContent(startElement).addContent(endElement);
 
 		org.jdom.Document xmlDoc = new org.jdom.Document(httpQuery);
-
 		return xmlDoc;
 	}
 
@@ -650,125 +628,130 @@ public class HTTPUtils implements Serializable{
 
 	/**
 	 * Generates an Element for a given result object
-	 * @param result - an instance of a class
-	 * @param recordNum - specifies the record number in the result set
+	 * 
+	 * @param result
+	 *            - an instance of a class
+	 * @param recordNum
+	 *            - specifies the record number in the result set
 	 * @return
 	 * @throws Exception
 	 */
-	private Element getElement(Object result, String recordNum) throws Exception{
+	@SuppressWarnings("rawtypes")
+	private Element getElement(Object result, String recordNum)
+			throws Exception {
 
-
-		Element classElement = new Element("class").setAttribute("name",result.getClass().getName()).setAttribute("recordNumber",recordNum);
+		Element classElement = new Element("class").setAttribute("name",
+				result.getClass().getName()).setAttribute("recordNumber",
+				recordNum);
 		String criteriaIdValue = getCriteriaIdValue(result);
-
 		String link = null;
-
 		Field[] fields = classCache.getAllFields(result.getClass());
-		for(int f=0; f<fields.length; f++){
+		for (int f = 0; f < fields.length; f++) {
 			String criteriaBean = result.getClass().getName();
 			Field field = fields[f];
 			String fieldName = field.getName();
-
-
-			if(fieldName.equalsIgnoreCase("serialVersionUID")){
+			if (fieldName.equalsIgnoreCase("serialVersionUID")) {
 				continue;
 			}
-			Element fieldElement = new Element("field").setAttribute("name", fieldName);
-
+			Element fieldElement = new Element("field").setAttribute("name",
+					fieldName);
 			String fieldType = field.getType().getName();
 			String targetBean = null;
-
-			if(!(fieldType.startsWith("java") && !(fieldType.endsWith("Collection")) || field.getType().isPrimitive())){
-				if(field.getType().getName().endsWith("Collection") ){
+			if (!(fieldType.startsWith("java")
+					&& !(fieldType.endsWith("Collection")) || field.getType()
+					.isPrimitive())) {
+				if (field.getType().getName().endsWith("Collection")) {
 					SearchUtils searchUtils = new SearchUtils(classCache);
-					if(searchUtils.getTargetClassName(result.getClass().getName(),fieldName)!=null){
-						targetBean = searchUtils.getTargetClassName(result.getClass().getName(),fieldName);
-						
-						//handle primitive collections
-						if (Class.forName(targetBean).isPrimitive() ||
-								targetBean.startsWith("java")){
+					if (searchUtils.getTargetClassName(result.getClass()
+							.getName(), fieldName) != null) {
+						targetBean = searchUtils.getTargetClassName(result
+								.getClass().getName(), fieldName);
+						// handle primitive collections
+						if (Class.forName(targetBean).isPrimitive()
+								|| targetBean.startsWith("java")) {
 							targetBean = null;
 						}
 					}
-				}
-				else if(locateClass(fieldType)){
+				} else if (locateClass(fieldType)) {
 					targetBean = fieldType;
 				}
-
 			}
-
-			if(targetBean != null){
-				if(result.getClass().getPackage().equals(Class.forName(targetBean).getPackage())){
-					targetBean = targetBean.substring(targetBean.lastIndexOf(SystemConstant.DOT)+1);
-					if(criteriaBean.indexOf(SystemConstant.DOT)>0){
-						criteriaBean = criteriaBean.substring(criteriaBean.lastIndexOf(SystemConstant.DOT)+1);
+			if (targetBean != null) {
+				if (result.getClass().getPackage()
+						.equals(Class.forName(targetBean).getPackage())) {
+					targetBean = targetBean.substring(targetBean
+							.lastIndexOf(SystemConstant.DOT) + 1);
+					if (criteriaBean.indexOf(SystemConstant.DOT) > 0) {
+						criteriaBean = criteriaBean.substring(criteriaBean
+								.lastIndexOf(SystemConstant.DOT) + 1);
 					}
 				}
-				String methodName = "get"+  fieldName.substring(0,1).toUpperCase() + fieldName.substring(1);
-	
-				link = servletName + "?query=" +  targetBean + SystemConstant.AMPERSAND +criteriaBean + SystemConstant.LEFT_BRACKET+ criteriaIdValue+SystemConstant.RIGHT_BRACKET + 
-						SystemConstant.AMPERSAND + "roleName=" + fieldName;
-				
-				fieldElement.setAttribute("type","simple",namespace).setAttribute("href",link,namespace).setText(methodName);
+				String methodName = "get"
+						+ fieldName.substring(0, 1).toUpperCase()
+						+ fieldName.substring(1);
 
+				link = servletName + "?query=" + targetBean
+						+ SystemConstant.AMPERSAND + criteriaBean
+						+ SystemConstant.LEFT_BRACKET + criteriaIdValue
+						+ SystemConstant.RIGHT_BRACKET
+						+ SystemConstant.AMPERSAND + "roleName=" + fieldName;
 
-			}
-
-			else{
+				fieldElement.setAttribute("type", "simple", namespace)
+						.setAttribute("href", link, namespace)
+						.setText(methodName);
+			}else {
 				String fieldValue = " ";
 				Object value = null;
+				try {
+					if (fieldType.indexOf("Collection") > 0
+							|| fieldType.endsWith("HashSet")
+							|| fieldType.endsWith("ArrayList")
+							|| fieldType.indexOf("Vector") > 0) {
 
-				try{
-					if(fieldType.indexOf("Collection")>0 || fieldType.endsWith("HashSet") || fieldType.endsWith("ArrayList") || fieldType.indexOf("Vector")>0){
-						
-						if (((Collection)fields[f].get(result)).size() > 0) {
-							
-							Iterator it = ((Collection)fields[f].get(result)).iterator();
+						if (((Collection) fields[f].get(result)).size() > 0) {
+
+							Iterator it = ((Collection) fields[f].get(result))
+									.iterator();
 							fieldValue = String.valueOf(it.next());
-							while(it.hasNext()){
-								fieldValue += "; "+ String.valueOf(it.next());
+							while (it.hasNext()) {
+								fieldValue += "; " + String.valueOf(it.next());
 							}
 						}
-						
-						if(fieldValue != null){
+						if (fieldValue != null) {
 							fieldElement.setText(fieldValue);
-						}
-						else{
+						} else {
 							fieldElement.setText(" ");
 						}
-
+					} else {
+						Object tempFieldValue = this.getFieldValue(field,
+								result);
+						if (tempFieldValue != null) {
+							if(tempFieldValue instanceof Document){
+								Document childDocument=(Document)tempFieldValue;
+								fieldElement.addContent(childDocument.detachRootElement());
+							}else{
+								value = tempFieldValue;
+								fieldValue = String.valueOf(value);
+								fieldElement.addContent(fieldValue);
+							}
+						}						
 					}
-					else{
-						Object tempFieldValue = this.getFieldValue(field,result);
-						if(tempFieldValue!= null){
-							value = tempFieldValue;
-							fieldValue = String.valueOf(value);
-						}
-						fieldElement.setText(fieldValue);
-					}
-
-				}catch(Exception ex){
+				} catch (Exception ex) {
 					fieldValue = " ";
-					value = getFieldValue(field,result);
+					value = getFieldValue(field, result);
 					fieldValue = String.valueOf(value);
 					String temp = null;
-					for(int s=0; s< fieldValue.length(); s++){
+					for (int s = 0; s < fieldValue.length(); s++) {
 						String charValue = String.valueOf(fieldValue.charAt(s));
-						try{
+						try {
 							temp += charValue;
-						}catch(Exception e){
+						} catch (Exception e) {
 							temp += " ";
 						}
 					}
-					if(temp != null){
-						fieldValue = temp;
-					}
-
 					fieldElement.setText(fieldValue);
 				}
-
 			}
-
 			classElement.addContent(fieldElement);
 		}
 		return classElement;
@@ -876,15 +859,22 @@ public class HTTPUtils implements Serializable{
 		Object value= field.get(domain);		
 		Marshaller isoMarshaller = getJaxbMarshaller(field.getType().getName());
 		if (isoMarshaller != null) {
-			StringWriter stringWriter = new StringWriter();
 			XmlAdapter<ANY, Any> jaxbAdapter = jaxbISOAdapterMap.get(field
 					.getGenericType().toString());
 			if (jaxbAdapter == null) {
 				jaxbAdapter = jaxbISOAdapterMap.get("defaultAdapter");
 			}
 			org.iso._21090.ANY anyJaxb = jaxbAdapter.marshal((Any) value);
-			isoMarshaller.marshal(anyJaxb, stringWriter);
-			value = stringWriter;
+			
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+			dbf.setNamespaceAware(true);
+			DocumentBuilder db = dbf.newDocumentBuilder();
+			org.w3c.dom.Document domDoc = db.newDocument();
+			isoMarshaller.marshal(anyJaxb, domDoc);	
+
+			DOMBuilder builder = new DOMBuilder();
+	        org.jdom.Document jdomDoc = builder.build(domDoc);
+			value = jdomDoc;
 		}
 		return value;
 	}
@@ -897,53 +887,51 @@ public class HTTPUtils implements Serializable{
 	
 	/**
 	 * Returns an array of result objects
+	 * 
 	 * @return
 	 * @throws Exception
 	 */
-	public Object[] getResultSet()throws Exception{
-
+	@SuppressWarnings("rawtypes")
+	public Object[] getResultSet() throws Exception {
 		results = new ArrayList();
 		int index = 0;
 		int counter = 1000;
-
-		try{
-			String searchPath = getSearchClassNames(targetClassName, targetPackageName);
+		try {
+			String searchPath = getSearchClassNames(targetClassName,
+					targetPackageName);
 			List criteriaList = getSearchCriteriaList(criteria);
-			Object criteria = buildSearchCriteria(targetPackageName, criteriaList );
+			Object criteria = buildSearchCriteria(targetPackageName,
+					criteriaList);
 
-			if(startIndex != null || !startIndex.equals("0")){
+			if (startIndex != null || !startIndex.equals("0")) {
 				index = Integer.parseInt(startIndex);
 			}
-			if(resultCounter != null){
+			if (resultCounter != null) {
 				counter = Integer.parseInt(resultCounter);
 			}
-			if (roleName != null){
+			if (roleName != null) {
 				results = applicationService.getAssociation(criteria, roleName);
 			} else {
 				results = applicationService.search(searchPath, criteria);
 			}
 
-			if (results != null && (results instanceof ListProxy)){
-				((ListProxy)results).setAppService(applicationService);
+			if (results != null && (results instanceof ListProxy)) {
+				((ListProxy) results).setAppService(applicationService);
 			}
-		}catch(Exception ex){
+		} catch (Exception ex) {
 			log.error("Exception: ", ex);
 			throw ex;
 		}
 
-
-		if((counter + index) > results.size()){
+		if ((counter + index) > results.size()) {
 			counter = results.size();
-		}
-		else{
+		} else {
 			counter += index;
 		}
-
 		Object[] resultSet = new Object[counter];
-		for(int i = index, s=0; i< counter; i++,s++){
-			resultSet[s]= results.get(i);
+		for (int i = index, s = 0; i < counter; i++, s++) {
+			resultSet[s] = results.get(i);
 		}
-
 		return resultSet;
 	}
 
@@ -975,14 +963,16 @@ public class HTTPUtils implements Serializable{
 	public void transform(Document xmlDoc, InputStream styleIn, OutputStream out)
 			throws Exception {
 
-        if (styleIn == null) throw new ServletException("No stylesheet configued");
-        
+		if (styleIn == null)
+			throw new ServletException("No stylesheet configued");
+
 		JDOMSource source = new JDOMSource(xmlDoc);
 		StreamResult result = new StreamResult(out);
-		
+
 		try {
 			TransformerFactory tFactory = TransformerFactory.newInstance();
-			Templates stylesheet = tFactory.newTemplates(new StreamSource(styleIn));
+			Templates stylesheet = tFactory.newTemplates(new StreamSource(
+					styleIn));
 			Transformer processor = stylesheet.newTransformer();
 			processor.transform(source, result);
 
