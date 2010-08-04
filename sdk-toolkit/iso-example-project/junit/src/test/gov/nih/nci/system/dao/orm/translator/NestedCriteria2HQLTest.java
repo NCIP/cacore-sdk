@@ -129,6 +129,31 @@ public class NestedCriteria2HQLTest extends TestCase {
 		assertEquals(expectedHQL, hqlCriteria.getHqlString());
 	}
 	
+	public void testEnDataTypeValue2AndValue1Exception() throws Exception {
+		NestedCriteria criteria = new NestedCriteria();
+		criteria.setSourceObjectName("gov.nih.nci.cacoresdk.domain.other.datatype.EnDataType");
+		criteria.setTargetObjectName("gov.nih.nci.cacoresdk.domain.other.datatype.EnDataType");
+		EnDataType enDataType = new EnDataType();
+		En en = getEn();
+		en.getPart().iterator().next().setType(EntityNamePartType.GIV);
+		enDataType.setValue1(en);
+		enDataType.setValue2(getEn());
+		List<EnDataType> sourceObjectList = new ArrayList<EnDataType>();
+		sourceObjectList.add(enDataType);
+		criteria.setSourceObjectList(sourceObjectList);
+		NestedCriteria2HQL criteria2hql = new NestedCriteria2HQL(criteria,
+				configurationHolder.getConfiguration(), true);
+		try {
+			criteria2hql.translate();
+			fail("Must throw an Exception");
+		} catch (Exception ex) {
+			assertEquals(
+					"No matching found for the input 'type' with the mapped-constant specified in EA-Model",
+					ex.getMessage());
+		}
+	}
+	
+	
 	public void testEnDataTypeValue4() throws Exception {
 		NestedCriteria criteria = new NestedCriteria();
 		criteria.setSourceObjectName("gov.nih.nci.cacoresdk.domain.other.datatype.EnDataType");
