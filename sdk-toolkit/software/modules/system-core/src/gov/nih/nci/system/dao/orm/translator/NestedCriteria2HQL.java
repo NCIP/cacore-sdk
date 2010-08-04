@@ -760,6 +760,8 @@ public class NestedCriteria2HQL {
 									aliasSetBuffer, rootKlassAttr, value,
 									newQuery);
 						} else {
+							if (fieldName.equals("partRestriction"))
+								continue;
 							Value persistChildvalue = locateComponent(
 									componentValue, fieldName);
 							if (isoObject & !isEnumObject) {

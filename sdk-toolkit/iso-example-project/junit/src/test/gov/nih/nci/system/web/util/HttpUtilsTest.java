@@ -341,14 +341,24 @@ public class HttpUtilsTest extends TestCase{
 		process(queryText, "test50");
 	}
 	
+	public void testISOComplexEnPnDataType() throws Exception {
+		String queryText = "query=EnPnDataType&EnPnDataType[@value1=[@part=[@value=Mr. John Doe Double Jr.][@type=FAM]]]";
+		process(queryText, "test51");
+	}
+	
+	public void testISOComplexEnOnDataType() throws Exception {
+		String queryText = "query=EnOnDataType&EnOnDataType[@value1=[@part=[@value=Mr. John Doe Double Jr.][@type=FAM]]]";
+		process(queryText, "test51");
+	}
+	
 	public void testISOComplexEnDataType_2() throws Exception {
 		String queryText = "query=EnDataType&EnDataType[@value1=[@part=[@value=Mr. John Doe Jr1.][@type=FAM]]][@value2=[@part=[@value=Mr. John Doe Jr1.][@type=FAM]]]";
-		process(queryText, "test50");
+		process(queryText, "test52");
 	}
 
 	public void testISOComplexDsetAdDataSetType2() throws Exception {
 		String queryText = "query=DsetAdDataType[@value5=[@item=[@part=[@value=106 Jefferson Street][@type=AL]][@part=[@value=Rockville][@type=CTY]]]]";
-		process(queryText, "test51");
+		process(queryText, "test53");
 	}
 	                                                                                                                    
 	                                                                                                                    

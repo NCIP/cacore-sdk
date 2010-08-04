@@ -5,7 +5,6 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import gov.nih.nci.cacoresdk.domain.inheritance.childwithassociation.Credit;
 
@@ -14,6 +13,7 @@ import gov.nih.nci.cacoresdk.domain.other.datatype.CdDataType;
 import gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType;
 import gov.nih.nci.cacoresdk.domain.other.datatype.DsetCdDataType;
 import gov.nih.nci.cacoresdk.domain.other.datatype.EnDataType;
+import gov.nih.nci.cacoresdk.domain.other.datatype.EnOnDataType;
 import gov.nih.nci.cacoresdk.domain.other.datatype.IvlIntDataType;
 import gov.nih.nci.cacoresdk.domain.other.datatype.IvlRealDataType;
 import gov.nih.nci.cacoresdk.domain.other.datatype.IvlTsDataType;
@@ -363,6 +363,21 @@ public class SearchUtilsTest extends TestCase {
 			assertNotNull(next2.getCodeSystem());
 			assertNotNull(next2.getValue());
 			assertEquals(next2.getType().name(), "ADL");
+		} catch (Exception ex) {
+			String message=getStackTrace(ex);
+			fail(message);
+		}
+	}
+	
+	public void testISOComplexEnOnDataType() throws Exception{
+		List<String> criteriaList=new ArrayList<String>();
+		String queryText="EnOnDataType[@value1=[@part=[@value=1][@type=FAM]]]";
+		criteriaList.add(queryText);
+		try {
+			EnOnDataType enDataType=(EnOnDataType)searchUtils.buildSearchCriteria("gov.nih.nci.cacoresdk.domain.other.datatype",criteriaList);
+			Enxp next = enDataType.getValue1().getPart().iterator().next();
+			assertNotNull(next.getValue());
+			assertNotNull(next.getType());
 		} catch (Exception ex) {
 			String message=getStackTrace(ex);
 			fail(message);
