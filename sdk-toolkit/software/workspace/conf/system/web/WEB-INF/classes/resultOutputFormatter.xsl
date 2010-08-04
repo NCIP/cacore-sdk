@@ -391,26 +391,37 @@
 					</td>
 				</tr>
 			</xsl:if>
-			<xsl:for-each select="node()">
-				<tr class="dataRowLight">
-					<td class="dataCellText" nowrap="off">
-						<table width="100%" border="0" cellspacing="0" cellpadding="0">
-							<tr class="dataRowLight">
-								<td class="dataCellText" nowrap="off">
-									<xsl:value-of select="name()" />
-									<xsl:for-each select="./@*">
-										<xsl:text>&nbsp;</xsl:text>
+			<xsl:if test="*">
+				<xsl:for-each select="node()">
+					<tr class="dataRowLight">
+						<td class="dataCellText" nowrap="off">
+							<table width="100%" border="0" cellspacing="0" cellpadding="0">
+								<tr class="dataRowLight">
+									<td class="dataCellText" nowrap="off">
 										<xsl:value-of select="name()" />
-										<xsl:text>=</xsl:text>
-										<xsl:value-of select="."></xsl:value-of>
-									</xsl:for-each>
-									<xsl:call-template name="fieldNode" />
-								</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-			</xsl:for-each>
+										<table width="100%" border="0" cellspacing="0"
+											cellpadding="0">
+											<tr class="dataRowLight">
+												<td class="dataCellText" nowrap="off">
+													<xsl:for-each select="./@*">
+														<xsl:value-of select="name()" />
+														<xsl:text>=</xsl:text>
+														<xsl:value-of select="."></xsl:value-of>
+														<xsl:if test="position()!=last()">
+															<xsl:text>,</xsl:text>
+														</xsl:if>
+													</xsl:for-each>
+													<xsl:call-template name="fieldNode" />
+												</td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</xsl:for-each>
+			</xsl:if>
 		</table>
 	</xsl:template>
 </xsl:stylesheet>
