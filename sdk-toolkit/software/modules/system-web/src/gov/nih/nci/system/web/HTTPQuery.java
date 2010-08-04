@@ -180,7 +180,6 @@ public class HTTPQuery extends HttpServlet {
 		        response.setContentType("application/x-javascript");
 		        if (httpUtils.getTargetPackageName() != null) {
 		            printDocument(domDoc, jsonStyleSheet, out,httpUtils);
-		            
 		        }
 			} else {
 				response.setContentType("text/html");
@@ -319,9 +318,8 @@ public class HTTPQuery extends HttpServlet {
 	 * @return
 	 * @throws Exception
 	 */
-	public void printDocument(Document doc, String styleSheet, OutputStream out,HTTPUtils httpUtils)
-			throws Exception {
-
+	public void printDocument(Document doc, String styleSheet,
+			OutputStream out, HTTPUtils httpUtils) throws Exception {
 		try {
 			InputStream styleIn = Thread.currentThread()
 					.getContextClassLoader().getResourceAsStream(styleSheet);
@@ -333,7 +331,7 @@ public class HTTPQuery extends HttpServlet {
 			log.error(ex.getMessage());
 			throw new ServletException(ex.getMessage());
 		}
-	} 
+	}
 	
 	/**
 	 * Generates an XML or HTML document based on a given stylesheet

@@ -315,7 +315,7 @@
 												-
 											</xsl:when>
 											<xsl:otherwise>
-												<xsl:value-of select="." />
+												<xsl:call-template name="fieldNode"/>
 											</xsl:otherwise>
 										</xsl:choose>
 									</td>
@@ -382,4 +382,35 @@
 		</xsl:for-each>
 	</xsl:template>
 
+	<xsl:template name="fieldNode">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+			<xsl:if test="node()">
+				<tr class="dataRowLight">
+					<td class="dataCellText" nowrap="off">
+						<xsl:value-of select="." />
+					</td>
+				</tr>
+			</xsl:if>
+			<xsl:for-each select="node()">
+				<tr class="dataRowLight">
+					<td class="dataCellText" nowrap="off">
+						<table width="100%" border="0" cellspacing="0" cellpadding="0">
+							<tr class="dataRowLight">
+								<td class="dataCellText" nowrap="off">
+									<xsl:value-of select="name()" />
+									<xsl:for-each select="./@*">
+										<xsl:text>&nbsp;</xsl:text>
+										<xsl:value-of select="name()" />
+										<xsl:text>=</xsl:text>
+										<xsl:value-of select="."></xsl:value-of>
+									</xsl:for-each>
+									<xsl:call-template name="fieldNode" />
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</xsl:for-each>
+		</table>
+	</xsl:template>
 </xsl:stylesheet>
