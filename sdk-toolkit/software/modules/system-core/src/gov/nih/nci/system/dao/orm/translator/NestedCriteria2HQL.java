@@ -877,11 +877,10 @@ public class NestedCriteria2HQL {
 						&& innerNode.getName().equals("type")) {
 					ConstantNode constantNode = (ConstantNode) innerNode;
 					key = constantNode.getConstantValue();
+					map.put(key, value);
 					break;
 				}
 			}
-			if(key!=null)
-				map.put(key, value);
 		}
 		if (value == null) {
 			String exceptionMessage = "mapped-constant of 'Type' was not specified for "
