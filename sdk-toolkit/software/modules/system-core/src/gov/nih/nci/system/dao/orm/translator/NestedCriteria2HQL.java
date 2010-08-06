@@ -880,7 +880,8 @@ public class NestedCriteria2HQL {
 					break;
 				}
 			}
-			map.put(key, value);
+			if(key!=null)
+				map.put(key, value);
 		}
 		if (value == null) {
 			String exceptionMessage = "mapped-constant of 'Type' was not specified for "
