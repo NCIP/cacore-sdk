@@ -337,23 +337,33 @@ public class HttpUtilsTest extends TestCase{
 	}
 
 	public void testISOComplexEnDataType() throws Exception {
-		String queryText = "query=EnDataType&EnDataType[@value2=[@part=[@value=Mr. John Doe Jr1.][@type=FAM]]]";
+		String queryText = "query=gov.nih.nci.cacoresdk.domain.other.datatype.EnDataType&gov.nih.nci.cacoresdk.domain.other.datatype.EnDataType[@value1=[@part=[@value=Mr. John Doe Jr.][@type=FAM]]]";
 		process(queryText, "test50");
+	}
+	
+	public void testISOComplexEnDataType_2() throws Exception {
+		String queryText = "query=EnDataType&EnDataType[@value2=[@part=[@value=Mr. John Doe Jr1.][@type=FAM]]]";
+		process(queryText, "test51");
+	}
+	
+	public void testISOComplexEnDataType_3() throws Exception {
+		try {
+			String queryText = "query=EnDataType&EnDataType[@value3=[@part=[@code=MSD2][@type=FAM]]]";
+			process(queryText, "test51");
+			fail("must throw an exception");
+		} catch (Exception e) {
+			assertEquals("Error while executing nested search criteria query", e.getMessage());
+		}
 	}
 	
 	public void testISOComplexEnPnDataType() throws Exception {
 		String queryText = "query=EnPnDataType&EnPnDataType[@value1=[@part=[@value=Mr. John Doe Double Jr.][@type=FAM]]]";
-		process(queryText, "test51");
+		process(queryText, "test52");
 	}
 	
 	public void testISOComplexEnOnDataType() throws Exception {
 		String queryText = "query=EnOnDataType&EnOnDataType[@value1=[@part=[@value=Mr. John Doe Double Jr.][@type=FAM]]]";
-		process(queryText, "test51");
-	}
-	
-	public void testISOComplexEnDataType_2() throws Exception {
-		String queryText = "query=EnDataType&EnDataType[@value1=[@part=[@value=Mr. John Doe Jr1.][@type=FAM]]][@value2=[@part=[@value=Mr. John Doe Jr1.][@type=FAM]]]";
-		process(queryText, "test52");
+		process(queryText, "test53");
 	}
 
 	public void testISOComplexDsetAdDataSetType2() throws Exception {

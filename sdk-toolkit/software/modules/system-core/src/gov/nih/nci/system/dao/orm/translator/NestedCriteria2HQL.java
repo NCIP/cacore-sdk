@@ -863,9 +863,13 @@ public class NestedCriteria2HQL {
 				.getComplexNodeBean(rootKlassAttr);
 		List<Node> nodes = complexNode.getInnerNodes();
 		Map<String, String> map = new HashMap<String, String>();
+		String value=null;
 		for (Node node : nodes) {
+			if(node instanceof ConstantNode){
+				continue;
+			}
 			ComplexNode innerComplexNode = (ComplexNode) node;
-			String value = innerComplexNode.getName();
+			value = innerComplexNode.getName();
 			String key = null;
 			List<Node> innerNodes = innerComplexNode.getInnerNodes();
 			for (Node innerNode : innerNodes) {
@@ -876,12 +880,13 @@ public class NestedCriteria2HQL {
 					break;
 				}
 			}
-			if (value == null) {
-				throw new Exception("mapped-constant 'Type' not specified for "
-						+ rootKlassAttr + " in EA-Model.");
-			}
 			map.put(key, value);
-			break;
+		}
+		if (value == null) {
+			String exceptionMessage = "mapped-constant of 'Type' was not specified for "
+					+ rootKlassAttr + " in EA-Model.";
+			log.error(exceptionMessage);
+			throw new Exception(exceptionMessage);
 		}
 		Set<String> keySet = map.keySet();
 		for (Enxp enxp : valueList) {
@@ -901,8 +906,9 @@ public class NestedCriteria2HQL {
 						persistChildvalue, parentheses, queryAppender,
 						andCount++, aliasSetBuffer, rootKlassAttr);
 			} else {
-				throw new Exception(
-						"No matching found for the input 'type' with the mapped-constant specified in EA-Model");
+				String message = "No matching found for the input 'type' with the mapped-constant specified in EA-Model";
+				log.error(message);
+				throw new Exception(message);
 			}
 		}
 	}
