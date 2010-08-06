@@ -883,7 +883,7 @@ public class NestedCriteria2HQL {
 			}
 		}
 		if (value == null) {
-			String exceptionMessage = "mapped-constant of 'Type' was not specified for "
+			String exceptionMessage = "mapped-constant of 'type' was not specified for "
 					+ rootKlassAttr + " in EA-Model.";
 			log.error(exceptionMessage);
 			throw new Exception(exceptionMessage);
