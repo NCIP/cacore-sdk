@@ -996,7 +996,7 @@ public class NestedCriteria2HQL {
 	private Map<String, Object> getObjAttrCriterion(Object obj,
 			Configuration cfg, String parentClassName, String parentRoleName)
 			throws Exception {
-		
+
 		Map<String, Object> criterions = new HashMap<String, Object>();
 		String objClassName = obj.getClass().getName();
 		PersistentClass pclass = getPersistentClass(objClassName,
@@ -1005,15 +1005,17 @@ public class NestedCriteria2HQL {
 		if (pclass != null) {
 			Map<String, Object> tempObjectCriterion = getCriterionForComponentAndAttribute(
 					obj, pclass);
-			if (tempObjectCriterion != null)
+			if (tempObjectCriterion != null) {
 				criterions.putAll(tempObjectCriterion);
+			}
 			while (pclass.getSuperclass() != null) {
 				pclass = pclass.getSuperclass();
 				if (pclass != null) {
 					Map<String, Object> tempObjectCriterion2 = getCriterionForComponentAndAttribute(
 							obj, pclass);
-					if (tempObjectCriterion2 != null)
+					if (tempObjectCriterion2 != null) {
 						criterions.putAll(tempObjectCriterion2);
+					}
 
 				}
 			}
@@ -1044,6 +1046,9 @@ public class NestedCriteria2HQL {
 		
 		Map<String, Object> criterions = new HashMap<String, Object>();
 		Iterator properties = pclass.getPropertyIterator();
+		if (!properties.hasNext()) {
+			return null;
+		}
 		Property tempProperty = (Property) pclass.getPropertyIterator().next();
 		String propertyAccessorName = tempProperty.getPropertyAccessorName();
 		boolean isPropertyCollectionAccessor = propertyAccessorName
@@ -1367,10 +1372,10 @@ public class NestedCriteria2HQL {
 			return pClasses.iterator().next();
 		}
 		if (parentObjectClassName == null || parentRoleName == null
-				&& pClasses.size() > 0) {
+				&& pClasses.size() > 1) {
 			log.error("Object Class name "
 					+ objClassName
-					+ " has multiple persistent classes and it's an parent class");
+					+ "is a 'parent class' and also has multiple persistent classes");
 			throw new Exception("NestedCriteria Object to HQL conversion error");
 		}
 		for (PersistentClass persistentClass : pClasses) {
