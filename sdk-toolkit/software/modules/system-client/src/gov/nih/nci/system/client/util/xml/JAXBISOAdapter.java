@@ -4,6 +4,7 @@ import java.util.Set;
 
 import gov.nih.nci.iso21090.*;
 import gov.nih.nci.iso21090.grid.dto.transform.iso.*;
+import gov.nih.nci.iso21090.grid.dto.transform.iso.CDTransformer.*;
 import gov.nih.nci.iso21090.grid.dto.transform.iso.ENTransformer.ENONTransformer;
 import gov.nih.nci.iso21090.grid.dto.transform.iso.ENTransformer.ENPNTransformer;
 
@@ -86,8 +87,6 @@ public class JAXBISOAdapter<T1 extends org.iso._21090.ANY, T2 extends gov.nih.nc
 			return (T1)BLTransformer.INSTANCE.toXml((Bl)arg0);
 		else if(className.equals(BlNonNull_NAME))
 			return (T1)BLNONNULLTransformer.INSTANCE.toXml((BlNonNull)arg0);
-		else if(className.equals(Cd_NAME))
-			return (T1)CDTransformer.INSTANCE.toXml((Cd)arg0);
 		else if(className.equals(Cd_NAME))
 			return (T1)CDTransformer.INSTANCE.toXml((Cd)arg0);
 		else if(className.equals(Ed_NAME))
