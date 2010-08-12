@@ -1373,9 +1373,9 @@ public class NestedCriteria2HQL {
 		}
 		if (parentObjectClassName == null || parentRoleName == null
 				&& pClasses.size() > 1) {
-			log.error("Object Class name "
+			log.error("Object Class  "
 					+ objClassName
-					+ "is a 'parent class' and also has multiple persistent classes");
+					+ " which is a 'parent class' and has multiple persistent classes");
 			throw new Exception("NestedCriteria Object to HQL conversion error");
 		}
 		for (PersistentClass persistentClass : pClasses) {
