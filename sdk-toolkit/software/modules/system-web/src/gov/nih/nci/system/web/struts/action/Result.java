@@ -166,7 +166,7 @@ public class Result extends BaseActionSupport {
  		}
  		
  		//Change 'part#' references to just 'part'
- 		return sb.toString().replaceAll("part\\d", "part");
+ 		return sb.toString().replaceAll("part(\\d+)", "part");
 
 	}
 
