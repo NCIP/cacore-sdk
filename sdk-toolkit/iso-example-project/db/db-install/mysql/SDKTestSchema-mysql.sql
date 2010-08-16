@@ -2832,6 +2832,7 @@ DROP TABLE IF EXISTS `TEACHER`;
 CREATE TABLE `TEACHER` (
   `ID` int(8) NOT NULL,
   `NAME` varchar(50) default NULL,
+  `NULL_FLAVOR` varchar(50) default NULL,
   PRIMARY KEY  (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 

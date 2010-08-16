@@ -674,7 +674,8 @@ CREATE TABLE tank_tank_accessory (
 DROP TABLE IF EXISTS teacher CASCADE;
 CREATE TABLE teacher (
     ID integer NOT NULL,
-    NAME character varying(50)
+    NAME character varying(50),
+    NULL_FLAVOR character varying(50)
 );
 
 DROP TABLE IF EXISTS tenured_professor CASCADE;
