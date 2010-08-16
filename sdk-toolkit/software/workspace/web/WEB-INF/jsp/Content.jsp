@@ -9,25 +9,12 @@
 <html>
 <head>
 <title>Content</title>
-<s:head theme="ajax" debug="true" />
 <link rel="stylesheet" type="text/css" href="styleSheet.css" />
-<script src="script.js" type="text/javascript"></script>
-<script>
-	<!-- transport: "XMLHTTPTransport" -->
-    function treeNodeSelected(nodeId) {
-        dojo.io.bind({
-            url: "<s:url value='Criteria.action' />?nodeId="+nodeId,
-            load: function(type, data, evt) {
-                var displayDiv = dojo.byId("displayId");
-                displayDiv.innerHTML = data;
-		    	setFocus('firstInputField')
-            },
-            mimeType: "text/html"
-        });
-    };
-
-    dojo.event.topic.subscribe("treeSelected", this, "treeNodeSelected"); 
-</script>
+<script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="jquery-ui-1.8.2.custom.min.js"></script>
+<script type="text/javascript" src="jquery.validate-1.7.min.js"></script>
+<script type="text/javascript" src="sdk-jquery.validate.js"></script>
+<script type="text/javascript" src="script.js" ></script>
 <script>
 	function setFocus(fieldName)
 	{
@@ -37,6 +24,24 @@
 			return true;
 		}
 	}// setFocus()    
+</script>
+<s:head theme="ajax" debug="true" />
+<script>
+	<!-- transport: "XMLHTTPTransport" -->
+    function treeNodeSelected(nodeId) {
+        dojo.io.bind({
+            url: "<s:url value='Criteria.action' />?nodeId="+nodeId,
+            load: function(type, data, evt) {
+                var displayDiv = dojo.byId("displayId");
+                displayDiv.innerHTML = data;
+		    	setFocus('firstInputField');
+		    	enableValidation();
+            },
+            mimeType: "text/html"
+        });
+    };
+
+    dojo.event.topic.subscribe("treeSelected", this, "treeNodeSelected"); 
 </script>
 </head>
 <body>
@@ -130,8 +135,8 @@
 															</div>														
 															<img width="400" height="1"/>														
 														</td>
-														<td valign="top" id="displayId" >
-														</td>														
+														<td valign="top" id="displayId">
+														</td>									
 													</tr>														
 												</table>
 											</td>
