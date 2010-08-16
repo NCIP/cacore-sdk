@@ -1,15 +1,14 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@taglib prefix="s" uri="/struts-tags" %>
 <%@ page import="gov.nih.nci.system.web.util.JSPUtils,
-				 gov.nih.nci.system.web.util.Iso21090DataTypeHtmlUtils,
-				 java.lang.reflect.*,
-				 java.util.*" %> 
+				 gov.nih.nci.system.web.util.HtmlUtils,
+				 java.lang.reflect.*,java.util.*" %> 
 			 
 <link href="styleSheet.css" type="text/css" rel="stylesheet" />
 <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="jquery-ui-1.8.2.custom.min.js"></script>
 <script type="text/javascript" src="iso-21090-datatype.2.1.js"></script>
-<% 
+<%
 JSPUtils jspUtils= null;
 List fieldNames=new ArrayList();
 List domainNames=new ArrayList();
@@ -34,15 +33,15 @@ if(className != null)
 	
 	//out.println("fieldNames:  " + fieldNames);
 	if(fieldNames != null && fieldNames.size() > 0)
-	{ 	
+	{
 %>
-<s:form method="post" action="Result.action" target="_blank" name="form1" theme="simple">
+<form method="post" target="_blank" action="Result.action" name="Result" id="Result">
 	<table summary="" cellpadding="3" cellspacing="0" border="0" align="center">
 		<tr>
 			<td class="formTitle" height="20" colspan="3"><a target="_blank" href="docs/<s:property value="javaDocsClassName" />"><s:property value="fullyQualClassName" /></a></td>
 		</tr>
-<% 		
-//<!--  Sample Form Fields		
+<%
+	//<!--  Sample Form Fields		
 //		<tr>
 //			<td class="formRequiredNotice" width="5">*</td>
 //			<td class="formRequiredLabel"><label for="field1">Text Field</label></td>
@@ -86,65 +85,71 @@ if(className != null)
 		String focusAttributes;
 		if(fieldNames != null && fieldNames.size() > 0)
 		{  
-			String attrName;
-			String attrNameLabel = "";
+	String attrName;
+	String attrNameLabel = "";
 		   	String attrType;
 		   	String attrGenericTypeClassName;
 		   	String attrTypeClassName = "";
 		   
 		   	for(int i=0; i < fieldNames.size(); i++)
 		   	{	attrName = ((Field)fieldNames.get(i)).getName();
-			   	attrType = ((Field)fieldNames.get(i)).getType().getName();
-			   	attrGenericTypeClassName = ((Field)fieldNames.get(i)).getGenericType().toString();
-			   	
-			   	System.out.println("Field Type: "+((Field)fieldNames.get(i)).getType().getName());
-			   	System.out.println("Field Generic Type: "+((Field)fieldNames.get(i)).getGenericType());
-			   	
-			   	
-			   	boolean isIsoDataTypeAttr = attrType.startsWith("gov.nih.nci.iso21090");
-			   	
-			   	if (isIsoDataTypeAttr) {
-					int beginIndex = attrType.lastIndexOf('.');
-					if (beginIndex > 0) {
-						++beginIndex;
-						attrTypeClassName =  attrType.substring(beginIndex).toUpperCase();
-					}
-			   		
-			   		if (attrGenericTypeClassName.indexOf('<') > 0){ // e.g. IVL<INT>
-			   			beginIndex = attrGenericTypeClassName.lastIndexOf('.') + 1;
-			   		
-			   			attrGenericTypeClassName = attrGenericTypeClassName.substring(beginIndex,attrGenericTypeClassName.length()-1).toUpperCase();
-			   			attrTypeClassName +=  "&lt;" + attrGenericTypeClassName + "&gt;";
-			   		}
-			   		
-			   		attrNameLabel = attrName + " (" + attrTypeClassName +")"; 
-			   	} else {
-			   		attrNameLabel = attrName;
-			   	}
-			   	
-			   	if (i==0) {
-			   		focusAttributes = "id=\"firstInputField\" tabindex=\"1\"";
-			   	} else {
-			   		focusAttributes = "tabindex=\"" + i+1 + "\"";
-			   	}	   	
+	   	attrType = ((Field)fieldNames.get(i)).getType().getName();
+	   	attrGenericTypeClassName = ((Field)fieldNames.get(i)).getGenericType().toString();
+	   	
+	   	System.out.println("Field Type: "+((Field)fieldNames.get(i)).getType().getName());
+	   	System.out.println("Field Generic Type: "+((Field)fieldNames.get(i)).getGenericType());
+	   	
+	   	boolean isIsoDataTypeAttr = attrType.startsWith("gov.nih.nci.iso21090");
+	   	
+	   	if (isIsoDataTypeAttr) {
+			int beginIndex = attrType.lastIndexOf('.');
+			if (beginIndex > 0) {
+				++beginIndex;
+				attrTypeClassName =  attrType.substring(beginIndex).toUpperCase();
+			}
+	   		
+	   		if (attrGenericTypeClassName.indexOf('<') > 0){ // e.g. IVL<INT>
+	   			beginIndex = attrGenericTypeClassName.lastIndexOf('.') + 1;
+	   		
+	   			attrGenericTypeClassName = attrGenericTypeClassName.substring(beginIndex,attrGenericTypeClassName.length()-1).toUpperCase();
+	   			attrTypeClassName +=  "&lt;" + attrGenericTypeClassName + "&gt;";
+	   		}
+	   		
+	   		attrNameLabel = attrName + " (" + attrTypeClassName +")"; 
+	   	} else {
+	   		
+			int beginIndex = attrType.lastIndexOf('.');
+			if (beginIndex > 0) {
+				++beginIndex;
+				attrTypeClassName =  attrType.substring(beginIndex).toUpperCase();
+			}
+			
+	   		attrNameLabel = attrName;
+	   	}
+	   	
+	   	if (i==0) {
+	   		focusAttributes = "id=\"firstInputField\" tabindex=\"1\"";
+	   	} else {
+	   		focusAttributes = "tabindex=\"" + i+1 + "\"";
+	   	}
 %>
 			   	
 		<tr align="left" valign="top">
 			<td class="formRequiredNotice" width="5px">&nbsp;</td>
 			<td class="formLabel" align="right"><%=attrNameLabel%>:</td>
-		<% if (isIsoDataTypeAttr) { // ISO Data Type %>	
-			<td class="formField" width="90%">
-				<%=Iso21090DataTypeHtmlUtils.getHtmlFor(attrName,attrTypeClassName,jspUtils.getSearchableIsoDataTypeFields(className,attrName))%>
+		<%
+			if (isIsoDataTypeAttr) { // ISO Data Type
+		%>
+			<td class="formField" width="90%">	
+				<%=HtmlUtils.getHtmlFor(attrName,attrTypeClassName,jspUtils.getSearchableIsoDataTypeFields(className,attrName))%>
 			</td>
-		<%} else if (attrType.equalsIgnoreCase("java.lang.Boolean") ) {%>
-			<td class="formField" width="90%"><SELECT <%=focusAttributes%> class="formFieldSized" NAME=<%=attrName%> > 
-			   		<OPTION SELECTED></OPTION>
-			   		<OPTION >True</OPTION>
-			   		<OPTION >False</OPTION>
-				</SELECT></td>
-		<%} else {%>
-			<td class="formField"><input type="text" name="<%=attrName%>" <%=focusAttributes%> class="formField" size="14" theme="simple" /></td>
-		<%}%>
+		<%
+			} else {
+		%>
+			<td class="formField" width="90%">
+				<%=HtmlUtils.getHtmlFor(attrName,attrTypeClassName,focusAttributes)%>
+			</td>
+		<%} %>
 		</tr>
 		  <%}%>
 		<tr align="left" valign="top">
@@ -177,7 +182,6 @@ if(className != null)
 		</tr>
 	</table>
 	<s:hidden name="selectedDomain" />
-</s:form>
-
+</form>	
 <%		}
 	}%> 
