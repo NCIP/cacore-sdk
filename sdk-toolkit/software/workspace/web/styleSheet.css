@@ -464,3 +464,9 @@ MISCELLANEOUS BEGINS
 img.img{ /* for images that need a border */
   border:1px solid #5C5C5C; /* constant: dark gray */
 }
+.error { 
+	float: none; 
+	color: red; 
+	padding-left: .5em; 
+	vertical-align: top; 
+}
