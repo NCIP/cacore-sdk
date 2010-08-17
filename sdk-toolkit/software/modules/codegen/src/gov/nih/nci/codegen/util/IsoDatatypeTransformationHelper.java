@@ -13,6 +13,7 @@ import gov.nih.nci.iso21090.hibernate.node.RootNode;
 import gov.nih.nci.iso21090.hibernate.node.SimpleNode;
 import gov.nih.nci.iso21090.hibernate.node.ConstantNode;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -96,6 +97,12 @@ public class IsoDatatypeTransformationHelper
 	 */
 	public RootNode getDatatypeNode(UMLClass klass, UMLAttribute attr, UMLClass table, boolean skipDataModelInformation) throws GenerationException
 	{
+		UMLClass originalKlass=getOriginalClassForAttribute(klass,attr);
+		if ((!klass.getName().equals(originalKlass.getName()) && (!utils
+				.isImplicitParent(originalKlass)))) {
+			klass = originalKlass;
+			table = utils.getTable(klass);
+		}
 		RootNode rootNode = createDatatypeNode(klass, attr, table);
 		traverseNodeAndAttachDataType(rootNode, klass, attr);
 		getGlobalConstantNode(rootNode);
@@ -606,7 +613,7 @@ public class IsoDatatypeTransformationHelper
 			String tagValuePrefix = utils.TV_MAPPED_ATTR_CONSTANT+":"+currentPrefix;
 				
 			for(UMLTaggedValue tv: attr.getTaggedValues())
-			{
+			{	
 				if (tv.getName().startsWith(tagValuePrefix))
 				{
 					String tvName = tv.getName();
@@ -623,6 +630,20 @@ public class IsoDatatypeTransformationHelper
 		return rootNode;
 	}
 	
+	private UMLClass getOriginalClassForAttribute(UMLClass umlKlass,
+			UMLAttribute attr) throws GenerationException {
+
+		UMLClass currentUmlKlass = umlKlass;
+		while (currentUmlKlass != null) {
+			for (UMLAttribute currentAttr : currentUmlKlass.getAttributes()) {
+				if (attr.getName().equals(currentAttr.getName())) {
+					return currentUmlKlass;
+				}
+			}
+			currentUmlKlass = utils.getSuperClass(currentUmlKlass);
+		}
+		return umlKlass;
+	}
 	/**
 	 * Method responsible for parsing the tag value and converting in the graph node
 	 * 
