@@ -24,15 +24,15 @@
             
     $.validator.addMethod("TEL_value", function(value, element) {
         return this.optional(element) || mailtoUriRegex.test(value) || telUriRegex.test(value) || telUrlRegex.test(value);
-    }, "TEL value should start with the mailto:, tel:, x-text-tel:, x-text-fax URI scheme, or a valid URL.");
+    }, "TEL value should start with the mailto:, tel:, x-text-tel:, x-text-fax: URI scheme, or a valid URL.");
         
     $.validator.addMethod("TEL_PERSON_value", function(value, element) {
         return this.optional(element) || telUriRegex.test(value) || mailtoUriRegex.test(value);
-    }, "TEL PERSON value should start with the mailto:, tel:, x-text-tel:, or x-text-fax URI scheme, followed by a valid email address or phone number.");
+    }, "TEL PERSON value should start with the mailto:, tel:, x-text-tel:, or x-text-fax: URI scheme, followed by a valid email address or phone number.");
        
     $.validator.addMethod("TEL_PHONE_value", function(value, element) {
         return this.optional(element) || telUriRegex.test(value);
-    }, "TEL PHONE value should start with the tel:, x-text-tel:, or x-text-fax URI scheme, followed by a valid phone number.");
+    }, "TEL PHONE value should start with the tel:, x-text-tel:, or x-text-fax: URI scheme, followed by a valid phone number.");
     
     $.validator.addMethod("TEL_EMAIL_value", function(value, element) {
         return this.optional(element) || mailtoUriRegex.test(value);
@@ -40,7 +40,7 @@
     
     $.validator.addMethod("TS_value", function(value, element) {
         return this.optional(element) || timestampRegex.test(value);
-    }, "TS timestamp value should follow the pattern:  yyyy-mm-dd hh:mm:ss or mm-dd-yyyy hh:mm:ss");
+    }, "TS timestamp value should follow the pattern: yyyy-mm-dd hh:mm:ss or mm-dd-yyyy hh:mm:ss");
 	    
 	$(document).ready(function(){
 		$("#Result").validate();
