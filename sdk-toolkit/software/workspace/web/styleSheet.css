@@ -1,8 +1,8 @@
 /*########## INSTRUCTIONS ##########
 1. comments that start with constant: indicate colors that don't change among the color schemes
 2. comments with the words lighter or darker indicate the colors that do change depending on the color scheme
-For example using the blue color sheme, darker means use the darker blue and lighter means use the lighter blue
-3. ems are used as the unit of measurement to maintain proportional sizing which is important for 508 compliance
+For example using the blue color scheme, darker means use the darker blue and lighter means use the lighter blue
+3. em's are used as the unit of measurement to maintain proportional sizing which is important for 508 compliance
 
 /*########## BLUE COLOR SCHEME ##########
  #475B82 = darker blue
@@ -365,6 +365,12 @@ DATA TABLE BEGINS
   border-top:1px solid #5C5C5C; /* constant: dark gray */
   border-left:1px solid #5C5C5C; /* constant: dark gray */
 }
+.isoDataTable{ /* for ISO data type  */
+  font-family:arial,helvetica,verdana,sans-serif;
+  /* font-size:1em; */
+  color:#000000; /* constant: black */
+  border:1px solid #5C5C5C; /* constant: dark gray */
+}
 .dataRowLight{ /* for the light color of alternating rows */
   background-color:#FFFFFF; /* constant: white */
   color:#000000; /* constant: black */
@@ -374,8 +380,17 @@ DATA TABLE BEGINS
   color:#000000; /* constant: black */
 }
 .dataCellText{ /* for text output cells */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.7em;
+  color:#000000; /* constant: black */
   border-right:1px solid #5C5C5C; /* constant: dark gray */
   border-bottom:1px solid #5C5C5C; /* constant: dark gray */
+  text-align:left;
+}
+.isoDataCellText{ /* for text output cells */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.7em;
+  color:#000000; /* constant: black */
   text-align:left;
 }
 .dataCellNumerical{ /* for numerical output cells */
