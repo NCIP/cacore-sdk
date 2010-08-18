@@ -14,8 +14,6 @@ public class HtmlUtils {
 	private static String HTML_SCREEN_BEGIN = "<table cellspacing=\"0\" cellpadding=\"3\" border=\"1\" width=\"100%\" >";
 	private static String HTML_SCREEN_END = "</table>";
 	
-	// todo :: get enumeration values from ISO data type enum classes?
-	
 	private static String booleanSelect = null;
 	private static List<String> booleanOptions = new ArrayList<String>(Arrays.asList("","True (Yes)","False (No)"));
 	private static List<String> booleanValues = new ArrayList<String>(Arrays.asList("","true","false"));
@@ -286,7 +284,7 @@ public class HtmlUtils {
 	
 	private static String getHTML(String attrName, String focusAttributes, String validationClass) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("<input type=\"text\" name=\"").append(attrName).append("\" id=\"").append(attrName).append("\" class=\"formField ").append(validationClass).append("\" size=\"14\" />");
+		sb.append("<input type=\"text\" name=\"").append(attrName).append("\" id=\"").append(attrName).append("\" class=\"formFieldSized ").append(validationClass).append("\"/>");
 		
 		return sb.toString();
 	}
