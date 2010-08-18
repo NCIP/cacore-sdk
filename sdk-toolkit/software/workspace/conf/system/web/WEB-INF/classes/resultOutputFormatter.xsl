@@ -378,7 +378,7 @@
 	<xsl:template name="fieldNode">
 			<xsl:if test="not(node())">
 				<xsl:choose>									
-					<xsl:when test="not(string(.))">
+					<xsl:when test="not(string(.))"> <!-- print a non-breaking space -->
 						<xsl:text>&#160;</xsl:text>
 					</xsl:when>							
 				</xsl:choose>
