@@ -310,14 +310,7 @@
 								</xsl:when>
 								<xsl:otherwise>
 									<td class="dataCellText" nowrap="off">
-										<xsl:choose>
-											<xsl:when test=". = ' '">
-												-
-											</xsl:when>									
-											<xsl:otherwise>
-												<xsl:call-template name="fieldNode"/>
-											</xsl:otherwise>
-										</xsl:choose>
+										<xsl:call-template name="fieldNode"/>
 									</td>
 								</xsl:otherwise>
 							</xsl:choose>
@@ -383,8 +376,22 @@
 	</xsl:template>
 
 	<xsl:template name="fieldNode">
+			<xsl:if test="not(node())">
+				<xsl:choose>									
+					<xsl:when test="not(string(.))">
+						<xsl:text>&#160;</xsl:text>
+					</xsl:when>							
+				</xsl:choose>
+			</xsl:if>
 			<xsl:if test="node()">
-				<xsl:value-of select="." />
+				<xsl:choose>
+					<xsl:when test=". = ' '">
+						-
+					</xsl:when>																	
+					<xsl:otherwise>
+						<xsl:value-of select="." />
+					</xsl:otherwise>
+				</xsl:choose>
 			</xsl:if>
 			<xsl:if test="*">
 				<xsl:for-each select="node()">
