@@ -313,7 +313,7 @@
 										<xsl:choose>
 											<xsl:when test=". = ' '">
 												-
-											</xsl:when>
+											</xsl:when>									
 											<xsl:otherwise>
 												<xsl:call-template name="fieldNode"/>
 											</xsl:otherwise>
@@ -383,45 +383,36 @@
 	</xsl:template>
 
 	<xsl:template name="fieldNode">
-		<table width="100%" border="0" cellspacing="0" cellpadding="0">
 			<xsl:if test="node()">
-				<tr class="dataRowLight">
-					<td class="dataCellText" nowrap="off">
-						<xsl:value-of select="." />
-					</td>
-				</tr>
+				<xsl:value-of select="." />
 			</xsl:if>
 			<xsl:if test="*">
 				<xsl:for-each select="node()">
-					<tr class="dataRowLight">
-						<td class="dataCellText" nowrap="off">
-							<table width="100%" border="0" cellspacing="0" cellpadding="0">
-								<tr class="dataRowLight">
-									<td class="dataCellText" nowrap="off">
-										<xsl:value-of select="name()" />
-										<table width="100%" border="0" cellspacing="0"
-											cellpadding="0">
-											<tr class="dataRowLight">
-												<td class="dataCellText" nowrap="off">
-													<xsl:for-each select="./@*">
-														<xsl:value-of select="name()" />
-														<xsl:text>=</xsl:text>
-														<xsl:value-of select="."></xsl:value-of>
-														<xsl:if test="position()!=last()">
-															<xsl:text>,</xsl:text>
-														</xsl:if>
-													</xsl:for-each>
-													<xsl:call-template name="fieldNode" />
-												</td>
-											</tr>
-										</table>
-									</td>
-								</tr>
-							</table>
-						</td>
-					</tr>
+					<table border="0" width="100%" cellspacing="2" cellpadding="0">
+						<tr class="dataRowLight">
+							<td nowrap="off" class="isoDataCellText">
+								<xsl:value-of select="name()" />: 
+							</td>
+							<td nowrap="off" align="left" width="100%">
+								<table class="isoDataTable" width="100%" cellspacing="0" cellpadding="3">
+									<tr class="dataRowLight">
+										<td class="isoDataCellText" nowrap="off">
+											<xsl:for-each select="./@*">
+												<xsl:value-of select="name()" />
+												<xsl:text>: </xsl:text>
+												<xsl:value-of select="."></xsl:value-of>
+												<xsl:if test="position()!=last()">
+													<xsl:text>; </xsl:text>
+												</xsl:if>
+											</xsl:for-each>
+											<xsl:call-template name="fieldNode" />
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
 				</xsl:for-each>
 			</xsl:if>
-		</table>
 	</xsl:template>
 </xsl:stylesheet>
