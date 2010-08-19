@@ -1,0 +1,1330 @@
+									Listing of Hibernate Metadata used when generating the SDK Search Criteria input screen for the Sample ISO Data Type model
+
+Class Name gov.nih.nci.cacoresdk.domain.other.datatype.BlDataType
+
+Attribute Name >> value1
+Fields >>>> value , 
+Attribute Name >> value2
+Fields >>>> nullFlavor , value , 
+Attribute Name >> id
+Fields >>>> id , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.datatype.CdDataType
+
+Attribute Name >> value1
+Fields >>>> code , 
+Attribute Name >> value4
+Fields >>>> nullFlavor , code , codeSystem , codeSystemVersion , codeSystemName , {displayName=[nullFlavor, value]} , {originalText=[nullFlavor, value]} , 
+Attribute Name >> value7
+Fields >>>> {code=[code]} , {codeSystemName=[codeSystemName]} , {codeSystemVersion=[codeSystemVersion]} , {nullFlavor=[nullFlavor]} , {codeSystem=[codeSystem]} , {originalText=[nullFlavor, value]} , {displayName=[nullFlavor, value]} , 
+Attribute Name >> value2
+Fields >>>> nullFlavor , code , 
+Attribute Name >> value8
+Fields >>>> {code=[code]} , {codeSystemName=[codeSystemName]} , {codeSystemVersion=[codeSystemVersion]} , {nullFlavor=[nullFlavor]} , {codeSystem=[codeSystem]} , {originalText=[nullFlavor, value]} , {displayName=[nullFlavor, value]} , 
+Attribute Name >> value5
+Fields >>>> nullFlavor , code , codeSystem , codeSystemName , codeSystemVersion , {displayName=[nullFlavor, value]} , {originalText=[nullFlavor, value]} , 
+Attribute Name >> value6
+Fields >>>> nullFlavor , code , codeSystem , codeSystemName , codeSystemVersion , {displayName=[nullFlavor, value]} , {originalText=[nullFlavor, value]} , 
+Attribute Name >> id
+Fields >>>> id , 
+Attribute Name >> value3
+Fields >>>> code , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.datatype.AdDataType
+
+Attribute Name >> value1
+Fields >>>> {part_0=[value]} , 
+Attribute Name >> value4
+Fields >>>> {part_0=[value, code, codeSystem]} , {part_1=[value, code, codeSystem]} , 
+Attribute Name >> value7
+Fields >>>> {part_0=[value, code, codeSystem]} , {part_1=[code, value, codeSystem]} , {part_2=[value, code, codeSystem]} , 
+Attribute Name >> value2
+Fields >>>> {part_0=[value, code]} , 
+Attribute Name >> value8
+Fields >>>> {part_2=[value, code, codeSystem]} , {part_0=[value, code]} , {part_1=[code, value, codeSystem]} , 
+Attribute Name >> value5
+Fields >>>> {part_0=[value, code, codeSystem]} , {part_1=[code, value, codeSystem]} , {part_2=[value, code, codeSystem]} , 
+Attribute Name >> value6
+Fields >>>> {part_0=[value, code]} , {part_1=[value]} , {part_2=[value]} , {part_3=[value]} , {part_4=[value, code, codeSystem]} , {part_5=[value]} , {part_6=[value]} , {part_7=[value]} , {part_8=[value]} , {part_9=[value]} , {part_10=[value, code, codeSystem]} , {part_11=[value]} , {part_12=[value]} , {part_13=[value]} , {part_14=[value]} , {part_15=[value]} , {part_16=[value]} , {part_18=[value]} , {part_19=[value]} , {part_20=[value]} , {part_21=[value]} , {part_22=[value, code, codeSystem]} , {part_23=[value]} , {part_24=[value]} , {part_25=[value]} , {part_26=[value]} , {part_27=[value, codeSystem, code]} , 
+Attribute Name >> value9
+Fields >>>> {part_2=[value, code, codeSystem]} , {part_0=[value, code, codeSystem]} , {part_1=[code, value, codeSystem]} , 
+Attribute Name >> id
+Fields >>>> id , 
+Attribute Name >> value3
+Fields >>>> {part_0=[value, code, codeSystem]} , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.datatype.EnDataType
+
+Attribute Name >> value1
+Fields >>>> {part_0=[value]} , 
+Attribute Name >> value4
+Fields >>>> {part_0=[value, qualifier]} , 
+Attribute Name >> value2
+Fields >>>> {part_0=[value, code]} , 
+Attribute Name >> value5
+Fields >>>> {part_0=[value, code, codeSystem, codeSystemVersion]} , {part_1=[value, code, codeSystem, codeSystemVersion]} , 
+Attribute Name >> value6
+Fields >>>> {part_0=[value, code, codeSystem, codeSystemVersion]} , {part_1=[value, code, codeSystem, codeSystemVersion]} , 
+Attribute Name >> id
+Fields >>>> id , 
+Attribute Name >> value3
+Fields >>>> {part_0=[value, code, codeSystem, codeSystemVersion]} , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.datatype.DsetCdDataType
+
+Attribute Name >> value1
+Fields >>>> {item<gov.nih.nci.iso21090.Cd>=[code]} , 
+Attribute Name >> value4
+Fields >>>> {item<gov.nih.nci.iso21090.Cd>=[code, codeSystem, codeSystemName, codeSystemVersion, {displayName=[value]}, {originalText=[value]}]} , 
+Attribute Name >> value7
+Fields >>>> {} , 
+Attribute Name >> value2
+Fields >>>> {item<gov.nih.nci.iso21090.Cd>=[code, nullFlavor]} , 
+Attribute Name >> value5
+Fields >>>> {item<gov.nih.nci.iso21090.Cd>=[code, codeSystem, codeSystemName, codeSystemVersion, {displayName=[value]}, {originalText=[value]}]} , 
+Attribute Name >> value6
+Fields >>>> {} , 
+Attribute Name >> id
+Fields >>>> id , 
+Attribute Name >> value3
+Fields >>>> {item<gov.nih.nci.iso21090.Cd>=[code, codeSystem, codeSystemName]} , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType
+
+Attribute Name >> value1
+Fields >>>> {item<gov.nih.nci.iso21090.Ad>=[{part_0=[value]}]} , 
+Attribute Name >> value4
+Fields >>>> {item<gov.nih.nci.iso21090.Ad>=[{part_0=[value, code, codeSystem]}, {part_1=[value, code, codeSystem]}]} , 
+Attribute Name >> value7
+Fields >>>> {} , 
+Attribute Name >> value2
+Fields >>>> {item<gov.nih.nci.iso21090.Ad>=[{part_0=[value, code]}]} , 
+Attribute Name >> value8
+Fields >>>> {} , 
+Attribute Name >> value5
+Fields >>>> {item<gov.nih.nci.iso21090.Ad>=[{part_0=[value, code, codeSystem]}, {part_1=[code, codeSystem, value]}, {part_2=[value, code, codeSystem]}]} , 
+Attribute Name >> value6
+Fields >>>> {item<gov.nih.nci.iso21090.Ad>=[{part_0=[value, code]}, {part_1=[value]}, {part_2=[value]}, {part_3=[value]}, {part_4=[value, code, codeSystem]}, {part_5=[value]}, {part_6=[value]}, {part_7=[value]}, {part_8=[value]}, {part_9=[value]}, {part_10=[value, code, codeSystem]}, {part_11=[value]}, {part_12=[value]}, {part_13=[value]}, {part_14=[value]}, {part_15=[value]}, {part_16=[value]}, {part_18=[value]}, {part_19=[value]}, {part_20=[value]}, {part_21=[value]}, {part_22=[value, code, codeSystem]}, {part_23=[value]}, {part_24=[value]}, {part_25=[value]}, {part_26=[value]}, {part_27=[value, codeSystem, code]}]} , 
+Attribute Name >> id
+Fields >>>> id , 
+Attribute Name >> value3
+Fields >>>> {item<gov.nih.nci.iso21090.Ad>=[{part_0=[value, code, codeSystem]}]} , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.datatype.DsetTelDataType
+
+Attribute Name >> value1
+Fields >>>> {item<gov.nih.nci.iso21090.Tel>=[value]} , 
+Attribute Name >> value2
+Fields >>>> {} , 
+Attribute Name >> id
+Fields >>>> id , 
+Attribute Name >> value3
+Fields >>>> {} , 
+
+Class Name gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.Display
+
+Attribute Name >> width
+Fields >>>> value , 
+Attribute Name >> height
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.manytomany.unidirectional.Author
+
+Attribute Name >> name
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation.withjoin.InLaw
+
+Attribute Name >> name
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.onetoone.unidirectional.Address
+
+Attribute Name >> zip
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.sametable.Luggage
+
+Attribute Name >> capacity
+Fields >>>> value , 
+Attribute Name >> wheel
+Fields >>>> 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.onetoone.unidirectional.withjoin.Handle
+
+Attribute Name >> color
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.primarykey.StringKey
+
+Attribute Name >> name
+Fields >>>> name , 
+Attribute Name >> id
+Fields >>>> id , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.datatype.EdDataType
+
+Attribute Name >> value1
+Fields >>>> data , 
+Attribute Name >> value2
+Fields >>>> nullFlavor , data , compression , 
+Attribute Name >> id
+Fields >>>> id , 
+Attribute Name >> value3
+Fields >>>> nullFlavor , data , compression , value , 
+
+Class Name gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.Goverment
+
+Attribute Name >> country
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.inheritance.childwithassociation.sametable.Shoes
+
+Attribute Name >> color
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.primarykey.StringPrimitiveKey
+
+Attribute Name >> name
+Fields >>>> name , 
+Attribute Name >> id
+Fields >>>> id , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.datatype.IvlRealDataType
+
+Attribute Name >> value1
+Fields >>>> {low=[value]} , {high=[value]} , 
+Attribute Name >> value2
+Fields >>>> lowClosed , {high=[value]} , 
+Attribute Name >> id
+Fields >>>> id , 
+Attribute Name >> value3
+Fields >>>> highClosed , lowClosed , nullFlavor , {high=[value]} , {low=[value]} , {width=[value, nullFlavor]} , {any=[value]} , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.primarykey.DoublePrimitiveKey
+
+Attribute Name >> name
+Fields >>>> name , 
+Attribute Name >> id
+Fields >>>> id , 
+
+Class Name gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametablerootlevel.Calculator
+
+Attribute Name >> brand
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.CRTMonitor
+
+Attribute Name >> refreshRate
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.datatype.EdTextDataType
+
+Attribute Name >> value1
+Fields >>>> value , 
+Attribute Name >> value2
+Fields >>>> nullFlavor , value , 
+Attribute Name >> id
+Fields >>>> id , 
+Attribute Name >> value3
+Fields >>>> nullFlavor , data , compression , value , 
+
+Class Name gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.sametable.SoftTop
+
+Attribute Name >> expandable
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.Student
+
+Attribute Name >> name
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.datatype.TelPersonDataType
+
+Attribute Name >> value1
+Fields >>>> value , 
+Attribute Name >> value2
+Fields >>>> nullFlavor , value , 
+Attribute Name >> id
+Fields >>>> id , 
+
+Class Name gov.nih.nci.cacoresdk.domain.manytoone.unidirectional.withjoin.Song
+
+Attribute Name >> title
+Fields >>>> value , 
+Attribute Name >> album
+Fields >>>> 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.sametable.HardTopType
+
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.inheritance.abstrakt.Teacher
+
+Attribute Name >> pupilCollection
+Fields >>>> pupilCollection , 
+Attribute Name >> name
+Fields >>>> value , nullFlavor , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.UndergraduateStudent
+
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.Monitor
+
+Attribute Name >> brand
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametablerootlevel.GraphicCalculator
+
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.AssistantProfessor
+
+Attribute Name >> joiningYear
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.datatype.BlNonNullDataType
+
+Attribute Name >> value1
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> id , 
+
+Class Name gov.nih.nci.cacoresdk.domain.inheritance.onechild.sametable.Currency
+
+Attribute Name >> country
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.onetomany.unidirectional.withjoin.Button
+
+Attribute Name >> holes
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametablerootlevel.ScientificCalculator
+
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.datatype.PqDataType
+
+Attribute Name >> value1
+Fields >>>> value , unit , 
+Attribute Name >> value2
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> id , 
+Attribute Name >> value3
+Fields >>>> nullFlavor , unit , value , precision , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.primarykey.LongKey
+
+Attribute Name >> name
+Fields >>>> name , 
+Attribute Name >> id
+Fields >>>> id , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.datatype.IvlIntDataType
+
+Attribute Name >> value1
+Fields >>>> {low=[value]} , {high=[value]} , 
+Attribute Name >> value2
+Fields >>>> lowClosed , {high=[value]} , 
+Attribute Name >> id
+Fields >>>> id , 
+Attribute Name >> value3
+Fields >>>> highClosed , {low=[value]} , {any=[value]} , 
+
+Class Name gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation.Child
+
+Attribute Name >> father
+Fields >>>> 
+Attribute Name >> name
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+Attribute Name >> mother
+Fields >>>> 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType
+
+Attribute Name >> value1
+Fields >>>> {item<gov.nih.nci.iso21090.Ad>=[{part_0=[value]}]} , 
+Attribute Name >> value4
+Fields >>>> {item<gov.nih.nci.iso21090.Ad>=[{part_0=[value, code, codeSystem]}, {part_1=[value, code, codeSystem]}]} , 
+Attribute Name >> value7
+Fields >>>> {} , 
+Attribute Name >> value2
+Fields >>>> {item<gov.nih.nci.iso21090.Ad>=[{part_0=[value, code]}]} , 
+Attribute Name >> value8
+Fields >>>> {} , 
+Attribute Name >> value5
+Fields >>>> {item<gov.nih.nci.iso21090.Ad>=[{part_0=[value, code, codeSystem]}, {part_1=[code, codeSystem, value]}, {part_2=[value, code, codeSystem]}]} , 
+Attribute Name >> value6
+Fields >>>> {item<gov.nih.nci.iso21090.Ad>=[{part_0=[value, code]}, {part_1=[value]}, {part_2=[value]}, {part_3=[value]}, {part_4=[value, code, codeSystem]}, {part_5=[value]}, {part_6=[value]}, {part_7=[value]}, {part_8=[value]}, {part_9=[value]}, {part_10=[value, code, codeSystem]}, {part_11=[value]}, {part_12=[value]}, {part_13=[value]}, {part_14=[value]}, {part_15=[value]}, {part_16=[value]}, {part_18=[value]}, {part_19=[value]}, {part_20=[value]}, {part_21=[value]}, {part_22=[value, code, codeSystem]}, {part_23=[value]}, {part_24=[value]}, {part_25=[value]}, {part_26=[value]}, {part_27=[value, codeSystem, code]}]} , 
+Attribute Name >> id
+Fields >>>> id , 
+Attribute Name >> value3
+Fields >>>> {item<gov.nih.nci.iso21090.Ad>=[{part_0=[value, code, codeSystem]}]} , 
+
+Class Name gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.CommunistGovt
+
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.ParliamantaryGovt
+
+Attribute Name >> primeMinister
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.datatype.DsetIiDataType
+
+Attribute Name >> value1
+Fields >>>> {item<gov.nih.nci.iso21090.Ii>=[extension]} , 
+Attribute Name >> value4
+Fields >>>> {item<gov.nih.nci.iso21090.Ii>=[root, extension, identifierName, reliability, scope, displayable, nullFlavor]} , 
+Attribute Name >> value2
+Fields >>>> {item<gov.nih.nci.iso21090.Ii>=[extension, root, nullFlavor]} , 
+Attribute Name >> value5
+Fields >>>> {} , 
+Attribute Name >> value6
+Fields >>>> {} , 
+Attribute Name >> id
+Fields >>>> id , 
+Attribute Name >> value3
+Fields >>>> {item<gov.nih.nci.iso21090.Ii>=[extension, identifierName, displayable, reliability, scope]} , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.primarykey.FloatKey
+
+Attribute Name >> name
+Fields >>>> name , 
+Attribute Name >> id
+Fields >>>> id , 
+
+Class Name gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.Assistant
+
+Attribute Name >> name
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.inheritance.childwithassociation.sametable.SportsShoes
+
+Attribute Name >> sportsType
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.manytoone.unidirectional.Chef
+
+Attribute Name >> restaurant
+Fields >>>> 
+Attribute Name >> name
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.inheritance.onechild.Human
+
+Attribute Name >> diet
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.onetomany.unidirectional.withjoin.Shirt
+
+Attribute Name >> style
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+Attribute Name >> buttonCollection
+Fields >>>> buttonCollection , 
+
+Class Name gov.nih.nci.cacoresdk.domain.inheritance.childwithassociation.sametable.Designer
+
+Attribute Name >> name
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.inheritance.childwithassociation.sametable.DesignerShoes
+
+Attribute Name >> designer
+Fields >>>> 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.inheritance.implicit.Substrate
+
+Attribute Name >> name
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.onetoone.unidirectional.withjoin.Bag
+
+Attribute Name >> handle
+Fields >>>> 
+Attribute Name >> style
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.primarykey.NoIdKey
+
+Attribute Name >> mykey
+Fields >>>> mykey , 
+Attribute Name >> name
+Fields >>>> name , 
+
+Class Name gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.TenuredProfessor
+
+Attribute Name >> tenuredYear
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.primarykey.IntegerPrimitiveKey
+
+Attribute Name >> name
+Fields >>>> name , 
+Attribute Name >> id
+Fields >>>> id , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.datatype.StNtDataType
+
+Attribute Name >> value1
+Fields >>>> value , 
+Attribute Name >> value2
+Fields >>>> nullFlavor , value , 
+Attribute Name >> id
+Fields >>>> id , 
+
+Class Name gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.OrderLine
+
+Attribute Name >> product
+Fields >>>> product , 
+Attribute Name >> name
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.datatype.ScDataType
+
+Attribute Name >> value1
+Fields >>>> value , {code=[code]} , 
+Attribute Name >> value2
+Fields >>>> nullFlavor , value , {code=[nullFlavor, code, codeSystem, codeSystemName, codeSystemVersion]} , 
+Attribute Name >> id
+Fields >>>> id , 
+Attribute Name >> value3
+Fields >>>> nullFlavor , value , {code=[nullFlavor, code, codeSystem, codeSystemName, codeSystemVersion, {displayName=[nullFlavor, value]}, {originalText=[nullFlavor, value]}]} , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.differentpackage.Dessert
+
+Attribute Name >> utensilCollection
+Fields >>>> utensilCollection , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.inheritance.implicit.AngelFish
+
+Attribute Name >> finSize
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.onetoone.unidirectional.Person
+
+Attribute Name >> livesAt
+Fields >>>> 
+Attribute Name >> name
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.inheritance.onechild.Mammal
+
+Attribute Name >> hairColor
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.validationtype.AllValidationType
+
+Attribute Name >> maxNumeric
+Fields >>>> maxNumeric , 
+Attribute Name >> past
+Fields >>>> past , 
+Attribute Name >> minNumeric
+Fields >>>> minNumeric , 
+Attribute Name >> length
+Fields >>>> length , 
+Attribute Name >> rangeString
+Fields >>>> rangeString , 
+Attribute Name >> minString
+Fields >>>> minString , 
+Attribute Name >> id
+Fields >>>> id , 
+Attribute Name >> notNull
+Fields >>>> notNull , 
+Attribute Name >> rangeNumeric
+Fields >>>> rangeNumeric , 
+Attribute Name >> notEmpty
+Fields >>>> notEmpty , 
+Attribute Name >> maxString
+Fields >>>> maxString , 
+Attribute Name >> future
+Fields >>>> future , 
+Attribute Name >> email
+Fields >>>> email , 
+Attribute Name >> pattern
+Fields >>>> pattern , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.datatype.TelPhoneDataType
+
+Attribute Name >> value1
+Fields >>>> value , 
+Attribute Name >> value2
+Fields >>>> nullFlavor , value , 
+Attribute Name >> id
+Fields >>>> id , 
+
+Class Name gov.nih.nci.cacoresdk.domain.inheritance.childwithassociation.Bank
+
+Attribute Name >> name
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.Professor
+
+Attribute Name >> assistantCollection
+Fields >>>> assistantCollection , 
+Attribute Name >> name
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.datatype.EnOnDataType
+
+Attribute Name >> value1
+Fields >>>> {part_0=[value]} , 
+Attribute Name >> id
+Fields >>>> id , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.levelassociation.Deck
+
+Attribute Name >> name
+Fields >>>> value , 
+Attribute Name >> suitCollection
+Fields >>>> suitCollection , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin.Pendant
+
+Attribute Name >> chain
+Fields >>>> 
+Attribute Name >> shape
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.DemocraticGovt
+
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.primarykey.IntegerKey
+
+Attribute Name >> name
+Fields >>>> name , 
+Attribute Name >> id
+Fields >>>> id , 
+
+Class Name gov.nih.nci.cacoresdk.domain.inheritance.onechild.sametable.Note
+
+Attribute Name >> value
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.manytoone.unidirectional.withjoin.Album
+
+Attribute Name >> title
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.manytomany.unidirectional.Book
+
+Attribute Name >> authorCollection
+Fields >>>> authorCollection , 
+Attribute Name >> name
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.levelassociation.Card
+
+Attribute Name >> suit
+Fields >>>> 
+Attribute Name >> image
+Fields >>>> value , 
+Attribute Name >> name
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.inheritance.implicit.TankAccessory
+
+Attribute Name >> tankCollection
+Fields >>>> tankCollection , 
+Attribute Name >> name
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.primarykey.CharacterPrimitiveKey
+
+Attribute Name >> name
+Fields >>>> name , 
+Attribute Name >> id
+Fields >>>> id , 
+
+Class Name gov.nih.nci.cacoresdk.domain.onetomany.unidirectional.LatchKey
+
+Attribute Name >> type
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.sametable.GovtOrganization
+
+Attribute Name >> agencyBudget
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.levelassociation.Suit
+
+Attribute Name >> cardCollection
+Fields >>>> cardCollection , 
+Attribute Name >> deck
+Fields >>>> 
+Attribute Name >> name
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.primarykey.CharacterKey
+
+Attribute Name >> name
+Fields >>>> name , 
+Attribute Name >> id
+Fields >>>> id , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.datatype.RealDataType
+
+Attribute Name >> value1
+Fields >>>> value , 
+Attribute Name >> value2
+Fields >>>> nullFlavor , value , 
+Attribute Name >> id
+Fields >>>> id , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.datatype.IiDataType
+
+Attribute Name >> value1
+Fields >>>> extension , 
+Attribute Name >> value4
+Fields >>>> nullFlavor , root , extension , identifierName , reliability , scope , displayable , 
+Attribute Name >> value2
+Fields >>>> nullFlavor , root , extension , 
+Attribute Name >> id
+Fields >>>> id , 
+Attribute Name >> value3
+Fields >>>> nullFlavor , extension , identifierName , reliability , scope , displayable , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.datatype.DsetCdDataType
+
+Attribute Name >> value1
+Fields >>>> {item<gov.nih.nci.iso21090.Cd>=[code]} , 
+Attribute Name >> value4
+Fields >>>> {item<gov.nih.nci.iso21090.Cd>=[code, codeSystem, codeSystemName, codeSystemVersion, {displayName=[value]}, {originalText=[value]}]} , 
+Attribute Name >> value7
+Fields >>>> {} , 
+Attribute Name >> value2
+Fields >>>> {item<gov.nih.nci.iso21090.Cd>=[code, nullFlavor]} , 
+Attribute Name >> value5
+Fields >>>> {item<gov.nih.nci.iso21090.Cd>=[code, codeSystem, codeSystemName, codeSystemVersion, {displayName=[value]}, {originalText=[value]}]} , 
+Attribute Name >> value6
+Fields >>>> {} , 
+Attribute Name >> id
+Fields >>>> id , 
+Attribute Name >> value3
+Fields >>>> {item<gov.nih.nci.iso21090.Cd>=[code, codeSystem, codeSystemName]} , 
+
+Class Name gov.nih.nci.cacoresdk.domain.inheritance.implicit.SaltwaterFishTank
+
+Attribute Name >> proteinSkimmerModel
+Fields >>>> value , 
+Attribute Name >> shape
+Fields >>>> value , 
+Attribute Name >> numGallons
+Fields >>>> value , 
+Attribute Name >> substrateCollection
+Fields >>>> substrateCollection , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin.Chain
+
+Attribute Name >> metal
+Fields >>>> value , 
+Attribute Name >> pendant
+Fields >>>> 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation.Parent
+
+Attribute Name >> name
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.inheritance.implicit.DiscusFish
+
+Attribute Name >> primaryColor
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.datatype.TelUrlDataType
+
+Attribute Name >> value1
+Fields >>>> value , 
+Attribute Name >> value2
+Fields >>>> nullFlavor , value , 
+Attribute Name >> id
+Fields >>>> id , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.datatype.AdDataType
+
+Attribute Name >> value1
+Fields >>>> {part_0=[value]} , 
+Attribute Name >> value4
+Fields >>>> {part_0=[value, code, codeSystem]} , {part_1=[value, code, codeSystem]} , 
+Attribute Name >> value7
+Fields >>>> {part_0=[value, code, codeSystem]} , {part_1=[code, value, codeSystem]} , {part_2=[value, code, codeSystem]} , 
+Attribute Name >> value2
+Fields >>>> {part_0=[value, code]} , 
+Attribute Name >> value8
+Fields >>>> {part_2=[value, code, codeSystem]} , {part_0=[value, code]} , {part_1=[code, value, codeSystem]} , 
+Attribute Name >> value5
+Fields >>>> {part_0=[value, code, codeSystem]} , {part_1=[code, value, codeSystem]} , {part_2=[value, code, codeSystem]} , 
+Attribute Name >> value6
+Fields >>>> {part_0=[value, code]} , {part_1=[value]} , {part_2=[value]} , {part_3=[value]} , {part_4=[value, code, codeSystem]} , {part_5=[value]} , {part_6=[value]} , {part_7=[value]} , {part_8=[value]} , {part_9=[value]} , {part_10=[value, code, codeSystem]} , {part_11=[value]} , {part_12=[value]} , {part_13=[value]} , {part_14=[value]} , {part_15=[value]} , {part_16=[value]} , {part_18=[value]} , {part_19=[value]} , {part_20=[value]} , {part_21=[value]} , {part_22=[value, code, codeSystem]} , {part_23=[value]} , {part_24=[value]} , {part_25=[value]} , {part_26=[value]} , {part_27=[value, codeSystem, code]} , 
+Attribute Name >> value9
+Fields >>>> {part_2=[value, code, codeSystem]} , {part_0=[value, code, codeSystem]} , {part_1=[code, value, codeSystem]} , 
+Attribute Name >> id
+Fields >>>> id , 
+Attribute Name >> value3
+Fields >>>> {part_0=[value, code, codeSystem]} , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.datatype.StDataType
+
+Attribute Name >> value1
+Fields >>>> value , 
+Attribute Name >> value2
+Fields >>>> nullFlavor , value , 
+Attribute Name >> id
+Fields >>>> id , 
+
+Class Name gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.sametable.Wheel
+
+Attribute Name >> radius
+Fields >>>> value , 
+Attribute Name >> luggage
+Fields >>>> luggage , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.inheritance.childwithassociation.Payment
+
+Attribute Name >> amount
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.datatype.IvlPqDataType
+
+Attribute Name >> value1
+Fields >>>> {low=[value]} , 
+Attribute Name >> value4
+Fields >>>> highClosed , lowClosed , nullFlavor , {high=[value, precision, unit, nullFlavor]} , {low=[value, precision, unit, nullFlavor]} , {width=[value, precision, unit, nullFlavor]} , 
+Attribute Name >> value2
+Fields >>>> {low=[value, precision, unit]} , 
+Attribute Name >> id
+Fields >>>> id , 
+Attribute Name >> value3
+Fields >>>> nullFlavor , {low=[value, precision, unit]} , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.datatype.IvlTsDataType
+
+Attribute Name >> value1
+Fields >>>> {low=[value]} , {high=[value]} , 
+Attribute Name >> value2
+Fields >>>> lowClosed , {high=[value]} , 
+Attribute Name >> id
+Fields >>>> id , 
+Attribute Name >> value3
+Fields >>>> nullFlavor , {high=[value]} , {low=[value]} , {width=[nullFlavor, value]} , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.datatype.EnDataType
+
+Attribute Name >> value1
+Fields >>>> {part_0=[value]} , 
+Attribute Name >> value4
+Fields >>>> {part_0=[value, qualifier]} , 
+Attribute Name >> value2
+Fields >>>> {part_0=[value, code]} , 
+Attribute Name >> value5
+Fields >>>> {part_0=[value, code, codeSystem, codeSystemVersion]} , {part_1=[value, code, codeSystem, codeSystemVersion]} , 
+Attribute Name >> value6
+Fields >>>> {part_0=[value, code, codeSystem, codeSystemVersion]} , {part_1=[value, code, codeSystem, codeSystemVersion]} , 
+Attribute Name >> id
+Fields >>>> id , 
+Attribute Name >> value3
+Fields >>>> {part_0=[value, code, codeSystem, codeSystemVersion]} , 
+
+Class Name gov.nih.nci.cacoresdk.domain.onetomany.unidirectional.KeyChain
+
+Attribute Name >> keyCollection
+Fields >>>> keyCollection , 
+Attribute Name >> name
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.inheritance.abstrakt.Pupil
+
+Attribute Name >> name
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.datatype.TelEmailDataType
+
+Attribute Name >> value1
+Fields >>>> value , 
+Attribute Name >> value2
+Fields >>>> nullFlavor , value , 
+Attribute Name >> id
+Fields >>>> id , 
+
+Class Name gov.nih.nci.cacoresdk.domain.inheritance.abstrakt.PrivateTeacher
+
+Attribute Name >> yearsExperience
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.inheritance.implicit.FreshwaterFishTank
+
+Attribute Name >> shape
+Fields >>>> value , 
+Attribute Name >> numGallons
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+Attribute Name >> filterModel
+Fields >>>> value , 
+
+Class Name gov.nih.nci.cacoresdk.domain.interfaze.Dog
+
+Attribute Name >> gender
+Fields >>>> value , 
+Attribute Name >> breed
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametablerootlevel.FinancialCalculator
+
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.datatype.IntDataType
+
+Attribute Name >> value1
+Fields >>>> value , 
+Attribute Name >> value2
+Fields >>>> nullFlavor , value , 
+Attribute Name >> id
+Fields >>>> id , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.primarykey.FloatPrimitiveKey
+
+Attribute Name >> name
+Fields >>>> name , 
+Attribute Name >> id
+Fields >>>> id , 
+
+Class Name gov.nih.nci.cacoresdk.domain.inheritance.implicit.Fish
+
+Attribute Name >> genera
+Fields >>>> value , 
+Attribute Name >> tank
+Fields >>>> tank , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.differentpackage.associations.Pie
+
+Attribute Name >> filling
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.PresidentialGovt
+
+Attribute Name >> president
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.sametable.PvtOrganization
+
+Attribute Name >> ceo
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.sametable.HardTop
+
+Attribute Name >> keyCode
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.onetomany.bidirectional.HardDrive
+
+Attribute Name >> computer
+Fields >>>> 
+Attribute Name >> size
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.manytomany.bidirectional.Employee
+
+Attribute Name >> projectCollection
+Fields >>>> projectCollection , 
+Attribute Name >> name
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.datatype.CdDataType
+
+Attribute Name >> value1
+Fields >>>> code , 
+Attribute Name >> value4
+Fields >>>> nullFlavor , code , codeSystem , codeSystemVersion , codeSystemName , {displayName=[nullFlavor, value]} , {originalText=[nullFlavor, value]} , 
+Attribute Name >> value7
+Fields >>>> {code=[code]} , {codeSystemName=[codeSystemName]} , {codeSystemVersion=[codeSystemVersion]} , {nullFlavor=[nullFlavor]} , {codeSystem=[codeSystem]} , {originalText=[nullFlavor, value]} , {displayName=[nullFlavor, value]} , 
+Attribute Name >> value2
+Fields >>>> nullFlavor , code , 
+Attribute Name >> value8
+Fields >>>> {code=[code]} , {codeSystemName=[codeSystemName]} , {codeSystemVersion=[codeSystemVersion]} , {nullFlavor=[nullFlavor]} , {codeSystem=[codeSystem]} , {originalText=[nullFlavor, value]} , {displayName=[nullFlavor, value]} , 
+Attribute Name >> value5
+Fields >>>> nullFlavor , code , codeSystem , codeSystemName , codeSystemVersion , {displayName=[nullFlavor, value]} , {originalText=[nullFlavor, value]} , 
+Attribute Name >> value6
+Fields >>>> nullFlavor , code , codeSystem , codeSystemName , codeSystemVersion , {displayName=[nullFlavor, value]} , {originalText=[nullFlavor, value]} , 
+Attribute Name >> id
+Fields >>>> id , 
+Attribute Name >> value3
+Fields >>>> code , 
+
+Class Name gov.nih.nci.cacoresdk.domain.onetomany.selfassociation.Element
+
+Attribute Name >> childCollection
+Fields >>>> childCollection , 
+Attribute Name >> name
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.levelassociation.Hand
+
+Attribute Name >> cardCollection
+Fields >>>> cardCollection , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.AssociateProfessor
+
+Attribute Name >> yearsServed
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.differentpackage.associations.Utensil
+
+Attribute Name >> name
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+Attribute Name >> dessertCollection
+Fields >>>> dessertCollection , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.datatype.DsetTelDataType
+
+Attribute Name >> value1
+Fields >>>> {item<gov.nih.nci.iso21090.Tel>=[value]} , 
+Attribute Name >> value2
+Fields >>>> {} , 
+Attribute Name >> id
+Fields >>>> id , 
+Attribute Name >> value3
+Fields >>>> {} , 
+
+Class Name gov.nih.nci.cacoresdk.domain.manytoone.unidirectional.Restaurant
+
+Attribute Name >> name
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.datatype.EnPnDataType
+
+Attribute Name >> value1
+Fields >>>> {part_0=[value]} , 
+Attribute Name >> id
+Fields >>>> id , 
+
+Class Name gov.nih.nci.cacoresdk.domain.inheritance.childwithassociation.Credit
+
+Attribute Name >> cardNumber
+Fields >>>> value , 
+Attribute Name >> issuingBank
+Fields >>>> 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.sametable.Organization
+
+Attribute Name >> name
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.inheritance.childwithassociation.Cash
+
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.datatype.BlDataType
+
+Attribute Name >> value1
+Fields >>>> value , 
+Attribute Name >> value2
+Fields >>>> nullFlavor , value , 
+Attribute Name >> id
+Fields >>>> id , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.datatype.TsDataType
+
+Attribute Name >> value1
+Fields >>>> value , 
+Attribute Name >> value2
+Fields >>>> nullFlavor , value , 
+Attribute Name >> id
+Fields >>>> id , 
+
+Class Name gov.nih.nci.cacoresdk.domain.manytomany.bidirectional.Project
+
+Attribute Name >> employeeCollection
+Fields >>>> employeeCollection , 
+Attribute Name >> name
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.Product
+
+Attribute Name >> line
+Fields >>>> 
+Attribute Name >> name
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.onetomany.bidirectional.Computer
+
+Attribute Name >> hardDriveCollection
+Fields >>>> hardDriveCollection , 
+Attribute Name >> type
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.differentpackage.associations.IceCream
+
+Attribute Name >> topping
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.datatype.TelDataType
+
+Attribute Name >> value1
+Fields >>>> value , 
+Attribute Name >> value2
+Fields >>>> nullFlavor , value , 
+Attribute Name >> id
+Fields >>>> id , 
+
+Class Name gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.LCDMonitor
+
+Attribute Name >> dpiSupported
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation.withjoin.Bride
+
+Attribute Name >> father
+Fields >>>> 
+Attribute Name >> name
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+Attribute Name >> mother
+Fields >>>> 
+
+Class Name gov.nih.nci.cacoresdk.domain.onetomany.bidirectional.withjoin.Passanger
+
+Attribute Name >> flight
+Fields >>>> 
+Attribute Name >> name
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.GraduateStudent
+
+Attribute Name >> projectName
+Fields >>>> value , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.primarykey.LongPrimitiveKey
+
+Attribute Name >> name
+Fields >>>> name , 
+Attribute Name >> id
+Fields >>>> id , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.datatype.AllDataType
+
+Attribute Name >> floatValue
+Fields >>>> floatValue , 
+Attribute Name >> intPrimitiveValue
+Fields >>>> intPrimitiveValue , 
+Attribute Name >> booleanValue
+Fields >>>> booleanValue , 
+Attribute Name >> intValue
+Fields >>>> intValue , 
+Attribute Name >> datePrimitiveValue
+Fields >>>> datePrimitiveValue , 
+Attribute Name >> longPrimitiveValue
+Fields >>>> longPrimitiveValue , 
+Attribute Name >> doublePrimitiveValue
+Fields >>>> doublePrimitiveValue , 
+Attribute Name >> stringValue
+Fields >>>> stringValue , 
+Attribute Name >> dateValue
+Fields >>>> dateValue , 
+Attribute Name >> id
+Fields >>>> id , 
+Attribute Name >> longValue
+Fields >>>> longValue , 
+Attribute Name >> stringCollection
+Fields >>>> stringCollection , 
+Attribute Name >> characterValue
+Fields >>>> characterValue , 
+Attribute Name >> characterPrimitiveValue
+Fields >>>> characterPrimitiveValue , 
+Attribute Name >> stringPrimitiveValue
+Fields >>>> stringPrimitiveValue , 
+Attribute Name >> floatPrimitiveValue
+Fields >>>> floatPrimitiveValue , 
+Attribute Name >> booleanPrimitiveValue
+Fields >>>> booleanPrimitiveValue , 
+Attribute Name >> doubleValue
+Fields >>>> doubleValue , 
+Attribute Name >> blobValue
+Fields >>>> blobValue , 
+Attribute Name >> clobValue
+Fields >>>> clobValue , 
+
+Class Name gov.nih.nci.cacoresdk.domain.onetomany.bidirectional.withjoin.Flight
+
+Attribute Name >> destination
+Fields >>>> value , 
+Attribute Name >> passangerCollection
+Fields >>>> passangerCollection , 
+Attribute Name >> id
+Fields >>>> extension , 
+
+Class Name gov.nih.nci.cacoresdk.domain.other.primarykey.DoubleKey
+
+Attribute Name >> name
+Fields >>>> name , 
+Attribute Name >> id
+Fields >>>> id , 
