@@ -143,7 +143,7 @@ public class ClassCacheTest extends TestCase {
 			String objectName = objectNameMapEntry.getKey();
 			Map<String, List<Object>> isoAttributeMapList = objectNameMapEntry
 					.getValue();
-			System.out.println("\nClass Name " + objectName);
+			System.out.println("\n\nClass Name " + objectName);
 			Iterator<Entry<String, List<Object>>> isoAttributeIterator = isoAttributeMapList
 					.entrySet().iterator();
 			while (isoAttributeIterator.hasNext()) {
