@@ -636,13 +636,6 @@ public class HtmlUtils {
 	private static String getHTML_QTY(List<Object> searchableFields) {
 		StringBuilder sb = new StringBuilder();
 		
-		if (searchableFields.contains("value")){
-			sb.append("<tr>");
-			sb.append("  <td class=\"isoFormLabel\">Value:</td>");
-			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"value\" id=\"value\" class=\"formFieldSized\" /></td>");
-			sb.append("</tr>");		
-		}
-		
 		return sb.toString();
 	}
 
@@ -819,23 +812,23 @@ public class HtmlUtils {
 	}
 
 	private static String getScreen_INT(List<Object> searchableFields) {
-		return getHTML_ANY(searchableFields) + getHTML_INT(searchableFields);
+		return getHTML_ANY(searchableFields) + getHTML_QTY(searchableFields) + getHTML_INT(searchableFields);
 	}
 
 	private static String getScreen_IVL(String genericType,List<Object> searchableFields) {
-		return getHTML_ANY(searchableFields) + getHTML_IVL(genericType,searchableFields);
+		return getHTML_ANY(searchableFields) + getHTML_QTY(searchableFields) + getHTML_IVL(genericType,searchableFields);
 	}	
 
 	private static String getScreen_PQ(List<Object> searchableFields) {
-		return getHTML_ANY(searchableFields) + getHTML_PQV(searchableFields) + getHTML_PQ(searchableFields);
+		return getHTML_ANY(searchableFields) + getHTML_QTY(searchableFields) + getHTML_PQV(searchableFields) + getHTML_PQ(searchableFields);
 	}
 	
 	private static String getScreen_QTY(List<Object> searchableFields) {	
-		return getHTML_ANY(searchableFields) + getHTML_QTY(searchableFields);
+		return getHTML_QTY(searchableFields);
 	}	
 
 	private static String getScreen_REAL(List<Object> searchableFields) {
-		return getHTML_ANY(searchableFields) + getHTML_REAL(searchableFields);
+		return getHTML_ANY(searchableFields) + getHTML_QTY(searchableFields) + getHTML_REAL(searchableFields);
 	}
 
 	private static String getScreen_SC(List<Object> searchableFields) {
@@ -871,7 +864,7 @@ public class HtmlUtils {
 	}
 
 	private static String getScreen_TS(List<Object> searchableFields) {	
-		return getHTML_ANY(searchableFields) + getHTML_TS(searchableFields);
+		return getHTML_ANY(searchableFields) + getHTML_QTY(searchableFields) + getHTML_TS(searchableFields);
 	}
 	
 	public static String getHtmlFor(String attrName, String attrType, String focusAttributes) {
