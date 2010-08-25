@@ -15,8 +15,6 @@ import javax.script.CompiledScript;
 import javax.script.ScriptEngineFactory;
 import javax.script.ScriptException;
 
-import com.lucidtechnics.blackboard.util.PropertyUtil;
-
 public class OmniScriptingUtil
    implements ScriptingUtil
 {
