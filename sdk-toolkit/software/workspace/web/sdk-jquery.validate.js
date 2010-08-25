@@ -51,3 +51,19 @@
     	//alert("Enabling Validation");
 		$("#Result").validate();
     };
+    
+    function setTabIndex()
+    {
+    	//alert("Setting Tab Order");
+    	var tabindex = 1;
+    	$('input,select').each(function() {
+    	    	if (this.type != "hidden") {
+    	    	    	var $input = $(this);
+    	    	    	$input.attr("tabindex", tabindex);
+    	    	    	tabindex++;
+				}
+		});
+		
+		$("input:text:visible:first").focus();
+	};
+	

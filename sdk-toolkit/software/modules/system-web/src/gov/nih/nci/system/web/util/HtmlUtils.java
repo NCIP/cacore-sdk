@@ -273,7 +273,7 @@ public class HtmlUtils {
 		return "";		
 	}	
 
-	private static String getHTML_Boolean(String attrName, String focusAttributes) {
+	private static String getHTML_Boolean(String attrName) {
 
 		StringBuilder sb = new StringBuilder();
 		sb.append(getSelect_Boolean(attrName));
@@ -282,7 +282,7 @@ public class HtmlUtils {
 
 	}
 	
-	private static String getHTML(String attrName, String focusAttributes, String validationClass) {
+	private static String getHTML(String attrName, String validationClass) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("<input type=\"text\" name=\"").append(attrName).append("\" id=\"").append(attrName).append("\" class=\"formFieldSized ").append(validationClass).append("\"/>");
 		
@@ -867,25 +867,25 @@ public class HtmlUtils {
 		return getHTML_ANY(searchableFields) + getHTML_QTY(searchableFields) + getHTML_TS(searchableFields);
 	}
 	
-	public static String getHtmlFor(String attrName, String attrType, String focusAttributes) {
+	public static String getHtmlFor(String attrName, String attrType) {
 
 		StringBuilder html = new StringBuilder();
 		String validationClass = null;
 		
 		if ("Boolean".equalsIgnoreCase(attrType)){
-			html.append(getHTML_Boolean(attrName, focusAttributes));		
+			html.append(getHTML_Boolean(attrName));		
 		} else if ("Double".equalsIgnoreCase(attrType) || "Float".equalsIgnoreCase(attrType)){
 			validationClass = "number";
-			html.append(getHTML(attrName, focusAttributes,validationClass));	
+			html.append(getHTML(attrName,validationClass));	
 		} else if ("Integer".equalsIgnoreCase(attrType) || "Long".equalsIgnoreCase(attrType)){
 			validationClass = "int_long";
-			html.append(getHTML(attrName, focusAttributes, validationClass));	
+			html.append(getHTML(attrName, validationClass));	
 		} else if ("Character".equalsIgnoreCase(attrType)){
 			validationClass = "char";
-			html.append(getHTML(attrName, focusAttributes, validationClass));			
+			html.append(getHTML(attrName, validationClass));			
 		} else {	
 			validationClass = "";
-			html.append(getHTML(attrName, focusAttributes, validationClass));
+			html.append(getHTML(attrName, validationClass));
 		}
 		
 		System.out.println("HTML for non-ISO data type " +attrType + ": "+html);
