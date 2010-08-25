@@ -257,6 +257,7 @@ public class HttpUtilsTest extends TestCase{
 		String	queryText="query=DsetCdDataType&DsetCdDataType[@value3=[@item=[@code=CODE1]]][@value3=[@item=[@codeSystem=CODE_SYSTEM1]]]";
 		try{
 			process(queryText,"test37");
+			fail("must throw an exception");
 		}catch (Exception e) {
 			assertEquals("ERROR :  Invalid Query Criteria ", e.getMessage());
 		}
