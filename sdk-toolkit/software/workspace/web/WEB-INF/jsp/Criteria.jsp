@@ -2,7 +2,8 @@
 <%@taglib prefix="s" uri="/struts-tags" %>
 <%@ page import="gov.nih.nci.system.web.util.JSPUtils,
 				 gov.nih.nci.system.web.util.HtmlUtils,
-				 java.lang.reflect.*,java.util.*" %> 
+				 java.lang.reflect.*,
+				 java.util.*" %> 
 			 
 <link href="styleSheet.css" type="text/css" rel="stylesheet" />
 <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
@@ -10,9 +11,9 @@
 <script type="text/javascript" src="iso-21090-datatype.2.1.js"></script>
 <%
 JSPUtils jspUtils= null;
-List fieldNames=new ArrayList();
-List domainNames=new ArrayList();
-String message = null, selectedSearchDomain=null;
+List<Field> fieldNames=new ArrayList<Field>();
+List<String> domainNames=new ArrayList<String>();
+String message=null, selectedSearchDomain=null;
 String className = (String)request.getAttribute("klassName");
 
 //out.println("className: " + className);
@@ -82,56 +83,50 @@ if(className != null)
 //		</tr>
 //-->	
 		
-		String focusAttributes;
 		if(fieldNames != null && fieldNames.size() > 0)
 		{  
-	String attrName;
-	String attrNameLabel = "";
+			String attrName;
+			String attrNameLabel = "";
 		   	String attrType;
 		   	String attrGenericTypeClassName;
 		   	String attrTypeClassName = "";
 		   
 		   	for(int i=0; i < fieldNames.size(); i++)
-		   	{	attrName = ((Field)fieldNames.get(i)).getName();
-	   	attrType = ((Field)fieldNames.get(i)).getType().getName();
-	   	attrGenericTypeClassName = ((Field)fieldNames.get(i)).getGenericType().toString();
+		   	{	
+		   		attrName = ((Field)fieldNames.get(i)).getName();
+	   			attrType = ((Field)fieldNames.get(i)).getType().getName();
+	   			attrGenericTypeClassName = ((Field)fieldNames.get(i)).getGenericType().toString();
 	   	
-	   	System.out.println("Field Type: "+((Field)fieldNames.get(i)).getType().getName());
-	   	System.out.println("Field Generic Type: "+((Field)fieldNames.get(i)).getGenericType());
+	   			System.out.println("Field Type: "+((Field)fieldNames.get(i)).getType().getName());
+	   			System.out.println("Field Generic Type: "+((Field)fieldNames.get(i)).getGenericType());
 	   	
-	   	boolean isIsoDataTypeAttr = attrType.startsWith("gov.nih.nci.iso21090");
+	   			boolean isIsoDataTypeAttr = attrType.startsWith("gov.nih.nci.iso21090");
 	   	
-	   	if (isIsoDataTypeAttr) {
-			int beginIndex = attrType.lastIndexOf('.');
-			if (beginIndex > 0) {
-				++beginIndex;
-				attrTypeClassName =  attrType.substring(beginIndex).toUpperCase();
-			}
+	   			if (isIsoDataTypeAttr) {
+					int beginIndex = attrType.lastIndexOf('.');
+					if (beginIndex > 0) {
+						++beginIndex;
+						attrTypeClassName =  attrType.substring(beginIndex).toUpperCase();
+					}
 	   		
-	   		if (attrGenericTypeClassName.indexOf('<') > 0){ // e.g. IVL<INT>
-	   			beginIndex = attrGenericTypeClassName.lastIndexOf('.') + 1;
+			   		if (attrGenericTypeClassName.indexOf('<') > 0){ // e.g. IVL<INT>
+			   			beginIndex = attrGenericTypeClassName.lastIndexOf('.') + 1;
+			   		
+			   			attrGenericTypeClassName = attrGenericTypeClassName.substring(beginIndex,attrGenericTypeClassName.length()-1).toUpperCase();
+			   			attrTypeClassName +=  "&lt;" + attrGenericTypeClassName + "&gt;";
+			   		}
+			   		
+			   		attrNameLabel = attrName + " (" + attrTypeClassName +")"; 
+			   	} else {
 	   		
-	   			attrGenericTypeClassName = attrGenericTypeClassName.substring(beginIndex,attrGenericTypeClassName.length()-1).toUpperCase();
-	   			attrTypeClassName +=  "&lt;" + attrGenericTypeClassName + "&gt;";
-	   		}
-	   		
-	   		attrNameLabel = attrName + " (" + attrTypeClassName +")"; 
-	   	} else {
-	   		
-			int beginIndex = attrType.lastIndexOf('.');
-			if (beginIndex > 0) {
-				++beginIndex;
-				attrTypeClassName =  attrType.substring(beginIndex).toUpperCase();
-			}
+					int beginIndex = attrType.lastIndexOf('.');
+					if (beginIndex > 0) {
+						++beginIndex;
+						attrTypeClassName =  attrType.substring(beginIndex).toUpperCase();
+					}
 			
-	   		attrNameLabel = attrName;
-	   	}
-	   	
-	   	if (i==0) {
-	   		focusAttributes = "id=\"firstInputField\" tabindex=\"1\"";
-	   	} else {
-	   		focusAttributes = "tabindex=\"" + i+1 + "\"";
-	   	}
+			   		attrNameLabel = attrName;
+			   	}
 %>
 			   	
 		<tr align="left" valign="top">
@@ -147,7 +142,7 @@ if(className != null)
 			} else {
 		%>
 			<td class="formField" width="90%">
-				<%=HtmlUtils.getHtmlFor(attrName,attrTypeClassName,focusAttributes)%>
+				<%=HtmlUtils.getHtmlFor(attrName,attrTypeClassName)%>
 			</td>
 		<%} %>
 		</tr>

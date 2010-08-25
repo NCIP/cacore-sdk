@@ -34,8 +34,8 @@
             load: function(type, data, evt) {
                 var displayDiv = dojo.byId("displayId");
                 displayDiv.innerHTML = data;
-		    	setFocus('firstInputField');
 		    	enableValidation();
+		    	setTabIndex();
             },
             mimeType: "text/html"
         });
