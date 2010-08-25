@@ -64,6 +64,7 @@
 				}
 		});
 		
-		$("input:text:visible:first").focus();
+		//Set focus on first input field
+		$(":input:visible:first").focus();
 	};
 	
