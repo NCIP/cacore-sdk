@@ -1,0 +1,14 @@
+##
+## appName and package name are pushed via token replacement
+## configuration files.
+##
+package=gov.nih.nci.${appName}
+description=${appName} is a web application.
+deployDir=${basedir}/deploy
+version=alpha-0.10
+
+##
+## Specify these values for your java doc 
+##
+javadoc.java.version=http://java.sun.com/j2se/1.6.0/docs/api/
+javadoc.footer.tag.info=Copyright 2009. All Rights Reserved
