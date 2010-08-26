@@ -146,6 +146,35 @@ public class XMI2EcoreModelConverter extends UMLImporter {
 
 		return epkg;
 	}
+	
+	public Collection<org.eclipse.uml2.uml.Package> convert2UML(String xmiFilePath) throws Exception {
+		if (xmiFilePath == null)
+			throw new IllegalArgumentException("xmiFilePath cannot be null.");
+
+		File preparedFile = prepareFile(xmiFilePath);
+		URI uri = URI.createFileURI(preparedFile.getCanonicalPath());
+		String modelLocation = uri.toString();
+		super.setModelLocation(modelLocation);
+
+		Map<String, String> options = new HashMap<String, String>();
+		List<URI> locationURIs = getModelLocationURIs();
+		Collection<org.eclipse.uml2.uml.Package> packages = new ArrayList<org.eclipse.uml2.uml.Package>();
+
+		ResourceSet umlResourceSet = createResourceSet();
+		umlResourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap()
+				.put("xmi", new XMI2UMLResourceFactoryImpl());
+
+		for (URI locationURI : locationURIs) {
+			packages
+					.addAll(EcoreUtil
+							.<org.eclipse.uml2.uml.Package> getObjectsByType(
+									umlResourceSet.getResource(locationURI,
+											true).getContents(),
+									UMLPackage.Literals.PACKAGE));
+		}
+
+		return packages;
+	}
 
 	File prepareFile(String filePath) throws IOException {
 		File f = new File(filePath);
