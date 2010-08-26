@@ -40,7 +40,7 @@ public class Generator
 			{
 				for (String script: scriptList)
 				{
-					ScriptContext scriptContext = determineScriptContext(script, _generatorContext);	
+					ScriptContext scriptContext = determineScriptContext(script, eClassifier.getName(), _generatorContext);	
 					executeScript(script, scriptContext);
 					processScriptContext(scriptContext);
 
@@ -96,15 +96,18 @@ public class Generator
 		_scriptContext.reset();
 	}
 
-	public ScriptContext determineScriptContext(String _script, GeneratorContext _generatorContext)
+	public ScriptContext determineScriptContext(String _script, String _focusDomain, GeneratorContext _generatorContext)
 	{
 		ScriptContext scriptContext = getScriptContextMap().get(_script);
 
 		if (scriptContext == null)
 		{
-			scriptContext = new ScriptContext(_script, _generatorContext);
+			scriptContext = new ScriptContext(_script, _generatorContext.getEPackage(), _generatorContext.getMemory());
 			getScriptContextMap().put(_script, scriptContext);
 		}
+
+		scriptContext.setFocusDomain(_focusDomain);
+		scriptContext.setGeneratorContext(_generatorContext);
 		
 		return scriptContext;
 	}
