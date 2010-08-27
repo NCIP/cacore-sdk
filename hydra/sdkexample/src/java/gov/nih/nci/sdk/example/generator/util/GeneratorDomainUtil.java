@@ -1,10 +1,5 @@
 package gov.nih.nci.sdk.example.generator.util;
 
-import gov.nih.nci.sdk.core.generator.ECOREAttribute;
-import gov.nih.nci.sdk.core.generator.ECOREDomain;
-import gov.nih.nci.sdk.core.generator.ECOREElement;
-import gov.nih.nci.sdk.core.generator.ECOREOperation;
-
 import java.util.ArrayList;
 import java.util.List;
 
