@@ -1,6 +1,6 @@
 package gov.nih.nci.sdk.example.generator;
 
-import gov.nih.nci.sdk.core.generator.GeneratorContext;
+import gov.nih.nci.sdk.core.GeneratorContext;
 import gov.nih.nci.sdk.example.generator.util.GeneratorUtil;
 
 public class JAXBPojoGenerator extends PojoGenerator {
