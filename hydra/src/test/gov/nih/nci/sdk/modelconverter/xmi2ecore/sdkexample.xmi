@@ -1409,6 +1409,12 @@
 		<thecustomprofile:constraint base_Class="EAID_BC31AD66_1D75_457b_84F2_ED55EF863BAE"/>
 		<thecustomprofile:Uri base_Class="EAID_0BFF0F65_B5DB_4e77_B13B_E06A0D594AA3"/>
 		<WebModeling:xml base_Class="EAID_6DEA83B6_B9F2_4d4e_A148_82454771ACB2"/>
+		<thecustomprofile:class.per.table.name base_Class="EAID_1900C30C_5F50_4178_BE67_C2242BE57225" class.per.table.name="ORGANIZATION"/>
+		<thecustomprofile:prop.per.primary.key base_Attribute="EAID_F0C81987_C4A1_4e4f_B05C_C5EFCA810E53" prop.per.primary.key="0"/>
+		<thecustomprofile:class.per.table.name base_Class="EAID_0EF420F0_4227_406f_A187_85A06587C2A1" class.per.table.name="PERSON"/>
+		<thecustomprofile:prop.per.primary.key base_Attribute="EAID_E5C11E6A_77A1_4ce2_A8E2_28B8EF22E684" prop.per.primary.key="0"/>
+		<thecustomprofile:prop.val.min.length base_Attribute="EAID_2A61BDBC_D606_42a1_9650_711E33BFBD85" prop.val.min.length="1"/>
+		<thecustomprofile:prop.val.max.length base_Attribute="EAID_2A61BDBC_D606_42a1_9650_711E33BFBD85" prop.val.max.length="20"/>
 		<thecustomprofile:prop.val.required base_Attribute="EAID_2A61BDBC_D606_42a1_9650_711E33BFBD85" prop.val.required="true"/>
 		<uml:Profile xmi:version="2.1" xmlns:uml="http://schema.omg.org/spec/UML/2.1/uml.xml" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmi:id="8AD18777-7" nsPrefix="WebModeling" name="WebModeling" metamodelReference="mmref01">
 			<ownedComment xmi:type="uml:Comment" xmi:id="comment01" annotatedElement="8AD18777-7">
@@ -1796,6 +1802,17 @@
 			<packageImport xmi:id="mmref01">
 				<importedPackage href="http://schema.omg.org/spec/UML/2.1/uml.xml"/>
 			</packageImport>
+			<packagedElement xmi:type="uml:Stereotype" xmi:id="prop.val.min.length" name="prop.val.min.length">
+				<ownedAttribute xmi:type="uml:Property" xmi:id="prop.val.min.length-base_Attribute" name="base_Attribute" association="Attribute_prop.val.min.length">
+					<type href="http://schema.omg.org/spec/UML/2.1/uml.xml#Attribute"/>
+				</ownedAttribute>
+				<ownedAttribute xmi:type="uml:Property" xmi:id="prop.val.min.length-prop.val.min.length" name="prop.val.min.length">
+					<type href="http://schema.omg.org/spec/UML/2.1/uml.xml#String"/>
+				</ownedAttribute>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Extension" xmi:id="Attribute_prop.val.min.length" name="A_Attribute_prop.val.min.length" memberEnd="extension_prop.val.min.length prop.val.min.length-base_Attribute">
+				<ownedEnd xmi:id="extension_prop.val.min.length" name="extension_prop.val.min.length" type="prop.val.min.length" isComposite="true" lower="0" upper="1" memberEnd="extension_prop.val.min.length prop.val.min.length-base_Attribute"/>
+			</packagedElement>
 			<packagedElement xmi:type="uml:Stereotype" xmi:id="enum" name="enum">
 				<ownedAttribute xmi:type="uml:Property" xmi:id="enum-base_Attribute" name="base_Attribute" association="Attribute_enum">
 					<type href="http://schema.omg.org/spec/UML/2.1/uml.xml#Attribute"/>
@@ -1803,6 +1820,17 @@
 			</packagedElement>
 			<packagedElement xmi:type="uml:Extension" xmi:id="Attribute_enum" name="A_Attribute_enum" memberEnd="extension_enum enum-base_Attribute">
 				<ownedEnd xmi:id="extension_enum" name="extension_enum" type="enum" isComposite="true" lower="0" upper="1" memberEnd="extension_enum enum-base_Attribute"/>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Stereotype" xmi:id="prop.val.max.length" name="prop.val.max.length">
+				<ownedAttribute xmi:type="uml:Property" xmi:id="prop.val.max.length-base_Attribute" name="base_Attribute" association="Attribute_prop.val.max.length">
+					<type href="http://schema.omg.org/spec/UML/2.1/uml.xml#Attribute"/>
+				</ownedAttribute>
+				<ownedAttribute xmi:type="uml:Property" xmi:id="prop.val.max.length-prop.val.max.length" name="prop.val.max.length">
+					<type href="http://schema.omg.org/spec/UML/2.1/uml.xml#String"/>
+				</ownedAttribute>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Extension" xmi:id="Attribute_prop.val.max.length" name="A_Attribute_prop.val.max.length" memberEnd="extension_prop.val.max.length prop.val.max.length-base_Attribute">
+				<ownedEnd xmi:id="extension_prop.val.max.length" name="extension_prop.val.max.length" type="prop.val.max.length" isComposite="true" lower="0" upper="1" memberEnd="extension_prop.val.max.length prop.val.max.length-base_Attribute"/>
 			</packagedElement>
 			<packagedElement xmi:type="uml:Stereotype" xmi:id="constraint" name="constraint">
 				<ownedAttribute xmi:type="uml:Property" xmi:id="constraint-base_Class" name="base_Class" association="Class_constraint">
@@ -1839,6 +1867,17 @@
 			<packagedElement xmi:type="uml:Extension" xmi:id="Attribute_mapped-constant:gov.nih.nci.iso21090.IVL&lt;PQ&gt;.low.unit" name="A_Attribute_mapped-constant:gov.nih.nci.iso21090.IVL&lt;PQ&gt;.low.unit" memberEnd="extension_mapped-constant:gov.nih.nci.iso21090.IVL&lt;PQ&gt;.low.unit mapped-constant:gov.nih.nci.iso21090.IVL&lt;PQ&gt;.low.unit-base_Attribute">
 				<ownedEnd xmi:id="extension_mapped-constant:gov.nih.nci.iso21090.IVL&lt;PQ&gt;.low.unit" name="extension_mapped-constant:gov.nih.nci.iso21090.IVL&lt;PQ&gt;.low.unit" type="mapped-constant:gov.nih.nci.iso21090.IVL&lt;PQ&gt;.low.unit" isComposite="true" lower="0" upper="1" memberEnd="extension_mapped-constant:gov.nih.nci.iso21090.IVL&lt;PQ&gt;.low.unit mapped-constant:gov.nih.nci.iso21090.IVL&lt;PQ&gt;.low.unit-base_Attribute"/>
 			</packagedElement>
+			<packagedElement xmi:type="uml:Stereotype" xmi:id="class.per.table.name" name="class.per.table.name">
+				<ownedAttribute xmi:type="uml:Property" xmi:id="class.per.table.name-base_Class" name="base_Class" association="Class_class.per.table.name">
+					<type href="http://schema.omg.org/spec/UML/2.1/uml.xml#Class"/>
+				</ownedAttribute>
+				<ownedAttribute xmi:type="uml:Property" xmi:id="class.per.table.name-class.per.table.name" name="class.per.table.name">
+					<type href="http://schema.omg.org/spec/UML/2.1/uml.xml#String"/>
+				</ownedAttribute>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Extension" xmi:id="Class_class.per.table.name" name="A_Class_class.per.table.name" memberEnd="extension_class.per.table.name class.per.table.name-base_Class">
+				<ownedEnd xmi:id="extension_class.per.table.name" name="extension_class.per.table.name" type="class.per.table.name" isComposite="true" lower="0" upper="1" memberEnd="extension_class.per.table.name class.per.table.name-base_Class"/>
+			</packagedElement>
 			<packagedElement xmi:type="uml:Stereotype" xmi:id="Uri" name="Uri">
 				<ownedAttribute xmi:type="uml:Property" xmi:id="Uri-base_Class" name="base_Class" association="Class_Uri">
 					<type href="http://schema.omg.org/spec/UML/2.1/uml.xml#Class"/>
@@ -1857,6 +1896,17 @@
 			</packagedElement>
 			<packagedElement xmi:type="uml:Extension" xmi:id="Attribute_prop.val.required" name="A_Attribute_prop.val.required" memberEnd="extension_prop.val.required prop.val.required-base_Attribute">
 				<ownedEnd xmi:id="extension_prop.val.required" name="extension_prop.val.required" type="prop.val.required" isComposite="true" lower="0" upper="1" memberEnd="extension_prop.val.required prop.val.required-base_Attribute"/>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Stereotype" xmi:id="prop.per.primary.key" name="prop.per.primary.key">
+				<ownedAttribute xmi:type="uml:Property" xmi:id="prop.per.primary.key-base_Attribute" name="base_Attribute" association="Attribute_prop.per.primary.key">
+					<type href="http://schema.omg.org/spec/UML/2.1/uml.xml#Attribute"/>
+				</ownedAttribute>
+				<ownedAttribute xmi:type="uml:Property" xmi:id="prop.per.primary.key-prop.per.primary.key" name="prop.per.primary.key">
+					<type href="http://schema.omg.org/spec/UML/2.1/uml.xml#String"/>
+				</ownedAttribute>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Extension" xmi:id="Attribute_prop.per.primary.key" name="A_Attribute_prop.per.primary.key" memberEnd="extension_prop.per.primary.key prop.per.primary.key-base_Attribute">
+				<ownedEnd xmi:id="extension_prop.per.primary.key" name="extension_prop.per.primary.key" type="prop.per.primary.key" isComposite="true" lower="0" upper="1" memberEnd="extension_prop.per.primary.key prop.per.primary.key-base_Attribute"/>
 			</packagedElement>
 			<packagedElement xmi:type="uml:Stereotype" xmi:id="mapped-constant:gov.nih.nci.iso21090.ANY.nullFlavor" name="mapped-constant:gov.nih.nci.iso21090.ANY.nullFlavor">
 				<ownedAttribute xmi:type="uml:Property" xmi:id="mapped-constant:gov.nih.nci.iso21090.ANY.nullFlavor-base_Attribute" name="base_Attribute" association="Attribute_mapped-constant:gov.nih.nci.iso21090.ANY.nullFlavor">
@@ -8462,7 +8512,9 @@
 				<code gentype="Java"/>
 				<style appearance="BackColor=-1;BorderColor=65280;BorderWidth=4;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
 				<modelDocument/>
-				<tags/>
+				<tags>
+					<tag xmi:id="EAID_2D15EEDB_E4DB_4176_8B4E_84950FBE2909" name="class.per.table.name" value="ORGANIZATION" modelElement="EAID_1900C30C_5F50_4178_BE67_C2242BE57225"/>
+				</tags>
 				<xrefs value="$XREFPROP=$XID={F28CFB8F-C362-4040-9D3F-9070BD8FD497}$XID;$NAM=CustomProperties$NAM;$TYP=element property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isActive@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={1900C30C-5F50-4178-BE67-C2242BE57225}$CLT;$ENDXREF;"/>
 				<extendedProperties tagged="0" package_name="sdkexample" eventflags="ATT=c15f;LNK=0bfa;" cardinality="*"/>
 				<attributes>
@@ -8478,7 +8530,9 @@
 						<options/>
 						<style/>
 						<styleex value="volatile=0;"/>
-						<tags/>
+						<tags>
+							<tag xmi:id="EAID_35EB282C_F247_4da1_BBF9_0DF0A37A73A9" name="prop.per.primary.key" value="0"/>
+						</tags>
 						<xrefs/>
 					</attribute>
 					<attribute xmi:idref="EAID_8D227695_9AE7_4d57_B444_04F5E1A8B145" name="name" scope="Public">
@@ -8568,7 +8622,9 @@
 				<code gentype="Java"/>
 				<style appearance="BackColor=-1;BorderColor=65280;BorderWidth=4;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
 				<modelDocument/>
-				<tags/>
+				<tags>
+					<tag xmi:id="EAID_468A5620_AD3D_4916_AB2A_E1576AF10592" name="class.per.table.name" value="PERSON" modelElement="EAID_0EF420F0_4227_406f_A187_85A06587C2A1"/>
+				</tags>
 				<xrefs value="$XREFPROP=$XID={0F589F75-80C5-411f-BDA7-D80F280D99D3}$XID;$NAM=CustomProperties$NAM;$TYP=element property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isActive@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={0EF420F0-4227-406f-A187-85A06587C2A1}$CLT;$ENDXREF;"/>
 				<extendedProperties tagged="0" package_name="sdkexample" eventflags="LNK=5b14;ATT=918f;"/>
 				<attributes>
@@ -8599,7 +8655,9 @@
 						<options/>
 						<style/>
 						<styleex value="volatile=0;"/>
-						<tags/>
+						<tags>
+							<tag xmi:id="EAID_BC1FCE61_1E52_4e74_97DB_B213DDC1A99C" name="prop.per.primary.key" value="0"/>
+						</tags>
 						<xrefs/>
 					</attribute>
 					<attribute xmi:idref="EAID_2A61BDBC_D606_42a1_9650_711E33BFBD85" name="name" scope="Public">
@@ -8615,6 +8673,8 @@
 						<style/>
 						<styleex value="volatile=0;"/>
 						<tags>
+							<tag xmi:id="EAID_05087EB5_B33F_4337_B106_45080441843F" name="prop.val.max.length" value="20"/>
+							<tag xmi:id="EAID_4EE7A0C4_B3A4_47b0_BCEB_FA4AFD99C4F0" name="prop.val.min.length" value="1"/>
 							<tag xmi:id="EAID_BB9B46BA_2CDC_4b7e_BF4E_B4FB25B3B772" name="prop.val.required" value="true"/>
 						</tags>
 						<xrefs/>

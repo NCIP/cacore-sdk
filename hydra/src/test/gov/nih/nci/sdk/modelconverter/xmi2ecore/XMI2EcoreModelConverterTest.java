@@ -1,5 +1,7 @@
 package gov.nih.nci.sdk.modelconverter.xmi2ecore;
 
+import gov.nih.nci.sdk.modelconverter.util.SDKTag;
+
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -17,6 +19,7 @@ import org.eclipse.uml2.uml.Element;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.Package;
 import org.eclipse.uml2.uml.Profile;
+import org.eclipse.uml2.uml.Stereotype;
 
 public class XMI2EcoreModelConverterTest {
 	public static void processPackages(Collection<Package> pkgs) {
@@ -32,7 +35,7 @@ public class XMI2EcoreModelConverterTest {
 		
 		List<org.eclipse.uml2.uml.Stereotype> ass = pkg.getAppliedStereotypes();
 		System.out.println("ass size: " + ass.size());
-		Iterator itAss = ass.iterator();
+		Iterator<Stereotype> itAss = ass.iterator();
 		while(itAss.hasNext()) {
 			Object as = itAss.next();
 			System.out.println("as: " + as);
@@ -40,7 +43,7 @@ public class XMI2EcoreModelConverterTest {
 		
 		List<EAnnotation> eans = pkg.getEAnnotations();
 		System.out.println("eans size: " + eans.size());
-		Iterator itEans = eans.iterator();
+		Iterator<EAnnotation> itEans = eans.iterator();
 		while(itEans.hasNext()) {
 			Object ean = itEans.next();
 			System.out.println("ean: " + ean);
@@ -87,22 +90,24 @@ public class XMI2EcoreModelConverterTest {
 		
 		EClass eClass = null;
 		Iterator<EObject> pkgIter = packageInterface.eContents().iterator();
-		EObject eObjectImpl = null;
+		EObject eo = null;
 		while (pkgIter.hasNext()) {
-			eObjectImpl = (EObject) pkgIter.next();
-			if (eObjectImpl instanceof EClassImpl) {
-				eClass = (EClassImpl) eObjectImpl;
+			eo = pkgIter.next();
+			
+			if (eo instanceof EClassImpl) {
+				eClass = (EClassImpl) eo;
 				System.out.println("Parsing attributes for business entity " + eClass.getName());
 				EList<EStructuralFeature> attributes = eClass.getEAllStructuralFeatures();
 				Iterator<EStructuralFeature> itAttr = attributes.iterator();
 				while(itAttr.hasNext()) {
 					EStructuralFeature attr = itAttr.next();
 					System.out.println("attr: " + attr.getName());
+					System.out.println("attr container: " + attr.getEContainingClass().getName());
 				}
-			} else if (eObjectImpl instanceof EEnum) {
-				System.out.println("Parsing artifacts for enumerator " + ((EEnum) eObjectImpl).getName());
-			} else if (eObjectImpl instanceof EPackage) {
-				processPackage_ecore((EPackage) eObjectImpl);
+			} else if (eo instanceof EEnum) {
+				System.out.println("Parsing artifacts for enumerator " + ((EEnum) eo).getName());
+			} else if (eo instanceof EPackage) {
+				processPackage_ecore((EPackage) eo);
 			}
 		}
 	}
@@ -112,10 +117,16 @@ public class XMI2EcoreModelConverterTest {
 		try {
 			String pathName = "./test/gov/nih/nci/sdk/modelconverter/xmi2ecore/sdkexample.xmi";
 			EPackage epkg = test.convert(pathName);
+			EList annsPkg = epkg.getEAnnotations();
+			System.out.println("XXXX anns: " + annsPkg.size());
+			
+			EAnnotation eann = new SDKTag("class.per.table.name", "ORGANIZATION");
+			annsPkg.add(eann);
+			System.out.println("XXXX anns: " + annsPkg.size());
 			processPackage_ecore(epkg);
 			
-			Collection<Package> pkgs = test.convert2UML(pathName);
-			processPackages(pkgs);
+//			Collection<Package> pkgs = test.convert2UML(pathName);
+//			processPackages(pkgs);
 		} catch (Throwable ex) {
 			ex.printStackTrace();
 		}
