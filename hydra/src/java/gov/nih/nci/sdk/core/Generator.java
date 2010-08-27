@@ -26,27 +26,34 @@ public class Generator
 
 		if (_generatorContext.hasErrors() == false)
 		{
-			conduct(_generatorContext);
+			determineGeneratorScripts(_generatorContext);
+			level1Validate(_generatorContext);
+			
+			if (_generatorContext.hasErrors() == false)
+			{
+				conduct(_generatorContext);
+			}
 		}
 	}
 
 	private void conduct(GeneratorContext _generatorContext)
-	{
-		List<java.io.File> scriptList = determineGeneratorScripts(_generatorContext);
-		
+	{		
 		for (EClassifier eClassifier: _generatorContext.getEPackage().getEClassifiers())
 		{
 			if (_generatorContext.getDomainSet().contains(eClassifier.getName()) == true)
 			{
-				for (java.io.File script: scriptList)
+				for (java.io.File script: _generatorContext.getGeneratorScriptFileList())
 				{
-					ScriptContext scriptContext = determineScriptContext(script, eClassifier.getName(), _generatorContext);	
-					executeScript(script, scriptContext);
-					processScriptContext(scriptContext);
+					if (isValidationScript(script) == false)
+					{
+						ScriptContext scriptContext = determineScriptContext(script, eClassifier.getName(), _generatorContext);
+						executeScript(script, scriptContext);
+						processScriptContext(scriptContext);
 
-					//BREAK LOOP condition: execute script set
-					//generator context to abort operation
-					if (_generatorContext.isAborted() == true) { break; }
+						//BREAK LOOP condition: execute script set
+						//generator context to abort operation
+						if (_generatorContext.isAborted() == true) { break; }
+					}
 				}
 			}
 
@@ -113,9 +120,41 @@ public class Generator
 		return scriptContext;
 	}
 
+	private java.io.File findValidateScriptFile(List<java.io.File> _fileList)
+	{
+		java.io.File validateScriptFile = null;
+
+		for (java.io.File file: _fileList)
+		{
+			if (isValidationScript(file) == true)
+			{
+					validateScriptFile = file;
+					//BREAK: choosing first file that satisfies the
+					//validation rule criteria.
+					break;
+			}
+		}
+
+		return validateScriptFile;
+	}
+
+	public boolean isValidationScript(java.io.File _file)
+	{
+		return (_file.exists() == true &&
+				_file.isDirectory() == false &&
+				_file.getName().startsWith("level1validate.") == true &&
+				OmniScriptingUtil.hasScriptingUtil(determineFileExtension(_file)) == true);
+	}
+
 	public void level1Validate(GeneratorContext _generatorContext)
 	{
-		//TODO
+		java.io.File validateScriptFile = findValidateScriptFile(_generatorContext.getGeneratorScriptFileList());
+
+		if (validateScriptFile != null)
+		{
+			ScriptContext scriptContext = determineScriptContext(validateScriptFile, "", _generatorContext);	
+			executeScript(validateScriptFile, scriptContext);
+		}
 	}
 
 	public void level0Validate(GeneratorContext _generatorContext)
@@ -123,7 +162,7 @@ public class Generator
 		//TODO
 	}
 
-	public List<java.io.File> determineGeneratorScripts(GeneratorContext _generatorContext)
+	public void determineGeneratorScripts(GeneratorContext _generatorContext)
 	{
 		List<java.io.File> generatorScriptList = new java.util.ArrayList<java.io.File>();
 		
@@ -147,6 +186,6 @@ public class Generator
 			throw new RuntimeException("Generator base URI: " + _generatorContext.getGeneratorBase() + " is not a directory.");
 		}
 		
-		return generatorScriptList;
+		_generatorContext.setGeneratorScriptFileList(generatorScriptList);
 	}
 }
