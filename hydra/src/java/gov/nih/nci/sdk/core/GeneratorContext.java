@@ -6,6 +6,8 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.List;
+import java.util.ArrayList;
 
 public class GeneratorContext
 {
@@ -16,7 +18,8 @@ public class GeneratorContext
 	private MessageManager warningManager;
 	private boolean isAborted;
 	private Map memory;
-
+	private List generatorScriptFileList;
+	
 	public URI getGeneratorBase() { return generatorBase; }
 	public EPackage getEPackage() { return ePackage; }
 	public Set<String> getDomainSet() { return domainSet; }
@@ -24,6 +27,7 @@ public class GeneratorContext
 	public MessageManager getWarningManager() { return warningManager; }
 	private boolean getIsAborted() { return isAborted; }
 	public Map getMemory() { return memory; }
+	protected List getGeneratorScriptFileList() { return generatorScriptFileList; }
 	
 	public void setGeneratorBase(URI _generatorBase) { generatorBase = _generatorBase; }
 	public void setEPackage(EPackage _ePackage) { ePackage = _ePackage; }
@@ -32,6 +36,7 @@ public class GeneratorContext
 	private void setWarningManager(MessageManager _warningManager) { warningManager = _warningManager; }
 	private void setIsAborted(boolean _isAborted) { isAborted = _isAborted; }
 	private void setMemory(Map _memory) { memory = _memory; }
+	protected void setGeneratorScriptFileList(List _generatorScriptFileList) { generatorScriptFileList = _generatorScriptFileList; }
 	
 	public GeneratorContext(URI _generatorBase,
 							EPackage _ePackage,

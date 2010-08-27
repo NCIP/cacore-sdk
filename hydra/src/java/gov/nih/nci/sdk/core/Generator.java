@@ -30,15 +30,15 @@ public class Generator
 		}
 	}
 
-	public void conduct(GeneratorContext _generatorContext)
+	private void conduct(GeneratorContext _generatorContext)
 	{
-		List<String> scriptList = determineGeneratorScripts(_generatorContext);
+		List<java.io.File> scriptList = determineGeneratorScripts(_generatorContext);
 		
 		for (EClassifier eClassifier: _generatorContext.getEPackage().getEClassifiers())
 		{
 			if (_generatorContext.getDomainSet().contains(eClassifier.getName()) == true)
 			{
-				for (String script: scriptList)
+				for (java.io.File script: scriptList)
 				{
 					ScriptContext scriptContext = determineScriptContext(script, eClassifier.getName(), _generatorContext);	
 					executeScript(script, scriptContext);
@@ -56,7 +56,7 @@ public class Generator
 		}
 	}
 
-	public void executeScript(String _script, ScriptContext _scriptContext)
+	public void executeScript(java.io.File _script, ScriptContext _scriptContext)
 	{
 		ScriptingUtil scriptingUtil = new OmniScriptingUtil(determineFileExtension(_script));
 
@@ -65,7 +65,7 @@ public class Generator
 		
 		String[] scriptResources = new String[1];
 
-		scriptResources[0] = _script;
+		scriptResources[0] = _script.getAbsolutePath();
 
 		try
 		{
@@ -74,17 +74,18 @@ public class Generator
 		catch(Throwable t)
 		{
 			//TODO log throwable to console ...
-			_scriptContext.getErrorManager().add(_script, "SEVERE", t.toString());
+			_scriptContext.getErrorManager().add(_script.getAbsolutePath(), "SEVERE", t.toString());
 		}
 	}
 
-	public String determineFileExtension(String _script)
+	public String determineFileExtension(java.io.File _script)
 	{
 		String extension = "";
+		String fileName = _script.getName();
 
-		if (_script.contains(".") == true)
+		if (fileName.contains(".") == true)
 		{
-			String[] tokenArray = _script.split("\\.");
+			String[] tokenArray = fileName.split("\\.");
 			extension = tokenArray[tokenArray.length - 1];
 		}
 
@@ -96,14 +97,14 @@ public class Generator
 		_scriptContext.reset();
 	}
 
-	public ScriptContext determineScriptContext(String _script, String _focusDomain, GeneratorContext _generatorContext)
+	public ScriptContext determineScriptContext(java.io.File _script, String _focusDomain, GeneratorContext _generatorContext)
 	{
-		ScriptContext scriptContext = getScriptContextMap().get(_script);
+		ScriptContext scriptContext = getScriptContextMap().get(_script.getAbsolutePath());
 
 		if (scriptContext == null)
 		{
-			scriptContext = new ScriptContext(_script, _generatorContext.getEPackage(), _generatorContext.getMemory());
-			getScriptContextMap().put(_script, scriptContext);
+			scriptContext = new ScriptContext(_script.getAbsolutePath(), _generatorContext.getEPackage(), _generatorContext.getMemory());
+			getScriptContextMap().put(_script.getAbsolutePath(), scriptContext);
 		}
 
 		scriptContext.setFocusDomain(_focusDomain);
@@ -111,16 +112,20 @@ public class Generator
 		
 		return scriptContext;
 	}
-	
-	public java.util.List<Message> level0Validate(GeneratorContext _generatorContext)
+
+	public void level1Validate(GeneratorContext _generatorContext)
 	{
 		//TODO
-		return new java.util.ArrayList<Message>();
 	}
 
-	public List<String> determineGeneratorScripts(GeneratorContext _generatorContext)
+	public void level0Validate(GeneratorContext _generatorContext)
 	{
-		List<String> generatorScriptList = new java.util.ArrayList<String>();
+		//TODO
+	}
+
+	public List<java.io.File> determineGeneratorScripts(GeneratorContext _generatorContext)
+	{
+		List<java.io.File> generatorScriptList = new java.util.ArrayList<java.io.File>();
 		
 		java.io.File baseDirectory = new java.io.File(_generatorContext.getGeneratorBase());
 
@@ -130,17 +135,10 @@ public class Generator
 
 			for (int i = 0; i < directoryFiles.length; i++)
 			{
-				if (directoryFiles[i].isDirectory() == false)
+				if (directoryFiles[i].isDirectory() == false &&
+					  OmniScriptingUtil.hasScriptingUtil(determineFileExtension(directoryFiles[i])) == true)
 				{
-					if (directoryFiles[i].isDirectory() == false)
-					{
-						String fileName = directoryFiles[i].getName();
-						
-						if (OmniScriptingUtil.hasScriptingUtil(determineFileExtension(fileName)) == true)
-						{
-							generatorScriptList.add(directoryFiles[i].getAbsolutePath());
-						}
-					}
+					generatorScriptList.add(directoryFiles[i]);
 				}
 			}
 		}

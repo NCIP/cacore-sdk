@@ -86,7 +86,7 @@ var createEPackage = function()
 var determineFileExtensionTest = function()
 {
 	var generator = new Packages.gov.nih.nci.sdk.core.Generator();
-	var extension = generator.determineFileExtension("C:\work\hydra\.script.js");
+	var extension = generator.determineFileExtension(new Packages.java.io.File("C:\work\hydra\.script.js"));
 	assert(("js".equalsIgnoreCase(extension) === true), "File extension test failed");
 	Packages.java.lang.System.out.println("determineFileExtensionTest test completed");
 }
@@ -108,7 +108,7 @@ var determineGeneratorScriptsTest = function()
 
 	for (var fileName in Iterator(fileList))
 	{
-		if (fileName.endsWith("testScript.js") === true)
+		if ("testScript.js".equals(fileName.getName()) === true)
 		{
 			var foundFile = true;
 		}
@@ -123,8 +123,8 @@ var determineScriptContextTest = function()
 	var generator = new Packages.gov.nih.nci.sdk.core.Generator();
 	var generatorContext = createGeneratorContext();
 
-	var scriptContext1 = generator.determineScriptContext("myscript.js", "", generatorContext);
-	var scriptContext2 = generator.determineScriptContext("myscript.js", "", generatorContext);
+	var scriptContext1 = generator.determineScriptContext(new Packages.java.io.File("myscript.js"), "", generatorContext);
+	var scriptContext2 = generator.determineScriptContext(new Packages.java.io.File("myscript.js"), "", generatorContext);
 
 	assert((scriptContext1 === scriptContext2), "Generator is not managing script contexts as expected");
 	Packages.java.lang.System.out.println("determineScriptContextTest test completed");
@@ -141,16 +141,16 @@ var executeScriptTest = function()
 
 	var generator = new Packages.gov.nih.nci.sdk.core.Generator();
 	var generatorContext = createGeneratorContext();
-	var scriptContext = new Packages.gov.nih.nci.sdk.core.ScriptContext(script, generatorContext.getEPackage(), generatorContext.getMemory());
+	var scriptContext = new Packages.gov.nih.nci.sdk.core.ScriptContext(scriptFile.getAbsolutePath(), generatorContext.getEPackage(), generatorContext.getMemory());
 
-	generator.executeScript(script, scriptContext);
+	generator.executeScript(scriptFile, scriptContext);
 
 	assert((scriptContext.getMemory().containsKey("author") === true), "Script execution apparently failed");
 	scriptFile["delete"]();
 	Packages.java.lang.System.out.println("executeScriptTest test completed");
 }
 
-var conductTest = function()
+var compileTest = function()
 {
 	var ePackage = createEPackage();
 
@@ -171,13 +171,13 @@ var conductTest = function()
 	generatorContext.setEPackage(ePackage);
 	generatorContext.setDomainSet(domainSet);
 
-	generator.conduct(generatorContext);
-	var scriptContext = generator.determineScriptContext(scriptFile.getAbsolutePath(), "", generatorContext)
+	generator.compile(generatorContext);
+	var scriptContext = generator.determineScriptContext(scriptFile, "", generatorContext)
 	
-	assert((scriptContext.getMemory().keySet().containsAll(domainSet) === true), "Method conductTest not completed successfully");
+	assert((scriptContext.getMemory().keySet().containsAll(domainSet) === true), "Method compileTest not completed successfully");
 	
 	scriptFile["delete"]();
-	Packages.java.lang.System.out.println("conductTest test completed");	
+	Packages.java.lang.System.out.println("compileTest test completed");	
 }
 
 //Execute Tests
@@ -186,4 +186,4 @@ determineFileExtensionTest();
 determineGeneratorScriptsTest();
 determineScriptContextTest();
 executeScriptTest();
-conductTest();
+compileTest();
