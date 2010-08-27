@@ -93,22 +93,21 @@ var determineFileExtensionTest = function()
 
 var determineGeneratorScriptsTest = function()
 {
-	var script = "./workspace/testScript.js";
+	var script = "workspace/testScript.js";
 	var scriptFile = new Packages.java.io.File(script);
 	var fileWriter = new Packages.java.io.FileWriter(scriptFile);
 	fileWriter.write("Packages.java.lang.System.out.println(\"Found this script: \"  + SCRIPT_CONTEXT.getScript());\n");
 	fileWriter.write("SCRIPT_CONTEXT.getMemory().put(\"author\", \"Bediako\");");
 	fileWriter.flush();
 	fileWriter.close();
-
+	
 	var generator = new Packages.gov.nih.nci.sdk.core.Generator();
 	var generatorContext = createGeneratorContext();
+	generator.determineGeneratorScripts(generatorContext);
 	
-	var fileList = generator.determineGeneratorScripts(generatorContext);
-
-	for (var fileName in Iterator(fileList))
+	for (var file in Iterator(generatorContext.copyGeneratorScriptFileList()))
 	{
-		if ("testScript.js".equals(fileName.getName()) === true)
+		if ("testScript.js".equals(file.getName()) === true)
 		{
 			var foundFile = true;
 		}
@@ -161,27 +160,40 @@ var compileTest = function()
 	fileWriter.write("SCRIPT_CONTEXT.getMemory().put(SCRIPT_CONTEXT.getFocusDomain(), \"found this one\");");
 	fileWriter.flush();
 	fileWriter.close();
-	
+
+	var validateScript = "workspace/level1validate.js";
+	var validateScriptFile = new Packages.java.io.File(validateScript);
+	var fileWriter = new Packages.java.io.FileWriter(validateScriptFile);
+	fileWriter.write("SCRIPT_CONTEXT.getGlobalMemory().put(\"validation\", \"found this one\");");
+	fileWriter.flush();
+	fileWriter.close();
+
 	var generator = new Packages.gov.nih.nci.sdk.core.Generator();
 	var generatorContext = createGeneratorContext();
 
 	var domainSet = new Packages.java.util.HashSet();
 	domainSet.add("Department");
+	domainSet.add("Company");
 	
 	generatorContext.setEPackage(ePackage);
 	generatorContext.setDomainSet(domainSet);
 
 	generator.compile(generatorContext);
-	var scriptContext = generator.determineScriptContext(scriptFile, "", generatorContext)
+	var scriptContext = generator.determineScriptContext(scriptFile, "", generatorContext);
 	
-	assert((scriptContext.getMemory().keySet().containsAll(domainSet) === true), "Method compileTest not completed successfully");
-	
+	assert((scriptContext.getMemory().keySet().containsAll(domainSet) === true), "Method compileTest not completed successfully. Domain sets do not match.");
+	assert((scriptContext.getGlobalMemory().keySet().contains("validation") === true), "Method compileTest not completed successfully. Validation key not found");
+
+	//Clean up the temporary generator scripts.
+	//In JavaScript "delete" is a reserved word, so
+	//we must use this method for calling java.io.File.delete().
 	scriptFile["delete"]();
+	validateScriptFile["delete"]();
+	
 	Packages.java.lang.System.out.println("compileTest test completed");	
 }
 
 //Execute Tests
-
 determineFileExtensionTest();
 determineGeneratorScriptsTest();
 determineScriptContextTest();
