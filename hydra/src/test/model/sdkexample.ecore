@@ -1,0 +1,679 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="EA_Model"
+    nsURI="http:///EA_Model.ecore" nsPrefix="EA_Model">
+  <eSubpackages name="LogicalView" nsURI="http:///EA_Model/LogicalView.ecore" nsPrefix="EA_Model.LogicalView">
+    <eSubpackages name="LogicalModel" nsURI="http:///EA_Model/LogicalView/LogicalModel.ecore"
+        nsPrefix="EA_Model.LogicalView.LogicalModel">
+      <eSubpackages name="Diagrams" nsURI="http:///EA_Model/LogicalView/LogicalModel/Diagrams.ecore"
+          nsPrefix="EA_Model.LogicalView.LogicalModel.Diagrams"/>
+      <eSubpackages name="gov" nsURI="http:///EA_Model/LogicalView/LogicalModel/gov.ecore"
+          nsPrefix="EA_Model.LogicalView.LogicalModel.gov">
+        <eSubpackages name="nih" nsURI="http:///EA_Model/LogicalView/LogicalModel/gov/nih.ecore"
+            nsPrefix="EA_Model.LogicalView.LogicalModel.gov.nih">
+          <eSubpackages name="nci" nsURI="http:///EA_Model/LogicalView/LogicalModel/gov/nih/nci.ecore"
+              nsPrefix="EA_Model.LogicalView.LogicalModel.gov.nih.nci">
+            <eSubpackages name="iso21090" nsURI="http:///EA_Model/LogicalView/LogicalModel/gov/nih/nci/iso21090.ecore"
+                nsPrefix="EA_Model.LogicalView.LogicalModel.gov.nih.nci.iso21090">
+              <eClassifiers xsi:type="ecore:EClass" name="ADXPCEN" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ADXP">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="  inv &quot;type&quot;: type = AddressPartType.CEN"/>
+                </eAnnotations>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="ADXP">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="context ADXP&#xA;  inv &quot;value is required&quot;: value.size > 0&#xA;  inv &quot;code requires codeSystem&quot;: code.oclIsDefined implies codeSystem.oclIsDefined&#xA;  inv &quot;codeSystemVersion only if codeSystem&quot;: codeSystemVersion.oclIsDefined implies codeSystem.oclIsDefined"/>
+                </eAnnotations>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="code" ordered="false"
+                    eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/String"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="codeSystem"
+                    ordered="false" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/String"/>
+                <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" ordered="false"
+                    eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/AddressPartType"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="value" ordered="false"
+                    eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/String"/>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="String"/>
+              <eClassifiers xsi:type="ecore:EEnum" name="AddressPartType"/>
+              <eClassifiers xsi:type="ecore:EClass" name="ADXPSTB" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ADXP">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="inv &quot;type&quot;: type = AddressPartType.STB"/>
+                </eAnnotations>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="Uid" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/String">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="context Uid&#xA;  -- oid, uuid, ruid&#xA;  inv &quot;patterns&quot;: matches(&quot;[0-2](\.(0|[1-9][0-9]*))*&quot;) or &#xA;    matches(&quot;[0-9a-zA-Z]{8}-[0-9a-zA-Z]{4}-[0-9a-zA-Z]{4}-[0-9a-zA-Z]{4}-[0-9a-zA-Z]{12}&quot;) or &#xA;    matches(&quot;[A-Za-z][A-Za-z0-9\-]*&quot;)&#xA;&#xA;"/>
+                </eAnnotations>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="ADXPDAL" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ADXP">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="inv &quot;type&quot;: type = AddressPartType.DAL"/>
+                </eAnnotations>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="ADXPSAL" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ADXP">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="inv &quot;type&quot;: type = AddressPartType.SAL"/>
+                </eAnnotations>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="EN" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ANY">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="context EN&#xA;  inv &quot;null or parts&quot;: isNull xor part->isEmpty"/>
+                </eAnnotations>
+                <eOperations name="canonical" ordered="false" lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/EN"/>
+                <eStructuralFeatures xsi:type="ecore:EAttribute" name="part" ordered="false"
+                    lowerBound="1"/>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="ANY">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="context ANY&#xA;  def: let isNull : Boolean = nullFlavor.oclIsDefined&#xA;  def: let isNotNull : Boolean = not isNull&#xA;&#xA;  def: let noUpdate : Boolean = updateMode.oclIsUndefined&#xA;  def: let noUpdateOrHistory() : Boolean = noUpdate and noHistory&#xA;  def: let noUpdateOrHistory(member : ANY) : Boolean = member.oclIsDefined&#xA;    implies member.noUpdate and member.noHistory&#xA;&#xA;  def: let invalid : Boolean = (nullFlavor = NullFlavor.INV or nullFlavor = NullFlavor.OTH or&#xA;          nullFlavor = NullFlavor.PINF or nullFlavor = NullFlavor.NINF or&#xA;          nullFlavor = NullFlavor.UNC or nullFlavor = NullFlavor.DER)&#xA;          &#xA;  inv &quot;no ANY unless null&quot;: (isNotNull or invalid) implies not oclIsTypeOf(ANY)"/>
+                </eAnnotations>
+                <eOperations name="equals" ordered="false" lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/BL">
+                  <eParameters name="x" ordered="false" lowerBound="1"/>
+                </eOperations>
+                <eStructuralFeatures xsi:type="ecore:EAttribute" name="nullFlavor"
+                    ordered="false" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/NullFlavor"/>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EEnum" name="NullFlavor"/>
+              <eClassifiers xsi:type="ecore:EClass" name="BL" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ANY">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="context BL&#xA;  inv &quot;no value if null&quot;: isNull implies value.oclIsUndefined"/>
+                </eAnnotations>
+                <eOperations name="and" ordered="false" lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/BL">
+                  <eParameters name="other" ordered="false" lowerBound="1"/>
+                </eOperations>
+                <eOperations name="implies" ordered="false" lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/BL">
+                  <eParameters name="other" ordered="false" lowerBound="1"/>
+                </eOperations>
+                <eOperations name="not" ordered="false" lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/BL"/>
+                <eOperations name="or" ordered="false" lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/BL">
+                  <eParameters name="other" ordered="false" lowerBound="1"/>
+                </eOperations>
+                <eOperations name="xor" ordered="false" lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/BL">
+                  <eParameters name="other" ordered="false" lowerBound="1"/>
+                </eOperations>
+                <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" ordered="false"/>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="ED" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ANY">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="context ED&#xA;  def: let hasValue : Boolean = value.oclIsDefined or data.oclIsDefined or xml.oclIsDefined or &#xA;    hasReference&#xA;  def: let hasReference : Boolean = reference.isNotNull&#xA;  &#xA;  inv &quot;content is required if not null&quot;: isNotNull implies hasValue&#xA;  inv &quot;only one of value, data, xml&quot;:&#xA;           value.oclIsDefined implies (data.oclIsUndefined and xml.oclIsUndefined) and&#xA;           data.oclIsDefined implies (value.oclIsUndefined and xml.oclIsUndefined) and&#xA;           xml.oclIsDefined implies (value.oclIsUndefined and data.oclIsUndefined)&#xA;  inv &quot;integrityCheckAlgorithm required&quot;: integrityCheck.oclIsDefined implies &#xA;    integrityCheckAlgorithm.oclIsDefined&#xA;  inv &quot;thumbnails do not use reference&quot;: thumbnail.isNotNull implies not thumbnail.hasReference&#xA;  inv &quot;thumbnails do not have thumbnails&quot;: thumbnail.isNotNull implies &#xA;    thumbnail.thumbnail.oclIsUndefined&#xA;  inv &quot;compression only on binary&quot;: compression.oclIsDefined implies data.oclIsDefined&#xA;  inv &quot;mediaType cannot be null&quot;: isNotNull implies mediaType.oclIsDefined&#xA;  inv &quot;value implies mediaType is text/plain&quot;: value.oclIsDefined implies mediaType = 'text/plain'&#xA;  inv &quot;no charset for value or xml&quot;: (value.oclIsDefined or xml.oclIsDefined) implies &#xA;      charset.oclIsUndefined&#xA;  inv &quot;No History or Update Mode&quot;: noUpdateOrHistory(reference) and noUpdateOrHistory(thumbnail)&#xA;  inv &quot;no nested translations&quot;: translation->forAll(t | t.translation->isEmpty)&#xA;  &#xA;  -- nullFlavor invariants&#xA;  inv &quot;no value if null&quot;: isNull implies value.oclIsUndefined&#xA;  inv &quot;no data if null&quot;: isNull implies data.oclIsUndefined&#xA;  inv &quot;no xml if null&quot;: isNull implies xml.oclIsUndefined&#xA;  inv &quot;no reference if null&quot;: isNull implies reference.oclIsUndefined&#xA;  inv &quot;no mediaType if null&quot;: isNull implies mediaType.oclIsUndefined&#xA;  inv &quot;no charset if null&quot;: isNull implies charset.oclIsUndefined&#xA;  inv &quot;no language if null&quot;: isNull implies language.oclIsUndefined&#xA;  inv &quot;no compression if null&quot;: isNull implies compression.oclIsUndefined&#xA;  inv &quot;no integrityCheck if null&quot;: isNull implies integrityCheck.oclIsUndefined&#xA;  inv &quot;no integrityCheckAlgorithm if null&quot;: isNull implies integrityCheckAlgorithm.oclIsUndefined&#xA;  inv &quot;no thumbnail if null&quot;: isNull implies thumbnail.oclIsUndefined&#xA;  inv &quot;no translation if null&quot;: isNull implies translation->isEmpty"/>
+                </eAnnotations>
+                <eStructuralFeatures xsi:type="ecore:EAttribute" name="compression"
+                    ordered="false" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/Compression"/>
+                <eStructuralFeatures xsi:type="ecore:EAttribute" name="data" ordered="false"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="value" ordered="false"
+                    lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/String"/>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EEnum" name="Compression"/>
+              <eClassifiers xsi:type="ecore:EClass" name="ADXPDINST" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ADXP">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="inv &quot;type&quot;: type = AddressPartType.DINST"/>
+                </eAnnotations>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="TS" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/QTY">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="context TS&#xA;  def: let hasTimezone : Boolean = value.pos(&quot;+&quot;) > 0 or value.pos(&quot;-&quot;) > 0&#xA;  &#xA;  inv &quot;null or value&quot;: isNull xor value.oclIsDefined&#xA;context TS::isDifference(other : QTY): Boolean&#xA;  post: other.oclIsKindOf(PQ) -- and units are time"/>
+                </eAnnotations>
+                <eOperations name="_" ordered="false" lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/TS">
+                  <eParameters name="other" ordered="false" lowerBound="1"/>
+                </eOperations>
+                <eOperations name="_" ordered="false" lowerBound="1">
+                  <eParameters name="other" ordered="false" lowerBound="1"/>
+                </eOperations>
+                <eOperations name="max" ordered="false" lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/TS">
+                  <eParameters name="other" ordered="false" lowerBound="1"/>
+                </eOperations>
+                <eOperations name="min" ordered="false" lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/TS">
+                  <eParameters name="other" ordered="false" lowerBound="1"/>
+                </eOperations>
+                <eOperations name="toInterval" ordered="false" lowerBound="1"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="value" ordered="false"
+                    eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/String"/>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="QTY" abstract="true" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ANY">
+                <eOperations name="_" ordered="false" lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/QTY">
+                  <eParameters name="other" ordered="false" lowerBound="1"/>
+                </eOperations>
+                <eOperations name="_" ordered="false" lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/BL">
+                  <eParameters name="other" ordered="false" lowerBound="1"/>
+                </eOperations>
+                <eOperations name="compares" ordered="false" lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/BL">
+                  <eParameters name="other" ordered="false" lowerBound="1"/>
+                </eOperations>
+                <eOperations name="isDifference" ordered="false" lowerBound="1">
+                  <eParameters name="other" ordered="false" lowerBound="1"/>
+                </eOperations>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="ADXPSTR" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ADXP">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="inv &quot;type&quot;: type = AddressPartType.STR"/>
+                </eAnnotations>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="ADXPUNID" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ADXP">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="inv &quot;type&quot;: type = AddressPartType.UNID"/>
+                </eAnnotations>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="ADXPPRE" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ADXP">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="  inv &quot;type&quot;: type = AddressPartType.PRE"/>
+                </eAnnotations>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="XML">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="This class is a placeholder for any XML content"/>
+                </eAnnotations>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="ADXPDMOD" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ADXP">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="inv &quot;type&quot;: type = AddressPartType.DMOD"/>
+                </eAnnotations>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="ADXPDINSTA" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ADXP">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="inv &quot;type&quot;: type = AddressPartType.DINSTA"/>
+                </eAnnotations>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="ADXPBR" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ADXP">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="  inv &quot;type&quot;: type = AddressPartType.DEL"/>
+                </eAnnotations>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="ST" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ANY">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="context ST&#xA;  inv &quot;no nested translations&quot;: translation->&#xA;     forAll(t | t.translation->isEmpty)&#xA;  inv &quot;null or content&quot; : isNull xor&#xA;    (value.oclIsDefined and value.size > 0)&#xA;&#xA;context ST::mediaType(): String&#xA;  post: result = &quot;text/plain&quot;"/>
+                </eAnnotations>
+                <eOperations name="concat" ordered="false" lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ST">
+                  <eParameters name="other" ordered="false" lowerBound="1"/>
+                </eOperations>
+                <eOperations name="mediaType" ordered="false" lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/String"/>
+                <eOperations name="size" ordered="false" lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ST"/>
+                <eOperations name="substring" ordered="false" lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ST">
+                  <eParameters name="upper" ordered="false" lowerBound="1"/>
+                  <eParameters name="lower" ordered="false" lowerBound="1"/>
+                </eOperations>
+                <eOperations name="toInteger" ordered="false" lowerBound="1"/>
+                <eOperations name="toReal" ordered="false" lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/REAL"/>
+                <eOperations name="toTimestamp" ordered="false" lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/TS"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="value" ordered="false"
+                    eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/String"/>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="REAL" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/QTY">
+                <eOperations name="_" ordered="false" lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/REAL">
+                  <eParameters name="other" ordered="false" lowerBound="1"/>
+                </eOperations>
+                <eOperations name="_" ordered="false" lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/REAL"/>
+                <eOperations name="abs" ordered="false" lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/REAL"/>
+                <eOperations name="ceiling" ordered="false" lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/REAL"/>
+                <eOperations name="floor" ordered="false" lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/REAL"/>
+                <eOperations name="inverted" ordered="false" lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/REAL"/>
+                <eOperations name="max" ordered="false" lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/REAL">
+                  <eParameters name="other" ordered="false" lowerBound="1"/>
+                </eOperations>
+                <eOperations name="min" ordered="false" lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/REAL">
+                  <eParameters name="other" ordered="false" lowerBound="1"/>
+                </eOperations>
+                <eOperations name="power" ordered="false" lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/REAL">
+                  <eParameters name="other" ordered="false" lowerBound="1"/>
+                </eOperations>
+                <eOperations name="round" ordered="false" lowerBound="1"/>
+                <eOperations name="toInterval" ordered="false" lowerBound="1"/>
+                <eStructuralFeatures xsi:type="ecore:EAttribute" name="precision"
+                    ordered="false" defaultValueLiteral="0"/>
+                <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" ordered="false"/>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="ADXPDMODID" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ADXP">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="inv &quot;type&quot;: type = AddressPartType.DMODID"/>
+                </eAnnotations>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="TELPHONE" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/TELPERSON">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="context TEL.Phone&#xA;  inv &quot;Phone&quot;: scheme(&quot;tel&quot;) or scheme(&quot;x-text-fax&quot;) or scheme(&quot;x-text-tel&quot;)"/>
+                </eAnnotations>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="TELPERSON" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/TEL">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="context TEL.Person&#xA;  inv &quot;Personal Address&quot;: scheme(&quot;tel&quot;) or scheme(&quot;x-text-fax&quot;) or&#xA;                          scheme(&quot;x-text-tel&quot;) or scheme(&quot;mailto&quot;)"/>
+                </eAnnotations>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="TEL" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ANY">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="context TEL&#xA;  inv &quot;value is required&quot;: isNotNull implies value.oclIsDefined&#xA;  def: let scheme(s : String) : Boolean = value.substring(0, s.size) = s&#xA;  inv &quot;no value if null&quot;: isNull implies value.oclIsUndefined&#xA;  inv &quot;no use if null&quot;: isNull implies use->isEmpty&#xA;  inv &quot;no useablePeriod if null&quot;: isNull implies useablePeriod.oclIsUndefined&#xA;  inv &quot;no updateMode or History on TEL attributes&quot;: noUpdateOrHistory(useablePeriod)"/>
+                </eAnnotations>
+                <eOperations name="canonical" ordered="false" lowerBound="1"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="value" ordered="false"
+                    eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/Uri"/>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="Uri" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/String">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="context Uri&#xA;  -- note that not everything conforms to this pattern&#xA;  inv &quot;pattern&quot;: matches(&quot;(([a-zA-Z][0-9a-zA-Z+\-\.]*:)?/{0,2}[0-9a-zA-Z;/?:@&amp;=+$\.\-_!~*'()%]+)?(#[0-9a-zA-Z;/?:@&amp;=+$\.\-_!~*'()%]+)?&quot;)&#xA;"/>
+                </eAnnotations>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="ADXPDIR" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ADXP">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="inv &quot;type&quot;: type = AddressPartType.DIR"/>
+                </eAnnotations>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="ADXPAL" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ADXP">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="inv &quot;type&quot;: type = AddressPartType.AL"/>
+                </eAnnotations>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="EDTEXT" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ED">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="context ED.Text&#xA;  inv &quot;text only&quot;: mediaType = &quot;text/plain&quot;&#xA;  inv &quot;no xml&quot;: xml.oclIsUndefined&#xA;  inv &quot;no data&quot;: data.oclIsUndefined&#xA;  inv &quot;no integrityCheck&quot;: integrityCheck.oclIsUndefined&#xA;  inv &quot;no thumbnail&quot;: thumbnail.oclIsUndefined&#xA;  inv &quot;no compression&quot;: compression.oclIsUndefined&#xA;  inv &quot;no translations&quot;: translation->isEmpty"/>
+                </eAnnotations>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="STNT" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ST">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="context SC.NT&#xA;  inv &quot;no translations&quot;: translation->isEmpty"/>
+                </eAnnotations>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="ADXPCNT" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ADXP">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="  inv &quot;type&quot;: type = AddressPartType.CNT"/>
+                </eAnnotations>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="ADXPDINSTQ" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ADXP">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="inv &quot;type&quot;: type = AddressPartType.DINSTQ"/>
+                </eAnnotations>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="ADXPPOB" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ADXP">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="inv &quot;type&quot;: type = AddressPartType.POB"/>
+                </eAnnotations>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="ADXPADL" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ADXP">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="inv &quot;type&quot;: type = AddressPartType.ADL"/>
+                </eAnnotations>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="ADXPBNS" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ADXP">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="inv &quot;type&quot;: type = AddressPartType.BNS"/>
+                </eAnnotations>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="ENPN" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/EN">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="context EN.PN&#xA;  inv &quot;no parts are qualified by LS&quot;: part->forAll(p | not p.qualifier->includes(EntityNamePartQualifier.LS))&#xA;"/>
+                </eAnnotations>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="ADXPCPA" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ADXP">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="  inv &quot;type&quot;: type = AddressPartType.CPA"/>
+                </eAnnotations>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="ADXPUNIT" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ADXP">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="inv &quot;type&quot;: type = AddressPartType.UNIT"/>
+                </eAnnotations>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="TELEMAIL" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/TELPERSON">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="context TEL.Email&#xA;  inv &quot;email only&quot;: scheme(&quot;mailto&quot;)"/>
+                </eAnnotations>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="ADXPZIP" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ADXP">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="  inv &quot;type&quot;: type = AddressPartType.ZIP"/>
+                </eAnnotations>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="ADXPCTY" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ADXP">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="  inv &quot;type&quot;: type = AddressPartType.CTY"/>
+                </eAnnotations>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="ENON" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/EN">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="context EN.ON&#xA;  inv &quot;no parts are person types&quot;: part->forAll(p | not (p.type = EntityNamePartType.FAM or p.type = EntityNamePartType.GIV))&#xA;"/>
+                </eAnnotations>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="QSET" abstract="true" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ANY">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="context QSET&#xA;  inv &quot;No History or Update Mode&quot;: noUpdateOrHistory(originalText)&#xA;"/>
+                </eAnnotations>
+                <eTypeParameters name="_T"/>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="ADXPBNR" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ADXP">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="inv &quot;type&quot;: type = AddressPartType.BNR"/>
+                </eAnnotations>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="BLNONNULL" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/BL">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="context BN&#xA;  inv &quot;BN cannot be null&quot;: not isNull"/>
+                </eAnnotations>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="ADXPCAR" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ADXP">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="  inv &quot;type&quot;: type = AddressPartType.CAR"/>
+                </eAnnotations>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="IVLINT" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/QSET">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="context IVL&#xA;  def: let hasBounds : Boolean = low.isNotNull or high.isNotNull&#xA;  inv &quot;null rules&quot;: isNull xor (hasBounds or any_.isNotNull or width.isNotNull)&#xA;  inv &quot;co-occurence rules&quot;: (any.isNotNull implies not (hasBounds or width.isNotNull))&#xA;                        and (any.isNull implies (hasBounds xor width.isNotNull))&#xA;  inv &quot;closed attributes only if limited&quot;: (not low.isNotNull implies lowClosed.oclIsUndefined) and (not high.isNotNull implies highClosed.oclIsUndefined)&#xA;  inv &quot;no updateMode or History on IVL attributes&quot;: noUpdateOrHistory(low) and&#xA;             noUpdateOrHistory(high) and noUpdateOrHistory(width)&#xA;"/>
+                </eAnnotations>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="any" ordered="false"
+                    lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/INT"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="high" ordered="false"
+                    eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/INT"/>
+                <eStructuralFeatures xsi:type="ecore:EAttribute" name="highClosed"
+                    ordered="false"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="low" ordered="false"
+                    eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/INT"/>
+                <eStructuralFeatures xsi:type="ecore:EAttribute" name="lowClosed"
+                    ordered="false"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="width" ordered="false"
+                    eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/PQ"/>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="INT" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/QTY">
+                <eOperations name="_" ordered="false" lowerBound="1">
+                  <eParameters name="other" ordered="false" lowerBound="1"/>
+                </eOperations>
+                <eOperations name="_" ordered="false" lowerBound="1"/>
+                <eOperations name="_" ordered="false" lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/REAL">
+                  <eParameters name="other" ordered="false" lowerBound="1"/>
+                </eOperations>
+                <eOperations name="_" ordered="false" lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/REAL">
+                  <eParameters name="x" ordered="false" lowerBound="1"/>
+                </eOperations>
+                <eOperations name="abs" ordered="false" lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/REAL"/>
+                <eOperations name="div" ordered="false" lowerBound="1">
+                  <eParameters name="other" ordered="false" lowerBound="1"/>
+                </eOperations>
+                <eOperations name="max" ordered="false" lowerBound="1">
+                  <eParameters name="other" ordered="false" lowerBound="1"/>
+                </eOperations>
+                <eOperations name="min" ordered="false" lowerBound="1">
+                  <eParameters name="other" ordered="false" lowerBound="1"/>
+                </eOperations>
+                <eOperations name="mod" ordered="false" lowerBound="1">
+                  <eParameters name="other" ordered="false" lowerBound="1"/>
+                </eOperations>
+                <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" ordered="false"/>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="PQ" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/PQV">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="context PQ&#xA;  inv &quot;no translation if null&quot;: isNull &#xA;    implies translation->isEmpty&#xA;&#xA;context CO::isDifference(other : QTY): Boolean&#xA;  post: other.oclIsKindOf(PQ) and &#xA;    (canonical.units.equals(other.&#xA;       oclAsTypeOf(PQ).canonical.units)"/>
+                </eAnnotations>
+                <eOperations name="_" ordered="false" lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/PQ"/>
+                <eOperations name="_" ordered="false" lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/PQ">
+                  <eParameters name="other" ordered="false" lowerBound="1"/>
+                </eOperations>
+                <eOperations name="abs" ordered="false" lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/PQ"/>
+                <eOperations name="canonical" ordered="false" lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/PQ"/>
+                <eOperations name="inverted" ordered="false" lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/PQ"/>
+                <eOperations name="max" ordered="false" lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/PQ">
+                  <eParameters name="other" ordered="false" lowerBound="1"/>
+                </eOperations>
+                <eOperations name="min" ordered="false" lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/PQ">
+                  <eParameters name="other" ordered="false" lowerBound="1"/>
+                </eOperations>
+                <eOperations name="toInterval" ordered="false" lowerBound="1"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="unit" ordered="false"
+                    eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/Code"/>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="PQV" abstract="true" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/QTY">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="context PQV&#xA;  inv &quot;null or value&quot;: isNull xor &#xA;    value.oclIsDefined&#xA;  inv &quot;no precision if null&quot;: isNull &#xA;    implies precision.oclIsUndefined&#xA;"/>
+                </eAnnotations>
+                <eStructuralFeatures xsi:type="ecore:EAttribute" name="precision"
+                    ordered="false" defaultValueLiteral="0"/>
+                <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" ordered="false"/>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="Code" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/String"/>
+              <eClassifiers xsi:type="ecore:EClass" name="ADXPSTTYP" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ADXP">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="inv &quot;type&quot;: type = AddressPartType.STTYP"/>
+                </eAnnotations>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="ADXPSTA" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ADXP">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="  inv &quot;type&quot;: type = AddressPartType.STA"/>
+                </eAnnotations>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="ENXP">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="context ENXP&#xA;  inv &quot;value is required&quot;: value.size > 0&#xA;  inv &quot;code requires codeSystem&quot;: code.oclIsDefined implies &#xA;     codeSystem.oclIsDefined&#xA;  inv &quot;codeSystemVersion only if codeSystem&quot;: codeSystemVersion.oclIsDefined &#xA;      implies codeSystem.oclIsDefined&#xA;"/>
+                </eAnnotations>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="code" ordered="false"
+                    eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/String"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="codeSystem"
+                    ordered="false" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/String"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="codeSystemVersion"
+                    ordered="false" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/String"/>
+                <eStructuralFeatures xsi:type="ecore:EAttribute" name="qualifier"
+                    ordered="false" lowerBound="1"/>
+                <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" ordered="false"
+                    eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/EntityNamePartType"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="value" ordered="false"
+                    eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/String"/>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EEnum" name="EntityNamePartType"/>
+              <eClassifiers xsi:type="ecore:EClass" name="AD" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ANY">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="context AD&#xA;  inv &quot;null or parts&quot;: isNull xor parts->notEmpty&#xA;  inv &quot;no useablePeriod if null&quot;: isNull implies (useablePeriod.oclIsUndefined or useablePeriod.isNull)&#xA;  inv &quot;no updateMode or History on AD attributes&quot;: noUpdateOrHistory(useablePeriod)&#xA;"/>
+                </eAnnotations>
+                <eStructuralFeatures xsi:type="ecore:EAttribute" name="part" ordered="false"
+                    lowerBound="1"/>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="ADXPBNN" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ADXP">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="  inv &quot;type&quot;: type = AddressPartType.BNN"/>
+                </eAnnotations>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="II" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ANY">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="context II&#xA;  inv &quot;root is required&quot;: isNotNull implies root.oclIsDefined&#xA;  inv &quot;no root if null&quot;: isNull implies root.oclIsUndefined&#xA;  inv &quot;no extension if null&quot;: isNull implies extension.oclIsUndefined&#xA;  inv &quot;no identifierName if null&quot;: isNull implies identifierName.oclIsUndefined&#xA;  inv &quot;no displayable if null&quot;: isNull implies displayable.oclIsUndefined&#xA;  inv &quot;no reliability if null&quot;: isNull implies reliability.oclIsUndefined"/>
+                </eAnnotations>
+                <eStructuralFeatures xsi:type="ecore:EAttribute" name="displayable"
+                    ordered="false"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="extension"
+                    ordered="false" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/String"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="identifierName"
+                    ordered="false" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/String"/>
+                <eStructuralFeatures xsi:type="ecore:EAttribute" name="reliability"
+                    ordered="false" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/IdentifierReliability"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="root" ordered="false"
+                    eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/Uid"/>
+                <eStructuralFeatures xsi:type="ecore:EAttribute" name="scope" ordered="false"
+                    eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/IdentifierScope"/>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EEnum" name="IdentifierReliability"/>
+              <eClassifiers xsi:type="ecore:EEnum" name="IdentifierScope"/>
+              <eClassifiers xsi:type="ecore:EClass" name="SC" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ST">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="context SC&#xA;  inv &quot;no code if no value&quot; : code.isNotNull implies isNotNull&#xA;  inv &quot;no updateMode or History on SC attributes&quot;: noUpdateOrHistory(code)&#xA;  inv &quot;no originalText&quot; : code.isNotNull implies code.originalText.isNull"/>
+                </eAnnotations>
+                <eStructuralFeatures xsi:type="ecore:EAttribute" name="code" ordered="false"/>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="TELURL" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/TEL">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="context TEL.Url&#xA;  inv &quot;no use&quot;: use->isEmpty&#xA;  inv &quot;schemes&quot;: (scheme(&quot;file&quot;) or scheme(&quot;ftp&quot;) or&#xA;          scheme(&quot;http&quot;) or scheme(&quot;https&quot;) or scheme(&quot;nfs&quot;))"/>
+                </eAnnotations>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="ADXPDEL" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ADXP"/>
+              <eClassifiers xsi:type="ecore:EClass" name="Binary">
+                <eStructuralFeatures xsi:type="ecore:EAttribute" name="content" ordered="false"
+                    lowerBound="1"/>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="CD" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ANY">
+                <eStructuralFeatures xsi:type="ecore:EReference" name="code" ordered="false"
+                    eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/String"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="codeSystem"
+                    ordered="false" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/Uid"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="codeSystemName"
+                    ordered="false" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/String"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="codeSystemVersion"
+                    ordered="false" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/String"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="displayName"
+                    ordered="false" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ST"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="originalText"
+                    ordered="false" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/EDTEXT"/>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="Coll" abstract="true" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ANY">
+                <eTypeParameters name="_T"/>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="DSET" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/Coll">
+                <eTypeParameters name="_T"/>
+                <eOperations name="_" ordered="false" lowerBound="1">
+                  <eParameters name="other" ordered="false" lowerBound="1"/>
+                </eOperations>
+                <eOperations name="asBag" ordered="false" lowerBound="1"/>
+                <eOperations name="asList" ordered="false" lowerBound="1"/>
+                <eOperations name="excluding" ordered="false" lowerBound="1">
+                  <eParameters name="obj" ordered="false" lowerBound="1"/>
+                </eOperations>
+                <eOperations name="excluding" ordered="false" lowerBound="1">
+                  <eParameters name="other" ordered="false" lowerBound="1"/>
+                </eOperations>
+                <eOperations name="including" ordered="false" lowerBound="1">
+                  <eParameters name="obj" ordered="false" lowerBound="1"/>
+                </eOperations>
+                <eOperations name="including" ordered="false" lowerBound="1">
+                  <eParameters name="other" ordered="false" lowerBound="1"/>
+                </eOperations>
+                <eOperations name="intersection" ordered="false" lowerBound="1">
+                  <eParameters name="other" ordered="false" lowerBound="1"/>
+                </eOperations>
+                <eOperations name="symmetricDifference" ordered="false" lowerBound="1">
+                  <eParameters name="other" ordered="false" lowerBound="1"/>
+                </eOperations>
+                <eOperations name="union" ordered="false" lowerBound="1">
+                  <eParameters name="other" ordered="false" lowerBound="1"/>
+                </eOperations>
+                <eStructuralFeatures xsi:type="ecore:EAttribute" name="item" ordered="false"
+                    lowerBound="1"/>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="ENTN" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/EN"/>
+              <eClassifiers xsi:type="ecore:EEnum" name="EntityNamePartQualifier"/>
+              <eClassifiers xsi:type="ecore:EClass" name="IVLPQ" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/QSET">
+                <eOperations name="center" ordered="false" lowerBound="1"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="any" ordered="false"
+                    lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/PQ"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="high" ordered="false"
+                    eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/PQ"/>
+                <eStructuralFeatures xsi:type="ecore:EAttribute" name="highClosed"
+                    ordered="false"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="low" ordered="false"
+                    eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/PQ"/>
+                <eStructuralFeatures xsi:type="ecore:EAttribute" name="lowClosed"
+                    ordered="false"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="width" ordered="false"
+                    eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/PQ"/>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="IVLREAL" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/QSET">
+                <eOperations name="center" ordered="false" lowerBound="1"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="any" ordered="false"
+                    lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/REAL"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="high" ordered="false"
+                    eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/REAL"/>
+                <eStructuralFeatures xsi:type="ecore:EAttribute" name="highClosed"
+                    ordered="false"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="low" ordered="false"
+                    eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/REAL"/>
+                <eStructuralFeatures xsi:type="ecore:EAttribute" name="lowClosed"
+                    ordered="false"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="width" ordered="false"
+                    eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/REAL"/>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="IVLTS" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/QSET">
+                <eOperations name="center" ordered="false" lowerBound="1"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="any" ordered="false"
+                    lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/TS"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="high" ordered="false"
+                    eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/TS"/>
+                <eStructuralFeatures xsi:type="ecore:EAttribute" name="highClosed"
+                    ordered="false"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="low" ordered="false"
+                    eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/TS"/>
+                <eStructuralFeatures xsi:type="ecore:EAttribute" name="lowClosed"
+                    ordered="false"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="width" ordered="false"
+                    eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/PQ"/>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="Integer"/>
+            </eSubpackages>
+            <eSubpackages name="sdkexample" nsURI="http:///EA_Model/LogicalView/LogicalModel/gov/nih/nci/sdkexample.ecore"
+                nsPrefix="EA_Model.LogicalView.LogicalModel.gov.nih.nci.sdkexample">
+              <eClassifiers xsi:type="ecore:EClass" name="Organization">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+                  <details key="documentation" value="External Registry: We need an ontology of organization types. For Example, government, academic, pharmaceutical etc.."/>
+                </eAnnotations>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="identifier"
+                    ordered="false" lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/II"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="name" ordered="false"
+                    lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ENON"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="postalAddress"
+                    ordered="false" lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/AD"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="statusCode"
+                    ordered="false" lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/CD"/>
+                <eStructuralFeatures xsi:type="ecore:EAttribute" name="telecomAddress"
+                    ordered="false" lowerBound="1"/>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="Address">
+                <eStructuralFeatures xsi:type="ecore:EReference" name="addressLine1"
+                    ordered="false" lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ST"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="addressLine2"
+                    ordered="false" lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ST"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="city" ordered="false"
+                    lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ST"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="identifier"
+                    ordered="false" lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/II"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="state" ordered="false"
+                    lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ST"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="zipcode" ordered="false"
+                    lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ST"/>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="Patient" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/sdkexample/Person"/>
+              <eClassifiers xsi:type="ecore:EClass" name="Person">
+                <eStructuralFeatures xsi:type="ecore:EReference" name="birthDate"
+                    ordered="false" lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/TS"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="identifier"
+                    ordered="false" lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/II"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="name" ordered="false"
+                    lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/ENPN"/>
+                <eStructuralFeatures xsi:type="ecore:EAttribute" name="postalAddress"
+                    ordered="false" lowerBound="1"/>
+                <eStructuralFeatures xsi:type="ecore:EAttribute" name="raceCode" ordered="false"
+                    lowerBound="1"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="sexCode" ordered="false"
+                    lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/CD"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="statusCode"
+                    ordered="false" lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/CD"/>
+                <eStructuralFeatures xsi:type="ecore:EAttribute" name="telecomAddress"
+                    ordered="false" lowerBound="1"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="_" ordered="false"
+                    lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/sdkexample/Organization"/>
+              </eClassifiers>
+            </eSubpackages>
+          </eSubpackages>
+        </eSubpackages>
+      </eSubpackages>
+      <eSubpackages name="java" nsURI="http:///EA_Model/LogicalView/LogicalModel/java.ecore"
+          nsPrefix="EA_Model.LogicalView.LogicalModel.java">
+        <eSubpackages name="lang" nsURI="http:///EA_Model/LogicalView/LogicalModel/java/lang.ecore"
+            nsPrefix="EA_Model.LogicalView.LogicalModel.java.lang">
+          <eClassifiers xsi:type="ecore:EClass" name="Boolean"/>
+          <eClassifiers xsi:type="ecore:EClass" name="Character"/>
+          <eClassifiers xsi:type="ecore:EClass" name="Double"/>
+          <eClassifiers xsi:type="ecore:EClass" name="Float"/>
+          <eClassifiers xsi:type="ecore:EClass" name="Integer"/>
+          <eClassifiers xsi:type="ecore:EClass" name="Long"/>
+          <eClassifiers xsi:type="ecore:EClass" name="String"/>
+        </eSubpackages>
+        <eSubpackages name="util" nsURI="http:///EA_Model/LogicalView/LogicalModel/java/util.ecore"
+            nsPrefix="EA_Model.LogicalView.LogicalModel.java.util">
+          <eClassifiers xsi:type="ecore:EClass" name="Date"/>
+        </eSubpackages>
+      </eSubpackages>
+    </eSubpackages>
+    <eSubpackages name="Mapping" nsURI="http:///EA_Model/LogicalView/Mapping.ecore"
+        nsPrefix="EA_Model.LogicalView.Mapping">
+      <eSubpackages name="Diagrams" nsURI="http:///EA_Model/LogicalView/Mapping/Diagrams.ecore"
+          nsPrefix="EA_Model.LogicalView.Mapping.Diagrams"/>
+    </eSubpackages>
+  </eSubpackages>
+</ecore:EPackage>
