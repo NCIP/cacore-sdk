@@ -124,10 +124,6 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
 		if (getEnableIso21090DatatypesCheckBox().isSelected()){
 			enableWebServiceInterfaceCheckBox.setEnabled(false);
 			enableWebServiceInterfaceCheckBox.setSelected(false);
-			enableRestfulHtmlInterfaceCheckBox.setEnabled(false);
-			enableRestfulHtmlInterfaceCheckBox.setSelected(false);
-			enableRestfulJsonInterfaceCheckBox.setEnabled(false);
-			enableRestfulJsonInterfaceCheckBox.setSelected(false);
 			
 			generateHibernateValidatorCheckBox.setEnabled(false);
 			generateHibernateValidatorCheckBox.setSelected(false);
@@ -141,8 +137,6 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
 
 		} else {
 			enableWebServiceInterfaceCheckBox.setEnabled(true);
-			enableRestfulHtmlInterfaceCheckBox.setEnabled(true);
-			enableRestfulJsonInterfaceCheckBox.setEnabled(true);
 			
 			generateHibernateValidatorCheckBox.setEnabled(true);
 			generateCastorMappingCheckBox.setEnabled(true);

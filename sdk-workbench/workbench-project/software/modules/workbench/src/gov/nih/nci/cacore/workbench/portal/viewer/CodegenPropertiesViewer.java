@@ -407,7 +407,6 @@ public class CodegenPropertiesViewer extends WorkbenchViewerBaseComponent {
 					this,
 					"Enabling ISO 21090 Datatypes causes the following to be disabled:\n"
 					+"  *  Web Service API\n"
-					+"  *  RESTful HTML and JSON API's\n"
 					+"  *  Writable API\n"
 					+"  *  CLM API\n"
 					+"  *  Castor Mapping\n"
