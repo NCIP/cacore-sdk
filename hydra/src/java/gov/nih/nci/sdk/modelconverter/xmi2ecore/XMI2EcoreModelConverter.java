@@ -1,6 +1,6 @@
 package gov.nih.nci.sdk.modelconverter.xmi2ecore;
 
-import gov.nih.nci.sdk.modelconverter.util.SDKTag;
+import gov.nih.nci.sdk.util.Tag;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -43,6 +43,9 @@ import org.eclipse.uml2.uml.util.UMLUtil;
 /**
  * XMI2EcoreModelConverter class converts UML model inside an XMI file to Ecore
  * model represented by <tt>EPackage</tt>.
+ * 
+ * TODO: This code does not load tag values of the Package level. Since this 
+ * is not of the highest priority, I will add that feature later. --John
  * 
  * @author John Chen
  * 
@@ -144,17 +147,17 @@ public class XMI2EcoreModelConverter extends UMLImporter {
 			}
 		}.convert(packages, options, diagnostics, context);
 
-		EPackage epkg = null;
+		EPackage rootEPackage = null;
 		Iterator<EPackage> it = ePackages.iterator();
 		if (it.hasNext()) {
-			epkg = it.next();
+			rootEPackage = it.next();
 		}
 		
-		fetchTags(preparedFile, epkg);
+		fetchTags(preparedFile, rootEPackage);
 		
 		preparedFile.delete();
 
-		return epkg;
+		return rootEPackage;
 	}
 	
 	public Collection<org.eclipse.uml2.uml.Package> convert2UML(String xmiFilePath) throws Exception {
@@ -166,7 +169,6 @@ public class XMI2EcoreModelConverter extends UMLImporter {
 		String modelLocation = uri.toString();
 		super.setModelLocation(modelLocation);
 
-		Map<String, String> options = new HashMap<String, String>();
 		List<URI> locationURIs = getModelLocationURIs();
 		Collection<org.eclipse.uml2.uml.Package> packages = new ArrayList<org.eclipse.uml2.uml.Package>();
 
@@ -241,12 +243,11 @@ public class XMI2EcoreModelConverter extends UMLImporter {
 		return new File(tmpFileName);
 	}
 	
-	void fetchTags(File file, EPackage epkg) throws IOException {
-		if (file == null || epkg == null) return;
+	void fetchTags(File file, EPackage rootEPackage) throws IOException {
+		if (file == null || rootEPackage == null) return;
 		
 		if (!file.exists())
-			throw new FileNotFoundException("File " + file
-					+ " does not exist.");
+			throw new FileNotFoundException("File " + file	+ " does not exist.");
 		
 		List<String> lines = new ArrayList<String>();
 		List<TagLine> tagLines = new ArrayList<TagLine>();
@@ -268,7 +269,7 @@ public class XMI2EcoreModelConverter extends UMLImporter {
 		if (lines.size() == 0 || tagLines.size() == 0) return;
 		
 		fillInSourceForTags(lines, tagLines);
-		linkTagsWithModel(epkg, tagLines);
+		linkTagsWithModel(rootEPackage, tagLines);
 	}
 	
 	private void fillInSourceForTags(List<String> lines, List<TagLine> tagLines) {
@@ -323,18 +324,20 @@ public class XMI2EcoreModelConverter extends UMLImporter {
 	private void linkTagWithModel(EPackage rootPkg, TagLine tag) {
 		if (tag.source == null || tag.containerClass == null) return;
 		
-		System.out.println("creating link for tag: " + tag);
-		EModelElement modelElement = null;
-		if (tag.isAttributeTag()) {
-			modelElement = getModelElement(rootPkg, tag.containerClass, tag.source);
+		if (tag.isClassTag()) {
+			linkClassTagWithModel(rootPkg, tag);
 		}
-		else if (tag.isClassTag()) {
-			modelElement = getModelElement(rootPkg, tag.containerClass);
+		else if (tag.isPropTag()) {
+			linkPropTagWithModel(rootPkg, tag);
 		}
-		
-		if (modelElement != null) {
-			modelElement.getEAnnotations().add(tag.toSDKTag());
-			System.out.println("xxxxxxxxxxxxxxx added tag to model element named " + modelElement);
+		else if (tag.isOperTag()) {
+			//TODO: linkOperTagWithModel(rootPkg, tag);
+		}
+		else if (tag.isRelTag()) {
+			//TODO: linkRelTagWithModel(rootPkg, tag);
+		}
+		else if (tag.isPackageTag()) {
+			//TODO: linkPackageTagWithModel(rootPkg, tag);
 		}
 	}
 	
@@ -355,36 +358,34 @@ public class XMI2EcoreModelConverter extends UMLImporter {
 		return s;
 	}
 	
-	public static EModelElement getModelElement(EPackage pkg, String eClassName) {
-		System.out.println("getModelElement eClassName: " + eClassName);
-		if (pkg == null || eClassName == null) return null;
+	public static void linkClassTagWithModel(EPackage rootEPackage, TagLine tag) {
+		if (rootEPackage == null || tag == null) return;
+		System.out.println("linkClassTagWithModel rootEPackage: " + rootEPackage.getNsURI());
+		System.out.println("linkClassTagWithModel eClassName: " + tag.containerClass);
 		
-		EClass eClass = null;
-		Iterator<EObject> pkgIter = pkg.eContents().iterator();
-		EObject eo = null;
-		while (pkgIter.hasNext()) {
-			eo = pkgIter.next();
-			
-			if (eo instanceof EClassImpl) {
-				EClass tmp = (EClassImpl) eo;
-				if (eClassName.equals(tmp.getName())) {
-					System.out.println("xxxxxFound business entity " + tmp.getName());
-					eClass = tmp;
-					break;
-				}
-			} else if (eo instanceof EPackage) {
-				return getModelElement((EPackage) eo, eClassName);
-			}
+		EModelElement modelElement = gov.nih.nci.sdk.util.EcoreUtil.getModelElementForName(rootEPackage, tag.containerClass);
+		if (modelElement == null) {
+			System.out.println("linkClassTagWithModel ERROR: This should not happen.");//TODO: log the error.
 		}
 		
-		System.out.println("xxxxxxxFound business entity " + eClass);
+		modelElement.getEAnnotations().add(tag.toSDKTag());
+	}
+	
+	public static void linkPropTagWithModel(EPackage rootEPackage, TagLine tag) {
+		if (rootEPackage == null || tag == null) return;
+		System.out.println("linkClassTagWithModel rootEPackage: " + rootEPackage.getNsURI());
+		System.out.println("linkClassTagWithModel eClassName: " + tag.containerClass);
 		
-		return eClass;
+		EModelElement modelElement = gov.nih.nci.sdk.util.EcoreUtil.getModelElementForName(rootEPackage, tag.containerClass);
+		if (modelElement == null) {
+			System.out.println("linkPropTagWithModel ERROR: This should not happen.");//TODO: log the error.
+		}
+		
+		modelElement.getEAnnotations().add(tag.toSDKTag());
 	}
 	
 	public static EModelElement getModelElement(EPackage pkg, String eClassName, String attributeName) {
-		System.out.println("getModelElement eClassName: " + eClassName);
-		System.out.println("getModelElement attributeName: " + attributeName);
+		System.out.println("getModelElement eClassName: " + eClassName + ", attributeName: " + attributeName);
 		if (pkg == null || eClassName == null) return null;
 		
 		EClass eClass = null;
@@ -434,7 +435,7 @@ public class XMI2EcoreModelConverter extends UMLImporter {
 			return value != null;
 		}
 		
-		boolean isAttributeTag() {
+		boolean isPropTag() {
 			return "Attribute".equals(baseLevel);
 		}
 		
@@ -442,8 +443,16 @@ public class XMI2EcoreModelConverter extends UMLImporter {
 			return "Class".equals(baseLevel);
 		}
 		
-		boolean isOperationTag() {
+		boolean isOperTag() {
 			return "Operation".equals(baseLevel);
+		}
+		
+		boolean isRelTag() {
+			return "Aggregation".equals(baseLevel) || "Generalization".equals(baseLevel);
+		}
+		
+		boolean isPackageTag() {
+			throw new UnsupportedOperationException();//TODO
 		}
 		
 		public String toString() {
@@ -458,8 +467,8 @@ public class XMI2EcoreModelConverter extends UMLImporter {
 			return sb.toString();
 		}
 		
-		SDKTag toSDKTag() {
-			return new SDKTag(name, value);
+		Tag toSDKTag() {
+			return new Tag(name, value);
 		}
 		
 		private void init(String line) {
