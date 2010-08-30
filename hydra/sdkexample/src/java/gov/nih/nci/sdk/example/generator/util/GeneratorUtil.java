@@ -13,7 +13,7 @@ import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
 import org.apache.commons.io.FileUtils;
 
-import gov.nih.nci.sdk.core.generator.GeneratorContext;
+import gov.nih.nci.sdk.core.GeneratorContext;
 import gov.nih.nci.sdk.example.generator.Generator;
 
 public class GeneratorUtil {
