@@ -1,49 +1,53 @@
 package gov.nih.nci.sdk.example.generator;
 
-import gov.nih.nci.sdk.core.GeneratorContext;
-import gov.nih.nci.sdk.example.generator.util.GeneratorDomainUtil;
+import gov.nih.nci.sdk.core.ScriptContext;
 import gov.nih.nci.sdk.example.generator.util.GeneratorUtil;
 
 import org.antlr.stringtemplate.StringTemplate;
 
-public class PojoGenerator extends Generator{
-	
-	public PojoGenerator(GeneratorContext context) {
-		super(context);
+public class PojoGenerator
+   extends Generator
+{	
+	public PojoGenerator(ScriptContext _scriptContext)
+	{
+		super(_scriptContext);
 	}
 
-	protected void init() {
+	protected void init()
+	{
 		System.out.println("Generating pojo...");
 		// TODO Auto-generated method stub
 	}
 
-	protected void preProcess() {
+	protected void preProcess()
+	{
 		// TODO Auto-generated method stub
 	}
 
-	protected void validate() {
+	protected void validate()
+	{
 		// TODO Auto-generated method stub
 	}
 
-	public void runProcess() {
-		runProcess("pojo", "pojo", GeneratorUtil.getPojoPath(context));
+	public void runProcess()
+	{
+		runProcess("pojo", "pojo", GeneratorUtil.getPojoPath(getScriptContext()));
 	}
 
-	protected void runProcess(String pojoTemplateName, String pojoPackageName, String outputDir) {
-		
-		StringTemplate template = GeneratorUtil.getTemplate(context, pojoTemplateName);
-		ECOREDomain domain = context.getDomain();
-		template.setAttribute("packageName", domain.getPackageName()+"."+pojoPackageName);
-		template.setAttribute("className", domain.getName());
-		ECOREElement[] elements = GeneratorDomainUtil.getAttributeList(domain);
+	protected void runProcess(String pojoTemplateName, String pojoPackageName, String outputDir)
+	{	
+		StringTemplate template = GeneratorUtil.getTemplate(TEMPLATES_PACKAGE_NAME, pojoTemplateName);
+		String domain = getScriptContext().getFocusDomain();
+		template.setAttribute("packageName", EcoreUtil.getPackageName(getScriptContext()) + "." + pojoPackageName);
+		template.setAttribute("className", domain);
+		List<EAttributes> eAttributeList = EcoreUtil.getEClass(domain).getEAttributes();
 
-		template.setAttribute("ECOREElement", elements);
-		GeneratorUtil.writeFile(outputDir, domain.getName()+".java", template.toString());
+		template.setAttribute("ECOREElement", eAttributeList);
+		GeneratorUtil.writeFile(outputDir, domain + ".java", template.toString());
 	}
 
-	protected void postProcess() {
+	protected void postProcess()
+	{
 		// TODO Auto-generated method stub
 	}
-
-
 }
