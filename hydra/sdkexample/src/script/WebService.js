@@ -1,34 +1,36 @@
 importPackage(Packages.gov.nih.nci.sdk.example.generator);
 importPackage(Packages.gov.nih.nci.sdk.core.generator);
 
-function generate(context)
+function generate(_scriptContext)
 {
-	generateJAXBPojo(context);
-	generatePojo(context);
-	generateWebserviceInterface(context);
-	generateSpringConf(context);
+	generateJAXBPojo(_scriptContext);
+	generatePojo(_scriptContext);
+	generateWebserviceInterface(_scriptContext);
+	generateSpringConf(_scriptContext);
 }
 
-function generateJAXBPojo(context)
+function generateJAXBPojo(_scriptContext)
 {
-	var pojoGenerator = new JAXBPojoGenerator(context);
+	var pojoGenerator = new JAXBPojoGenerator(_scriptContext);
 	pojoGenerator.generate();
 }
 
-function generatePojo(context)
+function generatePojo(_scriptContext)
 {
-	var pojoGenerator = new PojoGenerator(context);
+	var pojoGenerator = new PojoGenerator(_scriptContext);
 	pojoGenerator.generate();
 }
 
-function generateWebserviceInterface(context)
+function generateWebserviceInterface(_scriptContext)
 {
-	var interfaceGenerator = new WebServiceGenerator(context);
+	var interfaceGenerator = new WebServiceGenerator(_scriptContext);
 	interfaceGenerator.generate();
 }
 
-function generateSpringConf(context)
+function generateSpringConf(_scriptContext)
 {
-	var interfaceGenerator = new CXFSpringConfGenerator(context);
+	var interfaceGenerator = new CXFSpringConfGenerator(_scriptContext);
 	interfaceGenerator.generate();
 }
+
+generate(SCRIPT_CONTEXT);

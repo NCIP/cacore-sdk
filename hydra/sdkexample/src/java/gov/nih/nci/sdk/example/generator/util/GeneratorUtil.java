@@ -13,199 +13,232 @@ import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
 import org.apache.commons.io.FileUtils;
 
-import gov.nih.nci.sdk.core.GeneratorContext;
+import gov.nih.nci.sdk.core.ScriptContext;
 import gov.nih.nci.sdk.example.generator.Generator;
 
 public class GeneratorUtil {
 
-	public static StringTemplate getTemplate(GeneratorContext context, String templateName) {
-
-		String projectRoot = context.getGeneratorProperties().getValue(
-		"PROJECT_ROOT");
-
-		StringTemplateGroup group = new StringTemplateGroup("sdkCodeGen",
-				projectRoot + File.separator + Generator.TEMPLATES_PACKAGE_NAME);
-		return group.getInstanceOf(templateName);
+	public static StringTemplate getTemplate(String _templatePath, String _templateName)
+	{
+		StringTemplateGroup group = new StringTemplateGroup("sdkCodeGen", _templatePath);
+		return group.getInstanceOf(_templateName);
 	}
 
-	public static void writeFile(String outputDir, String fileName,
-			String content) {
-		try {
-			if (outputDir.contains("."))
-				outputDir = outputDir.replace(".", File.separator);
+	public static void writeFile(String _outputDir, String _fileName, String _content)
+	{
+		BufferedWriter bufferedWriter = new BufferedWriter(w);
 
-			createOutputDir(outputDir);
-			File f = new File(outputDir, fileName);
-			FileWriter w = new FileWriter(f);
-			BufferedWriter bw = new BufferedWriter(w);
-			bw.write(content);
-			bw.close();
-			w.close();
-		} catch (IOException ioe) {
-			System.err.println("can't write file");
-			ioe.printStackTrace(System.err);
+		try
+		{
+			createOutputDir(_outputDir);
+			File file = new File(_outputDir, _fileName);
+			FileWriter fileWriter = new FileWriter(file);
+			bufferedWriter = new BufferedWriter(fileWriter);
+			bufferedWriter.write(content);
+		}
+		catch (Throwable t)
+		{
+			throw new RuntimeException(t);
+		}
+		finally
+		{
+			if (bufferedWriter != null) { try { bufferedWriter.close(); } catch (Throwable t) { } }
 		}
 	}
 
-	public static void createOutputDir(String outputDir) throws IOException {
-		if (outputDir == null)
-			return;
-
-		if (outputDir.contains("."))
-			outputDir = outputDir.replace(".", File.pathSeparator);
-
-		File file = new File(outputDir);
-		if (!file.exists())
-			FileUtils.forceMkdir(file);
+	public static void createOutputDir(String _outputDir)
+	{
+		try
+		{
+			File file = new File(_outputDir);
+			
+			if (!file.exists() == true)
+			{
+				FileUtils.forceMkdir(file);
+			}
+		}
+		catch(Throwable t)
+		{
+			throw new RuntimeException(t);
+		}
 	}
 
-	public static List getFiles(String dir, String[] extensions)
-			throws MalformedURLException {
+	public static List getFiles(String _dir, String[] _extensions)
+	{
 		List<String> files = new ArrayList();
-		Iterator iter = FileUtils
-				.iterateFiles(new File(dir), extensions, false);
-		while (iter.hasNext()) {
-			File file = (File) iter.next();
-			files.add(file.toURI().toURL().getFile());
+		try
+		{
+			Iterator iter = FileUtils.iterateFiles(new File(_dir), _extensions, false);
+			
+			while (iter.hasNext() == true)
+			{
+				File file = (File) iter.next();
+				files.add(file.getAbsolutePath());
+			}
 		}
+		catch(Throwable t)
+		{
+			throw new RuntimeException(t);
+		}
+		
 		return files;
 	}
 
-	public static String getFiles(String dir, String[] extensions,
-			String seperator) throws MalformedURLException {
-		StringBuffer files = new StringBuffer();
-		Iterator iter = FileUtils
-				.iterateFiles(new File(dir), extensions, false);
-		while (iter.hasNext()) {
-			File file = (File) iter.next();
-			files.append(file.toURI().toURL().getFile()).append(seperator);
+	public static String getFiles(String _dir, String[] _extensions, String _seperator)
+	{
+		try
+		{
+			StringBuffer files = new StringBuffer();
+			Iterator iter = FileUtils.iterateFiles(new File(_dir), _extensions, false);
+			
+			while (iter.hasNext() == true)
+			{
+				File file = (File) iter.next();
+				files.append(file.getAbsolutePath()).append(_seperator);
+			}
 		}
+		catch(Throwable t)
+		{
+			throw new RuntimeException(t);
+		}
+		
 		return files.toString();
 	}
 
-	public static String getJaxbPojoPath(GeneratorContext context) {
-		String jaxbPojoPath = getGeneratedPath(context)
+	public static String getJaxbPojoPath(ScriptContext _scriptContext)
+	{
+		String jaxbPojoPath = getGeneratedPath(_scriptContext)
 				+ File.separator
-				+ context.getDomain().getPackageName().replace(".", File.separator)
+				+ EcoreUtil.getPackageName(_scriptContext).replaceAll("\\.", File.separator)
 				+ File.separator + Generator.JAXBPOJO_PACKAGE_NAME;
 
 		return jaxbPojoPath;
 	}
 
-	public static String getPojoPath(GeneratorContext context) {
-		String jaxbPojoPath = getGeneratedPath(context)
+	public static String getPojoPath(ScriptContext _scriptContext)
+	{
+		String jaxbPojoPath = getGeneratedPath(_scriptContext)
 				+ File.separator
-				+ context.getDomain().getPackageName().replace(".", File.separator)
+				+ EcoreUtil.getPackageName(_scriptContext).replaceAll("\\.", File.separator)
 				+ File.separator + Generator.POJO_PACKAGE_NAME;
 
 		return jaxbPojoPath;
 	}
 	
-	public static String getServiceImplPath(GeneratorContext context) {
-		String serviceImplPath = getImplPath(context)
+	public static String getServiceImplPath(ScriptContext _scriptContext)
+	{
+		String serviceImplPath = getImplPath(_scriptContext)
 				+ File.separator
-				+ context.getDomain().getPackageName().replace(".", File.separator)
+				+ EcoreUtil.getPackageName(_scriptContext).replaceAll("\\.", File.separator)
 				+ File.separator 
 				+ Generator.SERVICE_PACKAGE_NAME;
 
 		return serviceImplPath;
 	}
 
-	public static String getServiceClientPath(GeneratorContext context) {
-		String serviceImplPath = getGeneratedPath(context)
+	public static String getServiceClientPath(ScriptContext _scriptContext)
+	{
+		return getGeneratedPath(context)
 				+ File.separator
-				+ context.getDomain().getPackageName().replace(".", File.separator)
+				+ EcoreUtil.getPackageName(_scriptContext).replaceAll("\\.", File.separator)
 				+ File.separator 
 				+ Generator.SERVICE_PACKAGE_NAME
 				+ File.separator
 				+ Generator.SERVICE_CLIENT_PACKAGE_NAME;
-
-		return serviceImplPath;
 	}
 	
-	public static String getServicePath(GeneratorContext context) {
-		String servicePath = getGeneratedPath(context)
+	public static String getServicePath(ScriptContext _scriptContext)
+	{
+		return getGeneratedPath(_scriptContext)
 				+ File.separator
-				+ context.getDomain().getPackageName().replace(".", File.separator)
+				+ EcoreUtil.getPackageName(_scriptContext).replaceAll("\\.", File.separator)
 				+ File.separator 
 				+ Generator.SERVICE_PACKAGE_NAME;
-
-		return servicePath;
 	}
 
-	public static String getGeneratedPath(GeneratorContext context) {
-		String pathStr = context.getGeneratorProperties().getValue(
+	public static String getGeneratedPath(ScriptContext _scriptContext) {
+		return _scriptContext.getGeneratorProperties().getValue(
 				"PROJECT_ROOT")
 				+ File.separator
-				+ context.getGeneratorProperties().getValue("PROJECT_SRC")
+				+ _scriptContext.getProperties().getValue("PROJECT_SRC")
 				+ File.separator 
 				+ Generator.GENERATED_PACKAGE_NAME;
-
-		return pathStr;
 	}
 
-	public static String getImplPath(GeneratorContext context) {
-		String pathStr = context.getGeneratorProperties().getValue(
+	public static String getImplPath(ScriptContext _scriptContext) {
+		return _scriptContext.getProperties().getValue(
 				"PROJECT_ROOT")
 				+ File.separator
-				+ context.getGeneratorProperties().getValue("PROJECT_SRC")
+				+ _scriptContext.getProperties().getValue("PROJECT_SRC")
 				+ File.separator 
 				+ Generator.IMPL_PACKAGE_NAME;
-
-		return pathStr;
 	}
 
-	public static String getServicePackageName(GeneratorContext context)
+	public static String getServicePackageName(ScriptContext _scriptContext)
 	{
-		return context.getDomain().getPackageName()+"."+Generator.SERVICE_PACKAGE_NAME;
+		return EcoreUtil.getPackageName(_scriptContext.getFocusDomain(), _scriptContext) + "." + Generator.SERVICE_PACKAGE_NAME;
 	}
 
-	public static String getJaxbPojoPackageName(GeneratorContext context)
+	public static String getJaxbPojoPackageName(ScriptContext _scriptContext)
 	{
-		return context.getDomain().getPackageName()+"."+Generator.JAXBPOJO_PACKAGE_NAME;
+		return EcoreUtil.getPackageName(_scriptContext.getFocusDomain(), _scriptContext) + "." + Generator.JAXBPOJO_PACKAGE_NAME;
 	}
 	
-	public static String getPojoPackageName(GeneratorContext context)
+	public static String getPojoPackageName(ScriptContext _scriptContext)
 	{
-		return context.getDomain().getPackageName()+"."+Generator.POJO_PACKAGE_NAME;
+		return EcoreUtil.getPackageName(_scriptContext.getFocusDomain(), _scriptContext) + "." + Generator.POJO_PACKAGE_NAME;
 	}
 
-	public static String getServiceClientPackageName(GeneratorContext context)
+	public static String getServiceClientPackageName(ScriptContext _scriptContext)
 	{
-		return context.getDomain().getPackageName()
+		return EcoreUtil.getPackageName(_scriptContext.getFocusDomain(), _scriptContext)
 			+ "."
 			+ Generator.SERVICE_PACKAGE_NAME
 			+ "."
 			+ Generator.SERVICE_CLIENT_PACKAGE_NAME;
 	}
 	
-	public static String getClassesPath(GeneratorContext context) {
-		return context.getGeneratorProperties().getValue("PROJECT_ROOT")
-				+ File.separator + "classes";
-	}
-
-	public static String getTemplatesPath(GeneratorContext context) {
-		return context.getGeneratorProperties().getValue("PROJECT_ROOT")
-				+ File.separator + "templates";
-	}
-
-	public static String convertFirstCharToUpperCase(String str)
+	public static String getClassesPath(ScriptContext _scriptContext)
 	{
-		if(str == null)
-			return null;
-		else if(str.length() > 1)
-			return str.substring(0,1).toUpperCase() + str.substring(1, str.length());
-		else 
-			return str;
+		return _scriptContext.getProperties().getValue("PROJECT_ROOT") + File.separator + "classes";
 	}
 
-	public static String convertFirstCharToLowerCase(String str)
+	public static String getTemplatesPath()
 	{
-		if(str == null)
-			return null;
-		else if(str.length() > 1)
-			return str.substring(0,1).toLowerCase() + str.substring(1, str.length());
-		else 
-			return str;
+		return TEMPLATES_PACKAGE_NAME;
+	}
+
+	public static String convertFirstCharToUpperCase(String _string)
+	{
+		String capitalizedString = _string;
+
+		if(_string != null && _string.length() > 0)
+		{
+			capitalizedString = _string.substring(0,1).toUpperCase();
+			
+			if (str.length() > 1)
+			{
+				capitalizedString += _string.substring(1, _string.length());
+			}
+		}
+
+		return capitalizedString;
+	}
+
+	public static String convertFirstCharToLowerCase(String _string)
+	{
+		String capitalizedString = _string;
+
+		if(_string != null && _string.length() > 0)
+		{
+			capitalizedString = _string.substring(0,1).toLowerCase();
+
+			if (str.length() > 1)
+			{
+				capitalizedString += _string.substring(1, _string.length());
+			}
+		}
+
+		return capitalizedString;
 	}
 }
