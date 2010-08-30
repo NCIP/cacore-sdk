@@ -8,10 +8,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Properties;
 
 public class GeneratorContext
 {
 	private URI generatorBase;
+	private URI targetBase;
 	private EPackage ePackage;
 	private Set<String> domainSet;
 	private MessageManager errorManager;
@@ -19,8 +21,10 @@ public class GeneratorContext
 	private boolean isAborted;
 	private Map memory;
 	private List<java.io.File> generatorScriptFileList;
+	private Properties properties;
 	
 	public URI getGeneratorBase() { return generatorBase; }
+	public URI getTargetBase() { return targetBase; }
 	public EPackage getEPackage() { return ePackage; }
 	public Set<String> getDomainSet() { return domainSet; }
 	public MessageManager getErrorManager() { return errorManager; }
@@ -28,8 +32,10 @@ public class GeneratorContext
 	private boolean getIsAborted() { return isAborted; }
 	public Map getMemory() { return memory; }
 	protected List<java.io.File> getGeneratorScriptFileList() { return generatorScriptFileList; }
+	public Properties getProperties() { return properties; }
 	
 	public void setGeneratorBase(URI _generatorBase) { generatorBase = _generatorBase; }
+	public void setTargetBase(URI _targetBase) { targetBase = _targetBase; }
 	public void setEPackage(EPackage _ePackage) { ePackage = _ePackage; }
 	public void setDomainSet(Set<String> _domainSet) { domainSet = _domainSet; }
 	private void setErrorManager(MessageManager _errorManager) { errorManager = _errorManager; }
@@ -37,14 +43,19 @@ public class GeneratorContext
 	private void setIsAborted(boolean _isAborted) { isAborted = _isAborted; }
 	private void setMemory(Map _memory) { memory = _memory; }
 	protected void setGeneratorScriptFileList(List<java.io.File> _generatorScriptFileList) { generatorScriptFileList = _generatorScriptFileList; }
+	public void setProperties(Properties _properties) { properties = _properties; }
 	
 	public GeneratorContext(URI _generatorBase,
+							URI _targetBase,
+							Properties _properties,
 							EPackage _ePackage,
 							java.util.Set<String> _domainSet)
 	{
 		setGeneratorBase(_generatorBase);
+		setTargetBase(_targetBase);
 		setEPackage(_ePackage);
 		setDomainSet(_domainSet);
+		setProperties(_properties);
 		setErrorManager(new MessageManager());
 		setWarningManager(new MessageManager());
 		setIsAborted(false);
