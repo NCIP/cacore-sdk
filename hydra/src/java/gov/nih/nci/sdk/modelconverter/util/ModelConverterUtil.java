@@ -2,20 +2,47 @@ package gov.nih.nci.sdk.modelconverter.util;
 
 import gov.nih.nci.sdk.modelconverter.xmi2ecore.XMI2EcoreModelConverter;
 
-import org.eclipse.emf.common.util.URI;
+import java.util.ResourceBundle;
+import java.util.Set;
+
 import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
-import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
 
 /**
- * Help methods for the converter.
+ * Helper methods for the converter.
  * 
  * @author John Chen
  *
  */
 public class ModelConverterUtil {
+	public static final String SDK_TAGS_FILE = "gov/nih/nci/sdk/modelconverter/util/sdk_tags";
+	private static Set<String> allTagNames = null;
+	
+	/**
+	 * Returns a set of SDK tag names.
+	 * 
+	 * @return a set of SDK tag names
+	 */
+	static Set<String> getAllSDKTagNames() {
+		ResourceBundle bundle = ResourceBundle.getBundle(SDK_TAGS_FILE);
+		Set<String> keys = bundle.keySet();
+		return keys;
+	}
+	
+	/**
+	 * Checks if it is a SDK defined tag name.
+	 * 
+	 * @return true of it is a SDK defined tag name
+	 */
+	public static boolean isSDKTag(String name) {
+		if (name == null) 
+			throw new IllegalArgumentException("Input name cannot be null.");
+		
+		if (allTagNames == null) {
+			allTagNames = getAllSDKTagNames();
+		}
+		
+		return allTagNames.contains(name);
+	}
 	
 	/**
 	 * Returns the root EPackage instance. 
@@ -33,27 +60,5 @@ public class ModelConverterUtil {
 			throw new RuntimeException("Failed to read test model xmi file: " + ex.getMessage());
 		}
 		return rootEPackage;
-	}
-	
-	/**
-	 * Returns the root EPackage instance. 
-	 * 
-	 * @param ecoreFile ecore file name
-	 * @return root EPackage
-	 */
-	public static EPackage readRootEPackageFromEcoreFile(String ecoreFile) {
-		ResourceSet resourceSet = new ResourceSetImpl();
-		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap()
-				.put("ecore", new EcoreResourceFactoryImpl());
-		Resource resource = resourceSet.getResource(
-				URI.createFileURI(ecoreFile), true);
-
-		if (resource == null || resource.getContents().size() == 0) {
-			throw new IllegalArgumentException(
-					"There is no ecore model found in " + ecoreFile
-							+ ". Please verify if it is a valid ecore file.");
-		}
-
-		return (EPackage) resource.getContents().get(0);
 	}
 }
