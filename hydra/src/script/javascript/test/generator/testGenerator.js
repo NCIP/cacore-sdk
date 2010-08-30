@@ -13,7 +13,7 @@ var createGeneratorContext = function(_directory)
 	var directory = (!_directory) ? "workspace" : _directory;
 	var file = new Packages.java.io.File(directory);
 	var uri = file.toURI();
-	return new Packages.gov.nih.nci.sdk.core.GeneratorContext(uri, null, new Packages.java.util.HashSet());
+	return new Packages.gov.nih.nci.sdk.core.GeneratorContext(uri, null, null, null, new Packages.java.util.HashSet());
 }
 
 var createEPackage = function()
@@ -140,7 +140,7 @@ var executeScriptTest = function()
 
 	var generator = new Packages.gov.nih.nci.sdk.core.Generator();
 	var generatorContext = createGeneratorContext();
-	var scriptContext = new Packages.gov.nih.nci.sdk.core.ScriptContext(scriptFile.getAbsolutePath(), generatorContext.getEPackage(), generatorContext.getMemory());
+	var scriptContext = new Packages.gov.nih.nci.sdk.core.ScriptContext(scriptFile.getAbsolutePath(), generatorContext.getEPackage(), generatorContext.getMemory(), null, null);
 
 	generator.executeScript(scriptFile, scriptContext);
 

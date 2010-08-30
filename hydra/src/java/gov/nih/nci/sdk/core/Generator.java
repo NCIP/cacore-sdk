@@ -110,7 +110,12 @@ public class Generator
 
 		if (scriptContext == null)
 		{
-			scriptContext = new ScriptContext(_script.getAbsolutePath(), _generatorContext.getEPackage(), _generatorContext.getMemory());
+			scriptContext = new ScriptContext(_script.getAbsolutePath(),
+											  _generatorContext.getEPackage(),
+											  _generatorContext.getMemory(),
+											  _generatorContext.getProperties(),
+											  _generatorContext.getTargetBase());
+			
 			getScriptContextMap().put(_script.getAbsolutePath(), scriptContext);
 		}
 
