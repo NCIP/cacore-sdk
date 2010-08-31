@@ -17,6 +17,7 @@ public class JAXBPojoGenerator extends PojoGenerator {
 
 	public void runProcess()
 	{
-		runProcess("JAXBPojo", "jaxb", GeneratorUtil.getJaxbPojoPath(getScriptContext()));
+		//TODO Talk to Prasad about what he wanted to do here.
+		//runProcess("JAXBPojo", "jaxb", GeneratorUtil.getJaxbPojoPath(getScriptContext()));
 	}
 }

@@ -7,7 +7,6 @@ $importSt;separator=";"$
 @WebService
 public interface $interfaceName$ {
 
-$ECOREElement:{
-	public $it.type$ $it.name$($it.param$);
-}$
+$operation; separator="\n"$
+
 }
