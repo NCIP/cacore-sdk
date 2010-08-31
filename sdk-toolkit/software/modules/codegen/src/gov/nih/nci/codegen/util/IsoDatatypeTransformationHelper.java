@@ -97,13 +97,15 @@ public class IsoDatatypeTransformationHelper
 	 */
 	public RootNode getDatatypeNode(UMLClass klass, UMLAttribute attr, UMLClass table, boolean skipDataModelInformation) throws GenerationException
 	{
+		RootNode rootNode = createDatatypeNode(klass, attr, table);
+		
 		UMLClass originalKlass=getOriginalClassForAttribute(klass,attr);
 		if ((!klass.getName().equals(originalKlass.getName()) && (!utils
 				.isImplicitParent(originalKlass)))) {
 			klass = originalKlass;
 			table = utils.getTable(klass);
 		}
-		RootNode rootNode = createDatatypeNode(klass, attr, table);
+		
 		traverseNodeAndAttachDataType(rootNode, klass, attr);
 		getGlobalConstantNode(rootNode);
 		traverseNodeAndAttachDataType(rootNode, klass, attr);
@@ -632,7 +634,10 @@ public class IsoDatatypeTransformationHelper
 	
 	private UMLClass getOriginalClassForAttribute(UMLClass umlKlass,
 			UMLAttribute attr) throws GenerationException {
-
+		
+		if(umlKlass.getName().equals("PrivateTeacher")){
+			System.out.println("Hello");
+		}
 		UMLClass currentUmlKlass = umlKlass;
 		while (currentUmlKlass != null) {
 			for (UMLAttribute currentAttr : currentUmlKlass.getAttributes()) {
