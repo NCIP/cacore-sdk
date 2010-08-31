@@ -1,6 +1,6 @@
 package gov.nih.nci.sdk.modelconverter.xmi2ecore;
 
-import gov.nih.nci.sdk.util.Tag;
+import gov.nih.nci.sdk.util.SDKUtil;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -24,12 +24,14 @@ import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EModelElement;
-import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.ecore.impl.EClassImpl;
+import org.eclipse.emf.ecore.EcoreFactory;
+import org.eclipse.emf.ecore.impl.EAnnotationImpl;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.importer.ModelImporter;
@@ -159,34 +161,6 @@ public class XMI2EcoreModelConverter extends UMLImporter {
 
 		return rootEPackage;
 	}
-	
-	public Collection<org.eclipse.uml2.uml.Package> convert2UML(String xmiFilePath) throws Exception {
-		if (xmiFilePath == null)
-			throw new IllegalArgumentException("xmiFilePath cannot be null.");
-
-		File preparedFile = prepareFile(xmiFilePath);
-		URI uri = URI.createFileURI(preparedFile.getCanonicalPath());
-		String modelLocation = uri.toString();
-		super.setModelLocation(modelLocation);
-
-		List<URI> locationURIs = getModelLocationURIs();
-		Collection<org.eclipse.uml2.uml.Package> packages = new ArrayList<org.eclipse.uml2.uml.Package>();
-
-		ResourceSet umlResourceSet = createResourceSet();
-		umlResourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap()
-				.put("xmi", new XMI2UMLResourceFactoryImpl());
-
-		for (URI locationURI : locationURIs) {
-			packages
-					.addAll(EcoreUtil
-							.<org.eclipse.uml2.uml.Package> getObjectsByType(
-									umlResourceSet.getResource(locationURI,
-											true).getContents(),
-									UMLPackage.Literals.PACKAGE));
-		}
-
-		return packages;
-	}
 
 	File prepareFile(String filePath) throws IOException {
 		File f = new File(filePath);
@@ -253,13 +227,14 @@ public class XMI2EcoreModelConverter extends UMLImporter {
 		List<TagLine> tagLines = new ArrayList<TagLine>();
 		BufferedReader in = new BufferedReader(new FileReader(file));
 		String line = null;
+		TagLine tagLine = null;
 		while ((line = in.readLine()) != null) {
 			lines.add(line);
 			
 			if (line.indexOf("<thecustomprofile:") != -1 &&
 					line.indexOf(" base_") != -1) {
-				TagLine tagLine = new TagLine(line);
-				if (tagLine.isValidTag()) {
+				tagLine = new TagLine(line);
+				if (tagLine.isSDKTag()) {
 					tagLines.add(tagLine);
 				}
 			}
@@ -292,8 +267,15 @@ public class XMI2EcoreModelConverter extends UMLImporter {
 				if (tag.isClassTag()) {
 					tag.containerClass = source;
 				}
-				else {
+				else if (tag.isPropTag() || tag.isOperTag()) {
 					detectClassName(lines, count, tag);
+				}
+				else if (tag.isRelGeneralizationTag()) {
+					detectClassName(lines, count, tag);
+					detectRelatedClassName(lines, line, tag);
+				}
+				else {
+					;//TODO: need to handle Package and RelAggregation tags
 				}
 			}
 			count++;
@@ -313,6 +295,20 @@ public class XMI2EcoreModelConverter extends UMLImporter {
 		return s;
 	}
 	
+	static void detectRelatedClassName(List<String> lines, String tagLine, TagLine tag) {
+		String general = getValueForToken(tagLine, "general");
+		String searchToken = "xmi:id=\"" + general + "\"";
+		Iterator<String> it = lines.iterator();
+		while(it.hasNext()) {
+			String line = it.next();
+			if (line.indexOf(searchToken) != -1) {
+				String name = getValueForToken(line, "name");
+				tag.relatedClass = name;
+				break;
+			}
+		}
+	}
+	
 	private void linkTagsWithModel(EPackage rootPkg, List<TagLine> tagLines) {
 		Iterator<TagLine> it = tagLines.iterator();
 		while(it.hasNext()) {
@@ -322,7 +318,7 @@ public class XMI2EcoreModelConverter extends UMLImporter {
 	}
 	
 	private void linkTagWithModel(EPackage rootPkg, TagLine tag) {
-		if (tag.source == null || tag.containerClass == null) return;
+		if (tag == null || !tag.isSDKTag()) return;
 		
 		if (tag.isClassTag()) {
 			linkClassTagWithModel(rootPkg, tag);
@@ -331,10 +327,13 @@ public class XMI2EcoreModelConverter extends UMLImporter {
 			linkPropTagWithModel(rootPkg, tag);
 		}
 		else if (tag.isOperTag()) {
-			//TODO: linkOperTagWithModel(rootPkg, tag);
+			linkOperTagWithModel(rootPkg, tag);
 		}
-		else if (tag.isRelTag()) {
-			//TODO: linkRelTagWithModel(rootPkg, tag);
+		else if (tag.isRelGeneralizationTag()) {
+			linkRelGeneralizationTagWithModel(rootPkg, tag);
+		}
+		else if (tag.isRelAggregationTag()) {
+			//TODO: linkRelAggregationTagWithModel(rootPkg, tag);
 		}
 		else if (tag.isPackageTag()) {
 			//TODO: linkPackageTagWithModel(rootPkg, tag);
@@ -360,63 +359,69 @@ public class XMI2EcoreModelConverter extends UMLImporter {
 	
 	public static void linkClassTagWithModel(EPackage rootEPackage, TagLine tag) {
 		if (rootEPackage == null || tag == null) return;
-		System.out.println("linkClassTagWithModel rootEPackage: " + rootEPackage.getNsURI());
-		System.out.println("linkClassTagWithModel eClassName: " + tag.containerClass);
 		
 		EModelElement modelElement = gov.nih.nci.sdk.util.EcoreUtil.getModelElementForName(rootEPackage, tag.containerClass);
 		if (modelElement == null) {
 			System.out.println("linkClassTagWithModel ERROR: This should not happen.");//TODO: log the error.
 		}
-		
-		modelElement.getEAnnotations().add(tag.toSDKTag());
+
+		addAnnotationToModelElement(modelElement, tag);
 	}
 	
 	public static void linkPropTagWithModel(EPackage rootEPackage, TagLine tag) {
 		if (rootEPackage == null || tag == null) return;
-		System.out.println("linkClassTagWithModel rootEPackage: " + rootEPackage.getNsURI());
-		System.out.println("linkClassTagWithModel eClassName: " + tag.containerClass);
 		
 		EModelElement modelElement = gov.nih.nci.sdk.util.EcoreUtil.getModelElementForName(rootEPackage, tag.containerClass);
 		if (modelElement == null) {
 			System.out.println("linkPropTagWithModel ERROR: This should not happen.");//TODO: log the error.
 		}
 		
-		modelElement.getEAnnotations().add(tag.toSDKTag());
-	}
-	
-	public static EModelElement getModelElement(EPackage pkg, String eClassName, String attributeName) {
-		System.out.println("getModelElement eClassName: " + eClassName + ", attributeName: " + attributeName);
-		if (pkg == null || eClassName == null) return null;
-		
-		EClass eClass = null;
-		Iterator<EObject> pkgIter = pkg.eContents().iterator();
-		EObject eo = null;
-		while (pkgIter.hasNext()) {
-			eo = pkgIter.next();
+		EList<EStructuralFeature> attributes = ((EClass)modelElement).getEAllStructuralFeatures();
+		Iterator<EStructuralFeature> itAttr = attributes.iterator();
+		while (itAttr.hasNext()) {
+			EStructuralFeature attr = itAttr.next();
 			
-			if (eo instanceof EClassImpl) {
-				EClass tmp = (EClassImpl) eo;
-				if (eClassName.equals(tmp.getName())) {
-					System.out.println("Parsing attributes for business entity " + tmp.getName());
-					if (attributeName != null) {
-						EList<EStructuralFeature> attributes = tmp.getEAllStructuralFeatures();
-						Iterator<EStructuralFeature> itAttr = attributes.iterator();
-						while (itAttr.hasNext()) {
-							EStructuralFeature attr = itAttr.next();
-							System.out.println("attr: " + attr.getName());
-							if (attributeName.equals(attr.getName())) {
-								eClass = tmp;
-								break;
-							}
-						}
-					}
-				}
-			} else if (eo instanceof EPackage) {
-				getModelElement((EPackage) eo, eClassName, attributeName);
+			if (tag.source.equals(attr.getName())) {
+				addAnnotationToModelElement(attr, tag);
 			}
 		}
+	}
+	
+	public static void linkOperTagWithModel(EPackage rootEPackage, TagLine tag) {
+		if (rootEPackage == null || tag == null) return;
 		
-		return eClass;
+		EModelElement modelElement = gov.nih.nci.sdk.util.EcoreUtil.getModelElementForName(rootEPackage, tag.containerClass);
+		if (modelElement == null) {
+			System.out.println("linkOperTagWithModel ERROR: This should not happen.");//TODO: log the error.
+		}
+		
+		EList<EOperation> operations = ((EClass)modelElement).getEAllOperations();
+		Iterator<EOperation> itOper = operations.iterator();
+		while (itOper.hasNext()) {
+			EOperation oper = itOper.next();
+			
+			if (tag.source.equals(oper.getName())) {
+				addAnnotationToModelElement(oper, tag);
+			}
+		}
+	}
+	
+	public static void linkRelGeneralizationTagWithModel(EPackage rootEPackage, TagLine tag) {
+		if (rootEPackage == null || tag == null) return;
+		
+		EModelElement modelElement = gov.nih.nci.sdk.util.EcoreUtil.getModelElementForName(rootEPackage, tag.containerClass);
+		if (modelElement == null) {
+			System.out.println("linkRelGeneralizationTagWithModel ERROR: This should not happen.");//TODO: log the error.
+		}
+		
+		addAnnotationToModelElement(modelElement, tag);
+	}
+	
+	private static void addAnnotationToModelElement(EModelElement modelElement, TagLine tag) {
+		EAnnotation ann = EcoreFactory.eINSTANCE.createEAnnotation();
+		ann.setSource(tag.name);
+		ann.setEModelElement(modelElement);
+		ann.getDetails().put(tag.name, tag.value);
 	}
 	
 	class TagLine {
@@ -426,13 +431,14 @@ public class XMI2EcoreModelConverter extends UMLImporter {
 		String value;
 		String source;
 		String containerClass;
+		String relatedClass;
 		
 		TagLine(String line) {
 			init(line);
 		}
 		
-		boolean isValidTag() {
-			return value != null;
+		boolean isSDKTag() {
+			return SDKUtil.isSDKTag(name);
 		}
 		
 		boolean isPropTag() {
@@ -447,8 +453,12 @@ public class XMI2EcoreModelConverter extends UMLImporter {
 			return "Operation".equals(baseLevel);
 		}
 		
-		boolean isRelTag() {
-			return "Aggregation".equals(baseLevel) || "Generalization".equals(baseLevel);
+		boolean isRelAggregationTag() {
+			return "Aggregation".equals(baseLevel);
+		}
+		
+		boolean isRelGeneralizationTag() {
+			return "Generalization".equals(baseLevel);
 		}
 		
 		boolean isPackageTag() {
@@ -462,13 +472,9 @@ public class XMI2EcoreModelConverter extends UMLImporter {
 			sb.append("baseLevel=").append(baseLevel).append(",");
 			sb.append("baseId=").append(baseId).append(",");
 			sb.append("source=").append(source).append(",");
-			sb.append("containerClass=").append(containerClass);
-			
+			sb.append("containerClass=").append(containerClass).append(",");
+			sb.append("relatedClass=").append(relatedClass);
 			return sb.toString();
-		}
-		
-		Tag toSDKTag() {
-			return new Tag(name, value);
 		}
 		
 		private void init(String line) {
