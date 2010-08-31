@@ -629,6 +629,7 @@
               </eClassifiers>
               <eClassifiers xsi:type="ecore:EClass" name="Patient" eSuperTypes="#//LogicalView/LogicalModel/gov/nih/nci/sdkexample/Person"/>
               <eClassifiers xsi:type="ecore:EClass" name="Person">
+                <eOperations name="getNickName" ordered="false" lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/String"/>
                 <eStructuralFeatures xsi:type="ecore:EReference" name="birthDate"
                     ordered="false" lowerBound="1" eType="#//LogicalView/LogicalModel/gov/nih/nci/iso21090/TS"/>
                 <eStructuralFeatures xsi:type="ecore:EReference" name="identifier"
