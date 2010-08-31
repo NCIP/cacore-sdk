@@ -634,10 +634,7 @@ public class IsoDatatypeTransformationHelper
 	
 	private UMLClass getOriginalClassForAttribute(UMLClass umlKlass,
 			UMLAttribute attr) throws GenerationException {
-		
-		if(umlKlass.getName().equals("PrivateTeacher")){
-			System.out.println("Hello");
-		}
+
 		UMLClass currentUmlKlass = umlKlass;
 		while (currentUmlKlass != null) {
 			for (UMLAttribute currentAttr : currentUmlKlass.getAttributes()) {
