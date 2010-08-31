@@ -1415,6 +1415,7 @@
 		<thecustomprofile:class.per.table.name base_Class="EAID_1900C30C_5F50_4178_BE67_C2242BE57225" class.per.table.name="ORGANIZATION"/>
 		<thecustomprofile:prop.per.primary.key base_Attribute="EAID_F0C81987_C4A1_4e4f_B05C_C5EFCA810E53" prop.per.primary.key="0"/>
 		<thecustomprofile:rel.mea.desc base_Aggregation="EAID_A3CEAAAC_FEE5_420f_9E60_06DCCB788B85" rel.mea.desc="Person belongs to an organization."/>
+		<thecustomprofile:rel.mea.desc base_Generalization="EAID_0A0700F2_1256_46d1_86DA_3611D705E828" rel.mea.desc="Patient is a subclass of Person."/>
 		<thecustomprofile:class.per.table.name base_Class="EAID_0EF420F0_4227_406f_A187_85A06587C2A1" class.per.table.name="PERSON"/>
 		<thecustomprofile:prop.per.primary.key base_Attribute="EAID_E5C11E6A_77A1_4ce2_A8E2_28B8EF22E684" prop.per.primary.key="0"/>
 		<thecustomprofile:prop.val.min.length base_Attribute="EAID_2A61BDBC_D606_42a1_9650_711E33BFBD85" prop.val.min.length="1"/>
@@ -13126,7 +13127,9 @@
 				<extendedProperties virtualInheritance="0"/>
 				<style/>
 				<xrefs value="$XREFPROP=$XID={ADF3C29A-A058-4dbc-8F17-98563A2B8139}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isSubstitutable@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={0A0700F2-1256-46d1-86DA-3611D705E828}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-				<tags/>
+				<tags>
+					<tag xmi:id="EAID_7B80A2E9_465B_4aee_95BE_A0D23BA62E6C" name="rel.mea.desc" value="Patient is a subclass of Person."/>
+				</tags>
 			</connector>
 		</connectors>
 		<diagrams>
