@@ -19,8 +19,14 @@ import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
 import org.apache.commons.io.FileUtils;
 
+import gov.nih.nci.sdk.util.EcoreUtil;
 import gov.nih.nci.sdk.core.ScriptContext;
 import gov.nih.nci.sdk.example.generator.util.GeneratorUtil;
+
+import org.eclipse.emf.ecore.EParameter;
+import org.eclipse.emf.ecore.EAnnotation;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EOperation;
 
 public class WebServiceGenerator
    extends Generator
@@ -31,8 +37,8 @@ public class WebServiceGenerator
 	public WebServiceGenerator(ScriptContext _scriptContext)
 	{
 		super(_scriptContext);
-		packageName = EcoreUtil.getPackageName(_scriptContext);
-		serviceName = _scriptContext.getFocusDomain() + "Service";
+		packageName = EcoreUtil.determinePackageName(_scriptContext.getFocusDomain());
+		serviceName = EcoreUtil.determineClassName(_scriptContext.getFocusDomain()) + "Service";
 	}
 
 	protected void init()
@@ -79,7 +85,7 @@ public class WebServiceGenerator
 
 	public void runProcess()
 	{
-		StringTemplateGroup group = new StringTemplateGroup("sdkCodeGen", GeneratorUtil.getTemplatesPath(TEMPLATES_PACKAGE_NAME));
+		StringTemplateGroup group = new StringTemplateGroup("sdkCodeGen", GeneratorUtil.getTemplatesPath());
 		
 		generateWebServiceInterface(group);
 		generateWebServiceAbstract(group);
@@ -99,8 +105,41 @@ public class WebServiceGenerator
 		template.setAttribute("packageName", GeneratorUtil.getServicePackageName(getScriptContext()));
 		template.setAttribute("importSt", getImportStmt());
 		template.setAttribute("interfaceName", serviceName);
-		List<EOperation> eOperationList = GeneratorDomainUtil.getServiceOperationsList(getScriptContext().getFocusDomain());
-		template.setAttribute("ECOREElement", eOperationList);
+		List<EOperation> eOperationList = new java.util.ArrayList();
+
+		EClass eClass = EcoreUtil.getEClass(getScriptContext().getEPackage(), getScriptContext().getFocusDomain());
+		EAnnotation defaultServiceAnnotation = eClass.getEAnnotation("oper.ser.service");
+
+		for (EOperation eOperation: eClass.getEAllOperations())
+		{
+			EAnnotation eAnnotation = eOperation.getEAnnotation("oper.ser.service");
+			if (eAnnotation != null)
+			{
+				//TODO this logic is not quite right as it does not
+				//take the class level default into account.  We really
+				//need to write a method to handle the assignment of
+				//defaults.  This should really be in the SDKUtil class
+				//John is workin on.  Once he has created this class I
+				//will add this utility there.  Right now I just want
+				//to get this doing something so that I can explore how
+				//EOperations work.
+				boolean isService = (eAnnotation != null && eAnnotation.getDetails().get("oper.ser.service").equalsIgnoreCase("false") == false) ? true : false;
+
+				if (isService == true)
+				{
+					StringTemplate operationTemplate = new StringTemplate("public $returnType$ $name$($param; separator=\", \"$);");
+					operationTemplate.setAttribute("returnType", eOperation.getEType());
+					operationTemplate.setAttribute("name", eOperation.getName());
+
+					for (EParameter eParameter: eOperation.getEParameters())
+					{
+						operationTemplate.setAttribute("param", eParameter.getEType().getName() + " " + eParameter.getName());
+					}
+					
+					template.setAttribute("operation", operationTemplate.toString());
+				}
+			}
+		}
 
 		//Generate and write the template output
 		GeneratorUtil.writeFile(GeneratorUtil.getServicePath(getScriptContext()), serviceName + ".java", template.toString());
@@ -114,8 +153,41 @@ public class WebServiceGenerator
 		template.setAttribute("packageName", GeneratorUtil.getServicePackageName(getScriptContext()));
 		template.setAttribute("importSt", getImportStmt());
 		template.setAttribute("interfaceName", serviceName);
-		List<EOperation> eOperationList = GeneratorDomainUtil.getServiceOperationsList(getScriptContext().getFocusDomain());
-		template.setAttribute("ECOREElement", eOperationList);
+
+
+		EClass eClass = EcoreUtil.getEClass(getScriptContext().getEPackage(), getScriptContext().getFocusDomain());
+		EAnnotation defaultServiceAnnotation = eClass.getEAnnotation("oper.ser.service");
+
+		for (EOperation eOperation: eClass.getEAllOperations())
+		{
+			EAnnotation eAnnotation = eOperation.getEAnnotation("oper.ser.service");
+			if (eAnnotation != null)
+			{
+				//TODO this logic is not quite right as it does not
+				//take the class level default into account.  We really
+				//need to write a method to handle the assignment of
+				//defaults.  This should really be in the SDKUtil class
+				//John is workin on.  Once he has created this class I
+				//will add this utility there.  Right now I just want
+				//to get this doing something so that I can explore how
+				//EOperations work.
+				boolean isService = (eAnnotation != null && eAnnotation.getDetails().get("oper.ser.service").equalsIgnoreCase("false") == false) ? true : false;
+
+				if (isService == true)
+				{
+					StringTemplate operationTemplate = new StringTemplate("public $returnType$ $name$($param; separator=\", \"$);");
+					operationTemplate.setAttribute("returnType", eOperation.getEType());
+					operationTemplate.setAttribute("name", eOperation.getName());
+
+					for (EParameter eParameter: eOperation.getEParameters())
+					{
+						operationTemplate.setAttribute("param", eParameter.getEType().getName() + " " + eParameter.getName());
+					}
+
+					template.setAttribute("operation", operationTemplate.toString());
+				}
+			}
+		}
 
 		//Generate and write the template output
 		GeneratorUtil.writeFile(GeneratorUtil.getServicePath(getScriptContext()), serviceName + "ImplAbstract.java", template.toString());
@@ -132,7 +204,7 @@ public class WebServiceGenerator
 		{
 			StringTemplate template = _group.getInstanceOf("WebServiceImpl");
 			//Set template tokens
-			template.setAttribute("packageName", GeneratorUtil.getServicePackageName(context));
+			template.setAttribute("packageName", GeneratorUtil.getServicePackageName(getScriptContext()));
 			template.setAttribute("importSt", getImportStmt());
 			template.setAttribute("interfaceName", serviceName);
 
@@ -199,17 +271,17 @@ public class WebServiceGenerator
 			for (Diagnostic diagnostic : diagnostics.getDiagnostics())
 			{
 				getScriptContext().logInfo(diagnostic.getCode());
-				getScriptContext().logInfo(diagnostic.getKind());
-				getScriptContext().logInfo(diagnostic.getPosition());
-				getScriptContext().logInfo(diagnostic.getStartPosition());
-				getScriptContext().logInfo(diagnostic.getEndPosition());
-				getScriptContext().logInfo(diagnostic.getSource());
+				getScriptContext().logInfo(diagnostic.getKind().toString());
+				getScriptContext().logInfo(diagnostic.getPosition() + "");
+				getScriptContext().logInfo(diagnostic.getStartPosition() + "");
+				getScriptContext().logInfo(diagnostic.getEndPosition() + "");
+				getScriptContext().logInfo(diagnostic.getSource().toString());
 				getScriptContext().logInfo(diagnostic.getMessage(null));
 			}
 		}
 		catch (Throwable t)
 		{
-			getScriptContext().logError("sdkExample", t);
+			getScriptContext().logError(t);
 		}
 		finally
 		{
@@ -228,7 +300,7 @@ public class WebServiceGenerator
 		String javaToolPath = getScriptContext().getProperties().getProperty("JAVA_HOME") +
 							  File.separatorChar + "lib" + File.separatorChar + "tools.jar";
 		String classPath = classesPath + File.pathSeparator + cxfClassPath + File.pathSeparator + javaToolPath;
-		String packageName = EcoreUtil.getPackageName(getScriptContext().getFocusDomain());
+		String packageName = EcoreUtil.determinePackageName(getScriptContext().getFocusDomain());
 
 		String cmd = cxfHome + File.separator + "bin" + File.separator	+ "java2ws.bat";
 		String argStr = " -wsdl -server -client -ant -cp " + classPath;
@@ -255,7 +327,7 @@ public class WebServiceGenerator
 			if (_command != null)
 			{
 				Runtime a = Runtime.getRuntime();
-				java.lang.Process p = a.exec(command);
+				java.lang.Process p = a.exec(_command);
 
 				BufferedReader stdInput = new BufferedReader(new InputStreamReader(
 						p.getInputStream()));
