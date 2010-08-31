@@ -50,7 +50,7 @@ public class CXFSpringConfGenerator
 
 	public void runProcess()
 	{
-		String templatePath = GeneratorUtil.getTemplatesPath(TEMPLATES_PACKAGE_NAME);
+		String templatePath = GeneratorUtil.getTemplatesPath();
 		StringTemplateGroup group = new StringTemplateGroup("sdkCodeGen", templatePath);
 		generateSpringServerConf(group);
 		generateSpringClientConf(group);
@@ -58,7 +58,8 @@ public class CXFSpringConfGenerator
 		generateBuildScripts(group);
 	}
 
-	private void generateSpringServerConf(StringTemplateGroup group) {
+	private void generateSpringServerConf(StringTemplateGroup group)
+	{
 		StringTemplate template = group.getInstanceOf("SpringBeanServerConf");
 		SpringBean bean = new SpringBean();
 		bean.setBeanId(GeneratorUtil.convertFirstCharToLowerCase(getScriptContext().getFocusDomain()) + "Service");
@@ -75,7 +76,8 @@ public class CXFSpringConfGenerator
 		GeneratorUtil.writeFile(outputDir, "beans.xml", template.toString());
 	}
 
-	private void generateSpringClientConf(StringTemplateGroup group) {
+	private void generateSpringClientConf(StringTemplateGroup group)
+	{
 		StringTemplate template = group.getInstanceOf("SpringBeanClientConf");
 		SpringBean bean = new SpringBean();
 		bean.setBeanId(getScriptContext().getFocusDomain() + "Client");

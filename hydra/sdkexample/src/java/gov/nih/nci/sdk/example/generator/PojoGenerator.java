@@ -1,9 +1,12 @@
 package gov.nih.nci.sdk.example.generator;
 
+import java.util.List;
 import gov.nih.nci.sdk.core.ScriptContext;
+import gov.nih.nci.sdk.util.EcoreUtil;
 import gov.nih.nci.sdk.example.generator.util.GeneratorUtil;
 
 import org.antlr.stringtemplate.StringTemplate;
+import org.eclipse.emf.ecore.EAttribute;
 
 public class PojoGenerator
    extends Generator
@@ -31,16 +34,18 @@ public class PojoGenerator
 
 	public void runProcess()
 	{
-		runProcess("pojo", "pojo", GeneratorUtil.getPojoPath(getScriptContext()));
+		runProcess("pojo", GeneratorUtil.getPojoPath(getScriptContext()));
 	}
 
-	protected void runProcess(String pojoTemplateName, String pojoPackageName, String outputDir)
+	protected void runProcess(String pojoPackageName, String outputDir)
 	{	
-		StringTemplate template = GeneratorUtil.getTemplate(TEMPLATES_PACKAGE_NAME, pojoTemplateName);
+		StringTemplate template = GeneratorUtil.getTemplate(TEMPLATES_PACKAGE_NAME, "pojo");
 		String domain = getScriptContext().getFocusDomain();
-		template.setAttribute("packageName", EcoreUtil.getPackageName(getScriptContext()) + "." + pojoPackageName);
-		template.setAttribute("className", domain);
-		List<EAttributes> eAttributeList = EcoreUtil.getEClass(domain).getEAttributes();
+		String packageName = EcoreUtil.determinePackageName(domain);
+		String className = EcoreUtil.determineClassName(domain);
+		template.setAttribute("packageName", packageName);
+		template.setAttribute("className", className);
+		List<EAttribute> eAttributeList = EcoreUtil.getEClass(getScriptContext().getEPackage(), domain).getEAttributes();
 
 		template.setAttribute("ECOREElement", eAttributeList);
 		GeneratorUtil.writeFile(outputDir, domain + ".java", template.toString());

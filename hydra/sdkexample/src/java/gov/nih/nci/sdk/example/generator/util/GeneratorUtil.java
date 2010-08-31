@@ -13,6 +13,7 @@ import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
 import org.apache.commons.io.FileUtils;
 
+import gov.nih.nci.sdk.util.EcoreUtil;
 import gov.nih.nci.sdk.core.ScriptContext;
 import gov.nih.nci.sdk.example.generator.Generator;
 
@@ -26,7 +27,7 @@ public class GeneratorUtil {
 
 	public static void writeFile(String _outputDir, String _fileName, String _content)
 	{
-		BufferedWriter bufferedWriter = new BufferedWriter(w);
+		BufferedWriter bufferedWriter = null;
 
 		try
 		{
@@ -34,7 +35,7 @@ public class GeneratorUtil {
 			File file = new File(_outputDir, _fileName);
 			FileWriter fileWriter = new FileWriter(file);
 			bufferedWriter = new BufferedWriter(fileWriter);
-			bufferedWriter.write(content);
+			bufferedWriter.write(_content);
 		}
 		catch (Throwable t)
 		{
@@ -86,9 +87,10 @@ public class GeneratorUtil {
 
 	public static String getFiles(String _dir, String[] _extensions, String _seperator)
 	{
+		StringBuffer files = new StringBuffer();
+		
 		try
 		{
-			StringBuffer files = new StringBuffer();
 			Iterator iter = FileUtils.iterateFiles(new File(_dir), _extensions, false);
 			
 			while (iter.hasNext() == true)
@@ -109,7 +111,7 @@ public class GeneratorUtil {
 	{
 		String jaxbPojoPath = getGeneratedPath(_scriptContext)
 				+ File.separator
-				+ EcoreUtil.getPackageName(_scriptContext).replaceAll("\\.", File.separator)
+				+ EcoreUtil.determinePackageName(_scriptContext.getFocusDomain()).replaceAll("\\.", File.separator)
 				+ File.separator + Generator.JAXBPOJO_PACKAGE_NAME;
 
 		return jaxbPojoPath;
@@ -119,7 +121,7 @@ public class GeneratorUtil {
 	{
 		String jaxbPojoPath = getGeneratedPath(_scriptContext)
 				+ File.separator
-				+ EcoreUtil.getPackageName(_scriptContext).replaceAll("\\.", File.separator)
+				+ EcoreUtil.determinePackageName(_scriptContext.getFocusDomain()).replaceAll("\\.", File.separator)
 				+ File.separator + Generator.POJO_PACKAGE_NAME;
 
 		return jaxbPojoPath;
@@ -129,7 +131,7 @@ public class GeneratorUtil {
 	{
 		String serviceImplPath = getImplPath(_scriptContext)
 				+ File.separator
-				+ EcoreUtil.getPackageName(_scriptContext).replaceAll("\\.", File.separator)
+				+ EcoreUtil.determinePackageName(_scriptContext.getFocusDomain()).replaceAll("\\.", File.separator)
 				+ File.separator 
 				+ Generator.SERVICE_PACKAGE_NAME;
 
@@ -138,9 +140,9 @@ public class GeneratorUtil {
 
 	public static String getServiceClientPath(ScriptContext _scriptContext)
 	{
-		return getGeneratedPath(context)
+		return getGeneratedPath(_scriptContext)
 				+ File.separator
-				+ EcoreUtil.getPackageName(_scriptContext).replaceAll("\\.", File.separator)
+				+ EcoreUtil.determinePackageName(_scriptContext.getFocusDomain()).replaceAll("\\.", File.separator)
 				+ File.separator 
 				+ Generator.SERVICE_PACKAGE_NAME
 				+ File.separator
@@ -151,47 +153,45 @@ public class GeneratorUtil {
 	{
 		return getGeneratedPath(_scriptContext)
 				+ File.separator
-				+ EcoreUtil.getPackageName(_scriptContext).replaceAll("\\.", File.separator)
+				+ EcoreUtil.determinePackageName(_scriptContext.getFocusDomain()).replaceAll("\\.", File.separator)
 				+ File.separator 
 				+ Generator.SERVICE_PACKAGE_NAME;
 	}
 
 	public static String getGeneratedPath(ScriptContext _scriptContext) {
-		return _scriptContext.getGeneratorProperties().getValue(
-				"PROJECT_ROOT")
+		return _scriptContext.getProperties().getProperty("PROJECT_ROOT")
 				+ File.separator
-				+ _scriptContext.getProperties().getValue("PROJECT_SRC")
+				+ _scriptContext.getProperties().getProperty("PROJECT_SRC")
 				+ File.separator 
 				+ Generator.GENERATED_PACKAGE_NAME;
 	}
 
 	public static String getImplPath(ScriptContext _scriptContext) {
-		return _scriptContext.getProperties().getValue(
-				"PROJECT_ROOT")
+		return _scriptContext.getProperties().getProperty("PROJECT_ROOT")
 				+ File.separator
-				+ _scriptContext.getProperties().getValue("PROJECT_SRC")
+				+ _scriptContext.getProperties().getProperty("PROJECT_SRC")
 				+ File.separator 
 				+ Generator.IMPL_PACKAGE_NAME;
 	}
 
 	public static String getServicePackageName(ScriptContext _scriptContext)
 	{
-		return EcoreUtil.getPackageName(_scriptContext.getFocusDomain(), _scriptContext) + "." + Generator.SERVICE_PACKAGE_NAME;
+		return EcoreUtil.determinePackageName(_scriptContext.getFocusDomain()) + "." + Generator.SERVICE_PACKAGE_NAME;
 	}
 
 	public static String getJaxbPojoPackageName(ScriptContext _scriptContext)
 	{
-		return EcoreUtil.getPackageName(_scriptContext.getFocusDomain(), _scriptContext) + "." + Generator.JAXBPOJO_PACKAGE_NAME;
+		return EcoreUtil.determinePackageName(_scriptContext.getFocusDomain()) + "." + Generator.JAXBPOJO_PACKAGE_NAME;
 	}
 	
 	public static String getPojoPackageName(ScriptContext _scriptContext)
 	{
-		return EcoreUtil.getPackageName(_scriptContext.getFocusDomain(), _scriptContext) + "." + Generator.POJO_PACKAGE_NAME;
+		return EcoreUtil.determinePackageName(_scriptContext.getFocusDomain()) + "." + Generator.POJO_PACKAGE_NAME;
 	}
 
 	public static String getServiceClientPackageName(ScriptContext _scriptContext)
 	{
-		return EcoreUtil.getPackageName(_scriptContext.getFocusDomain(), _scriptContext)
+		return EcoreUtil.determinePackageName(_scriptContext.getFocusDomain())
 			+ "."
 			+ Generator.SERVICE_PACKAGE_NAME
 			+ "."
@@ -200,12 +200,12 @@ public class GeneratorUtil {
 	
 	public static String getClassesPath(ScriptContext _scriptContext)
 	{
-		return _scriptContext.getProperties().getValue("PROJECT_ROOT") + File.separator + "classes";
+		return _scriptContext.getProperties().getProperty("PROJECT_ROOT") + File.separator + "classes";
 	}
 
 	public static String getTemplatesPath()
 	{
-		return TEMPLATES_PACKAGE_NAME;
+		return gov.nih.nci.sdk.example.generator.Generator.TEMPLATES_PACKAGE_NAME;
 	}
 
 	public static String convertFirstCharToUpperCase(String _string)
@@ -216,7 +216,7 @@ public class GeneratorUtil {
 		{
 			capitalizedString = _string.substring(0,1).toUpperCase();
 			
-			if (str.length() > 1)
+			if (_string.length() > 1)
 			{
 				capitalizedString += _string.substring(1, _string.length());
 			}
@@ -233,7 +233,7 @@ public class GeneratorUtil {
 		{
 			capitalizedString = _string.substring(0,1).toLowerCase();
 
-			if (str.length() > 1)
+			if (_string.length() > 1)
 			{
 				capitalizedString += _string.substring(1, _string.length());
 			}
