@@ -99,12 +99,6 @@ public class EcoreUtil {
 					if (targetName.equals(tmp.getName())) {
 						results.add(tmp);
 					}
-//					else if (tmp.getName().equals(firstPart)) {
-//						searchModelElementsInClass(results, tmp, remainingName);
-//					}
-//					else {
-//						searchModelElementsInClass(results, tmp, targetName);
-//					}
 				} else if (eo instanceof EPackage) {
 					EPackage tmp = (EPackage) eo;
 					if (tmp.getName().equals(firstPart)) {
