@@ -1421,8 +1421,8 @@
 		<thecustomprofile:prop.val.min.length base_Attribute="EAID_2A61BDBC_D606_42a1_9650_711E33BFBD85" prop.val.min.length="1"/>
 		<thecustomprofile:prop.val.max.length base_Attribute="EAID_2A61BDBC_D606_42a1_9650_711E33BFBD85" prop.val.max.length="20"/>
 		<thecustomprofile:prop.val.required base_Attribute="EAID_2A61BDBC_D606_42a1_9650_711E33BFBD85" prop.val.required="true"/>
+		<thecustomprofile:oper.mea.desc base_Operation="EAID_4FEA5C8B_6308_465b_9809_A37597FBCA32" oper.mea.desc="This operation returns the nick name of the person or null if there is none."/>
 		<thecustomprofile:oper.sec.role base_Operation="EAID_4FEA5C8B_6308_465b_9809_A37597FBCA32" oper.sec.role="AdminUser"/>
-		<thecustomprofile:oper.mean.desc base_Operation="EAID_4FEA5C8B_6308_465b_9809_A37597FBCA32" oper.mean.desc="This operation returns the nick name of the person or null if there is none."/>
 		<uml:Profile xmi:version="2.1" xmlns:uml="http://schema.omg.org/spec/UML/2.1/uml.xml" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmi:id="8AD18777-7" nsPrefix="WebModeling" name="WebModeling" metamodelReference="mmref01">
 			<ownedComment xmi:type="uml:Comment" xmi:id="comment01" annotatedElement="8AD18777-7">
 				<body>WebModeling Version:1.1</body>
@@ -1858,6 +1858,17 @@
 			<packagedElement xmi:type="uml:Extension" xmi:id="Class_constraint" name="A_Class_constraint" memberEnd="extension_constraint constraint-base_Class">
 				<ownedEnd xmi:id="extension_constraint" name="extension_constraint" type="constraint" isComposite="true" lower="0" upper="1" memberEnd="extension_constraint constraint-base_Class"/>
 			</packagedElement>
+			<packagedElement xmi:type="uml:Stereotype" xmi:id="oper.mea.desc" name="oper.mea.desc">
+				<ownedAttribute xmi:type="uml:Property" xmi:id="oper.mea.desc-base_Operation" name="base_Operation" association="Operation_oper.mea.desc">
+					<type href="http://schema.omg.org/spec/UML/2.1/uml.xml#Operation"/>
+				</ownedAttribute>
+				<ownedAttribute xmi:type="uml:Property" xmi:id="oper.mea.desc-oper.mea.desc" name="oper.mea.desc">
+					<type href="http://schema.omg.org/spec/UML/2.1/uml.xml#String"/>
+				</ownedAttribute>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Extension" xmi:id="Operation_oper.mea.desc" name="A_Operation_oper.mea.desc" memberEnd="extension_oper.mea.desc oper.mea.desc-base_Operation">
+				<ownedEnd xmi:id="extension_oper.mea.desc" name="extension_oper.mea.desc" type="oper.mea.desc" isComposite="true" lower="0" upper="1" memberEnd="extension_oper.mea.desc oper.mea.desc-base_Operation"/>
+			</packagedElement>
 			<packagedElement xmi:type="uml:Stereotype" xmi:id="XMLText" name="XMLText">
 				<ownedAttribute xmi:type="uml:Property" xmi:id="XMLText-base_Attribute" name="base_Attribute" association="Attribute_XMLText">
 					<type href="http://schema.omg.org/spec/UML/2.1/uml.xml#Attribute"/>
@@ -1925,17 +1936,6 @@
 			</packagedElement>
 			<packagedElement xmi:type="uml:Extension" xmi:id="Operation_oper.sec.role" name="A_Operation_oper.sec.role" memberEnd="extension_oper.sec.role oper.sec.role-base_Operation">
 				<ownedEnd xmi:id="extension_oper.sec.role" name="extension_oper.sec.role" type="oper.sec.role" isComposite="true" lower="0" upper="1" memberEnd="extension_oper.sec.role oper.sec.role-base_Operation"/>
-			</packagedElement>
-			<packagedElement xmi:type="uml:Stereotype" xmi:id="oper.mean.desc" name="oper.mean.desc">
-				<ownedAttribute xmi:type="uml:Property" xmi:id="oper.mean.desc-base_Operation" name="base_Operation" association="Operation_oper.mean.desc">
-					<type href="http://schema.omg.org/spec/UML/2.1/uml.xml#Operation"/>
-				</ownedAttribute>
-				<ownedAttribute xmi:type="uml:Property" xmi:id="oper.mean.desc-oper.mean.desc" name="oper.mean.desc">
-					<type href="http://schema.omg.org/spec/UML/2.1/uml.xml#String"/>
-				</ownedAttribute>
-			</packagedElement>
-			<packagedElement xmi:type="uml:Extension" xmi:id="Operation_oper.mean.desc" name="A_Operation_oper.mean.desc" memberEnd="extension_oper.mean.desc oper.mean.desc-base_Operation">
-				<ownedEnd xmi:id="extension_oper.mean.desc" name="extension_oper.mean.desc" type="oper.mean.desc" isComposite="true" lower="0" upper="1" memberEnd="extension_oper.mean.desc oper.mean.desc-base_Operation"/>
 			</packagedElement>
 			<packagedElement xmi:type="uml:Stereotype" xmi:id="prop.per.primary.key" name="prop.per.primary.key">
 				<ownedAttribute xmi:type="uml:Property" xmi:id="prop.per.primary.key-base_Attribute" name="base_Attribute" association="Attribute_prop.per.primary.key">
@@ -8810,8 +8810,8 @@
 						<styleex/>
 						<documentation value="Returns the nick name of the person or null if there is none."/>
 						<tags>
+							<tag xmi:id="EAID_0CBEE5CE_CEBD_404b_B531_048CB28FC3DA" name="oper.mea.desc" value="This operation returns the nick name of the person or null if there is none."/>
 							<tag xmi:id="EAID_DFBDCCAF_F7B8_4dc7_B929_AEB83B15ABCF" name="oper.sec.role" value="AdminUser"/>
-							<tag xmi:id="EAID_FED5E2FC_C8E5_404c_8264_659EA93FD08B" name="oper.mean.desc" value="This operation returns the nick name of the person or null if there is none."/>
 						</tags>
 						<parameters>
 							<parameter xmi:idref="EAID_RETURNID_6308_465b_9809_A37597FBCA32" visibility="public">
