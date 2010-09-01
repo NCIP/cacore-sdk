@@ -1,6 +1,7 @@
 package gov.nih.nci.sdk.modelconverter.util;
 
 import static org.junit.Assert.assertNotNull;
+import gov.nih.nci.sdk.modelconverter.xmi2ecore.XMI2EcoreModelConverterTestHelper;
 
 import org.eclipse.emf.ecore.EPackage;
 import org.junit.Test;
@@ -15,8 +16,7 @@ public class ModelConverterUtilTest {
 	
 	@Test
 	public void getEPackageFromXMIFile() {
-		String xmiFileName = "./test/model/sdkexample.xmi";
-		EPackage rootEPackage = ModelConverterUtil.getEPackageFromXMIFile(xmiFileName);
+		EPackage rootEPackage = XMI2EcoreModelConverterTestHelper.readEPackageFromXMIFile();
 		assertNotNull(rootEPackage);
 	}
 }
