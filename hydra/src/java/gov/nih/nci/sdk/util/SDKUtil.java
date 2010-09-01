@@ -21,7 +21,7 @@ import org.eclipse.emf.ecore.EModelElement;
 public class SDKUtil {
 	public static final String SDK_TAGS_FILE = "gov/nih/nci/sdk/util/sdk_tags";
 	
-	private static Collection<EAnnotation> tags = new ArrayList<EAnnotation>();
+	private static Collection<EAnnotation> sdkTags = new ArrayList<EAnnotation>();
 	
 	private static Set<String> allTagNames = null;
 	
@@ -101,19 +101,20 @@ public class SDKUtil {
 	}
 	
 	/**
-	 * Returns a collection of EAnnotation instances.
+	 * Returns a collection of EAnnotation instances for SDK.
+	 * 
 	 * @return
 	 */
-	public static Collection<EAnnotation> getTags() {
-		return tags;
+	public static Collection<EAnnotation> getSDKTags() {
+		return sdkTags;
 	}
 	
 	/**
-	 * Sets a collection of EAnnotation instances.
+	 * Sets a collection of EAnnotation instances for SDK.
 	 * 
 	 * @param annotations
 	 */
-	public static void setTags(Collection<EAnnotation> annotations) {
-		tags = annotations;
+	public static void setSDKTags(Collection<EAnnotation> annotations) {
+		sdkTags = annotations;
 	}
 }
