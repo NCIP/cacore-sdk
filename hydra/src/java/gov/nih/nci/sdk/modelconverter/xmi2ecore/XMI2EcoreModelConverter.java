@@ -162,7 +162,7 @@ public class XMI2EcoreModelConverter extends UMLImporter implements ModelConvert
 		
 		preparedFile.delete();
 		
-		SDKUtil.setTags(tags);
+		SDKUtil.setSDKTags(tags);
 
 		return rootEPackage;
 	}
