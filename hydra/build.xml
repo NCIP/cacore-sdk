@@ -96,7 +96,7 @@
 			<include name="**/*.zip"/>
 		</fileset>		
 		<fileset dir="${dist}">
-			<include name="**/*Test.jar"/>
+			<include name="**/*.jar"/>
 		</fileset>
 		<pathelement path="${src.cfg}"/>
 		<pathelement location="certs"/>
@@ -238,6 +238,13 @@
 		  />
 
 		<jar destfile="${dist}/lib/${jar}"
+		       basedir="${src.java}"
+			   excludes="**\*.java"
+			   includes="**\*.properties"
+			   update="true"
+		  />
+
+		<jar destfile="${dist}/lib/${jar}"
 		       basedir="${src.template}"
 			   update="true"
 		  />
@@ -255,6 +262,14 @@
 		<jar destfile="${dist}/lib/${testJar}"
 		       basedir="${classes}"
 		  />
+
+		<jar destfile="${dist}/lib/${testJar}"
+		       basedir="${src.test}"
+			   excludes="*"
+			   includes="**\*.xmi, **\*.properties, **\*.xml. **\*.txt"
+			   update="true"
+		  />
+
 	</target>
 
 	<!-- Redeploy -->
