@@ -76,6 +76,29 @@ public class ScriptContext
 		return (getIsAborted() == true);
 	}
 
+	public void logError(Throwable _t)
+	{
+		_t.printStackTrace();
+		logError(_t.toString());
+	}
+
+	public void logError(String _message)
+	{
+		java.util.logging.Logger.getLogger(getScript()).severe(_message);
+		getErrorManager().add(getScript(), "severe", _message);
+	}
+
+	public void logWarning(String _message)
+	{
+		java.util.logging.Logger.getLogger(getScript()).warning(_message);
+		getWarningManager().add(getScript(), "warning", _message);
+	}
+
+	public void logInfo(String _message)
+	{
+		java.util.logging.Logger.getLogger(getScript()).info(_message);
+	}
+
 	public void reset()
 	{
 		setFocusDomain(null);
