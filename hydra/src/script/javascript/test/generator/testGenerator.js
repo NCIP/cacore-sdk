@@ -88,7 +88,7 @@ var determineFileExtensionTest = function()
 	var generator = new Packages.gov.nih.nci.sdk.core.Generator();
 	var extension = generator.determineFileExtension(new Packages.java.io.File("C:\work\hydra\.script.js"));
 	assert(("js".equalsIgnoreCase(extension) === true), "File extension test failed");
-	Packages.java.lang.System.out.println("determineFileExtensionTest test completed");
+	print("determineFileExtensionTest test completed");
 }
 
 var determineGeneratorScriptsTest = function()
@@ -114,7 +114,7 @@ var determineGeneratorScriptsTest = function()
 	}
 	
 	assert((foundFile === true), "determineGeneratorScriptsTest failed to find this file");
-	Packages.java.lang.System.out.println("determineGeneratorScriptsTest test completed");
+	print("determineGeneratorScriptsTest test completed");
 }
 
 var determineScriptContextTest = function()
@@ -126,7 +126,7 @@ var determineScriptContextTest = function()
 	var scriptContext2 = generator.determineScriptContext(new Packages.java.io.File("myscript.js"), "", generatorContext);
 
 	assert((scriptContext1 === scriptContext2), "Generator is not managing script contexts as expected");
-	Packages.java.lang.System.out.println("determineScriptContextTest test completed");
+	print("determineScriptContextTest test completed");
 }
 
 var executeScriptTest = function()
@@ -146,7 +146,7 @@ var executeScriptTest = function()
 
 	assert((scriptContext.getMemory().containsKey("author") === true), "Script execution apparently failed");
 	scriptFile["delete"]();
-	Packages.java.lang.System.out.println("executeScriptTest test completed");
+	print("executeScriptTest test completed");
 }
 
 var compileTest = function()
@@ -190,7 +190,7 @@ var compileTest = function()
 	scriptFile["delete"]();
 	validateScriptFile["delete"]();
 	
-	Packages.java.lang.System.out.println("compileTest test completed");	
+	print("compileTest test completed");	
 }
 
 //Execute Tests
