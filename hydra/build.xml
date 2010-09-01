@@ -366,7 +366,7 @@
 	   <!-- use this to update the plugin -->
 	</target>
 
-	<target name="unit-test" depends="compile, buildJar">
+	<target name="unit-test" depends="redeploy">
 
 		<property name="test.class.path" refId="test.class.path"/>
 		<echo message="Class path is:  ${test.class.path}"/>
