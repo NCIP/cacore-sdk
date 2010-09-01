@@ -63,7 +63,61 @@ public class EcoreUtil {
 		searchModelElementsByClassName(list, rootEPackage, targetName);
 		return (list.size() == 1)?list.get(0):null;
 	}
-	
+
+	/**
+	 * Gets the EClass related to the <tt>targetName</tt>. 
+	 * 
+	 * Example <tt>targetName</tt>: 
+	 * <pre>
+	 * gov.nih.nci.sdkexample.Organization
+	 * gov.nih.nci.sdkexample.Person
+	 * </pre>
+	 * 
+	 * @param rootEPackage  root EPackage to search
+	 * @param targetName  target ModelElement name
+	 * @return the ModelElement
+	 */
+	public static EClass getEClass(EPackage _rootEPackage, String _className)
+	{
+		return (EClass) EcoreUtil.getModelElementForName(_rootEPackage, _className);
+	}
+
+	/**
+	 * Given a <tt>_fullyQualifiedClassName</tt> this returns the
+	 * package this class belongs to. 
+	 * 
+	 * Example <tt>_fullyQualifiedClassName</tt>: 
+	 * <pre>
+	 * gov.nih.nci.sdkexample.Organization
+	 * </pre>
+	 * 
+	 * @param rootEPackage  root EPackage to search
+	 * @param targetName  target ModelElement name
+	 * @return "gov.nih.nci.sdkexample"
+	 */
+	public static String determinePackageName(String _fullyQualifiedClassName)
+	{
+		return _fullyQualifiedClassName.substring(0, _fullyQualifiedClassName.lastIndexOf("."));
+	}
+
+	/**
+	 * Given a <tt>_fullyQualifiedClassName</tt> this returns the
+	 * class' short name. 
+	 * 
+	 * Example <tt>_fullyQualifiedClassName</tt>: 
+	 * <pre>
+	 * gov.nih.nci.sdkexample.Organization
+	 * </pre>
+	 * 
+	 * @param rootEPackage  root EPackage to search
+	 * @param targetName  target ModelElement name
+	 * @return "Organization"
+	 */
+	public static String determineClassName(String _fullyQualifiedClassName)
+	{
+		return _fullyQualifiedClassName.substring(_fullyQualifiedClassName.lastIndexOf("."), _fullyQualifiedClassName.length());
+	}
+
 	/**
 	 * Finds all ModelElements related to the <tt>targetName</tt>.
 	 * 
