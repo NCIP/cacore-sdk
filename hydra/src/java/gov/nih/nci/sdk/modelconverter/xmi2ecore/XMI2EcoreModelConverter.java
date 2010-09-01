@@ -1,5 +1,6 @@
 package gov.nih.nci.sdk.modelconverter.xmi2ecore;
 
+import gov.nih.nci.sdk.modelconverter.ModelConverter;
 import gov.nih.nci.sdk.util.SDKUtil;
 
 import java.io.BufferedReader;
@@ -51,7 +52,7 @@ import org.eclipse.uml2.uml.util.UMLUtil;
  * @author John Chen
  * 
  */
-public class XMI2EcoreModelConverter extends UMLImporter {
+public class XMI2EcoreModelConverter extends UMLImporter implements ModelConverter {
 	
 	private Collection<EAnnotation> tags = new ArrayList<EAnnotation>();
 	
