@@ -630,9 +630,10 @@ public class NestedCriteria2HQL {
 		Map<String, Object> criterionMap = getObjAttrCriterion(obj, cfg,
 				parentClassName, parentRoleName);
 		String rootKlass = obj.getClass().getName();
-		PersistentClass pclass = getPersistentClass(rootKlass, parentClassName,
+		List<PersistentClass> pclasses = getPersistentClasses(rootKlass, parentClassName,
 				parentRoleName);
-
+		
+		PersistentClass pclass=pclasses.iterator().next();
 		if (criterionMap != null) {
 			Iterator<String> keys = criterionMap.keySet().iterator();
 			while (keys.hasNext()) {
@@ -999,9 +1000,13 @@ public class NestedCriteria2HQL {
 
 		Map<String, Object> criterions = new HashMap<String, Object>();
 		String objClassName = obj.getClass().getName();
-		PersistentClass pclass = getPersistentClass(objClassName,
+		
+		List<PersistentClass> pclasses = getPersistentClasses(objClassName,
 				parentClassName, parentRoleName);
-
+		PersistentClass pclass = null;
+		if (pclasses != null && pclasses.size() > 0) {
+			pclass = pclasses.iterator().next();
+		}
 		if (pclass != null) {
 			Map<String, Object> tempObjectCriterion = getCriterionForComponentAndAttribute(
 					obj, pclass);
@@ -1130,8 +1135,11 @@ public class NestedCriteria2HQL {
 		if (!skipAssociations) {
 			associationCritMap = getAssociatedObjectCriterion(obj, cfg,
 					parentClass, parentRoleName);
-			PersistentClass tempPclass = getPersistentClass(obj.getClass()
-					.getName(), parentClass, parentRoleName);
+			
+			List<PersistentClass> tempPclasses = getPersistentClasses(obj
+					.getClass().getName(), parentClass, parentRoleName);
+
+			PersistentClass tempPclass = tempPclasses.iterator().next();
 			hql.append("select ");
 			hql.append(srcAlias);
 			hql.append(" from ").append(tempPclass.getEntityName()).append(" ")
@@ -1176,22 +1184,40 @@ public class NestedCriteria2HQL {
 			if (roleValue instanceof Collection) {
 				Object[] objs = ((Collection) roleValue).toArray();
 				for (int i = 0; i < objs.length; i++) {
-					PersistentClass tempRolePclass = getPersistentClass(objs[i]
-							.getClass().getName(), tempPclass.getEntityName(),
-							roleName);
+					List<PersistentClass> tempRolePclasses = getPersistentClasses(
+							objs[i].getClass().getName(),
+							tempPclass.getEntityName(), roleName);
+
 					String alias = getAlias(objs[i].getClass().getName(),
 							counter++);
-					hql.append(",").append(tempRolePclass.getEntityName())
-							.append(" ").append(alias);
+					String objectClassName = null;
+					if (tempRolePclasses.size() > 1) {
+						objectClassName = objs[i].getClass().getName();
+					} else {
+						PersistentClass tempRolePClass = tempRolePclasses
+								.iterator().next();
+						objectClassName = tempRolePClass.getEntityName();
+					}
+					hql.append(",").append(objectClassName).append(" ")
+							.append(alias);
 				}
 			} else {
-				PersistentClass tempRolePclass = getPersistentClass(roleValue
-						.getClass().getName(), tempPclass.getEntityName(),
-						roleName);
+				List<PersistentClass> tempRolePclasses = getPersistentClasses(
+						roleValue.getClass().getName(),
+						tempPclass.getEntityName(), roleName);
+
 				String alias = getAlias(roleValue.getClass().getName(),
 						counter++);
-				hql.append(",").append(tempRolePclass.getEntityName())
-						.append(" ").append(alias);
+				String roleEntityName = null;
+				if (tempRolePclasses.size() > 1) {
+					roleEntityName = roleValue.getClass().getName();
+				} else {
+					PersistentClass tempRolePClass = tempRolePclasses
+							.iterator().next();
+					roleEntityName = tempRolePClass.getEntityName();
+				}
+				hql.append(",").append(roleEntityName).append(" ")
+						.append(alias);
 			}
 		}
 		hql.append(" where ");
@@ -1268,8 +1294,10 @@ public class NestedCriteria2HQL {
 	// avoid duplication of result set.
 	@SuppressWarnings("rawtypes")
 	private boolean isComponentSetCriterion(Object obj) throws Exception {
-		PersistentClass pclass = getPersistentClass(obj.getClass().getName(),
-				null, null);
+		List<PersistentClass> pclasses = getPersistentClasses(obj.getClass()
+				.getName(), null, null);
+		PersistentClass pclass = pclasses.iterator().next();
+		
 		Iterator properties = pclass.getPropertyIterator();
 		while (properties.hasNext()) {
 			Property prop = (Property) properties.next();
@@ -1305,8 +1333,12 @@ public class NestedCriteria2HQL {
 		Map<String, Object> superClassCriterions = null;
 		String objClassName = obj.getClass().getName();
 
-		PersistentClass pclass = getPersistentClass(objClassName,
+		List<PersistentClass> pclasses = getPersistentClasses(objClassName,
 				parentClassName, parentRoleName);
+		PersistentClass pclass = null;
+		if (pclasses != null) {
+			pclass = pclasses.iterator().next();
+		}
 		if (pclass != null) {
 			criterions = getAssociatedObjectWithFieldCriterion(obj, pclass);
 
@@ -1364,26 +1396,24 @@ public class NestedCriteria2HQL {
 		return field;
 	}
 
-	private PersistentClass getPersistentClass(String objClassName,
+	private List<PersistentClass> getPersistentClasses(String objClassName,
 			String parentObjectClassName, String parentRoleName)
 			throws Exception {
 		List<PersistentClass> pClasses = getPersistentClassList(objClassName);
 		if (pClasses.size() == 1) {
-			return pClasses.iterator().next();
+			return pClasses;
 		}
 		if (parentObjectClassName == null || parentRoleName == null
 				&& pClasses.size() > 1) {
-			log.error("Object Class  "
-					+ objClassName
-					+ " which is a 'parent class' and has multiple persistent classes");
-			throw new Exception("NestedCriteria Object to HQL conversion error");
-		}
+			return pClasses;		}
 		for (PersistentClass persistentClass : pClasses) {
 			parentObjectClassName = parentObjectClassName.replace('.', '_');
 			String tempSubString = parentObjectClassName + "_" + parentRoleName;
 			String childPClassName = persistentClass.getEntityName();
 			if (childPClassName.contains(tempSubString)) {
-				return persistentClass;
+				List<PersistentClass> tempPClasses=new ArrayList<PersistentClass>();
+				tempPClasses.add(persistentClass);
+				return tempPClasses;
 			}
 		}
 		return null;
