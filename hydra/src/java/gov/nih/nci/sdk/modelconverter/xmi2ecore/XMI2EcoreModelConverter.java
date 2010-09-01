@@ -31,7 +31,6 @@ import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcoreFactory;
-import org.eclipse.emf.ecore.impl.EAnnotationImpl;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.importer.ModelImporter;
@@ -53,6 +52,9 @@ import org.eclipse.uml2.uml.util.UMLUtil;
  * 
  */
 public class XMI2EcoreModelConverter extends UMLImporter {
+	
+	private Collection<EAnnotation> tags = new ArrayList<EAnnotation>();
+	
 
 	/**
 	 * Converts UML model inside the xmi file to Ecore model.
@@ -158,6 +160,8 @@ public class XMI2EcoreModelConverter extends UMLImporter {
 		fetchTags(preparedFile, rootEPackage);
 		
 		preparedFile.delete();
+		
+		SDKUtil.setTags(tags);
 
 		return rootEPackage;
 	}
@@ -282,7 +286,7 @@ public class XMI2EcoreModelConverter extends UMLImporter {
 		}
 	}
 	
-	static String detectClassName(List<String> lines, int index, TagLine tag) {
+	String detectClassName(List<String> lines, int index, TagLine tag) {
 		String s = null;
 		for (int i = index; i > 0; i--) {
 			String line = lines.get(i).trim();
@@ -295,7 +299,7 @@ public class XMI2EcoreModelConverter extends UMLImporter {
 		return s;
 	}
 	
-	static void detectRelatedClassName(List<String> lines, String tagLine, TagLine tag) {
+	void detectRelatedClassName(List<String> lines, String tagLine, TagLine tag) {
 		String general = getValueForToken(tagLine, "general");
 		String searchToken = "xmi:id=\"" + general + "\"";
 		Iterator<String> it = lines.iterator();
@@ -357,7 +361,7 @@ public class XMI2EcoreModelConverter extends UMLImporter {
 		return s;
 	}
 	
-	public static void linkClassTagWithModel(EPackage rootEPackage, TagLine tag) {
+	public void linkClassTagWithModel(EPackage rootEPackage, TagLine tag) {
 		if (rootEPackage == null || tag == null) return;
 		
 		EModelElement modelElement = gov.nih.nci.sdk.util.EcoreUtil.getModelElementForName(rootEPackage, tag.containerClass);
@@ -368,7 +372,7 @@ public class XMI2EcoreModelConverter extends UMLImporter {
 		addAnnotationToModelElement(modelElement, tag);
 	}
 	
-	public static void linkPropTagWithModel(EPackage rootEPackage, TagLine tag) {
+	public void linkPropTagWithModel(EPackage rootEPackage, TagLine tag) {
 		if (rootEPackage == null || tag == null) return;
 		
 		EModelElement modelElement = gov.nih.nci.sdk.util.EcoreUtil.getModelElementForName(rootEPackage, tag.containerClass);
@@ -387,7 +391,7 @@ public class XMI2EcoreModelConverter extends UMLImporter {
 		}
 	}
 	
-	public static void linkOperTagWithModel(EPackage rootEPackage, TagLine tag) {
+	public void linkOperTagWithModel(EPackage rootEPackage, TagLine tag) {
 		if (rootEPackage == null || tag == null) return;
 		
 		EModelElement modelElement = gov.nih.nci.sdk.util.EcoreUtil.getModelElementForName(rootEPackage, tag.containerClass);
@@ -406,7 +410,7 @@ public class XMI2EcoreModelConverter extends UMLImporter {
 		}
 	}
 	
-	public static void linkRelGeneralizationTagWithModel(EPackage rootEPackage, TagLine tag) {
+	public void linkRelGeneralizationTagWithModel(EPackage rootEPackage, TagLine tag) {
 		if (rootEPackage == null || tag == null) return;
 		
 		EModelElement modelElement = gov.nih.nci.sdk.util.EcoreUtil.getModelElementForName(rootEPackage, tag.containerClass);
@@ -417,11 +421,12 @@ public class XMI2EcoreModelConverter extends UMLImporter {
 		addAnnotationToModelElement(modelElement, tag);
 	}
 	
-	private static void addAnnotationToModelElement(EModelElement modelElement, TagLine tag) {
+	private void addAnnotationToModelElement(EModelElement modelElement, TagLine tag) {
 		EAnnotation ann = EcoreFactory.eINSTANCE.createEAnnotation();
 		ann.setSource(tag.name);
 		ann.setEModelElement(modelElement);
 		ann.getDetails().put(tag.name, tag.value);
+		tags.add(ann);
 	}
 	
 	class TagLine {
