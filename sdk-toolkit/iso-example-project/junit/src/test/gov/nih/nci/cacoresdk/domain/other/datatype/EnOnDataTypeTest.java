@@ -222,6 +222,6 @@ public class EnOnDataTypeTest extends SDKISOTestBase{
 		//Global constant
 		assertEquals("ENXP Code System Version", data.getValue1().getPart().get(0).getCodeSystemVersion());
 		assertNull(data.getValue1().getPart().get(0).getQualifier());
-		assertNull(data.getValue1().getPart().get(0).getType());
+		assertNotNull(data.getValue1().getPart().get(0).getType());
 	}
 }
