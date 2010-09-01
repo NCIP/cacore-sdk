@@ -1,5 +1,7 @@
 package gov.nih.nci.sdk.util;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.ResourceBundle;
@@ -18,6 +20,9 @@ import org.eclipse.emf.ecore.EModelElement;
  */
 public class SDKUtil {
 	public static final String SDK_TAGS_FILE = "gov/nih/nci/sdk/util/sdk_tags";
+	
+	private static Collection<EAnnotation> tags = new ArrayList<EAnnotation>();
+	
 	private static Set<String> allTagNames = null;
 	
 	/**
@@ -93,5 +98,22 @@ public class SDKUtil {
 		
 		EMap<String, String> eMap = ann.getDetails();
 		return (eMap != null)?eMap.get(key):null;
+	}
+	
+	/**
+	 * Returns a collection of EAnnotation instances.
+	 * @return
+	 */
+	public static Collection<EAnnotation> getTags() {
+		return tags;
+	}
+	
+	/**
+	 * Sets a collection of EAnnotation instances.
+	 * 
+	 * @param annotations
+	 */
+	public static void setTags(Collection<EAnnotation> annotations) {
+		tags = annotations;
 	}
 }
