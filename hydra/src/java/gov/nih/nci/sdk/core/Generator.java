@@ -48,7 +48,7 @@ public class Generator
 					{
 						ScriptContext scriptContext = determineScriptContext(script, eClassifier.getName(), _generatorContext);
 						executeScript(script, scriptContext);
-						processScriptContext(scriptContext);
+						processScriptContext(scriptContext, _generatorContext);
 
 						//BREAK LOOP condition: execute script set
 						//generator context to abort operation
@@ -99,8 +99,11 @@ public class Generator
 		return extension;
 	}
 	
-	public void processScriptContext(ScriptContext _scriptContext)
+	public void processScriptContext(ScriptContext _scriptContext, GeneratorContext _generatorContext)
 	{
+		_generatorContext.getErrorManager().add(_scriptContext.getErrorManager());
+		_generatorContext.getWarningManager().add(_scriptContext.getWarningManager());
+		
 		_scriptContext.reset();
 	}
 
@@ -114,7 +117,8 @@ public class Generator
 											  _generatorContext.getEPackage(),
 											  _generatorContext.getMemory(),
 											  _generatorContext.getProperties(),
-											  _generatorContext.getTargetBase());
+											  _generatorContext.getTargetBase(),
+											  _generatorContext.getGeneratorBase());
 			
 			getScriptContextMap().put(_script.getAbsolutePath(), scriptContext);
 		}

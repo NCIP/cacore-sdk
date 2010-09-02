@@ -3,10 +3,10 @@ importPackage(Packages.gov.nih.nci.sdk.core.generator);
 
 function generate(_scriptContext)
 {
-	generateJAXBPojo(_scriptContext);
+	//generateJAXBPojo(_scriptContext);
 	generatePojo(_scriptContext);
-	generateWebserviceInterface(_scriptContext);
-	generateSpringConf(_scriptContext);
+	//generateWebserviceInterface(_scriptContext);
+	//generateSpringConf(_scriptContext);
 }
 
 function generateJAXBPojo(_scriptContext)

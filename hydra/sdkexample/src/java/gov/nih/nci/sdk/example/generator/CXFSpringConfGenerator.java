@@ -63,7 +63,7 @@ public class CXFSpringConfGenerator
 		StringTemplate template = group.getInstanceOf("SpringBeanServerConf");
 		SpringBean bean = new SpringBean();
 		bean.setBeanId(GeneratorUtil.convertFirstCharToLowerCase(getScriptContext().getFocusDomain()) + "Service");
-		bean.setBeanImpl(GeneratorUtil.getServicePackageName(getScriptContext()) + "." + getScriptContext().getFocusDomain() + "ServiceImpl");
+		bean.setBeanImpl(GeneratorUtil.getServicePackageName(getScriptContext().getFocusDomain()) + "." + getScriptContext().getFocusDomain() + "ServiceImpl");
 		
 		bean.setBeanAddress(getScriptContext().getFocusDomain() + "Service");
 
@@ -81,7 +81,7 @@ public class CXFSpringConfGenerator
 		StringTemplate template = group.getInstanceOf("SpringBeanClientConf");
 		SpringBean bean = new SpringBean();
 		bean.setBeanId(getScriptContext().getFocusDomain() + "Client");
-		bean.setServiceClass(GeneratorUtil.getServicePackageName(getScriptContext()) +
+		bean.setServiceClass(GeneratorUtil.getServicePackageName(getScriptContext().getFocusDomain()) +
 							 "." + getScriptContext().getFocusDomain() + "Service");
 		
 		String address = "http://" + getScriptContext().getProperties().getProperty("CATALINA_ADDRESS")
@@ -127,7 +127,7 @@ public class CXFSpringConfGenerator
 				template.toString());
 
 		template = group.getInstanceOf("ant_build");
-		template.setAttribute("serviceClient", GeneratorUtil.getServiceClientPackageName(getScriptContext()) +
+		template.setAttribute("serviceClient", GeneratorUtil.getServiceClientPackageName(getScriptContext().getFocusDomain()) +
 							  "." + getScriptContext().getFocusDomain()+"ServiceClient");
 		template.setAttribute("archiveName", getScriptContext().getProperties().getProperty("APPLICATION_NAME"));
 		GeneratorUtil.writeFile(outputDir + File.separator, "build.xml", template.toString());

@@ -22,7 +22,6 @@
 	<property name="src.shl" location="${src}/shl" />
 	<property name="src.java" location="${src}/java" />
 	<property name="src.script" location="${src}/script" />	
-	<property name="src.javascript" location="${src.script}/javascript" />
 	<property name="src.sql" location="${src}/sql" />
 	<property name="src.template" location="${src}/template" />
 	<property name="src.test" location="${src}/test" />
@@ -36,7 +35,6 @@
 	<property name="stage" location="stage" />
 	<property name="stage.shl" location="${stage}/shl" />
 	<property name="stage.java" location="${stage}/java" />
-	<property name="stage.javascript" location="${stage}/javascript" />
 	<property name="stage.sql" location="${stage}/sql" />
 	<property name="stage.template" location="${stage}/template" />
 	<property name="stage.test" location="${stage}/test" />
@@ -52,7 +50,6 @@
 	<property name="deployDir.test" location="${deployDir}/test" />
 	<property name="deployDir.cfg" location="${deployDir}/cfg" />
 	<property name="deployDir.html" location="${deployDir}/html" />
-	<property name="deployDir.javascript" location="${deployDir}/javascript" />
 	<property name="deployDir.images" location="${deployDir}/images" />
 	<property name="deployDir.css" location="${deployDir}/css" />
 	<property name="deployDir.script" location="${deployDir}/script" />
@@ -64,6 +61,8 @@
 
 	<property name="jar" value="${appName}-${version}.jar" />
 	<property name="testJar" value="${appName}Test-${version}.jar" />
+
+	<property name="zip" value="${appName}-sdk-plugin-${version}.zip" />
 
 	<path id="build.class.path">
 		<fileset dir="${runtime.lib}">
@@ -125,7 +124,6 @@
 	   
 	    <mkdir dir="${archive}" />
 		<mkdir dir="${runtime.lib}" />
-		<mkdir dir="${runtime.lib}/javascript" />
 		<mkdir dir="${stringTemplate.lib}" />		
 		<mkdir dir="${build.only.lib}" />
 		
@@ -139,16 +137,12 @@
 		<mkdir dir="${stage.images}" />
 		<mkdir dir="${stage.css}" />
 		<mkdir dir="${stage.script}" />
-		<mkdir dir="${stage.javascript}" />
 		<mkdir dir="${stage.cfg}/${appName}" />
 
 		<mkdir dir="${src}" />
 		<mkdir dir="${src.shl}" />
 		<mkdir dir="${src.sql}" />		
 		<mkdir dir="${src.java}" />
-		<mkdir dir="${src.javascript}" />
-		<mkdir dir="${src.javascript}/server" />
-		<mkdir dir="${src.javascript}/${appName}/client" />
 		<mkdir dir="${src.template}" />
 		<mkdir dir="${src.test}" />
 		<mkdir dir="${src.cfg}" />
@@ -169,7 +163,6 @@
 		<mkdir dir="${deployDir.sql}" />		
 		<mkdir dir="${deployDir.html}" />
 		<mkdir dir="${deployDir.template}" />
-		<mkdir dir="${deployDir.javascript}" />
 		<mkdir dir="${deployDir.test}" />
 		<mkdir dir="${deployDir.cfg}" />
 		<mkdir dir="${deployDir.html}" />
@@ -177,7 +170,6 @@
 		<mkdir dir="${deployDir.css}" />
 		<mkdir dir="${deployDir.script}" />
 		<mkdir dir="${deployDir.cfg}/${appName}" />
-		<mkdir dir="${deployDir.javascript}/client" />
 
 		<mkdir dir="${classes}" />
 		<mkdir dir="${workspace}" />
@@ -243,7 +235,7 @@
 		  />
 
 		<jar destfile="${dist}/lib/${jar}"
-		       basedir="${src.script}/javascript"
+		       basedir="${src.script}/"
 			   update="true"
 		  />
 
@@ -255,6 +247,31 @@
 		<jar destfile="${dist}/lib/${testJar}"
 		       basedir="${classes}"
 		  />
+	</target>
+
+		<!-- make plugin zip file -->
+	<target name="makePlugin" depends="redeploy">
+
+	   <zip destfile="${dist}/${zip}"
+			 basedir="${src}/script"
+			 includes="*.*"
+		/>
+
+	   <zip destfile="${dist}/${zip}"
+			 basedir="${src}"
+			 includes="template/**/*.*"
+			 update="true"
+		/>
+
+		<zip destfile="dist/${zip}"
+		       basedir="${dist}"
+			   includes="lib/${jar}"
+			   update="true"
+		  />
+	</target>
+
+	<target name="install" depends="makePlugin">
+	   <unzip src="${dist}/${zip}" dest="${installDir}"/>
 	</target>
 
 	<!-- Redeploy -->
@@ -292,11 +309,11 @@
 			<fileset dir="${src.template}" includes="**/*.*" />
 		</copy>
 		
-		<copy todir="${deployDir.javascript}">
-			<fileset dir="${src.javascript}" includes="**/*.js*" />
+		<copy todir="${deployDir}/javascript">
+			<fileset dir="${src.script}" includes="**/*.js*" />
 		</copy>
 		
-		<copy todir="${deployDir.javascript}">
+		<copy todir="${deployDir}/javascript">
 			<fileset dir="${runtime.lib}/javascript" includes="**/*.js*" />
 		</copy>
 
@@ -338,9 +355,6 @@
 		<mkdir dir="${java.package.dir}/dao/serialize" />
 		<mkdir dir="${java.package.dir}/controllers" />				
 		<mkdir dir="${java.package.dir}/servlet" />
-
-		<mkdir dir="${src.javascript}/${appName}" />
-		
 	</target>
 
 	<target name="clean-plugin">
@@ -375,7 +389,7 @@
 	<target name="runScript">
 	   	<property name="run.class.path" refId="run.class.path"/>
 		<echo message="${run.class.path}"/>
-		<script language="javascript" src="src/script/javascript/${script}.js">
+		<script language="javascript" src="src/script/${script}.js">
 		    <classpath refid="test.class.path"/>
 		</script>		
 	</target>
@@ -384,7 +398,7 @@
 	   	<property name="run.class.path" refId="run.class.path"/>
 		<echo message="${run.class.path}"/>
 		<script language="javascript"
-					 src="src/test/script/javascript/bigTest.js">
+					 src="src/test/script/bigTest.js">
 		    <classpath refid="test.class.path"/>
 		</script>
 	</target>
