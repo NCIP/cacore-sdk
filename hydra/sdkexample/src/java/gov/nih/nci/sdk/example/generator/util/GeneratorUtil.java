@@ -19,9 +19,9 @@ import gov.nih.nci.sdk.example.generator.Generator;
 
 public class GeneratorUtil {
 
-	public static StringTemplate getTemplate(String _templatePath, String _templateName)
+	public static StringTemplate getTemplate(String _templateName)
 	{
-		StringTemplateGroup group = new StringTemplateGroup("sdkCodeGen", _templatePath);
+		StringTemplateGroup group = new StringTemplateGroup("sdkCodeGen");
 		return group.getInstanceOf(_templateName);
 	}
 
@@ -119,11 +119,13 @@ public class GeneratorUtil {
 
 	public static String getPojoPath(ScriptContext _scriptContext)
 	{
+		System.out.println("Getting pojo path for domain: " + _scriptContext.getFocusDomain());
 		String jaxbPojoPath = getGeneratedPath(_scriptContext)
 				+ File.separator
 				+ EcoreUtil.determinePackageName(_scriptContext.getFocusDomain()).replaceAll("\\.", File.separator)
 				+ File.separator + Generator.POJO_PACKAGE_NAME;
 
+		System.out.println("Getting pojo path: " + jaxbPojoPath);
 		return jaxbPojoPath;
 	}
 	
@@ -159,11 +161,16 @@ public class GeneratorUtil {
 	}
 
 	public static String getGeneratedPath(ScriptContext _scriptContext) {
-		return _scriptContext.getProperties().getProperty("PROJECT_ROOT")
+
+		System.out.println("Getting generated path for focus domain: " + _scriptContext.getFocusDomain());
+		String returnString =  _scriptContext.getProperties().getProperty("PROJECT_ROOT")
 				+ File.separator
 				+ _scriptContext.getProperties().getProperty("PROJECT_SRC")
 				+ File.separator 
-				+ Generator.GENERATED_PACKAGE_NAME;
+							   + Generator.GENERATED_PACKAGE_NAME;
+
+		System.out.println("Generated path: " + returnString);
+		return returnString;
 	}
 
 	public static String getImplPath(ScriptContext _scriptContext) {
@@ -174,24 +181,24 @@ public class GeneratorUtil {
 				+ Generator.IMPL_PACKAGE_NAME;
 	}
 
-	public static String getServicePackageName(ScriptContext _scriptContext)
+	public static String getServicePackageName(String _fullyQualifiedClassName)
 	{
-		return EcoreUtil.determinePackageName(_scriptContext.getFocusDomain()) + "." + Generator.SERVICE_PACKAGE_NAME;
+		return EcoreUtil.determinePackageName(_fullyQualifiedClassName) + "." + Generator.SERVICE_PACKAGE_NAME;
 	}
 
-	public static String getJaxbPojoPackageName(ScriptContext _scriptContext)
+	public static String getJaxbPojoPackageName(String _fullyQualifiedClassName)
 	{
-		return EcoreUtil.determinePackageName(_scriptContext.getFocusDomain()) + "." + Generator.JAXBPOJO_PACKAGE_NAME;
+		return EcoreUtil.determinePackageName(_fullyQualifiedClassName) + "." + Generator.JAXBPOJO_PACKAGE_NAME;
 	}
 	
-	public static String getPojoPackageName(ScriptContext _scriptContext)
+	public static String getPojoPackageName(String _fullyQualifiedClassName)
 	{
-		return EcoreUtil.determinePackageName(_scriptContext.getFocusDomain()) + "." + Generator.POJO_PACKAGE_NAME;
+		return EcoreUtil.determinePackageName(_fullyQualifiedClassName) + "." + Generator.POJO_PACKAGE_NAME;
 	}
 
-	public static String getServiceClientPackageName(ScriptContext _scriptContext)
+	public static String getServiceClientPackageName(String _fullyQualifiedClassName)
 	{
-		return EcoreUtil.determinePackageName(_scriptContext.getFocusDomain())
+		return EcoreUtil.determinePackageName(_fullyQualifiedClassName)
 			+ "."
 			+ Generator.SERVICE_PACKAGE_NAME
 			+ "."

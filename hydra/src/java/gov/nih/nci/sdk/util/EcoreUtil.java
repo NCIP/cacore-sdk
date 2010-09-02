@@ -97,7 +97,8 @@ public class EcoreUtil {
 	 */
 	public static String determinePackageName(String _fullyQualifiedClassName)
 	{
-		return _fullyQualifiedClassName.substring(0, _fullyQualifiedClassName.lastIndexOf("."));
+		int lastPeriodIndex = _fullyQualifiedClassName.lastIndexOf(".");
+		return (lastPeriodIndex > 0) ? _fullyQualifiedClassName.substring(0, lastPeriodIndex) : "";
 	}
 
 	/**
@@ -115,7 +116,8 @@ public class EcoreUtil {
 	 */
 	public static String determineClassName(String _fullyQualifiedClassName)
 	{
-		return _fullyQualifiedClassName.substring(_fullyQualifiedClassName.lastIndexOf("."), _fullyQualifiedClassName.length());
+		int lastPeriodIndex = _fullyQualifiedClassName.lastIndexOf(".");
+		return (lastPeriodIndex > 0) ? _fullyQualifiedClassName.substring(0, lastPeriodIndex) : _fullyQualifiedClassName;
 	}
 
 	/**

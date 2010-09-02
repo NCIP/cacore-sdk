@@ -11,6 +11,7 @@ import java.net.URI;
 public class ScriptContext
 {
 	private String script;
+	private URI generatorBase;
 	private URI targetBase;
 	private Properties properties;
 	private Map globalMemory;
@@ -23,6 +24,7 @@ public class ScriptContext
 	private MessageManager warningManager;
 
 	public String getScript() { return script; }
+	public URI getGeneratorBase() { return generatorBase; }
 	public URI getTargetBase() { return targetBase; }
 	public Properties getProperties() { return properties; }
 	public Map getGlobalMemory() { return globalMemory; }
@@ -35,11 +37,12 @@ public class ScriptContext
 	public MessageManager getWarningManager() { return warningManager; }
 
 	private void setScript(String _script) { script = _script; }
+	public void setGeneratorBase(URI _generatorBase) { generatorBase = _generatorBase; }
 	public void setTargetBase(URI _targetBase) { targetBase = _targetBase; }
 	public void setProperties(Properties _properties) { properties = _properties; }
 	private void setGlobalMemory(Map _globalMemory) { globalMemory = _globalMemory; }
 	private void setMemory(Map _memory) { memory = _memory; }
-	protected void setFocusDomain(String _focusDomain) { focusDomain = _focusDomain; }
+	public void setFocusDomain(String _focusDomain) { focusDomain = _focusDomain; }
 	private void setEPackage(EPackage _ePackage) { ePackage = _ePackage; }
 	private void setIsAborted(boolean _isAborted) { isAborted = _isAborted; }
 	protected void setGeneratorContext(GeneratorContext _generatorContext) { generatorContext = _generatorContext; }
@@ -52,7 +55,8 @@ public class ScriptContext
 						 EPackage _ePackage,
 						 Map _globalMemory,
 						 Properties _properties,
-						 URI _targetBase)
+						 URI _targetBase,
+						 URI _generatorBase)
 	{
 		setScript(_script);
 		setIsAborted(false);
@@ -60,6 +64,7 @@ public class ScriptContext
 		setGlobalMemory(_globalMemory);
 		setProperties(_properties);
 		setTargetBase(_targetBase);
+		setGeneratorBase(_generatorBase);
 		setMemory(new HashMap());
 		setErrorManager(new MessageManager());
 		setWarningManager(new MessageManager());
