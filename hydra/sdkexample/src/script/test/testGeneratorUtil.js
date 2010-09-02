@@ -26,5 +26,19 @@ var testConvertFirstCharToLowerCase = function()
 	print("testConvertFirstCharToLowerCase completed");
 }
 
+var testGetServiceClientPackageName = function()
+{
+	
+	var focusDomain = "gov.nih.nci.cadsr.DataElement";
+	var targetServiceClientPackage = "gov.nih.nci.cadsr." +
+									 Packages.gov.nih.nci.sdk.example.generator.Generator.SERVICE_PACKAGE_NAME + "." +
+									 Packages.gov.nih.nci.sdk.example.generator.Generator.SERVICE_CLIENT_PACKAGE_NAME;
+
+	var serviceClientPackageName = Packages.gov.nih.nci.sdk.example.generator.util.GeneratorUtil.getServiceClientPackageName(focusDomain);
+	assert((targetServiceClientPackage.equals(serviceClientPackageName) === true), "getServiceClientPackageName function failed");
+	print("testGetServiceClientPackageName completed");
+}
+
 testConvertFirstCharToUpperCase();
 testConvertFirstCharToLowerCase();
+testGetServiceClientPackageName();
