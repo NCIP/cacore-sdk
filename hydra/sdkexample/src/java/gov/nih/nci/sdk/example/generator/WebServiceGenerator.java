@@ -102,7 +102,7 @@ public class WebServiceGenerator
 		StringTemplate template = _group.getInstanceOf("WebServiceInterface");
 
 		//Set template tokens
-		template.setAttribute("packageName", GeneratorUtil.getServicePackageName(getScriptContext()));
+		template.setAttribute("packageName", GeneratorUtil.getServicePackageName(getScriptContext().getFocusDomain()));
 		template.setAttribute("importSt", getImportStmt());
 		template.setAttribute("interfaceName", serviceName);
 		List<EOperation> eOperationList = new java.util.ArrayList();
@@ -150,7 +150,7 @@ public class WebServiceGenerator
 		StringTemplate template = _group.getInstanceOf("WebServiceAbstractImpl");
 
 		//Set template tokens
-		template.setAttribute("packageName", GeneratorUtil.getServicePackageName(getScriptContext()));
+		template.setAttribute("packageName", GeneratorUtil.getServicePackageName(getScriptContext().getFocusDomain()));
 		template.setAttribute("importSt", getImportStmt());
 		template.setAttribute("interfaceName", serviceName);
 
@@ -204,7 +204,7 @@ public class WebServiceGenerator
 		{
 			StringTemplate template = _group.getInstanceOf("WebServiceImpl");
 			//Set template tokens
-			template.setAttribute("packageName", GeneratorUtil.getServicePackageName(getScriptContext()));
+			template.setAttribute("packageName", GeneratorUtil.getServicePackageName(getScriptContext().getFocusDomain()));
 			template.setAttribute("importSt", getImportStmt());
 			template.setAttribute("interfaceName", serviceName);
 
@@ -218,11 +218,11 @@ public class WebServiceGenerator
 		StringTemplate template = _group.getInstanceOf("WebServiceClient");
 		
 		//Set template tokens
-		template.setAttribute("packageName", GeneratorUtil.getServiceClientPackageName(getScriptContext()));
+		template.setAttribute("packageName", GeneratorUtil.getServiceClientPackageName(getScriptContext().getFocusDomain()));
 		template.setAttribute("importSt", getImportStmt());
-		template.setAttribute("importSt", "import " + GeneratorUtil.getServicePackageName(getScriptContext()) + ".*;");
+		template.setAttribute("importSt", "import " + GeneratorUtil.getServicePackageName(getScriptContext().getFocusDomain()) + ".*;");
 		template.setAttribute("clientName", serviceName+"Client");
-		template.setAttribute("packagePath", GeneratorUtil.getServiceClientPackageName(getScriptContext()).
+		template.setAttribute("packagePath", GeneratorUtil.getServiceClientPackageName(getScriptContext().getFocusDomain()).
 							  replaceAll("\\.", File.separator + File.separator) + File.separator + File.separator);
 
 		//Generate and write the template output
