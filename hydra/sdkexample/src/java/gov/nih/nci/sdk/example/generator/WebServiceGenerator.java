@@ -85,14 +85,12 @@ public class WebServiceGenerator
 
 	public void runProcess()
 	{
-		StringTemplateGroup group = new StringTemplateGroup("sdkCodeGen", GeneratorUtil.getTemplatesPath());
-		
-		generateWebServiceInterface(group);
-		generateWebServiceAbstract(group);
-		generateWebServiceImpl(group);
+		generateWebServiceInterface(getScriptContext().getTemplateGroup());
+		generateWebServiceAbstract(getScriptContext().getTemplateGroup());
+		generateWebServiceImpl(getScriptContext().getTemplateGroup());
 		compileWebServiceInterface();
-		generateWebServiceArtifacts(group);
-		generateWebServiceClient(group);
+		generateWebServiceArtifacts(getScriptContext().getTemplateGroup());
+		generateWebServiceClient(getScriptContext().getTemplateGroup());
 		
 		getScriptContext().logInfo("Webservice generation is completed!");
 	}

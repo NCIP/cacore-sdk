@@ -50,12 +50,10 @@ public class CXFSpringConfGenerator
 
 	public void runProcess()
 	{
-		String templatePath = GeneratorUtil.getTemplatesPath();
-		StringTemplateGroup group = new StringTemplateGroup("sdkCodeGen", templatePath);
-		generateSpringServerConf(group);
-		generateSpringClientConf(group);
-		generateSpringWebConf(group);
-		generateBuildScripts(group);
+		generateSpringServerConf(getScriptContext().getTemplateGroup());
+		generateSpringClientConf(getScriptContext().getTemplateGroup());
+		generateSpringWebConf(getScriptContext().getTemplateGroup());
+		generateBuildScripts(getScriptContext().getTemplateGroup());
 	}
 
 	private void generateSpringServerConf(StringTemplateGroup group)
