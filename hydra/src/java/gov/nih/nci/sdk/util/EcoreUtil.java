@@ -117,7 +117,7 @@ public class EcoreUtil {
 	public static String determineClassName(String _fullyQualifiedClassName)
 	{
 		int lastPeriodIndex = _fullyQualifiedClassName.lastIndexOf(".");
-		return (lastPeriodIndex > 0) ? _fullyQualifiedClassName.substring(0, lastPeriodIndex) : _fullyQualifiedClassName;
+		return (lastPeriodIndex > 0) ? _fullyQualifiedClassName.substring(lastPeriodIndex + 1, _fullyQualifiedClassName.length()) : _fullyQualifiedClassName;
 	}
 
 	/**
