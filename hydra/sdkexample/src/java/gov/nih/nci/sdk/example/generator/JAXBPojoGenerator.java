@@ -11,13 +11,12 @@ public class JAXBPojoGenerator extends PojoGenerator {
 
 	protected void init()
 	{
-		System.out.println("Generating JAXB pojo...");
+		getScriptContext().logInfo("Generating JAXB pojo...");
 		// TODO Auto-generated method stub
 	}
 
 	public void runProcess()
 	{
-		//TODO Talk to Prasad about what he wanted to do here.
-		//runProcess("JAXBPojo", "jaxb", GeneratorUtil.getJaxbPojoPath(getScriptContext()));
+		super.runProcess("jaxb", GeneratorUtil.getJaxbPojoPath(getScriptContext()));
 	}
 }

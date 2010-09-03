@@ -27,6 +27,18 @@ var createGeneratorContext = function(_generatorDirectory, _targetDirectory, _pr
 	return new Packages.gov.nih.nci.sdk.core.GeneratorContext(generatorBase, targetBase, properties, ePackage, domainSet, logger);
 }
 
+var addAnnotation = function(_modelElement, _name, _value)
+{
+	var ecoreFactory = Packages.org.eclipse.emf.ecore.EcoreFactory.eINSTANCE;
+	var annotation = ecoreFactory.createEAnnotation();
+
+	annotation.setSource(_name);
+	annotation.setEModelElement(_modelElement);
+	annotation.getDetails().put(_name, _value);
+
+	return annotation;
+}
+
 var createEPackage = function()
 {
 	importClass(Packages.org.eclipse.emf.ecore.ETypedElement);
@@ -64,6 +76,14 @@ var createEPackage = function()
 	departmentNumber.setEType(ecorePackage.getEInt());
 	departmentClass.getEStructuralFeatures().add(departmentNumber);
 
+	//add department identification number
+	var fireDepartment = ecoreFactory.createEOperation();
+	fireDepartment.setName("fireDepartment");
+	fireDepartment.setEType(ecorePackage.getEInt()); //number of people fired in department
+	addAnnotation(fireDepartment, "oper.ser.service", "true");
+	//fireDepartment.getEParameters().add(departmentNumber);
+	departmentClass.getEOperations().add(fireDepartment);
+	
 	//department class can contain reference to one or many employees
 	var departmentEmployees = ecoreFactory.createEReference();
 	departmentEmployees.setName("employees");
@@ -111,8 +131,8 @@ var testCompile = function()
 	var generator = new Packages.gov.nih.nci.sdk.core.Generator();
 
 	var domainSet = new Packages.java.util.HashSet();
-	domainSet.add("company.Department");
 	domainSet.add("company.Company");
+	domainSet.add("company.Department");
 
 	var generatorContext = createGeneratorContext("workspace/sdkexample", "workspace/src", properties, ePackage, domainSet);
 

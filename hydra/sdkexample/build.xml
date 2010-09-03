@@ -268,6 +268,19 @@
 			   includes="lib/${jar}"
 			   update="true"
 		  />
+
+		<zip destfile="dist/${zip}"
+		       basedir="${deployDir}"
+			   includes="lib/*.jar"
+			   update="true"
+		  />
+
+		<zip destfile="dist/${zip}"
+		       basedir="${src}"
+			   includes="bin/*.bat"
+			   update="true"
+		  />
+
 	</target>
 
 	<target name="install" depends="makePlugin">
