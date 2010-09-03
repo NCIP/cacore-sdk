@@ -60,7 +60,10 @@ public class GeneratorUtil
 
 	public static List getFiles(String _dir, String[] _extensions)
 	{
+		java.util.logging.Logger.getLogger("DEBUG").info("Directory _dir is: " + _dir);
+		
 		List<String> files = new ArrayList();
+
 		try
 		{
 			Iterator iter = FileUtils.iterateFiles(new File(_dir), _extensions, false);
@@ -75,12 +78,16 @@ public class GeneratorUtil
 		{
 			throw new RuntimeException(t);
 		}
+
+		java.util.logging.Logger.getLogger("DEBUG").info("Returning these files: " + files);
 		
 		return files;
 	}
 
 	public static String getFiles(String _dir, String[] _extensions, String _seperator)
 	{
+		java.util.logging.Logger.getLogger("DEBUG").info("Directory _dir is: " + _dir);
+
 		StringBuffer files = new StringBuffer();
 		
 		try
@@ -97,7 +104,9 @@ public class GeneratorUtil
 		{
 			throw new RuntimeException(t);
 		}
-		
+
+		java.util.logging.Logger.getLogger("DEBUG").info("Returning these files: " + files);
+
 		return files.toString();
 	}
 
