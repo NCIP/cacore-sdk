@@ -17,14 +17,8 @@ import gov.nih.nci.sdk.util.EcoreUtil;
 import gov.nih.nci.sdk.core.ScriptContext;
 import gov.nih.nci.sdk.example.generator.Generator;
 
-public class GeneratorUtil {
-
-	public static StringTemplate getTemplate(String _templateName)
-	{
-		StringTemplateGroup group = new StringTemplateGroup("sdkCodeGen");
-		return group.getInstanceOf(_templateName);
-	}
-
+public class GeneratorUtil
+{
 	public static void writeFile(String _outputDir, String _fileName, String _content)
 	{
 		BufferedWriter bufferedWriter = null;
@@ -119,13 +113,11 @@ public class GeneratorUtil {
 
 	public static String getPojoPath(ScriptContext _scriptContext)
 	{
-		System.out.println("Getting pojo path for domain: " + _scriptContext.getFocusDomain());
 		String jaxbPojoPath = getGeneratedPath(_scriptContext)
 				+ File.separator
 				+ EcoreUtil.determinePackageName(_scriptContext.getFocusDomain()).replaceAll("\\.", File.separator)
 				+ File.separator + Generator.POJO_PACKAGE_NAME;
 
-		System.out.println("Getting pojo path: " + jaxbPojoPath);
 		return jaxbPojoPath;
 	}
 	
@@ -162,14 +154,12 @@ public class GeneratorUtil {
 
 	public static String getGeneratedPath(ScriptContext _scriptContext) {
 
-		System.out.println("Getting generated path for focus domain: " + _scriptContext.getFocusDomain());
 		String returnString =  _scriptContext.getProperties().getProperty("PROJECT_ROOT")
 				+ File.separator
 				+ _scriptContext.getProperties().getProperty("PROJECT_SRC")
 				+ File.separator 
-							   + Generator.GENERATED_PACKAGE_NAME;
+			    + Generator.GENERATED_PACKAGE_NAME;
 
-		System.out.println("Generated path: " + returnString);
 		return returnString;
 	}
 
@@ -208,11 +198,6 @@ public class GeneratorUtil {
 	public static String getClassesPath(ScriptContext _scriptContext)
 	{
 		return _scriptContext.getProperties().getProperty("PROJECT_ROOT") + File.separator + "classes";
-	}
-
-	public static String getTemplatesPath()
-	{
-		return gov.nih.nci.sdk.example.generator.Generator.TEMPLATES_PACKAGE_NAME;
 	}
 
 	public static String convertFirstCharToUpperCase(String _string)

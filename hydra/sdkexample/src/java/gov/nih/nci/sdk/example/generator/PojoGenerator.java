@@ -18,7 +18,7 @@ public class PojoGenerator
 
 	protected void init()
 	{
-		System.out.println("Generating pojo...");
+		getScriptContext().getLogger().info("Generating pojo...");
 		// TODO Auto-generated method stub
 	}
 
@@ -34,32 +34,36 @@ public class PojoGenerator
 
 	public void runProcess()
 	{
-		System.out.println("Here 0");
 		runProcess("pojo", GeneratorUtil.getPojoPath(getScriptContext()));
-		System.out.println("Here 0.1");
 	}
 
 	protected void runProcess(String pojoPackageName, String outputDir)
 	{
-		System.out.println("Here 1");
-		StringTemplate template = GeneratorUtil.getTemplate("pojo");
-		System.out.println("Here 2");
+		StringTemplate template = getScriptContext().getTemplateGroup().getInstanceOf("pojo");
 		String domain = getScriptContext().getFocusDomain();
-		System.out.println("Here 3");
 		String packageName = EcoreUtil.determinePackageName(domain);
-		System.out.println("Here 4");
 		String className = EcoreUtil.determineClassName(domain);
-		System.out.println("Here 5");
 		template.setAttribute("packageName", packageName);
-		System.out.println("Here 6");
 		template.setAttribute("className", className);
-		System.out.println("Here 7");
 		List<EAttribute> eAttributeList = EcoreUtil.getEClass(getScriptContext().getEPackage(), domain).getEAttributes();
-		System.out.println("Here 8");
-		template.setAttribute("ECOREElement", eAttributeList);
-		System.out.println("Here 9");
-		GeneratorUtil.writeFile(outputDir, domain + ".java", template.toString());
-		System.out.println("Here 10");
+
+		for (EAttribute eAttribute: eAttributeList)
+		{
+			StringTemplate pojoAttributeTemplate = getScriptContext().getTemplate("pojoAttributes");
+			pojoAttributeTemplate.setAttribute("name", eAttribute.getName());
+			pojoAttributeTemplate.setAttribute("type", eAttribute.getEType().getInstanceClassName());
+
+			template.setAttribute("pojoAttribute", pojoAttributeTemplate);
+
+			StringTemplate pojoOperationTemplate = getScriptContext().getTemplate("pojoOperations");
+			pojoOperationTemplate.setAttribute("name", eAttribute.getName());
+			pojoOperationTemplate.setAttribute("type", eAttribute.getEType().getInstanceClassName());
+			pojoOperationTemplate.setAttribute("operationName", GeneratorUtil.convertFirstCharToUpperCase(eAttribute.getName()));
+
+			template.setAttribute("pojoOperation", pojoOperationTemplate);
+		}
+		
+		GeneratorUtil.writeFile(outputDir, className + ".java", template.toString());
 	}
 
 	protected void postProcess()

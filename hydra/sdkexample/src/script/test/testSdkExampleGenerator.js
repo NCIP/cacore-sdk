@@ -22,8 +22,11 @@ var createGeneratorContext = function(_generatorDirectory, _targetDirectory, _pr
 	var properties = (!_properties) ? null : _properties;
 	var ePackage = (!_ePackage) ? null : _ePackage;
 
-	return new Packages.gov.nih.nci.sdk.core.GeneratorContext(generatorBase, targetBase, properties, ePackage, domainSet);
+	var logger = Packages.java.util.logging.Logger.getLogger(_generatorDirectory);
+
+	return new Packages.gov.nih.nci.sdk.core.GeneratorContext(generatorBase, targetBase, properties, ePackage, domainSet, logger);
 }
+
 var createEPackage = function()
 {
 	importClass(Packages.org.eclipse.emf.ecore.ETypedElement);
@@ -33,7 +36,7 @@ var createEPackage = function()
 
 	// create an Company class
 	var companyClass = ecoreFactory.createEClass();
-	companyClass.setName("Company");
+	companyClass.setName("company.Company");
 
 	// create company name
 	var companyName = ecoreFactory.createEAttribute();
@@ -43,7 +46,7 @@ var createEPackage = function()
 
 	//create an Employee class
 	var employeeClass = ecoreFactory.createEClass();
-	employeeClass.setName("Employee");
+	employeeClass.setName("company.Employee");
 
 	//add a name attribute to an Employee class
 	var employeeName = ecoreFactory.createEAttribute();
@@ -53,7 +56,7 @@ var createEPackage = function()
 
 	//create a Department class
 	var departmentClass = ecoreFactory.createEClass();
-	departmentClass.setName("Department");
+	departmentClass.setName("company.Department");
 
 	//add department identification number
 	var departmentNumber = ecoreFactory.createEAttribute();
@@ -108,8 +111,8 @@ var testCompile = function()
 	var generator = new Packages.gov.nih.nci.sdk.core.Generator();
 
 	var domainSet = new Packages.java.util.HashSet();
-	domainSet.add("Department");
-	domainSet.add("Company");
+	domainSet.add("company.Department");
+	domainSet.add("company.Company");
 
 	var generatorContext = createGeneratorContext("workspace/sdkexample", "workspace/src", properties, ePackage, domainSet);
 
@@ -120,29 +123,5 @@ var testCompile = function()
 
 	print("testCompile test completed");	
 }
-
-/*var testGeneratePojo = function()
-{
-	print("Hullo 1");
-	var generator = new Packages.gov.nih.nci.sdk.core.Generator();
-	print("Hullo 2");
-	var generatorContext = createGeneratorContext();
-	print("Hullo 3");
-	var scriptContext = generator.determineScriptContext(new Packages.java.io.File("sdkScript.js"), "", generatorContext);
-	print("Hullo 4");
-
-	var properties = new Packages.java.util.Properties();
-	properties.setProperty("PROJECT_ROOT", "./workspace");
-	properties.setProperty("PROJECT_SRC", "src");
-
-	scriptContext.setProperties(properties);
-	scriptContext.setFocusDomain("company.Company");
-	
-	var pojoGenerator = new Packages.gov.nih.nci.sdk.example.generator.PojoGenerator(scriptContext);
-	print("Hullo 5");
-	pojoGenerator.generate();
-	print("Hullo 6");
-	print("Finished generating");
-}*/
 
 testCompile();
