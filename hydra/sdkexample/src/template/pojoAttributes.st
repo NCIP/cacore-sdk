@@ -1,3 +1,1 @@
-$ECOREElement:{
-private $it.type$ $it.name$;
-}$
+private $type$ $name$;

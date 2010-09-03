@@ -1,12 +1,9 @@
-$ECOREElement:{
-public $it.type$ get$it.operationName$()
+public $type$ get$operationName$()
 {
-	return $it.name$; 
+	return $name$; 
 }
 
-public void set$it.operationName$($it.type$ $it.name$)
+public void set$operationName$($type$ $name$)
 {
-	this.$it.name$ = $it.name$; 
+	this.$name$ = $name$; 
 }
-
-}$

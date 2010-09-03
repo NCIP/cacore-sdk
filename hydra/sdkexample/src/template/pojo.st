@@ -11,7 +11,7 @@ public class $className$ implements Serializable{
 	*/
 	private static final long serialVersionUID = 1234567890L;
 	
-	$pojoAttributes()$
+	$pojoAttribute; separator="\n"$
 
-	$pojoOperations()$
+	$pojoOperation; separator="\n"$
 }
