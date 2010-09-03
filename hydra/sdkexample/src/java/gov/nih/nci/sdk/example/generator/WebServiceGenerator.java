@@ -43,38 +43,43 @@ public class WebServiceGenerator
 
 	protected void init()
 	{
-		System.out.println("Generating Webservice artifacts....");
+		getScriptContext().logInfo("Generating Webservice artifacts....");
 	}
 
 	protected void preProcess()
 	{
-		// Delete generated folder
-		try
+		if(getScriptContext().getMemory().get("preProcess") == null)
 		{
-			String generatedPath = GeneratorUtil.getServicePath(getScriptContext());
-			if (new File(generatedPath).exists() == true) {	FileUtils.forceDelete(new File(generatedPath)); }	
-		}
-		catch (Throwable t)
-		{
-			getScriptContext().logError(t);
-			// TODO Auto-generated catch block
-			t.printStackTrace();
-		}
-
-		try
-		{
-			String classesPath = GeneratorUtil.getClassesPath(getScriptContext());
-			
-			if (new File(classesPath).exists() == true)
+			// Delete generated folder
+			try
 			{
-				FileUtils.forceDelete(new File(classesPath));
+				String generatedPath = GeneratorUtil.getServicePath(getScriptContext());
+				if (new File(generatedPath).exists() == true) {	FileUtils.forceDelete(new File(generatedPath)); }	
 			}
-		}
-		catch (Throwable t)
-		{
-			getScriptContext().logError(t);
-			// TODO Auto-generated catch block
-			t.printStackTrace();
+			catch (Throwable t)
+			{
+				getScriptContext().logError(t);
+				// TODO Auto-generated catch block
+				t.printStackTrace();
+			}
+
+			try
+			{
+				String classesPath = GeneratorUtil.getClassesPath(getScriptContext());
+
+				if (new File(classesPath).exists() == true)
+				{
+					FileUtils.forceDelete(new File(classesPath));
+				}
+			}
+			catch (Throwable t)
+			{
+				getScriptContext().logError(t);
+				// TODO Auto-generated catch block
+				t.printStackTrace();
+			}
+
+			getScriptContext().getMemory().put("preProcess", "");
 		}
 	}
 
@@ -118,7 +123,7 @@ public class WebServiceGenerator
 				//need to write a method to handle the assignment of
 				//defaults.  This should really be in the SDKUtil class
 				//John is workin on.  Once he has created this class I
-				//will add this utility there.  Right now I just want
+				//will use this utility there.  Right now I just want
 				//to get this doing something so that I can explore how
 				//EOperations work.
 				boolean isService = (eAnnotation != null && eAnnotation.getDetails().get("oper.ser.service").equalsIgnoreCase("false") == false) ? true : false;
@@ -126,7 +131,7 @@ public class WebServiceGenerator
 				if (isService == true)
 				{
 					StringTemplate operationTemplate = new StringTemplate("public $returnType$ $name$($param; separator=\", \"$);");
-					operationTemplate.setAttribute("returnType", eOperation.getEType());
+					operationTemplate.setAttribute("returnType", eOperation.getEType().getInstanceClassName());
 					operationTemplate.setAttribute("name", eOperation.getName());
 
 					for (EParameter eParameter: eOperation.getEParameters())
@@ -173,8 +178,8 @@ public class WebServiceGenerator
 
 				if (isService == true)
 				{
-					StringTemplate operationTemplate = new StringTemplate("public $returnType$ $name$($param; separator=\", \"$);");
-					operationTemplate.setAttribute("returnType", eOperation.getEType());
+					StringTemplate operationTemplate = _group.getInstanceOf("WebServiceAbstractImplOperation");
+					operationTemplate.setAttribute("returnType", eOperation.getEType().getInstanceClassName());
 					operationTemplate.setAttribute("name", eOperation.getName());
 
 					for (EParameter eParameter: eOperation.getEParameters())
@@ -248,7 +253,7 @@ public class WebServiceGenerator
 
 			List<String> options = new ArrayList<String>();
 			options.add("-classpath");
-			String classPathStr = GeneratorUtil.getFiles(projectRoot +
+			String classPathStr = GeneratorUtil.getFiles(new java.io.File(getScriptContext().getGeneratorBase()).getAbsolutePath() +
 					File.separator + "lib",
 					new String[] { "jar" }, File.pathSeparator)
 					+ File.pathSeparator
@@ -258,6 +263,9 @@ public class WebServiceGenerator
 
 			options.add("-d");
 			options.add(projectRoot	+ File.separator + "classes");
+
+			options.add("-s");
+			options.add(projectRoot	+ File.separator + "src/generated");
 
 			JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
 			DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
@@ -290,7 +298,7 @@ public class WebServiceGenerator
 	private void generateWebServiceArtifacts(StringTemplateGroup _group)
 	{
 		String projectRoot = getScriptContext().getProperties().getProperty("PROJECT_ROOT");
-		String cxfHome = getScriptContext().getProperties().getProperty("CXF_HOME");
+		String cxfHome = new java.io.File(getScriptContext().getGeneratorBase()).getAbsolutePath();
 		String classesPath = projectRoot + File.separatorChar + "classes";
 		String srcPath = projectRoot + File.separatorChar + getScriptContext().getProperties().getProperty("PROJECT_SRC") +
 						 File.separatorChar + "generated";
