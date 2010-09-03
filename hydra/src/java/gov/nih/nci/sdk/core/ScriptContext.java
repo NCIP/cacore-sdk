@@ -5,8 +5,11 @@ import org.eclipse.emf.ecore.EPackage;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import java.net.URI;
+import org.antlr.stringtemplate.StringTemplateGroup;
+import org.antlr.stringtemplate.StringTemplate;
 
 public class ScriptContext
 {
@@ -22,7 +25,9 @@ public class ScriptContext
 	private boolean isAborted;
 	private MessageManager errorManager;
 	private MessageManager warningManager;
-
+	private StringTemplateGroup templateGroup;
+	private Logger logger;
+	
 	public String getScript() { return script; }
 	public URI getGeneratorBase() { return generatorBase; }
 	public URI getTargetBase() { return targetBase; }
@@ -35,7 +40,9 @@ public class ScriptContext
 	private GeneratorContext getGeneratorContext() { return generatorContext; }
 	public MessageManager getErrorManager() { return errorManager; }
 	public MessageManager getWarningManager() { return warningManager; }
-
+	public StringTemplateGroup getTemplateGroup() { return templateGroup; }
+	public Logger getLogger() { return logger; }
+	
 	private void setScript(String _script) { script = _script; }
 	public void setGeneratorBase(URI _generatorBase) { generatorBase = _generatorBase; }
 	public void setTargetBase(URI _targetBase) { targetBase = _targetBase; }
@@ -48,7 +55,9 @@ public class ScriptContext
 	protected void setGeneratorContext(GeneratorContext _generatorContext) { generatorContext = _generatorContext; }
 	private void setErrorManager(MessageManager _errorManager) { errorManager = _errorManager; }
 	private void setWarningManager(MessageManager _warningManager) { warningManager = _warningManager; }
-
+	public void setTemplateGroup(StringTemplateGroup _templateGroup) { templateGroup = _templateGroup; }
+	public void setLogger(Logger _logger) { logger = _logger; }
+	
 	private ScriptContext () { setIsAborted(false); }
 
 	public ScriptContext(String _script,
@@ -56,7 +65,8 @@ public class ScriptContext
 						 Map _globalMemory,
 						 Properties _properties,
 						 URI _targetBase,
-						 URI _generatorBase)
+						 URI _generatorBase,
+						 Logger _logger)
 	{
 		setScript(_script);
 		setIsAborted(false);
@@ -68,8 +78,26 @@ public class ScriptContext
 		setMemory(new HashMap());
 		setErrorManager(new MessageManager());
 		setWarningManager(new MessageManager());
+		setTemplateGroup(new StringTemplateGroup(getGeneratorBase() + java.io.File.separator + "template"));
+		setLogger(_logger);
 	}
 
+	public ScriptContext(String _scriptAbsolutePath, GeneratorContext _generatorContext)
+	{
+		setScript(_scriptAbsolutePath);
+		setIsAborted(false);
+		setEPackage(_generatorContext.getEPackage());
+		setGlobalMemory(_generatorContext.getMemory());
+		setProperties(_generatorContext.getProperties());
+		setTargetBase(_generatorContext.getTargetBase());
+		setGeneratorBase(_generatorContext.getGeneratorBase());
+		setMemory(new HashMap());
+		setErrorManager(new MessageManager());
+		setWarningManager(new MessageManager());
+		setTemplateGroup(new StringTemplateGroup(getGeneratorBase() + java.io.File.separator + "template"));
+		setLogger(_generatorContext.getLogger());
+	}
+	
 	public void abort()
 	{
 		setIsAborted(true);
@@ -89,19 +117,19 @@ public class ScriptContext
 
 	public void logError(String _message)
 	{
-		java.util.logging.Logger.getLogger(getScript()).severe(_message);
+		getLogger().severe(_message);
 		getErrorManager().add(getScript(), "severe", _message);
 	}
 
 	public void logWarning(String _message)
 	{
-		java.util.logging.Logger.getLogger(getScript()).warning(_message);
+		getLogger().warning(_message);
 		getWarningManager().add(getScript(), "warning", _message);
 	}
 
 	public void logInfo(String _message)
 	{
-		java.util.logging.Logger.getLogger(getScript()).info(_message);
+		getLogger().info(_message);
 	}
 
 	public void reset()
@@ -109,5 +137,10 @@ public class ScriptContext
 		setFocusDomain(null);
 		getErrorManager().clearMessages();
 		getWarningManager().clearMessages();
+	}
+
+	public StringTemplate getTemplate(String _templateName)
+	{
+		return getTemplateGroup().getInstanceOf(_templateName);
 	}
 }
