@@ -405,7 +405,8 @@ public class CodegenPropertiesViewer extends WorkbenchViewerBaseComponent {
 		if (codegenSettingsPanel.isIso21090DatatypesEnabled()){
 			JOptionPane.showMessageDialog(
 					this,
-					"Enabling ISO 21090 Datatypes causes the following to be disabled:\n"
+					 "Enabling ISO 21090 Data Type support causes the following functionality\n"
+					+"to be disabled:\n"
 					+"  *  Web Service API\n"
 					+"  *  Writable API\n"
 					+"  *  CLM API\n"
