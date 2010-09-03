@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 public class GeneratorContext
 {
@@ -22,6 +23,7 @@ public class GeneratorContext
 	private Map memory;
 	private List<java.io.File> generatorScriptFileList;
 	private Properties properties;
+	private Logger logger;
 	
 	public URI getGeneratorBase() { return generatorBase; }
 	public URI getTargetBase() { return targetBase; }
@@ -33,6 +35,7 @@ public class GeneratorContext
 	public Map getMemory() { return memory; }
 	protected List<java.io.File> getGeneratorScriptFileList() { return generatorScriptFileList; }
 	public Properties getProperties() { return properties; }
+	public Logger getLogger() { return logger; }
 	
 	public void setGeneratorBase(URI _generatorBase) { generatorBase = _generatorBase; }
 	public void setTargetBase(URI _targetBase) { targetBase = _targetBase; }
@@ -44,12 +47,14 @@ public class GeneratorContext
 	private void setMemory(Map _memory) { memory = _memory; }
 	protected void setGeneratorScriptFileList(List<java.io.File> _generatorScriptFileList) { generatorScriptFileList = _generatorScriptFileList; }
 	public void setProperties(Properties _properties) { properties = _properties; }
+	public void setLogger(Logger _logger) { logger = _logger; }
 	
 	public GeneratorContext(URI _generatorBase,
 							URI _targetBase,
 							Properties _properties,
 							EPackage _ePackage,
-							java.util.Set<String> _domainSet)
+							java.util.Set<String> _domainSet,
+						    Logger _logger)
 	{
 		setGeneratorBase(_generatorBase);
 		setTargetBase(_targetBase);
@@ -60,6 +65,7 @@ public class GeneratorContext
 		setWarningManager(new MessageManager());
 		setIsAborted(false);
 		setMemory(new HashMap());
+		setLogger(_logger);
 	}
 
 	public boolean hasErrors()
