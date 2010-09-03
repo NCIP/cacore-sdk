@@ -1037,7 +1037,7 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
 		    generateWsddLabel.setText("Generate WSDD?");
 		    
 		    enableIso21090DatatypesLabel = new JLabel();
-		    enableIso21090DatatypesLabel.setText("Enable ISO21090 Datatype Support?");
+		    enableIso21090DatatypesLabel.setText("Enable ISO21090 Data Type Support?");
 
 		    miscSettingsSubCenterPanel = new JPanel();
 		    miscSettingsSubCenterPanel.setLayout(new GridBagLayout());
@@ -1779,7 +1779,7 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
 		    generateWsddValueLabel.setText(Utils.convertToYesNo(getGenerateWsddCheckBox()));		
             
 		    enableIso21090DatatypesLabel = new JLabel();
-		    enableIso21090DatatypesLabel.setText("Enable ISO21090 Datatype Support?");
+		    enableIso21090DatatypesLabel.setText("Enable ISO21090 Data Type Support?");
 		    enableIso21090DatatypesValueLabel = new JLabel();
 		    enableIso21090DatatypesValueLabel.setText(Utils.convertToYesNo(getEnableIso21090DatatypesCheckBox()));			    
 
