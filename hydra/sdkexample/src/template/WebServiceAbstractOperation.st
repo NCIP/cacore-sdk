@@ -1,1 +1,4 @@
-public abstract $returnType$ $name$($param$);
+public $returnType$ $name$($param$)
+{
+	return $dummyValue$;
+}
