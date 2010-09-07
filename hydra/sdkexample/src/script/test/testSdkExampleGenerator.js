@@ -117,9 +117,16 @@ var createEPackage = function()
 var createProperties = function()
 {
 	var properties = new Packages.java.util.Properties();
+
 	properties.setProperty("PROJECT_ROOT", "./workspace");
 	properties.setProperty("PROJECT_SRC", "src");
 	properties.setProperty("JAVA_HOME", "c:\\Program Files\\Java\\jdk1.6.0_18");
+	properties.setProperty("CXF_HOME", "C:\\apps\\cxf\\apache-cxf-2.2.10");
+	
+	//TODO set these properties when you get a chance ...
+	properties.setProperty("CATALINA_ADDRESS", "localhost");
+	properties.setProperty("CATALINA_PORT", "8080");
+	properties.setProperty("APPLICATION_NAME", "SDK Example");
 	
 	return properties;
 }

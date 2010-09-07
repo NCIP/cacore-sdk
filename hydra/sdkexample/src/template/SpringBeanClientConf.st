@@ -6,11 +6,7 @@
 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
 
-$SpringBean:{
-	<jaxws:client id="$it.beanId$" 
-	serviceClass="$it.serviceClass$"
-	address="$it.serviceAddress$" >
-	</jaxws:client>
-}$	
+   $beanId, serviceClass, serviceAddress: { b, sc, sa | <jaxws:client id="$b$" serviceClass="$sc$" address="$sa$" ></jaxws:client>
+}$
 
 </beans>
