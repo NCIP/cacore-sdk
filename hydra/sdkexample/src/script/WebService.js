@@ -6,7 +6,7 @@ function generate(_scriptContext)
 	generateJAXBPojo(_scriptContext);
 	generatePojo(_scriptContext);
 	generateWebserviceInterface(_scriptContext);
-	//generateSpringConf(_scriptContext);
+	generateSpringConf(_scriptContext);
 }
 
 function generateJAXBPojo(_scriptContext)

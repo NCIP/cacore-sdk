@@ -30,17 +30,22 @@ import org.eclipse.emf.ecore.EOperation;
 
 public class WebServiceGenerator
    extends Generator
-{
-	String packageName;
-	String serviceName;
-	
+{	
 	public WebServiceGenerator(ScriptContext _scriptContext)
 	{
 		super(_scriptContext);
-		packageName = EcoreUtil.determinePackageName(_scriptContext.getFocusDomain());
-		serviceName = EcoreUtil.determineClassName(_scriptContext.getFocusDomain()) + "Service";
 	}
 
+	private String createPackageName(String _focusDomain)
+	{
+		return EcoreUtil.determinePackageName(_focusDomain);
+	}
+
+	private String createServiceName(String _focusDomain)
+	{
+		return EcoreUtil.determineClassName(_focusDomain) + "Service";
+	}
+	
 	protected void init()
 	{
 		getScriptContext().logInfo("Generating Webservice artifacts....");
@@ -106,7 +111,7 @@ public class WebServiceGenerator
 		//Set template tokens
 		template.setAttribute("packageName", GeneratorUtil.getServicePackageName(getScriptContext().getFocusDomain()));
 		template.setAttribute("importSt", getImportStmt());
-		template.setAttribute("interfaceName", serviceName);
+		template.setAttribute("interfaceName", createServiceName(getScriptContext().getFocusDomain()));
 		List<EOperation> eOperationList = new java.util.ArrayList();
 
 		EClass eClass = EcoreUtil.getEClass(getScriptContext().getEPackage(), getScriptContext().getFocusDomain());
@@ -144,7 +149,7 @@ public class WebServiceGenerator
 		}
 
 		//Generate and write the template output
-		GeneratorUtil.writeFile(GeneratorUtil.getServicePath(getScriptContext()), serviceName + ".java", template.toString());
+		GeneratorUtil.writeFile(GeneratorUtil.getServicePath(getScriptContext()), createServiceName(getScriptContext().getFocusDomain()) + ".java", template.toString());
 	}
 
 	private void generateWebServiceAbstract(StringTemplateGroup _group)
@@ -154,7 +159,7 @@ public class WebServiceGenerator
 		//Set template tokens
 		template.setAttribute("packageName", GeneratorUtil.getServicePackageName(getScriptContext().getFocusDomain()));
 		template.setAttribute("importSt", getImportStmt());
-		template.setAttribute("interfaceName", serviceName);
+		template.setAttribute("interfaceName", createServiceName(getScriptContext().getFocusDomain()));
 
 
 		EClass eClass = EcoreUtil.getEClass(getScriptContext().getEPackage(), getScriptContext().getFocusDomain());
@@ -201,14 +206,14 @@ public class WebServiceGenerator
 		}
 
 		//Generate and write the template output
-		GeneratorUtil.writeFile(GeneratorUtil.getServicePath(getScriptContext()), serviceName + "ImplAbstract.java", template.toString());
+		GeneratorUtil.writeFile(GeneratorUtil.getServicePath(getScriptContext()), createServiceName(getScriptContext().getFocusDomain()) + "ImplAbstract.java", template.toString());
 	}
 
 	private void generateWebServiceImpl(StringTemplateGroup _group)
 	{
 		String filePath = GeneratorUtil.getServiceImplPath(getScriptContext());
 		// Check if the template file exist
-		String fileName = filePath + File.separator + serviceName + "Impl.java";
+		String fileName = filePath + File.separator + createServiceName(getScriptContext().getFocusDomain()) + "Impl.java";
 		File file = new File(fileName);
 
 		if (file.exists() != true)
@@ -217,10 +222,10 @@ public class WebServiceGenerator
 			//Set template tokens
 			template.setAttribute("packageName", GeneratorUtil.getServicePackageName(getScriptContext().getFocusDomain()));
 			template.setAttribute("importSt", getImportStmt());
-			template.setAttribute("interfaceName", serviceName);
+			template.setAttribute("interfaceName", createServiceName(getScriptContext().getFocusDomain()));
 
 			//Generate and write the template output
-			GeneratorUtil.writeFile(filePath, serviceName+"Impl.java", template.toString());
+			GeneratorUtil.writeFile(filePath, createServiceName(getScriptContext().getFocusDomain())+"Impl.java", template.toString());
 		}
 	}
 
@@ -232,12 +237,12 @@ public class WebServiceGenerator
 		template.setAttribute("packageName", GeneratorUtil.getServiceClientPackageName(getScriptContext().getFocusDomain()));
 		template.setAttribute("importSt", getImportStmt());
 		template.setAttribute("importSt", "import " + GeneratorUtil.getServicePackageName(getScriptContext().getFocusDomain()) + ".*;");
-		template.setAttribute("clientName", serviceName+"Client");
+		template.setAttribute("clientName", createServiceName(getScriptContext().getFocusDomain())+"Client");
 		template.setAttribute("packagePath", GeneratorUtil.getServiceClientPackageName(getScriptContext().getFocusDomain()).
 							  replaceAll("\\.", File.separator + File.separator) + File.separator + File.separator);
 
 		//Generate and write the template output
-		GeneratorUtil.writeFile(GeneratorUtil.getServiceClientPath(getScriptContext()), serviceName + "Client.java", template.toString());
+		GeneratorUtil.writeFile(GeneratorUtil.getServiceClientPath(getScriptContext()), createServiceName(getScriptContext().getFocusDomain()) + "Client.java", template.toString());
 	}
 
 	private void compileWebServiceInterface()
@@ -318,36 +323,38 @@ public class WebServiceGenerator
 				try	{ fileManager.close(); } catch (Throwable t) {}
 			}
 
-			//generateWebServiceArtifacts();
+			for (String focusDomain: getScriptContext().retrieveDomainSet())
+			{
+				getScriptContext().logWarning("Calling HALLOWEEN for: "+ focusDomain);
+				generateWebServiceArtifacts(focusDomain);
+			}
 		}
 	}
 
-	private void generateWebServiceArtifacts()
+	private void generateWebServiceArtifacts(String _focusDomain)
 	{
 		String projectRoot = getScriptContext().getProperties().getProperty("PROJECT_ROOT");
-		String cxfHome = new java.io.File(getScriptContext().getGeneratorBase()).getAbsolutePath();
+		String cxfHome = getScriptContext().getProperties().getProperty("CXF_HOME");
 		String classesPath = projectRoot + File.separatorChar + "classes";
 		String srcPath = projectRoot + File.separatorChar + getScriptContext().getProperties().getProperty("PROJECT_SRC") +
 						 File.separatorChar + "generated";
 		String cxfClassPath = cxfHome + File.separatorChar + "lib" + File.separatorChar + "cxf-manifest.jar";
 		String javaToolPath = getScriptContext().getProperties().getProperty("JAVA_HOME") +
 							  File.separatorChar + "lib" + File.separatorChar + "tools.jar";
-		String classPath = classesPath + File.pathSeparator + cxfClassPath + File.pathSeparator + javaToolPath;
-		String packageName = EcoreUtil.determinePackageName(getScriptContext().getFocusDomain());
-
-		getScriptContext().logInfo("Cxf Home: " + cxfHome);
-		getScriptContext().logInfo("CXF Class path: " + classPath);
-		getScriptContext().logInfo("Class path: " + classPath);
+		String classPath = "\"" + classesPath + File.pathSeparator + cxfClassPath + File.pathSeparator + javaToolPath + "\"";
+		String packageName = createPackageName(_focusDomain);
 		
 		String cmd = cxfHome + File.separator + "bin" + File.separator	+ "java2ws.bat";
-		String argStr = " -wsdl -server -client -ant -cp " + classPath;
+		String argStr = " -wsdl -client -server -cp " + classPath;
 		argStr += " -classdir " + classesPath;
 		argStr += " -s " + srcPath;
 		argStr += " -createxsdimports";
 		argStr += " -d " + projectRoot + File.separator + "conf";
-		argStr += " -servicename "+ serviceName;
-		argStr += " -portname "+serviceName + " ";
-		argStr += packageName + ".service."+serviceName+"Impl";
+		argStr += " -servicename "+ createServiceName(_focusDomain);
+		argStr += " -portname "+ createServiceName(_focusDomain) + " ";
+		argStr += packageName + ".service."+createServiceName(_focusDomain)+"Impl";
+
+		getScriptContext().logInfo("Command: " + cmd + argStr);
 		
 		runCommand(cmd + argStr);
 	}
@@ -377,18 +384,19 @@ public class WebServiceGenerator
 				// System.out.println("Here is the standard output of the command:\n");
 				while ((s = stdInput.readLine()) != null) {
 					input.append(s);
-					System.out.println(s);
 				}
 
 				// read any errors from the attempted command
 				while ((s = stdError.readLine()) != null)
 				{
-					getScriptContext().logError(s);
+					getScriptContext().logInfo(s);
 				}
+				
 			}
 		}
 		catch(Throwable t)
 		{
+			t.printStackTrace();
 			getScriptContext().logError(t); 
 		}
 	}
@@ -397,7 +405,7 @@ public class WebServiceGenerator
 
 	private String getImportStmt()
 	{
-		return "import " + packageName + "."+Generator.JAXBPOJO_PACKAGE_NAME+".*;";
+		return "import " + createPackageName(getScriptContext().getFocusDomain()) + "."+Generator.JAXBPOJO_PACKAGE_NAME+".*;";
 	}
 
 	private String getDummyValue(String _type)
