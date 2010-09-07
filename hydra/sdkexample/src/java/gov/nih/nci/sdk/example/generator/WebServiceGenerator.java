@@ -318,7 +318,7 @@ public class WebServiceGenerator
 				try	{ fileManager.close(); } catch (Throwable t) {}
 			}
 
-			generateWebServiceArtifacts();
+			//generateWebServiceArtifacts();
 		}
 	}
 
@@ -335,6 +335,10 @@ public class WebServiceGenerator
 		String classPath = classesPath + File.pathSeparator + cxfClassPath + File.pathSeparator + javaToolPath;
 		String packageName = EcoreUtil.determinePackageName(getScriptContext().getFocusDomain());
 
+		getScriptContext().logInfo("Cxf Home: " + cxfHome);
+		getScriptContext().logInfo("CXF Class path: " + classPath);
+		getScriptContext().logInfo("Class path: " + classPath);
+		
 		String cmd = cxfHome + File.separator + "bin" + File.separator	+ "java2ws.bat";
 		String argStr = " -wsdl -server -client -ant -cp " + classPath;
 		argStr += " -classdir " + classesPath;
