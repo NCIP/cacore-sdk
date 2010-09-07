@@ -10,11 +10,7 @@ http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
 	<import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" />
 	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" /> 
 
-$SpringBean:{
-	<jaxws:endpoint 
-	  id="$it.beanId$" 
-	  implementor="$it.beanImpl$" 
-	  address="/$it.beanAddress$" />
-}$	
+	$beanId, beanImpl, beanAddress: { b, bi, ba | <jaxws:endpoint  id="$b$" implementor="$bi$" address="$ba$" />
+}$
   
 </beans>

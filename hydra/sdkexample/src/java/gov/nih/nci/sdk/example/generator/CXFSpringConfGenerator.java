@@ -50,24 +50,36 @@ public class CXFSpringConfGenerator
 
 	public void runProcess()
 	{
-		generateSpringServerConf(getScriptContext().getTemplateGroup());
-		generateSpringClientConf(getScriptContext().getTemplateGroup());
-		generateSpringWebConf(getScriptContext().getTemplateGroup());
-		generateBuildScripts(getScriptContext().getTemplateGroup());
+
+		java.util.Set<String> processedFocusDomainSet = (java.util.Set<String>) getScriptContext().getMemory().get("processedFocusDomainSet");
+
+		if (processedFocusDomainSet == null)
+		{
+			processedFocusDomainSet = new java.util.HashSet<String>();
+			getScriptContext().getMemory().put("processedFocusDomainSet", processedFocusDomainSet);
+		}
+
+		processedFocusDomainSet.add(getScriptContext().getFocusDomain());
+
+		if (processedFocusDomainSet.containsAll(getScriptContext().retrieveDomainSet()) == true)
+		{ //All domains have been processed so now we can compile and generate WSDL
+			generateSpringServerConf();
+			generateSpringClientConf(getScriptContext().getTemplateGroup());
+			generateSpringWebConf(getScriptContext().getTemplateGroup());
+			generateBuildScripts(getScriptContext().getTemplateGroup());
+		}
 	}
 
-	private void generateSpringServerConf(StringTemplateGroup group)
+	private void generateSpringServerConf()
 	{
-		StringTemplate template = group.getInstanceOf("SpringBeanServerConf");
-		SpringBean bean = new SpringBean();
-		bean.setBeanId(GeneratorUtil.convertFirstCharToLowerCase(getScriptContext().getFocusDomain()) + "Service");
-		bean.setBeanImpl(GeneratorUtil.getServicePackageName(getScriptContext().getFocusDomain()) + "." + getScriptContext().getFocusDomain() + "ServiceImpl");
-		
-		bean.setBeanAddress(getScriptContext().getFocusDomain() + "Service");
+		StringTemplate template = getScriptContext().getTemplateGroup().getInstanceOf("SpringBeanServerConf");
 
-		SpringBean[] elements = new SpringBean[] { bean };
-
-		template.setAttribute("SpringBean", elements);
+		for (String focusDomain: getScriptContext().retrieveDomainSet())
+		{
+			template.setAttribute("beanId", GeneratorUtil.convertFirstCharToLowerCase(focusDomain) + "Service");
+			template.setAttribute("beanImpl", GeneratorUtil.getServicePackageName(focusDomain) + "." + focusDomain + "ServiceImpl");
+			template.setAttribute("beanAddress", focusDomain + "Service");
+		}
 
 		File targetBase = new File(getScriptContext().getTargetBase());
 		String outputDir = new File(targetBase.getAbsolutePath() + WEBINF_PATH).getAbsolutePath();
@@ -77,27 +89,25 @@ public class CXFSpringConfGenerator
 	private void generateSpringClientConf(StringTemplateGroup group)
 	{
 		StringTemplate template = group.getInstanceOf("SpringBeanClientConf");
-		SpringBean bean = new SpringBean();
-		bean.setBeanId(getScriptContext().getFocusDomain() + "Client");
-		bean.setServiceClass(GeneratorUtil.getServicePackageName(getScriptContext().getFocusDomain()) +
-							 "." + getScriptContext().getFocusDomain() + "Service");
-		
-		String address = "http://" + getScriptContext().getProperties().getProperty("CATALINA_ADDRESS")
-				+ ":"
-				+ getScriptContext().getProperties().getProperty("CATALINA_PORT")
-				+ "/"
-				+ getScriptContext().getProperties().getProperty("APPLICATION_NAME")
-				+ "/"
-				+ getScriptContext().getFocusDomain() + "Service";
-		
-		bean.setServiceAddress(address);
 
-		SpringBean[] elements = new SpringBean[] { bean };
+		for (String focusDomain: getScriptContext().retrieveDomainSet())
+		{
+			template.setAttribute("beanId", focusDomain + "Client");
+			template.setAttribute("serviceClass", GeneratorUtil.getServicePackageName(focusDomain) + "." + focusDomain + "Service");
+		
+			String address = "http://" + getScriptContext().getProperties().getProperty("CATALINA_ADDRESS")
+					+ ":"
+					+ getScriptContext().getProperties().getProperty("CATALINA_PORT")
+					+ "/"
+					+ getScriptContext().getProperties().getProperty("APPLICATION_NAME")
+					+ "/"
+					+ getScriptContext().getFocusDomain() + "Service";
 
-		template.setAttribute("SpringBean", elements);
+			template.setAttribute("serviceAddress", address);
+		}
+		
 		String outputDir = GeneratorUtil.getServiceClientPath(getScriptContext());
-		GeneratorUtil.writeFile(outputDir, "client-beans.xml",
-				template.toString());
+		GeneratorUtil.writeFile(outputDir, "client-beans.xml", template.toString());
 	}
 
 	private void generateSpringWebConf(StringTemplateGroup group) {
