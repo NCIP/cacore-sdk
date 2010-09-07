@@ -373,6 +373,7 @@
 
 	<target name="clean-plugin">
 	   <!-- use this to clean up the plugins -->
+	   <delete dir="${installDir}" />
 	</target>
 
 	<target name="deployPlugin" depends="clean-plugin" >
