@@ -1,0 +1,1 @@
+public abstract $returnType$ $name$($param$);
