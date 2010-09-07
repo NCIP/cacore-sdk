@@ -143,4 +143,9 @@ public class ScriptContext
 	{
 		return getTemplateGroup().getInstanceOf(_templateName);
 	}
+
+	public java.util.Set<String> retrieveDomainSet()
+	{
+		return new java.util.HashSet<String>(getGeneratorContext().getDomainSet());
+	}
 }

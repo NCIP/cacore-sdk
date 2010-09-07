@@ -93,9 +93,8 @@ public class WebServiceGenerator
 		generateWebServiceInterface(getScriptContext().getTemplateGroup());
 		generateWebServiceAbstract(getScriptContext().getTemplateGroup());
 		generateWebServiceImpl(getScriptContext().getTemplateGroup());
-		compileWebServiceInterface();
-		generateWebServiceArtifacts(getScriptContext().getTemplateGroup());
 		generateWebServiceClient(getScriptContext().getTemplateGroup());
+		compileWebServiceInterface();
 		
 		getScriptContext().logInfo("Webservice generation is completed!");
 	}
@@ -170,7 +169,7 @@ public class WebServiceGenerator
 				//take the class level default into account.  We really
 				//need to write a method to handle the assignment of
 				//defaults.  This should really be in the SDKUtil class
-				//John is workin on.  Once he has created this class I
+				//John is working on.  Once he has created this class I
 				//will add this utility there.  Right now I just want
 				//to get this doing something so that I can explore how
 				//EOperations work.
@@ -178,9 +177,18 @@ public class WebServiceGenerator
 
 				if (isService == true)
 				{
-					StringTemplate operationTemplate = _group.getInstanceOf("WebServiceAbstractOperation");
-					operationTemplate.setAttribute("returnType", eOperation.getEType().getInstanceClassName());
+					boolean voidOperation = ("void".equalsIgnoreCase(eOperation.getEType().getInstanceClassName()) == true);
+
+					String operationTemplateName = (voidOperation == true) ? "WebServiceAbstractVoidOperation" : "WebServiceAbstractOperation";
+					
+					StringTemplate operationTemplate = _group.getInstanceOf(operationTemplateName);
 					operationTemplate.setAttribute("name", eOperation.getName());
+					
+					if (voidOperation == false)
+					{
+						operationTemplate.setAttribute("returnType", eOperation.getEType().getInstanceClassName());
+						operationTemplate.setAttribute("dummyValue", getDummyValue(eOperation.getEType().getInstanceClassName()));
+					}
 
 					for (EParameter eParameter: eOperation.getEParameters())
 					{
@@ -234,70 +242,87 @@ public class WebServiceGenerator
 
 	private void compileWebServiceInterface()
 	{
-		StandardJavaFileManager fileManager = null;
-		
-		try
+		java.util.Set<String> processedFocusDomainSet = (java.util.Set<String>) getScriptContext().getMemory().get("processedFocusDomainSet");
+
+		if (processedFocusDomainSet == null)
 		{
-			String jaxbPojoPath = GeneratorUtil.getJaxbPojoPath(getScriptContext());
-			String servicePath = GeneratorUtil.getServicePath(getScriptContext());
-			String serviceImplPath = GeneratorUtil.getServiceImplPath(getScriptContext());
-			String projectRoot = getScriptContext().getProperties().getProperty("PROJECT_ROOT");
+			processedFocusDomainSet = new java.util.HashSet<String>();
+			getScriptContext().getMemory().put("processedFocusDomainSet", processedFocusDomainSet);
+		}
+
+		processedFocusDomainSet.add(getScriptContext().getFocusDomain());
+
+		if (processedFocusDomainSet.containsAll(getScriptContext().retrieveDomainSet()) == true)
+		{ //All domains have been processed so now we can compile and generate WSDL
 			
-			List<String> compilerFiles = GeneratorUtil.getFiles(jaxbPojoPath, new String[] { "java" });
-			compilerFiles.addAll(GeneratorUtil.getFiles(servicePath, new String[] { "java" }));
+			StandardJavaFileManager fileManager = null;
 
-			getScriptContext().logInfo("Compiling files: " + compilerFiles);
-			// Check if output directory exist, create it
-			GeneratorUtil.createOutputDir(projectRoot + File.separator + "classes");
-
-			List<String> options = new ArrayList<String>();
-			options.add("-classpath");
-			String classPathStr = GeneratorUtil.getFiles(new java.io.File(getScriptContext().getGeneratorBase()).getAbsolutePath() +
-					File.separator + "lib",
-					new String[] { "jar" }, File.pathSeparator)
-					+ File.pathSeparator
-					+ new java.io.File(projectRoot + File.separatorChar + "classes").getAbsolutePath();
-
-
-			getScriptContext().logInfo("compiler classpath is: " + classPathStr);
-			
-			options.add(classPathStr);
-
-			options.add("-d");
-			options.add(projectRoot	+ File.separator + "classes");
-
-			options.add("-s");
-			options.add(projectRoot	+ File.separator + "src/generated");
-
-			JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-			DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
-			fileManager = compiler.getStandardFileManager(diagnostics, null, null);
-			Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromStrings(compilerFiles);
-			JavaCompiler.CompilationTask task = compiler.getTask(null, fileManager, diagnostics, options, null, compilationUnits);
-			boolean success = task.call();
-
-			for (Diagnostic diagnostic : diagnostics.getDiagnostics())
+			try
 			{
-				getScriptContext().logInfo(diagnostic.getCode());
-				getScriptContext().logInfo(diagnostic.getKind().toString());
-				getScriptContext().logInfo(diagnostic.getPosition() + "");
-				getScriptContext().logInfo(diagnostic.getStartPosition() + "");
-				getScriptContext().logInfo(diagnostic.getEndPosition() + "");
-				getScriptContext().logInfo(diagnostic.getSource().toString());
-				getScriptContext().logInfo(diagnostic.getMessage(null));
+				String jaxbPojoPath = GeneratorUtil.getJaxbPojoPath(getScriptContext());
+				String servicePath = GeneratorUtil.getServicePath(getScriptContext());
+				String serviceImplPath = GeneratorUtil.getServiceImplPath(getScriptContext());
+				String projectRoot = getScriptContext().getProperties().getProperty("PROJECT_ROOT");
+
+				List<String> compilerFiles = GeneratorUtil.getFiles(jaxbPojoPath, new String[] { "java" });
+				compilerFiles.addAll(GeneratorUtil.getFiles(servicePath, new String[] { "java" }));
+				compilerFiles.addAll(GeneratorUtil.getFiles(serviceImplPath, new String[] { "java" }));
+
+				getScriptContext().logInfo("Compiling files: " + compilerFiles);
+				// Check if output directory exist, create it
+				GeneratorUtil.createOutputDir(projectRoot + File.separator + "classes");
+
+				List<String> options = new ArrayList<String>();
+				options.add("-classpath");
+				String classPathStr = GeneratorUtil.getFiles(new java.io.File(getScriptContext().getGeneratorBase()).getAbsolutePath() +
+						File.separator + "lib",
+						new String[] { "jar" }, File.pathSeparator)
+						+ File.pathSeparator
+						+ new java.io.File(projectRoot + File.separatorChar + "classes").getAbsolutePath();
+
+
+				getScriptContext().logInfo("compiler classpath is: " + classPathStr);
+
+				options.add(classPathStr);
+
+				options.add("-d");
+				options.add(projectRoot	+ File.separator + "classes");
+
+				options.add("-s");
+				options.add(projectRoot	+ File.separator + "src/generated");
+
+				JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+				DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
+				fileManager = compiler.getStandardFileManager(diagnostics, null, null);
+				Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromStrings(compilerFiles);
+				JavaCompiler.CompilationTask task = compiler.getTask(null, fileManager, diagnostics, options, null, compilationUnits);
+				boolean success = task.call();
+
+				for (Diagnostic diagnostic : diagnostics.getDiagnostics())
+				{
+					getScriptContext().logInfo(diagnostic.getCode());
+					getScriptContext().logInfo(diagnostic.getKind().toString());
+					getScriptContext().logInfo(diagnostic.getPosition() + "");
+					getScriptContext().logInfo(diagnostic.getStartPosition() + "");
+					getScriptContext().logInfo(diagnostic.getEndPosition() + "");
+					getScriptContext().logInfo(diagnostic.getSource().toString());
+					getScriptContext().logInfo(diagnostic.getMessage(null));
+				}
 			}
-		}
-		catch (Throwable t)
-		{
-			getScriptContext().logError(t);
-		}
-		finally
-		{
-			try	{ fileManager.close(); } catch (Throwable t) {}
+			catch (Throwable t)
+			{
+				getScriptContext().logError(t);
+			}
+			finally
+			{
+				try	{ fileManager.close(); } catch (Throwable t) {}
+			}
+
+			generateWebServiceArtifacts();
 		}
 	}
 
-	private void generateWebServiceArtifacts(StringTemplateGroup _group)
+	private void generateWebServiceArtifacts()
 	{
 		String projectRoot = getScriptContext().getProperties().getProperty("PROJECT_ROOT");
 		String cxfHome = new java.io.File(getScriptContext().getGeneratorBase()).getAbsolutePath();
@@ -369,5 +394,48 @@ public class WebServiceGenerator
 	private String getImportStmt()
 	{
 		return "import " + packageName + "."+Generator.JAXBPOJO_PACKAGE_NAME+".*;";
+	}
+
+	private String getDummyValue(String _type)
+	{
+		String dummyValue = "\"\"";
+
+		if ("byte".equals(_type) == true ||
+				"java.lang.Byte".equals(_type) == true ||
+				"int".equals(_type) == true ||
+				"java.lang.Integer".equals(_type) == true ||
+				"short".equals(_type) == true ||
+			  "java.lang.Short".equals(_type) == true)
+		{
+			dummyValue = "0";
+		}
+		else if ("long".equals(_type) == true ||
+				 "java.lang.Long".equals(_type) == true)
+		{
+			dummyValue = "0l";
+		}
+		else if ("double".equals(_type) == true ||
+				"java.lang.Double".equals(_type) == true ||
+				"float".equals(_type) == true ||
+				 "java.lang.Float".equals(_type) == true)
+		{
+				dummyValue = "0.0";
+		}
+		else if ("char".equals(_type) == true ||
+				 "java.lang.Character".equals(_type) == true)
+		{
+			dummyValue = "\'\'";
+		}
+		else if ("boolean".equals(_type) == true ||
+				 "java.lang.Boolean".equals(_type) == true)
+		{
+			dummyValue = "\'\'";
+		}
+		else
+		{
+			dummyValue = "new " + _type + "()";
+		}
+
+		return dummyValue;
 	}
 }
