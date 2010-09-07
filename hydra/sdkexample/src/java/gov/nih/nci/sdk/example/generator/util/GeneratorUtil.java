@@ -30,6 +30,7 @@ public class GeneratorUtil
 			FileWriter fileWriter = new FileWriter(file);
 			bufferedWriter = new BufferedWriter(fileWriter);
 			bufferedWriter.write(_content);
+			bufferedWriter.flush();
 		}
 		catch (Throwable t)
 		{
@@ -84,7 +85,7 @@ public class GeneratorUtil
 		return files;
 	}
 
-	public static String getFiles(String _dir, String[] _extensions, String _seperator)
+	public static String getFiles(String _dir, String[] _extensions, String _separator)
 	{
 		java.util.logging.Logger.getLogger("DEBUG").info("Directory _dir is: " + _dir);
 
@@ -97,7 +98,7 @@ public class GeneratorUtil
 			while (iter.hasNext() == true)
 			{
 				File file = (File) iter.next();
-				files.append(file.getAbsolutePath()).append(_seperator);
+				files.append(file.getAbsolutePath()).append(_separator);
 			}
 		}
 		catch(Throwable t)
@@ -107,7 +108,7 @@ public class GeneratorUtil
 
 		java.util.logging.Logger.getLogger("DEBUG").info("Returning these files: " + files);
 
-		return files.toString();
+		return files.toString().replaceAll(":$", "");
 	}
 
 	public static String getJaxbPojoPath(ScriptContext _scriptContext)

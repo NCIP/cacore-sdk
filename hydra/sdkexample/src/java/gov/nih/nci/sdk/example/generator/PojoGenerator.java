@@ -37,13 +37,13 @@ public class PojoGenerator
 		runProcess("pojo", GeneratorUtil.getPojoPath(getScriptContext()));
 	}
 
-	protected void runProcess(String pojoPackageName, String outputDir)
+	protected void runProcess(String _pojoPackageName, String _outputDir)
 	{
 		StringTemplate template = getScriptContext().getTemplateGroup().getInstanceOf("pojo");
 		String domain = getScriptContext().getFocusDomain();
 		String packageName = EcoreUtil.determinePackageName(domain);
 		String className = EcoreUtil.determineClassName(domain);
-		template.setAttribute("packageName", packageName);
+		template.setAttribute("packageName", packageName + "." + _pojoPackageName);
 		template.setAttribute("className", className);
 		List<EAttribute> eAttributeList = EcoreUtil.getEClass(getScriptContext().getEPackage(), domain).getEAttributes();
 
@@ -63,7 +63,7 @@ public class PojoGenerator
 			template.setAttribute("pojoOperation", pojoOperationTemplate);
 		}
 		
-		GeneratorUtil.writeFile(outputDir, className + ".java", template.toString());
+		GeneratorUtil.writeFile(_outputDir, className + ".java", template.toString());
 	}
 
 	protected void postProcess()

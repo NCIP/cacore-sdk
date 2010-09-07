@@ -178,7 +178,7 @@ public class WebServiceGenerator
 
 				if (isService == true)
 				{
-					StringTemplate operationTemplate = _group.getInstanceOf("WebServiceAbstractImplOperation");
+					StringTemplate operationTemplate = _group.getInstanceOf("WebServiceAbstractOperation");
 					operationTemplate.setAttribute("returnType", eOperation.getEType().getInstanceClassName());
 					operationTemplate.setAttribute("name", eOperation.getName());
 
@@ -245,9 +245,8 @@ public class WebServiceGenerator
 			
 			List<String> compilerFiles = GeneratorUtil.getFiles(jaxbPojoPath, new String[] { "java" });
 			compilerFiles.addAll(GeneratorUtil.getFiles(servicePath, new String[] { "java" }));
-			compilerFiles.addAll(GeneratorUtil.getFiles(serviceImplPath, new String[] { "java" }));
-			String[] files1 = compilerFiles.toArray(new String[compilerFiles.size()]);
 
+			getScriptContext().logInfo("Compiling files: " + compilerFiles);
 			// Check if output directory exist, create it
 			GeneratorUtil.createOutputDir(projectRoot + File.separator + "classes");
 
@@ -257,8 +256,11 @@ public class WebServiceGenerator
 					File.separator + "lib",
 					new String[] { "jar" }, File.pathSeparator)
 					+ File.pathSeparator
-					+ projectRoot 
-					+ File.separatorChar + "classes";
+					+ new java.io.File(projectRoot + File.separatorChar + "classes").getAbsolutePath();
+
+
+			getScriptContext().logInfo("compiler classpath is: " + classPathStr);
+			
 			options.add(classPathStr);
 
 			options.add("-d");
