@@ -21,11 +21,23 @@ public class ModelDetailsGroupPanel extends GroupPanel {
 		super(parent, style, data, title);
 	}
 	
-	public void create() {
-		String[] meaningTabs = Constants.meaningTabs;
-		
-		categoryTabFolder = new TabFolder(getUIComposite(), SWT.TOP);
+	public void paint(Composite composite) {
+		categoryTabFolder = new TabFolder(composite, SWT.TOP);
 		categoryTabFolder.setLayoutData(UIHelper.getFieldGridData());
+		
+		categoryTabFolder.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent event) {
+				TabItem[] selected = categoryTabFolder.getSelection();
+				if (selected.length > 0) {
+					Event eve = new Event();
+					eve.type = SWT.Selection;
+					eve.text = selected[0].getText();
+					notifyListeners(SWT.Selection, eve);
+				}
+			}
+		});
+		
+		String[] meaningTabs = Constants.meaningTabs;
 		
 		for (int i = 0; i < meaningTabs.length; i++) {
 			TabItem item = new TabItem(categoryTabFolder, SWT.NONE);
@@ -37,15 +49,6 @@ public class ModelDetailsGroupPanel extends GroupPanel {
 			button.setText("Tab " + meaningTabs[i]);
 			item.setControl(control);
 		}
-		
-		categoryTabFolder.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent event) {
-				TabItem[] selected = categoryTabFolder.getSelection();
-				if (selected.length > 0) {
-					System.out.println("DETAILS Selected tab: " + selected[0].getText());
-				}
-			}
-		});
 		
 		if (categoryTabFolder.getItemCount() > 0) {
 			categoryTabFolder.setSelection(0);
@@ -66,12 +69,15 @@ public class ModelDetailsGroupPanel extends GroupPanel {
 		if (event == null) return;
 		
 		if (event instanceof ModelSelectionEvent) {
+			System.out.println("DETAILS received: " + event);
 			ModelSelectionEvent mse = (ModelSelectionEvent)event;
-			((Group)super.getUIComposite()).setText(formatGroupTitle(mse.getCategory()));
+			((Group)super.getUIComposite()).setText(formatGroupTitle(mse.getClassName(), mse.getCategory()));
+			
+			categoryTabFolder.dispose();
 		}
 	}
 	
-	private String formatGroupTitle(String category) {
-		return category + " Viewer";
+	private String formatGroupTitle(String className, String category) {
+		return className + " - " + category + " Viewer";
 	}
 }
