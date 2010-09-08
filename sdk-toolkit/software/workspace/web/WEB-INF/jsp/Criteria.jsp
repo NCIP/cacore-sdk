@@ -11,8 +11,8 @@
 <script type="text/javascript" src="iso-21090-datatype.2.1.js"></script>
 <%
 JSPUtils jspUtils= null;
-List<Field> fieldNames=new ArrayList<Field>();
-List<String> domainNames=new ArrayList<String>();
+List fieldNames=new ArrayList();
+List domainNames=new ArrayList();
 String message=null, selectedSearchDomain=null;
 String className = (String)request.getAttribute("klassName");
 
