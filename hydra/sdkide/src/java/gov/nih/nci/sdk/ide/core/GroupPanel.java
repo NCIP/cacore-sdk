@@ -36,6 +36,4 @@ public abstract class GroupPanel extends ActiveUI {
 		layout.horizontalSpacing = 10;
 		return layout;
 	}
-	
-	public abstract void create();
 }

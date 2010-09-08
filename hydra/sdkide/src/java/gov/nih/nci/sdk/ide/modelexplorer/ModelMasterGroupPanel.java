@@ -17,12 +17,34 @@ public class ModelMasterGroupPanel extends GroupPanel {
 		super(parent, style, data, title);
 	}
 	
-	public void create() {
+	public void paint(Composite composite) {
+		final Tree domainTree = new Tree(composite, SWT.SINGLE);
+		domainTree.setLayoutData(UIHelper.getFieldGridData());
+		
+		domainTree.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent event) {
+				TreeItem[] allSelected = domainTree.getSelection();
+				if (allSelected.length > 0) {
+					TreeItem selectedItem = allSelected[0];
+					String modelName = "";
+					String categoryName = "";
+					if (selectedItem.getItemCount() == 0) {
+						modelName = selectedItem.getParentItem().getText();
+						categoryName = selectedItem.getText();
+					}
+					else {
+						modelName = selectedItem.getText();
+						categoryName = "Meaning";
+					}
+					Event eve = new ModelSelectionEvent(null, modelName, categoryName);
+					System.out.println("MASTER   sending: " + eve);
+					notifyListeners(SWT.Selection, eve);
+				}
+			}
+		});
+		
 		String[] domains = {"Person", "Contact", "Address", "Doctor"};
 		String[] categories = Constants.categories;
-		
-		final Tree domainTree = new Tree(getUIComposite(), SWT.SINGLE);
-		domainTree.setLayoutData(UIHelper.getFieldGridData());
 		
 		for (int i = 0; i < domains.length; i++) {
 			TreeItem domain = new TreeItem(domainTree, 0);
@@ -34,31 +56,10 @@ public class ModelMasterGroupPanel extends GroupPanel {
 				if (i == 0 && j == 0) {
 					domainTree.setSelection(category);
 					String categoryName = category.getText();
-					Event event = new ModelSelectionEvent(null, categoryName);
-					event.data = categoryName;
-					event.item = category;
+					Event event = new ModelSelectionEvent(null, domain.getText(), categoryName);
 					domainTree.notifyListeners(SWT.Selection, event);
 				}
 			}
 		}
-		
-		domainTree.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent event) {
-				TreeItem[] selected = domainTree.getSelection();
-				if (selected.length > 0) {
-					String categoryName = getSelectionData(selected[0]);
-					Event eve = new ModelSelectionEvent(null, categoryName);
-					eve.data = categoryName;
-					System.out.println("MASTER eve.data: " + eve.data);
-					getUIComposite().notifyListeners(SWT.Selection, eve);
-				}
-			}
-		});
-	}
-	
-	private String getSelectionData(TreeItem itemSelected) {
-		String text = itemSelected.getText();
-		System.out.println("MASTER Tree item text: " + text);
-		return text;
 	}
 }

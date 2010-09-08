@@ -35,6 +35,4 @@ public abstract class CategoryTabItem extends ActiveUI {
 		layout.horizontalSpacing = 10;
 		return layout;
 	}
-	
-	public abstract void create();
 }
