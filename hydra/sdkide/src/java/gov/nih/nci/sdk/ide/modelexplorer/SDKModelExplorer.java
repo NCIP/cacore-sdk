@@ -1,21 +1,16 @@
 package gov.nih.nci.sdk.ide.modelexplorer;
 
-import gov.nih.nci.sdk.ide.core.Constants;
 import gov.nih.nci.sdk.ide.core.GroupPanel;
 import gov.nih.nci.sdk.ide.core.SDKScreen;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 public class SDKModelExplorer extends SDKScreen {
 	private Object data;
-	
-	public SDKModelExplorer(Object data) {
-		super();
-		this.data = data;
-	}
 	
 	public SDKModelExplorer(Shell parent, String title, Object data) {
 		super(parent, title);
@@ -40,4 +35,5 @@ public class SDKModelExplorer extends SDKScreen {
 		
 		masterPanel.addListener(SWT.Selection, detailsPanel);
 	}
+
 }

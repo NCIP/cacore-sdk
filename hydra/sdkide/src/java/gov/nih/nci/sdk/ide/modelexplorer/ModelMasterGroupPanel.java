@@ -1,6 +1,5 @@
 package gov.nih.nci.sdk.ide.modelexplorer;
 
-import gov.nih.nci.sdk.ide.core.Constants;
 import gov.nih.nci.sdk.ide.core.GroupPanel;
 import gov.nih.nci.sdk.ide.core.UIHelper;
 
