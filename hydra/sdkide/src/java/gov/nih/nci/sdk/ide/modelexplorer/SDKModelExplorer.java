@@ -6,7 +6,6 @@ import gov.nih.nci.sdk.ide.core.SDKScreen;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 public class SDKModelExplorer extends SDKScreen {
@@ -28,12 +27,7 @@ public class SDKModelExplorer extends SDKScreen {
 		composite.setLayout(layout);
 
 		GroupPanel masterPanel = new ModelMasterGroupPanel(composite, SWT.NONE, data, Constants.MODEL_MASTER_PANEL_TITLE);
-		masterPanel.create();
-		
 		GroupPanel detailsPanel = new ModelDetailsGroupPanel(composite, SWT.NONE, data, Constants.MODEL_DETAILS_PANEL_TITLE);
-		detailsPanel.create();
-		
 		masterPanel.addListener(SWT.Selection, detailsPanel);
 	}
-
 }
