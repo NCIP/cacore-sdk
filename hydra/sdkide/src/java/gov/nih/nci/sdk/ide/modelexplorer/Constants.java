@@ -1,4 +1,4 @@
-package gov.nih.nci.sdk.ide.core;
+package gov.nih.nci.sdk.ide.modelexplorer;
 
 public class Constants {
 	public static final int MODEL_EXPLORER_SCREEN_WIDTH = 800;

@@ -1,6 +1,6 @@
 package gov.nih.nci.sdk.ide.actions;
 
-import gov.nih.nci.sdk.ide.core.Constants;
+import gov.nih.nci.sdk.ide.modelexplorer.Constants;
 import gov.nih.nci.sdk.ide.modelexplorer.SDKModelExplorer;
 
 import org.eclipse.jface.action.IAction;

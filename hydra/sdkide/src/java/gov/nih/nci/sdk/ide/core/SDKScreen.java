@@ -16,11 +16,6 @@ public abstract class SDKScreen extends Dialog {
 		setTitle(title);
 	}
 	
-	public SDKScreen() {
-		this(new Shell(new Display()), Constants.SDK_SCREEN_TITLE);
-		open();
-	}
-	
 	public void setTitle(String title) {
 		this.title = title;
 	}
