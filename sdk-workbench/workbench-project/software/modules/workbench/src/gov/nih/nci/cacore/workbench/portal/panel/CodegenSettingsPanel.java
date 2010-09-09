@@ -125,8 +125,8 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
 			enableWebServiceInterfaceCheckBox.setEnabled(false);
 			enableWebServiceInterfaceCheckBox.setSelected(false);
 			
-			generateHibernateValidatorCheckBox.setEnabled(false);
-			generateHibernateValidatorCheckBox.setSelected(false);
+			generateWsddCheckBox.setEnabled(false);
+			generateWsddCheckBox.setSelected(false);
 			generateCastorMappingCheckBox.setEnabled(false);
 			generateCastorMappingCheckBox.setSelected(false);
 			generateXsdWithPermissibleValuesCheckBox.setEnabled(false);
@@ -138,7 +138,7 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
 		} else {
 			enableWebServiceInterfaceCheckBox.setEnabled(true);
 			
-			generateHibernateValidatorCheckBox.setEnabled(true);
+			generateWsddCheckBox.setEnabled(true);
 			generateCastorMappingCheckBox.setEnabled(true);
 			generateXsdWithPermissibleValuesCheckBox.setEnabled(true);
 			
