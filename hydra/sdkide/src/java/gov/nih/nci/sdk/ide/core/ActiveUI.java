@@ -16,7 +16,6 @@ public abstract class ActiveUI implements Listener {
 		this.data = data;
 		
 		this.uiComposite = initUIComposite();
-		paint(uiComposite);
 	}
 	
 	public Composite getParent() {
@@ -37,7 +36,7 @@ public abstract class ActiveUI implements Listener {
 	
 	protected abstract Composite initUIComposite();
 	
-	protected abstract void paint(Composite composite);
+	public abstract void paint();
 	
 	@Override
 	public void handleEvent(Event event) {
