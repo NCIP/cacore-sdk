@@ -82,9 +82,6 @@
 				<equals arg1="${ENABLE_INSTANCE_LEVEL_SECURITY}" arg2="yes" casesensitive="false" trim="true" />
 			</or>
 			<equals arg1="${SECURITY_ENABLED}" arg2="true" casesensitive="false" trim="true" />
-			<not>
-				<equals arg1="${ISO21090_DATATYPES_ENABLED}" arg2="true" casesensitive="false" trim="true" />
-			</not>
 		</and>
 	</condition>
 	<condition property="ATTRIBUTE_LEVEL_SECURITY_ENABLED" value="true" else="false">
@@ -94,9 +91,6 @@
 				<equals arg1="${ENABLE_ATTRIBUTE_LEVEL_SECURITY}" arg2="yes" casesensitive="false" trim="true" />
 			</or>
 			<equals arg1="${SECURITY_ENABLED}" arg2="true" casesensitive="false" trim="true" />
-			<not>
-				<equals arg1="${ISO21090_DATATYPES_ENABLED}" arg2="true" casesensitive="false" trim="true" />
-			</not>
 		</and>
 	</condition>
 	<condition property="ATTRIBUTE_LEVEL_SECURITY_START" value="" else="${xml.comment.start}">
@@ -112,15 +106,10 @@
 		</or>
 	</condition>
 	<condition property="WRITABLE_API_EXTENSION_ENABLED" value="true" else="false">
-		<and>
-			<or>
-				<equals arg1="${ENABLE_WRITABLE_API_EXTENSION}" arg2="true" casesensitive="false" trim="true" />
-				<equals arg1="${ENABLE_WRITABLE_API_EXTENSION}" arg2="yes" casesensitive="false" trim="true" />
-			</or>
-			<not>
-				<equals arg1="${ISO21090_DATATYPES_ENABLED}" arg2="true" casesensitive="false" trim="true" />
-			</not>
-		</and>
+		<or>
+			<equals arg1="${ENABLE_WRITABLE_API_EXTENSION}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${ENABLE_WRITABLE_API_EXTENSION}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
 	</condition>
 	<condition property="SERVICE_INTERFACE" value="${extension.api.interface}" else="${sdk.api.interface}">
 		<equals arg1="${WRITABLE_API_EXTENSION_ENABLED}" arg2="true" casesensitive="false" trim="true" />
