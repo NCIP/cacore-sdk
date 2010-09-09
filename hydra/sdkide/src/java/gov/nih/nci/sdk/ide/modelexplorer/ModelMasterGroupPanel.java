@@ -17,7 +17,9 @@ public class ModelMasterGroupPanel extends GroupPanel {
 		super(parent, style, data, title);
 	}
 	
-	public void paint(Composite composite) {
+	public void paint() {
+		Composite composite = super.getUIComposite();
+		
 		final Tree domainTree = new Tree(composite, SWT.SINGLE);
 		domainTree.setLayoutData(UIHelper.getFieldGridData());
 		
@@ -37,13 +39,12 @@ public class ModelMasterGroupPanel extends GroupPanel {
 						categoryName = "Meaning";
 					}
 					Event eve = new ModelSelectionEvent(null, modelName, categoryName);
-					System.out.println("MASTER   sending: " + eve);
 					notifyListeners(SWT.Selection, eve);
 				}
 			}
 		});
 		
-		String[] domains = {"Person", "Contact", "Address", "Doctor"};
+		String[] domains = getDomains();
 		String[] categories = Constants.categories;
 		
 		for (int i = 0; i < domains.length; i++) {
@@ -61,5 +62,11 @@ public class ModelMasterGroupPanel extends GroupPanel {
 				}
 			}
 		}
+	}
+	
+	private String[] getDomains() {
+		//TODO: hard-coded for now.
+		String[] domains = {"Person", "Contact", "Address", "Doctor"};
+		return domains;
 	}
 }

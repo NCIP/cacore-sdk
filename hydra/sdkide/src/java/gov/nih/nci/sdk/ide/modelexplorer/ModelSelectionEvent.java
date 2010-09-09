@@ -8,13 +8,13 @@ import org.eclipse.swt.widgets.Event;
 
 public class ModelSelectionEvent extends Event {
 	private EClass eClass;
-	private String className;
+	private String modelName;
 	private String category;
 	private Date timestamp;
 	
-	public ModelSelectionEvent(EClass eClass, String className, String category) {
+	public ModelSelectionEvent(EClass eClass, String modelName, String category) {
 		this.eClass = eClass;
-		this.className = className;
+		this.modelName = modelName;
 		this.category = category;
 		this.timestamp = new Date();
 		super.type = SWT.Selection;
@@ -24,8 +24,8 @@ public class ModelSelectionEvent extends Event {
 		return eClass;
 	}
 
-	public String getClassName() {
-		return className;
+	public String getModelName() {
+		return modelName;
 	}
 
 	public String getCategory() {
@@ -36,10 +36,14 @@ public class ModelSelectionEvent extends Event {
 		return timestamp;
 	}
 	
+	public String getEventName() {
+		return modelName + " - " + category;
+	}
+	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("timestamp=").append(timestamp).append(", ");
-		sb.append("className=").append(className).append(", ");
+		sb.append("className=").append(modelName).append(", ");
 		sb.append("category=").append(category);
 		return sb.toString();
 	}
