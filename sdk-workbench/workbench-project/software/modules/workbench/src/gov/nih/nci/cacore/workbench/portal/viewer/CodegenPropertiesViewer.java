@@ -408,13 +408,9 @@ public class CodegenPropertiesViewer extends WorkbenchViewerBaseComponent {
 					 "Enabling ISO 21090 Data Type support causes the following functionality\n"
 					+"to be disabled:\n"
 					+"  *  Web Service API\n"
-					+"  *  Writable API\n"
-					+"  *  CLM API\n"
-					+"  *  Castor Mapping\n"
-					+"  *  Permissible Values Validator\n"
-					+"  *  Hibernate Validator\n"
-					+"  *  WSSD Generation\n"
-					+"  *  Instance and Attribute Level Security");
+					+"  *  WSDD Generation\n"
+					+"  *  Castor Mapping Generation\n"
+					+"  *  Permissible Values Validator Activation\n");
 		}
     }
 
