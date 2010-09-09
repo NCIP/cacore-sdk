@@ -9,14 +9,28 @@ import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 
 public abstract class CategoryTabItem extends ActiveUI {
+	private String title;
+	private TabItem theTabItem;
+	
 	public CategoryTabItem(TabFolder parent, int style, Object data, String title) {
 		super(parent, style, data);
+		this.title = title;
+		theTabItem.setText(title);
+	}
+	
+	public String getTitle() {
+		return title;
+	}
+	
+	public TabItem getTabItem() {
+		return theTabItem;
 	}
 	
 	protected Composite initUIComposite() {
 		Composite parent = getParent();
+		
 		Composite control = new Composite(parent, SWT.NONE);
-		TabItem theTabItem = new TabItem((TabFolder)parent, SWT.NONE);
+		theTabItem = new TabItem((TabFolder)parent, super.getStyle());
 		theTabItem.setControl(control);
 		
 		return control;

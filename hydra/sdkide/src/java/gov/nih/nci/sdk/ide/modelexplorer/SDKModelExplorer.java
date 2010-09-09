@@ -27,7 +27,11 @@ public class SDKModelExplorer extends SDKScreen {
 		composite.setLayout(layout);
 
 		GroupPanel masterPanel = new ModelMasterGroupPanel(composite, SWT.NONE, data, Constants.MODEL_MASTER_PANEL_TITLE);
+		masterPanel.paint();
+		
 		GroupPanel detailsPanel = new ModelDetailsGroupPanel(composite, SWT.NONE, data, Constants.MODEL_DETAILS_PANEL_TITLE);
+		detailsPanel.paint();
+		
 		masterPanel.addListener(SWT.Selection, detailsPanel);
 	}
 }
