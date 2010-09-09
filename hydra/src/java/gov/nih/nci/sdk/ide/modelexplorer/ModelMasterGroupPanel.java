@@ -1,6 +1,9 @@
 package gov.nih.nci.sdk.ide.modelexplorer;
 
+import java.util.List;
+
 import gov.nih.nci.sdk.ide.core.GroupPanel;
+import gov.nih.nci.sdk.ide.core.ModelPackageVO;
 import gov.nih.nci.sdk.ide.core.UIHelper;
 
 import org.eclipse.swt.SWT;
@@ -28,45 +31,90 @@ public class ModelMasterGroupPanel extends GroupPanel {
 				TreeItem[] allSelected = domainTree.getSelection();
 				if (allSelected.length > 0) {
 					TreeItem selectedItem = allSelected[0];
+					String packageName = "";
 					String modelName = "";
 					String categoryName = "";
-					if (selectedItem.getItemCount() == 0) {
+					if (clickedOnCategory(selectedItem)) {
+						TreeItem pkgItem = selectedItem.getParentItem().getParentItem();
+						if (pkgItem != null) packageName = pkgItem.getText();
 						modelName = selectedItem.getParentItem().getText();
 						categoryName = selectedItem.getText();
 					}
-					else {
+					else if (clickedOnModel(selectedItem)) {
+						TreeItem pkgItem = selectedItem.getParentItem();
+						if (pkgItem != null) packageName = pkgItem.getText();
 						modelName = selectedItem.getText();
-						categoryName = "Meaning";
+						categoryName = Constants.DEFAULT_CATEGORY;
 					}
-					Event eve = new ModelSelectionEvent(modelName, categoryName);
-					notifyListeners(SWT.Selection, eve);
+					else {
+						packageName = selectedItem.getText();
+						if (selectedItem.getItemCount() > 0) {
+							modelName = selectedItem.getItem(0).getText();
+							categoryName = Constants.DEFAULT_CATEGORY;
+						}
+					}
+					
+					if (!(UIHelper.isEmpty(packageName) && UIHelper.isEmpty(modelName) && UIHelper.isEmpty(categoryName))) {
+						Event eve = new ModelSelectionEvent(packageName, modelName, categoryName);
+						notifyListeners(SWT.Selection, eve);
+					}
 				}
 			}
 		});
 		
-		String[] domains = getDomains();
-		String[] categories = Constants.categories;
-		
-		for (int i = 0; i < domains.length; i++) {
-			TreeItem domain = new TreeItem(domainTree, 0);
-			domain.setText(domains[i]);
-			for (int j = 0; j < categories.length; j++) {
-				TreeItem category = new TreeItem(domain, 0);
-				category.setText(categories[j]);
-				
-				if (i == 0 && j == 0) {
-					domainTree.setSelection(category);
-					String categoryName = category.getText();
-					Event event = new ModelSelectionEvent(domain.getText(), categoryName);
-					domainTree.notifyListeners(SWT.Selection, event);
+		@SuppressWarnings("unchecked")
+		List<ModelPackageVO> dataList = (List<ModelPackageVO>)super.getData();
+		String[] categories = Constants.ALL_CATEGORIES;
+		for (int k = 0; k < dataList.size(); k++) {
+			ModelPackageVO mpVO = dataList.get(k);
+			if (mpVO.hasPackage()) {
+				TreeItem packageItem = new TreeItem(domainTree, 0);
+				packageItem.setText(mpVO.getPackageName());
+				List<String> models = mpVO.getModels();
+				for (int i = 0; i < models.size(); i++) {
+					TreeItem model = new TreeItem(packageItem, 0);
+					model.setText(models.get(i));
+					for (int j = 0; j < categories.length; j++) {
+						TreeItem category = new TreeItem(model, 0);
+						category.setText(categories[j]);
+						
+						if (k == 0 && i == 0 && j == 0) {
+							domainTree.setSelection(category);
+							String categoryName = category.getText();
+							Event event = new ModelSelectionEvent(mpVO.getPackageName(), model.getText(), categoryName);
+							domainTree.notifyListeners(SWT.Selection, event);
+						}
+					}
 				}
 			}
+			else {
+				List<String> models = mpVO.getModels();
+				for (int i = 0; i < models.size(); i++) {
+					TreeItem model = new TreeItem(domainTree, 0);
+					model.setText(models.get(i));
+					for (int j = 0; j < categories.length; j++) {
+						TreeItem category = new TreeItem(model, 0);
+						category.setText(categories[j]);
+						
+						if (k == 0 && i == 0 && j == 0) {
+							domainTree.setSelection(category);
+							String categoryName = category.getText();
+							Event event = new ModelSelectionEvent(mpVO.getPackageName(), model.getText(), categoryName);
+							domainTree.notifyListeners(SWT.Selection, event);
+						}
+					}
+				}
+			}
+			
+			
 		}
 	}
 	
-	private String[] getDomains() {
-		//TODO: hard-coded for now.
-		String[] domains = {"Person", "Contact", "Address", "Doctor"};
-		return domains;
+	private boolean clickedOnModel(TreeItem selectedItem) {
+		return (selectedItem.getItemCount() == Constants.ALL_CATEGORIES.length && Constants.ALL_CATEGORIES[0].equals(selectedItem.getItem(0).getText()))?true:false;
+	}
+	
+	private boolean clickedOnCategory(TreeItem selectedItem) {
+		return (selectedItem.getItemCount() == 0 && selectedItem.getParentItem() != null)?true:false;
 	}
 }

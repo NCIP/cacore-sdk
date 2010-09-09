@@ -1,12 +1,13 @@
 package gov.nih.nci.sdk.ide.modelexplorer.meaning;
 
+import gov.nih.nci.sdk.ide.core.CategoryTabItem;
+import gov.nih.nci.sdk.ide.modelexplorer.Constants;
+import gov.nih.nci.sdk.ide.modelexplorer.ModelSelectionEvent;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TabFolder;
-
-import gov.nih.nci.sdk.ide.core.CategoryTabItem;
-import gov.nih.nci.sdk.ide.modelexplorer.Constants;
 
 public class MeaningDomainTabItm extends CategoryTabItem {
 
@@ -20,6 +21,6 @@ public class MeaningDomainTabItm extends CategoryTabItem {
 		composite.setLayout(super.getLayout());
 		
 		Button button = new Button(composite, SWT.PUSH);
-		button.setText("Tab " + super.getTitle());
+		button.setText("Tab " + super.getTitle() + " for " + ((ModelSelectionEvent)super.getData()).getFullModelName());
 	}
 }

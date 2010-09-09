@@ -17,7 +17,7 @@ public class Constants {
 	public static final String CATEGORY_Representation = "Representation";
 	public static final String CATEGORY_Service = "Service";
 
-	public static final String[] categories = { CATEGORY_Meaning,
+	public static final String[] ALL_CATEGORIES = { CATEGORY_Meaning,
 			CATEGORY_Persistence, CATEGORY_Security, CATEGORY_Validation,
 			CATEGORY_Presentation, CATEGORY_Representation, CATEGORY_Service };
 

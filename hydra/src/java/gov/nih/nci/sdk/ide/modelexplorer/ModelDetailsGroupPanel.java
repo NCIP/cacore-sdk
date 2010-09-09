@@ -40,15 +40,15 @@ public class ModelDetailsGroupPanel extends GroupPanel {
 		
 		String eventName = event.getEventName();
 		if (!eventName.equals(currentHandledEventName)) {
-			((Group)super.getUIComposite()).setText(formatGroupTitle(event.getModelName(), event.getCategory()));
+			((Group)super.getUIComposite()).setText(formatGroupTitle(event));
 			
 			CategoryContentBuilder ccb = CategoryContentBuilderFactory.getContentBuilder(event.getCategory());
-			ccb.buildContent(super.getUIComposite(), event.getModelName());
+			ccb.buildContent(super.getUIComposite(), event);
 			currentHandledEventName = eventName;
 		}
 	}
 	
-	private String formatGroupTitle(String className, String category) {
-		return className + " - " + category + " Viewer";
+	private String formatGroupTitle(ModelSelectionEvent event) {
+		return event.getEventName() + " Viewer";
 	}
 }
