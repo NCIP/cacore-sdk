@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            label="SDK Action Set"
+            visible="true"
+            id="gov.nih.nci.sdk.ide.actionSet">
+         <menu
+               label="SDK"
+               id="sdkMenu">
+            <separator
+                  name="sdkGroup">
+            </separator>
+         </menu>
+         <action
+               label="&amp;Model Explorer"
+               icon="src/images/sdk.gif"
+               class="gov.nih.nci.sdk.ide.actions.SDKPlugInAction"
+               tooltip="Open SDK IDE"
+               menubarPath="sdkMenu/sdkGroup"
+               toolbarPath="sdkGroup"
+               id="gov.nih.nci.sdk.ide.actions.SDKPlugInAction">
+         </action>
+      </actionSet>
+   </extension>
+
+</plugin>
