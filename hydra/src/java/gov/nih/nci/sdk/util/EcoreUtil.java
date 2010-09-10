@@ -1,8 +1,13 @@
 package gov.nih.nci.sdk.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
@@ -22,6 +27,22 @@ import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
  *
  */
 public class EcoreUtil {
+	
+	/**
+	 * A business domain package name does not contain "<tt>iso21090</tt>".
+	 */
+	private static final String FORBIDDEN_PACKAGE_NAME_STRING_iso21090 = "iso21090";
+	
+	/**
+	 * A business domain package name does not contain "<tt>java</tt>".
+	 */
+	private static final String FORBIDDEN_PACKAGE_NAME_STRING_java = "java";
+	
+	/**
+	 * A regular package name does not contain these strings.
+	 */
+	private static final List<String> SKIPPED_PACKAGE_NAME_STRINGS = Arrays.asList("LogicalModel", "LogicalView", "EA_Model");
+	
 	
 	/**
 	 * Returns the root EPackage instance. 
@@ -182,5 +203,107 @@ public class EcoreUtil {
 				}
 			}
 		}
+	}
+	
+	/**
+	 * Gets all packages and their associated class names as a map. The key 
+	 * of the map is a name of a business domain package, while the value is 
+	 * a sorted set of all class names within the package. 
+	 * 
+	 * @param rootPackage  the EPackage to parse
+	 * @return map
+	 */
+	public static Map<String, SortedSet<String>> getAllDomainPackageClassNamesMap(EPackage rootPackage) {
+		Map<String, SortedSet<String>> domainPackageClassesMap = new TreeMap<String, SortedSet<String>>();
+		
+		Map<String, SortedSet<String>> map = getAllPackageClassNamesMap(rootPackage);
+		for (Map.Entry<String, SortedSet<String>> entry : map.entrySet()) {
+			String key = entry.getKey();
+			SortedSet<String> value = entry.getValue();
+			if (key.indexOf(FORBIDDEN_PACKAGE_NAME_STRING_iso21090) != -1 ||
+					key.indexOf(FORBIDDEN_PACKAGE_NAME_STRING_java) != -1) continue;
+			domainPackageClassesMap.put(key, value);
+		}
+		
+		return domainPackageClassesMap;
+	}
+	
+	/**
+	 * Gets all packages and their associated class names as a map. The key 
+	 * of the map is a name of a package, while the value is 
+	 * a sorted set of all class names within the package. 
+	 * 
+	 * @param rootPackage  the EPackage to parse
+	 * @return map
+	 */
+	public static Map<String, SortedSet<String>> getAllPackageClassNamesMap(EPackage rootPackage) {
+		List<EClass> ecs = getAllEClasses(rootPackage);
+		
+		Map<String, SortedSet<String>> pkgClassesMap = new TreeMap<String, SortedSet<String>>();
+		for (EClass ec : ecs) {
+			String pkgName = getPackage(ec);
+			if (pkgClassesMap.containsKey(pkgName)) {
+				pkgClassesMap.get(pkgName).add(ec.getName());
+			}
+			else {
+				SortedSet<String> classNames = new TreeSet<String>();
+				classNames.add(ec.getName());
+				pkgClassesMap.put(pkgName, classNames);
+			}
+		}
+		
+		return pkgClassesMap;
+	}
+	
+	/**
+	 * Gets all EClass instances within the <tt>rootPackage</tt>.
+	 * 
+	 * @param rootPackage  the EPackage to parse
+	 * @return a list of EClass instances
+	 */
+	public static List<EClass> getAllEClasses(EPackage rootPackage) {
+		List<EClass> ecs = new ArrayList<EClass>();
+		_findAllEClasses(rootPackage, ecs);
+		return ecs;
+	}
+	
+	private static void _findAllEClasses(EPackage epkg, List<EClass> list) {
+		Iterator<EObject> pkgIter = epkg.eContents().iterator();
+		EObject eo = null;
+		while (pkgIter.hasNext()) {
+			eo = pkgIter.next();
+			if (eo instanceof EClassImpl) {
+				list.add((EClass)eo);
+			} else if (eo instanceof EPackage) {
+				_findAllEClasses((EPackage)eo, list);
+			}
+		}
+	}
+	
+	/**
+	 * Gets the package name of a EClass <tt>ec</tt>.
+	 * 
+	 * @param ec the EClass instance
+	 * @return package name string
+	 */
+	public static String getPackage(EClass ec) {
+		List<String> names = new ArrayList<String>();
+		EPackage epkg = ec.getEPackage();
+		while(epkg != null) {
+			String name = epkg.getName();
+			if (name == null || "".equals(name) || SKIPPED_PACKAGE_NAME_STRINGS.contains(name)) break;
+			names.add(name);
+			epkg = epkg.getESuperPackage();
+		}
+		
+		if (names.size() == 0) return "";
+		
+		StringBuilder sb = new StringBuilder();
+		int total = names.size();
+		for (int i = total - 1; i > 0; i--) {
+			sb.append(names.get(i)).append(".");
+		}
+		if (total > 0) sb.append(names.get(0));
+		return sb.toString();
 	}
 }

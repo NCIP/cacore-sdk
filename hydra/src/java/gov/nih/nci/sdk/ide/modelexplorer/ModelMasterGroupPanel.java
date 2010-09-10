@@ -1,6 +1,7 @@
 package gov.nih.nci.sdk.ide.modelexplorer;
 
 import java.util.List;
+import java.util.Set;
 
 import gov.nih.nci.sdk.ide.core.GroupPanel;
 import gov.nih.nci.sdk.ide.core.ModelPackageVO;
@@ -70,7 +71,7 @@ public class ModelMasterGroupPanel extends GroupPanel {
 			if (mpVO.hasPackage()) {
 				TreeItem packageItem = new TreeItem(domainTree, 0);
 				packageItem.setText(mpVO.getPackageName());
-				List<String> models = mpVO.getModels();
+				List<String> models = SDKModelExplorerUtil.convertToList((Set<String>)mpVO.getModels());
 				for (int i = 0; i < models.size(); i++) {
 					TreeItem model = new TreeItem(packageItem, 0);
 					model.setText(models.get(i));
@@ -88,7 +89,7 @@ public class ModelMasterGroupPanel extends GroupPanel {
 				}
 			}
 			else {
-				List<String> models = mpVO.getModels();
+				List<String> models = SDKModelExplorerUtil.convertToList((Set<String>)mpVO.getModels());
 				for (int i = 0; i < models.size(); i++) {
 					TreeItem model = new TreeItem(domainTree, 0);
 					model.setText(models.get(i));
