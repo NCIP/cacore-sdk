@@ -20,6 +20,8 @@ public class MeaningPropertiesTabItm extends CategoryTabItem {
 		composite.setLayout(super.getLayout());
 		
 		Button button = new Button(composite, SWT.PUSH);
-		button.setText("Tab " + super.getTitle());
+		button.setText("Replace me for " + super.getTitle());
+		
+		composite.setSize(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	}
 }
