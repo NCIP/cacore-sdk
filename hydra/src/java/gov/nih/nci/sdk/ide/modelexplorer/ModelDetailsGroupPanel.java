@@ -19,6 +19,7 @@ public class ModelDetailsGroupPanel extends GroupPanel {
 		_paint((ModelSelectionEvent)super.getData());
 	}
 	
+	@Override
 	protected GridData getGridData() {
 		GridData gd = super.getGridData();
 		gd.widthHint = Constants.MODEL_DETAILS_PANEL_WIDTH;
