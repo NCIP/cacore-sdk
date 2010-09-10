@@ -1,11 +1,11 @@
 package gov.nih.nci.sdk.ide.core;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 public class ModelPackageVO {
 	private String packageName = "";
-	private List<String> models = new ArrayList<String>();
+	private SortedSet<String> models = new TreeSet<String>();
 	
 	/**
 	 * @return the packageName
@@ -24,14 +24,14 @@ public class ModelPackageVO {
 	/**
 	 * @return the models
 	 */
-	public List<String> getModels() {
+	public SortedSet<String> getModels() {
 		return models;
 	}
 	
 	/**
 	 * @param models the models to set
 	 */
-	public void setModels(List<String> models) {
+	public void setModels(SortedSet<String> models) {
 		this.models = models;
 	}
 	

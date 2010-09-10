@@ -1,9 +1,5 @@
 package gov.nih.nci.sdk.ide.core;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.TabFolder;
@@ -28,22 +24,6 @@ public class UIHelper {
 			TabItem tab = tabs[i];
 			tab.dispose();
 		}
-	}
-	
-	//TODO: hard-coded for now. --John
-	public static List<ModelPackageVO> getModelPackages(EPackage epackage) {
-		List<ModelPackageVO> list = new ArrayList<ModelPackageVO>();
-		
-		ModelPackageVO mpVO = new ModelPackageVO();
-		mpVO.setPackageName("gov.nih.nci.sdkexample");
-		List<String> models = new ArrayList<String>();
-		models.add("Person");
-		models.add("Contact");
-		models.add("Address");
-		models.add("Doctor");
-		mpVO.setModels(models);
-		list.add(mpVO);
-		return list;
 	}
 	
 	public static boolean isEmpty(String s) {

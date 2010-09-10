@@ -3,9 +3,9 @@ package gov.nih.nci.sdk.ide.modelexplorer;
 import gov.nih.nci.sdk.ide.core.GroupPanel;
 import gov.nih.nci.sdk.ide.core.ModelPackageVO;
 import gov.nih.nci.sdk.ide.core.SDKScreen;
-import gov.nih.nci.sdk.ide.core.UIHelper;
 
 import java.util.List;
+import java.util.SortedSet;
 
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.swt.SWT;
@@ -36,14 +36,14 @@ public class SDKModelExplorer extends SDKScreen {
 		layout.numColumns = 2;
 		composite.setLayout(layout);
 		
-		List<ModelPackageVO> dataList = UIHelper.getModelPackages(epackage);
+		List<ModelPackageVO> dataList = SDKModelExplorerUtil.getModelPackages(epackage);
 		GroupPanel masterPanel = new ModelMasterGroupPanel(composite, SWT.NONE, dataList, Constants.MODEL_MASTER_PANEL_TITLE);
 		masterPanel.paint();
 		
 		ModelPackageVO firstMP = getFirstModel(dataList);
 		if (firstMP == null) return;
 		String packageName = firstMP.getPackageName();
-		String modelName = firstMP.getModels().get(0);
+		String modelName = firstMP.getModels().first();
 		String categoryName = Constants.DEFAULT_CATEGORY;
 		Event defaultEvent = new ModelSelectionEvent(packageName, modelName, categoryName);
 		
@@ -58,7 +58,7 @@ public class SDKModelExplorer extends SDKScreen {
 		
 		ModelPackageVO firstModel = null;
 		for (ModelPackageVO mpVO : dataList) {
-			List<String> models = mpVO.getModels();
+			SortedSet<String> models = mpVO.getModels();
 			if (models.size() > 0) {
 				firstModel = mpVO;
 				break;
