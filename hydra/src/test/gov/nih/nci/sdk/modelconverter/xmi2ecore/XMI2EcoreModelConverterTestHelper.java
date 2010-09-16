@@ -24,8 +24,9 @@ public class XMI2EcoreModelConverterTestHelper {
 	private static File createTempFileForTesting(String xmiResourcePath) {
 		String tmpDir = System.getProperty("java.io.tmpdir");
 		File outFile = new File(tmpDir + File.separatorChar + "_sdkexample.xmi");
-		InputStream in = "".getClass().getResourceAsStream(xmiResourcePath);
-		try {
+		InputStream in = XMI2EcoreModelConverterTestHelper.getResourceAsStream(xmiResourcePath);
+		try
+		{
 			OutputStream out = new FileOutputStream(outFile);
 			byte buf[] = new byte[4096];
 			int len;
@@ -35,9 +36,17 @@ public class XMI2EcoreModelConverterTestHelper {
 			out.close();
 			in.close();
 		}
-		catch (IOException ex) {
+		catch (IOException ex)
+		{
 			throw new IllegalArgumentException("Failed to read file "  + xmiResourcePath + ": " + ex.getMessage());
 		}
+		
 		return outFile;
+	}
+
+	private static InputStream getResourceAsStream(String _resourcePath)
+	{
+		XMI2EcoreModelConverterTestHelper helper = new XMI2EcoreModelConverterTestHelper();
+		return helper.getClass().getResourceAsStream(_resourcePath);
 	}
 }

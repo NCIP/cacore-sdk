@@ -65,42 +65,6 @@ companyPackage.getEClassifiers().add(employeeClass);
 companyPackage.getEClassifiers().add(departmentClass);
 companyPackage.getEClassifiers().add(companyClass);
 
-for (var eClassifier in Iterator(companyPackage.getEClassifiers()))
-{
-	Packages.java.lang.System.out.println("Halloween: " + eClassifier);
-	Packages.java.lang.System.out.println("Yah: " + eClassifier.getName());
-
-	for (var name in eClassifier)
-	{
-		Packages.java.lang.System.out.println("Boo: " + name);
-	}
-}
-
-//Using the reflective API you can create and initialize an instance of your model:
-
-/*
-// get company factory
-var companyFactory = companyPackage.getEFactoryInstance();
-
-// using the factory create instance of company class and 
-// set company name
-var company = companyFactory.create(companyClass);
-company.eSet(companyName, "MyCompany");
-
-// create an instance of employee class
-var employee = companyFactory.create(employeeClass);
-//using reflective API initialize name of employee
-employee.eSet(employeeName, "John");
-
-// create an instance of department class
-var department = companyFactory.create(departmentClass);
-department.eSet(departmentNumber, new Packages.java.lang.Integer(123));
-//add "John" to department
-department.eGet(departmentEmployees).add(employee);
-// add the department to the company
-company.eGet(companyDepartments).add(department);
-*/
-
 // create resource set and resource 
 var resourceSet = new Packages.org.eclipse.emf.ecore.resource.impl.ResourceSetImpl();
 var xmiResourceFactory = new Packages.org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl();

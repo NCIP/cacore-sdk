@@ -48,7 +48,7 @@ var createEPackage = function()
 
 	// create an Company class
 	var companyClass = ecoreFactory.createEClass();
-	companyClass.setName("company.Company");
+	companyClass.setName("Company");
 
 	// create company name
 	var companyName = ecoreFactory.createEAttribute();
@@ -58,7 +58,7 @@ var createEPackage = function()
 
 	//create an Employee class
 	var employeeClass = ecoreFactory.createEClass();
-	employeeClass.setName("company.Employee");
+	employeeClass.setName("Employee");
 
 	//add a name attribute to an Employee class
 	var employeeName = ecoreFactory.createEAttribute();
@@ -68,7 +68,7 @@ var createEPackage = function()
 
 	//create a Department class
 	var departmentClass = ecoreFactory.createEClass();
-	departmentClass.setName("company.Department");
+	departmentClass.setName("Department");
 
 	//add department identification number
 	var departmentNumber = ecoreFactory.createEAttribute();
@@ -107,6 +107,7 @@ var createEPackage = function()
 	companyPackage.setName("company");
 	companyPackage.setNsPrefix("company");
 	companyPackage.setNsURI("http:///com.example.company.ecore");
+	
 	companyPackage.getEClassifiers().add(employeeClass);
 	companyPackage.getEClassifiers().add(departmentClass);
 	companyPackage.getEClassifiers().add(companyClass);
@@ -152,4 +153,38 @@ var testCompile = function()
 	print("testCompile test completed");	
 }
 
+var testCompileFromXMIFile = function()
+{
+	var ePackage = Packages.gov.nih.nci.sdk.modelconverter.xmi2ecore.XMI2EcoreModelConverterTestHelper.readEPackageFromXMIFile();
+	var eModelElementList = new Packages.java.util.ArrayList();
+
+	/*Packages.gov.nih.nci.sdk.util.EcoreUtil.findAllEClassModelElements(eModelElementList, ePackage);
+
+	var eModelElements = eModelElementList.iterator();
+	
+	while (eModelElements.hasNext() === true)
+	{
+		var eModelElement = eModelElements.next();
+		print("Class name: " + Packages.gov.nih.nci.sdk.util.EcoreUtil.determineFullyQualifiedName(eModelElement));
+	}*/
+	
+	var properties = createProperties();
+
+	var generator = new Packages.gov.nih.nci.sdk.core.Generator();
+
+	var domainSet = new Packages.java.util.HashSet();
+	domainSet.add("EA_Model.LogicalView.LogicalModel.gov.nih.nci.sdkexample.Organization");
+	domainSet.add("EA_Model.LogicalView.LogicalModel.gov.nih.nci.sdkexample.Address");
+
+	var generatorContext = createGeneratorContext("workspace/sdkexample", "workspace/src", properties, ePackage, domainSet);
+
+	generator.compile(generatorContext);
+
+	print("Errors?: " + generatorContext.hasErrors());
+	print("Errors: " + generatorContext.getErrorManager().getMessageList());
+
+	print("testCompileFromXMIFile test completed");
+}
+
 testCompile();
+testCompileFromXMIFile();
