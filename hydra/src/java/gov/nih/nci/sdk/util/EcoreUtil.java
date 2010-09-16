@@ -11,6 +11,7 @@ import java.util.TreeSet;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EModelElement;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
@@ -140,6 +141,66 @@ public class EcoreUtil {
 		int lastPeriodIndex = _fullyQualifiedClassName.lastIndexOf(".");
 		return (lastPeriodIndex > 0) ? _fullyQualifiedClassName.substring(lastPeriodIndex + 1, _fullyQualifiedClassName.length()) : _fullyQualifiedClassName;
 	}
+	
+	/**
+	 * Finds all ModelElements in a Package.
+	 * 
+	 * @param _modelElementList  list of ModelElements
+	 * @param _rootEPackage  root EPackage to search
+	 */
+	public static void findAllEClassModelElements(List<EClassifier> _modelElementList, EPackage _rootEPackage)
+	{
+		if (_rootEPackage == null)
+		{
+			throw new IllegalArgumentException("Input rootEPackage cannot be null.");
+		}
+		
+		for (EObject eObject: _rootEPackage.eContents())
+		{
+			if (eObject instanceof EClassImpl) { _modelElementList.add((EClassifier) eObject); }
+			else if (eObject instanceof EPackage) { findAllEClassModelElements(_modelElementList, (EPackage) eObject); }
+		}
+	}
+
+	/**
+	 * Determines EClassifier's fully qualified package name.
+	 * 
+	 * @param _eClass  EClassifier
+	 */
+	public static String determinePackageName(EClassifier _eClassifier)
+	{
+		StringBuffer packageName = new StringBuffer();
+		EPackage ePackage = null;
+
+		if (_eClassifier != null)
+		{
+			ePackage = _eClassifier.getEPackage();
+			java.util.Stack<String> stack = new java.util.Stack<String>();
+
+			while (ePackage != null)
+			{
+				stack.push(ePackage.getName());
+				ePackage = (EPackage) ePackage.getESuperPackage();
+			}
+
+			while (stack.isEmpty() == false)
+			{
+				packageName.append((String)stack.pop()).append(".");
+			}
+		}
+		
+		return packageName.toString().replaceAll("\\.$", "");
+	}
+
+	/**
+	 * Determines EClassifier's fully qualified name.
+	 * 
+	 * @param _eClassifier  EClassifier
+	 */
+	public static String determineFullyQualifiedName(EClassifier _eClassifier)
+	{
+		return determinePackageName(_eClassifier) + "." + _eClassifier.getName();
+	}
 
 	/**
 	 * Finds all ModelElements related to the <tt>targetName</tt>.
@@ -165,6 +226,9 @@ public class EcoreUtil {
 		if (firstDotIndex != -1) {
 			String firstPart = targetName.substring(0, firstDotIndex);
 			String remainingName = targetName.substring(firstDotIndex + 1);
+
+			System.out.println("Processing package: " + rootEPackage.getName());
+
 			
 			Iterator<EObject> pkgIter = rootEPackage.eContents().iterator();
 			EObject eo = null;
@@ -173,6 +237,10 @@ public class EcoreUtil {
 				
 				if (eo instanceof EClassImpl) {
 					EClass tmp = (EClassImpl) eo;
+					
+					System.out.println("target name: " + targetName);
+					System.out.println("Tmp name: " + tmp.getName());
+
 					if (targetName.equals(tmp.getName())) {
 						results.add(tmp);
 					}
