@@ -23,7 +23,7 @@ public class WSQueryImpl extends ServletEndpointSupport implements WSQuery{
 	private static ApplicationService applicationService;	
 	private static ClassCache classCache;
 
-	private String version = "4.3";
+	private String version = "4.4";
 	
 	public void destroy() {
 		applicationService = null;
