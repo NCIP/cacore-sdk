@@ -325,7 +325,6 @@ public class WebServiceGenerator
 
 			for (String focusDomain: getScriptContext().retrieveDomainSet())
 			{
-				getScriptContext().logWarning("Calling HALLOWEEN for: "+ focusDomain);
 				generateWebServiceArtifacts(focusDomain);
 			}
 		}

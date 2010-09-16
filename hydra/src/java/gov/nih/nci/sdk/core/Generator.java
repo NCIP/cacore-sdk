@@ -37,10 +37,16 @@ public class Generator
 	}
 
 	private void conduct(GeneratorContext _generatorContext)
-	{		
-		for (EClassifier eClassifier: _generatorContext.getEPackage().getEClassifiers())
+	{
+		java.util.List<EClassifier> eClassifierList = new java.util.ArrayList<EClassifier>();
+		gov.nih.nci.sdk.util.EcoreUtil.findAllEClassModelElements(eClassifierList, _generatorContext.getEPackage());
+
+		System.out.println("Domain set is: " + _generatorContext.getDomainSet());
+		for (EClassifier eClassifier: eClassifierList)
 		{
-			if (_generatorContext.getDomainSet().contains(eClassifier.getName()) == true)
+			System.out.println("Eclassifier name is: " + eClassifier.getName());
+			
+			if (_generatorContext.getDomainSet().contains(gov.nih.nci.sdk.util.EcoreUtil.determineFullyQualifiedName(eClassifier)) == true)
 			{
 				for (java.io.File script: _generatorContext.getGeneratorScriptFileList())
 				{
