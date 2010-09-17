@@ -18,7 +18,7 @@ public class SDKUtilTest {
 	@Test
 	public void loadTags() {
 		Set<String> tagNames = SDKUtil.getAllSDKTagNames();
-		assertEquals("All tags loaded", 56, tagNames.size());
+		assertEquals("All tags loaded", 58, tagNames.size());
 	}
 	
 	@Test
