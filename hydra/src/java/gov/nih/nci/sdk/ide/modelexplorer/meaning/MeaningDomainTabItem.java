@@ -14,12 +14,12 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.Text;
 
-public class MeaningDomainTabItm extends CategoryTabItem {
+public class MeaningDomainTabItem extends CategoryTabItem {
 	private String domainName;
 	private String domainDesc;
 	private List<String> concepts;
 
-	public MeaningDomainTabItm(TabFolder parent, int style, Object data) {
+	public MeaningDomainTabItem(TabFolder parent, int style, Object data) {
 		super(parent, style, data, Constants.TAB_Domain);
 	}
 	
