@@ -2,6 +2,7 @@ package gov.nih.nci.sdk.ide.actions;
 
 import gov.nih.nci.sdk.ide.modelexplorer.Constants;
 import gov.nih.nci.sdk.ide.modelexplorer.SDKModelExplorer;
+import gov.nih.nci.sdk.ide.modelexplorer.SDKUIManager;
 
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.jface.action.IAction;
@@ -33,7 +34,7 @@ public class SDKPlugInAction implements IWorkbenchWindowActionDelegate {
 	 * @see IWorkbenchWindowActionDelegate#run
 	 */
 	public void run(IAction action) {
-		EPackage epackage = null;
+		EPackage epackage = SDKUIManager.getInstance().getRootEPackage();
 		SDKModelExplorer sui = new SDKModelExplorer(window.getShell(), Constants.SDK_SCREEN_TITLE, epackage);
 		sui.open();
 	}
