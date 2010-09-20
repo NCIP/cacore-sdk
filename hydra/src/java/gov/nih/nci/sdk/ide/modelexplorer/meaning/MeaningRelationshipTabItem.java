@@ -24,4 +24,7 @@ public class MeaningRelationshipTabItem extends CategoryTabItem {
 		
 		composite.setSize(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	}
+
+	@Override
+	public void prepareData() {}
 }

@@ -8,9 +8,9 @@ import org.eclipse.swt.widgets.TabFolder;
 import gov.nih.nci.sdk.ide.core.CategoryTabItem;
 import gov.nih.nci.sdk.ide.modelexplorer.Constants;
 
-public class PersistencePropertiesTabItm extends CategoryTabItem {
+public class PersistencePropertiesTabItem extends CategoryTabItem {
 
-	public PersistencePropertiesTabItm(TabFolder parent, int style, Object data) {
+	public PersistencePropertiesTabItem(TabFolder parent, int style, Object data) {
 		super(parent, style, data, Constants.TAB_Properties);
 	}
 
@@ -24,4 +24,7 @@ public class PersistencePropertiesTabItm extends CategoryTabItem {
 		
 		composite.setSize(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	}
+
+	@Override
+	public void prepareData() {}
 }

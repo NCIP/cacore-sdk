@@ -15,12 +15,12 @@ import gov.nih.nci.sdk.ide.core.CategoryTabItem;
 import gov.nih.nci.sdk.ide.modelexplorer.Constants;
 import gov.nih.nci.sdk.ide.modelexplorer.ModelSelectionEvent;
 
-public class PersistenceDomainTabItm extends CategoryTabItem {
+public class PersistenceDomainTabItem extends CategoryTabItem {
 	private String domainName;
 	private String tableName;
 	private String domainDesc;
 
-	public PersistenceDomainTabItm(TabFolder parent, int style, Object data) {
+	public PersistenceDomainTabItem(TabFolder parent, int style, Object data) {
 		super(parent, style, data, Constants.TAB_Domain);
 	}
 	
