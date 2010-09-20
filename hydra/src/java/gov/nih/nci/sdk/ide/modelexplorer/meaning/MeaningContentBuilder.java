@@ -15,10 +15,6 @@ import org.eclipse.swt.widgets.TabFolder;
 public class MeaningContentBuilder extends TabbedContentBuilder {
 	public TabFolder buildContent(Composite composite, Object data) {
 		TabFolder tabFolder = super.buildContent(composite, data);
-		
-//		TabItemsBuilder tib = new MeaningTabItemsBuilder();
-//		tib.buildTabs(tabFolder, SWT.NONE, data);
-		
 
 		UIHelper.cleanTabs(tabFolder);
 		
@@ -28,11 +24,7 @@ public class MeaningContentBuilder extends TabbedContentBuilder {
 		tabs.add(new MeaningOperationsTabItem(tabFolder, SWT.NONE, data));
 		tabs.add(new MeaningRelationshipTabItem(tabFolder, SWT.NONE, data));
 		
-		for (CategoryTabItem tab : tabs) {
-			tab.paint();
-		}
-		
-		//super.autoSetFirstTab(tabFolder);
+		super.activate(tabs);
 		
 		return tabFolder;
 	}

@@ -1,6 +1,9 @@
 package gov.nih.nci.sdk.ide.modelexplorer;
 
+import java.util.List;
+
 import gov.nih.nci.sdk.ide.core.CategoryContentBuilder;
+import gov.nih.nci.sdk.ide.core.CategoryTabItem;
 import gov.nih.nci.sdk.ide.core.UIHelper;
 
 import org.eclipse.swt.SWT;
@@ -62,6 +65,14 @@ public class TabbedContentBuilder implements CategoryContentBuilder {
 			Event event = new Event();
 			event.item = tabFolder.getItem(0);
 			tabFolder.notifyListeners(SWT.Selection, event);
+		}
+	}
+	
+	public void activate(List<CategoryTabItem> tabs) {
+		if (tabs == null) return;
+		
+		for (CategoryTabItem tab : tabs) {
+			tab.paint();
 		}
 	}
 }
