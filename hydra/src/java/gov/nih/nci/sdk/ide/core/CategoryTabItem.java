@@ -67,7 +67,5 @@ public abstract class CategoryTabItem extends ActiveUI {
 	}
 	
 	//TODO: make it abstract.
-	protected void prepareData() {
-		
-	}
+	protected abstract void prepareData();
 }
