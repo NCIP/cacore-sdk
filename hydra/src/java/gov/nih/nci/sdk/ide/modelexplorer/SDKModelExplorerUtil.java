@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
-import java.util.TreeSet;
 
 import org.eclipse.emf.ecore.EPackage;
 
@@ -17,27 +16,15 @@ public class SDKModelExplorerUtil {
 	
 	public static List<ModelPackageVO> getModelPackages(EPackage rootEPackage) {
 		List<ModelPackageVO> list = new ArrayList<ModelPackageVO>();
-//		Map<String, SortedSet<String>> map = EcoreUtil.getAllDomainPackageClassNamesMap(rootEPackage);
-//		for (Map.Entry<String, SortedSet<String>> entry: map.entrySet()) {
-//			String packageName = entry.getKey();
-//			SortedSet<String> classNames = entry.getValue();
-//			ModelPackageVO mpVO = new ModelPackageVO();
-//			mpVO.setPackageName(packageName);
-//			mpVO.setModels(classNames);
-//			list.add(mpVO);
-//		}
-		
-		//TODO: to be deleted
-		ModelPackageVO mpVO = new ModelPackageVO();
-		mpVO.setPackageName("gov.nih.nci.sdkexample");
-		
-		SortedSet<String> models = new TreeSet<String>();
-		models.add("Person");
-		models.add("Contact");
-		models.add("Address");
-		models.add("Doctor");
-		mpVO.setModels(models);
-		list.add(mpVO);
+		Map<String, SortedSet<String>> map = EcoreUtil.getAllDomainPackageClassNamesMap(rootEPackage);
+		for (Map.Entry<String, SortedSet<String>> entry: map.entrySet()) {
+			String packageName = entry.getKey();
+			SortedSet<String> classNames = entry.getValue();
+			ModelPackageVO mpVO = new ModelPackageVO();
+			mpVO.setPackageName(packageName);
+			mpVO.setModels(classNames);
+			list.add(mpVO);
+		}
 		return list;
 	}
 	
