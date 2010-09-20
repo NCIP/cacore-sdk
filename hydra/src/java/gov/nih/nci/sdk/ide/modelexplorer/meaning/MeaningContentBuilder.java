@@ -24,10 +24,10 @@ public class MeaningContentBuilder extends TabbedContentBuilder {
 		UIHelper.cleanTabs(tabFolder);
 		
 		List<CategoryTabItem> tabs = new ArrayList<CategoryTabItem>(Constants.meaningTabs.length);
-		tabs.add(new MeaningDomainTabItm(tabFolder, SWT.NONE, data));
-		tabs.add(new MeaningPropertiesTabItm(tabFolder, SWT.NONE, data));
-		tabs.add(new MeaningOperationsTabItm(tabFolder, SWT.NONE, data));
-		tabs.add(new MeaningRelationshipTabItm(tabFolder, SWT.NONE, data));
+		tabs.add(new MeaningDomainTabItem(tabFolder, SWT.NONE, data));
+		tabs.add(new MeaningPropertiesTabItem(tabFolder, SWT.NONE, data));
+		tabs.add(new MeaningOperationsTabItem(tabFolder, SWT.NONE, data));
+		tabs.add(new MeaningRelationshipTabItem(tabFolder, SWT.NONE, data));
 		
 		System.out.println("SWT.None: " + SWT.None);
 		System.out.println("SWT.NONE: " + SWT.NONE);
