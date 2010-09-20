@@ -8,10 +8,10 @@ import org.eclipse.swt.widgets.TabFolder;
 import gov.nih.nci.sdk.ide.core.CategoryTabItem;
 import gov.nih.nci.sdk.ide.modelexplorer.Constants;
 
-public class MeaningOperationsTabItm extends CategoryTabItem {
+public class MeaningPropertiesTabItem extends CategoryTabItem {
 
-	public MeaningOperationsTabItm(TabFolder parent, int style, Object data) {
-		super(parent, style, data, Constants.TAB_Operations);
+	public MeaningPropertiesTabItem(TabFolder parent, int style, Object data) {
+		super(parent, style, data, Constants.TAB_Properties);
 	}
 
 	@Override

@@ -8,9 +8,9 @@ import org.eclipse.swt.widgets.TabFolder;
 import gov.nih.nci.sdk.ide.core.CategoryTabItem;
 import gov.nih.nci.sdk.ide.modelexplorer.Constants;
 
-public class MeaningRelationshipTabItm extends CategoryTabItem {
+public class MeaningRelationshipTabItem extends CategoryTabItem {
 
-	public MeaningRelationshipTabItm(TabFolder parent, int style, Object data) {
+	public MeaningRelationshipTabItem(TabFolder parent, int style, Object data) {
 		super(parent, style, data, Constants.TAB_Relationship);
 	}
 

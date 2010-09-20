@@ -16,10 +16,10 @@ public class MeaningTabItemsBuilder extends TabItemsBuilderImpl implements TabIt
 		UIHelper.cleanTabs(parent);
 		
 		List<CategoryTabItem> tabs = new ArrayList<CategoryTabItem>(Constants.meaningTabs.length);
-		tabs.add(new MeaningDomainTabItm(parent, style, data));
-		tabs.add(new MeaningPropertiesTabItm(parent, style, data));
-		tabs.add(new MeaningOperationsTabItm(parent, style, data));
-		tabs.add(new MeaningRelationshipTabItm(parent, style, data));
+		tabs.add(new MeaningDomainTabItem(parent, style, data));
+		tabs.add(new MeaningPropertiesTabItem(parent, style, data));
+		tabs.add(new MeaningOperationsTabItem(parent, style, data));
+		tabs.add(new MeaningRelationshipTabItem(parent, style, data));
 		
 		super.activate(tabs);
 		
