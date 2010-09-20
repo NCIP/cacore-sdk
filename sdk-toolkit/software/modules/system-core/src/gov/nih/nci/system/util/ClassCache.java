@@ -415,11 +415,17 @@ public class ClassCache implements InitializingBean{
 
 		for (Field field : fields) {
 			field.setAccessible(true);
-			String type = field.getType().getName();
-			log.debug("fieldType: " + type);
 			String fieldName = field.getName();
-			log.debug("fieldName: " + fieldName);
-			if (!field.getType().isPrimitive()) {
+			String type = field.getType().getName();
+			
+			log.debug("* * *Qualified Class name: " + qualClassName + "fieldName: " + fieldName+"; fieldType: " + type);
+			
+			boolean isPrimitive = field.getType().isPrimitive();
+			boolean isIsoDataType = type.startsWith("gov.nih.nci.iso21090");
+			
+			log.debug("* * * isNotPrimitive and isNotIsoDataType:" + ((!isPrimitive) && (!isIsoDataType)) );
+			
+			if ( (!isPrimitive) && (!isIsoDataType) ) {
 				if ((type.startsWith("java") && type.endsWith("Collection"))) {
 					String roleClassName;
 					String beanName;
