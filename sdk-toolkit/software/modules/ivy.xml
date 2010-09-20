@@ -93,6 +93,7 @@
 		<dependency org="jakarta" name="commons-logging" rev="1.1" conf="runtime->compile" />
 		<dependency org="jakarta" name="commons-collections" rev="3.2" conf="runtime->compile" />
 		<dependency org="jakarta" name="commons-lang" rev="2.4" conf="runtime->compile" />	
+		<dependency org="jakarta" name="commons-beanutils" rev="1.7.0" conf="runtime->compile" />		
 		<dependency org="javax.activation" name="activation" rev="1.0.2" conf="runtime->compile" />
 		<dependency org="javax.transaction" name="jta" rev="1.0.1B" conf="runtime->compile" />		
 		<dependency org="javax.xml.bind" name="jaxb-api" rev="2.1" conf="compile" />
