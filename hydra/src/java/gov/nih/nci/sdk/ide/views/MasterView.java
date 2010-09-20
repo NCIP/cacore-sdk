@@ -3,10 +3,12 @@ package gov.nih.nci.sdk.ide.views;
 import gov.nih.nci.sdk.ide.core.ActiveViewPart;
 import gov.nih.nci.sdk.ide.core.ModelPackageVO;
 import gov.nih.nci.sdk.ide.core.UIHelper;
+import gov.nih.nci.sdk.ide.generator.SDKGenerator;
 import gov.nih.nci.sdk.ide.modelexplorer.Constants;
 import gov.nih.nci.sdk.ide.modelexplorer.ModelSelectionEvent;
-import gov.nih.nci.sdk.ide.modelexplorer.SDKUIManager;
+import gov.nih.nci.sdk.ide.modelexplorer.SDKModelExplorer;
 import gov.nih.nci.sdk.ide.modelexplorer.SDKModelExplorerUtil;
+import gov.nih.nci.sdk.ide.modelexplorer.SDKUIManager;
 
 import java.util.List;
 import java.util.Set;
@@ -18,7 +20,6 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -176,7 +177,7 @@ public class MasterView extends ActiveViewPart {
 	private void makeActions() {
 		actionLoadXMI = new Action() {
 			public void run() {
-				showMessage(Constants.LABEL_FOR_LOAD_XMI + " executed");
+				popupConverter();
 			}
 		};
 		actionLoadXMI.setText(Constants.LABEL_FOR_LOAD_XMI);
@@ -186,7 +187,7 @@ public class MasterView extends ActiveViewPart {
 		
 		actionGenerateApp = new Action() {
 			public void run() {
-				showMessage(Constants.LABEL_FOR_GENERATE_APP + " executed");
+				popupGenerator();
 			}
 		};
 		actionGenerateApp.setText(Constants.LABEL_FOR_GENERATE_APP);
@@ -260,11 +261,19 @@ public class MasterView extends ActiveViewPart {
 		});
 	}
 	
-	private void showMessage(String message) {
-		MessageDialog.openInformation(
-			viewer.getControl().getShell(),
-			"Master View",
-			message);
+	private void popupConverter() {
+		EPackage epackage = SDKUIManager.getInstance().getRootEPackage();
+		SDKModelExplorer sui = new SDKModelExplorer(viewer.getControl().getShell(), Constants.SDK_SCREEN_TITLE, epackage);
+		sui.open();
+	}
+	
+	private void popupGenerator() {
+		System.out.println("pg1");
+		EPackage epackage = SDKUIManager.getInstance().getRootEPackage();
+		SDKGenerator sui = new SDKGenerator(viewer.getControl().getShell(), Constants.SDK_SCREEN_TITLE, epackage);
+		System.out.println("pg2");
+		sui.open();
+		System.out.println("pg3");
 	}
 	
 	public void setFocus() {
