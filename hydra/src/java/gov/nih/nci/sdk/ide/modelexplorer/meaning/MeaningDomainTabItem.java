@@ -14,50 +14,57 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.Text;
 
-public class MeaningDomainTabItem extends CategoryTabItem {
-	private String domainName;
-	private String domainDesc;
-	private List<String> concepts;
+import gov.nih.nci.sdk.util.SDKUtil;
+import gov.nih.nci.sdk.util.EcoreUtil;
+import org.eclipse.emf.ecore.EClassifier;
 
+public class MeaningDomainTabItem
+   extends CategoryTabItem
+{
+	private String domainName;
+	private String domainDescription;
+	private List<String> conceptList;
+	private EClassifier eClassifier; //the domain object to be displayed.
+
+	public String getDomainName() { return domainName; }
+	public String getDomainDescription() { return domainDescription; }
+	public List<String> getConceptList() { return conceptList; }
+	public EClassifier getEClassifier() { return eClassifier; }
+
+	public void setDomainName(String _domainName) { domainName = _domainName; }
+	public void setDomainDescription(String _domainDescription) { domainDescription = _domainDescription; }
+	public void setConceptList(List<String> _conceptList) { conceptList = _conceptList; }
+	public void setEClassifier(EClassifier _eClassifier) { eClassifier = _eClassifier; }
+	
 	public MeaningDomainTabItem(TabFolder parent, int style, Object data) {
 		super(parent, style, data, Constants.TAB_Domain);
+		setConceptList(new ArrayList<String>());
 	}
 	
 	@Override
-	protected void prepareData() {
-		ModelSelectionEvent mse = (ModelSelectionEvent)this.getData();
-		domainName = mse.getFullModelName();
+	protected void prepareData()
+	{
+		String domainName = "No domain selected";
+		String domainDescription = "";
 		
-		domainDesc = mse.getFullModelName();
-		
-		domainDesc += "\nThis is a very very long description which should come from UML.";
-		domainDesc += "\nThis is a very very long description which should come from UML.";
-		domainDesc += "\nThis is a very very long description which should come from UML.";
-		domainDesc += "\nThis is a very very long description which should come from UML.";
-		domainDesc += "\nThis is a very very long description which should come from UML.";
-		domainDesc += "\nThis is a very very long description which should come from UML.";
-		domainDesc += "\nThis is a very very long description which should come from UML.";
-		domainDesc += "\nThis is a very very long description which should come from UML.";
-		domainDesc += "\nThis is a very very long description which should come from UML.";
-		domainDesc += "\nThis is a very very long description which should come from UML.";
-		
-		concepts = new ArrayList<String>();
-		concepts.add("http://mayoclinic.com/concept/person");
-		concepts.add("http://mayoclinic.com/concept/patient");
-		concepts.add("http://lexevs.nci.gov/concept/humanbeing");
-		concepts.add("http://lexevs.nci.gov/concept/humanbeing1");
-		concepts.add("http://lexevs.nci.gov/concept/humanbeing2");
-		concepts.add("http://lexevs.nci.gov/concept/humanbeing3");
-		concepts.add("http://lexevs.nci.gov/concept/humanbeing4");
-		concepts.add("http://lexevs.nci.gov/concept/humanbeing5");
-		concepts.add("http://lexevs.nci.gov/concept/humanbeing6");
-		concepts.add("http://lexevs.nci.gov/concept/humanbeing7");
-		concepts.add("http://lexevs.nci.gov/concept/humanbeing8");
-		concepts.add("http://lexevs.nci.gov/concept/humanbeing9");
+		if (getEClassifier() != null)
+		{
+			domainDescription = SDKUtil.getTagValue(getEClassifier(), "class.mea.desc");
+			setDomainDescription((domainDescription != null) ? domainDescription : "");
+			domainName = EcoreUtil.determineFullyQualifiedName(getEClassifier());
+
+			String concept = SDKUtil.getTagValue(getEClassifier(), "class.mea.concept");
+			concept = (concept != null && "".equalsIgnoreCase(concept) == true) ? concept : null;
+
+			if (concept != null) { getConceptList().add(concept); }
+		}
+
+		setDomainName((domainName != null) ? domainName : "No domain selected");
 	}
 
 	@Override
-	public void paint() {
+	public void paint()
+	{
 		Composite composite = super.getUIComposite();
 		composite.setLayout(super.getLayout());
 		
@@ -68,7 +75,7 @@ public class MeaningDomainTabItem extends CategoryTabItem {
 		
 		new Label(composite, SWT.NONE).setText("Description");
 		Text domainDescText = new Text(composite, SWT.BORDER | SWT.READ_ONLY | SWT.MULTI);
-		domainDescText.setText(domainDesc);
+		domainDescText.setText(getDomainDescription());
 		domainDescText.setLayoutData(super.getGridData());
 		
 		new Label(composite, SWT.NONE).setText("Concept");
@@ -79,7 +86,8 @@ public class MeaningDomainTabItem extends CategoryTabItem {
 		conceptsArea.setLayout(cgd);
 		
 		Text conceptText = null;
-		for (String concept: concepts) {
+		for (String concept: conceptList)
+		{
 			conceptText = new Text(conceptsArea, SWT.BORDER | SWT.READ_ONLY);
 			conceptText.setText(concept);
 			conceptText.setLayoutData(super.getGridData());
