@@ -1163,6 +1163,7 @@
 				<include name="caGrid-*-translator-*.jar"/>
 				<include name="castor-*.jar"/>
 				<include name="cglib-*.jar"/>
+				<include name="commons-beanutils-*.jar"/>				
 				<include name="commons-collections-*.jar"/>
 				<include name="commons-discovery-*.jar"/>
 				<include name="commons-lang-*.jar"/>
