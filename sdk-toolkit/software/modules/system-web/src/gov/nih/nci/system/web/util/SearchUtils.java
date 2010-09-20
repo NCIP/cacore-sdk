@@ -770,6 +770,10 @@ public class SearchUtils {
 				if (valueType.equals("java.lang.String")) {
 					convertedValue = new URI((String) value);
 				}
+			} else if (fieldType.equals("java.lang.Character")) {
+				if (valueType.equals("java.lang.String")) {
+					convertedValue = new Character(((String)value).charAt(0) );
+				}				
 			} else if (field.getType().isEnum()) {
 				if (valueType.equals("java.lang.String")) {
 					Class enumKlass = Class.forName(fieldType);
