@@ -11,7 +11,7 @@ public abstract class ActiveUI implements Listener {
 	private int style;
 	private Object data;
 	private Composite uiComposite;
-	private EPackage ePackage;
+	private EPackage ePackage; //Every significant widget in the application should have access to the EPackage.
 	
 	public ActiveUI(Composite parent, int style, Object data) {
 		this.parent = parent;
