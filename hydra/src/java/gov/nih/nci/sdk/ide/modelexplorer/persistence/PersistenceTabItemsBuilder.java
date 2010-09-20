@@ -16,8 +16,8 @@ public class PersistenceTabItemsBuilder extends TabItemsBuilderImpl implements T
 		UIHelper.cleanTabs(parent);
 		
 		List<CategoryTabItem> tabs = new ArrayList<CategoryTabItem>(Constants.persistenceTabs.length);
-		tabs.add(new PersistenceDomainTabItm(parent, style, data));
-		tabs.add(new PersistencePropertiesTabItm(parent, style, data));
+		tabs.add(new PersistenceDomainTabItem(parent, style, data));
+		tabs.add(new PersistencePropertiesTabItem(parent, style, data));
 		
 		super.activate(tabs);
 		
