@@ -31,4 +31,7 @@ public class Constants {
 	public static String[] meaningTabs = { TAB_Domain, TAB_Properties,
 			TAB_Operations, TAB_Relationship };
 	public static String[] persistenceTabs = { TAB_Domain, TAB_Properties };
+	
+	public static final String LABEL_FOR_LOAD_XMI = "Load XMI";
+	public static final String LABEL_FOR_GENERATE_APP = "Generate App";
 }

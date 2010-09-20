@@ -26,5 +26,65 @@
          </action>
       </actionSet>
    </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            id="gov.nih.nci.sdk.ide"
+            name="SDK Category">
+      </category>
+      <view
+            category="gov.nih.nci.sdk.ide"
+            class="gov.nih.nci.sdk.ide.views.MasterView"
+            icon="src/images/sdk.gif"
+            id="gov.nih.nci.sdk.ide.views.MasterView"
+            name="Model Explorer">
+      </view>
+      <view
+            category="gov.nih.nci.sdk.ide"
+            class="gov.nih.nci.sdk.ide.views.DetailsView"
+            icon="src/images/sdk.gif"
+            id="gov.nih.nci.sdk.ide.views.DetailsView"
+            name="Model Details">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="org.eclipse.jdt.ui.JavaPerspective">
+         <view
+               id="gov.nih.nci.sdk.ide.views.MasterView"
+               ratio="0.5"
+               relationship="right"
+               relative="org.eclipse.ui.views.TaskList">
+         </view>
+      </perspectiveExtension>
+      <perspectiveExtension
+            targetID="org.eclipse.jdt.ui.JavaPerspective">
+         <view
+               id="gov.nih.nci.sdk.ide.views.DetailsView"
+               ratio="0.5"
+               relationship="right"
+               relative="org.eclipse.ui.views.TaskList">
+         </view>
+      </perspectiveExtension>
+   </extension>
+   <extension
+         point="org.eclipse.help.contexts">
+      <contexts
+            file="contexts.xml">
+      </contexts>
+      <contexts
+            file="contexts.xml">
+      </contexts>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="gov.nih.nci.sdk.ide.perspectives.SDKPerspective"
+            icon="src/images/gears.gif"
+            id="gov.nih.nci.sdk.ide.perspectives.SDKPerspective"
+            name="SDK Development">
+      </perspective>
+   </extension>
 
 </plugin>

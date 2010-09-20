@@ -1,13 +1,12 @@
 package gov.nih.nci.sdk.ide.modelexplorer.meaning;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import gov.nih.nci.sdk.ide.core.CategoryTabItem;
-import gov.nih.nci.sdk.ide.core.TabItemsBuilder;
 import gov.nih.nci.sdk.ide.core.UIHelper;
 import gov.nih.nci.sdk.ide.modelexplorer.Constants;
 import gov.nih.nci.sdk.ide.modelexplorer.TabbedContentBuilder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -28,9 +27,6 @@ public class MeaningContentBuilder extends TabbedContentBuilder {
 		tabs.add(new MeaningPropertiesTabItem(tabFolder, SWT.NONE, data));
 		tabs.add(new MeaningOperationsTabItem(tabFolder, SWT.NONE, data));
 		tabs.add(new MeaningRelationshipTabItem(tabFolder, SWT.NONE, data));
-		
-		System.out.println("SWT.None: " + SWT.None);
-		System.out.println("SWT.NONE: " + SWT.NONE);
 		
 		for (CategoryTabItem tab : tabs) {
 			tab.paint();
