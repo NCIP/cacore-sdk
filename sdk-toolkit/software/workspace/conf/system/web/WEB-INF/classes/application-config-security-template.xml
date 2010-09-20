@@ -147,7 +147,7 @@
 		<property name='accessDecisionManager' ref='accessDecisionManager'/>
 		<property name='objectDefinitionSource'>
 			<value>
-				@READABLE_APPLICATION_SERVICE_INTERFACE@.*=DUMMYVALUE
+				@READABLE_APPLICATION_SERVICE_INTERFACE@.*=IS_AUTHENTICATED_FULLY
 				@WRITABLE_APPLICATION_SERVICE_CLASS_LEVEL_SECURITY_INTERFACE@
 			</value>
 		</property>
