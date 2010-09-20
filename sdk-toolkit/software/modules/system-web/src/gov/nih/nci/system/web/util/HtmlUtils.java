@@ -486,7 +486,7 @@ public class HtmlUtils {
 		return sb.toString();
 	}	
 
-	private static String getHTML_II(List<Object> searchableFields) {
+	private static String getHTML_II(List<Object> searchableFields, String attrName) {
 		StringBuilder sb = new StringBuilder();
 		
 		if (searchableFields.contains("displayable")){
@@ -496,10 +496,14 @@ public class HtmlUtils {
 			sb.append("</tr>");
 		}
 		
-		if (searchableFields.contains("extension")){		
+		if (searchableFields.contains("extension")){
+			String extensionClass = "";
+			if ("id".equalsIgnoreCase(attrName)){
+				extensionClass = "number ";
+			}
 			sb.append("<tr>");
 			sb.append("  <td class=\"isoFormLabel\">Extension:</td>");
-			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"extension\" id=\"extension\" class=\"formFieldSized\" /></td>");
+			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"extension\" id=\"extension\" class=\"" + extensionClass + "formFieldSized\" /></td>");
 			sb.append("</tr>");
 		}
 		
@@ -807,8 +811,8 @@ public class HtmlUtils {
 		return getHTML_ENXP(searchableFields);
 	}	
 
-	private static String getScreen_II(List<Object> searchableFields) {
-		return getHTML_ANY(searchableFields) + getHTML_II(searchableFields);
+	private static String getScreen_II(List<Object> searchableFields, String attrName) {
+		return getHTML_ANY(searchableFields) + getHTML_II(searchableFields, attrName);
 	}
 
 	private static String getScreen_INT(List<Object> searchableFields) {
@@ -882,6 +886,9 @@ public class HtmlUtils {
 			html.append(getHTML(attrName, validationClass));	
 		} else if ("Character".equalsIgnoreCase(attrType)){
 			validationClass = "char";
+			html.append(getHTML(attrName, validationClass));
+		} else if ("Date".equalsIgnoreCase(attrType)){
+			validationClass = "date";
 			html.append(getHTML(attrName, validationClass));			
 		} else {	
 			validationClass = "";
@@ -932,7 +939,7 @@ public class HtmlUtils {
 		} else if ("ENXP".equalsIgnoreCase(attrType)){
 			html.append(getScreen_ENXP(searchableFields));			
 		} else if ("II".equalsIgnoreCase(attrType)){
-			html.append(getScreen_II(searchableFields));
+			html.append(getScreen_II(searchableFields, attrName));
 		} else if ("INT".equalsIgnoreCase(attrType)){
 			html.append(getScreen_INT(searchableFields));
 		} else if ("IVL&lt;INT&gt;".equalsIgnoreCase(attrType)){
