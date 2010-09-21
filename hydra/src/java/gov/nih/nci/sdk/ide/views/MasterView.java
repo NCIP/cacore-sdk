@@ -262,18 +262,13 @@ public class MasterView extends ActiveViewPart {
 	}
 	
 	private void popupConverter() {
-		EPackage epackage = SDKUIManager.getInstance().getRootEPackage();
-		SDKModelExplorer sui = new SDKModelExplorer(viewer.getControl().getShell(), Constants.SDK_SCREEN_TITLE, epackage);
+		SDKModelExplorer sui = new SDKModelExplorer(viewer.getControl().getShell(), Constants.CONVERTER_SCREEN_TITLE);
 		sui.open();
 	}
 	
 	private void popupGenerator() {
-		System.out.println("pg1");
-		EPackage epackage = SDKUIManager.getInstance().getRootEPackage();
-		SDKGenerator sui = new SDKGenerator(viewer.getControl().getShell(), Constants.SDK_SCREEN_TITLE, epackage);
-		System.out.println("pg2");
+		SDKGenerator sui = new SDKGenerator(viewer.getControl().getShell(), Constants.GENERATOR_SCREEN_TITLE);
 		sui.open();
-		System.out.println("pg3");
 	}
 	
 	public void setFocus() {
