@@ -15,15 +15,8 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Shell;
 
 public class SDKModelExplorer extends SDKScreen {
-	private static EPackage epackage;
-	
-	public SDKModelExplorer(Shell parent, String title, Object data) {
+	public SDKModelExplorer(Shell parent, String title) {
 		super(parent, title);
-		epackage = (EPackage)data;
-	}
-	
-	public static EPackage getEPackage() {
-		return epackage;
 	}
 	
 	public void createScreen(Composite composite) {
@@ -36,7 +29,8 @@ public class SDKModelExplorer extends SDKScreen {
 		layout.numColumns = 2;
 		composite.setLayout(layout);
 		
-		List<ModelPackageVO> dataList = SDKModelExplorerUtil.getModelPackages(epackage);
+		EPackage rootEPackage = SDKUIManager.getInstance().getRootEPackage();
+		List<ModelPackageVO> dataList = SDKModelExplorerUtil.getModelPackages(rootEPackage);
 		GroupPanel masterPanel = new ModelMasterGroupPanel(composite, SWT.NONE, dataList, Constants.MODEL_MASTER_PANEL_TITLE);
 		masterPanel.paint();
 		

@@ -3,12 +3,12 @@ package gov.nih.nci.sdk.ide.generator;
 import gov.nih.nci.sdk.ide.core.GroupPanel;
 import gov.nih.nci.sdk.ide.core.ModelPackageVO;
 import gov.nih.nci.sdk.ide.core.UIHelper;
-import gov.nih.nci.sdk.ide.modelexplorer.Constants;
 import gov.nih.nci.sdk.ide.modelexplorer.SDKModelExplorerUtil;
 
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -25,10 +25,10 @@ public class GeneratorDetailsGroupPanel extends GroupPanel {
 	
 	public void paint() {
 		Composite composite = super.getUIComposite();
-		
+
 		final Tree domainTree = new Tree(composite, SWT.SINGLE);
 		domainTree.setLayoutData(UIHelper.getFieldGridData());
-		
+
 		domainTree.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
 				TreeItem[] allSelected = domainTree.getSelection();
@@ -47,18 +47,17 @@ public class GeneratorDetailsGroupPanel extends GroupPanel {
 				}
 			}
 		});
-		
-		@SuppressWarnings("unchecked")
-		List<ModelPackageVO> dataList = (List<ModelPackageVO>)super.getData();
+
+		List<ModelPackageVO> dataList = SDKModelExplorerUtil.getModelPackages((EPackage)super.getData());
 		for (int k = 0; k < dataList.size(); k++) {
 			ModelPackageVO mpVO = dataList.get(k);
 			if (mpVO.hasPackage()) {
-				TreeItem packageItem = new TreeItem(domainTree, 0);
-				packageItem.setText(mpVO.getPackageName());
+				String packageName = mpVO.getPackageName();
 				List<String> models = SDKModelExplorerUtil.convertToList((Set<String>)mpVO.getModels());
 				for (int i = 0; i < models.size(); i++) {
-					TreeItem model = new TreeItem(packageItem, 0);
-					model.setText(models.get(i));
+					String itemText = packageName + "." + models.get(i);
+					TreeItem model = new TreeItem(domainTree, 0);
+					model.setText(itemText);
 				}
 			}
 			else {
@@ -68,8 +67,6 @@ public class GeneratorDetailsGroupPanel extends GroupPanel {
 					model.setText(models.get(i));
 				}
 			}
-			
-			
 		}
 	}
 }

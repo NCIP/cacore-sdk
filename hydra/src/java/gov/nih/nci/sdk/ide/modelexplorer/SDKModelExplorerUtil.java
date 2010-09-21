@@ -15,6 +15,8 @@ import org.eclipse.emf.ecore.EPackage;
 public class SDKModelExplorerUtil {
 	
 	public static List<ModelPackageVO> getModelPackages(EPackage rootEPackage) {
+		if (rootEPackage == null) return null;
+		
 		List<ModelPackageVO> list = new ArrayList<ModelPackageVO>();
 		Map<String, SortedSet<String>> map = EcoreUtil.getAllDomainPackageClassNamesMap(rootEPackage);
 		for (Map.Entry<String, SortedSet<String>> entry: map.entrySet()) {

@@ -8,6 +8,7 @@ import gov.nih.nci.sdk.ide.modelexplorer.SDKModelExplorerUtil;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -23,14 +24,11 @@ public class DomainListGroupPanel extends GroupPanel {
 	}
 	
 	public void paint() {
-		System.out.println("a");
 		Composite composite = super.getUIComposite();
 
-		System.out.println("a1");
-		final Tree domainTree = new Tree(composite, SWT.SINGLE);
+		final Tree domainTree = new Tree(composite, SWT.SINGLE | SWT.CHECK);
 		domainTree.setLayoutData(UIHelper.getFieldGridData());
 
-		System.out.println("a2");
 		domainTree.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
 				TreeItem[] allSelected = domainTree.getSelection();
@@ -50,21 +48,23 @@ public class DomainListGroupPanel extends GroupPanel {
 			}
 		});
 
-		System.out.println("a3");
-		//@SuppressWarnings("unchecked")
-		List<ModelPackageVO> dataList = (List<ModelPackageVO>)super.getData();
-		System.out.println("a4 " + dataList);
+		List<ModelPackageVO> dataList = SDKModelExplorerUtil.getModelPackages((EPackage)super.getData());
+		if (dataList == null) return;
+		
+		boolean showFullPackage = true;
+		if (dataList.size() == 1) showFullPackage = false;
+		
 		for (int k = 0; k < dataList.size(); k++) {
-			System.out.println("a4 k: " + k);
 			ModelPackageVO mpVO = dataList.get(k);
 			if (mpVO.hasPackage()) {
-				TreeItem packageItem = new TreeItem(domainTree, 0);
-				packageItem.setText(mpVO.getPackageName());
+				String packageName = mpVO.getPackageName();
 				List<String> models = SDKModelExplorerUtil.convertToList((Set<String>)mpVO.getModels());
 				for (int i = 0; i < models.size(); i++) {
-					System.out.println("a4 i: " + i);
-					TreeItem model = new TreeItem(packageItem, 0);
-					model.setText(models.get(i));
+					String itemText = (showFullPackage)?
+							(packageName + "." + models.get(i)):
+								models.get(i);
+					TreeItem model = new TreeItem(domainTree, 0);
+					model.setText(itemText);
 				}
 			}
 			else {
@@ -74,9 +74,6 @@ public class DomainListGroupPanel extends GroupPanel {
 					model.setText(models.get(i));
 				}
 			}
-			
-			
 		}
-		System.out.println("a9");
 	}
 }

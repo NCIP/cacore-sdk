@@ -3,6 +3,7 @@ package gov.nih.nci.sdk.ide.generator;
 import gov.nih.nci.sdk.ide.core.GroupPanel;
 import gov.nih.nci.sdk.ide.core.SDKScreen;
 import gov.nih.nci.sdk.ide.modelexplorer.Constants;
+import gov.nih.nci.sdk.ide.modelexplorer.SDKUIManager;
 
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.swt.SWT;
@@ -11,15 +12,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 
 public class SDKGenerator extends SDKScreen {
-	private static EPackage epackage;
-	
-	public SDKGenerator(Shell parent, String title, Object data) {
+	public SDKGenerator(Shell parent, String title) {
 		super(parent, title);
-		epackage = (EPackage)data;
-	}
-	
-	public static EPackage getEPackage() {
-		return epackage;
 	}
 	
 	public void createScreen(Composite composite) {
@@ -31,18 +25,15 @@ public class SDKGenerator extends SDKScreen {
 		layout.marginWidth = 10;
 		layout.numColumns = 3;
 		composite.setLayout(layout);
-		System.out.println("1");
 		
-		GroupPanel dlPanel = new DomainListGroupPanel(composite, SWT.NONE, null, "Domain List");
+		EPackage rootEPackage = SDKUIManager.getInstance().getRootEPackage();
+		GroupPanel dlPanel = new DomainListGroupPanel(composite, SWT.NONE, rootEPackage, "Domain List");
 		dlPanel.paint();
-		System.out.println("2");
 		
-		GroupPanel gdPanel = new GeneratorDetailsGroupPanel(composite, SWT.NONE, null, "Generator");
+		GroupPanel gdPanel = new GeneratorDetailsGroupPanel(composite, SWT.NONE, rootEPackage, "Generator");
 		gdPanel.paint();
-		System.out.println("3");
 		
-		GroupPanel glPanel = new GeneratorListGroupPanel(composite, SWT.NONE, null, "Generators");
+		GroupPanel glPanel = new GeneratorListGroupPanel(composite, SWT.NONE, rootEPackage, "Generators");
 		glPanel.paint();
-		System.out.println("4");
 	}
 }
