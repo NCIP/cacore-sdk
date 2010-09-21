@@ -6,8 +6,10 @@ import gov.nih.nci.sdk.ide.modelexplorer.Constants;
 import gov.nih.nci.sdk.ide.modelexplorer.SDKUIManager;
 
 import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 
@@ -35,5 +37,20 @@ public class SDKGenerator extends SDKScreen {
 		
 		GroupPanel glPanel = new GeneratorListGroupPanel(composite, SWT.NONE, rootEPackage, "Generators");
 		glPanel.paint();
+	}
+	
+	public void okPressed() {
+		System.out.println("okPressed");
+	}
+	
+	public Button createButton(Composite parent, int id, String label, boolean defaultButton) {
+		System.out.println("createButton label: " + label);
+		Button button = super.createButton(parent, id, label, defaultButton);
+		if (id == IDialogConstants.OK_ID) button.setText("Generate");
+		return button;
+	}
+	
+	public boolean isResizable() {
+		return true;
 	}
 }

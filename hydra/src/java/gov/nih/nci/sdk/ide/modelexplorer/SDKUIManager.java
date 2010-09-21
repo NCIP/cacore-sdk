@@ -1,6 +1,6 @@
 package gov.nih.nci.sdk.ide.modelexplorer;
 
-import gov.nih.nci.sdk.modelconverter.xmi2ecore.XMI2EcoreModelConverterTestHelper;
+import gov.nih.nci.sdk.ide.converter.SDKModelConverter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,7 +26,8 @@ public class SDKUIManager {
 	private Event lastSelection;
 	
 	private SDKUIManager() {
-		rootEPackage = XMI2EcoreModelConverterTestHelper.readEPackageFromXMIFile();
+		//TODO: The following will be removed when the SDKModelConverter screen is up.
+		rootEPackage = SDKModelConverter.readEPackageFromXMIFile();
 		setRootEPackage(rootEPackage);
 	}
 	
