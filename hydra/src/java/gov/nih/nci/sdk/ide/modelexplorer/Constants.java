@@ -8,6 +8,8 @@ public class Constants {
 	public static final String SDK_SCREEN_TITLE = "SDK";
 	public static final String MODEL_MASTER_PANEL_TITLE = "Model Explorer";
 	public static final String MODEL_DETAILS_PANEL_TITLE = "Meaning Viewer";
+	public static final String CONVERTER_SCREEN_TITLE = "SDK Converter";
+	public static final String GENERATOR_SCREEN_TITLE = "SDK Generator";
 
 	public static final String CATEGORY_Meaning = "Meaning";
 	public static final String CATEGORY_Persistence = "Persistence";
