@@ -1,19 +1,7 @@
 package gov.nih.nci.sdk.core;
 
-import java.io.Reader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.StringReader;
-import java.util.Set;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.HashMap;
-
-import javax.script.ScriptContext;
-import javax.script.ScriptEngine;
-import javax.script.CompiledScript;
-import javax.script.ScriptEngineFactory;
-import javax.script.ScriptException;
 
 public class OmniScriptingUtil
    implements ScriptingUtil
