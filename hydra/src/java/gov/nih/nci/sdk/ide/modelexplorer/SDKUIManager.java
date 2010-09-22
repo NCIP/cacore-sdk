@@ -4,6 +4,7 @@ import gov.nih.nci.sdk.ide.converter.SDKModelConverter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -58,13 +59,31 @@ public class SDKUIManager {
 		}
 	}
 	
-	public void registerAsListener(int eventType, Listener listener) {
+	public void registerAsListener(int eventType, Listener listener, boolean single) {
+		if (listener == null) return;
+		
 		List<Listener> listeners = listenersMap.get(eventType);
 		if (listeners == null) {
 			listeners = new ArrayList<Listener>();
 			listenersMap.put(eventType, listeners);
 		}
-		listeners.add(listener);
+		
+		if (single) {
+			Iterator<Listener> it = listeners.iterator();
+			while(it.hasNext()) {
+				if (listener.getClass().getName().equals(it.next().getClass().getName())) {
+					it.remove();
+				}
+			}
+		}
+		
+		if (!listeners.contains(listener)) {
+			listeners.add(listener);
+		}
+	}
+	
+	public void registerAsListener(int eventType, Listener listener) {
+		registerAsListener(eventType, listener, true);
 	}
 	
 	public void lastSelection() {

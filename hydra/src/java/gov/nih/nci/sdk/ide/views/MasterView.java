@@ -261,14 +261,20 @@ public class MasterView extends ActiveViewPart {
 		});
 	}
 	
+	private SDKModelExplorer screenSDKModelExplorer;
 	private void popupConverter() {
-		SDKModelExplorer sui = new SDKModelExplorer(viewer.getControl().getShell(), Constants.CONVERTER_SCREEN_TITLE);
-		sui.open();
+		if (screenSDKModelExplorer == null) {
+			screenSDKModelExplorer = new SDKModelExplorer(viewer.getControl().getShell(), Constants.CONVERTER_SCREEN_TITLE);
+		}
+		screenSDKModelExplorer.open();
 	}
 	
+	private SDKGenerator screenSDKGenerator = null;
 	private void popupGenerator() {
-		SDKGenerator sui = new SDKGenerator(viewer.getControl().getShell(), Constants.GENERATOR_SCREEN_TITLE);
-		sui.open();
+		if (screenSDKGenerator == null) {
+			screenSDKGenerator = new SDKGenerator(viewer.getControl().getShell(), Constants.GENERATOR_SCREEN_TITLE);
+		}
+		screenSDKGenerator.open();
 	}
 	
 	public void setFocus() {

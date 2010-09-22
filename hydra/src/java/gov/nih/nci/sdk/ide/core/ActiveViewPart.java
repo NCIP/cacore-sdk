@@ -22,7 +22,6 @@ public abstract class ActiveViewPart extends ViewPart implements Listener {
 	
 	public abstract void paint(Composite parent);
 	
-	@Override
 	public void handleEvent(Event event) {
 	}
 	
