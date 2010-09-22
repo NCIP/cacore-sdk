@@ -14,53 +14,41 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.Text;
 
-public class MeaningDomainTabItem extends CategoryTabItem {
-	private String domainName;
-	private String domainDesc;
-	private List<String> concepts;
+public class MeaningDomainTabItem
+   extends CategoryTabItem
+   implements DomainView
+{
+	private String domainName = "";
+	private String domainDesc = "";
+	private List<String> conceptList = new ArrayList<String>();
 
-	public MeaningDomainTabItem(TabFolder parent, int style, Object data) {
+	public String getDomainName() { return domainName; }
+	public String getDomainDesc() { return domainDesc; }
+	public List<String> getConceptList() { return conceptList; }
+
+	public void setDomainName(String _domainName) { domainName = _domainName; }
+	public void setDomainDesc(String _domainDesc) { domainDesc = _domainDesc; }
+	public void setConceptList(List<String> _conceptList) { conceptList = _conceptList; }
+
+	public MeaningDomainTabItem(TabFolder parent, int style, Object data)
+	{
 		super(parent, style, data, Constants.TAB_Domain);
 	}
 	
 	@Override
-	protected void prepareData() {
+	protected void prepareData()
+	{
+		System.out.println("MeaningDomainTabItem prepareData() called");
 		ModelSelectionEvent mse = (ModelSelectionEvent)this.getData();
-		domainName = mse.getFullModelName();
-		
-		domainDesc = mse.getFullModelName();
-		
-		domainDesc += "\nThis is a very very long description which should come from UML.";
-		domainDesc += "\nThis is a very very long description which should come from UML.";
-		domainDesc += "\nThis is a very very long description which should come from UML.";
-		domainDesc += "\nThis is a very very long description which should come from UML.";
-		domainDesc += "\nThis is a very very long description which should come from UML.";
-		domainDesc += "\nThis is a very very long description which should come from UML.";
-		domainDesc += "\nThis is a very very long description which should come from UML.";
-		domainDesc += "\nThis is a very very long description which should come from UML.";
-		domainDesc += "\nThis is a very very long description which should come from UML.";
-		domainDesc += "\nThis is a very very long description which should come from UML.";
-		
-		concepts = new ArrayList<String>();
-		concepts.add("http://mayoclinic.com/concept/person");
-		concepts.add("http://mayoclinic.com/concept/patient");
-		concepts.add("http://lexevs.nci.gov/concept/humanbeing");
-		concepts.add("http://lexevs.nci.gov/concept/humanbeing1");
-		concepts.add("http://lexevs.nci.gov/concept/humanbeing2");
-		concepts.add("http://lexevs.nci.gov/concept/humanbeing3");
-		concepts.add("http://lexevs.nci.gov/concept/humanbeing4");
-		concepts.add("http://lexevs.nci.gov/concept/humanbeing5");
-		concepts.add("http://lexevs.nci.gov/concept/humanbeing6");
-		concepts.add("http://lexevs.nci.gov/concept/humanbeing7");
-		concepts.add("http://lexevs.nci.gov/concept/humanbeing8");
-		concepts.add("http://lexevs.nci.gov/concept/humanbeing9");
 	}
 
 	@Override
-	public void paint() {
+	public void paint()
+	{
+		System.out.println("MeaningDomainTabItem paint() called");
 		Composite composite = super.getUIComposite();
 		composite.setLayout(super.getLayout());
-		
+
 		new Label(composite, SWT.NONE).setText("Domain Name");
 		Text domainNameText = new Text(composite, SWT.BORDER | SWT.READ_ONLY);
 		domainNameText.setText(domainName);
@@ -79,7 +67,7 @@ public class MeaningDomainTabItem extends CategoryTabItem {
 		conceptsArea.setLayout(cgd);
 		
 		Text conceptText = null;
-		for (String concept: concepts) {
+		for (String concept: getConceptList()) {
 			conceptText = new Text(conceptsArea, SWT.BORDER | SWT.READ_ONLY);
 			conceptText.setText(concept);
 			conceptText.setLayoutData(super.getGridData());

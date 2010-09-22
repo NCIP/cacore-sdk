@@ -4,14 +4,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 
-import org.eclipse.emf.ecore.EPackage;
-
 public abstract class ActiveUI implements Listener {
 	private Composite parent;
 	private int style;
 	private Object data;
 	private Composite uiComposite;
-	private EPackage ePackage; //Every significant widget in the application should have access to the EPackage.
 	
 	public ActiveUI(Composite parent, int style, Object data) {
 		this.parent = parent;
@@ -36,13 +33,6 @@ public abstract class ActiveUI implements Listener {
 	public Composite getUIComposite() {
 		return uiComposite;
 	}
-
-	public EPackage getEPackage()
-	{
-		return ePackage;
-	}
-
-	protected void setEPackage(EPackage _ePackage) { ePackage = _ePackage; }
 
 	protected abstract Composite initUIComposite();
 	
