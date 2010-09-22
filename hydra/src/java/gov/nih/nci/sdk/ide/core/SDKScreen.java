@@ -5,9 +5,11 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 
-public abstract class SDKScreen extends Dialog {
+public abstract class SDKScreen extends Dialog implements Listener {
 	protected String title;
 	
 	public SDKScreen(Shell parent, String title) {
@@ -53,4 +55,7 @@ public abstract class SDKScreen extends Dialog {
 	}
 	
 	protected abstract void createScreen(Composite parent);
+	
+	public void handleEvent(Event event) {
+	}
 }

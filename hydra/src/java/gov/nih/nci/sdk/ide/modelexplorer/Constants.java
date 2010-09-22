@@ -1,7 +1,7 @@
 package gov.nih.nci.sdk.ide.modelexplorer;
 
 public class Constants {
-	public static final int MODEL_EXPLORER_SCREEN_WIDTH = 800;
+	public static final int MODEL_EXPLORER_SCREEN_WIDTH = 1200;
 	public static final int MODEL_EXPLORER_SCREEN_HEIGHT = 600;
 	public static final int MODEL_DETAILS_PANEL_WIDTH = 400;
 
@@ -36,4 +36,10 @@ public class Constants {
 	
 	public static final String LABEL_FOR_LOAD_XMI = "Load XMI";
 	public static final String LABEL_FOR_GENERATE_APP = "Generate App";
+	
+	public static final String[] GENERATOR_PROPERTIES_HEADER = {"Name", "Value", "Default"};
+	
+	//event ids
+	public static final int DOMAIN_SELECTION_EVENT = 100;
+	public static final int GENERATOR_SELECTION_EVENT = 110;
 }
