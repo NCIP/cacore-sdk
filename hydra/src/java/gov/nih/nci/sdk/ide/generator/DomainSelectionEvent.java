@@ -1,18 +1,25 @@
 package gov.nih.nci.sdk.ide.generator;
 
 import java.util.Date;
+import java.util.List;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Event;
 
 public class DomainSelectionEvent extends Event {
 	private String packageName;
-	private String modelName;
+	private List<String> modelNames;
 	private Date timestamp;
 	
-	public DomainSelectionEvent(String packageName, String modelName) {
+	public DomainSelectionEvent(List<String> modelNames) {
+		this.modelNames = modelNames;
+		this.timestamp = new Date();
+		super.type = SWT.Selection;
+	}
+	
+	public DomainSelectionEvent(String packageName, List<String> modelNames) {
 		this.packageName = packageName;
-		this.modelName = modelName;
+		this.modelNames = modelNames;
 		this.timestamp = new Date();
 		super.type = SWT.Selection;
 	}
@@ -21,28 +28,23 @@ public class DomainSelectionEvent extends Event {
 		return packageName;
 	}
 
-	public String getModelName() {
-		return modelName;
+	public List<String> getModelNames() {
+		return modelNames;
 	}
 	
 	public Date getTimestamp() {
 		return timestamp;
 	}
 	
-	public String getFullModelName() {
-		return (packageName == null || "".equals(packageName)) ? modelName
-				: (packageName + "." + modelName);
-	}
-	
 	public String getEventName() {
-		return getFullModelName();
+		return this.getClass().getName();
 	}
 	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("timestamp=").append(timestamp).append(", ");
 		sb.append("packageName=").append(packageName).append(", ");
-		sb.append("modelName=").append(modelName);
+		sb.append("modelNames=").append(modelNames);
 		return sb.toString();
 	}
 }

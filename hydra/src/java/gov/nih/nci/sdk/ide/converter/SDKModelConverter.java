@@ -16,9 +16,9 @@ public class SDKModelConverter {
 	 * Reads in the XMI file as Ecore model package.
 	 */
 	public static EPackage readEPackageFromXMIFile() {
-		//File xmiFile = createTempFileForTesting(TEST_MODEL_XMI_FILE);
-		return ModelConverterUtil.getEPackageFromXMIFile("/home/bediako/work/hydra/src/test/model/sdkexample.xmi");
-		//return ModelConverterUtil.getEPackageFromXMIFile(xmiFile.getAbsolutePath());
+		File xmiFile = createTempFileForTesting(TEST_MODEL_XMI_FILE);
+		return ModelConverterUtil.getEPackageFromXMIFile(xmiFile
+				.getAbsolutePath());
 	}
 
 	private static File createTempFileForTesting(String xmiResourcePath) {
