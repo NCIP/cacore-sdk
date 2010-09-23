@@ -10,6 +10,7 @@ import java.util.List;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.Text;
@@ -52,20 +53,25 @@ public class MeaningDomainTabItem
 		
 		Composite composite = super.getUIComposite();
 		composite.setLayout(super.getLayout());
+		
+		Group group = new Group(composite, SWT.SHADOW_OUT);
+		group.setText(domainName + " Domain Info");
+		group.setLayout(super.getLayout());
+		group.setLayoutData(super.getGridData());
 
-		new Label(composite, SWT.NONE).setText("Domain Name");
-		Text domainNameText = new Text(composite, SWT.BORDER | SWT.READ_ONLY);
+		new Label(group, SWT.NONE).setText("Domain Name");
+		Text domainNameText = new Text(group, SWT.BORDER | SWT.READ_ONLY);
 		domainNameText.setText(domainName);
 		domainNameText.setLayoutData(super.getGridData());
 		
-		new Label(composite, SWT.NONE).setText("Description");
-		Text domainDescText = new Text(composite, SWT.BORDER | SWT.READ_ONLY | SWT.MULTI);
+		new Label(group, SWT.NONE).setText("Description");
+		Text domainDescText = new Text(group, SWT.BORDER | SWT.READ_ONLY | SWT.MULTI);
 		domainDescText.setText(domainDesc);
 		domainDescText.setLayoutData(super.getGridData());
 		
-		new Label(composite, SWT.NONE).setText("Concept");
+		new Label(group, SWT.NONE).setText("Concept");
 		
-		Composite conceptsArea = new Composite(composite, SWT.NONE);
+		Composite conceptsArea = new Composite(group, SWT.NONE);
 		GridLayout cgd = (GridLayout)super.getLayout();
 		cgd.numColumns = 1;
 		conceptsArea.setLayout(cgd);
@@ -78,6 +84,7 @@ public class MeaningDomainTabItem
 			conceptText.setLayoutData(super.getGridData());
 		}
 
+		group.setSize(group.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		composite.setSize(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	}
 }

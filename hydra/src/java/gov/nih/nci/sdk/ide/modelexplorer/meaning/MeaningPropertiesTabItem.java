@@ -34,12 +34,14 @@ public class MeaningPropertiesTabItem extends CategoryTabItem {
 		EPackage ePackage = gov.nih.nci.sdk.ide.modelexplorer.SDKUIManager.getInstance().getRootEPackage();
 		EClass eClass = gov.nih.nci.sdk.util.EcoreUtil.getEClass(ePackage, modelSelectionEvent.getFullModelName());		
 		EList<EAttribute> eAttributeList = eClass.getEAttributes();
+		String domainName = gov.nih.nci.sdk.util.SDKUtil.getTagValue(eClass, "class.mea.domain");
+		domainName = (domainName == null) ? modelSelectionEvent.getModelName() : domainName;
 		
 		Composite composite = super.getUIComposite();
 		composite.setLayout(super.getLayout());
 
 		Group group = new Group(composite, SWT.SHADOW_OUT);
-		group.setText("Property Info");
+		group.setText(domainName + " Property Info");
 		group.setLayout(super.getLayout());
 		group.setLayoutData(super.getGridData());
 
@@ -55,14 +57,16 @@ public class MeaningPropertiesTabItem extends CategoryTabItem {
 			}
 			
 			new Label(group, SWT.NONE).setText("Domain Name");
-			Text domainNameText = new Text(group, SWT.BORDER | SWT.READ_ONLY);
-			domainNameText.setText(viewedAttribute.getName());
-			domainNameText.setLayoutData(super.getGridData());
+			Text nameText = new Text(group, SWT.BORDER | SWT.READ_ONLY);
+			nameText.setText(viewedAttribute.getName());
+			nameText.setLayoutData(super.getGridData());
 	
 			new Label(group, SWT.NONE).setText("Description");
-			Text domainDescText = new Text(group, SWT.BORDER | SWT.READ_ONLY | SWT.MULTI);
-			domainDescText.setText("Description");
-			domainDescText.setLayoutData(new GridData());
+			Text descriptionText = new Text(group, SWT.BORDER | SWT.READ_ONLY | SWT.MULTI);
+			String attributeDescription = gov.nih.nci.sdk.util.SDKUtil.getTagValue(eClass, "prop.mea.desc");
+			attributeDescription = (attributeDescription == null) ? "No attribute description found" : attributeDescription;
+			descriptionText.setText(attributeDescription);
+			descriptionText.setLayoutData(new GridData());
 	
 			new Label(group, SWT.NONE).setText("Type");
 			Text typeText = new Text(group, SWT.BORDER | SWT.READ_ONLY | SWT.MULTI);
