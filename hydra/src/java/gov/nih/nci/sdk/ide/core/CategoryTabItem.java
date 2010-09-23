@@ -40,7 +40,7 @@ public abstract class CategoryTabItem extends ActiveUI {
 		theTabItem.setControl(sc);
 		
 		GridLayout layout = new GridLayout();
-		layout.numColumns = 1;
+		layout.numColumns = 2;
 		tabArea.setLayout(layout);
 		tabArea.setSize(tabArea.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		tabArea.setLayoutData(getGridData());
