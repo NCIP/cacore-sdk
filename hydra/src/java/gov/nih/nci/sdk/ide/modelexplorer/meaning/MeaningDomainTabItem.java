@@ -44,7 +44,7 @@ public class MeaningDomainTabItem
 		String domainName = gov.nih.nci.sdk.util.SDKUtil.getTagValue(eClass, "class.mea.domain");
 		domainName = (domainName == null) ? modelSelectionEvent.getModelName() : domainName;
 		String domainDesc = gov.nih.nci.sdk.util.SDKUtil.getTagValue(eClass, "class.mea.desc");
-		domainDesc = (domainDesc == null) ? "" : domainDesc;
+		domainDesc = (domainDesc == null) ? "There is no description for this domain" : domainDesc;
 		
 		String modelConcept = gov.nih.nci.sdk.util.SDKUtil.getTagValue(eClass, "class.mea.concept");
 		modelConcept = (modelConcept == null) ? "" : modelConcept;
