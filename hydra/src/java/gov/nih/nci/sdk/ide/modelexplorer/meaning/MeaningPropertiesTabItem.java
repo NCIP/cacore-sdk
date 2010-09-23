@@ -47,7 +47,7 @@ public class MeaningPropertiesTabItem extends CategoryTabItem {
 
 		if (eAttributeList != null && eAttributeList.isEmpty() == false)
 		{
-			EAttribute viewedAttribute = eAttributeList.get(0);
+			EAttribute selectedAttribute = eAttributeList.get(0);
 		
 			List propertiesList = new List(composite, SWT.NONE);
 			
@@ -56,29 +56,23 @@ public class MeaningPropertiesTabItem extends CategoryTabItem {
 				propertiesList.add(eAttribute.getName());
 			}
 			
-			new Label(group, SWT.NONE).setText("Domain Name");
+			new Label(group, SWT.NONE).setText("Name");
 			Text nameText = new Text(group, SWT.BORDER | SWT.READ_ONLY);
-			nameText.setText(viewedAttribute.getName());
+			nameText.setText(selectedAttribute.getName());
 			nameText.setLayoutData(super.getGridData());
 	
 			new Label(group, SWT.NONE).setText("Description");
 			Text descriptionText = new Text(group, SWT.BORDER | SWT.READ_ONLY | SWT.MULTI);
-			String attributeDescription = gov.nih.nci.sdk.util.SDKUtil.getTagValue(eClass, "prop.mea.desc");
+			String attributeDescription = gov.nih.nci.sdk.util.SDKUtil.getTagValue(selectedAttribute, "prop.mea.desc");
 			attributeDescription = (attributeDescription == null) ? "No attribute description found" : attributeDescription;
 			descriptionText.setText(attributeDescription);
 			descriptionText.setLayoutData(new GridData());
 	
 			new Label(group, SWT.NONE).setText("Type");
 			Text typeText = new Text(group, SWT.BORDER | SWT.READ_ONLY | SWT.MULTI);
-			String type = (viewedAttribute.getEType() != null) ? viewedAttribute.getEType().toString() : "";
+			String type = (selectedAttribute.getEType() != null) ? selectedAttribute.getEType().getName() : "";
 			typeText.setText(type);
 			typeText.setLayoutData(new GridData());
-	
-			/*Composite conceptsArea = new Composite(composite, SWT.NONE);
-			GridLayout cgd = (GridLayout)super.getLayout();
-			cgd.numColumns = 1;
-			conceptsArea.setLayout(cgd);
-			*/
 		}
 		else
 		{
