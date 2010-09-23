@@ -44,12 +44,17 @@ public class MeaningPropertiesTabItem extends CategoryTabItem {
 		group.setText(domainName + " Property Info");
 		group.setLayout(super.getLayout());
 		group.setLayoutData(super.getGridData());
+		
+		Group listGroup= new Group(composite, SWT.SHADOW_OUT);
+		listGroup.setText("has properties ...");
+		listGroup.setLayout(super.getLayout());
+		listGroup.setLayoutData(super.getGridData());
 
 		if (eAttributeList != null && eAttributeList.isEmpty() == false)
 		{
 			EAttribute selectedAttribute = eAttributeList.get(0);
 		
-			List propertiesList = new List(composite, SWT.NONE);
+			List propertiesList = new List(listGroup, SWT.NONE);
 			
 			for (org.eclipse.emf.ecore.EAttribute eAttribute: eAttributeList)
 			{
@@ -80,6 +85,7 @@ public class MeaningPropertiesTabItem extends CategoryTabItem {
 		}
 
 		group.setSize(group.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		listGroup.setSize(listGroup.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		composite.setSize(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	}
 
