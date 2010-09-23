@@ -42,12 +42,17 @@ public class MeaningOperationsTabItem extends CategoryTabItem {
 		group.setText(domainName + " Operation Info");
 		group.setLayout(super.getLayout());
 		group.setLayoutData(super.getGridData());
+		
+		Group listGroup= new Group(composite, SWT.SHADOW_OUT);
+		listGroup.setText("has operations ...");
+		listGroup.setLayout(super.getLayout());
+		listGroup.setLayoutData(super.getGridData());
 
 		if (eOperationList != null && eOperationList.isEmpty() == false)
 		{
 			EOperation selectedOperation = eOperationList.get(0);
 		
-			List operationsList = new List(composite, SWT.NONE);
+			List operationsList = new List(listGroup, SWT.NONE);
 			
 			for (EOperation eOperation: eOperationList)
 			{
@@ -93,6 +98,7 @@ public class MeaningOperationsTabItem extends CategoryTabItem {
 		}
 
 		group.setSize(group.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		listGroup.setSize(listGroup.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		composite.setSize(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	}
 
