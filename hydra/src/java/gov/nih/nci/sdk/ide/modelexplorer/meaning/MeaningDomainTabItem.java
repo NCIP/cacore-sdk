@@ -14,22 +14,13 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.Text;
 
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EPackage;
+
+
 public class MeaningDomainTabItem
    extends CategoryTabItem
-   implements DomainView
 {
-	private String domainName = "";
-	private String domainDesc = "";
-	private List<String> conceptList = new ArrayList<String>();
-
-	public String getDomainName() { return domainName; }
-	public String getDomainDesc() { return domainDesc; }
-	public List<String> getConceptList() { return conceptList; }
-
-	public void setDomainName(String _domainName) { domainName = _domainName; }
-	public void setDomainDesc(String _domainDesc) { domainDesc = _domainDesc; }
-	public void setConceptList(List<String> _conceptList) { conceptList = _conceptList; }
-
 	public MeaningDomainTabItem(TabFolder parent, int style, Object data)
 	{
 		super(parent, style, data, Constants.TAB_Domain);
@@ -38,14 +29,27 @@ public class MeaningDomainTabItem
 	@Override
 	protected void prepareData()
 	{
-		System.out.println("MeaningDomainTabItem prepareData() called");
 		ModelSelectionEvent mse = (ModelSelectionEvent)this.getData();
+		System.out.println("Event fired: " + this.getData());
 	}
 
 	@Override
 	public void paint()
 	{
-		System.out.println("MeaningDomainTabItem paint() called");
+		ModelSelectionEvent modelSelectionEvent = (ModelSelectionEvent)this.getData();
+		EPackage ePackage = gov.nih.nci.sdk.ide.modelexplorer.SDKUIManager.getInstance().getRootEPackage();
+		EClass eClass = gov.nih.nci.sdk.util.EcoreUtil.getEClass(ePackage, modelSelectionEvent.getFullModelName());
+		
+		String domainName = gov.nih.nci.sdk.util.SDKUtil.getTagValue(eClass, "class.mea.domain");
+		domainName = (domainName == null) ? modelSelectionEvent.getModelName() : domainName;
+		String domainDesc = gov.nih.nci.sdk.util.SDKUtil.getTagValue(eClass, "class.mea.desc");
+		domainDesc = (domainDesc == null) ? "" : domainDesc;
+		
+		String modelConcept = gov.nih.nci.sdk.util.SDKUtil.getTagValue(eClass, "class.mea.concept");
+		modelConcept = (modelConcept == null) ? "" : modelConcept;
+		List<String> conceptList = new ArrayList<String>();
+		conceptList.add(modelConcept);
+		
 		Composite composite = super.getUIComposite();
 		composite.setLayout(super.getLayout());
 
@@ -67,7 +71,8 @@ public class MeaningDomainTabItem
 		conceptsArea.setLayout(cgd);
 		
 		Text conceptText = null;
-		for (String concept: getConceptList()) {
+		
+		for (String concept: conceptList) {
 			conceptText = new Text(conceptsArea, SWT.BORDER | SWT.READ_ONLY);
 			conceptText.setText(concept);
 			conceptText.setLayoutData(super.getGridData());
