@@ -41,11 +41,16 @@ public class MeaningRelationshipTabItem extends CategoryTabItem {
 		group.setLayout(super.getLayout());
 		group.setLayoutData(super.getGridData());
 
+		Group listGroup= new Group(composite, SWT.SHADOW_OUT);
+		listGroup.setText("has relationships...");
+		listGroup.setLayout(super.getLayout());
+		listGroup.setLayoutData(super.getGridData());
+		
 		if (eReferenceList != null && eReferenceList.isEmpty() == false)
 		{
 			EReference selectedReference = eReferenceList.get(0);
 		
-			List propertiesList = new List(composite, SWT.NONE);
+			List propertiesList = new List(listGroup, SWT.NONE);
 			
 			for (org.eclipse.emf.ecore.EReference eReference: eReferenceList)
 			{
@@ -76,6 +81,7 @@ public class MeaningRelationshipTabItem extends CategoryTabItem {
 		}
 
 		group.setSize(group.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		listGroup.setSize(listGroup.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		composite.setSize(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 
 	}
