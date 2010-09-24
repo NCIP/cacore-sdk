@@ -27,9 +27,6 @@ public class SDKUIManager {
 	private Event lastSelection;
 	
 	private SDKUIManager() {
-		//TODO: The following will be removed when the SDKModelConverter screen is up.
-		rootEPackage = SDKModelConverter.readEPackageFromXMIFile();
-		setRootEPackage(rootEPackage);
 	}
 	
 	public static SDKUIManager getInstance() {
