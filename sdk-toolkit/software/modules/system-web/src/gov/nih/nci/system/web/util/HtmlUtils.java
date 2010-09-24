@@ -895,7 +895,7 @@ public class HtmlUtils {
 			html.append(getHTML(attrName, validationClass));
 		}
 		
-		System.out.println("HTML for non-ISO data type " +attrType + ": "+html);
+		//System.out.println("HTML for non-ISO data type " +attrType + ": "+html);
 		log.debug("HTML for non-ISO data type " +attrType + ": "+html);
 		
 		return html.toString();
