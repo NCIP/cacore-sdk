@@ -56,25 +56,66 @@ public class TestClient
 		}
 	}
 	
-	void printObject(Object obj, Class klass) throws Exception {
-		System.out.println("Printing "+ klass.getName());
+	public static void printObject(Object obj, Class klass, boolean includeAssociation) throws Exception {
+		System.out.println("\nPrinting "+ klass.getName());
 		Method[] methods = klass.getMethods();
 		for(Method method:methods)
 		{
 			if(method.getName().startsWith("get") && !method.getName().equals("getClass"))
 			{
 				System.out.print("\t"+method.getName().substring(3)+":");
-				Object val = method.invoke(obj, (Object[])null);
-				if(val instanceof java.util.Set)
-					System.out.println("size="+((Collection)val).size());
+				Object val = null;
+				try {
+				val = method.invoke(obj, (Object[])null);
+				} catch(Exception e){
+					val = "ERROR - unable to determine value"; 
+						
+				}
+				if (val instanceof java.util.Set) {
+					Collection list = (Collection)val;
+					for(Object object: list){
+						System.out.println(object.getClass().getName()+":");
+						if (includeAssociation){
+							printObject(object, object.getClass(), false);
+						} else {
+							System.out.println(" -- association has been excluded");
+						}
+					}	
+					//System.out.println("size="+((Collection)val).size());
+				}
+				else if(val instanceof ArrayList)
+				{
+					Collection list = (ArrayList) val;
+					System.out.println("\nPrinting Collection.....");
+					for(Object object: list){
+						System.out.println(object.getClass().getName()+":");
+						if (includeAssociation){
+							printObject(object, object.getClass(), false);
+						} else {
+							System.out.println(" -- association has been excluded");
+						}
+					}
+				}
+				else if(val != null && val.getClass().getName().startsWith("gov.nih.nci"))
+				{
+					if (includeAssociation){
+						printObject(val, val.getClass(), false);
+					} else {
+						System.out.println(" -- association has been excluded");
+					}
+				}
 				else
 					System.out.println(val);
 			}
 		}
 	}
 
+	private void printObject(Object obj, Class klass) throws Exception {
+		printObject(obj,klass,false);
+	}
 
-	Collection<Class> getClasses() throws Exception
+
+	public Collection<Class> getClasses() throws Exception
 	{
 		Collection<Class> list = new ArrayList<Class>();
 		JarFile file = null;
