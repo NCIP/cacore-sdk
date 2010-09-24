@@ -1,24 +1,21 @@
 package gov.nih.nci.sdk.ide.modelexplorer.meaning;
 
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EAttribute;
-import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.emf.common.util.EList;
-
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.TabFolder;
-import org.eclipse.swt.widgets.List;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
-import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.RowLayout;
-import org.eclipse.swt.layout.GridLayout;
-
 import gov.nih.nci.sdk.ide.core.CategoryTabItem;
 import gov.nih.nci.sdk.ide.modelexplorer.Constants;
 import gov.nih.nci.sdk.ide.modelexplorer.ModelSelectionEvent;
+
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.List;
+import org.eclipse.swt.widgets.TabFolder;
+import org.eclipse.swt.widgets.Text;
 
 public class MeaningPropertiesTabItem extends CategoryTabItem {
 
@@ -33,7 +30,7 @@ public class MeaningPropertiesTabItem extends CategoryTabItem {
 		ModelSelectionEvent modelSelectionEvent = (ModelSelectionEvent)this.getData();
 		EPackage ePackage = gov.nih.nci.sdk.ide.modelexplorer.SDKUIManager.getInstance().getRootEPackage();
 		EClass eClass = gov.nih.nci.sdk.util.EcoreUtil.getEClass(ePackage, modelSelectionEvent.getFullModelName());		
-		EList<EAttribute> eAttributeList = eClass.getEAttributes();
+		EList<EAttribute> eAttributeList = (eClass != null)?eClass.getEAttributes():null;
 		String domainName = gov.nih.nci.sdk.util.SDKUtil.getTagValue(eClass, "class.mea.domain");
 		domainName = (domainName == null) ? modelSelectionEvent.getModelName() : domainName;
 		
