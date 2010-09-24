@@ -56,8 +56,7 @@ public class TestJaxbXMLClient extends TestClient
 		// ApplicationService appService =
 		// ApplicationServiceProvider.getApplicationService("userId","password");
 
-		ApplicationService appService = ApplicationServiceProvider
-				.getApplicationService();
+		ApplicationService appService = getApplicationService();
 		Collection<Class> classList = getClasses();
 
 		// JAXB
