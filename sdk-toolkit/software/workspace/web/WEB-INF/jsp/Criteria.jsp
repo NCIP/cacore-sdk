@@ -97,8 +97,8 @@ if(className != null)
 	   			attrType = ((Field)fieldNames.get(i)).getType().getName();
 	   			attrGenericTypeClassName = ((Field)fieldNames.get(i)).getGenericType().toString();
 	   	
-	   			System.out.println("Field Type: "+((Field)fieldNames.get(i)).getType().getName());
-	   			System.out.println("Field Generic Type: "+((Field)fieldNames.get(i)).getGenericType());
+	   			//System.out.println("Field Type: "+((Field)fieldNames.get(i)).getType().getName());
+	   			//System.out.println("Field Generic Type: "+((Field)fieldNames.get(i)).getGenericType());
 	   	
 	   			boolean isIsoDataTypeAttr = attrType.startsWith("gov.nih.nci.iso21090");
 	   	
