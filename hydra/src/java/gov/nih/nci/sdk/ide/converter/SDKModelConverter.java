@@ -9,6 +9,11 @@ import java.io.OutputStream;
 
 import org.eclipse.emf.ecore.EPackage;
 
+/**
+ * SDKModelConverter class.
+ * 
+ * @author John Chen
+ */
 public class SDKModelConverter {
 	public static final String TEST_MODEL_XMI_FILE = "/model/sdkexample.xmi";
 

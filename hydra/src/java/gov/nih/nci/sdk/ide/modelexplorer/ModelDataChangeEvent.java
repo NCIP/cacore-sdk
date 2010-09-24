@@ -5,6 +5,11 @@ import java.util.Date;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Event;
 
+/**
+ * ModelDataChangeEvent class.
+ * 
+ * @author John Chen
+ */
 public class ModelDataChangeEvent extends Event {
 	private Date timestamp;
 	
