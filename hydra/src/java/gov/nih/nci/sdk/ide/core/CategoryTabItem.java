@@ -17,7 +17,6 @@ public abstract class CategoryTabItem extends ActiveUI {
 		super(parent, style, data);
 		this.title = title;
 		theTabItem.setText(title);
-		prepareData();
 	}
 	
 	public String getTitle() {
@@ -65,7 +64,4 @@ public abstract class CategoryTabItem extends ActiveUI {
 		layout.numColumns = 2;
 		return layout;
 	}
-	
-	//TODO: make it abstract.
-	protected abstract void prepareData();
 }
