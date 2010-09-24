@@ -42,6 +42,7 @@ public class Constants {
 	public static final String MESSAGE_NO_MODEL_AVAILABLE = "No Model Available";
 	
 	//event ids
+	public static final int NO_DISPLAY_EVENT = 999;
 	public static final int DOMAIN_SELECTION_EVENT = 100;
 	public static final int GENERATOR_SELECTION_EVENT = 110;
 }

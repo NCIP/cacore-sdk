@@ -93,6 +93,8 @@ public class SDKUtil {
 	 * @return a value corresponding to the key
 	 */
 	public static String getTagValue(EModelElement modelElement, String key) {
+		if (modelElement == null) return null;
+		
 		EAnnotation ann = modelElement.getEAnnotation(key);
 		if (ann == null) return null;
 		
