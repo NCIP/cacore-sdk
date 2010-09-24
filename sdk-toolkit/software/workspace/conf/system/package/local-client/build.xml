@@ -87,6 +87,7 @@
 		<mkdir dir="./output"/>
 		<java classname="TestJaxbXMLClient" fork="true" maxmemory="512m">
 			<classpath refid="runtime" />
+			<sysproperty key="java.security.auth.login.config" value="${conf.dir}/login.config"/>
 		</java>
 	</target>
 	
@@ -98,6 +99,7 @@
 		<mkdir dir="./output"/>
 		<java classname="TestCastorXMLClient" fork="true" maxmemory="512m">
 			<classpath refid="runtime" />
+			<sysproperty key="java.security.auth.login.config" value="${conf.dir}/login.config"/>
 		</java>
 	</target>	
 	
