@@ -360,12 +360,8 @@ public final class SecuritySettingsPanel implements Panel, PanelValidator {
     protected void toggleSecurityFields() {
 		if (getEnableSecurityCheckBox().isSelected()){
 			getEnableClassLevelSecurityCheckBox().setEnabled(true);
-			
-			if (!parentContainer.isIso21090DatatypesEnabled()){
-			    getEnableInstanceLevelSecurityCheckBox().setEnabled(true);
-			    getEnableAttributeLevelSecurityCheckBox().setEnabled(true);
-			}
-
+		    getEnableInstanceLevelSecurityCheckBox().setEnabled(true);
+		    getEnableAttributeLevelSecurityCheckBox().setEnabled(true);
 		    getCsmProjectNameField().setEnabled(true);
 		    getCacheProtectionElementsCheckBox().setEnabled(true);
 		    getEnableCaGridLoginModuleCheckBox().setEnabled(true);

@@ -132,8 +132,8 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
 			generateXsdWithPermissibleValuesCheckBox.setEnabled(false);
 			generateXsdWithPermissibleValuesCheckBox.setSelected(false);
 			
-			parentContainer.disableWritableAPI();
-			parentContainer.disableInstanceAndAttributeLevelSecurity();
+//			parentContainer.disableWritableAPI();
+//			parentContainer.disableInstanceAndAttributeLevelSecurity();
 
 		} else {
 			enableWebServiceInterfaceCheckBox.setEnabled(true);
@@ -142,8 +142,8 @@ public final class CodegenSettingsPanel implements Panel, PanelValidator {
 			generateCastorMappingCheckBox.setEnabled(true);
 			generateXsdWithPermissibleValuesCheckBox.setEnabled(true);
 			
-			parentContainer.enableWritableAPI();
-			parentContainer.enableInstanceAndAttributeLevelSecurity();
+//			parentContainer.enableWritableAPI();
+//			parentContainer.enableInstanceAndAttributeLevelSecurity();
 		}
     }
     
