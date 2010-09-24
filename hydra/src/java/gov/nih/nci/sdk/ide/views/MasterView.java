@@ -1,12 +1,12 @@
 package gov.nih.nci.sdk.ide.views;
 
+import gov.nih.nci.sdk.ide.converter.SDKConverter;
 import gov.nih.nci.sdk.ide.core.ActiveViewPart;
 import gov.nih.nci.sdk.ide.core.ModelPackageVO;
 import gov.nih.nci.sdk.ide.core.UIHelper;
 import gov.nih.nci.sdk.ide.generator.SDKGenerator;
 import gov.nih.nci.sdk.ide.modelexplorer.Constants;
 import gov.nih.nci.sdk.ide.modelexplorer.ModelSelectionEvent;
-import gov.nih.nci.sdk.ide.modelexplorer.SDKModelExplorer;
 import gov.nih.nci.sdk.ide.modelexplorer.SDKModelExplorerUtil;
 import gov.nih.nci.sdk.ide.modelexplorer.SDKUIManager;
 
@@ -130,8 +130,15 @@ public class MasterView extends ActiveViewPart {
 	}
 
 	private void initialize() {
-		EPackage rootEPackage = SDKUIManager.getInstance().getRootEPackage();
-		updateTree(rootEPackage);
+		TreeParent root = new TreeParent("");
+		TreeParent child = new TreeParent(Constants.MESSAGE_NO_MODEL_AVAILABLE);
+		root.addChild(child);
+		viewer.setInput(root);
+		
+		viewer.refresh();
+		
+		Event event = new ModelSelectionEvent("", "", "Meaning");
+		publishEvent(SWT.Selection, event);
 	}
 
 	private void hookContextMenu() {
@@ -225,7 +232,10 @@ public class MasterView extends ActiveViewPart {
 						}
 					}
 					
-					if (!(UIHelper.isEmpty(packageName) && UIHelper.isEmpty(modelName) && UIHelper.isEmpty(categoryName))) {
+					if (!(UIHelper.isEmpty(packageName) 
+							&& UIHelper.isEmpty(modelName) 
+							&& UIHelper.isEmpty(categoryName))
+							&& !Constants.MESSAGE_NO_MODEL_AVAILABLE.equals(packageName)) {
 						Event eve = new ModelSelectionEvent(packageName, modelName, categoryName);
 						publishEvent(SWT.Selection, eve);
 					}
@@ -261,12 +271,12 @@ public class MasterView extends ActiveViewPart {
 		});
 	}
 	
-	private SDKModelExplorer screenSDKModelExplorer;
+	private SDKConverter screenSDKConverter;
 	private void popupConverter() {
-		if (screenSDKModelExplorer == null) {
-			screenSDKModelExplorer = new SDKModelExplorer(viewer.getControl().getShell(), Constants.CONVERTER_SCREEN_TITLE);
+		if (screenSDKConverter == null) {
+			screenSDKConverter = new SDKConverter(viewer.getControl().getShell(), Constants.CONVERTER_SCREEN_TITLE);
 		}
-		screenSDKModelExplorer.open();
+		screenSDKConverter.open();
 	}
 	
 	private SDKGenerator screenSDKGenerator = null;
