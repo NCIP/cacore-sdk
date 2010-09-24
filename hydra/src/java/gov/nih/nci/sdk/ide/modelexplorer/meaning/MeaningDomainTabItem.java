@@ -86,5 +86,7 @@ public class MeaningDomainTabItem
 
 		group.setSize(group.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		composite.setSize(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		
+		System.out.println("paint the MDTI: " + modelSelectionEvent);
 	}
 }

@@ -46,6 +46,13 @@ public class DetailsView extends ActiveViewPart {
 	private void _paint(ModelSelectionEvent event) {
 		if (event == null) return;
 		
+		if ("".equals(((ModelSelectionEvent)event).getModelName())) {
+			super.getUIComposite().setVisible(false);
+		}
+		else {
+			super.getUIComposite().setVisible(true);
+		}
+		
 		String eventName = event.getEventName();
 		if (!eventName.equals(currentHandledEventName)) {
 			if (super.getUIComposite() == null) return;

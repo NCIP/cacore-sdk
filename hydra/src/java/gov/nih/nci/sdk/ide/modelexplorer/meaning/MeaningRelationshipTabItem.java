@@ -1,22 +1,21 @@
 package gov.nih.nci.sdk.ide.modelexplorer.meaning;
 
+import gov.nih.nci.sdk.ide.core.CategoryTabItem;
+import gov.nih.nci.sdk.ide.modelexplorer.Constants;
+import gov.nih.nci.sdk.ide.modelexplorer.ModelSelectionEvent;
+
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.Text;
-
-import gov.nih.nci.sdk.ide.core.CategoryTabItem;
-import gov.nih.nci.sdk.ide.modelexplorer.Constants;
-import gov.nih.nci.sdk.ide.modelexplorer.ModelSelectionEvent;
 
 public class MeaningRelationshipTabItem extends CategoryTabItem {
 
@@ -29,7 +28,7 @@ public class MeaningRelationshipTabItem extends CategoryTabItem {
 		ModelSelectionEvent modelSelectionEvent = (ModelSelectionEvent)this.getData();
 		EPackage ePackage = gov.nih.nci.sdk.ide.modelexplorer.SDKUIManager.getInstance().getRootEPackage();
 		EClass eClass = gov.nih.nci.sdk.util.EcoreUtil.getEClass(ePackage, modelSelectionEvent.getFullModelName());		
-		EList<EReference> eReferenceList = eClass.getEReferences();
+		EList<EReference> eReferenceList = (eClass != null)?eClass.getEReferences():null;
 		String domainName = gov.nih.nci.sdk.util.SDKUtil.getTagValue(eClass, "class.mea.domain");
 		domainName = (domainName == null) ? modelSelectionEvent.getModelName() : domainName;
 		

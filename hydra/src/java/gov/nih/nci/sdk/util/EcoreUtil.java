@@ -81,6 +81,7 @@ public class EcoreUtil {
 	 * @return the ModelElement
 	 */
 	public static EModelElement getModelElementForName(EPackage rootEPackage, String targetName) {
+		if (rootEPackage == null || targetName == null || "".equals(targetName)) return null;
 		List<EModelElement> list = new ArrayList<EModelElement>();
 		searchModelElementsByClassName(list, rootEPackage, targetName);
 		return (list.size() == 1)?list.get(0):null;
