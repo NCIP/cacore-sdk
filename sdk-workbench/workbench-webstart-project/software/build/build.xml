@@ -20,7 +20,7 @@
 	<property name="shared.local.repo.dir" location="${target.dir}/shared-local-ivy-repo" />
 	<property name="bda-blueprints-webapp.install.zip.file" value="${project-webapp.install.zip.file}"/>
 	<property name="bda-blueprints-webapp.upgrade.zip.file" value="${project-webapp.upgrade.zip.file}"/>
-	<property name="bda-download.dir" location="${target.dir}/bda-download" />
+	<property name="bda-download.dir" location="${common.dir}/bda-download" />
 
 	<property name="ivy.settings.dir" value="${basedir}/../common" />
 	<property name="ivy.settings.file" value="ivysettings.xml" />
