@@ -15,12 +15,17 @@
 	<property file="project.properties" />
 	<property file="build.properties" />
 
+	<property name="project.home" location="${basedir}/.." />
+	<property name="project.build.home" location="${project.home}/build" />
+	<property name="project.common.dir" location="${project.home}/common" />
+
+
 	<property name="software.dir" location=".." />
 	<property name="target.dir" location="${software.dir}/target" />
 	<property name="shared.local.repo.dir" location="${target.dir}/shared-local-ivy-repo" />
 	<property name="bda-blueprints-webapp.install.zip.file" value="${project-webapp.install.zip.file}"/>
 	<property name="bda-blueprints-webapp.upgrade.zip.file" value="${project-webapp.upgrade.zip.file}"/>
-	<property name="bda-download.dir" location="${common.dir}/bda-download" />
+	<property name="bda-download.dir" location="${project.common.dir}/bda-download" />
 
 	<property name="ivy.settings.dir" value="${basedir}/../common" />
 	<property name="ivy.settings.file" value="ivysettings.xml" />
@@ -28,9 +33,6 @@
 	<import file="bda-master-build.xml"/>
 	<import file="build-util-macros.xml"/>
 
-	<property name="project.home" location="${basedir}/.." />
-	<property name="project.build.home" location="${project.home}/build" />
-	<property name="project.common.dir" location="${project.home}/common" />
 
 
 	<property name="jar-signing.keystore.abs-location" location="${jar-signing.keystore.location}"/>
