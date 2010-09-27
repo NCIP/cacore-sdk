@@ -43,9 +43,7 @@ public class GeneratorDetailsGroupPanel extends GroupPanel {
 		if (event == null) return;
 		
 		if (event instanceof GeneratorSelectionEvent) {
-			_paint((GeneratorSelectionEvent)event);
-		}
-	}
+			_paint((GeneratorSelectionEvent)	}
 	
 	private Composite composite;
 	private Label nameLabel;
@@ -54,6 +52,7 @@ public class GeneratorDetailsGroupPanel extends GroupPanel {
 	private Text domainDescText;
 	private Label propertiesLabel;
 	private Table propertiesTable;
+
 	private void _paint(GeneratorSelectionEvent event) {
 		Composite parent = super.getUIComposite();
 		if (event == null || parent == null) return;
@@ -73,7 +72,7 @@ public class GeneratorDetailsGroupPanel extends GroupPanel {
 		String name = giVO.getName();
 		String description = giVO.getDescription();
 		List<PropertyVO> properties = giVO.getProperties();
-		
+
 		if (nameLabel == null) {
 			nameLabel = new Label(composite, SWT.NONE);
 			nameLabel.setText("Name");
