@@ -1,5 +1,6 @@
 package gov.nih.nci.sdk.ide.generator;
 
+import gov.nih.nci.sdk.core.GeneratorContext;
 import gov.nih.nci.sdk.ide.core.GroupPanel;
 import gov.nih.nci.sdk.ide.core.SDKScreen;
 import gov.nih.nci.sdk.ide.modelexplorer.Constants;
@@ -48,11 +49,42 @@ public class SDKGenerator extends SDKScreen {
 	}
 	
 	@Override
-	public void okPressed() {
-		//TODO: to be completed
+	public void okPressed()
+	{
 		System.out.println("okPressed - fire code generation here");
 		System.out.println("dsEvent: " + dsEvent);
 		System.out.println("gsEvent: " + gsEvent);
+
+		//Create Generator Context
+		GeneratorContext generatorContext = new GeneratorContext(
+			null,
+			null,
+			extractProperties(gsEvent),
+			SDKUIManager.getInstance().getRootEPackage(),
+			new java.util.HashSet<String>(dsEvent.getModelNames()),
+			java.util.Logger.getLogger(generatorInfoVO.getName()));
+
+		/*
+				private URI generatorBase;
+				private URI targetBase;
+				private List<java.io.File> generatorScriptFileList;
+		*/
+		
+		gov.nih.nci.sdk.core.Generator generator = new gov.nih.nci.sdk.core.Generator();
+		generator.compile(generatorContext);		
+	}
+
+	private java.util.Properties extractProperties(GeneratorSelectionEvent _gsEvent)
+	{
+		java.util.Properties properties = new java.util.Properties();
+		gov.nih.nci.sdk.ide.generator.GeneratorInfoVO generatorInfoVO = _gsEvent.getGeneratorInfoVO();
+
+		for (gov.nih.nci.sdk.ide.core.PropertyVO propertyVO: generatorInfoVO.getProperties())
+		{
+			properties.setProperty(propertyVO.getName(), propertyVO.getValue());
+		}
+
+		return properties;
 	}
 	
 	@Override

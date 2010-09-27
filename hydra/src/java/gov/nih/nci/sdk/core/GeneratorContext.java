@@ -48,6 +48,8 @@ public class GeneratorContext
 	protected void setGeneratorScriptFileList(List<java.io.File> _generatorScriptFileList) { generatorScriptFileList = _generatorScriptFileList; }
 	public void setProperties(Properties _properties) { properties = _properties; }
 	public void setLogger(Logger _logger) { logger = _logger; }
+
+	public GeneratorContext() {}
 	
 	public GeneratorContext(URI _generatorBase,
 							URI _targetBase,
