@@ -40,7 +40,7 @@ public class GeneratorListGroupPanel extends GroupPanel {
 		Color whiteColor = listArea.getDisplay().getSystemColor(SWT.COLOR_WHITE);
 		listArea.setBackground(whiteColor);
 		listArea.setLayout(getLayout());
-		listArea.setLayoutData(UIHelper.getFieldGridData());
+		listArea.setLayoutData(UIHelper.getCoverAllGridData());
 		
 		final org.eclipse.swt.widgets.List list = new org.eclipse.swt.widgets.List(listArea, SWT.NONE);
 		for (int i = 0; i < generators.size(); i++) {

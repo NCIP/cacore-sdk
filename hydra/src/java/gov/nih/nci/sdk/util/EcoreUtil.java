@@ -227,9 +227,6 @@ public class EcoreUtil {
 		if (firstDotIndex != -1) {
 			String firstPart = targetName.substring(0, firstDotIndex);
 			String remainingName = targetName.substring(firstDotIndex + 1);
-
-			System.out.println("Processing package: " + rootEPackage.getName());
-
 			
 			Iterator<EObject> pkgIter = rootEPackage.eContents().iterator();
 			EObject eo = null;
@@ -238,9 +235,6 @@ public class EcoreUtil {
 				
 				if (eo instanceof EClassImpl) {
 					EClass tmp = (EClassImpl) eo;
-					
-					System.out.println("target name: " + targetName);
-					System.out.println("Tmp name: " + tmp.getName());
 
 					if (targetName.equals(tmp.getName())) {
 						results.add(tmp);

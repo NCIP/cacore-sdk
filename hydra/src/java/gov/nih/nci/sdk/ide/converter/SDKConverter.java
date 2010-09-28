@@ -86,7 +86,7 @@ public class SDKConverter extends SDKScreen {
 		fileLabel.setText("Model File");
 		
 		fileText = new Text(composite, SWT.BORDER);
-		fileText.setLayoutData(UIHelper.getFieldGridData());
+		fileText.setLayoutData(UIHelper.getCoverAllGridData());
 		
 		fileButton = new Button(composite, SWT.PUSH);
 		fileButton.setText("Browse");
@@ -122,7 +122,7 @@ public class SDKConverter extends SDKScreen {
 
 		convertersTable = new Table(composite, SWT.SINGLE | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		
-		GridData ctGD = UIHelper.getFieldGridData();
+		GridData ctGD = UIHelper.getCoverAllGridData();
 		ctGD.heightHint = 100;
 		ctGD.minimumWidth = 400;
 		convertersTable.setLayoutData(ctGD);

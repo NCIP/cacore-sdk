@@ -3,14 +3,36 @@ package gov.nih.nci.sdk.ide.core;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 
 public class UIHelper {
+	
+	public static Layout getOneColumnLayout() {
+		GridLayout layout = new GridLayout();
+		layout.marginHeight = 10;
+		layout.marginWidth = 10;
+		layout.verticalSpacing = 10;
+		layout.horizontalSpacing = 10;
+		layout.numColumns = 1;
+		return layout;
+	}
+	
+	public static Layout getTwoColumnLayout() {
+		GridLayout layout = new GridLayout();
+		layout.marginHeight = 10;
+		layout.marginWidth = 10;
+		layout.verticalSpacing = 10;
+		layout.horizontalSpacing = 10;
+		layout.numColumns = 2;
+		return layout;
+	}
 
-	public static GridData getFieldGridData() {
+	public static GridData getCoverAllGridData() {
 		GridData data = new GridData();
 		data.horizontalAlignment = SWT.FILL;
 		data.grabExcessHorizontalSpace = true;

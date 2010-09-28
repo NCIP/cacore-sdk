@@ -45,4 +45,8 @@ public class Constants {
 	public static final int NO_DISPLAY_EVENT = 999;
 	public static final int DOMAIN_SELECTION_EVENT = 100;
 	public static final int GENERATOR_SELECTION_EVENT = 110;
+	
+	public static final int MEANING_PROPERTY_SELECTION_EVENT = 201;
+	public static final int MEANING_OPERATION_SELECTION_EVENT = 202;
+	public static final int MEANING_RELATIONSHIP_SELECTION_EVENT = 203;
 }

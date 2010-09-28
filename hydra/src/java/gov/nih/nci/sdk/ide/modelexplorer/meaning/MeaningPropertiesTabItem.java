@@ -1,91 +1,161 @@
 package gov.nih.nci.sdk.ide.modelexplorer.meaning;
 
 import gov.nih.nci.sdk.ide.core.CategoryTabItem;
+import gov.nih.nci.sdk.ide.core.UIHelper;
 import gov.nih.nci.sdk.ide.modelexplorer.Constants;
 import gov.nih.nci.sdk.ide.modelexplorer.ModelSelectionEvent;
+import gov.nih.nci.sdk.ide.modelexplorer.SDKModelExplorerUtil;
+import gov.nih.nci.sdk.ide.modelexplorer.SDKUIManager;
+import gov.nih.nci.sdk.util.SDKUtil;
+
+import java.util.Date;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.Text;
 
 public class MeaningPropertiesTabItem extends CategoryTabItem {
+	private Text nameText;
+	private Text descriptionText;
+	private Text typeText;
 
-	public MeaningPropertiesTabItem(TabFolder parent, int style, Object data)
-	{
+	public MeaningPropertiesTabItem(TabFolder parent, int style, Object data) {
 		super(parent, style, data, Constants.TAB_Properties);
+		SDKUIManager.getInstance().registerAsListener(Constants.MEANING_PROPERTY_SELECTION_EVENT, this);
+	}
+	
+	private static EList<EAttribute> getEAttributes(ModelSelectionEvent event) {
+		if (event == null) return null;
+		EClass eClass = SDKUIManager.getInstance().getEClass(event.getFullModelName());	
+		return (eClass != null)?eClass.getEAttributes():null;
 	}
 
 	@Override
-	public void paint()
-	{
-		ModelSelectionEvent modelSelectionEvent = (ModelSelectionEvent)this.getData();
-		EPackage ePackage = gov.nih.nci.sdk.ide.modelexplorer.SDKUIManager.getInstance().getRootEPackage();
-		EClass eClass = gov.nih.nci.sdk.util.EcoreUtil.getEClass(ePackage, modelSelectionEvent.getFullModelName());		
-		EList<EAttribute> eAttributeList = (eClass != null)?eClass.getEAttributes():null;
-		String domainName = gov.nih.nci.sdk.util.SDKUtil.getTagValue(eClass, "class.mea.domain");
-		domainName = (domainName == null) ? modelSelectionEvent.getModelName() : domainName;
+	public void paint() {
+		String domainName = SDKModelExplorerUtil.getDomainName((ModelSelectionEvent)this.getData());
+		domainName = (UIHelper.isEmpty(domainName)) ? ((ModelSelectionEvent)this.getData()).getModelName() : domainName;
+
+		final EList<EAttribute> eAttributeList = getEAttributes((ModelSelectionEvent)this.getData());
 		
 		Composite composite = super.getUIComposite();
-		composite.setLayout(super.getLayout());
 
-		Group group = new Group(composite, SWT.SHADOW_OUT);
-		group.setText(domainName + " Property Info");
-		group.setLayout(super.getLayout());
-		group.setLayoutData(super.getGridData());
+		Group detailsGroup = new Group(composite, SWT.SHADOW_OUT);
+		detailsGroup.setText(domainName + " Property Info");
+		detailsGroup.setLayout(UIHelper.getTwoColumnLayout());
+		detailsGroup.setLayoutData(UIHelper.getCoverAllGridData());
+		UIHelper.setWhiteBackground(detailsGroup);
 		
-		Group listGroup= new Group(composite, SWT.SHADOW_OUT);
+		Label nameLabel = new Label(detailsGroup, SWT.NONE);
+		nameLabel.setText("Name");
+		UIHelper.setWhiteBackground(nameLabel);
+		nameText = new Text(detailsGroup, SWT.BORDER | SWT.READ_ONLY);
+		nameText.setLayoutData(UIHelper.getCoverAllGridData());
+		UIHelper.setWhiteBackground(nameText);
+
+		Label descLabel = new Label(detailsGroup, SWT.NONE);
+		descLabel.setText("Description");
+		UIHelper.setWhiteBackground(descLabel);
+		descriptionText = new Text(detailsGroup, SWT.BORDER | SWT.READ_ONLY | SWT.MULTI);
+		descriptionText.setLayoutData(UIHelper.getCoverAllGridData());
+		UIHelper.setWhiteBackground(descriptionText);
+
+		Label typeLabel = new Label(detailsGroup, SWT.NONE);
+		typeLabel.setText("Type");
+		UIHelper.setWhiteBackground(typeLabel);
+		typeText = new Text(detailsGroup, SWT.BORDER | SWT.READ_ONLY | SWT.MULTI);
+		typeText.setLayoutData(UIHelper.getCoverAllGridData());
+		UIHelper.setWhiteBackground(typeText);
+
+		Group listGroup = new Group(composite, SWT.SHADOW_OUT);
 		listGroup.setText("has properties ...");
-		listGroup.setLayout(super.getLayout());
-		listGroup.setLayoutData(super.getGridData());
-
-		if (eAttributeList != null && eAttributeList.isEmpty() == false)
-		{
-			EAttribute selectedAttribute = eAttributeList.get(0);
+		listGroup.setLayout(UIHelper.getOneColumnLayout());
+		listGroup.setLayoutData(UIHelper.getCoverAllGridData());
+		UIHelper.setWhiteBackground(listGroup);
 		
-			List propertiesList = new List(listGroup, SWT.NONE);
-			
-			for (org.eclipse.emf.ecore.EAttribute eAttribute: eAttributeList)
-			{
-				propertiesList.add(eAttribute.getName());
+		final List list = new List(listGroup, SWT.NONE);
+		list.addListener (SWT.Selection, new Listener() {
+			public void handleEvent (Event event) {
+				int[] selection = list.getSelectionIndices();
+				EAttribute selected = eAttributeList.get(selection[0]);
+				MeaningPropertySelectionEvent eve = new MeaningPropertySelectionEvent(selected);
+				SDKUIManager.getInstance().publishEvent(Constants.MEANING_PROPERTY_SELECTION_EVENT, eve);
+			}
+		});
+		
+		if (eAttributeList != null && eAttributeList.isEmpty() == false) {
+			for (EAttribute eAttribute : eAttributeList) {
+				list.add(eAttribute.getName());
 			}
 			
-			new Label(group, SWT.NONE).setText("Name");
-			Text nameText = new Text(group, SWT.BORDER | SWT.READ_ONLY);
-			nameText.setText(selectedAttribute.getName());
-			nameText.setLayoutData(super.getGridData());
-	
-			new Label(group, SWT.NONE).setText("Description");
-			Text descriptionText = new Text(group, SWT.BORDER | SWT.READ_ONLY | SWT.MULTI);
-			String attributeDescription = gov.nih.nci.sdk.util.SDKUtil.getTagValue(selectedAttribute, "prop.mea.desc");
-			attributeDescription = (attributeDescription == null) ? "No attribute description found" : attributeDescription;
-			descriptionText.setText(attributeDescription);
-			descriptionText.setLayoutData(new GridData());
-	
-			new Label(group, SWT.NONE).setText("Type");
-			Text typeText = new Text(group, SWT.BORDER | SWT.READ_ONLY | SWT.MULTI);
-			String type = (selectedAttribute.getEType() != null) ? selectedAttribute.getEType().getName() : "";
-			typeText.setText(type);
-			typeText.setLayoutData(new GridData());
+			EAttribute selected = eAttributeList.get(0);
+			MeaningPropertySelectionEvent event = new MeaningPropertySelectionEvent(selected);
+			SDKUIManager.getInstance().publishEvent(Constants.MEANING_PROPERTY_SELECTION_EVENT, event);
 		}
-		else
-		{
-			new Label(group, SWT.NONE).setText("This domain has no properties");		
+		else {
+			list.add("No properties.");
 		}
-
-		group.setSize(group.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-		listGroup.setSize(listGroup.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		
 		composite.setSize(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	}
-
+	
 	@Override
-	public void prepareData() {}
+	public void handleEvent(Event event) {
+		if (event == null) return;
+		
+		if (event instanceof MeaningPropertySelectionEvent) {
+			_paint((MeaningPropertySelectionEvent)event);
+		}
+	}
+	
+	private void _paint(MeaningPropertySelectionEvent event) {	
+		EAttribute selected = event.getEAttribute();
+		if (selected != null) {
+			nameText.setText(selected.getName());
+
+			String attributeDescription = SDKUtil.getTagValue(selected, "prop.mea.desc");
+			attributeDescription = (UIHelper.isEmpty(attributeDescription)) ? "No property description found" : attributeDescription;
+			descriptionText.setText(attributeDescription);
+			
+			String type = (selected.getEType() != null) ? selected.getEType().getName() : "";
+			typeText.setText(type);
+		}
+
+		super.getUIComposite().redraw();
+	}
+	
+	class MeaningPropertySelectionEvent extends Event {
+		private EAttribute eAttribute;
+		private Date timestamp;
+		
+		public MeaningPropertySelectionEvent(EAttribute eAttribute) {
+			this.eAttribute = eAttribute;
+			this.timestamp = new Date();
+			super.data = eAttribute;
+			super.type = Constants.MEANING_PROPERTY_SELECTION_EVENT;
+		}
+
+		public EAttribute getEAttribute() {
+			return eAttribute;
+		}
+		
+		public Date getTimestamp() {
+			return timestamp;
+		}
+		
+		public String toString() {
+			StringBuilder sb = new StringBuilder();
+			sb.append("timestamp=").append(timestamp).append(", ");
+			sb.append("eAttribute=").append(eAttribute);
+			return sb.toString();
+		}
+	}
 }

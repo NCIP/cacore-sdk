@@ -1,105 +1,184 @@
 package gov.nih.nci.sdk.ide.modelexplorer.meaning;
 
 import gov.nih.nci.sdk.ide.core.CategoryTabItem;
+import gov.nih.nci.sdk.ide.core.UIHelper;
 import gov.nih.nci.sdk.ide.modelexplorer.Constants;
 import gov.nih.nci.sdk.ide.modelexplorer.ModelSelectionEvent;
+import gov.nih.nci.sdk.ide.modelexplorer.SDKModelExplorerUtil;
+import gov.nih.nci.sdk.ide.modelexplorer.SDKUIManager;
+import gov.nih.nci.sdk.util.SDKUtil;
+
+import java.util.Date;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EOperation;
-import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EParameter;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.Text;
 
 public class MeaningOperationsTabItem extends CategoryTabItem {
+	private Text nameText;
+	private Text descriptionText;
+	private Text typeText;
+	private List parameterList;
 
 	public MeaningOperationsTabItem(TabFolder parent, int style, Object data) {
 		super(parent, style, data, Constants.TAB_Operations);
+		SDKUIManager.getInstance().registerAsListener(Constants.MEANING_OPERATION_SELECTION_EVENT, this);
+	}
+	
+	private static EList<EOperation> getEOperations(ModelSelectionEvent event) {
+		if (event == null) return null;
+		EClass eClass = SDKUIManager.getInstance().getEClass(event.getFullModelName());	
+		return (eClass != null)?eClass.getEOperations():null;
 	}
 
 	@Override
 	public void paint() {
-		ModelSelectionEvent modelSelectionEvent = (ModelSelectionEvent)this.getData();
-		EPackage ePackage = gov.nih.nci.sdk.ide.modelexplorer.SDKUIManager.getInstance().getRootEPackage();
-		EClass eClass = gov.nih.nci.sdk.util.EcoreUtil.getEClass(ePackage, modelSelectionEvent.getFullModelName());		
-		EList<EOperation> eOperationList = (eClass != null)?eClass.getEOperations():null;
-		String domainName = gov.nih.nci.sdk.util.SDKUtil.getTagValue(eClass, "class.mea.domain");
-		domainName = (domainName == null) ? modelSelectionEvent.getModelName() : domainName;
+		String domainName = SDKModelExplorerUtil.getDomainName((ModelSelectionEvent)this.getData());
+		domainName = (UIHelper.isEmpty(domainName)) ? ((ModelSelectionEvent)this.getData()).getModelName() : domainName;
+
+		final EList<EOperation> eOperationList = getEOperations((ModelSelectionEvent)this.getData());
 		
 		Composite composite = super.getUIComposite();
-		composite.setLayout(super.getLayout());
 
-		Group group = new Group(composite, SWT.SHADOW_OUT);
-		group.setText(domainName + " Operation Info");
-		group.setLayout(super.getLayout());
-		group.setLayoutData(super.getGridData());
+		Group detailsGroup = new Group(composite, SWT.SHADOW_OUT);
+		detailsGroup.setText(domainName + " Operation Info");
+		detailsGroup.setLayout(UIHelper.getTwoColumnLayout());
+		detailsGroup.setLayoutData(UIHelper.getCoverAllGridData());
+		UIHelper.setWhiteBackground(detailsGroup);
 		
-		Group listGroup= new Group(composite, SWT.SHADOW_OUT);
+		Label nameLabel = new Label(detailsGroup, SWT.NONE);
+		nameLabel.setText("Name");
+		UIHelper.setWhiteBackground(nameLabel);
+		nameText = new Text(detailsGroup, SWT.BORDER | SWT.READ_ONLY);
+		nameText.setLayoutData(UIHelper.getCoverAllGridData());
+		UIHelper.setWhiteBackground(nameText);
+
+		Label descLabel = new Label(detailsGroup, SWT.NONE);
+		descLabel.setText("Description");
+		UIHelper.setWhiteBackground(descLabel);
+		descriptionText = new Text(detailsGroup, SWT.BORDER | SWT.READ_ONLY | SWT.MULTI);
+		descriptionText.setLayoutData(UIHelper.getCoverAllGridData());
+		UIHelper.setWhiteBackground(descriptionText);
+
+		Label typeLabel = new Label(detailsGroup, SWT.NONE);
+		typeLabel.setText("Return Type");
+		UIHelper.setWhiteBackground(typeLabel);
+		typeText = new Text(detailsGroup, SWT.BORDER | SWT.READ_ONLY | SWT.MULTI);
+		typeText.setLayoutData(UIHelper.getCoverAllGridData());
+		UIHelper.setWhiteBackground(typeText);
+		
+		Label paramsLabel = new Label(detailsGroup, SWT.NONE);
+		paramsLabel.setText("Parameters");
+		UIHelper.setWhiteBackground(paramsLabel);
+		parameterList = new List(detailsGroup, SWT.NONE);
+		parameterList.setLayoutData(UIHelper.getCoverAllGridData());
+		UIHelper.setWhiteBackground(parameterList);
+		
+		
+
+		Group listGroup = new Group(composite, SWT.SHADOW_OUT);
 		listGroup.setText("has operations ...");
-		listGroup.setLayout(super.getLayout());
-		listGroup.setLayoutData(super.getGridData());
-
-		if (eOperationList != null && eOperationList.isEmpty() == false)
-		{
-			EOperation selectedOperation = eOperationList.get(0);
+		listGroup.setLayout(UIHelper.getOneColumnLayout());
+		listGroup.setLayoutData(UIHelper.getCoverAllGridData());
+		UIHelper.setWhiteBackground(listGroup);
 		
-			List operationsList = new List(listGroup, SWT.NONE);
-			
-			for (EOperation eOperation: eOperationList)
-			{
-				operationsList.add(eOperation.getName());
+		final List list = new List(listGroup, SWT.NONE);
+		list.addListener (SWT.Selection, new Listener() {
+			public void handleEvent (Event event) {
+				int[] selection = list.getSelectionIndices();
+				EOperation selected = eOperationList.get(selection[0]);
+				MeaningOperationSelectionEvent eve = new MeaningOperationSelectionEvent(selected);
+				SDKUIManager.getInstance().publishEvent(Constants.MEANING_OPERATION_SELECTION_EVENT, eve);
+			}
+		});
+		
+		if (eOperationList != null && eOperationList.isEmpty() == false) {
+			for (EOperation eOperation : eOperationList) {
+				list.add(eOperation.getName());
 			}
 			
-			new Label(group, SWT.NONE).setText("Name");
-			Text nameText = new Text(group, SWT.BORDER | SWT.READ_ONLY);
-			nameText.setText(selectedOperation.getName());
-			nameText.setLayoutData(super.getGridData());
+			EOperation selected = eOperationList.get(0);
+			MeaningOperationSelectionEvent event = new MeaningOperationSelectionEvent(selected);
+			SDKUIManager.getInstance().publishEvent(Constants.MEANING_OPERATION_SELECTION_EVENT, event);
+		}
+		else {
+			list.add("No Operations.");
+		}
+		
+		composite.setSize(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+	}
 	
-			new Label(group, SWT.NONE).setText("Description");
-			Text descriptionText = new Text(group, SWT.BORDER | SWT.READ_ONLY | SWT.MULTI);
-			String attributeDescription = gov.nih.nci.sdk.util.SDKUtil.getTagValue(selectedOperation, "prop.mea.desc");
-			attributeDescription = (attributeDescription == null) ? "No operation description found" : attributeDescription;
+	@Override
+	public void handleEvent(Event event) {
+		if (event == null) return;
+		
+		if (event instanceof MeaningOperationSelectionEvent) {
+			_paint((MeaningOperationSelectionEvent)event);
+		}
+	}
+	
+	private void _paint(MeaningOperationSelectionEvent event) {	
+		EOperation selected = event.getEOperation();
+		if (selected != null) {
+			nameText.setText(selected.getName());
+
+			String attributeDescription = SDKUtil.getTagValue(selected, "oper.mea.desc");
+			attributeDescription = (UIHelper.isEmpty(attributeDescription)) ? "No operation description found" : attributeDescription;
 			descriptionText.setText(attributeDescription);
-			descriptionText.setLayoutData(new GridData());
-	
-			new Label(group, SWT.NONE).setText("Return Type");
-			Text typeText = new Text(group, SWT.BORDER | SWT.READ_ONLY | SWT.MULTI);
-			String type = (selectedOperation.getEType() != null) ? selectedOperation.getEType().getName() : "";
+			
+			String type = (selected.getEType() != null) ? selected.getEType().getName() : "";
 			typeText.setText(type);
-			typeText.setLayoutData(new GridData());
 			
-			new Label(group, SWT.NONE).setText("Parameters");
-			List parameterList = new List(group, SWT.NONE);
-			java.util.List<EParameter> eParameterList = selectedOperation.getEParameters();
-			
-			for (EParameter eParameter: eParameterList)
-			{
+			java.util.List<EParameter> eParameterList = selected.getEParameters();
+			for (EParameter eParameter: eParameterList) {
 				String parameterType = (eParameter.getEType() != null) ? eParameter.getEType().getName() : "";
-				parameterList.add(eParameter.getName() + ":" + parameterType);
+				String item = eParameter.getName() + ":" + parameterType;
+				System.out.println("Adding " + item);
+				parameterList.add(item);
 			}
 			
-			if (eParameterList.isEmpty() == true)
-			{ 
+			if (eParameterList.isEmpty() == true) {
 				parameterList.add("This operation has no parameters");
 			}
 		}
-		else
-		{
-			new Label(group, SWT.NONE).setText("This domain has no operations");		
+
+		super.getUIComposite().redraw();
+	}
+	
+	class MeaningOperationSelectionEvent extends Event {
+		private EOperation eOperation;
+		private Date timestamp;
+		
+		public MeaningOperationSelectionEvent(EOperation eOperation) {
+			this.eOperation = eOperation;
+			this.timestamp = new Date();
+			super.data = eOperation;
+			super.type = Constants.MEANING_OPERATION_SELECTION_EVENT;
 		}
 
-		group.setSize(group.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-		listGroup.setSize(listGroup.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-		composite.setSize(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		public EOperation getEOperation() {
+			return eOperation;
+		}
+		
+		public Date getTimestamp() {
+			return timestamp;
+		}
+		
+		public String toString() {
+			StringBuilder sb = new StringBuilder();
+			sb.append("timestamp=").append(timestamp).append(", ");
+			sb.append("eOperation=").append(eOperation);
+			return sb.toString();
+		}
 	}
-
-	@Override
-	public void prepareData() {}
 }
