@@ -2,6 +2,7 @@ package gov.nih.nci.sdk.ide.modelexplorer;
 
 import gov.nih.nci.sdk.ide.core.ModelPackageVO;
 import gov.nih.nci.sdk.util.EcoreUtil;
+import gov.nih.nci.sdk.util.SDKUtil;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -10,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 
 public class SDKModelExplorerUtil {
@@ -45,5 +47,11 @@ public class SDKModelExplorerUtil {
 			list.add(it.next());
 		}
 		return list;
+	}
+	
+	public static String getDomainName(ModelSelectionEvent event) {
+		if (event == null) return null;
+		EClass eClass = SDKUIManager.getInstance().getEClass(event.getFullModelName());	
+		return SDKUtil.getTagValue(eClass, "class.mea.domain");
 	}
 }

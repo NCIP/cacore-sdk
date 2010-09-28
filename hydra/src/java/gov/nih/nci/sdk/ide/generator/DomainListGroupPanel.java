@@ -33,7 +33,7 @@ public class DomainListGroupPanel extends GroupPanel {
 		Composite composite = super.getUIComposite();
 
 		final Tree domainTree = new Tree(composite, SWT.MULTI);
-		domainTree.setLayoutData(UIHelper.getFieldGridData());
+		domainTree.setLayoutData(UIHelper.getCoverAllGridData());
 
 		domainTree.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {

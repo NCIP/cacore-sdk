@@ -21,7 +21,7 @@ public class TabbedContentBuilder implements CategoryContentBuilder {
 		boolean oldTabFolderFound = (tf != null)?true:false;
 		
 		final TabFolder tabFolder = (oldTabFolderFound)?tf:new TabFolder(composite, SWT.V_SCROLL);
-		tabFolder.setLayoutData(UIHelper.getFieldGridData());
+		tabFolder.setLayoutData(UIHelper.getCoverAllGridData());
 		
 		if (!oldTabFolderFound) {
 			tabFolder.addSelectionListener(new SelectionAdapter() {

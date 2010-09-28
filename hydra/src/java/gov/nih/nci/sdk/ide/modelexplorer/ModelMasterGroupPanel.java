@@ -25,7 +25,7 @@ public class ModelMasterGroupPanel extends GroupPanel {
 		Composite composite = super.getUIComposite();
 		
 		final Tree domainTree = new Tree(composite, SWT.SINGLE);
-		domainTree.setLayoutData(UIHelper.getFieldGridData());
+		domainTree.setLayoutData(UIHelper.getCoverAllGridData());
 		
 		domainTree.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {

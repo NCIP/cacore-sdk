@@ -2,6 +2,7 @@ package gov.nih.nci.sdk.ide.modelexplorer;
 
 import gov.nih.nci.sdk.ide.core.CategoryContentBuilder;
 import gov.nih.nci.sdk.ide.core.GroupPanel;
+import gov.nih.nci.sdk.ide.core.UIHelper;
 
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -13,15 +14,15 @@ public class ModelDetailsGroupPanel extends GroupPanel {
 	
 	public ModelDetailsGroupPanel(Composite parent, int style, Object data, String title) {
 		super(parent, style, data, title);
+		super.getUIComposite().setLayoutData(getGridData());
 	}
 	
 	public void paint() {
 		_paint((ModelSelectionEvent)super.getData());
 	}
 	
-	@Override
 	protected GridData getGridData() {
-		GridData gd = super.getGridData();
+		GridData gd = UIHelper.getCoverAllGridData();
 		gd.widthHint = Constants.MODEL_DETAILS_PANEL_WIDTH;
 		return gd;
 	}

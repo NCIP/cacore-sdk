@@ -1,5 +1,6 @@
 package gov.nih.nci.sdk.ide.modelexplorer;
 
+import gov.nih.nci.sdk.ide.converter.SDKModelConverter;
 import gov.nih.nci.sdk.ide.core.GroupPanel;
 import gov.nih.nci.sdk.ide.core.ModelPackageVO;
 import gov.nih.nci.sdk.ide.core.SDKScreen;
@@ -29,7 +30,8 @@ public class SDKModelExplorer extends SDKScreen {
 		layout.numColumns = 2;
 		composite.setLayout(layout);
 		
-		EPackage rootEPackage = SDKUIManager.getInstance().getRootEPackage();
+//		EPackage rootEPackage = SDKUIManager.getInstance().getRootEPackage();
+		EPackage rootEPackage = SDKModelConverter.readEPackageFromXMIFile();
 		List<ModelPackageVO> dataList = SDKModelExplorerUtil.getModelPackages(rootEPackage);
 		GroupPanel masterPanel = new ModelMasterGroupPanel(composite, SWT.NONE, dataList, Constants.MODEL_MASTER_PANEL_TITLE);
 		masterPanel.paint();
