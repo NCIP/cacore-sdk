@@ -62,7 +62,7 @@ public class SDKGenerator extends SDKScreen {
 			extractProperties(gsEvent),
 			SDKUIManager.getInstance().getRootEPackage(),
 			new java.util.HashSet<String>(dsEvent.getModelNames()),
-			java.util.Logger.getLogger(generatorInfoVO.getName()));
+			java.util.logging.Logger.getLogger(gsEvent.getGeneratorInfoVO().getName()));
 
 		/*
 				private URI generatorBase;

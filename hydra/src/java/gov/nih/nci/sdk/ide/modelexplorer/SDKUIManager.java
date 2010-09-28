@@ -1,6 +1,7 @@
 package gov.nih.nci.sdk.ide.modelexplorer;
 
 import gov.nih.nci.sdk.ide.converter.SDKModelConverter;
+import gov.nih.nci.sdk.util.EcoreUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Event;
@@ -42,6 +44,10 @@ public class SDKUIManager {
 		this.rootEPackage = rootEPackage;
 		ModelDataChangeEvent mdcEvent = new ModelDataChangeEvent(rootEPackage);
 		notifyListeners(SWT.SetData, mdcEvent);
+	}
+	
+	public EClass getEClass(String fullModelName) {
+		return EcoreUtil.getEClass(rootEPackage, fullModelName);
 	}
 	
 	public void notifyListeners(int eventType, Event event) {

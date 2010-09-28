@@ -43,7 +43,9 @@ public class GeneratorDetailsGroupPanel extends GroupPanel {
 		if (event == null) return;
 		
 		if (event instanceof GeneratorSelectionEvent) {
-			_paint((GeneratorSelectionEvent)	}
+			_paint((GeneratorSelectionEvent) event);
+		}
+	}
 	
 	private Composite composite;
 	private Label nameLabel;
@@ -63,8 +65,8 @@ public class GeneratorDetailsGroupPanel extends GroupPanel {
 		
 		if (composite == null) {
 			composite = new Composite(parent, SWT.NONE);
-			composite.setLayout(getLayout());
-			composite.setLayoutData(UIHelper.getFieldGridData());
+			composite.setLayout(UIHelper.getOneColumnLayout());
+			composite.setLayoutData(UIHelper.getCoverAllGridData());
 			UIHelper.setWhiteBackground(composite);
 		}
 		
@@ -81,7 +83,7 @@ public class GeneratorDetailsGroupPanel extends GroupPanel {
 		
 		if (domainNameText == null) {
 			domainNameText = new Text(composite, SWT.BORDER | SWT.READ_ONLY);
-			domainNameText.setLayoutData(super.getGridData());
+			domainNameText.setLayoutData(UIHelper.getCoverAllGridData());
 			UIHelper.setWhiteBackground(domainNameText);
 		}
 		domainNameText.setText(name);
@@ -95,7 +97,7 @@ public class GeneratorDetailsGroupPanel extends GroupPanel {
 		if (domainDescText == null) {
 			domainDescText = new Text(composite, SWT.MULTI | SWT.V_SCROLL | SWT.BORDER | SWT.WRAP | SWT.READ_ONLY);
 			
-			GridData domainDescTextGD = UIHelper.getFieldGridData();
+			GridData domainDescTextGD = UIHelper.getCoverAllGridData();
 			domainDescTextGD.heightHint = 100;
 			domainDescTextGD.minimumWidth = 200;
 			domainDescText.setLayoutData(domainDescTextGD);
@@ -113,7 +115,7 @@ public class GeneratorDetailsGroupPanel extends GroupPanel {
 			propertiesTable = new Table(composite, SWT.MULTI | SWT.BORDER);
 			propertiesTable.setLinesVisible(true);
 			propertiesTable.setHeaderVisible(true);
-			GridData data = UIHelper.getFieldGridData();
+			GridData data = UIHelper.getCoverAllGridData();
 			data.heightHint = 100;
 			propertiesTable.setLayoutData(data);
 			
