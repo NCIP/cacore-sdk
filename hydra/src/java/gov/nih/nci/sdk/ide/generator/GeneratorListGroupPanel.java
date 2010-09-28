@@ -56,55 +56,57 @@ public class GeneratorListGroupPanel extends GroupPanel {
 			}
 		});
 	}
+
+	private java.util.Properties loadProperties(java.io.File _generatorDirectory, final String _propertyFileName)
+	{
+		java.io.File[] generatorPropertyFiles = _generatorDirectory.listFiles(new java.io.FilenameFilter() {
+			public boolean accept(java.io.File _dir, String _name)
+			{
+				return (_name.endsWith(_propertyFileName) == true);
+			}
+		});
+
+		if (generatorPropertyFiles.length != 1)
+		{
+			throw new RuntimeException("All plugins must include exactly one " +  _propertyFileName + "  file in its root directory");
+		}
+
+		java.util.Properties properties = new java.util.Properties();
+
+		try 
+		{
+			properties.load(new java.io.FileReader(generatorPropertyFiles[0]));
+		}
+		catch(Throwable t)
+		{
+			throw new RuntimeException("Unable to load properties from file: " + generatorPropertyFiles[0].getName());
+		}
+		
+		return properties;
+	}
 	
-	//TODO
-	private List<GeneratorInfoVO> getGenerators() {
-		List<GeneratorInfoVO> generators = new ArrayList<GeneratorInfoVO>();
+	private List<GeneratorInfoVO> getGenerators()
+	{
+		//This method should be querying the OSGI layer somehow to
+		//determine the generators that exist.  Instead it will read
+		//the generator directory and set up the generators ...
+		GeneratorInfoVO generator = new GeneratorInfoVO();
+		List<GeneratorInfoVO> generatorList = new ArrayList<GeneratorInfoVO>();
+
+		java.io.File generatorsDirectory = new java.io.File("generators");
+		java.io.File[] generatorDirectoryArray = generatorsDirectory.listFiles();
+
+		for (int i = 0; i < generatorDirectoryArray.length; i++)
+		{
+			java.util.Properties properties = loadProperties(generatorDirectoryArray[i], "info.properties");
+
+			generator.setName(properties.getProperty("name"));
+			generator.setDescription(properties.getProperty("description"));
+			generator.setProperties(loadProperties(generatorDirectoryArray[i], "generator.properties"));
+			
+			generatorList.add(generator);
+		}
 		
-		GeneratorInfoVO sdkExample = new GeneratorInfoVO();
-		sdkExample.setName("SDK Example");
-		sdkExample.setDescription("SDK Example serves as a tutorial on SDK.");
-		List<PropertyVO> properties = new ArrayList<PropertyVO>();
-		PropertyVO property1 = new PropertyVO();
-		property1.setName("rootDirectory");
-		property1.setValue("c:\\work\\sdkexample");
-		properties.add(property1);
-		PropertyVO property2 = new PropertyVO();
-		property2.setName("generatePojos");
-		property2.setValue("true");
-		property2.setDefaultValue("true");
-		properties.add(property2);
-		PropertyVO property3 = new PropertyVO();
-		property3.setName("generateServices");
-		property3.setValue("true");
-		property3.setDefaultValue("true");
-		properties.add(property3);
-		sdkExample.setProperties(properties);
-		generators.add(sdkExample);
-		
-		GeneratorInfoVO cbiitRef = new GeneratorInfoVO();
-		cbiitRef.setName("NCI CBIIT Reference Implementation");
-		cbiitRef.setDescription("NCI CBIIT's recommended working " 
-				+ "interoperability service implementation. This generator " 
-				+ "will generate a CBIIT approved service implementation.");
-		List<PropertyVO> properties2 = new ArrayList<PropertyVO>();
-		PropertyVO property21 = new PropertyVO();
-		property21.setName("rootDirectory");
-		property21.setValue("c:\\work\\cbiitref");
-		properties2.add(property21);
-		PropertyVO property22 = new PropertyVO();
-		property22.setName("generatePojos");
-		property22.setValue("true");
-		property22.setDefaultValue("false");
-		properties2.add(property22);
-		PropertyVO property23 = new PropertyVO();
-		property23.setName("generateServices");
-		property23.setValue("false");
-		property23.setDefaultValue("false");
-		properties2.add(property23);
-		cbiitRef.setProperties(properties2);
-		generators.add(cbiitRef);
-		
-		return generators;
+		return generatorList;
 	}
 }

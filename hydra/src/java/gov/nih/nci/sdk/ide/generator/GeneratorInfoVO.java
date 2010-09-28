@@ -8,7 +8,7 @@ import java.util.List;
 public class GeneratorInfoVO {
 	private String name = "";
 	private String description = "";
-	private List<PropertyVO> properties = new ArrayList<PropertyVO>();
+	private java.util.Properties properties = new java.util.Properties();
 	
 	/**
 	 * @return the generator name
@@ -41,22 +41,22 @@ public class GeneratorInfoVO {
 	/**
 	 * @return the properties
 	 */
-	public List<PropertyVO> getProperties() {
+	public java.util.Properties getProperties() {
 		return properties;
 	}
 	
 	/**
 	 * @param properties the properties to set
 	 */
-	public void setProperties(List<PropertyVO> properties) {
+	public void setProperties(java.util.Properties properties) {
 		this.properties = properties;
 	}
 	
 	/**
-	 * Adds a ne property.
+	 * Adds a new property.
 	 */
-	public void addProperty(PropertyVO property) {
-		properties.add(property);
+	public void addProperty(String _name, String _value) {
+		properties.setProperty(_name, _value);
 	}
 	
 	public String toString() {
