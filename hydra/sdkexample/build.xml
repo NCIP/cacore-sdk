@@ -264,6 +264,12 @@
 			 update="true"
 		/>
 
+	   <zip destfile="${dist}/${zip}"
+			 basedir="${src.cfg}"
+			 includes="**/*.*"
+			 update="true"
+		/>
+
 		<zip destfile="dist/${zip}"
 		       basedir="${dist}"
 			   includes="lib/${jar}"
@@ -284,7 +290,7 @@
 
 	</target>
 
-	<target name="install" depends="makePlugin">
+	<target name="installPlugin" depends="makePlugin">
 	   <unzip src="${dist}/${zip}" dest="${installDir}"/>
 	</target>
 

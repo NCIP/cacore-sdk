@@ -7,6 +7,7 @@ import gov.nih.nci.sdk.ide.modelexplorer.Constants;
 import gov.nih.nci.sdk.ide.modelexplorer.SDKUIManager;
 
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -21,28 +22,31 @@ import org.eclipse.swt.widgets.Text;
 public class GeneratorDetailsGroupPanel extends GroupPanel {
 	private String currentHandledEventName;
 	
-	public GeneratorDetailsGroupPanel(Composite parent, int style, Object data, String title) {
+	public GeneratorDetailsGroupPanel(Composite parent, int style, Object data, String title) 
+	{
 		super(parent, style, data, title);
 		SDKUIManager.getInstance().registerAsListener(Constants.GENERATOR_SELECTION_EVENT, this);
 	}
 	
-	public void paint() {
+	public void paint() 
+	{
 		String name = "Please select a generator";
 		String description = "";
 		GeneratorInfoVO giVO = new GeneratorInfoVO();
 		giVO.setName(name);
 		giVO.setDescription(description);
-		PropertyVO p = new PropertyVO();
-		giVO.addProperty(p);
+
 		GeneratorSelectionEvent event = new GeneratorSelectionEvent(giVO);
 		_paint(event);
 	}
 	
 	@Override
-	public void handleEvent(Event event) {
-		if (event == null) return;
+	public void handleEvent(Event event) 
+	{
+		if (event == null) { return; }
 		
-		if (event instanceof GeneratorSelectionEvent) {
+		if (event instanceof GeneratorSelectionEvent)
+		{
 			_paint((GeneratorSelectionEvent) event);
 		}
 	}
@@ -73,7 +77,7 @@ public class GeneratorDetailsGroupPanel extends GroupPanel {
 		GeneratorInfoVO giVO = event.getGeneratorInfoVO();
 		String name = giVO.getName();
 		String description = giVO.getDescription();
-		List<PropertyVO> properties = giVO.getProperties();
+		java.util.Properties properties = giVO.getProperties();
 
 		if (nameLabel == null) {
 			nameLabel = new Label(composite, SWT.NONE);
@@ -128,14 +132,16 @@ public class GeneratorDetailsGroupPanel extends GroupPanel {
 		}
 		
 		propertiesTable.removeAll();
-		
-		int count = properties.size();
-		for (int i = 0; i < count; i++) {
+				
+		for (Map.Entry propertiesEntry: giVO.getProperties().entrySet())
+		{
+			String propertyName = (String)propertiesEntry.getKey();
+			String propertyValue = (String)propertiesEntry.getValue();
+			
 			TableItem item = new TableItem(propertiesTable, SWT.NONE);
-			PropertyVO p = properties.get(i);
-			item.setText(0, p.getName());
-			item.setText(1, p.getValue());
-			item.setText(2, p.getDefaultValue());
+			item.setText(0, propertyName);
+			item.setText(1, propertyValue);
+			item.setText(2, propertyValue);
 		}
 
 		super.getUIComposite().redraw();
