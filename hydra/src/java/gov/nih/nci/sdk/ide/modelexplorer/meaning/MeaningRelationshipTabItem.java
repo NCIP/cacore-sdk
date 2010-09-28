@@ -8,6 +8,7 @@ import gov.nih.nci.sdk.ide.modelexplorer.SDKModelExplorerUtil;
 import gov.nih.nci.sdk.ide.modelexplorer.SDKUIManager;
 import gov.nih.nci.sdk.util.SDKUtil;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import org.eclipse.emf.common.util.EList;
@@ -26,6 +27,7 @@ import org.eclipse.swt.widgets.Text;
 public class MeaningRelationshipTabItem extends CategoryTabItem {
 	private Text nameText;
 	private Text descriptionText;
+	private List conceptList;
 	private Text typeText;
 	
 	public MeaningRelationshipTabItem(TabFolder parent, int style, Object data) {
@@ -67,6 +69,13 @@ public class MeaningRelationshipTabItem extends CategoryTabItem {
 		descriptionText = new Text(detailsGroup, SWT.BORDER | SWT.READ_ONLY | SWT.MULTI);
 		descriptionText.setLayoutData(UIHelper.getCoverAllGridData());
 		UIHelper.setWhiteBackground(descriptionText);
+		
+		Label conceptsLabel = new Label(detailsGroup, SWT.NONE);
+		conceptsLabel.setText("Concept");
+		UIHelper.setWhiteBackground(conceptsLabel);
+		conceptList = new List(detailsGroup, SWT.NONE);
+		conceptList.setLayoutData(UIHelper.getCoverAllGridData());
+		UIHelper.setWhiteBackground(conceptList);
 
 		Label typeLabel = new Label(detailsGroup, SWT.NONE);
 		typeLabel.setText("Type");
@@ -125,11 +134,33 @@ public class MeaningRelationshipTabItem extends CategoryTabItem {
 			referenceDescription = (UIHelper.isEmpty(referenceDescription)) ? "No reference description found" : referenceDescription;
 			descriptionText.setText(referenceDescription);
 			
+			conceptList.removeAll();
+			java.util.List<String> concepts = getConcepts(event);
+			if (concepts == null || concepts.isEmpty() == true) {
+				conceptList.add("This relationship has no concepts");
+			}
+			else {
+				for (String concept: concepts) {
+					conceptList.add(concept);
+				}
+			}
+			
 			String type = (selected.getEType() != null) ? selected.getEType().getName() : "";
 			typeText.setText(type);
 		}
 
 		super.getUIComposite().redraw();
+	}
+	
+	private static java.util.List<String> getConcepts(MeaningRelationshipSelectionEvent event) {
+		java.util.List<String> concepts = new ArrayList<String>();
+		if (event == null) return concepts;
+		EReference selected = event.getEReference();
+		String value = SDKUtil.getTagValue(selected, "rel.mea.concept");
+		value = (value == null)?"":value;
+		value = "http://nci.nih.gov/" + selected.getName();
+		concepts.add(value);
+		return concepts;
 	}
 	
 	class MeaningRelationshipSelectionEvent extends Event {
