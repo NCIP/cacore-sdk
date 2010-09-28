@@ -34,10 +34,7 @@ public class MeaningDomainTabItem extends CategoryTabItem {
 		String domainDesc = getDomainDesc((ModelSelectionEvent)this.getData());
 		domainDesc = (domainDesc == null) ? "There is no description for this domain" : domainDesc;
 		
-		String modelConcept = getModelConcepts((ModelSelectionEvent)this.getData());
-		modelConcept = (modelConcept == null) ? "" : modelConcept;
-		List<String> conceptList = new ArrayList<String>();
-		conceptList.add(modelConcept);
+		List<String> conceptList = getConcepts((ModelSelectionEvent)this.getData());
 		
 		Composite composite = super.getUIComposite();
 		
@@ -97,10 +94,14 @@ public class MeaningDomainTabItem extends CategoryTabItem {
 		return (value == null)?"":value;
 	}
 	
-	private static String getModelConcepts(ModelSelectionEvent event) {
-		if (event == null) return "";
+	private static List<String> getConcepts(ModelSelectionEvent event) {
+		List<String> concepts = new ArrayList<String>();
+		if (event == null) return concepts;
 		EClass eClass = SDKUIManager.getInstance().getEClass(event.getFullModelName());	
 		String value = SDKUtil.getTagValue(eClass, "class.mea.concept");
-		return (value == null)?"":value;
+		value = (value == null)?"":value;
+		value = "http://nci.nih.gov/" + event.getFullModelName();
+		concepts.add(value);
+		return concepts;
 	}
 }
