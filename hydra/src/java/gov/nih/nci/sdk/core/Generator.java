@@ -22,6 +22,8 @@ public class Generator
 	
 	public void compile(GeneratorContext _generatorContext)
 	{
+		System.out.println("Halloweeeeeeeen!!!!!!");
+		_generatorContext.getLogger().info("Performing level 0 validations");
 		level0Validate(_generatorContext);
 
 		if (_generatorContext.hasErrors() == false)
@@ -33,9 +35,49 @@ public class Generator
 			{
 				conduct(_generatorContext);
 			}
+			else
+			{
+				logMessagesToLogger(_generatorContext.getLogger(),
+									_generatorContext.getErrorManager(),
+									"Encountered the following generation errors:",
+									true);				
+			}
+		}
+		else
+		{
+			logMessagesToLogger(_generatorContext.getLogger(),
+								_generatorContext.getErrorManager(),
+								"Encountered the following level 0 validation errors:",
+								true);
 		}
 	}
 
+	private void logMessagesToLogger(java.util.logging.Logger _logger,
+									 MessageManager _messageManager,
+									 String _message, boolean _isError)
+	{
+		if (_isError == true)
+		{
+			_logger.severe(_message);
+		}
+		else
+		{
+			_logger.info(_message");
+		}
+			
+		for (gov.nih.nci.sdk.core.Message message: _generatorContext.getErrorManager().getMessageList())
+		{
+			if (_isError == true)
+			{
+				_logger.severe(message);
+			}
+			else
+			{
+				_logger.info(message);
+			}
+		}
+	}
+	
 	private void conduct(GeneratorContext _generatorContext)
 	{
 		java.util.List<EClassifier> eClassifierList = new java.util.ArrayList<EClassifier>();

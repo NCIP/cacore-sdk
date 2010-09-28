@@ -1,5 +1,7 @@
 package gov.nih.nci.sdk.ide.generator;
 
+import java.util.Map;
+
 import gov.nih.nci.sdk.core.GeneratorContext;
 import gov.nih.nci.sdk.ide.core.GroupPanel;
 import gov.nih.nci.sdk.ide.core.SDKScreen;
@@ -51,40 +53,43 @@ public class SDKGenerator extends SDKScreen {
 	@Override
 	public void okPressed()
 	{
-		System.out.println("okPressed - fire code generation here");
-		System.out.println("dsEvent: " + dsEvent);
-		System.out.println("gsEvent: " + gsEvent);
-
-		//Create Generator Context
-		GeneratorContext generatorContext = new GeneratorContext(
-			null,
-			null,
-			extractProperties(gsEvent),
-			SDKUIManager.getInstance().getRootEPackage(),
-			new java.util.HashSet<String>(dsEvent.getModelNames()),
-			java.util.logging.Logger.getLogger(gsEvent.getGeneratorInfoVO().getName()));
-
-		/*
-				private URI generatorBase;
-				private URI targetBase;
-				private List<java.io.File> generatorScriptFileList;
-		*/
+		java.util.logging.Logger logger = java.util.logging.Logger.getLogger(gsEvent.getGeneratorInfoVO().getName());
 		
-		gov.nih.nci.sdk.core.Generator generator = new gov.nih.nci.sdk.core.Generator();
-		generator.compile(generatorContext);		
-	}
-
-	private java.util.Properties extractProperties(GeneratorSelectionEvent _gsEvent)
-	{
-		java.util.Properties properties = new java.util.Properties();
-		gov.nih.nci.sdk.ide.generator.GeneratorInfoVO generatorInfoVO = _gsEvent.getGeneratorInfoVO();
-
-		for (gov.nih.nci.sdk.ide.core.PropertyVO propertyVO: generatorInfoVO.getProperties())
+		try
 		{
-			properties.setProperty(propertyVO.getName(), propertyVO.getValue());
-		}
+			logger.info("LOGGER: dsEvent: " + dsEvent);
+			logger.info("LOGGER: gsEvent: " + gsEvent);
 
-		return properties;
+			String targetDirectoryName = gsEvent.getGeneratorInfoVO().getProperties().getProperty("PROJECT_SRC");
+
+			if (targetDirectoryName == null || "".equals(targetDirectoryName) == true)
+			{
+				throw new RuntimeException("Please set target dir property to valid directory name instead of: " + targetDirectoryName);
+			}
+
+			java.io.File targetDirectory = new java.io.File(targetDirectoryName);
+
+			//Create Generator Context
+			GeneratorContext generatorContext = new GeneratorContext(
+				(new java.io.File("generators/sdkexample")).toURI(),
+				targetDirectory.toURI(),
+				gsEvent.getGeneratorInfoVO().getProperties(),
+				SDKUIManager.getInstance().getRootEPackage(),
+				new java.util.HashSet<String>(dsEvent.getModelNames()),
+				logger
+				);
+			
+			gov.nih.nci.sdk.core.Generator generator = new gov.nih.nci.sdk.core.Generator();
+
+			logger.info("Generation context created successfully.");
+			logger.info("Launching generator.");
+			generator.compile(generatorContext);
+		}
+		catch(Throwable t)
+		{
+			t.printStackTrace();
+			logger.severe("Encountered exception: " + t.toString());
+		}
 	}
 	
 	@Override
