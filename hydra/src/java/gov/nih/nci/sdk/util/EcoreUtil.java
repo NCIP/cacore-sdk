@@ -37,13 +37,7 @@ public class EcoreUtil {
 	/**
 	 * A business domain package name does not contain "<tt>java</tt>".
 	 */
-	private static final String FORBIDDEN_PACKAGE_NAME_STRING_java = "java";
-	
-	/**
-	 * A regular package name does not contain these strings.
-	 */
-	private static final List<String> SKIPPED_PACKAGE_NAME_STRINGS = Arrays.asList("LogicalModel", "LogicalView", "EA_Model");
-	
+	private static final String FORBIDDEN_PACKAGE_NAME_STRING_java = "java";	
 	
 	/**
 	 * Returns the root EPackage instance. 
@@ -342,19 +336,34 @@ public class EcoreUtil {
 			}
 		}
 	}
-	
+
+	/**
+	 * Gets the package name of a EClass <tt>ec</tt>.
+	 * 
+	 * @param ec the EClass instance
+	 * @param _ignorePrefix the package prefix that must be ignored
+	 * @return package name string
+	 */
+	public static String getPackage(EClass ec)
+	{
+		return getPackage(ec, "");
+	}
+
 	/**
 	 * Gets the package name of a EClass <tt>ec</tt>.
 	 * 
 	 * @param ec the EClass instance
 	 * @return package name string
 	 */
-	public static String getPackage(EClass ec) {
+	public static String getPackage(EClass ec, String _ignorePrefix)
+	{
+		String ignorePrefix = (_ignorePrefix == null) ? "" : _ignorePrefix;
+		
 		List<String> names = new ArrayList<String>();
 		EPackage epkg = ec.getEPackage();
 		while(epkg != null) {
 			String name = epkg.getName();
-			if (name == null || "".equals(name) || SKIPPED_PACKAGE_NAME_STRINGS.contains(name)) break;
+			if (name == null || "".equals(name) || ignorePrefix.contains(name)) break;
 			names.add(name);
 			epkg = epkg.getESuperPackage();
 		}
@@ -367,6 +376,7 @@ public class EcoreUtil {
 			sb.append(names.get(i)).append(".");
 		}
 		if (total > 0) sb.append(names.get(0));
+		
 		return sb.toString();
 	}
 }
