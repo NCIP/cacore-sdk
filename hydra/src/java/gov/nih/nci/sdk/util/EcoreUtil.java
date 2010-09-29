@@ -285,6 +285,23 @@ public class EcoreUtil {
 		return domainPackageClassesMap;
 	}
 	
+	public static String determineClassIgnorePrefix(EClass _eClass, String _packageIgnorePrefix)
+	{
+		String classIgnorePrefix = SDKUtil.getTagValue(_eClass, "class.mea.ignore.prefix");
+		classIgnorePrefix = (classIgnorePrefix == null) ? "" : classIgnorePrefix;
+		classIgnorePrefix = (_packageIgnorePrefix != null && "".equals(classIgnorePrefix) == true) ? _packageIgnorePrefix : classIgnorePrefix;
+	
+		return classIgnorePrefix;
+	}
+	
+	public static String determinePackageIgnorePrefix(EPackage _ePackage)
+	{
+		String packageIgnorePrefix = SDKUtil.getTagValue(_ePackage, "package.class.mea.ignore.prefix");
+		packageIgnorePrefix = (packageIgnorePrefix == null) ? "" : packageIgnorePrefix;
+		
+		return packageIgnorePrefix;
+	}
+	
 	/**
 	 * Gets all packages and their associated class names as a map. The key 
 	 * of the map is a name of a package, while the value is 
@@ -293,16 +310,24 @@ public class EcoreUtil {
 	 * @param rootPackage  the EPackage to parse
 	 * @return map
 	 */
-	public static Map<String, SortedSet<String>> getAllPackageClassNamesMap(EPackage rootPackage) {
-		List<EClass> ecs = getAllEClasses(rootPackage);
+	public static Map<String, SortedSet<String>> getAllPackageClassNamesMap(EPackage _rootPackage) {
+		
+		List<EClass> ecs = getAllEClasses(_rootPackage);
+		String packageIgnorePrefix = determinePackageIgnorePrefix(_rootPackage);
 		
 		Map<String, SortedSet<String>> pkgClassesMap = new TreeMap<String, SortedSet<String>>();
-		for (EClass ec : ecs) {
-			String pkgName = getPackage(ec);
-			if (pkgClassesMap.containsKey(pkgName)) {
+		
+		for (EClass ec : ecs)
+		{
+			String classIgnorePrefix = determineClassIgnorePrefix(ec, packageIgnorePrefix);
+			String pkgName = getPackage(ec, classIgnorePrefix);
+
+			if (pkgClassesMap.containsKey(pkgName))
+			{
 				pkgClassesMap.get(pkgName).add(ec.getName());
 			}
-			else {
+			else
+			{
 				SortedSet<String> classNames = new TreeSet<String>();
 				classNames.add(ec.getName());
 				pkgClassesMap.put(pkgName, classNames);
@@ -341,7 +366,6 @@ public class EcoreUtil {
 	 * Gets the package name of a EClass <tt>ec</tt>.
 	 * 
 	 * @param ec the EClass instance
-	 * @param _ignorePrefix the package prefix that must be ignored
 	 * @return package name string
 	 */
 	public static String getPackage(EClass ec)
@@ -351,8 +375,8 @@ public class EcoreUtil {
 
 	/**
 	 * Gets the package name of a EClass <tt>ec</tt>.
-	 * 
 	 * @param ec the EClass instance
+	 * @param _ignorePrefix the package prefix that must be ignored
 	 * @return package name string
 	 */
 	public static String getPackage(EClass ec, String _ignorePrefix)
