@@ -18,3 +18,18 @@ Require-Bundle: org.eclipse.ui,
  org.apache.commons.lang;bundle-version="2.3.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
+Bundle-ClassPath: runtime-lib/antlr/antlr-2.7.7.jar,
+ runtime-lib/antlr/antlr-3.0.jar,
+ runtime-lib/antlr/antlr-runtime-3.0.jar,
+ runtime-lib/antlr/stringtemplate-3.0.jar,
+ .,
+ runtime-lib/rhino/rhino1_7R1/js.jar,
+ sdkexample/dist/lib/sdkexample-alpha-0.10.jar,
+ sdkexample/runtime-lib/commons/commons-io-1.4.jar,
+ sdkexample/runtime-lib/commons/commons-jci-javac-1.0.jar,
+ sdkexample/runtime-lib/cxf/cxf-2.2.10.jar,
+ sdkexample/runtime-lib/cxf/cxf-manifest.jar,
+ sdkexample/runtime-lib/jaxb/jaxb-api-2.1.jar,
+ sdkexample/runtime-lib/jaxb/jaxb-impl-2.1.13.jar,
+ sdkexample/runtime-lib/jaxb/jaxb-xjc-2.1.13.jar,
+ sdkexample/runtime-lib/commons-logging-1.1.1.jar
