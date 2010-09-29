@@ -1,7 +1,6 @@
 package gov.nih.nci.sdk.util;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -221,25 +220,29 @@ public class EcoreUtil {
 		if (firstDotIndex != -1) {
 			String firstPart = targetName.substring(0, firstDotIndex);
 			String remainingName = targetName.substring(firstDotIndex + 1);
-			
-			Iterator<EObject> pkgIter = rootEPackage.eContents().iterator();
-			EObject eo = null;
-			while (pkgIter.hasNext()) {
-				eo = pkgIter.next();
-				
-				if (eo instanceof EClassImpl) {
-					EClass tmp = (EClassImpl) eo;
+			if (rootEPackage.getName().equals(firstPart)) {
+				searchModelElementsByClassName(results, rootEPackage, remainingName);
+			}
+			else {
+				Iterator<EObject> pkgIter = rootEPackage.eContents().iterator();
+				EObject eo = null;
+				while (pkgIter.hasNext()) {
+					eo = pkgIter.next();
+					
+					if (eo instanceof EClassImpl) {
+						EClass tmp = (EClassImpl) eo;
 
-					if (targetName.equals(tmp.getName())) {
-						results.add(tmp);
-					}
-				} else if (eo instanceof EPackage) {
-					EPackage tmp = (EPackage) eo;
-					if (tmp.getName().equals(firstPart)) {
-						searchModelElementsByClassName(results, tmp, remainingName);
-					}
-					else {
-						searchModelElementsByClassName(results, tmp, targetName);
+						if (targetName.equals(tmp.getName())) {
+							results.add(tmp);
+						}
+					} else if (eo instanceof EPackage) {
+						EPackage tmp = (EPackage) eo;
+						if (tmp.getName().equals(firstPart)) {
+							searchModelElementsByClassName(results, tmp, remainingName);
+						}
+						else {
+							searchModelElementsByClassName(results, tmp, targetName);
+						}
 					}
 				}
 			}
