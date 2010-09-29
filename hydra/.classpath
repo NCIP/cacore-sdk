@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry exported="true" kind="lib" path="sdkexample/runtime-lib/commons-logging-1.1.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="sdkexample/runtime-lib/jaxb/jaxb-api-2.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="sdkexample/runtime-lib/jaxb/jaxb-impl-2.1.13.jar"/>
+	<classpathentry exported="true" kind="lib" path="sdkexample/runtime-lib/jaxb/jaxb-xjc-2.1.13.jar"/>
+	<classpathentry exported="true" kind="lib" path="sdkexample/runtime-lib/cxf/cxf-2.2.10.jar"/>
+	<classpathentry exported="true" kind="lib" path="sdkexample/runtime-lib/cxf/cxf-manifest.jar"/>
+	<classpathentry exported="true" kind="lib" path="sdkexample/runtime-lib/commons/commons-io-1.4.jar"/>
+	<classpathentry exported="true" kind="lib" path="sdkexample/runtime-lib/commons/commons-jci-javac-1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="sdkexample/dist/lib/sdkexample-alpha-0.10.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="lib" path="build-only-lib/eclipse/org.eclipse.emf.codegen.ecore_2.5.0.v200906151043.jar"/>
