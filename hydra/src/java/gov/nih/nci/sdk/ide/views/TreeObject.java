@@ -3,7 +3,6 @@ package gov.nih.nci.sdk.ide.views;
 import org.eclipse.core.runtime.IAdaptable;
 
 class TreeObject implements IAdaptable {
-	private static final int MAX_VISIBLE_LENGTH = 30;
 
 	private String name;
 	private TreeParent parent;
@@ -13,8 +12,7 @@ class TreeObject implements IAdaptable {
 	}
 
 	public String getName() {
-		return (name.length() < MAX_VISIBLE_LENGTH) ? name : ("..." + name
-				.substring(name.length() - MAX_VISIBLE_LENGTH));
+		return name;
 	}
 
 	public void setParent(TreeParent parent) {
