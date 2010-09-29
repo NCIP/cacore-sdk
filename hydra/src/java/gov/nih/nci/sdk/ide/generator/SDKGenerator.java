@@ -3,6 +3,7 @@ package gov.nih.nci.sdk.ide.generator;
 import java.util.Map;
 
 import gov.nih.nci.sdk.core.GeneratorContext;
+import gov.nih.nci.sdk.core.MessageManager;
 import gov.nih.nci.sdk.ide.core.GroupPanel;
 import gov.nih.nci.sdk.ide.core.SDKScreen;
 import gov.nih.nci.sdk.ide.modelexplorer.Constants;
@@ -84,11 +85,28 @@ public class SDKGenerator extends SDKScreen {
 			logger.info("Generation context created successfully.");
 			logger.info("Launching generator.");
 			generator.compile(generatorContext);
+			
+			if (generatorContext.hasErrors() == true) 
+			{
+				logErrorsToLogger(generatorContext);
+			}
+			else
+			{
+				logger.info("Generation completed with no errors.");
+			}
 		}
 		catch(Throwable t)
 		{
-			t.printStackTrace();
 			logger.severe("Encountered exception: " + t.toString());
+			t.printStackTrace();
+		}
+	}
+	
+	private void logErrorsToLogger(GeneratorContext _generatorContext)
+	{
+		for (gov.nih.nci.sdk.core.Message message: _generatorContext.getErrorManager().getMessageList())
+		{
+			_generatorContext.getLogger().severe(message.toString());
 		}
 	}
 	

@@ -21,13 +21,13 @@ public class Generator
 	}
 	
 	public void compile(GeneratorContext _generatorContext)
-	{
-		System.out.println("Halloweeeeeeeen!!!!!!");
-		_generatorContext.getLogger().info("Performing level 0 validations");
+	{	
 		level0Validate(_generatorContext);
-
+		_generatorContext.getLogger().info("Level 0 validations completed");
+		
 		if (_generatorContext.hasErrors() == false)
 		{
+			_generatorContext.getLogger().info("Determinglevel 0 validations");
 			determineGeneratorScripts(_generatorContext);
 			level1Validate(_generatorContext);
 			
@@ -35,58 +35,25 @@ public class Generator
 			{
 				conduct(_generatorContext);
 			}
-			else
-			{
-				logMessagesToLogger(_generatorContext.getLogger(),
-									_generatorContext.getErrorManager(),
-									"Encountered the following generation errors:",
-									true);				
-			}
-		}
-		else
-		{
-			logMessagesToLogger(_generatorContext.getLogger(),
-								_generatorContext.getErrorManager(),
-								"Encountered the following level 0 validation errors:",
-								true);
-		}
-	}
-
-	private void logMessagesToLogger(java.util.logging.Logger _logger,
-									 MessageManager _messageManager,
-									 String _message, boolean _isError)
-	{
-		if (_isError == true)
-		{
-			_logger.severe(_message);
-		}
-		else
-		{
-			_logger.info(_message");
-		}
-			
-		for (gov.nih.nci.sdk.core.Message message: _generatorContext.getErrorManager().getMessageList())
-		{
-			if (_isError == true)
-			{
-				_logger.severe(message);
-			}
-			else
-			{
-				_logger.info(message);
-			}
 		}
 	}
 	
 	private void conduct(GeneratorContext _generatorContext)
 	{
+		_generatorContext.getLogger().info("Orchestrating artfact generation.");
+		
 		java.util.List<EClassifier> eClassifierList = new java.util.ArrayList<EClassifier>();
 		gov.nih.nci.sdk.util.EcoreUtil.findAllEClassModelElements(eClassifierList, _generatorContext.getEPackage());
 
 		for (EClassifier eClassifier: eClassifierList)
-		{			
-			if (_generatorContext.getDomainSet().contains(gov.nih.nci.sdk.util.EcoreUtil.determineFullyQualifiedName(eClassifier)) == true)
+		{
+			String fullyQualifiedClassName = gov.nih.nci.sdk.util.EcoreUtil.determineFullyQualifiedName(eClassifier);
+			_generatorContext.getLogger().info("Considering domain:" + fullyQualifiedClassName);
+			
+			if (_generatorContext.getDomainSet().contains(fullyQualifiedClassName) == true)
 			{
+				_generatorContext.getLogger().info("Processing domain: " + fullyQualifiedClassName);
+				
 				for (java.io.File script: _generatorContext.getGeneratorScriptFileList())
 				{
 					if (isValidationScript(script) == false)
@@ -99,17 +66,27 @@ public class Generator
 						//generator context to abort operation
 						if (_generatorContext.isAborted() == true) { break; }
 					}
+					else
+					{
+						_generatorContext.getLogger().info("Skipping validation script");
+					}
 				}
 			}
 
 			//BREAK LOOP condition: execute script set
 			//generator context to abort operation
-			if (_generatorContext.isAborted() == true) { break; }
+			if (_generatorContext.isAborted() == true)
+			{
+				_generatorContext.getLogger().warning("Generator execution prematurely aborted");
+				break;
+			}
 		}
 	}
 
 	public void executeScript(java.io.File _script, ScriptContext _scriptContext)
 	{
+		_scriptContext.getLogger().info("Executing script: " + _script.getName());
+		
 		ScriptingUtil scriptingUtil = new OmniScriptingUtil(determineFileExtension(_script));
 
 		scriptingUtil.bind("SCRIPT_UTIL", scriptingUtil);
@@ -128,6 +105,8 @@ public class Generator
 			//TODO log throwable to console ...
 			_scriptContext.getErrorManager().add(_script.getAbsolutePath(), "SEVERE", t.toString());
 		}
+		
+		_scriptContext.getLogger().info("Script execution completed.");
 	}
 
 	public String determineFileExtension(java.io.File _script)
@@ -154,6 +133,8 @@ public class Generator
 
 	public ScriptContext determineScriptContext(java.io.File _script, String _focusDomain, GeneratorContext _generatorContext)
 	{
+		_generatorContext.getLogger().info("Determining script context for script: " + _script.getName());
+		
 		ScriptContext scriptContext = getScriptContextMap().get(_script.getAbsolutePath());
 
 		if (scriptContext == null)
@@ -164,6 +145,8 @@ public class Generator
 
 		scriptContext.setFocusDomain(_focusDomain);
 		scriptContext.setGeneratorContext(_generatorContext);
+		
+		_generatorContext.getLogger().info("Script context determined.");
 		
 		return scriptContext;
 	}
@@ -196,26 +179,41 @@ public class Generator
 
 	public void level1Validate(GeneratorContext _generatorContext)
 	{
+		_generatorContext.getLogger().info("Performing level 1 validations");
+		_generatorContext.getLogger().info("Finding level 1 validation script");	
 		java.io.File validateScriptFile = findValidateScriptFile(_generatorContext.getGeneratorScriptFileList());
-
+		
 		if (validateScriptFile != null)
 		{
+			_generatorContext.getLogger().info("Level 1 validation script found: " + validateScriptFile.getName());		
+			
 			ScriptContext scriptContext = determineScriptContext(validateScriptFile, "", _generatorContext);	
 			executeScript(validateScriptFile, scriptContext);
 		}
+		else
+		{
+			_generatorContext.getLogger().info("Level 1 validation script not found.");
+		}
+		
+		_generatorContext.getLogger().info("Level 1 validations completed");
 	}
 
 	public void level0Validate(GeneratorContext _generatorContext)
 	{
 		//TODO
+		_generatorContext.getLogger().info("Performing level 0 validations");
+		_generatorContext.getLogger().info("Level 0 validations completed");
 	}
 
 	public void determineGeneratorScripts(GeneratorContext _generatorContext)
 	{
+		_generatorContext.getLogger().info("Finding generator scripts");
+		
 		List<java.io.File> generatorScriptList = new java.util.ArrayList<java.io.File>();
 		
+		_generatorContext.getLogger().info("Looking at base directory: " + _generatorContext.getGeneratorBase());
 		java.io.File baseDirectory = new java.io.File(_generatorContext.getGeneratorBase());
-
+		
 		if (baseDirectory.isDirectory() == true)
 		{
 			java.io.File[] directoryFiles = baseDirectory.listFiles();
@@ -235,5 +233,7 @@ public class Generator
 		}
 		
 		_generatorContext.setGeneratorScriptFileList(generatorScriptList);
+		
+		_generatorContext.getLogger().info("Found: " + generatorScriptList.size() + " generator script(s).");
 	}
 }
