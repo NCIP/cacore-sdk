@@ -1,13 +1,10 @@
 package gov.nih.nci.sdk.core;
 
-import java.io.Reader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.StringReader;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.Map;
+import java.io.Reader;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ContextFactory;
@@ -15,14 +12,11 @@ import org.mozilla.javascript.Script;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 public class JsScriptingUtil
    implements ScriptingUtil
 {
-	private static Log log = LogFactory.getLog(JsScriptingUtil.class);
-
+	
 	private static final Map<String, Script> scriptResourceMap = new HashMap<String, Script>();
 	private Map<String, Object> bindingsMap;
 	private Scriptable scope;
@@ -96,7 +90,6 @@ public class JsScriptingUtil
 		catch(Throwable t)
 		{
 			t.printStackTrace();
-			log.error(t.toString());
 			throw new RuntimeException(t);
 		}
 	}
