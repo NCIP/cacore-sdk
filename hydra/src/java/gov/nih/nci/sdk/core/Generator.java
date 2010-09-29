@@ -1,6 +1,7 @@
 package gov.nih.nci.sdk.core;
 
 import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
 
 import java.util.HashMap;
@@ -38,6 +39,24 @@ public class Generator
 		}
 	}
 	
+	private java.util.Set<String> deconstructClassName(String _fullyQualifiedClassName)
+	{
+		java.util.Set<String> deconstructedNameSet = new java.util.HashSet<String>();
+		java.util.Stack<String> tokenStack = new java.util.Stack<String>(); 
+		String[] tokenArray = _fullyQualifiedClassName.split("\\.");
+		String token = "";
+		for (int i = 0; i < tokenArray.length; i++) { tokenStack.push(tokenArray[i]); }
+		
+		while (tokenStack.isEmpty() == false)
+		{
+			token += tokenStack.pop();
+			deconstructedNameSet.add(token);
+			token += ".";
+		}
+		
+		return deconstructedNameSet;
+	}
+	
 	private void conduct(GeneratorContext _generatorContext)
 	{
 		_generatorContext.getLogger().info("Orchestrating artfact generation.");
@@ -47,7 +66,10 @@ public class Generator
 
 		for (EClassifier eClassifier: eClassifierList)
 		{
-			String fullyQualifiedClassName = gov.nih.nci.sdk.util.EcoreUtil.determineFullyQualifiedName(eClassifier);
+			String fullyQualifiedPackageName = gov.nih.nci.sdk.util.EcoreUtil.getPackage((EClass)eClassifier);
+			String fullyQualifiedClassName = 
+				(fullyQualifiedPackageName != null && "".equals(fullyQualifiedPackageName) != true) ? fullyQualifiedPackageName + "." + eClassifier.getName() : eClassifier.getName();
+				
 			_generatorContext.getLogger().info("Considering domain:" + fullyQualifiedClassName);
 			
 			if (_generatorContext.getDomainSet().contains(fullyQualifiedClassName) == true)
