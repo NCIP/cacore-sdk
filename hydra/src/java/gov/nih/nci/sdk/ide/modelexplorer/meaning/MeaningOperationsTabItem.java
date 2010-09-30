@@ -79,6 +79,8 @@ public class MeaningOperationsTabItem extends CategoryTabItem {
 		conceptList = new List(detailsGroup, SWT.NONE);
 		conceptList.setLayoutData(UIHelper.getCoverAllGridData());
 		UIHelper.setWhiteBackground(conceptList);
+		conceptList.add("No concepts.");
+		
 
 		Label typeLabel = new Label(detailsGroup, SWT.NONE);
 		typeLabel.setText("Return Type");
@@ -93,9 +95,9 @@ public class MeaningOperationsTabItem extends CategoryTabItem {
 		parameterList = new List(detailsGroup, SWT.NONE);
 		parameterList.setLayoutData(UIHelper.getCoverAllGridData());
 		UIHelper.setWhiteBackground(parameterList);
+		parameterList.add("No parameters.");
 		
 		
-
 		Group listGroup = new Group(composite, SWT.SHADOW_OUT);
 		listGroup.setText("has operations ...");
 		listGroup.setLayout(UIHelper.getOneColumnLayout());
@@ -148,13 +150,13 @@ public class MeaningOperationsTabItem extends CategoryTabItem {
 			
 			conceptList.removeAll();
 			java.util.List<String> concepts = getConcepts(event);
-			if (concepts == null || concepts.isEmpty() == true) {
+			if (concepts == null || concepts.size() == 0) {
 				String defaultConcept = getDefaultConcept(selected);
 				if (!UIHelper.isEmpty(defaultConcept)) {
 					concepts.add(defaultConcept);
 				}
 				else {
-					concepts.add("No concept");
+					concepts.add("No concepts.");
 				}
 			}
 
@@ -173,7 +175,7 @@ public class MeaningOperationsTabItem extends CategoryTabItem {
 			}
 			
 			if (eParameterList.isEmpty() == true) {
-				parameterList.add("This operation has no parameters");
+				parameterList.add("This operation has no parameters.");
 			}
 		}
 
