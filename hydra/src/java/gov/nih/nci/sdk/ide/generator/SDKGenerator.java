@@ -100,6 +100,8 @@ public class SDKGenerator extends SDKScreen {
 			logger.severe("Encountered exception: " + t.toString());
 			t.printStackTrace();
 		}
+		
+		super.okPressed();
 	}
 	
 	private void logErrorsToLogger(GeneratorContext _generatorContext)
