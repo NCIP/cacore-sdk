@@ -14,7 +14,6 @@ import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -39,13 +38,13 @@ public class MeaningDomainTabItem extends CategoryTabItem {
 		
 		List<String> superList = getDomainSuperClasses((ModelSelectionEvent)this.getData());
 		List<String> concepts = getConcepts((ModelSelectionEvent)this.getData());
-		if (concepts == null || concepts.isEmpty() == true) {
+		if (concepts == null || concepts.size() == 0) {
 			String defaultConcept = getDefaultConcept((ModelSelectionEvent)this.getData());
 			if (!UIHelper.isEmpty(defaultConcept)) {
 				concepts.add(defaultConcept);
 			}
 			else {
-				concepts.add("No concept");
+				concepts.add("No concepts.");
 			}
 		}
 		

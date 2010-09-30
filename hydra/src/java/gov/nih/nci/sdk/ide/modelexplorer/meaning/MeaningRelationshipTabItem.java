@@ -77,6 +77,7 @@ public class MeaningRelationshipTabItem extends CategoryTabItem {
 		conceptList = new List(detailsGroup, SWT.NONE);
 		conceptList.setLayoutData(UIHelper.getCoverAllGridData());
 		UIHelper.setWhiteBackground(conceptList);
+		conceptList.add("No concepts.");
 
 		Label typeLabel = new Label(detailsGroup, SWT.NONE);
 		typeLabel.setText("Type");
@@ -137,13 +138,13 @@ public class MeaningRelationshipTabItem extends CategoryTabItem {
 			
 			conceptList.removeAll();
 			java.util.List<String> concepts = getConcepts(event);
-			if (concepts == null || concepts.isEmpty() == true) {
+			if (concepts == null || concepts.size() == 0) {
 				String defaultConcept = getDefaultConcept(selected);
 				if (!UIHelper.isEmpty(defaultConcept)) {
 					concepts.add(defaultConcept);
 				}
 				else {
-					concepts.add("No concept");
+					concepts.add("No concepts.");
 				}
 			}
 			
