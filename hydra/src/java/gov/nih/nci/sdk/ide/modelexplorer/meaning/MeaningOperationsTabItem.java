@@ -167,6 +167,7 @@ public class MeaningOperationsTabItem extends CategoryTabItem {
 			String type = (selected.getEType() != null) ? selected.getEType().getName() : "";
 			typeText.setText(type);
 			
+			parameterList.removeAll();
 			java.util.List<EParameter> eParameterList = selected.getEParameters();
 			for (EParameter eParameter: eParameterList) {
 				String parameterType = (eParameter.getEType() != null) ? eParameter.getEType().getName() : "";
@@ -175,7 +176,7 @@ public class MeaningOperationsTabItem extends CategoryTabItem {
 			}
 			
 			if (eParameterList.isEmpty() == true) {
-				parameterList.add("This operation has no parameters.");
+				parameterList.add("No parameters.");
 			}
 		}
 
