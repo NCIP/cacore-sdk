@@ -14,6 +14,7 @@ import java.util.Date;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
@@ -137,12 +138,17 @@ public class MeaningPropertiesTabItem extends CategoryTabItem {
 			conceptList.removeAll();
 			java.util.List<String> concepts = getConcepts(event);
 			if (concepts == null || concepts.isEmpty() == true) {
-				conceptList.add("This property has no concepts");
-			}
-			else {
-				for (String concept: concepts) {
-					conceptList.add(concept);
+				String defaultConcept = getDefaultConcept(selected);
+				if (!UIHelper.isEmpty(defaultConcept)) {
+					concepts.add(defaultConcept);
 				}
+				else {
+					concepts.add("No concept");
+				}
+			}
+			
+			for (String concept: concepts) {
+				conceptList.add(concept);
 			}
 			
 			String type = (selected.getEType() != null) ? selected.getEType().getName() : "";
@@ -152,14 +158,27 @@ public class MeaningPropertiesTabItem extends CategoryTabItem {
 		super.getUIComposite().redraw();
 	}
 	
-	private static java.util.List<String> getConcepts(MeaningPropertySelectionEvent event) {
+	private String getDefaultConcept(ENamedElement selected) {
+		String uriPrefix = SDKUtil.getTagValue(selected, "prop.mea.concept.uri.prefix");
+		if (UIHelper.isEmpty(uriPrefix)) {
+			uriPrefix = SDKUtil.getTagValue(selected, "package.prop.mea.concept.uri.prefix");
+		}
+		String name = "";
+		if (selected != null) name = selected.getName();
+		return super.getDefaultConcept(uriPrefix, name);
+	}
+	
+	private java.util.List<String> getConcepts(MeaningPropertySelectionEvent event) {
 		java.util.List<String> concepts = new ArrayList<String>();
-		if (event == null) return concepts;
-		EAttribute selected = event.getEAttribute();
-		String value = SDKUtil.getTagValue(selected, "prop.mea.concept");
-		value = (value == null)?"":value;
-		value = "http://nci.nih.gov/" + selected.getName();
-		concepts.add(value);
+		if (event != null) {
+			EAttribute selected = event.getEAttribute();
+			if (selected != null) {
+				String value = SDKUtil.getTagValue(selected, "prop.mea.concept");
+				if (!UIHelper.isEmpty(value)) {
+					concepts.add(value);
+				}
+			}
+		}
 		return concepts;
 	}
 	

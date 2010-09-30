@@ -9,9 +9,12 @@ import gov.nih.nci.sdk.ide.modelexplorer.SDKUIManager;
 import gov.nih.nci.sdk.util.SDKUtil;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -34,7 +37,17 @@ public class MeaningDomainTabItem extends CategoryTabItem {
 		String domainDesc = getDomainDesc((ModelSelectionEvent)this.getData());
 		domainDesc = (domainDesc == null) ? "There is no description for this domain" : domainDesc;
 		
-		List<String> conceptList = getConcepts((ModelSelectionEvent)this.getData());
+		List<String> superList = getDomainSuperClasses((ModelSelectionEvent)this.getData());
+		List<String> concepts = getConcepts((ModelSelectionEvent)this.getData());
+		if (concepts == null || concepts.isEmpty() == true) {
+			String defaultConcept = getDefaultConcept((ModelSelectionEvent)this.getData());
+			if (!UIHelper.isEmpty(defaultConcept)) {
+				concepts.add(defaultConcept);
+			}
+			else {
+				concepts.add("No concept");
+			}
+		}
 		
 		Composite composite = super.getUIComposite();
 		
@@ -62,6 +75,30 @@ public class MeaningDomainTabItem extends CategoryTabItem {
 		domainDescText.setLayoutData(UIHelper.getCoverAllGridData());
 		UIHelper.setWhiteBackground(domainDescText);
 		
+		
+		Label superTypeLabel = new Label(detailsGroup, SWT.NONE);
+		superTypeLabel.setText("Super Type");
+		UIHelper.setWhiteBackground(superTypeLabel);
+		
+		Composite supersArea = new Composite(detailsGroup, SWT.NONE);
+		GridLayout sLayout = new GridLayout();
+		sLayout.marginHeight = 0;
+		sLayout.marginWidth = 0;
+		sLayout.verticalSpacing = 1;
+		sLayout.horizontalSpacing = 1;
+		sLayout.numColumns = 1;
+		supersArea.setLayout(sLayout);
+		UIHelper.setWhiteBackground(supersArea);
+		
+		Text superText = null;
+		for (String superType: superList) {
+			superText = new Text(supersArea, SWT.BORDER | SWT.READ_ONLY);
+			superText.setText(superType);
+			superText.setLayoutData(UIHelper.getCoverAllGridData());
+			UIHelper.setWhiteBackground(superText);
+		}
+
+		
 		Label conceptLabel = new Label(detailsGroup, SWT.NONE);
 		conceptLabel.setText("Concept");
 		UIHelper.setWhiteBackground(conceptLabel);
@@ -77,7 +114,7 @@ public class MeaningDomainTabItem extends CategoryTabItem {
 		UIHelper.setWhiteBackground(conceptsArea);
 		
 		Text conceptText = null;
-		for (String concept: conceptList) {
+		for (String concept: concepts) {
 			conceptText = new Text(conceptsArea, SWT.BORDER | SWT.READ_ONLY);
 			conceptText.setText(concept);
 			conceptText.setLayoutData(UIHelper.getCoverAllGridData());
@@ -89,19 +126,57 @@ public class MeaningDomainTabItem extends CategoryTabItem {
 	
 	private static String getDomainDesc(ModelSelectionEvent event) {
 		if (event == null) return "";
-		EClass eClass = SDKUIManager.getInstance().getEClass(event.getFullModelName());	
+		EClass eClass = SDKUIManager.getInstance().getEClass(event.getFullModelName());
 		String value = SDKUtil.getTagValue(eClass, "class.mea.desc");
 		return (value == null)?"":value;
 	}
 	
-	private static List<String> getConcepts(ModelSelectionEvent event) {
+	private String getDefaultConcept(ModelSelectionEvent event) {
+		if (event == null || event.isEmptyModel()) return null;
+		EClass selected = SDKUIManager.getInstance().getEClass(event.getFullModelName());
+		String uriPrefix = SDKUtil.getTagValue(selected, "class.mea.concept.uri.prefix");
+		if (UIHelper.isEmpty(uriPrefix)) {
+			uriPrefix = SDKUtil.getTagValue(selected, "package.class.mea.concept.uri.prefix");
+		}
+		String name = "";
+		if (selected != null) name = selected.getName();
+		return super.getDefaultConcept(uriPrefix, name);
+	}
+	
+	private static List<String> getDomainSuperClasses(ModelSelectionEvent event) {
+		List<String> list = new ArrayList<String>();
+		if (event == null) return list;
+		EClass eClass = SDKUIManager.getInstance().getEClass(event.getFullModelName());
+		if (eClass != null) {
+			EList<EClass> eList = eClass.getESuperTypes();
+			if (eList != null) {
+				Iterator<EClass> it = eList.iterator();
+				while(it.hasNext()) {
+					EClass item = it.next();
+					if (item != null) {
+						list.add(item.getName());
+					}
+				}
+			}
+		}
+		
+		if (list.size() == 0) {
+			list.add("No super types");
+		}
+		return list;
+	}
+	
+	private List<String> getConcepts(ModelSelectionEvent event) {
 		List<String> concepts = new ArrayList<String>();
-		if (event == null) return concepts;
-		EClass eClass = SDKUIManager.getInstance().getEClass(event.getFullModelName());	
-		String value = SDKUtil.getTagValue(eClass, "class.mea.concept");
-		value = (value == null)?"":value;
-		value = "http://nci.nih.gov/" + event.getFullModelName();
-		concepts.add(value);
+		if (event != null && !event.isEmptyModel()) {
+			EClass eClass = SDKUIManager.getInstance().getEClass(event.getFullModelName());
+			if (eClass != null) {
+				String value = SDKUtil.getTagValue(eClass, "class.mea.concept");
+				if (!UIHelper.isEmpty(value)) {
+					concepts.add(value);
+				}
+			}
+		}
 		return concepts;
 	}
 }

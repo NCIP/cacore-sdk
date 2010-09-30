@@ -1,5 +1,7 @@
 package gov.nih.nci.sdk.ide.core;
 
+import gov.nih.nci.sdk.ide.modelexplorer.ModelSelectionEvent;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.GridLayout;
@@ -19,6 +21,47 @@ public abstract class CategoryTabItem extends ActiveUI {
 	
 	public String getTitle() {
 		return title;
+	}
+	
+	public String getCategory() {
+		ModelSelectionEvent mse = (ModelSelectionEvent)super.getData();
+		return (mse != null)?mse.getCategory():"";
+	}
+	
+	public String getPackage() {
+		ModelSelectionEvent mse = (ModelSelectionEvent)super.getData();
+		return (mse != null)?mse.getPackageName():"";
+	}
+	
+	public String getModel() {
+		ModelSelectionEvent mse = (ModelSelectionEvent)super.getData();
+		return (mse != null)?mse.getModelName():"";
+	}
+	
+	public String getDefaultConcept(String uriPrefix, String name) {
+		if (UIHelper.isEmpty(uriPrefix)) uriPrefix = "http://example.org";
+		String concept = getDefaultConcept(uriPrefix, getCategory(), getPackage(), getModel(), name);
+		return concept;
+	}
+	
+	String getDefaultConcept(String uriPrefix, String category, String pkgName, String model, String name) {
+		StringBuilder sb = new StringBuilder();
+		if (!UIHelper.isEmpty(uriPrefix)) {
+			sb.append(uriPrefix);
+		} 
+		if (!UIHelper.isEmpty(category)) {
+			sb.append(category);
+		} 
+		if (!UIHelper.isEmpty(pkgName)) {
+			sb.append("/").append(pkgName);
+		} 
+		if (!UIHelper.isEmpty(model)) {
+			sb.append("/").append(model);
+		} 
+		if (!UIHelper.isEmpty(name)) {
+			sb.append("/").append(name);
+		}
+		return sb.toString();
 	}
 	
 	public TabItem getTabItem() {

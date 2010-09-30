@@ -18,6 +18,10 @@ public class ModelSelectionEvent extends Event {
 		this.timestamp = new Date();
 		super.type = SWT.Selection;
 	}
+	
+	public boolean isEmptyModel() {
+		return (modelName == null || "".equals(modelName))?true:false;
+	}
 
 	public String getPackageName() {
 		return packageName;
