@@ -29,7 +29,6 @@
 										<upperValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI000006_EAE6_4f62_A278_FA956613D038" value="1"/>
 									</ownedAttribute>
 									<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_354066BB_15F5_44ff_9DA7_AC271AA832DF" name="identifier" visibility="private" isDerived="false" isOrdered="false">
-										<type xmi:idref="EAID_61D84993_837B_48c3_9F63_E3020F52FA13"/>
 										<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI000007_15F5_44ff_9DA7_AC271AA832DF" value="1"/>
 										<upperValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI000008_15F5_44ff_9DA7_AC271AA832DF" value="1"/>
 									</ownedAttribute>
@@ -50,10 +49,12 @@
 										<upperValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI000014_C4A1_4e4f_B05C_C5EFCA810E53" value="1"/>
 									</ownedAttribute>
 									<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_8D227695_9AE7_4d57_B444_04F5E1A8B145" name="name" visibility="public" isDerived="false" isOrdered="false">
+										<type xmi:idref="EAID_D1A51FE0_90DA_4977_B520_F3A871CBA44E"/>
 										<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI000015_9AE7_4d57_B444_04F5E1A8B145" value="1"/>
 										<upperValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI000016_9AE7_4d57_B444_04F5E1A8B145" value="1"/>
 									</ownedAttribute>
 									<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_1C1027C5_0A6E_43f9_AAA1_CF516EE40906" name="postalAddress" visibility="public" isDerived="false" isOrdered="false">
+										<type xmi:idref="EAID_D1A51FE0_90DA_4977_B520_F3A871CBA44E"/>
 										<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI000017_0A6E_43f9_AAA1_CF516EE40906" value="1"/>
 										<upperValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI000018_0A6E_43f9_AAA1_CF516EE40906" value="1"/>
 									</ownedAttribute>
@@ -76,10 +77,10 @@
 									</ownedEnd>
 								</packagedElement>
 								<packagedElement xmi:type="uml:Class" xmi:id="EAID_15E7F775_6CC4_47bd_A818_5FDFB8740D95" name="Patient" visibility="public">
-									<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_8DBE4CDB_AE59_4465_9746_2F2C2EC9C6F8" name="hospital" visibility="private" isDerived="false" isOrdered="false">
+									<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_F7D8A625_FE20_4516_B4C3_AE0BBDE91C1D" name="hospital" visibility="private" isDerived="false" isOrdered="false">
 										<type xmi:idref="EAID_1900C30C_5F50_4178_BE67_C2242BE57225"/>
-										<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI000023_AE59_4465_9746_2F2C2EC9C6F8" value="1"/>
-										<upperValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI000024_AE59_4465_9746_2F2C2EC9C6F8" value="1"/>
+										<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI000023_FE20_4516_B4C3_AE0BBDE91C1D" value="1"/>
+										<upperValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI000024_FE20_4516_B4C3_AE0BBDE91C1D" value="1"/>
 									</ownedAttribute>
 									<generalization xmi:type="uml:Generalization" xmi:id="EAID_0A0700F2_1256_46d1_86DA_3611D705E828" general="EAID_0EF420F0_4227_406f_A187_85A06587C2A1"/>
 								</packagedElement>
@@ -90,7 +91,6 @@
 										<upperValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI000026_4479_483f_BB62_02D21E1CD2FB" value="1"/>
 									</ownedAttribute>
 									<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_E5C11E6A_77A1_4ce2_A8E2_28B8EF22E684" name="identifier" visibility="public" isDerived="false" isOrdered="false">
-										<type xmi:idref="EAID_61D84993_837B_48c3_9F63_E3020F52FA13"/>
 										<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI000027_77A1_4ce2_A8E2_28B8EF22E684" value="1"/>
 										<upperValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI000028_77A1_4ce2_A8E2_28B8EF22E684" value="1"/>
 									</ownedAttribute>
@@ -124,7 +124,9 @@
 										<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI000039_BB5F_440a_98FE_69B24E7238F4" value="1"/>
 										<upperValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI000040_BB5F_440a_98FE_69B24E7238F4" value="1"/>
 									</ownedAttribute>
-									<ownedOperation xmi:id="EAID_4FEA5C8B_6308_465b_9809_A37597FBCA32" name="getNickName" visibility="public" type="" concurrency="sequential"/>
+									<ownedOperation xmi:id="EAID_4FEA5C8B_6308_465b_9809_A37597FBCA32" name="getNickName" visibility="public" type="EAID_D1A51FE0_90DA_4977_B520_F3A871CBA44E" concurrency="sequential">
+										<ownedParameter xmi:id="EAID_RT000000_6308_465b_9809_A37597FBCA32" name="return" type="EAID_D1A51FE0_90DA_4977_B520_F3A871CBA44E" direction="return"/>
+									</ownedOperation>
 									<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_dstCEAAAC_FEE5_420f_9E60_06DCCB788B85" visibility="public" association="EAID_A3CEAAAC_FEE5_420f_9E60_06DCCB788B85" isOrdered="false" isDerived="false" isDerivedUnion="false" aggregation="shared">
 										<type xmi:idref="EAID_1900C30C_5F50_4178_BE67_C2242BE57225"/>
 									</ownedAttribute>
@@ -269,9 +271,7 @@
 				<code gentype="Java"/>
 				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
 				<modelDocument/>
-				<tags>
-					<tag xmi:id="EAID_8BC5A9C0_7757_4803_B932_9D5820B207DC" name="package.mea.ignore.prefix" value="EA_Model.LogicalView.LogicalModel" modelElement="EAID_6318152E_A62D_4c4d_BE2E_1F237D6F09C1"/>
-				</tags>
+				<tags/>
 				<xrefs/>
 				<extendedProperties tagged="0" package_name="Model"/>
 				<packageproperties tpos="5"/>
@@ -319,9 +319,12 @@
 				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
 				<modelDocument/>
 				<tags>
+					<tag xmi:id="EAID_49251634_9E94_4d7b_8EBC_D0DB2D9EB6FF" name="package.class.mea.concept.uri.prefix" value="http://example.org" modelElement="EAID_0F7BE4AE_9C3A_4c19_9CD7_51C7FBDBEBF8"/>
+					<tag xmi:id="EAID_CBAE4F23_5F92_498b_AAF5_94BFDC3B3137" name="package.oper.mea.concept.uri.prefix" value="http://example.org" modelElement="EAID_0F7BE4AE_9C3A_4c19_9CD7_51C7FBDBEBF8"/>
 					<tag xmi:id="EAID_81048E5B_CA15_4b10_9B12_33A037AEF5E5" name="package.oper.sec.role" value="AppUser" modelElement="EAID_0F7BE4AE_9C3A_4c19_9CD7_51C7FBDBEBF8"/>
-					<tag xmi:id="EAID_56248F20_4C78_4cbc_9619_C4BFB86F163C" name="package.oper.sec.role" value="DevUser" modelElement="EAID_0F7BE4AE_9C3A_4c19_9CD7_51C7FBDBEBF8"/>
+					<tag xmi:id="EAID_3EC0667B_1E3D_4ec3_8676_12D5E99F95DA" name="package.prop.mea.concept.uri.prefix" value="http://example.org" modelElement="EAID_0F7BE4AE_9C3A_4c19_9CD7_51C7FBDBEBF8"/>
 					<tag xmi:id="EAID_389602AA_B1BE_4aa9_B23E_B56BF589DD45" name="package.prop.sec.encrypt" value="false" modelElement="EAID_0F7BE4AE_9C3A_4c19_9CD7_51C7FBDBEBF8"/>
+					<tag xmi:id="EAID_79EDD258_7E76_403a_8A70_15BBEB718723" name="package.rel.mea.concept.uri.prefix" value="http://example.org" modelElement="EAID_0F7BE4AE_9C3A_4c19_9CD7_51C7FBDBEBF8"/>
 				</tags>
 				<xrefs/>
 				<extendedProperties tagged="0" package_name="Logical Model"/>
@@ -337,10 +340,7 @@
 				<code gentype="Java"/>
 				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
 				<modelDocument/>
-				<tags>
-					<tag xmi:id="EAID_B114594E_4841_4967_BDA0_8E8224B02309" name="package.oper.sec.role" value="DevUser" modelElement="EAID_C92CF8D5_5D06_4595_B30D_95B386F2356D"/>
-					<tag xmi:id="EAID_DDF41EF5_733F_4472_A338_98F5AE1ADCBD" name="package.oper.sec.role" value="ssss" modelElement="EAID_C92CF8D5_5D06_4595_B30D_95B386F2356D"/>
-				</tags>
+				<tags/>
 				<xrefs/>
 				<extendedProperties tagged="0" package_name="gov"/>
 				<packageproperties/>
@@ -438,7 +438,7 @@
 						<initial/>
 						<documentation/>
 						<model ea_localid="11433" ea_guid="{354066BB-15F5-44ff-9DA7-AC271AA832DF}"/>
-						<properties type="Integer" derived="0" collection="false" duplicates="0" changeability="changeable"/>
+						<properties type="int" derived="0" collection="false" duplicates="0" changeability="changeable"/>
 						<coords ordered="0"/>
 						<containment containment="Not Specified" position="3"/>
 						<stereotype/>
@@ -492,13 +492,13 @@
 					<tag xmi:id="EAID_2D15EEDB_E4DB_4176_8B4E_84950FBE2909" name="class.per.table.name" value="ORGANIZATION" modelElement="EAID_1900C30C_5F50_4178_BE67_C2242BE57225"/>
 				</tags>
 				<xrefs value="$XREFPROP=$XID={F28CFB8F-C362-4040-9D3F-9070BD8FD497}$XID;$NAM=CustomProperties$NAM;$TYP=element property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isActive@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={1900C30C-5F50-4178-BE67-C2242BE57225}$CLT;$ENDXREF;"/>
-				<extendedProperties tagged="0" package_name="sdkexample" eventflags="ATT=c15f;LNK=0bfa;" cardinality="*" ea_attsclassified="{8DBE4CDB-AE59-4465-9746-2F2C2EC9C6F8}"/>
+				<extendedProperties tagged="0" package_name="sdkexample" eventflags="ATT=c15f;LNK=0bfa;" cardinality="*" ea_attsclassified="{F7D8A625-FE20-4516-B4C3-AE0BBDE91C1D}"/>
 				<attributes>
 					<attribute xmi:idref="EAID_F0C81987_C4A1_4e4f_B05C_C5EFCA810E53" name="identifier" scope="Public">
 						<initial/>
 						<documentation value="The unique identifier assigned to an organization by some assigning body. &#xA;&#xA;For example, in cases of laboratories this is the Clinical Laboratory Improvement Act/Amendment (CLIA) ID."/>
 						<model ea_localid="11338" ea_guid="{F0C81987-C4A1-4e4f-B05C-C5EFCA810E53}"/>
-						<properties type="Integer" derived="0" precision="0" collection="false" length="0" duplicates="0" changeability="changeable"/>
+						<properties type="int" derived="0" precision="0" collection="false" length="0" duplicates="0" changeability="changeable"/>
 						<coords ordered="0" scale="0"/>
 						<containment containment="Not Specified" position="0"/>
 						<stereotype/>
@@ -588,10 +588,10 @@
 				<xrefs value="$XREFPROP=$XID={8E7D89D2-5D13-4cea-840D-068BC18B0FA6}$XID;$NAM=CustomProperties$NAM;$TYP=element property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isActive@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={15E7F775-6CC4-47bd-A818-5FDFB8740D95}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
 				<extendedProperties tagged="0" package_name="sdkexample" eventflags="LNK=a4a0;"/>
 				<attributes>
-					<attribute xmi:idref="EAID_8DBE4CDB_AE59_4465_9746_2F2C2EC9C6F8" name="hospital" scope="Private">
+					<attribute xmi:idref="EAID_F7D8A625_FE20_4516_B4C3_AE0BBDE91C1D" name="hospital" scope="Private">
 						<initial/>
 						<documentation/>
-						<model ea_localid="11444" ea_guid="{8DBE4CDB-AE59-4465-9746-2F2C2EC9C6F8}"/>
+						<model ea_localid="11444" ea_guid="{F7D8A625-FE20-4516-B4C3-AE0BBDE91C1D}"/>
 						<properties type="Organization" derived="0" collection="false" duplicates="0" changeability="changeable"/>
 						<coords ordered="0"/>
 						<containment containment="Not Specified" position="0"/>
@@ -640,7 +640,7 @@
 						<initial/>
 						<documentation value="The unique identifier assigned to a person by some assigning body. "/>
 						<model ea_localid="11329" ea_guid="{E5C11E6A-77A1-4ce2-A8E2-28B8EF22E684}"/>
-						<properties type="Integer" derived="0" precision="0" collection="false" length="0" duplicates="0" changeability="changeable"/>
+						<properties type="int" derived="0" precision="0" collection="false" length="0" duplicates="0" changeability="changeable"/>
 						<coords ordered="0" scale="0"/>
 						<containment containment="Not Specified" position="1"/>
 						<stereotype/>
@@ -765,7 +765,7 @@
 						</tags>
 						<parameters>
 							<parameter xmi:idref="EAID_RETURNID_6308_465b_9809_A37597FBCA32" visibility="public">
-								<properties pos="0" type="String" const="false" ea_guid="{RETURNID-6308-465b-9809-A37597FBCA32}"/>
+								<properties pos="0" type="String" const="false" classifier="EAID_D1A51FE0_90DA_4977_B520_F3A871CBA44E" ea_guid="{RETURNID-6308-465b-9809-A37597FBCA32}"/>
 								<style/>
 								<styleex/>
 								<documentation/>
@@ -878,7 +878,7 @@
 				<modelDocument/>
 				<tags/>
 				<xrefs value="$XREFPROP=$XID={4F16756A-674A-48e3-A244-64AC52D59A0C}$XID;$NAM=CustomProperties$NAM;$TYP=element property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isActive@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={61D84993-837B-48c3-9F63-E3020F52FA13}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-				<extendedProperties tagged="0" package_name="lang" ea_attsclassified="{E5C11E6A-77A1-4ce2-A8E2-28B8EF22E684},{354066BB-15F5-44ff-9DA7-AC271AA832DF}"/>
+				<extendedProperties tagged="0" package_name="lang"/>
 			</element>
 			<element xmi:idref="EAID_1C629429_347E_4f3f_8D5A_E52B555F406C" xmi:type="uml:Class" name="Long" scope="public">
 				<model package="EAPK_0CA6AD77_D114_4100_AE05_E65AB1F45D7E" tpos="0" ea_localid="4642" ea_eleType="element"/>
@@ -900,7 +900,7 @@
 				<modelDocument/>
 				<tags/>
 				<xrefs value="$XREFPROP=$XID={77BFCE39-617B-4738-B772-96BA9494FBCD}$XID;$NAM=CustomProperties$NAM;$TYP=element property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isActive@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={D1A51FE0-90DA-4977-B520-F3A871CBA44E}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-				<extendedProperties tagged="0" package_name="lang" ea_attsclassified="{E6BDA811-04A6-4c8c-80C6-4753980F61F5},{B7E2F0C8-CFF9-4cef-B628-2EADDD200C38},{1CFCB8D9-7B30-4bb1-8AB7-FF9A8FE1A59C},{04CA8362-EAE6-4f62-A278-FA956613D038},{2A61BDBC-D606-42a1-9650-711E33BFBD85},{BAEB46DC-7BB9-4bbe-B8DA-67E27CF91BB5},{BF43025B-CF04-4394-A2BD-87EA4C8B587D},{4A724DD3-EA83-4116-9259-58312DD7BDB3},{1AD8E6BB-BB5F-440a-98FE-69B24E7238F4},{8D0FE0D0-1A6F-4425-AB37-F3EBA42E32F7},{EE559CC8-786F-4d4f-91C1-1469FD4E0F38},{0C029AFF-BD26-4736-86FF-2846031BC1A2},{2AC07758-F4FA-407b-8446-88041EE533FD}"/>
+				<extendedProperties tagged="0" package_name="lang" ea_attsclassified="{E6BDA811-04A6-4c8c-80C6-4753980F61F5},{B7E2F0C8-CFF9-4cef-B628-2EADDD200C38},{1CFCB8D9-7B30-4bb1-8AB7-FF9A8FE1A59C},{04CA8362-EAE6-4f62-A278-FA956613D038},{2A61BDBC-D606-42a1-9650-711E33BFBD85},{BAEB46DC-7BB9-4bbe-B8DA-67E27CF91BB5},{BF43025B-CF04-4394-A2BD-87EA4C8B587D},{0C029AFF-BD26-4736-86FF-2846031BC1A2},{4A724DD3-EA83-4116-9259-58312DD7BDB3},{1AD8E6BB-BB5F-440a-98FE-69B24E7238F4},{8D0FE0D0-1A6F-4425-AB37-F3EBA42E32F7},{8D227695-9AE7-4d57-B444-04F5E1A8B145},{1C1027C5-0A6E-43f9-AAA1-CF516EE40906},{EE559CC8-786F-4d4f-91C1-1469FD4E0F38},{2AC07758-F4FA-407b-8446-88041EE533FD}" ea_oprsclassified="{4FEA5C8B-6308-465b-9809-A37597FBCA32}"/>
 			</element>
 			<element xmi:idref="EAPK_65413A3A_338B_4a5c_96B7_B456DA3809A1" xmi:type="uml:Package" name="util" scope="public">
 				<model package2="EAID_65413A3A_338B_4a5c_96B7_B456DA3809A1" package="EAPK_43BAE89C_5241_4bc7_B74B_FC946B52F491" tpos="0" ea_localid="592" ea_eleType="package"/>
