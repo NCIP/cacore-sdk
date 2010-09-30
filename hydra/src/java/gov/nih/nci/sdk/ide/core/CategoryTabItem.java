@@ -50,7 +50,7 @@ public abstract class CategoryTabItem extends ActiveUI {
 			sb.append(uriPrefix);
 		} 
 		if (!UIHelper.isEmpty(category)) {
-			sb.append(category);
+			sb.append("/").append(category);
 		} 
 		if (!UIHelper.isEmpty(pkgName)) {
 			sb.append("/").append(pkgName);
