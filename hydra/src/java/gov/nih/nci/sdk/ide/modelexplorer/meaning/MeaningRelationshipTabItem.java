@@ -13,6 +13,7 @@ import java.util.Date;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -137,12 +138,17 @@ public class MeaningRelationshipTabItem extends CategoryTabItem {
 			conceptList.removeAll();
 			java.util.List<String> concepts = getConcepts(event);
 			if (concepts == null || concepts.isEmpty() == true) {
-				conceptList.add("This relationship has no concepts");
-			}
-			else {
-				for (String concept: concepts) {
-					conceptList.add(concept);
+				String defaultConcept = getDefaultConcept(selected);
+				if (!UIHelper.isEmpty(defaultConcept)) {
+					concepts.add(defaultConcept);
 				}
+				else {
+					concepts.add("No concept");
+				}
+			}
+			
+			for (String concept: concepts) {
+				conceptList.add(concept);
 			}
 			
 			String type = (selected.getEType() != null) ? selected.getEType().getName() : "";
@@ -152,14 +158,27 @@ public class MeaningRelationshipTabItem extends CategoryTabItem {
 		super.getUIComposite().redraw();
 	}
 	
-	private static java.util.List<String> getConcepts(MeaningRelationshipSelectionEvent event) {
+	private String getDefaultConcept(ENamedElement selected) {
+		String uriPrefix = SDKUtil.getTagValue(selected, "rel.mea.concept.uri.prefix");
+		if (UIHelper.isEmpty(uriPrefix)) {
+			uriPrefix = SDKUtil.getTagValue(selected, "package.rel.mea.concept.uri.prefix");
+		}
+		String name = "";
+		if (selected != null) name = selected.getName();
+		return super.getDefaultConcept(uriPrefix, name);
+	}
+	
+	private java.util.List<String> getConcepts(MeaningRelationshipSelectionEvent event) {
 		java.util.List<String> concepts = new ArrayList<String>();
-		if (event == null) return concepts;
-		EReference selected = event.getEReference();
-		String value = SDKUtil.getTagValue(selected, "rel.mea.concept");
-		value = (value == null)?"":value;
-		value = "http://nci.nih.gov/" + selected.getName();
-		concepts.add(value);
+		if (event != null) {
+			EReference selected = event.getEReference();
+			if (selected != null) {
+				String value = SDKUtil.getTagValue(selected, "rel.mea.concept");
+				if (!UIHelper.isEmpty(value)) {
+					concepts.add(value);
+				}
+			}
+		}
 		return concepts;
 	}
 	
