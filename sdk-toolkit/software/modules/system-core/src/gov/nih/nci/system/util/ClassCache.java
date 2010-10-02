@@ -22,6 +22,7 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.mapping.Any;
 import org.hibernate.mapping.Component;
 import org.hibernate.mapping.ManyToOne;
+import org.hibernate.mapping.OneToMany;
 import org.hibernate.mapping.PersistentClass;
 import org.hibernate.mapping.Property;
 import org.hibernate.mapping.RootClass;
@@ -891,7 +892,7 @@ public class ClassCache implements InitializingBean{
 			isoObjectPsFields.add(prop.getName());
 		} else if (prop.getType().isComponentType()
 				&& !(prop.getValue() instanceof Any)) {
-			processIfComponentMapping(prop, isoObjectPsFields);
+			processIfComponentMapping(prop, isoObjectPsFields,cfg);
 		} else if (prop.getType().isAssociationType()
 				&& (prop.getValue() instanceof ManyToOne)) {
 			ManyToOne manyToOne = (ManyToOne) prop.getValue();
@@ -920,7 +921,7 @@ public class ClassCache implements InitializingBean{
 
 	@SuppressWarnings("unchecked")
 	private void processIfComponentMapping(Property prop,
-			List<Object> isoObjectPsFields) {
+			List<Object> isoObjectPsFields, Configuration cfg) {
 		Component isoComponent = (Component) prop.getValue();
 		Iterator<Property> itr = isoComponent.getPropertyIterator();
 		while (itr.hasNext()) {
@@ -934,7 +935,7 @@ public class ClassCache implements InitializingBean{
 				isoObjectPsFields.add(nestedComponent);
 			} else if (property.getType().isAssociationType()) {
 				Map<String, List<Object>> nestedComponent = processIfAssociationType(
-						property, fieldName);
+						property, fieldName, cfg);
 				isoObjectPsFields.add(nestedComponent);
 			} else {
 				isoObjectPsFields.add(fieldName);
@@ -944,16 +945,16 @@ public class ClassCache implements InitializingBean{
 
 	@SuppressWarnings("unchecked")
 	private Map<String, List<Object>> processIfAssociationType(
-			Property property, String fieldName) {
+			Property property, String fieldName, Configuration cfg) {
 		Map<String, List<Object>> associationPsFields = new HashMap<String, List<Object>>();
 
 		org.hibernate.mapping.Set childAssociationType = (org.hibernate.mapping.Set) property
 				.getValue();
+		Object element = childAssociationType.getElement();
 		Class<? extends Value> elementClass = childAssociationType.getElement()
 				.getClass();
 		if (Component.class.isAssignableFrom(elementClass)) {
-			Component associationComponent = (Component) childAssociationType
-					.getElement();
+			Component associationComponent = (Component) element;
 			Iterator<Property> propertiesIterator = associationComponent
 					.getPropertyIterator();
 			String assoChildCompClassName = associationComponent
@@ -975,6 +976,52 @@ public class ClassCache implements InitializingBean{
 				}
 			}
 			associationPsFields.put(key, isoPersistentFields);
+		} else if (element instanceof ManyToOne){
+			ManyToOne manyToOne = (ManyToOne) childAssociationType.getElement();
+			String many2OnePClassName = manyToOne.getReferencedEntityName();
+			if (!many2OnePClassName
+					.startsWith("_xxEntityxx_gov_nih_nci_cacoresdk_domain_other_datatype")) {
+				return associationPsFields;
+			}
+			PersistentClass many2OnePClass = cfg
+					.getClassMapping(many2OnePClassName);
+			Map<String, List<Object>> map = getISOPropertiesForObject(
+					many2OnePClass, cfg);
+			Iterator<String> keyItr = map.keySet().iterator();
+			
+			String key = fieldName + "<" + many2OnePClass.getClassName() + ">";
+			List<Object> isoPersistentFields = new ArrayList<Object>();
+			isoPersistentFields.add(map);
+//			String tempKey = null;
+//			while (keyItr.hasNext()) {
+//				tempKey = keyItr.next();
+//			}
+//			if (tempKey != null){
+				associationPsFields.put(key, isoPersistentFields);
+//			}
+		} else if (element instanceof OneToMany){
+			OneToMany oneToMany = (OneToMany) element;//prop.getValue();
+			String oneToManyPClassName = oneToMany.getReferencedEntityName();
+			if (!oneToManyPClassName
+					.startsWith("_xxEntityxx_gov_nih_nci_cacoresdk_domain_other_datatype")) {
+				return associationPsFields;
+			}
+			PersistentClass oneToManyPClass = cfg
+					.getClassMapping(oneToManyPClassName);
+			Map<String, List<Object>> map = getISOPropertiesForObject(
+					oneToManyPClass, cfg);
+			Iterator<String> keyItr = map.keySet().iterator();
+			
+			String key = fieldName + "<" + oneToMany.getAssociatedClass().getClassName() + ">";
+			List<Object> isoPersistentFields = new ArrayList<Object>();
+			isoPersistentFields.add(map);
+//			String tempKey = null;
+//			while (keyItr.hasNext()) {
+//				 tempKey = keyItr.next();
+//			}
+//			if (tempKey != null){
+				associationPsFields.put(key, isoPersistentFields);
+//			}
 		} else {
 			log.info("ignoring :::" + elementClass.getName());
 		}
