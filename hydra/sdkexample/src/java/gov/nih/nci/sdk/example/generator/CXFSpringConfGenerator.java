@@ -77,9 +77,9 @@ public class CXFSpringConfGenerator
 
 		for (String focusDomain: getScriptContext().retrieveDomainSet())
 		{
-			template.setAttribute("beanId", EcoreUtil.determinePackageName(focusDomain) + ".service." + EcoreUtil.determineClassName(focusDomain) + "Service");
+			template.setAttribute("beanId", EcoreUtil.determineClassName(focusDomain) + "Service");
 			template.setAttribute("beanImpl", EcoreUtil.determinePackageName(focusDomain) + ".service." + EcoreUtil.determineClassName(focusDomain) + "ServiceImpl");
-			template.setAttribute("beanAddress", EcoreUtil.determinePackageName(focusDomain) + ".service." + EcoreUtil.determineClassName(focusDomain) + "Service");
+			template.setAttribute("beanAddress", "/" + EcoreUtil.determineClassName(focusDomain) + "Service");
 		}
 
 		File targetBase = new File(getScriptContext().getTargetBase());
