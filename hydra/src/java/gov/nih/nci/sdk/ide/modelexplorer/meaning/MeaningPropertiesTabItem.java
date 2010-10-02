@@ -151,9 +151,8 @@ public class MeaningPropertiesTabItem extends CategoryTabItem {
 			for (String concept: concepts) {
 				conceptList.add(concept);
 			}
-			
-			String type = (selected.getEType() != null) ? selected.getEType().getName() : "";
-			typeText.setText(type);
+
+			typeText.setText(gov.nih.nci.sdk.util.EcoreUtil.determineSubstituteType(selected.getName(), selected.getEType()));
 		}
 
 		super.getUIComposite().redraw();

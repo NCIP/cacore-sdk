@@ -68,8 +68,6 @@ public class DomainListGroupPanel extends GroupPanel {
 		
 		TreeItem treeItem = new TreeItem(domainTree, 0);
 		treeItem.setText(ITEM_ALL);
-		treeItem = new TreeItem(domainTree, 0);
-		treeItem.setText(ITEM_NONE);
 		
 		allModelNames.clear();
 		

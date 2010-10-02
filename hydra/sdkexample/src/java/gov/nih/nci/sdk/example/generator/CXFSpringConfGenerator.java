@@ -9,6 +9,7 @@ import org.apache.commons.io.FileUtils;
 
 import gov.nih.nci.sdk.core.ScriptContext;
 import gov.nih.nci.sdk.example.generator.util.GeneratorUtil;
+import gov.nih.nci.sdk.util.EcoreUtil;
 
 public class CXFSpringConfGenerator
    extends Generator
@@ -76,13 +77,18 @@ public class CXFSpringConfGenerator
 
 		for (String focusDomain: getScriptContext().retrieveDomainSet())
 		{
-			template.setAttribute("beanId", GeneratorUtil.convertFirstCharToLowerCase(focusDomain) + "Service");
-			template.setAttribute("beanImpl", GeneratorUtil.getServicePackageName(focusDomain) + "." + focusDomain + "ServiceImpl");
-			template.setAttribute("beanAddress", focusDomain + "Service");
+			template.setAttribute("beanId", EcoreUtil.determinePackageName(focusDomain) + ".service." + EcoreUtil.determineClassName(focusDomain) + "Service");
+			template.setAttribute("beanImpl", EcoreUtil.determinePackageName(focusDomain) + ".service." + EcoreUtil.determineClassName(focusDomain) + "ServiceImpl");
+			template.setAttribute("beanAddress", EcoreUtil.determinePackageName(focusDomain) + ".service." + EcoreUtil.determineClassName(focusDomain) + "Service");
 		}
 
 		File targetBase = new File(getScriptContext().getTargetBase());
-		String outputDir = new File(targetBase.getAbsolutePath() + WEBINF_PATH).getAbsolutePath();
+		String outputDir = getScriptContext().getProperties().getProperty(				"PROJECT_ROOT")
+						   + File.separatorChar
+						   + "webapp"
+						   + File.separatorChar
+						   + "WEB-INF";
+		getScriptContext().getLogger().info("Beans.xml is being generated into directory: " + outputDir);
 		GeneratorUtil.writeFile(outputDir, "beans.xml", template.toString());
 	}
 
@@ -93,7 +99,7 @@ public class CXFSpringConfGenerator
 		for (String focusDomain: getScriptContext().retrieveDomainSet())
 		{
 			template.setAttribute("beanId", focusDomain + "Client");
-			template.setAttribute("serviceClass", GeneratorUtil.getServicePackageName(focusDomain) + "." + focusDomain + "Service");
+			template.setAttribute("serviceClass", focusDomain + "Service");
 		
 			String address = "http://" + getScriptContext().getProperties().getProperty("CATALINA_ADDRESS")
 					+ ":"
@@ -101,7 +107,7 @@ public class CXFSpringConfGenerator
 					+ "/"
 					+ getScriptContext().getProperties().getProperty("APPLICATION_NAME")
 					+ "/"
-					+ getScriptContext().getFocusDomain() + "Service";
+					+ EcoreUtil.determinePackageName(focusDomain) + ".service." + EcoreUtil.determineClassName(focusDomain) + "Service";
 
 			template.setAttribute("serviceAddress", address);
 		}
@@ -119,7 +125,6 @@ public class CXFSpringConfGenerator
 				+ File.separatorChar
 				+ "WEB-INF";
 		GeneratorUtil.writeFile(outputDir, "web.xml", template.toString());
-
 	}
 
 	private void generateBuildScripts(StringTemplateGroup group) {
@@ -139,6 +144,14 @@ public class CXFSpringConfGenerator
 							  "." + getScriptContext().getFocusDomain()+"ServiceClient");
 		template.setAttribute("archiveName", getScriptContext().getProperties().getProperty("APPLICATION_NAME"));
 		GeneratorUtil.writeFile(outputDir + File.separator, "build.xml", template.toString());
+
+		template = group.getInstanceOf("project_build");
+		template.setAttribute("cxfHome", getScriptContext().getProperties().getProperty("CXF_HOME"));
+		template.setAttribute("catalinaHome", getScriptContext().getProperties().getProperty("CATALINA_HOME"));
+		template.setAttribute("javaHome", getScriptContext().getProperties().getProperty("JAVA_HOME"));
+		template.setAttribute("javaHomeLib", getScriptContext().getProperties().getProperty("JAVA_HOME_LIB"));
+		GeneratorUtil.writeFile(outputDir + File.separator, "project.build", template.toString());
+
 
 	}
 	
