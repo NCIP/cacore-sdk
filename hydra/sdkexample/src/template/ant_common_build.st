@@ -20,6 +20,7 @@
 
 
     <property environment="env"/>
+	<property file="project.build" />
     <property name="build.dir" location ="\${basedir}"/>
     <property name="build.classes.dir" location ="\${build.dir}/classes"/>
     <property name="build.src.dir" location ="\${build.dir}/src"/>
@@ -36,8 +37,8 @@
     <property name="wsdl.dir" location="."/>
 
     <!-- find the tools jar -->
-    <available property="tools.jar" value="\${env.JAVA_HOME}/lib/tools.jar"
-       file="\${env.JAVA_HOME}/lib/tools.jar"/>
+    <available property="tools.jar" value="\${java.home.lib}/tools.jar"
+       file="\${java.home.lib}/lib/tools.jar"/>
     <path id="jdk.tools.classpath">
         <pathelement location="\${tools.jar}"/>
     </path>
@@ -57,8 +58,8 @@
     <!-- Determine cxf.home, either from the environment variable CXF_HOME
        - or using ../..
        -->
-    <condition property="cxf.home" value="\${env.CXF_HOME}">
-        <isset property="env.CXF_HOME"/>
+    <condition property="cxf.home" value="\${cxf.home}">
+        <isset property="cxf.home"/>
     </condition>
     <condition property="cxf.home" value="../..">
         <available file="../../etc" type="dir" property=""/>
@@ -83,8 +84,11 @@
     </path>
 
     <target name="compile">
+	    <mkdir dir="\${basedir}/lib"/>
+		<mkdir dir="\${basedir}/workspace/lib"/>
         <mkdir dir="\${build.classes.dir}"/>
         <mkdir dir="\${build.src.dir}"/>
+		<mkdir dir="\${build.src.dir}/cfg"/>
 
         <javac destdir="\${build.classes.dir}" debug="true">
             <src path="\${build.src.dir}"/>
@@ -271,17 +275,41 @@
     <target name="deploy-tomcat">
         <antcall target="validate-tomcat"/>
         <copy file="\${war.dir}/\${cxf.war.file.name}.war"
-              todir="\${env.CATALINA_HOME}/webapps"/>
+              todir="\${catalina.home}/webapps"/>
     </target>
 
     <target name="undeploy-tomcat">
         <antcall target="validate-tomcat"/>
-        <delete file="\${env.CATALINA_HOME}/webapps/\${cxf.war.file.name}.war"/>
-        <delete dir="\${env.CATALINA_HOME}/webapps/\${cxf.war.file.name}"/>
+        <delete file="\${catalina.home}/webapps/\${cxf.war.file.name}.war"/>
+        <delete dir="\${catalina.home}/webapps/\${cxf.war.file.name}"/>
     </target>
 
     <target name="validate-tomcat">
-        <fail unless="env.CATALINA_HOME" message="You should set the CATALINA_HOME, if you want to deploy into tomcat"/>
+        <fail unless="catalina.home" message="You should set the CATALINA_HOME, if you want to deploy into tomcat"/>
     </target>
+
+	<condition property="tomcat-startup-cmd" value="startup.bat" else="startup.sh">
+		<and><os family="windows"/></and>
+	</condition>
+
+	<condition property="tomcat-shutdown-cmd" value="shutdown.bat" else="shutdown.sh">
+		<and><os family="windows"/></and>
+	</condition>
+
+	<target name="start-tomcat">
+
+	   <chmod dir="\${catalina.home}/bin" includes="**/*.sh, **/*.bat"  perm="ugo+rx"/>
+	   <exec dir="\${catalina.home}/bin" executable="sh">
+	      <arg line="\${tomcat-startup-cmd}" />
+	   </exec>
+	</target>
+
+	<target name="stop-tomcat">
+
+	   <chmod dir="\${catalina.home}/bin" includes="**/*.sh, **/*.bat"  perm="ugo+rx"/>
+	   <exec dir="\${catalina.home}/bin" executable="sh">
+	      <arg line="\${tomcat-shutdown-cmd}" />
+	   </exec>
+	</target>
 
 </project>

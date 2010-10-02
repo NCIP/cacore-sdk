@@ -95,10 +95,15 @@ public class WebServiceGenerator
 
 	public void runProcess()
 	{
+		getScriptContext().getLogger().info("Executing generateWebServiceInterface()");
 		generateWebServiceInterface(getScriptContext().getTemplateGroup());
+		getScriptContext().getLogger().info("Executing generateWebServiceAbstract()");
 		generateWebServiceAbstract(getScriptContext().getTemplateGroup());
+		getScriptContext().getLogger().info("Executing generateWebServiceImpl()");
 		generateWebServiceImpl(getScriptContext().getTemplateGroup());
+		getScriptContext().getLogger().info("Executing generateWebServiceClient()");
 		generateWebServiceClient(getScriptContext().getTemplateGroup());
+		getScriptContext().getLogger().info("Executing compileWebServiceInterface()");
 		compileWebServiceInterface();
 		
 		getScriptContext().logInfo("Webservice generation is completed!");
@@ -106,50 +111,58 @@ public class WebServiceGenerator
 
 	private void generateWebServiceInterface(StringTemplateGroup _group)
 	{
-		StringTemplate template = _group.getInstanceOf("WebServiceInterface");
-
-		//Set template tokens
-		template.setAttribute("packageName", GeneratorUtil.getServicePackageName(getScriptContext().getFocusDomain()));
-		template.setAttribute("importSt", getImportStmt());
-		template.setAttribute("interfaceName", createServiceName(getScriptContext().getFocusDomain()));
-		List<EOperation> eOperationList = new java.util.ArrayList();
-
-		EClass eClass = EcoreUtil.getEClass(getScriptContext().getEPackage(), getScriptContext().getFocusDomain());
-		EAnnotation defaultServiceAnnotation = eClass.getEAnnotation("oper.ser.service");
-
-		for (EOperation eOperation: eClass.getEAllOperations())
+		try
 		{
-			EAnnotation eAnnotation = eOperation.getEAnnotation("oper.ser.service");
-			if (eAnnotation != null)
+			StringTemplate template = _group.getInstanceOf("WebServiceInterface");
+
+			//Set template tokens
+			template.setAttribute("packageName", GeneratorUtil.getServicePackageName(getScriptContext().getFocusDomain()));
+			template.setAttribute("importSt", getImportStmt());
+			template.setAttribute("interfaceName", createServiceName(getScriptContext().getFocusDomain()));
+			List<EOperation> eOperationList = new java.util.ArrayList();
+
+			EClass eClass = EcoreUtil.getEClass(getScriptContext().getEPackage(), getScriptContext().getFocusDomain());
+			EAnnotation defaultServiceAnnotation = eClass.getEAnnotation("oper.ser.service");
+
+			for (EOperation eOperation: eClass.getEAllOperations())
 			{
-				//TODO this logic is not quite right as it does not
-				//take the class level default into account.  We really
-				//need to write a method to handle the assignment of
-				//defaults.  This should really be in the SDKUtil class
-				//John is workin on.  Once he has created this class I
-				//will use this utility there.  Right now I just want
-				//to get this doing something so that I can explore how
-				//EOperations work.
-				boolean isService = (eAnnotation != null && eAnnotation.getDetails().get("oper.ser.service").equalsIgnoreCase("false") == false) ? true : false;
-
-				if (isService == true)
+				EAnnotation eAnnotation = eOperation.getEAnnotation("oper.ser.service");
+				if (eAnnotation != null)
 				{
-					StringTemplate operationTemplate = new StringTemplate("public $returnType$ $name$($param; separator=\", \"$);");
-					operationTemplate.setAttribute("returnType", eOperation.getEType().getInstanceClassName());
-					operationTemplate.setAttribute("name", eOperation.getName());
+					//TODO this logic is not quite right as it does not
+					//take the class level default into account.  We really
+					//need to write a method to handle the assignment of
+					//defaults.  This should really be in the SDKUtil class
+					//John is workin on.  Once he has created this class I
+					//will use this utility there.  Right now I just want
+					//to get this doing something so that I can explore how
+					//EOperations work.
+					boolean isService = (eAnnotation != null && eAnnotation.getDetails().get("oper.ser.service").equalsIgnoreCase("false") == false) ? true : false;
 
-					for (EParameter eParameter: eOperation.getEParameters())
+					if (isService == true)
 					{
-						operationTemplate.setAttribute("param", eParameter.getEType().getName() + " " + eParameter.getName());
+						StringTemplate operationTemplate = new StringTemplate("public $returnType$ $name$($param; separator=\", \"$);");
+						operationTemplate.setAttribute("returnType", determineJavaType(EcoreUtil.determineSubstituteType("", eOperation.getEType())));
+						operationTemplate.setAttribute("name", eOperation.getName());
+
+						for (EParameter eParameter: eOperation.getEParameters())
+						{
+							operationTemplate.setAttribute("param", EcoreUtil.determineSubstituteType(eParameter.getName(), eParameter.getEType()) + " " + eParameter.getName());
+						}
+
+						template.setAttribute("operation", operationTemplate.toString());
 					}
-					
-					template.setAttribute("operation", operationTemplate.toString());
 				}
 			}
-		}
 
-		//Generate and write the template output
-		GeneratorUtil.writeFile(GeneratorUtil.getServicePath(getScriptContext()), createServiceName(getScriptContext().getFocusDomain()) + ".java", template.toString());
+			//Generate and write the template output
+			GeneratorUtil.writeFile(GeneratorUtil.getServicePath(getScriptContext()), createServiceName(getScriptContext().getFocusDomain()) + ".java", template.toString());
+		}
+		catch(Throwable t)
+		{
+			t.printStackTrace();
+			throw new RuntimeException(t);
+		}
 	}
 
 	private void generateWebServiceAbstract(StringTemplateGroup _group)
@@ -182,7 +195,7 @@ public class WebServiceGenerator
 
 				if (isService == true)
 				{
-					boolean voidOperation = ("void".equalsIgnoreCase(eOperation.getEType().getInstanceClassName()) == true);
+					boolean voidOperation = ("void".equalsIgnoreCase(EcoreUtil.determineSubstituteType("", eOperation.getEType())) == true);
 
 					String operationTemplateName = (voidOperation == true) ? "WebServiceAbstractVoidOperation" : "WebServiceAbstractOperation";
 					
@@ -191,13 +204,13 @@ public class WebServiceGenerator
 					
 					if (voidOperation == false)
 					{
-						operationTemplate.setAttribute("returnType", eOperation.getEType().getInstanceClassName());
-						operationTemplate.setAttribute("dummyValue", getDummyValue(eOperation.getEType().getInstanceClassName()));
+						operationTemplate.setAttribute("returnType", determineJavaType(EcoreUtil.determineSubstituteType("", eOperation.getEType())));
+						operationTemplate.setAttribute("dummyValue", getDummyValue(EcoreUtil.determineSubstituteType("", eOperation.getEType())));
 					}
 
 					for (EParameter eParameter: eOperation.getEParameters())
 					{
-						operationTemplate.setAttribute("param", eParameter.getEType().getName() + " " + eParameter.getName());
+						operationTemplate.setAttribute("param", EcoreUtil.determineSubstituteType(eParameter.getName(), eParameter.getEType()) + " " + eParameter.getName());
 					}
 
 					template.setAttribute("operation", operationTemplate.toString());
@@ -330,8 +343,54 @@ public class WebServiceGenerator
 		}
 	}
 
+	private boolean isWindows()
+	{
+		boolean isWindows = false;
+		
+		String operatingSystemType = System.getProperty("os.name").toLowerCase();
+
+		if (operatingSystemType != null)
+		{
+			isWindows = operatingSystemType.indexOf("win") >= 0;
+		}
+
+		return isWindows;
+	}
+
+	private boolean isUnix()
+	{
+		boolean isUnix = false;
+
+		String operatingSystemType = System.getProperty("os.name").toLowerCase();
+
+		if (operatingSystemType != null)
+		{
+			isUnix = operatingSystemType.indexOf("unix") >= 0 || operatingSystemType.indexOf("linux") >= 0;
+		}
+
+		return isUnix;
+	}
+
+	private boolean isMac()
+	{
+		boolean isMac = false;
+
+		String operatingSystemType = System.getProperty("os.name").toLowerCase();
+
+		if (operatingSystemType != null)
+		{
+			isMac = operatingSystemType.indexOf("mac") >= 0;
+		}
+
+		return isMac;
+	}
+	
+
 	private void generateWebServiceArtifacts(String _focusDomain)
 	{
+		String java2wsCommand = "java2ws.bat";
+		if (isUnix() == true || isMac() == true) { java2wsCommand = "java2ws"; }
+		
 		String projectRoot = getScriptContext().getProperties().getProperty("PROJECT_ROOT");
 		String cxfHome = getScriptContext().getProperties().getProperty("CXF_HOME");
 		String classesPath = projectRoot + File.separatorChar + "classes";
@@ -343,7 +402,7 @@ public class WebServiceGenerator
 		String classPath = "\"" + classesPath + File.pathSeparator + cxfClassPath + File.pathSeparator + javaToolPath + "\"";
 		String packageName = createPackageName(_focusDomain);
 		
-		String cmd = cxfHome + File.separator + "bin" + File.separator	+ "java2ws.bat";
+		String cmd = cxfHome + File.separator + "bin" + File.separator	+ java2wsCommand;
 		String argStr = " -wsdl -client -server -cp " + classPath;
 		argStr += " -classdir " + classesPath;
 		argStr += " -s " + srcPath;
@@ -411,7 +470,11 @@ public class WebServiceGenerator
 	{
 		String dummyValue = "\"\"";
 
-		if ("byte".equals(_type) == true ||
+		if ("string".equalsIgnoreCase(_type) == true)
+		{
+			dummyValue = "new java.lang.String()";
+		}
+		else if ("byte".equals(_type) == true ||
 				"java.lang.Byte".equals(_type) == true ||
 				"int".equals(_type) == true ||
 				"java.lang.Integer".equals(_type) == true ||

@@ -37,6 +37,14 @@ public class EcoreUtil {
 	 * A business domain package name does not contain "<tt>java</tt>".
 	 */
 	private static final String FORBIDDEN_PACKAGE_NAME_STRING_java = "java";	
+
+
+	public static String determineSubstituteType(String _propertyName, EClassifier _eType)
+	{
+		String type = (_eType != null) ? _eType.getInstanceClassName() : ("identifier".equalsIgnoreCase(_propertyName) == true) ? "int" : "string";
+
+		return type;
+	}
 	
 	/**
 	 * Returns the root EPackage instance. 

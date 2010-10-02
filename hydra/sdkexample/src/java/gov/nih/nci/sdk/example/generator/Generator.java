@@ -31,10 +31,28 @@ public abstract class Generator
 
 	public void generate()
 	{
+		getScriptContext().getLogger().info("Executing init()");
 		init();
+		getScriptContext().getLogger().info("Executing preProcess()");
 		preProcess();
+		getScriptContext().getLogger().info("Executing validate()");
 		validate();
+		getScriptContext().getLogger().info("Executing runProcess()");
 		runProcess();
+		getScriptContext().getLogger().info("Executing postProcess()");
 		postProcess();
+		getScriptContext().getLogger().info("Completed generate()");
+	}
+
+	public String determineJavaType(String _substituteType)
+	{
+		String substituteType = _substituteType;
+
+		if ("string".equalsIgnoreCase(substituteType) == true)
+		{
+			substituteType = "java.lang.String";
+		}
+
+		return substituteType;
 	}
 }
