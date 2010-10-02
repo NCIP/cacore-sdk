@@ -300,28 +300,28 @@ public class HtmlUtils {
 			sb.append("</tr>");
 		}
 		
-		if (searchableFields.contains("code")){
+		if (searchableFields.contains("code") || getComplexSearchFields("code", searchableFields).contains("code")){
 			sb.append("<tr>");
 			sb.append("  <td class=\"isoFormLabel\">Code:</td>");
 			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"code\" id=\"code\" class=\"formFieldSized\"/></td>");
 			sb.append("</tr>");
 		}
 		
-		if (searchableFields.contains("codeSystem")){
+		if (searchableFields.contains("codeSystem") || getComplexSearchFields("codeSystem", searchableFields).contains("codeSystem")){
 			sb.append("<tr>");
 			sb.append("  <td class=\"isoFormLabel\">Code System:</td>");
 			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"codeSystem\" id=\"codeSystem\" class=\"formFieldSized\"/></td>");
 			sb.append("</tr>");
 		}
 		
-		if (searchableFields.contains("codeSystemName")){		
+		if (searchableFields.contains("codeSystemName") || getComplexSearchFields("codeSystemName", searchableFields).contains("codeSystemName")){		
 			sb.append("<tr>");
 			sb.append("  <td class=\"isoFormLabel\">Code System Name:</td>");
 			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"codeSystemName\" id=\"codeSystemName\" class=\"formFieldSized\"/></td>");
 			sb.append("</tr>");
 		}
 		
-		if (searchableFields.contains("codeSystemVersion")){
+		if (searchableFields.contains("codeSystemVersion") || getComplexSearchFields("codeSystemVersion", searchableFields).contains("codeSystemVersion")){
 			sb.append("<tr>");
 			sb.append("  <td class=\"isoFormLabel\">Code System Version:</td>");
 			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"codeSystemVersion\" id=\"codeSystemVersion\" class=\"formFieldSized\"/></td>");
@@ -489,14 +489,14 @@ public class HtmlUtils {
 	private static String getHTML_II(List<Object> searchableFields, String attrName) {
 		StringBuilder sb = new StringBuilder();
 		
-		if (searchableFields.contains("displayable")){
+		if (searchableFields.contains("displayable") || getComplexSearchFields("displayable", searchableFields).contains("displayable")){
 			sb.append("<tr>");
 			sb.append("  <td class=\"isoFormLabel\">Displayable:</td>");
 			sb.append("  <td class=\"isoFormField\">").append(getSelect_Boolean("displayable")).append("</td>");
 			sb.append("</tr>");
 		}
 		
-		if (searchableFields.contains("extension")){
+		if (searchableFields.contains("extension") || getComplexSearchFields("extension", searchableFields).contains("extension")){
 			String extensionClass = "";
 			if ("id".equalsIgnoreCase(attrName)){
 				extensionClass = "number ";
@@ -507,28 +507,28 @@ public class HtmlUtils {
 			sb.append("</tr>");
 		}
 		
-		if (searchableFields.contains("identifierName")){			
+		if (searchableFields.contains("identifierName") || getComplexSearchFields("identifierName", searchableFields).contains("identifierName")){			
 			sb.append("<tr>");
 			sb.append("  <td class=\"isoFormLabel\">Identifier Name:</td>");
 			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"identifierName\" id=\"identifierName\" class=\"formFieldSized\" /></td>");
 			sb.append("</tr>");
 		}
 		
-		if (searchableFields.contains("reliability")){
+		if (searchableFields.contains("reliability") || getComplexSearchFields("reliability", searchableFields).contains("reliability")){
 			sb.append("<tr>");
 			sb.append("  <td class=\"isoFormLabel\">Reliability:</td>");
 			sb.append("  <td class=\"isoFormField\">").append(getSelect_IdentifierReliability()).append("</td>");
 			sb.append("</tr>");
 		}
 
-		if (searchableFields.contains("root")){
+		if (searchableFields.contains("root") || getComplexSearchFields("root", searchableFields).contains("root")){
 			sb.append("<tr>");
 			sb.append("  <td class=\"isoFormLabel\">Root:</td>");
 			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"root\" id=\"root\" class=\"formFieldSized\" /></td>");
 			sb.append("</tr>");
 		}
 
-		if (searchableFields.contains("scope")){	
+		if (searchableFields.contains("scope") || getComplexSearchFields("scope", searchableFields).contains("scope")){	
 			sb.append("<tr>");
 			sb.append("  <td class=\"isoFormLabel\">Scope:</td>");
 			sb.append("  <td class=\"isoFormField\">").append(getSelect_IdentifierScope()).append("</td>");
@@ -690,7 +690,7 @@ public class HtmlUtils {
 	private static String getHTML_TEL(List<Object> searchableFields) {
 		StringBuilder sb = new StringBuilder();
 		
-		if (searchableFields.contains("value")){
+		if (searchableFields.contains("value") || getComplexSearchFields("value", searchableFields).contains("value")){
 			sb.append("<tr>");
 			sb.append("  <td class=\"isoFormLabel\">Value:</td>");
 			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"value\" id=\"value\" class=\"formFieldSized TEL_value\" /></td>");
