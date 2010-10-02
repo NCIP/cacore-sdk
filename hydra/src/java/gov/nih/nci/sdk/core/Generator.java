@@ -80,7 +80,7 @@ public class Generator
 				{
 					if (isValidationScript(script) == false)
 					{
-						ScriptContext scriptContext = determineScriptContext(script, eClassifier.getName(), _generatorContext);
+						ScriptContext scriptContext = determineScriptContext(script, fullyQualifiedClassName, _generatorContext);
 						executeScript(script, scriptContext);
 						processScriptContext(scriptContext, _generatorContext);
 

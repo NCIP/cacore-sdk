@@ -284,7 +284,7 @@
 
 		<zip destfile="dist/${zip}"
 		       basedir="${src}"
-			   includes="bin/*.bat"
+			   includes="bin/*.*, bin/*"
 			   update="true"
 		  />
 
@@ -292,6 +292,7 @@
 
 	<target name="installPlugin" depends="makePlugin">
 	   <unzip src="${dist}/${zip}" dest="${installDir}"/>
+	   <chmod file="${installDir}/bin/*" perm="ugo+rx"/>
 	</target>
 
 	<!-- Redeploy -->
