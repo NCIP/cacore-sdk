@@ -118,7 +118,7 @@
 														<td colspan="2">
 															<h2>Domain Class Browser</h2>
 															<h3>Please click on any of the tree nodes.</h3>
-															<p>To view the search criteria for a class, expand a package listed below and select a class.  To search for records, provide valid search criteria and click the Submit button.  For any date attributes, please use the syntax: mm-dd-yyyy.</p> 
+															<p>To view the search criteria for a class, expand a package listed below and select a class.  To search for records, provide valid search criteria and click the Submit button.  For any date attributes, please use the syntax: mm-dd-yyyy.  For any timestamp attributes, please use the syntax: mm-dd-yyyy hh:mm:ss.</p> 
 														</td>
 													</tr>
 													<tr>
