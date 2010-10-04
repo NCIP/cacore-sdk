@@ -320,6 +320,7 @@
 				<modelDocument/>
 				<tags>
 					<tag xmi:id="EAID_49251634_9E94_4d7b_8EBC_D0DB2D9EB6FF" name="package.class.mea.concept.uri.prefix" value="http://example.org" modelElement="EAID_0F7BE4AE_9C3A_4c19_9CD7_51C7FBDBEBF8"/>
+					<tag xmi:id="EAID_A9826574_B780_4c22_8B91_BA6F2CF32472" name="package.mea.ignore.prefix" value="EA_Model.LogicalView.LogicalModel" modelElement="EAID_0F7BE4AE_9C3A_4c19_9CD7_51C7FBDBEBF8"/>
 					<tag xmi:id="EAID_CBAE4F23_5F92_498b_AAF5_94BFDC3B3137" name="package.oper.mea.concept.uri.prefix" value="http://example.org" modelElement="EAID_0F7BE4AE_9C3A_4c19_9CD7_51C7FBDBEBF8"/>
 					<tag xmi:id="EAID_81048E5B_CA15_4b10_9B12_33A037AEF5E5" name="package.oper.sec.role" value="AppUser" modelElement="EAID_0F7BE4AE_9C3A_4c19_9CD7_51C7FBDBEBF8"/>
 					<tag xmi:id="EAID_3EC0667B_1E3D_4ec3_8676_12D5E99F95DA" name="package.prop.mea.concept.uri.prefix" value="http://example.org" modelElement="EAID_0F7BE4AE_9C3A_4c19_9CD7_51C7FBDBEBF8"/>
