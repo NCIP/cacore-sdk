@@ -1,6 +1,5 @@
 package gov.nih.nci.sdk.ide.modelexplorer;
 
-import gov.nih.nci.sdk.ide.converter.SDKModelConverter;
 import gov.nih.nci.sdk.util.EcoreUtil;
 
 import java.util.ArrayList;
