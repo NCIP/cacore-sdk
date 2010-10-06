@@ -36,8 +36,8 @@
 	<jar href="lib/postgresql-jdbc3-8.3-603.jar" download="eager" />
 	<jar href="lib/ojdbc14-10.2.0.3.0.jar" download="eager" />
 	<jar href="lib/saaj-1.2.jar" download="eager" /> 
-	<jar href="lib/sdk-workbench-0.1.jar" main="true" download="eager" />
-	<jar href="lib/sdk-workbench-conf-0.1.jar" download="eager" />
+	<jar href="lib/sdk-workbench-0.2.jar" main="true" download="eager" />
+	<jar href="lib/sdk-workbench-conf-0.2.jar" download="eager" />
 	<jar href="lib/spring-2.0.2.jar" download="eager" />
 	<jar href="lib/tools-1.5.0.jar" download="eager" />		
 	<jar href="lib/validation-2.0.0.jar" download="eager" />
