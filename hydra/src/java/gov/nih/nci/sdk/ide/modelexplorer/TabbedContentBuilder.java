@@ -31,8 +31,6 @@ public class TabbedContentBuilder implements CategoryContentBuilder {
 						Event eve = new Event();
 						eve.type = SWT.Selection;
 						eve.text = selected[0].getText();
-						//System.out.println("XXXXXXXXXXXXXXXXXXXXXXX  selected: " + eve.text);
-						//TODO: notifyListeners(SWT.Selection, eve);
 					}
 				}
 			});
