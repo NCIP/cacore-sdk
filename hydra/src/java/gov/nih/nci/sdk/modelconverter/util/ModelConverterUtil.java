@@ -18,6 +18,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EModelElement;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EcoreFactory;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -127,6 +128,23 @@ public class ModelConverterUtil {
 		String expression = "//xmi:XMI/xmi:Extension/elements/element[@name='" 
 					+ parentName + "']/operations/operation[@name='" 
 					+ operName + "']/tags/tag";
+		return getTags(xmiFilePath, expression);
+	}
+	
+	/**
+	 * Gets tags for reference level element.
+	 * 
+	 * @param xmiFilePath  The xmi file path
+	 * @param ref  The reference level element
+	 * @return A newly added EAnnotation instance
+	 */
+	public static Map<String, String> getReferenceTags(String xmiFilePath, EReference ref) {
+		if (ref == null) return new HashMap<String, String>();
+		String refName = ref.getName();
+		String parentName = ref.getEContainingClass().getName();
+		String expression = "//xmi:XMI/xmi:Extension/elements/element[@name='" 
+					+ parentName + "']/attributes/attribute[@name='" 
+					+ refName + "']/tags/tag";
 		return getTags(xmiFilePath, expression);
 	}
 	
