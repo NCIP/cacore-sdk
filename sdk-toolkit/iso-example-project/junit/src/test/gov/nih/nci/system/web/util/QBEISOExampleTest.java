@@ -228,6 +228,22 @@ public class QBEISOExampleTest extends TestCase {
 			assertNotNull(next.getCodeSystem());
 		}
 	}
+	
+	public void testEnDataType2() throws Exception {
+		EnDataType enDataType = new EnDataType();
+		enDataType.setValue5(getEn("Mr. John Doe I"));
+		List<EnDataType> sourceObjectList = new ArrayList<EnDataType>();
+		sourceObjectList.add(enDataType);
+		Collection<EnDataType> results = applicationService.search(
+				"gov.nih.nci.cacoresdk.domain.other.datatype.EnDataType",
+				enDataType);
+		assertEquals(2, results.size());
+
+		for (EnDataType result : results) {
+			assertEquals("Mr. John Doe I", result.getValue5().getPart().get(0).getValue().toString());			
+			assertNotNull(result.getId());
+		}
+	}	
 
 	private En getEn(String enxpValue) {
 		En en = new En();
@@ -249,10 +265,10 @@ public class QBEISOExampleTest extends TestCase {
 		return dsetAdDataType;
 	}
 
-	private En getEnDataType(String adxpValue) {
+	private En getEnDataType(String enxpValue) {
 		En en = new En();
 		Enxp enxp = new Enxp(); 
-		enxp.setValue(adxpValue);
+		enxp.setValue(enxpValue);
 		enxp.setType(EntityNamePartType.FAM);
 		en.addPart(enxp);
 		return en;
