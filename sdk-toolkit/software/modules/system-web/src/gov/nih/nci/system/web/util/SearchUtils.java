@@ -576,7 +576,7 @@ public class SearchUtils {
 			Method getterMethod = getAttributeGetMethodName(childObject,
 					attribute);
 			value = getterMethod.invoke(childObject);
-			if (value == null && attSetMethod != null) {
+			if ((value == null || ((java.util.List)value).isEmpty()) && attSetMethod != null) {
 				Type[] genericParameterTypes = attSetMethod
 						.getGenericParameterTypes();
 				value = getFieldTypeObject(genericParameterTypes, field,
