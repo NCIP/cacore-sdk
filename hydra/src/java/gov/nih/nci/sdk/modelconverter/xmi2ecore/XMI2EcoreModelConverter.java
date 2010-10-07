@@ -495,13 +495,10 @@ public class XMI2EcoreModelConverter extends UMLImporter implements ModelConvert
 		ann.setEModelElement(modelElement);
 		ann.getDetails().put(tagName, tagValue);
 		tags.add(ann);
-
-		System.out.println("MMMMMMMMMMMMMM adding tag for " + ((ENamedElement)modelElement).getName() + ": " + tagName + "=" + tagValue);
 	}
 	
 	private void addAnnotationToModelElement(ENamedElement element, Map<String, String> tags) {
 		if (tags == null || tags.size() == 0) return;
-		System.out.println("ZZZZZZZZZZZZZZ adding tags for " + element.getName() + ": " + tags);
 		Set<Entry<String, String>> tagSet = tags.entrySet();
 		for (Entry<String, String> entry : tagSet) {
 			String name = entry.getKey();
