@@ -595,10 +595,18 @@ public class HtmlUtils {
 		
 		List<Object> widthSearchFields = getComplexSearchFields("width", searchableFields);
 		if (widthSearchFields != null && !widthSearchFields.isEmpty()){	
-			sb.append("<tr>");
-			sb.append("  <td class=\"isoFormLabel\">Width ("+genericType+"):</td>");
-			sb.append("  <td class=\"isoFormField\">").append(getHtmlFor("width", genericType,widthSearchFields)).append("</td>");
-			sb.append("</tr>");
+			if (genericType.equalsIgnoreCase("TS")){
+				sb.append("<tr>");
+				sb.append("  <td class=\"isoFormLabel\">Width (PQ):</td>");
+				sb.append("  <td class=\"isoFormField\">").append(getHtmlFor("width", "PQ",widthSearchFields)).append("</td>");
+				sb.append("</tr>");
+			} else {
+				sb.append("<tr>");
+				sb.append("  <td class=\"isoFormLabel\">Width ("+genericType+"):</td>");
+				sb.append("  <td class=\"isoFormField\">").append(getHtmlFor("width", genericType,widthSearchFields)).append("</td>");
+				sb.append("</tr>");
+			}
+
 		}
 		
 		return sb.toString();
