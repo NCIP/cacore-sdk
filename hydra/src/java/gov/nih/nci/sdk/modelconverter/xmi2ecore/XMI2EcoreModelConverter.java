@@ -1,6 +1,7 @@
 package gov.nih.nci.sdk.modelconverter.xmi2ecore;
 
 import gov.nih.nci.sdk.modelconverter.ModelConverter;
+import gov.nih.nci.sdk.modelconverter.util.ModelConverterUtil;
 import gov.nih.nci.sdk.util.SDKUtil;
 
 import java.io.BufferedReader;
@@ -17,7 +18,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.Map.Entry;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.emf.codegen.util.CodeGenUtil;
@@ -26,12 +29,17 @@ import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAnnotation;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EModelElement;
+import org.eclipse.emf.ecore.ENamedElement;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcoreFactory;
+import org.eclipse.emf.ecore.impl.EClassImpl;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.importer.ModelImporter;
@@ -158,13 +166,68 @@ public class XMI2EcoreModelConverter extends UMLImporter implements ModelConvert
 			rootEPackage = it.next();
 		}
 		
-		fetchTags(preparedFile, rootEPackage);
+		readTags(xmiFilePath, rootEPackage);
+		
+		//fetchTags(preparedFile, rootEPackage);
 		
 		preparedFile.delete();
 		
 		SDKUtil.setSDKTags(tags);
 
 		return rootEPackage;
+	}
+	
+	private void readTags(String xmiFilePath, EPackage rootEPackage) {
+		Iterator<EObject> pkgIter = rootEPackage.eContents().iterator();
+		EObject eo = null;
+		while (pkgIter.hasNext()) {
+			eo = pkgIter.next();
+			
+			if (eo instanceof EClassImpl) {
+				EClass eClass = (EClassImpl) eo;
+				
+				Map<String, String> ctags = ModelConverterUtil.getClassTags(xmiFilePath, eClass);
+				addAnnotationToModelElement(eClass, ctags);
+				
+				EList<EAttribute> attrs = eClass.getEAttributes();
+				if (attrs != null) {
+					Iterator<EAttribute> it = attrs.iterator();
+					while(it.hasNext()) {
+						EAttribute attr = it.next();
+						Map<String, String> tags = ModelConverterUtil.getAttributeTags(xmiFilePath, attr);
+						addAnnotationToModelElement(attr, tags);
+					}
+				}
+				
+				EList<EOperation> opers = eClass.getEOperations();
+				if (opers != null) {
+					Iterator<EOperation> it = opers.iterator();
+					while(it.hasNext()) {
+						EOperation oper = it.next();
+						Map<String, String> tags = ModelConverterUtil.getOperationTags(xmiFilePath, oper);
+						addAnnotationToModelElement(oper, tags);
+					}
+				}
+				
+				EList<EReference> refs = eClass.getEReferences();
+				if (refs != null) {
+					Iterator<EReference> it = refs.iterator();
+					while(it.hasNext()) {
+						EReference ref = it.next();
+						Map<String, String> tags = ModelConverterUtil.getReferenceTags(xmiFilePath, ref);
+						addAnnotationToModelElement(ref, tags);
+					}
+				}
+				
+			} else if (eo instanceof EPackage) {
+				EPackage pkg = (EPackage) eo;
+				
+				Map<String, String> tags = ModelConverterUtil.getPackageTags(xmiFilePath, pkg);
+				addAnnotationToModelElement(pkg, tags);
+				
+				readTags(xmiFilePath, pkg);
+			}
+		}
 	}
 
 	File prepareFile(String filePath) throws IOException {
@@ -338,10 +401,10 @@ public class XMI2EcoreModelConverter extends UMLImporter implements ModelConvert
 			linkRelGeneralizationTagWithModel(rootPkg, tag);
 		}
 		else if (tag.isRelAggregationTag()) {
-			//TODO: linkRelAggregationTagWithModel(rootPkg, tag);
+			//This is handled by readTags
 		}
 		else if (tag.isPackageTag()) {
-			//TODO: linkPackageTagWithModel(rootPkg, tag);
+			//This is handled by readTags
 		}
 	}
 	
@@ -423,11 +486,28 @@ public class XMI2EcoreModelConverter extends UMLImporter implements ModelConvert
 	}
 	
 	private void addAnnotationToModelElement(EModelElement modelElement, TagLine tag) {
+		addAnnotationToModelElement(modelElement, tag.name, tag.value);
+	}
+	
+	private void addAnnotationToModelElement(EModelElement modelElement, String tagName, String tagValue) {
 		EAnnotation ann = EcoreFactory.eINSTANCE.createEAnnotation();
-		ann.setSource(tag.name);
+		ann.setSource(tagName);
 		ann.setEModelElement(modelElement);
-		ann.getDetails().put(tag.name, tag.value);
+		ann.getDetails().put(tagName, tagValue);
 		tags.add(ann);
+
+		System.out.println("MMMMMMMMMMMMMM adding tag for " + ((ENamedElement)modelElement).getName() + ": " + tagName + "=" + tagValue);
+	}
+	
+	private void addAnnotationToModelElement(ENamedElement element, Map<String, String> tags) {
+		if (tags == null || tags.size() == 0) return;
+		System.out.println("ZZZZZZZZZZZZZZ adding tags for " + element.getName() + ": " + tags);
+		Set<Entry<String, String>> tagSet = tags.entrySet();
+		for (Entry<String, String> entry : tagSet) {
+			String name = entry.getKey();
+			String value = entry.getValue();
+			addAnnotationToModelElement(element, name, value);
+		}
 	}
 	
 	class TagLine {
