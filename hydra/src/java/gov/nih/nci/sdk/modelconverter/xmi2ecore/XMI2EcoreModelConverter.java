@@ -168,7 +168,7 @@ public class XMI2EcoreModelConverter extends UMLImporter implements ModelConvert
 		
 		readTags(xmiFilePath, rootEPackage);
 		
-		//fetchTags(preparedFile, rootEPackage);
+		fetchTags(preparedFile, rootEPackage);
 		
 		preparedFile.delete();
 		
@@ -389,13 +389,13 @@ public class XMI2EcoreModelConverter extends UMLImporter implements ModelConvert
 		if (tag == null || !tag.isSDKTag()) return;
 		
 		if (tag.isClassTag()) {
-			linkClassTagWithModel(rootPkg, tag);
+			//linkClassTagWithModel(rootPkg, tag);
 		}
 		else if (tag.isPropTag()) {
-			linkPropTagWithModel(rootPkg, tag);
+			//linkPropTagWithModel(rootPkg, tag);
 		}
 		else if (tag.isOperTag()) {
-			linkOperTagWithModel(rootPkg, tag);
+			//linkOperTagWithModel(rootPkg, tag);
 		}
 		else if (tag.isRelGeneralizationTag()) {
 			linkRelGeneralizationTagWithModel(rootPkg, tag);
