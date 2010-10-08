@@ -163,6 +163,7 @@
 		<thecustomprofile:prop.val.min.length base_Attribute="EAID_2A61BDBC_D606_42a1_9650_711E33BFBD85" prop.val.min.length="1"/>
 		<thecustomprofile:prop.val.max.length base_Attribute="EAID_2A61BDBC_D606_42a1_9650_711E33BFBD85" prop.val.max.length="20"/>
 		<thecustomprofile:prop.val.required base_Attribute="EAID_2A61BDBC_D606_42a1_9650_711E33BFBD85" prop.val.required="true"/>
+		<thecustomprofile:oper.ser.service base_Operation="EAID_4FEA5C8B_6308_465b_9809_A37597FBCA32" oper.ser.service="true"/>
 		<thecustomprofile:oper.mea.desc base_Operation="EAID_4FEA5C8B_6308_465b_9809_A37597FBCA32" oper.mea.desc="This operation returns the nick name of the person or null if there is none."/>
 		<thecustomprofile:oper.sec.role base_Operation="EAID_4FEA5C8B_6308_465b_9809_A37597FBCA32" oper.sec.role="AdminUser"/>
 		<uml:Profile xmi:version="2.1" xmlns:uml="http://schema.omg.org/spec/UML/2.1/uml.xml" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmi:id="thecustomprofile" nsPrefix="thecustomprofile" name="thecustomprofile" metamodelReference="mmref01">
@@ -172,6 +173,17 @@
 			<packageImport xmi:id="mmref01">
 				<importedPackage href="http://schema.omg.org/spec/UML/2.1/uml.xml"/>
 			</packageImport>
+			<packagedElement xmi:type="uml:Stereotype" xmi:id="oper.ser.service" name="oper.ser.service">
+				<ownedAttribute xmi:type="uml:Property" xmi:id="oper.ser.service-base_Operation" name="base_Operation" association="Operation_oper.ser.service">
+					<type href="http://schema.omg.org/spec/UML/2.1/uml.xml#Operation"/>
+				</ownedAttribute>
+				<ownedAttribute xmi:type="uml:Property" xmi:id="oper.ser.service-oper.ser.service" name="oper.ser.service">
+					<type href="http://schema.omg.org/spec/UML/2.1/uml.xml#String"/>
+				</ownedAttribute>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Extension" xmi:id="Operation_oper.ser.service" name="A_Operation_oper.ser.service" memberEnd="extension_oper.ser.service oper.ser.service-base_Operation">
+				<ownedEnd xmi:id="extension_oper.ser.service" name="extension_oper.ser.service" type="oper.ser.service" isComposite="true" lower="0" upper="1" memberEnd="extension_oper.ser.service oper.ser.service-base_Operation"/>
+			</packagedElement>
 			<packagedElement xmi:type="uml:Stereotype" xmi:id="prop.val.min.length" name="prop.val.min.length">
 				<ownedAttribute xmi:type="uml:Property" xmi:id="prop.val.min.length-base_Attribute" name="base_Attribute" association="Attribute_prop.val.min.length">
 					<type href="http://schema.omg.org/spec/UML/2.1/uml.xml#Attribute"/>
@@ -762,6 +774,7 @@
 						<documentation value="Returns the nick name of the person or null if there is none."/>
 						<tags>
 							<tag xmi:id="EAID_0CBEE5CE_CEBD_404b_B531_048CB28FC3DA" name="oper.mea.desc" value="This operation returns the nick name of the person or null if there is none."/>
+							<tag xmi:id="EAID_40D0393C_9E10_4f52_BEE1_2DAAD3E3C5C0" name="oper.ser.service" value="true"/>
 							<tag xmi:id="EAID_DFBDCCAF_F7B8_4dc7_B929_AEB83B15ABCF" name="oper.sec.role" value="AdminUser"/>
 						</tags>
 						<parameters>
@@ -1071,16 +1084,16 @@
 			<diagram xmi:id="EAID_009A07E3_809E_4392_85DC_723E22DE45D4">
 				<model package="EAPK_CB699A04_2FDB_43de_9F15_2FBB5DA90527" localID="240" owner="EAPK_CB699A04_2FDB_43de_9F15_2FBB5DA90527"/>
 				<properties name="Logical Model" type="Logical"/>
-				<project author="wangeug" version="1.0" created="2010-05-25 15:48:14" modified="2010-08-24 11:56:56"/>
+				<project author="wangeug" version="1.0" created="2010-05-25 15:48:14" modified="2010-10-07 16:15:00"/>
 				<style1 value="ShowPrivate=1;ShowProtected=1;ShowPublic=1;HideRelationships=0;Locked=0;Border=1;HighlightForeign=1;PackageContents=1;SequenceNotes=0;ScalePrintImage=0;PPgs.cx=1;PPgs.cy=1;DocSize.cx=1067;DocSize.cy=815;ShowDetails=0;Orientation=L;Zoom=95;ShowTags=0;OpParams=1;VisibleAttributeDetail=0;ShowOpRetType=1;ShowIcons=1;CollabNums=0;HideProps=0;ShowReqs=0;ShowCons=0;PaperSize=1;HideParents=0;UseAlias=0;HideAtts=0;HideOps=0;HideStereo=0;HideElemStereo=0;ShowTests=0;ShowMaint=0;ConnectorNotation=UML 2.0;ExplicitNavigability=0;AdvancedElementProps=1;AdvancedFeatureProps=1;AdvancedConnectorProps=1;ShowNotes=0;SuppressBrackets=0;SuppConnectorLabels=0;PrintPageHeadFoot=0;ShowAsList=0;"/>
 				<style2 value="ExcludeRTF=0;DocAll=0;HideQuals=0;AttPkg=1;ShowTests=0;ShowMaint=0;SuppressFOC=1;MatrixActive=0;SwimlanesActive=1;MatrixLineWidth=1;MatrixLocked=0;TConnectorNotation=UML 2.0;TExplicitNavigability=0;AdvancedElementProps=1;AdvancedFeatureProps=1;AdvancedConnectorProps=1;ProfileData=;MDGDgm=;STBLDgm=;ShowNotes=0;VisibleAttributeDetail=0;ShowOpRetType=1;SuppressBrackets=0;SuppConnectorLabels=0;PrintPageHeadFoot=0;ShowAsList=0;"/>
 				<swimlanes value="locked=false;orientation=0;width=0;inbar=false;names=false;color=0;bold=false;fcol=0;;cls=0;"/>
 				<matrixitems value="locked=false;matrixactive=false;swimlanesactive=true;width=1;"/>
 				<elements>
-					<element geometry="Left=287;Top=536;Right=377;Bottom=606;" subject="EAID_15E7F775_6CC4_47bd_A818_5FDFB8740D95" seqno="1" style="DUID=063C9687;"/>
-					<element geometry="Left=605;Top=294;Right=717;Bottom=408;" subject="EAID_0743383A_96FC_4183_8718_55E72F3C1142" seqno="2" style="DUID=2F2E91F4;"/>
-					<element geometry="Left=244;Top=281;Right=420;Bottom=433;" subject="EAID_0EF420F0_4227_406f_A187_85A06587C2A1" seqno="3" style="DUID=F2880FF3;"/>
-					<element geometry="Left=506;Top=77;Right=675;Bottom=193;" subject="EAID_1900C30C_5F50_4178_BE67_C2242BE57225" seqno="4" style="DUID=A90D592D;"/>
+					<element geometry="Left=287;Top=536;Right=418;Bottom=606;" subject="EAID_15E7F775_6CC4_47bd_A818_5FDFB8740D95" seqno="1" style="DUID=063C9687;"/>
+					<element geometry="Left=605;Top=294;Right=731;Bottom=408;" subject="EAID_0743383A_96FC_4183_8718_55E72F3C1142" seqno="2" style="DUID=2F2E91F4;"/>
+					<element geometry="Left=244;Top=281;Right=420;Bottom=447;" subject="EAID_0EF420F0_4227_406f_A187_85A06587C2A1" seqno="3" style="DUID=F2880FF3;"/>
+					<element geometry="Left=505;Top=77;Right=674;Bottom=193;" subject="EAID_1900C30C_5F50_4178_BE67_C2242BE57225" seqno="4" style="DUID=A90D592D;"/>
 					<element geometry="EDGE=1;SX=4;SY=0;EX=0;EY=0;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=2380:-1416$;" subject="EAID_0A0700F2_1256_46d1_86DA_3611D705E828" style="Mode=2;EOID=F2880FF3;SOID=063C9687;Color=-1;LWidth=0;Hidden=0;"/>
 					<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=2;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_A3CEAAAC_FEE5_420f_9E60_06DCCB788B85" style="Mode=3;EOID=A90D592D;SOID=F2880FF3;Color=-1;LWidth=1;Hidden=0;"/>
 				</elements>
