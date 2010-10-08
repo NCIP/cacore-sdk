@@ -79,11 +79,13 @@ public class AnnotationTagTest {
 	public void verifyOperLevelTag() {
 		String className = "gov.nih.nci.sdkexample.Person";
 		String operName = "getNickName";
-		int totalAnnotationsAdded = 2;
+		int totalAnnotationsAdded = 3;
 		String annotationName1 = "oper.sec.role";
 		String annotationValue1 = "AdminUser";
 		String annotationName2 = "oper.mea.desc";
 		String annotationValue2 = "This operation returns the nick name of the person or null if there is none.";
+		String annotationName3 = "oper.ser.service";
+		String annotationValue3 = "true";
 		
 		EModelElement person = EcoreUtil.getModelElementForName(rootEPackage, className);
 		assertNotNull(person);
@@ -97,6 +99,7 @@ public class AnnotationTagTest {
 				assertEquals(totalAnnotationsAdded, anns.size());
 				assertEquals(annotationValue1, SDKUtil.getTagValue(oper, annotationName1));
 				assertEquals(annotationValue2, SDKUtil.getTagValue(oper, annotationName2));
+				assertEquals(annotationValue3, SDKUtil.getTagValue(oper, annotationName3));
 			}
 		}
 	}
