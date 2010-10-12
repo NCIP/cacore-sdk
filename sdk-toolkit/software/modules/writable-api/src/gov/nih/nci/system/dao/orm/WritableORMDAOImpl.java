@@ -20,6 +20,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.orm.hibernate3.HibernateCallback;
+import org.springframework.orm.hibernate3.HibernateTemplate;
 
 public class WritableORMDAOImpl extends ORMDAOImpl implements WritableDAO 
 {
@@ -73,40 +74,40 @@ public class WritableORMDAOImpl extends ORMDAOImpl implements WritableDAO
 	public void insert(Object o)
 	{
 		log.info("In the writable DAO. executing the Insert query");
-		getHibernateTemplate().save(o);	
+		getFlushAutoHibernateTemplate().save(o);	
 	}
 
 	public void update(Object o)
 	{
 		log.info("In the writable DAO. executing the Update query");
-		getHibernateTemplate().update(o);
+		getFlushAutoHibernateTemplate().update(o);
 	}
 
 	public void delete(Object o)
 	{
 		log.info("In the writable DAO. executing the Delete query");
-		getHibernateTemplate().delete(o);
+		getFlushAutoHibernateTemplate().delete(o);
 	}
 
 	public void insert(final String hql, final List<Object> paramList) 
 	{
 		log.info("In the writable DAO. executing the Insert query");
 		HibernateCallback callBack = getExecuteUpdateHibernateCallback(hql,paramList);
-		getHibernateTemplate().execute(callBack);
+		getFlushAutoHibernateTemplate().execute(callBack);
 	}
 
 	public void update(String hql, List<Object> paramList)
 	{
 		log.info("In the writable DAO. executing the Update query");
 		HibernateCallback callBack = getExecuteUpdateHibernateCallback(hql,paramList);
-		getHibernateTemplate().execute(callBack);
+		getFlushAutoHibernateTemplate().execute(callBack);
 	}
 
 	public void delete(String hql, List<Object> paramList)
 	{
 		log.info("In the writable DAO. executing the Delete query");
 		HibernateCallback callBack = getExecuteUpdateHibernateCallback(hql,paramList);
-		getHibernateTemplate().execute(callBack);
+		getFlushAutoHibernateTemplate().execute(callBack);
 	}
 	
 	protected HibernateCallback getExecuteUpdateHibernateCallback(final String hql, final List<Object> paramList)
@@ -125,4 +126,10 @@ public class WritableORMDAOImpl extends ORMDAOImpl implements WritableDAO
 		};
 		return callBack;
 	}
+	
+	public HibernateTemplate getFlushAutoHibernateTemplate() {
+		HibernateTemplate template = getHibernateTemplate();
+		template.setFlushMode(HibernateTemplate.FLUSH_AUTO);
+		return template;
+	}	
 }
