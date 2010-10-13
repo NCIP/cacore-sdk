@@ -47,7 +47,7 @@ public class GeneratorUtil
 		try
 		{
 			File file = new File(_outputDir);
-			
+
 			if (!file.exists() == true)
 			{
 				FileUtils.forceMkdir(file);
@@ -62,13 +62,13 @@ public class GeneratorUtil
 	public static List getFiles(String _dir, String[] _extensions)
 	{
 		java.util.logging.Logger.getLogger("DEBUG").info("Directory _dir is: " + _dir);
-		
+
 		List<String> files = new ArrayList();
 
 		try
 		{
 			Iterator iter = FileUtils.iterateFiles(new File(_dir), _extensions, false);
-			
+
 			while (iter.hasNext() == true)
 			{
 				File file = (File) iter.next();
@@ -81,7 +81,7 @@ public class GeneratorUtil
 		}
 
 		java.util.logging.Logger.getLogger("DEBUG").info("Returning these files: " + files);
-		
+
 		return files;
 	}
 
@@ -90,11 +90,11 @@ public class GeneratorUtil
 		java.util.logging.Logger.getLogger("DEBUG").info("Directory _dir is: " + _dir);
 
 		StringBuffer files = new StringBuffer();
-		
+
 		try
 		{
 			Iterator iter = FileUtils.iterateFiles(new File(_dir), _extensions, false);
-			
+
 			while (iter.hasNext() == true)
 			{
 				File file = (File) iter.next();
@@ -113,9 +113,10 @@ public class GeneratorUtil
 
 	public static String getJaxbPojoPath(ScriptContext _scriptContext)
 	{
-		String jaxbPojoPath = getGeneratedPath(_scriptContext)
+		String s = getGeneratedPath(_scriptContext);
+		String jaxbPojoPath = s
 				+ File.separator
-				+ EcoreUtil.determinePackageName(_scriptContext.getFocusDomain()).replaceAll("\\.", File.separator)
+				+ EcoreUtil.determinePackageName(_scriptContext.getFocusDomain()).replace('.', File.separatorChar)
 				+ File.separator + Generator.JAXBPOJO_PACKAGE_NAME;
 
 		return jaxbPojoPath;
@@ -125,18 +126,18 @@ public class GeneratorUtil
 	{
 		String jaxbPojoPath = getGeneratedPath(_scriptContext)
 				+ File.separator
-				+ EcoreUtil.determinePackageName(_scriptContext.getFocusDomain()).replaceAll("\\.", File.separator)
+				+ EcoreUtil.determinePackageName(_scriptContext.getFocusDomain()).replace('.', File.separatorChar)
 				+ File.separator + Generator.POJO_PACKAGE_NAME;
 
 		return jaxbPojoPath;
 	}
-	
+
 	public static String getServiceImplPath(ScriptContext _scriptContext)
 	{
 		String serviceImplPath = getImplPath(_scriptContext)
 				+ File.separator
-				+ EcoreUtil.determinePackageName(_scriptContext.getFocusDomain()).replaceAll("\\.", File.separator)
-				+ File.separator 
+				+ EcoreUtil.determinePackageName(_scriptContext.getFocusDomain()).replace('.', File.separatorChar)
+				+ File.separator
 				+ Generator.SERVICE_PACKAGE_NAME;
 
 		return serviceImplPath;
@@ -146,19 +147,19 @@ public class GeneratorUtil
 	{
 		return getGeneratedPath(_scriptContext)
 				+ File.separator
-				+ EcoreUtil.determinePackageName(_scriptContext.getFocusDomain()).replaceAll("\\.", File.separator)
-				+ File.separator 
+				+ EcoreUtil.determinePackageName(_scriptContext.getFocusDomain()).replace('.', File.separatorChar)
+				+ File.separator
 				+ Generator.SERVICE_PACKAGE_NAME
 				+ File.separator
 				+ Generator.SERVICE_CLIENT_PACKAGE_NAME;
 	}
-	
+
 	public static String getServicePath(ScriptContext _scriptContext)
 	{
 		return getGeneratedPath(_scriptContext)
 				+ File.separator
-				+ EcoreUtil.determinePackageName(_scriptContext.getFocusDomain()).replaceAll("\\.", File.separator)
-				+ File.separator 
+				+ EcoreUtil.determinePackageName(_scriptContext.getFocusDomain()).replace('.', File.separatorChar)
+				+ File.separator
 				+ Generator.SERVICE_PACKAGE_NAME;
 	}
 
@@ -167,7 +168,7 @@ public class GeneratorUtil
 		String returnString =  _scriptContext.getProperties().getProperty("PROJECT_ROOT")
 				+ File.separator
 				+ _scriptContext.getProperties().getProperty("PROJECT_SRC")
-				+ File.separator 
+				+ File.separator
 			    + Generator.GENERATED_PACKAGE_NAME;
 
 		return returnString;
@@ -177,7 +178,7 @@ public class GeneratorUtil
 		return _scriptContext.getProperties().getProperty("PROJECT_ROOT")
 				+ File.separator
 				+ _scriptContext.getProperties().getProperty("PROJECT_SRC")
-				+ File.separator 
+				+ File.separator
 				+ Generator.IMPL_PACKAGE_NAME;
 	}
 
@@ -190,7 +191,7 @@ public class GeneratorUtil
 	{
 		return EcoreUtil.determinePackageName(_fullyQualifiedClassName) + "." + Generator.JAXBPOJO_PACKAGE_NAME;
 	}
-	
+
 	public static String getPojoPackageName(String _fullyQualifiedClassName)
 	{
 		return EcoreUtil.determinePackageName(_fullyQualifiedClassName) + "." + Generator.POJO_PACKAGE_NAME;
@@ -204,7 +205,7 @@ public class GeneratorUtil
 			+ "."
 			+ Generator.SERVICE_CLIENT_PACKAGE_NAME;
 	}
-	
+
 	public static String getClassesPath(ScriptContext _scriptContext)
 	{
 		return _scriptContext.getProperties().getProperty("PROJECT_ROOT") + File.separator + "classes";
@@ -217,7 +218,7 @@ public class GeneratorUtil
 		if(_string != null && _string.length() > 0)
 		{
 			capitalizedString = _string.substring(0,1).toUpperCase();
-			
+
 			if (_string.length() > 1)
 			{
 				capitalizedString += _string.substring(1, _string.length());
