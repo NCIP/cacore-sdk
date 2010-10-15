@@ -83,6 +83,8 @@
 	        ivy:setup-compile,ivy:setup-runtime" description="Updates the local ivy repository for all build and test dependencies." />
 
 	<target name="ivy:setup-compile" depends="ivy:init">
+	 <echo>module.lib.dir=${module.lib.dir}</echo>
+
 		<ivy:resolve refresh="true" conf="compile" />
 		<ivy:retrieve pattern="${module.lib.dir}/[conf]/[artifact]-[revision].[ext]" conf="compile" />
 	</target>
