@@ -18,7 +18,7 @@
 	
 	<property name="sdk.src.file" value="SDK-${sdk.version}-src.zip"/>
 	
-	<target name="init">
+	<target name="init" description="initializes the system by create the required build output and temp directories">
 		<mkdir dir="${output.dir}"/>
 		<mkdir dir="${temp.dir}"/>
 	</target>
