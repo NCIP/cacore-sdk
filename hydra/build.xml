@@ -103,16 +103,16 @@
 	</path>
 
 	<!-- Clean -->
-	<target name="clean" depends="clean-classes, clean-target, clean-plugin" />
+	<target name="clean" depends="clean-classes, clean-target, clean-plugin" description="This target will remove all artifacts created by this build." />
 
 	<!-- Clean classes -->
-	<target name="clean-classes">
+	<target name="clean-classes" description="This target removes the compiled classes and the distribution jars created by this build">
 		<delete dir="${classes}" />
 		<delete dir="${dist}" />
 	</target>
 
 	<!-- Clean target -->
-	<target name="clean-target">
+	<target name="clean-target" description="This target removes artifacts from the archive, deploy, and stage directories">
 
 	    <delete dir="${archive}" />
 		<delete dir="${deployDir}" />
@@ -121,7 +121,7 @@
 	</target>
 
 	<!-- Init -->
-	<target name="init">
+	<target name="init" description="This target initializes the build directory in preparation for a new build run.">
 	   
 	    <mkdir dir="${archive}" />
 		<mkdir dir="${runtime.lib}" />
@@ -192,7 +192,7 @@
 	</target>
 
 	<!-- Prepare source -->
-	<target name="prepareSource" depends="createPackageStructure">
+	<target name="prepareSource" depends="createPackageStructure" description="This target will replace tokens in src files in the stage directory with values defined as properties in this build script.">
 
 	   	<mkdir dir="${stage}" />
 			
@@ -211,9 +211,9 @@
 	</target>
 
   	<!-- Compile -->
-	<target name="recompile" depends="clean-classes, compile" />
+	<target name="recompile" depends="clean-classes, compile" description="This target cleans all build artifacts, then compiles all Java source" />
 
-	<target name="compile" depends="init, prepareSource">
+	<target name="compile" depends="init, prepareSource" description="This target will initialize the build, tokenize all relevant source files, then compile the Java source code">
 		<property name="build.class.path" refId="build.class.path"/>
 		<echo message="${build.class.path}"/>
 
@@ -230,7 +230,7 @@
 	</target>
 
 	<!-- Jar -->
-	<target name="buildJar" depends="compile">
+	<target name="buildJar" depends="compile" description="This target creates a jar file from the build artifacts and the compiled classes">
 	   
 		<jar destfile="${dist}/lib/${jar}"
 		       basedir="${classes}"
@@ -273,11 +273,11 @@
 	</target>
 
 	<!-- Redeploy -->
-	<target name="redeploy" depends="clean-classes, clean-target, compile, buildJar, deploy" />
+	<target name="redeploy" depends="clean-classes, clean-target, compile, buildJar, deploy" description="This target initializes the build, then executes a deploy"/>
 	<target name="redeployTemplate" depends="clean-target, prepareSource, deploy" />
 
 	<!-- Deploy -->
-	<target name="deploy">
+	<target name="deploy" description="This target will copy all relevant artifacts like jar files, build scripts, executables, etc. to the relevant deployment directory">
 
 		<copy todir="${deployDir.lib}" flatten="true">
 			<fileset dir="${runtime.lib}" includes="**/*.jar" />
@@ -325,7 +325,7 @@
 		
 	</target>
 
-	<target name="createRootPackageDirProperty" >
+	<target name="createRootPackageDirProperty" description="This target will create the root package dir from the package property defined in the build property file" >
 
 	  <pathconvert property="java.package.dir" targetos="${operatingSystem}" >
 		  <path path="${package}" />
@@ -339,7 +339,7 @@
 
 	</target>
 
-	<target name="createPackageStructure" depends="init, createRootPackageDirProperty" >
+	<target name="createPackageStructure" depends="init, createRootPackageDirProperty" description="This target will create the Java package directories under the java source directory" >
 	   
 		<mkdir dir="${java.package.dir}" />
 		<mkdir dir="${java.package.dir}/util" />
@@ -358,15 +358,7 @@
 		
 	</target>
 
-	<target name="clean-plugin">
-	   <!-- use this to clean up the plugins -->
-	</target>
-
-	<target name="deployPlugin" depends="clean-plugin" >
-	   <!-- use this to update the plugin -->
-	</target>
-
-	<target name="unit-test" depends="redeploy">
+	<target name="unit-test" depends="redeploy" description="this target will execute the builds JUnit tests.  Results are written to the result directory">
 
 		<property name="test.class.path" refId="test.class.path"/>
 		<echo message="Class path is:  ${test.class.path}"/>
@@ -387,7 +379,7 @@
 		</junit>
 	</target>
 
-	<target name="runScript">
+	<target name="runScript" description="This plugin will execute a JavaScript any named script from the script/javascript directory.  Please provide the name of the script (without the extension) as the script property using Ant's -D option">
 	   	<property name="run.class.path" refId="run.class.path"/>
 		<echo message="${run.class.path}"/>
 		<script language="javascript" src="src/script/javascript/${script}.js">
@@ -395,16 +387,7 @@
 		</script>		
 	</target>
 
-	<target name="runTests">
-	   	<property name="run.class.path" refId="run.class.path"/>
-		<echo message="${run.class.path}"/>
-		<script language="javascript"
-					 src="src/test/script/javascript/bigTest.js">
-		    <classpath refid="test.class.path"/>
-		</script>
-	</target>
-
-	<target name="javadoc">
+	<target name="javadoc" description="This plugin will create JavaDoc documentation for Java files defined in this project">
 	   <javadoc
            destdir="${src.doc}/javadoc"
            author="true"
