@@ -885,7 +885,7 @@ public class NestedCriteria2HQL {
 		}
 		if (value == null) {
 			String exceptionMessage = "mapped-constant of 'type' was not specified for "
-					+ rootKlassAttr + " in EA-Model.";
+					+ rootKlassAttr + " in the domain model.";
 			log.error(exceptionMessage);
 			throw new Exception(exceptionMessage);
 		}
@@ -907,7 +907,7 @@ public class NestedCriteria2HQL {
 						persistChildvalue, parentheses, queryAppender,
 						andCount++, aliasSetBuffer, rootKlassAttr);
 			} else {
-				String message = "No matching found for the input 'type' with the mapped-constant specified in EA-Model";
+				String message = "No matching found for the input 'type' with the mapped-constant specified in domain model";
 				log.error(message);
 				throw new Exception(message);
 			}
