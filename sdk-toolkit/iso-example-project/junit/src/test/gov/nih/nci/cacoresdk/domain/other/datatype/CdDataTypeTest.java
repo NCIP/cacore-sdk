@@ -306,6 +306,7 @@ public class CdDataTypeTest extends SDKISOTestBase{
 	{
 		CdDataType searchObject = new CdDataType();
 		Collection<CdDataType> result = search("gov.nih.nci.cacoresdk.domain.other.datatype.CdDataType",searchObject );
+		assertEquals(5, result.size());
 		assertValue1(result, null);
 		assertValue2(result, null);
 		assertValue3(result, null);
@@ -324,7 +325,7 @@ public class CdDataTypeTest extends SDKISOTestBase{
 		for(CdDataType data : result)
 		{
 			//Validate 1st record
-			if((index == null && counter == 1) || (index != null && index.contains("1")))
+			if((index == null && counter == 1) || (index != null && index.contains("1")) && data.getId()==1)
 			{
 				if(index != null) 
 					index.remove("1");

@@ -1,7 +1,10 @@
 package test.gov.nih.nci.cacoresdk.domain.other.datatype;
 
 import gov.nih.nci.cacoresdk.domain.other.datatype.EnDataType;
+import gov.nih.nci.iso21090.En;
 import gov.nih.nci.iso21090.EntityNamePartQualifier;
+import gov.nih.nci.iso21090.EntityNamePartType;
+import gov.nih.nci.iso21090.Enxp;
 import gov.nih.nci.iso21090.NullFlavor;
 import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
@@ -1433,6 +1436,20 @@ public class EnDataTypeTest extends SDKISOTestBase{
 				counter++;
 			}
 		}
+	}
+	
+	public void testEnValue5ByQBE() throws Exception {
+		gov.nih.nci.cacoresdk.domain.other.datatype.EnDataType testClass = new gov.nih.nci.cacoresdk.domain.other.datatype.EnDataType();
+		En en0 = new En();
+		Enxp enxpfam2 = new Enxp();
+		enxpfam2.setValue("Mr. John Doe I");
+		enxpfam2.setType(EntityNamePartType.FAM);
+		en0.addPart(enxpfam2);
+		testClass.setValue5(en0);
+		Collection<gov.nih.nci.cacoresdk.domain.other.datatype.EnDataType> result = getApplicationService().search("gov.nih.nci.cacoresdk.domain.other.datatype.EnDataType", testClass);
+		gov.nih.nci.cacoresdk.domain.other.datatype.EnDataType testResultClass = result.iterator().next();
+		assertEquals(2, result.size());
+		assertEquals("Mr. John Doe I", testResultClass.getValue5().getPart().get(0).getValue().toString());
 	}
 	
 }
