@@ -1177,6 +1177,7 @@
 				<include name="hibernate-*.jar"/>
 				<include name="hibernate-annotations-*.jar"/>
 				<include name="hibernate-validator-*.jar"/>
+				<include name="jaxb-*.jar"/>
 				<include name="jaxrpc-*.jar"/>
 				<include name="jdom-1.1.jar"/>
 				<include name="jta-*.jar"/>
