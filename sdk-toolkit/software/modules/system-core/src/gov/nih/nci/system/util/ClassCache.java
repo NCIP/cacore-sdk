@@ -1,5 +1,9 @@
 package gov.nih.nci.system.util;
 
+import gov.nih.nci.iso21090.hibernate.node.ComplexNode;
+import gov.nih.nci.iso21090.hibernate.node.ConstantNode;
+import gov.nih.nci.iso21090.hibernate.node.Node;
+import gov.nih.nci.iso21090.hibernate.tuple.IsoConstantTuplizerHelper;
 import gov.nih.nci.system.dao.DAO;
 import gov.nih.nci.system.dao.DAOException;
 import gov.nih.nci.system.dao.QueryException;
@@ -45,6 +49,7 @@ public class ClassCache implements InitializingBean{
 
 	private List<String> allPackageNamesCache = new ArrayList<String>();
 	private Map<String, List<String>> pkgClassNamesCache = new HashMap<String, List<String>>();
+	private IsoConstantTuplizerHelper tuplizerHelper = new IsoConstantTuplizerHelper();
 
 	private HashMap<String, Class> classCache = new HashMap<String, Class>();
 	private Map<String, DAO> daoCache = new HashMap<String, DAO>();
@@ -893,6 +898,47 @@ public class ClassCache implements InitializingBean{
 		} else if (prop.getType().isComponentType()
 				&& !(prop.getValue() instanceof Any)) {
 			processIfComponentMapping(prop, isoObjectPsFields,cfg);
+			
+			String componentClassName = ((Component)prop.getValue()).getComponentClassName();
+			if (componentClassName != null && (componentClassName.indexOf("Adxp") > 0)){
+				String adxpType = componentClassName.substring(componentClassName.indexOf("Adxp") + 4).toUpperCase();
+				Map<String, List<Object>> nestedComponent = new HashMap<String, List<Object>>();
+				List<Object> adxpTypeList = new ArrayList<Object>();
+				adxpTypeList.add(adxpType);
+				nestedComponent.put("type",adxpTypeList);
+				isoObjectPsFields.add(nestedComponent);
+			} else if (componentClassName != null && (componentClassName.indexOf("Enxp") > 0)){
+				String roleName = ((Component)prop.getValue()).getRoleName();
+				String rootKlassAttr = roleName.substring(0, roleName.lastIndexOf('.'));
+				
+				ComplexNode complexNode = tuplizerHelper
+						.getComplexNodeBean(rootKlassAttr);
+				List<Node> nodes = complexNode.getInnerNodes();
+				Map<String, List<Object>> nestedComponent = new HashMap<String, List<Object>>();
+				List<Object> enxpTypeList = new ArrayList<Object>();
+//				String value=null;
+				for (Node node : nodes) {
+					if(node instanceof ConstantNode){
+						continue;
+					}
+					ComplexNode innerComplexNode = (ComplexNode) node;
+//					value = innerComplexNode.getName();
+					String key = null;
+					List<Node> innerNodes = innerComplexNode.getInnerNodes();
+					for (Node innerNode : innerNodes) {
+						if (innerNode instanceof ConstantNode
+								&& innerNode.getName().equals("type")) {
+							ConstantNode constantNode = (ConstantNode) innerNode;
+							key = constantNode.getConstantValue();
+							enxpTypeList.add(key);
+							break;
+						}
+					}
+				}
+				
+				nestedComponent.put("type",enxpTypeList);
+				isoObjectPsFields.add(nestedComponent);
+			}
 		} else if (prop.getType().isAssociationType()
 				&& (prop.getValue() instanceof ManyToOne)) {
 			ManyToOne manyToOne = (ManyToOne) prop.getValue();
