@@ -10,7 +10,6 @@ import java.util.Set;
 import gov.nih.nci.cacoresdk.domain.inheritance.abstrakt.PrivateTeacher;
 import gov.nih.nci.cacoresdk.domain.inheritance.abstrakt.Teacher;
 import gov.nih.nci.cacoresdk.domain.inheritance.childwithassociation.Credit;
-import gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.sametable.HardTop;
 import gov.nih.nci.cacoresdk.domain.other.datatype.AdDataType;
 import gov.nih.nci.cacoresdk.domain.other.datatype.CdDataType;
 import gov.nih.nci.cacoresdk.domain.other.datatype.DsetAdDataType;
