@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Property;
+
 import test.gov.nih.nci.cacoresdk.SDKISOTestBase;
 
 /*
@@ -869,7 +872,7 @@ public class AdDataTypeTest extends SDKISOTestBase{
 				assertEquals("Address line1", data.getValue5().getPart().get(0).getValue());
 				assertNull(data.getValue5().getPart().get(0).getCode());
 				assertNull(data.getValue5().getPart().get(0).getCodeSystem());
-
+				
 				assertNotNull(data.getValue5().getPart().get(1));
 				assertNotNull(data.getValue5().getPart().get(1).getType());
 				assertNotNull(data.getValue5().getPart().get(1).getValue());
@@ -907,7 +910,7 @@ public class AdDataTypeTest extends SDKISOTestBase{
 				assertEquals("Address line1", data.getValue5().getPart().get(0).getValue());
 				assertEquals("AL_CODE1", data.getValue5().getPart().get(0).getCode());
 				assertNull(data.getValue5().getPart().get(0).getCodeSystem());
-
+				
 				assertNotNull(data.getValue5().getPart().get(1));
 				assertNotNull(data.getValue5().getPart().get(1).getType());
 				assertNotNull(data.getValue5().getPart().get(1).getValue());
@@ -1845,6 +1848,28 @@ public class AdDataTypeTest extends SDKISOTestBase{
 				counter++;
 			}
 		}
+	}
+	
+	public void testDetachedCriteria7() throws Exception {
+		DetachedCriteria criteria = DetachedCriteria.forClass(gov.nih.nci.cacoresdk.domain.other.datatype.AdDataType.class);
+		criteria.add(Property.forName("value7.part_2.value").eq("CTY_VALUE3"));
+		criteria.add(Property.forName("value7.part_2.code").eq("CTY_CODE3"));
+		criteria.add(Property.forName("value7.part_2.codeSystem").eq("CTY_CODESYSTEM3"));
+		Collection<gov.nih.nci.cacoresdk.domain.other.datatype.AdDataType> result = getApplicationService().query(criteria,"gov.nih.nci.cacoresdk.domain.other.datatype.AdDataType");
+		gov.nih.nci.cacoresdk.domain.other.datatype.AdDataType testResultClass = result.iterator().next();
+		assertEquals(1, result.size());
+		assertEquals("AL_VALUE3", testResultClass.getValue7().getPart().get(0).getValue().toString());
+		assertEquals("AL_CODE3", testResultClass.getValue7().getPart().get(0).getCode().toString());
+		assertEquals("AL_CODESYSTEM3", testResultClass.getValue7().getPart().get(0).getCodeSystem().toString());
+		assertEquals(AddressPartType.AL, testResultClass.getValue7().getPart().get(0).getType());
+		assertEquals("DAL_VALUE3", testResultClass.getValue7().getPart().get(1).getValue().toString());
+		assertEquals("DAL_CODE3", testResultClass.getValue7().getPart().get(1).getCode().toString());
+		assertEquals("DAL_CODESYSTEM3", testResultClass.getValue7().getPart().get(1).getCodeSystem().toString());
+		assertEquals(AddressPartType.DAL, testResultClass.getValue7().getPart().get(1).getType());
+		assertEquals("CTY_VALUE3", testResultClass.getValue7().getPart().get(2).getValue().toString());
+		assertEquals("CTY_CODE3", testResultClass.getValue7().getPart().get(2).getCode().toString());
+		assertEquals("CTY_CODESYSTEM3", testResultClass.getValue7().getPart().get(2).getCodeSystem().toString());
+		assertEquals(NullFlavor.NI, testResultClass.getValue1().getNullFlavor());
 	}
 	
 }
