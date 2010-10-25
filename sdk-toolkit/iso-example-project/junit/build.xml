@@ -11,6 +11,7 @@
 	<property name="project.build.home" location="${project.home}/build" />
 
 	<property name="output.dir.location" value="${project.home}/target/dist/exploded"/>
+	<property name="isoExample.lib" value="${project.home}/target/dist/exploded/output/isoExample/lib"/>
 	<property file="${project.build.home}/codegen.properties" />
 	<property file="${project.build.home}/install.properties" />
 	<property file="${SDK_INSTALL_DIR}/software/build/project.properties"/>
@@ -95,6 +96,9 @@
 		<fileset dir="${package.client.local.lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
+		<fileset dir="${isoExample.lib}">
+			<include name="**/*.jar" />
+		</fileset>		
 		<path refid="junit-lib" />
 		<pathelement path="${classes.dir}" />
 		<pathelement path="${package.client.local.conf.dir}" />
@@ -110,6 +114,9 @@
 		<fileset dir="${package.client.remote.lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
+		<fileset dir="${isoExample.lib}">
+			<include name="**/*.jar" />
+		</fileset>			
 		<path refid="junit-lib" />
 		<pathelement path="${classes.dir}" />
 		<pathelement path="${package.client.remote.conf.dir}" />
