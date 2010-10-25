@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -34,10 +35,12 @@ public class HtmlUtils {
 	private static List<String> nullFlavorOptions = new ArrayList<String>(Arrays.asList("","NI (No Information)","INV (Invalid)","OTH (Other)","NINF (Negative Infinity)","PINF (Positive Infinity)","UNC (Unencoded)","DER (Derived)","UNK (Unknown)","ASKU (Asked but Unknown)","NAV (Temporarily Unavailable)","QS (Sufficient Quantity)","NASK (Not Asked)","TRC (Trace)","MSK (Masked)","NA (Not Applicable)"));
 	private static List<String> nullFlavorValues = new ArrayList<String>(Arrays.asList("","NI","INV","OTH","NINF","PINF","UNC","DER","UNK","ASKU","NAV","QS","NASK","TRC","MSK","NA"));
 
+	private static Map<String,String> addressPartTypeOptionMap = new HashMap<String,String>();
 	private static String addressPartTypeSelect = null;
 	private static List<String> addressPartTypeOptions = new ArrayList<String>(Arrays.asList("","AL (address line)","ADL (additional locator)","UNID (unit identifier)","UNIT (unit designator)","DAL (delivery address line)","DINST (delivery installation type)","DINSTA (delivery installation area)","DINSTQ (delivery installation qualifier)","DMOD (delivery mode)","DMODID (delivery mode identifier)","SAL (street address line)","BNR (building number)","BNN (building number numeric)","BNS (building number suffix)","STR (street name)","STB (street name base)","STTYP (street type)","DIR (direction)","CAR (care of)","CEN (census tract)","CNT (country)","CPA (county or parish)","CTY (municipality)","DEL (delimiter)","POB (post box)","PRE (precinct)","STA (state or province)","ZIP (postal code)"));
 	private static List<String> addressPartTypeValues = new ArrayList<String>(Arrays.asList("","AL","ADL","UNID","UNIT","DAL","DINST)","DINSTA","DINSTQ","DMOD","DMODID","SAL","BNR","BNN","BNS","STR","STB","STTYP","DIR","CAR","CEN","CNT","CPA","CTY","DEL","POB","PRE","STA","ZIP"));
 
+	private static Map<String,String> entityNamePartTypeOptionMap = new HashMap<String,String>();
 	private static String entityNamePartTypeSelect = null;	
 	private static List<String> entityNamePartTypeOptions = new ArrayList<String>(Arrays.asList("","FAM (family)","GIV (given)","PFX (prefix)","SFX (suffix)","DEL (delimiter)"));
 	private static List<String> entityNamePartTypeValues = new ArrayList<String>(Arrays.asList("","FAM","GIV","PFX","SFX","DEL"));
@@ -64,6 +67,25 @@ public class HtmlUtils {
 
 		return addressPartTypeSelect;
 	}
+	
+	private static String getSelect_AddressPartType(List<Object> validAddressPartTypes) {
+
+		StringBuilder sb = new StringBuilder("<select name=\"type\" id=\"type\" class=\"formFieldSized\">");
+
+		sb.append("<option value=\"\"></option>");
+		
+		String addressPartTypeOption = null;
+		for(Object validAddressPartType : validAddressPartTypes){
+			addressPartTypeOption = addressPartTypeOptionMap.get((String)validAddressPartType);
+			if (addressPartTypeOption != null){
+				sb.append("<option value=\"").append((String)validAddressPartType).append("\")>").append(addressPartTypeOption).append("</option>");
+			}
+		}
+
+		sb.append("</select>");
+
+		return sb.toString();
+	}	
 	
 	private static String getSelect_Boolean(String attrName) {
 		
@@ -98,6 +120,25 @@ public class HtmlUtils {
 		}
 
 		return entityNamePartTypeSelect;
+	}
+	
+	private static String getSelect_EntityNamePartType(List<Object> validEntityNamePartTypes) {
+
+		StringBuilder sb = new StringBuilder("<select name=\"type\" id=\"type\" class=\"formFieldSized\">");
+
+		sb.append("<option value=\"\"></option>");
+		
+		String validEntityNamePartTypeOption = null;
+		for(Object validEntityNamePartType : validEntityNamePartTypes){
+			validEntityNamePartTypeOption = entityNamePartTypeOptionMap.get((String)validEntityNamePartType);
+			if (validEntityNamePartTypeOption != null){
+				sb.append("<option value=\"").append((String)validEntityNamePartType).append("\")>").append(validEntityNamePartTypeOption).append("</option>");
+			}
+		}
+
+		sb.append("</select>");
+
+		return sb.toString();
 	}
 	
 	private static String getSelect_EntityNamePartQualifier() {
@@ -237,10 +278,11 @@ public class HtmlUtils {
 			sb.append("</tr>");
 		}		
 		
-		//always include Address Part Type, as it is required - also TODO :: client-side validation to make it required
+		//always include Address Part Type, as it is required
+		List<Object> addressPartTypeOptions = getComplexSearchFields("type", searchableFields);
 		sb.append("<tr>");
 		sb.append("  <td class=\"isoFormLabel\">Address Part Type:</td>");
-		sb.append("  <td class=\"isoFormField\">").append(getSelect_AddressPartType()).append("</td>");
+		sb.append("  <td class=\"isoFormField\">").append(getSelect_AddressPartType(addressPartTypeOptions)).append("</td>");
 		sb.append("</tr>");
 		
 		return sb.toString();
@@ -478,9 +520,10 @@ public class HtmlUtils {
 		}
 		
 		//always include Entity Name Part Type, as it is required - also TODO :: client-side validation to make it required
+		List<Object> entityNamePartTypeOptions = getComplexSearchFields("type", searchableFields);
 		sb.append("<tr>");
 		sb.append("  <td class=\"isoFormLabel\">Type:</td>");
-		sb.append("  <td class=\"isoFormField\">").append(getSelect_EntityNamePartType()).append("</td>");
+		sb.append("  <td class=\"isoFormField\">").append(getSelect_EntityNamePartType(entityNamePartTypeOptions)).append("</td>");
 		sb.append("</tr>");
 		
 		return sb.toString();
@@ -1012,5 +1055,18 @@ public class HtmlUtils {
 		}
 		
 		return new ArrayList<Object>();
+	}
+	
+	static {
+		int size = addressPartTypeValues.size();
+		for(int i=0;i<size; i++ ){
+			addressPartTypeOptionMap.put(addressPartTypeValues.get(i), addressPartTypeOptions.get(i));
+		}
+		
+		size = entityNamePartTypeValues.size();
+		for(int i=0;i<size; i++ ){
+			entityNamePartTypeOptionMap.put(entityNamePartTypeValues.get(i), entityNamePartTypeOptions.get(i));
+		}
+		
 	}
 }
