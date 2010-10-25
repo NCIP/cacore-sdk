@@ -884,13 +884,20 @@ public class NestedCriteria2HQL {
 			}
 		}
 		if (value == null) {
-			String exceptionMessage = "mapped-constant of 'type' was not specified for "
+			String exceptionMessage = "Tag value 'mapped-constant' missing for entity name part 'type' for attribute "
 					+ rootKlassAttr + " in the domain model.";
 			log.error(exceptionMessage);
 			throw new Exception(exceptionMessage);
 		}
 		Set<String> keySet = map.keySet();
 		for (Enxp enxp : valueList) {
+		
+			if (enxp.getType() != null && (enxp.getCode() == null && enxp.getCodeSystem() == null && enxp.getCodeSystemVersion() == null && enxp.getQualifier() == null && enxp.getValue() == null))
+				throw new Exception("If Entity Name Part type is specified, Entity Name Part code, code system, code system version, qualifier, and / or value must also be specified");
+			
+			if (enxp.getType() == null && (enxp.getCode() != null || enxp.getCodeSystem() != null || enxp.getCodeSystemVersion() == null || enxp.getQualifier() == null || enxp.getValue() != null))
+				throw new Exception("If Entity Name Part code, code system, code system version, qualifier, or value is specified, Entity Name Part type must also be specified");
+			
 			StringBuffer tempNewQuery = new StringBuffer(newQuery.toString());
 			EntityNamePartType entityNamePartType = enxp.getType();
 			String partNameMatch = entityNamePartType.toString();
@@ -907,7 +914,7 @@ public class NestedCriteria2HQL {
 						persistChildvalue, parentheses, queryAppender,
 						andCount++, aliasSetBuffer, rootKlassAttr);
 			} else {
-				String message = "No matching found for the input 'type' with the mapped-constant specified in domain model";
+				String message = "No En ISO Data Type Entity Name part type 'mapped-constant' tag value found for specified type " + enxp.getType() + " and attribute " + rootKlassAttr + " in domain model.";
 				log.error(message);
 				throw new Exception(message);
 			}
@@ -919,9 +926,17 @@ public class NestedCriteria2HQL {
 			StringBuffer whereQueryClause, String queryAppender,
 			Integer andCount, StringBuffer aliasSetBuffer, String rootKlassAttr)
 			throws Exception {
-		
+
 		Map<String, Set<String>> addressPartTypeMap = new HashMap<String, Set<String>>();
 		for (Object object : valueList) {
+			
+			Adxp adxp = (Adxp)object;
+			if (adxp.getType() != null && (adxp.getCode() == null && adxp.getCodeSystem() == null && adxp.getValue() == null))
+				throw new Exception("If Address Part type is specified, the Address Part code, code system, and / or value must also be specified");
+			
+			if (adxp.getType() == null && (adxp.getCode() != null || adxp.getCodeSystem() != null || adxp.getValue() != null))
+				throw new Exception("If Address Part code, code system, or value is specified, Address Part type must also be specified");
+			
 			Field partInstanceObjectField = null;
 			StringBuffer tempNewQuery = new StringBuffer(newQuery.toString());
 			partInstanceObjectField = getDeclaredField(object.getClass(),
