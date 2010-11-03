@@ -7,6 +7,8 @@ import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import test.gov.nih.nci.cacoresdk.SDKISOTestBase;
@@ -306,15 +308,18 @@ public class CdDataTypeTest extends SDKISOTestBase{
 	{
 		CdDataType searchObject = new CdDataType();
 		Collection<CdDataType> result = search("gov.nih.nci.cacoresdk.domain.other.datatype.CdDataType",searchObject );
-		assertEquals(5, result.size());
-		assertValue1(result, null);
-		assertValue2(result, null);
-		assertValue3(result, null);
-		assertValue4(result, null);
-		assertValue5(result, null);
-		assertValue6(result, null);
-		assertValue7(result, null);
-		assertValue8(result, null);
+		assertEquals(50, result.size());
+		
+		ArrayList<CdDataType> sortedResults = new ArrayList<CdDataType>(result);
+		Collections.sort(sortedResults, new IdComparator());
+		assertValue1(sortedResults, null);
+		assertValue2(sortedResults, null);
+		assertValue3(sortedResults, null);
+		assertValue4(sortedResults, null);
+		assertValue5(sortedResults, null);
+		assertValue6(sortedResults, null);
+		assertValue7(sortedResults, null);
+		assertValue8(sortedResults, null);
 	}
 	
 	private void assertValue1(Collection<CdDataType> result, List<Integer> index)
@@ -1690,5 +1695,23 @@ public class CdDataTypeTest extends SDKISOTestBase{
 			}
 		}
 	}
+	
+	private class IdComparator implements Comparator{
+		public int compare(Object cdDataType1, Object cdDataType2){
+
+			//parameter are of type Object, so we have to downcast it to CdDataType objects
+			int cdId1 = ( (CdDataType) cdDataType1).getId();
+			int cdId2 = ( (CdDataType) cdDataType2).getId();
+
+			if( cdId1 > cdId2 )
+				return 1;
+			else if( cdId1 < cdId2 )
+				return -1;
+			else
+				return 0;
+
+		}
+	}
+
 
 }
