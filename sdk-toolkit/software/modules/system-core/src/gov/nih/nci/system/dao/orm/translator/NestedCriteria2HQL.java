@@ -1,6 +1,8 @@
 package gov.nih.nci.system.dao.orm.translator;
+import gov.nih.nci.iso21090.Ad;
 import gov.nih.nci.iso21090.AddressPartType;
 import gov.nih.nci.iso21090.Adxp;
+import gov.nih.nci.iso21090.EntityNamePartQualifier;
 import gov.nih.nci.iso21090.EntityNamePartType;
 import gov.nih.nci.iso21090.Enxp;
 import gov.nih.nci.iso21090.hibernate.node.ComplexNode;
@@ -749,7 +751,7 @@ public class NestedCriteria2HQL {
 								.startsWith(isoprefix);
 						// parse the set and create an hql Set<CD>
 						boolean isSetObject = objectClassName
-								.startsWith("java.util.HashSet");
+								.startsWith("java.util.HashSet") && !fieldName.equalsIgnoreCase("qualifier");
 						boolean isEnumObject = value.getClass().isEnum();
 						boolean isListObject = objectClassName
 								.startsWith("java.util.ArrayList");
@@ -784,6 +786,9 @@ public class NestedCriteria2HQL {
 									parentheses = (count == 0)
 											? " (( "
 											: ") or ( ";
+									if (object.getClass()
+											.isAssignableFrom(Ad.class))
+										whereQueryClause.append(parentheses);
 									generateISOWhereQuery(object,
 											new StringBuffer(),
 											whereQueryClause,
@@ -812,7 +817,23 @@ public class NestedCriteria2HQL {
 									paramList.add(((String) value).replaceAll(
 											"\\*", "\\%"));
 								} else {
-									paramList.add(value);
+									if (fieldName.equalsIgnoreCase("qualifier")){
+										Set<EntityNamePartQualifier> qualifierSet = new HashSet<EntityNamePartQualifier>();
+										
+										String qualifierValue = null;
+										Iterator itr = ((HashSet)value).iterator();     
+										while(itr.hasNext()){
+											qualifierValue = (String)itr.next();
+											if (EntityNamePartQualifier.valueOf(qualifierValue) != null){
+												qualifierSet.add(EntityNamePartQualifier.valueOf(qualifierValue));
+											}
+										}
+										
+										paramList.add(qualifierSet);
+ 
+									} else {
+										paramList.add(value);
+									}
 								}
 								andCount++;
 							}
