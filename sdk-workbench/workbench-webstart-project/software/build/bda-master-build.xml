@@ -52,11 +52,8 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 	<property name="common.dir" location="${software.dir}/common" />
 	<property name="local.repo.dir" location="${software.dir}/local-ivy-repo" />
 	<property name="target.dir" location="${software.dir}/target" />
-    <property name="overall.common.dir" location="../../../../common" />
-    <property name="bda-download.dir" location="${overall.common.dir}/bda-download" />
-    <property name="build-bda-template.bda-download.dir" location="${overall.common.dir}/bda-download" />
-    <echo>bda-download.dir=${bda-download.dir}</echo>
-    <echo>build-bda-template.bda-download.dir=${build-bda-template.bda-download.dir}</echo>
+    <property name="bda-download.dir" location="${common.dir}/bda-download" />
+    <property name="build-bda-template.bda-download.dir" location="${common.dir}/bda-download" />
 	<property name="ivy.settings.dir" location="${common.dir}/ivy" />
 	<property name="lib.dir" location="${target.dir}/lib" />
 	<property name="temp.dir" location="${target.dir}/temp" />
