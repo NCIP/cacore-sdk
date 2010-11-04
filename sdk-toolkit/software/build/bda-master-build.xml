@@ -140,7 +140,7 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 	<property name="bda-blueprints-webapp.src.dir" value="${bda-blueprints-webapp.base.dir}/src/web"/>
 
 
-	<!-- retrive ivy.jar.files then retrieve bda files and librarires -->
+	<!-- retrieve ivy.jar.files then retrieve bda files and libraries -->
 	<property name="commonlibrary.dir" value="" />
 	<property name="bda-download.file" value="bda-ivy-2.0.0-build.xml" />
 	
