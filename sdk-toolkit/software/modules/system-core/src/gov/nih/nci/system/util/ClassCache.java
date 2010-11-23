@@ -424,7 +424,7 @@ public class ClassCache implements InitializingBean{
 			String fieldName = field.getName();
 			String type = field.getType().getName();
 			
-			log.debug("* * *Qualified Class name: " + qualClassName + "fieldName: " + fieldName+"; fieldType: " + type);
+			log.debug("* * * Qualified Class name: " + qualClassName + "fieldName: " + fieldName+"; fieldType: " + type);
 			
 			boolean isPrimitive = field.getType().isPrimitive();
 			boolean isIsoDataType = type.startsWith("gov.nih.nci.iso21090");
@@ -442,11 +442,11 @@ public class ClassCache implements InitializingBean{
 					roleClassName = locateClass(beanName, packageName);
 					log.debug("roleClassName: " + roleClassName);
 					if (roleClassName != null) {
-						roleNames.add(roleClassName);
+						roleNames.add(fieldName + " (" + roleClassName+")");
 					}
 				} else if (!type.startsWith("java")) {
 					if (type.startsWith(packageName)) {
-						roleNames.add(type);
+						roleNames.add(fieldName + " (" + type+")");
 					} else {
 						int counter = 0;
 						for (int x = 0; x < packageName.length(); x++) {
@@ -458,7 +458,7 @@ public class ClassCache implements InitializingBean{
 								packageName.lastIndexOf("."));
 						for (int x = counter; x > 1; x--) {
 							if (type.startsWith(pkg)) {
-								roleNames.add(type);
+								roleNames.add(fieldName + " (" + type+")");
 								break;
 							}
 							pkg = pkg.substring(0, pkg.lastIndexOf("."));
@@ -484,6 +484,7 @@ public class ClassCache implements InitializingBean{
 			log.error("Exception caught: ", e);
 		}
 
+		//Convert HashSet to ArrayList
 		ArrayList<String> roles = new ArrayList<String>();
 		for (String role : roleNames) {
 			roles.add(role);
@@ -1038,13 +1039,7 @@ public class ClassCache implements InitializingBean{
 			String key = fieldName + "<" + many2OnePClass.getClassName() + ">";
 			List<Object> isoPersistentFields = new ArrayList<Object>();
 			isoPersistentFields.add(map);
-//			String tempKey = null;
-//			while (keyItr.hasNext()) {
-//				tempKey = keyItr.next();
-//			}
-//			if (tempKey != null){
-				associationPsFields.put(key, isoPersistentFields);
-//			}
+			associationPsFields.put(key, isoPersistentFields);
 		} else if (element instanceof OneToMany){
 			OneToMany oneToMany = (OneToMany) element;//prop.getValue();
 			String oneToManyPClassName = oneToMany.getReferencedEntityName();
@@ -1061,13 +1056,7 @@ public class ClassCache implements InitializingBean{
 			String key = fieldName + "<" + oneToMany.getAssociatedClass().getClassName() + ">";
 			List<Object> isoPersistentFields = new ArrayList<Object>();
 			isoPersistentFields.add(map);
-//			String tempKey = null;
-//			while (keyItr.hasNext()) {
-//				 tempKey = keyItr.next();
-//			}
-//			if (tempKey != null){
-				associationPsFields.put(key, isoPersistentFields);
-//			}
+			associationPsFields.put(key, isoPersistentFields);
 		} else {
 			log.info("ignoring :::" + elementClass.getName());
 		}
