@@ -3,9 +3,7 @@
 	xmlns:xlink="http://www.w3.org/1999/xlink" exclude-result-prefixes="xlink"
 	version="2.0">
 	<xsl:output method="html" />
-	<xsl:variable name="role">
-		simple
-	</xsl:variable>
+	<xsl:variable name="role">simple</xsl:variable>
 	<xsl:variable name="recordCounter"
 		select="/xlink:httpQuery/queryResponse/recordCounter" />
 	<xsl:variable name="start" select="/xlink:httpQuery/queryResponse/start" />
