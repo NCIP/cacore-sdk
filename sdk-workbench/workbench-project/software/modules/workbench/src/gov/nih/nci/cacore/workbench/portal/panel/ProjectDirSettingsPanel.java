@@ -44,7 +44,7 @@ public final class ProjectDirSettingsPanel implements Panel, PanelValidator {
 	private CodegenPropertiesViewer parentContainer = null;
 	
 	// Validation Message Constants
-	private static final String PROJECT_GEN_DIR = "Project Generation Directory2";	
+	private static final String PROJECT_GEN_DIR = "Project Generation Directory";	
 
 	public ProjectDirSettingsPanel(CodegenPropertiesViewer parentContainer,
 			TabbedPanePropertiesValidator mainPanelValidator) {
