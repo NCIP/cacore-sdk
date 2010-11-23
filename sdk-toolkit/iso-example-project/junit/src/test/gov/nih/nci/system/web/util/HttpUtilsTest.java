@@ -9,6 +9,7 @@ import java.io.IOException;
 import junit.framework.TestCase;
 
 import gov.nih.nci.system.applicationservice.ApplicationService;
+import gov.nih.nci.system.dao.orm.HibernateConfigurationHolder;
 import gov.nih.nci.system.util.ClassCache;
 import gov.nih.nci.system.util.SystemConstant;
 import gov.nih.nci.system.web.util.HTTPUtils;
@@ -23,11 +24,13 @@ public class HttpUtilsTest extends TestCase{
 	private static ApplicationContext ctx =  new ClassPathXmlApplicationContext(paths);;
 	private ClassCache classCache;
 	private ApplicationService applicationService;
+	protected HibernateConfigurationHolder configurationHolder;
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		applicationService = (ApplicationService) ctx.getBean("ApplicationService");
 		classCache = (ClassCache) ctx.getBean("ClassCache");
+		configurationHolder = (HibernateConfigurationHolder) ctx.getBean("HibernateConfigHolder");
 	}
 	
 	public void testExampleIDQuery() throws Exception{
@@ -375,9 +378,7 @@ public class HttpUtilsTest extends TestCase{
 	                                                                                                                    
 	private void process(String queryText,String fileName) throws Exception, IOException,
 			FileNotFoundException {
-//		HQLCriteria criteria= new HQLCriteria("select adDataType_1 from gov.nih.nci.cacoresdk.domain.other.datatype.AdDataType adDataType_1 inner join adDataType_1.value1.part_0 as adxp_0 where  (( adxp_0.value='5 Sun Street'  )) ");
-//		applicationService.query(criteria);
-		HTTPUtils httpUtils= new HTTPUtils(applicationService,classCache,1000);
+		HTTPUtils httpUtils= new HTTPUtils(applicationService,classCache,1000,configurationHolder);
 		httpUtils.setPageSize(1000);
 		httpUtils.setQueryArguments(queryText);
 		Object[] resultSet=httpUtils.getResultSet();		
