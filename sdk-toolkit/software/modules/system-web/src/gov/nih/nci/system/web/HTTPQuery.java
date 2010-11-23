@@ -1,6 +1,7 @@
 package gov.nih.nci.system.web;
 
 import gov.nih.nci.system.applicationservice.ApplicationService;
+import gov.nih.nci.system.dao.orm.HibernateConfigurationHolder;
 import gov.nih.nci.system.util.ClassCache;
 import gov.nih.nci.system.util.SystemConstant;
 import gov.nih.nci.system.web.util.HTTPUtils;
@@ -109,7 +110,8 @@ public class HTTPQuery extends HttpServlet {
 		
 		ApplicationService applicationService = (ApplicationService)ctx.getBean("ApplicationServiceImpl");
 		ClassCache classCache= (ClassCache)ctx.getBean("ClassCache");
-		HTTPUtils httpUtils = new HTTPUtils(applicationService,classCache,pageSize);
+		HibernateConfigurationHolder configurationHolder = (HibernateConfigurationHolder) ctx.getBean("HibernateConfigHolder");
+		HTTPUtils httpUtils = new HTTPUtils(applicationService,classCache,pageSize,configurationHolder);
 		String queryType = httpUtils.getQueryType(request.getRequestURL().toString());
 		
 		String query = null;
