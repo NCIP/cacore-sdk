@@ -1,6 +1,8 @@
 package gov.nih.nci.system.web.util;
 
 import gov.nih.nci.iso21090.Any;
+import gov.nih.nci.iso21090.Ii;
+import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 import gov.nih.nci.system.client.proxy.ListProxy;
 import gov.nih.nci.system.client.util.xml.JAXBISOAdapter;
@@ -12,6 +14,10 @@ import gov.nih.nci.system.client.util.xml.JAXBISOIvlIntAdapter;
 import gov.nih.nci.system.client.util.xml.JAXBISOIvlPqAdapter;
 import gov.nih.nci.system.client.util.xml.JAXBISOIvlRealAdapter;
 import gov.nih.nci.system.client.util.xml.JAXBISOIvlTsAdapter;
+import gov.nih.nci.system.dao.orm.HibernateConfigurationHolder;
+import gov.nih.nci.system.dao.orm.translator.NestedCriteria2HQL;
+import gov.nih.nci.system.query.hibernate.HQLCriteria;
+import gov.nih.nci.system.query.nestedcriteria.NestedCriteria;
 import gov.nih.nci.system.util.ClassCache;
 import gov.nih.nci.system.util.SystemConstant;
 
@@ -72,6 +78,7 @@ public class HTTPUtils implements Serializable{
 
 	private ApplicationService applicationService;
 	private ClassCache classCache;
+	private HibernateConfigurationHolder configurationHolder;
 
 	private String query;
 	private String startIndex = "0";
@@ -117,11 +124,12 @@ public class HTTPUtils implements Serializable{
 		}
 	}
 
-	public HTTPUtils(ApplicationService applicationService,ClassCache classCache,int rowCounter) {
+	public HTTPUtils(ApplicationService applicationService,ClassCache classCache,int rowCounter, HibernateConfigurationHolder configurationHolder) {
 		log.debug("rowCounter: " + rowCounter);
 		this.applicationService=applicationService;
 		this.classCache=classCache;
 		this.resultCounter = rowCounter+"";
+		this.configurationHolder = configurationHolder;
 	}
 
 	/**
@@ -620,8 +628,9 @@ public class HTTPUtils implements Serializable{
 		if(idField.getName().indexOf(SystemConstant.DOT)>0){
 			id = id.substring(id.lastIndexOf(SystemConstant.DOT)+1);
 		}
-		if(getFieldValue(idField, result) != null){
-			criteriaIdValue += String.valueOf(getFieldValue(idField, result));
+		String fieldValue = getFieldValueStr(idField, result);
+		if(fieldValue != null){
+			criteriaIdValue += fieldValue;
 		}
 		return criteriaIdValue;
 	}
@@ -723,8 +732,7 @@ public class HTTPUtils implements Serializable{
 							fieldElement.setText(" ");
 						}
 					} else {
-						Object tempFieldValue = this.getFieldValue(field,
-								result);
+						Object tempFieldValue = this.getFieldValue(field,result);
 						if (tempFieldValue != null) {
 							if(tempFieldValue instanceof Document){
 								Document childDocument=(Document)tempFieldValue;
@@ -833,6 +841,34 @@ public class HTTPUtils implements Serializable{
 		}
 		return field;
 	}
+	
+	/**
+	 * Returns a field value
+	 * @param field - specifies the field
+	 * @param domain - specifies the object
+	 * @return
+	 * @throws Exception
+	 */
+	private String getFieldValueStr(Field field, Object domain) throws Exception{
+		String value = null;
+		Object fieldValue = field.get(domain);
+		if(fieldValue != null){
+			String fieldType = field.getType().getName();
+			if(fieldType.equals("java.util.Date")){
+				SimpleDateFormat date = new SimpleDateFormat("MM-dd-yyyy");
+				value = date.format((Date)fieldValue);
+			} else if (fieldType.equals("java.lang.Integer")) {
+				value = ((Integer)fieldValue).toString();						
+			} else if(fieldType.equals("gov.nih.nci.iso21090.Ii")){
+				String extensionValue = ((Ii)fieldValue).getExtension();
+				value = "[@extension=" + extensionValue + "]";
+		
+			} else {
+				throw new Exception("Unexpected field type found while determining criteria id value: " + fieldType );
+			}
+		}
+		return value;
+	}
 	/**
 	 * Returns a field value
 	 * @param field - specifies the field
@@ -910,7 +946,7 @@ public class HTTPUtils implements Serializable{
 				counter = Integer.parseInt(resultCounter);
 			}
 			if (roleName != null) {
-				results = applicationService.getAssociation(criteria, roleName);
+				results = getAssociation(criteria, roleName);
 			} else {
 				results = applicationService.search(searchPath, criteria);
 			}
@@ -1131,4 +1167,54 @@ public class HTTPUtils implements Serializable{
 		recordNum++;
 		out.println("</TR>");
 	}
+	
+	public <E> List<E> getAssociation(Object source, String associationName) throws ApplicationException {
+		String assocType = "";
+		try{
+			assocType = classCache.getAssociationType(source.getClass(),associationName);
+		}catch(Exception e)
+		{
+			throw new ApplicationException(e);
+		}
+		String hql = "";
+		boolean isCollection = classCache.isCollection(source.getClass().getName(), associationName);
+		if(isCollection)
+			//hql = "select dest from "+assocType+" as dest,"+source.getClass().getName()+" as src where dest in elements(src."+associationName+") and src=?";
+			hql = "select dest from "+source.getClass().getName()+" as src inner join src."+associationName+" dest";
+		else
+			hql = "select dest from "+assocType+" as dest,"+source.getClass().getName()+" as src where src."+associationName+".id=dest.id";
+
+	
+		NestedCriteria nestedCriteria = new NestedCriteria();
+		nestedCriteria.setSourceObjectName(source.getClass().getName());
+		nestedCriteria.setTargetObjectName(source.getClass().getName());
+		
+		List sourceObjectList = new ArrayList();
+		sourceObjectList.add(source);
+		nestedCriteria.setSourceObjectList(sourceObjectList);
+		
+		String srcAlias = "src";
+		NestedCriteria2HQL criteria2hql = new NestedCriteria2HQL(nestedCriteria, configurationHolder.getConfiguration(), false,srcAlias);
+		
+		HQLCriteria hqlCriteria=null;
+		try {
+			hqlCriteria = criteria2hql.translate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		int beginIndex = hqlCriteria.getHqlString().lastIndexOf("where");
+		if (beginIndex > 0){
+			if (isCollection)
+				hql += " where ";
+			else
+				hql += " and ";
+			
+			hql += hqlCriteria.getHqlString().substring(beginIndex + 6);	
+		}
+		
+		hqlCriteria.setHqlString(hql);
+		
+		return applicationService.query(hqlCriteria);
+	}	
 }
