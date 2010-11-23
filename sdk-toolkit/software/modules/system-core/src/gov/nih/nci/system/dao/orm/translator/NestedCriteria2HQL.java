@@ -28,6 +28,8 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.mapping.Component;
+import org.hibernate.mapping.ManyToOne;
+import org.hibernate.mapping.OneToMany;
 import org.hibernate.mapping.PersistentClass;
 import org.hibernate.mapping.Property;
 import org.hibernate.mapping.Value;
@@ -40,8 +42,10 @@ public class NestedCriteria2HQL {
 	private static Logger log = Logger.getLogger(NestedCriteria2HQL.class);
 
 	private List<Object> paramList = new ArrayList<Object>();
-	String isoprefix = "gov.nih.nci.iso21090.";
+	private String isoprefix = "gov.nih.nci.iso21090.";
 	private Integer aliasCount = 0;
+	
+	private String srcAlias;
 
 	private final Map<String, String> partTypes = new HashMap<String, String>() {
 		private static final long serialVersionUID = 1L;
@@ -58,6 +62,14 @@ public class NestedCriteria2HQL {
 		this.cfg = cfg;
 		this.caseSensitive = caseSensitive;
 	}
+	
+	public NestedCriteria2HQL(NestedCriteria crit, Configuration cfg,
+			boolean caseSensitive, String srcAlias) {
+		this.criteria = crit;
+		this.cfg = cfg;
+		this.caseSensitive = caseSensitive;
+		this.srcAlias = srcAlias;
+	}	
 
 	public HQLCriteria translate() throws Exception {
 		StringBuffer hql = new StringBuffer();
@@ -120,7 +132,7 @@ public class NestedCriteria2HQL {
 		}
 		String targetObjectName = criteria.getTargetObjectName();
 		String destAlias = getAlias(targetObjectName, 1);
-
+		
 		if (sourceObjectList.size() == 1) {
 			log.debug("Scenario1: Processing single object in source object list");
 			Object sourceObject = sourceObjectList.iterator().next();
@@ -594,7 +606,7 @@ public class NestedCriteria2HQL {
 		// Check if the target contains any CLOB. If yes then do a subselect
 		// with distinct else do plain distinct
 		//
-		String destalias = getAlias(criteria.getTargetObjectName(), 1);
+		String destAlias = getAlias(criteria.getTargetObjectName(), 1);
 		String countQ = "";
 		String normalQ = "";
 		String originalQ = hql.toString();
@@ -602,22 +614,22 @@ public class NestedCriteria2HQL {
 		// never comes to else code, as a part of legacy code,not removed.
 		if (!distinctRequired) {
 			if (inRequired()) {
-				String modifiedQ = originalQ.replaceFirst(destalias, destalias
+				String modifiedQ = originalQ.replaceFirst(destAlias, destAlias
 						+ ".id");
 				String suffix = "from " + criteria.getTargetObjectName()
-						+ " as " + destalias + " where " + destalias
+						+ " as " + destAlias + " where " + destAlias
 						+ ".id in (" + modifiedQ + ")";
-				normalQ = "select " + destalias + " " + suffix;
+				normalQ = "select " + destAlias + " " + suffix;
 				countQ = "select count(*) " + suffix;
 			} else {
 				normalQ = originalQ;
 				countQ = getCountQuery(originalQ);
 			}
 		} else {
-			normalQ = originalQ.replaceFirst("select " + destalias,
-					"select distinct (" + destalias + ") ");
-			countQ = originalQ.replaceFirst("select " + destalias,
-					"select count(distinct " + destalias + ".id) ");
+			normalQ = originalQ.replaceFirst("select " + destAlias,
+					"select distinct (" + destAlias + ") ");
+			countQ = originalQ.replaceFirst("select " + destAlias,
+					"select count(distinct " + destAlias + ".id) ");
 		}
 		log.debug("****** NormalQ: " + normalQ);
 		log.debug("****** CountQ: " + countQ);
@@ -862,8 +874,32 @@ public class NestedCriteria2HQL {
 					queryAppender, andCount, aliasSetBuffer, rootKlassAttr);
 		} else if (componentValue.getClass().isAssignableFrom(
 				org.hibernate.mapping.Set.class)) {
+			
 			org.hibernate.mapping.Set set = (org.hibernate.mapping.Set) componentValue;
-			Component component = (Component) set.getElement();
+			
+			Object element = set.getElement();
+			Object component = null;
+
+			if (element instanceof Component) {
+				component = element;
+	 		} else if (element instanceof ManyToOne){
+				ManyToOne manyToOne = (ManyToOne)element;
+				String many2OnePClassName = manyToOne.getReferencedEntityName();
+				if (!many2OnePClassName.startsWith("_xxEntityxx_gov_nih_nci_cacoresdk_domain_other_datatype")) {
+					throw new Exception("Unsupported Entity type detected.  Expected:  '_xxEntityxx_gov_nih_nci_cacoresdk_domain_other_datatype*', found:   " + many2OnePClassName);
+				}
+				component = cfg.getClassMapping(many2OnePClassName);			
+			} else if (element instanceof OneToMany){
+				OneToMany oneToMany = (OneToMany) element;
+				String oneToManyPClassName = oneToMany.getReferencedEntityName();
+				if (!oneToManyPClassName.startsWith("_xxEntityxx_gov_nih_nci_cacoresdk_domain_other_datatype")) {
+					throw new Exception("Unsupported Entity type detected.  Expected:  '_xxEntityxx_gov_nih_nci_cacoresdk_domain_other_datatype*', found:   " + oneToManyPClassName);
+				}
+				component = cfg.getClassMapping(oneToManyPClassName);
+			} else {
+				throw new Exception("Unsupported ISO Data Type AD component detected:  " + element.getClass().getName());
+			}
+			
 			resolveISOWhereQueryForAd((List) value, newQuery, component,
 					whereQueryClause, queryAppender, andCount, aliasSetBuffer,
 					rootKlassAttr);
@@ -943,7 +979,7 @@ public class NestedCriteria2HQL {
 	}
 
 	private void resolveISOWhereQueryForAd(List<? extends Object> valueList,
-			StringBuffer newQuery, Component componentValue,
+			StringBuffer newQuery, Object componentValue,
 			StringBuffer whereQueryClause, String queryAppender,
 			Integer andCount, StringBuffer aliasSetBuffer, String rootKlassAttr)
 			throws Exception {
@@ -964,10 +1000,15 @@ public class NestedCriteria2HQL {
 					"type");
 			partInstanceObjectField.setAccessible(true);
 			Object partType = partInstanceObjectField.get(object);
-			Component partComponent = (Component) componentValue;
+			
+			Iterator<Property> propertyItr = null;
+			if (componentValue instanceof Component){
+				propertyItr = ((Component)componentValue).getPropertyIterator();
+			} else if (componentValue instanceof PersistentClass){
+				propertyItr = ((PersistentClass)componentValue).getPropertyIterator();
+			}
+
 			@SuppressWarnings("unchecked")
-			Iterator<Property> propertyItr = partComponent
-					.getPropertyIterator();
 			boolean isValidPartType = false;
 			while (propertyItr.hasNext()) {
 				Property property = propertyItr.next();
@@ -995,6 +1036,76 @@ public class NestedCriteria2HQL {
 					}
 					Value persistChildvalue = locateComponent(componentValue,
 							partName);
+					int index = partName.indexOf('_');
+					String componentPartName = partName.substring(index,
+							partName.length());
+					tempNewQuery.append(componentPartName);
+					String parentheses = "";
+					generateISOWhereQuery(object, tempNewQuery,
+							whereQueryClause, persistChildvalue, parentheses,
+							queryAppender, andCount++, aliasSetBuffer,
+							rootKlassAttr);
+					isValidPartType = true;
+					break;
+				}
+			}
+			if (!isValidPartType) {
+				throw new Exception(" Invalid Address PartType " + partType
+						+ "  specified in RESTfulQuery");
+			}
+		}
+	}
+	
+	private void resolveISOWhereQueryForDsetAdMany2One(List<? extends Object> valueList,
+			StringBuffer newQuery, PersistentClass componentValue,
+			StringBuffer whereQueryClause, String queryAppender,
+			Integer andCount, StringBuffer aliasSetBuffer, String rootKlassAttr)
+			throws Exception {
+
+		Map<String, Set<String>> addressPartTypeMap = new HashMap<String, Set<String>>();
+		for (Object object : valueList) {
+			
+			Adxp adxp = (Adxp)object;
+			if (adxp.getType() != null && (adxp.getCode() == null && adxp.getCodeSystem() == null && adxp.getValue() == null))
+				throw new Exception("If Address Part type is specified, the Address Part code, code system, and / or value must also be specified");
+			
+			if (adxp.getType() == null && (adxp.getCode() != null || adxp.getCodeSystem() != null || adxp.getValue() != null))
+				throw new Exception("If Address Part code, code system, or value is specified, Address Part type must also be specified");
+			
+			Field partInstanceObjectField = null;
+			StringBuffer tempNewQuery = new StringBuffer(newQuery.toString());
+			partInstanceObjectField = getDeclaredField(object.getClass(),"type");
+			partInstanceObjectField.setAccessible(true);
+			Object partType = partInstanceObjectField.get(object);
+			//Component partComponent = (Component) componentValue;
+			@SuppressWarnings("unchecked")
+			Iterator<Property> propertyItr = componentValue.getPropertyIterator();
+			boolean isValidPartType = false;
+			while (propertyItr.hasNext()) {
+				Property property = propertyItr.next();
+				String partName = property.getName();
+				Component psComp = (Component) property.getValue();
+				String psCompClassName = psComp.getComponentClassName();
+				String partTypeClassName = partType.getClass().getName();
+				String partTypeName = partTypes.get(partTypeClassName)
+						+ partType;
+
+				if (psCompClassName.equalsIgnoreCase(partTypeName)) {
+					// search for matching part name (part_0,part_1,part_2 etc)
+					if (addressPartTypeMap.keySet().contains(partTypeName)) {
+						Set<String> parts = addressPartTypeMap
+								.get(partTypeName);
+						if (parts.contains(partName)) {
+							continue;
+						} else {
+							parts.add(partName);
+						}
+					} else {
+						Set<String> parts = new HashSet<String>();
+						parts.add(partName);
+						addressPartTypeMap.put(partTypeName, parts);
+					}
+					Value persistChildvalue = locateComponent(componentValue,partName);
 					int index = partName.indexOf('_');
 					String componentPartName = partName.substring(index,
 							partName.length());
@@ -1164,7 +1275,10 @@ public class NestedCriteria2HQL {
 	private String getHQLQueryFromSourceObjectWithCriterion(Object obj,
 			Configuration cfg, boolean skipAssociations, String parentClass,
 			String parentRoleName) throws Exception {
-		String srcAlias = getAlias(obj.getClass().getName(), 1);
+			
+		String srcAlias=this.srcAlias;
+		if (this.srcAlias == null)
+			srcAlias = getAlias(obj.getClass().getName(), 1);
 
 		StringBuffer hql = new StringBuffer();
 		Map<String, Object> associationCritMap = null;
