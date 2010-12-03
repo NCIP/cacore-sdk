@@ -873,13 +873,40 @@ public class ClassCache implements InitializingBean{
 	@SuppressWarnings("unchecked")
 	private Map<String, List<Object>> getISOPropertiesForObject(
 			PersistentClass pclass, Configuration cfg) {
+		
 		Map<String, List<Object>> isoFieldsMap = new HashMap<String, List<Object>>();
-		Iterator<? extends Object> properties = pclass.getPropertyIterator();
-		while (properties.hasNext()) {
-			Property prop = (Property) properties.next();
-			List<Object> searchableFields = getPersistentFieldsForISOObject(prop,cfg);
-			isoFieldsMap.put(prop.getName(), searchableFields);
+		
+		if (pclass.getEntityName().startsWith("_xxEntityxx_gov_nih_nci_cacoresdk_domain_other_datatype")){
+			Iterator<? extends Object> properties = pclass.getPropertyIterator();
+			while (properties != null && properties.hasNext()) {
+				Property prop = (Property) properties.next();
+				List<Object> searchableFields = getPersistentFieldsForISOObject(prop,cfg);
+				isoFieldsMap.put(prop.getName(), searchableFields);
+			}
+		} else {
+			Class klass;
+			try {
+				klass = Class.forName(pclass.getClassName());
+			} catch (ClassNotFoundException e) {
+				log.error("Error:  Class not found for: "+pclass.getClassName(), e);
+				
+				return isoFieldsMap;
+			}
+			
+			while (!klass.getName().equals("java.lang.Object")) {
+				pclass = cfg.getClassMapping(klass.getName()); 
+				if (pclass != null){
+					Iterator<? extends Object> properties = pclass.getPropertyIterator();
+					while (properties != null && properties.hasNext()) {
+						Property prop = (Property) properties.next();
+						List<Object> searchableFields = getPersistentFieldsForISOObject(prop,cfg);
+						isoFieldsMap.put(prop.getName(), searchableFields);
+					}
+				}
+				klass = klass.getSuperclass();
+			}
 		}
+
 		return isoFieldsMap;
 	}
 	
