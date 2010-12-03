@@ -252,134 +252,134 @@ public class EnDataTypeTest extends SDKISOTestBase{
 	 * @throws ApplicationException 
 	 */
 	@SuppressWarnings("unchecked")
-	public void testEnValue5ByDetachedCriteria() throws ApplicationException
-	{
-		DetachedCriteria criteria = DetachedCriteria.forClass(EnDataType.class);
-		criteria.add(Restrictions.or(Property.forName("value5.part_0.value").isNotNull(), Property.forName("value5.part_1.value").isNotNull()));
-
-		Collection<EnDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.EnDataType");
-		assertNotNull(result);
-		assertEquals(12, result.size());
-		List indexList = new ArrayList();
-		indexList.add("22");
-		indexList.add("23");
-		indexList.add("24");
-		indexList.add("25");
-		indexList.add("26");
-		indexList.add("27");
-		indexList.add("28");
-		indexList.add("29");
-		indexList.add("30");
-		indexList.add("31");
-		indexList.add("32");
-		indexList.add("33");
-		assertValue5(result, indexList);
-	}
+//	public void testEnValue5ByDetachedCriteria() throws ApplicationException
+//	{
+//		DetachedCriteria criteria = DetachedCriteria.forClass(EnDataType.class);
+//		criteria.add(Restrictions.or(Property.forName("value5.part_0.value").isNotNull(), Property.forName("value5.part_1.value").isNotNull()));
+//
+//		Collection<EnDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.EnDataType");
+//		assertNotNull(result);
+//		assertEquals(12, result.size());
+//		List indexList = new ArrayList();
+//		indexList.add("22");
+//		indexList.add("23");
+//		indexList.add("24");
+//		indexList.add("25");
+//		indexList.add("26");
+//		indexList.add("27");
+//		indexList.add("28");
+//		indexList.add("29");
+//		indexList.add("30");
+//		indexList.add("31");
+//		indexList.add("32");
+//		indexList.add("33");
+//		assertValue5(result, indexList);
+//	}
 
 	/**
 	 * Search Value4 by HQL criteria Test
 	 * 
 	 * @throws ApplicationException 
 	 */
-	@SuppressWarnings("unchecked")
-	public void testEnValue5ByHQLCriteria() throws ApplicationException
-	{
-		@SuppressWarnings("unused")
-		List params = new ArrayList(1);
-		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.EnDataType a where (a.value5.part_0.value is not null or a.value5.part_1.value is not null)  order by a.id asc");
-		Collection<EnDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.EnDataType");
-		assertEquals(12, result.size());
-		List indexList = new ArrayList();
-		indexList.add("22");
-		indexList.add("23");
-		indexList.add("24");
-		indexList.add("25");
-		indexList.add("26");
-		indexList.add("27");
-		indexList.add("28");
-		indexList.add("29");
-		indexList.add("30");
-		indexList.add("31");
-		indexList.add("32");
-		indexList.add("33");
-		assertValue5(result, indexList);
-	}
+//	@SuppressWarnings("unchecked")
+//	public void testEnValue5ByHQLCriteria() throws ApplicationException
+//	{
+//		@SuppressWarnings("unused")
+//		List params = new ArrayList(1);
+//		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.EnDataType a where (a.value5.part_0.value is not null or a.value5.part_1.value is not null)  order by a.id asc");
+//		Collection<EnDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.EnDataType");
+//		assertEquals(12, result.size());
+//		List indexList = new ArrayList();
+//		indexList.add("22");
+//		indexList.add("23");
+//		indexList.add("24");
+//		indexList.add("25");
+//		indexList.add("26");
+//		indexList.add("27");
+//		indexList.add("28");
+//		indexList.add("29");
+//		indexList.add("30");
+//		indexList.add("31");
+//		indexList.add("32");
+//		indexList.add("33");
+//		assertValue5(result, indexList);
+//	}
 
 	/**
 	 * Search Value6 by detached criteria Test
 	 * 
 	 * @throws ApplicationException 
 	 */
-	@SuppressWarnings("unchecked")
-	public void testEnValue6ByDetachedCriteria() throws ApplicationException
-	{
-		DetachedCriteria criteria = DetachedCriteria.forClass(EnDataType.class);
-		criteria.add(Restrictions.or(Property.forName("value6.part_0.value").isNotNull(), Property.forName("value6.part_1.value").isNotNull()));
-
-		Collection<EnDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.EnDataType");
-		assertNotNull(result);
-		assertEquals(12, result.size());
-		List indexList = new ArrayList();
-		indexList.add("34");
-		indexList.add("35");
-		indexList.add("36");
-		indexList.add("37");
-		indexList.add("38");
-		indexList.add("39");
-		indexList.add("40");
-		indexList.add("41");
-		indexList.add("42");
-		indexList.add("43");
-		indexList.add("44");
-		indexList.add("45");
-		assertValue6(result, indexList);
-	}
+//	@SuppressWarnings("unchecked")
+//	public void testEnValue6ByDetachedCriteria() throws ApplicationException
+//	{
+//		DetachedCriteria criteria = DetachedCriteria.forClass(EnDataType.class);
+//		criteria.add(Restrictions.or(Property.forName("value6.part_0.value").isNotNull(), Property.forName("value6.part_1.value").isNotNull()));
+//
+//		Collection<EnDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.EnDataType");
+//		assertNotNull(result);
+//		assertEquals(12, result.size());
+//		List indexList = new ArrayList();
+//		indexList.add("34");
+//		indexList.add("35");
+//		indexList.add("36");
+//		indexList.add("37");
+//		indexList.add("38");
+//		indexList.add("39");
+//		indexList.add("40");
+//		indexList.add("41");
+//		indexList.add("42");
+//		indexList.add("43");
+//		indexList.add("44");
+//		indexList.add("45");
+//		assertValue6(result, indexList);
+//	}
 
 	/**
 	 * Search Value6 by HQL criteria Test
 	 * 
 	 * @throws ApplicationException 
 	 */
-	@SuppressWarnings("unchecked")
-	public void testEnValue6ByHQLCriteria() throws ApplicationException
-	{
-		@SuppressWarnings("unused")
-		List params = new ArrayList(1);
-		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.EnDataType a where (a.value6.part_0.value is not null or a.value6.part_1.value is not null)  order by a.id asc");
-		Collection<EnDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.EnDataType");
-		assertEquals(12, result.size());
-		List indexList = new ArrayList();
-		indexList.add("34");
-		indexList.add("35");
-		indexList.add("36");
-		indexList.add("37");
-		indexList.add("38");
-		indexList.add("39");
-		indexList.add("40");
-		indexList.add("41");
-		indexList.add("42");
-		indexList.add("43");
-		indexList.add("44");
-		indexList.add("45");
-		assertValue6(result, indexList);
-	}
+//	@SuppressWarnings("unchecked")
+//	public void testEnValue6ByHQLCriteria() throws ApplicationException
+//	{
+//		@SuppressWarnings("unused")
+//		List params = new ArrayList(1);
+//		HQLCriteria criteria = new HQLCriteria("from gov.nih.nci.cacoresdk.domain.other.datatype.EnDataType a where (a.value6.part_0.value is not null or a.value6.part_1.value is not null)  order by a.id asc");
+//		Collection<EnDataType> result = search(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.EnDataType");
+//		assertEquals(12, result.size());
+//		List indexList = new ArrayList();
+//		indexList.add("34");
+//		indexList.add("35");
+//		indexList.add("36");
+//		indexList.add("37");
+//		indexList.add("38");
+//		indexList.add("39");
+//		indexList.add("40");
+//		indexList.add("41");
+//		indexList.add("42");
+//		indexList.add("43");
+//		indexList.add("44");
+//		indexList.add("45");
+//		assertValue6(result, indexList);
+//	}
 /**
 	 * Test all rows and columns
 	 * 
 	 * @throws ApplicationException 
 	 */
-	@SuppressWarnings("unchecked")
-	public void testEnValue() throws ApplicationException
-	{
-		EnDataType searchObject = new EnDataType();
-		Collection<EnDataType> result = search("gov.nih.nci.cacoresdk.domain.other.datatype.EnDataType",searchObject );
-		assertValue1(result, null);
-		assertValue2(result, null);
-		assertValue3(result, null);
-		assertValue4(result, null);
-		assertValue5(result, null);
-		assertValue6(result, null);
-	}
+//	@SuppressWarnings("unchecked")
+//	public void testEnValue() throws ApplicationException
+//	{
+//		EnDataType searchObject = new EnDataType();
+//		Collection<EnDataType> result = search("gov.nih.nci.cacoresdk.domain.other.datatype.EnDataType",searchObject );
+//		assertValue1(result, null);
+//		assertValue2(result, null);
+//		assertValue3(result, null);
+//		assertValue4(result, null);
+//		assertValue5(result, null);
+//		assertValue6(result, null);
+//	}
 	
 	private void assertValue1(Collection<EnDataType> result, List<Integer> index)
 	{
