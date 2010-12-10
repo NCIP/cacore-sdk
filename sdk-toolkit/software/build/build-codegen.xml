@@ -636,6 +636,7 @@
 	</target>
 
 	<target name="dist" description="target to package-system">
+		<mkdir dir="${dist.exploded.dir}"/>
 		<copy todir="${dist.exploded.dir}">
 			<fileset dir="${basedir}">
 				<include name="*-reconfigure.xml" />
