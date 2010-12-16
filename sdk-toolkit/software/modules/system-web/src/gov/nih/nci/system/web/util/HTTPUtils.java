@@ -862,9 +862,12 @@ public class HTTPUtils implements Serializable{
 			} else if(fieldType.equals("gov.nih.nci.iso21090.Ii")){
 				String extensionValue = ((Ii)fieldValue).getExtension();
 				value = "[@extension=" + extensionValue + "]";
-		
 			} else {
-				throw new Exception("Unexpected field type found while determining criteria id value: " + fieldType );
+				try {
+					value = fieldValue.toString();
+				} catch (Exception e) {
+					throw new Exception("Unexpected field type found while determining criteria id value: " + fieldType );
+				}
 			}
 		}
 		return value;
