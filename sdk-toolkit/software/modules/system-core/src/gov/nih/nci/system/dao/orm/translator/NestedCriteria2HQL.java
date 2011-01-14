@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.hibernate.MappingException;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.mapping.Component;
 import org.hibernate.mapping.ManyToOne;
@@ -697,6 +698,8 @@ public class NestedCriteria2HQL {
 	}
 
 	private Value locateComponent(Object pV, String key) {
+		Value value;
+		try {
 		Property property = null;
 		if (pV instanceof Component) {
 			property = ((Component) pV).getProperty(key);
@@ -706,7 +709,11 @@ public class NestedCriteria2HQL {
 		if (property == null) {
 			return null;
 		}
-		Value value = property.getValue();
+			value = property.getValue();
+		} catch (MappingException e) {
+			log.warn("Skipping processing of Hibernate mapping property " + key, e);
+			value = null;
+		}
 		return value;
 	}
 
@@ -777,8 +784,9 @@ public class NestedCriteria2HQL {
 						} else {
 							if (fieldName.equals("partRestriction"))
 								continue;
-							Value persistChildvalue = locateComponent(
-									componentValue, fieldName);
+							Value persistChildvalue = locateComponent(componentValue, fieldName);
+							if (persistChildvalue == null) //Hibernate Mapping component was not found - skip processing of field
+								continue;
 							if (isoObject & !isEnumObject) {
 								parentheses = "";
 								generateISOWhereQuery(value, newQuery,
@@ -965,8 +973,7 @@ public class NestedCriteria2HQL {
 						partName.length());
 				tempNewQuery.append(componentPartName);
 				String parentheses = "";
-				Value persistChildvalue = locateComponent(componentValue,
-						partName);
+				Value persistChildvalue = locateComponent(componentValue,partName);
 				generateISOWhereQuery(enxp, tempNewQuery, whereQueryClause,
 						persistChildvalue, parentheses, queryAppender,
 						andCount++, aliasSetBuffer, rootKlassAttr);
@@ -1034,8 +1041,7 @@ public class NestedCriteria2HQL {
 						parts.add(partName);
 						addressPartTypeMap.put(partTypeName, parts);
 					}
-					Value persistChildvalue = locateComponent(componentValue,
-							partName);
+					Value persistChildvalue = locateComponent(componentValue,partName);
 					int index = partName.indexOf('_');
 					String componentPartName = partName.substring(index,
 							partName.length());
