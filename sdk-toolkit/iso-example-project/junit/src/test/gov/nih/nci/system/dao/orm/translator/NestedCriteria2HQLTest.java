@@ -16,6 +16,9 @@ import gov.nih.nci.iso21090.En;
 import gov.nih.nci.iso21090.EntityNamePartType;
 import gov.nih.nci.iso21090.Enxp;
 import gov.nih.nci.iso21090.Ii;
+import gov.nih.nci.system.applicationservice.ApplicationException;
+import gov.nih.nci.system.applicationservice.ApplicationService;
+import gov.nih.nci.system.client.ApplicationServiceProvider;
 import gov.nih.nci.system.dao.orm.HibernateConfigurationHolder;
 import gov.nih.nci.system.dao.orm.translator.NestedCriteria2HQL;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
@@ -31,10 +34,12 @@ public class NestedCriteria2HQLTest extends TestCase {
 	private static ApplicationContext ctx = new ClassPathXmlApplicationContext(
 			paths);;
 	protected HibernateConfigurationHolder configurationHolder;
+	private ApplicationService appService;
 
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
+		appService = ApplicationServiceProvider.getApplicationService();
 		configurationHolder = (HibernateConfigurationHolder) ctx
 				.getBean("HibernateConfigHolder");
 	}
@@ -128,7 +133,7 @@ public class NestedCriteria2HQLTest extends TestCase {
 		String expectedHQL = "select enDataType_1 from gov.nih.nci.cacoresdk.domain.other.datatype.EnDataType as enDataType_1 where enDataType_1.id in (select enDataType_1.id from gov.nih.nci.cacoresdk.domain.other.datatype.EnDataType enDataType_1 where lower(enDataType_1.value1.part_0.value )=?  and lower(enDataType_1.value2.part_0.value )=? )";
 		assertEquals(expectedHQL, hqlCriteria.getHqlString());
 	}
-	
+
 	public void testEnDataTypeValue2AndValue1Exception() throws Exception {
 		NestedCriteria criteria = new NestedCriteria();
 		criteria.setSourceObjectName("gov.nih.nci.cacoresdk.domain.other.datatype.EnDataType");
@@ -152,8 +157,8 @@ public class NestedCriteria2HQLTest extends TestCase {
 					ex.getMessage());
 		}
 	}
-	
-	
+
+
 	public void testEnDataTypeValue4() throws Exception {
 		NestedCriteria criteria = new NestedCriteria();
 		criteria.setSourceObjectName("gov.nih.nci.cacoresdk.domain.other.datatype.EnDataType");
@@ -169,9 +174,9 @@ public class NestedCriteria2HQLTest extends TestCase {
 		String expectedHQL = "select enDataType_1 from gov.nih.nci.cacoresdk.domain.other.datatype.EnDataType as enDataType_1 where enDataType_1.id in (select enDataType_1.id from gov.nih.nci.cacoresdk.domain.other.datatype.EnDataType enDataType_1 where lower(enDataType_1.value4.part_0.value )=? )";
 		assertEquals(expectedHQL, hqlCriteria.getHqlString());
 	}
-	
+
 	private En getEn() {
-		En en=new En(); 
+		En en=new En();
 		Enxp partInstance=new Enxp();
 		partInstance.setType(EntityNamePartType.FAM);
 		partInstance.setValue("ENXP Code System");
@@ -194,4 +199,58 @@ public class NestedCriteria2HQLTest extends TestCase {
 		dsetAdDataType.setValue1(dSet);
 		return dsetAdDataType;
 	}
+
+	public void testQueryWithDistinct() throws ApplicationException
+	{
+		HQLCriteria criteria = new HQLCriteria("select distinct(id) from gov.nih.nci.cacoresdk.domain.other.datatype.BlDataType");
+		Collection<BlDataType> result = appService.query(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.BlDataType");
+		assert(result.size() > 0 );
+	}
+
+	public void testCountWithDistinct() throws ApplicationException
+	{
+		String sql = "select distinct (id) from gov.nih.nci.cacoresdk.domain.other.datatype.BlDataType";
+		HQLCriteria criteria = new HQLCriteria(NestedCriteria2HQL.getCountQuery(sql));
+		Collection<BlDataType> result = appService.query(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.BlDataType");
+		assert(result.size() > 0 );
+	}
+
+	public void testCountWithDistinct2() throws ApplicationException
+	{
+		String sql = "select distinct id) from gov.nih.nci.cacoresdk.domain.other.datatype.BlDataType";
+		HQLCriteria criteria = new HQLCriteria(NestedCriteria2HQL.getCountQuery(sql));
+		Collection<BlDataType> result = appService.query(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.BlDataType");
+		assert(result.size() > 0 );
+	}
+
+	public void testCountWithDistinct3() throws ApplicationException
+	{
+		String sql = "select distinct (id from gov.nih.nci.cacoresdk.domain.other.datatype.BlDataType";
+		HQLCriteria criteria = new HQLCriteria(NestedCriteria2HQL.getCountQuery(sql));
+		Collection<BlDataType> result = appService.query(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.BlDataType");
+		assert(result.size() > 0 );
+	}
+
+	public void testCountWithDistinct4() throws ApplicationException
+	{
+		String sql = "select distinct(id) from gov.nih.nci.cacoresdk.domain.other.datatype.BlDataType";
+		HQLCriteria criteria = new HQLCriteria(NestedCriteria2HQL.getCountQuery(sql));
+			Collection<BlDataType> result = appService.query(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.BlDataType");
+			assert(result.size() > 0 );
+	}
+
+	public void testFailCountWithDistinctBraces()
+	{
+		HQLCriteria criteria = new HQLCriteria("select count(distinct (id)) from gov.nih.nci.cacoresdk.domain.other.datatype.BlDataType");
+		try {
+			Collection<BlDataType> result = appService.query(criteria, "gov.nih.nci.cacoresdk.domain.other.datatype.BlDataType");
+			assert(1>10);
+		} catch (ApplicationException e) {
+			assert(1==1);
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+		}
+
+	}
+
 }
