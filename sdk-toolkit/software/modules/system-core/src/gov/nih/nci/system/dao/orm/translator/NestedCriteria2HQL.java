@@ -554,30 +554,6 @@ public class NestedCriteria2HQL {
 		return modifiedHQL;
 	}
 
-/*
-	public static String getCountQuery(String hql) {
-		String upperHQL = hql.toUpperCase();
-		String modifiedHQL = "";
-		int firstSelectIndex = upperHQL.indexOf("SELECT");
-		int firstFromIndex = upperHQL.indexOf("FROM");
-		if ((firstSelectIndex >= 0) && (firstSelectIndex < firstFromIndex)) {
-			String projections = hql.substring(
-					firstSelectIndex + "SELECT".length(), firstFromIndex);
-			String[] tokens = projections.split(",");
-			modifiedHQL = hql
-					.substring(0, firstSelectIndex + "SELECT".length())
-					+ " count("
-					+ tokens[0].trim()
-					+ ") "
-					+ hql.substring(firstFromIndex);
-		} else {
-			modifiedHQL = hql.substring(0, firstFromIndex)
-					+ " select count(*) " + hql.substring(firstFromIndex);
-		}
-		return modifiedHQL;
-	}
-
-*/
 	@SuppressWarnings("rawtypes")
 	private boolean checkClobAttribute(String objClassName) {
 		PersistentClass pclass = cfg.getClassMapping(objClassName);
