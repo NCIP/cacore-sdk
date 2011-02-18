@@ -10,6 +10,8 @@ import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.query.cql.CQLObject;
 import gov.nih.nci.system.query.cql.CQLQuery;
 
+import com.sun.xml.bind.CycleRecoverable;
+
 import java.io.Serializable;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -103,6 +105,7 @@ public class InterfaceTest extends SDKTestBase
 	{
 		List<Class> implementedInterfaces = new ArrayList<Class>();
 		implementedInterfaces.add(Serializable.class);
+		implementedInterfaces.add(CycleRecoverable.class);		
 		implementedInterfaces.add(Canidae.class);
 		implementedInterfaces.add(Pet.class);
 		
