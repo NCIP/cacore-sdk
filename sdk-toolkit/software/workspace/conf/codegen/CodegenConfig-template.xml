@@ -86,6 +86,7 @@
 		<constructor-arg>
 			<list>
 				<value>all</value>
+				<value>all-delete-orphan</value>				
 				<value>delete</value>
 				<value>delete-orphan</value>
 				<value>evict</value>

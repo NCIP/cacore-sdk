@@ -1389,7 +1389,7 @@ public class TransformerUtils
 		{
 			UMLClass client = (UMLClass) dependency.getClient();
 			
-			log.debug("getTable: klass: " + klass.getName() + "Client stereotype: " +client.getStereotype() + "; dependency stereotype: " + dependency.getStereotype());
+			log.debug("getTable: klass: " + klass.getName() + "; Client stereotype: " +client.getStereotype() + "; dependency stereotype: " + dependency.getStereotype());
 			if(STEREO_TYPE_TABLE.equalsIgnoreCase(client.getStereotype()) && STEREO_TYPE_DATASOURCE_DEPENDENCY.equalsIgnoreCase(dependency.getStereotype()))
 			{
 				log.debug("* * * client.getName(): " + client.getName());
@@ -1400,9 +1400,18 @@ public class TransformerUtils
 		
 		count = clientMap.size();
 
-		if(count!=1){
+		if(count<1){
 			log.debug("getTable: klass: " +klass.getName()+"; count: " + count);
-			throw new GenerationException("No table found for : "+getFQCN(klass)+".  Make sure the corresponding Data Model table (class) has a 'table' Stereotype assigned, and the Dependency between the Data Model table and Logical Model class has a 'DataSource' Stereotype assigned.");
+			GenerationException ge = new GenerationException("No table found for : "+getFQCN(klass)+".  Make sure the corresponding Data Model table (class) has a 'table' Stereotype assigned, and the Dependency between the Data Model table and Logical Model class has a 'DataSource' Stereotype assigned.");
+			log.debug(ge);
+			throw ge;
+		}
+		
+		if(count>1){
+			log.debug("getTable: klass: " +klass.getName()+"; count: " + count);
+			GenerationException ge = new GenerationException("More than one table found for : "+getFQCN(klass)+".  Make sure there is only one corresponding Data Model table (class) that has a 'table' Stereotype assigned, and the Dependency between the Data Model table and Logical Model class has a 'DataSource' Stereotype assigned.");
+			log.error(ge);
+			throw ge;
 		}
 
 		
@@ -1500,7 +1509,12 @@ public class TransformerUtils
 		if(!throwException && (tableName == null || tableName.length() ==0)) return null;
 		
 		UMLClass correlationTable = ModelUtil.findClass(model,BASE_PKG_DATA_MODEL+"."+tableName);
-		if(correlationTable == null) throw new GenerationException("No correlation table found named : \""+tableName+"\"");
+		if(correlationTable == null) {
+			List<UMLAssociationEnd> assocEnds = association.getAssociationEnds();
+			UMLAssociationEnd otherEnd = getOtherEnd(klass,assocEnds);
+			UMLAssociationEnd thisEnd = getThisEnd(klass,assocEnds);
+			throw new GenerationException("No correlation table found named : \""+tableName+"\".  Check the 'correlation-table' tag value assigned the association link attached to class " + getFQCN(klass) + " with rolenames '" + otherEnd.getRoleName() + "' and '" + thisEnd.getRoleName() + "'.");
+		}
 		
 		return correlationTable;
 	}
@@ -1597,6 +1611,8 @@ public class TransformerUtils
 	
 	public String findDiscriminatingColumnName(UMLClass klass) throws GenerationException
 	{
+		log.debug("**** Finding Discriminating Column Name for class : " + getFQCN(klass));
+		
 		UMLClass superKlass = klass;
 		
 		UMLClass temp = klass;
@@ -1610,17 +1626,20 @@ public class TransformerUtils
 
 	public String getDiscriminatorValue(UMLClass klass) throws GenerationException
 	{
+		log.debug("**** Getting Discriminator Value for class : " + getFQCN(klass));
 		return getTagValue(klass,TV_DISCR_COLUMN,null, 1,1);
 	}
 	
 	public String getRootDiscriminatorValue(UMLClass klass) throws GenerationException
 	{
+		log.debug("**** Getting Root Discriminator Value for class : " + getFQCN(klass));
+		
 		return getTagValue(klass,TV_DISCR_COLUMN,null,0,1);
 	}
 	
 	public String getImplicitDiscriminatorColumn(UMLClass table, UMLClass klass, String roleName) throws GenerationException
 	{
-		log.debug("**** getImplicitDiscriminator: table: " + table.getName() +"; klass: " + klass.getName() +"; roleName: " + roleName);
+		log.debug("**** Getting Implicit Discriminator Column for table: " + table.getName() +"; klass: " + klass.getName() +"; roleName: " + roleName);
 		return getColumnName(table,TV_DISCR_COLUMN,getFQCN(klass)+"."+roleName,false,1,1);
 	}
 	
@@ -1633,8 +1652,12 @@ public class TransformerUtils
 	{
 		String temp = getTagValue(klass,association, TV_LAZY_LOAD,null, 0,1);
 		
-		if (temp != null)
-			throw new GenerationException("Invalid Tag Value found:  The '" + TV_LAZY_LOAD + "' Tag Value which is attached to the association link has been replaced with the '" + TV_NCI_EAGER_LOAD + "' Tag Value.  Also, it's value must now conform to the following pattern:  "+TV_NCI_EAGER_LOAD+"#<fully qualified class name>.<role name>.  The value of the tag continues to be 'yes' or 'no'.  Please update your model accordingly" );
+		if (temp != null) {
+			List<UMLAssociationEnd> assocEnds = association.getAssociationEnds();
+			UMLAssociationEnd otherEnd = getOtherEnd(klass,assocEnds);
+			UMLAssociationEnd thisEnd = getThisEnd(klass,assocEnds);
+			throw new GenerationException("Invalid Tag Value found:  The '" + TV_LAZY_LOAD + "' Tag Value which is assigned to the association link attached to class " + getFQCN(klass) + " with the rolenames '" + otherEnd.getRoleName() + "' and '" + thisEnd.getRoleName() + "' has been replaced with the '" + TV_NCI_EAGER_LOAD + "' Tag Value.  Also, it's value must now conform to the following pattern:  "+TV_NCI_EAGER_LOAD+"#<fully qualified class name>.<role name>.  The value of the tag continues to be 'yes' or 'no'.  However, the value is the converse of the original 'lazy-load' tag; i.e., if 'lazy-load' tag value was set to 'yes', set the 'NCI_EAGER_LOAD#...' tag value to 'no', and vice versa.  Please update your model accordingly" );
+		}
 
 		return true;
 	}
@@ -1665,7 +1688,7 @@ public class TransformerUtils
 			}
 		}
 		
-		if(count < minOccurrence || (minOccurrence>0 && (result == null || result.trim().length() == 0))) throw new GenerationException("No value found for "+key+" tag in : "+getFQEN(elt));
+		if(count < minOccurrence || (minOccurrence>0 && (result == null || result.trim().length() == 0))) throw new GenerationException("No value found for "+key+" tag for element: "+getFQEN(elt));
 		if(count > maxOccurrence) throw new GenerationException("More than one value found for "+key+" tag in : "+getFQEN(elt));
 		
 		return result;
@@ -1704,16 +1727,27 @@ public class TransformerUtils
 
 	public String getColumnName(UMLClass klass, String key, String value,  boolean isValuePrefix, int minOccurrence, int maxOccurrence) throws GenerationException
 	{
+		log.debug("Getting Column Name for class " + getFQCN(klass) + " with a value of " + value);
 		UMLAttribute attr = getColumn(klass,key,value,isValuePrefix,minOccurrence,maxOccurrence);
 		return (attr==null) ? "" : attr.getName();
 	}
 
 	private UMLAttribute getColumn(UMLClass klass, String key, String value, boolean isValuePrefix, int minOccurrence, int maxOccurrence) throws GenerationException
 	{
+		log.debug("Getting Column for class " + getFQCN(klass) + " and key '" +key + "' and value '" + value + "'.");
 	
 		UMLAttribute result = null;
 		int count = 0;
-		for(UMLAttribute attr: klass.getAttributes())
+		List<UMLAttribute> attrList = new ArrayList<UMLAttribute>();
+
+		UMLClass currentKlass = klass;
+		while (currentKlass != null){
+			attrList.addAll(currentKlass.getAttributes());
+			
+			currentKlass = getSuperClass(currentKlass);
+		}
+		
+ 		for(UMLAttribute attr: attrList)
 		{
 			for(UMLTaggedValue tv: attr.getTaggedValues())
 			{
@@ -1742,9 +1776,14 @@ public class TransformerUtils
 				}
 			}
 		}
-		if(count < minOccurrence) 
-			throw new GenerationException("No value of "+value+" found for "+key+" tag in class : "+getFQCN(klass));
-		if(count > maxOccurrence) throw new GenerationException("More than one values found for "+key+" tag in class : "+getFQCN(klass));
+		if(count < minOccurrence) {
+			log.error("No value of "+value+" found for "+key+" tag in table : "+getFQCN(klass));
+			throw new GenerationException("No value of "+value+" found for "+key+" tag in table : "+getFQCN(klass));
+		}
+		if(count > maxOccurrence){
+			log.error("More than one value found for "+key+" tag in table : "+getFQCN(klass));
+			throw new GenerationException("More than one values found for "+key+" tag in table : "+getFQCN(klass));
+		}
 		
 		return result;
 	}
