@@ -117,7 +117,7 @@ import org.apache.log4j.Logger;
  * 	</UL>
  * </LI>
  * </UL>
- * @author Satish Patel
+ * @author Satish Patel, Dan Dumitru
  *
  */
 public class UMLModelMappingValidator implements Validator
@@ -183,7 +183,15 @@ public class UMLModelMappingValidator implements Validator
 		try 
 		{
 			UMLAttribute idAttr = transformerUtils.getClassIdAttr(klass);
-			log.debug("idAttr: " + idAttr.getName());
+			
+			if (idAttr!=null){
+				log.debug("idAttr: " + idAttr.getName());
+			} else {
+				log.error("Error:  No id attribute found for class " + transformerUtils.getFQCN(klass));
+				errors.addError(new GeneratorError(getName() + ": Unable to validate subclasses of parent class " + transformerUtils.getFQCN(klass) + ", as no id attribute was found for the parent class"));
+				return;
+			}
+			
 			String discriminatorColumnName = transformerUtils.findDiscriminatingColumnName(klass);		
 			log.debug("discriminatorColumnName: " + discriminatorColumnName);
 			if(discriminatorColumnName == null || "".equals(discriminatorColumnName))
@@ -279,7 +287,7 @@ public class UMLModelMappingValidator implements Validator
 		catch (GenerationException e) 
 		{
 			errors.addError(new GeneratorError(getName() + ": Subclass validation failed for "+fqcn+" class", e));
-		}		
+		}	
 	}
 
 	private Boolean hasSubClass(UMLClass klass)
@@ -317,183 +325,164 @@ public class UMLModelMappingValidator implements Validator
 		UMLClass currentKlass = klass;
 		do{
 
-			for(UMLAssociation association: currentKlass.getAssociations())
-			{
-				try 
+				for(UMLAssociation association: currentKlass.getAssociations())
 				{
-					
-					List <UMLAssociationEnd>ends = association.getAssociationEnds();
-					UMLAssociationEnd thisEnd = transformerUtils.getThisEnd(currentKlass, ends);
-					UMLAssociationEnd otherEnd = transformerUtils.getOtherEnd(currentKlass, ends);
-					
-					if(otherEnd.isNavigable())
+					try 
 					{
-						UMLClass assocKlass = (UMLClass)otherEnd.getUMLElement();
-						String cascadeStyle = transformerUtils.findCascadeStyle(currentKlass, otherEnd.getRoleName(), association);
 						
-						if(transformerUtils.isAny(thisEnd,otherEnd)){
+						List <UMLAssociationEnd>ends = association.getAssociationEnds();
+						UMLAssociationEnd thisEnd = transformerUtils.getThisEnd(currentKlass, ends);
+						UMLAssociationEnd otherEnd = transformerUtils.getOtherEnd(currentKlass, ends);
+						
+						if(otherEnd.isNavigable())
+						{
+							UMLClass assocKlass = (UMLClass)otherEnd.getUMLElement();
+							String cascadeStyle = transformerUtils.findCascadeStyle(currentKlass, otherEnd.getRoleName(), association);
 							
-							//implicit polymorphic validations for Any associations
-							Map<String, String> discriminatorValues = new HashMap<String, String>();
-
-							UMLClass implicitClass = (UMLClass)otherEnd.getUMLElement();
-							String discriminatorValue = null;
-							String nonImplicitSubclassFqcn = null;
-							
-							for (UMLClass nonImplicitSubclass:transformerUtils.getNonImplicitSubclasses(implicitClass)){
-								discriminatorValue = transformerUtils.getDiscriminatorValue(nonImplicitSubclass);
-								nonImplicitSubclassFqcn = transformerUtils.getFQCN(nonImplicitSubclass);
+							if(transformerUtils.isAny(thisEnd,otherEnd)){
+								log.debug("*** Validating isAny Association between class " + transformerUtils.getFQCN(currentKlass) + " and associated class " + transformerUtils.getFQCN(assocKlass));
 								
-								log.debug("discriminatorValue: " + discriminatorValue);
-								if(discriminatorValue == null || discriminatorValue.trim().length() ==0)
-									errors.addError(new GeneratorError(getName() + ": Discriminator value not present for the "+implicitClass+" class"));
-								if(discriminatorValues.get(discriminatorValue)!= null)
-									errors.addError(new GeneratorError(getName() + ": Same discriminator value for "+implicitClass+" and "+discriminatorValues.get(discriminatorValue)+ " class"));	
+								//implicit polymorphic validations for Any associations
+								Map<String, String> discriminatorValues = new HashMap<String, String>();
+	
+								UMLClass implicitClass = (UMLClass)otherEnd.getUMLElement();
+								log.debug("*** implicitClass is " + transformerUtils.getFQCN(implicitClass));
+								String discriminatorValue = null;
+								String nonImplicitSubclassFqcn = null;
 								
-								discriminatorValues.put(discriminatorValue, nonImplicitSubclassFqcn);
-							}
-
-							UMLClass anyTable = transformerUtils.getTable(currentKlass);
-							transformerUtils.getImplicitDiscriminatorColumn(anyTable,currentKlass,otherEnd.getRoleName());
-							transformerUtils.getImplicitIdColumn(anyTable,currentKlass,otherEnd.getRoleName());
-						} else if(transformerUtils.isMany2Any(thisEnd,otherEnd)){
-							// implicit polymorphic validations for Many-To-Any associations
-							
-							log.debug("cascadeStyle: "+ cascadeStyle + "; currentKlass: " + transformerUtils.getFQCN(currentKlass) + "; roleName: " + otherEnd.getRoleName());
-							if (!cascadeStyle.equalsIgnoreCase("none")){
-								errors.addError(new GeneratorError(getName() + ": Cascade-style settings are not supported on the Many-to-Any association between " + transformerUtils.getFQCN(currentKlass) + " and " + transformerUtils.getFQCN(assocKlass) +".  Please remove the NCI_CASCADE_ASSOCIATION Tag Value from the association."));
-							}
-							
-							UMLClass correlationTable = transformerUtils.findCorrelationTable(association, model, assocKlass);
-							String keyColumnName = transformerUtils.findAssociatedColumn(correlationTable,assocKlass,thisEnd, currentKlass,otherEnd, true);
-							String assocColumnName = transformerUtils.findAssociatedColumn(correlationTable,currentKlass,otherEnd, assocKlass, thisEnd, true);
-							String inverseColumnName =  transformerUtils.findInverseColumnValue(correlationTable,assocKlass,thisEnd);
-							
-							if(!"".equals(inverseColumnName) && !assocColumnName.equals(inverseColumnName))
-								errors.addError(new GeneratorError(getName() + "Different columns used for 'implements-association' and 'inverse-of' tags of the same association"));
-							
-							String inverseValue = assocColumnName.equals(inverseColumnName) ?"true":"false";
-							String joinTableName = correlationTable.getName();
-							
-							if (thisEnd.isNavigable()){//bi-directional association - ensure 'inverse-of' tag is not found on both association ends
-								String inverseColumnNameOtherEnd =  transformerUtils.findInverseColumnValue(correlationTable,currentKlass,otherEnd);
-								if (!"".equals(inverseColumnNameOtherEnd) && !"".equals(inverseColumnName))
-									errors.addError(new GeneratorError(getName() + " : the inverse setting is only valid on one side of a bi-directional, 'many-to-any' association with a join table, yet 'inverse-of' tag values were found on table columns corresponding to both ends of the association between " + transformerUtils.getFQCN(currentKlass) + " and " + transformerUtils.getFQCN(assocKlass) + " (foreign key columns " + inverseColumnName+ " and " +inverseColumnNameOtherEnd +" of table " + correlationTable.getName() + ")"));
-							}
-							
-							Map<String, String> discriminatorValues = new HashMap<String, String>();
-
-							UMLClass implicitClass = (UMLClass)otherEnd.getUMLElement();
-							String discriminatorValue = null;
-							String nonImplicitSubclassFqcn = null;
-							
-							for (UMLClass nonImplicitSubclass:transformerUtils.getNonImplicitSubclasses(implicitClass)){
-								discriminatorValue = transformerUtils.getDiscriminatorValue(nonImplicitSubclass);
-								nonImplicitSubclassFqcn = transformerUtils.getFQCN(nonImplicitSubclass);
-								
-								log.debug("discriminatorValue: " + discriminatorValue);
-								if(discriminatorValue == null || discriminatorValue.trim().length() ==0)
-									errors.addError(new GeneratorError(getName() + ": Discriminator value not present for the "+implicitClass+" class"));
-								if(discriminatorValues.get(discriminatorValue)!= null)
-									errors.addError(new GeneratorError(getName() + ": Same discriminator value for "+implicitClass+" and "+discriminatorValues.get(discriminatorValue)+ " class"));	
-								
-								discriminatorValues.put(discriminatorValue, nonImplicitSubclassFqcn);
-							}
-
-							transformerUtils.getImplicitDiscriminatorColumn(correlationTable,currentKlass,otherEnd.getRoleName());
-							transformerUtils.getImplicitIdColumn(correlationTable,currentKlass,otherEnd.getRoleName());
-
-						} else if(transformerUtils.isMany2Many(thisEnd,otherEnd)){
-							if (!cascadeStyle.equalsIgnoreCase("none")){
-								errors.addError(new GeneratorError(getName() + ": Cascade-style settings are not supported on the Many-to-Many association between " + transformerUtils.getFQCN(currentKlass) + " and " + transformerUtils.getFQCN(assocKlass) +".  Please remove the NCI_CASCADE_ASSOCIATION Tag Value from the association."));
-							}
-							UMLClass correlationTable = transformerUtils.findCorrelationTable(association, model, assocKlass);
-							String keyColumnName = transformerUtils.findAssociatedColumn(correlationTable,assocKlass,thisEnd,currentKlass,otherEnd,true);
-							String assocColumnName = transformerUtils.findAssociatedColumn(correlationTable,currentKlass,otherEnd,assocKlass,thisEnd, true);
-							String inverseColumnName =  transformerUtils.findInverseColumnValue(correlationTable,assocKlass,thisEnd);
-							if(!"".equals(inverseColumnName) && !assocColumnName.equals(inverseColumnName))
-								errors.addError(new GeneratorError(getName() + ": Different columns used for implements-association and inverse-of of the same association"));
-							
-							if (thisEnd.isNavigable()){//bi-directional association - ensure 'inverse-of' tag is not found on both association ends
-								String inverseColumnNameOtherEnd =  transformerUtils.findInverseColumnValue(correlationTable,currentKlass,otherEnd);
-								if (!"".equals(inverseColumnNameOtherEnd) && !"".equals(inverseColumnName))
-									errors.addError(new GeneratorError(getName() + " : the inverse setting is only valid on one side of a bi-directional, 'many-to-many' association with a join table, yet 'inverse-of' tag values were found on table columns corresponding to both ends of the association between " + transformerUtils.getFQCN(currentKlass) + " and " + transformerUtils.getFQCN(assocKlass) + " (foreign key columns " + inverseColumnName+ " and " +inverseColumnNameOtherEnd +" of table " + correlationTable.getName() + ")"));
-							}
-							
-						}else if(transformerUtils.isOne2Many(thisEnd,otherEnd)){
-							if(transformerUtils.isImplicitParent(assocKlass)) {
-								errors.addError(new GeneratorError(getName() + ": Implicit polymorphic one-to-many association between class " + currentKlass + " and implicit parent class " + assocKlass +" is not supported"));
-							} else {
-								
-								UMLClass correlationTable = transformerUtils.findCorrelationTable(association, model, assocKlass, false);
-								if (correlationTable == null) //One to Many - No Join Table
-								{
-									UMLClass assocTable = null;
-									UMLClass thisEndTable = null;
-									if (!transformerUtils.isImplicitParent(assocKlass))
-										assocTable = transformerUtils.getTable(assocKlass);
-									thisEndTable = transformerUtils.getTable(currentKlass);
-
-									if (assocTable != null){
-										String notNullFkAttr=transformerUtils.isFKAttributeNull(otherEnd);
-										String keyColumnName = transformerUtils.findAssociatedColumn(assocTable,assocKlass,thisEnd,currentKlass,otherEnd, false);
-										String assocColumnName = transformerUtils.findAssociatedColumn(assocTable,currentKlass,otherEnd,assocKlass,thisEnd, false);
-										String inverseColumnName =  transformerUtils.findInverseColumnValue(assocTable,assocKlass,thisEnd);
-										if(!"".equals(inverseColumnName) && !assocColumnName.equals(inverseColumnName))
-											errors.addError(new GeneratorError(getName() + ": Different columns used for 'implements-association' and 'inverse-of' of the same association"));
-
-										String inverseValue = assocColumnName.equals(inverseColumnName) ?"true":"false";
-										
-										if ("true".equalsIgnoreCase(notNullFkAttr) && !"true".equalsIgnoreCase(inverseValue))
-											errors.addError(new GeneratorError(getName() + ": The foreign key column " + keyColumnName+ " of table " + assocTable.getName() + " is not nullable (i.e., lower end multiplicity > 0 in the logical model association end).  This requires that the inverse setting ('inverse-of' tag) be set on the "+assocColumnName+" column with a value of: " + transformerUtils.getFQCN(assocKlass) +"."+thisEnd.getRoleName()+"."));
-									}
-
-										
-								}else{ //One to Many - Join Table
-									String keyColumnName = transformerUtils.findAssociatedColumn(correlationTable,assocKlass,thisEnd,currentKlass,otherEnd, true);
-									String assocColumnName = transformerUtils.findAssociatedColumn(correlationTable,currentKlass,otherEnd,assocKlass,thisEnd, true);
-									String inverseColumnName =  transformerUtils.findInverseColumnValue(correlationTable,assocKlass,thisEnd);
-									if(!"".equals(inverseColumnName) && !assocColumnName.equals(inverseColumnName))
-										errors.addError(new GeneratorError(getName() + ": Different columns used for 'implements-association' and 'inverse-of' of the same association"));
+								for (UMLClass nonImplicitSubclass:transformerUtils.getNonImplicitSubclasses(implicitClass)){
+									discriminatorValue = transformerUtils.getDiscriminatorValue(nonImplicitSubclass);
+									nonImplicitSubclassFqcn = transformerUtils.getFQCN(nonImplicitSubclass);
 									
-									if (thisEnd.isNavigable()){//bi-directional association - ensure 'inverse-of' tag is not found on both association ends
-										String inverseColumnNameOtherEnd =  transformerUtils.findInverseColumnValue(correlationTable,currentKlass,otherEnd);
-										if (!"".equals(inverseColumnNameOtherEnd) && !"".equals(inverseColumnName))
-											errors.addError(new GeneratorError(getName() + " : the 'inverse' setting is only valid on one side of a bi-directional, 'one-to-many' association with a join table, yet 'inverse-of' tags were found on table columns corresponding to both ends of the association between " + transformerUtils.getFQCN(currentKlass) + " and " + transformerUtils.getFQCN(assocKlass) + " (foreign key columns " + inverseColumnName+ " and " +inverseColumnNameOtherEnd +" of table " + correlationTable.getName() + ")"));
-									}
+									log.debug("discriminatorValue: " + discriminatorValue);
+									if(discriminatorValue == null || discriminatorValue.trim().length() ==0)
+										errors.addError(new GeneratorError(getName() + ": Discriminator value not present for the "+transformerUtils.getFQCN(implicitClass)+" class"));
+									if(discriminatorValues.get(discriminatorValue)!= null)
+										errors.addError(new GeneratorError(getName() + ": Same discriminator value for "+transformerUtils.getFQCN(implicitClass)+" and "+discriminatorValues.get(discriminatorValue)+ " class"));	
+									
+									discriminatorValues.put(discriminatorValue, nonImplicitSubclassFqcn);
 								}
-							}
-						}else if(transformerUtils.isMany2One(thisEnd,otherEnd)){
-							UMLClass correlationTable = transformerUtils.findCorrelationTable(association, model, assocKlass, false);
-							if (correlationTable == null) //Many to One - No Join Table
-							{
-								String keyColumnName = transformerUtils.findAssociatedColumn(table,currentKlass,otherEnd,assocKlass,thisEnd, false);
-							}else{ // Many to One - Join Table
-								String keyColumnName = transformerUtils.findAssociatedColumn(correlationTable,assocKlass,thisEnd,currentKlass,otherEnd, true);
-								String assocColumnName = transformerUtils.findAssociatedColumn(correlationTable,currentKlass,otherEnd,assocKlass,thisEnd, true);
+	
+								
+								UMLClass anyTable = transformerUtils.getTable(currentKlass);
+								transformerUtils.getImplicitDiscriminatorColumn(anyTable,currentKlass,otherEnd.getRoleName());
+								transformerUtils.getImplicitIdColumn(anyTable,currentKlass,otherEnd.getRoleName());
+							} else if(transformerUtils.isMany2Any(thisEnd,otherEnd)){
+								// implicit polymorphic validations for Many-To-Any associations
+								
+								log.debug("*** Validating isMany2Any Association between class " + transformerUtils.getFQCN(currentKlass) + " and associated class " + transformerUtils.getFQCN(assocKlass));								
+								
+								log.debug("cascadeStyle: "+ cascadeStyle + "; currentKlass: " + transformerUtils.getFQCN(currentKlass) + "; roleName: " + otherEnd.getRoleName());
+								if (!cascadeStyle.equalsIgnoreCase("none")){
+									errors.addError(new GeneratorError(getName() + ": Cascade-style settings are not supported on the Many-to-Any association between " + transformerUtils.getFQCN(currentKlass) + " and " + transformerUtils.getFQCN(assocKlass) +".  Please remove the NCI_CASCADE_ASSOCIATION Tag Value from the association."));
+								}
+								
+								UMLClass correlationTable = transformerUtils.findCorrelationTable(association, model, assocKlass);
+								String keyColumnName = transformerUtils.findAssociatedColumn(correlationTable,assocKlass,thisEnd, currentKlass,otherEnd, true);
+								String assocColumnName = transformerUtils.findAssociatedColumn(correlationTable,currentKlass,otherEnd, assocKlass, thisEnd, true);
 								String inverseColumnName =  transformerUtils.findInverseColumnValue(correlationTable,assocKlass,thisEnd);
+								
 								if(!"".equals(inverseColumnName) && !assocColumnName.equals(inverseColumnName))
-									errors.addError(new GeneratorError(getName() + ": Different columns used for 'implements-association' and 'inverse-of' of the same association"));
+									errors.addError(new GeneratorError(getName() + "Different columns used for 'implements-association' and 'inverse-of' tags of the same association"));
+								
+								String inverseValue = assocColumnName.equals(inverseColumnName) ?"true":"false";
+								String joinTableName = correlationTable.getName();
 								
 								if (thisEnd.isNavigable()){//bi-directional association - ensure 'inverse-of' tag is not found on both association ends
 									String inverseColumnNameOtherEnd =  transformerUtils.findInverseColumnValue(correlationTable,currentKlass,otherEnd);
 									if (!"".equals(inverseColumnNameOtherEnd) && !"".equals(inverseColumnName))
-										errors.addError(new GeneratorError(getName() + " : the inverse setting is only valid on one side of a bi-directional, 'one-to-many' association with a join table, yet 'inverse-of' tags were found on table columns corresponding to both ends of the association between " + transformerUtils.getFQCN(currentKlass) + " and " + transformerUtils.getFQCN(assocKlass) + " (foreign key columns " + inverseColumnName+ " and " +inverseColumnNameOtherEnd +" of table " + correlationTable.getName() + ")"));
+										errors.addError(new GeneratorError(getName() + " : the inverse setting is only valid on one side of a bi-directional, 'many-to-any' association with a join table, yet 'inverse-of' tag values were found on table columns corresponding to both ends of the association between " + transformerUtils.getFQCN(currentKlass) + " and " + transformerUtils.getFQCN(assocKlass) + " (foreign key columns " + inverseColumnName+ " and " +inverseColumnNameOtherEnd +" of table " + correlationTable.getName() + ")"));
 								}
-							}
-
-						}else{// one-to-one
-							if(transformerUtils.isImplicitParent(assocKlass)) {
-								errors.addError(new GeneratorError(getName() + ": Implicit polymorphic one-to-one association between class " + transformerUtils.getFQCN(currentKlass) + " and implicit parent class " + transformerUtils.getFQCN(assocKlass) +" is not supported"));
-							} else {
+								
+								Map<String, String> discriminatorValues = new HashMap<String, String>();
+	
+								UMLClass implicitClass = (UMLClass)otherEnd.getUMLElement();
+								log.debug("*** implicitClass is " + transformerUtils.getFQCN(implicitClass));
+								String discriminatorValue = null;
+								String nonImplicitSubclassFqcn = null;
+								
+								for (UMLClass nonImplicitSubclass:transformerUtils.getNonImplicitSubclasses(implicitClass)){
+									discriminatorValue = transformerUtils.getDiscriminatorValue(nonImplicitSubclass);
+									nonImplicitSubclassFqcn = transformerUtils.getFQCN(nonImplicitSubclass);
+									
+									log.debug("discriminatorValue: " + discriminatorValue);
+									if(discriminatorValue == null || discriminatorValue.trim().length() ==0)
+										errors.addError(new GeneratorError(getName() + ": Discriminator value not present for the "+transformerUtils.getFQCN(implicitClass)+" class"));
+									if(discriminatorValues.get(discriminatorValue)!= null)
+										errors.addError(new GeneratorError(getName() + ": Same discriminator value for "+transformerUtils.getFQCN(implicitClass)+" and "+discriminatorValues.get(discriminatorValue)+ " class"));	
+									
+									discriminatorValues.put(discriminatorValue, nonImplicitSubclassFqcn);
+								}
+	
+								transformerUtils.getImplicitDiscriminatorColumn(correlationTable,currentKlass,otherEnd.getRoleName());
+								transformerUtils.getImplicitIdColumn(correlationTable,currentKlass,otherEnd.getRoleName());
+	
+							} else if(transformerUtils.isMany2Many(thisEnd,otherEnd)){
+								if (!cascadeStyle.equalsIgnoreCase("none")){
+									errors.addError(new GeneratorError(getName() + ": Cascade-style settings are not supported on the Many-to-Many association between " + transformerUtils.getFQCN(currentKlass) + " and " + transformerUtils.getFQCN(assocKlass) +".  Please remove the NCI_CASCADE_ASSOCIATION Tag Value from the association."));
+								}
+								UMLClass correlationTable = transformerUtils.findCorrelationTable(association, model, assocKlass);
+								String keyColumnName = transformerUtils.findAssociatedColumn(correlationTable,assocKlass,thisEnd,currentKlass,otherEnd,true);
+								String assocColumnName = transformerUtils.findAssociatedColumn(correlationTable,currentKlass,otherEnd,assocKlass,thisEnd, true);
+								String inverseColumnName =  transformerUtils.findInverseColumnValue(correlationTable,assocKlass,thisEnd);
+								if(!"".equals(inverseColumnName) && !assocColumnName.equals(inverseColumnName))
+									errors.addError(new GeneratorError(getName() + ": Different columns used for implements-association and inverse-of of the same association"));
+								
+								if (thisEnd.isNavigable()){//bi-directional association - ensure 'inverse-of' tag is not found on both association ends
+									String inverseColumnNameOtherEnd =  transformerUtils.findInverseColumnValue(correlationTable,currentKlass,otherEnd);
+									if (!"".equals(inverseColumnNameOtherEnd) && !"".equals(inverseColumnName))
+										errors.addError(new GeneratorError(getName() + " : the inverse setting is only valid on one side of a bi-directional, 'many-to-many' association with a join table, yet 'inverse-of' tag values were found on table columns corresponding to both ends of the association between " + transformerUtils.getFQCN(currentKlass) + " and " + transformerUtils.getFQCN(assocKlass) + " (foreign key columns " + inverseColumnName+ " and " +inverseColumnNameOtherEnd +" of table " + correlationTable.getName() + ")"));
+								}
+								
+							}else if(transformerUtils.isOne2Many(thisEnd,otherEnd)){
+								if(transformerUtils.isImplicitParent(assocKlass)) {
+									errors.addError(new GeneratorError(getName() + ": Implicit polymorphic one-to-many association between class " + transformerUtils.getFQCN(currentKlass) + " and implicit parent class " + transformerUtils.getFQCN(assocKlass) +" is not supported"));
+								} else {
+									
+									UMLClass correlationTable = transformerUtils.findCorrelationTable(association, model, assocKlass, false);
+									if (correlationTable == null) //One to Many - No Join Table
+									{
+										UMLClass assocTable = null;
+										UMLClass thisEndTable = null;
+										if (!transformerUtils.isImplicitParent(assocKlass))
+											assocTable = transformerUtils.getTable(assocKlass);
+										thisEndTable = transformerUtils.getTable(currentKlass);
+	
+										if (assocTable != null){
+											String notNullFkAttr=transformerUtils.isFKAttributeNull(otherEnd);
+											String keyColumnName = transformerUtils.findAssociatedColumn(assocTable,assocKlass,thisEnd,currentKlass,otherEnd, false);
+											String assocColumnName = transformerUtils.findAssociatedColumn(assocTable,currentKlass,otherEnd,assocKlass,thisEnd, false);
+											String inverseColumnName =  transformerUtils.findInverseColumnValue(assocTable,assocKlass,thisEnd);
+											if(!"".equals(inverseColumnName) && !assocColumnName.equals(inverseColumnName))
+												errors.addError(new GeneratorError(getName() + ": Different columns used for 'implements-association' and 'inverse-of' of the same association"));
+	
+											String inverseValue = assocColumnName.equals(inverseColumnName) ?"true":"false";
+											
+											if ("true".equalsIgnoreCase(notNullFkAttr) && !"true".equalsIgnoreCase(inverseValue))
+												errors.addError(new GeneratorError(getName() + ": The foreign key column " + keyColumnName+ " of table " + assocTable.getName() + " is not nullable (i.e., lower end multiplicity > 0 in the logical model association end).  This requires that the inverse setting ('inverse-of' tag) be set on the "+assocColumnName+" column with a value of: " + transformerUtils.getFQCN(assocKlass) +"."+thisEnd.getRoleName()+"."));
+										}
+	
+											
+									}else{ //One to Many - Join Table
+										String keyColumnName = transformerUtils.findAssociatedColumn(correlationTable,assocKlass,thisEnd,currentKlass,otherEnd, true);
+										String assocColumnName = transformerUtils.findAssociatedColumn(correlationTable,currentKlass,otherEnd,assocKlass,thisEnd, true);
+										String inverseColumnName =  transformerUtils.findInverseColumnValue(correlationTable,assocKlass,thisEnd);
+										if(!"".equals(inverseColumnName) && !assocColumnName.equals(inverseColumnName))
+											errors.addError(new GeneratorError(getName() + ": Different columns used for 'implements-association' and 'inverse-of' of the same association"));
+										
+										if (thisEnd.isNavigable()){//bi-directional association - ensure 'inverse-of' tag is not found on both association ends
+											String inverseColumnNameOtherEnd =  transformerUtils.findInverseColumnValue(correlationTable,currentKlass,otherEnd);
+											if (!"".equals(inverseColumnNameOtherEnd) && !"".equals(inverseColumnName))
+												errors.addError(new GeneratorError(getName() + " : the 'inverse' setting is only valid on one side of a bi-directional, 'one-to-many' association with a join table, yet 'inverse-of' tags were found on table columns corresponding to both ends of the association between " + transformerUtils.getFQCN(currentKlass) + " and " + transformerUtils.getFQCN(assocKlass) + " (foreign key columns " + inverseColumnName+ " and " +inverseColumnNameOtherEnd +" of table " + correlationTable.getName() + ")"));
+										}
+									}
+								}
+							}else if(transformerUtils.isMany2One(thisEnd,otherEnd)){
 								UMLClass correlationTable = transformerUtils.findCorrelationTable(association, model, assocKlass, false);
-								if (correlationTable == null) //One to One - No Join Table
+								if (correlationTable == null) //Many to One - No Join Table
 								{
-									String keyColumnName = transformerUtils.findAssociatedColumn(table,currentKlass,otherEnd,assocKlass,thisEnd,false, false);
-									Boolean keyColumnPresent = (keyColumnName!=null && !"".equals(keyColumnName));
-									if(!thisEnd.isNavigable() && !keyColumnPresent)
-										errors.addError(new GeneratorError(getName() + ": One to one unidirectional mapping requires key column to be present in the source class"+transformerUtils.getFQCN(currentKlass)));
-								}else{
+									String keyColumnName = transformerUtils.findAssociatedColumn(table,currentKlass,otherEnd,assocKlass,thisEnd, false);
+								}else{ // Many to One - Join Table
 									String keyColumnName = transformerUtils.findAssociatedColumn(correlationTable,assocKlass,thisEnd,currentKlass,otherEnd, true);
 									String assocColumnName = transformerUtils.findAssociatedColumn(correlationTable,currentKlass,otherEnd,assocKlass,thisEnd, true);
 									String inverseColumnName =  transformerUtils.findInverseColumnValue(correlationTable,assocKlass,thisEnd);
@@ -503,25 +492,50 @@ public class UMLModelMappingValidator implements Validator
 									if (thisEnd.isNavigable()){//bi-directional association - ensure 'inverse-of' tag is not found on both association ends
 										String inverseColumnNameOtherEnd =  transformerUtils.findInverseColumnValue(correlationTable,currentKlass,otherEnd);
 										if (!"".equals(inverseColumnNameOtherEnd) && !"".equals(inverseColumnName))
-											errors.addError(new GeneratorError(getName() + " : the inverse setting is only valid on one side of a bi-directional, 'one-to-one' association with a join table, yet 'inverse-of' tags were found on table columns corresponding to both ends of the association between " + transformerUtils.getFQCN(currentKlass) + " and " + transformerUtils.getFQCN(assocKlass) + " (foreign key columns " + inverseColumnName+ " and " +inverseColumnNameOtherEnd +" of table " + correlationTable.getName() + ")"));
+											errors.addError(new GeneratorError(getName() + " : the inverse setting is only valid on one side of a bi-directional, 'one-to-many' association with a join table, yet 'inverse-of' tags were found on table columns corresponding to both ends of the association between " + transformerUtils.getFQCN(currentKlass) + " and " + transformerUtils.getFQCN(assocKlass) + " (foreign key columns " + inverseColumnName+ " and " +inverseColumnNameOtherEnd +" of table " + correlationTable.getName() + ")"));
+									}
+								}
+	
+							}else{// one-to-one
+								if(transformerUtils.isImplicitParent(assocKlass)) {
+									errors.addError(new GeneratorError(getName() + ": Implicit polymorphic one-to-one association between class " + transformerUtils.getFQCN(currentKlass) + " and implicit parent class " + transformerUtils.getFQCN(assocKlass) +" is not supported"));
+								} else {
+									UMLClass correlationTable = transformerUtils.findCorrelationTable(association, model, assocKlass, false);
+									if (correlationTable == null) //One to One - No Join Table
+									{
+										String keyColumnName = transformerUtils.findAssociatedColumn(table,currentKlass,otherEnd,assocKlass,thisEnd,false, false);
+										Boolean keyColumnPresent = (keyColumnName!=null && !"".equals(keyColumnName));
+										if(!thisEnd.isNavigable() && !keyColumnPresent)
+											errors.addError(new GeneratorError(getName() + ": One-to-one unidirectional mapping between classes " + transformerUtils.getFQCN(currentKlass) + " and " + transformerUtils.getFQCN(assocKlass) + " requires key column to be present in the source class "+transformerUtils.getFQCN(currentKlass)));
+									}else{
+										String keyColumnName = transformerUtils.findAssociatedColumn(correlationTable,assocKlass,thisEnd,currentKlass,otherEnd, true);
+										String assocColumnName = transformerUtils.findAssociatedColumn(correlationTable,currentKlass,otherEnd,assocKlass,thisEnd, true);
+										String inverseColumnName =  transformerUtils.findInverseColumnValue(correlationTable,assocKlass,thisEnd);
+										if(!"".equals(inverseColumnName) && !assocColumnName.equals(inverseColumnName))
+											errors.addError(new GeneratorError(getName() + ": Different columns used for 'implements-association' and 'inverse-of' of the same association"));
+										
+										if (thisEnd.isNavigable()){//bi-directional association - ensure 'inverse-of' tag is not found on both association ends
+											String inverseColumnNameOtherEnd =  transformerUtils.findInverseColumnValue(correlationTable,currentKlass,otherEnd);
+											if (!"".equals(inverseColumnNameOtherEnd) && !"".equals(inverseColumnName))
+												errors.addError(new GeneratorError(getName() + " : the inverse setting is only valid on one side of a bi-directional, 'one-to-one' association with a join table, yet 'inverse-of' tags were found on table columns corresponding to both ends of the association between " + transformerUtils.getFQCN(currentKlass) + " and " + transformerUtils.getFQCN(assocKlass) + " (foreign key columns " + inverseColumnName+ " and " +inverseColumnNameOtherEnd +" of table " + correlationTable.getName() + ")"));
+										}
 									}
 								}
 							}
+							validateCascadeStyles(currentKlass,otherEnd.getRoleName(),cascadeStyle);
+							
+							//Check for usage of deprecated lazy load tag
+							transformerUtils.isLazyLoad(currentKlass, association);
+							
+							// For sake of consistency, also invoke new lazy load check
+							transformerUtils.isLazyLoad(currentKlass, otherEnd.getRoleName(), association);
 						}
-						validateCascadeStyles(currentKlass,otherEnd.getRoleName(),cascadeStyle);
-						
-						//Check for usage of deprecated lazy load tag
-						transformerUtils.isLazyLoad(currentKlass, association);
-						
-						// For sake of consistency, also invoke new lazy load check
-						transformerUtils.isLazyLoad(currentKlass, otherEnd.getRoleName(), association);
 					}
-				}
-				catch (GenerationException e) 
-				{
-					errors.addError(new GeneratorError(getName() + ": Association validation failed ", e));
-				}
-			} // for
+					catch (GenerationException e) 
+					{
+						errors.addError(new GeneratorError(getName() + ": Association validation failed ", e));
+					}
+				} // for
 		} while(currentKlass!=null && transformerUtils.isImplicitParent(currentKlass));
 	}
 

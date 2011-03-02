@@ -23,6 +23,7 @@
 			<list>
 				<ref bean="HibernateMappingTransformer"/>
 				<ref bean="BeanTransformer"/>
+				<ref bean="JunitTransformer"/>
 				<ref bean="InterfaceTransformer"/>
 				<ref bean="EHCacheTransformer"/>
 				<ref bean="HibernateCfgTransformer"/>
@@ -71,6 +72,7 @@
 		<constructor-arg>
 			<list>
 				<value>all</value>
+				<value>all-delete-orphan</value>				
 				<value>delete</value>
 				<value>delete-orphan</value>
 				<value>evict</value>
@@ -136,6 +138,19 @@
 		</property>
 		<property name="enabled" value="@GENERATE_BEANS@"/>
 		<property name="name" value="Bean Transformer"/>
+		<property name="transformerUtils" ref="TransformerUtils"></property>
+	</bean>
+	
+	<bean name="JunitTransformer" class="gov.nih.nci.codegen.transformer.jet.JunitTransformer">
+		<property name="artifactHandler">
+			<bean class="gov.nih.nci.codegen.handler.FileHandler">
+				<property name="useArtifactSource" value="true"/>
+				<property name="outputDir" value="@JUNITOUTPUTDIR@"/>				
+				<property name="suffix" value=".java"/>									
+			</bean>
+		</property>
+		<property name="enabled" value="@GENERATE_JUNITS@"/>
+		<property name="name" value="Junit Bean Transformer"/>
 		<property name="transformerUtils" ref="TransformerUtils"></property>
 	</bean>
 	

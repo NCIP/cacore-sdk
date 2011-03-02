@@ -47,6 +47,15 @@ public class BaseArtifact implements Artifact
 	 * 
 	 * @param klass
 	 */
+	public void createJunitSourceName(UMLClass klass) {
+		sourceName = (transformerUtils.getFullPackageName(klass)+"."+klass.getName()+"Test").replace('.','/');
+	}	
+	
+	/**
+	 * Creates the source name for the artifact from the <code>klass</code>
+	 * 
+	 * @param klass
+	 */
 	public void createSourceName(UMLClass klass) {
 		sourceName = transformerUtils.getFQCN(klass).replace('.','/');
 	}	
