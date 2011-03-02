@@ -1389,7 +1389,7 @@ public class TransformerUtils
 		{
 			UMLClass client = (UMLClass) dependency.getClient();
 			
-			log.debug("getTable: klass: " + klass.getName() + "; Client stereotype: " +client.getStereotype() + "; dependency stereotype: " + dependency.getStereotype());
+			log.debug("getTable: klass: " + klass.getName() + "; Client " + client.getName() + " stereotype: " +client.getStereotype() + "; dependency stereotype: " + dependency.getStereotype());
 			if(STEREO_TYPE_TABLE.equalsIgnoreCase(client.getStereotype()) && STEREO_TYPE_DATASOURCE_DEPENDENCY.equalsIgnoreCase(dependency.getStereotype()))
 			{
 				log.debug("* * * client.getName(): " + client.getName());
