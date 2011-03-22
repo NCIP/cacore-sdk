@@ -23,7 +23,9 @@
 			<list>
 				<ref bean="HibernateMappingTransformer"/>
 				<ref bean="BeanTransformer"/>
-				<ref bean="JunitTransformer"/>
+				<ref bean="JunitPojoTransformer"/>
+				<ref bean="JunitXmlDataTransformer"/>
+				<ref bean="JunitXsdTransformer"/>				
 				<ref bean="InterfaceTransformer"/>
 				<ref bean="EHCacheTransformer"/>
 				<ref bean="HibernateCfgTransformer"/>
@@ -141,7 +143,7 @@
 		<property name="transformerUtils" ref="TransformerUtils"></property>
 	</bean>
 	
-	<bean name="JunitTransformer" class="gov.nih.nci.codegen.transformer.jet.JunitTransformer">
+	<bean name="JunitPojoTransformer" class="gov.nih.nci.codegen.transformer.jet.JunitPojoTransformer">
 		<property name="artifactHandler">
 			<bean class="gov.nih.nci.codegen.handler.FileHandler">
 				<property name="useArtifactSource" value="true"/>
@@ -150,7 +152,33 @@
 			</bean>
 		</property>
 		<property name="enabled" value="@GENERATE_JUNITS@"/>
-		<property name="name" value="Junit Bean Transformer"/>
+		<property name="name" value="Junit POJO Bean Test Transformer"/>
+		<property name="transformerUtils" ref="TransformerUtils"></property>
+	</bean>	
+		
+	<bean name="JunitXmlDataTransformer" class="gov.nih.nci.codegen.transformer.jet.JunitXmlDataTransformer">
+		<property name="artifactHandler">
+			<bean class="gov.nih.nci.codegen.handler.FileHandler">
+				<property name="useArtifactSource" value="true"/>
+				<property name="outputDir" value="@JUNITOUTPUTDIR@"/>				
+				<property name="suffix" value=".java"/>									
+			</bean>
+		</property>
+		<property name="enabled" value="@GENERATE_JUNITS@"/>
+		<property name="name" value="Junit XML Data Test Transformer"/>
+		<property name="transformerUtils" ref="TransformerUtils"></property>
+	</bean>
+	
+	<bean name="JunitXsdTransformer" class="gov.nih.nci.codegen.transformer.jet.JunitXsdTransformer">
+		<property name="artifactHandler">
+			<bean class="gov.nih.nci.codegen.handler.FileHandler">
+				<property name="useArtifactSource" value="true"/>
+				<property name="outputDir" value="@JUNITOUTPUTDIR@"/>				
+				<property name="suffix" value=".java"/>									
+			</bean>
+		</property>
+		<property name="enabled" value="@GENERATE_JUNITS@"/>
+		<property name="name" value="Junit XSD Test Transformer"/>
 		<property name="transformerUtils" ref="TransformerUtils"></property>
 	</bean>
 	
