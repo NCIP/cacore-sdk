@@ -1012,6 +1012,9 @@
 				<include name="${bean.file}" />
 				<include name="${orm.file}" />
 			</fileset>
+			<fileset dir="${3RD_PARTY_JARS_DIRECTORY}">
+				<include name="*.jar" />
+			</fileset>				
 		</copy>
 		<if>
 			<equals arg1="${USE_CONNECTION_POOL}" arg2="true" />
