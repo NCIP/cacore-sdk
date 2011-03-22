@@ -553,6 +553,17 @@ public class TransformerUtils
 		String name = attr.getName(); 
 		return "set"+name.substring(0,1).toUpperCase()+name.substring(1,name.length());
 	}
+	
+	public boolean isBidirectionalSelfAssociation(UMLClass klass, List<UMLAssociationEnd>assocEnds) throws GenerationException
+	{
+		UMLAssociationEnd end1 = assocEnds.get(0);
+		UMLAssociationEnd end2 = assocEnds.get(1);
+		
+		if(end1.getUMLElement().equals(klass) && end2.getUMLElement().equals(klass) && end1.isNavigable() && end2.isNavigable())
+			return true;
+
+		return false;
+	}
 
 	public UMLAssociationEnd getThisEnd(UMLClass klass, List<UMLAssociationEnd>assocEnds) throws GenerationException
 	{
@@ -1181,7 +1192,24 @@ public class TransformerUtils
 
 		return false;
 	}
+	/**
+	 * Determines whether the input class is a subclass
+	 * @param klass
+	 * @return
+	 */
+	public boolean isSubClass(UMLClass klass)
+	{
+		boolean isSubClass = false;
 	
+		if (klass != null)
+			for(UMLGeneralization gen:klass.getGeneralizations())
+			{
+				if(gen.getSupertype() instanceof UMLClass && ((UMLClass)gen.getSupertype()) != klass) 
+					return true;
+			}
+
+		return isSubClass;
+	}	
 	/**
 	 * Determines whether the input class is a superclass
 	 * @param klass
