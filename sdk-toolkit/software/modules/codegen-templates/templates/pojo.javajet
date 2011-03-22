@@ -32,42 +32,52 @@ public<%=transformerUtils.isAbstract(klass)? " abstract" : "" %> class <%=klass.
 		List<UMLAssociationEnd> assocEnds = assoc.getAssociationEnds();
 		UMLAssociationEnd thisEnd = transformerUtils.getThisEnd(klass,assocEnds);
 		UMLAssociationEnd otherEnd = transformerUtils.getOtherEnd(klass,assocEnds);
-	
-		if(otherEnd.isNavigable())
-		{
-			UMLClass assocKlass = (UMLClass)otherEnd.getUMLElement();
-			if(transformerUtils.isAssociationEndMany(otherEnd))
-			{%>
+		
+		List<UMLAssociationEnd> associationEnds = new java.util.ArrayList<UMLAssociationEnd>();
+		associationEnds.add(otherEnd);
+		
+		if(transformerUtils.isBidirectionalSelfAssociation(klass,assocEnds)) { // handle bi-directional self-association 
+			associationEnds.add(thisEnd);
+		}
+		
+		for(UMLAssociationEnd associationEnd : associationEnds){	
+			if(associationEnd.isNavigable())
+			{
+			
+				UMLClass assocKlass = (UMLClass)associationEnd.getUMLElement();
+				if(transformerUtils.isAssociationEndMany(associationEnd))
+				{%>
 	<%=transformerUtils.getJavaDocs(klass, assoc)%>			
-	private Collection<<%=assocKlass.getName()%>> <%=otherEnd.getRoleName()%>;
+	private Collection<<%=assocKlass.getName()%>> <%=associationEnd.getRoleName()%>;
 	<%=transformerUtils.getGetterMethodJavaDocs(klass, assoc)%>
-	public Collection<<%=assocKlass.getName()%>> <%=transformerUtils.getGetterMethodName(otherEnd)%>(){
-		return <%=otherEnd.getRoleName()%>;
+	public Collection<<%=assocKlass.getName()%>> <%=transformerUtils.getGetterMethodName(associationEnd)%>(){
+		return <%=associationEnd.getRoleName()%>;
 	}
 
 	<%=transformerUtils.getSetterMethodJavaDocs(klass, assoc)%>
-	public void <%=transformerUtils.getSetterMethodName(otherEnd)%>(Collection<<%=assocKlass.getName()%>> <%=otherEnd.getRoleName()%>){
-		this.<%=otherEnd.getRoleName()%> = <%=otherEnd.getRoleName()%>;
+	public void <%=transformerUtils.getSetterMethodName(associationEnd)%>(Collection<<%=assocKlass.getName()%>> <%=associationEnd.getRoleName()%>){
+		this.<%=associationEnd.getRoleName()%> = <%=associationEnd.getRoleName()%>;
 	}
 		<%}else{%>
 	<%=transformerUtils.getJavaDocs(klass, assoc)%>			
-	private <%=assocKlass.getName()%> <%=otherEnd.getRoleName()%>;
+	private <%=assocKlass.getName()%> <%=associationEnd.getRoleName()%>;
 	<%=transformerUtils.getGetterMethodJavaDocs(klass, assoc)%>	
-	public <%=assocKlass.getName()%> <%=transformerUtils.getGetterMethodName(otherEnd)%>(){
-		return <%=otherEnd.getRoleName()%>;
+	public <%=assocKlass.getName()%> <%=transformerUtils.getGetterMethodName(associationEnd)%>(){
+		return <%=associationEnd.getRoleName()%>;
 	}
 	<%=transformerUtils.getSetterMethodJavaDocs(klass, assoc)%>
-	public void <%=transformerUtils.getSetterMethodName(otherEnd)%>(<%=assocKlass.getName()%> <%=otherEnd.getRoleName()%>){
-		this.<%=otherEnd.getRoleName()%> = <%=otherEnd.getRoleName()%>;
+	public void <%=transformerUtils.getSetterMethodName(associationEnd)%>(<%=assocKlass.getName()%> <%=associationEnd.getRoleName()%>){
+		this.<%=associationEnd.getRoleName()%> = <%=associationEnd.getRoleName()%>;
 	}
-			<%}
+				<%}
+			}
 		}
 	}
 
 	String idGetter = transformerUtils.getClassIdGetterMthod(klass); 
 	if(idGetter!=null){%>
 	/**
-	* Compares <code>obj</code> to it self and returns true if they both are same
+	* Compares <code>obj</code> to itself and returns true if they both are same
 	*
 	* @param obj
 	**/
