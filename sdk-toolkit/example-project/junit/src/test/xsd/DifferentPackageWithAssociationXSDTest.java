@@ -16,7 +16,7 @@ public class DifferentPackageWithAssociationXSDTest extends SDKXSDTestBase
 	
 	public static String getTestCaseName()
 	{
-		return "Abstract Parent With Association XSD Test Case";
+		return "Different Package With Association XSD Test Case";
 	}
 
 	protected void setUp() throws Exception {
