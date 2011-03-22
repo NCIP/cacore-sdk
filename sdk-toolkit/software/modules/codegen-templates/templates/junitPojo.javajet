@@ -1,6 +1,6 @@
 <%@ jet package="gov.nih.nci.codegen.transformer.jet" 
-        class="JunitTransformer"
-        skeleton="JunitTransformerBase.skeleton" %>
+        class="JunitPojoTransformer"
+        skeleton="JunitPojoTransformerBase.skeleton" %>
 <% String fullPackageName=transformerUtils.getFullPackageName(klass);%>
 <% String klassName=klass.getName();%>        
 package test.<%=fullPackageName%>;
@@ -26,7 +26,7 @@ public class <%=klassName%>Test extends SDKTestBase
 {
 	public static String getTestCaseName()
 	{
-		return "<%=klassName%> Test Case";
+		return "<%=klassName%> POJO Test Case";
 	}
 
 <% if (!transformerUtils.isAbstract(klass)	)  {%>

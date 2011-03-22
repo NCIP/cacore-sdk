@@ -17,7 +17,7 @@ public class CLASS extends UMLClassJetTransformer{
 	public Artifact executeTemplate(UMLModel model, UMLClass klass) throws GenerationException{
 		BaseArtifact artifact = new BaseArtifact(transformerUtils);
 		artifact.setContent(generate(model, klass));
-		artifact.createJunitSourceName(klass);
+		artifact.createJunitPojoSourceName(klass);
 		return artifact;
 	}
 	
