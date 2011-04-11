@@ -18,16 +18,33 @@ public<%=transformerUtils.isAbstract(klass)? " abstract" : "" %> class <%=klass.
 	<%=transformerUtils.getJavaDocs(attr)%>
 	<%=transformerUtils.getHibernateValidatorConstraints(klass,attr)%>
 	<%=attr.getVisibility().getName()%> <%=transformerUtils.getDataType(attr)%> <%=attr.getName()%>;
+	<%if(!transformerUtils.matchGetOperationName(attr, klass.getOperations()))
+	{%>
 	<%=transformerUtils.getGetterMethodJavaDocs(attr)%>
 	public <%=transformerUtils.getDataType(attr)%> <%=transformerUtils.getGetterMethodName(attr)%>(){
 		return <%=attr.getName()%>;
 	}
-
+	<%}%>
+	<%
+	if(!transformerUtils.matchSetOperationName(attr, klass.getOperations()))
+	{%>
 	<%=transformerUtils.getSetterMethodJavaDocs(attr)%>
 	public void <%=transformerUtils.getSetterMethodName(attr)%>(<%=transformerUtils.getDataType(attr)%> <%=attr.getName()%>){
 		this.<%=attr.getName()%> = <%=attr.getName()%>;
 	}
+	<%}%>
 	<%}
+	
+	
+	if(klass.getOperations() != null && klass.getOperations().size() > 0)
+	{
+		for(UMLOperation operation:klass.getOperations())
+		{
+	%>
+	<%=transformerUtils.getOperationText(klass, operation)%>
+	<%	}
+	}
+	
 	for(UMLAssociation assoc:klass.getAssociations()){
 		List<UMLAssociationEnd> assocEnds = assoc.getAssociationEnds();
 		UMLAssociationEnd thisEnd = transformerUtils.getThisEnd(klass,assocEnds);
@@ -53,7 +70,6 @@ public<%=transformerUtils.isAbstract(klass)? " abstract" : "" %> class <%=klass.
 	public Collection<<%=assocKlass.getName()%>> <%=transformerUtils.getGetterMethodName(associationEnd)%>(){
 		return <%=associationEnd.getRoleName()%>;
 	}
-
 	<%=transformerUtils.getSetterMethodJavaDocs(klass, assoc)%>
 	public void <%=transformerUtils.getSetterMethodName(associationEnd)%>(Collection<<%=assocKlass.getName()%>> <%=associationEnd.getRoleName()%>){
 		this.<%=associationEnd.getRoleName()%> = <%=associationEnd.getRoleName()%>;

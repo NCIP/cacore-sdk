@@ -7,8 +7,23 @@ package <%=transformerUtils.getFullPackageName(interfaze)%>;
 <%=transformerUtils.getJavaDocs(interfaze)%> 
 public interface <%=interfaze.getName()%> <%=transformerUtils.getSuperInterfaceString(interfaze)%>
 {
+<%
+if(interfaze.getOperations() == null || interfaze.getOperations().size() == 0)
+{
+%>
 	/**
 	* This is a Marker Interface without any behavior
 	*/
-
+<%}
+else
+{
+	for(UMLOperation operation:interfaze.getOperations()){
+%>	
+		<%=transformerUtils.getJavaDocs(operation)%>
+		<%=ModelUtil.getOperationSignature(operation, true)%>;
+		
+<%
+	}
+}	
+%>
 }
