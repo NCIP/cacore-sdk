@@ -16,9 +16,15 @@ import gov.nih.nci.ncicb.xmiinout.domain.UMLGeneralizable;
 import gov.nih.nci.ncicb.xmiinout.domain.UMLGeneralization;
 import gov.nih.nci.ncicb.xmiinout.domain.UMLInterface;
 import gov.nih.nci.ncicb.xmiinout.domain.UMLModel;
+import gov.nih.nci.ncicb.xmiinout.domain.UMLOperation;
+import gov.nih.nci.ncicb.xmiinout.util.ModelUtil;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 
@@ -174,6 +180,7 @@ public class UMLLogicalModelValidator implements Validator
 		validateSuperClass(klass, errors);
 		validateAttributes(klass, errors);
 		validateAssociations(klass, errors);
+		validateOperations(klass, errors);
 	}
 	
 	private void validateInterface(UMLInterface interfaze,GeneratorErrors errors) {
@@ -237,6 +244,139 @@ public class UMLLogicalModelValidator implements Validator
 		if (!interfaze.getAttributes().isEmpty()){
 			errors.addError(new GeneratorError(getName() + ": Attributes not supported for interface "+interfaze.getName()));
 		}
+	}
+	
+	private void validateOperations(UMLClass klass, GeneratorErrors errors) 
+	{
+		List<UMLOperation> operations = klass.getOperations();
+		if(operations == null || operations.size() == 0)
+			return;
+	
+		log.debug("Validating operations for: "+klass.getName());
+		UMLClass superKlass = null;
+		try
+		{
+			superKlass = transformerUtils.getSuperClass(klass);
+		}
+		catch(GenerationException e)
+		{
+			errors.addError(new GeneratorError(klass.getName() + ": Failed to get Super class"));
+		}
+		
+		UMLInterface[] superInterface = ModelUtil.getInterfaces(klass);
+		
+		//If this class doesn't extend or implement
+		//no need to validate operations. Operations on this class are validated at compile time
+		if(superKlass == null && (superInterface == null || superInterface.length == 0))
+			return;
+		
+		log.debug("Validating operations:  superclass: "+superKlass.getName());
+		//If this class is abstract, it is not obligated to implement operations from extending abstract or implmenting interface
+		//if(superKlass.getAbstractModifier().isAbstract())
+		//	return;
+		
+		//Get all abstract operations of super classes and verify if they are implemented in this class
+		//Super class abstract operation could also be implemented in another child extended by this class
+		Map<String, List<UMLOperation>> superClassOperations = new HashMap();
+		try
+		{
+			transformerUtils.getSuperClassOperations(superClassOperations, klass);
+		}
+		catch(GenerationException e)
+		{
+			log.debug("Failed to get super class operations for "+klass.getName());
+		}
+		log.debug("Validating operations:  superclass operations: "+superClassOperations);
+		if(superClassOperations.size() > 0)
+		{
+			Iterator iterator = superClassOperations.keySet().iterator();
+			List<UMLOperation> allSuperOperations; 
+			while(iterator.hasNext())
+			{
+				String fullName = (String)iterator.next();
+				log.debug("Validating operations:  superclass fullName: "+fullName);
+				allSuperOperations = superClassOperations.get(fullName);
+				if(allSuperOperations.size() == 0)
+					continue;
+
+				//Get all operations except for the current class
+				List<UMLOperation> filteredOperations = filterOperations(superClassOperations, fullName);
+				log.debug("Validating operations:  filtered: "+filteredOperations);
+				for(UMLOperation operation : allSuperOperations)
+				{
+					if(!operation.getAbstractModifier().isAbstract())
+						continue;
+					
+					String signature = ModelUtil.getOperationName(operation, false);
+					log.debug("Validating operations:  signature: "+signature);
+					UMLOperation matchedOperationFromImpl = transformerUtils.matchOperationSignature(signature, operations);
+					log.debug("Validating operations:  matchedOperationFromImpl: "+matchedOperationFromImpl);
+					if(matchedOperationFromImpl == null)
+					{
+						UMLOperation matchedOperation = transformerUtils.matchOperationSignature(signature, filteredOperations);
+						log.debug("Validating operations:  matchedOperation: "+matchedOperation);
+						if(matchedOperation == null)
+							errors.addError(new GeneratorError("Abstract operation: "+signature + "in class: " + fullName + " should be implemeted"));
+					}
+					
+				}
+			}
+		}
+		
+		//Get all operations of interfaces and verify if they are implemented in this class
+		//Super interface operation could also be implemented in another child extended by this class
+		Map<String, List<UMLOperation>> superInterfaceOperations = new HashMap();
+		try
+		{
+			transformerUtils.getSuperInterfaceOperations(superInterfaceOperations, klass);
+		}
+		catch(GenerationException e)
+		{
+			log.debug("Failed to get super class operations for "+klass.getName());
+		}
+		
+		log.debug("Validating operations:  superInterfaceOperations: "+superInterfaceOperations);
+		if(superInterfaceOperations.size() > 0)
+		{
+			Iterator iterator = superInterfaceOperations.keySet().iterator();
+			List<UMLOperation> currentClassOperations; 
+			while(iterator.hasNext())
+			{
+				String fullName = (String)iterator.next();
+				log.debug("Validating operations:  superInterface fullName: "+fullName);
+				currentClassOperations = superInterfaceOperations.get(fullName);
+				if(currentClassOperations == null || currentClassOperations.size() == 0)
+					continue;
+
+				for(UMLOperation operation : currentClassOperations)
+				{
+					String signature = ModelUtil.getOperationName(operation, false);
+					log.debug("Validating operations:  superInterface signature: "+signature);
+					UMLOperation matchedOperationFromImpl = transformerUtils.matchOperationSignature(signature, operations);
+					log.debug("Validating operations:  superInterface matchedOperationFromImpl: "+matchedOperationFromImpl);
+					if(matchedOperationFromImpl == null)
+						errors.addError(new GeneratorError("Abstract operation: "+signature + "in class: " + fullName + " should be implemeted"));
+				}
+			}
+		}
+	}
+	
+	private List<UMLOperation> filterOperations(Map<String, List<UMLOperation>> operationsMap, String exclude)
+	{
+		List<UMLOperation> allSuperOperations = new ArrayList(); 
+		if(operationsMap != null && operationsMap.size() > 0)
+		{
+			Iterator iterator = operationsMap.keySet().iterator();
+			while(iterator.hasNext())
+			{
+				String fullName = (String)iterator.next();
+				if(exclude != null && exclude.equals(fullName))
+					continue;
+				
+				allSuperOperations.addAll(operationsMap.get(fullName));
+			}
+		}
+		return allSuperOperations;
 	}
 	
 	private void validateAssociations(UMLClass klass, GeneratorErrors errors) 

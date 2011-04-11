@@ -13,7 +13,9 @@ import gov.nih.nci.ncicb.xmiinout.domain.UMLDependency;
 import gov.nih.nci.ncicb.xmiinout.domain.UMLGeneralization;
 import gov.nih.nci.ncicb.xmiinout.domain.UMLInterface;
 import gov.nih.nci.ncicb.xmiinout.domain.UMLModel;
+import gov.nih.nci.ncicb.xmiinout.domain.UMLOperationParameter;
 import gov.nih.nci.ncicb.xmiinout.domain.UMLPackage;
+import gov.nih.nci.ncicb.xmiinout.domain.UMLOperation;
 import gov.nih.nci.ncicb.xmiinout.domain.UMLTaggableElement;
 import gov.nih.nci.ncicb.xmiinout.domain.UMLTaggedValue;
 import gov.nih.nci.ncicb.xmiinout.util.ModelUtil;
@@ -272,6 +274,91 @@ public class TransformerUtils
 		return superClasses[0];
 	}
 
+	public void getSuperClassOperations(Map<String, List<UMLOperation>> operations, UMLClass klass) throws GenerationException
+	{
+		getSuperClassOperations(operations, klass, null);
+	}
+
+	public String getOperationText(UMLClass klass, UMLOperation operation) throws GenerationException
+	{
+		
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("\n");
+		buffer.append("\t"+getJavaDocs(operation));
+		buffer.append("\n");
+		buffer.append("\t"+ModelUtil.getOperationSignature(operation, true));
+		if(!operation.getAbstractModifier().isAbstract())
+		{
+			buffer.append("\n\t{\n\t\t");
+			String operationBody = ModelUtil.getOperationBody(operation);
+			if(operationBody != null)
+			{
+				buffer.append(operationBody);
+				buffer.append("\n\t}\n");
+			}
+			else
+				throw new GenerationException("Operation body is missing for operation: "+operation.getName() + " for class: "+klass.getName());
+		}
+		else
+			buffer.append(";");
+			
+		return buffer.toString();
+	}
+	
+	public void getSuperClassOperations(Map<String, List<UMLOperation>> operations, UMLClass klass, List<String> exclude) throws GenerationException
+	{
+		UMLClass superClass = getSuperClass(klass);
+		if(superClass == null)
+			return;
+
+		List<UMLOperation> classperations = superClass.getOperations();
+		String fullName = getFQCN(superClass);
+		if(exclude == null || (exclude != null && !exclude.contains(fullName)))
+		{
+			if(classperations != null && classperations.size() > 0)
+				operations.put(getFQCN(superClass), classperations);
+		}
+		getSuperClassOperations(operations, superClass);
+	}
+	
+	public UMLOperation matchOperationSignature(String operationSignature, List<UMLOperation> operations)
+	{
+		if(operations == null || operations.size() ==0)
+			return null;
+		
+		for(UMLOperation operation : operations)
+		{
+			String signature = ModelUtil.getOperationName(operation, false);
+			if(operationSignature.equals(signature))
+				return operation;
+		}
+		return null;
+	}
+
+	private void getSuperInterfaceOperations(Map<String, List<UMLOperation>> operations, UMLInterface interfaze) throws GenerationException
+	{
+		UMLInterface[] superInterfaces = getSuperInterface(interfaze);
+		if(superInterfaces == null || superInterfaces.length == 0)
+			return;
+		
+		//An interface cannot implement another interface, it can only extend another.
+		UMLInterface superInterface = superInterfaces[0];
+		operations.put(getFQCN(superInterface), superInterface.getOperations());
+		getSuperInterfaceOperations(operations, interfaze);
+	}
+	
+	public void getSuperInterfaceOperations(Map<String, List<UMLOperation>> operations, UMLClass klass) throws GenerationException
+	{
+		UMLInterface[] interfaces = ModelUtil.getInterfaces(klass);
+		for(int i=0;i<interfaces.length;i++)
+		{
+			UMLInterface interfaze = interfaces[i];
+			operations.put(getFQCN(interfaze), interfaze.getOperations());
+			getSuperInterfaceOperations(operations, interfaze);
+			
+		}
+	}
+	
 	public String getSuperClassString(UMLClass klass) throws GenerationException
 	{
 		UMLClass superClass = getSuperClass(klass);
@@ -392,6 +479,27 @@ public class TransformerUtils
 				break;
 			}
 		}
+
+		if(klass.getOperations() != null)
+		{
+			for(UMLOperation operation: klass.getOperations())
+			{
+				List<UMLOperationParameter> params = operation.getParameters();
+				if(params == null || params.size() ==0)
+					continue;
+				
+				for(UMLOperationParameter param:params)
+				{
+					if(param.getDataType() instanceof UMLClass)
+					{
+						String fullName = getFQCN((UMLClass)param.getDataType());
+						if(!fullName.startsWith("java.lang."))
+							importList.add(fullName);
+					}
+				}
+			}
+		}
+		
 		for(UMLAssociation association: klass.getAssociations())
 		{
 			List<UMLAssociationEnd> assocEnds = association.getAssociationEnds();
@@ -554,6 +662,42 @@ public class TransformerUtils
 		return "set"+name.substring(0,1).toUpperCase()+name.substring(1,name.length());
 	}
 	
+	public boolean matchSetOperationName(UMLAttribute attr, List<UMLOperation> operations)
+	{
+		String setterOperationName = getSetterMethodName(attr) + "(" + getDataType(attr) + " param0)";
+		if(matchOperationSignature(setterOperationName, operations) != null)
+			return true;
+		
+		return false;
+	}
+
+	public boolean matchSetOperationName(UMLAssociationEnd assocEnd, UMLClass clazz, List<UMLOperation> operations)
+	{
+		String setterOperationName = getSetterMethodName(assocEnd) + "(Collection<" + clazz.getName() + "> param0)";
+		if(matchOperationSignature(setterOperationName, operations) != null)
+			return true;
+		
+		return false;
+	}
+	
+	public boolean matchGetOperationName(UMLAttribute attr, List<UMLOperation> operations)
+	{
+		String getterOperationName = getGetterMethodName(attr) + "()";
+		if(matchOperationSignature(getterOperationName, operations) != null)
+			return true;
+		
+		return false;
+	}
+	
+	public boolean matchGetOperationName(UMLAssociationEnd assocEnd, List<UMLOperation> operations)
+	{
+		String getterOperationName = getGetterMethodName(assocEnd) + "()";
+		if(matchOperationSignature(getterOperationName, operations) != null)
+			return true;
+		
+		return false;
+	}
+
 	public boolean isBidirectionalSelfAssociation(UMLClass klass, List<UMLAssociationEnd>assocEnds) throws GenerationException
 	{
 		UMLAssociationEnd end1 = assocEnds.get(0);
@@ -1665,6 +1809,11 @@ public class TransformerUtils
 		doc.append("\n\t**/");
 		return doc.toString();
 
+	}
+
+	public String getJavaDocs(UMLOperation operation) throws GenerationException 
+	{
+		return getJavaDocs(operation.getTaggedValues());
 	}
 	
 	public String getJavaDocs(UMLInterface interfaze) throws GenerationException 
