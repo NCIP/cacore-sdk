@@ -62,8 +62,19 @@ String discriminatorValueStr = (discriminatorValue==null) ? "" : "discriminator-
 							} else {
 								temp = currentKlass;
 							}
+							String notNullTagValue = transformerUtils.getIsNotNullTagValue(temp,attr);
+							if(notNullTagValue==null || notNullTagValue.length() == 0)
+							{					
 						%>
-		<%=emptySpace%><property name="<%=attr.getName()%>" type="<%=transformerUtils.getHibernateDataType(temp,attr)%>" column="<%=transformerUtils.getMappedColumnName(table,fqcn+"."+attr.getName())%>"/><%
+		<%=emptySpace%><property name="<%=attr.getName()%>" type="<%=transformerUtils.getHibernateDataType(temp,attr)%>" column="<%=transformerUtils.getMappedColumnName(table,fqcn+"."+attr.getName())%>" />
+						<%
+							}
+							else
+							{
+						%>
+		<%=emptySpace%><property name="<%=attr.getName()%>" type="<%=transformerUtils.getHibernateDataType(temp,attr)%>" column="<%=transformerUtils.getMappedColumnName(table,fqcn+"."+attr.getName())%>"  not-null="<%=notNullTagValue%>"/>
+						<%
+							}							
 						}
 					}
 				}
@@ -176,7 +187,7 @@ String discriminatorValueStr = (discriminatorValue==null) ? "" : "discriminator-
 								{	
 									String lazyValue = lazy == true ? "proxy" : "false";							
 									String keyColumnName = transformerUtils.findAssociatedColumn(table,currentKlass,otherEnd,assocKlass,thisEnd, false);%>
-		<%=emptySpace%><many-to-one name="<%=otherEnd.getRoleName()%>" class="<%=assocKlassName%>" column="<%=keyColumnName%>" lazy="<%=lazyValue%>" not-null="<%=notNullFkAttr%>" cascade="<%=cascadeStyle%>"/><%
+		<%=emptySpace%><many-to-one name="<%=otherEnd.getRoleName()%>" class="<%=assocKlassName%>" column="<%=keyColumnName%>" lazy="<%=lazyValue%>" not-null="<%=notNullFkAttr%>" cascade="<%=cascadeStyle%>" insert="false" update="false" /><%
 								}else{ // Many to One - Join Table
 						
 										// do nothing; do not generate any <join> elements in this first pass!  Hibernate DTD requires any <set> elements to appear first
@@ -193,13 +204,13 @@ String discriminatorValueStr = (discriminatorValue==null) ? "" : "discriminator-
 								if(thisEnd.isNavigable())
 								{
 									if(keyColumnPresent){%>
-		<%=emptySpace%><many-to-one name="<%=otherEnd.getRoleName()%>" class="<%=assocKlassName%>" column="<%=keyColumnName%>" unique="true" lazy="<%=lazyValue%>" not-null="<%=notNullFkAttr%>" cascade="<%=cascadeStyle%>"/><%
+		<%=emptySpace%><many-to-one name="<%=otherEnd.getRoleName()%>" class="<%=assocKlassName%>" column="<%=keyColumnName%>" unique="true" lazy="<%=lazyValue%>" not-null="<%=notNullFkAttr%>" cascade="<%=cascadeStyle%>" insert="false" update="false" /><%
 									}else{%>
 		<%=emptySpace%><one-to-one name="<%=otherEnd.getRoleName()%>" class="<%=assocKlassName%>" property-ref="<%=thisEnd.getRoleName()%>" lazy="<%=lazyValue%>" cascade="<%=cascadeStyle%>"/><%
 									}
 								}else{
 									if(keyColumnPresent){%>
-		<%=emptySpace%><many-to-one name="<%=otherEnd.getRoleName()%>" class="<%=assocKlassName%>" column="<%=keyColumnName%>" unique="true" lazy="<%=lazyValue%>" not-null="<%=notNullFkAttr%>" cascade="<%=cascadeStyle%>"/><%
+		<%=emptySpace%><many-to-one name="<%=otherEnd.getRoleName()%>" class="<%=assocKlassName%>" column="<%=keyColumnName%>" unique="true" lazy="<%=lazyValue%>" not-null="<%=notNullFkAttr%>" cascade="<%=cascadeStyle%>" insert="false" update="false"/><%
 									}else {
 									    throw new GenerationException("One to one unidirectional mapping requires key column to be present in the source class"+transformerUtils.getFQCN(currentKlass));
 									}
@@ -339,7 +350,7 @@ String discriminatorValueStr = (discriminatorValue==null) ? "" : "discriminator-
 								{	
 									String lazyValue = lazy == true ? "proxy" : "false";							
 									String keyColumnName = transformerUtils.findAssociatedColumn(table,currentKlass,otherEnd,assocKlass,thisEnd, false);%>
-		<%=emptySpace%><many-to-one name="<%=otherEnd.getRoleName()%>" class="<%=assocKlassName%>" column="<%=keyColumnName%>" lazy="<%=lazyValue%>" not-null="<%=notNullFkAttr%>" cascade="<%=cascadeStyle%>"/><%
+		<%=emptySpace%><many-to-one name="<%=otherEnd.getRoleName()%>" class="<%=assocKlassName%>" column="<%=keyColumnName%>" lazy="<%=lazyValue%>" not-null="<%=notNullFkAttr%>" cascade="<%=cascadeStyle%>" insert="false" update="false"/><%
 								}else{ // Many to One - Join Table
 						
 										// do nothing; do not generate any <join> elements in this first pass!  Hibernate DTD requires any <set> elements to appear first
@@ -356,13 +367,13 @@ String discriminatorValueStr = (discriminatorValue==null) ? "" : "discriminator-
 								if(thisEnd.isNavigable())
 								{
 									if(keyColumnPresent){%>
-		<%=emptySpace%><many-to-one name="<%=otherEnd.getRoleName()%>" class="<%=assocKlassName%>" column="<%=keyColumnName%>" unique="true" lazy="<%=lazyValue%>" not-null="<%=notNullFkAttr%>" cascade="<%=cascadeStyle%>"/><%
+		<%=emptySpace%><many-to-one name="<%=otherEnd.getRoleName()%>" class="<%=assocKlassName%>" column="<%=keyColumnName%>" unique="true" lazy="<%=lazyValue%>" not-null="<%=notNullFkAttr%>" cascade="<%=cascadeStyle%>" insert="false" update="false"/><%
 									}else{%>
 		<%=emptySpace%><one-to-one name="<%=otherEnd.getRoleName()%>" class="<%=assocKlassName%>" property-ref="<%=thisEnd.getRoleName()%>" lazy="<%=lazyValue%>" cascade="<%=cascadeStyle%>"/><%
 									}
 								}else{
 									if(keyColumnPresent){%>
-		<%=emptySpace%><many-to-one name="<%=otherEnd.getRoleName()%>" class="<%=assocKlassName%>" column="<%=keyColumnName%>" unique="true" lazy="<%=lazyValue%>" not-null="<%=notNullFkAttr%>" cascade="<%=cascadeStyle%>"/><%
+		<%=emptySpace%><many-to-one name="<%=otherEnd.getRoleName()%>" class="<%=assocKlassName%>" column="<%=keyColumnName%>" unique="true" lazy="<%=lazyValue%>" not-null="<%=notNullFkAttr%>" cascade="<%=cascadeStyle%>" insert="false" update="false"/><%
 									}else {
 									    throw new GenerationException("One to one unidirectional mapping requires key column to be present in the source class"+transformerUtils.getFQCN(currentKlass));
 									}

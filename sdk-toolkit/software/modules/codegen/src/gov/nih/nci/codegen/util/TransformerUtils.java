@@ -73,6 +73,7 @@ public class TransformerUtils
 	private static final String TV_NCI_EAGER_LOAD = "NCI_EAGER_LOAD";
 	public static final String  TV_PK_GENERATOR = "NCI_GENERATOR.";
 	public static final String  TV_PK_GENERATOR_PROPERTY = "NCI_GENERATOR_PROPERTY";
+	public static final String  TV_NOT_NULL_PROPERTY = "nci-not-null";
 	
 	//Global Model Exchange (GME) Project Tag Value Constants; see: https://wiki.nci.nih.gov/display/caCORE/GME+Namespace
 	public static final String  TV_NCI_GME_XML_NAMESPACE = "NCI_GME_XML_NAMESPACE"; //Used for projects, Packages, Classes
@@ -1796,6 +1797,23 @@ public class TransformerUtils
 		}
 		return temp.toString();
 	}
+	
+	public String getIsNotNullTagValue(UMLClass klass, UMLAttribute attr) throws GenerationException
+	{
+		log.debug("getIsNotNullTagValue for klass: " + klass.getName() + ", attr: " + attr.getName());
+		String fqcn = getFQCN(klass);
+		UMLClass table = getTable(klass);
+		UMLAttribute col = getMappedColumn(table,fqcn+"."+attr.getName());
+
+		String temp1= getTagValue(table,col, TV_NOT_NULL_PROPERTY, null, false,0, 1);			
+		if(temp1 ==null || temp1.length() == 0)
+		{
+			return null;
+		}
+		return temp1;
+	}
+	
+	
 	
 	private String getJavaDocs(Collection<UMLTaggedValue> tagValues) throws GenerationException
 	{
