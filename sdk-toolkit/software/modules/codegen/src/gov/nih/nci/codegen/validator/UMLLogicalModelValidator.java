@@ -177,7 +177,7 @@ public class UMLLogicalModelValidator implements Validator
 	}
 
 	private void validateClass(UMLClass klass,GeneratorErrors errors) {
-		validateSuperClass(klass, errors);
+		//validateSuperClass(klass, errors);
 		validateAttributes(klass, errors);
 		validateAssociations(klass, errors);
 		validateOperations(klass, errors);
