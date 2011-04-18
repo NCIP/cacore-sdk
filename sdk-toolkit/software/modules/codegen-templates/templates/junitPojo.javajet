@@ -56,31 +56,39 @@ public class <%=klassName%>Test extends SDKTestBase
 			}%>
 
 <%	int counter = 1;
-		for(UMLAssociation assoc:klass.getAssociations()) {
+	for(UMLAssociation assoc:klass.getAssociations()) {
 
 		List<UMLAssociationEnd> assocEnds = assoc.getAssociationEnds();
 		UMLAssociationEnd thisEnd = transformerUtils.getThisEnd(klass,assocEnds);
 		UMLAssociationEnd otherEnd = transformerUtils.getOtherEnd(klass,assocEnds);
-	
-		if(otherEnd.isNavigable())
+
+		List<UMLAssociationEnd> associationEnds = new java.util.ArrayList<UMLAssociationEnd>();
+		associationEnds.add(otherEnd);
+		
+		if(transformerUtils.isBidirectionalSelfAssociation(klass,assocEnds)) { // handle bi-directional self-association 
+			associationEnds.add(thisEnd);
+		}
+		
+	for(UMLAssociationEnd associationEnd : associationEnds){	
+		if(associationEnd.isNavigable())
 		{
-			UMLClass assocKlass = (UMLClass)otherEnd.getUMLElement();
-			if(transformerUtils.isAssociationEndMany(otherEnd))
+			UMLClass assocKlass = (UMLClass)associationEnd.getUMLElement();
+			if(transformerUtils.isAssociationEndMany(associationEnd))
 			{ %>
 			// test collection association
-			Collection<<%=transformerUtils.getFullPackageName(assocKlass)%>.<%=assocKlass.getName()%>> associated<%=assocKlass.getName()%>Collection<%=counter%> = result.<%=transformerUtils.getGetterMethodName(otherEnd)%>();
+			Collection<<%=transformerUtils.getFullPackageName(assocKlass)%>.<%=assocKlass.getName()%>> associated<%=assocKlass.getName()%>Collection<%=counter%> = result.<%=transformerUtils.getGetterMethodName(associationEnd)%>();
 			if (associated<%=assocKlass.getName()%>Collection<%=counter%> != null) {
 				assertTrue(associated<%=assocKlass.getName()%>Collection<%=counter%>.size() >= 0);
 			}
 <%		}	else { %>
 			// test object association
-			<%=transformerUtils.getFullPackageName(assocKlass)%>.<%=assocKlass.getName()%> associated<%=assocKlass.getName()%><%=counter%> = result.<%=transformerUtils.getGetterMethodName(otherEnd)%>();
+			<%=transformerUtils.getFullPackageName(assocKlass)%>.<%=assocKlass.getName()%> associated<%=assocKlass.getName()%><%=counter%> = result.<%=transformerUtils.getGetterMethodName(associationEnd)%>();
 			
 			if (associated<%=assocKlass.getName()%><%=counter%> != null) { //don't fail just because a particular DB record does not have associated object data<%for(UMLAttribute attr:assocKlass.getAttributes()){%>
 				assertNotNull("associated<%=assocKlass.getName()%><%=counter%>.<%=transformerUtils.getGetterMethodName(attr)%>() returned an unexpected 'null' value",associated<%=assocKlass.getName()%><%=counter%>.<%=transformerUtils.getGetterMethodName(attr)%>());<%
 				}%>			
 			}	
-<%		} 		counter ++;} } %>
+<%		} counter ++;}}} %>
 		}
 		
 		// print out a sample record
