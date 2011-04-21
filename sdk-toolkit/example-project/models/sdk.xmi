@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="windows-1252"?>
-<XMI xmi.version="1.1" xmlns:UML="omg.org/UML1.3" timestamp="2011-04-20 09:13:11">
+<XMI xmi.version="1.1" xmlns:UML="omg.org/UML1.3" timestamp="2011-04-21 08:00:23">
 	<XMI.header>
 		<XMI.documentation>
 			<XMI.exporter>Enterprise Architect</XMI.exporter>
@@ -6879,7 +6879,7 @@
 												<UML:TaggedValue tag="duplicates" value="1"/>
 												<UML:TaggedValue tag="ea_guid" value="{9FAB7C98-610E-4ae6-88A6-5B6EA3246D23}"/>
 												<UML:TaggedValue tag="ea_localid" value="1916"/>
-												<UML:TaggedValue tag="mapped-attributes" value="gov.nih.nci.cacoresdk.domain.operations.SuperTest.id" xmi.id="EAID_4DC7F02B_767A_4320_8426_53672AB19B42"/>
+												<UML:TaggedValue tag="mapped-attributes" value="gov.nih.nci.cacoresdk.domain.operations.ChildTest.id" xmi.id="EAID_4DC7F02B_767A_4320_8426_53672AB19B42"/>
 											</UML:ModelElement.taggedValue>
 										</UML:Attribute>
 										<UML:Operation name="PK_CHILD_TEST" visibility="public" ownerScope="instance" isQuery="false" concurrency="sequential">
@@ -43718,7 +43718,7 @@
 				<UML:TaggedValue tag="version" value="1.0"/>
 				<UML:TaggedValue tag="author" value="konkapv"/>
 				<UML:TaggedValue tag="created_date" value="2011-04-08 16:33:35"/>
-				<UML:TaggedValue tag="modified_date" value="2011-04-20 09:13:00"/>
+				<UML:TaggedValue tag="modified_date" value="2011-04-21 08:00:07"/>
 				<UML:TaggedValue tag="package" value="EAPK_C7B3C196_B60B_4843_ADB9_1F3C04CE9CC9"/>
 				<UML:TaggedValue tag="type" value="Logical"/>
 				<UML:TaggedValue tag="swimlanes" value="locked=false;orientation=0;width=0;inbar=false;names=false;color=0;bold=false;fcol=0;;cls=0;"/>
@@ -43728,9 +43728,9 @@
 				<UML:TaggedValue tag="styleex" value="ExcludeRTF=0;DocAll=0;HideQuals=0;AttPkg=1;ShowTests=0;ShowMaint=0;SuppressFOC=1;MatrixActive=0;SwimlanesActive=1;MatrixLineWidth=1;MatrixLocked=0;TConnectorNotation=UML 2.1;TExplicitNavigability=0;AdvancedElementProps=1;AdvancedFeatureProps=1;AdvancedConnectorProps=1;ProfileData=;MDGDgm=;STBLDgm=;ShowNotes=0;VisibleAttributeDetail=0;ShowOpRetType=1;SuppressBrackets=0;SuppConnectorLabels=0;PrintPageHeadFoot=0;ShowAsList=0;"/>
 			</UML:ModelElement.taggedValue>
 			<UML:Diagram.element>
-				<UML:DiagramElement geometry="Left=66;Top=1132;Right=242;Bottom=1237;" subject="EAID_6E2D36B4_123F_4545_A96A_AE32ED88E0F2" seqno="1" style="DUID=9B9482C9;NSL=0;"/>
+				<UML:DiagramElement geometry="Left=66;Top=1132;Right=278;Bottom=1237;" subject="EAID_6E2D36B4_123F_4545_A96A_AE32ED88E0F2" seqno="1" style="DUID=9B9482C9;NSL=0;"/>
 				<UML:DiagramElement geometry="Left=416;Top=1113;Right=580;Bottom=1219;" subject="EAID_40B4077C_71C1_4e9b_9C90_1B3D80A98F94" seqno="2" style="DUID=0891C74D;"/>
-				<UML:DiagramElement geometry="Left=393;Top=950;Right=569;Bottom=1065;" subject="EAID_317AF9AF_D14A_4ffd_90C8_8969C95CAD7C" seqno="3" style="NSL=0;DUID=F609A998;"/>
+				<UML:DiagramElement geometry="Left=394;Top=950;Right=570;Bottom=1065;" subject="EAID_317AF9AF_D14A_4ffd_90C8_8969C95CAD7C" seqno="3" style="NSL=0;DUID=F609A998;"/>
 				<UML:DiagramElement geometry="Left=388;Top=772;Right=589;Bottom=926;" subject="EAID_90055CDC_7F7A_427c_9916_3E867DB79A6F" seqno="4" style="NSL=0;DUID=A0E3E745;"/>
 				<UML:DiagramElement geometry="Left=366;Top=579;Right=567;Bottom=720;" subject="EAID_91B71E60_C178_4efd_90DF_0D4E9CFED796" seqno="5" style="NSL=0;DUID=94D3EACA;"/>
 				<UML:DiagramElement geometry="Left=330;Top=225;Right=604;Bottom=504;" subject="EAID_C0EC4345_454F_4239_8F78_EAC0F46A3CDE" seqno="6" style="NSL=0;DUID=29430BA9;"/>
