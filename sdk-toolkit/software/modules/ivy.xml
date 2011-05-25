@@ -34,7 +34,7 @@
 	<dependencies>
 		<dependency org="ncicb" name="csm" rev="4.2" conf="compile" />
 		<dependency org="ncicb" name="clm" rev="4.2.beta" conf="compile" />
-		<dependency org="ncicb" name="xmi.in.out" rev="1.0" conf="compile"/>	
+		<dependency org="ncicb" name="xmi.in.out" rev="1.1" conf="compile"/>	
 		<dependency org="ncicb" name="iso-datatypes" rev="2.1.1" conf="compile->master"/>	
 		<dependency org="ncicb" name="iso-datatypes-extensions" rev="2.1.1" conf="compile->master"/>	
 		<dependency org="ncicb" name="iso-datatypes-hibernate" rev="2.1.1" conf="compile->master"/>	

@@ -714,6 +714,9 @@
 				<include name="sdk-system-client-*.jar"/>
 				<include name="sdk-system-core-*.jar"/>
 			</fileset>
+			<fileset dir="${3RD_PARTY_JARS_DIRECTORY}">
+				<include name="*.jar" />
+			</fileset>						
 			<fileset dir="${output.target.dir}" />
 		</copy>	
 		<if>
@@ -1203,6 +1206,9 @@
 				<include name="${bean.file}" />
 				<include name="${orm.file}" />
 			</fileset>
+			<fileset dir="${3RD_PARTY_JARS_DIRECTORY}">
+				<include name="*.jar" />
+			</fileset>				
 		</copy>
 		<if>
 			<equals arg1="${GENERATE_JAXB_MAPPING}" arg2="true" />

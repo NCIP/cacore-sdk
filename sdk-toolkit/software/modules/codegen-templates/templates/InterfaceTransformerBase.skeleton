@@ -9,6 +9,8 @@ import gov.nih.nci.ncicb.xmiinout.domain.UMLInterface;
 import gov.nih.nci.ncicb.xmiinout.domain.UMLAttribute;
 import gov.nih.nci.ncicb.xmiinout.domain.UMLAssociation;
 import gov.nih.nci.ncicb.xmiinout.domain.UMLAssociationEnd;
+import gov.nih.nci.ncicb.xmiinout.domain.UMLOperation;
+import gov.nih.nci.ncicb.xmiinout.util.ModelUtil;
 
 import java.util.List;
 

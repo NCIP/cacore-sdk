@@ -11,6 +11,7 @@ import gov.nih.nci.ncicb.xmiinout.domain.UMLAttribute;
 import gov.nih.nci.ncicb.xmiinout.domain.UMLAssociation;
 import gov.nih.nci.ncicb.xmiinout.domain.UMLAssociationEnd;
 import gov.nih.nci.ncicb.xmiinout.domain.UMLGeneralization;
+import gov.nih.nci.ncicb.xmiinout.domain.UMLOperation;
 
 import java.util.*;
 

@@ -1,0 +1,75 @@
+<%@ jet package="gov.nih.nci.codegen.transformer.jet" 
+        class="JunitXmlDataTransformer"
+        skeleton="JunitXmlDataTransformerBase.skeleton" %>
+<% String fullPackageName=transformerUtils.getFullPackageName(klass);%>
+<% String klassName=klass.getName();%>        
+package test.<%=fullPackageName%>;
+
+<%=transformerUtils.getImports(klass)%>
+import <%=fullPackageName%>.<%=klassName%>;
+
+import gov.nih.nci.system.applicationservice.ApplicationException;
+
+import java.lang.reflect.Modifier;
+import java.util.Collection;
+import java.util.Iterator;
+
+import test.SDKXMLDataTestBase;
+
+public class <%=klassName%>XMLDataTest extends SDKXMLDataTestBase
+{
+	public static String getTestCaseName()
+	{
+		return "<%=klassName%> XML Data Test Case";
+	}
+
+<% if (!transformerUtils.isAbstract(klass)	)  {%>
+	
+	/**
+	 * Uses Nested Search Criteria for search
+	 * Verifies that the results are returned 
+	 * Verifies size of the result set
+	 * Verifies that none of the attributes are null
+	 * 
+	 * @throws ApplicationException
+	 */
+	public void testEntireObjectNestedSearch() throws Exception
+	{
+		<%=klassName%> searchObject = new <%=klassName%>();
+		Collection results = getApplicationService().search("<%=fullPackageName%>.<%=klassName%>",searchObject );
+
+		assertNotNull(results);
+		
+		for(Iterator i = results.iterator();i.hasNext();)
+		{
+			<%=klassName%> result = (<%=klassName%>)i.next();
+			toXML(result);
+			
+			validateClassElements(result);
+			// test attributes<%for(UMLAttribute attr:klass.getAttributes()){%>
+			validateAttribute(result,"<%=attr.getName()%>",result.<%=transformerUtils.getGetterMethodName(attr)%>());<%
+			}%>
+			
+			//assertTrue(validateXMLData(result, searchObject.getClass()));
+
+			<%=klassName%> result2 = (<%=klassName%>)fromXML(result);			
+			// test attributes<%for(UMLAttribute attr:klass.getAttributes()){%>
+			assertNotNull(result2.<%=transformerUtils.getGetterMethodName(attr)%>());<%
+			}%>
+		}	
+	}
+
+<%} else {%>	
+	/**
+	 * Regular test case not generated, as class <%=klassName%> is abstract
+	 * This "placeholder" test case is generated instead to avoid the junit warning that no tests were found
+	 * 
+	 * @throws ApplicationException
+	 */
+	public void testEntireObjectNestedSearch() throws ApplicationException
+	{
+		boolean isTrue = true;
+		assertTrue(	isTrue);
+	}
+<%}%>		
+}

@@ -473,6 +473,9 @@
 		<fileset dir="${target.module.dir}/lib">
 			<include name="sdk-codegen-*.jar" />
 		</fileset>
+		<fileset dir="${3RD_PARTY_JARS_DIRECTORY}">
+			<include name="*.jar" />
+		</fileset>				
 		<pathelement path="${output.codegen.config.dir}" />
 		<pathelement path="${output.codegen.validator.config.dir}" />
 	</path>
