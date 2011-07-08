@@ -1,6 +1,5 @@
 package gov.nih.nci.system.applicationservice;
 
-import gov.nih.nci.system.query.cql.CQLQuery;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
 import java.util.List;
@@ -14,48 +13,7 @@ import org.hibernate.criterion.DetachedCriteria;
  */
 public interface ApplicationService
 {
-	/**
-	 * Retrieves the result from the data source using the CQL query. The CQL query structure is converted into the
-	 * data source specific query language. For the Object Relational Mapping based persistence tier, the CQL query
-	 * structure is converted in the Hibernate Query Language (HQL). Hibernate converts the HQL into SQL and executes
-	 * it against the relational database. 
-	 * 
-	 * The retrieved results are converted into a list which may not be completely loaded. If the retrieved results 
-	 * are more than the maximum number of supported records as indicated by {@link #getMaxRecordsCount()} then the
-	 * result set will be partially loaded. The client framework will execute a subsequent query (transparent to the
-	 * client application) against the <code>ApplicationService</code> to load the remaining results in the chunk 
-	 * no greater than value specified by {@link #getMaxRecordsCount()}.
-	 * 
-	 * <B>Note:</B> The <code>targetClassName</code> parameter will not be interpreted by the system. This parameter
-	 * will be determined from the CQLQuery. 
-	 * 
-	 * @param cqlQuery
-	 * @param targetClassName
-	 * @return
-	 * @throws ApplicationException
-	 * @see {@link #query(CQLQuery)}
-	 */
-	@Deprecated
-	public <E> List<E> query(CQLQuery cqlQuery, String targetClassName) throws ApplicationException;
 	
-	/**
-	 * Retrieves the result from the data source using the CQL query. The CQL query structure is converted into the
-	 * data source specific query language. For the Object Relational Mapping based persistence tier, the CQL query
-	 * structure is converted in the Hibernate Query Language (HQL). Hibernate converts the HQL into SQL and executes
-	 * it against the relational database. 
-	 * 
-	 * The retrieved results are converted into a list which may not be completely loaded. If the retrieved results 
-	 * are more than the maximum number of supported records as indicated by {@link #getMaxRecordsCount()} then the
-	 * result set will be partially loaded. The client framework will execute a subsequent query (transparent to the
-	 * client application) against the <code>ApplicationService</code> to load the remaining results in the chunk 
-	 * no greater than value specified by {@link #getMaxRecordsCount()}.
-	 * 
-	 * @param cqlQuery
-	 * @return
-	 * @throws ApplicationException
-	 */
-	public <E> List<E> query(CQLQuery cqlQuery) throws ApplicationException;
-
 	/**
 	 * Retrieves the result from the data source using the DetachedCriteria query. The DetachedCriteria query structure 
 	 * can be used only by the Object Relational Mapping based persistence tier. Hibernate executes it against the 
@@ -262,23 +220,5 @@ public interface ApplicationService
 	 */
 	public <E> List<E> getAssociation(Object source, String associationName) throws ApplicationException;
 
-
-	/**
-	 * Retrieves the result from the data source using the caGrid's CQL query. The CQL query structure is converted into the
-	 * data source specific query language. For the Object Relational Mapping based persistence tier, the CQL query
-	 * structure is converted in the Hibernate Query Language (HQL). Hibernate converts the HQL into SQL and executes
-	 * it against the relational database. 
-	 * 
-	 * The retrieved results are converted into a list which may not be completely loaded. If the retrieved results 
-	 * are more than the maximum number of supported records as indicated by {@link #getMaxRecordsCount()} then the
-	 * result set will be partially loaded. The client framework will execute a subsequent query (transparent to the
-	 * client application) against the <code>ApplicationService</code> to load the remaining results in the chunk 
-	 * no greater than value specified by {@link #getMaxRecordsCount()}.
-	 * 
-	 * @param cqlQuery
-	 * @return
-	 * @throws ApplicationException
-	 */
-	public <E> List<E> query(gov.nih.nci.cagrid.cqlquery.CQLQuery cqlQuery) throws ApplicationException;
 	
 }

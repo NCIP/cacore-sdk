@@ -1,11 +1,10 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<!-- bda-build-template version 1.1.1  -->
+<!-- ld-template version 1.5.0      -->
 <!--
-$Id: install.xml 1775 2009-06-26 18:34:54Z saksass $
-$HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-template/software/build/install.xml $
+$Id$
+$HeadURL$
 -->
 
-<project name="bda-blueprints-installer" default="upgrade" basedir="." 
+<project name="bda-blueprints-installer" default="upgrade" basedir="."
 	xmlns:ivy="antlib:org.apache.ivy.ant"
 	>
 	<description>
@@ -33,6 +32,7 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 	</description>
 
 	<!-- Properties file related properties and tasks -->
+	<echo message="Passed in properties file of ${properties.file}."/>
 	<property environment="env" />
 	<property file="local.properties"/>
 	<property file="project.properties"/>
@@ -44,7 +44,7 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 	<replaceregexp file="${properties.file}" byline="true" match="^([\w\d.]+)=(.*[\w\d\/\{\}\\]+)[ \t]+\r*$" replace="\1=\2"/>
 	<replaceregexp file="${properties.file}" byline="true" match="^([\w\d.]+)=[ \t]+(.*[\w\d\/\{\}\\]+)\r*$" replace="\1=\2"/>
 	<property file="${properties.file}" />
-	
+
 	<!-- Generic properties -->
 	<property name="project.name" value="bda-blueprints"/>
 	<property name="env.name" value="local"/>
@@ -65,18 +65,24 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 	<property name="db-upgrade.dir.dest" location="${working.dir}/${db-upgrade.dist.relative.dir}" />
 	<property name="jboss-conf.dir.src" location="${basedir}/${jboss-conf.dist.relative.dir}" />
 	<property name="jboss-conf.dir.dest" location="${working.dir}/${jboss-conf.dist.relative.dir}" />
+	<property name="sync-gts.dir" location="${basedir}/${sync-gts.dist.relative.dir}"/>
+	<property name="sync-gts.build.dir" location="${sync-gts.dir}/syncgts"/>
+	<property name="cagrid-target.dir" location="${sync-gts.dir}/cagrid-target"/>
 
 	<!-- *-ds.xml and WAR -->
 	<property name="bda-blueprints-webapp.dir.dist" location="${basedir}/${bda-blueprints-webapp.dist.relative.dir}" />
 	<property name="bda-blueprints-webapp.ds.file" value="bda-blueprints-ds.xml" />
 	<property name="bda-blueprints-webapp.name" value="bda-blueprints-webapp" />
 	<property name="bda-blueprints-webapp.war.file" value="${bda-blueprints-webapp.name}.war" />
+	<!-- Added to make sure that it works with both absolute and relative paths, this property is handed to sub-project scripts in absolute format. -->
+	<property name="jar-signing.keystore.abs-location" location="${jar-signing.keystore.location}"/>
 
 	<!-- Grid related properties -->
 	<property name="grid.resource.dir" location="${basedir}/${tools.dist.relative.dir}" />
 	<property name="grid.application.dir" location="${basedir}/${grid-sample.dist.relative.dir}" />
 	<property name="grid.artifact.file" value="sample-wsrf-war.zip" />
-	<property name="grid.dir.dest" value="wsrf" />
+	<property name="grid.dir.dest.jboss" value="wsrf.war" />
+	<property name="grid.dir.dest.tomcat" value="wsrf" />
 	<property name="grid.application.name" value="Sample" />
 	<property name="resource.file.jboss-globus-lib" value="${cagrid-libs.binaries.file}" />
 	<property name="resource.file.jboss-globus-war" value="${cagrid-base-war.binaries.file}" />
@@ -101,81 +107,140 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 	<delete dir="${working.dir}" failonerror="false"/>
 	<mkdir dir="${working.dir}" />
 
-	<!-- Start logging moved out of target so all targets are logged --> 
+	<!-- Start logging moved out of target so all targets are logged -->
 	<!--<property name="install-logs.dir" location="${application.base.path}/change-logs"/> -->
 	<property name="install-logs.dir" location="${log.dir}"/>
 	<mkdir dir="${install-logs.dir}"/>
 	<tstamp>
-		<format property="install.time" pattern="yyyy-MM-dd-HH-mm" />
+		<format property="install.time" pattern="yyyy-MM-dd-HH-mm-ss" />
 	</tstamp>
 	<record name="${install-logs.dir}/install-${install.time}.log" action="start"/>
 
-	<target name="common:init:pre">
-		<!-- Set application.base.path based on platform -->
-		<condition property="application.base.path" value="${application.base.path.linux}">
-			<or>
-				<os family="unix" />
-				<os family="mac" />
-			</or>
-		</condition>
-	
-		<condition property="application.base.path" value="${application.base.path.windows}">
-			<os family="windows" />
-		</condition>
-		<echo message="application.base.path=${application.base.path}"/>
-		<property name="jboss.home" value="${application.base.path}/${jboss.relative.path}"/>
-		<property name="tomcat.home" value="${application.base.path}/${tomcat.relative.path}"/>
-	</target>
-	<!-- Targets begin -->
-	<target name="install:jboss:init" depends="common:init:pre" unless="upgrade.running">
-		<!-- determine if port configurations or port lists are being called -->
-		<if>
-			<isset property="jboss.ncicb-standard.port-config"/>
-			<then>
-				<!-- Read some port properties from standard bindings file -->
-				<echo message="Using JBoss NCICB Standard port configurations"/>
-				<property name="jboss.server.binding.template.location" value="${basedir}/${jboss-bindings.file}"/>
-				<jboss-read-ports
-					jboss.server.bindingfile.location="${jboss.server.binding.template.location}"
-					/>
-				<echo message="http -${jboss.server.port} "/>
-				<echo message="http -${jboss.server.jndi.port} "/>
-				<properties-exist
-					properties.list="jboss.server.jndi.port,jboss.server.port,jboss.server.ports.name"
-					/>
-				<!-- Make sure there are not unexpanded tokens and that the jboss.server.ports.name is a configuration in the bindings file. -->
-				<jboss-bindings-validate
-					jboss.server.bindingfile.location="${jboss.server.binding.template.location}"
-					/>
+    <target name="common:init:pre">
+        <!-- Set application.base.path based on platform -->
+        <condition property="application.base.path" value="${application.base.path.linux}">
+            <or>
+                <os family="unix"/>
+                <os family="mac"/>
+            </or>
+        </condition>
 
-			</then>
-			<else>
-				<!-- else ensure that all ports are set, since these will be removed from install-properties.template we will verify here.  They have to be removed so the validator works with or without the properties or we have to change the format of the file. -->
-				<echo message="Using custom JBoss port configurations"/>
-				<property name="jboss.server.binding.template.location" value="${bda-utils.dir}/resource/${jboss.binaries.relative.dir}/bindings.xml"/>
-				<properties-exist
-					properties.list="jboss.server.jndi.port,jboss.server.port,jboss.cobraorb.port,jboss.ejbinvoker.port,jboss.hajndi.port,jboss.hajrmi.port,jboss.jms.port,jboss.jmx-rmi.port,jboss.messaging.port,jboss.pooledha.port,jboss.remoting.port,jboss.server.bind.port,jboss.server.rmi.port,jboss.service.rmiobject.port,jboss.snmp.port,jboss.snmp-trapd.port,jboss.web.service.port"
-					/>
-			</else>
-		</if>
-	</target>
-	<target name="common:jboss:init" depends="common:init:pre" unless="exclude.jboss">
-		<math result="jboss.ssl.port" operand1="${jboss.server.port}" operation="+" operand2="363" datatype="int"/>
-		<property name="jboss.ssl.enable" value="false"/>
-		<property name="jboss.home" value="${application.base.path}/${jboss.relative.path}"/>
-		<property name="jboss.application.url" value="http://${jboss.server.hostname}:${jboss.server.port}/${bda-blueprints-webapp.name}"/>
-		<available file="${jboss.home}/server/${jboss.server.name}/conf/jboss-service.xml" property="jboss.exists"/>
-		<basename file="${jboss.ssl.keystore.location}" property="jboss.ssl.keystore.file"/>
-		<dirname file="${jboss.ssl.keystore.location}" property="jboss.ssl.keystore.dir"/>
-		<basename file="${jboss.grid.secure.cert.location}" property="jboss.grid.secure.cert.file"/>
-		<dirname file="${jboss.grid.secure.cert.location}" property="jboss.grid.secure.dir"/>
-		<basename file="${jboss.grid.secure.key.location}" property="jboss.grid.secure.key.file"/>
-		<property name="jboss.socket.ports" value="${jboss.server.port},${jboss.server.rmi.port},${jboss.server.jndi.port},${jboss.service.rmiobject.port},${jboss.jms.port},${jboss.web.service.port}"/>
-	</target>
+        <condition property="application.base.path" value="${application.base.path.windows}">
+            <os family="windows"/>
+        </condition>
+        <echo message="application.base.path=${application.base.path}"/>
+        <property name="jboss.home" value="${application.base.path}/${jboss.relative.path}"/>
+        <jboss-version/>
+        <property name="tomcat.home" value="${application.base.path}/${tomcat.relative.path}"/>
+        <tomcat-version/>
+        <!-- Disable container.grid if container excluded or jdk is 1.6-->
+        <if>
+            <or>
+                <equals arg1="${exclude.jboss}" arg2="true"/>
+                <equals arg1="${jboss.major.version}" arg2="5"/>
+            </or>
+            <then>
+                <property name="exclude.jboss.grid" value="true"/>
+            </then>
+        </if>
+        <if>
+            <or>
+                <equals arg1="${exclude.tomcat}" arg2="true"/>
+                <equals arg1="${tomcat.major.version}" arg2="6"/>
+            </or>
+            <then>
+                <property name="exclude.tomcat.grid" value="true"/>
+            </then>
+        </if>
+    </target>
+	<!-- Targets begin -->
+    <target depends="common:init:pre" name="install:jboss:init" unless="exclude.jboss">
+        <!-- determine if port configurations or port lists are being called -->
+        <if>
+            <isset property="jboss.ncicb-standard.port-config"/>
+            <then>
+                <!-- Read some port properties from standard bindings file -->
+                <echo message="Using JBoss NCICB Standard port configurations"/>
+                <if>
+                    <equals arg1="${jboss.major.version}" arg2="4"/>
+                    <then>
+                        <property name="jboss.server.binding.template.location" value="${basedir}/${jboss-bindings.file}"/>
+                        <jboss-read-ports jboss.server.bindingfile.location="${jboss.server.binding.template.location}"/>
+                        <jboss-bindings-validate jboss.server.bindingfile.location="${jboss.server.binding.template.location}"/>
+                    </then>
+                    <elseif>
+                        <equals arg1="${jboss.major.version}" arg2="5"/>
+                        <then>
+                            <property name="jboss.server.binding.template.location" value="${basedir}/${jboss-bindings.file}"/>
+                            <property name="jboss.server.bindingfile.location" value="${jboss.home}/server/${jboss.server.name}/conf/bindingservice.beans/META-INF/bindings-jboss-beans.xml"/>
+                            <property name="temp.ejb.file" value="${temp.dir}/ejb3-connectors-jboss-beans.xml"/>
+                            <copy file="${bda-utils.dir}/resource/jboss-5.1.0.GA/ejb3-connectors-jboss-beans.xml" tofile="${temp.ejb.file}"/>
+                            <!--
+                            <jboss51-bindings-nci
+                                jboss.server.bindingfile.location="${jboss-bindings.file}"
+                                />
+                            -->
+                            <jboss51-read-ports-nci jboss.server.bindingfile.location="${jboss-bindings.file}" jboss.server.ejbfile.location="${temp.ejb.file}"/>
+                        </then>
+                    </elseif>
+                </if>
+                <echo message="http -${jboss.server.port} "/>
+                <echo message="http -${jboss.server.jndi.port} "/>
+                <properties-exist properties.list="jboss.server.jndi.port,jboss.server.port,jboss.server.ports.name"/>
+            </then>
+            <else>
+                <!-- else ensure that all ports are set, since these will be removed from install-properties.template we will verify here.  They have to be removed so the validator works with or without the properties or we have to change the format of the file. -->
+                <echo message="Using custom JBoss port configurations"/>
+                <if>
+                    <equals arg1="${jboss.major.version}" arg2="4"/>
+                    <then>
+                        <property name="jboss.server.binding.template.location" value="${bda-utils.dir}/resource/${jboss.binaries.relative.dir}/bindings.xml"/>
+                    </then>
+                    <else>
+                        <property name="jboss.server.binding.template.location" value="${bda-utils.dir}/resource/${jboss.binaries.relative.dir}/bindings-jboss-beans.xml"/>
+
+                    </else>
+                </if>
+                <properties-exist properties.list="jboss.server.jndi.port,jboss.server.port,jboss.cobraorb.port,jboss.hajndi.port,jboss.hajrmi.port,jboss.jmx-rmi.port,jboss.messaging.port,jboss.pooledha.port,jboss.server.bind.port,jboss.server.rmi.port,jboss.service.rmiobject.port,jboss.snmp.port,jboss.snmp-trapd.port,jboss.web.service.port,jboss.unifiedinvoker.port,jboss.hajndi.auto.port,jboss.ssl.port,jboss.jms2.netty.port,jboss.jms2.netty-ssl.port,jboss.transaction.recovery.port,jboss.transaction.status.port,jboss.transaction.processid.port"/>
+            </else>
+        </if>
+        <if>
+            <equals arg1="${jboss.http-connector.remove}" arg2="true"/>
+            <then>
+                <property name="jboss.application.url" value="https://${jboss.server.hostname}:${jboss.grid.secure.port}/${bda-blueprints-webapp.name}"/>
+            </then>
+            <else>
+                <property name="jboss.application.url" value="http://${jboss.server.hostname}:${jboss.server.port}/${bda-blueprints-webapp.name}"/>
+            </else>
+        </if>
+    </target>
+    <target depends="common:init:pre" name="common:jboss:init" unless="exclude.jboss">
+        <property name="jboss.ssl.enable" value="false"/>
+        <property name="jboss.home" value="${application.base.path}/${jboss.relative.path}"/>
+        <jboss-version/>
+        <available file="${jboss.home}/server/${jboss.server.name}/conf/jboss-service.xml" property="jboss.exists"/>
+        <basename file="${jboss.ssl.keystore.location}" property="jboss.ssl.keystore.file"/>
+        <dirname file="${jboss.ssl.keystore.location}" property="jboss.ssl.keystore.dir"/>
+        <!--<basename file="${jboss.grid.secure.cert.location}" property="jboss.grid.secure.cert.file"/>-->
+        <!--<dirname file="${jboss.grid.secure.cert.location}" property="jboss.grid.secure.dir"/>-->
+        <!--<basename file="${jboss.grid.secure.key.location}" property="jboss.grid.secure.key.file"/>-->
+        <property name="jboss.socket.ports" value="${jboss.server.port},${jboss.server.rmi.port},${jboss.server.jndi.port},${jboss.service.rmiobject.port},${jboss.jms.port},${jboss.web.service.port}"/>
+    </target>
 	<target name="common:tomcat:init" depends="common:init:pre" unless="exclude.tomcat">
 		<property name="tomcat.ssl.enable" value="false"/>
 		<property name="tomcat.home" value="${application.base.path}/${tomcat.relative.path}"/>
-		<property name="tomcat.application.url" value="http://${tomcat.hostname}:${tomcat.port.http}/${bda-blueprints-webapp.name}"/>
+		<tomcat-version
+			/>
+		<if>
+			<equals arg1="${jboss.http-connector.remove}" arg2="true"/>
+			<then>
+				<property name="tomcat.application.url" value="http://${tomcat.hostname}:${tomcat.port.http}/${bda-blueprints-webapp.name}"/>
+			</then>
+			<else>
+				<property name="tomcat.application.url" value="https://${tomcat.hostname}:${tomcat.grid.secure.port}/${bda-blueprints-webapp.name}"/>
+			</else>
+		</if>
+
 		<basename file="${tomcat.ssl.keystore.location}" property="tomcat.ssl.keystore.file"/>
 		<dirname file="${tomcat.ssl.keystore.location}" property="tomcat.ssl.keystore.dir"/>
 		<basename file="${tomcat.grid.secure.cert.location}" property="tomcat.grid.secure.cert.file"/>
@@ -186,25 +251,24 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 
 
 	<target name="common:init" depends="common:init:pre">
-		<property name="install.running" value="true"/>
 		<!-- bda-blueprints-webapp can use either Oracle or MySQL or PostgreSQL as its database platform, this is controled by the database.type property.  Based on the value of this property sent several variables for use during install -->
 		<echoproperties prefix="database"/>
 		<switch value="${database.type}">
 			<case value="oracle">
 				<property name="database.dialect" value="org.hibernate.dialect.OracleDialect"/>
-				<property name="database.driver.file" value="${bda-utils.dir}/ojdbc14-10.2.0.4.0.jar"/>
+				<property name="database.driver.file" value="${bda-utils.dir}/ojdbc14-10.2.0.3.0.jar"/>
 				<property name="database.driver" value="oracle.jdbc.driver.OracleDriver"/>
-				<property name="database.schema" value="${database.user}"/>
+				<property name="database.schema" value="${database.name}"/>
 			</case>
 			<case value="mysql">
 				<property name="database.dialect" value="org.hibernate.dialect.MySQLDialect"/>
-				<property name="database.driver.file" value="${bda-utils.dir}/mysql-connector-java-5.0.8.jar"/>
+				<property name="database.driver.file" value="${bda-utils.dir}/mysql-connector-java-5.1.13.jar"/>
 				<property name="database.driver" value="com.mysql.jdbc.Driver"/>
 				<property name="database.schema" value="${database.name}"/>
 			</case>
 			<case value="postgresql">
 				<property name="database.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
-				<property name="database.driver.file" value="${bda-utils.dir}/postgresql-jdbc3-8.3-604.jar"/>
+				<property name="database.driver.file" value="${bda-utils.dir}/postgresql-8.4-701.jdbc3.jar"/>
 				<property name="database.driver" value="org.postgresql.Driver"/>
 				<property name="database.schema" value="public"/>
 			</case>
@@ -212,7 +276,7 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 				<fail message="Invalid database type ${database.type}"/>
 			</default>
 		</switch>
-	
+
 		<path id="jdbc.driver.classpath">
 			<pathelement location="${database.driver.file}"/>
 		</path>
@@ -240,16 +304,17 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 		</filterset>
 
 		<!--OS Temp dir -->
-		<condition property="os.temp.dir" value="/tmp">
+		<condition property="os.temp.dir" value="/tmp/${project.name}">
 			<or>
 				<os family="unix" />
 				<os family="mac" />
 			</or>
 		</condition>
-	
-		<condition property="os.temp.dir" value="c:/temp">
+
+		<condition property="os.temp.dir" value="c:/temp/${project.name}">
 			<os family="windows" />
 		</condition>
+		<echo message="os.temp.dir - ${os.temp.dir}"/>
 		<!-- Copy files to ensure values containing variables are expanded, such properties are stored in embedded.filterset and then copy with filter files -->
 		<copy todir="${common.dir.dest}" filtering="true">
 			<fileset dir="${common.dir.src}">
@@ -260,7 +325,7 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 				<filtersfile file="${properties.file}"/>
 				<filtersfile file="project.properties"/>
 			</filterset>
-		</copy> 
+		</copy>
 	</target>
 
 	<target name="diag">
@@ -277,16 +342,16 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 
 		<if>
 			<not>
-				<equals arg1="${exclude.jboss.backup}" arg2="true" casesensitive="false" trim="true" />
+				<equals arg1="${exclude.jboss.backup}" arg2="true"/>
 			</not>
 			<then>
 				<!-- Jboss backup, do not compress until install is finished -->
 				<property name="backup.jboss.base.dir" location="${application.base.path}/backup/jboss"/>
-		
+
 				<!-- So these directories won't be included in the backup, they are not needed to use jboss -->
 				<delete dir="${jboss.home}/server/${jboss.server.name}/work"/>
 				<delete dir="${jboss.home}/server/${jboss.server.name}/tmp"/>
-		
+
 				<backup-dir
 					src.dir="${jboss.home}"
 					backup.base.dir="${backup.jboss.base.dir}"
@@ -302,11 +367,11 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 		<property name="backup.count" value="5"/>
 		<if>
 			<not>
-				<equals arg1="${exclude.tomcat.backup}" arg2="true" trim="true" />
+				<equals arg1="${exclude.tomcat.backup}" arg2="true"/>
 			</not>
 			<then>
 				<property name="backup.tomcat.base.dir" location="${application.base.path}/backup/tomcat"/>
-		
+
 				<backup-dir
 					src.dir="${tomcat.home}"
 					backup.base.dir="${backup.tomcat.base.dir}"
@@ -345,7 +410,7 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 
 	<target name="install:database" description="Runs datbase creation scripts then calls uprade database." unless="exclude.database"
 		depends="
-		
+
 		common:init,
 		install:database:prep,
 		install:database:validation:pre-install
@@ -383,8 +448,8 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 	<target name="install:jboss:binaries" description="Install JBoss binaries" unless="exclude.jboss" depends="common:jboss:init, common:init">
 		<jboss-install-binaries
 			/>
-		<jboss-nci-customizations       
-			/>                                      
+		<jboss-nci-customizations
+			/>
 	</target>
 
 	<target name="install:jboss:bda-blueprints-webapp:filesystem-data"  depends="common:jboss:init, common:init">
@@ -410,7 +475,7 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 
 	<target name="install:jboss:bda-blueprints-webapp:configure" description="Configure bda-blueprints-webapp application, copies over externalized properties or configurations that are not part of the jboss configuration" unless="exclude.jboss" depends="common:jboss:init, common:init">
 		<!-- copy over any other files you may need to configure your application -->
-		
+
 		<!-- copy datasource file -->
 		<copy file="${jboss-conf.dir.dest}/${bda-blueprints-webapp.ds.file}" todir="${jboss.home}/server/${jboss.server.name}/deploy" overwrite="true" />
 		<!-- copy JBoss-web.xml file -->
@@ -457,7 +522,7 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 
 					<layout class="org.apache.log4j.PatternLayout">
 						<param name="ConversionPattern" value="%d %-5p [%c] %m%n"/>
-					</layout>           
+					</layout>
 				</appender>
 				]]>
 			</insert>
@@ -472,7 +537,7 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 		</xmltask>
 		<validate-log4j
 			log4j.file="${jboss.home}/server/${jboss.server.name}/conf/${log4j.file.name}"
-			/>                              
+			/>
 
 		<replaceregexp file="${jboss.home}/server/${jboss.server.name}/conf/${log4j.file.name}"
 			byline="true"
@@ -485,7 +550,7 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 		depends="
 		common:jboss:init,
 		common:init,
-		install:jboss:configure:log4j	
+		install:jboss:configure:log4j
 			">
 		<!-- Calls the following macros
 			jboss-bindings - configures ports for jboss
@@ -497,15 +562,31 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 			grid-secure-configure-connector - configures secure grid
 		-->
 		<!-- Use below if you are defining all the ports in your install.xml not the NCICB port configuraitons-->
-		<jboss-configure
-			jboss.grid.configure="true"
-			/>
+		<if>
+			<equals arg1="${jboss.major.version}" arg2="4"/>
+			<then>
+				<jboss-configure
+					jboss.grid.configure="true"
+					/>
+			</then>
+		</if>
+		<if>
+			<equals arg1="${jboss.major.version}" arg2="5"/>
+			<then>
+                <jboss-configure
+                        jboss.grid.configure="false"
+                        jboss.server-xml.file="${jboss.home}/server/${jboss.server.name}/deploy/jbossweb.sar/server.xml"
+                        jboss.server.binding.template.location="${jboss.server.binding.template.location}"
+                        jboss.server.bindingfile.location="${jboss.home}/server/${jboss.server.name}/conf/bindingservice.beans/META-INF/bindings-jboss-beans.xml"
+                        proxy.update.connector.port.ssl="${jboss.ssl.port}"/>
+			</then>
+		</if>
 	</target>
 
 
 	<!-- Configure MQ settings based on contents of ncia/software/resrouces/deploy/jbossmq-destinations-service.block.xml -->
 	<target name="-install:jboss:configure:jbossmq-dest" description="Configure MQ settings based on contents of software/common/resource/jboss-conf/jbossmq-destinations-service.block.xml" unless="exclude.jboss" depends="common:jboss:init,common:init">
-		<!-- Provide template to change jboss mq configurations 
+		<!-- Provide template to change jboss mq configurations
 		<property name="jboss-mq.block.file" value="${resource.dir.target}/jbossmq-destinations-service.block.xml"/>
 		<xmlconfig in="${jboss.home}/server/${jboss.server.name}/deploy/jms/jbossmq-destinations-service.xml" verbose="false">
 			<insertbranch path="//server" srcxmlfile="${jboss-mq.block.file}" srcpath="//mbean[1]" />
@@ -532,7 +613,7 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 			</not>
 			<then>
 				<jboss-start-jboss />
-				<sleep seconds="15"/>
+				<!--<sleep seconds="15"/>-->
 			</then>
 		</if>
 	</target>
@@ -543,7 +624,7 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 			java.check.version.minor="${java.minor.version}"
 			/>
 	</target>
-	<target name="install:jboss:validation:pre-install" description="Runs pre-install validation checks bda-utils" 
+	<target name="install:jboss:validation:pre-install" description="Runs pre-install validation checks bda-utils"
 		depends="
 		common:jboss:init,common:init,
 		install:common:validation:pre-install
@@ -551,7 +632,7 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 		<validate-pre-install-jboss
 			/>
 	</target>
-	<target name="install:tomcat:validation:pre-install" description="Runs pre-install validation checks bda-utils" 
+	<target name="install:tomcat:validation:pre-install" description="Runs pre-install validation checks bda-utils"
 		depends="
 		common:tomcat:init,
 		common:init,
@@ -560,7 +641,7 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 		<validate-pre-install-tomcat
 			/>
 	</target>
-	<target name="install:database:validation:pre-install" description="Runs pre-install validation checks bda-utils" 
+	<target name="install:database:validation:pre-install" description="Runs pre-install validation checks bda-utils"
 		depends="
 		common:init,
 		install:common:validation:pre-install
@@ -609,7 +690,7 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 			</then>
 		</if>
 	</target>
-	<target name="install:tomcat:validation:post-install" description="Run post-install checks from bda-utils" unless="exclude.tomcat"
+	<target name="install:tomcat:validation:post-install" description="Run post-install checks from bda-utils"
 		depends="
 		common:tomcat:init,
 		common:init,
@@ -632,6 +713,7 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 		common:init,
 		install:jboss:init,
 		install:jboss:validation:pre-install,
+		install:common:validation:pre-install,
 		install:jboss:stop,
 		install:jboss:validation:pre-install:ports,
 		install:jboss:clean,
@@ -650,10 +732,11 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 
 	<target name="install:tomcat" description="Wrapper scripts that calls all required targets to install the tomcat container" unless="exclude.tomcat"
 		depends="
-		
+
 		common:tomcat:init,
 		common:init,
 		install:tomcat:validation:pre-install,
+		install:common:validation:pre-install,
 		install:tomcat:stop,
 		install:tomcat:validation:pre-install:ports,
 		install:tomcat:clean,
@@ -670,11 +753,11 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 		">
 	</target>
 
-	<target name="install" description="Installs and configures JBOSS, creates database, and deploys application" 
+	<target name="install" description="Installs and configures JBOSS, creates database, and deploys application"
 		depends="
 		common:jboss:init,
 		common:tomcat:init,
-		
+
 		common:init,
 		install:jboss:init,
 		install:common:validation:pre-install,
@@ -696,17 +779,31 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 	</target>
 
 	<target name="install:jboss:bda-blueprints-webapp:re-configure" description="Update contents of artifacts if not all properties have been externalized, by extracting artifact, modify it as needed and re-archive it." unless="exclude.jboss"  depends="common:init">
+<!--		<copy file="${bda-blueprints-webapp.dir.dist}/${bda-blueprints-webapp.war.file}" todir="${jboss.home}/server/${jboss.server.name}/deploy" overwrite="true" />
+		<if>
+			<equals arg1="${jar-signing.execution.time}" arg2="install"/>
+			<then>
+				<echo message="jar-signing.execution.time set to install, signing jars"/>
+				<sign-jars
+					jars.archive.file="${bda-blueprints-webapp.dir.dist}/${bda-blueprints-webapp.war.file}"
+					jars.archive.relative.dir="WEB-INF/lib"
+					/>
+			</then>
+			<else>
+				<echo message="jar-signing.execution.time not set to install, not signing jars"/>
+			</else>
+		</if>-->
 		<!-- This is only required if configuration files are not externalized, below is a sample of what you may do.
 		<delete dir="${working.dir}/bda-blueprints-webapp"/>
 		<unzip src="${bda-blueprints-webapp.dir.dist}/${bda-blueprints-webapp.war.file}" dest="${working.dir}/bda-blueprints-webapp"/>
 		<copy todir="${working.dir}/bda-blueprints-webapp/WEB-INF/classes" file="${jboss-conf.dir.dest}/hibernate.cfg.xml"/>
-		
+
 		<move file="${bda-blueprints-webapp.dir.dist}/${bda-blueprints-webapp.war.file}" tofile="${bda-blueprints-webapp.dir.dist}/${bda-blueprints-webapp.war.file}.orig"/>
 		<war destfile="${bda-blueprints-webapp.dir.dist}/${bda-blueprints-webapp.war.file}" compress="false" webxml="${working.dir}/bda-blueprints-webapp/WEB-INF/web.xml" >
 			<fileset dir="${working.dir}/bda-blueprints-webapp">
 				<include name="*/**" />
 			</fileset>
-		</war>  
+		</war>
 		-->
 	</target>
 
@@ -730,6 +827,7 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 		common:init,
 		common:jboss:init,
 		install:jboss:validation:pre-install,
+		install:common:validation:pre-install,
 		install:jboss:stop,
 		install:jboss:validation:pre-install:ports,
 		install:jboss:clean,
@@ -738,6 +836,8 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 		install:jboss:bda-blueprints-webapp:re-configure,
 		install:jboss:bda-blueprints-webapp,
 		install:jboss:bda-blueprints-webapp:configure,
+		install:jboss:grid,
+		install:jboss:grid:configure,
 		upgrade:post:jboss,
 		install:post:jboss,
 		install:jboss:start,
@@ -750,6 +850,7 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 		common:init,
 		common:tomcat:init,
 		install:tomcat:validation:pre-install,
+		install:common:validation:pre-install,
 		install:tomcat:stop,
 		install:tomcat:validation:pre-install:ports,
 		install:tomcat:clean,
@@ -811,12 +912,15 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 		common:init,
 		common:jboss:init,
 		install:jboss:validation:pre-install,
+		install:common:validation:pre-install,
 		install:jboss:stop,
 		install:jboss:validation:pre-install:ports,
 		install:jboss:configure,
 		install:jboss:bda-blueprints-webapp:re-configure,
 		install:jboss:bda-blueprints-webapp,
 		install:jboss:bda-blueprints-webapp:configure,
+		install:jboss:grid,
+		install:jboss:grid:configure,
 		upgrade:post:jboss,
 		install:post:jboss,
 		install:jboss:start,
@@ -829,6 +933,7 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 		common:init,
 		common:tomcat:init,
 		install:tomcat:validation:pre-install,
+		install:common:validation:pre-install,
 		install:tomcat:stop,
 		install:tomcat:validation:pre-install:ports,
 		install:tomcat:configure,
@@ -888,11 +993,14 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 		common:init,
 		common:jboss:init,
 		install:jboss:validation:pre-install,
+		install:common:validation:pre-install,
 		install:jboss:stop,
 		install:jboss:validation:pre-install:ports,
 		install:jboss:bda-blueprints-webapp:re-configure,
 		install:jboss:bda-blueprints-webapp,
 		install:jboss:bda-blueprints-webapp:configure,
+		install:jboss:grid,
+		install:jboss:grid:configure,
 		install:post:jboss,
 		install:jboss:start,
 		install:jboss:validation:post-install
@@ -904,6 +1012,7 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 		common:init,
 		common:tomcat:init,
 		install:tomcat:validation:pre-install,
+		install:common:validation:pre-install,
 		install:tomcat:stop,
 		install:tomcat:validation:pre-install:ports,
 		install:tomcat:bda-blueprints-webapp:re-configure,
@@ -994,10 +1103,10 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 		<delete dir="${tomcat.home}"/>
 		<dirname file="${tomcat.home}" property="tomcat.base.dir"/>
 		<unzip dest="${tomcat.base.dir}" src="${tools.dir}/${tomcat.binaries.file}" />
-		<if>    
+		<if>
 			<os family="unix"/>
-			<then>  
-				<chmod dir="${tomcat.home}/bin" perm="ugo+rx" 
+			<then>
+				<chmod dir="${tomcat.home}/bin" perm="ugo+rx"
 					includes="**/*.sh"/>
 			</then>
 		</if>
@@ -1023,14 +1132,14 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 	</target>
 
 	<target name="install:tomcat:start" description="Start Tomcat" unless="exclude.tomcat" depends="common:init">
-		<if>    
-			<not>   
+		<if>
+			<not>
 				<isset property="exclude.start.servers"/>
-			</not>  
-			<then>  
+			</not>
+			<then>
 				<tomcat-start tomcat.home="${tomcat.home}"/>
-			</then> 
-		</if>   
+			</then>
+		</if>
 	</target>
 
 
@@ -1038,7 +1147,7 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 
 	<target name="install:bda-blueprints-grid" description="Wrapper target for Grid application targets"
 		depends="
-		
+
 		common:init,
 		install:jboss:grid,
 		install:jboss:grid:configure
@@ -1046,7 +1155,8 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 	</target>
 
 	<target name="install:tomcat:grid" description="Deploy grid to tomcat" unless="exclude.tomcat" depends="common:init">
-		<mkdir dir="${tomcat.home}/webapps/${grid.dir.dest}"/>
+		<mkdir dir="${tomcat.home}/webapps/${grid.dir.dest.tomcat}"/>
+		<!--
 		<unzip dest="${tomcat.home}/common/lib" src="${grid.resource.dir}/${resource.file.jboss-globus-lib}">
 			<patternset>
 				<exclude name="**/cog-tomcat.jar"/>
@@ -1057,8 +1167,23 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 				<include name="**/cog-tomcat.jar"/>
 			</patternset>
 		</unzip>
-		<unzip dest="${tomcat.home}/webapps/${grid.dir.dest}" src="${grid.resource.dir}/${resource.file.jboss-globus-war}" />
-		<unzip dest="${tomcat.home}/webapps/${grid.dir.dest}" src="${grid.application.dir}/${grid.artifact.file}" />
+		<unzip dest="${tomcat.home}/lib" src="${grid.resource.dir}/${resource.file.jboss-globus-lib}" >
+			<patternset>
+				<include name="**/cog-tomcat.jar"/>
+			</patternset>
+		</unzip>
+		-->
+		<unzip dest="${tomcat.home}/common/lib" src="${grid.resource.dir}/${resource.file.jboss-globus-lib}" />
+		<unzip dest="${tomcat.home}/server/lib" src="${grid.resource.dir}/${resource.file.jboss-globus-lib}" />
+		<unzip dest="${tomcat.home}/lib" src="${grid.resource.dir}/${resource.file.jboss-globus-lib}" />
+		<!-- Needed for Valve on tomcat 6.0.x -->
+		<copy todir="${tomcat.home}/lib">
+			<fileset dir="${bda-utils.dir}">
+				<include name="commons-logging*"/>
+			</fileset>
+		</copy>
+		<unzip dest="${tomcat.home}/webapps/${grid.dir.dest.tomcat}" src="${grid.resource.dir}/${resource.file.jboss-globus-war}" />
+		<unzip dest="${tomcat.home}/webapps/${grid.dir.dest.tomcat}" src="${grid.application.dir}/${grid.artifact.file}" />
 	</target>
 
 	<target name="install:tomcat:grid:configure" description="Configure tomcat-application" unless="exclude.tomcat" depends="common:init">
@@ -1077,18 +1202,20 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 			/>
 		-->
 		<tomcat-configure-grid
+			grid.application.relative.dir="${grid.dir.dest.tomcat}"
 			/>
 	</target>
 
 	<target name="install:jboss:grid" description="Deploy  to jboss" unless="exclude.jboss" depends="common:init">
-		<mkdir dir="${jboss.home}/server/${jboss.server.name}/deploy/${grid.dir.dest}"/>
+		<mkdir dir="${jboss.home}/server/${jboss.server.name}/deploy/${grid.dir.dest.jboss}"/>
 		<unzip dest="${jboss.home}/server/${jboss.server.name}/lib" src="${grid.resource.dir}/${resource.file.jboss-globus-lib}" />
-		<unzip dest="${jboss.home}/server/${jboss.server.name}/deploy/${grid.dir.dest}" src="${grid.resource.dir}/${resource.file.jboss-globus-war}" />
-		<unzip dest="${jboss.home}/server/${jboss.server.name}/deploy/${grid.dir.dest}" src="${grid.application.dir}/${grid.artifact.file}" />
+		<unzip dest="${jboss.home}/server/${jboss.server.name}/deploy/${grid.dir.dest.jboss}" src="${grid.resource.dir}/${resource.file.jboss-globus-war}" />
+		<unzip dest="${jboss.home}/server/${jboss.server.name}/deploy/${grid.dir.dest.jboss}" src="${grid.application.dir}/${grid.artifact.file}" />
 	</target>
 
 	<target name="install:jboss:grid:configure" description="Configure tomcat-application" unless="exclude.jboss" depends="common:init">
 		<jboss-configure-grid
+			grid.application.relative.dir="${grid.dir.dest.jboss}"
 			/>
 	</target>
 
@@ -1098,17 +1225,23 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 	<target name="install:post:jboss" unless="exclude.jboss" depends="common:init">
 		<if>
 			<not>
-				<equals arg1="${exclude.jboss.backup}" arg2="true" casesensitive="false" trim="true" />
+				<equals arg1="${exclude.jboss.backup}" arg2="true"/>
 			</not>
 			<then>
-				<property name="changelogFile" location="${install-logs.dir}/chagneLog-${install.time}.txt"/>
-				<property name="compare1.dir" location="${backup.jboss.base.dir}/backup/${jboss.binaries.relative.dir}"/>
-				<property name="compare2.dir" location="${jboss.home}"/>
-				<report-dir-diff
-					dir1="${compare1.dir}"
-					dir2="${compare2.dir}"
-					reportFile="${changelogFile}"
-					/>
+				<if>
+					<available file="${backup.jboss.base.dir}/backup/${jboss.binaries.relative.dir}/bin/run.sh"/>
+					<then>
+						<echo message="Producing changelog"/>
+						<report-dir-diff
+							dir1="${backup.jboss.base.dir}/backup/${jboss.binaries.relative.dir}"
+							dir2="${jboss.home}"
+							reportFile="${install-logs.dir}/chagneLog-jboss-${install.time}.diff"
+							/>
+					</then>
+					<else>
+						<echo message="It appears your jboss backup is incomplete, skipping change log."/>
+					</else>
+				</if>
 				<!-- Copy app server logs -->
 				<mkdir dir="${jboss.home}/server/${jboss.server.name}/log"/>
 				<mkdir dir="${backup.jboss.base.dir}/backup/${jboss.binaries.relative.dir}/server/${jboss.server.name}/log"/>
@@ -1118,7 +1251,7 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 						<include name="*"/>
 					</fileset>
 				</move>
-		
+
 				<!-- Compress backup and cleanup -->
 				<mkdir dir="${backup.jboss.base.dir}/backup1"/>
 				<zip destfile="${backup.jboss.base.dir}/backup1/${jboss.binaries.relative.dir}.zip" basedir="${backup.jboss.base.dir}/backup" />
@@ -1130,18 +1263,25 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 	<target name="install:post:tomcat" unless="exclude.tomcat" depends="common:init">
 		<if>
 			<not>
-				<equals arg1="${exclude.tomcat.backup}" arg2="true" casesensitive="false" trim="true" />
+				<equals arg1="${exclude.tomcat.backup}" arg2="true"/>
 			</not>
 			<then>
-				<property name="changelogFile" location="${install-logs.dir}/changeLog-${install.time}.txt"/>
-				<property name="compare1.dir" location="${backup.tomcat.base.dir}/backup/${tomcat.binaries.relative.dir}"/>
-				<property name="compare2.dir" location="${tomcat.home}"/>
-				<report-dir-diff
-					dir1="${compare1.dir}"
-					dir2="${compare2.dir}"
-					reportFile="${changelogFile}"
-					/>
-				
+				<if>
+					<available file="${backup.tomcat.base.dir}/backup/${tomcat.binaries.relative.dir}/bin/startup.sh"/>
+					<then>
+						<echo message="Producing changelog"/>
+						<report-dir-diff
+							dir1="${backup.tomcat.base.dir}/backup/${tomcat.binaries.relative.dir}"
+							dir2="${tomcat.home}"
+							reportFile="${install-logs.dir}/changeLog-tomcat-${install.time}.diff"
+							/>
+					</then>
+					<else>
+						<echo message="It appears your Tomcat backup is incomplete, skipping change log"/>
+					</else>
+				</if>
+
+				<!-- not needed for tomcat
 				<mkdir dir="${tomcat.home}/server/${tomcat.server.name}/log"/>
 				<mkdir dir="${backup.tomcat.base.dir}/backup/${tomcat.binaries.relative.dir}/server/${tomcat.server.name}/log"/>
 				<copy todir="${tomcat.home}/server/${tomcat.server.name}/log">
@@ -1149,6 +1289,11 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 						<include name="*"/>
 					</fileset>
 				</copy>
+				-->
+				<!-- Compress backup and cleanup -->
+				<mkdir dir="${backup.tomcat.base.dir}/backup1"/>
+				<zip destfile="${backup.tomcat.base.dir}/backup1/${tomcat.binaries.relative.dir}.zip" basedir="${backup.tomcat.base.dir}/backup" />
+				<delete dir="${backup.tomcat.base.dir}/backup"/>
 			</then>
 		</if>
 	</target>
@@ -1168,9 +1313,9 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 	<target name="install:tomcat:bda-blueprints-webapp:re-configure" description="Configure bda-blueprints-webapp application, copies over externalized properties or configurations that are not part of the tomcat configuration" unless="exclude.tomcat" depends="common:init">
 	</target>
 
-	<target name="upgrade:common:init" depends="upgrade:jboss:init, upgrade:tomcat:init" unless="install.running">
+	<target name="upgrade:common:init" depends="upgrade:jboss:init, upgrade:tomcat:init" >
 	</target>
-	<target name="upgrade:jboss:init" unless="install.running"
+	<target name="upgrade:jboss:init"
 		depends="
 		upgrade:jboss:init:prep,
 		upgrade:jboss:readers:bda,
@@ -1185,8 +1330,17 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 		<properties-write
 			properties.list="${read.properties.list}"
 			/>
+        <if>
+            <equals arg1="${jboss.http-connector.remove}" arg2="true"/>
+            <then>
+                <property name="jboss.application.url" value="https://${jboss.server.hostname}:${jboss.grid.secure.port}/${bda-blueprints-webapp.name}"/>
+            </then>
+            <else>
+                <property name="jboss.application.url" value="http://${jboss.server.hostname}:${jboss.server.port}/${bda-blueprints-webapp.name}"/>
+            </else>
+        </if>
 	</target>
-	<target name="upgrade:tomcat:init" unless="install.running"
+	<target name="upgrade:tomcat:init"
 		depends="
 		upgrade:tomcat:init:prep,
 		upgrade:tomcat:readers:bda,
@@ -1202,7 +1356,7 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 			properties.list="${read.properties.list}"
 			/>
 	</target>
-	<target name="upgrade:database:init" unless="install.running"
+	<target name="upgrade:database:init"
 		depends="
 		upgrade:jboss:init:prep,
 		upgrade:database:readers:bda,
@@ -1210,7 +1364,7 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 		">
 		<!-- You need to either depend on jboss or tomcat so that you can read the db properties from it's configs.  BDA only has macros to read database properties from jboss. -->
 	</target>
-	<target name="upgrade:common:init:prep" unless="install.running">
+	<target name="upgrade:common:init:prep">
 		<if>
 			<not>
 				<isset property="application.base.path"/>
@@ -1223,7 +1377,7 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 						<os family="mac" />
 					</or>
 				</condition>
-			
+
 				<condition property="application.base.path" value="${application.base.path.windows}">
 					<os family="windows" />
 				</condition>
@@ -1234,12 +1388,13 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 			properties.list="application.base.path,jboss.home,tomcat.home,jboss.server.name"
 			/>
 		<var name="read.properties.list" value=""/>
-		<property name="upgrade.running" value="true"/>
 	</target>
-	<target name="upgrade:jboss:init:prep" depends="upgrade:common:init:prep" unless="install.running">
+	<target name="upgrade:jboss:init:prep" depends="upgrade:common:init:prep">
 		<property name="jboss.home" value="${application.base.path}/${jboss.relative.path}"/>
+		<jboss-version
+			/>
 		<if>
-			<equals arg1="${jboss.ncicb-standard.port-config}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${jboss.ncicb-standard.port-config}" arg2="true"/>
 			<then>
 				<property name="jboss.server.binding.template.location" value="${basedir}/${jboss-bindings.file}"/>
 			</then>
@@ -1247,31 +1402,32 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 				<property name="jboss.server.binding.template.location" value="${bda-utils.dir}/resource/${jboss.binaries.relative.dir}/bindings.xml"/>
 			</else>
 		</if>
-						
-		<property name="upgrade.running" value="true"/>
+
 		<!-- Upgrades always use port configs -->
 		<property name="jboss.ncicb-standard.port-config" value="true"/>
 		<available file="${jboss.home}" property="jboss.exists"/>
 		<property name="read.jboss.home" value="${jboss.home}"/>
-
+		<echo message="jboss.exists - ${jboss.exists}"/>
 	</target>
 
-	<target name="upgrade:tomcat:init:prep" depends="upgrade:common:init:prep" unless="install.running">
+	<target name="upgrade:tomcat:init:prep" depends="upgrade:common:init:prep">
 		<property name="tomcat.home" value="${application.base.path}/${tomcat.relative.path}"/>
+		<tomcat-version
+			/>
 		<!-- Upgrades always use port configs -->
 		<available file="${tomcat.home}" property="tomcat.exists"/>
 		<property name="read.tomcat.home" value="${tomcat.home}"/>
 	</target>
 
-	<target name="upgrade:jboss:readers:custom" unless="install.running">
+	<target name="upgrade:jboss:readers:custom">
 		<!-- call your custom readers here, two properties included in these scripts that don't have readers are "fs-data.base.dir, mail.smtp.server" -->
 	</target>
 
-	<target name="upgrade:tomcat:readers:custom" unless="install.running">
+	<target name="upgrade:tomcat:readers:custom">
 		<!-- call your custom readers here, two properties included in these scripts that don't have readers are "fs-data.base.dir, mail.smtp.server" -->
 	</target>
 
-	<target name="upgrade:database:readers:custom" unless="install.running">
+	<target name="upgrade:database:readers:custom">
 		<!-- call your custom readers here, two properties included in these scripts that don't have readers are "fs-data.base.dir, mail.smtp.server" -->
 	</target>
 	<target name="upgrade:database:readers:bda" depends="upgrade:jboss:init:prep" if="jboss.exists">
@@ -1285,7 +1441,7 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 			jboss.ds-xml.file="bda-blueprints-ds.xml"
 			/>
 	</target>
-	
+
 	<target name="upgrade:jboss:readers:bda" if="jboss.exists">
 
 		<!-- Make sure the ${properties.file} has at least the following props -->
@@ -1321,57 +1477,123 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 		<jboss-read-bindings-file-location
 			jboss.home="${read.jboss.home}"
 			/>
-		<jboss-read-ports
-			/>
+		<if>
+			<equals arg1="${jboss.major.version}" arg2="4"/>
+			<then>
+				<jboss-read-ports
+					/>
+			</then>
+		</if>
+		<if>
+			<equals arg1="${jboss.major.version}" arg2="5"/>
+			<then>
+				<jboss51-read-ports
+				/>
+			</then>
+		</if>
 		<!-- Setting this variable will cause install to copy it into place if using CM/DAC, not modified in NCM -->
 		<var name="jboss.ssl.keystore.dir" value="${working.dir}/keys/jboss"/>
-		<jboss-read-ssl
-			jboss.home="${read.jboss.home}"
-			copied.keystore.dir="${jboss.ssl.keystore.dir}"
-			/>
-		<!-- No longer needed now reading all the ports
-		<jboss-copy-bindings
-			copied.jboss.server.bindingfile.dir="${working.dir}/copied-bindings"
-			copied.jboss.bindings.file.property.name="copied.jboss.bindings.file"
-			/>
-		# Setting this will cause install to copy this file into place if using CM/DAC, not modified in NCM 
-		<var name="jboss.server.binding.template.location" value="${working.dir}/copied-bindings/${copied.jboss.bindings.file}"/>
-		-->
-		<jboss-read-external-hostname
-			jboss.home="${read.jboss.home}"
-			/>
+		<if>
+			<equals arg1="${jboss.major.version}" arg2="4"/>
+			<then>
+				<jboss-read-ssl
+					jboss.home="${read.jboss.home}"
+					copied.keystore.dir="${jboss.ssl.keystore.dir}"
+					/>
+			</then>
+		</if>
+		<if>
+			<equals arg1="${jboss.major.version}" arg2="5"/>
+			<then>
+				<jboss-read-ssl
+					jboss.home="${read.jboss.home}"
+					jboss.server-xml.file="${jboss.home}/server/${jboss.server.name}/deploy/jbossweb.sar/server.xml"
+					copied.keystore.dir="${jboss.ssl.keystore.dir}"
+					/>
+			</then>
+		</if>
+		<if>
+			<equals arg1="${jboss.major.version}" arg2="4"/>
+			<then>
+				<jboss-read-external-hostname
+					jboss.home="${read.jboss.home}"
+					search.ssl.port="${jboss.ssl.port}"
+					/>
+			</then>
+		</if>
+		<if>
+			<equals arg1="${jboss.major.version}" arg2="5"/>
+			<then>
+				<jboss-read-external-hostname
+					jboss.home="${read.jboss.home}"
+					jboss.server-xml.file="${jboss.home}/server/${jboss.server.name}/deploy/jbossweb.sar/server.xml"
+					search.ssl.port="${jboss.ssl.port}"
+					/>
+			</then>
+		</if>
 		<!-- for tier installs, should be done first, since it is set first it will be the one used if it exists -->
 		<jboss-read-java_opts
 			jboss.bin.dir="${read.jboss.home}/server/${jboss.server.name}/bin"
-			/>              
+			/>
 		<jboss-read-java_opts
 			jboss.home="${read.jboss.home}"
 			/>
 		<!-- will have to add code to install:post:jboss to copy this back if exists -->
 		<property name="copied.jboss.log4j.dir" value="${working.dir}/copied-log4j"/>
-		<jboss-copy-log4j
-			jboss.home="${read.jboss.home}"
-			copied.jboss.log4j.dir="${copied.jboss.log4j.dir}"
-			/>
+		<if>
+			<equals arg1="${jboss.major.version}" arg2="4"/>
+			<then>
+				<jboss-copy-log4j
+					jboss.home="${read.jboss.home}"
+					jboss.log4j.location="${jboss.home}/server/${jboss.server.name}/conf/log4j.xml"
+					copied.jboss.log4j.dir="${copied.jboss.log4j.dir}"
+					/>
+			</then>
+		</if>
+		<if>
+			<equals arg1="${jboss.major.version}" arg2="5"/>
+			<then>
+				<jboss-copy-log4j
+					jboss.home="${read.jboss.home}"
+					jboss.log4j.location="${jboss.home}/server/${jboss.server.name}/conf/jboss-log4j.xml"
+					copied.jboss.log4j.dir="${copied.jboss.log4j.dir}"
+					/>
+			</then>
+		</if>
 		<grid-read-index-url
-			grid.wsrf.dir="${read.jboss.home}/server/${jboss.server.name}/deploy/wsrf"
-			/>              
-		<var name="jboss.grid.secure.dir" value="${working.dir}/keys/jboss"/>
-		<jboss-read-grid-secure
-			jboss.home="${read.jboss.home}"
-			copied.keystore.dir="${jboss.grid.secure.dir}"
+			grid.wsrf.dir="${read.jboss.home}/server/${jboss.server.name}/deploy/wsrf.war"
 			/>
+		<var name="jboss.grid.secure.dir" value="${working.dir}/keys/jboss"/>
+		<if>
+			<equals arg1="${jboss.major.version}" arg2="4"/>
+			<then>
+				<jboss-read-grid-secure
+					jboss.home="${read.jboss.home}"
+					copied.keystore.dir="${jboss.grid.secure.dir}"
+					/>
+			</then>
+		</if>
+		<if>
+			<equals arg1="${jboss.major.version}" arg2="5"/>
+			<then>
+				<jboss-read-grid-secure
+					jboss.home="${read.jboss.home}"
+					jboss.server-xml.file="${jboss.home}/server/${jboss.server.name}/deploy/jbossweb.sar/server.xml"
+					copied.keystore.dir="${jboss.grid.secure.dir}"
+					/>
+			</then>
+		</if>
 		<!-- will have to add code to install:post:jboss to copy this back if exists -->
-		<!-- no longer needed 
+		<!-- no longer needed
 		<property name="copied.jboss.service-metadata.dir" value="${working.dir}/jboss-grid"/>
 		<grid-copy-service-metadata
 			copied.service-metadata.dir="${copied.service-metadata.dir}"
 			/>
 		-->
 		<grid-read-poc
-			grid.wsrf.dir="${read.jboss.home}/server/${jboss.server.name}/deploy/wsrf"
+			grid.wsrf.dir="${read.jboss.home}/server/${jboss.server.name}/deploy/wsrf.war"
 			grid.service.name="Sample"
-			/>                      
+			/>
 		<read-property-from-properties-service
 			jboss.home="${read.jboss.home}"
 			property.name="property1"
@@ -1411,7 +1633,7 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 		<tomcat-read-ssl
 			tomcat.home="${read.tomcat.home}"
 			copied.keystore.dir="${tomcat.ssl.keystore.dir}"
-			/>              
+			/>
 		<tomcat-read-external-hostname
 			tomcat.home="${read.tomcat.home}"
 			/>
@@ -1433,7 +1655,7 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 		<grid-read-poc
 			grid.wsrf.dir="${read.tomcat.home}/webapps/wsrf"
 			grid.service.name="Sample"
-			/>                      
+			/>
 
 
 		<!-- Fail if any read properties are not set -->
@@ -1441,10 +1663,28 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 		<tomcat-read-dbconfig
 			/>
 	</target>
-	<target name="upgrade:post:jboss" unless="install.running">
-		<copy file="${copied.jboss.log4j.dir}/log4j.xml" todir="${jboss.home}/server/${jboss.server.name}/conf"/>
+	<!-- For JBoss 5.1
+		<copy file="${copied.jboss.log4j.dir}/jboss-log4j.xml" todir="${jboss.home}/server/${jboss.server.name}/conf"/>
+	-->
+	<target name="upgrade:post:jboss">
+		<if>
+			<equals arg1="${jboss.major.version}" arg2="4"/>
+			<then>
+				<copy file="${copied.jboss.log4j.dir}/log4j.xml" todir="${jboss.home}/server/${jboss.server.name}/conf"/>
+			</then>
+		</if>
+		<if>
+			<equals arg1="${jboss.major.version}" arg2="5"/>
+			<then>
+				<copy file="${copied.jboss.log4j.dir}/jboss-log4j.xml" todir="${jboss.home}/server/${jboss.server.name}/conf"/>
+			</then>
+		</if>
 	</target>
 	<target name="upgrade:post:tomcat">
 		<!-- place holder -->
 	</target>
+	<target name="test:fail">
+		<fail message="This target is supposed to cause a build failure.  This target can be used to verfiy that &lt;exec/&gt; calls are catching failures."/>
+	</target>
 </project>
+

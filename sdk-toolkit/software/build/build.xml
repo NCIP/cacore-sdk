@@ -26,6 +26,28 @@
 
 	<property file="${build.dir}/project.properties" />
 
+	<condition property="commonlibrary.dir" value="">
+                <or>
+                <os family="unix" />
+                        <os family="mac" />
+                </or>
+        </condition>
+
+        <condition property="commonlibrary.dir" value="c:/">
+                <os family="windows" />
+        </condition>
+
+        <condition property="local.cbiit-ivy-repo.dir" value="">
+                <or>
+                <os family="unix" />
+                        <os family="mac" />
+                </or>
+        </condition>
+
+        <condition property="local.cbiit-ivy-repo.dir" value="c:/">
+                <os family="windows" />
+        </condition>
+        
 	<property name="bda-blueprints-webapp.install.zip.file" value="${project-webapp.install.zip.file}"/>
 	<property name="bda-blueprints-webapp.upgrade.zip.file" value="${project-webapp.upgrade.zip.file}"/>
 	<property name="bda-download.dir" location="${target.dir}/bda-download" />

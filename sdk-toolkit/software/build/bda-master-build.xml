@@ -1,8 +1,7 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<!-- bda-build-template version 1.1.1  -->
+<!--ld-template version 1.5.0      -->
 <!--
-$Id: build.xml 1773 2009-06-26 18:03:24Z saksass $
-$HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-template/software/build/build.xml $
+$Id$
+$HeadURL$
 -->
 
 <project name="build-bda-template" default="build:all" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:cs="antlib:com.puppycrawl.tools.checkstyle">
@@ -16,6 +15,7 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 	<property file="local.properties" />
 	<property file="project.properties" />
 	<property name="properties.file" value="install.properties"/>
+	<property name="properties.file.location" location="${properties.file}"/>
 	<property name="upgrade.properties.file" value="upgrade.properties"/>
 	<echo message="Using properties file of ${properties.file}." />
 	<available file="${properties.file}" property="properties.file.exists" />
@@ -49,8 +49,7 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 	<property name="common.dir" location="${software.dir}/common" />
 	<property name="local.repo.dir" location="${software.dir}/local-ivy-repo" />
 	<property name="target.dir" location="${software.dir}/target" />
-    <property name="bda-download.dir" location="${common.dir}/bda-download" />
-    <property name="build-bda-template.bda-download.dir" location="${common.dir}/bda-download" />
+	<property name="bda-download.dir" location="${common.dir}/bda-download" />
 	<property name="ivy.settings.dir" location="${common.dir}/ivy" />
 	<property name="lib.dir" location="${target.dir}/lib" />
 	<property name="temp.dir" location="${target.dir}/temp" />
@@ -87,6 +86,9 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 	<property name="bda-blueprints-webapp.maven.profile.list" value="local,bda" />
 	<property name="bda-blueprints-webapp.maven.goal.list" value="clean install" />
 	<property name="bda-blueprints-api.maven.goal.list" value="clean install" />
+
+	<!-- Added to make sure that it works with both absolute and relative paths, this property is handed to sub-project scripts in absolute format. -->
+	<property name="jar-signing.keystore.abs-location" location="${jar-signing.keystore.location}"/>
 
 	<!-- Used by dist:*:prep to determin list of files to use for incremental build process.
 		Directory and files must be in svn to work.
@@ -140,11 +142,49 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 	<property name="bda-blueprints-webapp.src.dir" value="${bda-blueprints-webapp.base.dir}/src/web"/>
 
 
-	<!-- retrieve ivy.jar.files then retrieve bda files and libraries -->
-	<property name="commonlibrary.dir" value="" />
+	<!-- retrive ivy.jar.files then retrieve bda files and librarires -->
+	<condition property="commonlibrary.dir" value="">
+		<or>
+		<os family="unix" />
+			<os family="mac" />
+		</or>
+	</condition>
+
+	<condition property="commonlibrary.dir" value="c:/">
+		<os family="windows" />
+	</condition>
+
+	<condition property="local.cbiit-ivy-repo.dir" value="">
+		<or>
+		<os family="unix" />
+			<os family="mac" />
+		</or>
+	</condition>
+
+	<condition property="local.cbiit-ivy-repo.dir" value="c:/">
+		<os family="windows" />
+	</condition>
+
 	<property name="bda-download.file" value="bda-ivy-2.0.0-build.xml" />
-	
-	<property name="tools.lib.dir" value="${build.dir}/tools/lib" />
+	<!--
+	<mkdir dir="${bda-download.dir}" />
+	<property name="bda-download.src.url" value="http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-download/${bda-download.file}" />
+	<get src="${bda-download.src.url}" dest="${bda-download.dir}/${bda-download.file}" />
+	-->
+	<echo message="test: ${common.dir}/bda-download"/>
+	<ant inheritAll="false" inheritRefs="false" antfile="${bda-download.file}" target="retrieve-bda" dir="${common.dir}/bda-download">
+		<property name="bda.version" value="${bda.version}" />
+		<property name="bda-utils.dir" location="${bda-utils.dir}" />
+		<property name="lib.dir" location="${lib.dir}" />
+		<property name="software.dir" location="${software.dir}" />
+		<property name="commonlibrary.dir" location="${commonlibrary.dir}" />
+		<!-- Use below for old ivy repo -->
+		<!--<property name="ivy.settings.file" value="ivy-bda-settings.xml"/>-->
+		<!-- Use below for new ivy repo -->
+		<property name="ivy.settings.file" value="cbiit-ivy-bda-settings.xml"/>
+		<property name="target.dir" location="${target.dir}"/>
+		<property name="local.cbiit-ivy-repo.dir" value="${local.cbiit-ivy-repo.dir}"/>
+	</ant>
 	
 	<!-- Paths -->
 	<path id="bda-utils.classpath">
@@ -158,50 +198,34 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 		</fileset>
 	</path>
 
-	<path id="tools.classpath">
-		<fileset dir="${tools.lib.dir}">
-			<include name="*.jar" />
-		</fileset>
-	</path>
-	
-	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="tools.classpath"/>
-	<available file="${build-bda-template.bda-download.dir}/${bda-download.file}" type="file" property="bda.download.file.present"/>
-
-	<mkdir dir="${build-bda-template.bda-download.dir}" />
-			<property name="bda-download.src.url" value="http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-download/${bda-download.file}" />
-			 <!--<get src="${bda-download.src.url}" dest="${bda-download.dir}/${bda-download.file}" />-->
-
-    <ant inheritAll="false" inheritRefs="false" antfile="${bda-download.file}" target="retrieve-bda" dir="${build-bda-template.bda-download.dir}">
-				<property name="bda.version" value="${bda.version}" />
-				<property name="bda-utils.dir" location="${bda-utils.dir}" />
-				<property name="lib.dir" location="${lib.dir}" />
-				<property name="software.dir" location="${software.dir}" />
-				<property name="commonlibrary.dir" location="${commonlibrary.dir}" />
-				<property name="target.dir" location="${target.dir}"/>
-
-        <!-- Use below for old ivy repo -->
-        <property name="ivy.settings.file" value="ivy-bda-settings.xml"/>
-        <!-- Use below for new ivy repo -->
-        <!--<property name="ivy.settings.file" value="cbiit-ivy-bda-settings.xml"/>-->
-        <property name="target.dir" location="${target.dir}"/>
-        <property name="local.cbiit-ivy-repo.dir" value="${local.cbiit-ivy-repo.dir}"/>
-
-	</ant>
-		
 	<!-- Task definitions -->
 	<taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpathref="ivy.classpath" />
 	<taskdef name="for" classname="net.sf.antcontrib.logic.ForTask" classpathref="bda-utils.classpath"/>
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="bda-utils.classpath"/>
 
 	<!-- Includes- include BDA marcos -->
+	<if>
+		<equals arg1="${bda.debug}" arg2="true"/>
+		<then>
+			<echoproperties/>
+		</then>
+	</if>
 	<import file="${bda-utils.dir}/bda-build-utils-${bda.version}.xml" />
 
 	<!-- Start logging -->
 	<mkdir dir="${log.dir}" />
 	<tstamp>
-		<format property="install.time" pattern="yyyy-MM-dd-HH-mm" />
+		<format property="install.time" pattern="yyyy-MM-dd-HH-mm-ss" />
 	</tstamp>
 	<record name="${log.dir}/install-${install.time}.log" action="start" />
-
+	
+	<!-- Echo properties to catch AHP variables at build time-->
+	<if>
+		<equals arg1="${bda.debug}" arg2="true"/>
+		<then>
+			<echoproperties/>
+		</then>
+	</if>
 	<!-- Fix first time build issue -->
 	<mkdir dir="${download.dir}"/>
 
@@ -280,7 +304,7 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 	<target name="ivy:clean" description="Cleans up the ivy cache of this project and all sub-projects">
 		<ivy:settings file="${ivy.settings.dir}/${ivy.settings.file}" />
 		<ivy:cleancache />
-		<ant inheritAll="false" inheritRefs="false" antfile="bda-ivy-2.0.0-build.xml" target="ivy-cleancache" dir="${build-bda-template.bda-download.dir}">
+		<ant inheritAll="false" inheritRefs="false" antfile="bda-ivy-2.0.0-build.xml" target="ivy-cleancache" dir="${bda-download.dir}">
 			<property name="bda-utils.dir" value="${bda-utils.dir}" />
 			<property name="lib.dir" value="${lib.dir}" />
 			<property name="software.dir" value="${software.dir}" />
@@ -300,6 +324,7 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 		validate:pre:build,
 		clean,
 		init,
+		keygen,
 		build:bda-blueprints-webapp,
 		build:grid
 		" >
@@ -336,6 +361,11 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 			<property name="dist.dir" value="${bda-blueprints-webapp.dist.dir}" />
 			<property name="env.GLOBUS_LOCATION" value="${env.GLOBUS_LOCATION}"/>
 			<property name="commonlibrary.dir" value="${commonlibrary.dir}"/>
+			<property name="local.cbiit-ivy-repo.dir" value="${local.cbiit-ivy-repo.dir}"/>
+			<!-- Pass in env property file, used by jar-signing -->
+			<property name="envpropertyfile" value="${properties.file.location}"/>
+			<!-- Need absolution location, relative path would fail in sub-project since file would not exist -->
+			<property name="jar-signing.keystore.abs-location" value="${jar-signing.keystore.abs-location}"/>
 		</ant>
 	</target>
 
@@ -376,7 +406,7 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 		dist:tools:retrieve:jboss,
 		dist:tools:retrieve:jbosscp,
 		dist:tools:retrieve:tomcat,
-		dist:tools:retrieve:cagrid
+		dist:tools:retrieve:jboss-bindings
 		" >
 	</target>
 
@@ -431,6 +461,43 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 		</if>
 	</target>
 
+	<target name="dist:tools:retrieve:sync-gts"  description="Downloads JBOSS bindings filefrom binary repository and verifies checksum">
+		<if>
+			<not>
+				<available file="${download.dir}/${sync-gts.binaries.file}"/>
+			</not>
+			<then>
+				<get src="${sync-gts.src.url}" dest="${download.dir}/${sync-gts.binaries.file}" />
+			</then>
+		</if>
+		<property name="sync-gts.dist.dir" location="${dist.exploded.dir}/${sync-gts.dist.relative.dir}"/>
+		<unzip src="${download.dir}/${sync-gts.binaries.file}" dest="${sync-gts.dist.dir}"/>
+		<!--
+		<ant inheritAll="false" inheritRefs="false" 
+			antfile="build.xml"
+			target="all"
+			dir="${sync-gts.dist.dir}/syncgts"
+			/>
+		-->
+		<property name="cagrid.target.co.dir" location="${target.dir}/cagrid-target"/>
+		<mkdir dir="${cagrid.target.co.dir}"/>
+		<if>
+			<not>
+				<available file="${cagrid-target.src.url}"/>
+			</not>
+			<then>
+				<mkdir dir="${cagrid.target.co.dir}"/>
+				<svn-co
+					svn.checkout.url="${cagrid-target.src.url}"
+					svn.checkout.dir="${cagrid.target.co.dir}"
+					delete="false"
+					/>
+			</then>
+		</if>
+		<copy todir="${sync-gts.dist.dir}/cagrid-target">
+			<fileset dir="${cagrid.target.co.dir}"/>
+		</copy>
+	</target>
 
 	<target name="dist:installer:prep" depends="build:all,dist:tools:retrieve,dist:tools:retrieve:jboss-bindings" description="Copies artifacts not generated by sub-project builds into the install distribution area">
 
@@ -451,6 +518,12 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 				<include name="cagrid*"/>
 			</fileset>
 		</copy>
+		<if>
+			<equals arg1="${jar-signing.execution.time}" arg2="install"/>
+			<then>
+				<copy file="${jar-signing.keystore.abs-location}" todir="${dist.exploded.dir}"/>
+			</then>
+		</if>
 	</target>
 
 	<target name="dist:installer" depends="dist:installer:prep" description="Produces zip file based on installer distribution area. Zip is used by deploy:remote:* or external installations">
@@ -490,7 +563,12 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 			copy.tools.flag="Y"
 			default.target="upgrade"
 			/>
-
+		<if>
+			<equals arg1="${jar-signing.execution.time}" arg2="install"/>
+			<then>
+				<copy file="${jar-signing.keystore.abs-location}" todir="${dist.exploded.dir}"/>
+			</then>
+		</if>
 	</target>
 
 	<target name="dist:upgrader" depends="dist:upgrader:prep" description="Produces zip file based on installer distribution area. Zip is used by deploy:remote:* or external installations">
@@ -948,7 +1026,7 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 		<switch value="${database.type}">
 			<case value="oracle">
 				<property name="database.dialect" value="org.hibernate.dialect.OracleDialect"/>
-				<property name="database.driver.file" value="${bda-utils.dir}/ojdbc14-10.2.0.4.0.jar"/>
+				<property name="database.driver.file" value="${bda-utils.dir}/ojdbc14-10.2.0.3.0.jar"/>
 				<property name="database.driver" value="oracle.jdbc.driver.OracleDriver"/>
 				<property name="database.schema" value="${database.name}"/>
 			</case>
@@ -960,7 +1038,7 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 			</case>
 			<case value="postgresql">
 				<property name="database.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
-				<property name="database.driver.file" value="${bda-utils.dir}/postgresql-jdbc3-8.3-604.jar"/>
+				<property name="database.driver.file" value="${bda-utils.dir}/postgresql-8.4-701.jdbc3.jar"/>
 				<property name="database.driver" value="org.postgresql.Driver"/>
 				<property name="database.schema" value="public"/>
 			</case>
@@ -1037,4 +1115,129 @@ $HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build
 		<tomcat-read-dbconfig
 			/>
 	</target>
+	<target name="deploy:remote:upgrade:ahp" description="Installs and configures the application and required binaries and re-creates the datbase  on a remote machine. Used for NCI tiers (dev, qa, stg, prod)" >
+		<!--
+		  * Will use the target from install.xml specified in ${upgrade.target} (defaults to upgrade unless passed in on command line).
+		  * Requires specifying -Dproperties.file=@file@ on the command line to point installer to correct enviornment to install into.
+		  * Calls ant from exec task to ensure properties are do not carry over from current ant runtime and also to emulate a manual install, if you want properties to be used at install time they must be included in a proeprties file.
+		-->
+		<!-- Call macro to deploy files on desired server -->
+		<echoproperties prefix="ssh"/>
+         <deploy-files dist.file="${bda-blueprints-webapp.upgrade.zip.file}" />
+         <override-properties-prep
+               override.properties="${override.properties}"
+               override.properties.string.property.name="override.properties.string"
+         />
+         <!-- SSH to machine ant run ant command line to install application -->
+         <remote-ssh remotesshcommand=". .bash_profile;cd ${ssh.dir.temp}; ant -Dproperties.file=${properties.file.name} -Dforce.reinstall=true
+		 ${override.properties.string} ${upgrade.target}" />
+	</target>
+	<target name="temp-read-bindings">
+		<xmltask preservetype="true" source="${jboss.home}/server/${jboss.server.name}/conf/bindingservice.beans/META-INF/bindings-jboss-beans.xml">
+			<xmlcatalog refid="bda.xml.catalog"/>
+			<copy path="/:deployment/:bean[@name='StandardBindings']/:constructor/:parameter/:set/:bean/:property[text()='jboss.web:service=WebServer']/../:property[@name='port']/text()" property="read.server.port"/>
+			<copy path="/:deployment/:bean[@name='StandardBindings']/:constructor/:parameter/:set/:bean/:property[text()='jboss:service=Naming']/../:property[text()='Port']/../:property[@name='port']/text()" property="read.server.jndi.port"/>
+			<copy path="/:deployment/:bean[@name='StandardBindings']/:constructor/:parameter/:set/:bean/:property[text()='jboss:service=Naming']/../:property[text()='RmiPort']/../:property[@name='port']/text()" property="read.server.rmi.port"/>
+			<copy path="/:deployment/:bean[@name='StandardBindings']/:constructor/:parameter/:set/:bean/:property[text()='jboss:service=WebService']/../:property[@name='port']/text()" property="read.web.service.port"/>
+			<copy path="/:deployment/:bean[@name='StandardBindings']/:constructor/:parameter/:set/:bean/:property[text()='UnifiedInvokerConnector']/../:property[@name='port']/text()" property="read.unifiedinvoker.port"/>
+			<copy path="/:deployment/:bean[@name='StandardBindings']/:constructor/:parameter/:set/:bean/:property[text()='jboss:service=invoker,type=jrmp']/../:property[@name='port']/text()" property="read.service.rmiobject.port"/>
+			<copy path="/:deployment/:bean[@name='StandardBindings']/:constructor/:parameter/:set/:bean/:property[text()='jboss:service=invoker,type=pooled']/../:property[@name='port']/text()" property="read.server.bind.port"/>
+			<copy path="/:deployment/:bean[@name='StandardBindings']/:constructor/:parameter/:set/:bean/:property[text()='jboss:service=HAJNDI']/../:property[text()='Port']/../:property[@name='port']/text()" property="read.hajndi.port"/>
+			<copy path="/:deployment/:bean[@name='StandardBindings']/:constructor/:parameter/:set/:bean/:property[text()='jboss:service=HAJNDI']/../:property[text()='RmiPort']/../:property[@name='port']/text()" property="read.hajrmi.port"/>
+			<copy path="/:deployment/:bean[@name='StandardBindings']/:constructor/:parameter/:set/:bean/:property[text()='AutoDiscovery']/../:property[@name='port']/text()" property="read.hajndi.auto.port"/>
+			<copy path="/:deployment/:bean[@name='StandardBindings']/:constructor/:parameter/:set/:bean/:property[text()='jboss:service=invoker,type=jrmpha']/../:property[@name='port']/text()" property="read.service.rmiobject.port"/>
+			<copy path="/:deployment/:bean[@name='StandardBindings']/:constructor/:parameter/:set/:bean/:property[text()='jboss:service=invoker,type=pooledha']/../:property[@name='port']/text()" property="read.pooledha.port"/>
+			<copy path="/:deployment/:bean[@name='StandardBindings']/:constructor/:parameter/:set/:bean/:property[text()='jboss:service=CorbaORB']/../:property[@name='port']/text()" property="read.cobraorb.port"/>
+			<copy path="/:deployment/:bean[@name='StandardBindings']/:constructor/:parameter/:set/:bean/:property[text()='jboss.jmx:name=SnmpAgent,service=trapd,type=logger']/../:property[@name='port']/text()" property="read.snmp-trapd.port"/>
+			<copy path="/:deployment/:bean[@name='StandardBindings']/:constructor/:parameter/:set/:bean/:property[text()='jboss.jmx:name=SnmpAgent,service=snmp,type=adaptor']/../:property[@name='port']/text()" property="read.snmp.port"/>
+			<copy path="/:deployment/:bean[@name='StandardBindings']/:constructor/:parameter/:set/:bean/:property[text()='jboss.remoting:service=JMXConnectorServer,protocol=rmi']/../:property[@name='port']/text()" property="read.jmx-rmi.port"/>
+			<copy path="/:deployment/:bean[@name='StandardBindings']/:constructor/:parameter/:set/:bean/:property[text()='jboss.web:service=WebServer']/../:property[text()='HttpsConnector']/../:property[@name='port']/text()" property="read.ssl.port"/>
+			<copy path="/:deployment/:bean[@name='StandardBindings']/:constructor/:parameter/:set/:bean/:property[text()='jboss.messaging:service=Connector,transport=bisocket']/../:property[@name='port']/text()" property="read.messaging.port"/>
+			<copy path="/:deployment/:bean[@name='StandardBindings']/:constructor/:parameter/:set/:bean/:property[text()='netty-port']/../:property[@name='port']/text()" property="read.jms2.netty.port"/>
+			<copy path="/:deployment/:bean[@name='StandardBindings']/:constructor/:parameter/:set/:bean/:property[text()='netty-ssl-port']/../:property[@name='port']/text()" property="read.jms2.netty-ssl.port"/>
+			<copy path="/:deployment/:bean[@name='StandardBindings']/:constructor/:parameter/:set/:bean/:property[text()='recoveryManager']/../:property[@name='port']/text()" property="read.transaction.recovery.port"/>
+			<copy path="/:deployment/:bean[@name='StandardBindings']/:constructor/:parameter/:set/:bean/:property[text()='transactionStatusManager']/../:property[@name='port']/text()" property="read.transaction.status.port"/>
+			<copy path="/:deployment/:bean[@name='StandardBindings']/:constructor/:parameter/:set/:bean/:property[text()='socketProcessId']/../:property[@name='port']/text()" property="read.transaction.processid.port"/>
+		</xmltask>
+		<xmltask preservetype="true" source="/data/apps/bda-blueprints-webapp/jboss-5.1.0.GA/server/default/deploy/ejb3-connectors-jboss-beans.xml">
+			<xmlcatalog refid="bda.xml.catalog"/> 
+			<copy path="/:deployment/:bean[@name='org.jboss.ejb3.RemotingConnector']/:property[@name='invokerLocator']/:value-factory/:parameter[5]/text()" property="read.ejbinvoker.port"/>
+		</xmltask>              
+
+		<echo  message="read.ejbinvoker.port=${read.ejbinvoker.port}"/>
+		<echo  message="read.server.jndi.port=${read.server.jndi.port}"/>
+		<echo  message="read.server.port=${read.server.port}"/>
+		<echo  message="read.cobraorb.port=${read.cobraorb.port}"/>
+		<echo  message="read.hajndi.port=${read.hajndi.port}"/>
+		<echo  message="read.hajrmi.port=${read.hajrmi.port}"/>
+		<echo  message="read.jmx-rmi.port=${read.jmx-rmi.port}"/>
+		<echo  message="read.messaging.port=${read.messaging.port}"/>
+		<echo  message="read.pooledha.port=${read.pooledha.port}"/>
+		<echo  message="read.server.bind.port=${read.server.bind.port}"/>
+		<echo  message="read.server.rmi.port=${read.server.rmi.port}"/>
+		<echo  message="read.service.rmiobject.port=${read.service.rmiobject.port}"/>
+		<echo  message="read.snmp.port=${read.snmp.port}"/>
+		<echo  message="read.snmp-trapd.port=${read.snmp-trapd.port}"/>
+		<echo  message="read.web.service.port=${read.web.service.port}"/>
+		<echo  message="read.unifiedinvoker.port=${read.unifiedinvoker.port}"/>
+		<echo  message="read.hajndi.auto.port=${read.hajndi.auto.port}"/>
+		<echo  message="read.ssl.port=${read.ssl.port}"/>
+		<echo  message="read.jms2.netty.port=${read.jms2.netty.port}"/>
+		<echo  message="read.jms2.netty-ssl.port=${read.jms2.netty-ssl.port}"/>
+		<echo  message="read.transaction.recovery.port=${read.transaction.recovery.port}"/>
+		<echo  message="read.transaction.status.port=${read.transaction.status.port}"/>
+		<echo  message="read.transaction.processid.port=${read.transaction.processid.port}"/>
+	</target>
+	<target name="temp:read:bindings">
+		 <jboss-read-bindings-file-location
+			 />
+	</target>
+	<target name="temp:mysql:lctn" depends="database:prep">
+		<validate-mysql-lower_case_table_name
+			/>
+	</target>
+	<target name="keygen">
+		<generate-jar-signing-keystore
+			/>
+	</target>
+	<target name="temp:verify:password:value">
+		<property name="bda-utils.resource.dir" value="${dist.exploded.dir}/bda-utils/resource"/>
+		<unzip src="${bda-utils.dir}/bda-build-utils-${bda.version}.zip" dest="${bda-utils.resource.dir}"/>
+		<condition property="os.temp.dir" value="/tmp">
+			<or>
+				<os family="unix" />
+				<os family="mac" />
+			</or>
+		</condition>
+
+		<condition property="os.temp.dir" value="c:/temp">
+			<os family="windows" />
+		</condition>
+
+		<verify-password-value
+			/>
+	</target>
+	<target name="temp:remove:http">
+		<appserver-delete-http-connector
+			appserver.server-xml.file="${user.home}/server.xml"
+			appserver.server-xml.service.name="Catalina"
+			appserver.http.port="21080"
+			/>
+	</target>
+	<target name="temp:report:grand">
+
+		<basename file="${xml.file}" property="just.file"/>
+		<report-grand 
+			build.file.location="${xml.file}" 
+			output.file.dir="${target.dir}" 
+			output.file.name="${just.file}"
+			/>
+	</target>
+	<target name="temp:check:versions">
+		<jboss-version
+			/>
+		<tomcat-version
+			/>
+	</target>
 </project>
+

@@ -189,7 +189,7 @@
 																												</td>
 																												<td class="formFieldLogin">
 																													<s:textfield name="j_username"
-																														value="<%=lastUserKey%>"
+																														value="%{lastUserKey}"
 																														cssClass="formField" size="14" />
 																												</td>
 																											</tr>

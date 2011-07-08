@@ -706,6 +706,7 @@
 				<include name="jta-*.jar"/>
 				<include name="log4j-*.jar"/>
 				<include name="spring-*.jar"/>
+				<include name="slf4j-*.jar"/>
 				<include name="xercesImpl-*.jar"/>
 			</fileset>
 			<fileset dir="${lib.dir}">
@@ -716,6 +717,17 @@
 			</fileset>
 			<fileset dir="${output.target.dir}" />
 		</copy>	
+		<if>
+			<equals arg1="${3RD_PARTY_JARS_DIRECTORY}" arg2="true"/>
+		<then>
+		<copy todir="${package.client.local.lib.dir}">
+			<fileset dir="${3RD_PARTY_JARS_DIRECTORY}">
+				<include name="*.jar" />
+			</fileset>
+		</copy>
+		</then>
+		</if>
+
 		<if>
 			<equals arg1="${USE_CONNECTION_POOL}" arg2="true" />
 			<then>
@@ -1204,6 +1216,18 @@
 				<include name="${orm.file}" />
 			</fileset>
 		</copy>
+		<if>
+			<equals arg1="${3RD_PARTY_JARS_DIRECTORY}" arg2="true"/>
+		<then>
+		<copy todir="${temp.webapp.staging.lib.dir}" overwrite="true">
+			<fileset dir="${3RD_PARTY_JARS_DIRECTORY}">
+				<include name="*.jar" />
+			</fileset>
+		</copy>
+		</then>
+		</if>
+
+
 		<if>
 			<equals arg1="${GENERATE_JAXB_MAPPING}" arg2="true" />
 			<then>
