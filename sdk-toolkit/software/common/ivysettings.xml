@@ -1,6 +1,6 @@
 <ivysettings>
 	<property name="nci.ivy.repo" value="http://gforge.nci.nih.gov/svnroot/commonlibrary/trunk/ivy-repo" />
-	<property name="nci.cagrid13.ivy.repo" value="http://software.cagrid.org/repository-1.3.0.2" />
+	<property name="nci.cagrid13.ivy.repo" value="http://software.cagrid.org/repository-1.4" />
 	<property name="nci.cagrid13.iso21090.ivy.repo" value="http://software.cagrid.org/cagrid-iso21090/iso21090/integration-repository/" />
 
 	 

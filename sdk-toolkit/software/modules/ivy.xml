@@ -51,14 +51,16 @@
 
 		<dependency org="backport-util-concurrent" name="backport-util-concurrent" rev="3.0" conf="runtime->compile" />
 	
-		<dependency org="caGrid" name="cql" rev="1.3" conf="runtime->cql;compile->cql"/> 
-		<dependency org="caGrid" name="iso21090SdkQueryProcessor" rev="1.3" conf="compile->queryProcessor,translator" transitive="false"/>
-		<dependency org="caGrid" name="sdkQuery4" rev="1.3" conf="compile->processor,stubs" transitive="false"/>
-		<dependency org="caGrid" name="data" rev="1.3" conf="compile->common" transitive="false"/>
-		<dependency org="caGrid" name="gts" rev="1.3" conf="runtime->client;runtime->common" />
-		<dependency org="caGrid" name="authentication-service" rev="1.3" conf="compile->client"/>
-		<dependency org="caGrid" name="dorian" rev="1.3" conf="compile->client"/>
-		<dependency org="caGrid" name="syncgts" rev="1.3" conf="compile->stubs;compile->common;compile->client;compile->service"/>
+		<dependency org="caGrid" name="cql" rev="1.4" conf="runtime->cql;compile->cql"/> 
+		<dependency org="caGrid" name="sdkQuery43" rev="1.4" conf="compile->queryProcessor,translator" transitive="false"/>
+
+		<!--<dependency org="caGrid" name="iso21090SdkQueryProcessor" rev="1.4" conf="compile->queryProcessor,translator" transitive="false"/>-->
+		<dependency org="caGrid" name="sdkQuery4" rev="1.4" conf="compile->processor,stubs" transitive="false"/>
+		<dependency org="caGrid" name="data" rev="1.4" conf="compile->common" transitive="false"/>
+		<dependency org="caGrid" name="gts" rev="1.4" conf="runtime->client;runtime->common" />
+		<dependency org="caGrid" name="authentication-service" rev="1.4" conf="compile->client"/>
+		<dependency org="caGrid" name="dorian" rev="1.4" conf="compile->client"/>
+		<dependency org="caGrid" name="syncgts" rev="1.4" conf="compile->stubs;compile->common;compile->client;compile->service"/>
 		<dependency org="cglib" name="cglib" rev="2.1_3" conf="runtime->compile" />
 		<dependency org="c3p0" name="c3p0" rev="0.9.1.2" conf="runtime->runtime" />
 		
