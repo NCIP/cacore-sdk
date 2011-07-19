@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@taglib prefix="s" uri="/struts-tags" %>
+<%@ taglib prefix="sx" uri="/struts-dojo-tags" %>
 <%@ page import="gov.nih.nci.system.web.util.JSPUtils,
 				 gov.nih.nci.system.web.util.HtmlUtils,
 				 java.lang.reflect.*,

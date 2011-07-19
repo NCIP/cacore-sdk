@@ -1179,6 +1179,7 @@
 				<include name="commons-collections-*.jar"/>
 				<include name="commons-discovery-*.jar"/>
 				<include name="commons-lang-*.jar"/>
+				<include name="commons-fileupload*.jar"/>
 				<include name="commons-logging-*.jar"/>
 				<include name="clm-*.jar"/>
 				<include name="csmapi-*.jar"/>
@@ -1190,7 +1191,7 @@
 				<include name="hibernate-annotations-*.jar"/>
 				<include name="hibernate-validator-*.jar"/>
 				<include name="jaxb-*.jar"/>
-				<include name="jaxrpc-*.jar"/>
+				<!--<include name="jaxrpc-*.jar"/>-->
 				<include name="jdom-1.1.jar"/>
 				<include name="jta-*.jar"/>
 				<include name="${server-include-list}"/>
@@ -1199,8 +1200,7 @@
 				<include name="saaj-*.jar"/>
 				<include name="spring-*.jar"/>
 				<include name="stax-*.jar"/>
-				<include name="struts2-api-*.jar"/>
-				<include name="struts2-core-*.jar"/>
+				<include name="struts2-*.jar"/>
 				<include name="wsdl4j-*.jar"/>
 				<include name="xwork-*.jar"/>
 			</fileset>

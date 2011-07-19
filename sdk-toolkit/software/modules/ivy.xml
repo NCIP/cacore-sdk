@@ -44,7 +44,8 @@
 		<dependency org="slf4j" name="slf4j-api" rev="1.4.3" conf="runtime->compile" />
 		<dependency org="slf4j" name="slf4j-log4j12" rev="1.4.3" conf="runtime->compile" />
 		<!--<dependency org="apache" name="struts2-api" rev="2.0.5" conf="compile"/>-->
-		<dependency org="apache" name="struts2-core" rev="2.0.14" conf="compile"/>
+		<dependency org="apache" name="struts2-core" rev="2.1.6" conf="compile"/>
+		<dependency org="apache" name="struts2-dojo-plugin" rev="2.1.6" conf="compile"/>
 		<!--<dependency org="apache" name="xalan" rev="2.7.1" conf="runtime->runtime"/>  -->
 		<dependency org="apache" name="xerces" rev="2.8.1" conf="runtime->master" />
 		<dependency org="apache" name="xmlsec" rev="1.2.1" conf="runtime->master" />
@@ -98,6 +99,7 @@
 		<dependency org="jakarta" name="commons-logging" rev="1.1.1" conf="runtime->compile" />
 		<dependency org="jakarta" name="commons-collections" rev="3.2.1" conf="runtime->compile" />
 		<dependency org="jakarta" name="commons-lang" rev="2.6" conf="runtime->compile" />	
+		<dependency org="jakarta" name="commons-fileupload" rev="1.2.1" conf="runtime->compile" />	
 		<dependency org="jakarta" name="commons-beanutils" rev="1.8.3" conf="runtime->compile" />		
 		<!--<dependency org="javax.activation" name="activation" rev="1.0.2" conf="runtime->compile" />-->
 		<dependency org="javax.transaction" name="jta" rev="1.0.1B" conf="runtime->compile" />
@@ -126,7 +128,7 @@
 		<dependency org="org.jdom" name="jdom" rev="1.1" conf="runtime->master;compile->master" />		
 		<dependency org="osu" name="mobius" rev="1.1" conf="runtime->master" />
 		<!--<dependency org="opensymphony" name="cacore-xwork" rev="2.0.7" conf="compile"/>-->
-		<dependency org="opensymphony" name="xwork" rev="2.0.7" conf="compile"/>
+		<dependency org="opensymphony" name="xwork" rev="2.1.2" conf="compile"/>
 
 		<dependency org="springsource" name="acegi-security" rev="1.0.7" conf="compile"/>
 		<dependency org="springsource" name="spring" rev="2.5.6" conf="compile"/>

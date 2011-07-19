@@ -1,4 +1,6 @@
 <%@taglib prefix="s" uri="/struts-tags" %>
+<%@ taglib prefix="sx" uri="/struts-dojo-tags" %>
+
 <%@ page import="gov.nih.nci.system.web.util.JSPUtils"%>
 <%
 	JSPUtils jspUtils= JSPUtils.getJSPUtils(config.getServletContext());
@@ -25,12 +27,12 @@
 		}
 	}// setFocus()    
 </script>
-<s:head theme="ajax" debug="true" />
+<sx:head parseContent="true"/>
 <script>
 	<!-- transport: "XMLHTTPTransport" -->
     function treeNodeSelected(nodeId) {
         dojo.io.bind({
-            url: "<s:url value='Criteria.action' />?nodeId="+nodeId,
+            url: "<s:url value='Criteria.action' />?nodeId="+nodeId.node.widgetId,
             load: function(type, data, evt) {
                 var displayDiv = dojo.byId("displayId");
                 displayDiv.innerHTML = data;
@@ -124,14 +126,13 @@
 													<tr>
 														<td valign="top" style="border:0px; border-right:1px; border-style:solid; border-color:black;">
 															<div style="overflow:auto; height:350px; float:left; margin: 7px;">
-															<s:tree 
-															    theme="ajax"
+															<sx:tree 
 															    rootNode="%{classTreeRootNode}" 
 															    childCollectionProperty="children" 
 															    nodeIdProperty="id"
 															    nodeTitleProperty="name"
 															    treeSelectedTopic="treeSelected">
-															</s:tree> 
+															</sx:tree> 
 															</div>														
 															<img width="400" height="1"/>														
 														</td>
