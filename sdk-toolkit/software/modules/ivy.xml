@@ -39,6 +39,7 @@
 		<dependency org="ncicb" name="iso-datatypes-extensions" rev="2.1.1" conf="compile->master"/>	
 		<dependency org="ncicb" name="iso-datatypes-hibernate" rev="2.1.1" conf="compile->master"/>	
 
+		<dependency org="javassist" name="javassist" rev="3.3" conf="runtime->compile" />
 		<dependency org="apache" name="axis" rev="1.4" conf="runtime->compile" />
 		<dependency org="apache" name="log4j" rev="1.2.16" conf="runtime->compile" />
 		<dependency org="slf4j" name="slf4j-api" rev="1.4.3" conf="runtime->compile" />

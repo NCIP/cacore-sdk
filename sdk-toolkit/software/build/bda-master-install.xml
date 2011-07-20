@@ -612,7 +612,7 @@ $HeadURL$
 				<isset property="exclude.start.servers"/>
 			</not>
 			<then>
-				<jboss-start-jboss />
+				<jboss-start-jboss jboss.major.version="5"/>
 				<!--<sleep seconds="15"/>-->
 			</then>
 		</if>
@@ -757,7 +757,6 @@ $HeadURL$
 		depends="
 		common:jboss:init,
 		common:tomcat:init,
-
 		common:init,
 		install:jboss:init,
 		install:common:validation:pre-install,

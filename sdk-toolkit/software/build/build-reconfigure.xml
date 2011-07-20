@@ -699,6 +699,7 @@
 				<include name="csmapi-*.jar"/>
 				<include name="dom4j-*.jar"/>
 				<include name="ehcache-*.jar"/>
+				<include name="slf4j*.jar"/>
 				<include name="hibernate-*.jar"/>
 				<include name="jaxen-*.jar"/>
 				<include name="jaxrpc-*.jar"/>
@@ -959,6 +960,7 @@
 				<include name="dom4j-*.jar"/>
 				<include name="ejb3-persistence-*.jar"/>
 				<include name="hibernate-*.jar"/>
+				<include name="slf4j*.jar"/>
 				<include name="hibernate-annotations-*.jar"/>
 				<include name="hibernate-validator-*.jar"/>
 				<include name="jaxen-*.jar"/>
@@ -1188,10 +1190,10 @@
 				<include name="ejb3-persistence-*.jar"/>
 				<include name="freemarker-*.jar"/>
 				<include name="hibernate-*.jar"/>
+				<include name="slf4j*.jar"/>
 				<include name="hibernate-annotations-*.jar"/>
 				<include name="hibernate-validator-*.jar"/>
 				<include name="jaxb-*.jar"/>
-				<!--<include name="jaxrpc-*.jar"/>-->
 				<include name="jdom-1.1.jar"/>
 				<include name="jta-*.jar"/>
 				<include name="${server-include-list}"/>
@@ -1222,6 +1224,18 @@
 		<copy todir="${temp.webapp.staging.lib.dir}" overwrite="true">
 			<fileset dir="${3RD_PARTY_JARS_DIRECTORY}">
 				<include name="*.jar" />
+			</fileset>
+		</copy>
+		</then>
+		</if>
+
+		<if>
+		<equals arg1="${SERVER_TYPE}" arg2="tomcat" casesensitive="false" trim="true" />
+		<then>
+		<copy todir="${temp.webapp.staging.lib.dir}" overwrite="true">
+			<fileset dir="${runtime.lib.dir}">
+			<include name="jaxrpc-*.jar"/>
+			<include name="javassist-*.jar"/>
 			</fileset>
 		</copy>
 		</then>

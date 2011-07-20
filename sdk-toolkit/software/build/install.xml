@@ -178,15 +178,28 @@
 				<equals arg1="${RESTFUL_JSON_INTERFACE_ENABLED}" arg2="true" />
 			</or>
 			<then>
-				<antcall target="install:tomcat" />
-				<antcall target="install:jboss" />
+			
+				<if>
+				<equals arg1="${SERVER_TYPE}" arg2="tomcat" casesensitive="false" trim="true" />
+				<then>
+					<antcall target="install:tomcat" />
+				</then>
+				</if>
+				
+				<if>
+				<equals arg1="${SERVER_TYPE}" arg2="jboss" casesensitive="false" trim="true" />
+				<then>
+					<antcall target="install:jboss" />
+				</then>
+				</if>
+
 				<antcall target="install:common:post" />
 				<antcall target="install:common:validation:post-install" />
 			</then>
 		</if>
 	</target>
 
-	<target name="install:jboss" description="Wrapper scripts that calls all required targets to install the jboss container" unless="exclude.jboss"
+	<target name="install:jboss" description="Wrapper scripts that calls all required targets to install the jboss container" 
 		depends="
 		common:jboss:init,
 		common:init,
@@ -225,6 +238,7 @@
 		install:tomcat:start,
 		install:tomcat:validation:post-install
 		">
+		
 	</target>
 
 	<target name="install:jboss:clean" unless="exclude.jboss" depends="common:jboss:init,common:init">
