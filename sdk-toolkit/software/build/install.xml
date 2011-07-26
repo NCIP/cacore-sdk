@@ -36,6 +36,8 @@
                 <jboss-version
                         />
         <property name="tomcat.home" value="${application.base.path}/${tomcat.relative.path}"/>
+        <property name="catalina.home" value="${application.base.path}/${tomcat.relative.path}"/>
+        
                 <tomcat-version
                         />
                         
@@ -594,6 +596,9 @@
 
 			/>
 
+		<antcall target="install:tomcat:configure:login-config" />		
+		<antcall target="install:tomcat:configure:project-context" />
+		<antcall target="install:tomcat:configure:grid-login-project-context" />
 	</target>
 	
 	<target name="install:tomcat:configure:ports" unless="exclude.tomcat" >
@@ -666,7 +671,7 @@
 						<fail message="Invalid or unsupported database type ${database.type}"/>
 					</default>
 				</switch>
-				<copy file="${csm.database.driver.file}" todir="${catalina.home}/server/lib" overwrite="true" failonerror="false"/>
+				<copy file="${csm.database.driver.file}" todir="${catalina.home}/lib" overwrite="true" failonerror="false"/>
 				<copyfile src="${package.client.tomcat.serverxml.dir}/login.config" dest="${tomcat.home}/conf/login.config"/>
 				<propertyfile file="${tomcat.home}/conf/catalina.properties" comment="append login.config file path">
 					<entry key="java.security.auth.login.config" value="${catalina.home}/conf/login.config" />
