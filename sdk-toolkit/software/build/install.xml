@@ -884,6 +884,7 @@
 		install:jboss:stop
 		">
 		<validate-pre-jboss-ports
+			hostname="http://${jboss.server.hostname}"
 			/>
 	</target>
 

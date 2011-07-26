@@ -595,9 +595,17 @@ $HeadURL$
 		-->
 	</target>
 
+	<target name="check-port" description="Check whether JBoss is running">
+	    <echo message="Checking whether JBoss is running***********"/>
+	    <condition property="jboss.running">
+	      <socket server="${jboss.server.hostname}" port="${jboss.server.port}"/> 
+	    </condition>
+	</target>
+
 
 	<!-- Calls to bda macros for basic functionality -->
-	<target name="install:jboss:stop" description="Stops jboss" unless="exclude.jboss" depends="common:jboss:init,common:init">
+	<target name="install:jboss:stop" description="Stops jboss" unless="jboss.running" depends="common:jboss:init,common:init,check-port">
+	  <echo message="Stopping JBoss running at - ${jboss.server.hostname}:${jboss.server.port}"/>
 		<if>
 			<isset property="jboss.exists"/>
 			<then>
@@ -657,7 +665,8 @@ $HeadURL$
 		common:init,
 		install:jboss:stop
 		">
-		<validate-pre-jboss-ports
+		<validate-pre-jboss-ports 
+			hostname="http://${jboss.server.hostname}"
 			/>
 	</target>
 	<target name="install:tomcat:validation:pre-install:ports" description="Checks to see if configured ports are listenting and fails buld, meant to be run after jboss:stop"
