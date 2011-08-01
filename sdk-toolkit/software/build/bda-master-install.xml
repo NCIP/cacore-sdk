@@ -609,7 +609,21 @@ $HeadURL$
 		<if>
 			<isset property="jboss.exists"/>
 			<then>
-				<jboss-stop-jboss jboss.server.jndi.port="${jboss.server.jndi.port}"/>
+				<if>
+				    <equals arg1="${jboss.server.hostname}" arg2="localhost"/>
+				    <then>
+				    	<jboss-stop-jboss jboss.server.hostname="http://${jboss.server.hostname}" jboss.server.jndi.port="${jboss.server.jndi.port}"/>
+				    </then>
+				    <elseif>
+					 <equals arg1="${jboss.server.hostname}" arg2="127.0.0.1"/>
+					 <then>
+					 <jboss-stop-jboss jboss.server.hostname="http://${jboss.server.hostname}" jboss.server.jndi.port="${jboss.server.jndi.port}"/>
+					 </then>
+				    </elseif>
+				    <else>
+					<jboss-stop-jboss jboss.server.jndi.port="${jboss.server.jndi.port}"/>				    
+				    </else>
+				</if>
 			</then>
 		</if>
 	</target>
@@ -625,6 +639,94 @@ $HeadURL$
 			</then>
 		</if>
 	</target>
+	
+	<macrodef name="jboss-start-jboss" description="Starts a local JBoss instance">
+		<attribute name="jboss.home" default="${jboss.home}" />
+		<attribute name="jboss.server.name" default="${jboss.server.name}" />
+		<attribute name="jboss.major.version" default="${jboss.major.version}"/>
+		<sequential>
+			<if>
+				<and>
+					<available file="@{jboss.home}/server/@{jboss.server.name}/bin/start_jboss"/>
+					<or>
+						<os family="unix"/>
+						<os family="mac"/>
+					</or>
+
+				</and>
+				<then>
+					<echo message="Starting JBoss instance at @{jboss.home}/server/@{jboss.server.name}/bin with start_jboss" />
+					<exec executable="@{jboss.home}/server/@{jboss.server.name}/bin/start_jboss" osfamily="unix" />
+				</then>
+				<elseif>
+					<and>
+						<available file="@{jboss.home}/bin/start_jboss"/>
+						<or>
+							<os family="unix"/>
+							<os family="mac"/>
+						</or>
+					</and>
+					<then>
+						<echo message="Starting JBoss instance at @{jboss.home} with start_jboss" />
+						<exec executable="@{jboss.home}/bin/start_jboss" osfamily="unix"/>
+					</then>
+				</elseif>
+				<else>
+					<echo message="Starting JBoss instance at @{jboss.home}/bin/run.sh" />
+					<echo message="Starting JBoss instance @{jboss.major.version}" />
+					<var name="bind.address.arg" value=""/>
+
+					<if>
+						<equals arg1="@{jboss.major.version}" arg2="5"/>
+							<then>
+								<exec executable="nohup" osfamily="unix" dir="@{jboss.home}/bin" spawn="true">
+									<env key="NOPAUSE" value="true" />
+									<env key="JBOSS_HOME" value=""/>
+									<arg line="./run.sh -c @{jboss.server.name} -b 0.0.0.0" />
+								</exec>
+								<sleep seconds="15" />
+							</then>
+						<else>
+							<then>
+								<echo message="starting without binding address 0.0.0.0" />
+								<exec executable="nohup" osfamily="unix" dir="@{jboss.home}/bin" spawn="true">
+									<env key="NOPAUSE" value="true" />
+									<env key="JBOSS_HOME" value=""/>
+									<arg line="./run.sh -c @{jboss.server.name}" />
+								</exec>
+								<sleep seconds="15" />
+							</then>
+						</else>
+					</if>
+					
+
+					<if>
+						<equals arg1="@{jboss.major.version}" arg2="5"/>
+							<then>
+								<exec osfamily="windows" executable="${bda-utils.resource.dir}/psexec.exe" dir="@{jboss.home}/bin" spawn="true" >
+									<env key="NOPAUSE" value="true" />
+									<env key="JBOSS_HOME" value=""/>
+									<arg line="-d -i -w @{jboss.home}/bin @{jboss.home}/bin/run.bat -c @{jboss.server.name} -b 0.0.0.0" />
+								</exec>
+								<sleep seconds="15" />
+							</then>
+						<else>
+							<then>
+								<echo message="starting without binding address 0.0.0.0" />
+								<exec osfamily="windows" executable="${bda-utils.resource.dir}/psexec.exe" dir="@{jboss.home}/bin" spawn="true" >
+									<env key="NOPAUSE" value="true" />
+									<env key="JBOSS_HOME" value=""/>
+									<arg line="-d -i -w @{jboss.home}/bin @{jboss.home}/bin/run.bat -c @{jboss.server.name}" />
+								</exec>
+								<sleep seconds="15" />
+							</then>
+						</else>
+					</if>
+				</else>
+			</if>
+		</sequential>
+	</macrodef>
+	
 	<target name="install:common:validation:pre-install" description="Runs pre-install validation checks bda-utils" depends="common:init">
 		<validate-pre-install-common
 			ant.check.version="${ant.minimum.version}"
@@ -665,9 +767,26 @@ $HeadURL$
 		common:init,
 		install:jboss:stop
 		">
-		<validate-pre-jboss-ports 
-			hostname="http://${jboss.server.hostname}"
+		<if>
+		    <equals arg1="${jboss.server.hostname}" arg2="localhost"/>
+		    <then>
+			<validate-pre-jboss-ports
+				hostname="http://${jboss.server.hostname}"
 			/>
+		    </then>
+		    <elseif>
+			 <equals arg1="${jboss.server.hostname}" arg2="127.0.0.1"/>
+			 <then>
+			 <validate-pre-jboss-ports
+				hostname="http://${jboss.server.hostname}"
+				/>
+			 </then>
+		    </elseif>
+		    <else>
+			 <validate-pre-jboss-ports
+				/>
+		    </else>
+		   </if>
 	</target>
 	<target name="install:tomcat:validation:pre-install:ports" description="Checks to see if configured ports are listenting and fails buld, meant to be run after jboss:stop"
 		depends="
