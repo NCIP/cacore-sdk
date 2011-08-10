@@ -11,7 +11,7 @@
 	
 	 
 	<bean name="SyncGTS" class="gov.nih.nci.system.security.authentication.cagrid.SyncGTS">
-		<constructor-arg index="0" value="classpath:sync-description.xml"/>
+		<constructor-arg index="0" value="sync-description.xml"/>
 		<constructor-arg index="1" value="true"/>
 	</bean>
  	

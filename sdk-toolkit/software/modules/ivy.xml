@@ -63,6 +63,8 @@
 		<dependency org="caGrid" name="authentication-service" rev="1.4" conf="compile->client"/>
 		<dependency org="caGrid" name="dorian" rev="1.4" conf="compile->client"/>
 		<dependency org="caGrid" name="syncgts" rev="1.4" conf="compile->stubs;compile->common;compile->client;compile->service"/>
+		<dependency rev="syncgts-patched-4.0.3" org="globus" name="jcog" conf="runtime->client;runtime->common"/>
+		
 		<dependency org="cglib" name="cglib" rev="2.1_3" conf="runtime->compile" />
 		<dependency org="c3p0" name="c3p0" rev="0.9.1.2" conf="runtime->runtime" />
 		
@@ -94,6 +96,10 @@
 		<dependency org="globus" name="ws-addressing" rev="1.0" conf="runtime->runtime" />
 		<dependency org="globus" name="ws-core" rev="4.0.3" conf="compile->runtime" />
 		<dependency org="globus" name="ws-enumeration" rev="4.0.3" conf="compile" />
+		<dependency org="globus" name="cryptix32" rev="3.2" conf="compile->runtime" />
+		<dependency org="globus" name="cryptix-asn1" rev="0.1.11" conf="compile->runtime" />
+		<dependency org="globus" name="cryptix" rev="1.2" conf="compile->runtime" />
+		<dependency org="bouncycastle" name="bouncycastle" rev="jdk1.3_1.25" conf="compile->runtime" />
 
 		<dependency org="jakarta" name="commons-codec" rev="1.5" conf="runtime->compile" />
 		<dependency org="jakarta" name="commons-discovery" rev="0.2" conf="runtime->compile" />

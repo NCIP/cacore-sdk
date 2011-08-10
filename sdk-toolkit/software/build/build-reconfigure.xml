@@ -833,9 +833,10 @@
 						<include name="cryptix32-*.jar"/>
 						<include name="jasciidammit-*.jar"/>
 						<include name="jaxrpc-*.jar"/>
-						<include name="jce-jdk1.*.jar"/>
+						<include name="cryptix.*.jar"/>
 						<include name="jgss-noversion.jar"/>
 						<include name="jprov-jce-*.jar"/>
+						<include name="jce-jdk*.jar" />
 						<include name="mobius_common_client-*.jar"/>
 						<include name="mobius_factories-*.jar"/>
 						<include name="mobius_gme_client-*.jar"/>
@@ -1460,11 +1461,15 @@
 				<include name="caGrid-syncgts-service-*.jar" />
 				<include name="caGrid-syncgts-stubs-*.jar" />
 				<include name="castor-*.jar" />
+				<include name="cog-jglobus-*.jar" />
+				<include name="cog-axis-noversion*.jar" />
+				<include name="puretls-*.jar" />
 				<include name="cog-axis-noversion.jar" />
 				<include name="commons-beanutils-*.jar" />
 				<include name="commons-codec-*.jar" />
 				<include name="commons-collections-*.jar" />
 				<include name="commons-digester-*.jar" />
+				<include name="commons-logging-*.jar" />
 				<include name="commons-discovery-*.jar" />
 				<include name="concurrent-*.jar" />
 				<include name="jasciidammit-*.jar" />
@@ -1529,7 +1534,7 @@
 					<fileset dir="${bda-utils.dir}">
 						<include name="mysql-connector-java-*.jar"/>
 						<include name="ojdbc14-*.jar"/>
-						<include name="postgresql-jdbc3-*.jar"/>
+						<include name="postgresql-*.jar"/>
 					</fileset>
 				</copy>
 				<delete>
@@ -1578,7 +1583,7 @@
 						<include name="**/server*.xml" />
 					</fileset>
 				</copy>
-				<copy todir="${package.client.tomcat.dir}/common/lib">
+				<copy todir="${package.client.tomcat.dir}/lib">
 					<fileset dir="${runtime.lib.dir}">
 						<include name="cog-jglobus*.*" />
 						<include name="cog-axis*.*" />
@@ -1592,7 +1597,7 @@
 					<fileset dir="${bda-utils.dir}">
 						<include name="mysql-connector-java-*.jar"/>
 						<include name="ojdbc14-*.jar"/>
-						<include name="postgresql-jdbc3-*.jar"/>
+						<include name="postgresql-*.jar"/>
 					</fileset>
 					<fileset dir="${lib.dir}">
 						<include name="sdk-grid-jaas-jndi-binder-*.jar" />

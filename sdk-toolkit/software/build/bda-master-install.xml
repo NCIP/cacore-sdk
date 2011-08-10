@@ -281,6 +281,8 @@ $HeadURL$
 			<pathelement location="${database.driver.file}"/>
 		</path>
 
+		<property file="${basedir}/cagrid-target/${grid.target}/service_urls.properties"/>
+		<property name="grid.index.url" value="${cagrid.master.index.service.url}"/>
 		<property name="properties.template.file" value="${basedir}/properties.template" />
 		<filterset id="embedded.filterset">
 			<filter token="application.base.path" value="${application.base.path}"/>
@@ -299,7 +301,9 @@ $HeadURL$
 			<filter token="hibernate.cfg.file.path" value="${hibernate.cfg.file.path}"/>
 			<filter token="env.LOGNAME" value="${env.LOGNAME}"/>
 			<filter token="env.JAVA_HOME" value="${env.JAVA_HOME}"/>
-			<filter token="project.name" value="project.name"/>
+			<filter token="project.name" value="${project.name}"/>
+			<filter token="grid.dorian.name" value="${grid.target}-Dorian"/>
+			<filter token="grid.dorian.url" value="${cagrid.master.dorian.service.url}"/>			
 			<filter token="" value=""/>
 		</filterset>
 
@@ -583,7 +587,7 @@ $HeadURL$
 		</if>
 	</target>
 
-
+    
 	<!-- Configure MQ settings based on contents of ncia/software/resrouces/deploy/jbossmq-destinations-service.block.xml -->
 	<target name="-install:jboss:configure:jbossmq-dest" description="Configure MQ settings based on contents of software/common/resource/jboss-conf/jbossmq-destinations-service.block.xml" unless="exclude.jboss" depends="common:jboss:init,common:init">
 		<!-- Provide template to change jboss mq configurations
@@ -1274,44 +1278,28 @@ $HeadURL$
 
 	<target name="install:bda-blueprints-grid" description="Wrapper target for Grid application targets"
 		depends="
-
 		common:init,
 		install:jboss:grid,
 		install:jboss:grid:configure
 	">
 	</target>
 
+
+
 	<target name="install:tomcat:grid" description="Deploy grid to tomcat" unless="exclude.tomcat" depends="common:init">
-		<mkdir dir="${tomcat.home}/webapps/${grid.dir.dest.tomcat}"/>
-		<!--
-		<unzip dest="${tomcat.home}/common/lib" src="${grid.resource.dir}/${resource.file.jboss-globus-lib}">
-			<patternset>
-				<exclude name="**/cog-tomcat.jar"/>
-			</patternset>
-		</unzip>
-		<unzip dest="${tomcat.home}/server/lib" src="${grid.resource.dir}/${resource.file.jboss-globus-lib}" >
-			<patternset>
-				<include name="**/cog-tomcat.jar"/>
-			</patternset>
-		</unzip>
-		<unzip dest="${tomcat.home}/lib" src="${grid.resource.dir}/${resource.file.jboss-globus-lib}" >
-			<patternset>
-				<include name="**/cog-tomcat.jar"/>
-			</patternset>
-		</unzip>
-		-->
-		<unzip dest="${tomcat.home}/common/lib" src="${grid.resource.dir}/${resource.file.jboss-globus-lib}" />
-		<unzip dest="${tomcat.home}/server/lib" src="${grid.resource.dir}/${resource.file.jboss-globus-lib}" />
-		<unzip dest="${tomcat.home}/lib" src="${grid.resource.dir}/${resource.file.jboss-globus-lib}" />
-		<!-- Needed for Valve on tomcat 6.0.x -->
-		<copy todir="${tomcat.home}/lib">
-			<fileset dir="${bda-utils.dir}">
-				<include name="commons-logging*"/>
-			</fileset>
-		</copy>
-		<unzip dest="${tomcat.home}/webapps/${grid.dir.dest.tomcat}" src="${grid.resource.dir}/${resource.file.jboss-globus-war}" />
-		<unzip dest="${tomcat.home}/webapps/${grid.dir.dest.tomcat}" src="${grid.application.dir}/${grid.artifact.file}" />
-	</target>
+                <mkdir dir="${tomcat.home}/webapps/${grid.dir.dest}"/>
+                <unzip dest="${tomcat.home}/common/lib" src="${grid.resource.dir}/${resource.file.jboss-globus-lib}" />
+                <unzip dest="${tomcat.home}/server/lib" src="${grid.resource.dir}/${resource.file.jboss-globus-lib}" />
+                <unzip dest="${tomcat.home}/lib" src="${grid.resource.dir}/${resource.file.jboss-globus-lib}" />
+                <!-- Needed for Valve on tomcat 6.0.x -->
+                <copy todir="${tomcat.home}/lib">
+                        <fileset dir="${bda-utils.dir}">
+                                <include name="commons-logging*"/>
+                        </fileset>
+                </copy>
+                <unzip dest="${tomcat.home}/webapps/${grid.dir.dest}" src="${grid.resource.dir}/${resource.file.jboss-globus-war}" />
+                <unzip dest="${tomcat.home}/webapps/${grid.dir.dest}" src="${grid.application.dir}/${grid.artifact.file}" />
+        </target>
 
 	<target name="install:tomcat:grid:configure" description="Configure tomcat-application" unless="exclude.tomcat" depends="common:init">
 		<!--
@@ -1333,17 +1321,19 @@ $HeadURL$
 			/>
 	</target>
 
+       
+        <target name="install:jboss:grid:configure" description="Configure tomcat-application" unless="exclude.jboss" depends="common:init">
+                <jboss-configure-grid
+                        grid.application.relative.dir="${grid.dir.dest.jboss}"
+                        jboss.server-xml.file="${jboss.home}/server/${jboss.server.name}/deploy/jbossweb.sar/server.xml"
+                        />
+        </target>
+        
 	<target name="install:jboss:grid" description="Deploy  to jboss" unless="exclude.jboss" depends="common:init">
 		<mkdir dir="${jboss.home}/server/${jboss.server.name}/deploy/${grid.dir.dest.jboss}"/>
 		<unzip dest="${jboss.home}/server/${jboss.server.name}/lib" src="${grid.resource.dir}/${resource.file.jboss-globus-lib}" />
 		<unzip dest="${jboss.home}/server/${jboss.server.name}/deploy/${grid.dir.dest.jboss}" src="${grid.resource.dir}/${resource.file.jboss-globus-war}" />
 		<unzip dest="${jboss.home}/server/${jboss.server.name}/deploy/${grid.dir.dest.jboss}" src="${grid.application.dir}/${grid.artifact.file}" />
-	</target>
-
-	<target name="install:jboss:grid:configure" description="Configure tomcat-application" unless="exclude.jboss" depends="common:init">
-		<jboss-configure-grid
-			grid.application.relative.dir="${grid.dir.dest.jboss}"
-			/>
 	</target>
 
 	<target name="install:common:post" depends="common:init,install:post:jboss, install:post:tomcat">
@@ -1424,6 +1414,7 @@ $HeadURL$
 			</then>
 		</if>
 	</target>
+	
 	<target name="install:tomcat:bda-blueprints-webapp" description="Deploy bda-blueprints-webapp and common libraries to tomcat installation" unless="exclude.tomcat" depends="common:init">
 		<delete dir="${tomcat.home}/temp"/>
 		<delete dir="${tomcat.home}/work"/>
@@ -1730,6 +1721,8 @@ $HeadURL$
 			property.name="property2"
 			/>
 	</target>
+	
+                       
 	<target name="upgrade:tomcat:readers:bda" depends="upgrade:tomcat:init:prep" if="tomcat.exists">
 
 		<!-- Make sure the ${properties.file} has at least the following props -->

@@ -18,7 +18,14 @@
 	<property name="database.type" value="${DB_TYPE}"/>
 	<property name="jboss.application.url" value="http://${jboss.server.hostname}:${jboss.server.port}/${PROJECT_NAME}"/>
 	<property name="tomcat.application.url" value="http://${tomcat.hostname}:${tomcat.port.http}/${PROJECT_NAME}"/>
-	
+
+	<property name="sync-gts.dir" location="${basedir}/${sync-gts.dist.relative.dir}"/>
+        <property name="sync-gts.build.dir" location="${sync-gts.dir}/syncgts"/>
+        <property name="cagrid-target.dir" location="${sync-gts.dir}/cagrid-target"/>	
+
+	<property name="grid.dir.dest.jboss" value="wsrf.war" />
+        <property name="grid.dir.dest.tomcat" value="wsrf" />	
+        
 	<!-- Set application.base.path based on platform -->
 	<condition property="application.base.path" value="${application.base.path.linux}">
 	    <or>
@@ -339,6 +346,26 @@
 		install:jboss:configure:log4j
 		">
 		
+		<jboss-configure
+			jboss.grid.configure="false"
+			jboss.server.bindingfile.location="${jboss.home}/server/${jboss.server.name}/conf/bindingservice.beans/META-INF/bindings-jboss-beans.xml"
+			jboss.server.binding.template.location="${bda-utils.dir}/resource/${jboss.binaries.relative.dir}/bindings-jboss-beans.xml"
+			jboss.server-xml.file="${jboss.home}/server/${jboss.server.name}/deploy/jbossweb.sar/server.xml"
+			jboss.server.ports.name="${jboss.server.ports.name}"
+			proxy.update.connector.port.ssl="${jboss.ssl.port}"
+			/>
+	</target>
+
+<!--
+	<target name="install:jboss:configure" description="Configure JBoss (bindings, login-config.xml, ect)" unless="exclude.jboss" depends="
+		install:jboss:configure:grid-ports,
+		install:jboss:configure:login-config,
+		install:jboss:configure:login-config-grid,
+		install:jboss:configure:datasource,
+		install:jboss:configure:libraries,
+		install:jboss:configure:log4j
+		">
+		
                 <jboss-configure
                         jboss.grid.configure="false"
                         jboss.server-xml.file="${jboss.home}/server/${jboss.server.name}/deploy/jbossweb.sar/server.xml"
@@ -347,7 +374,7 @@
                         proxy.update.connector.port.ssl="${jboss.ssl.port}"/>
 	</target>
 
-
+-->
 
 	<target name="common:jboss:grid:init" depends="common:init:pre" unless="exclude.jboss">
                 <if>
@@ -420,11 +447,11 @@
 		<if>
 			<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true" casesensitive="false" trim="true" />
 			<then>
-				<echo message="modifying ${jboss.home}/server/${jboss.server.name}/deploy/jbossweb-tomcat55.sar/server.xml"/>
+				<echo message="modifying ${jboss.home}/server/${jboss.server.name}/deploy/jbossweb.sar/server.xml"/>
 				<echo message="modifying server.xml adding https connector"/>
 				<grid-secure-configure-connector
-						appserver.conf.dir="${jboss.home}/server/${jboss.server.name}/deploy/jbossweb-tomcat55.sar"
-						appserver.server-xml.file="${jboss.home}/server/${jboss.server.name}/deploy/jbossweb-tomcat55.sar/server.xml"
+						appserver.conf.dir="${jboss.home}/server/${jboss.server.name}/deploy/jbossweb.sar"
+						appserver.server-xml.file="${jboss.home}/server/${jboss.server.name}/deploy/jbossweb.sar/server.xml"
 						appserver.server-xml.service.name="jboss.web"
 						grid.secure.dir="${grid.dist.relative.dir}/${TARGET_GRID}"
 						grid.secure.enable="${GRID_LOGIN_MODULE_ENABLED}"
@@ -434,11 +461,11 @@
 				/>
 				<echo message="configuring https valve and connector "/>
 				<grid-secure-configure-valve
-						appserver.server-xml.file="${jboss.home}/server/${jboss.server.name}/deploy/jbossweb-tomcat55.sar/server.xml"
+						appserver.server-xml.file="${jboss.home}/server/${jboss.server.name}/deploy/jbossweb.sar/server.xml"
 						appserver.server-xml.service.name="jboss.web"
 				/>
-				<xmltask source="${jboss.home}/server/${jboss.server.name}/deploy/jbossweb-tomcat55.sar/server.xml"
-					dest="${jboss.home}/server/${jboss.server.name}/deploy/jbossweb-tomcat55.sar/server.xml">
+				<xmltask source="${jboss.home}/server/${jboss.server.name}/deploy/jbossweb.sar/server.xml"
+					dest="${jboss.home}/server/${jboss.server.name}/deploy/jbossweb.sar/server.xml">
 					<remove path="/Server/Service[@name='jboss.web']/ConnenctorEngine[@name='jboss.web']/Valve[@className='org.globus.tomcat.coyote.valves.HTTPSValve55']" />
 					<insert path="/Server/Service[@name='jboss.web']/Engine[@name='jboss.web']">
 						<![CDATA[                               
@@ -583,24 +610,23 @@
 		<!-- need to pass ports for new override functionality.  It appears macros attribute defaults get initialized at load time not and invoke.  When I changed the value of the property then called the macro the old values were being used. -->
 
 		<tomcat-configure
-
 			tomcat.port.http="${tomcat.port.http}"
-
 			tomcat.port.ajp="${tomcat.port.ajp}"
-
 			tomcat.port.ssl="${tomcat.port.ssl}"
-
 			tomcat.port.shutdown="${tomcat.port.shutdown}"
-
 			tomcat.grid.configure="${tomcat.grid.enable}"
-
+			tomcat.grid.secure.enable="${tomcat.grid.enable}"
 			/>
 
 		<antcall target="install:tomcat:configure:login-config" />		
 		<antcall target="install:tomcat:configure:project-context" />
 		<antcall target="install:tomcat:configure:grid-login-project-context" />
+		<antcall target="install:tomcat:configure:global-resource" />
+		<antcall target="install:tomcat:configure:libraries" />
+		
 	</target>
 	
+
 	<target name="install:tomcat:configure:ports" unless="exclude.tomcat" >
 		<if>
 			<equals arg1="${INSTALL_CONTAINER}" arg2="true" casesensitive="false"/>
@@ -656,7 +682,7 @@
 			<then>
 				<switch value="${database.type}">
 					<case value="oracle">
-						<property name="csm.database.driver.file" value="${bda-utils.dir}/ojdbc14-10.2.0.4.0.jar"/>
+						<property name="csm.database.driver.file" value="${bda-utils.dir}/ojdbc14-10.2.0.3.0.jar"/>
 					</case>
 					<case value="mysql">
 						<property name="csm.database.driver.file" value="${bda-utils.dir}/mysql-connector-java-5.1.13.jar"/>
@@ -755,6 +781,26 @@
 				<include name="**/*.jar"/>
 			</fileset>
 		</copy>
+		
+		<switch value="${database.type}">
+			<case value="oracle">
+				<property name="database.driver.file" value="${bda-utils.dir}/ojdbc14-10.2.0.3.0.jar"/>
+			</case>
+			<case value="mysql">
+				<property name="database.driver.file" value="${bda-utils.dir}/mysql-connector-java-5.1.13.jar"/>
+			</case>
+			<case value="postgresql">
+				<property name="database.driver.file" value="${bda-utils.dir}/postgresql-8.4-701.jdbc3.jar"/>
+			</case>
+			<case value="hsqldb">
+				<property name="database.driver.file" value="${bda-utils.dir}/hsqldb-1.8.0.7.jar"/>
+			</case>
+			<default>
+				<fail message="Invalid or unsupported database type ${database.type}"/>
+			</default>
+		</switch>
+		<copy file="${database.driver.file}" todir="${catalina.home}/lib" overwrite="true" failonerror="false"/>
+		
 	</target>
 
 	<target name="install:tomcat:project-webapp" description="Deploy example-webapp and common libraries to tomcat installation" unless="exclude.tomcat">
@@ -772,20 +818,6 @@
 		</if>
 	</target>
 
- 	<target name="install:tomcat:grid" description="Deploy grid to tomcat" unless="exclude.tomcat" depends="common:init">
-                <mkdir dir="${tomcat.home}/webapps/${grid.dir.dest}"/>
-                <unzip dest="${tomcat.home}/common/lib" src="${grid.resource.dir}/${resource.file.jboss-globus-lib}" />
-                <unzip dest="${tomcat.home}/server/lib" src="${grid.resource.dir}/${resource.file.jboss-globus-lib}" />
-                <unzip dest="${tomcat.home}/lib" src="${grid.resource.dir}/${resource.file.jboss-globus-lib}" />
-                <!-- Needed for Valve on tomcat 6.0.x -->
-                <copy todir="${tomcat.home}/lib">
-                        <fileset dir="${bda-utils.dir}">
-                                <include name="commons-logging*"/>
-                        </fileset>
-                </copy>
-                <unzip dest="${tomcat.home}/webapps/${grid.dir.dest}" src="${grid.resource.dir}/${resource.file.jboss-globus-war}" />
-                <unzip dest="${tomcat.home}/webapps/${grid.dir.dest}" src="${grid.application.dir}/${grid.artifact.file}" />
-        </target>
         
 	<target name="install:tomcat:grid-login-webapp" description="Deploy grid-webapp and common libraries to tomcat installation" unless="exclude.tomcat">
 		<if>
@@ -793,6 +825,11 @@
 			<then>
 				<delete dir="${tomcat.home}//webapps/${SDK_GRID_LOGIN_SERVICE_NAME}" quiet="true"/>
 				<copy file="${package.client.tomcat.webapps.dir}/${SDK_GRID_LOGIN_SERVICE_NAME}.war" todir="${tomcat.home}/webapps" overwrite="true" />
+				<copy todir="${tomcat.home}/lib" overwrite="true">
+					<fileset dir="${output.dir}/${PROJECT_NAME}/lib">
+						<include name="sdk-grid-jaas-*.jar"/>				
+					</fileset>
+				</copy>
 			</then>
 		</if>
 	</target>
@@ -887,6 +924,9 @@
 			hostname="http://${jboss.server.hostname}"
 			/>
 	</target>
+
+
+	<target name="common:jboss:init" depends="common:init:pre,common:jboss:grid:init" unless="exclude.jboss"/>
 
 	<target name="install:jboss:validation:pre-install" description="Runs pre-install validation checks bda-utils"  unless="exclude.jboss"
 		depends="
@@ -1129,306 +1169,6 @@
 			/>
 		-->
 	</target>
-
-	<macrodef name="jboss-configure2">
-		<!-- jboss-bindings -->
-		<attribute name="jboss.home" default="${jboss.home}"/>
-		<attribute name="jboss.server.name" default="${jboss.server.name}"/>
-		<attribute name="jboss.server.ports.name" default="${jboss.server.ports.name}"/>
-		<attribute name="jboss.server.bindingfile.location" default="${jboss.home}/bindings/bindings.xml"/>
-		<attribute name="jboss.server.binding.template.location" default="${jboss.server.binding.template.location}"/>
-		<!-- jboss-login-config -->
-		<attribute name="exclude.jboss-login-config" default="${exclude.jboss-login-config}"/>
-		<attribute name="authentication.type" default="${authentication.type}"/>
-		<attribute name="login-config.ldap.file" default="${jboss-conf.dir.dest}/login-config.ldap-block.xml"/>
-		<attribute name="login-config.db.file" default="${jboss-conf.dir.dest}/login-config.db-block.xml"/>
-		<!-- secure-jboss-console -->
-		<attribute name="jboss.web.user" default="${jboss.web.user}"/>
-		<attribute name="jboss.web.password" default="${jboss.web.password}"/>
-		<!-- jboss-update-shutdown -->
-		<attribute name="jboss.server.jndi.port" default="${jboss.server.jndi.port}"/>
-		<attribute name="jboss.server.port" default="${jboss.server.port}"/>
-		<attribute name="jboss.cobraorb.port" default="${jboss.cobraorb.port}"/>
-		<attribute name="jboss.ejbinvoker.port" default="${jboss.ejbinvoker.port}"/>
-		<attribute name="jboss.hajndi.port" default="${jboss.hajndi.port}"/>
-		<attribute name="jboss.hajrmi.port" default="${jboss.hajrmi.port}"/>
-		<attribute name="jboss.jms.port" default="${jboss.jms.port}"/>
-		<attribute name="jboss.jmx-rmi.port" default="${jboss.jmx-rmi.port}"/>
-		<attribute name="jboss.messaging.port" default="${jboss.messaging.port}"/>
-		<attribute name="jboss.pooledha.port" default="${jboss.pooledha.port}"/>
-		<attribute name="jboss.remoting.port" default="${jboss.remoting.port}"/>
-		<attribute name="jboss.server.bind.port" default="${jboss.server.bind.port}"/>
-		<attribute name="jboss.server.rmi.port" default="${jboss.server.rmi.port}"/>
-		<attribute name="jboss.service.rmiobject.port" default="${jboss.service.rmiobject.port}"/>
-		<attribute name="jboss.snmp.port" default="${jboss.snmp.port}"/>
-		<attribute name="jboss.snmp-trapd.port" default="${jboss.snmp-trapd.port}"/>
-		<attribute name="jboss.web.service.port" default="${jboss.web.service.port}"/>
-		<!-- new with 5.1.0-->
-		<attribute name="jboss.unifiedinvoker.port" default="${jboss.unifiedinvoker.port}"/>
-		<attribute name="jboss.hajndi.auto.port" default="${jboss.hajndi.auto.port}"/>
-		<attribute name="jboss.ssl.port" default="${jboss.ssl.port}"/>
-		<attribute name="jboss.jms2.netty.port" default="${jboss.jms2.netty.port}"/>
-		<attribute name="jboss.jms2.netty-ssl.port" default="${jboss.jms2.netty-ssl.port}"/>
-		<attribute name="jboss.transaction.recovery.port" default="${jboss.transaction.recovery.port}"/>
-		<attribute name="jboss.transaction.status.port" default="${jboss.transaction.status.port}"/>
-		<attribute name="jboss.transaction.processid.port" default="${jboss.transaction.processid.port}"/>
-
-		<!-- appserver-ssl-configure -->
-		<attribute name="jboss.conf.dir" default="${jboss.home}/server/${jboss.server.name}/conf"/>
-		<attribute name="jboss.server-xml.file" default="${jboss.home}/server/${jboss.server.name}/deploy/jbossweb-tomcat55.sar/server.xml"/>
-		<attribute name="jboss.server-xml.service.name" default="jboss.web"/>
-		<attribute name="jboss.ssl.enable" default="${jboss.ssl.enable}"/>
-		<!-- This is the value inserted into the connector in server.xml, bindings updates this the real port at runtime. You could use the real value then the bindings would not match  and it would update, so this may change in the future. -->
-		<!--<attribute name="jboss.ssl.port" default="8443"/>-->
-		<attribute name="jboss.ssl.keystore.file" default="${jboss.ssl.keystore.file}"/>
-		<attribute name="jboss.ssl.keystore.dir" default="${jboss.ssl.keystore.dir}"/>
-		<attribute name="jboss.ssl.keystore.pass" default="${jboss.ssl.keystore.pass}"/>
-		<attribute name="jboss.ssl.keystore.alias" default="${jboss.ssl.keystore.alias}"/>
-		<attribute name="jboss.ssl.fullyqualified.hostname" default="${jboss.ssl.fullyqualified.hostname}"/>
-		<!-- appserver-configure-external-hostname -->
-		<attribute name="jboss.external.ssl.host" default="${jboss.external.ssl.host}"/>
-		<attribute name="jboss.external.ssl.port" default="${jboss.external.ssl.port}"/>
-		<attribute name="proxy.update.connector.port.ssl" default="8443"/>
-		<attribute name="jboss.external.http.host" default="${jboss.external.http.host}"/>
-		<attribute name="jboss.external.http.port" default="${jboss.external.http.port}"/>
-		<attribute name="proxy.update.connector.port.http" default="8080"/>
-		<attribute name="jboss.external.grid.secure.host" default="${jboss.external.grid.secure.host}"/>
-		<attribute name="jboss.external.grid.secure.port" default="${jboss.external.grid.secure.port}"/>
-		<!--appserver-configure-hostname -->
-		<attribute name="jboss.server.hostname" default="${jboss.server.hostname}"/>
-		<!-- grid-secure-configure-connector -->
-		<attribute name="jboss.grid.configure" default="false"/>
-		<attribute name="jboss.grid.secure.dir" default="${jboss.grid.secure.dir}"/>
-		<attribute name="jboss.grid.secure.enable" default="${jboss.grid.secure.enable}"/>
-		<attribute name="jboss.grid.secure.port" default="${jboss.grid.secure.port}"/>
-		<attribute name="jboss.grid.secure.key.file" default="${jboss.grid.secure.key.file}" />
-		<attribute name="jboss.grid.secure.cert.file" default="${jboss.grid.secure.cert.file}" />
-		<!--jboss-configure-java_opts -->
-		<attribute name="jboss.java.opts" default="${jboss.java.opts}"/>
-		<attribute name="jboss.logs.dir" default="${jboss.home}/server/${jboss.server.name}/log"/>
-		<attribute name="jboss.http-connector.remove" default="${jboss.http-connector.remove}"/>
-		<sequential>
-			<var name="jboss.is.51" unset="true"/>
-			<propertyregex property="jboss.is.51"
-				input="@{jboss.binaries.file}"
-				regexp=".*jboss-5.1.*"
-				select="true"
-				/>
-			<if>
-				<not>
-					<equals arg1="${exclude.jboss-config}" arg2="true"/>
-				</not>
-				<then>
-					<if>
-						<not>
-							<equals arg1="${exclude.jboss-bindings}" arg2="true"/>
-						</not>
-						<then>
-							<echo message="Configuring JBoss ports (bindings)"/>
-							<jboss-bindings
-								jboss.home="@{jboss.home}"
-								jboss.server.name="@{jboss.server.name}"
-								jboss.server.ports.name="@{jboss.server.ports.name}"
-								jboss.server.bindingfile.location="@{jboss.server.bindingfile.location}"
-								jboss.server.binding.template.location="@{jboss.server.binding.template.location}"
-								jboss.server.jndi.port="@{jboss.server.jndi.port}"
-								jboss.server.port="@{jboss.server.port}"
-								jboss.cobraorb.port="@{jboss.cobraorb.port}"
-								jboss.ejbinvoker.port="@{jboss.ejbinvoker.port}"
-								jboss.hajndi.port="@{jboss.hajndi.port}"
-								jboss.hajrmi.port="@{jboss.hajrmi.port}"
-								jboss.jms.port="@{jboss.jms.port}"
-								jboss.jmx-rmi.port="@{jboss.jmx-rmi.port}"
-								jboss.messaging.port="@{jboss.messaging.port}"
-								jboss.pooledha.port="@{jboss.pooledha.port}"
-								jboss.remoting.port="@{jboss.remoting.port}"
-								jboss.server.bind.port="@{jboss.server.bind.port}"
-								jboss.server.rmi.port="@{jboss.server.rmi.port}"
-								jboss.service.rmiobject.port="@{jboss.service.rmiobject.port}"
-								jboss.snmp.port="@{jboss.snmp.port}"
-								jboss.snmp-trapd.port="@{jboss.snmp-trapd.port}"
-								jboss.web.service.port="@{jboss.web.service.port}"
-								jboss.unifiedinvoker.port="@{jboss.unifiedinvoker.port}"
-								jboss.hajndi.auto.port="@{jboss.hajndi.auto.port}"
-								jboss.ssl.port="@{jboss.ssl.port}"
-								jboss.jms2.netty.port="@{jboss.jms2.netty.port}"
-								jboss.jms2.netty-ssl.port="@{jboss.jms2.netty-ssl.port}"
-								jboss.transaction.recovery.port="@{jboss.transaction.recovery.port}"
-								jboss.transaction.status.port="@{jboss.transaction.status.port}"
-								jboss.transaction.processid.port="@{jboss.transaction.processid.port}"
-								jboss.http-connector.remove="@{jboss.http-connector.remove}"
-								grid.secure.port="@{jboss.grid.secure.port}"
-								/>
-						</then>
-						<else>
-							<echo message="Skipping configuring JBoss ports (bindings) because exclude.jboss-bindings is set"/>
-						</else>
-					</if>
-<echo message="***************@{exclude.jboss-login-config}"/>
-<echo message="***************@{authentication.type}"/>
-					<if>
-						<not>
-							<equals arg1="@{exclude.jboss-login-config}" arg2="true"/>
-						</not>
-						<then>
-							<echo message="Configuring JBoss authentication settins (login-config.xml)"/>
-							<jboss-login-config
-								authentication.type="@{authentication.type}"
-								jboss.home="@{jboss.home}"
-								jboss.server.name="@{jboss.server.name}"
-								login-config.ldap.file="@{login-config.ldap.file}"
-								login-config.db.file="@{login-config.db.file}"
-								/>
-						</then>
-						<else>
-							<echo message="Skipping configuring JBoss login-config.xml because exclude.jboss-login-config is set"/>
-						</else>
-					</if>
-
-					<echo message="Adding user and password to JBoss console apps"/>
-					<secure-jboss-console
-						jboss.home="@{jboss.home}"
-						jboss.server.name="@{jboss.server.name}"
-						jboss.web.user="@{jboss.web.user}"
-						jboss.web.password="@{jboss.web.password}"
-						jboss.ssl.enable="@{jboss.ssl.enable}"
-						/>
-
-					<echo message="Updating JBoss shutdown.jar to allow shutdown without command line args"/>
-					<jboss-update-shutdown
-						jboss.home="@{jboss.home}"
-						jboss.server.hostname="@{jboss.server.hostname}"
-						jboss.server.jndi.port="@{jboss.server.jndi.port}"
-						/>
-
-					<echo message="Enableing SSL for JBoss"/>
-					<appserver-ssl-configure
-						appserver.conf.dir="@{jboss.conf.dir}"
-						appserver.server-xml.file="@{jboss.server-xml.file}"
-						appserver.server-xml.service.name="@{jboss.server-xml.service.name}"
-						appserver.ssl.enable="@{jboss.ssl.enable}"
-						appserver.ssl.port="@{jboss.ssl.port}"
-						appserver.ssl.keystore.file="@{jboss.ssl.keystore.file}"
-						appserver.ssl.keystore.dir="@{jboss.ssl.keystore.dir}"
-						appserver.ssl.keystore.pass="@{jboss.ssl.keystore.pass}"
-						appserver.ssl.keystore.alias="@{jboss.ssl.keystore.alias}"
-						appserver.ssl.fullyqualified.hostname="@{jboss.ssl.fullyqualified.hostname}"
-						/>
-
-					<echo message="Configuring JBoss proxy settings for ssl"/>
-					<appserver-configure-external-hostname
-						appserver.server-xml.file="@{jboss.server-xml.file}"
-						appserver.server-xml.service.name="@{jboss.server-xml.service.name}"
-						appserver.external.host="@{jboss.external.ssl.host}"
-						appserver.external.port="@{jboss.external.ssl.port}"
-						proxy.update.connector.port="@{jboss.ssl.port}"
-						/>
-					<echo message="Configuring JBoss proxy settings for http"/>
-					<appserver-configure-external-hostname
-						appserver.server-xml.file="@{jboss.server-xml.file}"
-						appserver.server-xml.service.name="@{jboss.server-xml.service.name}"
-						appserver.external.host="@{jboss.external.http.host}"
-						appserver.external.port="@{jboss.external.http.port}"
-						proxy.update.connector.port="@{proxy.update.connector.port.http}"
-						/>
-					<!--
-					<echo message="Configuring JBoss hostname in server.xml"/>
-					<appserver-configure-hostname
-						appserver.server-xml.file="@{jboss.server-xml.file}"
-						appserver.server-xml.service.name="@{jboss.server-xml.service.name}"
-						appserver.hostname="@{jboss.server.hostname}"
-						/>
-					-->
-
-					<echo message="Configuring secure grid in JBoss"/>
-					<if>
-						<and>
-							<equals arg1="@{jboss.grid.configure}" arg2="true"/>
-							<equals arg1="@{jboss.grid.secure.enable}" arg2="true"/>
-						</and>
-						<then>
-							<echo message="Configuring grid on JBoss"/>
-							<grid-secure-configure-connector
-								appserver.conf.dir="@{jboss.conf.dir}"
-								appserver.server-xml.file="@{jboss.server-xml.file}"
-								appserver.server-xml.service.name="@{jboss.server-xml.service.name}"
-								grid.secure.port="@{jboss.grid.secure.port}"
-								grid.secure.dir="@{jboss.grid.secure.dir}"
-								grid.secure.enable="@{jboss.grid.secure.enable}"
-								grid.secure.key.file="@{jboss.grid.secure.key.file}"
-								grid.secure.cert.file="@{jboss.grid.secure.cert.file}"
-								/>
-							<grid-secure-configure-valve
-								appserver.server-xml.file="@{jboss.server-xml.file}"
-								appserver.server-xml.service.name="@{jboss.server-xml.service.name}"
-								/>
-
-							<appserver-delete-http-connector
-								appserver.server-xml.file="@{jboss.server-xml.file}"
-								appserver.server-xml.service.name="@{jboss.server-xml.service.name}"
-								appserver.http.port="@{proxy.update.connector.port.http}"
-								appserver.http-connector.remove="@{jboss.http-connector.remove}"
-								/>
-							<!-- needs to be done after adding connector -->
-							<if>
-								<equals arg1="@{jboss.grid.secure.enable}" arg2="true"/>
-										<then>
-									<echo message="Configuring jboss proxy settings for secure grid"/>
-									<appserver-configure-external-hostname
-										appserver.server-xml.file="@{jboss.server-xml.file}"
-										appserver.server-xml.service.name="@{jboss.server-xml.service.name}"
-										appserver.external.host="@{jboss.external.grid.secure.host}"
-										appserver.external.port="@{jboss.external.grid.secure.port}"
-										proxy.update.connector.port="@{jboss.grid.secure.port}"
-										/>
-								</then>
-								<else>
-									<echo message="Skipping configuring jboss proxy settings for secure grid since secure grid is not set."/>
-								</else>
-							</if>
-						</then>
-						<else>
-							<echo message="Skipping configuration of GRID on JBos"/>
-						</else>
-					</if>
-					<if>
-						<not>
-							<equals arg1="${exclude.access-logs}" arg2="true"/>
-						</not>
-						<then>
-							<appserver-accesslog-configure
-								appserver.conf.dir="@{jboss.conf.dir}"
-								appserver.server-xml.file="@{jboss.server-xml.file}"
-								appserver.server-xml.service.name="@{jboss.server-xml.service.name}"
-								appserver.hostname="localhost"
-								appserver.logs.dir="@{jboss.logs.dir}"
-								/>
-						</then>
-						<else>
-							<echo message="Skipping configuring access logs for jboss because exclude.access-logs is set."/>
-						</else>
-					</if>
-					<jboss-configure-java_opts
-						jboss.bin.dir="@{jboss.home}/bin"
-						jboss.java.opts="@{jboss.java.opts}"
-						/>
-					<jboss-configure-java_opts
-						jboss.bin.dir="@{jboss.home}/server/@{jboss.server.name}/bin"
-						jboss.java.opts="@{jboss.java.opts}"
-						/>
-					<replaceregexp
-						file="@{jboss.server-xml.file}"
-						byline="true"
-						match="emptySessionPath=&quot;true&quot;"
-						replace="emptySessionPath=&quot;false&quot;"
-						/>
-				</then>
-				<else>
-					<echo message="Skipping jboss configuraiton because exclude.jboss-config is set"/>
-				</else>
-			</if>
-		</sequential>
-	</macrodef>
 
 	<macrodef name="execute-database-install">
 		<attribute name="database.url"/>
