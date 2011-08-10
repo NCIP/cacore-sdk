@@ -16,7 +16,7 @@ public abstract class SDKSecurityTestBase extends TestCase {
 	protected boolean enableAttributeLevelSecurity=false;
 	protected boolean enableInstanceLevelSecurity=false;
 	protected boolean enableCaGridLoginModule=false;
-	protected String serverURL="http://localhost:21080/isoExample";
+	protected String serverURL="http://localhost:29080/isoExample";
 
 	public static String getTestCaseName() {
 		return "SDK Security Base Test Case";

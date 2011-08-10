@@ -12,6 +12,8 @@
 
 	<property name="output.dir.location" value="${project.home}/target/dist/exploded"/>
 	<property name="isoExample.lib" value="${project.home}/target/dist/exploded/output/isoExample/lib"/>
+	<property name="package.client.local.conf.dir" value="${project.home}/target/dist/exploded/output/isoExample/package/local-client/conf"/>
+	<property name="package.client.local.lib.dir" value="${project.home}/target/dist/exploded/output/isoExample/package/local-client/lib"/>
 	<property file="${project.build.home}/codegen.properties" />
 	<property file="${project.build.home}/install.properties" />
 	<property file="${SDK_INSTALL_DIR}/software/build/project.properties"/>
@@ -228,7 +230,7 @@
 					<path refid="@{junitClasspath}"/>
 				</classpath>
 				<formatter type="xml" />
-				<batchtest haltonfailure="no" todir="@{junitOutputDir}" fork="true">
+				<batchtest haltonfailure="no" todir="@{junitOutputDir}" fork="false">
 					<fileset dir="${classes.dir}">
 						<include name="@{includePattern}" />
 						<exclude name="@{excludePattern}" />
@@ -281,7 +283,7 @@
 					<path refid="project.test.cobertura.classpath"/>
 				</classpath>
 				<formatter type="xml" />
-				<batchtest haltonfailure="no" todir="@{junitOutputDir}" fork="true">
+				<batchtest haltonfailure="no" todir="@{junitOutputDir}" fork="false">
 					<fileset dir="${classes.dir}">
 						<include name="@{includePattern}" />
 						<exclude name="@{excludePattern}" />
