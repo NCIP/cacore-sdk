@@ -7,13 +7,12 @@ import java.util.Map;
 
 import javax.security.auth.login.CredentialNotFoundException;
 
-import org.globus.gsi.GlobusCredential;
 
 public class GridAuthenticationRemoteServiceImpl implements GridAuthenticationRemoteService
 {
 	GridAuthenticationService service;
 	Map securityMap;
-	
+
 	public GridAuthenticationRemoteServiceImpl(GridAuthenticationService service, Map securityMap)
 	{
 		this.service = service;
@@ -22,19 +21,19 @@ public class GridAuthenticationRemoteServiceImpl implements GridAuthenticationRe
 
 	public void authenticate(String bindKey, String username, String password, String authenticationServiceURL, String dorianServiceURL) throws CredentialNotFoundException, Exception
 	{
-		GlobusCredential credential = service.authenticate(username, password, authenticationServiceURL,dorianServiceURL);
+		org.globus.gsi.GlobusCredential credential = service.authenticate(username, password, authenticationServiceURL,dorianServiceURL);
 		bindCredential(bindKey,credential);
 	}
 
 	public void authenticate(String bindKey, String username, String password) throws CredentialNotFoundException, Exception
 	{
-		GlobusCredential credential = service.authenticate(username, password);
-		bindCredential(bindKey,credential);		
+		org.globus.gsi.GlobusCredential credential = (org.globus.gsi.GlobusCredential) service.authenticate(username, password);
+		bindCredential(bindKey,credential);
 	}
 
-	private void bindCredential(String bindKey, GlobusCredential credential)
+	private void bindCredential(String bindKey, org.globus.gsi.GlobusCredential credential)
 	{
 		securityMap.put(bindKey, credential);
 	}
-	
+
 }

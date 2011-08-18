@@ -687,8 +687,8 @@
 				<include name="caGrid-*-translator-*.jar"/>
 				<include name="castor-*.jar"/>
 				<include name="cglib-*.jar"/>
-				<include name="cog-axis-*.jar"/>
-				<include name="cog-jglobus-*.jar"/>
+				<include name="cog-axis-4*.jar"/>
+				<include name="cog-jglobus-4*.jar"/>
 				<include name="commons-beanutils-*.jar"/>
 				<include name="commons-codec-*.jar"/>
 				<include name="commons-collections-*.jar"/>
@@ -824,9 +824,9 @@
 						<include name="addressing-*.jar"/>
 						<include name="axis-1.2RC2.jar"/>
 						<include name="caGrid-*.jar"/>
-						<include name="cog-axis-noversion.jar"/>
-						<include name="cog-jglobus-*.jar"/>
-						<include name="cog-tomcat-noversion.jar"/>
+						<include name="cog-axis-4*.jar"/>
+						<include name="cog-jglobus-4*.jar"/>
+						<include name="cog-tomcat-4*.jar"/>
 						<include name="concurrent-*.jar"/>
 						<include name="cryptix-*.jar"/>
 						<include name="cryptix-asn1-*.jar"/>
@@ -952,7 +952,7 @@
 				<include name="caGrid-CQL-cql.*.jar"/>
 				<include name="castor-*.jar"/>
 				<include name="cglib-*.jar"/>
-				<include name="cog-jglobus-*.jar"/>
+				<include name="cog-jglobus-4*.jar"/>
 				<include name="commons-beanutils-*.jar"/>
 				<include name="commons-codec-*.jar"/>
 				<include name="commons-collections-*.jar"/>
@@ -1036,9 +1036,9 @@
 						<include name="axis-1.2RC2.jar"/>
 						<include name="caGrid-*.jar"/>
 						<include name="castor-*.jar"/>
-						<include name="cog-axis-noversion.jar"/>
-						<include name="cog-jglobus-*.jar"/>
-						<include name="cog-tomcat-noversion.jar"/>
+						<include name="cog-axis-4*.jar"/>
+						<include name="cog-jglobus-4*.jar"/>
+						<include name="cog-tomcat-4*.jar"/>
 						<include name="commons-beanutils-*.jar"/>
 						<include name="commons-collections-*.jar"/>
 						<include name="commons-digester-*.jar"/>
@@ -1340,7 +1340,7 @@
 				<echo message="Grid Jaas enabled" />
 				<copy todir="${temp.webapp.staging.lib.dir}" overwrite="true">
 					<fileset dir="${runtime.lib.dir}">
-						<include name="cog-jglobus-*.jar"/>
+						<include name="cog-jglobus-4*.jar"/>
 					</fileset>
 					<fileset dir="${lib.dir}">
 						<include name="sdk-grid-jaas-client-*.jar"/>
@@ -1390,10 +1390,11 @@
 				<attribute name="Version" value="${VERSION}" />
 			</manifest>
 			<lib dir="${temp.webapp.staging.lib.dir}">
-				<exclude name="cog*.*"/>
+<!--				<exclude name="cog*.*"/>  -->
 				<exclude name="servlet*.*"/>
 				<exclude name="${server-exclude-list}" />
 			</lib>
+			
 			<fileset dir="${output.project.dir}/web">
 				<include name="**/*" />
 			</fileset>
@@ -1461,10 +1462,9 @@
 				<include name="caGrid-syncgts-service-*.jar" />
 				<include name="caGrid-syncgts-stubs-*.jar" />
 				<include name="castor-*.jar" />
-				<include name="cog-jglobus-*.jar" />
-				<include name="cog-axis-noversion*.jar" />
+				<include name="cog-jglobus-4*.jar" />
+				<include name="cog-axis-4*.jar" />
 				<include name="puretls-*.jar" />
-				<include name="cog-axis-noversion.jar" />
 				<include name="commons-beanutils-*.jar" />
 				<include name="commons-codec-*.jar" />
 				<include name="commons-collections-*.jar" />
@@ -1585,8 +1585,8 @@
 				</copy>
 				<copy todir="${package.client.tomcat.dir}/lib">
 					<fileset dir="${runtime.lib.dir}">
-						<include name="cog-jglobus*.*" />
-						<include name="cog-axis*.*" />
+						<include name="cog-jglobus-4*.*" />
+						<include name="cog-axis-4*.*" />
 						<include name="cryptix*.*" />
 						<include name="jce-jdk*.*" />
 						<include name="puretls*.*" />
@@ -1603,9 +1603,9 @@
 						<include name="sdk-grid-jaas-jndi-binder-*.jar" />
 					</fileset>
 				</copy>
-				<copy todir="${package.client.tomcat.dir}/server/lib">
+				<copy todir="${package.client.tomcat.dir}/lib">
 					<fileset dir="${runtime.lib.dir}">
-						<include name="cog-tomcat*.*" />
+						<include name="cog-tomcat-4*.*" />
 					</fileset>
 				</copy>
 				<copy tofile="${package.client.tomcat.context.dir}/${SDK_GRID_LOGIN_SERVICE_NAME}.xml" file="${system.config.server.context.dir}/${file.grid.loginService.Context}" />
@@ -1690,9 +1690,9 @@
 				</copy>
 				<copy todir="${package.client.jboss.default.lib.dir}">
 					<fileset dir="${runtime.lib.dir}">
-						<include name="cog-jglobus*.*" />
-						<include name="cog-tomcat*.*" />
-						<include name="cog-axis*.*" />
+						<include name="cog-jglobus-4*.*" />
+						<include name="cog-tomcat-4*.*" />
+						<include name="cog-axis-4*.*" />
 						<include name="cryptix*.*" />
 						<include name="jce-jdk*.*" />
 						<include name="puretls*.*" />
