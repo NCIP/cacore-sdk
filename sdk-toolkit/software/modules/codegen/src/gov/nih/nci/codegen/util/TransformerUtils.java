@@ -13,7 +13,9 @@ import gov.nih.nci.ncicb.xmiinout.domain.UMLDependency;
 import gov.nih.nci.ncicb.xmiinout.domain.UMLGeneralization;
 import gov.nih.nci.ncicb.xmiinout.domain.UMLInterface;
 import gov.nih.nci.ncicb.xmiinout.domain.UMLModel;
+import gov.nih.nci.ncicb.xmiinout.domain.UMLOperationParameter;
 import gov.nih.nci.ncicb.xmiinout.domain.UMLPackage;
+import gov.nih.nci.ncicb.xmiinout.domain.UMLOperation;
 import gov.nih.nci.ncicb.xmiinout.domain.UMLTaggableElement;
 import gov.nih.nci.ncicb.xmiinout.domain.UMLTaggedValue;
 import gov.nih.nci.ncicb.xmiinout.domain.bean.UMLAssociationEndBean;
@@ -89,6 +91,7 @@ public class TransformerUtils
 	public static final String TV_PK_GENERATOR = "NCI_GENERATOR.";
 	public static final String TV_PK_GENERATOR_PROPERTY = "NCI_GENERATOR_PROPERTY";
 	public static final String TV_MAPPED_COLLECTION_ELEMENT_TYPE = "mapped-collection-element-type";
+	public static final String  TV_NOT_NULL_PROPERTY = "nci-not-null";
 
 	
 	//Global Model Exchange (GME) Project Tag Value Constants; see: https://wiki.nci.nih.gov/display/caCORE/GME+Namespace
@@ -462,6 +465,91 @@ public class TransformerUtils
 		return superClasses[0];
 	}
 
+	public void getSuperClassOperations(Map<String, List<UMLOperation>> operations, UMLClass klass) throws GenerationException
+	{
+		getSuperClassOperations(operations, klass, null);
+	}
+
+	public String getOperationText(UMLClass klass, UMLOperation operation) throws GenerationException
+	{
+		
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("\n");
+		buffer.append("\t"+getJavaDocs(operation));
+		buffer.append("\n");
+		buffer.append("\t"+ModelUtil.getOperationSignature(operation, true));
+		if(!operation.getAbstractModifier().isAbstract())
+		{
+			buffer.append("\n\t{\n\t\t");
+			String operationBody = ModelUtil.getOperationBody(operation);
+			if(operationBody != null)
+			{
+				buffer.append(operationBody);
+				buffer.append("\n\t}\n");
+			}
+			else
+				throw new GenerationException("Operation body is missing for operation: "+operation.getName() + " for class: "+klass.getName());
+		}
+		else
+			buffer.append(";");
+			
+		return buffer.toString();
+	}
+	
+	public void getSuperClassOperations(Map<String, List<UMLOperation>> operations, UMLClass klass, List<String> exclude) throws GenerationException
+	{
+		UMLClass superClass = getSuperClass(klass);
+		if(superClass == null)
+			return;
+
+		List<UMLOperation> classperations = superClass.getOperations();
+		String fullName = getFQCN(superClass);
+		if(exclude == null || (exclude != null && !exclude.contains(fullName)))
+		{
+			if(classperations != null && classperations.size() > 0)
+				operations.put(getFQCN(superClass), classperations);
+		}
+		getSuperClassOperations(operations, superClass);
+	}
+	
+	public UMLOperation matchOperationSignature(String operationSignature, List<UMLOperation> operations)
+	{
+		if(operations == null || operations.size() ==0)
+			return null;
+		
+		for(UMLOperation operation : operations)
+		{
+			String signature = ModelUtil.getOperationName(operation, false);
+			if(operationSignature.equals(signature))
+				return operation;
+		}
+		return null;
+	}
+
+	private void getSuperInterfaceOperations(Map<String, List<UMLOperation>> operations, UMLInterface interfaze) throws GenerationException
+	{
+		UMLInterface[] superInterfaces = getSuperInterface(interfaze);
+		if(superInterfaces == null || superInterfaces.length == 0)
+			return;
+		
+		//An interface cannot implement another interface, it can only extend another.
+		UMLInterface superInterface = superInterfaces[0];
+		operations.put(getFQCN(superInterface), superInterface.getOperations());
+		getSuperInterfaceOperations(operations, interfaze);
+	}
+	
+	public void getSuperInterfaceOperations(Map<String, List<UMLOperation>> operations, UMLClass klass) throws GenerationException
+	{
+		UMLInterface[] interfaces = ModelUtil.getInterfaces(klass);
+		for(int i=0;i<interfaces.length;i++)
+		{
+			UMLInterface interfaze = interfaces[i];
+			operations.put(getFQCN(interfaze), interfaze.getOperations());
+			getSuperInterfaceOperations(operations, interfaze);
+
+		}
+	}
+
 	public String getSuperClassString(UMLClass klass) throws GenerationException
 	{
 		UMLClass superClass = getSuperClass(klass);
@@ -608,6 +696,27 @@ public class TransformerUtils
 				}
 			}
 		}
+		
+		if(klass.getOperations() != null)
+		{
+			for(UMLOperation operation: klass.getOperations())
+			{
+				List<UMLOperationParameter> params = operation.getParameters();
+				if(params == null || params.size() ==0)
+					continue;
+				
+				for(UMLOperationParameter param:params)
+				{
+					if(param.getDataType() instanceof UMLClass)
+					{
+						String fullName = getFQCN((UMLClass)param.getDataType());
+						if(!fullName.startsWith("java.lang."))
+							importList.add(fullName);
+					}
+				}
+			}
+		}
+				
 		for(UMLAssociation association: klass.getAssociations())
 		{
 			List<UMLAssociationEnd> assocEnds = association.getAssociationEnds();
@@ -790,6 +899,53 @@ public class TransformerUtils
 	{
 		String name = attr.getName(); 
 		return "set"+name.substring(0,1).toUpperCase()+name.substring(1,name.length());
+	}
+	
+	public boolean matchSetOperationName(UMLAttribute attr, List<UMLOperation> operations)
+	{
+		String setterOperationName = getSetterMethodName(attr) + "(" + getDataType(attr) + " param0)";
+		if(matchOperationSignature(setterOperationName, operations) != null)
+			return true;
+		
+		return false;
+	}
+
+	public boolean matchSetOperationName(UMLAssociationEnd assocEnd, UMLClass clazz, List<UMLOperation> operations)
+	{
+		String setterOperationName = getSetterMethodName(assocEnd) + "(Collection<" + clazz.getName() + "> param0)";
+		if(matchOperationSignature(setterOperationName, operations) != null)
+			return true;
+		
+		return false;
+	}
+
+	public boolean matchGetOperationName(UMLAttribute attr, List<UMLOperation> operations)
+	{
+		String getterOperationName = getGetterMethodName(attr) + "()";
+		if(matchOperationSignature(getterOperationName, operations) != null)
+			return true;
+		
+		return false;
+	}
+	
+	public boolean matchGetOperationName(UMLAssociationEnd assocEnd, List<UMLOperation> operations)
+	{
+		String getterOperationName = getGetterMethodName(assocEnd) + "()";
+		if(matchOperationSignature(getterOperationName, operations) != null)
+			return true;
+		
+		return false;
+	}
+
+	public boolean isBidirectionalSelfAssociation(UMLClass klass, List<UMLAssociationEnd>assocEnds) throws GenerationException
+	{
+		UMLAssociationEnd end1 = assocEnds.get(0);
+		UMLAssociationEnd end2 = assocEnds.get(1);
+		
+		if(end1.getUMLElement().equals(klass) && end2.getUMLElement().equals(klass) && end1.isNavigable() && end2.isNavigable())
+			return true;
+
+		return false;
 	}
 
 	public UMLAssociationEnd getThisEnd(UMLClass klass, List<UMLAssociationEnd>assocEnds) throws GenerationException
@@ -1389,7 +1545,7 @@ public class TransformerUtils
 		{
 			UMLClass client = (UMLClass) dependency.getClient();
 			
-			log.debug("getTable: klass: " + klass.getName() + "Client stereotype: " +client.getStereotype() + "; dependency stereotype: " + dependency.getStereotype());
+			log.debug("getTable: klass: " + klass.getName() + "; Client " + client.getName() + " stereotype: " +client.getStereotype() + "; dependency stereotype: " + dependency.getStereotype());
 			if(STEREO_TYPE_TABLE.equalsIgnoreCase(client.getStereotype()) && STEREO_TYPE_DATASOURCE_DEPENDENCY.equalsIgnoreCase(dependency.getStereotype()))
 			{
 				log.debug("* * * client.getName(): " + client.getName());
@@ -1400,9 +1556,18 @@ public class TransformerUtils
 		
 		count = clientMap.size();
 
-		if(count!=1){
+		if(count<1){
 			log.debug("getTable: klass: " +klass.getName()+"; count: " + count);
-			throw new GenerationException("No table found for : "+getFQCN(klass)+".  Make sure the corresponding Data Model table (class) has a 'table' Stereotype assigned, and the Dependency between the Data Model table and Logical Model class has a 'DataSource' Stereotype assigned.");
+			GenerationException ge = new GenerationException("No table found for : "+getFQCN(klass)+".  Make sure the corresponding Data Model table (class) has a 'table' Stereotype assigned, and the Dependency between the Data Model table and Logical Model class has a 'DataSource' Stereotype assigned.");
+			log.debug(ge);
+			throw ge;
+		}
+		
+		if(count>1){
+			log.debug("getTable: klass: " +klass.getName()+"; count: " + count);
+			GenerationException ge = new GenerationException("More than one table found for : "+getFQCN(klass)+".  Make sure there is only one corresponding Data Model table (class) that has a 'table' Stereotype assigned, and the Dependency between the Data Model table and Logical Model class has a 'DataSource' Stereotype assigned.");
+			log.error(ge);
+			throw ge;
 		}
 
 		
@@ -1443,7 +1608,24 @@ public class TransformerUtils
 
 		return false;
 	}
+	/**
+	 * Determines whether the input class is a subclass
+	 * @param klass
+	 * @return
+	 */
+	public boolean isSubClass(UMLClass klass)
+	{
+		boolean isSubClass = false;
 	
+		if (klass != null)
+			for(UMLGeneralization gen:klass.getGeneralizations())
+			{
+				if(gen.getSupertype() instanceof UMLClass && ((UMLClass)gen.getSupertype()) != klass) 
+					return true;
+	}
+	
+		return isSubClass;
+	}	
 	/**
 	 * Determines whether the input class is a superclass
 	 * @param klass
@@ -1500,7 +1682,12 @@ public class TransformerUtils
 		if(!throwException && (tableName == null || tableName.length() ==0)) return null;
 		
 		UMLClass correlationTable = ModelUtil.findClass(model,BASE_PKG_DATA_MODEL+"."+tableName);
-		if(correlationTable == null) throw new GenerationException("No correlation table found named : \""+tableName+"\"");
+		if(correlationTable == null) {
+			List<UMLAssociationEnd> assocEnds = association.getAssociationEnds();
+			UMLAssociationEnd otherEnd = getOtherEnd(klass,assocEnds);
+			UMLAssociationEnd thisEnd = getThisEnd(klass,assocEnds);
+			throw new GenerationException("No correlation table found named : \""+tableName+"\".  Check the 'correlation-table' tag value assigned the association link attached to class " + getFQCN(klass) + " with rolenames '" + otherEnd.getRoleName() + "' and '" + thisEnd.getRoleName() + "'.");
+		}
 		
 		return correlationTable;
 	}
@@ -1555,13 +1742,14 @@ public class TransformerUtils
 		if("".equals(col3)) col3=null;
 		
 		if((col1==null && col3==null && isJoin && throwException) || (col1==null && col2==null && !isJoin && throwException)){
-			log.debug("***** col1: " + col1 + "; col2: " + col2 + "; col3: " + col3);
-			log.debug("klass: " + klass.getName());
-			log.debug("assocKlass: " + assocKlass.getName());
-			log.debug("table: " + table.getName());
-			log.debug("isJoin: " + isJoin);
-			log.debug("otherEnd.getRoleName(): " +otherEnd.getRoleName());
-			log.debug("thisEnd.getRoleName(): " +thisEnd.getRoleName());	
+			log.error("***** col1: " + col1 + "; col2: " + col2 + "; col3: " + col3);
+			log.error("klass: " + klass.getName());
+			log.error("assocKlass: " + assocKlass.getName());
+			log.error("table: " + table.getName());
+			log.error("isJoin: " + isJoin);
+			log.error("otherEnd.getRoleName(): " +otherEnd.getRoleName());
+			log.error("thisEnd.getRoleName(): " +thisEnd.getRoleName());
+			log.error("Could not determine the column for the association between "+getFQCN(klass)+" and "+getFQCN(assocKlass) +". Check for missing implements-association/inverse-of/correlation-table tag(s), where appropriate");
 			throw new GenerationException("Could not determine the column for the association between "+getFQCN(klass)+" and "+getFQCN(assocKlass) +". Check for missing implements-association/inverse-of/correlation-table tag(s), where appropriate");
 		}
 		/*if(col1!=null && col2!=null && !col1.equals(col2))
@@ -1597,6 +1785,8 @@ public class TransformerUtils
 	
 	public String findDiscriminatingColumnName(UMLClass klass) throws GenerationException
 	{
+		log.debug("**** Finding Discriminating Column Name for class : " + getFQCN(klass));
+		
 		UMLClass superKlass = klass;
 		
 		UMLClass temp = klass;
@@ -1610,17 +1800,20 @@ public class TransformerUtils
 
 	public String getDiscriminatorValue(UMLClass klass) throws GenerationException
 	{
+		log.debug("**** Getting Discriminator Value for class : " + getFQCN(klass));
 		return getTagValue(klass,TV_DISCR_COLUMN,null, 1,1);
 	}
 	
 	public String getRootDiscriminatorValue(UMLClass klass) throws GenerationException
 	{
+		log.debug("**** Getting Root Discriminator Value for class : " + getFQCN(klass));
+		
 		return getTagValue(klass,TV_DISCR_COLUMN,null,0,1);
 	}
 	
 	public String getImplicitDiscriminatorColumn(UMLClass table, UMLClass klass, String roleName) throws GenerationException
 	{
-		log.debug("**** getImplicitDiscriminator: table: " + table.getName() +"; klass: " + klass.getName() +"; roleName: " + roleName);
+		log.debug("**** Getting Implicit Discriminator Column for table: " + table.getName() +"; klass: " + klass.getName() +"; roleName: " + roleName);
 		return getColumnName(table,TV_DISCR_COLUMN,getFQCN(klass)+"."+roleName,false,1,1);
 	}
 	
@@ -1633,8 +1826,12 @@ public class TransformerUtils
 	{
 		String temp = getTagValue(klass,association, TV_LAZY_LOAD,null, 0,1);
 		
-		if (temp != null)
-			throw new GenerationException("Invalid Tag Value found:  The '" + TV_LAZY_LOAD + "' Tag Value which is attached to the association link has been replaced with the '" + TV_NCI_EAGER_LOAD + "' Tag Value.  Also, it's value must now conform to the following pattern:  "+TV_NCI_EAGER_LOAD+"#<fully qualified class name>.<role name>.  The value of the tag continues to be 'yes' or 'no'.  Please update your model accordingly" );
+		if (temp != null) {
+			List<UMLAssociationEnd> assocEnds = association.getAssociationEnds();
+			UMLAssociationEnd otherEnd = getOtherEnd(klass,assocEnds);
+			UMLAssociationEnd thisEnd = getThisEnd(klass,assocEnds);
+			throw new GenerationException("Invalid Tag Value found:  The '" + TV_LAZY_LOAD + "' Tag Value which is assigned to the association link attached to class " + getFQCN(klass) + " with the rolenames '" + otherEnd.getRoleName() + "' and '" + thisEnd.getRoleName() + "' has been replaced with the '" + TV_NCI_EAGER_LOAD + "' Tag Value.  Also, it's value must now conform to the following pattern:  "+TV_NCI_EAGER_LOAD+"#<fully qualified class name>.<role name>.  The value of the tag continues to be 'yes' or 'no'.  However, the value is the converse of the original 'lazy-load' tag; i.e., if 'lazy-load' tag value was set to 'yes', set the 'NCI_EAGER_LOAD#...' tag value to 'no', and vice versa.  Please update your model accordingly" );
+		}
 
 		return true;
 	}
@@ -1665,7 +1862,7 @@ public class TransformerUtils
 			}
 		}
 		
-		if(count < minOccurrence || (minOccurrence>0 && (result == null || result.trim().length() == 0))) throw new GenerationException("No value found for "+key+" tag in : "+getFQEN(elt));
+		if(count < minOccurrence || (minOccurrence>0 && (result == null || result.trim().length() == 0))) throw new GenerationException("No value found for "+key+" tag for element: "+getFQEN(elt));
 		if(count > maxOccurrence) throw new GenerationException("More than one value found for "+key+" tag in : "+getFQEN(elt));
 		
 		return result;
@@ -1704,16 +1901,27 @@ public class TransformerUtils
 
 	public String getColumnName(UMLClass klass, String key, String value,  boolean isValuePrefix, int minOccurrence, int maxOccurrence) throws GenerationException
 	{
+		log.debug("Getting Column Name for class " + getFQCN(klass) + " with a value of " + value);
 		UMLAttribute attr = getColumn(klass,key,value,isValuePrefix,minOccurrence,maxOccurrence);
 		return (attr==null) ? "" : attr.getName();
 	}
 
 	private UMLAttribute getColumn(UMLClass klass, String key, String value, boolean isValuePrefix, int minOccurrence, int maxOccurrence) throws GenerationException
 	{
+		log.debug("Getting Column for class " + getFQCN(klass) + " and key '" +key + "' and value '" + value + "'.");
 	
 		UMLAttribute result = null;
 		int count = 0;
-		for(UMLAttribute attr: klass.getAttributes())
+		List<UMLAttribute> attrList = new ArrayList<UMLAttribute>();
+
+		UMLClass currentKlass = klass;
+		while (currentKlass != null){
+			attrList.addAll(currentKlass.getAttributes());
+			
+			currentKlass = getSuperClass(currentKlass);
+		}
+		
+ 		for(UMLAttribute attr: attrList)
 		{
 			for(UMLTaggedValue tv: attr.getTaggedValues())
 			{
@@ -1742,9 +1950,14 @@ public class TransformerUtils
 				}
 			}
 		}
-		if(count < minOccurrence) 
-			throw new GenerationException("No value of "+value+" found for "+key+" tag in class : "+getFQCN(klass));
-		if(count > maxOccurrence) throw new GenerationException("More than one values found for "+key+" tag in class : "+getFQCN(klass));
+		if(count < minOccurrence) {
+			log.error("No value of "+value+" found for "+key+" tag in table : "+getFQCN(klass));
+			throw new GenerationException("No value of "+value+" found for "+key+" tag in table : "+getFQCN(klass));
+		}
+		if(count > maxOccurrence){
+			log.error("More than one value found for "+key+" tag in table : "+getFQCN(klass));
+			throw new GenerationException("More than one values found for "+key+" tag in table : "+getFQCN(klass));
+		}
 		
 		return result;
 	}
@@ -1858,6 +2071,23 @@ public class TransformerUtils
 		return temp.toString();
 	}
 	
+	public String getIsNotNullTagValue(UMLClass klass, UMLAttribute attr) throws GenerationException
+	{
+		log.debug("getIsNotNullTagValue for klass: " + klass.getName() + ", attr: " + attr.getName());
+		String fqcn = getFQCN(klass);
+		UMLClass table = getTable(klass);
+		UMLAttribute col = getMappedColumn(table,fqcn+"."+attr.getName());
+
+		String temp1= getTagValue(table,col, TV_NOT_NULL_PROPERTY, null, false,0, 1);			
+		if(temp1 ==null || temp1.length() == 0)
+		{
+			return null;
+	}
+		return temp1;
+	}
+	
+	
+	
 	private String getJavaDocs(Collection<UMLTaggedValue> tagValues) throws GenerationException
 	{
 		String documentation = getTagValue(tagValues, TV_DOCUMENTATION, 8);
@@ -1870,6 +2100,11 @@ public class TransformerUtils
 		doc.append("\n\t**/");
 		return doc.toString();
 
+	}
+
+	public String getJavaDocs(UMLOperation operation) throws GenerationException 
+	{
+		return getJavaDocs(operation.getTaggedValues());
 	}
 	
 	public String getJavaDocs(UMLInterface interfaze) throws GenerationException 

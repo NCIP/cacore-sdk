@@ -43,6 +43,31 @@ public class BaseArtifact implements Artifact
 	}
 	
 	/**
+	 * Creates the source name for the JUnit XML Data Artifact from the <code>klass</code>
+	 * 
+	 * @param klass
+	 */
+	public void createJunitXmlDataSourceName(UMLClass klass) {
+		sourceName = (transformerUtils.getFullPackageName(klass)+"."+klass.getName()+"XMLDataTest").replace('.','/');
+	}		
+	/**
+	 * Creates the source name for the JUnit XSD Artifact from the <code>klass</code>
+	 * 
+	 * @param klass
+	 */
+	public void createJunitXsdSourceName(UMLClass klass) {
+		sourceName = (transformerUtils.getFullPackageName(klass)+"."+klass.getName()+"XSDTest").replace('.','/');
+	}	
+	/**
+	 * Creates the source name for the JUnit POJO Artifact from the <code>klass</code>
+	 * 
+	 * @param klass
+	 */
+	public void createJunitPojoSourceName(UMLClass klass) {
+		sourceName = (transformerUtils.getFullPackageName(klass)+"."+klass.getName()+"Test").replace('.','/');
+	}	
+	
+	/**
 	 * Creates the source name for the artifact from the <code>klass</code>
 	 * 
 	 * @param klass

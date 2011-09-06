@@ -121,7 +121,7 @@ import org.apache.log4j.Logger;
  * 	</UL>
  * </LI>
  * </UL>
- * @author Satish Patel
+ * @author Satish Patel, Dan Dumitru
  *
  */
 public class UMLModelMappingValidator implements Validator
@@ -221,7 +221,15 @@ public class UMLModelMappingValidator implements Validator
 		try 
 		{
 			UMLAttribute idAttr = transformerUtils.getClassIdAttr(klass);
-//			log.debug("idAttr: " + idAttr.getName());
+			
+			if (idAttr!=null){
+				log.debug("idAttr: " + idAttr.getName());
+			} else {
+				log.error("Error:  No id attribute found for class " + transformerUtils.getFQCN(klass));
+				errors.addError(new GeneratorError(getName() + ": Unable to validate subclasses of parent class " + transformerUtils.getFQCN(klass) + ", as no id attribute was found for the parent class"));
+				return;
+			}
+			
 			String discriminatorColumnName = transformerUtils.findDiscriminatingColumnName(klass);		
 			log.debug("discriminatorColumnName: " + discriminatorColumnName);
 			if(discriminatorColumnName == null || "".equals(discriminatorColumnName))
@@ -370,11 +378,13 @@ public class UMLModelMappingValidator implements Validator
 						String cascadeStyle = transformerUtils.findCascadeStyle(currentKlass, otherEnd.getRoleName(), association);
 						
 						if(transformerUtils.isAny(thisEnd,otherEnd)){
+								log.debug("*** Validating isAny Association between class " + transformerUtils.getFQCN(currentKlass) + " and associated class " + transformerUtils.getFQCN(assocKlass));
 							
 							//implicit polymorphic validations for Any associations
 							Map<String, String> discriminatorValues = new HashMap<String, String>();
 
 							UMLClass implicitClass = (UMLClass)otherEnd.getUMLElement();
+								log.debug("*** implicitClass is " + transformerUtils.getFQCN(implicitClass));
 							String discriminatorValue = null;
 							String nonImplicitSubclassFqcn = null;
 							
@@ -384,9 +394,9 @@ public class UMLModelMappingValidator implements Validator
 								
 								log.debug("discriminatorValue: " + discriminatorValue);
 								if(discriminatorValue == null || discriminatorValue.trim().length() ==0)
-									errors.addError(new GeneratorError(getName() + ": Discriminator value not present for the "+implicitClass+" class"));
+										errors.addError(new GeneratorError(getName() + ": Discriminator value not present for the "+transformerUtils.getFQCN(implicitClass)+" class"));
 								if(discriminatorValues.get(discriminatorValue)!= null)
-									errors.addError(new GeneratorError(getName() + ": Same discriminator value for "+implicitClass+" and "+discriminatorValues.get(discriminatorValue)+ " class"));	
+										errors.addError(new GeneratorError(getName() + ": Same discriminator value for "+transformerUtils.getFQCN(implicitClass)+" and "+discriminatorValues.get(discriminatorValue)+ " class"));	
 								
 								discriminatorValues.put(discriminatorValue, nonImplicitSubclassFqcn);
 							}
@@ -397,6 +407,8 @@ public class UMLModelMappingValidator implements Validator
 						} else if(transformerUtils.isMany2Any(thisEnd,otherEnd)){
 							// implicit polymorphic validations for Many-To-Any associations
 							
+								log.debug("*** Validating isMany2Any Association between class " + transformerUtils.getFQCN(currentKlass) + " and associated class " + transformerUtils.getFQCN(assocKlass));								
+								
 							log.debug("cascadeStyle: "+ cascadeStyle + "; currentKlass: " + transformerUtils.getFQCN(currentKlass) + "; roleName: " + otherEnd.getRoleName());
 							if (!cascadeStyle.equalsIgnoreCase("none")){
 								errors.addError(new GeneratorError(getName() + ": Cascade-style settings are not supported on the Many-to-Any association between " + transformerUtils.getFQCN(currentKlass) + " and " + transformerUtils.getFQCN(assocKlass) +".  Please remove the NCI_CASCADE_ASSOCIATION Tag Value from the association."));
@@ -422,6 +434,7 @@ public class UMLModelMappingValidator implements Validator
 							Map<String, String> discriminatorValues = new HashMap<String, String>();
 
 							UMLClass implicitClass = (UMLClass)otherEnd.getUMLElement();
+								log.debug("*** implicitClass is " + transformerUtils.getFQCN(implicitClass));
 							String discriminatorValue = null;
 							String nonImplicitSubclassFqcn = null;
 							
@@ -431,9 +444,9 @@ public class UMLModelMappingValidator implements Validator
 								
 								log.debug("discriminatorValue: " + discriminatorValue);
 								if(discriminatorValue == null || discriminatorValue.trim().length() ==0)
-									errors.addError(new GeneratorError(getName() + ": Discriminator value not present for the "+implicitClass+" class"));
+										errors.addError(new GeneratorError(getName() + ": Discriminator value not present for the "+transformerUtils.getFQCN(implicitClass)+" class"));
 								if(discriminatorValues.get(discriminatorValue)!= null)
-									errors.addError(new GeneratorError(getName() + ": Same discriminator value for "+implicitClass+" and "+discriminatorValues.get(discriminatorValue)+ " class"));	
+										errors.addError(new GeneratorError(getName() + ": Same discriminator value for "+transformerUtils.getFQCN(implicitClass)+" and "+discriminatorValues.get(discriminatorValue)+ " class"));	
 								
 								discriminatorValues.put(discriminatorValue, nonImplicitSubclassFqcn);
 							}
@@ -460,7 +473,7 @@ public class UMLModelMappingValidator implements Validator
 							
 						}else if(transformerUtils.isOne2Many(thisEnd,otherEnd)){
 							if(transformerUtils.isImplicitParent(assocKlass)) {
-								errors.addError(new GeneratorError(getName() + ": Implicit polymorphic one-to-many association between class " + currentKlass + " and implicit parent class " + assocKlass +" is not supported"));
+									errors.addError(new GeneratorError(getName() + ": Implicit polymorphic one-to-many association between class " + transformerUtils.getFQCN(currentKlass) + " and implicit parent class " + transformerUtils.getFQCN(assocKlass) +" is not supported"));
 							} else {
 								
 								UMLClass correlationTable = transformerUtils.findCorrelationTable(association, model, assocKlass, false);
@@ -530,7 +543,7 @@ public class UMLModelMappingValidator implements Validator
 									String keyColumnName = transformerUtils.findAssociatedColumn(table,currentKlass,otherEnd,assocKlass,thisEnd,false, false);
 									Boolean keyColumnPresent = (keyColumnName!=null && !"".equals(keyColumnName));
 									if(!thisEnd.isNavigable() && !keyColumnPresent)
-										errors.addError(new GeneratorError(getName() + ": One to one unidirectional mapping requires key column to be present in the source class"+transformerUtils.getFQCN(currentKlass)));
+											errors.addError(new GeneratorError(getName() + ": One-to-one unidirectional mapping between classes " + transformerUtils.getFQCN(currentKlass) + " and " + transformerUtils.getFQCN(assocKlass) + " requires key column to be present in the source class "+transformerUtils.getFQCN(currentKlass)));
 								}else{
 									String keyColumnName = transformerUtils.findAssociatedColumn(correlationTable,assocKlass,thisEnd,currentKlass,otherEnd, true);
 									String assocColumnName = transformerUtils.findAssociatedColumn(correlationTable,currentKlass,otherEnd,assocKlass,thisEnd, true);
