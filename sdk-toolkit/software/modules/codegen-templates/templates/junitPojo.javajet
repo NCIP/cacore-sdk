@@ -1,0 +1,198 @@
+<%@ jet package="gov.nih.nci.codegen.transformer.jet" 
+        class="JunitPojoTransformer"
+        skeleton="JunitPojoTransformerBase.skeleton" %>
+<% String fullPackageName=transformerUtils.getFullPackageName(klass);%>
+<% String klassName=klass.getName();%>        
+package test.<%=fullPackageName%>;
+
+<%=transformerUtils.getImports(klass)%>
+import <%=fullPackageName%>.<%=klassName%>;
+
+import gov.nih.nci.system.applicationservice.ApplicationException;
+import gov.nih.nci.system.query.cql.CQLAssociation;
+import gov.nih.nci.system.query.cql.CQLAttribute;
+import gov.nih.nci.system.query.cql.CQLObject;
+import gov.nih.nci.system.query.cql.CQLPredicate;
+import gov.nih.nci.system.query.cql.CQLQuery;
+import gov.nih.nci.system.query.hibernate.HQLCriteria;
+
+import java.lang.reflect.Modifier;
+import java.util.Collection;
+import java.util.Iterator;
+
+import test.SDKTestBase;
+
+public class <%=klassName%>Test extends SDKTestBase
+{
+	public static String getTestCaseName()
+	{
+		return "<%=klassName%> POJO Test Case";
+	}
+
+<% if (!transformerUtils.isAbstract(klass)	)  {%>
+	
+	/**
+	 * Uses Nested Search Criteria for search
+	 * Verifies that the results are returned 
+	 * Verifies size of the result set
+	 * Verifies that none of the attributes are null
+	 * 
+	 * @throws ApplicationException
+	 */
+	public void testEntireObjectNestedSearch() throws ApplicationException
+	{
+		<%=klassName%> searchObject = new <%=klassName%>();
+		Collection results = getApplicationService().search("<%=fullPackageName%>.<%=klassName%>",searchObject );
+
+		assertNotNull(results);
+		
+		for(Iterator i = results.iterator();i.hasNext();)
+		{
+			<%=klassName%> result = (<%=klassName%>)i.next();
+			assertNotNull(result);
+			
+			// test attributes<%for(UMLAttribute attr:klass.getAttributes()){%>
+			assertNotNull("<%=klassName%>.<%=transformerUtils.getGetterMethodName(attr)%>() returned an unexpected 'null' value",result.<%=transformerUtils.getGetterMethodName(attr)%>());<%
+			}%>
+
+<%	int counter = 1;
+	for(UMLAssociation assoc:klass.getAssociations()) {
+
+		List<UMLAssociationEnd> assocEnds = assoc.getAssociationEnds();
+		UMLAssociationEnd thisEnd = transformerUtils.getThisEnd(klass,assocEnds);
+		UMLAssociationEnd otherEnd = transformerUtils.getOtherEnd(klass,assocEnds);
+
+		List<UMLAssociationEnd> associationEnds = new java.util.ArrayList<UMLAssociationEnd>();
+		associationEnds.add(otherEnd);
+		
+		if(transformerUtils.isBidirectionalSelfAssociation(klass,assocEnds)) { // handle bi-directional self-association 
+			associationEnds.add(thisEnd);
+		}
+		
+	for(UMLAssociationEnd associationEnd : associationEnds){	
+		if(associationEnd.isNavigable())
+		{
+			UMLClass assocKlass = (UMLClass)associationEnd.getUMLElement();
+			if(transformerUtils.isAssociationEndMany(associationEnd))
+			{ %>
+			// test collection association
+			Collection<<%=transformerUtils.getFullPackageName(assocKlass)%>.<%=assocKlass.getName()%>> associated<%=assocKlass.getName()%>Collection<%=counter%> = result.<%=transformerUtils.getGetterMethodName(associationEnd)%>();
+			if (associated<%=assocKlass.getName()%>Collection<%=counter%> != null) {
+				assertTrue(associated<%=assocKlass.getName()%>Collection<%=counter%>.size() >= 0);
+			}
+<%		}	else { %>
+			// test object association
+			<%=transformerUtils.getFullPackageName(assocKlass)%>.<%=assocKlass.getName()%> associated<%=assocKlass.getName()%><%=counter%> = result.<%=transformerUtils.getGetterMethodName(associationEnd)%>();
+			
+			if (associated<%=assocKlass.getName()%><%=counter%> != null) { //don't fail just because a particular DB record does not have associated object data<%for(UMLAttribute attr:assocKlass.getAttributes()){%>
+				assertNotNull("associated<%=assocKlass.getName()%><%=counter%>.<%=transformerUtils.getGetterMethodName(attr)%>() returned an unexpected 'null' value",associated<%=assocKlass.getName()%><%=counter%>.<%=transformerUtils.getGetterMethodName(attr)%>());<%
+				}%>			
+			}	
+<%		} counter ++;}}} %>
+		}
+		
+		// print out a sample record
+		for(Iterator i = results.iterator();i.hasNext();)
+		{
+			try {
+				printObject(i.next(), <%=klassName%>.class);
+			} catch (Exception e) {
+				fail("Error encountered while printing out sample record");
+			} 
+			break;		
+		}		
+	}		
+	
+	/**
+	 * Uses HQL Criteria Query API for search
+	 * Verifies that the results are returned 
+	 * Verifies size of the result set
+	 * Verifies that none of the attribute are  null
+	 * 
+	 * @throws ApplicationException
+	 */
+	public void testEntireObjectHqlCriteriaSearch() throws ApplicationException
+	{
+	
+		HQLCriteria criteria = new HQLCriteria("from <%=fullPackageName%>.<%=klassName%>");
+		Collection results = getApplicationService().query(criteria);	
+
+		assertNotNull(results);
+		
+		for(Iterator i = results.iterator();i.hasNext();)
+		{
+			<%=klassName%> result = (<%=klassName%>)i.next();
+			assertNotNull(result);
+			<%for(UMLAttribute attr:klass.getAttributes()){%>
+			assertNotNull("<%=klassName%>.<%=transformerUtils.getGetterMethodName(attr)%>() returned an unexpected 'null' value",result.<%=transformerUtils.getGetterMethodName(attr)%>());<%
+			}%>
+		}
+		
+		// print out a sample record
+		for(Iterator i = results.iterator();i.hasNext();)
+		{
+			try {
+				printObject(i.next(), <%=klassName%>.class);
+			} catch (Exception e) {
+				fail("Error encountered while printing out sample record");
+			} 
+			break;		
+		}		
+	}
+		
+	/**
+	 * Uses CQL Query API for search
+	 * Verifies that the results are returned 
+	 * Verifies size of the result set
+	 * Verifies that none of the attribute are  null
+	 * 
+	 * @throws ApplicationException
+	 */
+	public void testEntireObjectCqlSearch() throws ApplicationException
+	{
+	
+		CQLQuery cqlQuery = new CQLQuery();
+		CQLObject target = new CQLObject();
+		
+		target.setName("<%=fullPackageName%>.<%=klassName%>");
+		cqlQuery.setTarget(target);
+
+		Collection results = getApplicationService().query(cqlQuery);
+
+		assertNotNull(results);
+		
+		for(Iterator i = results.iterator();i.hasNext();)
+		{
+			<%=klassName%> result = (<%=klassName%>)i.next();
+			assertNotNull(result);
+			<%for(UMLAttribute attr:klass.getAttributes()){%>
+			assertNotNull("<%=klassName%>.<%=transformerUtils.getGetterMethodName(attr)%>() returned an unexpected 'null' value",result.<%=transformerUtils.getGetterMethodName(attr)%>());<%
+			}%>
+		}
+		
+		// print out a sample record
+		for(Iterator i = results.iterator();i.hasNext();)
+		{
+			try {
+				printObject(i.next(), <%=klassName%>.class);
+			} catch (Exception e) {
+				fail("Error encountered while printing out sample record");
+			} 
+			break;		
+		}		
+	}
+
+<%} else {%>	
+	/**
+	 * Regular test case not generated, as class <%=klassName%> is abstract
+	 * This "placeholder" test case is generated instead to avoid the junit warning that no tests were found
+	 * 
+	 * @throws ApplicationException
+	 */
+	public void testEntireObjectNestedSearch() throws ApplicationException
+	{
+		boolean isTrue = true;
+		assertTrue(	isTrue);
+	}
+<%}%>		
+}

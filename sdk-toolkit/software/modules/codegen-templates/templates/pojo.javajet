@@ -25,39 +25,65 @@ public<%=transformerUtils.isAbstract(klass)? " abstract" : "" %> class <%=klass.
 	<%=transformerUtils.getJavaDocs(attr)%>
 	<%=transformerUtils.getHibernateValidatorConstraints(klass,attr)%>
 	<%=attr.getVisibility().getName()%> <%=transformerUtils.getDataType(attr)%> <%=attr.getName()%>;
+	<%if(!transformerUtils.matchGetOperationName(attr, klass.getOperations()))
+	{%>
 	<%=transformerUtils.getGetterMethodJavaDocs(attr)%>
 <% if (jaxbEnabled) { %><%=transformerUtils.getJaxbXmlAttributeAnnotation(klass, attr)%><%}%>
 	public <%=transformerUtils.getDataType(attr)%> <%=transformerUtils.getGetterMethodName(attr)%>(){
 		return <%=attr.getName()%>;
 	}
-
+	<%}%>
+	<%
+	if(!transformerUtils.matchSetOperationName(attr, klass.getOperations()))
+	{%>
 	<%=transformerUtils.getSetterMethodJavaDocs(attr)%>
 	public void <%=transformerUtils.getSetterMethodName(attr)%>(<%=transformerUtils.getDataType(attr)%> <%=attr.getName()%>){
 		this.<%=attr.getName()%> = <%=attr.getName()%>;
 	}
+	<%}%>
 	<%}
+	
+	
+	if(klass.getOperations() != null && klass.getOperations().size() > 0)
+	{
+		for(UMLOperation operation:klass.getOperations())
+		{
+	%>
+	<%=transformerUtils.getOperationText(klass, operation)%>
+	<%}
+	}
+	
 	for(UMLAssociation assoc:klass.getAssociations()){
 		List<UMLAssociationEnd> assocEnds = assoc.getAssociationEnds();
 		UMLAssociationEnd thisEnd = transformerUtils.getThisEnd(klass,assocEnds);
 		UMLAssociationEnd otherEnd = transformerUtils.getOtherEnd(klass,assocEnds);
 	
-		if(otherEnd.isNavigable())
+		List<UMLAssociationEnd> associationEnds = new java.util.ArrayList<UMLAssociationEnd>();
+		associationEnds.add(otherEnd);
+	
+		if(transformerUtils.isBidirectionalSelfAssociation(klass,assocEnds)) { // handle bi-directional self-association 
+			associationEnds.add(thisEnd);
+		}
+		
+		for(UMLAssociationEnd associationEnd : associationEnds){	
+			if(associationEnd.isNavigable())
 		{
-			UMLClass assocKlass = (UMLClass)otherEnd.getUMLElement();
-			if(transformerUtils.isAssociationEndMany(otherEnd))
+			
+				UMLClass assocKlass = (UMLClass)associationEnd.getUMLElement();
+				if(transformerUtils.isAssociationEndMany(associationEnd))
 			{%>
 	<%=transformerUtils.getJavaDocs(klass, assoc)%>
 <% if (jaxbEnabled) { %><%=transformerUtils.getJaxbCollectionAnnotations(klass,assocKlass,otherEnd.getRoleName())%><%} %>
-	private Collection<<%=assocKlass.getName()%>> <%=otherEnd.getRoleName()%>;
+	private Collection<<%=assocKlass.getName()%>> <%=associationEnd.getRoleName()%>;
 	<%=transformerUtils.getGetterMethodJavaDocs(klass, assoc)%>
 <% if (jaxbEnabled) { %><%=transformerUtils.getJaxbXmlTransientAnnotation()%><%} %>
-	public Collection<<%=assocKlass.getName()%>> <%=transformerUtils.getGetterMethodName(otherEnd)%>(){
-		return <%=otherEnd.getRoleName()%>;
+	public Collection<<%=assocKlass.getName()%>> <%=transformerUtils.getGetterMethodName(associationEnd)%>(){
+		return <%=associationEnd.getRoleName()%>;
 	}
 
 	<%=transformerUtils.getSetterMethodJavaDocs(klass, assoc)%>
-	public void <%=transformerUtils.getSetterMethodName(otherEnd)%>(Collection<<%=assocKlass.getName()%>> <%=otherEnd.getRoleName()%>){
-		this.<%=otherEnd.getRoleName()%> = <%=otherEnd.getRoleName()%>;
+	public void <%=transformerUtils.getSetterMethodName(associationEnd)%>(Collection<<%=assocKlass.getName()%>> <%=associationEnd.getRoleName()%>){
+		this.<%=associationEnd.getRoleName()%> = <%=associationEnd.getRoleName()%>;
 	}
 		<%}else{%>
 	<%=transformerUtils.getJavaDocs(klass, assoc)%>	
@@ -66,17 +92,18 @@ public<%=transformerUtils.isAbstract(klass)? " abstract" : "" %> class <%=klass.
 				type=<%=assocKlass.getName()%>.class,
 				namespace="<%=transformerUtils.getNamespaceUriPrefix() +transformerUtils.getFullPackageName(assocKlass)%>")
 <%} %>
-	private <%=assocKlass.getName()%> <%=otherEnd.getRoleName()%>;
+	private <%=assocKlass.getName()%> <%=associationEnd.getRoleName()%>;
 	<%=transformerUtils.getGetterMethodJavaDocs(klass, assoc)%>
 <% if (jaxbEnabled) { %><%=transformerUtils.getJaxbXmlTransientAnnotation()%><%} %>
-	public <%=assocKlass.getName()%> <%=transformerUtils.getGetterMethodName(otherEnd)%>(){
-		return <%=otherEnd.getRoleName()%>;
+	public <%=assocKlass.getName()%> <%=transformerUtils.getGetterMethodName(associationEnd)%>(){
+		return <%=associationEnd.getRoleName()%>;
 	}
 	<%=transformerUtils.getSetterMethodJavaDocs(klass, assoc)%>
-	public void <%=transformerUtils.getSetterMethodName(otherEnd)%>(<%=assocKlass.getName()%> <%=otherEnd.getRoleName()%>){
-		this.<%=otherEnd.getRoleName()%> = <%=otherEnd.getRoleName()%>;
+	public void <%=transformerUtils.getSetterMethodName(associationEnd)%>(<%=assocKlass.getName()%> <%=associationEnd.getRoleName()%>){
+		this.<%=associationEnd.getRoleName()%> = <%=associationEnd.getRoleName()%>;
 	}
 			<%}
+			}
 		}
 	}
 

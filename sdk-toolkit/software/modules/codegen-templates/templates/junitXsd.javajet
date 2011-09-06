@@ -1,0 +1,119 @@
+<%@ jet package="gov.nih.nci.codegen.transformer.jet" 
+        class="JunitXsdTransformer"
+        skeleton="JunitXsdTransformerBase.skeleton" %>
+<% String fullPackageName=transformerUtils.getFullPackageName(klass);%>
+<% String klassName=klass.getName();%>        
+package test.<%=fullPackageName%>;
+
+<%=transformerUtils.getImports(klass)%>
+import <%=fullPackageName%>.<%=klassName%>;
+
+import org.jdom.Document;
+import test.SDKXSDTestBase;
+
+public class <%=klassName%>XSDTest extends SDKXSDTestBase
+{
+    private Document doc = null;
+
+	public static String getTestCaseName()
+	{
+		return "<%=klassName%> XSD Test Case";
+	}
+	
+	protected void setUp() throws Exception {
+		super.setUp();
+		
+		String schemaFileName = "<%=fullPackageName%>.xsd";
+		doc = getDocument(schemaFileName);
+	}
+		
+	public Document getDoc() {
+		return doc;
+	}
+	
+	/**
+	 * Uses xpath to query XSD
+	 * Verifies that common XSD elements are present 
+	 * 
+	 * @throws Exception
+	 */
+	public void testCommonSchemaElements() throws Exception
+	{
+		validateCommonSchemaElements();
+	}	
+	
+	/**
+	 * Verifies that the 'element' and 'complexType' elements 
+	 * corresponding to the Class are present in the XSD
+	 * Verifies that the Class attributes are present in the XSD
+	 * 
+	 * @throws Exception
+	 */
+	public void testClassElements() throws Exception
+	{
+		Class targetClass = <%=klassName%>.class;
+<% if (transformerUtils.isSubClass(klass)){%>
+		validateSubclassElements(targetClass);
+<% } else {%>	
+		validateClassElements(targetClass);
+<%}%>
+<%for(UMLAttribute attr:klass.getAttributes()){
+
+	String datatype = attr.getDatatype().getName();
+	if (datatype.startsWith("Collection<")){
+		continue;
+	} else if (datatype.startsWith("Char")){
+		datatype="String";
+	} else if (datatype.startsWith("char")){
+		datatype="String";
+	} else if (datatype.startsWith("int")){
+		datatype="Integer";
+	} else if (datatype.startsWith("Int")){
+		datatype="Integer";
+	} else if (datatype.startsWith("Date")){
+		datatype="Datetime";
+	} else if (datatype.startsWith("date")){
+		datatype="Datetime";
+	}
+	
+if (transformerUtils.isSubClass(klass)){%>
+		validateSubclassAttributeElement(targetClass, "<%=attr.getName()%>", "<%=datatype%>");
+<%} else {%>
+		validateAttributeElement(targetClass, "<%=attr.getName()%>", "<%=datatype%>");<%}
+}%>
+<% if (transformerUtils.isAbstract(klass))  {%>		
+		validateClassIsAbstract(targetClass);
+<% }
+for(UMLAssociation assoc:klass.getAssociations()) {
+		List<UMLAssociationEnd> assocEnds = assoc.getAssociationEnds();
+		UMLAssociationEnd thisEnd = transformerUtils.getThisEnd(klass,assocEnds);
+		UMLAssociationEnd otherEnd = transformerUtils.getOtherEnd(klass,assocEnds);
+	
+		if(otherEnd.isNavigable())
+		{
+			UMLClass assocKlass = (UMLClass)otherEnd.getUMLElement();
+			String highEndMultiplicity="";
+			if (otherEnd.getHighMultiplicity() < 0){
+				highEndMultiplicity = "unbounded";
+			} else { 
+				highEndMultiplicity = "1";
+			}
+			
+			String assocPackageName = transformerUtils.getFullPackageName(assocKlass);
+			boolean isTargetAndAssociatedPackagesSame = (fullPackageName.equalsIgnoreCase(assocPackageName));
+			if (transformerUtils.isSubClass(klass)){
+				if (isTargetAndAssociatedPackagesSame) {%>
+		validateSubclassAssociationElements(targetClass, <%=assocPackageName%>.<%=assocKlass.getName()%>.class, "<%=otherEnd.getRoleName()%>","0","<%=highEndMultiplicity%>");
+			 <% } else { %>	
+		validateSubclassAssociationElements(targetClass, <%=assocPackageName%>.<%=assocKlass.getName()%>.class, "<%=otherEnd.getRoleName()%>","0","<%=highEndMultiplicity%>");			<%	}
+			} else {
+				if (isTargetAndAssociatedPackagesSame) {%>
+		validateClassAssociationElements(targetClass, <%=assocPackageName%>.<%=assocKlass.getName()%>.class, "<%=otherEnd.getRoleName()%>","0","<%=highEndMultiplicity%>");	
+			 <% } else { %>	
+		validateClassAssociationElements(targetClass,"<%=klass.getName()%>", <%=assocPackageName%>.<%=assocKlass.getName()%>.class,"<%=assocPackageName%>:<%=assocKlass.getName()%>","<%=otherEnd.getRoleName()%>","0","<%=highEndMultiplicity%>");
+			<%	}			
+			}
+		}
+}%>
+	}
+}

@@ -75,14 +75,14 @@ public class ORMDAOImpl extends HibernateDaoSupport implements DAO
 			else
 				throw new DAOException("Can not determine type of the query");
 		} catch (JDBCException ex){
-			log.error("JDBC Exception in ORMDAOImpl ", ex);
-			throw new DAOException("JDBC Exception in ORMDAOImpl ", ex);
+			log.error("JDBC Exception in ORMDAOImpl: ", ex);
+			throw new DAOException("JDBC Exception in ORMDAOImpl: ", ex);
 		} catch(org.hibernate.HibernateException hbmEx)	{
-			log.error(hbmEx.getMessage());
-			throw new DAOException("Hibernate problem ", hbmEx);
+			log.error("Hibernate Exception in ORMDAOImpl: ", hbmEx);
+			throw new DAOException("Hibernate Exception in ORMDAOImpl: ", hbmEx);
 		} catch(Exception e) {
-			log.error("Exception ", e);
-			throw new DAOException("Exception in ORMDAOImpl ", e);
+			log.error("Exception in ORMDAOImpl: ", e);
+			throw new DAOException("Exception in ORMDAOImpl: ", e);
 		}
 	}
 	
