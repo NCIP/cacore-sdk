@@ -177,7 +177,12 @@
 			<equals arg1="${GENERATE_BEANS}" arg2="yes" casesensitive="false" trim="true" />
 		</or>
 	</condition>
-
+	<condition property="ENABLE_JUNIT_GENERATION" value="true" else="false">
+		<or>
+			<equals arg1="${GENERATE_JUNITS}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${GENERATE_JUNITS}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
+	</condition>	
 	<condition property="ENABLE_ISO_CONSTANT_GENERATION" value="true" else="false">
 		<and>
 			<equals arg1="${ISO21090_DATATYPES_ENABLED}" arg2="true" casesensitive="false" trim="true" />
@@ -351,6 +356,7 @@
 			<filter token="PROJECT_NAME" value="${PROJECT_NAME}" />
 			<filter token="SDK_GRID_LOGIN_SERVICE_NAME" value="${SDK_GRID_LOGIN_SERVICE_NAME}" />
 			<filter token="OUTPUTDIR" value="${output.src.dir}" />
+			<filter token="JUNITOUTPUTDIR" value="${output.codegen.junit.dir}/src/test" />
 			<filter token="VALIDATOR_OUTPUTDIR" value="${output.codegen.config.dir}" />
 			<filter token="MODEL_FILE_IN_DIRECTORY" value="${MODEL_FILE_IN_DIRECTORY}" />
 			<filter token="MODEL_FILE_TYPE" value="${MODEL_FILE_TYPE}" />
@@ -370,6 +376,7 @@
 			<filter token="GENERATE_HIBERNATE_MAPPING" value="${ENABLE_HIBERNATE_MAPPING_GENERATION}" />
 			<filter token="GENERATE_ISO_CONSTANT" value="${ENABLE_ISO_CONSTANT_GENERATION}" />
 			<filter token="GENERATE_BEANS" value="${ENABLE_BEANS_GENERATION}" />
+			<filter token="GENERATE_JUNITS" value="${ENABLE_JUNIT_GENERATION}" />
 			<filter token="GENERATE_CASTOR_MAPPING" value="${ENABLE_CASTOR_MAPPING_GENERATION}" />
 			<filter token="GENERATE_JAXB_MAPPING" value="${ENABLE_JAXB_MAPPING_GENERATION}" />
 			<filter token="GENERATE_XSD" value="${ENABLE_XSD_GENERATION}" />
@@ -466,8 +473,17 @@
 		<fileset dir="${target.module.dir}/lib">
 			<include name="sdk-codegen-*.jar" />
 		</fileset>
+		<fileset dir="${3RD_PARTY_JARS_DIRECTORY}">
+			<include name="*.jar" />
+		</fileset>
 		<pathelement path="${output.codegen.config.dir}" />
 		<pathelement path="${output.codegen.validator.config.dir}" />
+	</path>
+
+	<path id="codegen.junit.runtime.classpath">
+		<fileset dir="${output.codegen.junit.dir}/lib">
+			<include name="*.jar" />
+		</fileset>		
 	</path>
 
 	<available file="${test.cobertura.lib.dir}" property="test.cobertura.lib.exist" />
@@ -495,7 +511,14 @@
 		<mkdir dir="${src.java.dir}" />
 		<mkdir dir="${src.javadoc.dir}" />
 	</target>
-
+	<target name="-copy-junit-files" depends="">
+		<mkdir dir="${output.codegen.junit.dir}" />
+		<copy todir="${output.codegen.junit.dir}">
+			<fileset dir="${codegen.config.junit.dir}">
+				<include name="**/*" />
+			</fileset>
+		</copy>
+	</target>
 	<target name="-copy-iso-constants-template-file" depends="">
 		<copy todir="${output.src.dir}">
 			<fileset dir="${codegen.config.dir}">
@@ -561,7 +584,7 @@
 	</target>
 
 
-	<target name="-generate-codegen" depends="replacetoken-contents,-copy-iso-constants-template-file,-generate-codegen-validator" description="Runs the Code Generator">
+	<target name="-generate-codegen" depends="replacetoken-contents,-copy-junit-files,-copy-iso-constants-template-file,-generate-codegen-validator" description="Runs the Code Generator">
 		<echo>${ant.project.name}: Running the Code Generator</echo>
 		<fail unless="IDENTITY_GENERATOR_TAG">IDENTITY_GENERATOR property must be set in codegen.properties</fail>
 		<java classname="gov.nih.nci.codegen.Generator" failonerror="true" fork="true">
@@ -569,6 +592,7 @@
 			<jvmarg value="-Xms256M" />
 			<jvmarg value="-Xmx512M" />
 			<classpath refid="codegen.runtime.classpath" />
+			<classpath refid="codegen.junit.runtime.classpath" />
 			<classpath refid="cobertura.runtime.classpath" />
 		</java>
 	</target>

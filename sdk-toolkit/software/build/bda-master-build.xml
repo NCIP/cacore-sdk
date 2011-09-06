@@ -142,7 +142,7 @@ $HeadURL$
 	<property name="bda-blueprints-webapp.src.dir" value="${bda-blueprints-webapp.base.dir}/src/web"/>
 
 
-	<!-- retrive ivy.jar.files then retrieve bda files and librarires -->
+	<!-- retrieve ivy.jar.files then retrieve bda files and librarires -->
 	<condition property="commonlibrary.dir" value="">
 		<or>
 		<os family="unix" />
