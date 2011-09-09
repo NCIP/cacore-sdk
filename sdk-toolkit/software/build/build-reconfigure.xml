@@ -1185,6 +1185,7 @@
 				<include name="commons-collections-*.jar"/>
 				<include name="commons-discovery-*.jar"/>
 				<include name="commons-lang-*.jar"/>
+				<include name="commons-io-*.jar"/>
 				<include name="commons-fileupload*.jar"/>
 				<include name="commons-logging-*.jar"/>
 				<include name="clm-*.jar"/>
