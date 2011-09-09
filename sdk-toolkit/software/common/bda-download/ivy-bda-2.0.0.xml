@@ -31,6 +31,6 @@ This is the definition of a virtual module called bda-download that has a depend
     <dependency org="javancss" name="javancss" rev="29.50" conf="test-javancss->runtime"/>
     <dependency org="checkstyle" name="checkstyle" rev="5.0" conf="test-checkstyle->runtime"/>
     <dependency org="pmd" name="pmd" rev="4.2.5" conf="test-pmd->runtime"/>
-    <dependency org="ncicb" name="bda-utils" rev="${bda.version}" changing="true" conf="runtime"/>
+    <dependency org="ncicb" name="csm" rev="${bda.version}" changing="true" conf="runtime"/>
   </dependencies>
 </ivy-module>

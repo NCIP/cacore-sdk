@@ -676,6 +676,7 @@
 		<copy todir="${package.client.local.lib.dir}">
 			<fileset dir="${runtime.lib.dir}">
 				<include name="acegi-security-*.jar"/>
+				<include name="aopalliance*.jar"/>
 				<include name="antlr-*.jar"/>
 				<include name="asm-*.jar"/>
 				<include name="axis-1.4.jar"/>
@@ -706,7 +707,7 @@
 				<include name="jdom-1.1.jar"/>
 				<include name="jta-*.jar"/>
 				<include name="log4j-*.jar"/>
-				<include name="spring-*.jar"/>
+				<include name="org.springframework.*.jar"/>
 				<include name="slf4j-*.jar"/>
 				<include name="xercesImpl-*.jar"/>
 			</fileset>
@@ -947,6 +948,7 @@
 		<copy todir="${package.client.remote.lib.dir}">
 			<fileset dir="${runtime.lib.dir}">
 				<include name="acegi-security-*.jar"/>
+				<include name="aopalliance*.jar"/>
 				<include name="antlr-*.jar"/>
 				<include name="asm-*.jar"/>
 				<include name="caGrid-CQL-cql.*.jar"/>
@@ -967,7 +969,7 @@
 				<include name="jaxen-*.jar"/>
 				<include name="jdom-1.1.jar"/>
 				<include name="log4j-*.jar"/>
-				<include name="spring-*.jar"/>
+				<include name="org.springframework.*.jar"/>
 				<include name="xercesImpl-*.jar"/>
 			</fileset>
 			<fileset dir="${lib.dir}">
@@ -1165,6 +1167,7 @@
 		<copy todir="${temp.webapp.staging.lib.dir}" overwrite="true">
 			<fileset dir="${runtime.lib.dir}">
 				<include name="acegi-security-*.jar"/>
+				<include name="aopalliance*.jar"/>
 				<include name="antlr-*.jar"/>
 				<include name="asm-*.jar"/>
 				<include name="axis-1.4.jar"/>
@@ -1201,7 +1204,7 @@
 				<include name="mmbase-*.jar"/>
 				<include name="ognl-*.jar"/>
 				<include name="saaj-*.jar"/>
-				<include name="spring-*.jar"/>
+				<include name="org.springframework.*.jar"/>
 				<include name="stax-*.jar"/>
 				<include name="struts2-*.jar"/>
 				<include name="wsdl4j-*.jar"/>
@@ -1433,6 +1436,7 @@
 			<lib dir="${runtime.lib.dir}">
 				<include name="${server-include-list}" />
 				<include name="acegi-security-*.jar" />
+				<include name="aopalliance*.jar"/>
 				<include name="addressing-*.jar" />
 				<include name="axis-1.2RC2.jar" />
 				<include name="caGrid-advertisement-*.jar" />
@@ -1482,7 +1486,7 @@
 				<include name="mobius_mako_client-*.jar" />
 				<include name="mobius_tools-*.jar" />
 				<include name="saaj-*.jar" />
-				<include name="spring-*.jar" />
+				<include name="org.springframework.*.jar"/>
 				<include name="wsdl4j-*.jar" />
 				<include name="wsrf_core_enum-*.jar" />
 				<include name="wsrf_core_stubs_enum-*.jar" />

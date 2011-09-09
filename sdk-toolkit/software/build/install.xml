@@ -170,6 +170,14 @@
 		</then>
 	</if>
 
+	<target name="deploy:local:install:no-build">
+		<!--<antcall target="install"/>-->
+	</target>
+
+	<target name="deploy:local:install">
+		<!--<antcall target="install"/>-->
+	</target>
+
 	<target name="install" description="Installs and configures JBOSS, creates database, and deploys application" 
 		depends="
 		common:init,
@@ -318,8 +326,14 @@
 		</if>
 	</target>
 
+	<target name="build:SDK">
+		<antcall target="install:re-configure"/>
+	</target>
+	
 	<target name="install:re-configure" description="Configure example-webapp application, copies over externalized properties or configurations that are not part of the tomcat configuration">
+	<echo message="calling target....."/>
 		<antcall target="package-install-system"/>
+		<echo message="calling target.....done"/>
 	</target>
 
 	<target name="install:server:root-certs" >

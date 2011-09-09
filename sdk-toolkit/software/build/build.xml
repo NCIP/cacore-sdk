@@ -179,10 +179,14 @@
 	</target>
 
 	<target name="deploy:local:install:re-configure" depends="dist:installer:prep">
+	<echo message="calling........."/>
 		<deploy-local target.name="install:re-configure" />
+		<!--<ant antfile="build.xml" dir="${build.dir}" inheritall="false" inheritrefs="false" target="install:re-configure" />-->
+	<echo message="calling done...."/>
 	</target>
 
 	<target name="deploy:local:install:no-build" depends="dist:installer:prep">
+	<echo message="*********************************${install.target}"/>
 		<deploy-local target.name="${install.target}" />
 	</target>
 

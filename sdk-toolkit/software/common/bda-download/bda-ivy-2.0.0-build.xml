@@ -135,4 +135,31 @@ This ant build file downloads the bda project from the official NCICB Ivy Reposi
 		<ivy:publish artifactspattern="${scratch.dir}/[artifact].jar" forcedeliver="true" pubdate="${now}" pubrevision="${version}" resolver="local-repo" status="release" update="true"/>
 	</target>
 
+	<target name="setAntVersion">
+		<available file="${env.ANT_HOME}/lib/ant-1.8.0.pom" property="local.ant.exists" />
+		<if>
+			<equals arg1="${local.ant.exists}" arg2="true" />
+			<then>
+				<echo message="ANT_HOME is set to version 1.8.0" />
+				<copy todir="${bda-utils.dir}" overwrite="true">
+					<fileset dir="${env.ANT_HOME}/lib">
+						<include name="ant.jar" />
+						<include name="ant-launcher.jar" />
+						<include name="ant-nodeps.jar" />
+					</fileset>
+				</copy>
+				<delete file="${bda-utils.dir}/ant-1.7.0.jar" />
+				<delete file="${bda-utils.dir}/ant-antunit-1.1.jar" />
+				<delete file="${bda-utils.dir}/ant-launcher-1.7.0.jar" />
+				<delete file="${bda-utils.dir}/ant-nodeps-1.7.0.jar" />
+				<delete file="${bda-utils.dir}/clm-3.2.jar" />
+				
+			</then>
+		<else>
+			<echo message="ANT_HOME does not exist or ANT_HOME is not set to version 1.8.0" />
+		</else>
+		</if>
+		
+	</target>
+
 </project>

@@ -32,7 +32,7 @@
 
 
 	<dependencies>
-		<dependency org="ncicb" name="csm" rev="4.2.3" conf="compile" />
+		<dependency org="ncicb" name="csm" rev="4.2.4" conf="compile" />
 		<dependency org="ncicb" name="clm" rev="4.1.1" conf="compile" />
 		<dependency org="ncicb" name="xmi.in.out" rev="1.1" conf="compile"/>	
 		<dependency org="ncicb" name="iso-datatypes" rev="2.1.1" conf="compile->master"/>	
@@ -44,10 +44,8 @@
 		<dependency org="apache" name="log4j" rev="1.2.16" conf="runtime->compile" />
 		<dependency org="slf4j" name="slf4j-api" rev="1.4.3" conf="runtime->compile" />
 		<dependency org="slf4j" name="slf4j-log4j12" rev="1.4.3" conf="runtime->compile" />
-		<!--<dependency org="apache" name="struts2-api" rev="2.0.5" conf="compile"/>-->
-		<dependency org="apache" name="struts2-core" rev="2.1.6" conf="compile"/>
-		<dependency org="apache" name="struts2-dojo-plugin" rev="2.1.6" conf="compile"/>
-		<!--<dependency org="apache" name="xalan" rev="2.7.1" conf="runtime->runtime"/>  -->
+		<dependency org="apache" name="struts2-core" rev="2.2.3" conf="compile"/>
+		<dependency org="apache" name="struts2-dojo-plugin" rev="2.2.3" conf="compile"/>
 		<dependency org="apache" name="xerces" rev="2.8.1" conf="runtime->master" />
 		<dependency org="apache" name="xmlsec" rev="1.2.1" conf="runtime->master" />
 
@@ -56,7 +54,6 @@
 		<dependency org="caGrid" name="cql" rev="1.4" conf="runtime->cql;compile->cql"/> 
 		<dependency org="caGrid" name="sdkQuery43" rev="1.4" conf="compile->queryProcessor,translator" transitive="false"/>
 
-		<!--<dependency org="caGrid" name="iso21090SdkQueryProcessor" rev="1.4" conf="compile->queryProcessor,translator" transitive="false"/>-->
 		<dependency org="caGrid" name="sdkQuery4" rev="1.4" conf="compile->processor,stubs" transitive="false"/>
 		<dependency org="caGrid" name="data" rev="1.4" conf="compile->common" transitive="false"/>
 		<dependency org="caGrid" name="gts" rev="1.4" conf="runtime->client;runtime->common" />
@@ -109,7 +106,6 @@
 		<dependency org="jakarta" name="commons-lang" rev="2.6" conf="runtime->compile" />	
 		<dependency org="jakarta" name="commons-fileupload" rev="1.2.1" conf="runtime->compile" />	
 		<dependency org="jakarta" name="commons-beanutils" rev="1.8.3" conf="runtime->compile" />		
-		<!--<dependency org="javax.activation" name="activation" rev="1.0.2" conf="runtime->compile" />-->
 		<dependency org="javax.transaction" name="jta" rev="1.0.1B" conf="runtime->compile" />
 		<dependency org="javax.xml.bind" name="jaxb-api" rev="2.1" conf="compile" />
 		<dependency org="javax.xml.bind" name="jaxb-api" rev="2.1" conf="runtime->compile" />
@@ -117,8 +113,6 @@
 		<dependency org="javax.xml.bind" name="jaxb-xjc" rev="2.1.4" conf="runtime->compile" />		 
 		<dependency org="jaxen" name="jaxen" rev="1.1.1" conf="runtime->compile" />		
 
-		<!--<dependency org="jcp" name="jaxrpc" rev="1.1" conf="runtime->compile" />-->
-		<!--<dependency org="jcp" name="saaj" rev="1.2" conf="runtime->compile"/>-->
 		<dependency org="javax.servlet" name="servlet" rev="2.4" conf="compile" />
 
 		<dependency org="mmbase" name="mmbase" rev="1.9.5" conf="compile"/>
@@ -128,20 +122,30 @@
 		<dependency org="org.codehaus.castor" name="castor" rev="1.0.4" conf="runtime->compile"/>		
 		<dependency org="org.jdom" name="jdom" rev="1.1" conf="compile" />
 		<dependency org="ognl" name="ognl" rev="2.7.3" conf="runtime->runtime" />
-		<!--<dependency org="org.codehaus.castor" name="castor" rev="1.0.2" conf="runtime->compile"/>-->
 		<dependency org="org.hibernate" name="hibernate" rev="3.2.0.ga-modified" conf="compile" />
  		<dependency org="org.hibernate" name="hibernate-annotations" rev="3.2.0" conf="runtime->compile" />
 		<dependency org="org.hibernate" name="hibernate-validator" rev="3.0.0.GA" conf="runtime->compile" />
 		<dependency org="org.hibernate" name="ejb3-persistence" rev="1.0.1" conf="runtime->master" />
 		<dependency org="org.jdom" name="jdom" rev="1.1" conf="runtime->master;compile->master" />		
 		<dependency org="osu" name="mobius" rev="1.1" conf="runtime->master" />
-		<!--<dependency org="opensymphony" name="cacore-xwork" rev="2.0.7" conf="compile"/>-->
-		<dependency org="opensymphony" name="xwork" rev="2.1.2" conf="compile"/>
+		<dependency org="opensymphony" name="xwork" rev="2.2.3" conf="compile"/>
 
-		<dependency org="springsource" name="acegi-security" rev="1.0.7" conf="compile"/>
-		<dependency org="springsource" name="spring" rev="2.5.6" conf="compile"/>
-		<dependency org="springsource" name="spring-beans" rev="2.5.6" conf="compile"/>
-		<dependency org="springsource" name="spring-webmvc" rev="2.5.6" conf="compile"/>
+		<dependency org="springsource" name="acegi-security" rev="1.0.7" conf="compile->runtime"/>
+		<dependency org="springsource" name="org.springframework.core" rev="3.0.5.RELEASE" conf="compile->runtime"/>
+		<dependency org="springsource" name="org.springframework.beans" rev="3.0.5.RELEASE" conf="compile->runtime"/>
+		<dependency org="springsource" name="org.springframework.web" rev="3.0.5.RELEASE" conf="compile->runtime"/>
+		<dependency org="springsource" name="org.springframework.web.servlet" rev="3.0.5.RELEASE" conf="compile->runtime"/>
+		<dependency org="springsource" name="org.springframework.web.struts" rev="3.0.5.RELEASE" conf="compile->runtime"/>
+		<dependency org="springsource" name="org.springframework.asm" rev="3.0.5.RELEASE" conf="compile->runtime"/>
+		<dependency org="springsource" name="org.springframework.jdbc" rev="3.0.5.RELEASE" conf="compile->runtime"/>
+		<dependency org="springsource" name="org.springframework.context" rev="3.0.5.RELEASE" conf="compile->runtime"/>
+		<dependency org="springsource" name="org.springframework.context.support" rev="3.0.5.RELEASE" conf="compile->runtime"/>
+		<dependency org="springsource" name="org.springframework.expression" rev="3.0.5.RELEASE" conf="compile->runtime"/>
+		<dependency org="springsource" name="org.springframework.transaction" rev="3.0.5.RELEASE" conf="compile->runtime"/>
+		<dependency org="springsource" name="org.springframework.aop" rev="3.0.5.RELEASE" conf="compile->runtime"/>
+		<dependency org="springsource" name="org.springframework.orm" rev="3.0.5.RELEASE" conf="compile->runtime"/>
+		
+		<dependency org="aopalliance" name="aopalliance" rev="1.0" conf="compile"/>
 		
 		<dependency org="mysql" name="mysql-connector-java" rev="5.1.5" conf="runtime->compile"/>
 		<dependency org="oracle" name="ojdbc14" rev="10.2.0.4.0" conf="runtime->compile" />
