@@ -33,7 +33,7 @@
             name="SDKArgoTemplate.todo" />
     <historyfile name="" />
   </argo>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Mon Jul 27 19:04:53 GMT 2009'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Fri Sep 09 14:04:24 EDT 2011'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.24(5) revised on $Date: 2006-11-06 19:55:22 +0100 (Mon, 06 Nov 2006) $ </XMI.exporterVersion>
@@ -91,9 +91,6 @@
                           isAbstract = 'false' isActive = 'false'/>
                         <UML:Class xmi.id = '-64--88-1-103-888e6c:122bd951485:-8000:0000000000000806'
                           name = 'Long' visibility = 'public' isSpecification = 'false' isRoot = 'false'
-                          isLeaf = 'false' isAbstract = 'false' isActive = 'false'/>
-                        <UML:Class xmi.id = '-64--88-1-103-888e6c:122bd951485:-8000:0000000000000807'
-                          name = 'String' visibility = 'public' isSpecification = 'false' isRoot = 'false'
                           isLeaf = 'false' isAbstract = 'false' isActive = 'false'/>
                       </UML:Namespace.ownedElement>
                     </UML:Package>
