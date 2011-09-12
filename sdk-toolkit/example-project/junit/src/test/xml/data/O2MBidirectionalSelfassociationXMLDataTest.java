@@ -127,7 +127,7 @@ public class O2MBidirectionalSelfassociationXMLDataTest extends SDKXMLDataTestBa
 	public void testOneAssociatedObjectNestedSearch1() throws Exception
 	{
 		MemberO2MBS searchObject = new MemberO2MBS();
-		searchObject.setId(new Integer(1));
+		searchObject.setId(new Integer(2));
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.onetomany.bidirectional.selfassociation.MemberO2MBS",searchObject );
 
 		assertNotNull(results);
@@ -142,8 +142,8 @@ public class O2MBidirectionalSelfassociationXMLDataTest extends SDKXMLDataTestBa
 		assertNotNull(result2.getId());
 		assertNotNull(result2.getName());
 		
-		validateAssociation(result,"MemberO2MBS","mentorCollection");
-		
+		validateAssociation(result,"MemberO2MBS","friend", false, false);
+/*		
 		Collection mentorCollection = result2.getFriendCollection();
 		Iterator j = mentorCollection.iterator();
 		
@@ -154,6 +154,7 @@ public class O2MBidirectionalSelfassociationXMLDataTest extends SDKXMLDataTestBa
 		assertNotNull(mentor.getName());
 
 		assertEquals(new Integer(3),mentor.getId());
+*/		
 	}
 
 	/**
@@ -238,7 +239,7 @@ public class O2MBidirectionalSelfassociationXMLDataTest extends SDKXMLDataTestBa
 			
 			
 			if(result2.getId()==3 || result2.getId()==2){
-				validateAssociation(result,"MemberO2MBS","self");
+				validateAssociation(result,"MemberO2MBS","friend", false, false);
 				
 				self = result2.getFriend();
 				assertNotNull(self);
