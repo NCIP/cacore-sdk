@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns:ivy="antlib:org.apache.ivy.ant" name="bda-utils" default="retrieve-bda" basedir=".">
 <!--
-$Id$
-$HeadURL$
+$Id: bda-ivy-build.xml 391 2008-08-01 16:33:26Z saksass $
+$HeadURL: https://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-download/bda-ivy-build.xml $
 
 This ant build file downloads the bda project from the official NCICB Ivy Repository.  It also downloads files required to complete the operation if they do not exist.  This script aslo includes some sample publish tasks.  It can be called from other build scripts to download the bda project and it's supporting libraries.  Below is what you might add to your build.xml to use this script.
 
@@ -18,9 +18,8 @@ This ant build file downloads the bda project from the official NCICB Ivy Reposi
 	<property name="lib.dir" value="${basedir}/lib" />
 	<property name="software.dir" value="${basedir}" />
 	<property name="bda-utils.dir" value="${basedir}/bda-utils" />
-	<property name="commonlibrary.dir" value=""/>
 	<property name="bda.local.repo.dir" value="${software.dir}/../../bda-local-ivy-repo" />
-	<property name="bda.version" value="0.9.0" />
+	<property name="bda.version" value="0.3.0" />
 
 	<property name="ivy.file" value="ivy-2.0.0-beta2.jar" />
 	<property name="ivy-core.file" value="ivy-core-2.0.0-beta2.jar" />
@@ -33,6 +32,7 @@ This ant build file downloads the bda project from the official NCICB Ivy Reposi
 
 	<property name="ivy.dest.file" value="${lib.dir}/${ivy.file}" />
 	<property name="ivy-core.dest.file" value="${lib.dir}/${ivy-core.file}" />
+
 	<!-- Paths-->
 	<path id="ivy.classpath">
 		<fileset dir="${lib.dir}">
@@ -50,7 +50,6 @@ This ant build file downloads the bda project from the official NCICB Ivy Reposi
 	</condition>
 	<available file="${ivy.settings.file}" property="ivy.settings.available" />
 	<available file="${ivy.bda.file}" property="ivy.bda.available" />
-	<echo message="comonlibrary.dir=${commonlibrary.dir}"/>
 
 	<!-- Targets -->
 	<target name="init" description="Makes transcient directories">
@@ -92,7 +91,7 @@ This ant build file downloads the bda project from the official NCICB Ivy Reposi
 		<property name="ivy.resolver.default.check.modified" value="true" />
 		<ivy:settings file="${ivy.settings.file}" />
 		<ivy:resolve refresh="true" conf="runtime" />
-		<ivy:retrieve pattern="${bda-utils.dir}/[artifact]-[revision].[ext]" conf="runtime" sync="true" />
+		<ivy:retrieve pattern="${bda-utils.dir}/[artifact]-[revision].[ext]" conf="runtime" />
 		<!-- <echoproperties prefix="ivy."/> -->
 		<unzip dest="${bda-utils.dir}">
 			<fileset dir="${bda-utils.dir}">

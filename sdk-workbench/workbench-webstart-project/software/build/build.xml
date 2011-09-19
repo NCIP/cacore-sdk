@@ -55,7 +55,7 @@
 	<property name="output.war.dir" value="${dist.exploded.dir}/output/${PROJECT_NAME}/package/server/tomcat/webapps"/>
 
 
-	<property name="sdk.src.file" value="SDK-src.zip" />
+	<property name="sdk.src.file" value="SDK-4.4.1-src.zip" />
 
 	<!--***********************************************************************
 	*** Packages the caCORE Workbench into a WebStart application

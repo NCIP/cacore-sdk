@@ -20,31 +20,70 @@
 			<available file="${bda-download.dir}\bda-ivy-build.xml" />
 		</not>
 	</condition>
+	<condition property="commonlibrary.dir" value="">
+		<or>
+		<os family="unix" />
+			<os family="mac" />
+		</or>
+	</condition>
 
-	<target name="download-bda" if="download-needed">
+	<condition property="commonlibrary.dir" value="c:/">
+		<os family="windows" />
+	</condition>
+
+	<condition property="local.cbiit-ivy-repo.dir" value="">
+		<or>
+		<os family="unix" />
+			<os family="mac" />
+		</or>
+	</condition>
+
+	<condition property="local.cbiit-ivy-repo.dir" value="c:/">
+		<os family="windows" />
+	</condition>
+
+	<property name="bda-download.file" value="bda-ivy-2.0.0-build.xml" />
+
+	<target name="download-bda">
 		<echo>    ----Downloading BDA Utils----    </echo>
 		<!-- Get the three BDA files needed to set the Ivy environment up -->
-		<mkdir dir="${bda-download.dir}" />
+		<!--<mkdir dir="${bda-download.dir}" />-->
 
-		<get src="${build.bda.src.url}" dest="${bda-download.dir}/bda-ivy-build.xml" />
-		<get src="${ivy.bda.settings.src.url}" dest="${bda-download.dir}/ivy-bda-settings.xml" />
-		<get src="${ivy.bda.src.url}" dest="${bda-download.dir}/ivy-bda.xml" />
+		<!--<get src="${build.bda.src.url}" dest="${bda-download.dir}/bda-ivy-build.xml" />-->
+		<!--<get src="${ivy.bda.settings.src.url}" dest="${bda-download.dir}/ivy-bda-settings.xml" />-->
+		<!--<get src="${ivy.bda.src.url}" dest="${bda-download.dir}/ivy-bda.xml" />-->
 
 		<!-- Run the BDA build script to get the remaining Ivy dependencies needed for BDA -->
 		<property name="bda-download.file" value="bda-ivy-build.xml" />
 		<property name="bda-download.src.url" value="http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-download/${bda-download.file}" />
-		<get src="${bda-download.src.url}" dest="${bda-download.dir}/${bda-download.file}" />
+		<!--<property name="bda-download.src.url" value="https://ncisvn.nci.nih.gov/svn/cbiit-ivy-repo/trunk/ncicb/bda-utils/${bda.version}/${bda-download.file}" />-->
+		<!--<get src="${bda-download.src.url}" dest="${bda-download.dir}/${bda-download.file}" />-->
 		
 		<echo>bda-download.dir/bda-download.file=${bda-download.dir}/${bda-download.file}</echo>
         <!--.ivy2-${ant.project.name}-->
         <replaceregexp file="${bda-download.dir}/ivy-bda-settings.xml" byline="true" match="\.ivy2-\$\{ant.project.name\}" replace=".ivy2-workbench-bda-unique-cache-name"/>
+	<ant inheritAll="false" inheritRefs="false" antfile="${bda-download.file}" target="retrieve-bda" dir="${common.dir}/bda-download">
+		<property name="bda.version" value="${bda.version}" />
+		<property name="bda-utils.dir" location="${bda-utils.dir}" />
+		<property name="lib.dir" location="${lib.dir}" />
+		<property name="software.dir" location="${software.dir}" />
+		<property name="commonlibrary.dir" location="${commonlibrary.dir}" />
+		<!-- Use below for old ivy repo -->
+		<!--<property name="ivy.settings.file" value="ivy-bda-settings.xml"/>-->
+		<!-- Use below for new ivy repo -->
+		<property name="ivy.settings.file" value="cbiit-ivy-bda-settings.xml"/>
+		<property name="target.dir" location="${target.dir}"/>
+		<property name="local.cbiit-ivy-repo.dir" value="${local.cbiit-ivy-repo.dir}"/>
+	</ant>
 
+<!--
 		<ant inheritAll="false" inheritRefs="false" antfile="${bda-download.file}" target="retrieve-bda" dir="${bda-download.dir}">
 			<property name="bda.version" value="${bda.version}" />			
 			<property name="bda-utils.dir" location="${bda-utils.dir}" />
 			<property name="lib.dir" location="${lib.dir}" />
 			<property name="software.dir" location="${software.dir}" />
 		</ant>
+-->		
         <echo>    ----Downloading BDA Utils Complete----    </echo>
 	</target>
 	

@@ -64,7 +64,7 @@
 
 	<import file="build-common.xml"/>  
 	
-	<property name="sdk.src.file" value="SDK-src.zip" />
+	<property name="sdk.src.file" value="SDK-4.4.1-src.zip" />
 
 	<!--***********************************************************************
 	*** CLASSPATH AND UNIX-STYLE BASEDIR PROPERTIES
@@ -159,8 +159,8 @@
 		</copy>
 		<!-- cog-jglobus-1.2.jar contains a log4j.properties file; rename it here so  -->
 		<!-- that the sdk log4j.properties file takes precedence -->
-		<copy toFile="${dist.exploded.dir}/zcog-jglobus-1.2.jar">
-			<fileset dir="${project.dist.workbench.runtime.dir}" includes="**/cog-jglobus-1.2.jar" />
+		<copy toFile="${dist.exploded.dir}/cog-jglobus-4.0.3.jar">
+			<fileset dir="${project.dist.workbench.runtime.dir}" includes="**/cog-jglobus-4.0.3.jar" />
 		</copy>
 		<copy toDir="${dist.exploded.dir}">
 			<fileset dir="${tools.lib.dir}" includes="**/ant-contrib*" />
@@ -181,7 +181,7 @@
 				<echo message="SDK source file already exists; skipping SDK package step"/>
 			</then>
 			<else>
-				<echo message="SDK source file does not exist; packaging now"/>
+				<echo message="SDK source file does not exist; packaging now ${package.sdk.home}"/>
 				
 				<ant antfile="${package.sdk.home}/build.xml" target="package-software-sdk" inheritall="false" inheritrefs="false">
 					<property name="package.sdk.home" value="${package.sdk.home}"/>
