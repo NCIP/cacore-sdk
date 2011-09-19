@@ -304,7 +304,7 @@ $HeadURL$
 	<target name="ivy:clean" description="Cleans up the ivy cache of this project and all sub-projects">
 		<ivy:settings file="${ivy.settings.dir}/${ivy.settings.file}" />
 		<ivy:cleancache />
-		<ant inheritAll="false" inheritRefs="false" antfile="bda-ivy-2.0.0-build.xml" target="ivy-cleancache" dir="${bda-download.dir}">
+		<ant inheritAll="false" inheritRefs="false" antfile="bda-ivy-2.0.0-build.xml" target="ivy-cleancache" dir="${common.dir}/bda-download">
 			<property name="bda-utils.dir" value="${bda-utils.dir}" />
 			<property name="lib.dir" value="${lib.dir}" />
 			<property name="software.dir" value="${software.dir}" />
