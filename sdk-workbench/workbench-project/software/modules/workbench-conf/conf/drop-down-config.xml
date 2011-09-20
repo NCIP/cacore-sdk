@@ -32,16 +32,16 @@
 				<entry key="local" value="Local"/>
 				<entry key="remote" value="Remote"/>
 				
-				<entry key="ports-29080"  value="Port Name 29080"/>
-				<entry key="ports-29180"  value="Port Name 29180"/>
-				<entry key="ports-29280"  value="Port Name 29280"/>
-				<entry key="ports-29380"  value="Port Name 29380"/>
-				<entry key="ports-29480"  value="Port Name 29480"/>
-				<entry key="ports-29580"  value="Port Name 29580"/>
-				<entry key="ports-29680"  value="Port Name 29680"/>
-				<entry key="ports-29780"  value="Port Name 29780"/>
-				<entry key="ports-29880"  value="Port Name 29880"/>
-				<entry key="ports-29980"  value="Port Name 29980"/>
+				<entry key="ports-29080"  value="ports-29080"/>
+				<entry key="ports-29180"  value="ports-29180"/>
+				<entry key="ports-29280"  value="ports-29280"/>
+				<entry key="ports-29380"  value="ports-29380"/>
+				<entry key="ports-29480"  value="ports-29480"/>
+				<entry key="ports-29580"  value="ports-29580"/>
+				<entry key="ports-29680"  value="ports-29680"/>
+				<entry key="ports-29780"  value="ports-29780"/>
+				<entry key="ports-29880"  value="ports-29880"/>
+				<entry key="ports-29980"  value="ports-29980"/>
 			</map>
 		</constructor-arg>
 	</bean>
@@ -49,16 +49,16 @@
 	<bean id="jbossPortNameMap" class="java.util.HashMap">
 		<constructor-arg>
 			<map>
-				<entry key="ports-29080"  value="Port Name 29080"/>
-				<entry key="ports-29180"  value="Port Name 29180"/>
-				<entry key="ports-29280"  value="Port Name 29280"/>
-				<entry key="ports-29380"  value="Port Name 29380"/>
-				<entry key="ports-29480"  value="Port Name 29480"/>
-				<entry key="ports-29580"  value="Port Name 29580"/>
-				<entry key="ports-29680"  value="Port Name 29680"/>
-				<entry key="ports-29780"  value="Port Name 29780"/>
-				<entry key="ports-29880"  value="Port Name 29880"/>
-				<entry key="ports-29980"  value="Port Name 29980"/>
+				<entry key="ports-29080"  value="ports-29080"/>
+				<entry key="ports-29180"  value="ports-29180"/>
+				<entry key="ports-29280"  value="ports-29280"/>
+				<entry key="ports-29380"  value="ports-29380"/>
+				<entry key="ports-29480"  value="ports-29480"/>
+				<entry key="ports-29580"  value="ports-29580"/>
+				<entry key="ports-29680"  value="ports-29680"/>
+				<entry key="ports-29780"  value="ports-29780"/>
+				<entry key="ports-29880"  value="ports-29880"/>
+				<entry key="ports-29980"  value="ports-29980"/>
 			</map>
 		</constructor-arg>
 	</bean>
