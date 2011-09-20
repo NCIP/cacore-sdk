@@ -10,7 +10,6 @@ import gov.nih.nci.cacoresdk.domain.manytomany.bidirectional.Project;
 import gov.nih.nci.iso21090.Ii;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
-import test.xml.mapping.SDKXMLDataTestBase;
 
 public class M2MBidirectionalXMLData2Test extends SDKXMLDataTestBase
 {

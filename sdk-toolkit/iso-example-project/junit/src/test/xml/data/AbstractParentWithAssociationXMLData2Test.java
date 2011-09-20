@@ -12,7 +12,6 @@ import java.util.Iterator;
 
 import org.junit.Before;
 
-import test.xml.mapping.SDKXMLDataTestBase;
 
 public class AbstractParentWithAssociationXMLData2Test extends SDKXMLDataTestBase
 {

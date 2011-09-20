@@ -8,7 +8,6 @@ import gov.nih.nci.cacoresdk.domain.manytoone.unidirectional.Restaurant;
 
 import gov.nih.nci.iso21090.Ii;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
-import test.xml.mapping.SDKXMLDataTestBase;
 
 public class M2OUnidirectionalXMLData2Test extends SDKXMLDataTestBase
 {

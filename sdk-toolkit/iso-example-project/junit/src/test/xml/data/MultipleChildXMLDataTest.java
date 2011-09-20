@@ -8,7 +8,6 @@ import gov.nih.nci.iso21090.St;
 import java.util.Collection;
 import java.util.Iterator;
 
-import test.xml.mapping.SDKXMLDataTestBase;
 
 public class MultipleChildXMLDataTest extends SDKXMLDataTestBase
 {

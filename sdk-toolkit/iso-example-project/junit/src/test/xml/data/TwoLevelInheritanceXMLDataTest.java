@@ -10,7 +10,6 @@ import gov.nih.nci.system.query.hibernate.HQLCriteria;
 import java.util.Collection;
 import java.util.Iterator;
 
-import test.xml.mapping.SDKXMLDataTestBase;
 
 
 public class TwoLevelInheritanceXMLDataTest extends SDKXMLDataTestBase

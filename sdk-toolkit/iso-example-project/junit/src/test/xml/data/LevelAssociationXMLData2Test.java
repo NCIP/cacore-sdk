@@ -9,7 +9,6 @@ import gov.nih.nci.iso21090.Ii;
 import java.util.Collection;
 import java.util.Iterator;
 
-import test.xml.mapping.SDKXMLDataTestBase;
 
 public class LevelAssociationXMLData2Test extends SDKXMLDataTestBase
 {
