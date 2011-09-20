@@ -450,16 +450,6 @@
 	</target>
 
 	<!-- ************************************************************************************************-->
-	<!--                                Run JUnit for HBM Mapping Client                                                                    -->
-	<!-- ************************************************************************************************-->
-
-	<target name="hbmMappingTest" depends="createDir">
-		<SDKCompileJUnit compileClasspath="local-client-cp" includePattern="**/*HBM*.java" excludePattern="" />
-		<SDKRunJUnit junitClasspath="local-client-cp" junitOutputDir="${report.dir.hbm-mapping-client}" includePattern="**/*HBM*Test.class" excludePattern="" junitreportfile="TEST-hbmMapping.xml"/>
-		<SDKGenerateReport junitOutputDir="${report.dir.hbm-mapping-client}" />
-	</target>
-
-	<!-- ************************************************************************************************-->
 	<!--                                Run JUnits for Security client using the Thick Client            -->
 	<!-- ************************************************************************************************-->
 
