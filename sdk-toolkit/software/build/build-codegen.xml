@@ -473,6 +473,22 @@
 		<fileset dir="${target.module.dir}/lib">
 			<include name="sdk-codegen-*.jar" />
 		</fileset>
+
+		<pathelement path="${output.codegen.config.dir}" />
+		<pathelement path="${output.codegen.validator.config.dir}" />
+	</path>
+
+	<path id="codegen.runtime.classpath.with3rdparty">
+		<fileset dir="${codegen.lib.dir}">
+			<include name="*.jar" />
+		</fileset>
+		<fileset dir="${codegen.runtime.lib.dir}">
+			<include name="*.jar" />
+		</fileset>
+		<fileset dir="${target.module.dir}/lib">
+			<include name="sdk-codegen-*.jar" />
+		</fileset>
+
 		<fileset dir="${3RD_PARTY_JARS_DIRECTORY}">
 			<include name="*.jar" />
 		</fileset>
@@ -530,10 +546,24 @@
 
 	<target name="-compile:application-code" depends="-init,-generate-codegen" description="Compiles all subproject code">
 		<mkdir dir="${build.classes.dir}" />
-		<javac srcdir="${src.java.dir}" destdir="${build.classes.dir}" debug="true">
-			<classpath refid="codegen.runtime.classpath" />
-			<classpath refid="cobertura.runtime.classpath" />
-		</javac>
+		
+		<available file="${3RD_PARTY_JARS_DIRECTORY}" property="include.3rdparty.exist" />
+		<if>
+			<equals arg1="${include.3rdparty.exist}" arg2="true" />
+			<then>
+				<javac srcdir="${src.java.dir}" destdir="${build.classes.dir}" debug="true">
+					<classpath refid="codegen.runtime.classpath.with3rdparty" />
+					<classpath refid="cobertura.runtime.classpath" />
+				</javac>
+			</then>
+			<else>
+				<javac srcdir="${src.java.dir}" destdir="${build.classes.dir}" debug="true">
+					<classpath refid="codegen.runtime.classpath" />
+					<classpath refid="cobertura.runtime.classpath" />
+				</javac>
+			</else>
+		</if>
+		
 	</target>
 
 	<target name="-package-bean-jar" depends="-compile:application-code,-generate-codegen" description="Prepares Java Beans distribution files">
@@ -587,36 +617,86 @@
 	<target name="-generate-codegen" depends="replacetoken-contents,-copy-junit-files,-copy-iso-constants-template-file,-generate-codegen-validator" description="Runs the Code Generator">
 		<echo>${ant.project.name}: Running the Code Generator</echo>
 		<fail unless="IDENTITY_GENERATOR_TAG">IDENTITY_GENERATOR property must be set in codegen.properties</fail>
-		<java classname="gov.nih.nci.codegen.Generator" failonerror="true" fork="true">
-			<arg value="${codegen.config.file}" />
-			<jvmarg value="-Xms256M" />
-			<jvmarg value="-Xmx512M" />
-			<classpath refid="codegen.runtime.classpath" />
-			<classpath refid="codegen.junit.runtime.classpath" />
-			<classpath refid="cobertura.runtime.classpath" />
-		</java>
+		<available file="${3RD_PARTY_JARS_DIRECTORY}" property="include.3rdparty.exist" />
+		<if>
+			<equals arg1="${include.3rdparty.exist}" arg2="true" />
+			<then>
+				<java classname="gov.nih.nci.codegen.Generator" failonerror="true" fork="true">
+					<arg value="${codegen.config.file}" />
+					<jvmarg value="-Xms256M" />
+					<jvmarg value="-Xmx512M" />
+					<classpath refid="codegen.runtime.classpath.with3rdparty" />
+					<classpath refid="codegen.junit.runtime.classpath" />
+					<classpath refid="cobertura.runtime.classpath" />
+				</java>
+
+			</then>
+			<else>
+				<java classname="gov.nih.nci.codegen.Generator" failonerror="true" fork="true">
+					<arg value="${codegen.config.file}" />
+					<jvmarg value="-Xms256M" />
+					<jvmarg value="-Xmx512M" />
+					<classpath refid="codegen.runtime.classpath" />
+					<classpath refid="codegen.junit.runtime.classpath" />
+					<classpath refid="cobertura.runtime.classpath" />
+				</java>
+			</else>
+		</if>
+		
+		
 	</target>
 
 	<target name="-generate-codegen-validator" description="Runs the Hibernate Validator Code Generator">
 		<echo>${ant.project.name}: Running the Hibernate Validator Code Generator</echo>
-		<java classname="gov.nih.nci.codegen.Generator" failonerror="true" fork="true">
-			<arg value="${codegen.config.validator.file}" />
-			<jvmarg value="-Xms256M" />
-			<jvmarg value="-Xmx512M" />
-			<classpath refid="codegen.runtime.classpath" />
-			<classpath refid="cobertura.runtime.classpath" />
-		</java>
+		<available file="${3RD_PARTY_JARS_DIRECTORY}" property="include.3rdparty.exist" />
+		<if>
+			<equals arg1="${include.3rdparty.exist}" arg2="true" />
+			<then>
+				<java classname="gov.nih.nci.codegen.Generator" failonerror="true" fork="true">
+					<arg value="${codegen.config.validator.file}" />
+					<jvmarg value="-Xms256M" />
+					<jvmarg value="-Xmx512M" />
+					<classpath refid="codegen.runtime.classpath.with3rdparty" />
+					<classpath refid="cobertura.runtime.classpath" />
+				</java>
+			</then>
+			<else>
+			<java classname="gov.nih.nci.codegen.Generator" failonerror="true" fork="true">
+				<arg value="${codegen.config.validator.file}" />
+				<jvmarg value="-Xms256M" />
+				<jvmarg value="-Xmx512M" />
+				<classpath refid="codegen.runtime.classpath" />
+				<classpath refid="cobertura.runtime.classpath" />
+			</java>
+			</else>
+		</if>
 	</target>
 
 	<target name="-codegen-doc" description="Generates javadocs for the domain Java beans">
-		<javadoc packagenames="*" destdir="${src.javadoc.dir}" author="true"
-			private="true" version="true" use="true" windowtitle="${PROJECT_NAME} API Documentation"
-			doctitle="${PROJECT_NAME} API Documentation" useexternalfile="yes" verbose="false">
-			<classpath refid="codegen.runtime.classpath" />
-			<classpath refid="cobertura.runtime.classpath" />
-			<bottom>This API was generated by the caCORE Software Development Kit (SDK)</bottom>
-			<fileset dir="${src.java.dir}" includes="**/*.java"/>
-		</javadoc>
+		<available file="${3RD_PARTY_JARS_DIRECTORY}" property="include.3rdparty.exist" />
+		<if>
+			<equals arg1="${include.3rdparty.exist}" arg2="true" />
+			<then>
+				<javadoc packagenames="*" destdir="${src.javadoc.dir}" author="true"
+					private="true" version="true" use="true" windowtitle="${PROJECT_NAME} API Documentation"
+					doctitle="${PROJECT_NAME} API Documentation" useexternalfile="yes" verbose="false">
+					<classpath refid="codegen.runtime.classpath.with3rdparty" />
+					<classpath refid="cobertura.runtime.classpath" />
+					<bottom>This API was generated by the caCORE Software Development Kit (SDK)</bottom>
+					<fileset dir="${src.java.dir}" includes="**/*.java"/>
+				</javadoc>
+			</then>
+			<else>
+				<javadoc packagenames="*" destdir="${src.javadoc.dir}" author="true"
+					private="true" version="true" use="true" windowtitle="${PROJECT_NAME} API Documentation"
+					doctitle="${PROJECT_NAME} API Documentation" useexternalfile="yes" verbose="false">
+					<classpath refid="codegen.runtime.classpath" />
+					<classpath refid="cobertura.runtime.classpath" />
+					<bottom>This API was generated by the caCORE Software Development Kit (SDK)</bottom>
+					<fileset dir="${src.java.dir}" includes="**/*.java"/>
+				</javadoc>
+			</else>
+		</if>
 	</target>
 
 	<target name="-system-doc" description="Generates javadocs for the entire system">
