@@ -4,7 +4,6 @@ import gov.nih.nci.cacoresdk.domain.other.primarykey.CharacterPrimitiveKey;
 
 import org.jdom.Document;
 
-import test.xml.mapping.SDKXSDTestBase;
 
 public class CharacterPrimitiveKeyXSDTest extends SDKXSDTestBase
 {

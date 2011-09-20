@@ -5,7 +5,6 @@ import gov.nih.nci.cacoresdk.domain.onetomany.bidirectional.HardDrive;
 
 import org.jdom.Document;
 
-import test.xml.mapping.SDKXSDTestBase;
 
 public class O2MBidirectionalXSDTest extends SDKXSDTestBase
 {

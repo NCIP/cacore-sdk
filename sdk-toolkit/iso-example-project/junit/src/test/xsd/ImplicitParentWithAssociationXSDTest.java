@@ -12,7 +12,6 @@ import gov.nih.nci.cacoresdk.domain.inheritance.implicit.TankAccessory;
 
 import org.jdom.Document;
 
-import test.xml.mapping.SDKXSDTestBase;
 
 public class ImplicitParentWithAssociationXSDTest extends SDKXSDTestBase
 {

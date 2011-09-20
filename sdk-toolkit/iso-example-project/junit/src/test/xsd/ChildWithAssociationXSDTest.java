@@ -7,7 +7,6 @@ import gov.nih.nci.cacoresdk.domain.inheritance.childwithassociation.Cash;
 
 import org.jdom.Document;
 
-import test.xml.mapping.SDKXSDTestBase;
 
 public class ChildWithAssociationXSDTest extends SDKXSDTestBase
 {
