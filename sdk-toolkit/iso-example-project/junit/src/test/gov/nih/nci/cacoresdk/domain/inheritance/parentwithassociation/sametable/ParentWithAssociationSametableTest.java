@@ -12,11 +12,6 @@ import gov.nih.nci.iso21090.Ii;
 import gov.nih.nci.iso21090.Int;
 import gov.nih.nci.iso21090.NullFlavor;
 import gov.nih.nci.system.applicationservice.ApplicationException;
-import gov.nih.nci.system.query.cql.CQLAssociation;
-import gov.nih.nci.system.query.cql.CQLAttribute;
-import gov.nih.nci.system.query.cql.CQLObject;
-import gov.nih.nci.system.query.cql.CQLPredicate;
-import gov.nih.nci.system.query.cql.CQLQuery;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
 import test.gov.nih.nci.cacoresdk.SDKISOTestBase;
 
@@ -133,38 +128,6 @@ public class ParentWithAssociationSametableTest extends SDKISOTestBase
 			assertNotNull(result.getRadius());
 		}
 	}
-	
-	/**
-	 * Uses CQL Criteria for search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testEntireObjectCQL1() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.sametable.HardTop");
-		cqlQuery.setTarget(target);
-
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(3,results.size());
-		
-		for(Iterator i = results.iterator();i.hasNext();)
-		{
-			HardTop result = (HardTop)i.next();
-			assertNotNull(result);
-			assertNotNull(result.getId());
-			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
-			assertNotNull(result.getCapacity());
-			assertNotNull(result.getKeyCode());
-		}
-	}
 
 	public void testEntireObjectHQL1() throws ApplicationException {
 		HQLCriteria hqlCriteria = new HQLCriteria(
@@ -186,37 +149,6 @@ public class ParentWithAssociationSametableTest extends SDKISOTestBase
 		}
 	}
 	
-	/**
-	 * Uses CQL Criteria for search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testEntireObjectCQL2() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.sametable.Luggage");
-		cqlQuery.setTarget(target);
-
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(5,results.size());
-		
-		for(Iterator i = results.iterator();i.hasNext();)
-		{
-			Luggage result = (Luggage)i.next();
-			assertNotNull(result);
-			assertNotNull(result.getId());
-			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
-			assertNotNull(result.getCapacity());
-		}
-	}
-	
 	public void testEntireObjectHQL2() throws ApplicationException {
 		HQLCriteria hqlCriteria = new HQLCriteria(
 				"from gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.sametable.Luggage");
@@ -232,39 +164,6 @@ public class ParentWithAssociationSametableTest extends SDKISOTestBase
 			assertNotNull(result.getId());
 			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getCapacity());
-		}
-	}
-
-	/**
-	 * Uses CQL Criteria for search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testEntireObjectCQL3() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.sametable.SoftTop");
-		cqlQuery.setTarget(target);
-
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(2,results.size());
-		
-		for(Iterator i = results.iterator();i.hasNext();)
-		{
-			SoftTop result = (SoftTop)i.next();
-			assertNotNull(result);
-			assertNotNull(result.getId());
-			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
-			assertNotNull(result.getCapacity());
-			assertNotNull(result.getExpandable());
-			assertNull(result.getExpandable().getNullFlavor());
 		}
 	}
 
@@ -288,36 +187,6 @@ public class ParentWithAssociationSametableTest extends SDKISOTestBase
 		}
 	}	
 
-	/**
-	 * Uses CQL Criteria for search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testEntireObjectCQL4() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.sametable.Wheel");
-		cqlQuery.setTarget(target);
-
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(3,results.size());
-		
-		for(Iterator i = results.iterator();i.hasNext();)
-		{
-			Wheel result = (Wheel)i.next();
-			assertNotNull(result);
-			assertNotNull(result.getId());
-			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
-			assertNotNull(result.getRadius());
-		}
-	}
 
 	public void testEntireObjectHQL4() throws ApplicationException {
 		HQLCriteria hqlCriteria = new HQLCriteria(
@@ -415,34 +284,6 @@ public class ParentWithAssociationSametableTest extends SDKISOTestBase
 		assertNotNull(result.getId());
 		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertEquals("1", result.getId().getExtension());
-	}
-
-	/**
-	 * Uses CQL Search Criteria for inheritance as association in search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testZeroAssociationCQL() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-
-		CQLAssociation association = new CQLAssociation();
-		association.setName("gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.sametable.HardTop");
-		association.setAttribute(new CQLAttribute("capacity", CQLPredicate.EQUAL_TO,"99"));//no such row exists
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.sametable.Luggage");
-		target.setAssociation(association);
-		cqlQuery.setTarget(target);
-		
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(0,results.size());
-		
 	}
 
 	public void testZeroAssociationHQL() throws ApplicationException {
@@ -572,39 +413,6 @@ public class ParentWithAssociationSametableTest extends SDKISOTestBase
 		}
 	}
 	
-	/**
-	 * Uses CQL Criteria for inheritance as association in search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testAssociationCQL1() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-
-		CQLAssociation association = new CQLAssociation();
-		association.setName("gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.sametable.HardTop");
-		association.setAttribute(new CQLAttribute("id", CQLPredicate.EQUAL_TO,"1"));
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.sametable.Luggage");
-		target.setAssociation(association);
-		cqlQuery.setTarget(target);
-		
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(1,results.size());
-		
-		Luggage result = (Luggage)results.iterator().next();
-		assertNotNull(result);
-		assertNotNull(result.getId());
-		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
-		assertEquals("1", result.getId().getExtension());
-	}
-	
 	public void testAssociationHQL1() throws ApplicationException {
 		HQLCriteria hqlCriteria = new HQLCriteria(
 				"from gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.sametable.HardTop where id='1'");
@@ -621,38 +429,6 @@ public class ParentWithAssociationSametableTest extends SDKISOTestBase
 		assertEquals("1", result.getId().getExtension());
 	}
 	
-	/**
-	 * Uses CQL Criteria for inheritance as association in search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testAssociationCQL2() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-
-		CQLAssociation association = new CQLAssociation();
-		association.setName("gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.sametable.Luggage");
-		association.setAttribute(new CQLAttribute("id", CQLPredicate.EQUAL_TO,"2"));
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.sametable.HardTop");
-		target.setAssociation(association);
-		cqlQuery.setTarget(target);
-		
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(1,results.size());
-		
-		HardTop result = (HardTop)results.iterator().next();
-		assertNotNull(result);
-		assertNotNull(result.getId());
-		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
-		assertEquals("2", result.getId().getExtension());
-	}
 
 	public void testAssociationHQL2() throws ApplicationException {
 
@@ -671,88 +447,6 @@ public class ParentWithAssociationSametableTest extends SDKISOTestBase
 		assertEquals("2", result.getId().getExtension());
 	}
 	
-	/**
-	 * Uses CQL Criteria for inheritance as association in search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testAssociationCQL3() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-
-		CQLAssociation association = new CQLAssociation();
-		association.setName("gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.sametable.Wheel");
-		association.setAttribute(new CQLAttribute("radius", CQLPredicate.EQUAL_TO,"1"));
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.sametable.Luggage");
-		target.setAssociation(association);
-		cqlQuery.setTarget(target);
-		
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(3,results.size());
-		
-		Luggage result = (Luggage)results.iterator().next();
-		assertNotNull(result);
-		assertNotNull(result.getId());
-		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
-		assertEquals("1", result.getId().getExtension());
-	}
-
-	public void testAssociationHQL3() throws ApplicationException {
-		HQLCriteria hqlCriteria = new HQLCriteria(
-				"from gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.sametable.Luggage where wheel.radius='1'");
-		Collection results = search(
-				hqlCriteria,
-				"gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.sametable.Luggage");
-		assertNotNull(results);
-		assertEquals(3, results.size());
-
-		Luggage result = (Luggage) results.iterator().next();
-		assertNotNull(result);
-		assertNotNull(result.getId());
-		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
-		assertEquals("1", result.getId().getExtension());
-	}
-
-	/**
-	 * Uses CQL Criteria for inheritance as association in search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testAssociationCQL4() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-
-		CQLAssociation association = new CQLAssociation();
-		association.setName("gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.sametable.Wheel");
-		association.setAttribute(new CQLAttribute("radius", CQLPredicate.EQUAL_TO,"5"));
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.sametable.Luggage");
-		target.setAssociation(association);
-		cqlQuery.setTarget(target);
-		
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(1,results.size());
-		
-		SoftTop result = (SoftTop)results.iterator().next();
-		assertNotNull(result);
-		assertNotNull(result.getId());
-		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
-		assertEquals("4", result.getId().getExtension());
-	}
-
 	public void testAssociationHQL4() throws ApplicationException {
 		HQLCriteria hqlCriteria = new HQLCriteria(
 				"from gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.sametable.Luggage where wheel.radius='5'");

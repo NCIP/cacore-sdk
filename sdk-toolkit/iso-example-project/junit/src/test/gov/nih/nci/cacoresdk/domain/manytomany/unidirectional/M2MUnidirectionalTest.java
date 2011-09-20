@@ -4,11 +4,6 @@ import gov.nih.nci.cacoresdk.domain.manytomany.unidirectional.Author;
 import gov.nih.nci.cacoresdk.domain.manytomany.unidirectional.Book;
 import gov.nih.nci.iso21090.Ii;
 import gov.nih.nci.system.applicationservice.ApplicationException;
-import gov.nih.nci.system.query.cql.CQLAssociation;
-import gov.nih.nci.system.query.cql.CQLAttribute;
-import gov.nih.nci.system.query.cql.CQLObject;
-import gov.nih.nci.system.query.cql.CQLPredicate;
-import gov.nih.nci.system.query.cql.CQLQuery;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
 import java.util.Collection;
@@ -220,81 +215,6 @@ public class M2MUnidirectionalTest extends SDKISOTestBase
 		assertNotNull(author.getId());
 		assertNotNull(author.getName());
 		assertEquals("1",author.getId().getExtension());		
-	}
-	
-
-	/**
-	 * Uses CQL Criteria for search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * Verifies that the associated object has required Id
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testNoAssociationCQL() throws ApplicationException
-	{
-		boolean flag = false;
-		try
-		{
-			CQLQuery cqlQuery = new CQLQuery();
-			CQLObject target = new CQLObject();
-			
-			CQLAssociation association = new CQLAssociation();
-			association.setName("gov.nih.nci.cacoresdk.domain.manytomany.unidirectional.Book");
-			association.setAttribute(new CQLAttribute("id",CQLPredicate.EQUAL_TO,"1"));
-			
-			target.setName("gov.nih.nci.cacoresdk.domain.manytomany.unidirectional.Author");
-			target.setAssociation(association);
-			cqlQuery.setTarget(target);
-	
-			Collection results = getApplicationService().query(cqlQuery);
-			assertNotNull(results);
-			
-		}
-		catch(ApplicationException e)
-		{
-			flag = true;
-		}
-		
-		assertTrue(flag);
-	}
-
-	
-	/**
-	 * Uses CQL Criteria for search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * Verifies that the associated object has required Id
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testOneAssociatedObjectCQL() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-		
-		CQLAssociation association = new CQLAssociation();
-		association.setName("gov.nih.nci.cacoresdk.domain.manytomany.unidirectional.Book");
-		association.setAttribute(new CQLAttribute("id",CQLPredicate.EQUAL_TO,"1"));
-		association.setSourceRoleName("authorCollection");
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.manytomany.unidirectional.Author");
-		target.setAssociation(association);
-		cqlQuery.setTarget(target);
-
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(1,results.size());
-		
-		Iterator i = results.iterator();
-		Author author = (Author)i.next();
-		assertNotNull(author);
-		assertNotNull(author.getId());
-		assertNotNull(author.getName());
-		assertEquals("1",author.getId().getExtension());
 	}
 	
 	public void testOneAssociatedObjectHQL() throws ApplicationException {

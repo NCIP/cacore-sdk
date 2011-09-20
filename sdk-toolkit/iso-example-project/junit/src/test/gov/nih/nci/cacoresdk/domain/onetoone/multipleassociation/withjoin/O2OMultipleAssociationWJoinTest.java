@@ -4,11 +4,6 @@ import gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation.withjoin.Bride;
 import gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation.withjoin.InLaw;
 import gov.nih.nci.iso21090.Ii;
 import gov.nih.nci.system.applicationservice.ApplicationException;
-import gov.nih.nci.system.query.cql.CQLAssociation;
-import gov.nih.nci.system.query.cql.CQLAttribute;
-import gov.nih.nci.system.query.cql.CQLObject;
-import gov.nih.nci.system.query.cql.CQLPredicate;
-import gov.nih.nci.system.query.cql.CQLQuery;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
 import java.util.Collection;
@@ -198,129 +193,6 @@ public class O2OMultipleAssociationWJoinTest extends SDKISOTestBase
 
 	}
 	
-	/**
-	 * Uses CQL Criteria for search
-	 * Verifies that exception is generated 
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testRoleNameAssociationCQL() throws ApplicationException
-	{
-		boolean flag = false;
-		try
-		{
-			CQLQuery cqlQuery = new CQLQuery();
-			CQLObject target = new CQLObject();
-			
-			CQLAssociation association = new CQLAssociation();
-			association.setName("gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation.withjoin.Bride");
-			association.setAttribute(new CQLAttribute("id",CQLPredicate.EQUAL_TO,"1"));
-			
-			target.setName("gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation.withjoin.InLaw");
-			target.setAssociation(association);
-			cqlQuery.setTarget(target);
-	
-			Collection results = getApplicationService().query(cqlQuery);
-			assertNotNull(results);
-			
-		}
-		catch(ApplicationException e)
-		{
-			flag = true;
-		}
-		
-		assertTrue(flag);
-	}
-
-	/**
-	 * Uses CQL Criteria for search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * Verifies that the associated object has required Id
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testZeroAssociatedObjectCQL2() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-		
-		CQLAssociation association = new CQLAssociation();
-		association.setName("gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation.withjoin.Bride");
-		association.setAttribute(new CQLAttribute("id",CQLPredicate.EQUAL_TO,"4"));
-		association.setSourceRoleName("mother");
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation.withjoin.InLaw");
-		target.setAssociation(association);
-		cqlQuery.setTarget(target);
-
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(0,results.size());
-	}
-	
-	public void testZeroAssociatedObjectHQL2() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-		
-		CQLAssociation association = new CQLAssociation();
-		association.setName("gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation.withjoin.Bride");
-		association.setAttribute(new CQLAttribute("id",CQLPredicate.EQUAL_TO,"4"));
-		association.setSourceRoleName("mother");
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation.withjoin.InLaw");
-		target.setAssociation(association);
-		cqlQuery.setTarget(target);
-
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(0,results.size());
-	}
-	
-	/**
-	 * Uses CQL Criteria for search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * Verifies that the associated object has required Id
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testOneAssociatedObjectCQL1() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-		
-		CQLAssociation association = new CQLAssociation();
-		association.setName("gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation.withjoin.Bride");
-		association.setAttribute(new CQLAttribute("id",CQLPredicate.EQUAL_TO,"1"));
-		association.setSourceRoleName("father");
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation.withjoin.InLaw");
-		target.setAssociation(association);
-		cqlQuery.setTarget(target);
-
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(1,results.size());
-		
-		Iterator i = results.iterator();
-		
-		InLaw parent = (InLaw)i.next();
-		assertNotNull(parent);
-		
-		assertNotNull(parent);
-		assertNotNull(parent.getId());
-		assertEquals(parent.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
-		assertNotNull(parent.getName());
-		assertEquals("1",parent.getId().getExtension());
-	}		
-	
 	public void testOneAssociatedObjectHQL1() throws ApplicationException {
 
 		HQLCriteria hqlCriteria = new HQLCriteria(
@@ -344,46 +216,6 @@ public class O2OMultipleAssociationWJoinTest extends SDKISOTestBase
 		assertEquals("1", parent.getId().getExtension());
 	}
 
-	/**
-	 * Uses CQL Criteria for search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * Verifies that the associated object has required Id
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testOneAssociatedObjectCQL2() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-		
-		CQLAssociation association = new CQLAssociation();
-		association.setName("gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation.withjoin.Bride");
-		association.setAttribute(new CQLAttribute("id",CQLPredicate.EQUAL_TO,"1"));
-		association.setSourceRoleName("mother");
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation.withjoin.InLaw");
-		target.setAssociation(association);
-		cqlQuery.setTarget(target);
-
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(1,results.size());
-		
-		Iterator i = results.iterator();
-		
-		InLaw parent = (InLaw)i.next();
-		assertNotNull(parent);
-		
-		assertNotNull(parent);
-		assertNotNull(parent.getId());
-		assertEquals(parent.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
-		assertNotNull(parent.getName());
-		assertEquals("2",parent.getId().getExtension());
-	}	
-	
 	public void testOneAssociatedObjectHQL2() throws ApplicationException {
 		HQLCriteria hqlCriteria = new HQLCriteria(
 				"select bride.mother from gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation.withjoin.Bride bride "

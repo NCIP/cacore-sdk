@@ -6,11 +6,6 @@ import gov.nih.nci.cacoresdk.domain.other.differentpackage.associations.Utensil;
 import gov.nih.nci.iso21090.Ii;
 import gov.nih.nci.iso21090.St;
 import gov.nih.nci.system.applicationservice.ApplicationException;
-import gov.nih.nci.system.query.cql.CQLAssociation;
-import gov.nih.nci.system.query.cql.CQLAttribute;
-import gov.nih.nci.system.query.cql.CQLObject;
-import gov.nih.nci.system.query.cql.CQLPredicate;
-import gov.nih.nci.system.query.cql.CQLQuery;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
 import java.util.Collection;
@@ -104,38 +99,6 @@ public class DifferentPackageWithAssociationTest extends SDKISOTestBase
 		}
 	}
 
-	
-	/**
-	 * Uses CQL Criteria for search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testEntireObjectCQL1() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.other.differentpackage.associations.Pie");
-		cqlQuery.setTarget(target);
-
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(2,results.size());
-		
-		for(Iterator i = results.iterator();i.hasNext();)
-		{
-			Pie result = (Pie)i.next();
-			assertNotNull(result);
-			assertNotNull(result.getId());
-			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
-			assertNotNull(result.getFilling());
-		}
-	}
-	
 	public void testEntireObjectHQL1() throws ApplicationException {
 		HQLCriteria hqlCriteria = new HQLCriteria(
 				"from gov.nih.nci.cacoresdk.domain.other.differentpackage.associations.Pie");
@@ -153,69 +116,6 @@ public class DifferentPackageWithAssociationTest extends SDKISOTestBase
 			assertNotNull(result.getFilling());
 		}
 	}
-
-	/**
-	 * Uses CQL Criteria for search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testEntireObjectCQL2() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.other.differentpackage.associations.Pie");
-		cqlQuery.setTarget(target);
-
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(2,results.size());
-		
-		for(Iterator i = results.iterator();i.hasNext();)
-		{
-			Pie result = (Pie)i.next();
-			assertNotNull(result);
-			assertNotNull(result.getId());
-			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
-			assertNotNull(result.getFilling());
-		}
-	}
-
-	/**
-	 * Uses CQL Criteria for search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testEntireObjectCQL3() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.other.differentpackage.associations.Utensil");
-		cqlQuery.setTarget(target);
-
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(3,results.size());
-		
-		for(Iterator i = results.iterator();i.hasNext();)
-		{
-			Utensil result = (Utensil)i.next();
-			assertNotNull(result);
-			assertNotNull(result.getId());
-			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
-			assertNotNull(result.getName());
-		}
-	}
-
 	
 	public void testEntireObjectHQL3() throws ApplicationException {
 		HQLCriteria hqlCriteria = new HQLCriteria(
@@ -278,34 +178,6 @@ public class DifferentPackageWithAssociationTest extends SDKISOTestBase
 		assertEquals("3", result.getId().getExtension());
 	}
 
-	/**
-	 * Uses CQL Search Criteria for inheritance as association in search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testZeroAssociationCQL() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-
-		CQLAssociation association = new CQLAssociation();
-		association.setName("gov.nih.nci.cacoresdk.domain.other.differentpackage.associations.Pie");
-		association.setAttribute(new CQLAttribute("filling", CQLPredicate.EQUAL_TO,"Non-existent filling"));
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.other.differentpackage.Dessert");
-		target.setAssociation(association);
-		cqlQuery.setTarget(target);
-		
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(0,results.size());
-		
-	}
-	
 	public void testZeroAssociationHQL() throws ApplicationException {
 		HQLCriteria hqlCriteria = new HQLCriteria(
 				"from gov.nih.nci.cacoresdk.domain.other.differentpackage.associations.Pie where filling='Non-existent filling'");
@@ -369,39 +241,6 @@ public class DifferentPackageWithAssociationTest extends SDKISOTestBase
 		assertEquals("4", result.getId().getExtension());
 	}
 
-	/**
-	 * Uses CQL Criteria for inheritance as association in search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testAssociationCQL1() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-
-		CQLAssociation association = new CQLAssociation();
-		association.setName("gov.nih.nci.cacoresdk.domain.other.differentpackage.associations.Pie");
-		association.setAttribute(new CQLAttribute("id", CQLPredicate.EQUAL_TO,"3"));
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.other.differentpackage.Dessert");
-		target.setAssociation(association);
-		cqlQuery.setTarget(target);
-		
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(1,results.size());
-		
-		Dessert result = (Dessert)results.iterator().next();
-		assertNotNull(result);
-		assertNotNull(result.getId());
-		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
-		assertEquals("3", result.getId().getExtension());
-	}
-	
 	public void testAssociationHQL1() throws ApplicationException {
 		HQLCriteria hqlCriteria = new HQLCriteria(
 				"from gov.nih.nci.cacoresdk.domain.other.differentpackage.associations.Pie where id='3'");
@@ -418,39 +257,6 @@ public class DifferentPackageWithAssociationTest extends SDKISOTestBase
 		assertEquals("3", result.getId().getExtension());
 	}
 
-	/**
-	 * Uses CQL Criteria for inheritance as association in search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testAssociationCQL2() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-
-		CQLAssociation association = new CQLAssociation();
-		association.setName("gov.nih.nci.cacoresdk.domain.other.differentpackage.Dessert");
-		association.setAttribute(new CQLAttribute("id", CQLPredicate.EQUAL_TO,"4"));
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.other.differentpackage.associations.Pie");
-		target.setAssociation(association);
-		cqlQuery.setTarget(target);
-		
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(1,results.size());
-		
-		Pie result = (Pie)results.iterator().next();
-		assertNotNull(result);
-		assertNotNull(result.getId());
-		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
-		assertEquals("4", result.getId().getExtension());
-	}
-
 	public void testAssociationHQL2() throws ApplicationException {
 		HQLCriteria hqlCriteria = new HQLCriteria(
 				"from gov.nih.nci.cacoresdk.domain.other.differentpackage.Dessert where id='4'");
@@ -464,40 +270,6 @@ public class DifferentPackageWithAssociationTest extends SDKISOTestBase
 		assertNotNull(result.getId());
 		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertEquals("4", result.getId().getExtension());
-	}
-
-	/**
-	 * Uses CQL Criteria for inheritance as association in search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testAssociationCQL3() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-
-		CQLAssociation association = new CQLAssociation();
-		association.setName("gov.nih.nci.cacoresdk.domain.other.differentpackage.associations.Utensil");
-		association.setTargetRoleName("utensilCollection");
-		association.setAttribute(new CQLAttribute("name", CQLPredicate.EQUAL_TO,"Spoon"));
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.other.differentpackage.Dessert");
-		target.setAssociation(association);
-		cqlQuery.setTarget(target);
-		
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(2,results.size());
-		
-		Dessert result = (Dessert)results.iterator().next();
-		assertNotNull(result);
-		assertNotNull(result.getId());
-		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
-		assertEquals("1", result.getId().getExtension());
 	}
 
 	public void testAssociationHQL3() throws ApplicationException {
@@ -516,40 +288,6 @@ public class DifferentPackageWithAssociationTest extends SDKISOTestBase
 		assertEquals("1", result.getId().getExtension());
 	}
 
-	/**
-	 * Uses CQL Criteria for inheritance as association in search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testAssociationCQL4() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-
-		CQLAssociation association = new CQLAssociation();
-		association.setName("gov.nih.nci.cacoresdk.domain.other.differentpackage.associations.Utensil");
-		association.setTargetRoleName("utensilCollection");
-		association.setAttribute(new CQLAttribute("name", CQLPredicate.EQUAL_TO,"Spoon"));
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.other.differentpackage.associations.Pie");
-		target.setAssociation(association);
-		cqlQuery.setTarget(target);
-		
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(1,results.size());
-		
-		Pie result = (Pie)results.iterator().next();
-		assertNotNull(result);
-		assertNotNull(result.getId());
-		assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
-		assertEquals("3", result.getId().getExtension());
-	}
-	
 	public void testAssociationHQL4() throws ApplicationException {
 		HQLCriteria hqlCriteria = new HQLCriteria(
 				"from gov.nih.nci.cacoresdk.domain.other.differentpackage.associations.Pie as pie "
