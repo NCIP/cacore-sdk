@@ -33,7 +33,7 @@ import gov.nih.nci.cacoresdk.domain.other.datatype.TsDataType;
 
 import org.jdom.Document;
 
-import test.xml.mapping.SDKXSDTestBase;
+import test.xsd.SDKXSDTestBase;
 
 public class OtherDataTypeXSDTest extends SDKXSDTestBase
 {
