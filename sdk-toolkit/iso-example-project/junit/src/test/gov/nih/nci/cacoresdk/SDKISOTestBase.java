@@ -25,7 +25,7 @@ import org.hibernate.criterion.DetachedCriteria;
 import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
 
-import test.xml.mapping.SDKXMLDataTestBase;
+import test.xml.data.SDKXMLDataTestBase;
 
 /**
  * Base class used to support SDK ISO 21090 test cases
