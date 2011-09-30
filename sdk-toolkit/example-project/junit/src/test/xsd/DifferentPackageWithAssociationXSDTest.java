@@ -7,7 +7,7 @@ import gov.nih.nci.cacoresdk.domain.other.differentpackage.Dessert;
 
 import org.jdom.Document;
 
-import test.xml.mapping.SDKXSDTestBase;
+import test.xsd.SDKXSDTestBase;
 
 public class DifferentPackageWithAssociationXSDTest extends SDKXSDTestBase
 {

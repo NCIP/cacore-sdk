@@ -4,7 +4,7 @@ import gov.nih.nci.cacoresdk.domain.other.primarykey.DoublePrimitiveKey;
 
 import org.jdom.Document;
 
-import test.xml.mapping.SDKXSDTestBase;
+import test.xsd.SDKXSDTestBase;
 
 public class DoublePrimitiveKeyXSDTest extends SDKXSDTestBase
 {

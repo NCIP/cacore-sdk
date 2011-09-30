@@ -7,7 +7,7 @@ import gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametableroo
 
 import org.jdom.Document;
 
-import test.xml.mapping.SDKXSDTestBase;
+import test.xsd.SDKXSDTestBase;
 
 public class TwoLevelInheritanceSametablerootlevelXSDTest extends SDKXSDTestBase
 {

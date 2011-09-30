@@ -8,7 +8,7 @@ import gov.nih.nci.cacoresdk.domain.manytomany.unidirectional.Book;
 import org.jdom.Document;
 import org.jdom.Element;
 
-import test.xml.mapping.SDKXSDTestBase;
+import test.xsd.SDKXSDTestBase;
 
 public class M2MUnidirectionalXSDTest extends SDKXSDTestBase
 {

@@ -5,7 +5,7 @@ import gov.nih.nci.cacoresdk.domain.onetomany.bidirectional.selfassociation.Memb
 
 import org.jdom.Document;
 
-import test.xml.mapping.SDKXSDTestBase;
+import test.xsd.SDKXSDTestBase;
 
 public class O2MBidirectionalSelfassociationXSDTest extends SDKXSDTestBase
 {

@@ -8,7 +8,7 @@ import java.util.List;
 import org.jdom.Document;
 import org.jdom.Element;
 
-import test.xml.mapping.SDKXSDTestBase;
+import test.xsd.SDKXSDTestBase;
 
 public class M2OUnidirectionalWJoinXSDTest extends SDKXSDTestBase
 {

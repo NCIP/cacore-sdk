@@ -7,7 +7,7 @@ import gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.sametable.
 
 import org.jdom.Document;
 
-import test.xml.mapping.SDKXSDTestBase;
+import test.xsd.SDKXSDTestBase;
 
 public class ParentWithAssociationSametableXSDTest extends SDKXSDTestBase
 {

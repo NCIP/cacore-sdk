@@ -8,7 +8,7 @@ import gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.TenuredPro
 
 import org.jdom.Document;
 
-import test.xml.mapping.SDKXSDTestBase;
+import test.xsd.SDKXSDTestBase;
 
 public class ParentWithAssociationXSDTest extends SDKXSDTestBase
 {

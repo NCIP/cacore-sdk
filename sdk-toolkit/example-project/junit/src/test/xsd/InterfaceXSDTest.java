@@ -4,7 +4,7 @@ import gov.nih.nci.cacoresdk.domain.interfaze.Dog;
 
 import org.jdom.Document;
 
-import test.xml.mapping.SDKXSDTestBase;
+import test.xsd.SDKXSDTestBase;
 
 public class InterfaceXSDTest extends SDKXSDTestBase
 {

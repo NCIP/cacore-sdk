@@ -5,7 +5,7 @@ import gov.nih.nci.cacoresdk.domain.inheritance.onechild.Mammal;
 
 import org.jdom.Document;
 
-import test.xml.mapping.SDKXSDTestBase;
+import test.xsd.SDKXSDTestBase;
 
 public class OneChildXSDTest extends SDKXSDTestBase
 {

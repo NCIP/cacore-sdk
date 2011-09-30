@@ -139,48 +139,6 @@ public class <%=klassName%>Test extends SDKTestBase
 			break;		
 		}		
 	}
-		
-	/**
-	 * Uses CQL Query API for search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute are  null
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testEntireObjectCqlSearch() throws ApplicationException
-	{
-	
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-		
-		target.setName("<%=fullPackageName%>.<%=klassName%>");
-		cqlQuery.setTarget(target);
-
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		
-		for(Iterator i = results.iterator();i.hasNext();)
-		{
-			<%=klassName%> result = (<%=klassName%>)i.next();
-			assertNotNull(result);
-			<%for(UMLAttribute attr:klass.getAttributes()){%>
-			assertNotNull("<%=klassName%>.<%=transformerUtils.getGetterMethodName(attr)%>() returned an unexpected 'null' value",result.<%=transformerUtils.getGetterMethodName(attr)%>());<%
-			}%>
-		}
-		
-		// print out a sample record
-		for(Iterator i = results.iterator();i.hasNext();)
-		{
-			try {
-				printObject(i.next(), <%=klassName%>.class);
-			} catch (Exception e) {
-				fail("Error encountered while printing out sample record");
-			} 
-			break;		
-		}		
-	}
 
 <%} else {%>	
 	/**

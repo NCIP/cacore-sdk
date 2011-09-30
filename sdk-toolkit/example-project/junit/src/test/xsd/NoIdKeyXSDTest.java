@@ -4,7 +4,7 @@ import gov.nih.nci.cacoresdk.domain.other.primarykey.NoIdKey;
 
 import org.jdom.Document;
 
-import test.xml.mapping.SDKXSDTestBase;
+import test.xsd.SDKXSDTestBase;
 
 public class NoIdKeyXSDTest extends SDKXSDTestBase
 {
