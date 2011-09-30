@@ -4,11 +4,6 @@ import gov.nih.nci.cacoresdk.domain.inheritance.abstrakt.PrivateTeacher;
 import gov.nih.nci.cacoresdk.domain.inheritance.abstrakt.Pupil;
 import gov.nih.nci.cacoresdk.domain.inheritance.abstrakt.Teacher;
 import gov.nih.nci.system.applicationservice.ApplicationException;
-import gov.nih.nci.system.query.cql.CQLAssociation;
-import gov.nih.nci.system.query.cql.CQLAttribute;
-import gov.nih.nci.system.query.cql.CQLObject;
-import gov.nih.nci.system.query.cql.CQLPredicate;
-import gov.nih.nci.system.query.cql.CQLQuery;
 
 import java.lang.reflect.Modifier;
 import java.util.Collection;
@@ -75,68 +70,6 @@ public class AbstractParentWithAssociationTest extends SDKTestBase
 		}
 	}
 
-
-	/**
-	 * Uses CQL Criteria for search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testEntireObjectCQL1() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.abstrakt.PrivateTeacher");
-		cqlQuery.setTarget(target);
-
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(3,results.size());
-		
-		for(Iterator i = results.iterator();i.hasNext();)
-		{
-			PrivateTeacher result = (PrivateTeacher)i.next();
-			assertNotNull(result);
-			assertNotNull(result.getId());
-			assertNotNull(result.getName());
-			assertNotNull(result.getYearsExperience());
-		}
-	}
-
-	/**
-	 * Uses CQL Criteria for search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testEntireObjectCQL2() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.abstrakt.Pupil");
-		cqlQuery.setTarget(target);
-
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(4,results.size());
-		
-		for(Iterator i = results.iterator();i.hasNext();)
-		{
-			Pupil result = (Pupil)i.next();
-			assertNotNull(result);
-			assertNotNull(result.getId());
-			assertNotNull(result.getName());
-		}
-	}
-
 	/**
 	 * Uses Nested Search Criteria for inheritance as association in search
 	 * Verifies that the result set is empty
@@ -176,34 +109,6 @@ public class AbstractParentWithAssociationTest extends SDKTestBase
 		assertEquals(new Integer(1), result.getId());
 	}
 
-	/**
-	 * Uses CQL Search Criteria for inheritance as association in search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testZeroAssociationCQL() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-
-		CQLAssociation association = new CQLAssociation();
-		association.setName("gov.nih.nci.cacoresdk.domain.inheritance.abstrakt.PrivateTeacher");
-		association.setAttribute(new CQLAttribute("name", CQLPredicate.EQUAL_TO,"Bad Name"));
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.abstrakt.Teacher");
-		target.setAssociation(association);
-		cqlQuery.setTarget(target);
-		
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(0,results.size());
-		
-	}
-	
 	/**
 	 * Uses Nested Search Criteria for inheritance as association in search
 	 * Verifies that the results are returned 
@@ -250,138 +155,6 @@ public class AbstractParentWithAssociationTest extends SDKTestBase
 		assertEquals(new Integer(1), result.getId());
 	}
 
-	/**
-	 * Uses CQL Criteria for inheritance as association in search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testAssociationCQL1() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-
-		CQLAssociation association = new CQLAssociation();
-		association.setName("gov.nih.nci.cacoresdk.domain.inheritance.abstrakt.PrivateTeacher");
-		association.setAttribute(new CQLAttribute("id", CQLPredicate.EQUAL_TO,"1"));
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.abstrakt.Teacher");
-		target.setAssociation(association);
-		cqlQuery.setTarget(target);
-		
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(1,results.size());
-		
-		Teacher result = (Teacher)results.iterator().next();
-		assertNotNull(result);
-		assertNotNull(result.getId());
-		assertEquals(new Integer(1), result.getId());
-	}
-	
-
-	/**
-	 * Uses CQL Criteria for inheritance as association in search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testAssociationCQL2() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-
-		CQLAssociation association = new CQLAssociation();
-		association.setName("gov.nih.nci.cacoresdk.domain.inheritance.abstrakt.Teacher");
-		association.setAttribute(new CQLAttribute("id", CQLPredicate.EQUAL_TO,"2"));
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.abstrakt.PrivateTeacher");
-		target.setAssociation(association);
-		cqlQuery.setTarget(target);
-		
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(1,results.size());
-		
-		PrivateTeacher result = (PrivateTeacher)results.iterator().next();
-		assertNotNull(result);
-		assertNotNull(result.getId());
-		assertEquals(new Integer(2), result.getId());
-	}
-
-	/**
-	 * Uses CQL Criteria for inheritance as association in search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testAssociationCQL3() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-
-		CQLAssociation association = new CQLAssociation();
-		association.setName("gov.nih.nci.cacoresdk.domain.inheritance.abstrakt.Pupil");
-		association.setTargetRoleName("pupilCollection");
-		association.setAttribute(new CQLAttribute("name", CQLPredicate.EQUAL_TO,"Pupil_Name_1"));
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.abstrakt.Teacher");
-		target.setAssociation(association);
-		cqlQuery.setTarget(target);
-		
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(1,results.size());
-		
-		Teacher result = (Teacher)results.iterator().next();
-		assertNotNull(result);
-		assertNotNull(result.getId());
-		assertEquals(new Integer(1), result.getId());
-	}
-	
-
-	/**
-	 * Uses CQL Criteria for inheritance as association in search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testAssociationCQL4() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-
-		CQLAssociation association = new CQLAssociation();
-		association.setName("gov.nih.nci.cacoresdk.domain.inheritance.abstrakt.Pupil");
-		association.setTargetRoleName("pupilCollection");
-		association.setAttribute(new CQLAttribute("name", CQLPredicate.EQUAL_TO,"Pupil_Name_3"));
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.abstrakt.PrivateTeacher");
-		target.setAssociation(association);
-		cqlQuery.setTarget(target);
-		
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(1,results.size());
-		
-		PrivateTeacher result = (PrivateTeacher)results.iterator().next();
-		assertNotNull(result);
-		assertNotNull(result.getId());
-		assertEquals(new Integer(3), result.getId());
-	}
-	
 	public void testGetAssociation() throws ApplicationException
 	{
 		PrivateTeacher searchObject = new PrivateTeacher();

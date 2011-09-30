@@ -3,11 +3,6 @@ package test.gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin;
 import gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin.Chain;
 import gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin.Pendant;
 import gov.nih.nci.system.applicationservice.ApplicationException;
-import gov.nih.nci.system.query.cql.CQLAssociation;
-import gov.nih.nci.system.query.cql.CQLAttribute;
-import gov.nih.nci.system.query.cql.CQLObject;
-import gov.nih.nci.system.query.cql.CQLPredicate;
-import gov.nih.nci.system.query.cql.CQLQuery;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -205,110 +200,6 @@ public class O2OBidirectionalWJoinTest extends SDKTestBase
 		assertNotNull(pendant.getShape());
 		assertEquals(new Integer(1),pendant.getId());
 	}	
-	/**
-	 * Uses CQL Criteria for search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * Verifies that the associated object has required Id
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testOneAssociatedObjectCQL1() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-		
-		CQLAssociation association = new CQLAssociation();
-		association.setName("gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin.Pendant");
-		association.setAttribute(new CQLAttribute("id",CQLPredicate.EQUAL_TO,"1"));
-		association.setTargetRoleName("pendant");
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin.Chain");
-		target.setAssociation(association);
-		cqlQuery.setTarget(target);
-
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(1,results.size());
-		
-		Iterator i = results.iterator();
-		
-		Chain Chain = (Chain)i.next();
-		assertNotNull(Chain);
-		
-		assertNotNull(Chain);
-		assertNotNull(Chain.getId());
-		assertNotNull(Chain.getMetal());
-		assertEquals(new Integer(1),Chain.getId());
-	}	
-
-	/**
-	 * Uses CQL Criteria for search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * Verifies that the associated object has required Id
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testOneAssociatedObjectCQL2() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-		
-		CQLAssociation association = new CQLAssociation();
-		association.setName("gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin.Chain");
-		association.setAttribute(new CQLAttribute("id",CQLPredicate.EQUAL_TO,"1"));
-		association.setTargetRoleName("chain");
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin.Pendant");
-		target.setAssociation(association);
-		cqlQuery.setTarget(target);
-
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(1,results.size());
-		
-		Iterator i = results.iterator();
-		
-		Pendant Pendant = (Pendant)i.next();
-		assertNotNull(Pendant);
-		
-		assertNotNull(Pendant);
-		assertNotNull(Pendant.getId());
-		assertNotNull(Pendant.getShape());
-		assertEquals(new Integer(1),Pendant.getId());
-	}	
-	
-	/**
-	 * Uses CQL Criteria for search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set is 1
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testAssociatedObjectCQL() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-		
-		CQLAssociation association = new CQLAssociation();
-		association.setName("gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin.Pendant");
-		association.setAttribute(new CQLAttribute("id",CQLPredicate.EQUAL_TO,"3"));
-		association.setTargetRoleName("pendant");
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin.Chain");
-		target.setAssociation(association);
-		cqlQuery.setTarget(target);
-
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(1,results.size());
-	}
 	
 	public void testGetMethods1() throws ApplicationException
 	{

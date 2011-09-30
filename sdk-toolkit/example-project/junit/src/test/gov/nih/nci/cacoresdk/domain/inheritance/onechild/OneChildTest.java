@@ -3,11 +3,6 @@ package test.gov.nih.nci.cacoresdk.domain.inheritance.onechild;
 import gov.nih.nci.cacoresdk.domain.inheritance.onechild.Human;
 import gov.nih.nci.cacoresdk.domain.inheritance.onechild.Mammal;
 import gov.nih.nci.system.applicationservice.ApplicationException;
-import gov.nih.nci.system.query.cql.CQLAssociation;
-import gov.nih.nci.system.query.cql.CQLAttribute;
-import gov.nih.nci.system.query.cql.CQLObject;
-import gov.nih.nci.system.query.cql.CQLPredicate;
-import gov.nih.nci.system.query.cql.CQLQuery;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -72,65 +67,6 @@ public class OneChildTest extends SDKTestBase
 		}
 	}
 
-	/**
-	 * Uses CQL Criteria for search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testEntireObjectCQL1() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.onechild.Human");
-		cqlQuery.setTarget(target);
-
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(4,results.size());
-		
-		for(Iterator i = results.iterator();i.hasNext();)
-		{
-			Human result = (Human)i.next();
-			assertNotNull(result);
-			assertNotNull(result.getId());
-			assertNotNull(result.getDiet());
-		}
-	}
-
-	/**
-	 * Uses CQL Criteria for search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testEntireObjectCQL2() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.onechild.Mammal");
-		cqlQuery.setTarget(target);
-
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(5,results.size());
-		
-		for(Iterator i = results.iterator();i.hasNext();)
-		{
-			Mammal result = (Mammal)i.next();
-			assertNotNull(result);
-			assertNotNull(result.getId());
-			assertNotNull(result.getHairColor());
-		}
-	}
 
 	/**
 	 * Uses Nested Search Criteria for inheritance as association in search
@@ -184,74 +120,4 @@ public class OneChildTest extends SDKTestBase
 		}
 	}
 
-	/**
-	 * Uses CQL Criteria for inheritance as association in search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testAssociationCQL1() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-
-		CQLAssociation association = new CQLAssociation();
-		association.setName("gov.nih.nci.cacoresdk.domain.inheritance.onechild.Human");
-		association.setAttribute(new CQLAttribute("hairColor", CQLPredicate.EQUAL_TO,"Hair_Color1"));
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.onechild.Mammal");
-		target.setAssociation(association);
-		cqlQuery.setTarget(target);
-		
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(1,results.size());
-		
-		for(Iterator i = results.iterator();i.hasNext();)
-		{
-			Mammal result = (Mammal)i.next();
-			assertNotNull(result);
-			assertNotNull(result.getId());
-			assertNotNull(result.getHairColor());
-		}
-	}
-	
-
-	/**
-	 * Uses CQL Criteria for inheritance as association in search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testAssociationCQL2() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-
-		CQLAssociation association = new CQLAssociation();
-		association.setName("gov.nih.nci.cacoresdk.domain.inheritance.onechild.Mammal");
-		association.setAttribute(new CQLAttribute("hairColor", CQLPredicate.EQUAL_TO,"Hair_Color1"));
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.onechild.Human");
-		target.setAssociation(association);
-		cqlQuery.setTarget(target);
-		
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(1,results.size());
-		
-		for(Iterator i = results.iterator();i.hasNext();)
-		{
-			Human result = (Human)i.next();
-			assertNotNull(result);
-			assertNotNull(result.getId());
-			assertNotNull(result.getHairColor());
-		}
-	}
 }

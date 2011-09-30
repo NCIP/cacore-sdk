@@ -7,8 +7,6 @@ import gov.nih.nci.cacoresdk.domain.interfaze.Pet;
 import gov.nih.nci.cacoresdk.domain.interfaze.differentpackage.Canidae;
 import gov.nih.nci.cacoresdk.domain.interfaze.differentpackage.Mammalia;
 import gov.nih.nci.system.applicationservice.ApplicationException;
-import gov.nih.nci.system.query.cql.CQLObject;
-import gov.nih.nci.system.query.cql.CQLQuery;
 
 import com.sun.xml.bind.CycleRecoverable;
 
@@ -41,37 +39,6 @@ public class InterfaceTest extends SDKTestBase
 		Dog searchObject = new Dog();
 		
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.interfaze.Dog",searchObject );
-
-		assertNotNull(results);
-		assertEquals(3,results.size());
-		
-		for(Iterator i = results.iterator();i.hasNext();)
-		{
-			Dog result = (Dog)i.next();
-			assertNotNull(result);
-			assertNotNull(result.getId());
-			assertNotNull(result.getBreed());
-			assertNotNull(result.getGender());
-		}
-	}
-
-	/**
-	 * Uses CQL Criteria for search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testEntireObjectCQL1() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.interfaze.Dog");
-		cqlQuery.setTarget(target);
-
-		Collection results = getApplicationService().query(cqlQuery);
 
 		assertNotNull(results);
 		assertEquals(3,results.size());

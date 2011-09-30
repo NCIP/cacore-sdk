@@ -3,11 +3,6 @@ package test.gov.nih.nci.cacoresdk.domain.onetoone.unidirectional;
 import gov.nih.nci.cacoresdk.domain.onetoone.unidirectional.Address;
 import gov.nih.nci.cacoresdk.domain.onetoone.unidirectional.Person;
 import gov.nih.nci.system.applicationservice.ApplicationException;
-import gov.nih.nci.system.query.cql.CQLAssociation;
-import gov.nih.nci.system.query.cql.CQLAttribute;
-import gov.nih.nci.system.query.cql.CQLObject;
-import gov.nih.nci.system.query.cql.CQLPredicate;
-import gov.nih.nci.system.query.cql.CQLQuery;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -176,85 +171,7 @@ public class O2OUnidirectionalTest extends SDKTestBase
 		assertNotNull(address.getZip());
 		assertEquals(new Integer(1),address.getId());
 	}
-	
-
-	/**
-	 * Uses CQL Criteria for search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * Verifies that the associated object has required Id
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testNoAssociationCQL() throws ApplicationException
-	{
-		boolean flag = false;
-		try
-		{
-			CQLQuery cqlQuery = new CQLQuery();
-			CQLObject target = new CQLObject();
-			
-			CQLAssociation association = new CQLAssociation();
-			association.setName("gov.nih.nci.cacoresdk.domain.onetoone.unidirectional.Person");
-			association.setAttribute(new CQLAttribute("id",CQLPredicate.EQUAL_TO,"1"));
-			
-			target.setName("gov.nih.nci.cacoresdk.domain.onetoone.unidirectional.Address");
-			target.setAssociation(association);
-			cqlQuery.setTarget(target);
-	
-			Collection results = getApplicationService().query(cqlQuery);
-			assertNotNull(results);
-			
-		}
-		catch(ApplicationException e)
-		{
-			flag = true;
-		}
 		
-		assertTrue(flag);
-	}
-
-	
-	/**
-	 * Uses CQL Criteria for search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * Verifies that the associated object has required Id
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testOneAssociatedObjectCQL() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-		
-		CQLAssociation association = new CQLAssociation();
-		association.setName("gov.nih.nci.cacoresdk.domain.onetoone.unidirectional.Person");
-		association.setAttribute(new CQLAttribute("id",CQLPredicate.EQUAL_TO,"1"));
-		association.setSourceRoleName("livesAt");
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.onetoone.unidirectional.Address");
-		target.setAssociation(association);
-		cqlQuery.setTarget(target);
-
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(1,results.size());
-		
-		Iterator i = results.iterator();
-		
-		Address address = (Address)i.next();
-		assertNotNull(address);
-		
-		assertNotNull(address);
-		assertNotNull(address.getId());
-		assertNotNull(address.getZip());
-		assertEquals(new Integer(1),address.getId());
-	}	
-	
 	public void testGetAssociation() throws ApplicationException
 	{
 

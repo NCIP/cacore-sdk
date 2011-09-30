@@ -6,11 +6,7 @@ import java.util.Iterator;
 import gov.nih.nci.cacoresdk.domain.onetomany.unidirectional.KeyChain;
 import gov.nih.nci.cacoresdk.domain.onetomany.unidirectional.LatchKey;
 import gov.nih.nci.system.applicationservice.ApplicationException;
-import gov.nih.nci.system.query.cql.CQLAssociation;
-import gov.nih.nci.system.query.cql.CQLAttribute;
-import gov.nih.nci.system.query.cql.CQLObject;
-import gov.nih.nci.system.query.cql.CQLPredicate;
-import gov.nih.nci.system.query.cql.CQLQuery;
+
 import test.gov.nih.nci.cacoresdk.SDKTestBase;
 
 public class O2MUnidirectionalTest extends SDKTestBase
@@ -163,81 +159,6 @@ public class O2MUnidirectionalTest extends SDKTestBase
 		KeyChain searchObject = new KeyChain();
 		searchObject.setId(new Integer(1));
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.onetomany.unidirectional.LatchKey",searchObject );
-
-		assertNotNull(results);
-		assertEquals(1,results.size());
-		
-		Iterator i = results.iterator();
-		LatchKey key = (LatchKey)i.next();
-		assertNotNull(key);
-		assertNotNull(key.getId());
-		assertNotNull(key.getType());
-		assertEquals(new Integer(1),key.getId());
-	}
-	
-
-	/**
-	 * Uses CQL Criteria for search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * Verifies that the associated object has required Id
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testNoAssociationCQL() throws ApplicationException
-	{
-		boolean flag = false;
-		try
-		{
-			CQLQuery cqlQuery = new CQLQuery();
-			CQLObject target = new CQLObject();
-			
-			CQLAssociation association = new CQLAssociation();
-			association.setName("gov.nih.nci.cacoresdk.domain.onetomany.unidirectional.KeyChain");
-			association.setAttribute(new CQLAttribute("id",CQLPredicate.EQUAL_TO,"1"));
-			
-			target.setName("gov.nih.nci.cacoresdk.domain.onetomany.unidirectional.LatchKey");
-			target.setAssociation(association);
-			cqlQuery.setTarget(target);
-	
-			Collection results = getApplicationService().query(cqlQuery);
-			assertNotNull(results);
-			
-		}
-		catch(ApplicationException e)
-		{
-			flag = true;
-		}
-		
-		assertTrue(flag);
-	}
-
-	
-	/**
-	 * Uses CQL Criteria for search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * Verifies that the associated object has required Id
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testOneAssociatedObjectCQL() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-		
-		CQLAssociation association = new CQLAssociation();
-		association.setName("gov.nih.nci.cacoresdk.domain.onetomany.unidirectional.KeyChain");
-		association.setAttribute(new CQLAttribute("id",CQLPredicate.EQUAL_TO,"1"));
-		association.setSourceRoleName("keyCollection");
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.onetomany.unidirectional.LatchKey");
-		target.setAssociation(association);
-		cqlQuery.setTarget(target);
-
-		Collection results = getApplicationService().query(cqlQuery);
 
 		assertNotNull(results);
 		assertEquals(1,results.size());
