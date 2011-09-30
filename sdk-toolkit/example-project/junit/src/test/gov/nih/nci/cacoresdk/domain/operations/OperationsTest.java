@@ -1,18 +1,14 @@
 package test.gov.nih.nci.cacoresdk.domain.operations;
 
 import gov.nih.nci.cacoresdk.domain.onetoone.unidirectional.Address;
-import gov.nih.nci.cacoresdk.domain.operations.*;
+import gov.nih.nci.cacoresdk.domain.operations.ChildTest;
+import gov.nih.nci.cacoresdk.domain.operations.Site;
+import gov.nih.nci.cacoresdk.domain.operations.Specimen;
 import gov.nih.nci.system.applicationservice.ApplicationException;
-import gov.nih.nci.system.query.cql.CQLObject;
-import gov.nih.nci.system.query.cql.CQLQuery;
 
-import java.io.Serializable;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.List;
 
 import test.gov.nih.nci.cacoresdk.SDKTestBase;
 
