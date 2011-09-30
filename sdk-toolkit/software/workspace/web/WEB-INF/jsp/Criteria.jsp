@@ -132,7 +132,7 @@ if(className != null)
 			   	
 		<tr align="left" valign="top">
 			<td class="formRequiredNotice" width="5px">&nbsp;</td>
-			<td class="formLabel" align="right"><%=attrNameLabel%>:</td>
+			<td class="formLabel" align="right"><label for="<%=attrNameLabel%>"><%=attrNameLabel%>:</label></td>
 		<%
 			if (isIsoDataTypeAttr) { // ISO Data Type
 		%>
@@ -150,8 +150,8 @@ if(className != null)
 		  <%}%>
 		<tr align="left" valign="top">
 			<td class="formRequiredNotice" width="5px">&nbsp;</td>
-			<td class="formLabel" align="right">Search Object: </td>
-			<td class="formField" width="90%"><SELECT tabIndex="100" class="formFieldSized" size="1" NAME=searchObj STYLE="width:90%">
+			<td class="formLabel" align="right"><label for="searchObj">Search Object:</label></td>
+			<td class="formField" width="90%"><SELECT tabIndex="100" class="formFieldSized" size="1" NAME="searchObj" ID="searchObj" STYLE="width:90%">
 			<% if(domainNames != null)
 			   { if(!((String)domainNames.get(0)).equals("Please choose")) domainNames.add(0, "Please choose");
 			   %>

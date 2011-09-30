@@ -72,27 +72,27 @@
 					      <a class="mainMenuLink" href="Home.action">Home</a>
 					    </td>
 					    <!-- link 1 ends -->
-					    <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt="" /></td>
+					    <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt="Main Menu Tab Separator Image" /></td>
 					    <!-- link 2 begins -->
 					    <td height="20" class="mainMenuItemOver" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItemOver'),hideCursor()" onclick="document.location.href='ShowDynamicTree.action'">
 					      <a class="mainMenuLink" href="ShowDynamicTree.action">Criteria</a>
 					    </td>
 					    <!-- link 2 ends -->
-					    <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt=""/></td>
+					    <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt="Main Menu Tab Separator Image"/></td>
 					    <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" onclick="document.location.href='docs'">
 					      <a class="mainMenuLink" href="docs">Domain Java Docs</a>
 					    </td>
 					    <!-- link 3 ends -->
-					    <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt=""/></td>
+					    <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt="Main Menu Tab Separator Image"/></td>
 					    <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" onclick="document.location.href='docs/system'">
 					      <a class="mainMenuLink" href="docs/system">API Java Docs</a>
 					    </td>
 					    <!-- link 3 ends -->
-					    <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt=""/></td>
+					    <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt="Main Menu Tab Separator Image"/></td>
 					    <td height="20" width="100%">&nbsp;</td> 
 					    <!-- link 3 begins -->
 					    <%if(isSecurityEnabled){ %>
-					    <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt=""/></td>
+					    <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt="Main Menu Tab Separator Image"/></td>
 					    <td height="20" width="100%" align="right" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()">
 					      <a class="mainMenuLink" href="j_acegi_logout">Logout</a>
 					    </td> 
@@ -134,7 +134,7 @@
 															    treeSelectedTopic="treeSelected">
 															</sx:tree> 
 															</div>														
-															<img width="400" height="1"/>														
+															<img width="400" height="1" alt="Layout Spacer"/>														
 														</td>
 														<td valign="top" id="displayId">
 														</td>									
