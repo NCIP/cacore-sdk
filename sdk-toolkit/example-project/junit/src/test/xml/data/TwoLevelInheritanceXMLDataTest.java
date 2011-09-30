@@ -8,7 +8,7 @@ import gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.Monitor;
 import java.util.Collection;
 import java.util.Iterator;
 
-import test.xml.mapping.SDKXMLDataTestBase;
+import test.xml.data.SDKXMLDataTestBase;
 
 public class TwoLevelInheritanceXMLDataTest extends SDKXMLDataTestBase
 {

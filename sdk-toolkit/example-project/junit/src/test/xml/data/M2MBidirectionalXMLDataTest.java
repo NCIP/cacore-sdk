@@ -7,7 +7,7 @@ import gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.sametable.Organiza
 import gov.nih.nci.cacoresdk.domain.manytomany.bidirectional.Employee;
 import gov.nih.nci.cacoresdk.domain.manytomany.bidirectional.Project;
 
-import test.xml.mapping.SDKXMLDataTestBase;
+import test.xml.data.SDKXMLDataTestBase;
 
 public class M2MBidirectionalXMLDataTest extends SDKXMLDataTestBase
 {

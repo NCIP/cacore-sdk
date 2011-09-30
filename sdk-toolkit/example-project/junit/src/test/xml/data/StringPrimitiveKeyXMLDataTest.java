@@ -6,7 +6,7 @@ import gov.nih.nci.system.applicationservice.ApplicationException;
 import java.util.Collection;
 import java.util.Iterator;
 
-import test.xml.mapping.SDKXMLDataTestBase;
+import test.xml.data.SDKXMLDataTestBase;
 
 public class StringPrimitiveKeyXMLDataTest extends SDKXMLDataTestBase
 {

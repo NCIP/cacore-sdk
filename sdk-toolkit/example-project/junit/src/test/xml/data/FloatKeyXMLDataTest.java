@@ -5,7 +5,7 @@ import java.util.Iterator;
 
 import gov.nih.nci.cacoresdk.domain.other.primarykey.FloatKey;
 
-import test.xml.mapping.SDKXMLDataTestBase;
+import test.xml.data.SDKXMLDataTestBase;
 
 public class FloatKeyXMLDataTest extends SDKXMLDataTestBase
 {

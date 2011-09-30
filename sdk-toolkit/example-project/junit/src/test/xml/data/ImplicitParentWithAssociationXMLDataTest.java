@@ -13,7 +13,7 @@ import gov.nih.nci.cacoresdk.domain.inheritance.implicit.TankAccessory;
 import java.util.Collection;
 import java.util.Iterator;
 
-import test.xml.mapping.SDKXMLDataTestBase;
+import test.xml.data.SDKXMLDataTestBase;
 
 public class ImplicitParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 {

@@ -6,7 +6,7 @@ import java.util.Iterator;
 import gov.nih.nci.cacoresdk.domain.manytomany.bidirectional.selfassociation.MemberM2MBS;
 
 
-import test.xml.mapping.SDKXMLDataTestBase;
+import test.xml.data.SDKXMLDataTestBase;
 
 public class M2MBidirectionalSelfassociationXMLDataTest extends SDKXMLDataTestBase
 {

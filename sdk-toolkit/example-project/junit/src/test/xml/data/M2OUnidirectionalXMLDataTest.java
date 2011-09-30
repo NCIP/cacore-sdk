@@ -7,7 +7,7 @@ import gov.nih.nci.cacoresdk.domain.manytoone.unidirectional.Chef;
 import gov.nih.nci.cacoresdk.domain.manytoone.unidirectional.Restaurant;
 import gov.nih.nci.cacoresdk.domain.manytoone.unidirectional.withjoin.Album;
 import gov.nih.nci.cacoresdk.domain.manytoone.unidirectional.withjoin.Song;
-import test.xml.mapping.SDKXMLDataTestBase;
+import test.xml.data.SDKXMLDataTestBase;
 
 public class M2OUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 {

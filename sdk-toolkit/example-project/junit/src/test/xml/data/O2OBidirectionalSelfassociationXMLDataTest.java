@@ -7,7 +7,7 @@ import gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.selfassociation.Membe
 import java.util.Collection;
 import java.util.Iterator;
 
-import test.xml.mapping.SDKXMLDataTestBase;
+import test.xml.data.SDKXMLDataTestBase;
 
 public class O2OBidirectionalSelfassociationXMLDataTest extends SDKXMLDataTestBase
 {

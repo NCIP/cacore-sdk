@@ -6,7 +6,7 @@ import java.util.Iterator;
 import gov.nih.nci.cacoresdk.domain.other.primarykey.FloatKey;
 import gov.nih.nci.cacoresdk.domain.other.primarykey.IntegerKey;
 
-import test.xml.mapping.SDKXMLDataTestBase;
+import test.xml.data.SDKXMLDataTestBase;
 
 public class IntegerKeyXMLDataTest extends SDKXMLDataTestBase
 {
