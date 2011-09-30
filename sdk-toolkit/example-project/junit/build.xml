@@ -399,22 +399,6 @@
 	</target>
 
 	<!-- ************************************************************************************************-->
-	<!--                                Run JUnits for CQL Query        	                                                                            -->
-	<!-- ************************************************************************************************-->
-
-	<target name="cqlQueryThickClientTest" depends="createDir">
-		<SDKCompileJUnit compileClasspath="local-client-cp" includePattern="**/*CQL*.java" excludePattern="" />
-		<SDKRunJUnit junitClasspath="local-client-cp" junitOutputDir="${report.dir.thick-client.cql.query}" includePattern="**/*CQL*Test.class" excludePattern="" junitreportfile="TEST-cqlQueryThickClient.xml"/>
-		<SDKGenerateReport junitOutputDir="${report.dir.thick-client.cql.query}" />
-	</target>
-
-	<target name="cqlQueryRemoteClientTest" depends="createDir">
-		<SDKCompileJUnit compileClasspath="remote-client-cp" includePattern="**/*CQL*.java" excludePattern="" />
-		<SDKRunJUnit junitClasspath="remote-client-cp" junitOutputDir="${report.dir.remote-client.cql.query}" includePattern="**/*CQL*Test.class" excludePattern="" junitreportfile="TEST-cqlQueryRemoteClient.xml"/>
-		<SDKGenerateReport junitOutputDir="${report.dir.remote-client.cql.query}" />
-	</target>
-	
-	<!-- ************************************************************************************************-->
 	<!--                                Run JUnits for ApplicationService Tests                             	                            -->
 	<!-- ************************************************************************************************-->
 
