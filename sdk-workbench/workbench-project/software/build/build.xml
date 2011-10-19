@@ -36,18 +36,14 @@
 	<property name="project.dist.dir" location="../target/dist" />
 	<property name="project.dist.workbench.runtime.dir" location="${project.dist.dir}/workbench-runtime" />
 
-	<property name="ivy.def.file" location="ivy.xml" />
-
 	<property name="build.dir" location="${software.dir}/build" />
 	<property name="common.dir" location="${software.dir}/common" />
 	<property name="local.repo.dir" location="${software.dir}/local-ivy-repo" />
 	<property name="target.dir" location="${software.dir}/target" />
-	<property name="bda-download.dir" location="${target.dir}/bda-download" />
-	<property name="ivy.settings.dir" location="${common.dir}" />
 	<property name="lib.dir" location="${target.dir}/lib" />
 	<property name="temp.dir" location="${target.dir}/temp" />
 	<property name="reports.dir" location="${target.dir}/reports" />
-	<property name="bda-utils.dir" location="${target.dir}/bda-utils" />
+	<property name="build-utils.dir" location="${target.dir}/build-utils" />
 	<property name="log.dir" location="${target.dir}/logs" />
 	<property name="dist.dir" location="${target.dir}/dist" />
 	<property name="download.dir" location="${target.dir}/download" />
@@ -91,6 +87,13 @@
 	<target name="init" >
 		<SDKecho message="${ant.project.name}: Preparing directories"/>
 		<mkdir dir="${dist.dir}"/>
+		<mkdir dir="${dist.dir}/workbench-runtime"/>
+		<copy todir="${dist.dir}/workbench-runtime" overwrite="true">
+			<fileset dir="${software.dir}/../../common/lib">
+				<include name="**/*" />
+			</fileset>
+		</copy>
+		
 	</target>
 
 	<!--***********************************************************************
@@ -114,7 +117,7 @@
 	<!--***********************************************************************
 	*** Compiles the workbench classes
 	*********************************************************************** -->
-	<target name="build:all" depends="package:sdk:src,build:workspace-modules,ivy:package-workbench,dist:workbench:artifacts" description="Call modules build target to produce artifacts">
+	<target name="build:all" depends="package:sdk:src,build:workspace-modules,dist:workbench:artifacts" description="Call modules build target to produce artifacts">
 		<SDKecho message="${ant.project.name}: Building the workbench source"/>
 		<ant antfile="${software.modules.dir}/build.xml" target="build:all" inheritall="false" inheritrefs="false"/>
 	</target>
@@ -127,10 +130,6 @@
 		<ant antfile="${software.modules.dir}/build.xml" target="build:all" inheritall="false" inheritrefs="false"/>
 	</target>
 
-	<target name="ivy:package-workbench" depends="ivy:init">
-		<ivy:resolve refresh="true" conf="workbench-runtime" />
-		<ivy:retrieve pattern="${project.dist.dir}/[conf]/[artifact]-[revision].[ext]" conf="workbench-runtime" />
-	</target>
 
 	<target name="dist:workbench:artifacts" description="Distributes the workbench artifacts to the dist/exploded folder">
 		<copy toDir="${dist.exploded.dir}">

@@ -37,18 +37,6 @@
 	<!-- ** MAIN TARGETS                                                  ** -->
 	<!-- ******************************************************************* -->
 
-	<target name="ivy:setup" depends="ivy:setup-runtime, 
-	        ivy:setup-compile" description="Updates the local ivy repository for all build and test dependencies." />
-
-	<target name="ivy:setup-runtime" depends="ivy:init">
-		<ivy:resolve refresh="true" conf="runtime" />
-		<ivy:retrieve pattern="${module.lib.dir}/[conf]/[artifact]-[revision].[ext]" conf="runtime" />
-	</target>
-
-	<target name="ivy:setup-compile" depends="ivy:init">
-		<ivy:resolve refresh="true" conf="compile" />
-		<ivy:retrieve pattern="${module.lib.dir}/[conf]/[artifact]-[revision].[ext]" conf="compile" />
-	</target>
 
 
 	<!-- This will delete all of the files created by the build process -->
@@ -62,14 +50,14 @@
 		<mkdir dir="${src.java.dir}" />
 	</target>
 
-	<target name="compile:application-code" depends="-init, ivy:setup-compile" description="Compiles all subproject code">
+	<target name="compile:application-code" depends="-init" description="Compiles all subproject code">
 		<mkdir dir="${build.classes.dir}" />
 		<javac srcdir="${src.java.dir}" destdir="${build.classes.dir}" debug="true">
 			<classpath refid="project.compile.classpath" />
 		</javac>
 	</target>
 
-	<target name="jar" depends="compile:application-code,ivy:setup-runtime">
+	<target name="jar" depends="compile:application-code">
 		<jar destfile="${module.lib.dir}/${jar.name}">
 			<fileset dir="${build.classes.dir}" />
 			<fileset dir="${src.java.dir}" />
@@ -85,7 +73,7 @@
 	</target>
 
 	<!-- removed test target dependency -->
-	<target name="build:all" depends="-pre-clean,-init,jar,ivy:publish,post-clean" description="Default target" >
+	<target name="build:all" depends="-pre-clean,-init,jar,post-clean" description="Default target" >
 	</target>
 
 </project>
