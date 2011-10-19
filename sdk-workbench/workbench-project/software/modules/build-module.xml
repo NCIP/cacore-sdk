@@ -17,14 +17,17 @@
 
 	<property name="ivy.def.file" location="ivy.xml" />
 
-	<property name="runtime.lib.dir" location="${module.lib.dir}/runtime" />
-	<property name="compile.lib.dir" location="${module.lib.dir}/compile" />
+	<property name="lib.dir" location="${software.dir}/../../common/lib" />
+	<property name="runtime.lib.dir" location="${lib.dir}" />
+	<property name="compile.lib.dir" location="${lib.dir}" />
 	<property name="src.java.dir" value="${basedir}/src" />
 	<property name="build.classes.dir" value="${target.dir}/modules/${module.name}/classes" />
 	
 	<target name="clean:dependencies">
+		<!--
 		<delete dir="${compile.lib.dir}" />
-		<delete dir="${runtime.lib.dir}" />
+		<delete dir="${runtime.lib.dir}" />  
+		-->
 	</target>
 
 	<path id="project.compile.classpath">
@@ -48,6 +51,8 @@
 	<!-- This sets up all of the neccessary directories -->
 	<target name="-init" depends="-pre-clean">
 		<mkdir dir="${src.java.dir}" />
+		<echo message="************************************************${module.lib.dir}"/>
+		<mkdir dir="${module.lib.dir}" />
 	</target>
 
 	<target name="compile:application-code" depends="-init" description="Compiles all subproject code">
