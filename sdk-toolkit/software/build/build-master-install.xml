@@ -5,10 +5,9 @@ $HeadURL$
 -->
 
 <project name="bda-blueprints-installer" default="upgrade" basedir="."
-	xmlns:ivy="antlib:org.apache.ivy.ant"
 	>
 	<description>
-		This build file is part of the bda-build-templates project. This is the master install file for the project.  It should be placed in project/software.  This script is copied into the distribution and  executed from the extracted distribution.  It is run by typing "ant" from the master project build.xml or from command line. This script has two flows install and upgrade.
+		This build file is part of the build-templates project. This is the master install file for the project.  It should be placed in project/software.  This script is copied into the distribution and  executed from the extracted distribution.  It is run by typing "ant" from the master project build.xml or from command line. This script has two flows install and upgrade.
 		Install will do the following
  			* Install binaries
 			* Configure binaries
@@ -46,7 +45,7 @@ $HeadURL$
 	<property file="${properties.file}" />
 
 	<!-- Generic properties -->
-	<property name="project.name" value="bda-blueprints"/>
+	<property name="project.name" value="build-blueprints"/>
 	<property name="env.name" value="local"/>
 	<property name="log.dir" location="${basedir}/logs" />
 	<property name="working.dir" location="${basedir}/working" />
@@ -55,7 +54,7 @@ $HeadURL$
 
 	<!-- Install Time properties -->
 	<!-- Source and target directories -->
-	<property name="bda-utils.dir" location="${basedir}/bda-utils" />
+	<property name="build-utils.dir" location="${basedir}/build-utils" />
 	<property name="tools.dir" location="${basedir}/${tools.dist.relative.dir}" />
 	<property name="common.dir.src" location="${basedir}/${common.dist.relative.dir}" />
 	<property name="common.dir.dest" location="${working.dir}/${common.dist.relative.dir}" />
@@ -70,10 +69,10 @@ $HeadURL$
 	<property name="cagrid-target.dir" location="${sync-gts.dir}/cagrid-target"/>
 
 	<!-- *-ds.xml and WAR -->
-	<property name="bda-blueprints-webapp.dir.dist" location="${basedir}/${bda-blueprints-webapp.dist.relative.dir}" />
-	<property name="bda-blueprints-webapp.ds.file" value="bda-blueprints-ds.xml" />
-	<property name="bda-blueprints-webapp.name" value="bda-blueprints-webapp" />
-	<property name="bda-blueprints-webapp.war.file" value="${bda-blueprints-webapp.name}.war" />
+	<property name="build-blueprints-webapp.dir.dist" location="${basedir}/${build-blueprints-webapp.dist.relative.dir}" />
+	<property name="build-blueprints-webapp.ds.file" value="build-blueprints-ds.xml" />
+	<property name="build-blueprints-webapp.name" value="build-blueprints-webapp" />
+	<property name="build-blueprints-webapp.war.file" value="${build-blueprints-webapp.name}.war" />
 	<!-- Added to make sure that it works with both absolute and relative paths, this property is handed to sub-project scripts in absolute format. -->
 	<property name="jar-signing.keystore.abs-location" location="${jar-signing.keystore.location}"/>
 
@@ -88,20 +87,20 @@ $HeadURL$
 	<property name="resource.file.jboss-globus-war" value="${cagrid-base-war.binaries.file}" />
 
 	<!-- Paths -->
-	<path id="bda-utils.classpath">
-		<fileset dir="${bda-utils.dir}">
+	<path id="build-utils.classpath">
+		<fileset dir="${build-utils.dir}">
 			<include name="**/*.jar" />
 		</fileset>
 	</path>
 	<!-- Task definitions -->
-	<taskdef uri="antlib:org.apache.ant.antunit" resource="org/apache/ant/antunit/antlib.xml" classpathref="bda-utils.classpath"/>
-	<taskdef name="for" classname="net.sf.antcontrib.logic.ForTask" classpathref="bda-utils.classpath"/>
-	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="bda-utils.classpath"/>
-	<taskdef resource="liquibasetasks.properties" classpathref="bda-utils.classpath"/>
-	<taskdef name="groovy" classname="org.codehaus.groovy.ant.Groovy" classpathref="bda-utils.classpath"/>
+	<taskdef uri="antlib:org.apache.ant.antunit" resource="org/apache/ant/antunit/antlib.xml" classpathref="build-utils.classpath"/>
+	<taskdef name="for" classname="net.sf.antcontrib.logic.ForTask" classpathref="build-utils.classpath"/>
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="build-utils.classpath"/>
+	<taskdef resource="liquibasetasks.properties" classpathref="build-utils.classpath"/>
+	<taskdef name="groovy" classname="org.codehaus.groovy.ant.Groovy" classpathref="build-utils.classpath"/>
 
 	<!-- Includes-->
-	<import file="${bda-utils.dir}/bda-build-utils-${bda.version}.xml" />
+	<import file="${build-utils.dir}/build-utils-${build.version}.xml" />
 
 	<!-- Clean/make working dir -->
 	<delete dir="${working.dir}" failonerror="false"/>
@@ -174,7 +173,7 @@ $HeadURL$
                             <property name="jboss.server.binding.template.location" value="${basedir}/${jboss-bindings.file}"/>
                             <property name="jboss.server.bindingfile.location" value="${jboss.home}/server/${jboss.server.name}/conf/bindingservice.beans/META-INF/bindings-jboss-beans.xml"/>
                             <property name="temp.ejb.file" value="${temp.dir}/ejb3-connectors-jboss-beans.xml"/>
-                            <copy file="${bda-utils.dir}/resource/jboss-5.1.0.GA/ejb3-connectors-jboss-beans.xml" tofile="${temp.ejb.file}"/>
+                            <copy file="${build-utils.dir}/resource/jboss-5.1.0.GA/ejb3-connectors-jboss-beans.xml" tofile="${temp.ejb.file}"/>
                             <!--
                             <jboss51-bindings-nci
                                 jboss.server.bindingfile.location="${jboss-bindings.file}"
@@ -194,10 +193,10 @@ $HeadURL$
                 <if>
                     <equals arg1="${jboss.major.version}" arg2="4"/>
                     <then>
-                        <property name="jboss.server.binding.template.location" value="${bda-utils.dir}/resource/${jboss.binaries.relative.dir}/bindings.xml"/>
+                        <property name="jboss.server.binding.template.location" value="${build-utils.dir}/resource/${jboss.binaries.relative.dir}/bindings.xml"/>
                     </then>
                     <else>
-                        <property name="jboss.server.binding.template.location" value="${bda-utils.dir}/resource/${jboss.binaries.relative.dir}/bindings-jboss-beans.xml"/>
+                        <property name="jboss.server.binding.template.location" value="${build-utils.dir}/resource/${jboss.binaries.relative.dir}/bindings-jboss-beans.xml"/>
 
                     </else>
                 </if>
@@ -207,10 +206,10 @@ $HeadURL$
         <if>
             <equals arg1="${jboss.http-connector.remove}" arg2="true"/>
             <then>
-                <property name="jboss.application.url" value="https://${jboss.server.hostname}:${jboss.grid.secure.port}/${bda-blueprints-webapp.name}"/>
+                <property name="jboss.application.url" value="https://${jboss.server.hostname}:${jboss.grid.secure.port}/${build-blueprints-webapp.name}"/>
             </then>
             <else>
-                <property name="jboss.application.url" value="http://${jboss.server.hostname}:${jboss.server.port}/${bda-blueprints-webapp.name}"/>
+                <property name="jboss.application.url" value="http://${jboss.server.hostname}:${jboss.server.port}/${build-blueprints-webapp.name}"/>
             </else>
         </if>
     </target>
@@ -234,10 +233,10 @@ $HeadURL$
 		<if>
 			<equals arg1="${jboss.http-connector.remove}" arg2="true"/>
 			<then>
-				<property name="tomcat.application.url" value="http://${tomcat.hostname}:${tomcat.port.http}/${bda-blueprints-webapp.name}"/>
+				<property name="tomcat.application.url" value="http://${tomcat.hostname}:${tomcat.port.http}/${build-blueprints-webapp.name}"/>
 			</then>
 			<else>
-				<property name="tomcat.application.url" value="https://${tomcat.hostname}:${tomcat.grid.secure.port}/${bda-blueprints-webapp.name}"/>
+				<property name="tomcat.application.url" value="https://${tomcat.hostname}:${tomcat.grid.secure.port}/${build-blueprints-webapp.name}"/>
 			</else>
 		</if>
 
@@ -251,24 +250,24 @@ $HeadURL$
 
 
 	<target name="common:init" depends="common:init:pre">
-		<!-- bda-blueprints-webapp can use either Oracle or MySQL or PostgreSQL as its database platform, this is controled by the database.type property.  Based on the value of this property sent several variables for use during install -->
+		<!-- build-blueprints-webapp can use either Oracle or MySQL or PostgreSQL as its database platform, this is controled by the database.type property.  Based on the value of this property sent several variables for use during install -->
 		<echoproperties prefix="database"/>
 		<switch value="${database.type}">
 			<case value="oracle">
 				<property name="database.dialect" value="org.hibernate.dialect.OracleDialect"/>
-				<property name="database.driver.file" value="${bda-utils.dir}/ojdbc14-10.2.0.3.0.jar"/>
+				<property name="database.driver.file" value="${build-utils.dir}/ojdbc14-10.2.0.3.0.jar"/>
 				<property name="database.driver" value="oracle.jdbc.driver.OracleDriver"/>
 				<property name="database.schema" value="${database.name}"/>
 			</case>
 			<case value="mysql">
 				<property name="database.dialect" value="org.hibernate.dialect.MySQLDialect"/>
-				<property name="database.driver.file" value="${bda-utils.dir}/mysql-connector-java-5.1.13.jar"/>
+				<property name="database.driver.file" value="${build-utils.dir}/mysql-connector-java-5.1.13.jar"/>
 				<property name="database.driver" value="com.mysql.jdbc.Driver"/>
 				<property name="database.schema" value="${database.name}"/>
 			</case>
 			<case value="postgresql">
 				<property name="database.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
-				<property name="database.driver.file" value="${bda-utils.dir}/postgresql-8.4-701.jdbc3.jar"/>
+				<property name="database.driver.file" value="${build-utils.dir}/postgresql-8.4-701.jdbc3.jar"/>
 				<property name="database.driver" value="org.postgresql.Driver"/>
 				<property name="database.schema" value="public"/>
 			</case>
@@ -456,32 +455,32 @@ $HeadURL$
 			/>
 	</target>
 
-	<target name="install:jboss:bda-blueprints-webapp:filesystem-data"  depends="common:jboss:init, common:init">
+	<target name="install:jboss:build-blueprints-webapp:filesystem-data"  depends="common:jboss:init, common:init">
 		<!-- This target is a place holder for creating a file-system data repository.  If you do not use one you can remove this target and all targets that refer to it. If you require a certain directory structure be sure to create it here.  If you need to copy in files, make sure to check them into svn, copy them into the distribution and then copy them to thier ultimate directory.  If your data needs to be refreshed with each install make sure to delete the base directory, then create the structure and copy in data.  Also you can use an archive file with relative pathing inside to build out the structure if you like, using an archive like zip may shrink the footprint in svn.
 		<mkdir dir="${fs-data.base.dir}"/>
 		<mkdir dir="${fs-data.base.dir}/scratch"/>
-		<copy file="${bda-blueprints-webapp.dir.dist}/${bda-blueprints-webapp.war.file}" todir="${fs-data.base.dir}/scratch" overwrite="true" />
+		<copy file="${build-blueprints-webapp.dir.dist}/${build-blueprints-webapp.war.file}" todir="${fs-data.base.dir}/scratch" overwrite="true" />
 		-->
 	</target>
 
-	<target name="install:jboss:bda-blueprints-webapp" description="Deploy bda-blueprints-webapp and common libraries to jboss installation" unless="exclude.jboss" depends="common:jboss:init, common:init,install:jboss:bda-blueprints-webapp:filesystem-data">
+	<target name="install:jboss:build-blueprints-webapp" description="Deploy build-blueprints-webapp and common libraries to jboss installation" unless="exclude.jboss" depends="common:jboss:init, common:init,install:jboss:build-blueprints-webapp:filesystem-data">
 		<!-- added to ensure working.dirs are fresh for our install -->
 		<delete dir="${jboss.home}/server/${jboss.server.name}/tmp"/>
 		<delete dir="${jboss.home}/server/${jboss.server.name}/work"/>
 		<move file="${jboss.home}/server/${jboss.server.name}/log/server.log" tofile="${jboss.home}/server/${jboss.server.name}/log/server/log.${install.time}" failonerror="false"/>
 
-		<copy file="${bda-blueprints-webapp.dir.dist}/${bda-blueprints-webapp.war.file}" todir="${jboss.home}/server/${jboss.server.name}/deploy" overwrite="true" />
+		<copy file="${build-blueprints-webapp.dir.dist}/${build-blueprints-webapp.war.file}" todir="${jboss.home}/server/${jboss.server.name}/deploy" overwrite="true" />
 		<!--  Many NCI applications require clm for csm, so you can point this to where you have the version you want to use
-		<copy file="${bda-utils.dir}/clm-3.2.jar" todir="${jboss.home}/server/${jboss.server.name}/lib" overwrite="true" />
+		<copy file="${build-utils.dir}/clm-3.2.jar" todir="${jboss.home}/server/${jboss.server.name}/lib" overwrite="true" />
 		-->
 		<copy file="${database.driver.file}" todir="${jboss.home}/server/${jboss.server.name}/lib" overwrite="true" />
 	</target>
 
-	<target name="install:jboss:bda-blueprints-webapp:configure" description="Configure bda-blueprints-webapp application, copies over externalized properties or configurations that are not part of the jboss configuration" unless="exclude.jboss" depends="common:jboss:init, common:init">
+	<target name="install:jboss:build-blueprints-webapp:configure" description="Configure build-blueprints-webapp application, copies over externalized properties or configurations that are not part of the jboss configuration" unless="exclude.jboss" depends="common:jboss:init, common:init">
 		<!-- copy over any other files you may need to configure your application -->
 
 		<!-- copy datasource file -->
-		<copy file="${jboss-conf.dir.dest}/${bda-blueprints-webapp.ds.file}" todir="${jboss.home}/server/${jboss.server.name}/deploy" overwrite="true" />
+		<copy file="${jboss-conf.dir.dest}/${build-blueprints-webapp.ds.file}" todir="${jboss.home}/server/${jboss.server.name}/deploy" overwrite="true" />
 		<!-- copy JBoss-web.xml file -->
 		<!--
 		<copy file="${jboss-conf.dir.dest}/${jboss.web.xml.file}" todir="${jboss.home}/server/${jboss.server.name}/deploy" overwrite="true" />
@@ -607,7 +606,7 @@ $HeadURL$
 	</target>
 
 
-	<!-- Calls to bda macros for basic functionality -->
+	<!-- Calls to build macros for basic functionality -->
 	<target name="install:jboss:stop" description="Stops jboss" unless="jboss.running" depends="common:jboss:init,common:init,check-port">
 	  <echo message="Stopping JBoss running at - ${jboss.server.hostname}:${jboss.server.port}"/>
 		<if>
@@ -707,7 +706,7 @@ $HeadURL$
 					<if>
 						<equals arg1="@{jboss.major.version}" arg2="5"/>
 							<then>
-								<exec osfamily="windows" executable="${bda-utils.resource.dir}/psexec.exe" dir="@{jboss.home}/bin" spawn="true" >
+								<exec osfamily="windows" executable="${build-utils.resource.dir}/psexec.exe" dir="@{jboss.home}/bin" spawn="true" >
 									<env key="NOPAUSE" value="true" />
 									<env key="JBOSS_HOME" value=""/>
 									<arg line="-d -i -w @{jboss.home}/bin @{jboss.home}/bin/run.bat -c @{jboss.server.name} -b 0.0.0.0" />
@@ -717,7 +716,7 @@ $HeadURL$
 						<else>
 							<then>
 								<echo message="starting without binding address 0.0.0.0" />
-								<exec osfamily="windows" executable="${bda-utils.resource.dir}/psexec.exe" dir="@{jboss.home}/bin" spawn="true" >
+								<exec osfamily="windows" executable="${build-utils.resource.dir}/psexec.exe" dir="@{jboss.home}/bin" spawn="true" >
 									<env key="NOPAUSE" value="true" />
 									<env key="JBOSS_HOME" value=""/>
 									<arg line="-d -i -w @{jboss.home}/bin @{jboss.home}/bin/run.bat -c @{jboss.server.name}" />
@@ -731,14 +730,14 @@ $HeadURL$
 		</sequential>
 	</macrodef>
 	
-	<target name="install:common:validation:pre-install" description="Runs pre-install validation checks bda-utils" depends="common:init">
+	<target name="install:common:validation:pre-install" description="Runs pre-install validation checks build-utils" depends="common:init">
 		<validate-pre-install-common
 			ant.check.version="${ant.minimum.version}"
 			java.check.version.major="${java.major.version}"
 			java.check.version.minor="${java.minor.version}"
 			/>
 	</target>
-	<target name="install:jboss:validation:pre-install" description="Runs pre-install validation checks bda-utils"
+	<target name="install:jboss:validation:pre-install" description="Runs pre-install validation checks build-utils"
 		depends="
 		common:jboss:init,common:init,
 		install:common:validation:pre-install
@@ -746,7 +745,7 @@ $HeadURL$
 		<validate-pre-install-jboss
 			/>
 	</target>
-	<target name="install:tomcat:validation:pre-install" description="Runs pre-install validation checks bda-utils"
+	<target name="install:tomcat:validation:pre-install" description="Runs pre-install validation checks build-utils"
 		depends="
 		common:tomcat:init,
 		common:init,
@@ -755,7 +754,7 @@ $HeadURL$
 		<validate-pre-install-tomcat
 			/>
 	</target>
-	<target name="install:database:validation:pre-install" description="Runs pre-install validation checks bda-utils"
+	<target name="install:database:validation:pre-install" description="Runs pre-install validation checks build-utils"
 		depends="
 		common:init,
 		install:common:validation:pre-install
@@ -801,13 +800,13 @@ $HeadURL$
 			/>
 	</target>
 
-	<target name="install:common:validation:post-install" description="Run post-install checks from bda-utils"
+	<target name="install:common:validation:post-install" description="Run post-install checks from build-utils"
 		depends="
 		common:init
 		">
 		<validate-post-common />
 	</target>
-	<target name="install:jboss:validation:post-install" description="Run post-install checks from bda-utils"
+	<target name="install:jboss:validation:post-install" description="Run post-install checks from build-utils"
 		depends="
 		common:jboss:init,
 		common:init,
@@ -822,7 +821,7 @@ $HeadURL$
 			</then>
 		</if>
 	</target>
-	<target name="install:tomcat:validation:post-install" description="Run post-install checks from bda-utils"
+	<target name="install:tomcat:validation:post-install" description="Run post-install checks from build-utils"
 		depends="
 		common:tomcat:init,
 		common:init,
@@ -850,9 +849,9 @@ $HeadURL$
 		install:jboss:validation:pre-install:ports,
 		install:jboss:clean,
 		install:jboss:binaries,
-		install:jboss:bda-blueprints-webapp:re-configure,
-		install:jboss:bda-blueprints-webapp,
-		install:jboss:bda-blueprints-webapp:configure,
+		install:jboss:build-blueprints-webapp:re-configure,
+		install:jboss:build-blueprints-webapp,
+		install:jboss:build-blueprints-webapp:configure,
 		install:jboss:configure,
 		install:jboss:grid,
 		install:jboss:grid:configure,
@@ -874,9 +873,9 @@ $HeadURL$
 		install:tomcat:clean,
 		install:tomcat:binaries,
 		install:tomcat:configure,
-		install:tomcat:bda-blueprints-webapp:re-configure,
-		install:tomcat:bda-blueprints-webapp,
-		install:tomcat:bda-blueprints-webapp:configure,
+		install:tomcat:build-blueprints-webapp:re-configure,
+		install:tomcat:build-blueprints-webapp,
+		install:tomcat:build-blueprints-webapp:configure,
 		install:tomcat:grid,
 		install:tomcat:grid:configure,
 		install:post:tomcat,
@@ -909,14 +908,14 @@ $HeadURL$
 		">
 	</target>
 
-	<target name="install:jboss:bda-blueprints-webapp:re-configure" description="Update contents of artifacts if not all properties have been externalized, by extracting artifact, modify it as needed and re-archive it." unless="exclude.jboss"  depends="common:init">
-<!--		<copy file="${bda-blueprints-webapp.dir.dist}/${bda-blueprints-webapp.war.file}" todir="${jboss.home}/server/${jboss.server.name}/deploy" overwrite="true" />
+	<target name="install:jboss:build-blueprints-webapp:re-configure" description="Update contents of artifacts if not all properties have been externalized, by extracting artifact, modify it as needed and re-archive it." unless="exclude.jboss"  depends="common:init">
+<!--		<copy file="${build-blueprints-webapp.dir.dist}/${build-blueprints-webapp.war.file}" todir="${jboss.home}/server/${jboss.server.name}/deploy" overwrite="true" />
 		<if>
 			<equals arg1="${jar-signing.execution.time}" arg2="install"/>
 			<then>
 				<echo message="jar-signing.execution.time set to install, signing jars"/>
 				<sign-jars
-					jars.archive.file="${bda-blueprints-webapp.dir.dist}/${bda-blueprints-webapp.war.file}"
+					jars.archive.file="${build-blueprints-webapp.dir.dist}/${build-blueprints-webapp.war.file}"
 					jars.archive.relative.dir="WEB-INF/lib"
 					/>
 			</then>
@@ -925,13 +924,13 @@ $HeadURL$
 			</else>
 		</if>-->
 		<!-- This is only required if configuration files are not externalized, below is a sample of what you may do.
-		<delete dir="${working.dir}/bda-blueprints-webapp"/>
-		<unzip src="${bda-blueprints-webapp.dir.dist}/${bda-blueprints-webapp.war.file}" dest="${working.dir}/bda-blueprints-webapp"/>
-		<copy todir="${working.dir}/bda-blueprints-webapp/WEB-INF/classes" file="${jboss-conf.dir.dest}/hibernate.cfg.xml"/>
+		<delete dir="${working.dir}/build-blueprints-webapp"/>
+		<unzip src="${build-blueprints-webapp.dir.dist}/${build-blueprints-webapp.war.file}" dest="${working.dir}/build-blueprints-webapp"/>
+		<copy todir="${working.dir}/build-blueprints-webapp/WEB-INF/classes" file="${jboss-conf.dir.dest}/hibernate.cfg.xml"/>
 
-		<move file="${bda-blueprints-webapp.dir.dist}/${bda-blueprints-webapp.war.file}" tofile="${bda-blueprints-webapp.dir.dist}/${bda-blueprints-webapp.war.file}.orig"/>
-		<war destfile="${bda-blueprints-webapp.dir.dist}/${bda-blueprints-webapp.war.file}" compress="false" webxml="${working.dir}/bda-blueprints-webapp/WEB-INF/web.xml" >
-			<fileset dir="${working.dir}/bda-blueprints-webapp">
+		<move file="${build-blueprints-webapp.dir.dist}/${build-blueprints-webapp.war.file}" tofile="${build-blueprints-webapp.dir.dist}/${build-blueprints-webapp.war.file}.orig"/>
+		<war destfile="${build-blueprints-webapp.dir.dist}/${build-blueprints-webapp.war.file}" compress="false" webxml="${working.dir}/build-blueprints-webapp/WEB-INF/web.xml" >
+			<fileset dir="${working.dir}/build-blueprints-webapp">
 				<include name="*/**" />
 			</fileset>
 		</war>
@@ -964,9 +963,9 @@ $HeadURL$
 		install:jboss:clean,
 		install:jboss:binaries,
 		install:jboss:configure,
-		install:jboss:bda-blueprints-webapp:re-configure,
-		install:jboss:bda-blueprints-webapp,
-		install:jboss:bda-blueprints-webapp:configure,
+		install:jboss:build-blueprints-webapp:re-configure,
+		install:jboss:build-blueprints-webapp,
+		install:jboss:build-blueprints-webapp:configure,
 		install:jboss:grid,
 		install:jboss:grid:configure,
 		upgrade:post:jboss,
@@ -987,9 +986,9 @@ $HeadURL$
 		install:tomcat:clean,
 		install:tomcat:binaries,
 		install:tomcat:configure,
-		install:tomcat:bda-blueprints-webapp:re-configure,
-		install:tomcat:bda-blueprints-webapp,
-		install:tomcat:bda-blueprints-webapp:configure,
+		install:tomcat:build-blueprints-webapp:re-configure,
+		install:tomcat:build-blueprints-webapp,
+		install:tomcat:build-blueprints-webapp:configure,
 		install:tomcat:grid,
 		install:tomcat:grid:configure,
 		upgrade:post:tomcat,
@@ -1047,9 +1046,9 @@ $HeadURL$
 		install:jboss:stop,
 		install:jboss:validation:pre-install:ports,
 		install:jboss:configure,
-		install:jboss:bda-blueprints-webapp:re-configure,
-		install:jboss:bda-blueprints-webapp,
-		install:jboss:bda-blueprints-webapp:configure,
+		install:jboss:build-blueprints-webapp:re-configure,
+		install:jboss:build-blueprints-webapp,
+		install:jboss:build-blueprints-webapp:configure,
 		install:jboss:grid,
 		install:jboss:grid:configure,
 		upgrade:post:jboss,
@@ -1068,9 +1067,9 @@ $HeadURL$
 		install:tomcat:stop,
 		install:tomcat:validation:pre-install:ports,
 		install:tomcat:configure,
-		install:tomcat:bda-blueprints-webapp:re-configure,
-		install:tomcat:bda-blueprints-webapp,
-		install:tomcat:bda-blueprints-webapp:configure,
+		install:tomcat:build-blueprints-webapp:re-configure,
+		install:tomcat:build-blueprints-webapp,
+		install:tomcat:build-blueprints-webapp:configure,
 		install:tomcat:grid,
 		install:tomcat:grid:configure,
 		upgrade:post:tomcat,
@@ -1127,9 +1126,9 @@ $HeadURL$
 		install:common:validation:pre-install,
 		install:jboss:stop,
 		install:jboss:validation:pre-install:ports,
-		install:jboss:bda-blueprints-webapp:re-configure,
-		install:jboss:bda-blueprints-webapp,
-		install:jboss:bda-blueprints-webapp:configure,
+		install:jboss:build-blueprints-webapp:re-configure,
+		install:jboss:build-blueprints-webapp,
+		install:jboss:build-blueprints-webapp:configure,
 		install:jboss:grid,
 		install:jboss:grid:configure,
 		install:post:jboss,
@@ -1146,9 +1145,9 @@ $HeadURL$
 		install:common:validation:pre-install,
 		install:tomcat:stop,
 		install:tomcat:validation:pre-install:ports,
-		install:tomcat:bda-blueprints-webapp:re-configure,
-		install:tomcat:bda-blueprints-webapp,
-		install:tomcat:bda-blueprints-webapp:configure,
+		install:tomcat:build-blueprints-webapp:re-configure,
+		install:tomcat:build-blueprints-webapp,
+		install:tomcat:build-blueprints-webapp:configure,
 		install:tomcat:grid,
 		install:tomcat:grid:configure,
 		install:post:tomcat,
@@ -1196,7 +1195,7 @@ $HeadURL$
 	</target>
 
 	<!-- static upgrade targets -->
-	<target name="upgrade:database" description="Upgrades database using BDA Datbase Upgrade process." unless="exclude.database"
+	<target name="upgrade:database" description="Upgrades database using build Datbase Upgrade process." unless="exclude.database"
 		depends="
 		upgrade:database:init,
 		common:init,
@@ -1276,7 +1275,7 @@ $HeadURL$
 
 	<!-- Grid Targets for jboss and tomcat -->
 
-	<target name="install:bda-blueprints-grid" description="Wrapper target for Grid application targets"
+	<target name="install:build-blueprints-grid" description="Wrapper target for Grid application targets"
 		depends="
 		common:init,
 		install:jboss:grid,
@@ -1293,7 +1292,7 @@ $HeadURL$
                 <unzip dest="${tomcat.home}/lib" src="${grid.resource.dir}/${resource.file.jboss-globus-lib}" />
                 <!-- Needed for Valve on tomcat 6.0.x -->
                 <copy todir="${tomcat.home}/lib">
-                        <fileset dir="${bda-utils.dir}">
+                        <fileset dir="${build-utils.dir}">
                                 <include name="commons-logging*"/>
                         </fileset>
                 </copy>
@@ -1415,20 +1414,20 @@ $HeadURL$
 		</if>
 	</target>
 	
-	<target name="install:tomcat:bda-blueprints-webapp" description="Deploy bda-blueprints-webapp and common libraries to tomcat installation" unless="exclude.tomcat" depends="common:init">
+	<target name="install:tomcat:build-blueprints-webapp" description="Deploy build-blueprints-webapp and common libraries to tomcat installation" unless="exclude.tomcat" depends="common:init">
 		<delete dir="${tomcat.home}/temp"/>
 		<delete dir="${tomcat.home}/work"/>
-		<copy file="${bda-blueprints-webapp.dir.dist}/${bda-blueprints-webapp.war.file}" todir="${tomcat.home}/webapps" overwrite="true" />
+		<copy file="${build-blueprints-webapp.dir.dist}/${build-blueprints-webapp.war.file}" todir="${tomcat.home}/webapps" overwrite="true" />
 		<!--  Many NCI applications require clm for csm, so you can point this to where you have the version you want to use
-		<copy file="${bda-utils.dir}/clm-3.2.jar" todir="${tomcat.home}/server/${tomcat.server.name}/lib" overwrite="true" />
+		<copy file="${build-utils.dir}/clm-3.2.jar" todir="${tomcat.home}/server/${tomcat.server.name}/lib" overwrite="true" />
 		-->
 		<copy file="${database.driver.file}" todir="${tomcat.home}/common/lib" overwrite="true" />
 	</target>
 
-	<target name="install:tomcat:bda-blueprints-webapp:configure" description="Configure bda-blueprints-webapp application, copies over externalized properties or configurations that are not part of the tomcat configuration" unless="exclude.tomcat" depends="common:init">
+	<target name="install:tomcat:build-blueprints-webapp:configure" description="Configure build-blueprints-webapp application, copies over externalized properties or configurations that are not part of the tomcat configuration" unless="exclude.tomcat" depends="common:init">
 		<!-- configure datasource -->
 	</target>
-	<target name="install:tomcat:bda-blueprints-webapp:re-configure" description="Configure bda-blueprints-webapp application, copies over externalized properties or configurations that are not part of the tomcat configuration" unless="exclude.tomcat" depends="common:init">
+	<target name="install:tomcat:build-blueprints-webapp:re-configure" description="Configure build-blueprints-webapp application, copies over externalized properties or configurations that are not part of the tomcat configuration" unless="exclude.tomcat" depends="common:init">
 	</target>
 
 	<target name="upgrade:common:init" depends="upgrade:jboss:init, upgrade:tomcat:init" >
@@ -1436,7 +1435,7 @@ $HeadURL$
 	<target name="upgrade:jboss:init"
 		depends="
 		upgrade:jboss:init:prep,
-		upgrade:jboss:readers:bda,
+		upgrade:jboss:readers:build,
 		upgrade:jboss:readers:custom
 		">
 		<properties-print
@@ -1451,17 +1450,17 @@ $HeadURL$
         <if>
             <equals arg1="${jboss.http-connector.remove}" arg2="true"/>
             <then>
-                <property name="jboss.application.url" value="https://${jboss.server.hostname}:${jboss.grid.secure.port}/${bda-blueprints-webapp.name}"/>
+                <property name="jboss.application.url" value="https://${jboss.server.hostname}:${jboss.grid.secure.port}/${build-blueprints-webapp.name}"/>
             </then>
             <else>
-                <property name="jboss.application.url" value="http://${jboss.server.hostname}:${jboss.server.port}/${bda-blueprints-webapp.name}"/>
+                <property name="jboss.application.url" value="http://${jboss.server.hostname}:${jboss.server.port}/${build-blueprints-webapp.name}"/>
             </else>
         </if>
 	</target>
 	<target name="upgrade:tomcat:init"
 		depends="
 		upgrade:tomcat:init:prep,
-		upgrade:tomcat:readers:bda,
+		upgrade:tomcat:readers:build,
 		upgrade:tomcat:readers:custom
 		">
 		<properties-print
@@ -1477,10 +1476,10 @@ $HeadURL$
 	<target name="upgrade:database:init"
 		depends="
 		upgrade:jboss:init:prep,
-		upgrade:database:readers:bda,
+		upgrade:database:readers:build,
 		upgrade:database:readers:custom
 		">
-		<!-- You need to either depend on jboss or tomcat so that you can read the db properties from it's configs.  BDA only has macros to read database properties from jboss. -->
+		<!-- You need to either depend on jboss or tomcat so that you can read the db properties from it's configs.  build only has macros to read database properties from jboss. -->
 	</target>
 	<target name="upgrade:common:init:prep">
 		<if>
@@ -1517,7 +1516,7 @@ $HeadURL$
 				<property name="jboss.server.binding.template.location" value="${basedir}/${jboss-bindings.file}"/>
 			</then>
 			<else>
-				<property name="jboss.server.binding.template.location" value="${bda-utils.dir}/resource/${jboss.binaries.relative.dir}/bindings.xml"/>
+				<property name="jboss.server.binding.template.location" value="${build-utils.dir}/resource/${jboss.binaries.relative.dir}/bindings.xml"/>
 			</else>
 		</if>
 
@@ -1548,7 +1547,7 @@ $HeadURL$
 	<target name="upgrade:database:readers:custom">
 		<!-- call your custom readers here, two properties included in these scripts that don't have readers are "fs-data.base.dir, mail.smtp.server" -->
 	</target>
-	<target name="upgrade:database:readers:bda" depends="upgrade:jboss:init:prep" if="jboss.exists">
+	<target name="upgrade:database:readers:build" depends="upgrade:jboss:init:prep" if="jboss.exists">
 
 		<!-- Make sure the ${properties.file} has at least the following props -->
 		<properties-exist
@@ -1556,11 +1555,11 @@ $HeadURL$
 			/>
 		<jboss-read-dbconfig
 			jboss.home="${read.jboss.home}"
-			jboss.ds-xml.file="bda-blueprints-ds.xml"
+			jboss.ds-xml.file="build-blueprints-ds.xml"
 			/>
 	</target>
 
-	<target name="upgrade:jboss:readers:bda" if="jboss.exists">
+	<target name="upgrade:jboss:readers:build" if="jboss.exists">
 
 		<!-- Make sure the ${properties.file} has at least the following props -->
 		<properties-exist
@@ -1587,7 +1586,7 @@ $HeadURL$
 		<!-- Reader reqiures that you have only one data source defined in each *-ds.xml file -->
 		<jboss-read-dbconfig
 			jboss.home="${read.jboss.home}"
-			jboss.ds-xml.file="bda-blueprints-ds.xml"
+			jboss.ds-xml.file="build-blueprints-ds.xml"
 			/>
 		<jboss-read-ldapconfig
 			jboss.home="${read.jboss.home}"
@@ -1723,7 +1722,7 @@ $HeadURL$
 	</target>
 	
                        
-	<target name="upgrade:tomcat:readers:bda" depends="upgrade:tomcat:init:prep" if="tomcat.exists">
+	<target name="upgrade:tomcat:readers:build" depends="upgrade:tomcat:init:prep" if="tomcat.exists">
 
 		<!-- Make sure the ${properties.file} has at least the following props -->
 		<properties-exist

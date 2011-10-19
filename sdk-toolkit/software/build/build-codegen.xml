@@ -2,7 +2,7 @@
 <!-- ** PROJECT:   BDA Blueprints Web Application                         ** -->
 <!-- *********************************************************************** -->
 
-<project name="caCORE SDK - Codegen" default="build:all" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant" xmlns="antlib:org.apache.tools.ant" xmlns:cs="antlib:com.puppycrawl.tools.checkstyle">
+<project name="caCORE SDK - Codegen" default="build:all" basedir="." xmlns="antlib:org.apache.tools.ant" xmlns:cs="antlib:com.puppycrawl.tools.checkstyle">
 
 	<property name="root.dir" location="${basedir}/../.." />
 	<property name="software.dir" location="${root.dir}/software" />
@@ -14,8 +14,6 @@
 	<property name="target.module.dir" location="${target.dir}/modules" />
 	<property name="test.cobertura.lib.dir" location="${target.module.dir}/lib/test-cobertura" />
 	<property name="output.dir.location" value="../target/workspace" />
-
-	<property name="ivy.def.file" location="ivy.xml" />
 
 	<property file="project.properties" />
 

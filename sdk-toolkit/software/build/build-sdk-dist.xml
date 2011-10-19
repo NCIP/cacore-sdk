@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<project name="caCORE SDK - target Build" default="build:all" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:cs="antlib:com.puppycrawl.tools.checkstyle">
+<project name="caCORE SDK - target Build" default="build:all" basedir="."  xmlns:cs="antlib:com.puppycrawl.tools.checkstyle">
 	<description>
 		This build file used to generate SDK target directory 
 	</description>
@@ -9,11 +9,6 @@
 	<property name="modules.dir" value="${software.dir}/modules"/>
 	<property name="common.dir" location="${software.dir}/common" />
 	<property name="target.dir" location="${software.dir}/target" />
-	<property name="shared.local.repo.dir" location="${target.dir}/shared-local-ivy-repo" />
-	<property name="local.repo.dir" location="${software.dir}/local-ivy-repo" />
-
-	<property name="ivy.settings.dir" value="${common.dir}"/>
-	<property name="ivy.settings.file" value="ivysettings.xml" />
 
 	<property name="modules.build.file" value="build.xml" />
 	<property name="modules.build.target" value="build:all" />
@@ -23,16 +18,9 @@
 
 	<property file="${build.dir}/project.properties" />
 
-	<property name="bda-download.dir" location="${target.dir}/bda-download" />
-	<property name="ivy.build.def.file" location="ivy.xml" />
-
-	<import file="${build.dir}/bda-master-build.xml"/>
+	<import file="${build.dir}/build-master-build.xml"/>
 	
-	<target name="ivy:init">
-		<property name="ivy.dep.file" value="${ivy.build.def.file}" />
-		<ivy:settings file="${ivy.settings.dir}/${ivy.settings.file}"/>
-	</target>
-	
+<!--	
 	<target name="ivy:package-iso21090_xsd" depends="ivy:init">
 		<ivy:resolve refresh="true" conf="standards_xsd" />
 		<ivy:retrieve pattern="${common.dir}/resources/iso21090/[artifact].[ext]" conf="standards_xsd" />
@@ -50,7 +38,7 @@
 		<ivy:retrieve pattern="${common.dir}/resources/target_grid/${NCI_STAGE_TARGET_GRID}/[artifact].[ext]" conf="target_grid_stage" />
 		
 	</target>
-
+-->
 
 	<target name="init" description="Sets up build are and initalizes variables">
 		<mkdir dir="${target.dir}" />
@@ -67,11 +55,19 @@
 		init,
 		build:workspace-modules,
 		dist:tools:retrieve,
+		dist:tools:retrieve:jboss-bindings"
+		 />
+<!--
+	<target name="build:all" description="Builds all the sub projects, putting artifacts in the project level target directory, used by distribution targets to make distributions" depends="
+		init,
+		build:workspace-modules,
+		dist:tools:retrieve,
 		dist:tools:retrieve:jboss-bindings,
 		ivy:package-target_grid,
-		ivy:package-iso21090_xsd
-		" />
+		ivy:package-iso21090_xsd 		
+		 />
 
+-->
 	<target name="dist:tools:retrieve" description="Downloads binary applications from commonlibrary repository" depends="
 		init,
 		dist:tools:retrieve:jboss,
@@ -87,7 +83,7 @@
 		</ant>
 	</target>
 	
-	<target name="clean:all" depends="ivy:clean" description="cleans this project">
+	<target name="clean:all" description="cleans this project">
 		<delete dir="${target.dir}" failonerror="false"/>		
 	</target>
 </project>

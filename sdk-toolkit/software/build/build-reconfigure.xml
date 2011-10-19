@@ -1,4 +1,4 @@
-<project name="caCORE SDK - Project Reconfiguration" default="package-install-system" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant" xmlns="antlib:org.apache.tools.ant" xmlns:cs="antlib:com.puppycrawl.tools.checkstyle">
+<project name="caCORE SDK - Project Reconfiguration" default="package-install-system" basedir="." xmlns="antlib:org.apache.tools.ant" xmlns:cs="antlib:com.puppycrawl.tools.checkstyle">
 
 	<property name="output.dir.location" value="."/>
 
@@ -1531,7 +1531,7 @@
 			<then>
 				<copy tofile="${package.client.tomcat.context.dir}/${PROJECT_NAME}.xml" file="${system.config.server.context.dir}/${file.project.Context}" />
 				<copy todir="${package.client.tomcat.common.lib.dir}">
-					<fileset dir="${bda-utils.dir}">
+					<fileset dir="${build-utils.dir}">
 						<include name="mysql-connector-java-*.jar"/>
 						<include name="ojdbc14-*.jar"/>
 						<include name="postgresql-*.jar"/>
@@ -1594,7 +1594,7 @@
 						<include name="jgss*.*" />
 						<include name="log4j*.*" />
 					</fileset>
-					<fileset dir="${bda-utils.dir}">
+					<fileset dir="${build-utils.dir}">
 						<include name="mysql-connector-java-*.jar"/>
 						<include name="ojdbc14-*.jar"/>
 						<include name="postgresql-*.jar"/>
@@ -1648,7 +1648,7 @@
 					file="${system.config.jboss.server.default.deploy.dir}/${file.project.Context}" />
 
 				<copy todir="${package.client.jboss.default.lib.dir}">
-					<fileset dir="${bda-utils.dir}">
+					<fileset dir="${build-utils.dir}">
 						<include name="mysql-connector-java-*.jar"/>
 						<include name="ojdbc14-*.jar"/>
 						<include name="postgres-*.jar"/>
@@ -1757,7 +1757,7 @@
 				<equals arg1="${DB_TYPE}" arg2="mysql" />
 				<then>
 					<copy todir="@{TARGET.LIB.DIRECTORY}">
-						<fileset dir="${bda-utils.dir}">
+						<fileset dir="${build-utils.dir}">
 							<include name="mysql-connector-java-*.jar" />
 						</fileset>
 					</copy>
@@ -1766,7 +1766,7 @@
 					<equals arg1="${DB_TYPE}" arg2="oracle" />
 					<then>
 						<copy todir="@{TARGET.LIB.DIRECTORY}">
-							<fileset dir="${bda-utils.dir}">
+							<fileset dir="${build-utils.dir}">
 								<include name="ojdbc14-*.jar" />
 							</fileset>
 						</copy>
@@ -1774,7 +1774,7 @@
 				</elseif>
 				<else>
 					<copy todir="@{TARGET.LIB.DIRECTORY}">
-						<fileset dir="${bda-utils.dir}">
+						<fileset dir="${build-utils.dir}">
 							<include name="postgresql-*.jar" />
 						</fileset>
 					</copy>

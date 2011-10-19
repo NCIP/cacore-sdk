@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<project name="caCORE SDK - Master Build" default="build:all" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:cs="antlib:com.puppycrawl.tools.checkstyle">
+<project name="caCORE SDK - Master Build" default="build:all" xmlns:ivy="antlib:org.apache.ivy.ant" basedir="." xmlns:cs="antlib:com.puppycrawl.tools.checkstyle"  xmlns:artifact="antlib:org.apache.maven.artifact.ant">
 	<description>
-		This build file is part of the bda-build-template project.  This is the master build file for the project.  It should be placed in project/software/.  This script wrappers sub projects to build, test and inspect code.  Additionally this project manges creation of distributions and deployment locally or remotely.  Deployments will call the install.xml from the distribution to install or upgrade the application.  Lastly this script will run include targets that require manipulation of containers (selenium tests because they require starting the application server container (and require a fully deployed application which this process is responsible for). This build script assumes two sub-projects bda-blueprints-webapp and bda-blueprints-api. The API targets are commented out and can be removed if not needed.  Also support for both tomcat and jboss download, install and configure are included.  These scripts require Java, Ant, Database and SVN to work.
+		This build file is part of the build-template project.  This is the master build file for the project.  It should be placed in project/software/.  This script wrappers sub projects to build, test and inspect code.  Additionally this project manges creation of distributions and deployment locally or remotely.  Deployments will call the install.xml from the distribution to install or upgrade the application.  Lastly this script will run include targets that require manipulation of containers (selenium tests because they require starting the application server container (and require a fully deployed application which this process is responsible for). This build script assumes two sub-projects build-blueprints-webapp and build-blueprints-api. The API targets are commented out and can be removed if not needed.  Also support for both tomcat and jboss download, install and configure are included.  These scripts require Java, Ant, Database and SVN to work.
 	</description>
 
 	<property name="software.dir" location=".." />
@@ -9,11 +9,7 @@
 	<property name="modules.dir" value="${software.dir}/modules"/>
 	<property name="common.dir" location="${software.dir}/common" />
 	<property name="target.dir" location="${software.dir}/target" />
-	<property name="shared.local.repo.dir" location="${target.dir}/shared-local-ivy-repo" />
-	<property name="local.repo.dir" location="${software.dir}/local-ivy-repo" />
-
-	<property name="ivy.settings.dir" value="${common.dir}"/>
-	<property name="ivy.settings.file" value="ivysettings.xml" />
+	<property name="local.lib.dir" location="${software.dir}/lib" />
 
 	<property name="modules.build.file" value="build.xml" />
 	<property name="modules.build.target" value="build:all" />
@@ -37,26 +33,16 @@
                 <os family="windows" />
         </condition>
 
-        <condition property="local.cbiit-ivy-repo.dir" value="">
-                <or>
-                <os family="unix" />
-                        <os family="mac" />
-                </or>
-        </condition>
-
-        <condition property="local.cbiit-ivy-repo.dir" value="c:/">
-                <os family="windows" />
-        </condition>
-        
-	<property name="bda-blueprints-webapp.install.zip.file" value="${project-webapp.install.zip.file}"/>
-	<property name="bda-blueprints-webapp.upgrade.zip.file" value="${project-webapp.upgrade.zip.file}"/>
-	<property name="bda-download.dir" location="${target.dir}/../common/bda-download" />
+	<property name="build-blueprints-webapp.install.zip.file" value="${project-webapp.install.zip.file}"/>
+	<property name="build-blueprints-webapp.upgrade.zip.file" value="${project-webapp.upgrade.zip.file}"/>
 	<property name="project.name" value="${PROJECT_NAME}"/>
 
-	<import file="${build.dir}/bda-master-build.xml"/>
+	<import file="${build.dir}/build-master-build.xml"/>
 	
 	<target name="init" description="Sets up build are and initalizes variables">
 		<mkdir dir="${target.dir}" />
+		<mkdir dir="${target.dir}/modules" />
+		<mkdir dir="${target.dir}/modules/lib" />
 		<mkdir dir="${dist.dir}" />
 		<mkdir dir="${dist.exploded.dir}" />
 		<mkdir dir="${common.dist.dir}" />
@@ -66,17 +52,6 @@
 
 		<available file="${jboss.dest.file}" property="jboss.tools.exists" />
 		<available file="${tomcat.dest.file}" property="tomcat.tools.exists" />
-	</target>
-
-	<target name="ivy:clean" description="Cleans up the ivy cache of this project and all sub-projects">
-		<ivy:settings file="${ivy.settings.dir}/${ivy.settings.file}" />
-		<ivy:cleancache />
-		<ant inheritAll="false" inheritRefs="false" antfile="bda-ivy-2.0.0-build.xml" target="ivy-cleancache" dir="${bda-download.dir}">
-			<property name="bda-utils.dir" value="${bda-utils.dir}" />
-			<property name="lib.dir" value="${lib.dir}" />
-			<property name="software.dir" value="${software.dir}" />
-		</ant>
-		<ant inheritAll="true" inheritRefs="false" antfile="${modules.build.file}" target="clean:dependencies" dir="${modules.dir}" />
 	</target>
 
 	<target name="build:all" description="Builds all the sub projects, putting artifacts in the project level target directory, used by distribution targets to make distributions" depends="
@@ -150,7 +125,7 @@
 		<dist-prep />
 		<copy todir="${dist.exploded.dir}" overwrite="true">
 			<fileset dir="${build.dir}">
-				<include name="bda-master-install.xml" />
+				<include name="build-master-install.xml" />
 				<include name="build-reconfigure.xml" />
 			</fileset>
 			<fileset dir="${project.build.home}">
@@ -189,7 +164,7 @@
 	<target name="deploy:remote:install:no-build" description="Installs and configures the application and required binaries and re-creates the datbase  on a remote machine. Used for NCI tiers (dev, qa, stg, prod)" depends="
 		dist:installer
 		">
-		<deploy-files dist.file="${bda-blueprints-webapp.install.zip.file}" />
+		<deploy-files dist.file="${build-blueprints-webapp.install.zip.file}" />
 		<remote-ssh remotesshcommand=". .bash_profile;cd ${ssh.dir.temp}; ant -Dproperties.file=${properties.file.name} -Dforce.reinstall=true ${install.target}" />
 	</target>
 
@@ -215,4 +190,25 @@
 	<target name="deploy:remote:upgrade" description="Installs and configures the application and required binaries and re-creates the datbase  on a remote machine. Used for NCI tiers (dev, qa, stg, prod)" depends="">
 		<echo message="deploy remote upgrade is not implemented by SDK Project. To upgrade the Example project application in existing Tomcat, change INSTALL_CONTAINER=false in example-project/build/install.properties" />
 	</target>
+	
+	  <target name="resolve" description="--> retrieve dependencies with maven">
+	      <!-- Resolve dependencies -->
+	      <artifact:dependencies filesetId="dependency.fileset">
+		  <pom file="pom.xml" />
+	      </artifact:dependencies>
+	      <!-- Copy all dependencies to the correct location. -->
+	      <copy todir="${lib.dir}">
+		  <fileset refid="dependency.fileset" />
+		  <!-- This mapper strips off all leading directory information -->
+		  <mapper type="flatten" />
+	      </copy>
+	  </target>
+	
+	<target name="makepom">
+		<ivy:makepom ivyfile="ivy.xml" pomfile="$module.pom">
+		   <mapping conf="default" scope="compile"/>
+		   <mapping conf="runtime" scope="runtime"/>
+		</ivy:makepom>
+	</target>
+
 </project>
