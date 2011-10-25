@@ -51,7 +51,6 @@
 	<!-- This sets up all of the neccessary directories -->
 	<target name="-init" depends="-pre-clean">
 		<mkdir dir="${src.java.dir}" />
-		<echo message="************************************************${module.lib.dir}"/>
 		<mkdir dir="${module.lib.dir}" />
 	</target>
 
