@@ -1,0 +1,15 @@
+<ivy-module version="1.0">
+	<info organisation="${project.org}" module="${project.name}-download"
+		/>
+  <configurations>
+    <conf name="default" />          
+    <conf name="runtime" />          
+    <conf name="jboss-default-lib"/>
+    <conf name="cgmm-api"/>
+  </configurations>
+  <publications>    
+  </publications>
+  <dependencies>
+	  <dependency org="${project.org}" name="${project.name}" rev="${project.version}" changing="true" conf="cgmm-api,jboss-default-lib,runtime"/>
+  </dependencies>
+</ivy-module>

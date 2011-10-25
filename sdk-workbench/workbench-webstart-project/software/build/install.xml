@@ -4,9 +4,9 @@
 
 	<property file="project.properties" />
 	<property name="properties.template.file" value="${basedir}/properties.template" />
-	<property name="bda-blueprints-webapp.name" value="${PROJECT_NAME}" />
+	<property name="build-blueprints-webapp.name" value="${PROJECT_NAME}" />
 
-	<import file="bda-master-install.xml" />
+	<import file="build-master-install.xml" />
 	<import file="build-util-macros.xml"/>
 
 	<property name="jar-signing.keystore.abs-location" location="${jar-signing.keystore.location}"/>
@@ -92,7 +92,7 @@
 	<target name="upgrade:common:init" depends="upgrade:tomcat:init" unless="install.running">
 	</target>
 
-	<target name="upgrade:tomcat:readers:bda" depends="upgrade:tomcat:init:prep" if="tomcat.exists">
+	<target name="upgrade:tomcat:readers:build" depends="upgrade:tomcat:init:prep" if="tomcat.exists">
 		<!-- Make sure the ${properties.file} has at least the following props -->
 		<properties-exist properties.list="application.base.path,tomcat.home" />
 		<!-- Begin Tomcat readers, delete if you don't need -->
@@ -117,7 +117,7 @@
 	</target>
 	
 	<!-- override the validation:pre-install targets due to the JDK 1.5 vs 1.6 issue -->
-	<target name="install:common:validation:pre-install" description="Runs pre-install validation checks bda-utils" depends="common:init">
+	<target name="install:common:validation:pre-install" description="Runs pre-install validation checks build-utils" depends="common:init">
 	<!--
 		<validate-pre-install-common
 			ant.check.version="${ant.minimum.version}"
@@ -128,7 +128,7 @@
 	</target>
 	
 	<!-- override the validation:pre-install targets due to the JDK 1.5 vs 1.6 issue -->
-	<target name="install:tomcat:validation:pre-install" description="Runs pre-install validation checks bda-utils" 
+	<target name="install:tomcat:validation:pre-install" description="Runs pre-install validation checks build-utils" 
 		depends="
 		common:tomcat:init,
 		common:init,
@@ -139,7 +139,7 @@
 		-->
 	</target>
 		
-	<target name="install:tomcat:project-webapp:re-configure" description="Configure bda-blueprints-webapp application, copies over externalized properties or configurations that are not part of the tomcat configuration" unless="exclude.tomcat" depends="common:init">
+	<target name="install:tomcat:project-webapp:re-configure" description="Configure build-blueprints-webapp application, copies over externalized properties or configurations that are not part of the tomcat configuration" unless="exclude.tomcat" depends="common:init">
 		<property name="workbench.temp.dir" value="${working.dir}/workbench-webapp"/>
 		<delete dir="${workbench.temp.dir}"/>
 		<unzip src="${package.client.tomcat.webapps.dir}/${PROJECT_NAME}.war" dest="${workbench.temp.dir}"/>
