@@ -13,13 +13,13 @@
 
 	<import file="${modules.dir}/build-module.xml" />
 	
-	<target name="jar" depends="ivy:setup-runtime" >
+	<target name="jar">
 		<mkdir dir="${module.lib.dir}" />
 		<jar destfile="${module.lib.dir}/${jar.name}">
 			<fileset dir="${conf.dir}" excludes="**/SDK*.zip" />
 		</jar>
 	</target>
 	
-	<target name="build:all" depends="jar,ivy:publish" description="Default target" ></target>
+	<target name="build:all" depends="jar" description="Default target" ></target>
 
 </project>

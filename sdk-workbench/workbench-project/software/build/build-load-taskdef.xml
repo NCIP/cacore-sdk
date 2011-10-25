@@ -4,13 +4,13 @@
 	<!-- BDA standard structure -->
 	<property name="build.dir" location="." />
 	<property name="target.dir" location="${software.dir}/target" />
-	<property name="bda-utils.dir" location="${target.dir}/bda-utils" />
+	<property name="build-utils.dir" location="${target.dir}/build-utils" />
 	<property name="tools.dir" location="${build.dir}/tools" />
 	<property name="tools.lib.dir" location="${tools.dir}/lib" />
 
 	<!-- Paths -->
-	<path id="bda-utils.classpath">
-		<fileset dir="${bda-utils.dir}">
+	<path id="build-utils.classpath">
+		<fileset dir="${build-utils.dir}">
 			<include name="**/*.jar" />
 		</fileset>
 	</path>
@@ -24,10 +24,10 @@
 	<!-- Task definitions -->
 	<taskdef name="xmltask" classname="com.oopsconsultancy.xmltask.ant.XmlTask" classpathref="taskdef.cp" onerror="ignore"/>
 	<taskdef resource="net/sf/antcontrib/antlib.xml" classpathref="taskdef.cp" onerror="ignore"/>	
-	<taskdef resource="liquibasetasks.properties" classpathref="bda-utils.classpath" />
-	<taskdef name="groovy" classname="org.codehaus.groovy.ant.Groovy" classpathref="bda-utils.classpath" />
-	<taskdef resource="org/apache/ant/antunit/antlib.xml" uri="antlib:org.apache.ant.antunit" classpathref="bda-utils.classpath" />
-	<taskdef name="for" classname="net.sf.antcontrib.logic.ForTask" classpathref="bda-utils.classpath" />
-	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="bda-utils.classpath" />
+	<taskdef resource="liquibasetasks.properties" classpathref="build-utils.classpath" />
+	<taskdef name="groovy" classname="org.codehaus.groovy.ant.Groovy" classpathref="build-utils.classpath" />
+	<taskdef resource="org/apache/ant/antunit/antlib.xml" uri="antlib:org.apache.ant.antunit" classpathref="build-utils.classpath" />
+	<taskdef name="for" classname="net.sf.antcontrib.logic.ForTask" classpathref="build-utils.classpath" />
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="build-utils.classpath" />
 	<taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpathref="taskdef.cp" />
 </project>

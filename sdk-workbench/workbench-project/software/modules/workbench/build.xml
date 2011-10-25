@@ -11,6 +11,6 @@
 
 	<import file="${modules.dir}/build-module.xml" />
 	
-	<target name="build:all" depends="-pre-clean,-init,jar,ivy:publish,post-clean" description="Default target" ></target>
+	<target name="build:all" depends="-pre-clean,-init,jar,post-clean" description="Default target" ></target>
 
 </project>
