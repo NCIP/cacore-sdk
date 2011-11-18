@@ -1,0 +1,316 @@
+<%@ jet package="gov.nih.nci.codegen.transformer.jet" 
+        class="RESTfulResourceTransformer"
+        skeleton="RESTfulResourceTransformerBase.skeleton" %>
+<% String fullPackageName=transformerUtils.getFullPackageName(klass);%>
+<% String klassName=klass.getName();%>        
+package <%=fullPackageName%>;
+
+<%=transformerUtils.getImports(klass)%>
+import <%=fullPackageName%>.<%=klassName%>;
+
+import gov.nih.nci.system.applicationservice.ApplicationException;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
+import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.Context;
+import javax.servlet.ServletContext;
+import javax.ws.rs.WebApplicationException;
+
+import java.util.List;
+import java.util.Collection;
+import java.util.ArrayList;
+import gov.nih.nci.system.query.hibernate.HQLCriteria;
+import gov.nih.nci.system.web.RESTfulResource;
+import gov.nih.nci.system.query.hql.DeleteHQLQuery;
+import gov.nih.nci.system.applicationservice.ApplicationException;
+
+@Path("/<%=klassName%>Service")
+@Produces("application/xml")
+public class <%=klassName%>Resource extends RESTfulResource
+{
+
+	
+	
+	public <%=klassName%>Resource(@Context ServletContext context)
+	{
+		super(context);
+		System.out.println("Constructor...<%=klassName%>Resource");
+	}
+	
+	@GET
+	@Path("/<%=klassName%>/{id}")
+	//@Produces("application/xml")
+	public void get<%=klassName%>(@Context javax.servlet.http.HttpServletRequest request, @Context javax.servlet.http.HttpServletResponse response, @PathParam("id") String id) 
+	{
+		System.out.println("GET...<%=klassName%>Resource");	
+		try
+		{
+	  		List params = new ArrayList(1);
+	  		String className = "<%=fullPackageName%>.<%=klassName%>";
+			params.add(new Integer(id));
+	  		HQLCriteria criteria = new HQLCriteria("from <%=fullPackageName%>.<%=klassName%> a where a.id = ?", params);
+	  		System.out.println("GET.2..<%=klassName%>Resource");	
+	  		query(request, response, criteria, className);
+	  		/*if(results != null && results.size() != 0)
+	  			return (<%=klassName%>)results.get(0);
+			else
+			{			
+				  ResponseBuilder builder = Response.status(Status.BAD_REQUEST);
+				  builder.type("application/xml");
+				  builder.entity("<error>Not found</error>");
+				  throw new WebApplicationException(builder.build());
+	  		}*/
+			
+			
+		}
+		catch(ApplicationException e)
+		{
+		  ResponseBuilder builder = Response.status(Status.BAD_REQUEST);
+		  builder.type("application/xml");
+		  builder.entity("<error>Not found</error>");
+		  throw new WebApplicationException(builder.build());
+		}
+	}
+
+<%	
+System.out.println("************************ "+klass.getName());
+List<UMLAssociation> associations = transformerUtils.getAssociations(klass, true);
+System.out.println("**********got************** "+associations);
+List<UMLAssociationEnd> associationAdds = new java.util.ArrayList<UMLAssociationEnd>();
+List<String> methodNames = new java.util.ArrayList<String>();
+
+	for(UMLAssociation assoc:associations){
+		List<UMLAssociationEnd> assocEnds = assoc.getAssociationEnds();
+	/*
+		UMLAssociationEnd thisEnd = null;
+		try
+		{
+			thisEnd = transformerUtils.getThisEnd(klass,assocEnds);
+			System.out.println("**********thisEnd************** "+thisEnd);
+		}
+		catch(GenerationException e)
+		{
+			//Ignore the exception
+			System.out.println("**********thisEnd**********exception**1** ");
+		}
+		if(thisEnd == null)
+		{
+			try
+			{
+				UMLClass superKlass = transformerUtils.getSuperClass(klass);
+				thisEnd = transformerUtils.getThisEnd(superKlass,assocEnds);
+				System.out.println("**********thisEnd************** "+thisEnd);
+			}
+			catch(GenerationException e)
+			{
+				//Ignore the exception
+				System.out.println("**********thisEnd**********exception*2*** ");
+			}
+		}
+		
+		UMLAssociationEnd otherEnd = null;
+		try
+		{
+			otherEnd = transformerUtils.getOtherEnd(klass,assocEnds);
+			System.out.println("**********otherEnd************** "+otherEnd);
+		}
+		catch(GenerationException e)
+		{
+			System.out.println("**********otherEnd**********exception*1*** ");
+			//continue;
+		}
+		
+		if(otherEnd == null)
+		{
+			try
+			{
+				UMLClass superKlass = transformerUtils.getSuperClass(klass);
+				otherEnd = transformerUtils.getOtherEnd(klass,assocEnds);
+				System.out.println("**********otherEnd************** "+otherEnd);
+			}
+			catch(GenerationException e)
+			{
+				//Ignore the exception
+				System.out.println("**********otherEnd**********exception*2*** ");
+				continue;
+			}
+		}
+		
+	
+		
+		
+		List<UMLAssociationEnd> associationEnds = new java.util.ArrayList<UMLAssociationEnd>();
+		associationEnds.add(otherEnd);
+	
+		List<UMLAssociationEnd> associationAdds = new java.util.ArrayList<UMLAssociationEnd>();
+	
+		if(transformerUtils.isBidirectionalSelfAssociation(klass,assocEnds)) { // handle bi-directional self-association 
+			associationEnds.add(thisEnd);
+		}
+		*/
+		
+		
+		methodNames.add("get"+klass.getName());
+		System.out.println("I am outside...");
+		for(UMLAssociationEnd associationEnd : assocEnds){	
+			if(associationEnd.isNavigable() && !associationAdds.contains(associationEnd))
+		{
+			
+				UMLClass assocKlass = (UMLClass)associationEnd.getUMLElement();
+				String name = associationEnd.getRoleName(); 
+				String roleName = name.substring(0,1).toUpperCase()+name.substring(1,name.length());
+		System.out.println("22 "+associationEnd.getRoleName());	
+		associationAdds.add(associationEnd);	
+		String getterMethodName = transformerUtils.getGetterMethodName(associationEnd);
+		System.out.println("&&&&&&&getterMethodName: "+getterMethodName);
+		
+		
+		if(!methodNames.contains(getterMethodName))
+		{
+				methodNames.add(getterMethodName);
+				System.out.println("&&&&&&&adding getterMethodName: "+getterMethodName);
+				if(transformerUtils.isAssociationEndMany(associationEnd))
+				{
+				%>
+		@GET
+		@Path("/<%=klassName%>/{id}/<%=roleName%>")
+		public void <%=transformerUtils.getGetterMethodName(associationEnd)%>(@Context javax.servlet.http.HttpServletRequest request, @Context javax.servlet.http.HttpServletResponse response, @PathParam("id") String id){
+			try
+			{
+		  		String className = "<%=fullPackageName%>.<%=klassName%>";
+		  		System.out.println("GET.X2..<%=klassName%>Resource");	
+		  		query(request, response, "<%=klassName%>", "<%=fullPackageName%>", id, "<%=roleName%>");
+	  		}
+			catch(ApplicationException e)
+			{
+			  ResponseBuilder builder = Response.status(Status.BAD_REQUEST);
+			  builder.type("application/xml");
+			  builder.entity("<error>Error Retrieving results</error>");
+			  throw new WebApplicationException(builder.build());
+			}
+		}
+				<%}else{
+				System.out.println("&&&&&&&in else ");
+				%>
+		@GET
+		@Path("/<%=klassName%>/{id}/<%=roleName%>")
+		public void <%=transformerUtils.getGetterMethodName(associationEnd)%>(@Context javax.servlet.http.HttpServletRequest request, @Context javax.servlet.http.HttpServletResponse response, @PathParam("id") String id){
+			try
+			{
+		  		String className = "<%=fullPackageName%>.<%=klassName%>";
+		  		System.out.println("GET.X2..<%=klassName%>Resource");	
+		  		query(request, response, "<%=klassName%>", "<%=fullPackageName%>", id, "<%=roleName%>");
+	  		}
+			catch(ApplicationException e)
+			{
+			  ResponseBuilder builder = Response.status(Status.BAD_REQUEST);
+			  builder.type("application/xml");
+			  builder.entity("<error>Error Retrieving results</error>");
+			  throw new WebApplicationException(builder.build());
+			}
+	  		
+		}
+			<%}
+			}
+		}
+		}
+	}%>
+
+	@POST
+	@Path("/<%=klassName%>")
+	@Consumes("application/xml")
+	public void add<%=klassName%>(<%=klassName%> object)
+	{
+		System.out.println("in add................");
+		try
+		{
+			save(object);
+		}
+		catch(ApplicationException e)
+		{
+		  ResponseBuilder builder = Response.status(Status.BAD_REQUEST);
+		  builder.type("application/xml");
+		  builder.entity("<error>Not found</error>");
+		  throw new WebApplicationException(builder.build());
+		}
+	}
+
+
+	@DELETE
+	@Path("/<%=klassName%>/{id}")
+	public void delete<%=klassName%>(@Context javax.servlet.http.HttpServletRequest request, @Context javax.servlet.http.HttpServletResponse response, @PathParam("id") String id)
+	{
+	System.out.println("in delete................");
+		try
+		{
+	  		List params = new ArrayList(1);
+			params.add(new Integer(id));
+	  		HQLCriteria criteria = new HQLCriteria("from <%=fullPackageName%>.<%=klassName%> a where a.id = ?", params);
+	  		System.out.println("GET.2..<%=klassName%>Resource");	
+  			System.out.println("before delete................");
+			params = new ArrayList(1);
+			params.add(new Integer(id));
+			String query = "delete from <%=fullPackageName%>.<%=klassName%> a where a.id = ?";
+	  			
+	  			DeleteHQLQuery deleteQuery = new DeleteHQLQuery(query, params);
+	  			delete(deleteQuery);
+/*
+	  		List results = query(request, response, criteria);
+	  		if(results != null && results.size() != 0)
+	  		{
+	  			System.out.println("before delete................");
+				params = new ArrayList(1);
+				params.add(new Integer(id));
+				String query = "delete from <%=fullPackageName%>.<%=klassName%> a where a.id = ?";
+	  			
+	  			DeleteHQLQuery deleteQuery = new DeleteHQLQuery(query, params);
+	  			//delete((<%=klassName%>)results.get(0));
+	  			delete(deleteQuery);
+	  		}
+			else
+			{			
+				  ResponseBuilder builder = Response.status(Status.BAD_REQUEST);
+				  builder.type("application/xml");
+				  builder.entity("<error>Not found</error>");
+				  throw new WebApplicationException(builder.build());
+	  		}
+*/	  		
+		}
+		catch(ApplicationException e)
+		{
+		  ResponseBuilder builder = Response.status(Status.BAD_REQUEST);
+		  builder.type("application/xml");
+		  builder.entity("<error>Not found</error>");
+		  throw new WebApplicationException(builder.build());
+		}
+		
+	}
+
+	@PUT
+	@Path("/<%=klassName%>")
+	@Consumes("application/xml")
+	public void update<%=klassName%>(<%=klassName%> object)
+	{
+		System.out.println("in update................");
+		try
+		{
+			update(object);
+		}
+		catch(ApplicationException e)
+		{
+		  ResponseBuilder builder = Response.status(Status.BAD_REQUEST);
+		  builder.type("application/xml");
+		  builder.entity("<error>Not found</error>");
+		  throw new WebApplicationException(builder.build());
+		}
+	}
+
+}

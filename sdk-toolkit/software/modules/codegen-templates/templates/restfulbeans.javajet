@@ -1,0 +1,34 @@
+<%@ jet package="gov.nih.nci.codegen.transformer.jet" 
+        class="RESTfulBeansTransformer"
+        skeleton="ModelTransformerBase.skeleton" %>
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+  xmlns:cxf="http://cxf.apache.org/core"
+  xsi:schemaLocation="
+http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd
+http://cxf.apache.org/jaxrs
+http://cxf.apache.org/schemas/jaxrs.xsd">
+
+ <jaxrs:server id="SDKRESTService" address="/">
+    <jaxrs:features>
+     <cxf:logging/>
+</jaxrs:features>
+<jaxrs:serviceBeans>
+	<%for(UMLClass klass:transformerUtils.getAllRESTResources(model)){%>
+	<ref bean="<%=klass.getName()%>Service" />
+	<%}%>
+
+    </jaxrs:serviceBeans>
+  </jaxrs:server>
+
+<%for(UMLClass klass:transformerUtils.getAllRESTResources(model)){%>
+
+	<bean id="<%=klass.getName()%>Service" class="<%=transformerUtils.getFQCN(klass)%>Resource">
+	</bean>
+<%}%>
+
+</beans>
+	

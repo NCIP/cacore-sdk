@@ -232,6 +232,10 @@ public class ClassCache implements InitializingBean{
 		return fieldArray;
 	}
 
+	public String getReturnType(String className, String fieldName)
+	throws ClassNotFoundException, Exception {
+		return getReturnType(className, fieldName, false);
+	}
 	/**
 	 * Gets the data type of a particular field of the class
 	 * 
@@ -240,11 +244,14 @@ public class ClassCache implements InitializingBean{
 	 * @return
 	 * @throws ClassNotFoundException
 	 */
-	public String getReturnType(String className, String fieldName)
+	public String getReturnType(String className, String fieldName, boolean includeParent)
 			throws ClassNotFoundException, Exception {
+		System.out.println("className: "+className);
+		System.out.println("fieldName: "+fieldName);
 		Field[] classFields;
 		classFields = getFields(getClassFromCache(className));
 		for (int i = 0; i < classFields.length; i++) {
+			System.out.println("classFields[i].getName(): "+classFields[i].getName());
 			if (classFields[i].getName().equals(fieldName))
 				return getReturnType(classFields[i].getGenericType().toString());
 		}
@@ -392,8 +399,15 @@ public class ClassCache implements InitializingBean{
 	}
 
 	public String getAssociationType(Class klass, String associationName)
+	throws Exception {
+		return getAssociationType(klass, associationName, false);
+	}
+	
+	public String getAssociationType(Class klass, String associationName, boolean includeParent)
 			throws Exception {
-		String type = getReturnType(klass.getName(), associationName);
+		System.out.println("getAssociationType 2 "+klass.getName());
+		System.out.println("getAssociationType 2 "+associationName);
+		String type = getReturnType(klass.getName(), associationName, includeParent);
 		if (type.startsWith("class "))
 			type = type.substring(6).trim();
 		return type;

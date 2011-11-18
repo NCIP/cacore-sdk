@@ -47,17 +47,17 @@ public class WritableApplicationServiceImpl extends ApplicationServiceImpl imple
 			throw new ApplicationException("Error while querying DAO: ", exception);
 		}
 	}
-	
+
 	public List<SDKQueryResult> executeBatchQuery(List<SDKQuery> batchQuery) throws ApplicationException{
 		List<SDKQueryResult> sdkQueryResults=new ArrayList<SDKQueryResult>();
-		
+
 		for (SDKQuery query : batchQuery) {
 			SDKQueryResult queryResult = executeQuery(query);
 			sdkQueryResults.add(queryResult);
 		}
 		return sdkQueryResults;
 	}
-	
+
 	protected SDKQueryResult prepareResult(Request request, Response resp) {
 		Object result = resp.getResponse();
 		SDKQueryResult queryResult = null;
@@ -74,12 +74,13 @@ public class WritableApplicationServiceImpl extends ApplicationServiceImpl imple
 		request.setIsCount(Boolean.FALSE);
 		request.setClassCache(getClassCache());
 		request.setDomainObjectName(classname);
-		
+
 		Object requestObject = query;
-		
+
 		//Needed to make sure the pagination and the count queries works.
 		if (query instanceof SearchExampleQuery)
 		{
+			System.out.println("instance of SearchExampleQuery....");
 			Object obj = ((SearchExampleQuery)query).getExample();
 			List<Object> objList = new ArrayList<Object>();
 			objList.add(obj);
@@ -88,13 +89,14 @@ public class WritableApplicationServiceImpl extends ApplicationServiceImpl imple
 		}
 		else if(query instanceof SearchHQLQuery)
 		{
+			System.out.println("instance of SearchHQLQuery....");
 			HQLCriteria oldCriteria = (HQLCriteria)query;
 			HQLCriteria hqlCriteria = new HQLCriteria(oldCriteria.getHqlString(),oldCriteria.getParameters());
 			requestObject = hqlCriteria;
 		}
-		
+
 		request.setRequest(requestObject);
-		
+
 		return request;
 	}
 
@@ -117,10 +119,10 @@ public class WritableApplicationServiceImpl extends ApplicationServiceImpl imple
 		else if (query instanceof HQLCriteria)
 		{
 			String hql = ((HQLCriteria)query).getHqlString();
-			
+
 			String upperHQL = hql.toUpperCase();
 			int index = upperHQL.indexOf(" FROM ");
-			
+
 			hql = hql.substring(index + " FROM ".length()).trim()+" ";
 			classname = hql.substring(0,hql.indexOf(' ')).trim();
 		}

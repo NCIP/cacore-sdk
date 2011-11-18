@@ -281,6 +281,21 @@
 		</or>
 	</condition>
 
+	<condition property="GENERATE_RESTFUL_RESOURCES" value="true" else="false">
+			<or>
+				<equals arg1="${GENERATE_RESTFUL_RESOURCES}" arg2="true" casesensitive="false" trim="true" />
+				<equals arg1="${GENERATE_RESTFUL_RESOURCES}" arg2="yes" casesensitive="false" trim="true" />
+			</or>
+	</condition>
+
+	<condition property="RESTFUL_CXF_SERVLET_START" value="" else="${xml.comment.start}">
+		<equals arg1="${GENERATE_RESTFUL_RESOURCES}" arg2="true" casesensitive="false" trim="true" />
+	</condition>
+
+	<condition property="RESTFUL_CXF_SERVLET_END" value="" else="${xml.comment.end}">
+		<equals arg1="${GENERATE_RESTFUL_RESOURCES}" arg2="true" casesensitive="false" trim="true" />
+	</condition>
+
 	<condition property="RESTFUL_XML_INTERFACE_ENABLED" value="true" else="false">
 			<or>
 				<equals arg1="${ENABLE_RESTFUL_XML_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
@@ -422,6 +437,11 @@
 			<filter token="RESTFUL_JSON_INTERFACE_START" value="${RESTFUL_JSON_INTERFACE_START}" />
 			<filter token="RESTFUL_JSON_INTERFACE_END" value="${RESTFUL_JSON_INTERFACE_END}" />
 		</filterset>
+		<filterset id="filtertoken5" begintoken="${xml.comment.start}@" endtoken="@${xml.comment.end}" onmissingfiltersfile="fail">
+			<filter token="RESTFUL_CXF_SERVLET_START" value="${RESTFUL_CXF_SERVLET_START}" />
+			<filter token="RESTFUL_CXF_SERVLET_END" value="${RESTFUL_CXF_SERVLET_END}" />
+		</filterset>
+		
 	</target>
 
 	<target name="replacetoken-contents-install-database" depends="-replace-templates-filter-tokens-reconfigure">
@@ -1210,6 +1230,13 @@
 				<include name="struts2-*.jar"/>
 				<include name="wsdl4j-*.jar"/>
 				<include name="xwork-*.jar"/>
+				<include name="cxf-*.jar"/>
+				<include name="geronimo-*.jar"/>
+				<include name="jsr311-*.jar"/>
+				<include name="neethi-*.jar"/>
+				<include name="stax2-api-*.jar"/>
+				<include name="xml-resolver-*.jar"/>
+				<include name="xmlschema-core-*.jar"/>
 			</fileset>
 			<fileset dir="${lib.dir}">
 				<include name="sdk-security-*.jar"/>
@@ -1384,11 +1411,35 @@
 				<include name="IsoConstants.xml"/>
 			</fileset>
 		</copy>
+		
 	</target>
 
 	<target name="-build-project-war" depends="-staging-war">
 		<echo message="building war in dir ${param.server.webapps.dir}\${PROJECT_NAME}.war" />
+		<echo message="generate ${GENERATE_RESTFUL_RESOURCES}"/>
+		<echo message="generate ${system.config.client.webapp.dir}"/>
+		<if>
+			<equals arg1="${GENERATE_RESTFUL_RESOURCES}" arg2="true" />
+			<then>
+				<echo message="generate 22${system.config.client.webapp.dir}"/>
+				<copy todir="${system.config.client.webapp.dir}/WEB-INF">
+					<fileset dir="${system.config.client.webapp.dir}/WEB-INF">
+						<include name="web.xml" />
+					</fileset>
+					<filterset refid="filtertoken5" />
+				</copy>
+
+
+				<xmltask preservetype="true" failWithoutMatch="true"
+					source="${system.config.client.webapp.dir}/WEB-INF/web.xml"
+					dest="${system.config.client.webapp.dir}/WEB-INF/web.xml">
+					<xmlcatalog refid="build.xml.catalog" />
+					<insert path="//*[local-name()='web-app']/*[local-name()='servlet'][2]/*[local-name()='init-param'][1]/*[local-name()='param-value']" file="${output.src.dir}/RESTResources.txt" />
+				</xmltask>
+			</then>
+		</if>
 		<war destfile="${param.server.webapps.dir}\${PROJECT_NAME}.war" webxml="${system.config.client.webapp.dir}/WEB-INF/web.xml">
+		
 			<manifest>
 				<attribute name="Generated-By" value="caCORE SDK Code Generator" />
 				<attribute name="Version" value="${VERSION}" />
@@ -1414,6 +1465,8 @@
 			</fileset>
 			<webinf dir="${output.src.dir}">
 				<include name="server-config.wsdd" />
+				<include name="RESTfulApp.xml" />
+				<include name="RESTfulBeans.xml" />
 			</webinf>
 
 			<classes dir="${temp.webapp.staging.classes.dir}" />
@@ -1494,6 +1547,13 @@
 				<include name="wss4j-noversion.jar" />
 				<include name="xalan-*.jar" />
 				<include name="xmlsec-*.jar" />
+				<include name="cxf-*.jar"/>
+				<include name="geronimo-*.jar"/>
+				<include name="jsr311-*.jar"/>
+				<include name="neethi-*.jar"/>
+				<include name="stax2-api-*.jar"/>
+				<include name="xml-resolver-*.jar"/>
+				<include name="xmlschema-core-*.jar"/>
 			</lib>
 			<fileset dir="${system.config.grid.loginService.dir}">
 				<include name="**/*" />

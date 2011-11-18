@@ -24,6 +24,8 @@
 				<ref bean="HibernateMappingTransformer"/>
 				<ref bean="IsoConstantTransformer"/>
 				<ref bean="BeanTransformer"/>
+				<ref bean="RESTfulResourceTransformer"/>
+				<ref bean="RESTfulAppTransformer"/>
 				<ref bean="JunitPojoTransformer"/>
 				<ref bean="JunitXmlDataTransformer"/>
 				<ref bean="JunitXsdTransformer"/>				
@@ -60,6 +62,10 @@
 				<prop key="Exclude Namespace">@EXCLUDE_NAMESPACE@</prop>
 				<prop key="Identity Generator Tag"><![CDATA[@IDENTITY_GENERATOR_TAG@]]></prop>
 				<prop key="Database Type">@DATABASE_TYPE@</prop>
+				<prop key="Include REST Package">@RESTFUL_RESOURES_INCLUDE_PACKAGE@</prop>
+				<prop key="Exclude REST Package">@RESTFUL_RESOURES_EXCLUDE_PACKAGE@</prop>
+				<prop key="Exclude REST Name">@RESTFUL_RESOURES_EXCLUDE_NAME@</prop>
+
 			</props>
 		</constructor-arg>
 	</bean>
@@ -169,6 +175,32 @@
 		<property name="enabled" value="@GENERATE_BEANS@"/>
 		<property name="name" value="Bean Transformer"/>
 		<property name="transformerUtils" ref="TransformerUtils"></property>
+	</bean>
+
+	<bean name="RESTfulResourceTransformer" class="gov.nih.nci.codegen.transformer.jet.RESTfulResourceTransformer">
+		<property name="artifactHandler">
+			<bean class="gov.nih.nci.codegen.handler.FileHandler">
+				<property name="useArtifactSource" value="true"/>
+				<property name="outputDir" value="@OUTPUTDIR@"/>				
+				<property name="suffix" value=".java"/>									
+			</bean>
+		</property>
+		<property name="enabled" value="@GENERATE_RESTFUL_RESOURCES@"/>
+		<property name="name" value="RESTful Resource Transformer"/>
+		<property name="transformerUtils" ref="TransformerUtils"></property>
+	</bean>
+
+	<bean name="RESTfulAppTransformer" class="gov.nih.nci.codegen.transformer.jet.SDKRESTAppTransformer">
+		<property name="artifactHandler">
+			<bean class="gov.nih.nci.codegen.handler.FileHandler">
+				<property name="useArtifactSource" value="false"/>
+				<property name="outputDir" value="@OUTPUTDIR@"/>				
+				<property name="fileName" value="RESTResources.txt"/>						
+			</bean>
+		</property>
+		<property name="enabled" value="@GENERATE_RESTFUL_RESOURCES@"/>
+		<property name="name" value="RESTful Application Transformer"/>
+		<property name="transformerUtils" ref="TransformerUtils"></property>			
 	</bean>
 	
 	<bean name="JunitPojoTransformer" class="gov.nih.nci.codegen.transformer.jet.JunitPojoTransformer">

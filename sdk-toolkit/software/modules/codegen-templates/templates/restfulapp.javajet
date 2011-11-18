@@ -1,0 +1,13 @@
+<%@ jet package="gov.nih.nci.codegen.transformer.jet" 
+        class="SDKRESTAppTransformer"
+        skeleton="ModelTransformerBase.skeleton" %>
+
+			gov.nih.nci.system.web.SDKRESTfulResource
+<%for(UMLClass klass:transformerUtils.getAllRESTResources(model)){
+	if(!transformerUtils.isAbstract(klass))
+	{
+%>
+			<%=transformerUtils.getFQCN(klass)%>Resource
+<%
+	}
+}%>

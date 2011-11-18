@@ -204,6 +204,7 @@ public class SearchUtils {
 				throw new Exception("Criteria not defined");
 			}
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			log.error("ERROR : " + ex.getMessage());
 			throw new Exception("ERROR :  " + ex.getMessage());
 		}

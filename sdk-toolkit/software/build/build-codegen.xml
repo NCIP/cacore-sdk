@@ -175,6 +175,14 @@
 			<equals arg1="${GENERATE_BEANS}" arg2="yes" casesensitive="false" trim="true" />
 		</or>
 	</condition>
+
+	<condition property="ENABLE_RESTFUL_GENERATION" value="true" else="false">
+		<or>
+			<equals arg1="${GENERATE_RESTFUL_RESOURCES}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${GENERATE_RESTFUL_RESOURCES}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
+	</condition>
+
 	<condition property="ENABLE_JUNIT_GENERATION" value="true" else="false">
 		<or>
 			<equals arg1="${GENERATE_JUNITS}" arg2="true" casesensitive="false" trim="true" />
@@ -374,6 +382,7 @@
 			<filter token="GENERATE_HIBERNATE_MAPPING" value="${ENABLE_HIBERNATE_MAPPING_GENERATION}" />
 			<filter token="GENERATE_ISO_CONSTANT" value="${ENABLE_ISO_CONSTANT_GENERATION}" />
 			<filter token="GENERATE_BEANS" value="${ENABLE_BEANS_GENERATION}" />
+			<filter token="GENERATE_RESTFUL_RESOURCES" value="${ENABLE_RESTFUL_GENERATION}" />
 			<filter token="GENERATE_JUNITS" value="${ENABLE_JUNIT_GENERATION}" />
 			<filter token="GENERATE_CASTOR_MAPPING" value="${ENABLE_CASTOR_MAPPING_GENERATION}" />
 			<filter token="GENERATE_JAXB_MAPPING" value="${ENABLE_JAXB_MAPPING_GENERATION}" />

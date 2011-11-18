@@ -194,7 +194,7 @@
 	  <target name="resolve" description="--> retrieve dependencies with maven">
 	      <!-- Resolve dependencies -->
 	      <artifact:dependencies filesetId="dependency.fileset">
-		  <pom file="pom.xml" />
+		  <pom file="${modules.dir}/pom.xml" />
 	      </artifact:dependencies>
 	      <!-- Copy all dependencies to the correct location. -->
 	      <copy todir="${lib.dir}">

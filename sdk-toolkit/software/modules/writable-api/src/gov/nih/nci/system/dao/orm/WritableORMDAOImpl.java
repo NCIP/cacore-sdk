@@ -22,12 +22,13 @@ import org.hibernate.Session;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 
-public class WritableORMDAOImpl extends ORMDAOImpl implements WritableDAO 
+public class WritableORMDAOImpl extends ORMDAOImpl implements WritableDAO
 {
 	@Override
 	@SuppressWarnings("unchecked")
-	public Response query(Request request) throws DAOException 
+	public Response query(Request request) throws DAOException
 	{
+		System.out.println("WritableORMDAOImpl query....");
 		if(! (request.getRequest() instanceof SDKQuery))
 			return super.query(request);
 
@@ -45,7 +46,7 @@ public class WritableORMDAOImpl extends ORMDAOImpl implements WritableDAO
 				delete(((DeleteExampleQuery) q).getExample());
 				result = new SDKQueryResult(true);
 			}
-			else if (q instanceof UpdateExampleQuery) 
+			else if (q instanceof UpdateExampleQuery)
 			{
 				update(((UpdateExampleQuery) q).getExample());
 				result = new SDKQueryResult(((UpdateExampleQuery) q).getExample());
@@ -57,12 +58,12 @@ public class WritableORMDAOImpl extends ORMDAOImpl implements WritableDAO
 			}
 			else if(q instanceof DeleteHQLQuery)
 			{
-				update(((DeleteHQLQuery)q).getHqlString(),((DeleteHQLQuery)q).getParameters());
+				delete(((DeleteHQLQuery)q).getHqlString(),((DeleteHQLQuery)q).getParameters());
 				result = new SDKQueryResult(true);
 			}
 			else if(q instanceof UpdateHQLQuery)
 			{
-				delete(((UpdateHQLQuery)q).getHqlString(),((UpdateHQLQuery)q).getParameters());
+				update(((UpdateHQLQuery)q).getHqlString(),((UpdateHQLQuery)q).getParameters());
 				result = new SDKQueryResult(true);
 			}
 
@@ -74,7 +75,7 @@ public class WritableORMDAOImpl extends ORMDAOImpl implements WritableDAO
 	public void insert(Object o)
 	{
 		log.info("In the writable DAO. executing the Insert query");
-		getFlushAutoHibernateTemplate().save(o);	
+		getFlushAutoHibernateTemplate().save(o);
 	}
 
 	public void update(Object o)
@@ -89,7 +90,7 @@ public class WritableORMDAOImpl extends ORMDAOImpl implements WritableDAO
 		getFlushAutoHibernateTemplate().delete(o);
 	}
 
-	public void insert(final String hql, final List<Object> paramList) 
+	public void insert(final String hql, final List<Object> paramList)
 	{
 		log.info("In the writable DAO. executing the Insert query");
 		HibernateCallback callBack = getExecuteUpdateHibernateCallback(hql,paramList);
@@ -109,7 +110,7 @@ public class WritableORMDAOImpl extends ORMDAOImpl implements WritableDAO
 		HibernateCallback callBack = getExecuteUpdateHibernateCallback(hql,paramList);
 		getFlushAutoHibernateTemplate().execute(callBack);
 	}
-	
+
 	protected HibernateCallback getExecuteUpdateHibernateCallback(final String hql, final List<Object> paramList)
 	{
 		HibernateCallback callBack = new HibernateCallback(){
@@ -126,10 +127,10 @@ public class WritableORMDAOImpl extends ORMDAOImpl implements WritableDAO
 		};
 		return callBack;
 	}
-	
+
 	public HibernateTemplate getFlushAutoHibernateTemplate() {
 		HibernateTemplate template = getHibernateTemplate();
 		template.setFlushMode(HibernateTemplate.FLUSH_AUTO);
 		return template;
-	}	
+	}
 }
