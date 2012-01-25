@@ -260,6 +260,10 @@
 																								<td class="sidebarContent">
 																									<ul>
 																										<li>
+																											508 Compliance
+																										</li>
+
+																										<li>
 																											New User Interface
 																										</li>
 																										<li>
