@@ -289,8 +289,11 @@
 						<chmod dir="${tomcat.home}/bin" perm="ugo+rx" includes="**/*.sh" />
 					</then>
 				</if>
+				<tomcat-nci-customizations
+					/>
 			</then>
 		</if>
+		
 	</target>
 
 	<target name="install:tomcat:clean" unless="exclude.tomcat" depends="common:tomcat:init">
