@@ -2,7 +2,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 
 <html>
-<s:head theme="ajax" debug="true" />
 <title>Privacy Notice</title>
 <link rel="stylesheet" type="text/css" href="styleSheet.css" />
 <script src="script.js" type="text/javascript"></script>

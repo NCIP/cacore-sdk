@@ -1,7 +1,8 @@
 <%@taglib prefix="s" uri="/struts-tags" %>
-<%@ taglib prefix="sx" uri="/struts-dojo-tags" %>
 
 <%@ page import="gov.nih.nci.system.web.util.JSPUtils"%>
+<%@ page import="gov.nih.nci.system.web.ajax.tree.Category"%>
+
 <%
 	JSPUtils jspUtils= JSPUtils.getJSPUtils(config.getServletContext());
 	boolean isSecurityEnabled = jspUtils.isSecurityEnabled();
@@ -12,41 +13,51 @@
 <head>
 <title>Content</title>
 <link rel="stylesheet" type="text/css" href="styleSheet.css" />
-<script type="text/javascript" src="jquery-1.4.2.min.js"></script>
-<script type="text/javascript" src="jquery-ui-1.8.2.custom.min.js"></script>
-<script type="text/javascript" src="jquery.validate-1.7.min.js"></script>
-<script type="text/javascript" src="sdk-jquery.validate.js"></script>
-<script type="text/javascript" src="script.js" ></script>
-<script>
-	function setFocus(fieldName)
-	{
-		try {
-			document.getElementById( fieldName ).focus();
-		} catch(e) {
-			return true;
-		}
-	}// setFocus()    
-</script>
-<sx:head parseContent="true"/>
-<script>
-	<!-- transport: "XMLHTTPTransport" -->
-    function treeNodeSelected(nodeId) {
-        dojo.io.bind({
-            url: "<s:url value='Criteria.action' />?nodeId="+nodeId.node.widgetId,
-            load: function(type, data, evt) {
-                var displayDiv = dojo.byId("displayId");
-                displayDiv.innerHTML = data;
-		    	enableValidation();
-		    	setTabIndex();
-            },
-            mimeType: "text/html"
-        });
-    };
+<link rel="stylesheet" type="text/css" href="dijit/themes/tundra/tundra.css">
 
-    dojo.event.topic.subscribe("treeSelected", this, "treeNodeSelected"); 
+<script type="text/javascript" src="dojo/dojo.js"
+djConfig="parseOnLoad: true">
+
+<script type="text/javascript" src="script.js" ></script>
+
+<script>
+
+dojo.require("dojo.store.Memory");
+dojo.require("dijit.tree.ObjectStoreModel");
+dojo.require("dijit.Tree");
+dojo.require("dijit.layout.ContentPane");
+dojo.require("dijit.Tooltip");
+dojo.addOnLoad(function() {
+});
 </script>
 </head>
-<body>
+
+<%
+Category category = (Category) request.getAttribute("sdkTreeRootNode");
+%>
+<body class="tundra">
+<div data-dojo-type="dojo.store.Memory" data-dojo-id="sdkTreeStore">
+    <!-- Create store with inlined data.
+        For larger data sets should use dojo.store.JsonRest etc. instead of dojo.store.Memory. -->
+    <script type="dojo/method">
+         this.setData([
+            <%=category.getTreeData()%>
+        ]);
+    </script>
+    <script type="dojo/method" data-dojo-event="getChildren" data-dojo-args="object">
+         // Supply a getChildren() method to store for the data model where
+         // children objects point to their parent (aka relational model)
+         return this.query({parent: object.id});
+    </script>
+
+    
+</div>
+
+<div data-dojo-type="dijit.tree.ObjectStoreModel" data-dojo-id="sdkTreeModel"
+  data-dojo-props="store: sdkTreeStore, query: {id: '<%=category.getId()%>'}"></div>
+
+
+
 <table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="500px">
 
 <%@ include file="include/header.inc" %>	
@@ -125,18 +136,21 @@
 													</tr>
 													<tr>
 														<td valign="top" style="border:0px; border-right:1px; border-style:solid; border-color:black;">
-															<div style="overflow:auto; height:350px; float:left; margin: 7px;">
-															<sx:tree 
-															    rootNode="%{classTreeRootNode}" 
-															    childCollectionProperty="children" 
-															    nodeIdProperty="id"
-															    nodeTitleProperty="name"
-															    treeSelectedTopic="treeSelected">
-															</sx:tree> 
-															</div>														
+															<!-- Create the tree -->
+
+															<div style="overflow:auto; height:350px; float:left; margin: 7px;" 
+															dojoType="dijit.Tree" id="mytree" model="sdkTreeModel" openOnClick="false">
+															    <script type="dojo/method" event="onClick" args="item">
+																var myCp = dijit.byId('MyTab'); 
+																myCp.set("href", "Criteria.action?nodeId="+item.id);
+															    </script>
+															</div>
+
 															<img width="400" height="1" alt="Layout Spacer"/>														
 														</td>
 														<td valign="top" id="displayId">
+															<div id="MyTab" preload="false" extractContent="true" dojoType="dijit.layout.ContentPane" selected="true" >
+															</div> 
 														</td>									
 													</tr>														
 												</table>
