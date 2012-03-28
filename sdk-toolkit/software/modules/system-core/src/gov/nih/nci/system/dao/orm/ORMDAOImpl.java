@@ -172,9 +172,13 @@ public class ORMDAOImpl extends HibernateDaoSupport implements DAO
 		}
 		else 
 		{
+			int firstRow = request.getFirstRow() == null ? -1 : request.getFirstRow();
+			int maxRows = request.getRecordsCount() == null ? resultCountPerQuery : request.getRecordsCount();
+			
 			log.info("HQL Query :"+hqlCriteria.getHqlString());
 			Response rsp = new Response();
-	    	HibernateCallback callBack = getExecuteFindQueryHibernateCallback(hqlCriteria.getHqlString(),hqlCriteria.getParameters(), request.getFirstRow() == null?-1:request.getFirstRow(),resultCountPerQuery);
+	    	HibernateCallback callBack = getExecuteFindQueryHibernateCallback(hqlCriteria.getHqlString(),hqlCriteria.getParameters(), 
+	    			firstRow, maxRows);
 	    	List rs = (List)getFlushNeverHibernateTemplate().execute(callBack);
 	    	rsp.setRowCount(rs.size());
 	    	rsp.setResponse(rs);

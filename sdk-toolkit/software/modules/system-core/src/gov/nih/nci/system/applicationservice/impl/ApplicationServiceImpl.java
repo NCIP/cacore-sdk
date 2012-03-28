@@ -246,10 +246,25 @@ public class ApplicationServiceImpl implements ApplicationService {
 	 */
 	protected <E> List<E> privateQuery(Object criteria, String targetClassName) throws ApplicationException 
 	{
+		int firstRow = 0;
+		int maxRows = 0;
+		
+		if (criteria instanceof HQLCriteria) {
+			HQLCriteria hqlCriteria = (HQLCriteria) criteria;
+			if (hqlCriteria.getFirstRow() != -1) {
+				firstRow = hqlCriteria.getFirstRow();
+			}
+			if (hqlCriteria.getNumberOfRows() != -1) {
+				maxRows = hqlCriteria.getNumberOfRows();
+			}
+		}
 		
 		Request request = new Request(criteria);
 		request.setIsCount(Boolean.FALSE);
-		request.setFirstRow(0);
+		request.setFirstRow(firstRow);
+		if (maxRows != 0) {
+			request.setRecordsCount(maxRows);
+		}
 		request.setDomainObjectName(targetClassName);
 
 		Response response = query(request);

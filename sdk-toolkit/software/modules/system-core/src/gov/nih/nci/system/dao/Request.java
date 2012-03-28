@@ -5,11 +5,11 @@ import gov.nih.nci.system.util.ClassCache;
 import java.util.Hashtable;
 /**
  * Provides various methods to submit a query request to a specified datasource
- * @author Satish Patel 
+ * @author Satish Patel
  */
 public class Request implements java.io.Serializable
 {
-	
+
 	private static final long serialVersionUID = 1234567890L;
 	private Object request;
 	private String domainObjectName;
@@ -17,16 +17,16 @@ public class Request implements java.io.Serializable
 	private Boolean isCount;
 //	private Boolean caseSensitivity;
 	private Integer firstRow;
-//	private Integer recordsCount;
+	private Integer recordsCount;
 	private ClassCache classCache;
-	
+
 	/**
 	 * Creates a Request instance
 	 */
 	public Request()
 	{
-	}	
-	
+	}
+
 	/**
 	 * Creates a Request instance for a given object
 	 * @param request
@@ -38,13 +38,13 @@ public class Request implements java.io.Serializable
 
 	/**
 	 * Sets the value for this request object
-	 * @param request 	Specifies the request object	 
+	 * @param request 	Specifies the request object
 	 */
 	public void setRequest(Object request)
 	{
 		this.request=request;
 	}
-	
+
 	/**
 	 * Returns a value for this request object
 	 * @return 	returns a request object
@@ -53,7 +53,7 @@ public class Request implements java.io.Serializable
 	{
 		return request;
 	}
-	
+
 	/**
 	 * Sets the name for this domain object
 	 * @param domainObjectName 	Specifies the domain object name
@@ -62,7 +62,7 @@ public class Request implements java.io.Serializable
 	{
 		this.domainObjectName=domainObjectName;
 	}
-	
+
 	/**
 	 * Returns the domain object name of this request
 	 * @return returns the name of this domain object
@@ -71,18 +71,18 @@ public class Request implements java.io.Serializable
 	{
 		return domainObjectName;
 	}
-	
+
 	/**
 	 * Sets the configuration value
 	 * @param config	Specifies the configuration values
 	 */
-	
+
 	public void setConfig(Hashtable config)
 	{
 		this.config = config;
-		
+
 	}
-	
+
 	/**
 	 * Returns the configuration values for this request
 	 * @return Returns the configuration values
@@ -107,22 +107,22 @@ public class Request implements java.io.Serializable
 	{
 	    return this.firstRow;
 	}
-//	/**
-//	 * Set recordsCount value
-//	 * @param rc
-//	 */
-//	public void setRecordsCount(Integer rc)
-//	{
-//	    this.recordsCount = rc;
-//	}
-//	/**
-//	 * 
-//	 * @return recordsCount value
-//	 */
-//	public Integer getRecordsCount()
-//	{
-//	    return this.recordsCount;
-//	}
+	/**
+	 * Set recordsCount value
+	 * @param rc
+	 */
+	public void setRecordsCount(Integer rc)
+	{
+	    this.recordsCount = rc;
+	}
+	/**
+	 *
+	 * @return recordsCount value
+	 */
+	public Integer getRecordsCount()
+	{
+	    return this.recordsCount;
+	}
 
 	/**
 	 * Return isCount value
@@ -158,5 +158,5 @@ public class Request implements java.io.Serializable
 //	{
 //		this.caseSensitivity = caseSensitivity;
 //	}
-	
+
 }
