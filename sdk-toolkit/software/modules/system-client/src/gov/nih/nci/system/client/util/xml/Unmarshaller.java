@@ -4,7 +4,7 @@ package gov.nih.nci.system.client.util.xml;
  * The object used for deserializing an xml rempresentation of an object back to a java bean.
  */
 public interface Unmarshaller {
-	
+
 	/**
 	 * Deserializes xml to a java bean.
 	 *
@@ -17,6 +17,9 @@ public interface Unmarshaller {
 	 * @param  file the object to be deserialzed.
 	 */
    Object fromXML(java.io.File file) throws XMLUtilityException;
+
+   Object fromXML(java.io.File file, final String namespacePrefix) throws XMLUtilityException;
+
 	/**
 	 * Returns the base unmarshaller
 	 *
