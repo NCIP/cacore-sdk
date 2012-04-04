@@ -23,8 +23,10 @@
 		</property>
 	</bean>
 
+	<!--@GLOBUS_FILTER_START@-->
 	<bean id="x509InitializingFilter" class="gov.nih.nci.system.security.acegi.ui.globus.X509InitializationFilter"/>
-
+	<!--@GLOBUS_FILTER_END@-->
+	
 	<bean id="x509ProcessingFilter" class="org.acegisecurity.ui.x509.X509ProcessingFilter">
 		<property name="authenticationManager" ref="authenticationManager"/>
 	</bean>

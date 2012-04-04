@@ -42,6 +42,7 @@
 		</property>
 	</bean>
 
+	<!--@GRID_LOGIN_PROVIDER_START@-->
 	<bean id="gridAuthenticationProvider" class="gov.nih.nci.system.security.acegi.authentication.GridAuthenticationProvider">
 		<property name="loginModule" value="@CAGRID_LOGIN_MODULE_NAME@"/>
 		<property name="x509AuthenticationProvider">
@@ -62,7 +63,8 @@
 			</bean>
 		</property>
 	</bean>
-
+	<!--@GRID_LOGIN_PROVIDER_END@-->
+	
 	<bean id="csmAuthenticationProvider" class="gov.nih.nci.system.security.acegi.authentication.CSMAuthenticationProvider">
 		<property name="userDetailsService">
 			<ref bean="userDetailsService"/>
