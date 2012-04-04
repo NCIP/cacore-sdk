@@ -31,6 +31,7 @@
 	<property name="grid-jaas-jndi-binder.module.name" value="grid-jaas-jndi-binder" />
 	<property name="grid-remoting.module.name" value="grid-remoting" />
 	<property name="security.module.name" value="security" />
+	<property name="grid-security.module.name" value="grid-security" />
 	<property name="security-client.module.name" value="security-client" />
 	<property name="system-client.module.name" value="system-client" />
 	<property name="system-core.module.name" value="system-core" />
@@ -95,11 +96,23 @@
 	<target name="compile:application-code" depends="-init, -compile:templates" description="Compiles all subproject code">
 		<mkdir dir="${build.classes.dir}" />
 		
-		<javac 
-			srcdir="${codegen.module.name}/src:${codegen-templates.module.name}/src:${codegen-validator.module.name}/src:${codegen-validator-templates.module.name}/src:${grid-jaas.module.name}/src:${grid-jaas-client.module.name}/src:${grid-jaas-jndi-binder.module.name}/src:${grid-remoting.module.name}/src:${security.module.name}/src:${security-client.module.name}/src:${system-client.module.name}/src:${system-core.module.name}/src:${system-logging.module.name}/src:${system-web.module.name}/src:${system-ws.module.name}/src:${writable-api.module.name}/src:${writable-api-client.module.name}/src"
-			destdir="${build.classes.dir}" debug="true">
-			<classpath refid="project.compile.classpath" />
-		</javac>
+		<if>
+			<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true"/>
+			<then>
+				<javac 
+					srcdir="${codegen.module.name}/src:${codegen-templates.module.name}/src:${codegen-validator.module.name}/src:${codegen-validator-templates.module.name}/src:${grid-jaas.module.name}/src:${grid-jaas-client.module.name}/src:${grid-jaas-jndi-binder.module.name}/src:${grid-remoting.module.name}/src:${grid-security.module.name}/src:${security.module.name}/src:${security-client.module.name}/src:${system-client.module.name}/src:${system-core.module.name}/src:${system-logging.module.name}/src:${system-web.module.name}/src:${system-ws.module.name}/src:${writable-api.module.name}/src:${writable-api-client.module.name}/src"
+					destdir="${build.classes.dir}" debug="true">
+					<classpath refid="project.compile.classpath" />
+				</javac>
+			</then>
+			<else>
+				<javac 
+					srcdir="${codegen.module.name}/src:${codegen-templates.module.name}/src:${codegen-validator.module.name}/src:${codegen-validator-templates.module.name}/src:${security.module.name}/src:${security-client.module.name}/src:${system-client.module.name}/src:${system-core.module.name}/src:${system-logging.module.name}/src:${system-web.module.name}/src:${system-ws.module.name}/src:${writable-api.module.name}/src:${writable-api-client.module.name}/src"
+					destdir="${build.classes.dir}" debug="true">
+					<classpath refid="project.compile.classpath" />
+				</javac>
+			</else>
+		</if>
 	</target>
 
 	<macrodef name="create-jar" description="Creates a JAR file">

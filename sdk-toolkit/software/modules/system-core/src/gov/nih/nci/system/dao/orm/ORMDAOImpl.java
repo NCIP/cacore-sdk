@@ -7,7 +7,6 @@ import gov.nih.nci.system.dao.Response;
 import gov.nih.nci.system.dao.orm.translator.CQL2HQL;
 import gov.nih.nci.system.dao.orm.translator.NestedCriteria2HQL;
 import gov.nih.nci.system.dao.orm.translator.Path2NestedCriteria;
-import gov.nih.nci.system.query.cql.CQLQuery;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
 import gov.nih.nci.system.query.nestedcriteria.NestedCriteria;
 import gov.nih.nci.system.query.nestedcriteria.NestedCriteriaPath;
@@ -70,8 +69,6 @@ public class ORMDAOImpl extends HibernateDaoSupport implements DAO
 				return query(request, (NestedCriteriaPath) obj); 	
 			else if (obj instanceof HQLCriteria)
 				return query(request, (HQLCriteria) obj);
-			else if (obj instanceof CQLQuery)
-				return query(request, (CQLQuery) obj);
 			else
 				throw new DAOException("Can not determine type of the query");
 		} catch (JDBCException ex){
@@ -146,13 +143,6 @@ public class ORMDAOImpl extends HibernateDaoSupport implements DAO
 		return query(request, hqlCriteria);
 	}
 	
-	//if (obj instanceof CQLQuery)
-	protected Response query(Request request, CQLQuery obj) throws Exception	
-	{
-		CQL2HQL converter = new CQL2HQL(request.getClassCache());
-		HQLCriteria hqlCriteria = converter.translate((CQLQuery)obj, false, caseSensitive);
-		return query(request, hqlCriteria);		
-	}
 
 	//if (obj instanceof HQLCriteria)
 	protected Response query(Request request, HQLCriteria hqlCriteria) throws Exception
