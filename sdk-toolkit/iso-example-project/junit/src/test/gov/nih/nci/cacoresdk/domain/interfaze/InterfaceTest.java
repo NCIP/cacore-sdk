@@ -10,6 +10,8 @@ import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.query.cql.CQLObject;
 import gov.nih.nci.system.query.cql.CQLQuery;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
+import gov.nih.nci.system.dao.orm.translator.CQL2HQL;
+import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
 import java.io.Serializable;
 import java.lang.reflect.Modifier;
@@ -28,24 +30,24 @@ public class InterfaceTest extends SDKISOTestBase
 	{
 		return "Interface Test Case";
 	}
-	
+
 	/**
 	 * Uses Nested Search Criteria for search
-	 * Verifies that the results are returned 
+	 * Verifies that the results are returned
 	 * Verifies size of the result set
 	 * Verifies that none of the attribute is null
-	 * 
+	 *
 	 * @throws ApplicationException
 	 */
 	public void testEntireObjectNestedSearch1() throws ApplicationException
 	{
 		Dog searchObject = new Dog();
-		
+
 		Collection results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.interfaze.Dog",searchObject );
 
 		assertNotNull(results);
 		assertEquals(3,results.size());
-		
+
 		for(Iterator i = results.iterator();i.hasNext();)
 		{
 			Dog result = (Dog)i.next();
@@ -59,25 +61,28 @@ public class InterfaceTest extends SDKISOTestBase
 
 	/**
 	 * Uses CQL Criteria for search
-	 * Verifies that the results are returned 
+	 * Verifies that the results are returned
 	 * Verifies size of the result set
 	 * Verifies that none of the attribute is null
-	 * 
+	 *
 	 * @throws ApplicationException
 	 */
 	public void testEntireObjectCQL1() throws ApplicationException
 	{
 		CQLQuery cqlQuery = new CQLQuery();
 		CQLObject target = new CQLObject();
-		
+
 		target.setName("gov.nih.nci.cacoresdk.domain.interfaze.Dog");
 		cqlQuery.setTarget(target);
 
-		Collection results = getApplicationService().query(cqlQuery);
+		CQL2HQL converter = new CQL2HQL(getClassCache());
+		HQLCriteria hqlCriteria = converter.translate(cqlQuery, false, false);
+
+		Collection results = getApplicationService().query(hqlCriteria);
 
 		assertNotNull(results);
 		assertEquals(3,results.size());
-		
+
 		for(Iterator i = results.iterator();i.hasNext();)
 		{
 			Dog result = (Dog)i.next();
@@ -88,7 +93,7 @@ public class InterfaceTest extends SDKISOTestBase
 			assertNotNull(result.getGender());
 		}
 	}
-	
+
 	public void testEntireObjectHQL1() throws ApplicationException {
 		HQLCriteria hqlCriteria = new HQLCriteria(
 				"from gov.nih.nci.cacoresdk.domain.interfaze.Dog");
@@ -106,22 +111,22 @@ public class InterfaceTest extends SDKISOTestBase
 			assertNotNull(result.getGender());
 		}
 	}
-	
+
 	public void testExtendsInterface1() throws ApplicationException
 	{
 		assertEquals(Carnivora.class.asSubclass(Mammalia.class),Carnivora.class);
 	}
-	
+
 	public void testExtendsInterface2() throws ApplicationException
 	{
 		assertEquals(Canidae.class.asSubclass(Carnivora.class),Canidae.class);
 	}
-	
+
 	public void testExtendsInterface3() throws ApplicationException
 	{
 		assertEquals(Canidae.class.asSubclass(Digitigrade.class),Canidae.class);
 	}
-	
+
 	public void testImplementsInterface1() throws ApplicationException
 	{
 		List<Class> implementedInterfaces = new ArrayList<Class>();
@@ -129,43 +134,43 @@ public class InterfaceTest extends SDKISOTestBase
 		implementedInterfaces.add(Canidae.class);
 		implementedInterfaces.add(Pet.class);
 		implementedInterfaces.add(CycleRecoverable.class);
-		
+
 		for (Class interfaceKlass : Dog.class.getInterfaces()){
 			Boolean result = implementedInterfaces.contains(interfaceKlass);
 			assertTrue(result);
 		}
 	}
-	
+
 	public void testIsInterface1() throws ApplicationException
 	{
 		assertTrue(Modifier.isInterface(Canidae.class.getModifiers()));
 		assertTrue(Canidae.class.isInterface());
 	}
-	
+
 	public void testIsInterface2() throws ApplicationException
 	{
 		assertTrue(Modifier.isInterface(Digitigrade.class.getModifiers()));
 		assertTrue(Digitigrade.class.isInterface());
 	}
-		
+
 	public void testIsInterface3() throws ApplicationException
 	{
 		assertTrue(Modifier.isInterface(Carnivora.class.getModifiers()));
 		assertTrue(Carnivora.class.isInterface());
 	}
-	
+
 	public void testIsInterface4() throws ApplicationException
 	{
 		assertTrue(Modifier.isInterface(Mammalia.class.getModifiers()));
 		assertTrue(Mammalia.class.isInterface());
 	}
-	
+
 	public void testIsInterface5() throws ApplicationException
 	{
 		assertTrue(Modifier.isInterface(Pet.class.getModifiers()));
 		assertTrue(Pet.class.isInterface());
 	}
-	
+
 	public void testInstanceof() throws ApplicationException
 	{
 		Dog dog = new Dog();

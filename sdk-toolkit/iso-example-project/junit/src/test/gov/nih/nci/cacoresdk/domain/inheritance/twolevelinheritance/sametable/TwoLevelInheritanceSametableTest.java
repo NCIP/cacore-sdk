@@ -15,6 +15,8 @@ import gov.nih.nci.system.query.cql.CQLObject;
 import gov.nih.nci.system.query.cql.CQLPredicate;
 import gov.nih.nci.system.query.cql.CQLQuery;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
+import gov.nih.nci.system.dao.orm.translator.CQL2HQL;
+import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -27,14 +29,14 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 	{
 		return "Two Level Inheritance Same Table Test Case";
 	}
-	
+
 
 	/**
 	 * Uses Nested Search Criteria for search
-	 * Verifies that the results are returned 
+	 * Verifies that the results are returned
 	 * Verifies size of the result set
 	 * Verifies that none of the attribute is null
-	 * 
+	 *
 	 * @throws ApplicationException
 	 */
 	public void testEntireObjectNestedSearch1() throws ApplicationException
@@ -44,7 +46,7 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 
 		assertNotNull(results);
 		assertEquals(3,results.size());
-		
+
 		for(Iterator i = results.iterator();i.hasNext();)
 		{
 			Goverment result = (Goverment)i.next();
@@ -54,13 +56,13 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 			assertNotNull(result.getCountry());
 		}
 	}
-	
+
 	/**
 	 * Uses Nested Search Criteria for search
-	 * Verifies that the results are returned 
+	 * Verifies that the results are returned
 	 * Verifies size of the result set
 	 * Verifies that none of the attribute is null
-	 * 
+	 *
 	 * @throws ApplicationException
 	 */
 	public void testEntireObjectNestedSearch2() throws ApplicationException
@@ -70,7 +72,7 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 
 		assertNotNull(results);
 		assertEquals(1,results.size());
-		
+
 		for(Iterator i = results.iterator();i.hasNext();)
 		{
 			CommunistGovt result = (CommunistGovt)i.next();
@@ -83,10 +85,10 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 
 	/**
 	 * Uses Nested Search Criteria for search
-	 * Verifies that the results are returned 
+	 * Verifies that the results are returned
 	 * Verifies size of the result set
 	 * Verifies that none of the attribute is null
-	 * 
+	 *
 	 * @throws ApplicationException
 	 */
 	public void testEntireObjectNestedSearch3() throws ApplicationException
@@ -96,7 +98,7 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 
 		assertNotNull(results);
 		assertEquals(2,results.size());
-		
+
 		for(Iterator i = results.iterator();i.hasNext();)
 		{
 			DemocraticGovt result = (DemocraticGovt)i.next();
@@ -109,10 +111,10 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 
 	/**
 	 * Uses Nested Search Criteria for search
-	 * Verifies that the results are returned 
+	 * Verifies that the results are returned
 	 * Verifies size of the result set
 	 * Verifies that none of the attribute is null
-	 * 
+	 *
 	 * @throws ApplicationException
 	 */
 	public void testEntireObjectNestedSearch4() throws ApplicationException
@@ -122,24 +124,24 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 
 		assertNotNull(results);
 		assertEquals(1,results.size());
-		
+
 		for(Iterator i = results.iterator();i.hasNext();)
 		{
 			ParliamantaryGovt result = (ParliamantaryGovt)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
 			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
-			assertNotNull(result.getCountry());			
+			assertNotNull(result.getCountry());
 			assertNotNull(result.getPrimeMinister());
 		}
 	}
 
 	/**
 	 * Uses Nested Search Criteria for search
-	 * Verifies that the results are returned 
+	 * Verifies that the results are returned
 	 * Verifies size of the result set
 	 * Verifies that none of the attribute is null
-	 * 
+	 *
 	 * @throws ApplicationException
 	 */
 	public void testEntireObjectNestedSearch5() throws ApplicationException
@@ -149,40 +151,43 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 
 		assertNotNull(results);
 		assertEquals(1,results.size());
-		
+
 		for(Iterator i = results.iterator();i.hasNext();)
 		{
 			PresidentialGovt result = (PresidentialGovt)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
 			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
-			assertNotNull(result.getCountry());	
+			assertNotNull(result.getCountry());
 			assertNotNull(result.getPresident());
 		}
 	}
-	
+
 
 	/**
 	 * Uses CQL Criteria for search
-	 * Verifies that the results are returned 
+	 * Verifies that the results are returned
 	 * Verifies size of the result set
 	 * Verifies that none of the attribute is null
-	 * 
+	 *
 	 * @throws ApplicationException
 	 */
 	public void testEntireObjectCQL1() throws ApplicationException
 	{
 		CQLQuery cqlQuery = new CQLQuery();
 		CQLObject target = new CQLObject();
-		
+
 		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.Goverment");
 		cqlQuery.setTarget(target);
 
-		Collection results = getApplicationService().query(cqlQuery);
+		CQL2HQL converter = new CQL2HQL(getClassCache());
+		HQLCriteria hqlCriteria = converter.translate(cqlQuery, false, false);
+
+		Collection results = getApplicationService().query(hqlCriteria);
 
 		assertNotNull(results);
 		assertEquals(3,results.size());
-		
+
 		for(Iterator i = results.iterator();i.hasNext();)
 		{
 			Goverment result = (Goverment)i.next();
@@ -211,28 +216,31 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 			assertNotNull(result.getCountry());
 		}
 	}
-	
+
 	/**
 	 * Uses CQL Criteria for search
-	 * Verifies that the results are returned 
+	 * Verifies that the results are returned
 	 * Verifies size of the result set
 	 * Verifies that none of the attribute is null
-	 * 
+	 *
 	 * @throws ApplicationException
 	 */
 	public void testEntireObjectCQL2() throws ApplicationException
 	{
 		CQLQuery cqlQuery = new CQLQuery();
 		CQLObject target = new CQLObject();
-		
+
 		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.CommunistGovt");
 		cqlQuery.setTarget(target);
 
-		Collection results = getApplicationService().query(cqlQuery);
+		CQL2HQL converter = new CQL2HQL(getClassCache());
+		HQLCriteria hqlCriteria = converter.translate(cqlQuery, false, false);
+
+		Collection results = getApplicationService().query(hqlCriteria);
 
 		assertNotNull(results);
 		assertEquals(1,results.size());
-		
+
 		for(Iterator i = results.iterator();i.hasNext();)
 		{
 			CommunistGovt result = (CommunistGovt)i.next();
@@ -240,7 +248,7 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 			assertNotNull(result.getId());
 			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		}
-	}	
+	}
 
 	public void testEntireObjectHQL2() throws ApplicationException {
 		HQLCriteria hqlCriteria = new HQLCriteria(
@@ -258,28 +266,31 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		}
 	}
-	
+
 	/**
 	 * Uses CQL Criteria for search
-	 * Verifies that the results are returned 
+	 * Verifies that the results are returned
 	 * Verifies size of the result set
 	 * Verifies that none of the attribute is null
-	 * 
+	 *
 	 * @throws ApplicationException
 	 */
 	public void testEntireObjectCQL3() throws ApplicationException
 	{
 		CQLQuery cqlQuery = new CQLQuery();
 		CQLObject target = new CQLObject();
-		
+
 		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.ParliamantaryGovt");
 		cqlQuery.setTarget(target);
 
-		Collection results = getApplicationService().query(cqlQuery);
+		CQL2HQL converter = new CQL2HQL(getClassCache());
+		HQLCriteria hqlCriteria = converter.translate(cqlQuery, false, false);
+
+		Collection results = getApplicationService().query(hqlCriteria);
 
 		assertNotNull(results);
 		assertEquals(1,results.size());
-		
+
 		for(Iterator i = results.iterator();i.hasNext();)
 		{
 			ParliamantaryGovt result = (ParliamantaryGovt)i.next();
@@ -305,28 +316,31 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		}
 	}
-	
+
 	/**
 	 * Uses CQL Criteria for search
-	 * Verifies that the results are returned 
+	 * Verifies that the results are returned
 	 * Verifies size of the result set
 	 * Verifies that none of the attribute is null
-	 * 
+	 *
 	 * @throws ApplicationException
 	 */
 	public void testEntireObjectCQL4() throws ApplicationException
 	{
 		CQLQuery cqlQuery = new CQLQuery();
 		CQLObject target = new CQLObject();
-		
+
 		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.DemocraticGovt");
 		cqlQuery.setTarget(target);
 
-		Collection results = getApplicationService().query(cqlQuery);
+		CQL2HQL converter = new CQL2HQL(getClassCache());
+		HQLCriteria hqlCriteria = converter.translate(cqlQuery, false, false);
+
+		Collection results = getApplicationService().query(hqlCriteria);
 
 		assertNotNull(results);
 		assertEquals(2,results.size());
-		
+
 		for(Iterator i = results.iterator();i.hasNext();)
 		{
 			DemocraticGovt result = (DemocraticGovt)i.next();
@@ -355,25 +369,28 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 
 	/**
 	 * Uses CQL Criteria for search
-	 * Verifies that the results are returned 
+	 * Verifies that the results are returned
 	 * Verifies size of the result set
 	 * Verifies that none of the attribute is null
-	 * 
+	 *
 	 * @throws ApplicationException
 	 */
 	public void testEntireObjectCQL5() throws ApplicationException
 	{
 		CQLQuery cqlQuery = new CQLQuery();
 		CQLObject target = new CQLObject();
-		
+
 		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.PresidentialGovt");
 		cqlQuery.setTarget(target);
 
-		Collection results = getApplicationService().query(cqlQuery);
+		CQL2HQL converter = new CQL2HQL(getClassCache());
+		HQLCriteria hqlCriteria = converter.translate(cqlQuery, false, false);
+
+		Collection results = getApplicationService().query(hqlCriteria);
 
 		assertNotNull(results);
 		assertEquals(1,results.size());
-		
+
 		for(Iterator i = results.iterator();i.hasNext();)
 		{
 			PresidentialGovt result = (PresidentialGovt)i.next();
@@ -402,11 +419,11 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 			assertNotNull(result.getPresident());
 		}
 	}
-	
+
 	/**
 	 * Uses Nested Search Criteria for inheritance as association in search
 	 * Verifies that the result set is empty
-	 * 
+	 *
 	 * @throws ApplicationException
 	 */
 	public void testZeroAssociationNestedSearch() throws ApplicationException
@@ -421,13 +438,13 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 		assertEquals(0,results.size());
 	}
 
-	
+
 	/**
 	 * Uses Nested Search Criteria for inheritance as association in search
-	 * Verifies that the results are returned 
+	 * Verifies that the results are returned
 	 * Verifies size of the result set
 	 * Verifies that none of the attribute is null
-	 * 
+	 *
 	 * @throws ApplicationException
 	 */
 	public void testAssociationNestedSearch1() throws ApplicationException
@@ -437,22 +454,22 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 
 		assertNotNull(results);
 		assertEquals(1,results.size());
-		
+
 		for(Iterator i = results.iterator();i.hasNext();)
 		{
 			CommunistGovt result = (CommunistGovt)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
 			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
-		}		
+		}
 	}
 
 	/**
 	 * Uses CQL Search Criteria for inheritance as association in search
-	 * Verifies that the results are returned 
+	 * Verifies that the results are returned
 	 * Verifies size of the result set
 	 * Verifies that none of the attribute is null
-	 * 
+	 *
 	 * @throws ApplicationException
 	 */
 	public void testZeroAssociationCQL() throws ApplicationException
@@ -463,18 +480,21 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 		CQLAssociation association = new CQLAssociation();
 		association.setName("gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.ParliamantaryGovt");
 		association.setAttribute(new CQLAttribute("primeMinister", CQLPredicate.EQUAL_TO,"George Bush"));
-		
+
 		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.DemocraticGovt");
 		target.setAssociation(association);
 		cqlQuery.setTarget(target);
-		
-		Collection results = getApplicationService().query(cqlQuery);
+
+		CQL2HQL converter = new CQL2HQL(getClassCache());
+		HQLCriteria hqlCriteria = converter.translate(cqlQuery, false, false);
+
+		Collection results = getApplicationService().query(hqlCriteria);
 
 		assertNotNull(results);
 		assertEquals(0,results.size());
-		
+
 	}
-	
+
 	public void testZeroAssociationHQL() throws ApplicationException {
 		HQLCriteria hqlCriteria = new HQLCriteria(
 				"from gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.ParliamantaryGovt where primeMinister='George Bush'");
@@ -485,13 +505,13 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 		assertNotNull(results);
 		assertEquals(0, results.size());
 	}
-	
+
 	/**
 	 * Uses Nested Search Criteria for inheritance as association in search
-	 * Verifies that the results are returned 
+	 * Verifies that the results are returned
 	 * Verifies size of the result set
 	 * Verifies that none of the attribute is null
-	 * 
+	 *
 	 * @throws ApplicationException
 	 */
 	public void testAssociationNestedSearch2() throws ApplicationException
@@ -501,7 +521,7 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 
 		assertNotNull(results);
 		assertEquals(1,results.size());
-		
+
 		for(Iterator i = results.iterator();i.hasNext();)
 		{
 			DemocraticGovt result = (DemocraticGovt)i.next();
@@ -513,10 +533,10 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 
 	/**
 	 * Uses Nested Search Criteria for inheritance as association in search
-	 * Verifies that the results are returned 
+	 * Verifies that the results are returned
 	 * Verifies size of the result set
 	 * Verifies that none of the attribute is null
-	 * 
+	 *
 	 * @throws ApplicationException
 	 */
 	public void testAssociationNestedSearch3() throws ApplicationException
@@ -526,7 +546,7 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 
 		assertNotNull(results);
 		assertEquals(1,results.size());
-		
+
 		for(Iterator i = results.iterator();i.hasNext();)
 		{
 			PresidentialGovt result = (PresidentialGovt)i.next();
@@ -538,10 +558,10 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 
 	/**
 	 * Uses Nested Search Criteria for inheritance as association in search
-	 * Verifies that the results are returned 
+	 * Verifies that the results are returned
 	 * Verifies size of the result set
 	 * Verifies that none of the attribute is null
-	 * 
+	 *
 	 * @throws ApplicationException
 	 */
 	public void testAssociationNestedSearch4() throws ApplicationException
@@ -551,7 +571,7 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 
 		assertNotNull(results);
 		assertEquals(1,results.size());
-		
+
 		for(Iterator i = results.iterator();i.hasNext();)
 		{
 			DemocraticGovt result = (DemocraticGovt)i.next();
@@ -560,7 +580,7 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		}
 	}
-	
+
 	public void testAssociationNestedSearch5() throws ApplicationException
 	{
 		PresidentialGovt searchObject = new PresidentialGovt();
@@ -568,7 +588,7 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 
 		assertNotNull(results);
 		assertEquals(1,results.size());
-		
+
 		for(Iterator i = results.iterator();i.hasNext();)
 		{
 			PresidentialGovt result = (PresidentialGovt)i.next();
@@ -577,13 +597,13 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		}
 	}
-	
+
 	/**
 	 * Uses CQL Criteria for inheritance as association in search
-	 * Verifies that the results are returned 
+	 * Verifies that the results are returned
 	 * Verifies size of the result set
 	 * Verifies that none of the attribute is null
-	 * 
+	 *
 	 * @throws ApplicationException
 	 */
 	public void testAssociationCQL1() throws ApplicationException
@@ -594,16 +614,19 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 		CQLAssociation association = new CQLAssociation();
 		association.setName("gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.ParliamantaryGovt");
 		association.setAttribute(new CQLAttribute("primeMinister", CQLPredicate.EQUAL_TO,"Tony Blair"));
-		
+
 		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.DemocraticGovt");
 		target.setAssociation(association);
 		cqlQuery.setTarget(target);
-		
-		Collection results = getApplicationService().query(cqlQuery);
+
+		CQL2HQL converter = new CQL2HQL(getClassCache());
+		HQLCriteria hqlCriteria = converter.translate(cqlQuery, false, false);
+
+		Collection results = getApplicationService().query(hqlCriteria);
 
 		assertNotNull(results);
 		assertEquals(1,results.size());
-		
+
 		for(Iterator i = results.iterator();i.hasNext();)
 		{
 			DemocraticGovt result = (DemocraticGovt)i.next();
@@ -612,7 +635,7 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		}
 	}
-	
+
 	public void testAssociationHQL1() throws ApplicationException {
 		HQLCriteria hqlCriteria = new HQLCriteria(
 				"from gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.ParliamantaryGovt where primeMinister='Tony Blair'");
@@ -632,10 +655,10 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 
 	/**
 	 * Uses CQL Criteria for inheritance as association in search
-	 * Verifies that the results are returned 
+	 * Verifies that the results are returned
 	 * Verifies size of the result set
 	 * Verifies that none of the attribute is null
-	 * 
+	 *
 	 * @throws ApplicationException
 	 */
 	public void testAssociationCQL2() throws ApplicationException
@@ -646,16 +669,19 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 		CQLAssociation association = new CQLAssociation();
 		association.setName("gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.DemocraticGovt");
 		association.setAttribute(new CQLAttribute("id", CQLPredicate.EQUAL_TO,"2"));
-		
+
 		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.ParliamantaryGovt");
 		target.setAssociation(association);
 		cqlQuery.setTarget(target);
-		
-		Collection results = getApplicationService().query(cqlQuery);
+
+		CQL2HQL converter = new CQL2HQL(getClassCache());
+		HQLCriteria hqlCriteria = converter.translate(cqlQuery, false, false);
+
+		Collection results = getApplicationService().query(hqlCriteria);
 
 		assertNotNull(results);
 		assertEquals(1,results.size());
-		
+
 		for(Iterator i = results.iterator();i.hasNext();)
 		{
 			ParliamantaryGovt result = (ParliamantaryGovt)i.next();
@@ -681,13 +707,13 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		}
 	}
-	
+
 	/**
 	 * Uses CQL Criteria for inheritance as association in search
-	 * Verifies that the results are returned 
+	 * Verifies that the results are returned
 	 * Verifies size of the result set
 	 * Verifies that none of the attribute is null
-	 * 
+	 *
 	 * @throws ApplicationException
 	 */
 	public void testAssociationCQL3() throws ApplicationException
@@ -698,16 +724,19 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 		CQLAssociation association = new CQLAssociation();
 		association.setName("gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.PresidentialGovt");
 		association.setAttribute(new CQLAttribute("country", CQLPredicate.EQUAL_TO,"USA"));
-		
+
 		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.DemocraticGovt");
 		target.setAssociation(association);
 		cqlQuery.setTarget(target);
-		
-		Collection results = getApplicationService().query(cqlQuery);
+
+		CQL2HQL converter = new CQL2HQL(getClassCache());
+		HQLCriteria hqlCriteria = converter.translate(cqlQuery, false, false);
+
+		Collection results = getApplicationService().query(hqlCriteria);
 
 		assertNotNull(results);
 		assertEquals(1,results.size());
-		
+
 		for(Iterator i = results.iterator();i.hasNext();)
 		{
 			DemocraticGovt result = (DemocraticGovt)i.next();
@@ -716,7 +745,7 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		}
 	}
-	
+
 	public void testAssociationHQL3() throws ApplicationException {
 		HQLCriteria hqlCriteria = new HQLCriteria(
 				"from gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.PresidentialGovt where country='USA'");
@@ -737,10 +766,10 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 
 	/**
 	 * Uses CQL Criteria for inheritance as association in search
-	 * Verifies that the results are returned 
+	 * Verifies that the results are returned
 	 * Verifies size of the result set
 	 * Verifies that none of the attribute is null
-	 * 
+	 *
 	 * @throws ApplicationException
 	 */
 	public void testAssociationCQL4() throws ApplicationException
@@ -751,16 +780,19 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 		CQLAssociation association = new CQLAssociation();
 		association.setName("gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.DemocraticGovt");
 		association.setAttribute(new CQLAttribute("id", CQLPredicate.EQUAL_TO,"1"));
-		
+
 		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.PresidentialGovt");
 		target.setAssociation(association);
 		cqlQuery.setTarget(target);
-		
-		Collection results = getApplicationService().query(cqlQuery);
+
+		CQL2HQL converter = new CQL2HQL(getClassCache());
+		HQLCriteria hqlCriteria = converter.translate(cqlQuery, false, false);
+
+		Collection results = getApplicationService().query(hqlCriteria);
 
 		assertNotNull(results);
 		assertEquals(1,results.size());
-		
+
 		for(Iterator i = results.iterator();i.hasNext();)
 		{
 			PresidentialGovt result = (PresidentialGovt)i.next();
@@ -786,13 +818,13 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		}
 	}
-	
+
 	/**
 	 * Uses CQL Criteria for inheritance as association in search
-	 * Verifies that the results are returned 
+	 * Verifies that the results are returned
 	 * Verifies size of the result set
 	 * Verifies that none of the attribute is null
-	 * 
+	 *
 	 * @throws ApplicationException
 	 */
 	public void testAssociationCQL5() throws ApplicationException
@@ -807,22 +839,25 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 		CQLAssociation association2 = new CQLAssociation();
 		association2.setName("gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.PresidentialGovt");
 		association2.setAttribute(new CQLAttribute("id", CQLPredicate.EQUAL_TO,"1"));
-		
+
 
 		CQLGroup group = new CQLGroup();
 		group.setLogicOperator(CQLLogicalOperator.OR);
 		group.addAssociation(association1);
 		group.addAssociation(association2);
-		
+
 		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.DemocraticGovt");
 		target.setGroup(group);
 		cqlQuery.setTarget(target);
-		
-		Collection results = getApplicationService().query(cqlQuery);
+
+		CQL2HQL converter = new CQL2HQL(getClassCache());
+		HQLCriteria hqlCriteria = converter.translate(cqlQuery, false, false);
+
+		Collection results = getApplicationService().query(hqlCriteria);
 
 		assertNotNull(results);
 		assertEquals(2,results.size());
-		
+
 		for(Iterator i = results.iterator();i.hasNext();)
 		{
 			Goverment result = (Goverment)i.next();
@@ -832,7 +867,7 @@ public class TwoLevelInheritanceSametableTest extends SDKISOTestBase
 			assertNotNull(result.getCountry());
 		}
 	}
-	
+
 	public void testAssociationHQL5() throws ApplicationException {
 		HQLCriteria hqlCriteria = new HQLCriteria(
 				"from gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.Goverment govt" +

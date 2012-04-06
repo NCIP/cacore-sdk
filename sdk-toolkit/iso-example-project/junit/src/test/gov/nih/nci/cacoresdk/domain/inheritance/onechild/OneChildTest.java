@@ -10,6 +10,8 @@ import gov.nih.nci.system.query.cql.CQLObject;
 import gov.nih.nci.system.query.cql.CQLPredicate;
 import gov.nih.nci.system.query.cql.CQLQuery;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
+import gov.nih.nci.system.dao.orm.translator.CQL2HQL;
+import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -22,13 +24,13 @@ public class OneChildTest extends SDKISOTestBase
 	{
 		return "One Child Test Case";
 	}
-	
+
 	/**
 	 * Uses Nested Search Criteria for search
-	 * Verifies that the results are returned 
+	 * Verifies that the results are returned
 	 * Verifies size of the result set
 	 * Verifies that none of the attribute is null
-	 * 
+	 *
 	 * @throws ApplicationException
 	 */
 	public void testEntireObjectNestedSearch1() throws ApplicationException
@@ -38,7 +40,7 @@ public class OneChildTest extends SDKISOTestBase
 
 		assertNotNull(results);
 		assertEquals(5,results.size());
-		
+
 		for(Iterator i = results.iterator();i.hasNext();)
 		{
 			Mammal result = (Mammal)i.next();
@@ -51,10 +53,10 @@ public class OneChildTest extends SDKISOTestBase
 
 	/**
 	 * Uses Nested Search Criteria for search
-	 * Verifies that the results are returned 
+	 * Verifies that the results are returned
 	 * Verifies size of the result set
 	 * Verifies that none of the attribute is null
-	 * 
+	 *
 	 * @throws ApplicationException
 	 */
 	public void testEntireObjectNestedSearch2() throws ApplicationException
@@ -64,7 +66,7 @@ public class OneChildTest extends SDKISOTestBase
 
 		assertNotNull(results);
 		assertEquals(4,results.size());
-		
+
 		for(Iterator i = results.iterator();i.hasNext();)
 		{
 			Human result = (Human)i.next();
@@ -78,25 +80,28 @@ public class OneChildTest extends SDKISOTestBase
 
 	/**
 	 * Uses CQL Criteria for search
-	 * Verifies that the results are returned 
+	 * Verifies that the results are returned
 	 * Verifies size of the result set
 	 * Verifies that none of the attribute is null
-	 * 
+	 *
 	 * @throws ApplicationException
 	 */
 	public void testEntireObjectCQL1() throws ApplicationException
 	{
 		CQLQuery cqlQuery = new CQLQuery();
 		CQLObject target = new CQLObject();
-		
+
 		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.onechild.Human");
 		cqlQuery.setTarget(target);
 
-		Collection results = getApplicationService().query(cqlQuery);
+		CQL2HQL converter = new CQL2HQL(getClassCache());
+		HQLCriteria hqlCriteria = converter.translate(cqlQuery, false, false);
+
+		Collection results = getApplicationService().query(hqlCriteria);
 
 		assertNotNull(results);
 		assertEquals(4,results.size());
-		
+
 		for(Iterator i = results.iterator();i.hasNext();)
 		{
 			Human result = (Human)i.next();
@@ -123,28 +128,31 @@ public class OneChildTest extends SDKISOTestBase
 			assertNotNull(result.getDiet());
 		}
 	}
-	
+
 	/**
 	 * Uses CQL Criteria for search
-	 * Verifies that the results are returned 
+	 * Verifies that the results are returned
 	 * Verifies size of the result set
 	 * Verifies that none of the attribute is null
-	 * 
+	 *
 	 * @throws ApplicationException
 	 */
 	public void testEntireObjectCQL2() throws ApplicationException
 	{
 		CQLQuery cqlQuery = new CQLQuery();
 		CQLObject target = new CQLObject();
-		
+
 		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.onechild.Mammal");
 		cqlQuery.setTarget(target);
 
-		Collection results = getApplicationService().query(cqlQuery);
+		CQL2HQL converter = new CQL2HQL(getClassCache());
+		HQLCriteria hqlCriteria = converter.translate(cqlQuery, false, false);
+
+		Collection results = getApplicationService().query(hqlCriteria);
 
 		assertNotNull(results);
 		assertEquals(5,results.size());
-		
+
 		for(Iterator i = results.iterator();i.hasNext();)
 		{
 			Mammal result = (Mammal)i.next();
@@ -174,10 +182,10 @@ public class OneChildTest extends SDKISOTestBase
 
 	/**
 	 * Uses Nested Search Criteria for inheritance as association in search
-	 * Verifies that the results are returned 
+	 * Verifies that the results are returned
 	 * Verifies size of the result set
 	 * Verifies that none of the attribute is null
-	 * 
+	 *
 	 * @throws ApplicationException
 	 */
 	public void testAssociationNestedSearch1() throws ApplicationException
@@ -190,7 +198,7 @@ public class OneChildTest extends SDKISOTestBase
 
 		assertNotNull(results);
 		assertEquals(1,results.size());
-		
+
 		for(Iterator i = results.iterator();i.hasNext();)
 		{
 			Human result = (Human)i.next();
@@ -203,10 +211,10 @@ public class OneChildTest extends SDKISOTestBase
 
 	/**
 	 * Uses Nested Search Criteria for inheritance as association in search
-	 * Verifies that the results are returned 
+	 * Verifies that the results are returned
 	 * Verifies size of the result set
 	 * Verifies that none of the attribute is null
-	 * 
+	 *
 	 * @throws ApplicationException
 	 */
 	public void testAssociationNestedSearch2() throws ApplicationException
@@ -219,7 +227,7 @@ public class OneChildTest extends SDKISOTestBase
 
 		assertNotNull(results);
 		assertEquals(1,results.size());
-		
+
 		for(Iterator i = results.iterator();i.hasNext();)
 		{
 			Mammal result = (Mammal)i.next();
@@ -232,10 +240,10 @@ public class OneChildTest extends SDKISOTestBase
 
 	/**
 	 * Uses CQL Criteria for inheritance as association in search
-	 * Verifies that the results are returned 
+	 * Verifies that the results are returned
 	 * Verifies size of the result set
 	 * Verifies that none of the attribute is null
-	 * 
+	 *
 	 * @throws ApplicationException
 	 */
 	public void testAssociationCQL1() throws ApplicationException
@@ -246,16 +254,19 @@ public class OneChildTest extends SDKISOTestBase
 		CQLAssociation association = new CQLAssociation();
 		association.setName("gov.nih.nci.cacoresdk.domain.inheritance.onechild.Human");
 		association.setAttribute(new CQLAttribute("hairColor", CQLPredicate.EQUAL_TO,"Hair_Color1"));
-		
+
 		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.onechild.Mammal");
 		target.setAssociation(association);
 		cqlQuery.setTarget(target);
-		
-		Collection results = getApplicationService().query(cqlQuery);
+
+		CQL2HQL converter = new CQL2HQL(getClassCache());
+		HQLCriteria hqlCriteria = converter.translate(cqlQuery, false, false);
+
+		Collection results = getApplicationService().query(hqlCriteria);
 
 		assertNotNull(results);
 		assertEquals(1,results.size());
-		
+
 		for(Iterator i = results.iterator();i.hasNext();)
 		{
 			Mammal result = (Mammal)i.next();
@@ -265,7 +276,7 @@ public class OneChildTest extends SDKISOTestBase
 			assertNotNull(result.getHairColor());
 		}
 	}
-	
+
 	public void testAssociationHQL1() throws ApplicationException {
 		HQLCriteria hqlCriteria = new HQLCriteria(
 				"from gov.nih.nci.cacoresdk.domain.inheritance.onechild.Human where hairColor='Hair_Color1'");
@@ -282,13 +293,13 @@ public class OneChildTest extends SDKISOTestBase
 			assertNotNull(result.getHairColor());
 		}
 	}
-	
+
 	/**
 	 * Uses CQL Criteria for inheritance as association in search
-	 * Verifies that the results are returned 
+	 * Verifies that the results are returned
 	 * Verifies size of the result set
 	 * Verifies that none of the attribute is null
-	 * 
+	 *
 	 * @throws ApplicationException
 	 */
 	public void testAssociationCQL2() throws ApplicationException
@@ -299,16 +310,19 @@ public class OneChildTest extends SDKISOTestBase
 		CQLAssociation association = new CQLAssociation();
 		association.setName("gov.nih.nci.cacoresdk.domain.inheritance.onechild.Mammal");
 		association.setAttribute(new CQLAttribute("hairColor", CQLPredicate.EQUAL_TO,"Hair_Color1"));
-		
+
 		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.onechild.Human");
 		target.setAssociation(association);
 		cqlQuery.setTarget(target);
-		
-		Collection results = getApplicationService().query(cqlQuery);
+
+		CQL2HQL converter = new CQL2HQL(getClassCache());
+		HQLCriteria hqlCriteria = converter.translate(cqlQuery, false, false);
+
+		Collection results = getApplicationService().query(hqlCriteria);
 
 		assertNotNull(results);
 		assertEquals(1,results.size());
-		
+
 		for(Iterator i = results.iterator();i.hasNext();)
 		{
 			Human result = (Human)i.next();
@@ -318,7 +332,7 @@ public class OneChildTest extends SDKISOTestBase
 			assertNotNull(result.getHairColor());
 		}
 	}
-	
+
 	public void testAssociationHQL2() throws ApplicationException {
 		HQLCriteria hqlCriteria = new HQLCriteria(
 				"from gov.nih.nci.cacoresdk.domain.inheritance.onechild.Mammal where hairColor='Hair_Color1'");

@@ -51,6 +51,22 @@ public class ClassCacheTest extends TestCase {
 		assertEquals("id", iterator.next());
 		assertEquals("shape", iterator.next());
 	}
+
+	public void testFieldNamesForFishTank() {
+//		List<String> fieldNames = classCache
+//				.getAllFieldNames("gov.nih.nci.cacoresdk.domain.inheritance.implicit.FishTank");
+
+		Map<String, List<Object>> searchableFieldsMap = classCache.getSearchableFieldsMap().get("gov.nih.nci.cacoresdk.domain.inheritance.implicit.FishTank");
+		assertNotNull(searchableFieldsMap);
+		
+		List<Object> searchableFields = searchableFieldsMap.get("id");
+		assertNotNull(searchableFields);
+		
+		
+		//Iterator<String> iterator = fieldNames.iterator();
+		//assertEquals("id", iterator.next());
+		//assertEquals("shape", iterator.next());
+	}
 	
 	public void testFieldNamesForAClass() {
 		List<String> fieldNames = classCache
