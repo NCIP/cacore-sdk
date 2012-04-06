@@ -345,6 +345,17 @@
 			<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true" casesensitive="false" trim="true" />
 		</and>
 	</condition>
+	<condition property="NON_GLOBUS_FILTER_START" value="${xml.comment.start}" else="">
+		<and>
+			<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+		</and>
+	</condition>
+	<condition property="NON_GLOBUS_FILTER_END" value="${xml.comment.end}" else="">
+		<and>
+			<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+		</and>
+	</condition>
+
 	<condition property="GSI_HTTP_INVOKER_SRART" value="${xml.comment.start}" else="">
 		<and>
 			<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="false" casesensitive="false" trim="true" />

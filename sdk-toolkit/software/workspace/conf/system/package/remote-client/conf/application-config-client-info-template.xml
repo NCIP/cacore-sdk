@@ -25,7 +25,7 @@
 				<property name="serviceInterface" value="@SERVICE_INTERFACE@"/>
 				<property name="httpInvokerRequestExecutor">
 				<!--@SIMPLE_HTTP_INVOKER_SRART@-->
-				<bean class="org.springframework.remoting.httpinvoker.SimpleHttpInvokerRequestExecutor"/>
+				<bean class="gov.nih.nci.system.springframework.remoting.httpinvoker.HttpInvokerRequestExecutor"/>
 				<!--@SIMPLE_HTTP_INVOKER_END@-->
 				<!--@GSI_HTTP_INVOKER_SRART@-->
 				<bean class="gov.nih.nci.system.springframework.remoting.httpinvoker.GSIHttpInvokerRequestExecutor"/>
