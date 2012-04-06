@@ -161,6 +161,10 @@
 		<deploy-local target.name="${install.target}" />
 	</target>
 
+	<target name="stop:jboss">
+		<deploy-local target.name="stop:jboss" />
+	</target>
+
 	<target name="deploy:remote:install:no-build" description="Installs and configures the application and required binaries and re-creates the datbase  on a remote machine. Used for NCI tiers (dev, qa, stg, prod)" depends="
 		dist:installer
 		">

@@ -348,12 +348,16 @@
 	<condition property="NON_GLOBUS_FILTER_START" value="${xml.comment.start}" else="">
 		<and>
 			<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${SECURITY_ENABLED}" arg2="true" casesensitive="false" trim="true" />	
 		</and>
+		
 	</condition>
 	<condition property="NON_GLOBUS_FILTER_END" value="${xml.comment.end}" else="">
 		<and>
 			<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${SECURITY_ENABLED}" arg2="true" casesensitive="false" trim="true" />
 		</and>
+		
 	</condition>
 
 	<condition property="GSI_HTTP_INVOKER_SRART" value="${xml.comment.start}" else="">
@@ -500,6 +504,8 @@
 			<filter token="SIMPLE_HTTP_INVOKER_END" value="${SIMPLE_HTTP_INVOKER_END}" />
 			<filter token="GSI_HTTP_INVOKER_SRART" value="${GSI_HTTP_INVOKER_SRART}" />
 			<filter token="GSI_HTTP_INVOKER_END" value="${GSI_HTTP_INVOKER_END}" />
+			<filter token="NON_GLOBUS_FILTER_START" value="${NON_GLOBUS_FILTER_START}" />
+			<filter token="NON_GLOBUS_FILTER_END" value="${NON_GLOBUS_FILTER_END}" />
 			<filter token="CSM_LOGIN_MODULE_START" value="${CSM_LOGIN_MODULE_START}" />
 			<filter token="CSM_LOGIN_MODULE_END" value="${CSM_LOGIN_MODULE_END}" />
 		</filterset>
