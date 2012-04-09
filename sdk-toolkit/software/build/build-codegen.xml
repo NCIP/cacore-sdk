@@ -329,7 +329,7 @@
 	</condition>
 
 
-	<condition property="HTTP_INVOKER" value="org.springframework.remoting.httpinvoker.SimpleHttpInvokerRequestExecutor" else="gov.nih.nci.system.springframework.remoting.httpinvoker.GSIHttpInvokerRequestExecutor">
+	<condition property="HTTP_INVOKER" value="gov.nih.nci.system.springframework.remoting.httpinvoker.HttpInvokerRequestExecutor" else="gov.nih.nci.system.springframework.remoting.httpinvoker.GSIHttpInvokerRequestExecutor">
 		<and>
 			<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="false" casesensitive="false" trim="true" />
 		</and>
