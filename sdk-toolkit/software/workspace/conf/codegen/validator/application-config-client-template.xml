@@ -13,6 +13,17 @@
 		</constructor-arg>
 	</bean>
 
+	<bean id="ServiceInfo" class="java.util.HashMap">
+		<constructor-arg>
+			<map>
+				<entry key="APPLICATION_SERVICE_BEAN" value-ref="CaDsrApplicationService"/>
+				<entry key="AUTHENTICATION_SERVICE_BEAN" value-ref="CaDsrAuthenticationManager"/>
+				<entry key="APPLICATION_SERVICE_CONFIG"  value-ref="CaDsrApplicationServiceConfig"/>
+				<entry key="APPLICATION_SERVICE_URL"  value="http://cadsrapi.nci.nih.gov/cadsrapi40"/>
+			</map>
+		</constructor-arg>
+	</bean>
+
 	<bean id="CaDsrInterceptor" class="gov.nih.nci.system.client.proxy.ApplicationServiceProxy" singleton="true">
 		<property name="proxyFactory">
 			<bean class="gov.nih.nci.system.client.proxy.ProxyHelperImpl"/>
