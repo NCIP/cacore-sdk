@@ -42,7 +42,6 @@ public class <%=klassName%>Resource extends RESTfulResource
 	public <%=klassName%>Resource(@Context ServletContext context)
 	{
 		super(context);
-		System.out.println("Constructor...<%=klassName%>Resource");
 	}
 	
 	@GET
@@ -50,14 +49,12 @@ public class <%=klassName%>Resource extends RESTfulResource
 	//@Produces("application/xml")
 	public void get<%=klassName%>(@Context javax.servlet.http.HttpServletRequest request, @Context javax.servlet.http.HttpServletResponse response, @PathParam("id") String id) 
 	{
-		System.out.println("GET...<%=klassName%>Resource");	
 		try
 		{
 	  		List params = new ArrayList(1);
 	  		String className = "<%=fullPackageName%>.<%=klassName%>";
 			params.add(new Integer(id));
 	  		HQLCriteria criteria = new HQLCriteria("from <%=fullPackageName%>.<%=klassName%> a where a.id = ?", params);
-	  		System.out.println("GET.2..<%=klassName%>Resource");	
 	  		query(request, response, criteria, className);
 	  		/*if(results != null && results.size() != 0)
 	  			return (<%=klassName%>)results.get(0);
@@ -81,85 +78,13 @@ public class <%=klassName%>Resource extends RESTfulResource
 	}
 
 <%	
-System.out.println("************************ "+klass.getName());
 List<UMLAssociation> associations = transformerUtils.getAssociations(klass, true);
-System.out.println("**********got************** "+associations);
 List<UMLAssociationEnd> associationAdds = new java.util.ArrayList<UMLAssociationEnd>();
 List<String> methodNames = new java.util.ArrayList<String>();
 
 	for(UMLAssociation assoc:associations){
 		List<UMLAssociationEnd> assocEnds = assoc.getAssociationEnds();
-	/*
-		UMLAssociationEnd thisEnd = null;
-		try
-		{
-			thisEnd = transformerUtils.getThisEnd(klass,assocEnds);
-			System.out.println("**********thisEnd************** "+thisEnd);
-		}
-		catch(GenerationException e)
-		{
-			//Ignore the exception
-			System.out.println("**********thisEnd**********exception**1** ");
-		}
-		if(thisEnd == null)
-		{
-			try
-			{
-				UMLClass superKlass = transformerUtils.getSuperClass(klass);
-				thisEnd = transformerUtils.getThisEnd(superKlass,assocEnds);
-				System.out.println("**********thisEnd************** "+thisEnd);
-			}
-			catch(GenerationException e)
-			{
-				//Ignore the exception
-				System.out.println("**********thisEnd**********exception*2*** ");
-			}
-		}
-		
-		UMLAssociationEnd otherEnd = null;
-		try
-		{
-			otherEnd = transformerUtils.getOtherEnd(klass,assocEnds);
-			System.out.println("**********otherEnd************** "+otherEnd);
-		}
-		catch(GenerationException e)
-		{
-			System.out.println("**********otherEnd**********exception*1*** ");
-			//continue;
-		}
-		
-		if(otherEnd == null)
-		{
-			try
-			{
-				UMLClass superKlass = transformerUtils.getSuperClass(klass);
-				otherEnd = transformerUtils.getOtherEnd(klass,assocEnds);
-				System.out.println("**********otherEnd************** "+otherEnd);
-			}
-			catch(GenerationException e)
-			{
-				//Ignore the exception
-				System.out.println("**********otherEnd**********exception*2*** ");
-				continue;
-			}
-		}
-		
-	
-		
-		
-		List<UMLAssociationEnd> associationEnds = new java.util.ArrayList<UMLAssociationEnd>();
-		associationEnds.add(otherEnd);
-	
-		List<UMLAssociationEnd> associationAdds = new java.util.ArrayList<UMLAssociationEnd>();
-	
-		if(transformerUtils.isBidirectionalSelfAssociation(klass,assocEnds)) { // handle bi-directional self-association 
-			associationEnds.add(thisEnd);
-		}
-		*/
-		
-		
 		methodNames.add("get"+klass.getName());
-		System.out.println("I am outside...");
 		for(UMLAssociationEnd associationEnd : assocEnds){	
 			if(associationEnd.isNavigable() && !associationAdds.contains(associationEnd))
 		{
@@ -167,16 +92,12 @@ List<String> methodNames = new java.util.ArrayList<String>();
 				UMLClass assocKlass = (UMLClass)associationEnd.getUMLElement();
 				String name = associationEnd.getRoleName(); 
 				String roleName = name.substring(0,1).toUpperCase()+name.substring(1,name.length());
-		System.out.println("22 "+associationEnd.getRoleName());	
 		associationAdds.add(associationEnd);	
 		String getterMethodName = transformerUtils.getGetterMethodName(associationEnd);
-		System.out.println("&&&&&&&getterMethodName: "+getterMethodName);
-		
 		
 		if(!methodNames.contains(getterMethodName))
 		{
 				methodNames.add(getterMethodName);
-				System.out.println("&&&&&&&adding getterMethodName: "+getterMethodName);
 				if(transformerUtils.isAssociationEndMany(associationEnd))
 				{
 				%>
@@ -186,7 +107,6 @@ List<String> methodNames = new java.util.ArrayList<String>();
 			try
 			{
 		  		String className = "<%=fullPackageName%>.<%=klassName%>";
-		  		System.out.println("GET.X2..<%=klassName%>Resource");	
 		  		query(request, response, "<%=klassName%>", "<%=fullPackageName%>", id, "<%=roleName%>");
 	  		}
 			catch(ApplicationException e)
@@ -198,7 +118,6 @@ List<String> methodNames = new java.util.ArrayList<String>();
 			}
 		}
 				<%}else{
-				System.out.println("&&&&&&&in else ");
 				%>
 		@GET
 		@Path("/<%=klassName%>/{id}/<%=roleName%>")
@@ -206,7 +125,6 @@ List<String> methodNames = new java.util.ArrayList<String>();
 			try
 			{
 		  		String className = "<%=fullPackageName%>.<%=klassName%>";
-		  		System.out.println("GET.X2..<%=klassName%>Resource");	
 		  		query(request, response, "<%=klassName%>", "<%=fullPackageName%>", id, "<%=roleName%>");
 	  		}
 			catch(ApplicationException e)
@@ -229,7 +147,6 @@ List<String> methodNames = new java.util.ArrayList<String>();
 	@Consumes("application/xml")
 	public void add<%=klassName%>(<%=klassName%> object)
 	{
-		System.out.println("in add................");
 		try
 		{
 			save(object);
@@ -254,8 +171,6 @@ List<String> methodNames = new java.util.ArrayList<String>();
 	  		List params = new ArrayList(1);
 			params.add(new Integer(id));
 	  		HQLCriteria criteria = new HQLCriteria("from <%=fullPackageName%>.<%=klassName%> a where a.id = ?", params);
-	  		System.out.println("GET.2..<%=klassName%>Resource");	
-  			System.out.println("before delete................");
 			params = new ArrayList(1);
 			params.add(new Integer(id));
 			String query = "delete from <%=fullPackageName%>.<%=klassName%> a where a.id = ?";

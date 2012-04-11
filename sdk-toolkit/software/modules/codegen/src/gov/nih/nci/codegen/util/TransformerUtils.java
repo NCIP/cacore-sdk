@@ -1339,11 +1339,9 @@ public class TransformerUtils
 		while (superClass != null) {
 			Collection assocs = superClass.getAssociations();
 			log.debug( superClass.getName() + " association collection size(): " + assocs.size());
-			System.out.println("superClass.getName() "+superClass.getName());
 			for (Iterator i = assocs.iterator(); i.hasNext();) {
 				UMLAssociation assoc = (UMLAssociation) i.next();
 				assocList.add(assoc);
-				System.out.println("added assoc: "+assoc);	
 			}
 			if (!includeInherited) 
 				superClass = null;
