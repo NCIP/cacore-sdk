@@ -16,6 +16,8 @@ public class HQLCriteria implements Serializable{
 	private String hqlString;
 	private String countHqlString;
 	private List parameters;	
+	private int firstRow = -1;
+	private int numberOfRows = -1;
 	
 	public HQLCriteria(String hqlString)
 	{
@@ -34,6 +36,19 @@ public class HQLCriteria implements Serializable{
 		this.parameters = parameters;
 		this.countHqlString = countHqlString;
 	}	
+	
+	public HQLCriteria(String hqlString, List parameters, int firstRow) {
+		this.hqlString = hqlString;
+		this.parameters = parameters;
+		this.firstRow = firstRow;
+	}
+	
+	public HQLCriteria(String hqlString, List parameters, int firstRow, int numberOfRows) {
+		this.hqlString = hqlString;
+		this.parameters = parameters;
+		this.firstRow = firstRow;
+		this.numberOfRows = numberOfRows;
+	}
 
 	public String getHqlString()
 	{
@@ -59,6 +74,22 @@ public class HQLCriteria implements Serializable{
 
 	public void setCountHqlString(String countHqlString) {
 		this.countHqlString = countHqlString;
+	}
+	
+	public int getFirstRow() {
+		return firstRow;
+	}
+	
+	public void setFirstRow(int firstRow) {
+		this.firstRow = firstRow;
+	}
+	
+	public int getNumberOfRows() {
+		return numberOfRows;
+	}
+	
+	public void setNumberOfRows(int numberOfRows) {
+		this.numberOfRows = numberOfRows;
 	}
 	
 }

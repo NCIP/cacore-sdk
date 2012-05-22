@@ -22,21 +22,19 @@
 	</filter> 
 
 	<!--@SECURITY_START@-->
-	
-        <filter>
-		<filter-name>AcegiFilters</filter-name>
-		<filter-class>org.acegisecurity.util.FilterToBeanProxy</filter-class>
-		<init-param>
-		    <param-name>targetClass</param-name>
-		    <param-value>org.acegisecurity.util.FilterChainProxy</param-value>
-		</init-param>
-	</filter>
+    <filter>
+        <filter-name>AcegiFilters</filter-name>
+        <filter-class>org.acegisecurity.util.FilterToBeanProxy</filter-class>
+        <init-param>
+            <param-name>targetClass</param-name>
+            <param-value>org.acegisecurity.util.FilterChainProxy</param-value>
+        </init-param>
+    </filter>
 
-    	<filter-mapping>
-    		<filter-name>AcegiFilters</filter-name>
-      		<url-pattern>/*</url-pattern>
-    	</filter-mapping>	
-    	
+    <filter-mapping>
+      <filter-name>AcegiFilters</filter-name>
+      <url-pattern>/*</url-pattern>
+    </filter-mapping>	
 	<!--@SECURITY_END@-->
 	
 	<filter-mapping> 

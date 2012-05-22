@@ -260,21 +260,21 @@ public class HtmlUtils {
 		if (searchableFields.contains("code")){
 			sb.append("<tr>");
 			sb.append("  <td class=\"isoFormLabel\">Code:</td>");
-			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"code\" id=\"code\" class=\"formFieldSized\" alt=\"ADXP Code Input Text\"/></td>");
+			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"code\" id=\"code\" class=\"formFieldSized\"/></td>");
 			sb.append("</tr>");
 		}
 		
 		if (searchableFields.contains("codeSystem")){
 			sb.append("<tr>");
 			sb.append("  <td class=\"isoFormLabel\">Code System:</td>");
-			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"codeSystem\" id=\"codeSystem\" class=\"formFieldSized\" alt=\"ADXP Code System Input Text\"/></td>");
+			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"codeSystem\" id=\"codeSystem\" class=\"formFieldSized\"/></td>");
 			sb.append("</tr>");	
 		}
 		
 		if (searchableFields.contains("value")){		
 			sb.append("<tr>");
 			sb.append("  <td class=\"isoFormLabel\">Value:</td>");
-			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"value\" id=\"value\" class=\"formFieldSized\" alt=\"ADXP Value Input Text\"/></td>");
+			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"value\" id=\"value\" class=\"formFieldSized\"/></td>");
 			sb.append("</tr>");
 		}		
 		
@@ -326,7 +326,7 @@ public class HtmlUtils {
 	
 	private static String getHTML(String attrName, String validationClass) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("<input type=\"text\" name=\"").append(attrName).append("\" id=\"").append(attrName).append("\" class=\"formFieldSized ").append(validationClass).append("\" alt=\"").append(attrName).append(" Input Text\" />");
+		sb.append("<input type=\"text\" name=\"").append(attrName).append("\" id=\"").append(attrName).append("\" class=\"formFieldSized ").append(validationClass).append("\"/>");
 		
 		return sb.toString();
 	}
@@ -345,28 +345,28 @@ public class HtmlUtils {
 		if (searchableFields.contains("code") || getComplexSearchFields("code", searchableFields).contains("code")){
 			sb.append("<tr>");
 			sb.append("  <td class=\"isoFormLabel\">Code:</td>");
-			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"code\" id=\"code\" class=\"formFieldSized\" alt=\"CD Code Input Text\"/></td>");
+			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"code\" id=\"code\" class=\"formFieldSized\"/></td>");
 			sb.append("</tr>");
 		}
 		
 		if (searchableFields.contains("codeSystem") || getComplexSearchFields("codeSystem", searchableFields).contains("codeSystem")){
 			sb.append("<tr>");
 			sb.append("  <td class=\"isoFormLabel\">Code System:</td>");
-			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"codeSystem\" id=\"codeSystem\" class=\"formFieldSized\" alt=\"CD Code System Input Text\"/></td>");
+			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"codeSystem\" id=\"codeSystem\" class=\"formFieldSized\"/></td>");
 			sb.append("</tr>");
 		}
 		
 		if (searchableFields.contains("codeSystemName") || getComplexSearchFields("codeSystemName", searchableFields).contains("codeSystemName")){		
 			sb.append("<tr>");
 			sb.append("  <td class=\"isoFormLabel\">Code System Name:</td>");
-			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"codeSystemName\" id=\"codeSystemName\" class=\"formFieldSized\" alt=\"CD Code System Name Input Text\"/></td>");
+			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"codeSystemName\" id=\"codeSystemName\" class=\"formFieldSized\"/></td>");
 			sb.append("</tr>");
 		}
 		
 		if (searchableFields.contains("codeSystemVersion") || getComplexSearchFields("codeSystemVersion", searchableFields).contains("codeSystemVersion")){
 			sb.append("<tr>");
 			sb.append("  <td class=\"isoFormLabel\">Code System Version:</td>");
-			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"codeSystemVersion\" id=\"codeSystemVersion\" class=\"formFieldSized\" alt=\"CD Code System Version Input Text\"/></td>");
+			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"codeSystemVersion\" id=\"codeSystemVersion\" class=\"formFieldSized\"/></td>");
 			sb.append("</tr>");
 		}	
 		
@@ -405,14 +405,14 @@ public class HtmlUtils {
 //		if (searchableFields.contains("data")){
 //			sb.append("<tr>");
 //			sb.append("  <td class=\"isoFormLabel\">Data:</td>");
-//			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"data\" id=\"data\" class=\"formFieldSized\" alt=\"ED Compression Input Text\"/></td>");
+//			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"data\" id=\"data\" class=\"formFieldSized\"/></td>");
 //			sb.append("</tr>");
 //		}
 
 		if (searchableFields.contains("value")){
 			sb.append("<tr>");
 			sb.append("  <td class=\"isoFormLabel\">Value:</td>");
-			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"value\" id=\"value\" class=\"formFieldSized\" alt=\"ED Value Input Text\"/></td>");
+			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"value\" id=\"value\" class=\"formFieldSized\"/></td>");
 			sb.append("</tr>");
 		}
 		
@@ -425,7 +425,7 @@ public class HtmlUtils {
 		if (searchableFields.contains("value")){
 			sb.append("<tr>");
 			sb.append("  <td class=\"isoFormLabel\">Value:</td>");
-			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"value\" id=\"value\" class=\"formFieldSized\" alt=\"ED TEXT Value Input Text\"/></td>");
+			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"value\" id=\"value\" class=\"formFieldSized\"/></td>");
 			sb.append("</tr>");
 		}
 		
@@ -480,28 +480,28 @@ public class HtmlUtils {
 		if (searchableFields.contains("code")){
 			sb.append("<tr>");
 			sb.append("  <td class=\"isoFormLabel\">Code:</td>");
-			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"code\" id=\"code\" class=\"formFieldSized\" alt=\"ENXP Code Input Text\"/></td>");
+			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"code\" id=\"code\" class=\"formFieldSized\"/></td>");
 			sb.append("</tr>");
 		}
 		
 		if (searchableFields.contains("codeSystem")){
 			sb.append("<tr>");
 			sb.append("  <td class=\"isoFormLabel\">Code System:</td>");
-			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"codeSystem\" id=\"codeSystem\" class=\"formFieldSized\" alt=\"ENXP Code System Input Text\"/></td>");
+			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"codeSystem\" id=\"codeSystem\" class=\"formFieldSized\"/></td>");
 			sb.append("</tr>");	
 		}
 		
 		if (searchableFields.contains("codeSystemName")){		
 			sb.append("<tr>");
 			sb.append("  <td class=\"isoFormLabel\">Code System Name:</td>");
-			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"codeSystemName\" id=\"codeSystemName\" class=\"formFieldSized\" alt=\"ENXP Code System Name Input Text\"/></td>");
+			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"codeSystemName\" id=\"codeSystemName\" class=\"formFieldSized\"/></td>");
 			sb.append("</tr>");
 		}
 		
 		if (searchableFields.contains("codeSystemVersion")){
 			sb.append("<tr>");
 			sb.append("  <td class=\"isoFormLabel\">Code System Version:</td>");
-			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"codeSystemVersion\" id=\"codeSystemVersion\" class=\"formFieldSized\" alt=\"ENXP Code System Version Input Text\"/></td>");
+			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"codeSystemVersion\" id=\"codeSystemVersion\" class=\"formFieldSized\"/></td>");
 			sb.append("</tr>");
 		}
 		
@@ -515,7 +515,7 @@ public class HtmlUtils {
 		if (searchableFields.contains("value")){
 			sb.append("<tr>");
 			sb.append("  <td class=\"isoFormLabel\">Value:</td>");
-			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"value\" id=\"value\" class=\"formFieldSized\" alt=\"ENXP Value Input Text\"/></td>");
+			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"value\" id=\"value\" class=\"formFieldSized\"/></td>");
 			sb.append("</tr>");
 		}
 		
@@ -553,7 +553,7 @@ public class HtmlUtils {
 		if (searchableFields.contains("identifierName") || getComplexSearchFields("identifierName", searchableFields).contains("identifierName")){			
 			sb.append("<tr>");
 			sb.append("  <td class=\"isoFormLabel\">Identifier Name:</td>");
-			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"identifierName\" id=\"identifierName\" class=\"formFieldSized\" alt=\"II Extension Input Text\" /></td>");
+			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"identifierName\" id=\"identifierName\" class=\"formFieldSized\" /></td>");
 			sb.append("</tr>");
 		}
 		
@@ -567,7 +567,7 @@ public class HtmlUtils {
 		if (searchableFields.contains("root") || getComplexSearchFields("root", searchableFields).contains("root")){
 			sb.append("<tr>");
 			sb.append("  <td class=\"isoFormLabel\">Root:</td>");
-			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"root\" id=\"root\" class=\"formFieldSized\" alt=\"II Root Input Text\" /></td>");
+			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"root\" id=\"root\" class=\"formFieldSized\" /></td>");
 			sb.append("</tr>");
 		}
 
@@ -587,7 +587,7 @@ public class HtmlUtils {
 		if (searchableFields.contains("value")){
 			sb.append("<tr>");
 			sb.append("  <td class=\"isoFormLabel\">Value:</td>");
-			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"value\" id=\"value\" class=\"formFieldSized INT_value\" alt=\"INT Value Input Text\" /></td>");
+			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"value\" id=\"value\" class=\"formFieldSized INT_value\"/></td>");
 			sb.append("</tr>");
 		}
 		
@@ -661,14 +661,14 @@ public class HtmlUtils {
 		if (searchableFields.contains("precision")){
 			sb.append("<tr>");
 			sb.append("  <td class=\"isoFormLabel\">Precision:</td>");
-			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"precision\" id=\"precision\" class=\"formFieldSized PQV_precision\" alt=\"PQV Precision Input Text\" /></td>");
+			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"precision\" id=\"precision\" class=\"formFieldSized PQV_precision\" /></td>");
 			sb.append("</tr>");
 		}
 
 		if (searchableFields.contains("value")){
 			sb.append("<tr>");
 			sb.append("  <td class=\"isoFormLabel\">Value:</td>");
-			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"value\" id=\"value\" class=\"formFieldSized number\" alt=\"PQV Value Input Text\" /></td>");
+			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"value\" id=\"value\" class=\"formFieldSized number\" /></td>");
 			sb.append("</tr>");
 		}
 		
@@ -681,7 +681,7 @@ public class HtmlUtils {
 		if (searchableFields.contains("unit")){
 			sb.append("<tr>");
 			sb.append("  <td class=\"isoFormLabel\">Unit:</td>");
-			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"unit\" id=\"unit\" class=\"formFieldSized\" alt=\"PQ Unit Input Text\" /></td>");
+			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"unit\" id=\"unit\" class=\"formFieldSized\" /></td>");
 			sb.append("</tr>");
 		}
 		
@@ -700,7 +700,7 @@ public class HtmlUtils {
 		if (searchableFields.contains("value")){
 			sb.append("<tr>");
 			sb.append("  <td class=\"isoFormLabel\">Value:</td>");
-			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"value\" id=\"value\" class=\"formFieldSized number\" alt=\"REAL Value Input Text\" /></td>");
+			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"value\" id=\"value\" class=\"formFieldSized number\" /></td>");
 			sb.append("</tr>");
 		}
 		
@@ -727,7 +727,7 @@ public class HtmlUtils {
 		if (searchableFields.contains("value")){
 			sb.append("<tr>");
 			sb.append("  <td class=\"isoFormLabel\">Value:</td>");
-			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"value\" id=\"value\" class=\"formFieldSized\" alt=\"ST Value Input Text\"/></td>");
+			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"value\" id=\"value\" class=\"formFieldSized\"/></td>");
 			sb.append("</tr>");
 		}
 		
@@ -744,7 +744,7 @@ public class HtmlUtils {
 		if (searchableFields.contains("value") || getComplexSearchFields("value", searchableFields).contains("value")){
 			sb.append("<tr>");
 			sb.append("  <td class=\"isoFormLabel\">Value:</td>");
-			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"value\" id=\"value\" class=\"formFieldSized TEL_value\" alt=\"TEL Value Input Text\" /></td>");
+			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"value\" id=\"value\" class=\"formFieldSized TEL_value\" /></td>");
 			sb.append("</tr>");
 		}
 		
@@ -757,7 +757,7 @@ public class HtmlUtils {
 		if (searchableFields.contains("value")){
 			sb.append("<tr>");
 			sb.append("  <td class=\"isoFormLabel\">Value (Email):</td>");
-			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"value\" id=\"value\" class=\"formFieldSized TEL_EMAIL_value\" alt=\"TEL EMAIL Value Input Text\" /></td>");
+			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"value\" id=\"value\" class=\"formFieldSized TEL_EMAIL_value\" /></td>");
 			sb.append("</tr>");
 		}
 		
@@ -770,7 +770,7 @@ public class HtmlUtils {
 		if (searchableFields.contains("value")){
 			sb.append("<tr>");
 			sb.append("  <td class=\"isoFormLabel\">Value (Phone or Email):</td>");
-			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"value\" id=\"value\" class=\"formFieldSized TEL_PERSON_value\" alt=\"TEL PERSON Value Input Text\" /></td>");
+			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"value\" id=\"value\" class=\"formFieldSized TEL_PERSON_value\" /></td>");
 			sb.append("</tr>");
 		}
 		return sb.toString();
@@ -782,7 +782,7 @@ public class HtmlUtils {
 		if (searchableFields.contains("value")){
 			sb.append("<tr>");
 			sb.append("  <td class=\"isoFormLabel\">Value (Phone):</td>");
-			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"value\" id=\"value\" class=\"formFieldSized TEL_PHONE_value\" alt=\"TEL PHONE Value Input Text\" /></td>");
+			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"value\" id=\"value\" class=\"formFieldSized TEL_PHONE_value\" /></td>");
 			sb.append("</tr>");
 		}
 		
@@ -795,7 +795,7 @@ public class HtmlUtils {
 		if (searchableFields.contains("value")){
 			sb.append("<tr>");
 			sb.append("  <td class=\"isoFormLabel\">Value (URL):</td>");
-			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"value\" id=\"value\" class=\"formFieldSized defaultInvalid url\" alt=\"TEL URL Value Input Text\" /></td>");
+			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"value\" id=\"value\" class=\"formFieldSized defaultInvalid url\" /></td>");
 			sb.append("</tr>");
 		}
 		return sb.toString();
@@ -807,7 +807,7 @@ public class HtmlUtils {
 		if (searchableFields.contains("value")){
 			sb.append("<tr>");
 			sb.append("  <td class=\"isoFormLabel\">Value:</td>");
-			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"value\" id=\"value\" class=\"formFieldSized TS_value\" alt=\"TS Value Input Text\" /></td>");
+			sb.append("  <td class=\"isoFormField\"><input type=\"text\" name=\"value\" id=\"value\" class=\"formFieldSized TS_value\" /></td>");
 			sb.append("</tr>");
 		}
 		

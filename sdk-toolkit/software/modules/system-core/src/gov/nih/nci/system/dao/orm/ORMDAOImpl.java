@@ -7,7 +7,6 @@ import gov.nih.nci.system.dao.Response;
 import gov.nih.nci.system.dao.orm.translator.CQL2HQL;
 import gov.nih.nci.system.dao.orm.translator.NestedCriteria2HQL;
 import gov.nih.nci.system.dao.orm.translator.Path2NestedCriteria;
-import gov.nih.nci.system.query.cql.CQLQuery;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
 import gov.nih.nci.system.query.nestedcriteria.NestedCriteria;
 import gov.nih.nci.system.query.nestedcriteria.NestedCriteriaPath;
@@ -70,19 +69,17 @@ public class ORMDAOImpl extends HibernateDaoSupport implements DAO
 				return query(request, (NestedCriteriaPath) obj); 	
 			else if (obj instanceof HQLCriteria)
 				return query(request, (HQLCriteria) obj);
-			else if (obj instanceof CQLQuery)
-				return query(request, (CQLQuery) obj);
 			else
 				throw new DAOException("Can not determine type of the query");
 		} catch (JDBCException ex){
-			log.error("JDBC Exception in ORMDAOImpl: ", ex);
-			throw new DAOException("JDBC Exception in ORMDAOImpl: ", ex);
+			log.error("JDBC Exception in ORMDAOImpl ", ex);
+			throw new DAOException("JDBC Exception in ORMDAOImpl ", ex);
 		} catch(org.hibernate.HibernateException hbmEx)	{
-			log.error("Hibernate Exception in ORMDAOImpl: ", hbmEx);
-			throw new DAOException("Hibernate Exception in ORMDAOImpl: ", hbmEx);
+			log.error(hbmEx.getMessage());
+			throw new DAOException("Hibernate problem ", hbmEx);
 		} catch(Exception e) {
-			log.error("Exception in ORMDAOImpl: ", e);
-			throw new DAOException("Exception in ORMDAOImpl: ", e);
+			log.error("Exception ", e);
+			throw new DAOException("Exception in ORMDAOImpl ", e);
 		}
 	}
 	
@@ -146,13 +143,6 @@ public class ORMDAOImpl extends HibernateDaoSupport implements DAO
 		return query(request, hqlCriteria);
 	}
 	
-	//if (obj instanceof CQLQuery)
-	protected Response query(Request request, CQLQuery obj) throws Exception	
-	{
-		CQL2HQL converter = new CQL2HQL(request.getClassCache());
-		HQLCriteria hqlCriteria = converter.translate((CQLQuery)obj, false, caseSensitive);
-		return query(request, hqlCriteria);		
-	}
 
 	//if (obj instanceof HQLCriteria)
 	protected Response query(Request request, HQLCriteria hqlCriteria) throws Exception
@@ -172,9 +162,13 @@ public class ORMDAOImpl extends HibernateDaoSupport implements DAO
 		}
 		else 
 		{
+			int firstRow = request.getFirstRow() == null ? -1 : request.getFirstRow();
+			int maxRows = request.getRecordsCount() == null ? resultCountPerQuery : request.getRecordsCount();
+			
 			log.info("HQL Query :"+hqlCriteria.getHqlString());
 			Response rsp = new Response();
-	    	HibernateCallback callBack = getExecuteFindQueryHibernateCallback(hqlCriteria.getHqlString(),hqlCriteria.getParameters(), request.getFirstRow() == null?-1:request.getFirstRow(),resultCountPerQuery);
+	    	HibernateCallback callBack = getExecuteFindQueryHibernateCallback(hqlCriteria.getHqlString(),hqlCriteria.getParameters(), 
+	    			firstRow, maxRows);
 	    	List rs = (List)getFlushNeverHibernateTemplate().execute(callBack);
 	    	rsp.setRowCount(rs.size());
 	    	rsp.setResponse(rs);

@@ -455,6 +455,12 @@ $HeadURL$
 			/>
 	</target>
 
+	<target name="stop:jboss" description="Checks to see if configured ports are listenting and fails buld, meant to be run after jboss:stop" unless="exclude.jboss"
+		depends="
+		install:jboss:stop
+		">
+	</target>
+
 	<target name="install:jboss:build-blueprints-webapp:filesystem-data"  depends="common:jboss:init, common:init">
 		<!-- This target is a place holder for creating a file-system data repository.  If you do not use one you can remove this target and all targets that refer to it. If you require a certain directory structure be sure to create it here.  If you need to copy in files, make sure to check them into svn, copy them into the distribution and then copy them to thier ultimate directory.  If your data needs to be refreshed with each install make sure to delete the base directory, then create the structure and copy in data.  Also you can use an archive file with relative pathing inside to build out the structure if you like, using an archive like zip may shrink the footprint in svn.
 		<mkdir dir="${fs-data.base.dir}"/>
@@ -599,7 +605,8 @@ $HeadURL$
 	</target>
 
 	<target name="check-port" description="Check whether JBoss is running">
-	    <echo message="Checking whether JBoss is running***********"/>
+	    <echo message="Checking whether JBoss is running at - ${jboss.server.hostname}:${jboss.server.port}"/>
+
 	    <condition property="jboss.running">
 	      <socket server="${jboss.server.hostname}" port="${jboss.server.port}"/> 
 	    </condition>
@@ -607,15 +614,24 @@ $HeadURL$
 
 
 	<!-- Calls to build macros for basic functionality -->
-	<target name="install:jboss:stop" description="Stops jboss" unless="jboss.running" depends="common:jboss:init,common:init,check-port">
+	<target name="install:jboss:stop" description="Stops jboss" depends="common:jboss:init,common:init">
 	  <echo message="Stopping JBoss running at - ${jboss.server.hostname}:${jboss.server.port}"/>
+	
+	    <condition property="jboss.running" value="true">
+	     <!--<socket server="NCI-01738801.nci.nih.gov" port="29080"/>-->
+	     <http url="http://${jboss.server.hostname}:${jboss.server.port}/"/>
+	    </condition>
 		<if>
-			<isset property="jboss.exists"/>
+			<isset property="jboss.running"/>
 			<then>
 				<if>
+				<equals arg1="${jboss.running}" arg2="true"/>
+				<then>
+				<echo message="JBoss is running......"/>
+				    <if>
 				    <equals arg1="${jboss.server.hostname}" arg2="localhost"/>
 				    <then>
-				    	<jboss-stop-jboss jboss.server.hostname="http://${jboss.server.hostname}" jboss.server.jndi.port="${jboss.server.jndi.port}"/>
+				    	<jboss-stop-jboss jboss.server.hostname="${jboss.server.hostname}" jboss.server.jndi.port="${jboss.server.jndi.port}"/>
 				    </then>
 				    <elseif>
 					 <equals arg1="${jboss.server.hostname}" arg2="127.0.0.1"/>
@@ -626,7 +642,9 @@ $HeadURL$
 				    <else>
 					<jboss-stop-jboss jboss.server.jndi.port="${jboss.server.jndi.port}"/>				    
 				    </else>
-				</if>
+				    </if>
+				   </then>
+				   </if>
 			</then>
 		</if>
 	</target>

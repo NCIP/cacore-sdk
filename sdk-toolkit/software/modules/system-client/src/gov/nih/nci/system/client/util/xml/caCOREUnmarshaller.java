@@ -105,6 +105,21 @@ public class caCOREUnmarshaller implements gov.nih.nci.system.client.util.xml.Un
 		}
 		return beanObject;
 	}
+
+	public Object fromXML(java.io.File xmlFile, final String namespacePrefix)throws XMLUtilityException {
+		Object beanObject = null;
+		try {
+			//log.debug("Reading from file: " + xmlFile.getName());
+			FileReader fRead = new FileReader(xmlFile);
+			beanObject = fromXML(fRead);
+		} catch (FileNotFoundException e) {
+			System.out.println("XML input file invalid: " + e.getMessage());
+			log.error("XML input file invalid: ", e);
+			throw new XMLUtilityException("XML input file invalid: ", e);
+		}
+		return beanObject;
+	}
+
 	public Object getBaseUnmarshaller(){
 		return this.getUnmarshaller();
 	}

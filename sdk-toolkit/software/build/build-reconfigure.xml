@@ -876,6 +876,7 @@
 					<fileset dir="${lib.dir}">
 						<include name="sdk-grid-jaas-*.jar"/>
 						<include name="sdk-grid-jaas-client-*.jar"/>
+						<include name="sdk-grid-security-*.jar" />
 						<include name="sdk-grid-jaas-jndi-binder-*.jar"/>
 						<include name="sdk-grid-remoting-*.jar"/>
 					</fileset>
@@ -1094,6 +1095,7 @@
 					<fileset dir="${lib.dir}">
 						<include name="sdk-grid-jaas-*.jar"/>
 						<include name="sdk-grid-jaas-client-*.jar"/>
+						<include name="sdk-grid-security-*.jar" />
 						<include name="sdk-grid-jaas-jndi-binder-*.jar"/>
 						<include name="sdk-grid-remoting-*.jar"/>
 					</fileset>
@@ -1483,6 +1485,7 @@
 			</manifest>
 			<lib dir="${lib.dir}">
 				<include name="sdk-grid-jaas-*.jar" />
+				<include name="sdk-grid-security-*.jar" />
 				<include name="sdk-grid-jaas-client-*.jar" />
 				<include name="sdk-grid-jaas-jndi-binder-*.jar" />
 				<include name="sdk-grid-remoting-*.jar" />

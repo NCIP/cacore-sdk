@@ -8,7 +8,6 @@ import gov.nih.nci.system.dao.DAOException;
 import gov.nih.nci.system.dao.Request;
 import gov.nih.nci.system.dao.Response;
 import gov.nih.nci.system.dao.orm.ORMDAOImpl;
-import gov.nih.nci.system.query.cql.CQLQuery;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
 import gov.nih.nci.system.query.nestedcriteria.NestedCriteriaPath;
 import gov.nih.nci.system.util.ClassCache;
@@ -19,17 +18,13 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import org.apache.log4j.Logger;
-import org.cagrid.iso21090.sdkquery.translator.CQL2ParameterizedHQL;
-import org.cagrid.iso21090.sdkquery.translator.HibernateConfigTypesInformationResolver;
-import org.cagrid.iso21090.sdkquery.translator.IsoDatatypesConstantValueResolver;
-import org.cagrid.iso21090.sdkquery.translator.ParameterizedHqlQuery;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.impl.CriteriaImpl;
 
 /**
  * Implementation for the methods in the service layer
- * 
+ *
  * @author Satish Patel
  * @version 1.0
  */
@@ -41,8 +36,6 @@ public class ApplicationServiceImpl implements ApplicationService {
 	private Integer maxRecordCount = 1000;
 	
 	private static Logger log = Logger.getLogger(ApplicationServiceImpl.class.getName());
-	
-	private CQL2ParameterizedHQL cqlTranslator;
 
 	/**
 	 * Default constructor. Cache is required and is expected to have a collection of DAO
@@ -59,18 +52,10 @@ public class ApplicationServiceImpl implements ApplicationService {
 			if(dao instanceof ORMDAOImpl)
 			{
 				maxRecordCount = ((ORMDAOImpl)dao).getResultCountPerQuery();
-				cqlTranslator = initializeCQLTranslator(((ORMDAOImpl)dao).getConfig());
 			}
 		}
 	}
-	
-	private CQL2ParameterizedHQL initializeCQLTranslator(Configuration config)
-	{
-		HibernateConfigTypesInformationResolver typeResolver = new HibernateConfigTypesInformationResolver(config, true);
-		IsoDatatypesConstantValueResolver constantResolver = new IsoDatatypesConstantValueResolver();			
-		return new CQL2ParameterizedHQL(typeResolver, constantResolver, false);
-	}
-	
+
 	/**
 	 * @see gov.nih.nci.system.applicationservice.ApplicationService#query(org.hibernate.criterion.DetachedCriteria, java.lang.String)
 	 */
@@ -107,22 +92,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 		String targetClassName = hql.substring(0,hql.indexOf(' ')).trim();
 		return privateQuery(hqlCriteria, targetClassName);
 	}
-	
-	/**
-	 * @see gov.nih.nci.system.applicationservice.ApplicationService#query(gov.nih.nci.system.query.cql.CQLQuery, java.lang.String)
-	 */
-	public <E> List<E> query(CQLQuery cqlQuery, String targetClassName) throws ApplicationException {
-		throw new ApplicationException("Direct CQL query has been removed from SDK to avoid circular dependencies with caGrid. SDK supports querying by HQL. If you need to use CQL, You could use caGrid API that converts CQL to HQL and pass it to SDK. Please refer to www.cagrid.org for details.");
-		//return query(cqlQuery);
-	}
 
-	/**
-	 * @see gov.nih.nci.system.applicationservice.ApplicationService#query(gov.nih.nci.system.query.cql.CQLQuery)
-	 */
-	public <E> List<E> query(CQLQuery cqlQuery) throws ApplicationException {
-		throw new ApplicationException("Direct CQL query has been removed from SDK to avoid circular dependencies with caGrid. SDK supports querying by HQL. If you need to use CQL, You could use caGrid API that converts CQL to HQL and pass it to SDK. Please refer to www.cagrid.org for details.");
-		//return privateQuery(cqlQuery, cqlQuery.getTarget().getName());
-	}
 
 	
 	/** 
@@ -244,12 +214,27 @@ public class ApplicationServiceImpl implements ApplicationService {
 	 * @return
 	 * @throws ApplicationException
 	 */
-	protected <E> List<E> privateQuery(Object criteria, String targetClassName) throws ApplicationException 
+	protected <E> List<E> privateQuery(Object criteria, String targetClassName) throws ApplicationException
 	{
-		
+		int firstRow = 0;
+		int maxRows = 0;
+
+		if (criteria instanceof HQLCriteria) {
+			HQLCriteria hqlCriteria = (HQLCriteria) criteria;
+			if (hqlCriteria.getFirstRow() != -1) {
+				firstRow = hqlCriteria.getFirstRow();
+			}
+			if (hqlCriteria.getNumberOfRows() != -1) {
+				maxRows = hqlCriteria.getNumberOfRows();
+			}
+		}
+
 		Request request = new Request(criteria);
 		request.setIsCount(Boolean.FALSE);
-		request.setFirstRow(0);
+		request.setFirstRow(firstRow);
+		if (maxRows != 0) {
+			request.setRecordsCount(maxRows);
+		}
 		request.setDomainObjectName(targetClassName);
 
 		Response response = query(request);
@@ -323,8 +308,4 @@ public class ApplicationServiceImpl implements ApplicationService {
 		return classCache;
 	}
 
-	public <E> List<E> query(gov.nih.nci.cagrid.cqlquery.CQLQuery cqlQuery) throws ApplicationException
-	{
-		throw new ApplicationException("Direct CQL query has been removed from SDK to avoid circular dependencies with caGrid. SDK supports querying by HQL. If you need to use CQL, You could use caGrid API that converts CQL to HQL and pass it to SDK. Please refer to www.cagrid.org for details."); 
-	}
 }

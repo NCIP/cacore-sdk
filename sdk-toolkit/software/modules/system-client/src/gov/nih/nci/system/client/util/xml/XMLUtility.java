@@ -96,7 +96,13 @@ public class XMLUtility {
 		beanObject = unmarshaller.fromXML(xmlFile);
 		return beanObject;
 	}
-	
+
+	public Object fromXML(File xmlFile, String namespacePrefix) throws XMLUtilityException {
+		Object beanObject = null;
+		beanObject = unmarshaller.fromXML(xmlFile, namespacePrefix);
+		return beanObject;
+	}
+
 	/**
 	 * Instantiates an object from an XML File that contains the serialized output
 	 * of that object. This method should only be used with a JAXBUnmarshaller instance

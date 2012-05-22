@@ -297,6 +297,8 @@
 						<chmod dir="${tomcat.home}/bin" perm="ugo+rx" includes="**/*.sh" />
 					</then>
 				</if>
+				<tomcat-nci-customizations
+					/>
 			</then>
 		</if>
 	</target>
@@ -925,6 +927,12 @@
 					/>
 			</else>
 		</if>
+	</target>
+
+	<target name="stop:jboss" description="Checks to see if configured ports are listenting and fails buld, meant to be run after jboss:stop" unless="exclude.jboss"
+		depends="
+		install:jboss:stop
+		">
 	</target>
 	
 	<target name="install:jboss:validation:pre-install:ports" description="Checks to see if configured ports are listenting and fails buld, meant to be run after jboss:stop" unless="exclude.jboss"
