@@ -98,6 +98,9 @@ public class FileHandler implements ArtifactHandler
 	 */
 	public void handleArtifact(Artifact artifact) throws GenerationException
 	{
+		if(artifact.getContent() == null)
+			return;
+		
 		String fName = prepareFileName(artifact);
 		try
 		{

@@ -53,6 +53,7 @@ public class TransformerUtils
 	private String EXCLUDE_REST_NAME;
 	private String EXCLUDE_NAME;
 	private String EXCLUDE_NAMESPACE;
+	
 	private String IDENTITY_GENERATOR_TAG;
 	private Set<String> INCLUDE_PACKAGE_PATTERNS = new HashSet<String>();
 	private Set<String> EXCLUDE_PACKAGE_PATTERNS = new HashSet<String>();
@@ -70,7 +71,8 @@ public class TransformerUtils
 	private boolean useGMETags = false;
 	private boolean isJaxbEnabled = false;
 	private boolean isISO21090Enabled = false;
-
+	private Map<UMLClass, String> restResourceNames = new HashMap<UMLClass, String>();
+	
 	private UMLPackage isoDataTypeRootPackage;
 	/**
 	 * UMLModel from which the code is to be generated
@@ -97,8 +99,8 @@ public class TransformerUtils
 	public static final String TV_PK_GENERATOR = "NCI_GENERATOR.";
 	public static final String TV_PK_GENERATOR_PROPERTY = "NCI_GENERATOR_PROPERTY";
 	public static final String TV_MAPPED_COLLECTION_ELEMENT_TYPE = "mapped-collection-element-type";
-	public static final String  TV_NOT_NULL_PROPERTY = "nci-not-null";
-
+	public static final String TV_NOT_NULL_PROPERTY = "nci-not-null";
+	public static final String RESTFUL_RESOURCE = "RESTFUL_RESOURCE";
 	
 	//Global Model Exchange (GME) Project Tag Value Constants; see: https://wiki.nci.nih.gov/display/caCORE/GME+Namespace
 	public static final String TV_NCI_GME_XML_NAMESPACE = "NCI_GME_XML_NAMESPACE"; //Used for projects, Packages, Classes
@@ -147,6 +149,36 @@ public class TransformerUtils
 		}
 	};	
 
+	public static final Map<String, String> javaPrimitiveDatatypeMap = new HashMap<String, String>()
+	{
+		{
+			put("int", "Integer");
+			put("integer", "Integer");
+			put("double", "Double");
+			put("float", "Float");
+			put("long", "Long");
+			put("string", "String");
+			put("char", "Character");
+			put("character", "Character");
+			put("boolean", "Boolean");
+			put("byte", "Byte");
+			put("short", "Short");
+			put("date", "java.util.Date");
+			put("Integer", "Integer");
+			put("integer", "Integer");
+			put("Double", "Double");
+			put("Float", "Float");
+			put("Long", "Long");
+			put("String", "String");
+			put("Character", "Character");
+			put("character", "Character");
+			put("Boolean", "Boolean");
+			put("Byte", "Byte");
+			put("Short", "Short");
+			put("java.util.Date", "java.util.Date");
+		}
+	};	
+	
 	public static final Map<String, String> isoDatatypeMap = new HashMap<String, String>()
 	{
 		{
@@ -309,79 +341,156 @@ public class TransformerUtils
 			
 			this.vModelExtension = vModelExtension;
 			log.debug("ValidatorModel Extension: " + vModelExtension);
+			buildRESTFulResourceNames();
 
 		}
 	
-	private void setModelNamespace(UMLModel model, String basePkgLogicalModel){
-		//override codegen.properties NAMESPACE_PREFIX property with GME namespace tag value, if it exists
-		
-		try {
-			String namespaceUriPrefix = this.getModelNamespace(model, basePkgLogicalModel);
-			if (namespaceUriPrefix != null) {
-				this.namespaceUriPrefix = namespaceUriPrefix;
-			}
-		} catch (GenerationException e) {
-			log.error("Exception caught trying to set GME model namespace URI Prefix: ", e);
-		}
-	}
-	
-	public String getDatabaseType() {
-		return DATABASE_TYPE;
-	}
-	
-	public boolean isIncluded(UMLClass klass) throws GenerationException
+	public boolean isValidRestFulResource(UMLClass klass)
 	{
-		String fqcn = getFQCN(klass);
+		String action = restResourceNames.get(klass);
+		if(action == null || action.trim().length() == 0)
+			return false;
 		
-		return isIncluded(fqcn);
-	}
-	
-	public boolean isIncluded(UMLInterface interfaze) throws GenerationException
-	{
-		String fqcn = getFQCN(interfaze);
+		action = action.toUpperCase();
 		
-		return isIncluded(fqcn);
-	}
-	
-	public boolean isIncluded(String fqcn)
-	{
-
-		log.debug("isIncluded(String fqcn) for fqcn: "+fqcn);
-
-		for (String excludePkgPattern:EXCLUDE_PACKAGE_PATTERNS)
-			if (Pattern.matches(excludePkgPattern, fqcn))
-				return false;
-
-
-		for (String excludeClassPattern:EXCLUDE_CLASS_PATTERNS){
-			if (Pattern.matches(excludeClassPattern, fqcn))
-				return false;
-		}
-
-		for(String includePkgPattern: INCLUDE_PACKAGE_PATTERNS){
-			log.debug("includePkgPattern: "+includePkgPattern+"; fqcn: "+fqcn);
-			if(Pattern.matches(includePkgPattern, fqcn))
-				return true;
-		}
-
+		if(action.indexOf("C") != -1 || action.indexOf("R") != -1 || action.indexOf("U") != -1 || action.indexOf("D") != -1)
+			return true;
 		return false;
 	}
 	
-	public boolean isIncluded(UMLPackage pkg) throws GenerationException
+	public String getRestFulResourceAction(UMLClass klass)
 	{
-		String fullPkgName = getFullPackageName(pkg);
-		log.debug("isIncluded(UMLPackage pkg) for fullPkgName: "+fullPkgName);
-
-		for(String excludePkgPattern: EXCLUDE_PACKAGE_PATTERNS)
-			if (Pattern.matches(excludePkgPattern, fullPkgName))
-				return false;
-
-		for(String includePkgPattern: INCLUDE_PACKAGE_PATTERNS)
-			if (Pattern.matches(includePkgPattern, fullPkgName))
-				return true;
-		
-		return true;
+		return restResourceNames.get(klass);
 	}
+	
+	private void buildRESTFulResourceNames()
+	{
+		Collection<UMLClass> classes = null;
+		try {
+			Collection<UMLPackage> pkgCollection = getAllPackages(model);
+			Map<String, String> restPackages = new HashMap<String, String>();
+			
+			for(UMLPackage pkg : pkgCollection)
+			{
+				if(!isIncluded(pkg) || !isIncludedForREST(pkg))
+					continue;
+				
+				UMLTaggedValue tValue = pkg.getTaggedValue(RESTFUL_RESOURCE);
+				if(tValue == null)
+					continue;
+				
+				String pkgName = getFullPackageName(pkg);
+				restPackages.put(pkgName, tValue.getValue());
+			}
+			
+			Collection<UMLClass> classCollection = getAllClasses(model);
+			for(UMLClass klass : classCollection )
+			{
+				if(!isIncluded(klass) || !isIncludedForREST(klass) || isAbstract(klass))
+					continue;
+
+				//String klassName = getFQCN(klass);
+				String restAction = getRESTTagValue(klass, restPackages);
+				//System.out.println("klassName "+klassName + " restAction "+restAction);
+				if(restAction != null && restAction.length() > 0)
+					restResourceNames.put(klass, restAction);
+			}
+			
+		} catch(Exception e){
+			log.error("Error while building RESTFul resources: ", e);
+			//throw new GenerationException("Error while building RESTFul resources: ", e);
+		}
+	}
+	
+	private String getRESTTagValue(UMLClass klass, Map<String, String> restPackages)
+	{
+		String action = "";
+		int start = 0;
+		String klassName = getFQCN(klass);
+		UMLTaggedValue tValue = klass.getTaggedValue(RESTFUL_RESOURCE);
+		if(tValue != null)
+			action = tValue.getValue();
+		
+		while(true)
+		{
+			int index = klassName.indexOf(".", start);
+			if(index == -1)
+				break;
+			String pkg = klassName.substring(0, index);
+			start = start + pkg.length() + 1;
+			String actionValue = restPackages.get(pkg);
+			if(actionValue != null && actionValue.trim().length() > 0)
+			{
+				action += actionValue.trim();
+			}
+		}
+		
+		String returnAction = "";
+		if(action != null && action.indexOf("C") != -1)
+			returnAction += "C";
+		if(action != null && action.indexOf("R") != -1)
+			returnAction += "R";
+		if(action != null && action.indexOf("U") != -1)
+			returnAction += "U";
+		if(action != null && action.indexOf("D") != -1)
+			returnAction += "D";
+		
+		return returnAction;
+	}
+
+	public boolean isValidRestResource(UMLModel model, UMLClass klass)
+	{
+		if(restResourceNames.get(klass) == null)
+			return false;
+		else
+			return true;
+	}
+	
+	public Collection<UMLClass> getAllRESTResources()
+	{
+		Collection<UMLClass> classes = new HashSet<UMLClass>();
+		for(UMLClass klass : restResourceNames.keySet())
+		{
+			classes.add(klass);
+		}
+		return classes;
+	}
+	/**
+	 * Returns all the classes (not the tables) in the XMI file which do not belong to java.lang or java.util package 
+	 * @param model
+	 * @return
+	 */
+	public Collection<UMLClass> getAllRESTResources(UMLModel model) throws GenerationException
+	{
+		Collection<UMLClass> classes = null;
+		try {
+			classes = new HashSet<UMLClass>();
+			getAllRESTResources(model.getPackages(),classes);
+		} catch(Exception e){
+			log.error("Unable to retrieve classes from model: ", e);
+			throw new GenerationException("Unable to retrieve classes from model: ", e);
+		}
+		return classes;
+	}
+	
+	private void getAllRESTResources(Collection<UMLPackage> pkgCollection,Collection<UMLClass> classes)throws GenerationException
+	{
+		for(UMLPackage pkg:pkgCollection)
+			getAllRESTResources(pkg,classes);
+	}
+	
+	private void getAllRESTResources(UMLPackage rootPkg,Collection<UMLClass> classes) throws GenerationException
+	{
+		if(isIncluded(rootPkg) && isIncludedForREST(rootPkg))
+		{
+			for(UMLClass klass:rootPkg.getClasses())
+			{
+				if(!STEREO_TYPE_TABLE.equalsIgnoreCase(klass.getStereotype()) && isIncluded(klass) && isIncludedForREST(klass))
+					classes.add(klass);
+			}
+		}
+		//getAllRESTResources(rootPkg.getPackages(),classes);
+	}	
 
 	public boolean isIncludedForREST(UMLClass klass) throws GenerationException
 	{
@@ -393,6 +502,7 @@ public class TransformerUtils
 	public boolean isIncludedForREST(String fqcn)
 	{
 
+		log.debug("isIncluded(String fqcn) for fqcn: "+fqcn);
 		log.debug("isIncluded(String fqcn) for fqcn: "+fqcn);
 
 		for (String excludePkgPattern:EXCLUDE_REST_PACKAGE_PATTERNS)
@@ -429,6 +539,77 @@ public class TransformerUtils
 		
 		return true;
 	}
+	
+	private void setModelNamespace(UMLModel model, String basePkgLogicalModel){
+		//override codegen.properties NAMESPACE_PREFIX property with GME namespace tag value, if it exists
+		
+		try {
+			String namespaceUriPrefix = this.getModelNamespace(model, basePkgLogicalModel);
+			if (namespaceUriPrefix != null) {
+				this.namespaceUriPrefix = namespaceUriPrefix;
+			}
+		} catch (GenerationException e) {
+			log.error("Exception caught trying to set GME model namespace URI Prefix: ", e);
+		}
+	}
+	
+	public String getDatabaseType() {
+		return DATABASE_TYPE;
+	}
+	
+	public boolean isIncluded(UMLClass klass) throws GenerationException
+	{
+		String fqcn = getFQCN(klass);
+		
+		return isIncluded(fqcn);
+	}
+	
+	public boolean isIncluded(UMLInterface interfaze) throws GenerationException
+	{
+		String fqcn = getFQCN(interfaze);
+		
+		return isIncluded(fqcn);
+	}
+	
+	public boolean isIncluded(String fqcn)
+	{
+
+		log.debug("isIncluded(String fqcn) for fqcn: "+fqcn);
+		for (String excludePkgPattern:EXCLUDE_PACKAGE_PATTERNS)
+			if (Pattern.matches(excludePkgPattern, fqcn))
+				return false;
+
+
+		for (String excludeClassPattern:EXCLUDE_CLASS_PATTERNS){
+			if (Pattern.matches(excludeClassPattern, fqcn))
+				return false;
+		}
+
+		for(String includePkgPattern: INCLUDE_PACKAGE_PATTERNS){
+			log.debug("includePkgPattern: "+includePkgPattern+"; fqcn: "+fqcn);
+			if(Pattern.matches(includePkgPattern, fqcn))
+				return true;
+		}
+
+		return false;
+	}
+	
+	public boolean isIncluded(UMLPackage pkg) throws GenerationException
+	{
+		String fullPkgName = getFullPackageName(pkg);
+		log.debug("isIncluded(UMLPackage pkg) for fullPkgName: "+fullPkgName);
+
+		for(String excludePkgPattern: EXCLUDE_PACKAGE_PATTERNS)
+			if (Pattern.matches(excludePkgPattern, fullPkgName))
+				return false;
+
+		for(String includePkgPattern: INCLUDE_PACKAGE_PATTERNS)
+			if (Pattern.matches(includePkgPattern, fullPkgName))
+				return true;
+		
+		return true;
+	}
+
 	
 	public boolean isNamespaceIncluded(UMLClass klass, String defaultNamespacePrefix) throws GenerationException
 	{
@@ -1503,37 +1684,35 @@ public class TransformerUtils
 	 * @param model
 	 * @return
 	 */
-	public Collection<UMLClass> getAllRESTResources(UMLModel model) throws GenerationException
+	public Collection<UMLPackage> getAllPackages(UMLModel model) throws GenerationException
 	{
-		Collection<UMLClass> classes = null;
+		Collection<UMLPackage> packages = null;
 		try {
-			classes = new HashSet<UMLClass>();
-			getAllRESTResources(model.getPackages(),classes);
+			packages = new HashSet<UMLPackage>();
+			getAllPackages(model.getPackages(),packages);
 		} catch(Exception e){
 			log.error("Unable to retrieve classes from model: ", e);
 			throw new GenerationException("Unable to retrieve classes from model: ", e);
 		}
-		return classes;
+		return packages;
 	}
 	
-	private void getAllRESTResources(Collection<UMLPackage> pkgCollection,Collection<UMLClass> classes)throws GenerationException
+	private void getAllPackages(Collection<UMLPackage> pkgCollection,Collection<UMLPackage> packages)throws GenerationException
 	{
 		for(UMLPackage pkg:pkgCollection)
-			getAllClasses(pkg,classes);
+			getAllPackages(pkg,packages);
 	}
 	
-	private void getAllRESTResources(UMLPackage rootPkg,Collection<UMLClass> classes) throws GenerationException
+	private void getAllPackages(UMLPackage rootPkg,Collection<UMLPackage> packages) throws GenerationException
 	{
-		if(isIncluded(rootPkg) && isIncludedForREST(rootPkg))
+		if(isIncluded(rootPkg))
 		{
-			for(UMLClass klass:rootPkg.getClasses())
-			{
-				if(!STEREO_TYPE_TABLE.equalsIgnoreCase(klass.getStereotype()) && isIncluded(klass) && isIncludedForREST(klass))
-					classes.add(klass);
-			}
+			//if(!STEREO_TYPE_TABLE.equalsIgnoreCase(rootPkg.getStereotype()))
+				packages.add(rootPkg);
 		}
-		getAllRESTResources(rootPkg.getPackages(),classes);
+		getAllPackages(rootPkg.getPackages(),packages);
 	}	
+
 
 	/**
 	 * Returns all the interfaces in the XMI file which do not belong to java.lang or java.util package 
@@ -3118,6 +3297,34 @@ public class TransformerUtils
 		return javaDatatypeMap.containsKey(originalType.toLowerCase());
 	}
 
+	
+	public boolean isISO21090Enabled(UMLClass klass)
+	{
+		for(UMLAttribute attr: klass.getAttributes())
+		{
+			String originalType = attr.getDatatype().getName();
+
+			if(isoDatatypeMap.containsKey(originalType))
+				return true;
+		}
+		return false;
+	}
+
+	public boolean isValidForRESTMatrixParam(UMLClass klass)
+	{
+		if(isISO21090Enabled(klass))
+			return false;
+		
+		for(UMLAttribute attr: klass.getAttributes())
+		{
+			String originalType = attr.getDatatype().getName();
+
+			if(javaPrimitiveDatatypeMap.containsKey(originalType))
+				return true;
+		}
+		return false;
+	}
+	
 	public boolean isDsetDataType(UMLAttribute attr)
 	{
 		String originalType = attr.getDatatype().getName();

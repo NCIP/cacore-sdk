@@ -17,14 +17,14 @@ http://cxf.apache.org/schemas/jaxrs.xsd">
      <cxf:logging/>
 </jaxrs:features>
 <jaxrs:serviceBeans>
-	<%for(UMLClass klass:transformerUtils.getAllRESTResources(model)){%>
+	<%for(UMLClass klass:transformerUtils.getAllRESTResources()){%>
 	<ref bean="<%=klass.getName()%>Service" />
 	<%}%>
 
     </jaxrs:serviceBeans>
   </jaxrs:server>
 
-<%for(UMLClass klass:transformerUtils.getAllRESTResources(model)){%>
+<%for(UMLClass klass:transformerUtils.getAllRESTResources()){%>
 
 	<bean id="<%=klass.getName()%>Service" class="<%=transformerUtils.getFQCN(klass)%>Resource">
 	</bean>

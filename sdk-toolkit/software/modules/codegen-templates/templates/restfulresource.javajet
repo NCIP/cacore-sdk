@@ -16,6 +16,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.MatrixParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
@@ -26,56 +27,208 @@ import javax.ws.rs.WebApplicationException;
 
 import java.util.List;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.ArrayList;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
 import gov.nih.nci.system.web.RESTfulResource;
 import gov.nih.nci.system.query.hql.DeleteHQLQuery;
 import gov.nih.nci.system.applicationservice.ApplicationException;
+import org.apache.log4j.Logger;
+import java.util.StringTokenizer;
 
-@Path("/<%=klassName%>Service")
+@Path("/<%=klassName%>")
 @Produces("application/xml")
 public class <%=klassName%>Resource extends RESTfulResource
 {
 
-	
+	private static Logger log = Logger.getLogger(<%=klassName%>Resource.class);	
 	
 	public <%=klassName%>Resource(@Context ServletContext context)
 	{
 		super(context);
 	}
+
+<%	
+String action = transformerUtils.getRestFulResourceAction(klass).toUpperCase();
+if(action != null && action.indexOf("R") != -1)
+{%>
 	
 	@GET
-	@Path("/<%=klassName%>/{id}")
-	//@Produces("application/xml")
-	public void get<%=klassName%>(@Context javax.servlet.http.HttpServletRequest request, @Context javax.servlet.http.HttpServletResponse response, @PathParam("id") String id) 
+	@Path("{id : \\d+}")
+	@Produces("application/xml")
+	public <%=klassName%> get<%=klassName%>ById(@Context javax.servlet.http.HttpServletRequest request, @Context javax.servlet.http.HttpServletResponse response, @PathParam("id") String id, @PathParam("startIndex") String start, @PathParam("size") String size) 
 	{
 		try
 		{
-	  		List params = new ArrayList(1);
+	  		List params = new ArrayList();
 	  		String className = "<%=fullPackageName%>.<%=klassName%>";
-			params.add(new Integer(id));
-	  		HQLCriteria criteria = new HQLCriteria("from <%=fullPackageName%>.<%=klassName%> a where a.id = ?", params);
-	  		query(request, response, criteria, className);
-	  		/*if(results != null && results.size() != 0)
-	  			return (<%=klassName%>)results.get(0);
+			
+			int startIndex = -1;
+			int totalSize = -1;
+			if(start != null)
+				startIndex = Integer.parseInt(start);
+			if(size != null)
+				totalSize = Integer.parseInt(size);
+			
+			params.add(new Long(id));	
+			HQLCriteria criteria = new HQLCriteria("from <%=fullPackageName%>.<%=klassName%> a where a.<%=transformerUtils.getClassIdAttrName(klass)%> = ?", params, startIndex, totalSize);
+			
+			Collection<<%=klassName%>> results = getApplicationService().query(criteria);
+			if(results != null && results.size() > 0)
+				return results.iterator().next();
 			else
-			{			
-				  ResponseBuilder builder = Response.status(Status.BAD_REQUEST);
+			{
+				  ResponseBuilder builder = Response.status(Status.NOT_FOUND);
 				  builder.type("application/xml");
-				  builder.entity("<error>Not found</error>");
+				  builder.entity("<message>Not found</message>");
 				  throw new WebApplicationException(builder.build());
-	  		}*/
+			}
 			
-			
+	  		//query(request, response, criteria, className);
+		}
+		catch(WebApplicationException e)
+		{
+			throw e;
 		}
 		catch(ApplicationException e)
 		{
-		  ResponseBuilder builder = Response.status(Status.BAD_REQUEST);
-		  builder.type("application/xml");
-		  builder.entity("<error>Not found</error>");
-		  throw new WebApplicationException(builder.build());
+			  log.error("Error in querying REST resource: " + e.getMessage());
+			  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
+			  builder.type("application/xml");
+			  builder.entity("<error>Failed to Query due to: "+e.getMessage()+"</error>");
+			  throw new WebApplicationException(builder.build());
+		}
+		
+	}
+	
+
+<%
+if(klass.getAttributes() != null && klass.getAttributes().size() > 0 && transformerUtils.isValidForRESTMatrixParam(klass))
+{
+%>
+	@GET
+	@Path("/search")
+	@Produces("application/xml")
+	public Collection<<%=klassName%>> get<%=klassName%>(@Context javax.servlet.http.HttpServletRequest request, @Context javax.servlet.http.HttpServletResponse response, @MatrixParam("sIndex") String bstart, @MatrixParam("bSize") String bsize
+	<%
+	java.util.Iterator iter = klass.getAttributes().iterator();
+	while(iter.hasNext()){
+		UMLAttribute attr = (UMLAttribute) iter.next();
+		if(transformerUtils.javaPrimitiveDatatypeMap.get(attr.getDatatype().getName()) == null)
+			continue;
+
+		if(attr.getDatatype().getName().equals("character") || attr.getDatatype().getName().equals("Character") || attr.getDatatype().getName().equals("char"))
+		{
+	%>
+		, @MatrixParam("<%=attr.getName()%>") Character <%=attr.getName()%>
+		
+	<%	
+		} else {
+	%>
+		, @MatrixParam("<%=attr.getName()%>") String <%=attr.getName()%>
+	<%
 		}
 	}
+	%>)
+	{
+		try
+		{
+	  		List params = new ArrayList();
+	  		String className = "<%=fullPackageName%>.<%=klassName%>";
+			
+			int startIndex = -1;
+			int totalSize = -1;
+			if(bstart != null)
+				startIndex = Integer.parseInt(bstart);
+			if(bsize != null)
+				totalSize = Integer.parseInt(bsize);
+			
+			String whereCriteria = "";
+
+			List criteria = new ArrayList();
+			
+			<%
+			java.util.Iterator iter2 = klass.getAttributes().iterator();
+			while(iter2.hasNext()){
+				UMLAttribute attr = (UMLAttribute) iter2.next();
+				String atype = null;
+				if(transformerUtils.javaPrimitiveDatatypeMap.get(attr.getDatatype().getName()) == null)
+					continue;
+				else
+				{
+					if(transformerUtils.javaPrimitiveDatatypeMap.get(attr.getDatatype().getName()) != null)
+						atype = transformerUtils.javaPrimitiveDatatypeMap.get(attr.getDatatype().getName());
+					else
+						atype = attr.getDatatype().getName();
+				}
+			%>
+				if(<%=attr.getName()%> != null)
+				{
+					criteria.add("<%=attr.getName()%>");
+					if("<%=attr.getName()%>" != null && "<%=attr.getName()%>".equalsIgnoreCase("null"))
+						criteria.add(" is null ");
+					else
+					{
+						criteria.add("=? ");
+						params.add(new <%=atype%>(<%=attr.getName()%>));
+					}
+				}
+			<%}%>
+			
+			if(criteria.size() > 0)
+				whereCriteria = " where ";
+			else
+			{
+				  ResponseBuilder builder = Response.status(Status.NOT_FOUND);
+				  builder.type("application/xml");
+				  builder.entity("<message>Invalid Criteria</message>");
+				  throw new WebApplicationException(builder.build());
+			}
+			
+			java.util.Iterator iter = criteria.iterator();
+			
+			while(iter.hasNext())
+			{
+				String crtra = (String) iter.next();
+				whereCriteria = whereCriteria + crtra + " ";
+				if(iter.hasNext())
+					whereCriteria = whereCriteria + " and ";
+			}
+			
+			//params.add(new Long(id));
+			HQLCriteria hcriteria = null;
+			if(whereCriteria.length() > 0)
+				hcriteria = new HQLCriteria("from <%=fullPackageName%>.<%=klassName%> a "+whereCriteria, params, startIndex, totalSize);
+			else
+				hcriteria = new HQLCriteria("from <%=fullPackageName%>.<%=klassName%> a ", params, startIndex, totalSize);
+			
+			Collection<<%=klassName%>> results = getApplicationService().query(hcriteria);
+			if(results != null && results.size() > 0)
+				return results;
+			else
+			{
+				  ResponseBuilder builder = Response.status(Status.NOT_FOUND);
+				  builder.type("application/xml");
+				  builder.entity("<message>Not found</message>");
+				  throw new WebApplicationException(builder.build());
+			}
+		}
+		catch(WebApplicationException e)
+		{
+			throw e;
+		}
+		catch(ApplicationException e)
+		{
+			  log.error("Error in querying REST resource: " + e.getMessage());
+			  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
+			  builder.type("application/xml");
+			  builder.entity("<error>Failed to Query due to: "+e.getMessage()+"</error>");
+			  throw new WebApplicationException(builder.build());
+		}
+		
+	}
+	
+<%}%>
 
 <%	
 List<UMLAssociation> associations = transformerUtils.getAssociations(klass, true);
@@ -102,39 +255,34 @@ List<String> methodNames = new java.util.ArrayList<String>();
 				{
 				%>
 		@GET
-		@Path("/<%=klassName%>/{id}/<%=roleName%>")
+		@Path("{id}/<%=roleName%>")
+		@Produces("application/xml")
 		public void <%=transformerUtils.getGetterMethodName(associationEnd)%>(@Context javax.servlet.http.HttpServletRequest request, @Context javax.servlet.http.HttpServletResponse response, @PathParam("id") String id){
 			try
 			{
 		  		String className = "<%=fullPackageName%>.<%=klassName%>";
 		  		query(request, response, "<%=klassName%>", "<%=fullPackageName%>", id, "<%=roleName%>");
 	  		}
-			catch(ApplicationException e)
+			catch(WebApplicationException e)
 			{
-			  ResponseBuilder builder = Response.status(Status.BAD_REQUEST);
-			  builder.type("application/xml");
-			  builder.entity("<error>Error Retrieving results</error>");
-			  throw new WebApplicationException(builder.build());
+				throw e;
 			}
 		}
 				<%}else{
 				%>
 		@GET
-		@Path("/<%=klassName%>/{id}/<%=roleName%>")
+		@Path("{id}/<%=roleName%>")
+		@Produces("application/xml")
 		public void <%=transformerUtils.getGetterMethodName(associationEnd)%>(@Context javax.servlet.http.HttpServletRequest request, @Context javax.servlet.http.HttpServletResponse response, @PathParam("id") String id){
 			try
 			{
 		  		String className = "<%=fullPackageName%>.<%=klassName%>";
 		  		query(request, response, "<%=klassName%>", "<%=fullPackageName%>", id, "<%=roleName%>");
 	  		}
-			catch(ApplicationException e)
+			catch(WebApplicationException e)
 			{
-			  ResponseBuilder builder = Response.status(Status.BAD_REQUEST);
-			  builder.type("application/xml");
-			  builder.entity("<error>Error Retrieving results</error>");
-			  throw new WebApplicationException(builder.build());
+				throw e;
 			}
-	  		
 		}
 			<%}
 			}
@@ -142,8 +290,12 @@ List<String> methodNames = new java.util.ArrayList<String>();
 		}
 	}%>
 
+<%}%>
+
+<%
+if(action != null && action.indexOf("C") != -1)
+{%>
 	@POST
-	@Path("/<%=klassName%>")
 	@Consumes("application/xml")
 	public void add<%=klassName%>(<%=klassName%> object)
 	{
@@ -151,18 +303,20 @@ List<String> methodNames = new java.util.ArrayList<String>();
 		{
 			save(object);
 		}
-		catch(ApplicationException e)
+		catch(WebApplicationException e)
 		{
-		  ResponseBuilder builder = Response.status(Status.BAD_REQUEST);
-		  builder.type("application/xml");
-		  builder.entity("<error>Not found</error>");
-		  throw new WebApplicationException(builder.build());
+			throw e;
 		}
 	}
 
+<%}%>
+
+<%
+if(action != null && action.indexOf("D") != -1)
+{%>
 
 	@DELETE
-	@Path("/<%=klassName%>/{id}")
+	@Path("{id}")
 	public void delete<%=klassName%>(@Context javax.servlet.http.HttpServletRequest request, @Context javax.servlet.http.HttpServletResponse response, @PathParam("id") String id)
 	{
 	System.out.println("in delete................");
@@ -174,58 +328,34 @@ List<String> methodNames = new java.util.ArrayList<String>();
 			params = new ArrayList(1);
 			params.add(new Integer(id));
 			String query = "delete from <%=fullPackageName%>.<%=klassName%> a where a.id = ?";
-	  			
-	  			DeleteHQLQuery deleteQuery = new DeleteHQLQuery(query, params);
-	  			delete(deleteQuery);
-/*
-	  		List results = query(request, response, criteria);
-	  		if(results != null && results.size() != 0)
-	  		{
-	  			System.out.println("before delete................");
-				params = new ArrayList(1);
-				params.add(new Integer(id));
-				String query = "delete from <%=fullPackageName%>.<%=klassName%> a where a.id = ?";
-	  			
-	  			DeleteHQLQuery deleteQuery = new DeleteHQLQuery(query, params);
-	  			//delete((<%=klassName%>)results.get(0));
-	  			delete(deleteQuery);
-	  		}
-			else
-			{			
-				  ResponseBuilder builder = Response.status(Status.BAD_REQUEST);
-				  builder.type("application/xml");
-				  builder.entity("<error>Not found</error>");
-				  throw new WebApplicationException(builder.build());
-	  		}
-*/	  		
+			DeleteHQLQuery deleteQuery = new DeleteHQLQuery(query, params);
+			delete(deleteQuery);
 		}
-		catch(ApplicationException e)
+		catch(WebApplicationException e)
 		{
-		  ResponseBuilder builder = Response.status(Status.BAD_REQUEST);
-		  builder.type("application/xml");
-		  builder.entity("<error>Not found</error>");
-		  throw new WebApplicationException(builder.build());
+			throw e;
 		}
 		
 	}
+<%}%>
+
+<%
+if(action != null && action.indexOf("U") != -1)
+{%>
 
 	@PUT
-	@Path("/<%=klassName%>")
 	@Consumes("application/xml")
 	public void update<%=klassName%>(<%=klassName%> object)
 	{
-		System.out.println("in update................");
 		try
 		{
 			update(object);
 		}
-		catch(ApplicationException e)
+		catch(WebApplicationException e)
 		{
-		  ResponseBuilder builder = Response.status(Status.BAD_REQUEST);
-		  builder.type("application/xml");
-		  builder.entity("<error>Not found</error>");
-		  throw new WebApplicationException(builder.build());
+			throw e;
 		}
 	}
 
+<%}%>
 }

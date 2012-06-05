@@ -1,7 +1,23 @@
 package gov.nih.nci.system.web;
 
+import gov.nih.nci.system.applicationservice.ApplicationException;
+import gov.nih.nci.system.applicationservice.ApplicationService;
+import gov.nih.nci.system.applicationservice.WritableApplicationService;
+import gov.nih.nci.system.dao.orm.HibernateConfigurationHolder;
+import gov.nih.nci.system.query.example.DeleteExampleQuery;
+import gov.nih.nci.system.query.example.InsertExampleQuery;
+import gov.nih.nci.system.query.example.UpdateExampleQuery;
+import gov.nih.nci.system.query.hibernate.HQLCriteria;
+import gov.nih.nci.system.query.hql.DeleteHQLQuery;
+import gov.nih.nci.system.util.ClassCache;
+import gov.nih.nci.system.util.SystemConstant;
+import gov.nih.nci.system.web.util.HTTPUtils;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
 
@@ -9,63 +25,24 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.StreamingOutput;
-import javax.xml.bind.JAXBElement;
+import javax.ws.rs.core.Response.ResponseBuilder;
+import javax.ws.rs.core.Response.Status;
 import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamSource;
 
-import org.springframework.beans.BeanUtils;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
-
-import com.sun.jersey.api.core.HttpRequestContext;
-import com.sun.jersey.spi.resource.Singleton;
-
-import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.cqlquery.CQLQuery;
-import gov.nih.nci.system.applicationservice.ApplicationException;
-import gov.nih.nci.system.applicationservice.ApplicationService;
-import gov.nih.nci.system.applicationservice.WritableApplicationService;
-import gov.nih.nci.system.client.proxy.ListProxy;
-import gov.nih.nci.system.dao.DAO;
-import gov.nih.nci.system.dao.orm.HibernateConfigurationHolder;
-import gov.nih.nci.system.dao.orm.ORMDAOImpl;
-import gov.nih.nci.system.query.SDKQueryResult;
-import gov.nih.nci.system.query.example.DeleteExampleQuery;
-import gov.nih.nci.system.query.example.InsertExampleQuery;
-import gov.nih.nci.system.query.example.UpdateExampleQuery;
-import gov.nih.nci.system.query.hql.DeleteHQLQuery;
-import gov.nih.nci.system.query.hibernate.HQLCriteria;
-import gov.nih.nci.system.util.ClassCache;
-import gov.nih.nci.system.util.SystemConstant;
-import gov.nih.nci.system.web.util.HTTPUtils;
-
 import org.apache.log4j.Logger;
-import org.cagrid.iso21090.sdkquery.translator.CQL2ParameterizedHQL;
-import org.cagrid.iso21090.sdkquery.translator.ParameterizedHqlQuery;
 import org.jdom.Document;
 import org.jdom.output.XMLOutputter;
 import org.jdom.transform.JDOMResult;
 import org.jdom.transform.JDOMSource;
 import org.mmbase.util.Encode;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.StringReader;
-import java.net.URLDecoder;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 public class RESTfulResource {
 
@@ -91,7 +68,6 @@ public class RESTfulResource {
 			jsonStyleSheet = systemProperties.getProperty("jsonOutputFormatter");
 			classCache= (ClassCache)ctx.getBean("ClassCache");
 			writableApplicationService = (WritableApplicationService)ctx.getBean("ApplicationServiceImpl");
-			//writableApplicationService = (WritableApplicationService)ctx.getBean("WritableApplicationServiceImpl");
 			try {
 				String pageCount = systemProperties.getProperty("rowCounter");
 				if (pageCount != null) {
@@ -107,100 +83,196 @@ public class RESTfulResource {
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			log.error("Error in constructing REST resource: " + e.getMessage());
+			//e.printStackTrace();
 		}
   }
 
-    protected void query(@Context javax.servlet.http.HttpServletRequest request, @Context javax.servlet.http.HttpServletResponse response, HQLCriteria criteria, String targetClassName) throws ApplicationException
+	/**
+	 * Get the list of all searchable Fields for the class
+	 * @param className
+	 * @return Field[] of all fields for the given class
+	 */
+	public List<Field> getSearchableFields(String className) {
+		Field[] fields = null;
+		List<Field> searchableFields = new ArrayList<Field>();
+
+		try {
+			Class klass = classCache.getClassFromCache(className);
+			log.debug("Retrieved " + className + " from cache");
+
+			fields = classCache.getAllFields(klass);
+			String fieldType;
+
+			for (int i = 0; i < fields.length; i++) {
+				fields[i].setAccessible(true);
+				fieldType = fields[i].getType().getName();
+
+				if (classCache.isSearchable(fieldType)) {
+					searchableFields.add(fields[i]);
+				}
+
+			}
+		} catch (ClassNotFoundException e) {
+			// Do nothing.  Abstract class names have been purposely modified 
+			// with a " (abstract)" suffix on the UI, and thus are no longer found in the cache
+			// This is intentional; abstract classes cannot be used as a target or 
+			// search criteria object since they cannot be instantiated via Class.forName().newInstance();
+			log.debug("Searchable fields not found for class: " + className + ".  This warning can be safely ignored if the class is abstract or an interface.");
+		} catch (Exception e) {
+			log.error("Exception caught generating a list of searchable fields for class " + className, e);
+		}
+		return searchableFields;
+	}
+
+    protected void query(@Context javax.servlet.http.HttpServletRequest request, @Context javax.servlet.http.HttpServletResponse response, HQLCriteria criteria, String targetClassName) throws WebApplicationException
   {
 	  try
 	  {
- 	  httpUtils.setServletName(request.getRequestURL().toString());
-	  ServletOutputStream out = response.getOutputStream();
-	  Object[] results = httpUtils.getResultSet(criteria);
-
-	  if(results == null)
-	  {
-		  throw new ApplicationException("No results found");
-	  }
-
-	  httpUtils.setTargetClassName(targetClassName);
-	  executeFormatOutput(response, out, results, 1,httpUtils, "XML", false);
-	  //if(results != null)
-		//  return results;
-	  //else
-		//  return null;
-		  //executeFormatOutput(response, out, results.toArray(), 1,httpUtils, "XML");
+	 	  httpUtils.setServletName(request.getRequestURL().toString());
+		  ServletOutputStream out = response.getOutputStream();
+		  Object[] results = httpUtils.getResultSet(criteria);
+	
+		  if(results == null)
+		  {
+			  ResponseBuilder builder = Response.status(Status.NOT_FOUND);
+			  builder.type("application/xml");
+			  builder.entity("<error>Not found</error>");
+			  throw new WebApplicationException(builder.build());
+		  }
+	
+		  httpUtils.setTargetClassName(targetClassName);
+		  executeFormatOutput(response, out, results, 1,httpUtils, "XML", false);
 	  }
 	  catch(IOException e)
 	  {
-		  new ApplicationException(e.getMessage());
+		  log.error("Error in querying REST resource: " + e.getMessage());
+		  ResponseBuilder builder = Response.status(Status. INTERNAL_SERVER_ERROR);
+		  builder.type("application/xml");
+		  builder.entity("<error>Failed to Query due to: "+e.getMessage()+"</error>");
+		  throw new WebApplicationException(builder.build());
 	  }
 	  catch(Exception e)
 	  {
-		  e.printStackTrace();
-		  new ApplicationException(e.getMessage());
+		  log.error("Error in querying REST resource: " + e.getMessage());
+		  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
+		  builder.type("application/xml");
+		  builder.entity("<error>Not found"+e.getMessage()+"</error>");
+		  throw new WebApplicationException(builder.build());
 	  }
-	  //return null;
   }
 
-    protected void query(@Context javax.servlet.http.HttpServletRequest request, @Context javax.servlet.http.HttpServletResponse response, String targetClassName, String targetPackageName, String criteriaValue, String roleName) throws ApplicationException
+    protected void query(@Context javax.servlet.http.HttpServletRequest request, @Context javax.servlet.http.HttpServletResponse response, String targetClassName, String targetPackageName, String criteriaValue, String roleName) throws WebApplicationException
     {
   	  try
   	  {
-		httpUtils.setServletName(request.getRequestURL().toString());
-  		ServletOutputStream out = response.getOutputStream();
-  		String criteriaStr = targetClassName+"[@id="+criteriaValue+"]";
-  		String roleNameLower = roleName.substring(0,1).toLowerCase()+roleName.substring(1,roleName.length());
-  		Object[]  results = httpUtils.getResultSet(targetClassName, targetPackageName, criteriaStr, roleNameLower);
-
-  		if(results == null)
-  		{
-  			throw new ApplicationException("No results found");
-  		}
-
-  	  httpUtils.setTargetClassName(targetClassName);
-
-  	  executeFormatOutput(response, out, results, 1,httpUtils, "XML", false);
-  	  //if(results != null)
-  		//  return results;
-  	  //else
-  		//  return null;
-  		  //executeFormatOutput(response, out, results.toArray(), 1,httpUtils, "XML");
+			httpUtils.setServletName(request.getRequestURL().toString());
+	  		ServletOutputStream out = response.getOutputStream();
+	  		String criteriaStr = targetClassName+"[@id="+criteriaValue+"]";
+	  		String roleNameLower = roleName.substring(0,1).toLowerCase()+roleName.substring(1,roleName.length());
+	  		Object[]  results = httpUtils.getResultSet(targetClassName, targetPackageName, criteriaStr, roleNameLower);
+	
+	  		if(results == null)
+	  		{
+				  ResponseBuilder builder = Response.status(Status.NOT_FOUND);
+				  builder.type("application/xml");
+				  builder.entity("<error>Not found</error>");
+				  throw new WebApplicationException(builder.build());
+	  		}
+	
+	  	  httpUtils.setTargetClassName(targetClassName);
+	
+	  	  executeFormatOutput(response, out, results, 1,httpUtils, "XML", false);
   	  }
-  	  catch(IOException e)
-  	  {
-  		  new ApplicationException(e.getMessage());
-  	  }
-  	  catch(Exception e)
-  	  {
-  		  e.printStackTrace();
-  		  new ApplicationException(e.getMessage());
-  	  }
-  	  //return null;
+	  catch(IOException e)
+	  {
+		  log.error("Error in querying REST resource: " + e.getMessage());
+		  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
+		  builder.type("application/xml");
+		  builder.entity("<error>Failed to Query due to: "+e.getMessage()+"</error>");
+		  throw new WebApplicationException(builder.build());
+	  }
+	  catch(Exception e)
+	  {
+		  log.error("Error in querying REST resource: " + e.getMessage());
+		  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
+		  builder.type("application/xml");
+		  builder.entity("<error>Not found"+e.getMessage()+"</error>");
+		  throw new WebApplicationException(builder.build());
+	  }
     }
 
-	public void save(final Object obj) throws ApplicationException{
-		System.out.println("in save................");
-		final InsertExampleQuery sdkQuery = new InsertExampleQuery(obj);
-		writableApplicationService.executeQuery(sdkQuery);
+    protected ApplicationService getApplicationService()
+    {
+    	return writableApplicationService;
+    }
+    
+	public void save(final Object obj) throws WebApplicationException{
+		try
+		{
+			System.out.println("in save................");
+			final InsertExampleQuery sdkQuery = new InsertExampleQuery(obj);
+			writableApplicationService.executeQuery(sdkQuery);
+		}
+		catch(ApplicationException e)
+		{
+			log.error("Error in Saving REST resource: " + e.getMessage());
+			ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
+			builder.type("application/xml");
+			builder.entity("<error>Failed to Save due to: "+e.getMessage()+"</error>");
+			throw new WebApplicationException(builder.build());
+		}
 	}
 
-	public void update(Object obj) throws ApplicationException{
-		System.out.println("in update................");
-		final UpdateExampleQuery sdkQuery = new UpdateExampleQuery(obj);
-		writableApplicationService.executeQuery(sdkQuery);
+	public void update(Object obj) throws WebApplicationException{
+		try
+		{
+			System.out.println("in update................");
+			final UpdateExampleQuery sdkQuery = new UpdateExampleQuery(obj);
+			writableApplicationService.executeQuery(sdkQuery);
+		}
+		catch(ApplicationException e)
+		{
+			log.error("Error in Updating REST resource: " + e.getMessage());
+			ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
+			builder.type("application/xml");
+			builder.entity("<error>Failed to update due to: "+e.getMessage()+"</error>");
+			throw new WebApplicationException(builder.build());
+		}
+
 	}
 
-	public void delete(Object obj) throws ApplicationException{
-		System.out.println("in delete................");
-		final DeleteExampleQuery sdkQuery = new DeleteExampleQuery(obj);
-		writableApplicationService.executeQuery(sdkQuery);
+	public void delete(Object obj) throws WebApplicationException{
+		try
+		{
+			System.out.println("in delete................");
+			final DeleteExampleQuery sdkQuery = new DeleteExampleQuery(obj);
+			writableApplicationService.executeQuery(sdkQuery);
+		}
+		catch(ApplicationException e)
+		{
+			log.error("Error in Updating REST resource: " + e.getMessage());
+			ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
+			builder.type("application/xml");
+			builder.entity("<error>Failed to update due to: "+e.getMessage()+"</error>");
+			throw new WebApplicationException(builder.build());
+		}
 	}
 
-	public void delete(DeleteHQLQuery query) throws ApplicationException{
-		System.out.println("in delete.......query.........");
-		writableApplicationService.executeQuery(query);
+	public void delete(DeleteHQLQuery query) throws WebApplicationException{
+		try
+		{
+			System.out.println("in delete.......query.........");
+			writableApplicationService.executeQuery(query);
+		}
+		catch(ApplicationException e)
+		{
+			log.error("Error in Updating REST resource: " + e.getMessage());
+			ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
+			builder.type("application/xml");
+			builder.entity("<error>Failed to update due to: "+e.getMessage()+"</error>");
+			throw new WebApplicationException(builder.build());
+		}
 	}
 
 	  protected void executeFormatOutput(HttpServletResponse response,
