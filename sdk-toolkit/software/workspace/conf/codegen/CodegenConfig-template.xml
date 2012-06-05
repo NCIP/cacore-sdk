@@ -181,7 +181,7 @@
 		<property name="artifactHandler">
 			<bean class="gov.nih.nci.codegen.handler.FileHandler">
 				<property name="useArtifactSource" value="true"/>
-				<property name="outputDir" value="@OUTPUTDIR@"/>				
+				<property name="outputDir" value="@OUTPUTDIR@/../rest/src"/>				
 				<property name="suffix" value=".java"/>									
 			</bean>
 		</property>
@@ -194,8 +194,8 @@
 		<property name="artifactHandler">
 			<bean class="gov.nih.nci.codegen.handler.FileHandler">
 				<property name="useArtifactSource" value="false"/>
-				<property name="outputDir" value="@OUTPUTDIR@"/>				
-				<property name="fileName" value="RESTResources.txt"/>						
+				<property name="outputDir" value="@OUTPUTDIR@/../rest/src/gov/nih/nci/sdk/rest/"/>				
+				<property name="fileName" value="SDKRESTApplication.java"/>						
 			</bean>
 		</property>
 		<property name="enabled" value="@GENERATE_RESTFUL_RESOURCES@"/>

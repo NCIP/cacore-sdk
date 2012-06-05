@@ -61,14 +61,20 @@
 		 	org.apache.cxf.jaxrs.servlet.CXFNonSpringJaxrsServlet
 		 </servlet-class>
 		 <init-param>
-		 	<param-name>jaxrs.serviceClasses</param-name>
-		 	<param-value> </param-value>
+		 	<param-name>javax.ws.rs.Application</param-name>
+		 	<param-value>
+		 	gov.nih.nci.sdk.rest.SDKRESTApplication	      
+		 	</param-value>
 		 </init-param>
+		 <!-- 
+		    This parameter is recognized only starting from CXF 2.3.1
+		    @ApplicationPath value will be ignored if this parameter is set to true
+		 -->
 		 <init-param>
 		 	<param-name>jaxrs.application.address.ignore</param-name>
 		 	<param-value>true</param-value>
 		 </init-param>
-		 <init-param>
+ 		 <init-param>
 		 	<param-name>jaxrs.scope</param-name>
 		 	<param-value>
 		 		prototype

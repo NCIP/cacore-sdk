@@ -739,6 +739,7 @@
 			</fileset>
 			<fileset dir="${output.target.dir}" />
 		</copy>	
+		
 		<if>
 			<equals arg1="${3RD_PARTY_JARS_DIRECTORY}" arg2="true"/>
 		<then>
@@ -984,6 +985,7 @@
 				<include name="dom4j-*.jar"/>
 				<include name="ejb3-persistence-*.jar"/>
 				<include name="hibernate-*.jar"/>
+				<include name="servlet-*.jar"/>
 				<include name="slf4j*.jar"/>
 				<include name="hibernate-annotations-*.jar"/>
 				<include name="hibernate-validator-*.jar"/>
@@ -1003,6 +1005,17 @@
 				<include name="${schema.file}" />
 			</fileset>
 		</copy>
+		<if>
+			<equals arg1="${GENERATE_RESTFUL_RESOURCES}" arg2="true" />
+			<then>
+				<copy todir="${package.client.remote.lib.dir}">
+					<fileset dir="${runtime.lib.dir}">
+						<include name="jsr311-api-*.jar"/>
+					</fileset>
+				</copy>
+			</then>
+		</if>
+		
 		<copy todir="${package.client.remote.dir}">
 			<fileset dir="${system.config.client.remote.dir}">
 				<exclude name="**/*template*" />
@@ -1234,7 +1247,6 @@
 				<include name="xwork-*.jar"/>
 				<include name="cxf-*.jar"/>
 				<include name="geronimo-*.jar"/>
-				<include name="jsr311-*.jar"/>
 				<include name="neethi-*.jar"/>
 				<include name="stax2-api-*.jar"/>
 				<include name="xml-resolver-*.jar"/>
@@ -1252,6 +1264,20 @@
 				<include name="${orm.file}" />
 			</fileset>
 		</copy>
+		<if>
+			<equals arg1="${GENERATE_RESTFUL_RESOURCES}" arg2="true" />
+			<then>
+				<copy todir="${temp.webapp.staging.lib.dir}">
+					<fileset dir="${runtime.lib.dir}">
+						<include name="jsr311-api-*.jar"/>
+					</fileset>
+					<fileset dir="${output.target.dir}">
+						<include name="${rest.file}"/>
+					</fileset>
+				</copy>
+			</then>
+		</if>
+
 		<if>
 			<equals arg1="${3RD_PARTY_JARS_DIRECTORY}" arg2="true"/>
 		<then>
@@ -1423,7 +1449,6 @@
 		<if>
 			<equals arg1="${GENERATE_RESTFUL_RESOURCES}" arg2="true" />
 			<then>
-				<echo message="generate 22${system.config.client.webapp.dir}"/>
 				<copy todir="${system.config.client.webapp.dir}/WEB-INF">
 					<fileset dir="${system.config.client.webapp.dir}/WEB-INF">
 						<include name="web.xml" />
@@ -1431,13 +1456,14 @@
 					<filterset refid="filtertoken5" />
 				</copy>
 
-
+<!--
 				<xmltask preservetype="true" failWithoutMatch="true"
 					source="${system.config.client.webapp.dir}/WEB-INF/web.xml"
 					dest="${system.config.client.webapp.dir}/WEB-INF/web.xml">
 					<xmlcatalog refid="build.xml.catalog" />
 					<insert path="//*[local-name()='web-app']/*[local-name()='servlet'][2]/*[local-name()='init-param'][1]/*[local-name()='param-value']" file="${output.src.dir}/RESTResources.txt" />
 				</xmltask>
+-->
 			</then>
 		</if>
 		<war destfile="${param.server.webapps.dir}\${PROJECT_NAME}.war" webxml="${system.config.client.webapp.dir}/WEB-INF/web.xml">
@@ -1552,7 +1578,6 @@
 				<include name="xmlsec-*.jar" />
 				<include name="cxf-*.jar"/>
 				<include name="geronimo-*.jar"/>
-				<include name="jsr311-*.jar"/>
 				<include name="neethi-*.jar"/>
 				<include name="stax2-api-*.jar"/>
 				<include name="xml-resolver-*.jar"/>

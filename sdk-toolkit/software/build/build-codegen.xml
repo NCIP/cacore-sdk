@@ -448,6 +448,9 @@
 			<filter token="INCLUDE_PACKAGE" value="${INCLUDE_PACKAGE}" />
 			<filter token="EXCLUDE_PACKAGE" value="${EXCLUDE_PACKAGE}" />
 			<filter token="EXCLUDE_NAME" value="${EXCLUDE_NAME}" />
+			<filter token="RESTFUL_RESOURES_EXCLUDE_NAME" value="${RESTFUL_RESOURES_EXCLUDE_NAME}" />
+			<filter token="RESTFUL_RESOURES_INCLUDE_PACKAGE" value="${RESTFUL_RESOURES_INCLUDE_PACKAGE}" />
+			<filter token="RESTFUL_RESOURES_EXCLUDE_PACKAGE" value="${RESTFUL_RESOURES_EXCLUDE_PACKAGE}" />
 			<filter token="EXCLUDE_NAMESPACE" value="${EXCLUDE_NAMESPACE}" />
 			<filter token="NAMESPACE_PREFIX" value="${NAMESPACE_PREFIX}" />
 
@@ -559,6 +562,10 @@
 	<!-- ** CODEGEN TARGETS                                                  ** -->
 	<!-- ******************************************************************* -->
 
+	<path id="beans.classpath">
+		<pathelement path="${build.classes.dir}" />
+	</path>
+	
 	<path id="codegen.runtime.classpath">
 		<fileset dir="${codegen.lib.dir}">
 			<include name="*.jar" />
@@ -659,7 +666,36 @@
 				</javac>
 			</else>
 		</if>
+	</target>
+
+	<target name="-compile:rest-application-code" depends="-init,-generate-codegen" description="Compiles all subproject code">
+		<mkdir dir="${build.classes.dir}/../rest/classes" />
 		
+		<available file="${3RD_PARTY_JARS_DIRECTORY}" property="include.3rdparty.exist" />
+		<available file="${src.java.dir}/../rest/src" property="include.rest.exist" />
+		<if>
+			<equals arg1="${include.rest.exist}" arg2="true" />
+			<then>
+
+				<if>
+					<equals arg1="${include.3rdparty.exist}" arg2="true" />
+					<then>
+						<javac srcdir="${src.java.dir}/../rest/src" destdir="${build.classes.dir}/../rest/classes" debug="true">
+							<classpath refid="codegen.runtime.classpath.with3rdparty" />
+							<classpath refid="cobertura.runtime.classpath" />
+							<classpath refid="beans.classpath" />
+						</javac>
+					</then>
+					<else>
+						<javac srcdir="${src.java.dir}/../rest/src" destdir="${build.classes.dir}/../rest/classes" debug="true">
+							<classpath refid="codegen.runtime.classpath" />
+							<classpath refid="cobertura.runtime.classpath" />
+							<classpath refid="beans.classpath" />
+						</javac>
+					</else>
+				</if>
+			</then>
+		</if>
 	</target>
 
 	<target name="-package-bean-jar" depends="-compile:application-code,-generate-codegen" description="Prepares Java Beans distribution files">
@@ -672,6 +708,22 @@
 			<fileset dir="${src.java.dir}">
 				<include name="**/*.java" />
 				<include name="**/jaxb.index" />
+				<exclude name="**/sdk/rest/**" />
+			</fileset>
+		</jar>
+	</target>
+
+	<target name="-package-rest-app-jar" depends="-compile:application-code,-compile:rest-application-code,-generate-codegen" description="Prepares REST Application file">
+		<mkdir dir="${output.target.dir}" />
+		<jar destfile="${output.target.dir}\${rest.file}" basedir="${build.classes.dir}/../rest/classes">
+			<manifest>
+				<attribute name="Generated-By" value="caCORE SDK Code Generator" />
+				<attribute name="Version" value="${VERSION}" />
+			</manifest>
+			<include name="**/sdk/**/*.class" />
+			<include name="**/*.class" />
+			<fileset dir="${src.java.dir}/../rest/src">
+				<include name="**/*.java" />
 			</fileset>
 		</jar>
 	</target>
@@ -706,7 +758,7 @@
 		</jar>
 	</target>
 
-	<target name="-package-codegen-artifacts" depends="-package-bean-jar,-package-orm-jar,-package-xml-jar" description="Prepares distribution files">
+	<target name="-package-codegen-artifacts" depends="-package-bean-jar,-package-rest-app-jar,-package-orm-jar,-package-xml-jar" description="Prepares distribution files">
 	</target>
 
 
