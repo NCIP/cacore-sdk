@@ -3,6 +3,13 @@ package test.gov.nih.nci.cacoresdk.domain.inheritance.onechild.sametable;
 import gov.nih.nci.cacoresdk.domain.inheritance.onechild.sametable.Note;
 import gov.nih.nci.cacoresdk.domain.inheritance.onechild.sametable.Currency;
 import gov.nih.nci.system.applicationservice.ApplicationException;
+import gov.nih.nci.system.query.cql.CQLAssociation;
+import gov.nih.nci.system.query.cql.CQLAttribute;
+import gov.nih.nci.system.query.cql.CQLObject;
+import gov.nih.nci.system.query.cql.CQLPredicate;
+import gov.nih.nci.system.query.cql.CQLQuery;
+import gov.nih.nci.system.dao.orm.translator.CQL2HQL;
+import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -15,13 +22,13 @@ public class OneChildSametableTest extends SDKTestBase
 	{
 		return "One Child Same Table Test Case";
 	}
-	
+
 	/**
 	 * Uses Nested Search Criteria for search
-	 * Verifies that the results are returned 
+	 * Verifies that the results are returned
 	 * Verifies size of the result set
 	 * Verifies that none of the attribute is null
-	 * 
+	 *
 	 * @throws ApplicationException
 	 */
 	public void testEntireObjectNestedSearch1() throws ApplicationException
@@ -31,7 +38,7 @@ public class OneChildSametableTest extends SDKTestBase
 
 		assertNotNull(results);
 		assertEquals(3,results.size());
-		
+
 		for(Iterator i = results.iterator();i.hasNext();)
 		{
 			Currency result = (Currency)i.next();
@@ -43,10 +50,10 @@ public class OneChildSametableTest extends SDKTestBase
 
 	/**
 	 * Uses Nested Search Criteria for search
-	 * Verifies that the results are returned 
+	 * Verifies that the results are returned
 	 * Verifies size of the result set
 	 * Verifies that none of the attribute is null
-	 * 
+	 *
 	 * @throws ApplicationException
 	 */
 	public void testEntireObjectNestedSearch2() throws ApplicationException
@@ -56,24 +63,89 @@ public class OneChildSametableTest extends SDKTestBase
 
 		assertNotNull(results);
 		assertEquals(3,results.size());
-		
+
 		for(Iterator i = results.iterator();i.hasNext();)
 		{
 			Note result = (Note)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
-			assertNotNull(result.getCountry());			
+			assertNotNull(result.getCountry());
 			assertNotNull(result.getValue());
 		}
 	}
 
+	/**
+	 * Uses CQL Criteria for search
+	 * Verifies that the results are returned
+	 * Verifies size of the result set
+	 * Verifies that none of the attribute is null
+	 *
+	 * @throws ApplicationException
+	 */
+	public void testEntireObjectCQL1() throws ApplicationException
+	{
+		CQLQuery cqlQuery = new CQLQuery();
+		CQLObject target = new CQLObject();
+
+		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.onechild.sametable.Note");
+		cqlQuery.setTarget(target);
+
+		CQL2HQL converter = new CQL2HQL(getClassCache());
+		HQLCriteria hqlCriteria = converter.translate(cqlQuery, false, false);
+
+		Collection results = getApplicationService().query(hqlCriteria);
+
+		assertNotNull(results);
+		assertEquals(3,results.size());
+
+		for(Iterator i = results.iterator();i.hasNext();)
+		{
+			Note result = (Note)i.next();
+			assertNotNull(result);
+			assertNotNull(result.getId());
+			assertNotNull(result.getValue());
+		}
+	}
+
+	/**
+	 * Uses CQL Criteria for search
+	 * Verifies that the results are returned
+	 * Verifies size of the result set
+	 * Verifies that none of the attribute is null
+	 *
+	 * @throws ApplicationException
+	 */
+	public void testEntireObjectCQL2() throws ApplicationException
+	{
+		CQLQuery cqlQuery = new CQLQuery();
+		CQLObject target = new CQLObject();
+
+		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.onechild.sametable.Currency");
+		cqlQuery.setTarget(target);
+
+		CQL2HQL converter = new CQL2HQL(getClassCache());
+		HQLCriteria hqlCriteria = converter.translate(cqlQuery, false, false);
+
+		Collection results = getApplicationService().query(hqlCriteria);
+
+		assertNotNull(results);
+		assertEquals(3,results.size());
+
+		for(Iterator i = results.iterator();i.hasNext();)
+		{
+			Currency result = (Currency)i.next();
+			assertNotNull(result);
+			assertNotNull(result.getId());
+			assertNotNull(result.getCountry());
+		}
+	}
 
 	/**
 	 * Uses Nested Search Criteria for inheritance as association in search
-	 * Verifies that the results are returned 
+	 * Verifies that the results are returned
 	 * Verifies size of the result set
 	 * Verifies that none of the attribute is null
-	 * 
+	 *
 	 * @throws ApplicationException
 	 */
 	public void testAssociationNestedSearch1() throws ApplicationException
@@ -84,7 +156,7 @@ public class OneChildSametableTest extends SDKTestBase
 
 		assertNotNull(results);
 		assertEquals(1,results.size());
-		
+
 		for(Iterator i = results.iterator();i.hasNext();)
 		{
 			Note result = (Note)i.next();
@@ -96,10 +168,10 @@ public class OneChildSametableTest extends SDKTestBase
 
 	/**
 	 * Uses Nested Search Criteria for inheritance as association in search
-	 * Verifies that the results are returned 
+	 * Verifies that the results are returned
 	 * Verifies size of the result set
 	 * Verifies that none of the attribute is null
-	 * 
+	 *
 	 * @throws ApplicationException
 	 */
 	public void testAssociationNestedSearch2() throws ApplicationException
@@ -110,7 +182,7 @@ public class OneChildSametableTest extends SDKTestBase
 
 		assertNotNull(results);
 		assertEquals(1,results.size());
-		
+
 		for(Iterator i = results.iterator();i.hasNext();)
 		{
 			Currency result = (Currency)i.next();
@@ -120,4 +192,80 @@ public class OneChildSametableTest extends SDKTestBase
 		}
 	}
 
+	/**
+	 * Uses CQL Criteria for inheritance as association in search
+	 * Verifies that the results are returned
+	 * Verifies size of the result set
+	 * Verifies that none of the attribute is null
+	 *
+	 * @throws ApplicationException
+	 */
+	public void testAssociationCQL1() throws ApplicationException
+	{
+		CQLQuery cqlQuery = new CQLQuery();
+		CQLObject target = new CQLObject();
+
+		CQLAssociation association = new CQLAssociation();
+		association.setName("gov.nih.nci.cacoresdk.domain.inheritance.onechild.sametable.Note");
+		association.setAttribute(new CQLAttribute("country", CQLPredicate.EQUAL_TO,"USA"));
+
+		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.onechild.sametable.Currency");
+		target.setAssociation(association);
+		cqlQuery.setTarget(target);
+
+		CQL2HQL converter = new CQL2HQL(getClassCache());
+		HQLCriteria hqlCriteria = converter.translate(cqlQuery, false, false);
+
+		Collection results = getApplicationService().query(hqlCriteria);
+
+		assertNotNull(results);
+		assertEquals(1,results.size());
+
+		for(Iterator i = results.iterator();i.hasNext();)
+		{
+			Currency result = (Currency)i.next();
+			assertNotNull(result);
+			assertNotNull(result.getId());
+			assertNotNull(result.getCountry());
+		}
+	}
+
+
+	/**
+	 * Uses CQL Criteria for inheritance as association in search
+	 * Verifies that the results are returned
+	 * Verifies size of the result set
+	 * Verifies that none of the attribute is null
+	 *
+	 * @throws ApplicationException
+	 */
+	public void testAssociationCQL2() throws ApplicationException
+	{
+		CQLQuery cqlQuery = new CQLQuery();
+		CQLObject target = new CQLObject();
+
+		CQLAssociation association = new CQLAssociation();
+		association.setName("gov.nih.nci.cacoresdk.domain.inheritance.onechild.sametable.Currency");
+		association.setAttribute(new CQLAttribute("country", CQLPredicate.EQUAL_TO,"Germany"));
+
+		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.onechild.sametable.Note");
+		target.setAssociation(association);
+		cqlQuery.setTarget(target);
+
+		CQL2HQL converter = new CQL2HQL(getClassCache());
+		HQLCriteria hqlCriteria = converter.translate(cqlQuery, false, false);
+
+		Collection results = getApplicationService().query(hqlCriteria);
+
+		assertNotNull(results);
+		assertEquals(1,results.size());
+
+		for(Iterator i = results.iterator();i.hasNext();)
+		{
+			Note result = (Note)i.next();
+			assertNotNull(result);
+			assertNotNull(result.getId());
+			assertNotNull(result.getCountry());
+		}
+	}
 }

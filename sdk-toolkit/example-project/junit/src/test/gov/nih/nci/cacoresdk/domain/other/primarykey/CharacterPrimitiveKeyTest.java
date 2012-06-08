@@ -2,6 +2,12 @@ package test.gov.nih.nci.cacoresdk.domain.other.primarykey;
 
 import gov.nih.nci.cacoresdk.domain.other.primarykey.CharacterPrimitiveKey;
 import gov.nih.nci.system.applicationservice.ApplicationException;
+import gov.nih.nci.system.query.cql.CQLAttribute;
+import gov.nih.nci.system.query.cql.CQLObject;
+import gov.nih.nci.system.query.cql.CQLPredicate;
+import gov.nih.nci.system.query.cql.CQLQuery;
+import gov.nih.nci.system.dao.orm.translator.CQL2HQL;
+import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -14,13 +20,13 @@ public class CharacterPrimitiveKeyTest extends SDKTestBase
 	{
 		return "Character Primitive Key Test Case";
 	}
-	 
+
 	/**
 	 * Uses Nested Search Criteria for search
-	 * Verifies that the results are returned 
+	 * Verifies that the results are returned
 	 * Verifies size of the result set
 	 * Verifies that none of the attribute is null
-	 * 
+	 *
 	 * @throws ApplicationException
 	 */
 	public void testEntireObjectNestedSearch() throws ApplicationException
@@ -30,7 +36,7 @@ public class CharacterPrimitiveKeyTest extends SDKTestBase
 
 		assertNotNull(results);
 		assertEquals(4,results.size());
-		
+
 		for(Iterator i = results.iterator();i.hasNext();)
 		{
 			CharacterPrimitiveKey result = (CharacterPrimitiveKey)i.next();
@@ -44,7 +50,7 @@ public class CharacterPrimitiveKeyTest extends SDKTestBase
 	 * Uses Class for search
 	 * Searches by the primary key
 	 * Verifies size of the result set
-	 * 
+	 *
 	 * @throws ApplicationException
 	 */
 	public void testPrimaryKeyNestedSearch() throws ApplicationException
@@ -52,6 +58,31 @@ public class CharacterPrimitiveKeyTest extends SDKTestBase
 		CharacterPrimitiveKey searchObject = new CharacterPrimitiveKey();
 		searchObject.setId('6');
 		Collection results = getApplicationService().search(CharacterPrimitiveKey.class,searchObject );
+
+		assertNotNull(results);
+		assertEquals(1,results.size());
+	}
+
+	/**
+	 * Uses CQL for search
+	 * Searches by the Double data type
+	 * Verifies size of the result set
+	 *
+	 * @throws ApplicationException
+	 */
+	public void testPrimaryKeyCQL() throws ApplicationException
+	{
+		CQLQuery criteria = new CQLQuery();
+
+		CQLObject object = new CQLObject();
+		object.setName("gov.nih.nci.cacoresdk.domain.other.primarykey.CharacterPrimitiveKey");
+		object.setAttribute(new CQLAttribute("id",CQLPredicate.EQUAL_TO,"6"));
+		criteria.setTarget(object);
+
+		CQL2HQL converter = new CQL2HQL(getClassCache());
+		HQLCriteria hqlCriteria = converter.translate(criteria, false, false);
+
+		Collection results = getApplicationService().query(hqlCriteria);
 
 		assertNotNull(results);
 		assertEquals(1,results.size());

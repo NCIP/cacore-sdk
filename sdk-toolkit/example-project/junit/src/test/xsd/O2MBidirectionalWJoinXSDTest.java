@@ -5,7 +5,7 @@ import gov.nih.nci.cacoresdk.domain.onetomany.bidirectional.withjoin.Passanger;
 
 import org.jdom.Document;
 
-import test.xsd.SDKXSDTestBase;
+import test.xml.mapping.SDKXSDTestBase;
 
 public class O2MBidirectionalWJoinXSDTest extends SDKXSDTestBase
 {

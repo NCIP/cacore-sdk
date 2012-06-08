@@ -7,7 +7,7 @@ import gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.Monitor;
 
 import org.jdom.Document;
 
-import test.xsd.SDKXSDTestBase;
+import test.xml.mapping.SDKXSDTestBase;
 
 public class TwoLevelInheritanceXSDTest extends SDKXSDTestBase
 {

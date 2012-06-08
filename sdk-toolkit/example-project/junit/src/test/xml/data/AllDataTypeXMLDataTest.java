@@ -10,7 +10,7 @@ import gov.nih.nci.cacoresdk.domain.onetomany.bidirectional.Computer;
 import gov.nih.nci.cacoresdk.domain.other.datatype.AllDataType;
 import gov.nih.nci.cacoresdk.domain.other.primarykey.DoubleKey;
 
-import test.xml.data.SDKXMLDataTestBase;
+import test.xml.mapping.SDKXMLDataTestBase;
 
 public class AllDataTypeXMLDataTest extends SDKXMLDataTestBase
 {

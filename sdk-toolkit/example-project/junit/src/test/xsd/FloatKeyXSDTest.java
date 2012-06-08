@@ -4,7 +4,7 @@ import gov.nih.nci.cacoresdk.domain.other.primarykey.FloatKey;
 
 import org.jdom.Document;
 
-import test.xsd.SDKXSDTestBase;
+import test.xml.mapping.SDKXSDTestBase;
 
 public class FloatKeyXSDTest extends SDKXSDTestBase
 {

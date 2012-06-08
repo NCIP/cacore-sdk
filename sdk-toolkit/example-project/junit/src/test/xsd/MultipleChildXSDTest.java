@@ -6,7 +6,7 @@ import gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.GraduateStudent;
 
 import org.jdom.Document;
 
-import test.xsd.SDKXSDTestBase;
+import test.xml.mapping.SDKXSDTestBase;
 
 public class MultipleChildXSDTest extends SDKXSDTestBase
 {

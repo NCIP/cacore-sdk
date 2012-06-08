@@ -7,7 +7,7 @@ import gov.nih.nci.cacoresdk.domain.inheritance.abstrakt.Teacher;
 import java.util.Collection;
 import java.util.Iterator;
 
-import test.xml.data.SDKXMLDataTestBase;
+import test.xml.mapping.SDKXMLDataTestBase;
 
 public class AbstractParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 {

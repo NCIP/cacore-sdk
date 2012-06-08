@@ -23,7 +23,15 @@ public class AllDataTypeWritableApiTest  extends SDKWritableBaseTest{
 		//allDataType.setBooleanValue(new Boolean(true));
 		allDataType.setCharacterPrimitiveValue(new Character('c'));
 		allDataType.setClobValue("clobValue");
-		allDataType.setBlobValue("bytearray".getBytes());
+
+		byte[] bytearray = "bytearray".getBytes();
+		Byte[] BigByteArray = new Byte[bytearray.length];
+		for(int i = 0; i < bytearray.length; i++)
+		{
+			BigByteArray[i] = new Byte(bytearray[i]);
+		}
+
+		allDataType.setBlobValue(BigByteArray);
 		allDataType.setDatePrimitiveValue(new Date());
 		allDataType.setDoublePrimitiveValue(new Double(10.2));
 		allDataType.setDoubleValue(new Double(12));
@@ -37,16 +45,33 @@ public class AllDataTypeWritableApiTest  extends SDKWritableBaseTest{
 		allDataType.setStringCollection(stringColl);
 		allDataType.setStringPrimitiveValue("stringprimitive");
 		allDataType.setStringValue("stringvalue");
-		
+
 		save(allDataType);
-		
+
 		AllDataType result=(AllDataType)getObject(AllDataType.class, allDataType.getId());
 		Assert.assertEquals(allDataType.getBooleanPrimitiveValue(), result.getBooleanPrimitiveValue());
 		Assert.assertEquals(allDataType.getBooleanValue(), result.getBooleanValue());
 		Assert.assertEquals(allDataType.getCharacterPrimitiveValue(), result.getCharacterPrimitiveValue());
 		Assert.assertEquals(allDataType.getCharacterValue(), result.getCharacterValue());
 		Assert.assertEquals(allDataType.getClobValue(), result.getClobValue());
-		Assert.assertEquals(new String(allDataType.getBlobValue()), new String(result.getBlobValue()));
+
+
+		Byte[] BigByteArray1 = allDataType.getBlobValue();
+		byte[] bytearray1 = new byte[BigByteArray1.length];
+		for(int i = 0; i < BigByteArray1.length; i++)
+		{
+			bytearray1[i] = BigByteArray1[i].byteValue();
+		}
+
+		Byte[] BigByteArray2 = result.getBlobValue();
+		byte[] bytearray2 = new byte[BigByteArray2.length];
+		for(int i = 0; i < BigByteArray2.length; i++)
+		{
+			bytearray2[i] = BigByteArray2[i].byteValue();
+		}
+
+
+		Assert.assertEquals(new String(bytearray1), new String(bytearray2));
 		Assert.assertEquals(allDataType.getDatePrimitiveValue(), result.getDatePrimitiveValue());
 		Assert.assertEquals(allDataType.getDateValue(), result.getDateValue());
 		Assert.assertEquals(allDataType.getDoublePrimitiveValue(), result.getDoublePrimitiveValue());

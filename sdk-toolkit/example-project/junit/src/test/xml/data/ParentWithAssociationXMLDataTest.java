@@ -10,7 +10,7 @@ import gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.AssociateP
 import gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.Professor;
 import gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.TenuredProfessor;
 
-import test.xml.data.SDKXMLDataTestBase;
+import test.xml.mapping.SDKXMLDataTestBase;
 
 public class ParentWithAssociationXMLDataTest extends SDKXMLDataTestBase
 {

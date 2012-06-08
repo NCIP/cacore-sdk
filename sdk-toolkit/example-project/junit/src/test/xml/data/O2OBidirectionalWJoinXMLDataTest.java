@@ -6,7 +6,7 @@ import gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin.Pendant;
 import java.util.Collection;
 import java.util.Iterator;
 
-import test.xml.data.SDKXMLDataTestBase;
+import test.xml.mapping.SDKXMLDataTestBase;
 
 public class O2OBidirectionalWJoinXMLDataTest extends SDKXMLDataTestBase
 {

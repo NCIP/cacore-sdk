@@ -5,7 +5,7 @@ import java.util.Iterator;
 
 import gov.nih.nci.cacoresdk.domain.other.primarykey.StringKey;
 
-import test.xml.data.SDKXMLDataTestBase;
+import test.xml.mapping.SDKXMLDataTestBase;
 
 public class StringKeyXMLDataTest extends SDKXMLDataTestBase
 {

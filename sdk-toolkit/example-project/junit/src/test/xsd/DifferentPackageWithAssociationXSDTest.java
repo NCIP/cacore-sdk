@@ -7,7 +7,7 @@ import gov.nih.nci.cacoresdk.domain.other.differentpackage.Dessert;
 
 import org.jdom.Document;
 
-import test.xsd.SDKXSDTestBase;
+import test.xml.mapping.SDKXSDTestBase;
 
 public class DifferentPackageWithAssociationXSDTest extends SDKXSDTestBase
 {
@@ -16,7 +16,7 @@ public class DifferentPackageWithAssociationXSDTest extends SDKXSDTestBase
 	
 	public static String getTestCaseName()
 	{
-		return "Different Parent With Association XSD Test Case";
+		return "Abstract Parent With Association XSD Test Case";
 	}
 
 	protected void setUp() throws Exception {

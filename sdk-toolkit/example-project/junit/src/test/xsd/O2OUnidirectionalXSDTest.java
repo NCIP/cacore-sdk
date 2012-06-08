@@ -8,7 +8,7 @@ import java.util.List;
 import org.jdom.Document;
 import org.jdom.Element;
 
-import test.xsd.SDKXSDTestBase;
+import test.xml.mapping.SDKXSDTestBase;
 
 public class O2OUnidirectionalXSDTest extends SDKXSDTestBase
 {

@@ -8,7 +8,7 @@ import gov.nih.nci.cacoresdk.domain.inheritance.childwithassociation.Payment;
 import java.util.Collection;
 import java.util.Iterator;
 
-import test.xml.data.SDKXMLDataTestBase;
+import test.xml.mapping.SDKXMLDataTestBase;
 
 public class ChildWithAssociationXMLDataTest extends SDKXMLDataTestBase
 {

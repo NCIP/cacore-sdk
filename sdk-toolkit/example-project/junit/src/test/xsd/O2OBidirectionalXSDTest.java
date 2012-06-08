@@ -5,7 +5,7 @@ import gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.Product;
 
 import org.jdom.Document;
 
-import test.xsd.SDKXSDTestBase;
+import test.xml.mapping.SDKXSDTestBase;
 
 public class O2OBidirectionalXSDTest extends SDKXSDTestBase
 {

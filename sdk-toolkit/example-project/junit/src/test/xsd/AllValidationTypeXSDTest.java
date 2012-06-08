@@ -4,7 +4,7 @@ import gov.nih.nci.cacoresdk.domain.other.validationtype.AllValidationType;
 
 import org.jdom.Document;
 
-import test.xsd.SDKXSDTestBase;
+import test.xml.mapping.SDKXSDTestBase;
 
 public class AllValidationTypeXSDTest extends SDKXSDTestBase
 {

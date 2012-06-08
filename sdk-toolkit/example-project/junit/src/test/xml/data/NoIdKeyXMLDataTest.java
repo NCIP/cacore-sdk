@@ -5,7 +5,7 @@ import java.util.Iterator;
 
 import gov.nih.nci.cacoresdk.domain.other.primarykey.NoIdKey;
 
-import test.xml.data.SDKXMLDataTestBase;
+import test.xml.mapping.SDKXMLDataTestBase;
 
 public class NoIdKeyXMLDataTest extends SDKXMLDataTestBase
 {
