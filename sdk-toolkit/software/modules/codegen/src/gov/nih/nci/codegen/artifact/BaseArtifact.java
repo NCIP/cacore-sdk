@@ -68,12 +68,30 @@ public class BaseArtifact implements Artifact
 	}
 
 	/**
+	 * Creates the source name for the JUnit POJO Artifact from the <code>klass</code>
+	 *
+	 * @param klass
+	 */
+	public void createJunitRESTfulSourceName(UMLClass klass) {
+		sourceName = (transformerUtils.getFullPackageName(klass)+"."+klass.getName()+"ResourceTest").replace('.','/');
+	}
+
+	/**
 	 * Creates the source name for the RESTFul Resource Artifact from the <code>klass</code>
 	 *
 	 * @param klass
 	 */
 	public void createRESTResourceName(UMLClass klass) {
 		sourceName = (transformerUtils.getFullPackageName(klass)+"."+klass.getName()+"Resource").replace('.','/');
+	}
+
+	/**
+	 * Creates the source name for the RESTFul collection bean from the <code>klass</code>
+	 *
+	 * @param klass
+	 */
+	public void createRESTCollectionBeanName(UMLClass klass) {
+		sourceName = (transformerUtils.getFullPackageName(klass)+"."+klass.getName()+"s").replace('.','/');
 	}
 
 	/**

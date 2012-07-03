@@ -623,6 +623,7 @@
 		init-install,
 		package-remote-client,
 		package-local-client,
+		package-rest-client,
 		package-ws-client,
 		package-server
 		"/>
@@ -749,6 +750,20 @@
 			</fileset>
 		</copy>
 		</then>
+		</if>
+
+		<if>
+			<equals arg1="${GENERATE_RESTFUL_RESOURCES}" arg2="true" />
+			<then>
+				<copy todir="${package.client.local.lib.dir}">
+					<fileset dir="${runtime.lib.dir}">
+						<include name="jsr311-api-*.jar"/>
+						<include name="cxf-*.jar"/>
+						<include name="neethi-*.jar"/>
+						<include name="wsdl4j-*.jar"/>
+					</fileset>
+				</copy>
+			</then>
 		</if>
 
 		<if>
@@ -892,6 +907,20 @@
 					</fileset>
 				</delete>
 
+				<if>
+					<equals arg1="${GENERATE_RESTFUL_RESOURCES}" arg2="true" />
+					<then>
+						<copy todir="${package.client.local.lib.dir}">
+							<fileset dir="${runtime.lib.dir}">
+								<include name="jsr311-api-*.jar"/>
+								<include name="cxf-*.jar"/>
+								<include name="neethi-*.jar"/>
+								<include name="wsdl4j-*.jar"/>
+							</fileset>
+						</copy>
+					</then>
+				</if>
+
 				<copy todir="${package.client.local.dir}" overwrite="true">
 					<fileset dir="${system.config.client.grid-jaas.dir}" />
 				</copy>
@@ -938,6 +967,218 @@
 		</copy>
 		<echo message="ISO datatypes enabled - Copy Complete" />
 	</target>
+
+	<!-- #################################################################### -->
+	<!-- ##################### REST Client targets ######################### -->
+	<!-- #################################################################### -->
+
+
+	<target name="package-rest-client" depends="">
+		<if>
+			<equals arg1="${GENERATE_RESTFUL_RESOURCES}" arg2="true" />
+			<then>
+				<antcall target="-package-rest-client-core" />
+				<antcall target="-package-rest-client-security" />
+				<antcall target="-package-rest-client-grid-security" />
+				<antcall target="-package-rest-client-iso-datatype" />
+
+				<include-db-jar target.lib.directory="${package.client.local.lib.dir}" />
+				<!-- delete if present as duplicate mysql jar was added from Grid Services-->
+				<delete>
+					<fileset dir="${package.client.rest.lib.dir}">
+						<include name="mysql-connector-java-3.0.16-ga-bin.jar" />
+					</fileset>
+				</delete>
+			</then>
+		</if>
+	</target>
+
+	<target name="-package-rest-client-core" depends="">
+		<delete includeemptydirs="true" failonerror="false">
+			<fileset dir="${package.client.rest.dir}" includes="**/*.*" />
+		</delete>
+		<echo>=================================</echo>
+		<echo>
+		${package.client.rest.lib.dir}
+		${runtime.lib.dir}
+		${output.target.dir}
+		</echo>
+		<copy todir="${package.client.rest.lib.dir}">
+			<fileset dir="${runtime.lib.dir}">
+				<include name="acegi-security-*.jar"/>
+				<include name="aopalliance*.jar"/>
+				<include name="antlr-*.jar"/>
+				<include name="asm-*.jar"/>
+				<include name="caGrid-CQL-cql.*.jar"/>
+				<include name="castor-*.jar"/>
+				<include name="cglib-*.jar"/>
+				<include name="cog-jglobus-4*.jar"/>
+				<include name="commons-beanutils-*.jar"/>
+				<include name="commons-codec-*.jar"/>
+				<include name="commons-collections-*.jar"/>
+				<include name="commons-logging-*.jar"/>
+				<include name="commons-lang-*.jar"/>
+				<include name="dom4j-*.jar"/>
+				<include name="ejb3-persistence-*.jar"/>
+				<include name="hibernate-*.jar"/>
+				<include name="servlet-*.jar"/>
+				<include name="slf4j*.jar"/>
+				<include name="hibernate-annotations-*.jar"/>
+				<include name="hibernate-validator-*.jar"/>
+				<include name="jaxen-*.jar"/>
+				<include name="jdom-1.1.jar"/>
+				<include name="log4j-*.jar"/>
+				<include name="org.springframework.*.jar"/>
+				<include name="xercesImpl-*.jar"/>
+				<include name="jsr311-api-*.jar"/>
+				<include name="cxf-*.jar"/>
+				<include name="neethi-*.jar"/>
+				<include name="wsdl4j-*.jar"/>
+				<include name="activation-*.jar"/>
+				<include name="jaxb-*.jar"/>
+				<include name="stax-*.jar"/>
+			</fileset>
+			<fileset dir="${lib.dir}">
+				<include name="sdk-system-client-*.jar"/>
+				<include name="sdk-security-client-*.jar"/>
+				<include name="sdk-grid-remoting-*.jar"/>
+			</fileset>
+			<fileset dir="${output.target.dir}">
+				<include name="${bean.file}" />
+				<include name="${schema.file}" />
+			</fileset>
+		</copy>
+
+		<copy todir="${package.client.rest.lib.dir}">
+			<fileset dir="${lib.dir}">
+				<include name="sdk-security-client-*.jar"/>
+				<include name="sdk-writable-api-client-*.jar"/>
+			</fileset>
+		</copy>
+
+		<copy todir="${package.client.rest.dir}">
+			<fileset dir="${system.config.client.rest.dir}">
+				<exclude name="**/*template*" />
+			</fileset>
+		</copy>		
+	</target>
+
+	<target name="-package-rest-client-security" depends="">
+		<if>
+			<equals arg1="${SECURITY_ENABLED}" arg2="true" />
+			<then>
+				<echo message="security enabled" />
+				<copy todir="${package.client.rest.lib.dir}" overwrite="true">
+					<fileset dir="${lib.dir}">
+						<include name="sdk-security-client-*.jar"/>
+					</fileset>
+				</copy>
+				<copy todir="${package.client.rest.dir}" overwrite="true">
+					<fileset dir="${system.config.client.csm-security.dir}" includes="**/*.java" />
+				</copy>
+			</then>
+		</if>
+	</target>
+
+	<target name="-package-rest-client-grid-security" depends="">
+		<copy todir="${package.client.rest.lib.dir}" overwrite="true">
+			<fileset dir="${runtime.lib.dir}">
+				<include name="axis-1.2RC2.jar"/>
+				<include name="jaxrpc-*.jar"/>
+			</fileset>
+		</copy>
+		<if>
+			<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true" />
+			<then>
+				<echo message="Grid Jaas enabled" />
+				<copy todir="${package.client.rest.lib.dir}" overwrite="true">
+					<fileset dir="${runtime.lib.dir}">
+						<include name="addressing-*.jar"/>
+						<include name="axis-1.2RC2.jar"/>
+						<include name="caGrid-*.jar"/>
+						<include name="castor-*.jar"/>
+						<include name="cog-axis-4*.jar"/>
+						<include name="cog-jglobus-4*.jar"/>
+						<include name="cog-tomcat-4*.jar"/>
+						<include name="commons-beanutils-*.jar"/>
+						<include name="commons-collections-*.jar"/>
+						<include name="commons-digester-*.jar"/>
+						<include name="commons-discovery-*.jar"/>
+						<include name="concurrent-*.jar"/>
+						<include name="cryptix-*.jar"/>
+						<include name="cryptix-asn1-*.jar"/>
+						<include name="cryptix32-*.jar"/>
+						<include name="jasciidammit-*.jar"/>
+						<include name="jaxrpc-*.jar"/>
+						<include name="jce-jdk1.*.jar"/>
+						<include name="jgss-noversion.jar"/>
+						<include name="jdom-*.jar"/>
+						<include name="jprov-jce-*.jar"/>
+						<include name="mobius_common_client-*.jar"/>
+						<include name="mobius_factories-*.jar"/>
+						<include name="mobius_gme_client-*.jar"/>
+						<include name="mobius_mako_client-*.jar"/>
+						<include name="mobius_tools-*.jar"/>
+						<include name="puretls-*.jar"/>
+						<include name="saaj-*.jar"/>
+						<include name="wsdl4j-*.jar"/>
+						<include name="wsrf_core_enum-*.jar"/>
+						<include name="wsrf_core_stubs_enum-*.jar"/>
+						<include name="wss4j-noversion.jar"/>
+						<include name="xalan-*.jar"/>
+						<include name="xercesImpl-*.jar"/>
+						<include name="xmlsec-*.jar"/>
+						<include name="xml-apis-*.jar"/>
+						<include name="jsr311-api-*.jar"/>
+						<include name="cxf-*.jar"/>
+						<include name="neethi-*.jar"/>
+						<include name="wsdl4j-*.jar"/>
+						<include name="activation-*.jar"/>
+						<include name="jaxb-*.jar"/>
+						<include name="stax-*.jar"/>
+					</fileset>
+					<fileset dir="${lib.dir}">
+						<include name="sdk-grid-jaas-*.jar"/>
+						<include name="sdk-grid-jaas-client-*.jar"/>
+						<include name="sdk-grid-security-*.jar" />
+						<include name="sdk-grid-jaas-jndi-binder-*.jar"/>
+						<include name="sdk-grid-remoting-*.jar"/>
+					</fileset>
+				</copy>
+				<delete>
+					<fileset dir="${package.client.rest.lib.dir}">
+						<include name="caGrid-data-*.jar" />
+						<include name="caGrid-Introduce-serviceTools*.jar" />
+						<include name="caGrid-metadata-data*.jar" />
+						<include name="caGrid-metadatautils*.jar" />
+						<include name="jdom-1.0.jar" />
+						<include name="commons-logging-1.0.3.jar" />
+					</fileset>
+				</delete>
+
+				<copy todir="${package.client.rest.dir}" overwrite="true">
+					<fileset dir="${system.config.client.grid-jaas.dir}" />
+				</copy>
+				<copy todir="${package.client.rest.conf.dir}" overwrite="true">
+					<fileset dir="${system.config.grid.loginService.webinf.dir}/classes">
+						<include name="grid-login-service-config.xml" />
+					</fileset>
+					<fileset dir="${grid.dist.relative.dir}/${TARGET_GRID}" includes="sync-description.xml"/>
+				</copy>
+			</then>
+		</if>
+	</target>
+
+	<target name="-package-rest-client-iso-datatype" depends="">
+		<echo message="ISO datatypes enabled" />
+		<copy todir="${package.client.remote.lib.dir}">
+			<fileset dir="${runtime.lib.dir}">
+				<include name="iso-datatypes-*.jar"/>
+				<exclude name="iso-datatypes-hibernate*.jar" />
+			</fileset>
+		</copy>			
+		<echo message="ISO datatypes enabled - Copy Complete" />
+	</target>	
 
 	<!-- #################################################################### -->
 	<!-- ##################### Remote Client targets ######################## -->
@@ -1011,11 +1252,14 @@
 				<copy todir="${package.client.remote.lib.dir}">
 					<fileset dir="${runtime.lib.dir}">
 						<include name="jsr311-api-*.jar"/>
+						<include name="cxf-*.jar"/>
+						<include name="neethi-*.jar"/>
+						<include name="wsdl4j-*.jar"/>
 					</fileset>
 				</copy>
 			</then>
 		</if>
-		
+
 		<copy todir="${package.client.remote.dir}">
 			<fileset dir="${system.config.client.remote.dir}">
 				<exclude name="**/*template*" />
@@ -1123,6 +1367,20 @@
 						<include name="commons-logging-1.0.3.jar" />
 					</fileset>
 				</delete>
+
+				<if>
+					<equals arg1="${GENERATE_RESTFUL_RESOURCES}" arg2="true" />
+					<then>
+						<copy todir="${package.client.remote.lib.dir}">
+							<fileset dir="${runtime.lib.dir}">
+								<include name="jsr311-api-*.jar"/>
+								<include name="cxf-*.jar"/>
+								<include name="neethi-*.jar"/>
+								<include name="wsdl4j-*.jar"/>
+							</fileset>
+						</copy>
+					</then>
+				</if>
 
 				<copy todir="${package.client.remote.dir}" overwrite="true">
 					<fileset dir="${system.config.client.grid-jaas.dir}" />

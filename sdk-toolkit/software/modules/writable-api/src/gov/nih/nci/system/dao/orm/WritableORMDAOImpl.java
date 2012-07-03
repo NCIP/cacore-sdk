@@ -19,6 +19,7 @@ import java.util.List;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 
@@ -38,17 +39,18 @@ public class WritableORMDAOImpl extends ORMDAOImpl implements WritableDAO
 			if (q instanceof InsertExampleQuery)
 			{
 				Object obj = ((InsertExampleQuery) q).getExample();
-				insert(obj);
+				insert(obj, ((InsertExampleQuery) q).getCommit());
 				result = new SDKQueryResult(obj);
 			}
 			else if (q instanceof DeleteExampleQuery)
 			{
-				delete(((DeleteExampleQuery) q).getExample());
+				System.out.println("Instance of DeleteExampleQuery");
+				delete(((DeleteExampleQuery) q).getExample(), ((DeleteExampleQuery) q).getCommit());
 				result = new SDKQueryResult(true);
 			}
 			else if (q instanceof UpdateExampleQuery)
 			{
-				update(((UpdateExampleQuery) q).getExample());
+				update(((UpdateExampleQuery) q).getExample(), ((UpdateExampleQuery) q).getCommit());
 				result = new SDKQueryResult(((UpdateExampleQuery) q).getExample());
 			}
 			else if(q instanceof InsertHQLQuery)
@@ -58,8 +60,13 @@ public class WritableORMDAOImpl extends ORMDAOImpl implements WritableDAO
 			}
 			else if(q instanceof DeleteHQLQuery)
 			{
+				Session session = getSession();
+				Transaction tx = session.beginTransaction();
+				System.out.println("instanceof DeleteHQLQuery...****..");
 				delete(((DeleteHQLQuery)q).getHqlString(),((DeleteHQLQuery)q).getParameters());
+				tx.commit();
 				result = new SDKQueryResult(true);
+				System.out.println("instanceof DeleteHQLQuery....."+result);
 			}
 			else if(q instanceof UpdateHQLQuery)
 			{
@@ -72,23 +79,87 @@ public class WritableORMDAOImpl extends ORMDAOImpl implements WritableDAO
 		return resp;
 	}
 
-	public void insert(Object o)
+	public void insert(Object o, boolean commit)
 	{
-		log.info("In the writable DAO. executing the Insert query");
-		getFlushAutoHibernateTemplate().save(o);
+		log.info("In the writable DAO. executing the Insert query**********");
+		if(commit)
+		{
+			getFlushAutoHibernateTemplate().execute(getSaveHibernateCallback(o));
+		}
+		else
+			getFlushAutoHibernateTemplate().save(o);
 	}
 
-	public void update(Object o)
+	public void update(Object o, boolean commit)
 	{
-		log.info("In the writable DAO. executing the Update query");
-		getFlushAutoHibernateTemplate().update(o);
+		log.info("In the writable DAO. executing the Update query*********");
+		if(commit)
+		{
+			getFlushAutoHibernateTemplate().execute(getUpdateHibernateCallback(o));
+		}
+		else
+			getFlushAutoHibernateTemplate().update(o);
 	}
 
-	public void delete(Object o)
+	public void delete(final Object o, boolean commit)
 	{
-		log.info("In the writable DAO. executing the Delete query");
-		getFlushAutoHibernateTemplate().delete(o);
+		System.out.println("In the writable DAO. executing the Delete query***1111*******");
+
+		if(commit)
+		{
+			getFlushAutoHibernateTemplate().execute(getDeleteHibernateCallback(o));
+		}
+		else
+			getFlushAutoHibernateTemplate().delete(o);
+		System.out.println("In the writable DAO. executing the Delete query***commit*******");
+
 	}
+
+	protected HibernateCallback getDeleteHibernateCallback(final Object obj)
+	{
+		HibernateCallback callBack = new HibernateCallback(){
+
+			public Object doInHibernate(Session session) throws HibernateException, SQLException {
+				Transaction tx = session.beginTransaction();
+				session.delete(obj);
+				tx.commit();
+				session.flush();
+				return obj;
+			}
+		};
+		return callBack;
+	}
+
+	protected HibernateCallback getSaveHibernateCallback(final Object obj)
+	{
+		HibernateCallback callBack = new HibernateCallback(){
+
+			public Object doInHibernate(Session session) throws HibernateException, SQLException {
+				Transaction tx = session.beginTransaction();
+				session.save(obj);
+				tx.commit();
+				session.flush();
+				return obj;
+			}
+		};
+		return callBack;
+	}
+
+	protected HibernateCallback getUpdateHibernateCallback(final Object obj)
+	{
+		HibernateCallback callBack = new HibernateCallback(){
+
+			public Object doInHibernate(Session session) throws HibernateException, SQLException {
+				Transaction tx = session.beginTransaction();
+				session.update(obj);
+				tx.commit();
+				session.flush();
+				return obj;
+			}
+		};
+		return callBack;
+	}
+
 
 	public void insert(final String hql, final List<Object> paramList)
 	{
@@ -107,9 +178,14 @@ public class WritableORMDAOImpl extends ORMDAOImpl implements WritableDAO
 	public void delete(String hql, List<Object> paramList)
 	{
 		log.info("In the writable DAO. executing the Delete query");
+		System.out.println("In the writable DAO. executing the Delete query***2222*******");
+		HibernateTemplate template = getFlushAutoHibernateTemplate();
 		HibernateCallback callBack = getExecuteUpdateHibernateCallback(hql,paramList);
-		getFlushAutoHibernateTemplate().execute(callBack);
+		template.execute(callBack);
+		System.out.println("In the writable DAO. executing the Delete query***commit22222*******");
+
 	}
+
 
 	protected HibernateCallback getExecuteUpdateHibernateCallback(final String hql, final List<Object> paramList)
 	{

@@ -128,6 +128,7 @@ public class JAXBUnmarshaller implements gov.nih.nci.system.client.util.xml.Unma
 
 	        Unmarshaller unmarshaller = context.createUnmarshaller();
 
+	        System.out.println("validate: "+validate);
 	        if(validate){
 	        	//reset validation events list
 	        	validationEvents = new ArrayList<ValidationEvent>();
@@ -152,11 +153,14 @@ public class JAXBUnmarshaller implements gov.nih.nci.system.client.util.xml.Unma
                 		if(systemId != null)
                 		{
                 			xsdPath = systemId.substring(systemId.lastIndexOf("/")+1);
+                			
                 			if(publicId == null)
                 				publicId = xsdPath.substring(0, xsdPath.length()-4);
                 		}
                 		log.debug("Entity resolving publicId... " + publicId);
+                		System.out.println("Entity resolving publicId... " + publicId);
                 		log.debug("Entity resolving to xsd... " + xsdPath);
+                		System.out.println("Entity resolving to xsd... " + xsdPath);
 
                 		// InputSource source = new
                 		// InputSource(Thread.currentThread().getContextClassLoader()
@@ -174,6 +178,7 @@ public class JAXBUnmarshaller implements gov.nih.nci.system.client.util.xml.Unma
                 xmlReader.setEntityResolver(entityResolver);
 
                 saxSource = new SAXSource(xmlReader, inSrc);
+                System.out.println("Entity resolver: " + entityResolver);
                 log.debug("Entity resolver: " + entityResolver);
 	        }
 	        unmarshaller.setEventHandler(new ValidationHandler());

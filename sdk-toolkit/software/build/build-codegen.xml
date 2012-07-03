@@ -39,6 +39,24 @@
 		</or>
 	</condition>
 
+	<switch value="${SERVER_TYPE}">
+		<case value="jboss">
+			<property name="SERVER_HOST_NAME" value="${jboss.server.hostname}"/>
+			<property name="SERVER_HTTP_PORT" value="${jboss.server.port}"/>
+			<property name="SERVER_SSL_PORT" value="${jboss.server.ssl.port}"/>
+			<property name="exclude.tomcat" value="true"/>
+		</case>
+		<case value="tomcat">
+			<property name="SERVER_HOST_NAME" value="${tomcat.hostname}"/>
+			<property name="SERVER_SSL_PORT" value="${tomcat.port.ssl}"/>
+			<property name="SERVER_HTTP_PORT" value="${tomcat.port.http}"/>
+			<property name="exclude.jboss" value="true"/>
+		</case>
+		<default>
+			<fail message="Invalid server type ${SERVER_TYPE}" />
+		</default>
+	</switch>
+	
 	<condition property="SECURITY_ENABLED" value="true" else="false">
 		<or>
 			<equals arg1="${ENABLE_SECURITY}" arg2="true" casesensitive="false" trim="true" />
@@ -437,6 +455,10 @@
 		<echo>path == ${MODEL_FILE_PATH} ${MODEL_FILE_IN_DIRECTORY}</echo>
 		<filterset id="filtertoken1" begintoken="@" endtoken="@" onmissingfiltersfile="fail">
 			<filter token="PROJECT_NAME" value="${PROJECT_NAME}" />
+			
+			<filter token="HOST_NAME" value="${SERVER_HOST_NAME}" />
+			<filter token="PORT_NAME" value="${SERVER_HTTP_PORT}" />
+			
 			<filter token="SDK_GRID_LOGIN_SERVICE_NAME" value="${SDK_GRID_LOGIN_SERVICE_NAME}" />
 			<filter token="OUTPUTDIR" value="${output.src.dir}" />
 			<filter token="JUNITOUTPUTDIR" value="${output.codegen.junit.dir}/src/test" />

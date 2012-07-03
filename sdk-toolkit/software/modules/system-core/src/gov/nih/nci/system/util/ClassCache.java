@@ -36,12 +36,12 @@ import org.springframework.beans.factory.InitializingBean;
 
 /**
  * ClassCache
- * 
+ *
  * A Class Cache (and related metadata) facade. Gets initialized with a list of
  * the classes obtained from each DAO class within the System.
- * 
+ *
  * @author Dan Dumitru
- * 
+ *
  */
 public class ClassCache implements InitializingBean{
 
@@ -85,7 +85,7 @@ public class ClassCache implements InitializingBean{
 	public List<String> getAllPackageNames() {
 		return (List<String>) allPackageNamesCache;
 	}
-	
+
 	public Map<String, Map<String, List<Object>>> getSearchableFieldsMap() {
 		return searchableFieldsMap;
 	}
@@ -156,7 +156,7 @@ public class ClassCache implements InitializingBean{
 
 	/**
 	 * Gets all fields from a class and it's superclasses of a given type
-	 * 
+	 *
 	 * @param clazz
 	 *            The class to explore for typed fields
 	 * @param typeName
@@ -212,7 +212,7 @@ public class ClassCache implements InitializingBean{
 
 	/**
 	 * Gets all fields from a class and it's superclasses
-	 * 
+	 *
 	 * @param clazz
 	 *            The class to explore for fields
 	 * @return
@@ -238,7 +238,7 @@ public class ClassCache implements InitializingBean{
 	}
 	/**
 	 * Gets the data type of a particular field of the class
-	 * 
+	 *
 	 * @param className
 	 * @param fieldName
 	 * @return
@@ -246,12 +246,9 @@ public class ClassCache implements InitializingBean{
 	 */
 	public String getReturnType(String className, String fieldName, boolean includeParent)
 			throws ClassNotFoundException, Exception {
-		System.out.println("className: "+className);
-		System.out.println("fieldName: "+fieldName);
 		Field[] classFields;
 		classFields = getFields(getClassFromCache(className));
 		for (int i = 0; i < classFields.length; i++) {
-			System.out.println("classFields[i].getName(): "+classFields[i].getName());
 			if (classFields[i].getName().equals(fieldName))
 				return getReturnType(classFields[i].getGenericType().toString());
 		}
@@ -262,7 +259,7 @@ public class ClassCache implements InitializingBean{
 
 	/**
 	 * Gets the data type of a particular field of the class
-	 * 
+	 *
 	 * @param className
 	 * @param attribName
 	 * @return
@@ -322,7 +319,7 @@ public class ClassCache implements InitializingBean{
 
 	/**
 	 * Get the list of all fields for the class
-	 * 
+	 *
 	 * @param className
 	 * @return List of all fields for the given class
 	 */
@@ -356,7 +353,7 @@ public class ClassCache implements InitializingBean{
 
 	/**
 	 * Get the list of all non-Primitive fields for the class
-	 * 
+	 *
 	 * @param className
 	 * @return List of all fields for the given class
 	 */
@@ -402,7 +399,7 @@ public class ClassCache implements InitializingBean{
 	throws Exception {
 		return getAssociationType(klass, associationName, false);
 	}
-	
+
 	public String getAssociationType(Class klass, String associationName, boolean includeParent)
 			throws Exception {
 		System.out.println("getAssociationType 2 "+klass.getName());
@@ -437,14 +434,14 @@ public class ClassCache implements InitializingBean{
 			field.setAccessible(true);
 			String fieldName = field.getName();
 			String type = field.getType().getName();
-			
+
 			log.debug("* * * Qualified Class name: " + qualClassName + "fieldName: " + fieldName+"; fieldType: " + type);
-			
+
 			boolean isPrimitive = field.getType().isPrimitive();
 			boolean isIsoDataType = type.startsWith("gov.nih.nci.iso21090");
-			
+
 			log.debug("* * * isNotPrimitive and isNotIsoDataType:" + ((!isPrimitive) && (!isIsoDataType)) );
-			
+
 			if ( (!isPrimitive) && (!isIsoDataType) ) {
 				if ((type.startsWith("java") && type.endsWith("Collection"))) {
 					String roleClassName;
@@ -549,7 +546,7 @@ public class ClassCache implements InitializingBean{
 
 	/**
 	 * Gets all the fields for a given class
-	 * 
+	 *
 	 * @param resultClass
 	 *            - Specifies the class name
 	 * @return - returns all the fields of a class
@@ -834,7 +831,7 @@ public class ClassCache implements InitializingBean{
 							cfg, className);
 					if (tempSearchFieldForObject != null)
 						searchableFieldsMap.putAll(tempSearchFieldForObject);
-				}		
+				}
 			}
 		}
 
@@ -859,7 +856,7 @@ public class ClassCache implements InitializingBean{
 		Map<String, Map<String, List<Object>>> mapOfSearchFields = new HashMap<String, Map<String, List<Object>>>();
 		Map<String, List<Object>> isoFieldsMap = new HashMap<String, List<Object>>();
 		PersistentClass pClass = cfg.getClassMapping(objectClassName);
-		
+
 		if (pClass == null)
 			return null;
 		Map<String, List<Object>> isoIdentifierFieldsMap = getISOIdentifierFieldsMap(pClass,cfg);
@@ -887,9 +884,9 @@ public class ClassCache implements InitializingBean{
 	@SuppressWarnings("unchecked")
 	private Map<String, List<Object>> getISOPropertiesForObject(
 			PersistentClass pclass, Configuration cfg) {
-		
+
 		Map<String, List<Object>> isoFieldsMap = new HashMap<String, List<Object>>();
-		
+
 		if (pclass.getEntityName().startsWith("_xxEntityxx_gov_nih_nci_cacoresdk_domain_other_datatype")){
 			Iterator<? extends Object> properties = pclass.getPropertyIterator();
 			while (properties != null && properties.hasNext()) {
@@ -903,12 +900,12 @@ public class ClassCache implements InitializingBean{
 				klass = Class.forName(pclass.getClassName());
 			} catch (ClassNotFoundException e) {
 				log.error("Error:  Class not found for: "+pclass.getClassName(), e);
-				
+
 				return isoFieldsMap;
 			}
-			
+
 			while (!klass.getName().equals("java.lang.Object")) {
-				pclass = cfg.getClassMapping(klass.getName()); 
+				pclass = cfg.getClassMapping(klass.getName());
 				if (pclass != null){
 					Iterator<? extends Object> properties = pclass.getPropertyIterator();
 					while (properties != null && properties.hasNext()) {
@@ -923,7 +920,7 @@ public class ClassCache implements InitializingBean{
 
 		return isoFieldsMap;
 	}
-	
+
 	private List<Object> getPersistentFieldsForISOObject(Property prop) {
 		return getPersistentFieldsForISOObject(prop, null);
 	}
@@ -940,7 +937,7 @@ public class ClassCache implements InitializingBean{
 		} else if (prop.getType().isComponentType()
 				&& !(prop.getValue() instanceof Any)) {
 			processIfComponentMapping(prop, isoObjectPsFields,cfg);
-			
+
 			String componentClassName = ((Component)prop.getValue()).getComponentClassName();
 			if (componentClassName != null && (componentClassName.indexOf("Adxp") > 0)){
 				String adxpType = componentClassName.substring(componentClassName.indexOf("Adxp") + 4).toUpperCase();
@@ -952,7 +949,7 @@ public class ClassCache implements InitializingBean{
 			} else if (componentClassName != null && (componentClassName.indexOf("Enxp") > 0)){
 				String roleName = ((Component)prop.getValue()).getRoleName();
 				String rootKlassAttr = roleName.substring(0, roleName.lastIndexOf('.'));
-				
+
 				ComplexNode complexNode = tuplizerHelper
 						.getComplexNodeBean(rootKlassAttr);
 				List<Node> nodes = complexNode.getInnerNodes();
@@ -977,7 +974,7 @@ public class ClassCache implements InitializingBean{
 						}
 					}
 				}
-				
+
 				nestedComponent.put("type",enxpTypeList);
 				isoObjectPsFields.add(nestedComponent);
 			}
@@ -1076,7 +1073,7 @@ public class ClassCache implements InitializingBean{
 			Map<String, List<Object>> map = getISOPropertiesForObject(
 					many2OnePClass, cfg);
 			Iterator<String> keyItr = map.keySet().iterator();
-			
+
 			String key = fieldName + "<" + many2OnePClass.getClassName() + ">";
 			List<Object> isoPersistentFields = new ArrayList<Object>();
 			isoPersistentFields.add(map);
@@ -1093,7 +1090,7 @@ public class ClassCache implements InitializingBean{
 			Map<String, List<Object>> map = getISOPropertiesForObject(
 					oneToManyPClass, cfg);
 			Iterator<String> keyItr = map.keySet().iterator();
-			
+
 			String key = fieldName + "<" + oneToMany.getAssociatedClass().getClassName() + ">";
 			List<Object> isoPersistentFields = new ArrayList<Object>();
 			isoPersistentFields.add(map);
@@ -1132,7 +1129,11 @@ public class ClassCache implements InitializingBean{
 	}
 
 	public String getClassIdName(Class klass) {
-		return classIdCache.get(klass.getName());
+		return getClassIdName(klass.getName());
+	}
+
+	public String getClassIdName(String className) {
+		return classIdCache.get(className);
 	}
 
 	public void afterPropertiesSet() throws Exception {
