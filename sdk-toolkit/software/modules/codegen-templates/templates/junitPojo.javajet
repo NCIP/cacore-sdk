@@ -9,11 +9,6 @@ package test.<%=fullPackageName%>;
 import <%=fullPackageName%>.<%=klassName%>;
 
 import gov.nih.nci.system.applicationservice.ApplicationException;
-import gov.nih.nci.system.query.cql.CQLAssociation;
-import gov.nih.nci.system.query.cql.CQLAttribute;
-import gov.nih.nci.system.query.cql.CQLObject;
-import gov.nih.nci.system.query.cql.CQLPredicate;
-import gov.nih.nci.system.query.cql.CQLQuery;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
 import java.lang.reflect.Modifier;
@@ -139,6 +134,7 @@ public class <%=klassName%>Test extends SDKTestBase
 			break;		
 		}		
 	}
+		
 
 <%} else {%>	
 	/**
