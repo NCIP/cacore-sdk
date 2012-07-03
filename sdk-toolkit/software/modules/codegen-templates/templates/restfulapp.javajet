@@ -14,7 +14,8 @@ public class SDKRESTApplication extends Application
 
 public Set<Class<?>> getClasses() {
         HashSet<Class<?>> set = new HashSet<Class<?>>();
-        set.add(gov.nih.nci.system.web.SDKRESTfulResource.class);
+        set.add(gov.nih.nci.system.web.RESTfulResource.class);
+        set.add(gov.nih.nci.system.web.util.SDKRESTContentHandler.class);
         
 	<%for(UMLClass klass:transformerUtils.getAllRESTResources()){
 		if(!transformerUtils.isAbstract(klass))

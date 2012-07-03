@@ -4,6 +4,10 @@
 package <%=transformerUtils.getFullPackageName(klass)%>;
 
 <%=transformerUtils.getImports(klass)%>
+import gov.nih.nci.system.web.ResourceLink;
+import java.util.List;
+import java.util.ArrayList;
+import javax.persistence.Transient;
 
 <% 	boolean jaxbEnabled = transformerUtils.isJaxbEnabled();%>
 <%=transformerUtils.getJavaDocs(klass)%>
@@ -16,10 +20,14 @@ package <%=transformerUtils.getFullPackageName(klass)%>;
 <%} %>
 public<%=transformerUtils.isAbstract(klass)? " abstract" : "" %> class <%=klass.getName()%> <%=transformerUtils.getSuperClassString(klass)%> implements Serializable<% if (jaxbEnabled) { %>, CycleRecoverable<%} %><%=transformerUtils.getInterfaceString(klass)%>
 {
+	@Transient
+	List<ResourceLink> links = new ArrayList<ResourceLink>();
+
 	/**
 	* An attribute to allow serialization of the domain objects
 	*/
 	private static final long serialVersionUID = 1234567890L;
+	
 
 	<%for(UMLAttribute attr:klass.getAttributes()){%>
 	<%=transformerUtils.getJavaDocs(attr)%>
@@ -136,5 +144,79 @@ public<%=transformerUtils.isAbstract(klass)? " abstract" : "" %> class <%=klass.
 	}
 	<%}%>
 <% if (jaxbEnabled) { %><%=transformerUtils.getJaxbOnCycleDetectedMethod()%><%} %>
+
+public String getNamespacePrefix()
+{
+<%
+String namespace = transformerUtils.getGMENamespace(klass);
+if(namespace == null)
+ namespace = transformerUtils.getNamespaceUriPrefix();
+%>
+	return "<%=namespace%>";
+}
+
+@Transient
+public List<ResourceLink> getLinks()
+{
+	return links;
+}
+
+public void setLinks(List<ResourceLink> links)
+{
+	this.links = links;
+}
+
+public List<ResourceLink> buildLinks(String path)
+{
+	String idStr = null;
+	String href = null;
+	ResourceLink link = null;
+<%if(transformerUtils.getClassIdGetterMthod(klass) != null) {%>
+	idStr = <%=transformerUtils.getClassIdGetterMthod(klass)%>().toString();
+	href = path+"/<%=klass.getName()%>/"+idStr;
+	link = new ResourceLink("self", "application/xml", href);
+	links.add(link);
+<%}%>
+	<%
+	for(UMLAssociation assoc:klass.getAssociations()){
+		List<UMLAssociationEnd> assocEnds = assoc.getAssociationEnds();
+		UMLAssociationEnd thisEnd = transformerUtils.getThisEnd(klass,assocEnds);
+		UMLAssociationEnd otherEnd = transformerUtils.getOtherEnd(klass,assocEnds);
 	
+		List<UMLAssociationEnd> associationEnds = new java.util.ArrayList<UMLAssociationEnd>();
+		associationEnds.add(otherEnd);
+	
+		if(transformerUtils.isBidirectionalSelfAssociation(klass,assocEnds)) { // handle bi-directional self-association 
+			associationEnds.add(thisEnd);
+		}
+		
+		for(UMLAssociationEnd associationEnd : associationEnds)
+		{	
+			if(associationEnd.isNavigable())
+			{
+			
+				UMLClass assocKlass = (UMLClass)associationEnd.getUMLElement();
+				if(transformerUtils.isAssociationEndMany(associationEnd))
+			{%>
+<%if(transformerUtils.getClassIdGetterMthod(klass) != null) {%>			
+	href = path+"/<%=klass.getName()%>/"+idStr + "/" + "<%=associationEnd.getRoleName()%>";
+	link = new ResourceLink("<%=associationEnd.getRoleName()%>", "application/xml", href);
+	links.add(link);
+<%}%>
+			<%}else{%>
+	
+<%if(transformerUtils.getClassIdGetterMthod(assocKlass) != null) {%>	
+	idStr = <%=transformerUtils.getGetterMethodName(associationEnd)%>().<%=transformerUtils.getClassIdGetterMthod(assocKlass)%>().toString();		
+	href = path+"/<%=assocKlass.getName()%>/"+idStr;
+	link = new ResourceLink("<%=associationEnd.getRoleName()%>", "application/xml", href);
+	links.add(link);
+<%}%>
+	<%
+			}
+			}
+		}
+	}
+	%>			
+	return links;
+}
 }

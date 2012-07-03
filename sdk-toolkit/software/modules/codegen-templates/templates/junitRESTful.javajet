@@ -1,0 +1,303 @@
+<%@ jet package="gov.nih.nci.codegen.transformer.jet" 
+        class="JunitRESTfulTransformer"
+        skeleton="JunitRESTfulTransformerBase.skeleton" %>
+<% String fullPackageName=transformerUtils.getFullPackageName(klass);%>
+<% String klassName=klass.getName();%>        
+package test.<%=fullPackageName%>;
+
+import <%=fullPackageName%>.<%=klassName%>;
+
+import javax.ws.rs.core.Response;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.FileWriter;
+import java.io.File;
+import java.util.List;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.entity.FileEntity;
+
+import org.apache.cxf.common.util.Base64Utility;
+
+import java.lang.reflect.Modifier;
+import java.util.Collection;
+import java.util.Iterator;
+
+import test.gov.nih.nci.cacoresdk.SDKRESTfulTestBase;
+import gov.nih.nci.system.applicationservice.ApplicationException;
+
+public class <%=klassName%>ResourceTest extends SDKRESTfulTestBase
+{
+	public static String getTestCaseName()
+	{
+		return "<%=klassName%>  RESTful Resource Test Case";
+	}
+
+<% if (!transformerUtils.isAbstract(klass)	)  {%>
+	
+	/**
+	 * Uses Nested Search Criteria for search
+	 * Verifies that the results are returned 
+	 * Verifies size of the result set
+	 * Verifies that none of the attributes are null
+	 * 
+	 * @throws ApplicationException
+	 */
+	public void testGet() throws ApplicationException
+	{
+		
+	  try {
+ 
+ 		<%=klassName%> searchObject = new <%=klassName%>();
+ 		Collection results = getApplicationService().search("<%=fullPackageName%>.<%=klassName%>",searchObject );
+		String id = "";
+		
+		if(results != null && results.size() > 0)
+		{
+			<%=klassName%> obj = (<%=klassName%>) ((List)results).get(0);
+		<%
+			UMLAttribute attrb = transformerUtils.getClassIdAttr(klass);
+			
+			
+			if(attrb != null)
+			{
+				String dataType = TransformerUtils.javaPrimitiveDatatypeMap.get(attrb.getDatatype().getName());
+			if(attrb.getDatatype().getName().equals("string"))
+			{
+			%>
+		
+				String idVal = obj.<%=transformerUtils.getClassIdGetterMthod(klass)%>();
+			<%
+			}
+			else
+			{
+			%>
+				<%=attrb.getDatatype().getName()%> idVal = obj.<%=transformerUtils.getClassIdGetterMthod(klass)%>();
+			<%
+			}
+			%>
+			id = new <%=dataType%>(idVal).toString();
+			<%
+			}
+			%>
+		}
+		else
+			return;
+
+		if(id.equals(""))
+			return;
+			
+		DefaultHttpClient httpClient = new DefaultHttpClient();
+		String url = baseURL + "/rest/<%=klassName%>/"+id;
+		HttpGet getRequest = new HttpGet(url);
+		getRequest.addHeader("accept", "application/xml");
+
+ 
+		HttpResponse response = httpClient.execute(getRequest);
+ 
+		if (response.getStatusLine().getStatusCode() != 200) {
+			throw new RuntimeException("Failed : HTTP error code : "
+			   + response.getStatusLine().getStatusCode());
+		}
+ 
+ 		File myFile = new File("<%=klassName%>"+"XML.xml");						
+		System.out.println("writing data to file "+myFile.getAbsolutePath());
+		FileWriter myWriter = new FileWriter(myFile);
+
+		BufferedReader br = new BufferedReader(
+                         new InputStreamReader((response.getEntity().getContent())));
+ 
+		String output;
+		System.out.println("Output from Server .... \n");
+		while ((output = br.readLine()) != null) {
+			myWriter.write(output);
+			System.out.println(output);
+		}
+ 
+		httpClient.getConnectionManager().shutdown();
+		myWriter.flush();
+ 		myWriter.close();
+	  } catch (ClientProtocolException e) {
+ 
+		e.printStackTrace();
+ 
+	  } catch (IOException e) {
+ 
+		e.printStackTrace();
+	  }
+		
+	}
+
+
+	public void testDelete() throws ApplicationException
+	{
+		
+	  try {
+ 
+ 		<%=klassName%> searchObject = new <%=klassName%>();
+ 		Collection results = getApplicationService().search("<%=fullPackageName%>.<%=klassName%>",searchObject );
+		String id = "";
+		
+		if(results != null && results.size() > 0)
+		{
+			<%=klassName%> obj = (<%=klassName%>) ((List)results).get(0);
+		<%
+			UMLAttribute attrb2 = transformerUtils.getClassIdAttr(klass);
+			
+			
+			if(attrb2 != null)
+			{
+				String dataType2 = TransformerUtils.javaPrimitiveDatatypeMap.get(attrb2.getDatatype().getName());
+			if(attrb2.getDatatype().getName().equals("string"))
+			{
+			%>
+		
+				String idVal = obj.<%=transformerUtils.getClassIdGetterMthod(klass)%>();
+			<%
+			}
+			else
+			{
+			%>
+				<%=attrb2.getDatatype().getName()%> idVal = obj.<%=transformerUtils.getClassIdGetterMthod(klass)%>();
+			<%
+			}
+			%>
+			id = new <%=dataType2%>(idVal).toString();
+			<%
+			}
+			%>
+		}
+		else
+			return;
+
+		if(id.equals(""))
+			return;
+			
+		DefaultHttpClient httpClient = new DefaultHttpClient();
+		String url = baseURL + "/rest/<%=klassName%>/"+id;
+		HttpDelete deleteRequest = new HttpDelete(url);
+		//deleteRequest.addHeader("accept", "application/xml");
+ 
+		HttpResponse response = httpClient.execute(deleteRequest);
+		
+		if (response.getStatusLine().getStatusCode() != 200) {
+			throw new RuntimeException("Failed : HTTP error code : "
+			   + response.getStatusLine().getStatusCode());
+		}
+	  } catch (ClientProtocolException e) {
+ 
+		e.printStackTrace();
+ 
+	  } catch (IOException e) {
+ 
+		e.printStackTrace();
+	  }
+		
+	}
+
+
+	public void testPost() throws ApplicationException
+	{
+		
+	  try {
+		DefaultHttpClient httpClient = new DefaultHttpClient();
+		String url = baseURL + "/rest/<%=klassName%>";
+		HttpPost postRequest = new HttpPost(url);
+		File myFile = new File("<%=klassName%>"+"XML.xml");						
+		
+ 		FileEntity input = new FileEntity(myFile);
+ 		input.setContentType("application/xml");
+ 		System.out.println("input: "+myFile);
+ 		postRequest.setEntity(input);
+  
+ 		HttpResponse response = httpClient.execute(postRequest);
+  
+// 		if (response.getStatusLine().getStatusCode() != 201) {
+// 			throw new RuntimeException("Failed : HTTP error code : "
+// 				+ response.getStatusLine().getStatusCode());
+// 		}
+  
+ 		BufferedReader br = new BufferedReader(
+                         new InputStreamReader((response.getEntity().getContent())));
+  
+ 		String output;
+ 		System.out.println("Output from Server .... \n");
+ 		while ((output = br.readLine()) != null) {
+ 			System.out.println(output);
+ 		}
+  
+ 		httpClient.getConnectionManager().shutdown();
+	  } catch (ClientProtocolException e) {
+ 
+		e.printStackTrace();
+ 
+	  } catch (IOException e) {
+ 
+		e.printStackTrace();
+	  }
+		
+	}
+
+
+	public void testPut() throws ApplicationException
+	{
+		
+	  try {
+		DefaultHttpClient httpClient = new DefaultHttpClient();
+		String url = baseURL + "/rest/<%=klassName%>";
+		HttpPut putRequest = new HttpPut(url);
+		File myFile = new File("<%=klassName%>"+"XML.xml");						
+		
+ 		FileEntity input = new FileEntity(myFile);
+ 		input.setContentType("application/xml");
+ 		putRequest.setEntity(input);
+		
+ 		HttpResponse response = httpClient.execute(putRequest);
+  
+// 		if (response.getStatusLine().getStatusCode() != 201) {
+// 			throw new RuntimeException("Failed : HTTP error code : "
+// 				+ response.getStatusLine().getStatusCode());
+// 		}
+  
+ 		BufferedReader br = new BufferedReader(
+                         new InputStreamReader((response.getEntity().getContent())));
+  
+ 		String output;
+ 		System.out.println("Output from Server .... \n");
+ 		while ((output = br.readLine()) != null) {
+ 			System.out.println(output);
+ 		}
+  
+ 		httpClient.getConnectionManager().shutdown();
+	  } catch (ClientProtocolException e) {
+ 
+		e.printStackTrace();
+ 
+	  } catch (IOException e) {
+ 
+		e.printStackTrace();
+	  }
+		
+	}
+
+	
+<%}
+else
+{
+%>
+public void testNothing()
+{
+	assertTrue(Boolean.TRUE);
+}
+<%
+}
+%>
+}
