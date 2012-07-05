@@ -172,7 +172,39 @@ public List<ResourceLink> buildLinks(String path)
 	String href = null;
 	ResourceLink link = null;
 <%if(transformerUtils.getClassIdGetterMthod(klass) != null) {%>
+
+	<%if(transformerUtils.isISO21090Enabled())
+	{
+		UMLAttribute attrb = transformerUtils.getClassIdAttr(klass);
+		String idMethod = transformerUtils.getClassIdGetterMthod(klass);
+		if(attrb != null)
+		{
+		String attrType = transformerUtils.isoDatatypeCompleteMap.get(attrb.getDatatype().getName());
+
+		if(attrType == null)
+			attrType = transformerUtils.javaPrimitiveDatatypeMap.get(attrb.getDatatype().getName());
+
+
+		if(attrType.equals("Ii"))
+		{
+		%>
+			idStr = <%=idMethod%>().getExtension();
+		<%
+		}
+		else
+		{
+		%>
+			idStr = <%=transformerUtils.getClassIdGetterMthod(klass)%>().toString();
+		<%
+		}
+		}
+	}
+	else
+	{
+	%>
 	idStr = <%=transformerUtils.getClassIdGetterMthod(klass)%>().toString();
+	<%}%>
+	
 	href = path+"/<%=klass.getName()%>/"+idStr;
 	link = new ResourceLink("self", "application/xml", href);
 	links.add(link);
@@ -206,10 +238,45 @@ public List<ResourceLink> buildLinks(String path)
 			<%}else{%>
 	
 <%if(transformerUtils.getClassIdGetterMthod(assocKlass) != null) {%>	
+
+	<%if(transformerUtils.isISO21090Enabled())
+	{
+
+		UMLAttribute attrb = transformerUtils.getClassIdAttr(klass);
+		String idMethod = transformerUtils.getClassIdGetterMthod(assocKlass);
+		if(attrb != null)
+		{
+		String attrType = transformerUtils.isoDatatypeCompleteMap.get(attrb.getDatatype().getName());
+
+		if(attrType == null)
+			attrType = transformerUtils.javaPrimitiveDatatypeMap.get(attrb.getDatatype().getName());
+
+
+		if(attrType.equals("Ii"))
+		{
+		%>
+			idStr = <%=idMethod%>().getExtension();
+		<%
+		}
+		else
+		{
+		%>
+			idStr = <%=transformerUtils.getGetterMethodName(associationEnd)%>().<%=transformerUtils.getClassIdGetterMthod(assocKlass)%>().toString();		
+		<%
+		}
+		}
+	}
+	else
+	{
+	%>
 	idStr = <%=transformerUtils.getGetterMethodName(associationEnd)%>().<%=transformerUtils.getClassIdGetterMthod(assocKlass)%>().toString();		
+	<%
+	}
+	%>
 	href = path+"/<%=assocKlass.getName()%>/"+idStr;
 	link = new ResourceLink("<%=associationEnd.getRoleName()%>", "application/xml", href);
 	links.add(link);
+	
 <%}%>
 	<%
 			}

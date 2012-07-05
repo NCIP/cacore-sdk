@@ -76,7 +76,7 @@ if(action != null && action.indexOf("R") != -1)
 			
 			<%
 			UMLAttribute attrb = transformerUtils.getClassIdAttr(klass);
-			if(attrb != null)
+			if(attrb != null && !transformerUtils.isISO21090Enabled())
 			{
 				if(attrb.getDatatype().getName().equals("character") || attrb.getDatatype().getName().equals("Character") || attrb.getDatatype().getName().equals("char"))			
 				{
@@ -89,6 +89,48 @@ if(action != null && action.indexOf("R") != -1)
 				params.add(new <%=transformerUtils.javaPrimitiveDatatypeMap.get(attrb.getDatatype().getName())%>(id));	
 			<%
 				}
+			}
+			else if(attrb != null)
+			{
+			String attrType = transformerUtils.isoDatatypeCompleteMap.get(attrb.getDatatype().getName());
+			
+			if(attrType == null)
+				attrType = transformerUtils.javaPrimitiveDatatypeMap.get(attrb.getDatatype().getName());
+			
+			
+			if(attrType.equals("Ii"))
+			{
+			%>
+				gov.nih.nci.iso21090.Ii idAttr = new gov.nih.nci.iso21090.Ii();
+				idAttr.setExtension(id);
+				params.add(idAttr);	
+			<%
+			}
+			else if(attrb.getDatatype().getName().equals("character") || attrb.getDatatype().getName().equals("Character") || attrb.getDatatype().getName().equals("char"))			
+			{
+			%>
+				params.add(new <%=transformerUtils.javaPrimitiveDatatypeMap.get(attrb.getDatatype().getName())%>(id.charAt(0)));	
+			<%
+			}
+			else 
+			{
+			%>
+				params.add(new <%=attrType%>(id));	
+			<%
+			}
+			}
+			else
+			{
+			%>
+			if(true)
+			{
+				  ResponseBuilder builder2 = Response.status(Status.NOT_FOUND);
+				  builder2.type("application/xml");
+				  builder2.entity("<message>Not PK Found. Query is not supported.</message>");
+				  throw new WebApplicationException(builder2.build());
+			}
+			
+			<%
 			}
 			%>
 			
@@ -495,7 +537,7 @@ if(action != null && action.indexOf("C") != -1)
 			<%
 			UMLAttribute attrb = transformerUtils.getClassIdAttr(klass);
 			String idMethod = transformerUtils.getClassIdGetterMthod(klass);
-			if(attrb != null)
+			if(attrb != null && !transformerUtils.isISO21090Enabled())
 			{
 				if(attrb.getDatatype().getName().equals("character") || attrb.getDatatype().getName().equals("Character") || attrb.getDatatype().getName().equals("char"))			
 				{
@@ -509,8 +551,28 @@ if(action != null && action.indexOf("C") != -1)
 			<%
 				}
 			}
-			%>
+			else if(attrb != null)
+			{
+			String attrType = transformerUtils.isoDatatypeCompleteMap.get(attrb.getDatatype().getName());
 			
+			if(attrType == null)
+				attrType = transformerUtils.javaPrimitiveDatatypeMap.get(attrb.getDatatype().getName());
+			
+			
+			if(attrType.equals("Ii"))
+			{
+			%>
+				id = object.<%=idMethod%>().getExtension();
+			<%
+			}
+			else
+			{
+			%>
+				id = new <%=attrType%>(object.<%=idMethod%>()).toString();	
+			<%
+			}
+			}
+			%>
 			return Response.created(URI.create(path+"/<%=klassName%>/"+id)).build();
 		}
 		catch(WebApplicationException e)
@@ -536,10 +598,9 @@ if(action != null && action.indexOf("D") != -1)
 	  		List params = new ArrayList();
 	  		String className = "<%=fullPackageName%>.<%=klassName%>";
 			
-			
 			<%
 			UMLAttribute attrb = transformerUtils.getClassIdAttr(klass);
-			if(attrb != null)
+			if(attrb != null && !transformerUtils.isISO21090Enabled())
 			{
 				if(attrb.getDatatype().getName().equals("character") || attrb.getDatatype().getName().equals("Character") || attrb.getDatatype().getName().equals("char"))			
 				{
@@ -552,6 +613,48 @@ if(action != null && action.indexOf("D") != -1)
 				params.add(new <%=transformerUtils.javaPrimitiveDatatypeMap.get(attrb.getDatatype().getName())%>(id));	
 			<%
 				}
+			}
+			else if(attrb != null)
+			{
+			String attrType = transformerUtils.isoDatatypeCompleteMap.get(attrb.getDatatype().getName());
+			
+			if(attrType == null)
+				attrType = transformerUtils.javaPrimitiveDatatypeMap.get(attrb.getDatatype().getName());
+			
+			
+			if(attrType.equals("Ii"))
+			{
+			%>
+				gov.nih.nci.iso21090.Ii idAttr = new gov.nih.nci.iso21090.Ii();
+				idAttr.setExtension(id);
+				params.add(idAttr);	
+			<%
+			}
+			else if(attrb.getDatatype().getName().equals("character") || attrb.getDatatype().getName().equals("Character") || attrb.getDatatype().getName().equals("char"))			
+			{
+			%>
+				params.add(new <%=transformerUtils.javaPrimitiveDatatypeMap.get(attrb.getDatatype().getName())%>(id.charAt(0)));	
+			<%
+			}
+			else
+			{
+			%>
+				params.add(new <%=attrType%>(id));	
+			<%
+			}
+			}
+			else
+			{
+			%>
+			if(true)
+			{
+				  ResponseBuilder builder3 = Response.status(Status.NOT_FOUND);
+				  builder3.type("application/xml");
+				  builder3.entity("<message>Not PK Found. Query is not supported.</message>");
+				  throw new WebApplicationException(builder3.build());
+			}
+			
+			<%
 			}
 			%>
 			
