@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:ivy="antlib:org.apache.ivy.ant" name="project-download" default="project-download" basedir=".">
+
+	<property name="software.dir" location="."/>
+	<property name="target.dir" location="${software.dir}/target"/>
+	<property name="ivy.dir" location="${software.dir}/common/ivy"/>
+	<property name="lib.dir" location="${target.dir}/lib"/>
+	<property name="bda-utils.dir" location="${target.dir}/bda-utils"/>
+	<property name="project.org" value="ncicb"/>
+	<property name="project.ivy.conf" value="runtime"/>
+	<property name="project.name" value="cgmm"/>
+	<property name="project.version" value="0.6.0"/>
+	<property name="project.lib.dir" location="${lib.dir}/${project.name}"/>
+	<property name="ivy.dep.dir" value="${bda-utils.dir}/resource/ivy"/>
+	<property name="ivy.dep.file" value="${ivy.dep.dir}/generic-ivy.xml"/>
+	<property name="ivy.settings.file" value="${ivy.dir}/cbiit-ivy-settings-with-cagrid12.xml"/>
+
+	<path id="ivy.classpath">
+		<fileset dir="${lib.dir}">
+			<include name="ivy*.jar" />
+		</fileset>
+	</path>
+	<condition property="local.cbiit-ivy-repo.dir" value="/">
+		<or>            
+			<os family="unix" />    
+			<os family="mac" />     
+		</or>           
+	</condition>
+	<condition property="local.cbiit-ivy-repo.dir" value="c:/">
+		<os family="windows" />
+	</condition>
+
+
+	<target name="project-download">
+		<mkdir dir="${project.lib.dir}"/>
+		<taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpathref="ivy.classpath" />
+		<!-- Causes IVY to check last-modified http header to determine if it is going to download the file.  This can be modified on the resolver (settings file) with the resolve attribute of checkmodified.  It can also be set on the dependency level with the dependency attibute changing. If the web server does not send the http header last-modified it will never detect updates and you have to resort to clean cache to get the updated artifact and depeencies to download.--> 
+		<property name="ivy.resolver.default.check.modified" value="true" /> 
+		<ivy:settings file="${ivy.settings.file}" />
+		<ivy:resolve refresh="true" conf="${project.ivy.conf}" />
+		<ivy:retrieve pattern="${project.lib.dir}/[artifact]-[revision].[ext]" conf="${project.ivy.conf}" sync="true" />
+
+	</target>
+</project>
