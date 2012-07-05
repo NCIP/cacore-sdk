@@ -7,7 +7,6 @@ import gov.nih.nci.system.client.util.xml.Marshaller;
 import gov.nih.nci.system.client.util.xml.Unmarshaller;
 import gov.nih.nci.system.client.util.xml.XMLUtility;
 import gov.nih.nci.system.client.util.xml.XMLUtilityException;
-import gov.nih.nci.system.web.SDKResponse;
 import gov.nih.nci.system.web.ResourceLink;
 import gov.nih.nci.system.web.CollectionBean;
 
