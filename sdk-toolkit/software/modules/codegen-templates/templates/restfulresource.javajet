@@ -617,6 +617,7 @@ if(action != null && action.indexOf("U") != -1)
 	{
 		try
 		{
+			//System.out.println("object: "+object.getId());
 			update(object);
 		}
 		catch(WebApplicationException e)

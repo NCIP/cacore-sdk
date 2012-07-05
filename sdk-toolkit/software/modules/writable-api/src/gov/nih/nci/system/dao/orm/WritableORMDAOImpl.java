@@ -120,11 +120,18 @@ public class WritableORMDAOImpl extends ORMDAOImpl implements WritableDAO
 		HibernateCallback callBack = new HibernateCallback(){
 
 			public Object doInHibernate(Session session) throws HibernateException, SQLException {
-				Transaction tx = session.beginTransaction();
-				session.delete(obj);
-				tx.commit();
-				session.flush();
-				return obj;
+				try
+				{
+					Transaction tx = session.beginTransaction();
+					session.delete(obj);
+					tx.commit();
+					//session.flush();
+					return obj;
+				}
+				finally
+				{
+					//session.close();
+				}
 			}
 		};
 		return callBack;
@@ -135,11 +142,18 @@ public class WritableORMDAOImpl extends ORMDAOImpl implements WritableDAO
 		HibernateCallback callBack = new HibernateCallback(){
 
 			public Object doInHibernate(Session session) throws HibernateException, SQLException {
-				Transaction tx = session.beginTransaction();
-				session.save(obj);
-				tx.commit();
-				session.flush();
-				return obj;
+				try
+				{
+					Transaction tx = session.beginTransaction();
+					session.save(obj);
+					tx.commit();
+					//session.flush();
+					return obj;
+				}
+				finally
+				{
+					//session.close();
+				}
 			}
 		};
 		return callBack;
@@ -147,14 +161,21 @@ public class WritableORMDAOImpl extends ORMDAOImpl implements WritableDAO
 
 	protected HibernateCallback getUpdateHibernateCallback(final Object obj)
 	{
+		System.out.println("Update: "+obj);
 		HibernateCallback callBack = new HibernateCallback(){
-
 			public Object doInHibernate(Session session) throws HibernateException, SQLException {
-				Transaction tx = session.beginTransaction();
-				session.update(obj);
-				tx.commit();
-				session.flush();
-				return obj;
+				try
+				{
+					Transaction tx = session.beginTransaction();
+					session.update(obj);
+					tx.commit();
+					//session.flush();
+					return obj;
+				}
+				finally
+				{
+					//session.close();
+				}
 			}
 		};
 		return callBack;

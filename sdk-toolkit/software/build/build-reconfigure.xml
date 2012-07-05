@@ -298,22 +298,22 @@
 
 	<condition property="RESTFUL_XML_INTERFACE_ENABLED" value="true" else="false">
 			<or>
-				<equals arg1="${ENABLE_RESTFUL_XML_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
-				<equals arg1="${ENABLE_RESTFUL_XML_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
+				<equals arg1="${ENABLE_RESTLIKE_XML_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
+				<equals arg1="${ENABLE_RESTLIKE_XML_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
 			</or>
 	</condition>
 
 	<condition property="RESTFUL_HTML_INTERFACE_ENABLED" value="true" else="false">
 		<or>
-			<equals arg1="${ENABLE_RESTFUL_HTML_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
-			<equals arg1="${ENABLE_RESTFUL_HTML_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
+			<equals arg1="${ENABLE_RESTLIKE_HTML_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${ENABLE_RESTLIKE_HTML_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
 		</or>
 	</condition>
 
 	<condition property="RESTFUL_JSON_INTERFACE_ENABLED" value="true" else="false">
 		<or>
-			<equals arg1="${ENABLE_RESTFUL_JSON_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
-			<equals arg1="${ENABLE_RESTFUL_JSON_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
+			<equals arg1="${ENABLE_RESTLIKE_JSON_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${ENABLE_RESTLIKE_JSON_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
 		</or>
 	</condition>
 
