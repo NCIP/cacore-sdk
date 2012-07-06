@@ -763,6 +763,7 @@
 						<include name="wsdl4j-*.jar"/>
 					</fileset>
 				</copy>
+
 			</then>
 		</if>
 
@@ -1531,6 +1532,9 @@
 					</fileset>
 					<fileset dir="${output.target.dir}">
 						<include name="${rest.file}"/>
+					</fileset>
+					<fileset dir="${lib.dir}">
+						<include name="sdk-writable-api-client-*.jar"/>
 					</fileset>
 				</copy>
 			</then>

@@ -80,7 +80,7 @@ public class RESTfulResource {
 			jsonStyleSheet = systemProperties
 					.getProperty("jsonOutputFormatter");
 			classCache = (ClassCache) ctx.getBean("ClassCache");
-			writableApplicationService = (WritableApplicationService) ctx
+			applicationService = (ApplicationService)ctx
 					.getBean("ApplicationServiceImpl");
 			try {
 				String pageCount = systemProperties.getProperty("rowCounter");
@@ -98,8 +98,8 @@ public class RESTfulResource {
 
 			HibernateConfigurationHolder configurationHolder = (HibernateConfigurationHolder) ctx
 					.getBean("HibernateConfigHolder");
-			httpUtils = new HTTPUtils(writableApplicationService, classCache,
-					pageSize, configurationHolder);
+//			httpUtils = new HTTPUtils(writableApplicationService, classCache,
+//					pageSize, configurationHolder);
 		} catch (Exception e) {
 			log.error("Error in constructing REST resource: " + e.getMessage());
 			// e.printStackTrace();
@@ -728,91 +728,9 @@ public class RESTfulResource {
 
 	}
 
-	protected void query(
-			@Context javax.servlet.http.HttpServletRequest request,
-			@Context javax.servlet.http.HttpServletResponse response,
-			HQLCriteria criteria, String targetClassName)
-			throws WebApplicationException {
-		try {
-			httpUtils.setServletName(request.getRequestURL().toString());
-			ServletOutputStream out = response.getOutputStream();
-			Object[] results = httpUtils.getResultSet(criteria);
-
-			if (results == null) {
-				ResponseBuilder builder = Response.status(Status.NOT_FOUND);
-				builder.type("application/xml");
-				builder.entity("<error>Not found</error>");
-				throw new WebApplicationException(builder.build());
-			}
-
-			httpUtils.setTargetClassName(targetClassName);
-			executeFormatOutput(response, out, results, 1, httpUtils, "XML",
-					false);
-		} catch (IOException e) {
-			log.error("Error in querying REST resource: " + e.getMessage());
-			ResponseBuilder builder = Response
-					.status(Status.INTERNAL_SERVER_ERROR);
-			builder.type("application/xml");
-			builder.entity("<error>Failed to Query due to: " + e.getMessage()
-					+ "</error>");
-			throw new WebApplicationException(builder.build());
-		} catch (Exception e) {
-			log.error("Error in querying REST resource: " + e.getMessage());
-			ResponseBuilder builder = Response
-					.status(Status.INTERNAL_SERVER_ERROR);
-			builder.type("application/xml");
-			builder.entity("<error>Not found" + e.getMessage() + "</error>");
-			throw new WebApplicationException(builder.build());
-		}
-	}
-
-	protected void query(
-			@Context javax.servlet.http.HttpServletRequest request,
-			@Context javax.servlet.http.HttpServletResponse response,
-			String targetClassName, String targetPackageName,
-			String criteriaValue, String roleName)
-			throws WebApplicationException {
-		try {
-			httpUtils.setServletName(request.getRequestURL().toString());
-			ServletOutputStream out = response.getOutputStream();
-			String criteriaStr = targetClassName + "[@id=" + criteriaValue
-					+ "]";
-			String roleNameLower = roleName.substring(0, 1).toLowerCase()
-					+ roleName.substring(1, roleName.length());
-			Object[] results = httpUtils.getResultSet(targetClassName,
-					targetPackageName, criteriaStr, roleNameLower);
-
-			if (results == null) {
-				ResponseBuilder builder = Response.status(Status.NOT_FOUND);
-				builder.type("application/xml");
-				builder.entity("<error>Not found</error>");
-				throw new WebApplicationException(builder.build());
-			}
-
-			httpUtils.setTargetClassName(targetClassName);
-
-			executeFormatOutput(response, out, results, 1, httpUtils, "XML",
-					false);
-		} catch (IOException e) {
-			log.error("Error in querying REST resource: " + e.getMessage());
-			ResponseBuilder builder = Response
-					.status(Status.INTERNAL_SERVER_ERROR);
-			builder.type("application/xml");
-			builder.entity("<error>Failed to Query due to: " + e.getMessage()
-					+ "</error>");
-			throw new WebApplicationException(builder.build());
-		} catch (Exception e) {
-			log.error("Error in querying REST resource: " + e.getMessage());
-			ResponseBuilder builder = Response
-					.status(Status.INTERNAL_SERVER_ERROR);
-			builder.type("application/xml");
-			builder.entity("<error>Not found" + e.getMessage() + "</error>");
-			throw new WebApplicationException(builder.build());
-		}
-	}
 
 	protected ApplicationService getApplicationService() {
-		return writableApplicationService;
+		return applicationService;
 	}
 
 	public Object save(final Object obj) throws WebApplicationException {

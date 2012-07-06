@@ -122,6 +122,7 @@
 		<attribute name="include-pattern4" default=""/>
 		<attribute name="include-pattern5" default=""/>
 		<attribute name="include-pattern6" default=""/>
+		<attribute name="include-pattern7" default=""/>
 		
 		<attribute name="exclude-pattern1" default=""/>
 		<attribute name="exclude-pattern2" default=""/>
@@ -140,6 +141,7 @@
 					<include name="@{include-pattern4}"/>
 					<include name="@{include-pattern5}"/>
 					<include name="@{include-pattern6}"/>
+					<include name="@{include-pattern7}"/>
 					<exclude name="@{exclude-pattern1}"/>
 					<exclude name="@{exclude-pattern2}"/>
 					<exclude name="@{exclude-pattern3}"/>
@@ -180,6 +182,7 @@
 			include-pattern4="gov/nih/nci/system/query/cql/**/*.*" 
 			include-pattern5="gov/nih/nci/system/query/hibernate/**/*.*"
 			include-pattern6="gov/nih/nci/system/query/nestedcriteria/**/*.*"
+			include-pattern7="gov/nih/nci/system/query/*.*"
 			exclude-pattern1="**/impl/**/*.*"
 			exclude-pattern2="gov/nih/nci/system/client/proxy/CLM*.*"
 			exclude-pattern3="**/Writable*.*"/>

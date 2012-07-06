@@ -38,7 +38,10 @@ import java.util.Map;
 import java.util.HashMap;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
 import gov.nih.nci.system.web.RESTfulResource;
+<%if(!transformerUtils.isISO21090Enabled()){
+%>
 import gov.nih.nci.system.query.hql.DeleteHQLQuery;
+<%}%>
 import gov.nih.nci.system.applicationservice.ApplicationException;
 import org.apache.log4j.Logger;
 import java.util.StringTokenizer;
@@ -521,7 +524,7 @@ List<String> methodNames = new java.util.ArrayList<String>();
 <%}%>
 
 <%
-if(action != null && action.indexOf("C") != -1)
+if(action != null && action.indexOf("C") != -1 && !transformerUtils.isISO21090Enabled())
 {%>
 	@POST
 	@Consumes("application/xml")
@@ -584,7 +587,7 @@ if(action != null && action.indexOf("C") != -1)
 <%}%>
 
 <%
-if(action != null && action.indexOf("D") != -1)
+if(action != null && action.indexOf("D") != -1 && !transformerUtils.isISO21090Enabled())
 {%>
 
 	@DELETE
@@ -711,7 +714,7 @@ if(action != null && action.indexOf("D") != -1)
 <%}%>
 
 <%
-if(action != null && action.indexOf("U") != -1)
+if(action != null && action.indexOf("U") != -1 && !transformerUtils.isISO21090Enabled())
 {%>
 
 	@PUT

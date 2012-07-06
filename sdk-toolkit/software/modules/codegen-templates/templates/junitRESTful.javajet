@@ -67,7 +67,7 @@ public class <%=klassName%>ResourceTest extends SDKRESTfulTestBase
 			UMLAttribute attrb = transformerUtils.getClassIdAttr(klass);
 			
 			
-			if(attrb != null)
+			if(attrb != null && !transformerUtils.isISO21090Enabled())
 			{
 				String dataType = TransformerUtils.javaPrimitiveDatatypeMap.get(attrb.getDatatype().getName());
 			if(attrb.getDatatype().getName().equals("string"))
@@ -87,6 +87,33 @@ public class <%=klassName%>ResourceTest extends SDKRESTfulTestBase
 			id = new <%=dataType%>(idVal).toString();
 			<%
 			}
+			else if(attrb != null && transformerUtils.isISO21090Enabled())
+			{
+				String dataType = TransformerUtils.isoDatatypeCompleteMap.get(attrb.getDatatype().getName());
+				if(dataType == null)
+					dataType = TransformerUtils.javaPrimitiveDatatypeMap.get(attrb.getDatatype().getName());
+			if(dataType.equals("Ii"))
+			{
+			%>
+			         id = obj.<%=transformerUtils.getClassIdGetterMthod(klass)%>().getExtension();
+			<%
+			}
+			else if(dataType.equals("string"))
+			{
+			%>
+		
+				 id = obj.<%=transformerUtils.getClassIdGetterMthod(klass)%>();
+			<%
+			}
+			else
+			{
+			%>
+				<%=dataType%> idVal = obj.<%=transformerUtils.getClassIdGetterMthod(klass)%>();
+				id = new <%=dataType%>(idVal).toString();
+			<%
+			}
+			}
+			
 			%>
 		}
 		else
@@ -136,7 +163,10 @@ public class <%=klassName%>ResourceTest extends SDKRESTfulTestBase
 		
 	}
 
-
+<%
+if(!transformerUtils.isISO21090Enabled())
+{
+%>
 	public void testDelete() throws ApplicationException
 	{
 		
@@ -153,7 +183,7 @@ public class <%=klassName%>ResourceTest extends SDKRESTfulTestBase
 			UMLAttribute attrb2 = transformerUtils.getClassIdAttr(klass);
 			
 			
-			if(attrb2 != null)
+			if(attrb2 != null && !transformerUtils.isISO21090Enabled())
 			{
 				String dataType2 = TransformerUtils.javaPrimitiveDatatypeMap.get(attrb2.getDatatype().getName());
 			if(attrb2.getDatatype().getName().equals("string"))
@@ -173,6 +203,33 @@ public class <%=klassName%>ResourceTest extends SDKRESTfulTestBase
 			id = new <%=dataType2%>(idVal).toString();
 			<%
 			}
+			else if(attrb2 != null && transformerUtils.isISO21090Enabled())
+			{
+				String dataType3 = TransformerUtils.isoDatatypeCompleteMap.get(attrb2.getDatatype().getName());
+				if(dataType3 == null)
+					dataType3 = TransformerUtils.javaPrimitiveDatatypeMap.get(attrb2.getDatatype().getName());
+			if(dataType3.equals("Ii"))
+			{
+			%>
+			         id = obj.<%=transformerUtils.getClassIdGetterMthod(klass)%>().getExtension();
+			<%
+			}
+			else if(dataType3.equals("string"))
+			{
+			%>
+		
+				 id = obj.<%=transformerUtils.getClassIdGetterMthod(klass)%>();
+			<%
+			}
+			else
+			{
+			%>
+				<%=dataType3%> idVal = obj.<%=transformerUtils.getClassIdGetterMthod(klass)%>();
+				id = new <%=dataType3%>(idVal).toString();
+			<%
+			}
+			}
+			
 			%>
 		}
 		else
@@ -290,6 +347,7 @@ public class <%=klassName%>ResourceTest extends SDKRESTfulTestBase
 
 	
 <%}
+}
 else
 {
 %>
