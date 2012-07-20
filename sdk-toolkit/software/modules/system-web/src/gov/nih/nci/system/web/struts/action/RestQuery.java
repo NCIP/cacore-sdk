@@ -295,11 +295,20 @@ public class RestQuery extends BaseActionSupport {
 
 					Class klass = classCache.getClassFromCache(fullClassName);
 					Field[] fields = classCache.getAllFields(klass);
-					Arrays.sort(fields);
+					//Arrays.sort(fields);
 
 					if (child.getName().equals("link"))
 						continue;
-
+					
+					List<Element> linkChild = getChildren(child, "link");
+					List<String> refNameList = new ArrayList();
+					for(Element link : linkChild)
+					{
+						Attribute attr = link.getAttribute("ref");
+						if(attr != null && !attr.equals("self"))
+							refNameList.add(attr.getName());
+					}
+					
 					String idColName = classCache.getClassIdName(klass);
 
 					// Add id column to the table first
@@ -323,7 +332,7 @@ public class RestQuery extends BaseActionSupport {
 					// Add all remaining columns
 					for (int i = 0; i < fields.length; i++) {
 						Field field = fields[i];
-						if (field.getName().equals(idColName))
+						if (field.getName().equals(idColName) || field.getName().equals("links") || field.getName().equals("serialVersionUID") || refNameList.contains(field.getName()))
 							continue;
 
 						headerBuffer
@@ -362,7 +371,7 @@ public class RestQuery extends BaseActionSupport {
 					 * attr.getValue(); }
 					 */
 
-					List<Element> linkChild = getChildren(child, "link");
+					
 					for (Element link : linkChild) {
 						headerBuffer
 								.append("<th class=\"dataTableHeader\" scope=\"col\" align=\"center\">");
