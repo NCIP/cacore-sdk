@@ -161,7 +161,20 @@ public class JSPUtils {
 	public List<String> getAssociations(String className) throws Exception {
 		return classCache.getAssociations(className);
 	}
+
+	public String getReturnType(String className, String fieldName, boolean includeParent)
+	throws ClassNotFoundException, Exception {
+		return classCache.getReturnType(className, fieldName, includeParent);
+	}
 	
+	public List<String> getToAssociations(String className) {
+		return classCache.getToAssociations(className);
+	}
+	
+	public String getClassIdName(String className) {
+		return classCache.getClassIdName(className);
+	}
+
 	public boolean isSecurityEnabled() {
 		return secured;
 	}
@@ -169,4 +182,5 @@ public class JSPUtils {
 	public boolean isWebInterfaceDisabled() {
 		return disableWebinterface;
 	}
+	
 }

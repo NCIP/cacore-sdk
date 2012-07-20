@@ -33,6 +33,7 @@ public class Criteria extends BaseActionSupport {
 
 		// A Workaround for Criteria.jsp, which requires embedded JSP logic
 		request.setAttribute("klassName", getSelectedDomain());
+		request.setAttribute("nodeId", nodeId);
 
 		return SUCCESS;
 	}

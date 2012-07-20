@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.jdom.Attribute;
+import org.jdom.Element;
 
 public class HtmlUtils {
 	
@@ -95,6 +97,26 @@ public class HtmlUtils {
 			int size = booleanOptions.size();
 			for(int i=0;i<size; i++ ){
 				tempSb.append("<option value=\"").append(booleanValues.get(i)).append("\">").append(booleanOptions.get(i)).append("</option>");
+			}
+			
+			tempSb.append("</select>");
+			
+			booleanSelect = tempSb.toString();
+		}
+		return sb.append(booleanSelect).toString();
+	}
+
+	private static String getSelect_Boolean(String attrName, String value) {
+		
+		StringBuilder sb = new StringBuilder("<select name=\"").append(attrName).append("\" id=\"").append(attrName).append("\" class=\"formFieldSized\">");
+		if (booleanSelect == null){ // lazy initialize
+			StringBuilder tempSb = new StringBuilder();
+			int size = booleanOptions.size();
+			for(int i=0;i<size; i++ ){
+				String selected = "";
+				if(value != null && value.equals(booleanValues.get(i)))
+					selected = "selected=\"selected\"";
+				tempSb.append("<option "+ selected + "value=\"").append(booleanValues.get(i)).append("\">").append(booleanOptions.get(i)).append("</option>");
 			}
 			
 			tempSb.append("</select>");
@@ -323,10 +345,28 @@ public class HtmlUtils {
 		return sb.toString();
 
 	}
+
+	private static String getHTML_Boolean(String attrName, String value) {
+
+		StringBuilder sb = new StringBuilder();
+		sb.append(getSelect_Boolean(attrName, value));
+		
+		return sb.toString();
+
+	}
 	
 	private static String getHTML(String attrName, String validationClass) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("<input type=\"text\" name=\"").append(attrName).append("\" id=\"").append(attrName).append("\" class=\"formFieldSized ").append(validationClass).append("\"/>");
+		
+		return sb.toString();
+	}
+
+	private static String getHTML(String attrName, String validationClass, String value) {
+		StringBuilder sb = new StringBuilder();
+		if(value == null)
+			value = "";
+		sb.append("<input type=\"text\" name=\"").append(attrName).append("\" value=\"").append(value).append("\" id=\"").append(attrName).append("\" class=\"formFieldSized ").append(validationClass).append("\"/>");
 		
 		return sb.toString();
 	}
@@ -952,6 +992,45 @@ public class HtmlUtils {
 		return html.toString();
 	}
 
+	public static String getHtmlFor(String attrName, String attrType, String value) {
+
+		StringBuilder html = new StringBuilder();
+		String validationClass = null;
+		
+		if ("Boolean".equalsIgnoreCase(attrType)){
+			html.append(getHTML_Boolean(attrName, value));		
+		} else if ("Double".equalsIgnoreCase(attrType) || "Float".equalsIgnoreCase(attrType)){
+			validationClass = "number";
+			html.append(getHTML(attrName,validationClass, value));	
+		} else if ("Integer".equalsIgnoreCase(attrType) || "Long".equalsIgnoreCase(attrType)){
+			validationClass = "int_long";
+			html.append(getHTML(attrName, validationClass, value));	
+		} else if ("Character".equalsIgnoreCase(attrType)){
+			validationClass = "char";
+			html.append(getHTML(attrName, validationClass, value));
+		} else if ("Date".equalsIgnoreCase(attrType)){
+			validationClass = "date";
+			html.append(getHTML(attrName, validationClass, value));			
+		} else {	
+			validationClass = "";
+			html.append(getHTML(attrName, validationClass, value));
+		}
+		
+		//System.out.println("HTML for non-ISO data type " +attrType + ": "+html);
+		log.debug("HTML for non-ISO data type " +attrType + ": "+html);
+		
+		return html.toString();
+	}
+
+	public static String getAttributeValue(Element root, String attName)
+	{
+		Attribute attr = root.getAttribute(attName);
+		if(attr != null)
+			return attr.getValue();
+		else
+			return null;
+	}
+	
 	public static String getHtmlFor(String attrName, String attrType, List<Object> searchableFields) {
 		if (searchableFields == null || searchableFields.isEmpty()){
 			return "No searchable fields found for attribute '"+attrName+"' of type '" + attrType +"'";

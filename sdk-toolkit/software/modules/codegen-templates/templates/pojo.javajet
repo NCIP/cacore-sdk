@@ -171,6 +171,9 @@ public List<ResourceLink> buildLinks(String path)
 	String idStr = null;
 	String href = null;
 	ResourceLink link = null;
+<%if(!transformerUtils.isAbstract(klass)) 
+{%>
+
 <%if(transformerUtils.getClassIdGetterMthod(klass) != null) {%>
 
 	<%if(transformerUtils.isISO21090Enabled())
@@ -210,13 +213,22 @@ public List<ResourceLink> buildLinks(String path)
 	links.add(link);
 <%}%>
 	<%
-	for(UMLAssociation assoc:klass.getAssociations()){
+	List<UMLAssociation> assocs = transformerUtils.getAssociations(klass, true);
+	for(UMLAssociation assoc: assocs){
 		List<UMLAssociationEnd> assocEnds = assoc.getAssociationEnds();
-		UMLAssociationEnd thisEnd = transformerUtils.getThisEnd(klass,assocEnds);
-		UMLAssociationEnd otherEnd = transformerUtils.getOtherEnd(klass,assocEnds);
-	
 		List<UMLAssociationEnd> associationEnds = new java.util.ArrayList<UMLAssociationEnd>();
-		associationEnds.add(otherEnd);
+		UMLAssociationEnd thisEnd = null;
+		UMLAssociationEnd otherEnd = null;
+		try
+		{
+			thisEnd = transformerUtils.getThisEnd(klass,assocEnds, true);
+			otherEnd = transformerUtils.getOtherEnd(klass,assocEnds, true);
+			associationEnds.add(otherEnd);
+		}
+		catch(GenerationException e)
+		{
+			continue;
+		}
 	
 		if(transformerUtils.isBidirectionalSelfAssociation(klass,assocEnds)) { // handle bi-directional self-association 
 			associationEnds.add(thisEnd);
@@ -285,5 +297,12 @@ public List<ResourceLink> buildLinks(String path)
 	}
 	%>			
 	return links;
+	
+<% }
+else
+{
+%>
+return null;
+<%}%>
 }
 }

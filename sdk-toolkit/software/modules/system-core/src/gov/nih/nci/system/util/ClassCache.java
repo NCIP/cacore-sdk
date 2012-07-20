@@ -232,6 +232,25 @@ public class ClassCache implements InitializingBean{
 		return fieldArray;
 	}
 
+	/**
+	 * Gets all fields from a class and it's superclasses
+	 *
+	 * @param clazz
+	 *            The class to explore for fields
+	 * @return
+	 */
+	public Field[] getOwnFields(Class clazz) {
+		Set<Field> allFields = new HashSet<Field>();
+		Field[] classFields = clazz.getDeclaredFields();
+		if (classFields != null)
+			for (int i = 0; i < classFields.length; i++)
+				allFields.add(classFields[i]);
+		
+		Field[] fieldArray = new Field[allFields.size()];
+		allFields.toArray(fieldArray);
+		return fieldArray;
+	}
+	
 	public String getReturnType(String className, String fieldName)
 	throws ClassNotFoundException, Exception {
 		return getReturnType(className, fieldName, false);
@@ -395,6 +414,58 @@ public class ClassCache implements InitializingBean{
 		return classAssociationsCache.get(qualClassName);
 	}
 
+	public List<String> getToAssociations(String className) {
+		//System.out.println("className--------------: "+className);
+		List<String> asscs = new ArrayList<String>();
+		String qualClassName = null;
+		if (className.indexOf(".") < 1) {
+			String packageName = getPkgNameForClass(className);
+			qualClassName = packageName + "." + className;
+		} else {
+			qualClassName = className;
+		}
+		//System.out.println("qualClassName--------------: "+qualClassName);
+		Iterator iter = classAssociationsCache.keySet().iterator();
+		while(iter.hasNext())
+		{
+			String keyName = (String)iter.next();
+			//System.out.println("keyName: "+keyName);
+			List<String> toAsscs =  classAssociationsCache.get(keyName);
+			for(String asscName : toAsscs)
+			{
+				//System.out.println("asscName: "+asscName);
+				String asscClassName = asscName;
+				String roleName = null;
+				if(asscName.indexOf("(") != -1)
+				{
+					asscClassName = asscName.substring(asscName.indexOf("(")+1, asscName.indexOf(")"));
+					roleName = asscName.substring(0, asscName.indexOf("(")).trim();
+					//System.out.println("roleName: "+roleName);
+				}
+				if(asscClassName.equals(qualClassName))
+				{
+					try
+					{
+						Field[] classFields = getOwnFields(getClassFromCache(keyName));
+						for (int i = 0; i < classFields.length; i++) {
+							String fName = classFields[i].getName();
+							//System.out.println("***** "+fName);
+							if(fName.equals(roleName))
+								asscs.add(keyName);
+						}
+					}
+					catch(Exception e)
+					{
+						continue;
+					}
+				}
+			}
+		}
+		//System.out.println("asscs: "+asscs);
+		return asscs;
+	}
+	
+	
 	public String getAssociationType(Class klass, String associationName)
 	throws Exception {
 		return getAssociationType(klass, associationName, false);
@@ -402,8 +473,8 @@ public class ClassCache implements InitializingBean{
 
 	public String getAssociationType(Class klass, String associationName, boolean includeParent)
 			throws Exception {
-		System.out.println("getAssociationType 2 "+klass.getName());
-		System.out.println("getAssociationType 2 "+associationName);
+		//System.out.println("getAssociationType 2 "+klass.getName());
+		//System.out.println("getAssociationType 2 "+associationName);
 		String type = getReturnType(klass.getName(), associationName, includeParent);
 		if (type.startsWith("class "))
 			type = type.substring(6).trim();
@@ -1134,6 +1205,18 @@ public class ClassCache implements InitializingBean{
 
 	public String getClassIdName(String className) {
 		return classIdCache.get(className);
+	}
+
+	public String getClassIdName(Class clazz, boolean includeParent) {
+			Class checkClass = clazz;
+			while(checkClass != null)
+			{
+				String classIdName = getClassIdName(checkClass);
+				if(classIdName != null)
+					return classIdName;
+				checkClass = checkClass.getSuperclass();
+			}
+			return null;
 	}
 
 	public void afterPropertiesSet() throws Exception {

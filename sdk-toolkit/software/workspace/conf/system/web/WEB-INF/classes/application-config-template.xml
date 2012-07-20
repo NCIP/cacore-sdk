@@ -22,6 +22,7 @@
 			<props>
 				<prop key="jsonOutputFormatter">jsonOutputFormatter.xsl</prop>
 				<prop key="resultOutputFormatter">resultOutputFormatter.xsl</prop>
+				<prop key="restfulResultOutputFormatter">restfulResultOutputFormatter.xsl</prop>
 				<prop key="rowCounter">@RESTFUL_PAGE_SIZE@</prop>
 				<prop key="securityEnabled">@SECURITY_ENABLED@</prop>
 				<prop key="enableISO21090DataTypes">@ENABLE_ISO21090_DATATYPES@</prop>

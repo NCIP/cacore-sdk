@@ -4,23 +4,22 @@ import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 import gov.nih.nci.system.applicationservice.WritableApplicationService;
 import gov.nih.nci.system.dao.orm.HibernateConfigurationHolder;
+import gov.nih.nci.system.query.SDKQueryResult;
 import gov.nih.nci.system.query.example.DeleteExampleQuery;
 import gov.nih.nci.system.query.example.InsertExampleQuery;
 import gov.nih.nci.system.query.example.UpdateExampleQuery;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
 import gov.nih.nci.system.query.hql.DeleteHQLQuery;
 import gov.nih.nci.system.util.ClassCache;
-import gov.nih.nci.system.util.SystemConstant;
 import gov.nih.nci.system.web.util.HTTPUtils;
-import gov.nih.nci.system.query.SDKQueryResult;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -36,25 +35,17 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
-import javax.xml.transform.Templates;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.stream.StreamSource;
-
-import org.springframework.beans.BeanUtils;
 
 import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.jdom.output.XMLOutputter;
-import org.jdom.transform.JDOMResult;
-import org.jdom.transform.JDOMSource;
-import org.mmbase.util.Encode;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 public class RESTfulResource {
 
-	public static Logger log = Logger.getLogger(HTTPQuery.class.getName());
+	public static Logger log = Logger
+			.getLogger(RESTfulResource.class.getName());
 	public static final String LESS_THAN = "<";
 	public static final String GREATER_THAN = ">";
 	public static final String NOT_EQUAL = "<>";
@@ -80,7 +71,7 @@ public class RESTfulResource {
 			jsonStyleSheet = systemProperties
 					.getProperty("jsonOutputFormatter");
 			classCache = (ClassCache) ctx.getBean("ClassCache");
-			applicationService = (ApplicationService)ctx
+			applicationService = (ApplicationService) ctx
 					.getBean("ApplicationServiceImpl");
 			try {
 				String pageCount = systemProperties.getProperty("rowCounter");
@@ -92,14 +83,15 @@ public class RESTfulResource {
 				pageSize = 10000;
 			}
 
-			String securityEnabled = (String)systemProperties.getProperty("securityEnabled");
-			secured = "yes".equalsIgnoreCase(securityEnabled) || "true".equalsIgnoreCase(securityEnabled);
-
+			String securityEnabled = (String) systemProperties
+					.getProperty("securityEnabled");
+			secured = "yes".equalsIgnoreCase(securityEnabled)
+					|| "true".equalsIgnoreCase(securityEnabled);
 
 			HibernateConfigurationHolder configurationHolder = (HibernateConfigurationHolder) ctx
 					.getBean("HibernateConfigHolder");
-//			httpUtils = new HTTPUtils(writableApplicationService, classCache,
-//					pageSize, configurationHolder);
+			// httpUtils = new HTTPUtils(writableApplicationService, classCache,
+			// pageSize, configurationHolder);
 		} catch (Exception e) {
 			log.error("Error in constructing REST resource: " + e.getMessage());
 			// e.printStackTrace();
@@ -108,7 +100,7 @@ public class RESTfulResource {
 
 	/**
 	 * Get the list of all searchable Fields for the class
-	 *
+	 * 
 	 * @param className
 	 * @return Field[] of all fields for the given class
 	 */
@@ -153,6 +145,8 @@ public class RESTfulResource {
 
 	protected void validateCriteria(Map matrixParams, List<Field> searchFields)
 			throws WebApplicationException {
+		System.out.println("matrixParams: "+matrixParams);
+		System.out.println("searchFields: "+searchFields);
 		if (matrixParams == null) {
 			ResponseBuilder builder = Response.status(Status.BAD_REQUEST);
 			builder.type("application/xml");
@@ -163,8 +157,7 @@ public class RESTfulResource {
 			buffer.append("<code>SEARCH_CRITERIA_1</code>");
 			buffer.append("<message>Search criteria is missing</message>");
 			buffer.append("<valid>");
-			for(Field field : searchFields)
-			{
+			for (Field field : searchFields) {
 				buffer.append("<attribute>");
 				buffer.append(field.getName());
 				buffer.append("</attribute>");
@@ -203,16 +196,14 @@ public class RESTfulResource {
 			buffer.append("<code>SEARCH_CRITERIA_2</code>");
 			buffer.append("<message>Invalid Search criteria</message>");
 			buffer.append("<valid>");
-			for(Field field : searchFields)
-			{
+			for (Field field : searchFields) {
 				buffer.append("<attribute>");
 				buffer.append(field.getName());
 				buffer.append("</attribute>");
 			}
 			buffer.append("</valid>");
 			buffer.append("<invalid>");
-			for (String attr : invalidAttrs)
-			{
+			for (String attr : invalidAttrs) {
 				attrs = attr + " " + attrs;
 				buffer.append("<attribute>");
 				buffer.append(attr);
@@ -226,267 +217,419 @@ public class RESTfulResource {
 		}
 	}
 
-	private String getAttributeName(String name)
-	{
-		if(name.indexOf(NOT_EQUAL) > 0)
+	private String getAttributeName(String name) {
+		if (name.indexOf(NOT_EQUAL) > 0)
 			return name.substring(0, name.indexOf(NOT_EQUAL));
-		else if(name.indexOf(GREATER_THAN) > 0)
+		else if (name.indexOf(GREATER_THAN) > 0)
 			return name.substring(0, name.indexOf(GREATER_THAN));
-		else if(name.indexOf(LESS_THAN) > 0)
+		else if (name.indexOf(LESS_THAN) > 0)
 			return name.substring(0, name.indexOf(LESS_THAN));
 		else
 			return name;
 	}
 
-	private String getAttributeValue(String name)
-	{
-		if(name.indexOf(NOT_EQUAL) >0)
-			return name.substring(name.indexOf(NOT_EQUAL)+2, name.length());
-		else if(name.indexOf(GREATER_THAN) > 0)
-			return name.substring(name.indexOf(GREATER_THAN)+1, name.length());
-		else if(name.indexOf(LESS_THAN) > 0)
-			return name.substring(name.indexOf(LESS_THAN)+1, name.length());
+	private String getAttributeValue(String name) {
+		if (name.indexOf(NOT_EQUAL) > 0)
+			return name.substring(name.indexOf(NOT_EQUAL) + 2, name.length());
+		else if (name.indexOf(GREATER_THAN) > 0)
+			return name
+					.substring(name.indexOf(GREATER_THAN) + 1, name.length());
+		else if (name.indexOf(LESS_THAN) > 0)
+			return name.substring(name.indexOf(LESS_THAN) + 1, name.length());
 		else
 			return name;
 	}
 
-	private String getAttributeOperator(String name)
-	{
-		if(name.indexOf(NOT_EQUAL) > 0)
+	private String getAttributeOperator(String name) {
+		if (name.indexOf(NOT_EQUAL) > 0)
 			return "<>";
-		else if(name.indexOf(GREATER_THAN) > 0)
+		else if (name.indexOf(GREATER_THAN) > 0)
 			return ">";
-		else if(name.indexOf(LESS_THAN) > 0)
+		else if (name.indexOf(LESS_THAN) > 0)
 			return "<";
 		else
 			return "=";
 	}
 
-
-	protected ResourceLink getSelfLink(UriInfo uriInfo)
-	{
-			String fullpath = uriInfo.getAbsolutePath().toString();
-			ResourceLink link = new ResourceLink("self", "application/xml", fullpath);
-			return link;
+	protected ResourceLink getSelfLink(UriInfo uriInfo) {
+		String fullpath = uriInfo.getAbsolutePath().toString();
+		ResourceLink link = new ResourceLink("self", "application/xml",
+				fullpath);
+		return link;
 	}
 
-	protected ResourceLink getNextLink(UriInfo uriInfo, int resultsetCount, int totalResults, int maxCountPerQuery)
-	{
-		//System.out.println("resultsetCount: "+resultsetCount);
-		//System.out.println("totalResults: "+totalResults);
-		//System.out.println("maxCountPerQuery: "+maxCountPerQuery);
-			if(resultsetCount == totalResults)
-				return null;
+	protected ResourceLink getNextLink(UriInfo uriInfo, int resultsetCount,
+			int totalResults, int maxCountPerQuery) {
+		// System.out.println("resultsetCount: "+resultsetCount);
+		// System.out.println("totalResults: "+totalResults);
+		// System.out.println("maxCountPerQuery: "+maxCountPerQuery);
+		if (resultsetCount == totalResults)
+			return null;
 
-			int startIndex = -1;
-			int batchSize = -1;
-			ResourceLink link = null;
-			String bStart = uriInfo.getQueryParameters().getFirst("start");
-			if (bStart != null)
-				startIndex = Integer.parseInt(bStart);
-
-			String bSize = uriInfo.getQueryParameters().getFirst("size");
-			if (bSize != null)
-			{
-				batchSize = Integer.parseInt(bSize);
-			}
-
-			String startStr = null;
-			String sizeStr = null;
-			int newStart = 0;
-			int newSize = maxCountPerQuery;
-
-			//No start is given
-			if(startIndex == -1)
-			{
-				newStart = resultsetCount+1;
-			}
-			else
-			{
-				if((startIndex + batchSize) > totalResults)
-					return null;
-
-				newStart = startIndex + resultsetCount;
-				if(newStart > totalResults)
-					return null;
-			}
-
-			//No start is given
-			if(batchSize == -1)
-			{
-				newSize = maxCountPerQuery;
-			}
-			else
-			{
-				if(batchSize > maxCountPerQuery)
-					newSize = maxCountPerQuery;
-				else
-					newSize = batchSize;
-			}
-
-
-			String fullpath = uriInfo.getAbsolutePath().toString();
-			String path = removeStartSize(uriInfo, fullpath);
-
-			String href = null;
-			if(path.indexOf("?") > 0)
-				href = path + "&start=" + newStart + "&size=" + newSize;
-			else
-				href = path + "?start=" + newStart + "&size=" + newSize;
-
-			link = new ResourceLink("next", "application/xml", href);
-			//System.out.println(link.toString());
-			return link;
-
-	}
-
-	protected ResourceLink getPreviousLink(UriInfo uriInfo, int resultsetCount, int totalResults, int maxCountPerQuery)
-	{
-			if(resultsetCount == totalResults)
-				return null;
-
-			int startIndex = -1;
-			int batchSize = -1;
-			ResourceLink link = null;
-			String bStart = uriInfo.getQueryParameters().getFirst("start");
-			if (bStart != null)
-				startIndex = Integer.parseInt(bStart);
-
-			String bSize = uriInfo.getQueryParameters().getFirst("size");
-			if (bSize != null)
-			{
-				batchSize = Integer.parseInt(bSize);
-			}
-
-			String startStr = null;
-			String sizeStr = null;
-			int newStart = 0;
-			int newSize = maxCountPerQuery;
-
-			//No start is given
-			if(startIndex == -1)
-			{
-				return null;
-			}
-			else
-			{
-				if(startIndex >= resultsetCount)
-				{
-					newStart = startIndex - resultsetCount;
-				}
-				else
-					return null;
-
-			}
-			if(newStart < 0)
-				newStart = 0;
-
-			//No start is given
-			if(batchSize == -1)
-			{
-				newSize = maxCountPerQuery;
-			}
-			else
-			{
-				if(batchSize > maxCountPerQuery)
-					newSize = maxCountPerQuery;
-				else
-					newSize = batchSize;
-			}
-
-
-			String fullpath = uriInfo.getAbsolutePath().toString();
-			String path = removeStartSize(uriInfo, fullpath);
-
-			String href = null;
-			if(path.indexOf("?") > 0)
-				href = path + "&start=" + newStart + "&size=" + newSize;
-			else
-				href = path + "?start=" + newStart + "&size=" + newSize;
-
-			link = new ResourceLink("previous", "application/xml", href);
-			//System.out.println(link.toString());
-			return link;
-
-	}
-
-	private String removeStartSize(UriInfo uriInfo, String fullpath)
-	{
-			String bStart = uriInfo.getQueryParameters().getFirst("start");
-			String startStr = null;
-			String sizeStr = null;
-			String preHref = null;
-			if (bStart != null)
-				startStr = "start="+bStart;
-
-			String bSize = uriInfo.getQueryParameters().getFirst("size");
-			if (bSize != null)
-				sizeStr = "size="+bSize;
-
-			if(startStr != null && fullpath.indexOf(startStr)>0)
-			{
-				String preHref1 = fullpath.substring(0, fullpath.indexOf(startStr));
-				//System.out.println("preHref1: "+preHref1);
-				if(preHref1.endsWith("&"))
-					preHref1 = preHref1.substring(0, preHref1.length() -1);
-
-				String preHref2 = fullpath.substring(fullpath.indexOf(startStr)+startStr.length(), fullpath.length());
-				//System.out.println("preHref2: "+preHref2);
-				preHref = preHref1 + preHref2;
-				//System.out.println("preHref3: "+preHref1);
-
-			}
-			else
-				preHref = fullpath;
-
-
-			//System.out.println("preHref: "+preHref);
-
-			if(sizeStr != null && preHref.indexOf(sizeStr)>0)
-			{
-				String preHref1 = preHref.substring(0, preHref.indexOf(sizeStr));
-				//System.out.println("preHref4: "+preHref1);
-				if(preHref1.endsWith("&"))
-					preHref1 = preHref1.substring(0, preHref1.length() -1);
-
-				String preHref2 = fullpath.substring(preHref.indexOf(sizeStr)+sizeStr.length(), preHref.length());
-				//System.out.println("preHref5: "+preHref2);
-				preHref = preHref1 + preHref2;
-				//System.out.println("preHref6: "+preHref1);
-
-			}
-			else
-			{
-				if(preHref == null)
-					preHref = fullpath;
-
-			}
-
-			//System.out.println("preHref****: "+preHref);
-			return preHref;
-
-
-	}
-
-	protected HQLCriteria buildHQLCriteria(String className,
-			List<Field> searchFields, Map matrixParams,
-			UriInfo uriInfo) {
 		int startIndex = -1;
-		int totalSize = -1;
-		//System.out.println("uriInfo.getPathParameters(): "+uriInfo.getPathParameters());
-		//System.out.println("uriInfo.getQueryParameters(): "+uriInfo.getQueryParameters());
+		int batchSize = -1;
+		ResourceLink link = null;
 		String bStart = uriInfo.getQueryParameters().getFirst("start");
-		//System.out.println("bStart: "+bStart);
 		if (bStart != null)
 			startIndex = Integer.parseInt(bStart);
 
 		String bSize = uriInfo.getQueryParameters().getFirst("size");
-		//System.out.println("bSize: "+bSize);
+		if (bSize != null) {
+			batchSize = Integer.parseInt(bSize);
+		}
+
+		String startStr = null;
+		String sizeStr = null;
+		int newStart = 0;
+		int newSize = maxCountPerQuery;
+
+		// No start is given
+		if (startIndex == -1) {
+			newStart = resultsetCount + 1;
+		} else {
+			if ((startIndex + batchSize) > totalResults)
+				return null;
+
+			newStart = startIndex + resultsetCount;
+			if (newStart > totalResults)
+				return null;
+		}
+
+		// No start is given
+		if (batchSize == -1) {
+			newSize = maxCountPerQuery;
+		} else {
+			if (batchSize > maxCountPerQuery)
+				newSize = maxCountPerQuery;
+			else
+				newSize = batchSize;
+		}
+
+		String fullpath = uriInfo.getAbsolutePath().toString();
+		String path = removeStartSize(uriInfo, fullpath);
+
+		String href = null;
+		if (path.indexOf("?") > 0)
+			href = path + "&start=" + newStart + "&size=" + newSize;
+		else
+			href = path + "?start=" + newStart + "&size=" + newSize;
+
+		link = new ResourceLink("next", "application/xml", href);
+		// System.out.println(link.toString());
+		return link;
+
+	}
+
+	protected ResourceLink getPreviousLink(UriInfo uriInfo, int resultsetCount,
+			int totalResults, int maxCountPerQuery) {
+		if (resultsetCount == totalResults)
+			return null;
+
+		int startIndex = -1;
+		int batchSize = -1;
+		ResourceLink link = null;
+		String bStart = uriInfo.getQueryParameters().getFirst("start");
+		if (bStart != null)
+			startIndex = Integer.parseInt(bStart);
+
+		String bSize = uriInfo.getQueryParameters().getFirst("size");
+		if (bSize != null) {
+			batchSize = Integer.parseInt(bSize);
+		}
+
+		String startStr = null;
+		String sizeStr = null;
+		int newStart = 0;
+		int newSize = maxCountPerQuery;
+
+		// No start is given
+		if (startIndex == -1) {
+			return null;
+		} else {
+			if (startIndex >= resultsetCount) {
+				newStart = startIndex - resultsetCount;
+			} else
+				return null;
+
+		}
+		if (newStart < 0)
+			newStart = 0;
+
+		// No start is given
+		if (batchSize == -1) {
+			newSize = maxCountPerQuery;
+		} else {
+			if (batchSize > maxCountPerQuery)
+				newSize = maxCountPerQuery;
+			else
+				newSize = batchSize;
+		}
+
+		String fullpath = uriInfo.getAbsolutePath().toString();
+		String path = removeStartSize(uriInfo, fullpath);
+
+		String href = null;
+		if (path.indexOf("?") > 0)
+			href = path + "&start=" + newStart + "&size=" + newSize;
+		else
+			href = path + "?start=" + newStart + "&size=" + newSize;
+
+		link = new ResourceLink("previous", "application/xml", href);
+		// System.out.println(link.toString());
+		return link;
+
+	}
+
+	private String removeStartSize(UriInfo uriInfo, String fullpath) {
+		String bStart = uriInfo.getQueryParameters().getFirst("start");
+		String startStr = null;
+		String sizeStr = null;
+		String preHref = null;
+		if (bStart != null)
+			startStr = "start=" + bStart;
+
+		String bSize = uriInfo.getQueryParameters().getFirst("size");
+		if (bSize != null)
+			sizeStr = "size=" + bSize;
+
+		if (startStr != null && fullpath.indexOf(startStr) > 0) {
+			String preHref1 = fullpath.substring(0, fullpath.indexOf(startStr));
+			// System.out.println("preHref1: "+preHref1);
+			if (preHref1.endsWith("&"))
+				preHref1 = preHref1.substring(0, preHref1.length() - 1);
+
+			String preHref2 = fullpath.substring(fullpath.indexOf(startStr)
+					+ startStr.length(), fullpath.length());
+			// System.out.println("preHref2: "+preHref2);
+			preHref = preHref1 + preHref2;
+			// System.out.println("preHref3: "+preHref1);
+
+		} else
+			preHref = fullpath;
+
+		// System.out.println("preHref: "+preHref);
+
+		if (sizeStr != null && preHref.indexOf(sizeStr) > 0) {
+			String preHref1 = preHref.substring(0, preHref.indexOf(sizeStr));
+			// System.out.println("preHref4: "+preHref1);
+			if (preHref1.endsWith("&"))
+				preHref1 = preHref1.substring(0, preHref1.length() - 1);
+
+			String preHref2 = fullpath.substring(preHref.indexOf(sizeStr)
+					+ sizeStr.length(), preHref.length());
+			// System.out.println("preHref5: "+preHref2);
+			preHref = preHref1 + preHref2;
+			// System.out.println("preHref6: "+preHref1);
+
+		} else {
+			if (preHref == null)
+				preHref = fullpath;
+
+		}
+
+		// System.out.println("preHref****: "+preHref);
+		return preHref;
+
+	}
+
+	protected HQLCriteria buildHQLCriteria(String className,
+			List<Field> searchFields, Map matrixParams, UriInfo uriInfo) {
+		int startIndex = -1;
+		int totalSize = -1;
+		 System.out.println("uriInfo.getPathParameters(): "+uriInfo.getPathParameters());
+		 System.out.println("uriInfo.getQueryParameters(): "+uriInfo.getQueryParameters());
+		String bStart = uriInfo.getQueryParameters().getFirst("start");
+		 System.out.println("bStart: "+bStart);
+		if (bStart != null)
+			startIndex = Integer.parseInt(bStart);
+
+		String bSize = uriInfo.getQueryParameters().getFirst("size");
+		System.out.println("bSize: "+bSize);
 		if (bSize != null)
 			totalSize = Integer.parseInt(bSize);
 
-		//System.out.println("startIndex: "+startIndex);
-		//System.out.println("totalSize: "+totalSize);
+		// System.out.println("startIndex: "+startIndex);
+		// System.out.println("totalSize: "+totalSize);
+
+		HQLCriteria hcriteria = null;
+		Map<String, List> whereMap = buildWhereCriteria(className,
+				searchFields, matrixParams, uriInfo, null);
+		String whereCriteria = whereMap.keySet().iterator().next();
+		List params = whereMap.get(whereCriteria);
+		if (whereCriteria.length() > 0)
+			hcriteria = new HQLCriteria("from " + className + " a "
+					+ " where "+whereCriteria, params, startIndex - 1, totalSize);
+		else
+			hcriteria = new HQLCriteria("from " + className + " a ", params,
+					startIndex - 1, totalSize);
+
+		return hcriteria;
+	}
+
+	public HQLCriteria getAssociationCriteria(Class sourceClass,
+			String associationName, int start, int size,
+			List<Field> searchFields, Map matrixParams, UriInfo uriInfo)
+			throws WebApplicationException {
+
+		try {
+			String assocType = "";
+			try {
+				assocType = classCache.getAssociationType(sourceClass,
+						associationName);
+			} catch (Exception e) {
+				throw new ApplicationException(e);
+			}
+			String hql = "";
+			boolean isCollection = classCache.isCollection(
+					sourceClass.getName(), associationName);
+			String idName = classCache.getClassIdName(sourceClass);
+			String assosIdName = classCache.getClassIdName(assocType);
+
+
+			String whereCriteria = null;
+			List params = null;
+
+			if (isCollection) {
+				Map<String, List> whereMap = buildWhereCriteria(sourceClass.getName(),
+						searchFields, matrixParams, uriInfo, "src");
+
+				if(whereMap.size() == 0)
+				{
+					ResponseBuilder builder = Response.status(Status.NOT_FOUND);
+					builder.type("application/xml");
+					builder.entity("<message>Invalid Criteria</message>");
+					throw new WebApplicationException(builder.build());
+				}
+
+				whereCriteria = whereMap.keySet().iterator().next();
+				params = whereMap.get(whereCriteria);
+
+				hql = "select dest from " + sourceClass.getName()
+						+ " as src inner join src." + associationName
+						+ " dest where " + whereCriteria;
+				System.out.println("hql: collection: "+hql);
+			} else {
+				Map<String, List> whereMap = buildWhereCriteria(sourceClass.getName(),
+						searchFields, matrixParams, uriInfo, "src");
+
+				whereCriteria = whereMap.keySet().iterator().next();
+				params = whereMap.get(whereCriteria);
+
+				if(whereMap.size() == 0)
+				{
+					ResponseBuilder builder = Response.status(Status.NOT_FOUND);
+					builder.type("application/xml");
+					builder.entity("<message>Invalid Criteria</message>");
+					throw new WebApplicationException(builder.build());
+				}
+				
+				hql = "select dest from " + assocType + " as dest,"
+						+ sourceClass.getName() + " as src where " + whereCriteria + " and src."
+						+ associationName + "." + idName + "=dest."
+						+ assosIdName;
+				System.out.println("hql2: "+hql);
+			}
+
+			// System.out.println("hql: "+hql);
+
+			//Field[] fields = classCache.getAllFields(sourceClass);
+			//Field idField = getIdField(fields, idName);
+			//params.add(convertValues(idField, id));
+
+			HQLCriteria hqlCriteria = new HQLCriteria(hql, params, start, size);
+			return hqlCriteria;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			ResponseBuilder builder = Response
+					.status(Status.INTERNAL_SERVER_ERROR);
+			StringBuffer buffer = new StringBuffer();
+			buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+			buffer.append("<response>");
+			buffer.append("<type>ERROR</type>");
+			buffer.append("<code>INTERNAL_ERROR_3</code>");
+			buffer.append("<message>Failed to construct criteria: "
+					+ ex.getMessage() + "</message>");
+			buffer.append("</response>");
+			builder.entity(buffer.toString());
+			throw new WebApplicationException(builder.build());
+		}
+
+	}
+	
+	public HQLCriteria getAssociationCriteria(Class sourceClass,
+			String associationName, String id, int start, int size)
+			throws WebApplicationException {
+
+		try {
+			String assocType = "";
+			try {
+				assocType = classCache.getAssociationType(sourceClass,
+						associationName);
+			} catch (Exception e) {
+				throw new ApplicationException(e);
+			}
+			String hql = "";
+			boolean isCollection = classCache.isCollection(
+					sourceClass.getName(), associationName);
+			String idName = classCache.getClassIdName(sourceClass);
+			String assosIdName = classCache.getClassIdName(assocType);
+
+			if (isCollection) {
+				hql = "select dest from " + sourceClass.getName()
+						+ " as src inner join src." + associationName
+						+ " dest where dest." + assosIdName + " = ?";
+			} else {
+				hql = "select dest from " + assocType + " as dest,"
+						+ sourceClass.getName() + " as src where src."
+						+ associationName + "." + idName + "=dest."
+						+ assosIdName + " and dest." + assosIdName + " = ?";
+			}
+
+			// System.out.println("hql: "+hql);
+
+			Field[] fields = classCache.getAllFields(sourceClass);
+			Field idField = getIdField(fields, idName);
+			List params = new ArrayList(1);
+			params.add(convertValues(idField, id));
+
+			HQLCriteria hqlCriteria = new HQLCriteria(hql, params, start, size);
+			return hqlCriteria;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			ResponseBuilder builder = Response
+					.status(Status.INTERNAL_SERVER_ERROR);
+			StringBuffer buffer = new StringBuffer();
+			buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+			buffer.append("<response>");
+			buffer.append("<type>ERROR</type>");
+			buffer.append("<code>INTERNAL_ERROR_4</code>");
+			buffer.append("<message>Failed to construct criteria: "
+					+ ex.getMessage() + "</message>");
+			buffer.append("</response>");
+			builder.entity(buffer.toString());
+			throw new WebApplicationException(builder.build());
+		}
+
+	}
+
+	protected Map<String, List> buildWhereCriteria(String className,
+			List<Field> searchFields, Map matrixParams, UriInfo uriInfo, String alias) {
+		int startIndex = -1;
+		int totalSize = -1;
+		// System.out.println("uriInfo.getPathParameters(): "+uriInfo.getPathParameters());
+		// System.out.println("uriInfo.getQueryParameters(): "+uriInfo.getQueryParameters());
+		String bStart = uriInfo.getQueryParameters().getFirst("start");
+		// System.out.println("bStart: "+bStart);
+		if (bStart != null)
+			startIndex = Integer.parseInt(bStart);
+
+		String bSize = uriInfo.getQueryParameters().getFirst("size");
+		// System.out.println("bSize: "+bSize);
+		if (bSize != null)
+			totalSize = Integer.parseInt(bSize);
+
+		// System.out.println("startIndex: "+startIndex);
+		// System.out.println("totalSize: "+totalSize);
 
 		String whereCriteria = "";
 		List criteria = new ArrayList();
@@ -500,19 +643,17 @@ public class RESTfulResource {
 			String attrName = getAttributeName(fullName);
 			Object attrVal = null;
 			String operator = "=";
-			if(!fullName.equals(attrName))
-			{
+			if (!fullName.equals(attrName)) {
 				attrVal = getAttributeValue(fullName);
 				operator = getAttributeOperator(fullName);
-			}
-			else
+			} else
 				attrVal = matrixParams.get(fullName);
 
-			String attrValue=null;
-			if(attrVal instanceof java.util.ArrayList)
-				attrValue = (String)((ArrayList)attrVal).get(0);
+			String attrValue = null;
+			if (attrVal instanceof java.util.ArrayList)
+				attrValue = (String) ((ArrayList) attrVal).get(0);
 			else
-				attrValue = (String)attrVal;
+				attrValue = (String) attrVal;
 
 			Field field = null;
 			Iterator fIter = searchFields.iterator();
@@ -526,34 +667,40 @@ public class RESTfulResource {
 
 			if (found) {
 				if (field.getType().getName().equals("java.lang.String")) {
-					if((attrValue.indexOf("*") != -1) || (attrValue.indexOf("%") != -1))
+					if ((attrValue.indexOf("*") != -1)
+							|| (attrValue.indexOf("%") != -1)) {
+						// params.add(attrValue.replace("*", "%"));
+						criteria.add(((alias != null)? alias+"." : "") +attrName + " like '"
+								+ attrValue.replace("*", "%") + "'");
+					} else {
+						params.add(attrValue);
+						criteria.add(((alias != null)? alias+"." : "")+attrName + operator + "? ");
+					}
+				} else {
+					if(attrValue.equals("*"))
 					{
-						//params.add(attrValue.replace("*", "%"));
-						criteria.add(attrName + " like '"+attrValue.replace("*", "%")+"'");
+						criteria.add(((alias != null)? alias+"." : "")+attrName + " like '%' ");
 					}
 					else
 					{
-						params.add(attrValue);
-						criteria.add(attrName + operator+"? ");
-					}
-				} else {
 					Object paramValue = convertValues(field, attrValue);
 					if (paramValue != null) {
 
 						params.add(paramValue);
-						criteria.add(attrName + operator+"? ");
+						criteria.add(((alias != null)? alias+"." : "")+attrName + operator + "? ");
 					} else {
-						  StringBuffer buffer = new StringBuffer();
-						  ResponseBuilder builder = Response
-						  .status(Status.INTERNAL_SERVER_ERROR);
-						  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-						  buffer.append("<response>");
-						  buffer.append("<type>ERROR</type>");
-						  buffer.append("<code>INTERNAL_ERROR_2</code>");
-						  buffer.append("<message>Failed to construct criteria</message>");
-						  buffer.append("</response>");
-						  builder.entity(buffer.toString());
-						  throw new WebApplicationException(builder.build());
+						StringBuffer buffer = new StringBuffer();
+						ResponseBuilder builder = Response
+								.status(Status.INTERNAL_SERVER_ERROR);
+						buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+						buffer.append("<response>");
+						buffer.append("<type>ERROR</type>");
+						buffer.append("<code>INTERNAL_ERROR_2</code>");
+						buffer.append("<message>Failed to construct criteria</message>");
+						buffer.append("</response>");
+						builder.entity(buffer.toString());
+						throw new WebApplicationException(builder.build());
+					}
 					}
 				}
 			} else {
@@ -561,9 +708,8 @@ public class RESTfulResource {
 			}
 		}
 
-		if (criteria.size() > 0)
-			whereCriteria = " where ";
-		else {
+		if (criteria.size() == 0)
+		{
 			ResponseBuilder builder = Response.status(Status.NOT_FOUND);
 			builder.type("application/xml");
 			builder.entity("<message>Invalid Criteria</message>");
@@ -579,22 +725,14 @@ public class RESTfulResource {
 				whereCriteria = whereCriteria + " and ";
 		}
 
-		HQLCriteria hcriteria = null;
-		if (whereCriteria.length() > 0)
-			hcriteria = new HQLCriteria(
-					"from "+ className +" a "
-							+ whereCriteria, params, startIndex-1, totalSize);
-		else
-			hcriteria = new HQLCriteria(
-					"from " + className + " a ",
-					params, startIndex-1, totalSize);
-
-		return hcriteria;
+		Map returnMap = new HashMap();
+		returnMap.put(whereCriteria, params);
+		return returnMap;
 	}
 
 	/**
 	 * Converts the specified value to the field class type
-	 *
+	 * 
 	 * @param field
 	 *            Specifies the field
 	 * @param value
@@ -603,7 +741,8 @@ public class RESTfulResource {
 	 * @throws Exception
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public Object convertValues(Field field, Object value) throws WebApplicationException {
+	public Object convertValues(Field field, Object value)
+			throws WebApplicationException {
 
 		String fieldType = field.getType().getName();
 		String valueType = value.getClass().getName();
@@ -647,87 +786,37 @@ public class RESTfulResource {
 					Class enumKlass = Class.forName(fieldType);
 					convertedValue = Enum.valueOf(enumKlass, (String) value);
 				}
+			} else if (fieldType.equals("gov.nih.nci.iso21090.Ii")) {
+				if (valueType.equals("java.lang.String")) {
+					convertedValue = new gov.nih.nci.iso21090.Ii();
+					((gov.nih.nci.iso21090.Ii) convertedValue)
+							.setExtension((String) value);
+				}
 			} else {
 				throw new Exception("type mismatch - " + valueType);
 			}
 
 		} catch (Exception ex) {
-			  String msg = "Type mismatch " + field.getName() + " is of type - "
+			String msg = "Type mismatch " + field.getName() + " is of type - "
 					+ fieldType + " \n " + ex.getMessage();
-			 ex.printStackTrace();
-			  log.error("ERROR : " + msg);
-			  ResponseBuilder builder = Response
-			  .status(Status.INTERNAL_SERVER_ERROR);
-			  StringBuffer buffer = new StringBuffer();
-			  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-			  buffer.append("<response>");
-			  buffer.append("<type>ERROR</type>");
-			  buffer.append("<code>INTERNAL_ERROR_3</code>");
-			  buffer.append("<message>Failed to construct criteria: "+ msg +"</message>");
-			  buffer.append("</response>");
-			  builder.entity(buffer.toString());
-			  throw new WebApplicationException(builder.build());
+			ex.printStackTrace();
+			log.error("ERROR : " + msg);
+			ResponseBuilder builder = Response
+					.status(Status.INTERNAL_SERVER_ERROR);
+			StringBuffer buffer = new StringBuffer();
+			buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+			buffer.append("<response>");
+			buffer.append("<type>ERROR</type>");
+			buffer.append("<code>INTERNAL_ERROR_5</code>");
+			buffer.append("<message>Failed to construct criteria: " + msg
+					+ "</message>");
+			buffer.append("</response>");
+			builder.entity(buffer.toString());
+			throw new WebApplicationException(builder.build());
 		}
 
 		return convertedValue;
 	}
-
-
-	public HQLCriteria getAssociationCriteria(Class sourceClass,
-									String associationName,
-									String id,
-									int start,
-									int size) throws WebApplicationException {
-
-		try
-		{
-			String assocType = "";
-			try{
-				assocType = classCache.getAssociationType(sourceClass,associationName);
-			}catch(Exception e)
-			{
-				throw new ApplicationException(e);
-			}
-			String hql = "";
-			boolean isCollection = classCache.isCollection(sourceClass.getName(), associationName);
-			String idName = classCache.getClassIdName(sourceClass);
-			String assosIdName = classCache.getClassIdName(assocType);
-
-			if(isCollection)
-			{
-				hql = "select dest from "+sourceClass.getName()+" as src inner join src."+associationName+" dest where dest."+assosIdName+" = ?";
-			}
-			else
-			{
-				hql = "select dest from "+assocType+" as dest,"+sourceClass.getName()+" as src where src."+associationName+"."+idName+"=dest."+assosIdName+" and dest."+assosIdName+" = ?";
-			}
-
-	//System.out.println("hql: "+hql);
-
-			Field[] fields = classCache.getAllFields(sourceClass);
-			Field idField = getIdField(fields,idName);
-			List params = new ArrayList(1);
-			params.add(convertValues(idField, id));
-
-			HQLCriteria hqlCriteria = new HQLCriteria(hql, params, start, size);
-			return hqlCriteria;
-		} catch (Exception ex) {
-			 ex.printStackTrace();
-			  ResponseBuilder builder = Response
-			  .status(Status.INTERNAL_SERVER_ERROR);
-			  StringBuffer buffer = new StringBuffer();
-			  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-			  buffer.append("<response>");
-			  buffer.append("<type>ERROR</type>");
-			  buffer.append("<code>INTERNAL_ERROR_3</code>");
-			  buffer.append("<message>Failed to construct criteria: "+ ex.getMessage() +"</message>");
-			  buffer.append("</response>");
-			  builder.entity(buffer.toString());
-			  throw new WebApplicationException(builder.build());
-		}
-
-	}
-
 
 	protected ApplicationService getApplicationService() {
 		return applicationService;
@@ -735,11 +824,12 @@ public class RESTfulResource {
 
 	public Object save(final Object obj) throws WebApplicationException {
 		try {
-			//final InsertExampleQuery sdkQuery = new InsertExampleQuery(obj);
-			//writableApplicationService.executeQuery(sdkQuery);
+			// final InsertExampleQuery sdkQuery = new InsertExampleQuery(obj);
+			// writableApplicationService.executeQuery(sdkQuery);
 			final InsertExampleQuery sdkQuery = new InsertExampleQuery(obj);
 			sdkQuery.setCommit(true);
-			SDKQueryResult queryResult = writableApplicationService.executeQuery(sdkQuery);
+			SDKQueryResult queryResult = ((WritableApplicationService)applicationService)
+					.executeQuery(sdkQuery);
 			return queryResult.getObjectResult();
 		} catch (Exception e) {
 			log.error("Error in Saving REST resource: " + e.getMessage());
@@ -755,15 +845,15 @@ public class RESTfulResource {
 	public void update(Object obj) throws WebApplicationException {
 		try {
 			System.out.println("in update................");
-			//final UpdateExampleQuery sdkQuery = new UpdateExampleQuery(obj);
-			//writableApplicationService.executeQuery(sdkQuery);
+			// final UpdateExampleQuery sdkQuery = new UpdateExampleQuery(obj);
+			// writableApplicationService.executeQuery(sdkQuery);
 			final UpdateExampleQuery sdkQuery = new UpdateExampleQuery(obj);
 			sdkQuery.setCommit(true);
 			new BaseUtilWrapper() {
 
 				@Override
 				public List execute() throws Exception {
-					writableApplicationService.executeQuery(sdkQuery);
+					((WritableApplicationService)applicationService).executeQuery(sdkQuery);
 					return null;
 				}
 			}.executeLogic();
@@ -782,15 +872,15 @@ public class RESTfulResource {
 	public void delete(Object obj) throws WebApplicationException {
 		try {
 			System.out.println("in delete................");
-			//final DeleteExampleQuery sdkQuery = new DeleteExampleQuery(obj);
-			//writableApplicationService.executeQuery(sdkQuery);
+			// final DeleteExampleQuery sdkQuery = new DeleteExampleQuery(obj);
+			// writableApplicationService.executeQuery(sdkQuery);
 			final DeleteExampleQuery sdkQuery = new DeleteExampleQuery(obj);
 			sdkQuery.setCommit(true);
 			new BaseUtilWrapper() {
 
 				@Override
 				public List execute() throws Exception {
-					writableApplicationService.executeQuery(sdkQuery);
+					((WritableApplicationService)applicationService).executeQuery(sdkQuery);
 					return null;
 				}
 			}.executeLogic();
@@ -809,7 +899,7 @@ public class RESTfulResource {
 	public void delete(DeleteHQLQuery query) throws WebApplicationException {
 		try {
 			System.out.println("in delete.......DeleteHQLQuery query.........");
-			writableApplicationService.executeQuery(query);
+			((WritableApplicationService)applicationService).executeQuery(query);
 		} catch (ApplicationException e) {
 			e.printStackTrace();
 			log.error("Error in Updating REST resource: " + e.getMessage());
@@ -873,10 +963,9 @@ public class RESTfulResource {
 		}
 	}
 
-
 	/**
 	 * Generates an HTML Error message based upon a given Exception
-	 *
+	 * 
 	 * @param Exception
 	 *            The exception that should be used to generate an HTML error
 	 *            message
@@ -912,7 +1001,7 @@ public class RESTfulResource {
 
 	/**
 	 * Generates an HTML Error message based upon a given Exception
-	 *
+	 * 
 	 * @param Exception
 	 *            The exception that should be used to generate an HTML error
 	 *            message
@@ -965,7 +1054,7 @@ public class RESTfulResource {
 	/**
 	 * Generates an HTML Document for a given XML document with the given
 	 * stylesheet specification
-	 *
+	 * 
 	 * @param doc
 	 *            Specifies the XML document
 	 * @param styleSheet
@@ -988,10 +1077,9 @@ public class RESTfulResource {
 		}
 	}
 
-
 	/**
 	 * Returns the query syntax
-	 *
+	 * 
 	 * @return
 	 */
 	protected String getQuerySyntax() {
@@ -1008,11 +1096,11 @@ public class RESTfulResource {
 
 	}
 
-	private Field getIdField(Field[] fields, String idName) throws Exception{
+	private Field getIdField(Field[] fields, String idName) throws Exception {
 		Field id = null;
-		for(int i=0; i<fields.length;i++){
-			if(fields[i].getName().equalsIgnoreCase(idName)){
-				if(!this.locateClass(fields[i].getType().getName())){
+		for (int i = 0; i < fields.length; i++) {
+			if (fields[i].getName().equalsIgnoreCase(idName)) {
+				if (!this.locateClass(fields[i].getType().getName())) {
 					id = fields[i];
 					break;
 				}
@@ -1021,14 +1109,14 @@ public class RESTfulResource {
 		return id;
 	}
 
-	public boolean locateClass(String className){
-		//To make sure class is not a proxy generated by CGLIB
-		if(className.indexOf("$")>1)
+	public boolean locateClass(String className) {
+		// To make sure class is not a proxy generated by CGLIB
+		if (className.indexOf("$") > 1)
 			className = className.substring(0, className.indexOf("$"));
 
 		try {
 			classCache.getClassFromCache(className);
-		} catch(ClassNotFoundException e){
+		} catch (ClassNotFoundException e) {
 			return false;
 		}
 

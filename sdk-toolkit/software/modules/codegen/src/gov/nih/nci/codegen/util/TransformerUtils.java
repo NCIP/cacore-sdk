@@ -1207,6 +1207,49 @@ public class TransformerUtils
 			throw new GenerationException("Could not figureout this end");
 	}
 
+	public UMLAssociationEnd getThisEnd(UMLClass klass, List<UMLAssociationEnd>assocEnds, boolean includeParents) throws GenerationException
+	{
+		UMLAssociationEnd end1 = assocEnds.get(0);
+		UMLAssociationEnd end2 = assocEnds.get(1);
+		UMLClass parent = klass;
+		while(parent != null)
+		{
+			if(end1.getUMLElement().equals(parent))
+				return end1;
+			else if(end2.getUMLElement().equals(parent))
+				return end2;
+			else if(includeParents)
+			{
+				parent = getSuperClass(parent);
+			}
+			else
+				throw new GenerationException("Could not figureout this end");
+		}
+		throw new GenerationException("Could not figureout this end");
+	}
+
+	public UMLAssociationEnd getOtherEnd(UMLClass klass, List<UMLAssociationEnd>assocEnds, boolean includeParents) throws GenerationException
+	{
+		UMLAssociationEnd end1 = assocEnds.get(0);
+		UMLAssociationEnd end2 = assocEnds.get(1);
+		
+		UMLClass parent = klass;
+		while(parent != null)
+		{
+			if(end1.getUMLElement().equals(parent))
+				return end2;
+			else if(end2.getUMLElement().equals(parent))
+				return end1;
+			else if(includeParents)
+			{
+				parent = getSuperClass(parent);
+			}
+			else
+				throw new GenerationException("Could not figureout other end");
+		}
+		throw new GenerationException("Could not figureout this end");
+	}
+
 	public UMLAssociationEnd getOtherEnd(UMLClass klass, List<UMLAssociationEnd>assocEnds) throws GenerationException
 	{
 		UMLAssociationEnd end1 = assocEnds.get(0);
@@ -3312,8 +3355,8 @@ public class TransformerUtils
 
 	public boolean isValidForRESTMatrixParam(UMLClass klass)
 	{
-		if(isISO21090Enabled(klass))
-			return false;
+		//if(isISO21090Enabled(klass))
+		//	return false;
 		
 		for(UMLAttribute attr: klass.getAttributes())
 		{

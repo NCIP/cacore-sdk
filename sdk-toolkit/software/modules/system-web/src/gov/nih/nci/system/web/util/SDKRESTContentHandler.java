@@ -263,7 +263,13 @@ public class SDKRESTContentHandler implements MessageBodyReader,
 		{
 			for(ResourceLink link : collectionLinks)
 			{
-				httpQuery.addContent(link.toString());
+				Element linkElement = new Element("link");
+				linkElement.setAttribute("ref", link.getRelationship());
+				linkElement.setAttribute("type", link.getType());
+				linkElement.setAttribute("href", link.getHref());
+				//linkElement.setText(link.toString());
+				httpQuery.addContent(linkElement);				
+				//httpQuery.addContent(link.toString());
 			}
 		}
 
@@ -272,7 +278,14 @@ public class SDKRESTContentHandler implements MessageBodyReader,
 			obj = proxy.get(i);
 			if(obj instanceof ResourceLink)
 			{
-				httpQuery.addContent(((ResourceLink)obj).toString());
+				ResourceLink link = (ResourceLink)obj;
+				Element linkElement = new Element("link");
+				linkElement.setAttribute("ref", link.getRelationship());
+				linkElement.setAttribute("type", link.getType());
+				linkElement.setAttribute("href", link.getHref());
+				//linkElement.setText(link.toString());
+				httpQuery.addContent(linkElement);				
+				//httpQuery.addContent(((ResourceLink)obj).toString());
 				continue;
 			}
 

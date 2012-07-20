@@ -323,6 +323,8 @@ public class HTTPQuery extends HttpServlet {
 	public void printDocument(Document doc, String styleSheet,
 			OutputStream out, HTTPUtils httpUtils) throws Exception {
 		try {
+			System.out.println("styleSheet: "+styleSheet);
+			System.out.println("doc: "+doc.toString());
 			InputStream styleIn = Thread.currentThread()
 					.getContextClassLoader().getResourceAsStream(styleSheet);
 			if (styleIn != null) {
