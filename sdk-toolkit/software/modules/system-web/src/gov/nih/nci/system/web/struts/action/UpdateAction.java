@@ -18,6 +18,7 @@ import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.log4j.Logger;
 
 import org.apache.struts2.ServletActionContext;
+import org.jdom.Element;
 
 public class UpdateAction extends RestQuery {
 
@@ -73,44 +74,48 @@ public class UpdateAction extends RestQuery {
 			Object instance = prepareObject(request);
 			String url = request.getRequestURL().toString();
 			System.out.println("url: " + url);
-			String restURL = url.substring(0, url.indexOf("Create.action"));
+			String restURL = url.substring(0, url.indexOf("Update.action"));
 			System.out.println("restURL " + restURL);
 			WebClient client = WebClient.create(restURL);
 			client.path("rest/"
 					+ targetClass.substring(targetClass.lastIndexOf(".") + 1,
 							targetClass.length()));
 			client.type("application/xml").accept("application/xml");
+			try
+			{
 			Response r = client.put(instance);
 
 			System.out.println("r: " + r.getStatus());
-
-			Enumeration headerNames = request.getHeaderNames();
-			while (headerNames.hasMoreElements()) {
-				String headerName = (String) headerNames.nextElement();
-				System.out.println("headerName: " + headerName);
-				System.out.println("header: " + request.getHeader(headerName));
 			}
-		} else {
-			String url = request.getRequestURL().toString();
-			System.out.println("url: " + url);
-			String restURL = url.substring(0, url.lastIndexOf("/"));
-			System.out.println("restURL " + restURL);
-			WebClient client = WebClient.create(restURL);
-			client.path("rest/"
-					+ targetClass.substring(targetClass.lastIndexOf(".") + 1,
-							targetClass.length()) + "/" + idColValue);
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
 
-			client.type("application/xml").accept("application/xml");
+			String message = "Successfully Updated";
+			request.setAttribute("message", message);
+		} 
+		
+		String url = request.getRequestURL().toString();
+		System.out.println("url: " + url);
+		String restURL = url.substring(0, url.lastIndexOf("/"));
+		System.out.println("restURL " + restURL);
+		WebClient client = WebClient.create(restURL);
+		client.path("rest/"
+				+ targetClass.substring(targetClass.lastIndexOf(".") + 1,
+						targetClass.length()) + "/" + idColValue);
 
-			Response r = client.get();
+		client.type("application/xml").accept("application/xml");
 
-			InputStream is = (InputStream) r.getEntity();
+		Response r = client.get();
 
-			org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
-					false);
-			org.jdom.Document jDoc = builder.build(is);
-			request.setAttribute("jDoc", jDoc);
-		}
+		InputStream is = (InputStream) r.getEntity();
+
+		org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
+				false);
+		org.jdom.Document jDoc = builder.build(is);
+		request.setAttribute("jDoc", jDoc);
+		
 		return SUCCESS;
 	}
 
@@ -156,7 +161,7 @@ public class UpdateAction extends RestQuery {
 			String paramName = name.substring(0, 1).toUpperCase()
 					+ name.substring(1);
 			System.out.println("paramName: " + paramName);
-			Method[] allMethods = klass.getDeclaredMethods();
+			Method[] allMethods = klass.getMethods();
 			for (Method m : allMethods) {
 				String mname = m.getName();
 				if (mname.equals("get" + paramName)) {
@@ -164,9 +169,18 @@ public class UpdateAction extends RestQuery {
 					System.out.println("type.getName(): " + type.getName());
 					Class[] argTypes = new Class[] { type };
 
-					Method setMethod = klass.getDeclaredMethod("set"
-							+ paramName, argTypes);
-					setMethod.invoke(instance, convertValue(type, value));
+					Method method = null;
+					while (klass != Object.class) {
+					     try {
+					    	  Method setMethod = klass.getDeclaredMethod("set"+paramName, argTypes);
+					    	  setMethod.setAccessible(true);
+					          setMethod.invoke(instance, convertValue(type, value));
+					          break;
+					     } catch (NoSuchMethodException ex) {
+					    	 klass = klass.getSuperclass();
+					    	 System.out.println("Getting super......");
+					     }
+					}
 				}
 			}
 		} catch (Exception e) {

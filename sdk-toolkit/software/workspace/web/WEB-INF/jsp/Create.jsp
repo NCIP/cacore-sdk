@@ -77,7 +77,7 @@
 											</td>
 										</tr>
 										<tr>
-										<td border=0 class="txtHighlight" nowrap="off" height="1%">
+										<td border=0 class="txtHighlight" nowrap="off" align="center" height="1%">
 										<%String message2 = (String)request.getAttribute("message");
 										if(message2 == null)
 											message2="&nbsp;";
@@ -98,7 +98,7 @@ List domainNames=new ArrayList();
 String message=null, selectedSearchDomain=null;
 String className = (String)request.getAttribute("klassName");
 String validationMessage = (String)request.getAttribute("validationmessage");
-//out.println("className: " + className);
+System.out.println("className: " + className);
 //session.setAttribute("selectedDomain", className);
 
 if(className != null)
@@ -234,7 +234,18 @@ if(validationMessage != null && validationMessage.length() > 0)
 }
 %>
 											<tr>
-												<td height="20" width="100%" class="footerMenu">
+												<td height="20" width="100%" class="formField" align="center">
+												<%
+												String created = (String) request.getAttribute("created");
+												System.out.println("created================"+created);
+												if(created != null && created.equals("true"))
+												{
+												%>
+												
+												<input type="button" name="Close" value="Close" onClick="javascript:window.close()">
+												<%
+												}
+												%>
                 	&nbsp;
 												</td>
 											</tr>

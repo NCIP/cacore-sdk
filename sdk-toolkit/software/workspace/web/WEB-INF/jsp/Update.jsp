@@ -20,6 +20,7 @@
 			<body>
 				<table summary="" cellpadding="0" cellspacing="0" border="0"
 					width="100%" height="100%">
+<form method="post" action="Update.action" name="Update" id="Update">
 
 					<!-- nci hdr begins -->
 					<tr>
@@ -79,7 +80,7 @@
 											</td>
 										</tr>
 										<tr>
-										<td border=0 class="txtHighlight" nowrap="off" height="1%">
+										<td border=0 class="txtHighlight" nowrap="off" align="center" height="1%">
 										<%String message2 = (String)request.getAttribute("message");
 										if(message2 == null)
 											message2="&nbsp;";
@@ -87,7 +88,18 @@
 										<%=message2%>
 										</td>
 										</tr>
-											
+<%
+											Enumeration enums = request.getParameterNames();
+											while(enums.hasMoreElements())
+											{
+											String name = (String)enums.nextElement();
+											if(name.equals("confirm") || name.equals("submit"))
+												continue;
+											%>
+											<input type="hidden" name="<%=name%>" value="<%=request.getParameter(name)%>">
+											<%
+											}
+											%>											
 														<tr>
 															<td valign="top">
 																<table border="0" bordercolor="orange" summary=""
@@ -103,8 +115,11 @@ String validationMessage = (String)request.getAttribute("validationmessage");
 //out.println("className: " + className);
 //session.setAttribute("selectedDomain", className);
 org.jdom.Document jDoc = (org.jdom.Document)request.getAttribute("jDoc");
-Element rootElement = jDoc.getRootElement();
+Element rootElement = null;
+if(jDoc != null)
+	rootElement = jDoc.getRootElement();
 System.out.println(jDoc);
+String classIdName = null;
 
 if(className != null)
 {
@@ -113,6 +128,7 @@ if(className != null)
 		jspUtils = JSPUtils.getJSPUtils(config.getServletContext());
 		fieldNames = jspUtils.getSearchableFields(className);
 		domainNames = jspUtils.getToAssociations(className);
+		classIdName = jspUtils.getClassIdName(className);
 		
 	}
 	catch(Exception ex){
@@ -123,7 +139,6 @@ if(className != null)
 	if(fieldNames != null && fieldNames.size() > 0)
 	{
 %>
-<form method="post" action="Update.action" name="Update" id="Update">
 	<table summary="" cellpadding="3" cellspacing="0" border="0" align="center">
 		<tr>
 			<td class="formTitle" height="20" colspan="3"><a target="_blank" href="docs/<s:property value="javaDocsClassName" />"><%=className%></a></td>
@@ -160,7 +175,19 @@ if(className != null)
 			<td class="formRequiredNotice" width="5px">&nbsp;</td>
 			<td class="formLabel" align="right"><label for="<%=attrNameLabel%>"><%=attrNameLabel%>:</label></td>
 			<td class="formField" width="90%">
+			<%
+			if(attrName.equals(classIdName))
+			{
+			%>
+			<%=HtmlUtils.getAttributeValue(rootElement, attrName)%>
+			<input type="hidden" name="<%=attrName%>" value="<%=HtmlUtils.getAttributeValue(rootElement, attrName)%>">
+			<%
+			}
+			else
+			{
+			%>
 				<%=HtmlUtils.getHtmlFor(attrName,attrTypeClassName, HtmlUtils.getAttributeValue(rootElement, attrName))%>
+			<%}%>
 			</td>
 		</tr>
 

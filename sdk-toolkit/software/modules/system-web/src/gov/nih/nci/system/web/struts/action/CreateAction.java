@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.io.InputStream;
 import java.lang.reflect.*;
 import java.net.URI;
 
@@ -29,6 +30,7 @@ import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.dispatcher.SessionMap;
 import org.apache.struts2.util.ServletContextAware;
+import org.jdom.Element;
 
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
@@ -38,7 +40,7 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
-public class CreateAction extends BaseActionSupport {
+public class CreateAction extends RestQuery {
 
     private static final long serialVersionUID = 1234567890L;
 
@@ -49,21 +51,11 @@ public class CreateAction extends BaseActionSupport {
     private String btnSearch;
     private String searchObj;
     private String selectedDomain;
-    private ClassCache classCache;
-	WebApplicationContext ctx;
 
 	public String execute() throws Exception {
 
 		HttpServletRequest request = ServletActionContext.getRequest();
 		ServletContext context = ServletActionContext.getServletContext();
-		ctx =  WebApplicationContextUtils.getWebApplicationContext(context);
-		this.classCache = (ClassCache) ctx.getBean("ClassCache");
-		
-		SessionMap session = (SessionMap) ActionContext.getContext().get(ActionContext.SESSION.toString());
-
-		debugSessionAttributes(session);
-
-		// BEGIN - build query
 
 		String selectedSearchDomain=null;
 		String query=null;
@@ -95,24 +87,20 @@ public class CreateAction extends BaseActionSupport {
 		   	Response r = client.post(instance);
 
 		      System.out.println("r: " + r.getStatus());
+		      
+				InputStream is = (InputStream) r.getEntity();
 
-		    Enumeration headerNames = request.getHeaderNames();
-		    while(headerNames.hasMoreElements()) {
-		      String headerName = (String)headerNames.nextElement();
-		      System.out.println("headerName: " + headerName);
-		      System.out.println("header: " + request.getHeader(headerName));
-		    }
-		   	
-		   	String username = (String) session.get("username");
-		   	String password = (String) session.get("password");
-
-		   	if ((username != null) && (username.trim()).length() > 0)
-		   		query = query + "&username=" + username;
-		   	if ((password != null) && (password.trim()).length() > 0)
-		   		query = query + "&password=" + password;
-
+				org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
+						false);
+				org.jdom.Document jDoc = builder.build(is);
+				Element root = jDoc.getRootElement();
+				String href = root.getText();
+				String newId = href.substring(href.lastIndexOf("/")+1);
+				String message = "Successfully created "+ selectedDomain.substring(selectedDomain.lastIndexOf(".")+1, selectedDomain.length()) +" with Id: "+newId;
+				request.setAttribute("message", message);
+				System.out.println("SEtting created **************");
+				request.setAttribute("created", "true");
 		}
-
 		return SUCCESS;
 	}
 
@@ -153,7 +141,6 @@ public class CreateAction extends BaseActionSupport {
 		StringBuilder sb = new StringBuilder();
 		Enumeration<String> parameters = request.getParameterNames();
 
-		Map<String, Map<String, List<Object>>> isoDataTypeNodes = new HashMap<String, Map<String, List<Object>>>();
 		Object instance = null;
 		try
 		{
@@ -189,7 +176,7 @@ public class CreateAction extends BaseActionSupport {
 		{
 			String paramName = name.substring(0,1).toUpperCase()+name.substring(1);
 			System.out.println("paramName: "+paramName);
-			Method[] allMethods = klass.getDeclaredMethods();
+			Method[] allMethods = klass.getMethods();
 		    for (Method m : allMethods) {
 				String mname = m.getName();
 				if(mname.equals("get"+paramName))
@@ -197,9 +184,22 @@ public class CreateAction extends BaseActionSupport {
 					Class type = m.getReturnType();
 					System.out.println("type.getName(): "+type.getName());
 					Class[] argTypes = new Class[] { type };
-				
-					Method setMethod = klass.getDeclaredMethod("set"+paramName, argTypes);
-				    setMethod.invoke(instance, convertValue(type, value));
+
+					Method method = null;
+					while (klass != Object.class) {
+					     try {
+					    	  Method setMethod = klass.getDeclaredMethod("set"+paramName, argTypes);
+					    	  setMethod.setAccessible(true);
+					          setMethod.invoke(instance, convertValue(type, value));
+					          break;
+					     } catch (NoSuchMethodException ex) {
+					    	 klass = klass.getSuperclass();
+					    	 System.out.println("Getting super......");
+					     }
+					}
+					// only needed if the two classes are in different packages
+//					Method setMethod = klass.getDeclaredMethod("set"+paramName, argTypes);
+//				    setMethod.invoke(instance, convertValue(type, value));
 				}
 		    }
 		}

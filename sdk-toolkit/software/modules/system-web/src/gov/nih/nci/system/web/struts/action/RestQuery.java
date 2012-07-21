@@ -304,11 +304,13 @@ public class RestQuery extends BaseActionSupport {
 					List<String> refNameList = new ArrayList();
 					for(Element link : linkChild)
 					{
+						System.out.println("************"+link.toString());
 						Attribute attr = link.getAttribute("ref");
+						System.out.println("*****333*******"+attr.toString());
 						if(attr != null && !attr.equals("self"))
 							refNameList.add(attr.getName());
 					}
-					
+					System.out.println("*****555*******"+refNameList);
 					String idColName = classCache.getClassIdName(klass);
 
 					// Add id column to the table first
@@ -327,6 +329,8 @@ public class RestQuery extends BaseActionSupport {
 						Attribute attr = child.getAttribute(idColName);
 						bodyBuffer.append(attr.getValue());
 						bodyBuffer.append("</td>");
+						idColValue = attr.getValue();
+						break;
 					}
 
 					// Add all remaining columns
@@ -608,5 +612,4 @@ public class RestQuery extends BaseActionSupport {
 		}
 		return false;
 	}
-
 }

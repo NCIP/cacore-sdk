@@ -89,7 +89,7 @@
 											</td>
 										</tr>
 										<tr>
-										<td border=0 class="txtHighlight" nowrap="off">
+										<td border=0 class="txtHighlight" align="center" nowrap="off">
 										<%String message = (String)request.getAttribute("message");
 										if(message == null)
 											message="&nbsp;";
@@ -98,7 +98,7 @@
 										</td>
 										</tr>
 										<tr>
-											<td valign="top">
+											<td valign="top"  align="center">
 											<table border="0" bordercolor="orange" summary="" cellpadding="0" cellspacing="0">
 											<tr>
 											<td class="dataTablePrimaryLabel" height="20" align="left">
@@ -109,6 +109,8 @@
 											while(enums.hasMoreElements())
 											{
 											String name = (String)enums.nextElement();
+											if(name.equals("confirm") || name.equals("submit"))
+												continue;
 											%>
 											<%=name%> = <%=request.getParameter(name)%><br>
 											<input type="hidden" name="<%=name%>" value="<%=request.getParameter(name)%>">
@@ -117,8 +119,14 @@
 											%>
 											</td>
 											</tr>
+											<%
+											String success = (String)request.getAttribute("successful");
+											System.out.println("success: "+success);
+											if(success == null)
+											{
+											%>
 											<tr>
-											<td class="dataCellText" nowrap="off">
+											<td class="txtHighlight" nowrap="off">
 											Are you sure you want to delete?
 											<br>
 											
@@ -126,10 +134,20 @@
 											<input type="button" name="close" value="No" onClick="javascript:window.close()">
 											<input type="hidden" name="confirm" value="true">
 											
+											
+											</td>
+											</tr>
+											<%}
+											else
+											{%>
+											<tr>
+											<td class="dataCellText" nowrap="off">
+											<input type="button" name="close" value="Close" onClick="javascript:window.close()">
+											</td>
+											</tr>
+											<%}%>
+											</td>
 											</form>
-											</td>
-</tr>
-											</td>
 										</tr>
 													<!-- paging ends -->
 

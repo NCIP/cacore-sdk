@@ -725,7 +725,12 @@ if(action != null && action.indexOf("C") != -1 && !transformerUtils.isISO21090En
 			}
 			}
 			%>
-			return Response.created(URI.create(path+"/<%=klassName%>/"+id)).build();
+			
+			ResponseBuilder builder = Response.status(Status.CREATED);
+			builder.type("application/xml");
+			builder.entity("<message>"+path+"/<%=klassName%>/"+id+"</message>");
+			return builder.build();
+			//return Response.created(URI.create(path+"/<%=klassName%>/"+id)).build();
 		}
 		catch(WebApplicationException e)
 		{
