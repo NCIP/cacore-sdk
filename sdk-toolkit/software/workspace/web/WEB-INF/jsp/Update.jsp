@@ -118,7 +118,6 @@ org.jdom.Document jDoc = (org.jdom.Document)request.getAttribute("jDoc");
 Element rootElement = null;
 if(jDoc != null)
 	rootElement = jDoc.getRootElement();
-System.out.println(jDoc);
 String classIdName = null;
 
 if(className != null)
@@ -141,7 +140,7 @@ if(className != null)
 %>
 	<table summary="" cellpadding="3" cellspacing="0" border="0" align="center">
 		<tr>
-			<td class="formTitle" height="20" colspan="3"><a target="_blank" href="docs/<s:property value="javaDocsClassName" />"><%=className%></a></td>
+			<td class="formTitle" height="20" colspan="3"><%=className%></td>
 		</tr>
 <%
 		if(fieldNames != null && fieldNames.size() > 0)
@@ -178,6 +177,7 @@ if(className != null)
 			<%
 			if(attrName.equals(classIdName))
 			{
+				
 			%>
 			<%=HtmlUtils.getAttributeValue(rootElement, attrName)%>
 			<input type="hidden" name="<%=attrName%>" value="<%=HtmlUtils.getAttributeValue(rootElement, attrName)%>">
@@ -199,7 +199,7 @@ if(className != null)
 			<% if(domainNames != null && domainNames.size() > 0)
 			   { 
 			   %>
-		<tr align="left" valign="top">
+		
 			   		<%for(int i=0; i<domainNames.size(); i++)
 			   		{
 			   		String asscName = (String)domainNames.get(i);
@@ -209,21 +209,13 @@ if(className != null)
 			   			
 			   		if(asscClass.equals("Please choose") || asscClass.equals(className))
 			   			continue;
-			   		System.out.println("asscClass: "+asscClass);
 			   		String idName = jspUtils.getClassIdName(asscClass);
-			   		System.out.println("idName: "+idName);
 			   		String labelName = asscClass + "."+idName;
-			   		System.out.println("labelName: "+labelName);
 			   		String idType = jspUtils.getReturnType(asscClass, idName, true);
 			   		String filedName = labelName.replace(".", "-");
-			   		System.out.println("filedName: "+filedName);
 			   		%>
 		
-			<td class="formRequiredNotice" width="5px">&nbsp;</td>
-			<td class="formLabel" align="right"><label for="<%=labelName%>"><%=labelName%>:</label></td>
-			<td class="formField" width="90%">
-				<%=HtmlUtils.getHtmlFor(filedName,idType, HtmlUtils.getAttributeValue(rootElement, filedName))%>
-			</td>
+			<input type="hidden" value="<%=HtmlUtils.getAttributeValue(rootElement, filedName)%>">
 			<%}
 			
 			}// end if(domainNames != null) statement%>			   
@@ -238,6 +230,7 @@ if(className != null)
 				<table cellpadding="4" cellspacing="0" border="0">
 					<tr align="left">
 						<td align="left"><input type="submit" name="BtnSearch" class="actionButton" value="Submit" ></td>
+<input type="hidden" name="submitForm" value="true">
 						<td align="left"><input class="actionButton" type="reset" value="Reset"></td> 
 					</tr>
 				</table>

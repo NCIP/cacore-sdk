@@ -67,12 +67,6 @@ public class RestLinkAction extends RestQuery {
 		
 		String linkHref = request.getParameter("linkHref");
 		String className = request.getParameter("targetClass");
-		System.out.println("param: "+request.getParameterMap());
-		Enumeration enum1 = request.getAttributeNames();
-		while(enum1.hasMoreElements())
-			System.out.println("Attr: "+enum1.nextElement().toString());
-		System.out.println("linkHref: "+linkHref);
-		System.out.println("className: "+className);
 
 		if(linkHref != null)
 		{
@@ -92,11 +86,7 @@ public class RestLinkAction extends RestQuery {
 		   	//response.setContentType("text/xml");
 		   	//ServletOutputStream out = response.getOutputStream();
 		   	String roleName = getRoleName(linkHref, className);
-		   	System.out.println("roleName: "+roleName);
-		   	
-		   	System.out.println("targetClass: "+targetClass);
 		   	String resourceName = targetClass.substring(targetClass.lastIndexOf(".")+1);
-		   	System.out.println("resourceName: "+resourceName);
 		   	String html = getHTML(jDoc, targetClass, getCriteria(linkHref, resourceName), roleName);
 		   	request.setAttribute("HTMLContent", html);
 		   	request.setAttribute("targetClass", targetClass);
@@ -113,16 +103,13 @@ public class RestLinkAction extends RestQuery {
 		
 		String criteriaStr = href.substring(index+resName.length()+1);
 		String idStr = null;
-		System.out.println("criteriaStr: "+criteriaStr);
 		//role part
 		int index2 = criteriaStr.indexOf("/");
 		String roleName = null;
 		if(index2 != -1)
 		{
 			idStr = criteriaStr.substring(0, index2);
-			System.out.println("idStr: "+idStr);
 			roleName = criteriaStr.substring(index2+1, criteriaStr.length());
-			System.out.println("roleName: "+roleName);
 			return roleName;
 		}
 		return null;
@@ -136,20 +123,16 @@ public class RestLinkAction extends RestQuery {
 			return href;
 		
 		String preIdStr = href.substring(0, index+resName.length()+1);
-		System.out.println("preHref: "+preIdStr);
 		//id part
 		String criteriaStr = href.substring(index+resName.length()+1);
 		String idStr = null;
-		System.out.println("criteriaStr: "+criteriaStr);
 		//role part
 		int index2 = criteriaStr.indexOf("/");
 		String roleName = null;
 		if(index2 != -1)
 		{
 			idStr = criteriaStr.substring(0, index2);
-			System.out.println("idStr: "+idStr);
 			roleName = criteriaStr.substring(index2+1, criteriaStr.length());
-			System.out.println("roleName: "+roleName);
 		}
 		else
 			idStr = criteriaStr;
@@ -168,19 +151,15 @@ public class RestLinkAction extends RestQuery {
 			return href;
 		 
 		String newHref = preIdStr + "search;"+idName+"="+idStr + (roleName != null?"/"+roleName:"");
-		System.out.println("newHref: "+newHref);
 		return newHref;
 	}
 	
 	private String getCriteria(String linkHref, String resName)
 	{
-		System.out.println("linkHref: "+linkHref);
-		System.out.println("resName: "+resName);
 		int index = linkHref.indexOf(resName);
 		if(index == -1)
 			return null;
 		String crStr = linkHref.substring(index+resName.length()+1);
-		System.out.println("crStr: "+crStr);
 		int index2 = crStr.indexOf("/");
 		if(index2 == -1)
 			return crStr;

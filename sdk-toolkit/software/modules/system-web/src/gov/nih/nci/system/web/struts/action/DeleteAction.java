@@ -29,7 +29,6 @@ public class DeleteAction extends RestQuery {
 		init();
 		HttpServletRequest request = ServletActionContext.getRequest();
 		String targetClass = request.getParameter("target");
-		System.out.println("targetClass: " + targetClass);
 		if (targetClass == null || targetClass.trim().length() == 0) {
 			request.setAttribute("Message", "Invalid target");
 			return null;
@@ -42,7 +41,6 @@ public class DeleteAction extends RestQuery {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-		System.out.println("idCol: " + idCol);
 		if (idCol == null) {
 			request.setAttribute("Message", "Invalid target");
 			return null;
@@ -55,15 +53,12 @@ public class DeleteAction extends RestQuery {
 		}
 
 		String confirm = request.getParameter("confirm");
-		System.out.println("confirm: " + confirm);
 		if (confirm == null || confirm.trim().length() == 0
 				|| !confirm.equals("true"))
 			return SUCCESS;
 
 		String url = request.getRequestURL().toString();
-		System.out.println("url: " + url);
 		String restURL = url.substring(0, url.lastIndexOf("/"));
-		System.out.println("restURL " + restURL);
 		WebClient client = WebClient.create(restURL);
 		client.path("rest/"
 				+ targetClass.substring(targetClass.lastIndexOf(".") + 1,
@@ -73,7 +68,6 @@ public class DeleteAction extends RestQuery {
 		Response r = client.delete();
 
 		if (r.getStatus() == Status.OK.getStatusCode()) {
-			System.out.println("Status is OK");
 			request.removeAttribute("confirm");
 			request.setAttribute("successful", "1");
 			// request.removeAttribute("confirm");

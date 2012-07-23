@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.WebApplicationException;
@@ -26,14 +27,14 @@ public class UpdateAction extends RestQuery {
 
 	public static Logger log = Logger.getLogger(CreateAction.class.getName());
 	String targetClass;
-	String BtnSearch;
+	String btnSearch;
 
 	public String getBtnSearch() {
-		return BtnSearch;
+		return btnSearch;
 	}
 
 	public void setBtnSearch(String btnSearch) {
-		BtnSearch = btnSearch;
+		this.btnSearch = btnSearch;
 	}
 
 	public String execute() throws Exception {
@@ -41,7 +42,7 @@ public class UpdateAction extends RestQuery {
 		HttpServletRequest request = ServletActionContext.getRequest();
 		HttpServletResponse response = ServletActionContext.getResponse();
 		targetClass = request.getParameter("target");
-		System.out.println("targetClass update: " + targetClass);
+		System.out.println("Target: "+targetClass);
 		if (targetClass == null || targetClass.trim().length() == 0) {
 			request.setAttribute("Message", "Invalid target");
 			return null;
@@ -50,9 +51,6 @@ public class UpdateAction extends RestQuery {
 		String idCol = null;
 
 		try {
-			System.out.println("classCache: " + classCache);
-			System.out.println("Class.forName(targetClass): "
-					+ Class.forName(targetClass));
 			idCol = classCache.getClassIdName(Class.forName(targetClass));
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
@@ -64,42 +62,41 @@ public class UpdateAction extends RestQuery {
 		}
 
 		String idColValue = request.getParameter(idCol);
-		System.out.println("idColValue: " + idColValue);
 		if (idColValue == null || idColValue.trim().length() == 0) {
 			request.setAttribute("Message", "Invalid target identifier");
 			return null;
 		}
-
-		if (getBtnSearch() != null && getBtnSearch().equalsIgnoreCase("Submit")) {
+		System.out.println("BEFORE 	Submitting:................"+getBtnSearch());
+		String submitted = request.getParameter("submitForm"); 
+		System.out.println("BEFORE 	submitted:................"+submitted);
+		if (submitted != null && submitted.equals("true")) {
+			
+			System.out.println("Submitting:................");
+			try
+			{
 			Object instance = prepareObject(request);
 			String url = request.getRequestURL().toString();
-			System.out.println("url: " + url);
 			String restURL = url.substring(0, url.indexOf("Update.action"));
-			System.out.println("restURL " + restURL);
 			WebClient client = WebClient.create(restURL);
 			client.path("rest/"
 					+ targetClass.substring(targetClass.lastIndexOf(".") + 1,
 							targetClass.length()));
 			client.type("application/xml").accept("application/xml");
-			try
-			{
 			Response r = client.put(instance);
 
-			System.out.println("r: " + r.getStatus());
+			System.out.println("Status: "+r.getStatus());
+			String message =  "Updated Successfully";
+			request.setAttribute("message", message);
 			}
 			catch(Exception e)
 			{
-				e.printStackTrace();
+				String message =  "Failed to update: "+e.getMessage();
+				request.setAttribute("message", message);
 			}
-
-			String message = "Successfully Updated";
-			request.setAttribute("message", message);
 		} 
 		
 		String url = request.getRequestURL().toString();
-		System.out.println("url: " + url);
 		String restURL = url.substring(0, url.lastIndexOf("/"));
-		System.out.println("restURL " + restURL);
 		WebClient client = WebClient.create(restURL);
 		client.path("rest/"
 				+ targetClass.substring(targetClass.lastIndexOf(".") + 1,
@@ -119,77 +116,64 @@ public class UpdateAction extends RestQuery {
 		return SUCCESS;
 	}
 
-	private Object prepareObject(HttpServletRequest request) {
+	private Object prepareObject(HttpServletRequest request) throws Exception{
 
 		StringBuilder sb = new StringBuilder();
 		Enumeration<String> parameters = request.getParameterNames();
 
 		Map<String, Map<String, List<Object>>> isoDataTypeNodes = new HashMap<String, Map<String, List<Object>>>();
 		Object instance = null;
-		try {
-			Class klass = Class.forName(targetClass);
-			instance = klass.newInstance();
-			while (parameters.hasMoreElements()) {
-				String parameterName = (String) parameters.nextElement();
-				if (!parameterName.equals("klassName")
-						&& !parameterName.equals("searchObj")
-						&& !parameterName.equals("BtnSearch")
-						&& !parameterName.equals("username")
-						&& !parameterName.equals("password")
-						&& !parameterName.equals("selectedDomain")) {
-					System.out.println("param = " + parameterName);
-					String parameterValue = (request
-							.getParameter(parameterName)).trim();
-					System.out.println("parameterValue: " + parameterValue);
-					setParameterValue(klass, instance, parameterName,
-							parameterValue);
-					System.out.println("Instance " + instance);
-				}
+		Class klass = Class.forName(targetClass);
+		instance = klass.newInstance();
+		while (parameters.hasMoreElements()) {
+			String parameterName = (String) parameters.nextElement();
+			if (!parameterName.equals("klassName")
+					&& !parameterName.equals("searchObj")
+					&& !parameterName.equals("BtnSearch")
+					&& !parameterName.equals("username")
+					&& !parameterName.equals("password")
+					&& !parameterName.equals("selectedDomain")) {
+				System.out.println("param = " + parameterName);
+				String parameterValue = (request
+						.getParameter(parameterName)).trim();
+				setParameterValue(klass, instance, parameterName,
+						parameterValue);
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 		return instance;
 	}
 
 	private void setParameterValue(Class klass, Object instance, String name,
-			String value) {
+			String value) throws Exception {
 		if (value != null && value.trim().length() == 0)
 			value = null;
 
-		try {
-			String paramName = name.substring(0, 1).toUpperCase()
-					+ name.substring(1);
-			System.out.println("paramName: " + paramName);
-			Method[] allMethods = klass.getMethods();
-			for (Method m : allMethods) {
-				String mname = m.getName();
-				if (mname.equals("get" + paramName)) {
-					Class type = m.getReturnType();
-					System.out.println("type.getName(): " + type.getName());
-					Class[] argTypes = new Class[] { type };
+		String paramName = name.substring(0, 1).toUpperCase()
+				+ name.substring(1);
+		Method[] allMethods = klass.getMethods();
+		for (Method m : allMethods) {
+			String mname = m.getName();
+			if (mname.equals("get" + paramName)) {
+				Class type = m.getReturnType();
+				Class[] argTypes = new Class[] { type };
 
-					Method method = null;
-					while (klass != Object.class) {
-					     try {
-					    	  Method setMethod = klass.getDeclaredMethod("set"+paramName, argTypes);
-					    	  setMethod.setAccessible(true);
-					          setMethod.invoke(instance, convertValue(type, value));
-					          break;
-					     } catch (NoSuchMethodException ex) {
-					    	 klass = klass.getSuperclass();
-					    	 System.out.println("Getting super......");
-					     }
-					}
+				Method method = null;
+				while (klass != Object.class) {
+				     try {
+				    	  Method setMethod = klass.getDeclaredMethod("set"+paramName, argTypes);
+				    	  setMethod.setAccessible(true);
+				          setMethod.invoke(instance, convertValue(type, value));
+				          break;
+				     } catch (NoSuchMethodException ex) {
+				    	 klass = klass.getSuperclass();
+				     }
 				}
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 
 	public Object convertValue(Class klass, Object value)
-			throws WebApplicationException {
+			throws Exception {
 
 		String fieldType = klass.getName();
 		Object convertedValue = null;
@@ -219,12 +203,14 @@ public class UpdateAction extends RestQuery {
 			} else {
 				throw new Exception("type mismatch - " + fieldType);
 			}
-
+		} catch (NumberFormatException e)
+		{
+			e.printStackTrace();
+			throw new Exception(e.getMessage());
 		} catch (Exception ex) {
-			ex.printStackTrace();
 			log.error("ERROR : " + ex.getMessage());
+			throw ex;			
 		}
-		System.out.println("convertedValue: " + convertedValue);
 		return convertedValue;
 	}
 

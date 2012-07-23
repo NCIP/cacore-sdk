@@ -67,8 +67,6 @@ public class CreateAction extends RestQuery {
 
 		log.debug("className (selectedDomain): "+ getSelectedDomain());
 		
-		System.out.println("className (selectedDomain): "+ getSelectedDomain());
-
 		if(submitValue != null && submitValue.equalsIgnoreCase("Submit"))
 		{
 		    query = "GetHTML?query=";
@@ -78,16 +76,12 @@ public class CreateAction extends RestQuery {
 
 		   	Object instance = prepareObject(request);
 		   	String url = request.getRequestURL().toString();
-		   	System.out.println("url: "+url);
 		   	String restURL = url.substring(0, url.indexOf("Create.action"));
-		   	System.out.println("restURL "+restURL);
 		   	WebClient client = WebClient.create(restURL);
 		   	client.path("rest/"+selectedDomain.substring(selectedDomain.lastIndexOf(".")+1, selectedDomain.length()));
 		   	client.type("application/xml").accept("application/xml");
 		   	Response r = client.post(instance);
 
-		      System.out.println("r: " + r.getStatus());
-		      
 				InputStream is = (InputStream) r.getEntity();
 
 				org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
@@ -98,7 +92,6 @@ public class CreateAction extends RestQuery {
 				String newId = href.substring(href.lastIndexOf("/")+1);
 				String message = "Successfully created "+ selectedDomain.substring(selectedDomain.lastIndexOf(".")+1, selectedDomain.length()) +" with Id: "+newId;
 				request.setAttribute("message", message);
-				System.out.println("SEtting created **************");
 				request.setAttribute("created", "true");
 		}
 		return SUCCESS;
@@ -151,11 +144,8 @@ public class CreateAction extends RestQuery {
 	     		String parameterName = (String)parameters.nextElement();
 	     		if(!parameterName.equals("klassName") && !parameterName.equals("searchObj") && !parameterName.equals("BtnSearch") && !parameterName.equals("username") && !parameterName.equals("password") && !parameterName.equals("selectedDomain"))
 	     		{
-	     			System.out.println("param = " + parameterName);	
 	     			String parameterValue = (request.getParameter(parameterName)).trim();
-					System.out.println("parameterValue: " + parameterValue);
 	     			setParameterValue(klass, instance, parameterName, parameterValue);
-	     			System.out.println("Instance "+instance);
 	     		}
 	     	}
 		}
@@ -175,14 +165,12 @@ public class CreateAction extends RestQuery {
 		try
 		{
 			String paramName = name.substring(0,1).toUpperCase()+name.substring(1);
-			System.out.println("paramName: "+paramName);
 			Method[] allMethods = klass.getMethods();
 		    for (Method m : allMethods) {
 				String mname = m.getName();
 				if(mname.equals("get"+paramName))
 				{
 					Class type = m.getReturnType();
-					System.out.println("type.getName(): "+type.getName());
 					Class[] argTypes = new Class[] { type };
 
 					Method method = null;
@@ -194,7 +182,6 @@ public class CreateAction extends RestQuery {
 					          break;
 					     } catch (NoSuchMethodException ex) {
 					    	 klass = klass.getSuperclass();
-					    	 System.out.println("Getting super......");
 					     }
 					}
 					// only needed if the two classes are in different packages
@@ -244,7 +231,6 @@ public class CreateAction extends RestQuery {
 			 ex.printStackTrace();
 			 log.error("ERROR : " + ex.getMessage());
 		}
-		System.out.println("convertedValue: "+convertedValue);
 		return convertedValue;
 	}
 	

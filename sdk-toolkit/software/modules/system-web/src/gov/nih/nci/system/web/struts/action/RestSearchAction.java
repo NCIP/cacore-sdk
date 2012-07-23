@@ -34,7 +34,6 @@ public class RestSearchAction extends RestQuery {
 		log.debug("submitValue: " + submitValue);
 
 		String className = getSelectedDomain();
-		System.out.println("className: " + className);
 		log.debug("className (selectedDomain): " + getSelectedDomain());
 		String targetClass = className;
 
@@ -51,22 +50,16 @@ public class RestSearchAction extends RestQuery {
 					targetClass = selectedSearchDomain;
 				}
 			}
-			System.out.println("selectedDomain: " + selectedDomain);
-			System.out.println("selectedSearchDomain: " + selectedSearchDomain);
 			HttpServletRequest request = ServletActionContext.getRequest();
 
 			String url = request.getRequestURL().toString();
-			System.out.println("url: " + url);
 			String restURL = url.substring(0, url.lastIndexOf("/"));
-			System.out.println("restURL " + restURL);
 			WebClient client = WebClient.create(restURL);
 			String queryStr = getQueryString(className, roleName, request);
-			System.out.println("queryStr: " + queryStr);
 			String path = "rest/"
 					+ selectedDomain.substring(
 							selectedDomain.lastIndexOf(".") + 1,
 							selectedDomain.length()) + "/" + queryStr;
-			System.out.println("Path: " + path);
 			client.path(path);
 
 			client.type("application/xml").accept("application/xml");

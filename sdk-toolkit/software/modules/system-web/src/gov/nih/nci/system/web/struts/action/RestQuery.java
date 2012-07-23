@@ -64,8 +64,6 @@ public class RestQuery extends BaseActionSupport {
 						.trim();
 				if (parameterValue.length() > 0) {
 
-					System.out.println("parameterValue: " + parameterValue);
-
 					if (parameterName.indexOf('.') > 0) { // ISO data type
 															// parameter
 						saveIsoNode(isoDataTypeNodes, parameterName,
@@ -123,9 +121,7 @@ public class RestQuery extends BaseActionSupport {
 
 		String isoParamPrefix = parameterName.substring(0,
 				parameterName.lastIndexOf('.'));
-		System.out.println("isoParamPrefix: " + isoParamPrefix);
 		String[] isoParentNodes = isoParamPrefix.split("\\.");
-		System.out.println("isoParentNodes: " + isoParentNodes);
 
 		Object childNode = null;
 		Object parentNode = isoDataTypeNodes.get(isoParentNodes[0]);
@@ -154,9 +150,6 @@ public class RestQuery extends BaseActionSupport {
 
 		String isoParamKey = parameterName.substring(parameterName
 				.lastIndexOf('.') + 1);
-		System.out.println("isoParamKey: " + isoParamKey);
-		System.out.println("parameterValue: " + parameterValue);
-
 		List<Object> nodeList = new ArrayList<Object>();
 		nodeList.add(parameterValue);
 		((Map<String, List<Object>>) parentNode).put(isoParamKey, nodeList);
@@ -169,7 +162,6 @@ public class RestQuery extends BaseActionSupport {
 		Iterator iter = isoParentNodeNames.iterator();
 		while (iter.hasNext()) {
 			parentNodeName = (String) iter.next();
-			System.out.println("key: " + parentNodeName);
 
 			query.append("[@").append(parentNodeName).append("=");
 
@@ -265,28 +257,13 @@ public class RestQuery extends BaseActionSupport {
 				String eleName = classEleName.substring(
 						classEleName.lastIndexOf(".") + 1,
 						classEleName.length());
-				System.out.println("eleName: " + eleName);
-				/*
-				 * Element thEle = getDomainElement(root);
-				 * System.out.println("thEle: "+thEle); List<Attribute> thAttrs
-				 * = thEle.getAttributes(); for(Attribute thAttr : thAttrs) {
-				 * if(thAttr.getName().equals("xmlns") ||
-				 * thAttr.getName().equals("xsi:schemaLocation") ||
-				 * thAttr.getName().equals("schemaLocation")) continue; else {
-				 * buffer.append(
-				 * "<th class=\"dataTableHeader\" scope=\"col\" align=\"center\">"
-				 * ); buffer.append(thAttr.getName()); buffer.append("</th>"); }
-				 * }
-				 * 
-				 * buffer.append("</tr>");
-				 */
+
 				List<Element> children = root.getChildren();
 				for (Element child : children) {
 					StringBuffer headerBuffer = new StringBuffer();
 					StringBuffer bodyBuffer = new StringBuffer();
 					String fullClassName = classCache.getPkgNameForClass(child
 							.getName()) + "." + child.getName();
-					System.out.println("child name: " + child.getName());
 					if(child.getName().equals("link"))
 						continue;
 					
@@ -304,13 +281,10 @@ public class RestQuery extends BaseActionSupport {
 					List<String> refNameList = new ArrayList();
 					for(Element link : linkChild)
 					{
-						System.out.println("************"+link.toString());
 						Attribute attr = link.getAttribute("ref");
-						System.out.println("*****333*******"+attr.toString());
 						if(attr != null && !attr.equals("self"))
-							refNameList.add(attr.getName());
+							refNameList.add(attr.getValue());
 					}
-					System.out.println("*****555*******"+refNameList);
 					String idColName = classCache.getClassIdName(klass);
 
 					// Add id column to the table first
@@ -353,27 +327,6 @@ public class RestQuery extends BaseActionSupport {
 							bodyBuffer.append("&nbsp;");
 						bodyBuffer.append("</td>");
 					}
-
-					/*
-					 * List<Attribute> attrs = child.getAttributes();
-					 * for(Attribute attr : attrs) {
-					 * if(attr.getName().equals("xmlns") ||
-					 * attr.getName().equals("xsi:schemaLocation") ||
-					 * attr.getName().equals("schemaLocation")) continue;
-					 * 
-					 * String attrName = attr.getName(); headerBuffer.append(
-					 * "<th class=\"dataTableHeader\" scope=\"col\" align=\"center\">"
-					 * ); headerBuffer.append(attrName);
-					 * headerBuffer.append("</th>");
-					 * 
-					 * bodyBuffer.append(
-					 * "<td class=\"dataCellText\" nowrap=\"off\">");
-					 * bodyBuffer.append(attr.getValue());
-					 * bodyBuffer.append("</td>");
-					 * 
-					 * if(attr.getName().equals(idCol)) idColValue =
-					 * attr.getValue(); }
-					 */
 
 					
 					for (Element link : linkChild) {
@@ -529,7 +482,6 @@ public class RestQuery extends BaseActionSupport {
 			return className;
 		List<String> assocNames = classCache.getAssociations(className);
 		for (String assocName : assocNames) {
-			System.out.println("assocName: " + assocName);
 			if (assocName.startsWith(roleName)) {
 				String assocClassName = assocName.substring(
 						assocName.indexOf("(") + 1, assocName.lastIndexOf(")"));
@@ -572,14 +524,11 @@ public class RestQuery extends BaseActionSupport {
 				className.length());
 		try {
 			Class klass = Class.forName(className + "Resource");
-			System.out.println("className: " + className);
 
 			Method[] allMethods = klass.getDeclaredMethods();
 			String addName = "delete" + cName;
-			System.out.println("delete: " + addName);
 			for (Method m : allMethods) {
 				String mname = m.getName();
-				System.out.println("mname: " + mname);
 				if (addName.equals(mname))
 					return true;
 			}
@@ -595,14 +544,11 @@ public class RestQuery extends BaseActionSupport {
 				className.length());
 		try {
 			Class klass = Class.forName(className + "Resource");
-			System.out.println("className: " + className);
 
 			Method[] allMethods = klass.getDeclaredMethods();
 			String addName = "update" + cName;
-			System.out.println("update: " + addName);
 			for (Method m : allMethods) {
 				String mname = m.getName();
-				System.out.println("mname: " + mname);
 				if (addName.equals(mname))
 					return true;
 			}
