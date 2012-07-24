@@ -37,7 +37,7 @@ public class BaseActionSupport extends ActionSupport implements
 	
 	protected static void debugSessionAttributes(SessionMap session){
 		
-		log.debug("Debugging Session Attributes");
+		System.out.println("Debugging Session Attributes");
 		
 		Set entrySet = session.entrySet();
 		Iterator entryIter = entrySet.iterator();
@@ -50,13 +50,13 @@ public class BaseActionSupport extends ActionSupport implements
 		while (keyIter.hasNext()){
 			key = (String)keyIter.next();
 			value = session.get(key);
-			log.debug("Session Key: " + key + "; value = " + value );
+			System.out.println("Session Key: " + key + "; value = " + value );
 		}
 		
 		Object next;
 		while (entryIter.hasNext()){		
 			next = entryIter.next();
-			log.debug(next.getClass().getName() + ": " + next );
+			System.out.println(next.getClass().getName() + ": " + next );
 		}
 	}	
 }

@@ -3,6 +3,8 @@ package gov.nih.nci.system.web;
 import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 import gov.nih.nci.system.applicationservice.WritableApplicationService;
+import gov.nih.nci.system.client.ApplicationServiceProvider;
+import gov.nih.nci.system.client.proxy.ApplicationServiceProxy;
 import gov.nih.nci.system.dao.orm.HibernateConfigurationHolder;
 import gov.nih.nci.system.query.SDKQueryResult;
 import gov.nih.nci.system.query.example.DeleteExampleQuery;
@@ -36,9 +38,13 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
+import org.acegisecurity.providers.UsernamePasswordAuthenticationToken;
+import org.aopalliance.aop.Advice;
 import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.jdom.output.XMLOutputter;
+import org.springframework.aop.Advisor;
+import org.acegisecurity.Authentication;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -73,6 +79,7 @@ public class RESTfulResource {
 			classCache = (ClassCache) ctx.getBean("ClassCache");
 			applicationService = (ApplicationService) ctx
 					.getBean("ApplicationServiceImpl");
+			
 			try {
 				String pageCount = systemProperties.getProperty("rowCounter");
 				if (pageCount != null) {
@@ -818,9 +825,33 @@ public class RESTfulResource {
 		return convertedValue;
 	}
 
-	protected ApplicationService getApplicationService() {
+	protected ApplicationService getApplicationService() throws Exception {
+		//return ApplicationServiceProvider.getApplicationService();
 		return applicationService;
 	}
+	
+	protected ApplicationService getApplicationService(String username, String password) throws Exception {
+		System.out.println("getApplicationService(String username, String password) ------");
+		Authentication auth = new UsernamePasswordAuthenticationToken(username,password);
+		if(applicationService instanceof org.springframework.aop.framework.Advised)
+		{
+			System.out.println("getApplicationService(String username, String password) --aop----");
+			org.springframework.aop.framework.Advised proxy = (org.springframework.aop.framework.Advised)applicationService;
+			for(Advisor advisor: proxy.getAdvisors())
+			{
+				Advice advice = advisor.getAdvice();
+				if(advice instanceof ApplicationServiceProxy)
+				{
+					ApplicationServiceProxy asp = (ApplicationServiceProxy)advice;
+					asp.setApplicationService(applicationService);
+					asp.setAuthentication(auth);
+				}
+			}
+		}
+		return applicationService;
+//		return ApplicationServiceProvider.getApplicationService(username, password);
+	}
+	
 
 	public Object save(final Object obj) throws WebApplicationException {
 		try {

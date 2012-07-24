@@ -438,6 +438,39 @@ public class RestQuery extends BaseActionSupport {
 		}
 	}
 
+	public String getUnauthorizedHTML(String queryStr, String className, String message)
+	{
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("<table border=\"0\" bordercolor=\"orange\" summary=\"\" cellpadding=\"0\" cellspacing=\"0\">");
+		buffer.append("<tr>");
+		buffer.append("<td class=\"dataTablePrimaryLabel\" height=\"20\" align=\"left\">");
+		String criteria = null;
+
+		if (queryStr != null && queryStr.indexOf("search;") != -1)
+			criteria = queryStr.substring(queryStr.indexOf("search;") + 7,
+					queryStr.length());
+		else
+			criteria = queryStr;
+		buffer.append("Criteria: " + criteria);
+		buffer.append("<br />");
+
+			buffer.append("Result Class: " + className);
+			buffer.append("</td>");
+
+			buffer.append("<tr>");
+			buffer.append("<td class=\"dataPagingText\" align=\"left\" style=\"border:0px; border-bottom:1px; border-style:solid; border-color:#5C5C5C;\">");
+			buffer.append("<br />");
+			buffer.append(message);
+			buffer.append("<br />");
+			buffer.append("<br />");
+			buffer.append("</td>");
+			buffer.append("</tr>");
+			buffer.append("</td>");
+			buffer.append("</tr>");
+			return buffer.toString();
+
+		
+	}
 	protected String getPagingLinks(Element root) {
 		List<Element> links = getChildren(root, "links");
 		if (links == null || links.size() == 0)

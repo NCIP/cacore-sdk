@@ -216,7 +216,20 @@ public class CSMUsernameAuthenticationProvider implements AuthenticationProvider
 
 	public boolean supports(Class authentication)
 	{
-		return (UsernameAuthenticationToken.class.isAssignableFrom(authentication));
+		System.out.println("CSMUsernameAuthenticationProvider*******"+authentication);
+		System.out.println("CSMUsernameAuthenticationProvider*******"+authentication.getName());
+		try
+		{
+		boolean flag = (UsernameAuthenticationToken.class.isAssignableFrom(authentication));
+		System.out.println("CSMUsernameAuthenticationProvider*******"+flag);
+		throw new Exception();
+		//return flag;
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return true;
 	}
 
 }

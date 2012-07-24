@@ -87,8 +87,8 @@ public class Result extends BaseActionSupport {
 				}
 			}
 
-		   	String username = (String) session.get("username");
-		   	String password = (String) session.get("password");
+		   	String username = (String) session.get("Username");
+		   	String password = (String) session.get("Password");
 
 		   	if ((username != null) && (username.trim()).length() > 0)
 		   		query = query + "&username=" + username;

@@ -27,6 +27,7 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.Context;
 import javax.servlet.ServletContext;
 import javax.ws.rs.WebApplicationException;
+import gov.nih.nci.system.applicationservice.ApplicationService;
 
 import java.net.URI;
 import java.util.List;
@@ -43,6 +44,7 @@ import gov.nih.nci.system.web.RESTfulResource;
 import gov.nih.nci.system.query.hql.DeleteHQLQuery;
 <%}%>
 import gov.nih.nci.system.applicationservice.ApplicationException;
+
 import org.apache.log4j.Logger;
 import java.util.StringTokenizer;
 import gov.nih.nci.system.web.ResourceLink;
@@ -73,6 +75,7 @@ if(action != null && action.indexOf("R") != -1)
 	{
 		try
 		{
+System.out.println("in getId……");
 	  		List params = new ArrayList();
 	  		String className = "<%=fullPackageName%>.<%=klassName%>";
 			
@@ -178,6 +181,14 @@ if(action != null && action.indexOf("R") != -1)
 			  builder.entity("<error>Failed to Query due to: "+e.getMessage()+"</error>");
 			  throw new WebApplicationException(builder.build());
 		}
+		catch(Exception e)
+		{
+			  log.error("Error in querying REST resource: " + e.getMessage());
+			  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
+			  builder.type("application/xml");
+			  builder.entity("<error>Failed to Query due to: "+e.getMessage()+"</error>");
+			  throw new WebApplicationException(builder.build());
+		}
 		
 	}
 	
@@ -187,6 +198,7 @@ if(action != null && action.indexOf("R") != -1)
 	@Produces("application/xml")
 	public <%=klassName%>s get<%=klassName%>(@Context UriInfo uriInfo)
 	{
+System.out.println("in search ….");
 		try
 		{
 			List<PathSegment> pathSegments = uriInfo.getPathSegments();
@@ -223,14 +235,33 @@ if(action != null && action.indexOf("R") != -1)
 				  builder.entity("<error>No searchable fields on this resource" +"</error>");
 				  throw new WebApplicationException(builder.build());
 			}
+			
+			String username = uriInfo.getQueryParameters().getFirst("username");
+			String password = uriInfo.getQueryParameters().getFirst("password");
+System.out.println("username: "+ username);
+System.out.println("password: "+ password);
+password = org.apache.cxf.jaxrs.utils.HttpUtils.pathDecode(password);
+System.out.println("password: "+ password);
 
+ApplicationService appService = null;
+
+if(secured)
+{
+System.out.println("in search secured");
+	appService = getApplicationService(username, password);
+}
+else
+{
+System.out.println("in search not secured");
+	appService = getApplicationService();
+}
 			validateCriteria(matrixParams, searchFields);
 			HQLCriteria hcriteria = buildHQLCriteria("<%=fullPackageName%>.<%=klassName%>", searchFields, matrixParams, uriInfo);
-			int rowCount = getApplicationService().getQueryRowCount(hcriteria, "<%=fullPackageName%>.<%=klassName%>");
-			int maxRowCountPerQuery = getApplicationService().getMaxRecordsCount();
+			int rowCount = appService.getQueryRowCount(hcriteria, "<%=fullPackageName%>.<%=klassName%>");
+			int maxRowCountPerQuery = appService.getMaxRecordsCount();
 			//System.out.println("rowCount: "+rowCount);
 			//System.out.println("maxRowCountPerQuery: "+maxRowCountPerQuery);
-			Collection results = getApplicationService().query(hcriteria);
+			Collection results = appService.query(hcriteria);
 			ResourceLink nextLink = getNextLink(uriInfo, results.size(), rowCount, maxRowCountPerQuery);
 			ResourceLink previousLink = getPreviousLink(uriInfo, results.size(), rowCount, maxRowCountPerQuery);
 			ResourceLink selfLink = getSelfLink(uriInfo);
@@ -252,6 +283,7 @@ if(action != null && action.indexOf("R") != -1)
 					collection.addLink(previousLink);
 
 				collection.addLink(selfLink);
+System.out.println("Returning collection: "+collection.toString());
 				return collection;
 			}
 				
@@ -289,7 +321,22 @@ if(action != null && action.indexOf("R") != -1)
 			  builder.entity(buffer.toString());
 			  throw new WebApplicationException(builder.build());
 		}
-		
+		catch(Exception e)
+		{
+			  log.error("Error in querying REST resource: " + e.getMessage());
+			  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
+			  builder.type("application/xml");
+			  StringBuffer buffer = new StringBuffer();
+			  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+			  buffer.append("<response>");
+			  buffer.append("<type>ERROR</type>");
+			  buffer.append("<code>INTERNAL_ERROR_2</code>");
+			  buffer.append("<message>Failed to Query due to: "+e.getMessage()+"</message>");
+			  buffer.append("</response>");
+			  builder.entity(buffer.toString());
+			  throw new WebApplicationException(builder.build());
+		}
+
 	}
 	
 
@@ -462,6 +509,21 @@ for(UMLAssociation assoc: assocs){
 				  builder.entity(buffer.toString());
 				  throw new WebApplicationException(builder.build());
 			}
+		catch(Exception e)
+		{
+			  log.error("Error in querying REST resource: " + e.getMessage());
+			  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
+			  builder.type("application/xml");
+			  StringBuffer buffer = new StringBuffer();
+			  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+			  buffer.append("<response>");
+			  buffer.append("<type>ERROR</type>");
+			  buffer.append("<code>INTERNAL_ERROR_4</code>");
+			  buffer.append("<message>Failed to Query due to: "+e.getMessage()+"</message>");
+			  buffer.append("</response>");
+			  builder.entity(buffer.toString());
+			  throw new WebApplicationException(builder.build());
+		}
 
 		}
 
@@ -570,6 +632,21 @@ for(UMLAssociation assoc: assocs){
 				  builder.entity(buffer.toString());
 				  throw new WebApplicationException(builder.build());
 			}
+		catch(Exception e)
+		{
+			  log.error("Error in querying REST resource: " + e.getMessage());
+			  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
+			  builder.type("application/xml");
+			  StringBuffer buffer = new StringBuffer();
+			  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+			  buffer.append("<response>");
+			  buffer.append("<type>ERROR</type>");
+			  buffer.append("<code>INTERNAL_ERROR_5</code>");
+			  buffer.append("<message>Failed to Query due to: "+e.getMessage()+"</message>");
+			  buffer.append("</response>");
+			  builder.entity(buffer.toString());
+			  throw new WebApplicationException(builder.build());
+		}
 			
 		}
 	<%}else{
@@ -657,6 +734,21 @@ for(UMLAssociation assoc: assocs){
 				  builder.entity(buffer.toString());
 				  throw new WebApplicationException(builder.build());
 			}
+		catch(Exception e)
+		{
+			  log.error("Error in querying REST resource: " + e.getMessage());
+			  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
+			  builder.type("application/xml");
+			  StringBuffer buffer = new StringBuffer();
+			  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+			  buffer.append("<response>");
+			  buffer.append("<type>ERROR</type>");
+			  buffer.append("<code>INTERNAL_ERROR_6</code>");
+			  buffer.append("<message>Failed to Query due to: "+e.getMessage()+"</message>");
+			  buffer.append("</response>");
+			  builder.entity(buffer.toString());
+			  throw new WebApplicationException(builder.build());
+		}
 			
 		}
 		
@@ -858,6 +950,21 @@ if(action != null && action.indexOf("D") != -1 && !transformerUtils.isISO21090En
 			  buffer.append("<response>");
 			  buffer.append("<type>ERROR</type>");
 			  buffer.append("<code>INTERNAL_ERROR_1</code>");
+			  buffer.append("<message>Failed to Query due to: "+e.getMessage()+"</message>");
+			  buffer.append("</response>");
+			  builder.entity(buffer.toString());
+			  throw new WebApplicationException(builder.build());
+		}
+		catch(Exception e)
+		{
+			  log.error("Error in querying REST resource: " + e.getMessage());
+			  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
+			  builder.type("application/xml");
+			  StringBuffer buffer = new StringBuffer();
+			  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+			  buffer.append("<response>");
+			  buffer.append("<type>ERROR</type>");
+			  buffer.append("<code>INTERNAL_ERROR_7</code>");
 			  buffer.append("<message>Failed to Query due to: "+e.getMessage()+"</message>");
 			  buffer.append("</response>");
 			  builder.entity(buffer.toString());
