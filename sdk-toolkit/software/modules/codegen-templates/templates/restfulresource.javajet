@@ -28,6 +28,7 @@ import javax.ws.rs.core.Context;
 import javax.servlet.ServletContext;
 import javax.ws.rs.WebApplicationException;
 import gov.nih.nci.system.applicationservice.ApplicationService;
+import javax.servlet.http.HttpServletRequest;
 
 import java.net.URI;
 import java.util.List;
@@ -196,7 +197,7 @@ System.out.println("in getId……");
 	@GET
 	@Path("/search")
 	@Produces("application/xml")
-	public <%=klassName%>s get<%=klassName%>(@Context UriInfo uriInfo)
+	public <%=klassName%>s get<%=klassName%>(@Context UriInfo uriInfo, @Context HttpServletRequest request)
 	{
 System.out.println("in search ….");
 		try
@@ -236,17 +237,18 @@ System.out.println("in search ….");
 				  throw new WebApplicationException(builder.build());
 			}
 			
-			String username = uriInfo.getQueryParameters().getFirst("username");
-			String password = uriInfo.getQueryParameters().getFirst("password");
-System.out.println("username: "+ username);
-System.out.println("password: "+ password);
-password = org.apache.cxf.jaxrs.utils.HttpUtils.pathDecode(password);
-System.out.println("password: "+ password);
+//			String username = uriInfo.getQueryParameters().getFirst("username");
+//			String password = uriInfo.getQueryParameters().getFirst("password");
 
 ApplicationService appService = null;
 
 if(secured)
 {
+	String username = request.getRemoteUser();
+	String password = request.getUserPrincipal().getName();
+System.out.println("username: "+ username);
+System.out.println("password: "+ password);
+
 System.out.println("in search secured");
 	appService = getApplicationService(username, password);
 }

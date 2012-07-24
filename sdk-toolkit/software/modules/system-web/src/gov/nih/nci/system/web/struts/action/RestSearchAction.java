@@ -15,7 +15,7 @@ import org.apache.struts2.dispatcher.SessionMap;
 import org.acegisecurity.Authentication;
 import javax.ws.rs.core.Response.Status;
 import com.opensymphony.xwork2.ActionContext;
-
+import org.apache.commons.codec.binary.Base64;
 public class RestSearchAction extends RestQuery {
 
 	private static final long serialVersionUID = 1234567890L;
@@ -83,11 +83,13 @@ public class RestSearchAction extends RestQuery {
 			String path = "rest/"
 					+ selectedDomain.substring(
 							selectedDomain.lastIndexOf(".") + 1,
-							selectedDomain.length()) + "/" + queryStr
-					+ "?username=" + userName + "&password="
-					+ org.apache.cxf.jaxrs.utils.HttpUtils.pathEncode(password);
+							selectedDomain.length()) + "/" + queryStr;
+//					+ "?username=" + userName + "&password="
+//					+ org.apache.cxf.jaxrs.utils.HttpUtils.pathEncode(password);
 			System.out.println("Path: " + path);
 			client.path(path);
+			String base64encodedUsernameAndPassword = new String(Base64.encodeBase64((userName + ":" + password).getBytes()));
+			client.header("Authorization", "Basic " + base64encodedUsernameAndPassword);
 
 			client.type("application/xml").accept("application/xml");
 			Response r = client.get();
