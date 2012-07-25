@@ -29,6 +29,7 @@ import javax.servlet.ServletContext;
 import javax.ws.rs.WebApplicationException;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
 
 import java.net.URI;
 import java.util.List;
@@ -199,7 +200,7 @@ System.out.println("in getId……");
 	@Produces("application/xml")
 	public <%=klassName%>s get<%=klassName%>(@Context UriInfo uriInfo, @Context HttpServletRequest request)
 	{
-System.out.println("in search ….");
+System.out.println("in search *******");
 		try
 		{
 			List<PathSegment> pathSegments = uriInfo.getPathSegments();
@@ -244,12 +245,17 @@ ApplicationService appService = null;
 
 if(secured)
 {
+System.out.println("in search secured");
 	String username = request.getRemoteUser();
-	String password = request.getUserPrincipal().getName();
+Principal p = request.getUserPrincipal();
+System.out.println("in search secured p "+p);
+String password = null;
+if(p != null)
+	password = p.getName();
 System.out.println("username: "+ username);
 System.out.println("password: "+ password);
 
-System.out.println("in search secured");
+
 	appService = getApplicationService(username, password);
 }
 else
@@ -306,10 +312,12 @@ System.out.println("Returning collection: "+collection.toString());
 		}
 		catch(WebApplicationException e)
 		{
+			e.printStackTrace();
 			throw e;
 		}
 		catch(ApplicationException e)
 		{
+e.printStackTrace();
 			  log.error("Error in querying REST resource: " + e.getMessage());
 			  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
 			  builder.type("application/xml");
@@ -325,7 +333,8 @@ System.out.println("Returning collection: "+collection.toString());
 		}
 		catch(Exception e)
 		{
-			  log.error("Error in querying REST resource: " + e.getMessage());
+	e.printStackTrace();	
+	  log.error("Error in querying REST resource: " + e.getMessage());
 			  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
 			  builder.type("application/xml");
 			  StringBuffer buffer = new StringBuffer();
