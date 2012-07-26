@@ -10,21 +10,12 @@
 <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="jquery-ui-1.8.2.custom.min.js"></script>
 <script type="text/javascript" src="iso-21090-datatype.2.1.js"></script>
-
-<script type="text/javascript">
-function create()
-{
-alert("create");
-document.href.location="Create.action";
-}
-</script>
 <%
 JSPUtils jspUtils= null;
 List fieldNames=new ArrayList();
 List domainNames=new ArrayList();
 String message=null, selectedSearchDomain=null;
 String className = (String)request.getAttribute("klassName");
-String nodeId = (String)request.getAttribute("nodeId");
 
 //out.println("className: " + className);
 //session.setAttribute("selectedDomain", className);
@@ -188,57 +179,5 @@ if(className != null)
 	</table>
 	<s:hidden name="selectedDomain" />
 </form>	
-
-
-<%
-boolean found = false;
-String cName = className.substring(className.lastIndexOf(".")+1, className.length());
-try
-{
-Class klass = Class.forName(className+"Resource");
-System.out.println("className: "+className);
-
-Method[] allMethods = klass.getDeclaredMethods();
-String addName = "add"+cName;
-System.out.println("addName: "+addName);
-for (Method m : allMethods) {
-	String mname = m.getName();
-	System.out.println("mname: "+mname);
-	if(addName.equals(mname))	
-		found = true;
-}
-
-}
-catch(Exception e)
-{
-e.printStackTrace();
-}
-%>
-
-<%
-if(found)
-{
-
-%>
-<form method="post" target="_blank" action="PreCreate.action" name="Create" id="Create">
-<input type="hidden" name="nodeId" value="<%=nodeId%>"/>
-				<table cellpadding="4" cellspacing="0" border="0">
-					<tr align="left">
-					<td class="formField">
-					Click on the Create button to create a <%=cName%> record.
-					</td></tr>
-					<tr align="left">
-
-						<td align="left"><input type="submit" name="BtnCreate" class="actionButton" value="Create" ></td> 
-					</tr>
-				</table>
-
-</form>
-<%	
-}
-%>
-
-<%
-}
-
-}%> 
+<%		}
+	}%> 

@@ -108,10 +108,10 @@ public class HTTPUtils implements Serializable{
 			put("gov.nih.nci.iso21090.Ivl<gov.nih.nci.iso21090.Int>",new JAXBISOIvlIntAdapter<ANY, Any>());
 			put("gov.nih.nci.iso21090.Ivl<gov.nih.nci.iso21090.Pq>",new JAXBISOIvlPqAdapter<ANY, Any>());
 		}
-	};	
-	
+	};
+
 	private static Marshaller marshaller=null;
-	
+
 	static{
 		try {
 			JAXBContext jaxbContext = JAXBContext.newInstance("org.iso._21090");
@@ -209,7 +209,7 @@ public class HTTPUtils implements Serializable{
 					}
 					else if(param.toLowerCase().startsWith("rolename=")){
 						roleName = param.substring("roleName=".length());
-					}					
+					}
 					else if(param.toLowerCase().startsWith("pagenumber=")){
 						pageNumber = param.substring("pageNumber=".length());
 					}
@@ -442,10 +442,10 @@ public class HTTPUtils implements Serializable{
 
 	public org.jdom.Document getXMLDocument(Object[] resultSet, int pageNumber) throws Exception{
 		return getXMLDocument(resultSet, pageNumber, true);
-	}	
+	}
 	/**
 	 * Generates an org.jdom.Document based on a resultSet
-	 * 
+	 *
 	 * @param resultSet -
 	 *            specifies a list of populated domain objects
 	 * @param pageNumber -
@@ -461,7 +461,7 @@ public class HTTPUtils implements Serializable{
 		if(queryType)
 		{
 			Element queryString = new Element("queryString").setText(query);
-		
+
 			if(targetResult.indexOf(SystemConstant.COMMA)>1){
 				targetResult = targetResult.substring(0, targetResult.indexOf(SystemConstant.COMMA));
 			}
@@ -473,7 +473,7 @@ public class HTTPUtils implements Serializable{
 			Element queryElement = new Element("query").addContent(queryString).addContent(queryClass);
 			queryRequest.addContent(queryElement);
 			queryRequest.addContent(new org.jdom.Element("criteria").setText(criteria));
-	
+
 			httpQuery.addContent(queryRequest);
 		}
 		else
@@ -487,7 +487,7 @@ public class HTTPUtils implements Serializable{
 			Element queryClass = new Element("class").setText(targetResult);
 			Element queryElement = new Element("query").addContent(queryClass);
 			queryRequest.addContent(queryElement);
-			
+
 		}
 		int start = 0;
 		int end = resultSet.length;
@@ -496,7 +496,7 @@ public class HTTPUtils implements Serializable{
 		int resultCount = 0;
 		int nextStartIndex = 0;
 		int totalNumRecords = results.size();
-		
+
 		if(!(startIndex.equals("0") || startIndex == null)){
 			index = Integer.valueOf(startIndex).intValue();
 		}
@@ -509,7 +509,7 @@ public class HTTPUtils implements Serializable{
 
 		String counter = String.valueOf(totalNumRecords);
 		xmlElement.addContent(new Element("recordCounter").setText(counter));
-		
+
 		if(resultSet.length >0){
 			if(pageSize != null){
 				rowCount = Integer.parseInt(pageSize);
@@ -528,7 +528,7 @@ public class HTTPUtils implements Serializable{
 			if(pageNumber > pageCounter){
 				pageNumber = 1;
 			}
-			
+
 			if(pageNumber > 0 && pageNumber <= pageCounter){
 				end = rowCount * pageNumber;
 				start = end - rowCount;
@@ -536,10 +536,10 @@ public class HTTPUtils implements Serializable{
 					end = size;
 				}
 			}
-			
+
 			if(end == 0)
 				end = resultSet.length;
-			
+
 			String recordNum = "";
 			Set<String> resultClass = new HashSet<String>();
 			List<String> classes = new ArrayList<String>();
@@ -569,10 +569,10 @@ public class HTTPUtils implements Serializable{
 						Object result = subResults.get(i);
 						int recNum = index + i + 1;
 						recordNum = String.valueOf(recNum);
-						
+
 						Element element = getElement(result, recordNum, queryType);
 						xmlElement.addContent(element);
-						
+
 					}
 
 				}
@@ -603,7 +603,7 @@ public class HTTPUtils implements Serializable{
 					Element nextElement = new Element("next").setAttribute("type","simple",namespace).setAttribute("href",nextLink,namespace).setText(nextText);
 					xmlElement.addContent(nextElement);
 				}
-	
+
 				for(int i=0; i< pageCounter; i++){
 					int p = i + 1;
 					String pageLink = servletName +"?query="+targetClassName+SystemConstant.AMPERSAND+criteria +"&pageNumber="+p+"&resultCounter="+resultCounter+"&startIndex="+startIndex;
@@ -643,7 +643,7 @@ public class HTTPUtils implements Serializable{
 
 	/**
 	 * Generates an org.jdom.Document based on a resultSet
-	 * 
+	 *
 	 * @param resultSet -
 	 *            specifies a list of populated domain objects
 	 * @param pageNumber -
@@ -733,10 +733,10 @@ public class HTTPUtils implements Serializable{
 						Object result = subResults.get(i);
 						int recNum = index + i + 1;
 						recordNum = String.valueOf(recNum);
-						
+
 						Element element = getElement(result, recordNum, true);
 						xmlElement.addContent(element);
-						
+
 					}
 
 				}
@@ -804,17 +804,17 @@ public class HTTPUtils implements Serializable{
 	 */
 	private String getCriteriaIdValue(Object result) throws Exception{
 		Field[] fields = classCache.getAllFields(result.getClass());
-		
+
 		String idName = classCache.getClassIdName(result.getClass());
 		Field idField = getIdField(fields,idName);
-		
+
 		if (idField == null)
 			throw new Exception("ERROR: No identifier field found for class " + result.getClass().getName());
-		
+
 		String id = idField.getName();
 
 		String criteriaIdValue = SystemConstant.AT + id + SystemConstant.EQUAL;
-		
+
 		if(idField.getName().indexOf(SystemConstant.DOT)>0){
 			id = id.substring(id.lastIndexOf(SystemConstant.DOT)+1);
 		}
@@ -827,7 +827,7 @@ public class HTTPUtils implements Serializable{
 
 	/**
 	 * Generates an Element for a given result object
-	 * 
+	 *
 	 * @param result
 	 *            - an instance of a class
 	 * @param recordNum
@@ -843,14 +843,14 @@ public class HTTPUtils implements Serializable{
 				result.getClass().getName()).setAttribute("recordNumber",
 				recordNum);
 		String criteriaIdValue = getCriteriaIdValue(result);
-		
+
 		String link = null;
 		Field[] fields = classCache.getAllFields(result.getClass());
 		for (int f = 0; f < fields.length; f++) {
 			String criteriaBean = result.getClass().getName();
 			Field field = fields[f];
 			String fieldName = field.getName();
-			if (fieldName.equalsIgnoreCase("serialVersionUID")) {
+			if (fieldName.equalsIgnoreCase("serialVersionUID") ||  && fieldName.equalsIgnoreCase("links")) {
 				continue;
 			}
 			Element fieldElement = new Element("field").setAttribute("name",
@@ -891,13 +891,13 @@ public class HTTPUtils implements Serializable{
 					String methodName = "get"
 							+ fieldName.substring(0, 1).toUpperCase()
 							+ fieldName.substring(1);
-	
+
 					link = servletName + "?query=" + targetBean
 							+ SystemConstant.AMPERSAND + criteriaBean
 							+ SystemConstant.LEFT_BRACKET + criteriaIdValue
 							+ SystemConstant.RIGHT_BRACKET
 							+ SystemConstant.AMPERSAND + "roleName=" + fieldName;
-	
+
 					fieldElement.setAttribute("type", "simple", namespace)
 					.setAttribute("href", link, namespace)
 					.setText(methodName);
@@ -905,7 +905,7 @@ public class HTTPUtils implements Serializable{
 				else
 				{
 					String roleName = fieldName.substring(0, 1).toUpperCase()+ fieldName.substring(1);
-					link = servletName  
+					link = servletName
 					+ SystemConstant.FORWARD_SLASH
 					+ roleName;
 
@@ -946,7 +946,7 @@ public class HTTPUtils implements Serializable{
 								fieldValue = String.valueOf(value);
 								fieldElement.addContent(fieldValue);
 							}
-						}						
+						}
 					}
 				} catch (Exception ex) {
 					fieldValue = " ";
@@ -1006,7 +1006,7 @@ public class HTTPUtils implements Serializable{
 		return true;
 
 	}
-	
+
 	/**
 	 * Returns an id field from an array of fields
 	 * @param fields
@@ -1045,7 +1045,7 @@ public class HTTPUtils implements Serializable{
 		}
 		return field;
 	}
-	
+
 	/**
 	 * Returns a field value
 	 * @param field - specifies the field
@@ -1062,7 +1062,7 @@ public class HTTPUtils implements Serializable{
 				SimpleDateFormat date = new SimpleDateFormat("MM-dd-yyyy");
 				value = date.format((Date)fieldValue);
 			} else if (fieldType.equals("java.lang.Integer")) {
-				value = ((Integer)fieldValue).toString();						
+				value = ((Integer)fieldValue).toString();
 			} else if(fieldType.equals("gov.nih.nci.iso21090.Ii")){
 				String extensionValue = ((Ii)fieldValue).getExtension();
 				value = "[@extension=" + extensionValue + "]";
@@ -1099,7 +1099,7 @@ public class HTTPUtils implements Serializable{
 
 	private Object marshalISOObjectTOXml(Field field, Object domain)
 			throws Exception {
-		Object value= field.get(domain);		
+		Object value= field.get(domain);
 		Marshaller isoMarshaller = getJaxbMarshaller(field.getType().getName());
 		if (isoMarshaller != null) {
 			XmlAdapter<ANY, Any> jaxbAdapter = jaxbISOAdapterMap.get(field
@@ -1108,12 +1108,12 @@ public class HTTPUtils implements Serializable{
 				jaxbAdapter = jaxbISOAdapterMap.get("defaultAdapter");
 			}
 			org.iso._21090.ANY anyJaxb = jaxbAdapter.marshal((Any) value);
-			
+
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			dbf.setNamespaceAware(true);
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			org.w3c.dom.Document domDoc = db.newDocument();
-			isoMarshaller.marshal(anyJaxb, domDoc);	
+			isoMarshaller.marshal(anyJaxb, domDoc);
 
 			DOMBuilder builder = new DOMBuilder();
 	        org.jdom.Document jdomDoc = builder.build(domDoc);
@@ -1121,16 +1121,16 @@ public class HTTPUtils implements Serializable{
 		}
 		return value;
 	}
-	
+
 	private Marshaller getJaxbMarshaller(String fieldName) throws JAXBException,
 			PropertyException {
-		if(!fieldName.startsWith("gov.nih.nci.iso21090.")) return null;		
+		if(!fieldName.startsWith("gov.nih.nci.iso21090.")) return null;
 		return marshaller;
 	}
-	
+
 	/**
 	 * Returns an array of result objects
-	 * 
+	 *
 	 * @return
 	 * @throws Exception
 	 */
@@ -1175,7 +1175,7 @@ public class HTTPUtils implements Serializable{
 
 	/**
 	 * Returns an array of result objects
-	 * 
+	 *
 	 * @return
 	 * @throws Exception
 	 */
@@ -1218,10 +1218,10 @@ public class HTTPUtils implements Serializable{
 		}
 		return resultSet;
 	}
-	
+
 	/**
 	 * Returns an array of result objects
-	 * 
+	 *
 	 * @return
 	 * @throws Exception
 	 */
@@ -1291,7 +1291,7 @@ public class HTTPUtils implements Serializable{
 	 * @param xmlDoc Specifies the xml document
 	 * @param styleIn specifies the stylesheet
 	 * @return
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 
 	public void transform(Document xmlDoc, InputStream styleIn, OutputStream out)
@@ -1376,14 +1376,14 @@ public class HTTPUtils implements Serializable{
 			out.println("<TR BGCOLOR=\"#E3E4FA\">");
 			for(int x=0; x<fields.length; x++){
 				String fName = fields[x].getName();
-				if(!fName.equalsIgnoreCase("serialVersionUID")){
+				if(!(fName.equalsIgnoreCase("serialVersionUID") && fName.equalsIgnoreCase("links"))){
 					out.println("<TD>"+ fName +"</TD>");
 				}
 
 			}
 			for(int x=0; x<superFields.length; x++){
 				String fName = superFields[x].getName();
-				if(!fName.equalsIgnoreCase("serialVersionUID")){
+				if(!(fName.equalsIgnoreCase("serialVersionUID") && fName.equalsIgnoreCase("links"))){
 					out.println("<TD>"+ fName +"</TD>");
 				}
 
@@ -1412,7 +1412,7 @@ public class HTTPUtils implements Serializable{
 					throw new IOException(ex.getMessage());
 				}
 			}
-			else if(fieldName.equalsIgnoreCase("serialVersionUID")){
+			else if(fieldName.equalsIgnoreCase("serialVersionUID") ||  fName.equalsIgnoreCase("links")){
 				continue;
 			}
 			boolean bean = false;
@@ -1485,37 +1485,37 @@ public class HTTPUtils implements Serializable{
 		else
 			hql = "select dest from "+assocType+" as dest,"+source.getClass().getName()+" as src where src."+associationName+".id=dest.id";
 
-	
+
 		NestedCriteria nestedCriteria = new NestedCriteria();
 		nestedCriteria.setSourceObjectName(source.getClass().getName());
 		nestedCriteria.setTargetObjectName(source.getClass().getName());
-		
+
 		List sourceObjectList = new ArrayList();
 		sourceObjectList.add(source);
 		nestedCriteria.setSourceObjectList(sourceObjectList);
-		
+
 		String srcAlias = "src";
 		NestedCriteria2HQL criteria2hql = new NestedCriteria2HQL(nestedCriteria, configurationHolder.getConfiguration(), false,srcAlias);
-		
+
 		HQLCriteria hqlCriteria=null;
 		try {
 			hqlCriteria = criteria2hql.translate();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		int beginIndex = hqlCriteria.getHqlString().lastIndexOf("where");
 		if (beginIndex > 0){
 			if (isCollection)
 				hql += " where ";
 			else
 				hql += " and ";
-			
-			hql += hqlCriteria.getHqlString().substring(beginIndex + 6);	
+
+			hql += hqlCriteria.getHqlString().substring(beginIndex + 6);
 		}
-		
+
 		hqlCriteria.setHqlString(hql);
-		
+
 		return applicationService.query(hqlCriteria);
-	}	
+	}
 }

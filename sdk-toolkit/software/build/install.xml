@@ -586,6 +586,13 @@
 		<delete dir="${jboss.home}/server/${jboss.server.name}/tmp" />
 		<delete dir="${jboss.home}/server/${jboss.server.name}/work" />
 		<copy file="${package.client.jboss.default.deploy.dir}/${PROJECT_NAME}.war" todir="${jboss.home}/server/${jboss.server.name}/deploy" overwrite="true" />
+		<if>
+			<equals arg1="${GENERATE_RESTFUL_RESOURCES}" arg2="true" />
+			<then>
+			<copy file="${package.client.jboss.default.deploy.dir}/${PROJECT_NAME}rest.war" todir="${jboss.home}/server/${jboss.server.name}/deploy" overwrite="true" />
+			</then>
+		</if>
+		
 	</target>
 
 	<target name="install:jboss:coberturaflush-webapp" description="Deploy example-webapp and common libraries to tomcat installation" unless="exclude.jboss">
@@ -820,6 +827,14 @@
 	<target name="install:tomcat:project-webapp" description="Deploy example-webapp and common libraries to tomcat installation" unless="exclude.tomcat">
 		<delete dir="${tomcat.home}//webapps/${PROJECT_NAME}" quiet="true"/>
 		<copy file="${package.client.tomcat.webapps.dir}/${PROJECT_NAME}.war" todir="${tomcat.home}/webapps" overwrite="true" />
+		<if>
+			<equals arg1="${GENERATE_RESTFUL_RESOURCES}" arg2="true" />
+			<then>
+				<delete dir="${tomcat.home}//webapps/${PROJECT_NAME}rest" quiet="true"/>
+				<copy file="${package.client.tomcat.webapps.dir}/${PROJECT_NAME}rest.war" todir="${tomcat.home}/webapps" overwrite="true" />
+			</then>
+		</if>
+		
 	</target>
 
 	<target name="install:tomcat:coberturaflush-webapp" description="Deploy example-webapp and common libraries to tomcat installation" unless="exclude.tomcat">

@@ -909,6 +909,13 @@
 				<include name="**/*" />
 			</fileset>
 		</copy>
+		<mkdir dir="${output.project.dir}/restweb" />
+		<copy todir="${output.project.dir}/restweb">
+			<fileset dir="${workspace.dir}/restweb">
+				<include name="**/*" />
+			</fileset>
+		</copy>
+
 	</target>
 
 	<target name="dist" description="target to package-system">

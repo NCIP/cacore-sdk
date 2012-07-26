@@ -24,22 +24,10 @@
 		</action>
 
 		<action name="Result"
-			class="gov.nih.nci.system.web.struts.action.RestSearchAction">
-			<result name="login" type="chain">Home</result>
-			<result>WEB-INF/jsp/result.jsp</result>
-		</action>
-		<action name="LinkResult"
-			class="gov.nih.nci.system.web.struts.action.RestLinkAction">
-			<result name="login" type="chain">Home</result>
-			<result>WEB-INF/jsp/result.jsp</result>
-		</action>
-
-		<action name="Result2"
-			class="gov.nih.nci.system.web.struts.action.RestQuery">
+			class="gov.nih.nci.system.web.struts.action.Result">
 			<result name="login" type="chain">Home</result>
 			<result type="redirect">${query}</result>
 		</action>
-
 	</package>
 
 	<package name="ui-tags-ajax" extends="struts-default">
@@ -48,27 +36,6 @@
 			class="gov.nih.nci.system.web.struts.action.Criteria">
 			<result name="login" type="chain">Home</result>
 			<result>WEB-INF/jsp/Criteria.jsp</result>
-		</action>
-		<action name="PreCreate"
-			class="gov.nih.nci.system.web.struts.action.Criteria">
-			<result name="login" type="chain">Home</result>
-			<result>WEB-INF/jsp/Create.jsp</result>
-		</action>
-		<action name="Create"
-			class="gov.nih.nci.system.web.struts.action.CreateAction">
-			<result name="login" type="chain">Home</result>
-			<result name="error" type="chain">Create</result>
-			<result>WEB-INF/jsp/Create.jsp</result>
-		</action>
-		<action name="Update"
-			class="gov.nih.nci.system.web.struts.action.UpdateAction">
-			<result name="login" type="chain">Home</result>
-			<result>WEB-INF/jsp/Update.jsp</result>
-		</action>
-		<action name="Delete"
-			class="gov.nih.nci.system.web.struts.action.DeleteAction">
-			<result name="login" type="chain">Home</result>
-			<result>WEB-INF/jsp/Delete.jsp</result>
 		</action>
 	</package>
 

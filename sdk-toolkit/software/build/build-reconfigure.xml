@@ -1523,22 +1523,6 @@
 				<include name="${orm.file}" />
 			</fileset>
 		</copy>
-		<if>
-			<equals arg1="${GENERATE_RESTFUL_RESOURCES}" arg2="true" />
-			<then>
-				<copy todir="${temp.webapp.staging.lib.dir}">
-					<fileset dir="${runtime.lib.dir}">
-						<include name="jsr311-api-*.jar"/>
-					</fileset>
-					<fileset dir="${output.target.dir}">
-						<include name="${rest.file}"/>
-					</fileset>
-					<fileset dir="${lib.dir}">
-						<include name="sdk-writable-api-client-*.jar"/>
-					</fileset>
-				</copy>
-			</then>
-		</if>
 
 		<if>
 			<equals arg1="${3RD_PARTY_JARS_DIRECTORY}" arg2="true"/>
@@ -1702,6 +1686,305 @@
 			</fileset>
 		</copy>
 		
+	</target>
+
+	<target name="-staging-rest-war" depends="">
+		<delete dir="${temp.webapp.staging.dir}" includeemptydirs="true">
+		</delete>
+
+		<mkdir dir="${temp.webapp.staging.dir}" />
+		<mkdir dir="${temp.webapp.staging.lib.dir}" />
+		<mkdir dir="${temp.webapp.staging.classes.dir}" />
+
+		<copy todir="${temp.webapp.staging.lib.dir}" overwrite="true">
+			<fileset dir="${runtime.lib.dir}">
+				<include name="acegi-security-*.jar"/>
+				<include name="aopalliance*.jar"/>
+				<include name="antlr-*.jar"/>
+				<include name="asm-*.jar"/>
+				<include name="axis-1.4.jar"/>
+				<include name="backport-util-concurrent-*.jar"/>
+				<include name="caGrid-CQL-cql.1.0-*.jar"/>
+				<include name="caGrid-data-common-*.jar"/>
+				<include name="caGrid-data-stubs-*.jar"/>
+				<include name="caGrid-sdkQuery4-beans-*.jar"/>
+				<include name="caGrid-sdkQuery4-processor-*.jar"/>
+				<include name="caGrid-*-processor-*.jar"/>
+				<include name="caGrid-*-translator-*.jar"/>
+				<include name="castor-*.jar"/>
+				<include name="cglib-*.jar"/>
+				<include name="commons-beanutils-*.jar"/>				
+				<include name="commons-collections-*.jar"/>
+				<include name="commons-discovery-*.jar"/>
+				<include name="commons-lang-*.jar"/>
+				<include name="commons-io-*.jar"/>
+				<include name="commons-fileupload*.jar"/>
+				<include name="commons-logging-*.jar"/>
+				<include name="clm-*.jar"/>
+				<include name="csmapi-*.jar"/>
+				<include name="dom4j-*.jar"/>
+				<include name="ehcache-*.jar"/>
+				<include name="ejb3-persistence-*.jar"/>
+				<include name="freemarker-*.jar"/>
+				<include name="hibernate-*.jar"/>
+				<include name="slf4j*.jar"/>
+				<include name="hibernate-annotations-*.jar"/>
+				<include name="hibernate-validator-*.jar"/>
+				<include name="jaxb-*.jar"/>
+				<include name="jdom-1.1.jar"/>
+				<include name="jta-*.jar"/>
+				<include name="${server-include-list}"/>
+				<include name="mmbase-*.jar"/>
+				<include name="ognl-*.jar"/>
+				<include name="saaj-*.jar"/>
+				<include name="org.springframework.*.jar"/>
+				<include name="stax-*.jar"/>
+				<include name="struts2-*.jar"/>
+				<include name="wsdl4j-*.jar"/>
+				<include name="xwork-*.jar"/>
+				<include name="cxf-*.jar"/>
+				<include name="geronimo-*.jar"/>
+				<include name="neethi-*.jar"/>
+				<include name="stax2-api-*.jar"/>
+				<include name="xml-resolver-*.jar"/>
+				<include name="xmlschema-core-*.jar"/>
+			</fileset>
+			<fileset dir="${lib.dir}">
+				<include name="sdk-security-*.jar"/>
+				<include name="sdk-system-client-*.jar"/>
+				<include name="sdk-system-core-*.jar"/>
+				<include name="sdk-system-web-*.jar"/>
+				<include name="sdk-system-ws-*.jar"/>
+			</fileset>
+			<fileset dir="${output.target.dir}">
+				<include name="${bean.file}" />
+				<include name="${orm.file}" />
+			</fileset>
+		</copy>
+
+		<copy todir="${temp.webapp.staging.lib.dir}">
+			<fileset dir="${runtime.lib.dir}">
+				<include name="jsr311-api-*.jar"/>
+			</fileset>
+			<fileset dir="${output.target.dir}">
+				<include name="${rest.file}"/>
+			</fileset>
+			<fileset dir="${lib.dir}">
+				<include name="sdk-writable-api-client-*.jar"/>
+			</fileset>
+		</copy>
+
+		<if>
+			<equals arg1="${3RD_PARTY_JARS_DIRECTORY}" arg2="true"/>
+		<then>
+		<copy todir="${temp.webapp.staging.lib.dir}" overwrite="true">
+			<fileset dir="${3RD_PARTY_JARS_DIRECTORY}">
+				<include name="*.jar" />
+			</fileset>
+		</copy>
+		</then>
+		</if>
+
+		<if>
+		<equals arg1="${SERVER_TYPE}" arg2="tomcat" casesensitive="false" trim="true" />
+		<then>
+		<copy todir="${temp.webapp.staging.lib.dir}" overwrite="true">
+			<fileset dir="${runtime.lib.dir}">
+			<include name="jaxrpc-*.jar"/>
+			<include name="javassist-*.jar"/>
+			</fileset>
+		</copy>
+		</then>
+		</if>
+
+
+		<if>
+			<equals arg1="${GENERATE_JAXB_MAPPING}" arg2="true" />
+			<then>
+				<echo message="JAXB is enabled.  Copying JAXB related jars to web app staging lib" />
+				<copy todir="${temp.webapp.staging.lib.dir}" overwrite="true">
+					<fileset dir="${runtime.lib.dir}">
+						<include name="activation-*.jar"/>
+						<include name="jaxb-*.jar"/>
+						<include name="stax-*.jar"/>
+					</fileset>
+				</copy>
+			</then>
+		</if>
+		<echo message="ISO21090 Datatypes are enabled.  Copying ISO Datatype related jar files to web app staging lib" />
+		<copy todir="${temp.webapp.staging.lib.dir}" overwrite="true">
+			<fileset dir="${runtime.lib.dir}">
+				<include name="iso-datatypes-*.jar"/>
+				<!--<exclude name="iso-datatypes-extensions*.jar" />-->
+			</fileset>
+		</copy>
+		<if>
+			<equals arg1="${USE_CONNECTION_POOL}" arg2="true" />
+			<then>
+				<echo message="using c3p connection pooling database" />
+				<copy todir="${temp.webapp.staging.lib.dir}" overwrite="true">
+					<fileset dir="${runtime.lib.dir}">
+						<include name="c3p0-*.jar"/>
+					</fileset>
+				</copy>
+				<include-db-jar target.lib.directory="${temp.webapp.staging.lib.dir}"/>
+			</then>
+		</if>
+
+		<if>
+			<equals arg1="${WRITABLE_API_EXTENSION_ENABLED}" arg2="true" />
+			<then>
+				<echo message="writable api enabled" />
+				<copy todir="${temp.webapp.staging.lib.dir}" overwrite="true">
+					<fileset dir="${lib.dir}">
+						<include name="sdk-writable-api-client-*.jar"/>
+						<include name="sdk-writable-api-*.jar"/>
+					</fileset>
+				</copy>
+			</then>
+		</if>
+
+		<if>
+			<equals arg1="${ENABLE_CLM_LOGGER_CFG_GENERATION}" arg2="true" />
+			<then>
+				<echo message="system logging enabled" />
+				<copy todir="${temp.webapp.staging.lib.dir}" overwrite="true">
+					<fileset dir="${lib.dir}">
+						<include name="sdk-system-logging-*.jar"/>
+					</fileset>
+				</copy>
+				<copy todir="${temp.webapp.staging.classes.dir}" overwrite="true">
+					<fileset dir="${output.src.dir}">
+						<include name="${clm.object.state.logger.config}" />
+					</fileset>
+				</copy>
+			</then>
+		</if>
+
+		<if>
+			<equals arg1="${SECURITY_ENABLED}" arg2="true" />
+			<then>
+				<echo message="security enabled" />
+				<copy todir="${temp.webapp.staging.lib.dir}" overwrite="true">
+					<fileset dir="${runtime.lib.dir}">
+						<include name="commons-codec-*.jar"/>
+					</fileset>
+					<fileset dir="${lib.dir}">
+						<include name="sdk-security-*.jar"/>
+						<include name="sdk-security-client-*.jar"/>
+					</fileset>
+				</copy>
+				<copy todir="${temp.webapp.staging.classes.dir}" overwrite="true">
+					<fileset dir="${system.config.client.csm-security.dir}/conf">
+						<include name="login.config" />
+					</fileset>
+				</copy>
+				<copy todir="${temp.webapp.staging.classes.dir}" overwrite="true">
+					<fileset dir="${system.config.security.dir}" includes="${csm.ehcache.file}" />
+					<fileset dir="${system.config.rest.web.classes.dir}">
+						<include name="${application.config.security.file}" />
+					</fileset>
+				</copy>
+				<copy tofile="${temp.webapp.staging.classes.dir}/${csm.security.config.file}" file="${system.config.security.dir}/${csm.security.config.original.file}" overwrite="true" />
+			</then>
+		</if>
+
+		<if>
+			<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true" />
+			<then>
+				<echo message="Grid Jaas enabled" />
+				<copy todir="${temp.webapp.staging.lib.dir}" overwrite="true">
+					<fileset dir="${runtime.lib.dir}">
+						<include name="cog-jglobus-4*.jar"/>
+					</fileset>
+					<fileset dir="${lib.dir}">
+						<include name="sdk-grid-jaas-client-*.jar"/>
+					</fileset>
+				</copy>
+				<delete>
+					<fileset dir="${temp.webapp.staging.lib.dir}">
+						<include name="caGrid-data-*.jar" />
+						<include name="caGrid-metadata-data*.jar" />
+					</fileset>
+				</delete>
+
+				<copy todir="${temp.webapp.staging.classes.dir}" overwrite="true">
+					<fileset dir="${system.config.security.dir}" includes="${csm.ehcache.file}" />
+					<fileset dir="${system.config.rest.web.classes.dir}">
+						<include name="${application.config.security.file}" />
+					</fileset>
+				</copy>
+				<copy tofile="${temp.webapp.staging.classes.dir}/${csm.security.config.file}" file="${system.config.security.dir}/${csm.security.config.original.file}" overwrite="true" />
+			</then>
+		</if>
+
+		<if>
+			<not>
+				<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true" />
+			</not>
+			<then>
+				<copy todir="${temp.webapp.staging.lib.dir}" overwrite="true">
+					<fileset dir="${runtime.lib.dir}">
+						<include name="xalan*.*" />
+					</fileset>
+				</copy>
+			</then>
+		</if>
+		<copy todir="${temp.webapp.staging.classes.dir}">
+			<fileset dir="${output.src.dir}">
+				<include name="IsoConstants.xml"/>
+			</fileset>
+		</copy>
+		
+	</target>
+
+	<target name="-build-project-rest-war" depends="-staging-rest-war">
+		<echo message="building war in dir ${param.server.webapps.dir}\${PROJECT_NAME}rest.war" />
+		<echo message="generate ${GENERATE_RESTFUL_RESOURCES}"/>
+		<echo message="generate ${system.config.client.rest.webapp.dir}"/>
+		
+		<copy todir="${system.config.client.rest.webapp.dir}/WEB-INF">
+			<fileset dir="${system.config.client.rest.webapp.dir}/WEB-INF">
+				<include name="web.xml" />
+			</fileset>
+			<filterset refid="filtertoken5" />
+		</copy>
+
+		<war destfile="${param.server.webapps.dir}\${PROJECT_NAME}rest.war" webxml="${system.config.client.rest.webapp.dir}/WEB-INF/web.xml">
+		
+			<manifest>
+				<attribute name="Generated-By" value="caCORE SDK Code Generator" />
+				<attribute name="Version" value="${VERSION}" />
+			</manifest>
+			<lib dir="${temp.webapp.staging.lib.dir}">
+<!--				<exclude name="cog*.*"/>  -->
+				<exclude name="servlet*.*"/>
+				<exclude name="${server-exclude-list}" />
+			</lib>
+			
+			<fileset dir="${output.project.dir}/restweb">
+				<include name="**/*" />
+			</fileset>
+			<fileset dir="${output.codegen.dir}">
+				<include name="${javadoc.relative.dir}/**/*.*" />
+			</fileset>
+			<fileset dir="${system.config.client.rest.webapp.dir}">
+				<include name="**/*" />
+				<exclude name="**/web.xml" />
+				<exclude name="**/*template*.xml" />
+
+				<exclude name="${server-exclude-classes-list}" />
+			</fileset>
+			<webinf dir="${output.src.dir}">
+				<include name="server-config.wsdd" />
+				<include name="RESTfulApp.xml" />
+				<include name="RESTfulBeans.xml" />
+			</webinf>
+
+			<classes dir="${temp.webapp.staging.classes.dir}" />
+		</war>
+		<delete dir="${temp.webapp.staging.dir}" includeemptydirs="true">
+		</delete>
 	</target>
 
 	<target name="-build-project-war" depends="-staging-war">
@@ -2093,6 +2376,15 @@
 		<antcall target="-build-project-war">
 			<param name="param.server.webapps.dir" value="${param.server.webapps.dir}" />
 		</antcall>
+		<if>
+			<equals arg1="${GENERATE_RESTFUL_RESOURCES}" arg2="true" />
+			<then>
+				<antcall target="-build-project-rest-war">
+					<param name="param.server.webapps.dir" value="${param.server.webapps.dir}" />
+				</antcall>
+			</then>
+		</if>
+
 		<if>
 			<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true" />
 			<then>
