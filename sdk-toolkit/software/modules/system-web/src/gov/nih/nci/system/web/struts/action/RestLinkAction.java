@@ -67,11 +67,12 @@ public class RestLinkAction extends RestQuery {
 		
 		String linkHref = request.getParameter("linkHref");
 		String className = request.getParameter("targetClass");
+System.out.println("targetClass: "+className);
 
 		if(linkHref != null)
 		{
 			String targetClass = getClassName(linkHref);
-			
+			System.out.println("formatHref(linkHref, targetClass): "+formatHref(linkHref, targetClass));
 		   	WebClient client = WebClient.create(formatHref(linkHref, targetClass));
 		   	
 		   	client.type("application/xml").accept("application/xml");
@@ -87,7 +88,9 @@ public class RestLinkAction extends RestQuery {
 		   	//ServletOutputStream out = response.getOutputStream();
 		   	String roleName = getRoleName(linkHref, className);
 		   	String resourceName = targetClass.substring(targetClass.lastIndexOf(".")+1);
+		   	
 		   	String html = getHTML(jDoc, targetClass, getCriteria(linkHref, resourceName), roleName);
+		   	System.out.println("html: "+html);
 		   	request.setAttribute("HTMLContent", html);
 		   	request.setAttribute("targetClass", targetClass);
 		}
@@ -118,13 +121,16 @@ public class RestLinkAction extends RestQuery {
 	private String formatHref(String href, String className)
 	{
 		String resName = className.substring(className.lastIndexOf(".")+1);
+		System.out.println("resName: "+resName);
 		int index = href.indexOf(resName);
 		if(index == -1)
 			return href;
 		
 		String preIdStr = href.substring(0, index+resName.length()+1);
+		System.out.println("preIdStr: "+preIdStr);
 		//id part
 		String criteriaStr = href.substring(index+resName.length()+1);
+		System.out.println("criteriaStr: "+criteriaStr);
 		String idStr = null;
 		//role part
 		int index2 = criteriaStr.indexOf("/");
@@ -133,11 +139,14 @@ public class RestLinkAction extends RestQuery {
 		{
 			idStr = criteriaStr.substring(0, index2);
 			roleName = criteriaStr.substring(index2+1, criteriaStr.length());
+			System.out.println("roleName: "+roleName);
 		}
 		else
 			idStr = criteriaStr;
 
 		String idName = null;
+		System.out.println("idStr: "+idStr);
+		System.out.println("className: "+className);
 		try
 		{
 			idName = classCache.getClassIdName(Class.forName(className));
@@ -146,7 +155,7 @@ public class RestLinkAction extends RestQuery {
 		{
 			e.printStackTrace();
 		}
-		
+		System.out.println("idName: "+idName);
 		if(idName == null)
 			return href;
 		 

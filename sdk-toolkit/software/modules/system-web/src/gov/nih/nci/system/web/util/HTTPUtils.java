@@ -850,7 +850,7 @@ public class HTTPUtils implements Serializable{
 			String criteriaBean = result.getClass().getName();
 			Field field = fields[f];
 			String fieldName = field.getName();
-			if (fieldName.equalsIgnoreCase("serialVersionUID") ||  && fieldName.equalsIgnoreCase("links")) {
+			if (fieldName.equalsIgnoreCase("serialVersionUID") || fieldName.equalsIgnoreCase("links")) {
 				continue;
 			}
 			Element fieldElement = new Element("field").setAttribute("name",
@@ -1412,7 +1412,7 @@ public class HTTPUtils implements Serializable{
 					throw new IOException(ex.getMessage());
 				}
 			}
-			else if(fieldName.equalsIgnoreCase("serialVersionUID") ||  fName.equalsIgnoreCase("links")){
+			else if(fieldName.equalsIgnoreCase("serialVersionUID") ||  fieldName.equalsIgnoreCase("links")){
 				continue;
 			}
 			boolean bean = false;

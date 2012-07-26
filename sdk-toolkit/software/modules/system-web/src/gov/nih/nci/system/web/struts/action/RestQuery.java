@@ -499,8 +499,8 @@ public class RestQuery extends BaseActionSupport {
 	}
 
 	protected String getClassName(String href) {
-		int index = href.indexOf("rest/");
-		String postStr = href.substring(index + 5, href.length());
+		int index = href.indexOf("/rest/");
+		String postStr = href.substring(index + 6, href.length());
 		int index2 = postStr.indexOf("/");
 		String resName = postStr;
 		if (index2 != -1)

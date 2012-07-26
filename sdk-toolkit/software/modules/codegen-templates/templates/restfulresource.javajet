@@ -73,7 +73,7 @@ if(action != null && action.indexOf("R") != -1)
 	@GET
 	@Path("{id}")
 	@Produces("application/xml")
-	public <%=klassName%> get<%=klassName%>ById(@PathParam("id") String id, @Context UriInfo uriInfo) 
+	public <%=klassName%> get<%=klassName%>ById(@PathParam("id") String id, @Context UriInfo uriInfo, @Context HttpServletRequest request) 
 	{
 		try
 		{
@@ -141,10 +141,26 @@ System.out.println("in getId……");
 			<%
 			}
 			%>
+
+ApplicationService appService = null;
+
+if(secured)
+{
+	String username = request.getRemoteUser();
+	Principal p = request.getUserPrincipal();
+	String password = null;
+	if(p != null)
+		password = p.getName();
+	appService = getApplicationService(username, password);
+}
+else
+{
+	appService = getApplicationService();
+}
 			
 			HQLCriteria criteria = new HQLCriteria("from <%=fullPackageName%>.<%=klassName%> a where a.<%=transformerUtils.getClassIdAttrName(klass)%> = ?", params);
 			
-			Collection<<%=klassName%>> results = getApplicationService().query(criteria);
+			Collection<<%=klassName%>> results = appService.query(criteria);
 			
 			if(results != null && results.size() > 0)
 			{
@@ -238,31 +254,21 @@ System.out.println("in search *******");
 				  throw new WebApplicationException(builder.build());
 			}
 			
-//			String username = uriInfo.getQueryParameters().getFirst("username");
-//			String password = uriInfo.getQueryParameters().getFirst("password");
+		ApplicationService appService = null;
 
-ApplicationService appService = null;
-
-if(secured)
-{
-System.out.println("in search secured");
-	String username = request.getRemoteUser();
-Principal p = request.getUserPrincipal();
-System.out.println("in search secured p "+p);
-String password = null;
-if(p != null)
-	password = p.getName();
-System.out.println("username: "+ username);
-System.out.println("password: "+ password);
-
-
-	appService = getApplicationService(username, password);
-}
-else
-{
-System.out.println("in search not secured");
-	appService = getApplicationService();
-}
+		if(secured)
+		{
+			String username = request.getRemoteUser();
+			Principal p = request.getUserPrincipal();
+			String password = null;
+			if(p != null)
+				password = p.getName();
+			appService = getApplicationService(username, password);
+		}
+		else
+		{
+			appService = getApplicationService();
+		}
 			validateCriteria(matrixParams, searchFields);
 			HQLCriteria hcriteria = buildHQLCriteria("<%=fullPackageName%>.<%=klassName%>", searchFields, matrixParams, uriInfo);
 			int rowCount = appService.getQueryRowCount(hcriteria, "<%=fullPackageName%>.<%=klassName%>");
@@ -387,7 +393,7 @@ for(UMLAssociation assoc: assocs){
 		@GET
 		@Path("/search/<%=name%>")
 		@Produces("application/xml")
-		public <%=assocPackageName%>.<%=assocKlass.getName()%>s get<%=klassName%><%=counter%>(@Context UriInfo uriInfo)
+		public <%=assocPackageName%>.<%=assocKlass.getName()%>s get<%=klassName%><%=counter%>(@Context UriInfo uriInfo, @Context HttpServletRequest request)
 		{
 			try
 			{
@@ -441,11 +447,27 @@ for(UMLAssociation assoc: assocs){
 				
 				HQLCriteria hqlCriteria = getAssociationCriteria(Class.forName(className), "<%=name%>", startIndex, totalSize, searchFields, matrixParams, uriInfo);
 
-				int rowCount = getApplicationService().getQueryRowCount(hqlCriteria, "<%=assocPackageName%>.<%=assocKlass.getName()%>");
-				int maxRowCountPerQuery = getApplicationService().getMaxRecordsCount();
+
+		ApplicationService appService = null;
+		if(secured)
+		{
+			String username = request.getRemoteUser();
+			Principal p = request.getUserPrincipal();
+			String password = null;
+			if(p != null)
+				password = p.getName();
+			appService = getApplicationService(username, password);
+		}
+		else
+		{
+			appService = getApplicationService();
+		}
+
+				int rowCount = appService.getQueryRowCount(hqlCriteria, "<%=assocPackageName%>.<%=assocKlass.getName()%>");
+				int maxRowCountPerQuery = appService.getMaxRecordsCount();
 				//System.out.println("rowCount: "+rowCount);
 				//System.out.println("maxRowCountPerQuery: "+maxRowCountPerQuery);
-				Collection results = getApplicationService().query(hqlCriteria);
+				Collection results = appService.query(hqlCriteria);
 				ResourceLink nextLink = getNextLink(uriInfo, results.size(), rowCount, maxRowCountPerQuery);
 				ResourceLink previousLink = getPreviousLink(uriInfo, results.size(), rowCount, maxRowCountPerQuery);
 				ResourceLink selfLink = getSelfLink(uriInfo);
@@ -548,7 +570,7 @@ for(UMLAssociation assoc: assocs){
 		@GET
 		@Path("{id}/<%=name%>")
 		@Produces("application/xml")
-		public <%=assocPackageName%>.<%=assocKlass.getName()%>s <%=transformerUtils.getGetterMethodName(associationEnd)%>(@PathParam("id") String id, @Context UriInfo uriInfo)
+		public <%=assocPackageName%>.<%=assocKlass.getName()%>s <%=transformerUtils.getGetterMethodName(associationEnd)%>(@PathParam("id") String id, @Context UriInfo uriInfo, @Context HttpServletRequest request)
 		{
 			try
 			{
@@ -562,13 +584,28 @@ for(UMLAssociation assoc: assocs){
 				String bSize = uriInfo.getQueryParameters().getFirst("size");
 				if (bSize != null)
 					totalSize = Integer.parseInt(bSize);
+
+		ApplicationService appService = null;
+		if(secured)
+		{
+			String username = request.getRemoteUser();
+			Principal p = request.getUserPrincipal();
+			String password = null;
+			if(p != null)
+				password = p.getName();
+			appService = getApplicationService(username, password);
+		}
+		else
+		{
+			appService = getApplicationService();
+		}
 					
 				HQLCriteria hqlCriteria = getAssociationCriteria(Class.forName(className), "<%=name%>", id, startIndex, totalSize);
-				int rowCount = getApplicationService().getQueryRowCount(hqlCriteria, "<%=assocPackageName%>.<%=assocKlass.getName()%>");
-				int maxRowCountPerQuery = getApplicationService().getMaxRecordsCount();
+				int rowCount = appService.getQueryRowCount(hqlCriteria, "<%=assocPackageName%>.<%=assocKlass.getName()%>");
+				int maxRowCountPerQuery = appService.getMaxRecordsCount();
 				//System.out.println("rowCount: "+rowCount);
 				//System.out.println("maxRowCountPerQuery: "+maxRowCountPerQuery);
-				Collection results = getApplicationService().query(hqlCriteria);
+				Collection results = appService.query(hqlCriteria);
 				ResourceLink nextLink = getNextLink(uriInfo, results.size(), rowCount, maxRowCountPerQuery);
 				ResourceLink previousLink = getPreviousLink(uriInfo, results.size(), rowCount, maxRowCountPerQuery);
 				ResourceLink selfLink = getSelfLink(uriInfo);
@@ -665,7 +702,7 @@ for(UMLAssociation assoc: assocs){
 		@GET
 		@Path("{id}/<%=name%>")
 		@Produces("application/xml")
-		public <%=assocPackageName%>.<%=assocKlass.getName()%> <%=transformerUtils.getGetterMethodName(associationEnd)%>(@PathParam("id") String id, @Context UriInfo uriInfo)
+		public <%=assocPackageName%>.<%=assocKlass.getName()%> <%=transformerUtils.getGetterMethodName(associationEnd)%>(@PathParam("id") String id, @Context UriInfo uriInfo, @Context HttpServletRequest request)
 		{
 			try
 			{
@@ -680,14 +717,28 @@ for(UMLAssociation assoc: assocs){
 				if (bSize != null)
 					totalSize = Integer.parseInt(bSize);
 					
+		ApplicationService appService = null;
+		if(secured)
+		{
+			String username = request.getRemoteUser();
+			Principal p = request.getUserPrincipal();
+			String password = null;
+			if(p != null)
+				password = p.getName();
+			appService = getApplicationService(username, password);
+		}
+		else
+		{
+			appService = getApplicationService();
+		}
 					
 					
 				HQLCriteria hqlCriteria = getAssociationCriteria(Class.forName(className), "<%=name%>", id, startIndex, totalSize);
-				int rowCount = getApplicationService().getQueryRowCount(hqlCriteria, "<%=assocPackageName%>.<%=assocKlass.getName()%>");
-				int maxRowCountPerQuery = getApplicationService().getMaxRecordsCount();
+				int rowCount = appService.getQueryRowCount(hqlCriteria, "<%=assocPackageName%>.<%=assocKlass.getName()%>");
+				int maxRowCountPerQuery = appService.getMaxRecordsCount();
 				//System.out.println("rowCount: "+rowCount);
 				//System.out.println("maxRowCountPerQuery: "+maxRowCountPerQuery);
-				Collection results = getApplicationService().query(hqlCriteria);
+				Collection results = appService.query(hqlCriteria);
 				if(results != null && results.size() > 0)
 				{
 					<%=assocPackageName%>.<%=assocKlass.getName()%> returnObj =  (<%=assocPackageName%>.<%=assocKlass.getName()%>)((List)results).get(0);
@@ -780,7 +831,7 @@ if(action != null && action.indexOf("C") != -1 && !transformerUtils.isISO21090En
 {%>
 	@POST
 	@Consumes("application/xml")
-	public Response add<%=klassName%>(<%=klassName%> object, @Context UriInfo uriInfo)
+	public Response add<%=klassName%>(<%=klassName%> object, @Context UriInfo uriInfo, @Context HttpServletRequest request)
 	{
 		try
 		{
@@ -918,9 +969,24 @@ if(action != null && action.indexOf("D") != -1 && !transformerUtils.isISO21090En
 			}
 			%>
 			
+		ApplicationService appService = null;
+		if(secured)
+		{
+			String username = request.getRemoteUser();
+			Principal p = request.getUserPrincipal();
+			String password = null;
+			if(p != null)
+				password = p.getName();
+			appService = getApplicationService(username, password);
+		}
+		else
+		{
+			appService = getApplicationService();
+		}
+
 			HQLCriteria criteria = new HQLCriteria("from <%=fullPackageName%>.<%=klassName%> a where a.<%=transformerUtils.getClassIdAttrName(klass)%> = ?", params);
 			System.out.println("Delete looking for : "+id);
-			Collection<<%=klassName%>> results = getApplicationService().query(criteria);
+			Collection<<%=klassName%>> results = appService.query(criteria);
 			
 			if(results != null && results.size() > 0)
 			{
