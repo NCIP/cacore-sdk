@@ -35,6 +35,8 @@ import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.dispatcher.SessionMap;
 import org.apache.struts2.util.ServletContextAware;
+import org.apache.commons.codec.binary.Base64;
+import org.acegisecurity.Authentication;
 
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
@@ -58,13 +60,13 @@ public class RestLinkAction extends RestQuery {
 
     private static Logger log = Logger.getLogger(Result.class.getName());
 
-	
+
 	public String execute() throws Exception {
 		init();
 		HttpServletRequest request = ServletActionContext.getRequest();
 		HttpServletResponse response = ServletActionContext.getResponse();
 		ServletContext context = ServletActionContext.getServletContext();
-		
+
 		String linkHref = request.getParameter("linkHref");
 		String className = request.getParameter("targetClass");
 System.out.println("targetClass: "+className);
@@ -74,21 +76,49 @@ System.out.println("targetClass: "+className);
 			String targetClass = getClassName(linkHref);
 			System.out.println("formatHref(linkHref, targetClass): "+formatHref(linkHref, targetClass));
 		   	WebClient client = WebClient.create(formatHref(linkHref, targetClass));
-		   	
+
+			SessionMap session = (SessionMap) ActionContext.getContext().get(
+					ActionContext.SESSION.toString());
+			org.acegisecurity.context.SecurityContext scontext = (org.acegisecurity.context.SecurityContext) session
+					.get("ACEGI_SECURITY_CONTEXT");
+			if(scontext != null)
+			{
+				Authentication authentication = scontext.getAuthentication();
+				// authentication.getCredentials();
+				System.out.println("username 11 "
+						+ authentication.getPrincipal().toString());
+				String userName = ((org.acegisecurity.userdetails.User) authentication
+						.getPrincipal()).getUsername();
+				String password = authentication.getCredentials().toString();
+				System.out.println("password 11 "
+						+ authentication.getCredentials().toString());
+				String base64encodedUsernameAndPassword = new String(Base64.encodeBase64((userName + ":" + password).getBytes()));
+				client.header("Authorization", "Basic " + base64encodedUsernameAndPassword);
+			}
+			else
+			{
+				if(secured)
+				{
+					request.setAttribute("message", "Invalid authentication");
+					return SUCCESS;
+				}
+
+			}
+
 		   	client.type("application/xml").accept("application/xml");
 		   	Response r = client.get();
 
-		   	
+
 		   	InputStream is = (InputStream)r.getEntity();
 
 		   	org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(false);
             org.jdom.Document jDoc = builder.build(is);
-		   	
+
 		   	//response.setContentType("text/xml");
 		   	//ServletOutputStream out = response.getOutputStream();
 		   	String roleName = getRoleName(linkHref, className);
 		   	String resourceName = targetClass.substring(targetClass.lastIndexOf(".")+1);
-		   	
+
 		   	String html = getHTML(jDoc, targetClass, getCriteria(linkHref, resourceName), roleName);
 		   	System.out.println("html: "+html);
 		   	request.setAttribute("HTMLContent", html);
@@ -103,7 +133,7 @@ System.out.println("targetClass: "+className);
 		int index = href.indexOf(resName);
 		if(index == -1)
 			return null;
-		
+
 		String criteriaStr = href.substring(index+resName.length()+1);
 		String idStr = null;
 		//role part
@@ -117,7 +147,7 @@ System.out.println("targetClass: "+className);
 		}
 		return null;
 	}
-	
+
 	private String formatHref(String href, String className)
 	{
 		String resName = className.substring(className.lastIndexOf(".")+1);
@@ -125,7 +155,7 @@ System.out.println("targetClass: "+className);
 		int index = href.indexOf(resName);
 		if(index == -1)
 			return href;
-		
+
 		String preIdStr = href.substring(0, index+resName.length()+1);
 		System.out.println("preIdStr: "+preIdStr);
 		//id part
@@ -158,11 +188,11 @@ System.out.println("targetClass: "+className);
 		System.out.println("idName: "+idName);
 		if(idName == null)
 			return href;
-		 
+
 		String newHref = preIdStr + "search;"+idName+"="+idStr + (roleName != null?"/"+roleName:"");
 		return newHref;
 	}
-	
+
 	private String getCriteria(String linkHref, String resName)
 	{
 		int index = linkHref.indexOf(resName);

@@ -77,7 +77,7 @@ if(action != null && action.indexOf("R") != -1)
 	{
 		try
 		{
-System.out.println("in getId……");
+//System.out.println("in getId……");
 	  		List params = new ArrayList();
 	  		String className = "<%=fullPackageName%>.<%=klassName%>";
 			
@@ -216,7 +216,7 @@ else
 	@Produces("application/xml")
 	public <%=klassName%>s get<%=klassName%>(@Context UriInfo uriInfo, @Context HttpServletRequest request)
 	{
-System.out.println("in search *******");
+//System.out.println("in search *******");
 		try
 		{
 			List<PathSegment> pathSegments = uriInfo.getPathSegments();
@@ -297,7 +297,7 @@ System.out.println("in search *******");
 					collection.addLink(previousLink);
 
 				collection.addLink(selfLink);
-System.out.println("Returning collection: "+collection.toString());
+//System.out.println("Returning collection: "+collection.toString());
 				return collection;
 			}
 				
@@ -835,7 +835,7 @@ if(action != null && action.indexOf("C") != -1 && !transformerUtils.isISO21090En
 	{
 		try
 		{
-			System.out.println("Adding <%=klassName%>: "+object.toString());
+			//System.out.println("Adding <%=klassName%>: "+object.toString());
 			<%=klassName%> obj = (<%=klassName%>)save(object);
 			String fullpath = uriInfo.getAbsolutePath().toString();
 			String path = fullpath.substring(0, fullpath.indexOf("/rest/")+5);
@@ -902,7 +902,7 @@ if(action != null && action.indexOf("D") != -1 && !transformerUtils.isISO21090En
 	@Path("{id}")
 	public Response delete<%=klassName%>(@Context javax.servlet.http.HttpServletRequest request, @Context javax.servlet.http.HttpServletResponse response, @PathParam("id") String id)
 	{
-	System.out.println("in delete................");
+	//System.out.println("in delete................");
 		try
 		{
 
@@ -985,16 +985,16 @@ if(action != null && action.indexOf("D") != -1 && !transformerUtils.isISO21090En
 		}
 
 			HQLCriteria criteria = new HQLCriteria("from <%=fullPackageName%>.<%=klassName%> a where a.<%=transformerUtils.getClassIdAttrName(klass)%> = ?", params);
-			System.out.println("Delete looking for : "+id);
+			//System.out.println("Delete looking for : "+id);
 			Collection<<%=klassName%>> results = appService.query(criteria);
 			
 			if(results != null && results.size() > 0)
 			{
 				<%=klassName%> returnObj = (<%=klassName%>)results.iterator().next();
-				System.out.println("returnObj "+returnObj.toString());
+				//System.out.println("returnObj "+returnObj.toString());
 				//System.out.println("returnObj Links"+returnObj.getLinks());
 				String query = "delete from <%=fullPackageName%>.<%=klassName%> a where a.id = ?";
-				System.out.println("Deleting....<%=klassName%>: "+params);
+				//System.out.println("Deleting....<%=klassName%>: "+params);
 				DeleteHQLQuery deleteQuery = new DeleteHQLQuery(query, params);
 				delete(returnObj);
 				ResponseBuilder builder = Response.status(Status.OK);
@@ -1004,7 +1004,7 @@ if(action != null && action.indexOf("D") != -1 && !transformerUtils.isISO21090En
 			}
 			else
 			{
-				  System.out.println("NOT Found.....................");
+				  //System.out.println("NOT Found.....................");
 				  ResponseBuilder builder = Response.status(Status.NOT_FOUND);
 				  builder.type("application/xml");
 				  builder.entity("<message>Not found</message>");

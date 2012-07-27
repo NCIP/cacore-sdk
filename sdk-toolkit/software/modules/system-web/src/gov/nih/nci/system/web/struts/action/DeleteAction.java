@@ -10,12 +10,17 @@ import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.log4j.Logger;
 
 import org.apache.struts2.ServletActionContext;
+import org.apache.struts2.dispatcher.SessionMap;
+import org.acegisecurity.Authentication;
+import javax.ws.rs.core.Response.Status;
+import com.opensymphony.xwork2.ActionContext;
+import org.apache.commons.codec.binary.Base64;
 
 /**
  * Delete Action using RESTful Delete Implementation
  * Given Resource URL is used to determine the resource and its Id
  * Upon confirmation, proceed to delete
- * Upon delete, display message by hiding delete buttons section  
+ * Upon delete, display message by hiding delete buttons section
  * @author konkapv
  *
  */
@@ -64,6 +69,33 @@ public class DeleteAction extends RestQuery {
 				+ targetClass.substring(targetClass.lastIndexOf(".") + 1,
 						targetClass.length()) + "/" + idColValue);
 		client.type("application/xml").accept("application/xml");
+		SessionMap session = (SessionMap) ActionContext.getContext().get(
+				ActionContext.SESSION.toString());
+		org.acegisecurity.context.SecurityContext context = (org.acegisecurity.context.SecurityContext) session
+				.get("ACEGI_SECURITY_CONTEXT");
+		if(context != null)
+		{
+			Authentication authentication = context.getAuthentication();
+			// authentication.getCredentials();
+			System.out.println("username 11 "
+					+ authentication.getPrincipal().toString());
+			String userName = ((org.acegisecurity.userdetails.User) authentication
+					.getPrincipal()).getUsername();
+			String password = authentication.getCredentials().toString();
+			System.out.println("password 11 "
+					+ authentication.getCredentials().toString());
+			String base64encodedUsernameAndPassword = new String(Base64.encodeBase64((userName + ":" + password).getBytes()));
+			client.header("Authorization", "Basic " + base64encodedUsernameAndPassword);
+		}
+			else
+			{
+				if(secured)
+				{
+					request.setAttribute("message", "Invalid authentication");
+					return SUCCESS;
+				}
+
+			}
 
 		Response r = client.delete();
 

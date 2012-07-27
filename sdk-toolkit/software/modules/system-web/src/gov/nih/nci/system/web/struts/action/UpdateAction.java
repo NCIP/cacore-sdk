@@ -20,6 +20,11 @@ import org.apache.log4j.Logger;
 
 import org.apache.struts2.ServletActionContext;
 import org.jdom.Element;
+import org.apache.struts2.dispatcher.SessionMap;
+import org.acegisecurity.Authentication;
+import javax.ws.rs.core.Response.Status;
+import com.opensymphony.xwork2.ActionContext;
+import org.apache.commons.codec.binary.Base64;
 
 public class UpdateAction extends RestQuery {
 
@@ -67,10 +72,15 @@ public class UpdateAction extends RestQuery {
 			return null;
 		}
 		System.out.println("BEFORE 	Submitting:................"+getBtnSearch());
-		String submitted = request.getParameter("submitForm"); 
+		String submitted = request.getParameter("submitForm");
 		System.out.println("BEFORE 	submitted:................"+submitted);
+		SessionMap session = (SessionMap) ActionContext.getContext().get(
+				ActionContext.SESSION.toString());
+		org.acegisecurity.context.SecurityContext context = (org.acegisecurity.context.SecurityContext) session
+				.get("ACEGI_SECURITY_CONTEXT");
+
 		if (submitted != null && submitted.equals("true")) {
-			
+
 			System.out.println("Submitting:................");
 			try
 			{
@@ -82,19 +92,68 @@ public class UpdateAction extends RestQuery {
 					+ targetClass.substring(targetClass.lastIndexOf(".") + 1,
 							targetClass.length()));
 			client.type("application/xml").accept("application/xml");
+			if(context != null)
+			{
+				Authentication authentication = context.getAuthentication();
+				// authentication.getCredentials();
+				System.out.println("username 11 "
+						+ authentication.getPrincipal().toString());
+				String userName = ((org.acegisecurity.userdetails.User) authentication
+						.getPrincipal()).getUsername();
+				String password = authentication.getCredentials().toString();
+				System.out.println("password 11 "
+						+ authentication.getCredentials().toString());
+				String base64encodedUsernameAndPassword = new String(Base64.encodeBase64((userName + ":" + password).getBytes()));
+				client.header("Authorization", "Basic " + base64encodedUsernameAndPassword);
+			}
+			else
+			{
+				if(secured)
+				{
+					request.setAttribute("message", "Invalid authentication");
+					return SUCCESS;
+				}
+
+			}
+
+System.out.println("instance: "+instance);
+			try{
 			Response r = client.put(instance);
 
-			System.out.println("Status: "+r.getStatus());
-			String message =  "Updated Successfully";
-			request.setAttribute("message", message);
+
+			System.out.println("update Status: "+r.getStatus());
+
+			if(r.getStatus() != Status.OK.getStatusCode())
+			{
+				    System.out.println("update jDoc: "+r.toString());
+					InputStream is = (InputStream) r.getEntity();
+
+					org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
+							false);
+					org.jdom.Document jDoc = builder.build(is);
+
+					System.out.println("update jDoc: "+jDoc.toString());
+				request.setAttribute("message", "Unsuccessful update: "+jDoc.getRootElement().getText());
+			}
+else
+{
+				String message =  "Updated Successfully";
+				request.setAttribute("message", message);
+
+}
+			}
+			catch(WebApplicationException e)
+			{
+				e.printStackTrace();
+			}
 			}
 			catch(Exception e)
 			{
 				String message =  "Failed to update: "+e.getMessage();
 				request.setAttribute("message", message);
 			}
-		} 
-		
+		}
+
 		String url = request.getRequestURL().toString();
 		String restURL = url.substring(0, url.lastIndexOf("/"));
 		WebClient client = WebClient.create(restURL);
@@ -103,7 +162,29 @@ public class UpdateAction extends RestQuery {
 						targetClass.length()) + "/" + idColValue);
 
 		client.type("application/xml").accept("application/xml");
+			if(context != null)
+			{
+				Authentication authentication = context.getAuthentication();
+				// authentication.getCredentials();
+				////System.out.println("username 11 "
+						//+ authentication.getPrincipal().toString());
+				String userName = ((org.acegisecurity.userdetails.User) authentication
+						.getPrincipal()).getUsername();
+				String password = authentication.getCredentials().toString();
+				//System.out.println("password 11 "
+						//+ authentication.getCredentials().toString());
+				String base64encodedUsernameAndPassword = new String(Base64.encodeBase64((userName + ":" + password).getBytes()));
+				client.header("Authorization", "Basic " + base64encodedUsernameAndPassword);
+			}
+			else
+			{
+				if(secured)
+				{
+					request.setAttribute("message", "Invalid authentication");
+					return SUCCESS;
+				}
 
+			}
 		Response r = client.get();
 
 		InputStream is = (InputStream) r.getEntity();
@@ -112,7 +193,7 @@ public class UpdateAction extends RestQuery {
 				false);
 		org.jdom.Document jDoc = builder.build(is);
 		request.setAttribute("jDoc", jDoc);
-		
+
 		return SUCCESS;
 	}
 
@@ -133,7 +214,7 @@ public class UpdateAction extends RestQuery {
 					&& !parameterName.equals("username")
 					&& !parameterName.equals("password")
 					&& !parameterName.equals("selectedDomain")) {
-				System.out.println("param = " + parameterName);
+				//System.out.println("update param = " + parameterName);
 				String parameterValue = (request
 						.getParameter(parameterName)).trim();
 				setParameterValue(klass, instance, parameterName,
@@ -209,7 +290,7 @@ public class UpdateAction extends RestQuery {
 			throw new Exception(e.getMessage());
 		} catch (Exception ex) {
 			log.error("ERROR : " + ex.getMessage());
-			throw ex;			
+			throw ex;
 		}
 		return convertedValue;
 	}

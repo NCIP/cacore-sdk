@@ -23,6 +23,7 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
+import java.util.Properties;
 
 import org.apache.struts2.ServletActionContext;
 
@@ -35,12 +36,20 @@ public class RestQuery extends BaseActionSupport {
 	protected ClassCache classCache;
 	WebApplicationContext ctx;
 	protected String selectedSearchDomain;
+	boolean secured=false;
 
 	public void init() throws Exception {
 
 		ServletContext context = ServletActionContext.getServletContext();
 		ctx = WebApplicationContextUtils.getWebApplicationContext(context);
 		classCache = (ClassCache) ctx.getBean("ClassCache");
+		Properties systemProperties = (Properties) ctx
+					.getBean("WebSystemProperties");
+
+		String securityEnabled = (String) systemProperties
+				.getProperty("securityEnabled");
+		secured = "yes".equalsIgnoreCase(securityEnabled)
+				|| "true".equalsIgnoreCase(securityEnabled);
 	}
 
 	protected String getQueryString(String className, String roleName,
@@ -181,7 +190,7 @@ public class RestQuery extends BaseActionSupport {
 	/**
 	 * Generates an HTML Document for a given XML document with the given
 	 * stylesheet specification
-	 * 
+	 *
 	 * @param doc
 	 *            Specifies the XML document
 	 * @param styleSheet
@@ -266,7 +275,7 @@ public class RestQuery extends BaseActionSupport {
 							.getName()) + "." + child.getName();
 					if(child.getName().equals("link"))
 						continue;
-					
+
 					headerBuffer.append("<tr>");
 					bodyBuffer.append("<tr>");
 
@@ -276,7 +285,7 @@ public class RestQuery extends BaseActionSupport {
 
 					if (child.getName().equals("link"))
 						continue;
-					
+
 					List<Element> linkChild = getChildren(child, "link");
 					List<String> refNameList = new ArrayList();
 					for(Element link : linkChild)
@@ -328,7 +337,7 @@ public class RestQuery extends BaseActionSupport {
 						bodyBuffer.append("</td>");
 					}
 
-					
+
 					for (Element link : linkChild) {
 						headerBuffer
 								.append("<th class=\"dataTableHeader\" scope=\"col\" align=\"center\">");
@@ -469,7 +478,7 @@ public class RestQuery extends BaseActionSupport {
 			buffer.append("</tr>");
 			return buffer.toString();
 
-		
+
 	}
 	protected String getPagingLinks(Element root) {
 		List<Element> links = getChildren(root, "links");

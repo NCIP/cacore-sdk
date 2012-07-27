@@ -77,12 +77,12 @@ public class SDKRESTContentHandler implements MessageBodyReader,
 			WebApplicationException {
 		InputStreamReader reader = new InputStreamReader(is);
 		try {
-			System.out.println("read from .............: "+is);
-		System.out.println("readFrom......................."+type.getName());
-		System.out.println("readFrom......................."+genericType);
-		System.out.println("readFrom......................."+httpHeaders);
+			//System.out.println("read from .............: "+is);
+		//System.out.println("readFrom......................."+type.getName());
+		//System.out.println("readFrom......................."+genericType);
+		//System.out.println("readFrom......................."+httpHeaders);
 			String packageName = type.getName().substring(0, type.getName().lastIndexOf("."));
-			System.out.println("packageName: "+packageName);
+			//System.out.println("packageName: "+packageName);
 
 			Unmarshaller unmarshaller = new JAXBUnmarshaller(true,
 					packageName);
@@ -268,7 +268,7 @@ public class SDKRESTContentHandler implements MessageBodyReader,
 				linkElement.setAttribute("type", link.getType());
 				linkElement.setAttribute("href", link.getHref());
 				//linkElement.setText(link.toString());
-				httpQuery.addContent(linkElement);				
+				httpQuery.addContent(linkElement);
 				//httpQuery.addContent(link.toString());
 			}
 		}
@@ -284,7 +284,7 @@ public class SDKRESTContentHandler implements MessageBodyReader,
 				linkElement.setAttribute("type", link.getType());
 				linkElement.setAttribute("href", link.getHref());
 				//linkElement.setText(link.toString());
-				httpQuery.addContent(linkElement);				
+				httpQuery.addContent(linkElement);
 				//httpQuery.addContent(((ResourceLink)obj).toString());
 				continue;
 			}
@@ -364,13 +364,13 @@ public class SDKRESTContentHandler implements MessageBodyReader,
 
 
 	public static void printObject(Object obj, Class klass, boolean includeAssociation) throws Exception {
-		//System.out.println("\nPrinting "+ klass.getName());
+		System.out.println("\nPrinting "+ klass.getName());
 		Method[] methods = klass.getMethods();
 		for(Method method:methods)
 		{
 			if(method.getName().startsWith("get") && !method.getName().equals("getClass"))
 			{
-				//System.out.print("\t"+method.getName().substring(3)+":");
+				System.out.print("\t"+method.getName().substring(3)+":");
 				Object val = null;
 				try {
 				val = method.invoke(obj, (Object[])null);
@@ -381,21 +381,21 @@ public class SDKRESTContentHandler implements MessageBodyReader,
 				if (val instanceof java.util.Set) {
 					Collection list = (Collection)val;
 					for(Object object: list){
-						//System.out.println(object.getClass().getName()+":");
+						System.out.println(object.getClass().getName()+":");
 						if (includeAssociation){
 							printObject(object, object.getClass(), false);
 						} else {
 							System.out.println(" -- association has been excluded");
 						}
 					}
-					//System.out.println("size="+((Collection)val).size());
+					System.out.println("size="+((Collection)val).size());
 				}
 				else if(val instanceof ArrayList)
 				{
 					Collection list = (ArrayList) val;
-					System.out.println("\nPrinting Collection.....");
+					//System.out.println("\nPrinting Collection.....");
 					for(Object object: list){
-						System.out.println(object.getClass().getName()+":");
+						//System.out.println(object.getClass().getName()+":");
 						if (includeAssociation){
 							printObject(object, object.getClass(), false);
 						} else {

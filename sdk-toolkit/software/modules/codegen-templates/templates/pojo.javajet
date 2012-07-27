@@ -273,7 +273,9 @@ public List<ResourceLink> buildLinks(String path)
 		else
 		{
 		%>
-			idStr = <%=transformerUtils.getGetterMethodName(associationEnd)%>().<%=transformerUtils.getClassIdGetterMthod(assocKlass)%>().toString();		
+			if(<%=transformerUtils.getGetterMethodName(associationEnd)%>() != null && <%=transformerUtils.getGetterMethodName(associationEnd)%>().<%=transformerUtils.getClassIdGetterMthod(assocKlass)%>() != null)
+			{
+				idStr = <%=transformerUtils.getGetterMethodName(associationEnd)%>().<%=transformerUtils.getClassIdGetterMthod(assocKlass)%>().toString();		
 		<%
 		}
 		}
@@ -281,6 +283,8 @@ public List<ResourceLink> buildLinks(String path)
 	else
 	{
 	%>
+	if(<%=transformerUtils.getGetterMethodName(associationEnd)%>() != null && <%=transformerUtils.getGetterMethodName(associationEnd)%>().<%=transformerUtils.getClassIdGetterMthod(assocKlass)%>() != null)
+	{
 	idStr = <%=transformerUtils.getGetterMethodName(associationEnd)%>().<%=transformerUtils.getClassIdGetterMthod(assocKlass)%>().toString();		
 	<%
 	}
@@ -288,7 +292,7 @@ public List<ResourceLink> buildLinks(String path)
 	href = path+"/<%=assocKlass.getName()%>/"+idStr;
 	link = new ResourceLink("<%=associationEnd.getRoleName()%>", "application/xml", href);
 	links.add(link);
-	
+	}
 <%}%>
 	<%
 			}

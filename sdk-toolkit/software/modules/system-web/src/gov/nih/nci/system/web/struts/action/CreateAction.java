@@ -39,13 +39,18 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import org.apache.struts2.dispatcher.SessionMap;
+import org.acegisecurity.Authentication;
+import javax.ws.rs.core.Response.Status;
+import com.opensymphony.xwork2.ActionContext;
+import org.apache.commons.codec.binary.Base64;
 
 public class CreateAction extends RestQuery {
 
     private static final long serialVersionUID = 1234567890L;
 
     public static Logger log = Logger.getLogger(CreateAction.class.getName());
-    
+
     //Query parameters
     private String query;
     private String btnSearch;
@@ -66,7 +71,7 @@ public class CreateAction extends RestQuery {
 		String className = getSelectedDomain();
 
 		log.debug("className (selectedDomain): "+ getSelectedDomain());
-		
+
 		if(submitValue != null && submitValue.equalsIgnoreCase("Submit"))
 		{
 		    query = "GetHTML?query=";
@@ -80,6 +85,34 @@ public class CreateAction extends RestQuery {
 		   	WebClient client = WebClient.create(restURL);
 		   	client.path("rest/"+selectedDomain.substring(selectedDomain.lastIndexOf(".")+1, selectedDomain.length()));
 		   	client.type("application/xml").accept("application/xml");
+			SessionMap session = (SessionMap) ActionContext.getContext().get(
+					ActionContext.SESSION.toString());
+			org.acegisecurity.context.SecurityContext scontext = (org.acegisecurity.context.SecurityContext) session
+					.get("ACEGI_SECURITY_CONTEXT");
+			if(scontext != null)
+			{
+				Authentication authentication = scontext .getAuthentication();
+				// authentication.getCredentials();
+				System.out.println("username 11 "
+						+ authentication.getPrincipal().toString());
+				String userName = ((org.acegisecurity.userdetails.User) authentication
+						.getPrincipal()).getUsername();
+				String password = authentication.getCredentials().toString();
+				System.out.println("password 11 "
+						+ authentication.getCredentials().toString());
+				String base64encodedUsernameAndPassword = new String(Base64.encodeBase64((userName + ":" + password).getBytes()));
+				client.header("Authorization", "Basic " + base64encodedUsernameAndPassword);
+			}
+			else
+			{
+				if(secured)
+				{
+					request.setAttribute("message", "Invalid authentication");
+					return SUCCESS;
+				}
+
+			}
+
 		   	Response r = client.post(instance);
 
 				InputStream is = (InputStream) r.getEntity();
@@ -155,13 +188,13 @@ public class CreateAction extends RestQuery {
 		}
 		return instance;
 	}
-	
-	
+
+
 	private void setParameterValue(Class klass, Object instance, String name, String value)
 	{
 		if(value != null && value.trim().length()==0)
 			value = null;
-		
+
 		try
 		{
 			String paramName = name.substring(0,1).toUpperCase()+name.substring(1);
@@ -195,7 +228,7 @@ public class CreateAction extends RestQuery {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public Object convertValue(Class klass, Object value) throws WebApplicationException {
 
 		String fieldType = klass.getName();
@@ -233,7 +266,7 @@ public class CreateAction extends RestQuery {
 		}
 		return convertedValue;
 	}
-	
+
 }
 
 
