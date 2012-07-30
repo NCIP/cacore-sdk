@@ -47,6 +47,11 @@ import org.springframework.aop.Advisor;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
+/**
+ * Super class for all RESTful resources providing common functionality
+ * 
+ *
+ */
 public class RESTfulResource {
 
 	public static Logger log = Logger
@@ -64,7 +69,11 @@ public class RESTfulResource {
 	private String cacoreStyleSheet;
 	private String jsonStyleSheet;
 	protected boolean secured = false;
+	protected boolean isoEnabled = false;
 
+	/*
+	 * Initialize resource with ApplicationService and other properties 
+	 */
 	public RESTfulResource(@Context ServletContext context) {
 		try {
 			ctx = WebApplicationContextUtils.getWebApplicationContext(context);
@@ -94,10 +103,13 @@ public class RESTfulResource {
 			secured = "yes".equalsIgnoreCase(securityEnabled)
 					|| "true".equalsIgnoreCase(securityEnabled);
 
+			String isoEnabledStr = (String) systemProperties
+			.getProperty("enableISO21090DataTypes");
+			isoEnabled = "yes".equalsIgnoreCase(isoEnabledStr)
+			|| "true".equalsIgnoreCase(isoEnabledStr);
+
 			HibernateConfigurationHolder configurationHolder = (HibernateConfigurationHolder) ctx
 					.getBean("HibernateConfigHolder");
-			// httpUtils = new HTTPUtils(writableApplicationService, classCache,
-			// pageSize, configurationHolder);
 		} catch (Exception e) {
 			log.error("Error in constructing REST resource: " + e.getMessage());
 			// e.printStackTrace();
@@ -149,10 +161,14 @@ public class RESTfulResource {
 		return searchableFields;
 	}
 
+	/*
+	 * Validate given criteria. If not valid, respond with XML including valid fields
+	 * If ISO is enabled, attribute name can have sub attribute
+	 * @param Map matrix params from the request
+	 * @param List<Field> searchable fields for a selected domain class
+	 */
 	protected void validateCriteria(Map matrixParams, List<Field> searchFields)
 			throws WebApplicationException {
-		System.out.println("matrixParams: " + matrixParams);
-		System.out.println("searchFields: " + searchFields);
 		if (matrixParams == null) {
 			ResponseBuilder builder = Response.status(Status.BAD_REQUEST);
 			builder.type("application/xml");
@@ -230,6 +246,8 @@ public class RESTfulResource {
 			return name.substring(0, name.indexOf(GREATER_THAN));
 		else if (name.indexOf(LESS_THAN) > 0)
 			return name.substring(0, name.indexOf(LESS_THAN));
+		else if (isoEnabled && name.indexOf(".") > 0)
+			return name.substring(0, name.indexOf("."));
 		else
 			return name;
 	}
@@ -855,10 +873,12 @@ public class RESTfulResource {
 		// password);
 	}
 
+	/*
+	 * Save Object by calling writalbe API
+	 * @param Object 
+	 */
 	public Object save(final Object obj) throws WebApplicationException {
 		try {
-			// final InsertExampleQuery sdkQuery = new InsertExampleQuery(obj);
-			// writableApplicationService.executeQuery(sdkQuery);
 			final InsertExampleQuery sdkQuery = new InsertExampleQuery(obj);
 			sdkQuery.setCommit(true);
 			SDKQueryResult queryResult = ((WritableApplicationService) applicationService)
@@ -883,11 +903,12 @@ public class RESTfulResource {
 		}
 	}
 
+	/*
+	 * Update Object by calling writalbe API
+	 * @param Object 
+	 */
 	public void update(Object obj) throws WebApplicationException {
 		try {
-			System.out.println("in update................");
-			// final UpdateExampleQuery sdkQuery = new UpdateExampleQuery(obj);
-			// writableApplicationService.executeQuery(sdkQuery);
 			final UpdateExampleQuery sdkQuery = new UpdateExampleQuery(obj);
 			sdkQuery.setCommit(true);
 			new BaseUtilWrapper() {
@@ -908,14 +929,14 @@ public class RESTfulResource {
 					+ "</error>");
 			throw new WebApplicationException(builder.build());
 		}
-
 	}
 
+	/*
+	 * Delete Object by calling writalbe API
+	 * @param Object 
+	 */
 	public void delete(Object obj) throws WebApplicationException {
 		try {
-			System.out.println("in delete................");
-			// final DeleteExampleQuery sdkQuery = new DeleteExampleQuery(obj);
-			// writableApplicationService.executeQuery(sdkQuery);
 			final DeleteExampleQuery sdkQuery = new DeleteExampleQuery(obj);
 			sdkQuery.setCommit(true);
 			new BaseUtilWrapper() {
@@ -939,9 +960,12 @@ public class RESTfulResource {
 		}
 	}
 
+	/*
+	 * Delete Object by calling writalbe API
+	 * @param Object 
+	 */
 	public void delete(DeleteHQLQuery query) throws WebApplicationException {
 		try {
-			System.out.println("in delete.......DeleteHQLQuery query.........");
 			((WritableApplicationService) applicationService)
 					.executeQuery(query);
 		} catch (ApplicationException e) {
@@ -966,44 +990,6 @@ public class RESTfulResource {
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
-		}
-	}
-
-	protected void executeFormatOutput(HttpServletResponse response,
-			ServletOutputStream out, Object[] resultSet, int pageNumber,
-			HTTPUtils httpUtils, String queryType) throws Exception {
-		executeFormatOutput(response, out, resultSet, pageNumber, httpUtils,
-				queryType, true);
-	}
-
-	protected void executeFormatOutput(HttpServletResponse response,
-			ServletOutputStream out, Object[] resultSet, int pageNumber,
-			HTTPUtils httpUtils, String queryType, boolean query)
-			throws Exception {
-		try {
-
-			XMLOutputter xout = new XMLOutputter();
-			org.jdom.Document domDoc = httpUtils.getXMLDocument(resultSet,
-					pageNumber, query);
-
-			if (queryType.endsWith("XML")) {
-				response.setContentType("text/xml");
-				xout.output(domDoc, out);
-			} else if (queryType.endsWith("JSON")) {
-				response.setContentType("application/x-javascript");
-				if (httpUtils.getTargetPackageName() != null) {
-					printDocument(domDoc, jsonStyleSheet, out, httpUtils);
-				}
-			} else {
-				response.setContentType("text/html");
-				if (httpUtils.getTargetPackageName() != null) {
-					printDocument(domDoc, cacoreStyleSheet, out, httpUtils);
-				}
-			}
-
-		} catch (Exception ex) {
-			log.error("Print Results Exception: " + ex.getMessage());
-			throw ex;
 		}
 	}
 
@@ -1095,50 +1081,7 @@ public class RESTfulResource {
 		return sb.toString();
 	}
 
-	/**
-	 * Generates an HTML Document for a given XML document with the given
-	 * stylesheet specification
-	 * 
-	 * @param doc
-	 *            Specifies the XML document
-	 * @param styleSheet
-	 *            Specifies the stylesheet
-	 * @return
-	 * @throws Exception
-	 */
-	public void printDocument(Document doc, String styleSheet,
-			OutputStream out, HTTPUtils httpUtils) throws Exception {
-		try {
-			InputStream styleIn = Thread.currentThread()
-					.getContextClassLoader().getResourceAsStream(styleSheet);
-			if (styleIn != null) {
-				httpUtils.transform(doc, styleIn, out);
-			}
 
-		} catch (Exception ex) {
-			log.error(ex.getMessage());
-			throw new ServletException(ex.getMessage());
-		}
-	}
-
-	/**
-	 * Returns the query syntax
-	 * 
-	 * @return
-	 */
-	protected String getQuerySyntax() {
-		String syntax = "<br><br><font color=black size=4><B>Syntax: </B><br>"
-				+ "<font color=purple>query=</font>TargetClassName"
-				+ "<font color=purple>&</font>CriteriaClassName"
-				+ "<font color=purple>[@</font>attribute"
-				+ "<font color=purple>=</font>value"
-				+ "<font color=purple>][</font>association"
-				+ "<font color=purple>[@</font>attribute"
-				+ "<font color=purple>=</font>value"
-				+ "<font color=purple>]]<font color=purple></font>";
-		return syntax;
-
-	}
 
 	private Field getIdField(Field[] fields, String idName) throws Exception {
 		Field id = null;

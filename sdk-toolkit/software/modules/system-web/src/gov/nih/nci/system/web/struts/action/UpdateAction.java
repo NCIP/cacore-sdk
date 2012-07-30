@@ -1,5 +1,7 @@
 package gov.nih.nci.system.web.struts.action;
 
+import gov.nih.nci.system.web.util.SDKRESTContentHandler;
+
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.net.URI;
@@ -82,6 +84,15 @@ public class UpdateAction extends RestQuery {
 			System.out.println("Submitting:................");
 			try {
 				Object instance = prepareObject(request);
+				try
+				{
+					Class klass = Class.forName(targetClass);
+				SDKRESTContentHandler.printObject(instance, klass, true);
+				}
+				catch(Exception e)
+				{
+					
+				}
 				String url = request.getRequestURL().toString();
 				String restURL = url.substring(0, url.indexOf("Update.action"));
 				WebClient client = WebClient.create(restURL);
