@@ -6,16 +6,18 @@ import java.io.InputStream;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
+import org.acegisecurity.Authentication;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.log4j.Logger;
-import org.springframework.web.context.WebApplicationContext;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.dispatcher.SessionMap;
-import org.acegisecurity.Authentication;
-import javax.ws.rs.core.Response.Status;
+import org.springframework.web.context.WebApplicationContext;
+
 import com.opensymphony.xwork2.ActionContext;
-import org.apache.commons.codec.binary.Base64;
+
 public class RestSearchAction extends RestQuery {
 
 	private static final long serialVersionUID = 1234567890L;
@@ -60,42 +62,40 @@ public class RestSearchAction extends RestQuery {
 			debugSessionAttributes(session);
 			// String username = (String) session.get("Username");
 			// String password = (String) session.get("Password");
-
-			org.acegisecurity.context.SecurityContext context = (org.acegisecurity.context.SecurityContext) session
-					.get("ACEGI_SECURITY_CONTEXT");
-			Authentication authentication = context.getAuthentication();
-			// authentication.getCredentials();
-			System.out.println("username 11 "
-					+ authentication.getPrincipal().toString());
-			String userName = ((org.acegisecurity.userdetails.User) authentication
-					.getPrincipal()).getUsername();
-			String password = authentication.getCredentials().toString();
-			System.out.println("password 11 "
-					+ authentication.getCredentials().toString());
-			// if(username == null || username.trim().length() == 0 || password
-			// == null || password.trim().length() == 0)
-			// return LOGIN;
-
 			String url = request.getRequestURL().toString();
 			String restURL = url.substring(0, url.lastIndexOf("/"));
 			WebClient client = WebClient.create(restURL);
+
+			org.acegisecurity.context.SecurityContext context = (org.acegisecurity.context.SecurityContext) session
+					.get("ACEGI_SECURITY_CONTEXT");
+			if (context != null) {
+				Authentication authentication = context.getAuthentication();
+				// authentication.getCredentials();
+				System.out.println("username 11 "
+						+ authentication.getPrincipal().toString());
+				String userName = ((org.acegisecurity.userdetails.User) authentication
+						.getPrincipal()).getUsername();
+				String password = authentication.getCredentials().toString();
+				System.out.println("password 11 "
+						+ authentication.getCredentials().toString());
+				String base64encodedUsernameAndPassword = new String(
+						Base64.encodeBase64((userName + ":" + password)
+								.getBytes()));
+				client.header("Authorization", "Basic "
+						+ base64encodedUsernameAndPassword);
+			}
 			String queryStr = getQueryString(className, roleName, request);
 			String path = "rest/"
 					+ selectedDomain.substring(
 							selectedDomain.lastIndexOf(".") + 1,
 							selectedDomain.length()) + "/" + queryStr;
-//					+ "?username=" + userName + "&password="
-//					+ org.apache.cxf.jaxrs.utils.HttpUtils.pathEncode(password);
-			System.out.println("Path: " + path);
 			client.path(path);
-			String base64encodedUsernameAndPassword = new String(Base64.encodeBase64((userName + ":" + password).getBytes()));
-			client.header("Authorization", "Basic " + base64encodedUsernameAndPassword);
 
 			client.type("application/xml").accept("application/xml");
 			Response r = client.get();
-			System.out.println("Response code: " + r.getStatus());
 			if (r.getStatus() == Status.UNAUTHORIZED.getStatusCode()) {
-				String html = getUnauthorizedHTML(queryStr, className, "Unauthorized access to "+userName);
+				String html = getUnauthorizedHTML(queryStr, className,
+						"Unauthorized access");
 				request.setAttribute("HTMLContent", html);
 			} else {
 				InputStream is = (InputStream) r.getEntity();
@@ -104,13 +104,9 @@ public class RestSearchAction extends RestQuery {
 						false);
 				org.jdom.Document jDoc = builder.build(is);
 				System.out.println("Response: " + jDoc.toString());
-				// response.setContentType("text/xml");
-				// ServletOutputStream out = response.getOutputStream();
 				String html = getHTML(jDoc, className, queryStr, null);
 				request.setAttribute("HTMLContent", html);
 				request.setAttribute("targetClass", targetClass);
-				// String username = (String) session.get("username");
-				// String password = (String) session.get("password");
 			}
 		}
 		return SUCCESS;

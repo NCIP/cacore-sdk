@@ -77,12 +77,15 @@
 											</td>
 										</tr>
 										<tr>
-										<td border=0 class="txtHighlight" nowrap="off" align="center" height="1%">
+										<td border=0 class="txtHighlight" align="center" height="1%">
 										<%String message2 = (String)request.getAttribute("message");
-										if(message2 == null)
-											message2="&nbsp;";
+										if(message2 != null){
 										%>
-										<%=message2%>
+										<%=message2%><br>
+												<input type="button" name="Close" value="Close" class="actionButton" onClick="javascript:window.close()">
+										
+										<%}
+										%>
 										</td>
 										</tr>
 											
@@ -233,22 +236,6 @@ if(validationMessage != null && validationMessage.length() > 0)
 <%
 }
 %>
-											<tr>
-												<td height="20" width="100%" class="formField" align="center">
-												<%
-												String created = (String) request.getAttribute("created");
-												System.out.println("created================"+created);
-												if(created != null && created.equals("true"))
-												{
-												%>
-												
-												<input type="button" name="Close" value="Close" onClick="javascript:window.close()">
-												<%
-												}
-												%>
-                	&nbsp;
-												</td>
-											</tr>
 										</table>
 									</td>
 								</tr>

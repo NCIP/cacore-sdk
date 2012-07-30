@@ -47,7 +47,7 @@ public class UpdateAction extends RestQuery {
 		HttpServletRequest request = ServletActionContext.getRequest();
 		HttpServletResponse response = ServletActionContext.getResponse();
 		targetClass = request.getParameter("target");
-		System.out.println("Target: "+targetClass);
+		System.out.println("Target: " + targetClass);
 		if (targetClass == null || targetClass.trim().length() == 0) {
 			request.setAttribute("Message", "Invalid target");
 			return null;
@@ -71,9 +71,7 @@ public class UpdateAction extends RestQuery {
 			request.setAttribute("Message", "Invalid target identifier");
 			return null;
 		}
-		System.out.println("BEFORE 	Submitting:................"+getBtnSearch());
 		String submitted = request.getParameter("submitForm");
-		System.out.println("BEFORE 	submitted:................"+submitted);
 		SessionMap session = (SessionMap) ActionContext.getContext().get(
 				ActionContext.SESSION.toString());
 		org.acegisecurity.context.SecurityContext context = (org.acegisecurity.context.SecurityContext) session
@@ -82,74 +80,68 @@ public class UpdateAction extends RestQuery {
 		if (submitted != null && submitted.equals("true")) {
 
 			System.out.println("Submitting:................");
-			try
-			{
-			Object instance = prepareObject(request);
-			String url = request.getRequestURL().toString();
-			String restURL = url.substring(0, url.indexOf("Update.action"));
-			WebClient client = WebClient.create(restURL);
-			client.path("rest/"
-					+ targetClass.substring(targetClass.lastIndexOf(".") + 1,
-							targetClass.length()));
-			client.type("application/xml").accept("application/xml");
-			if(context != null)
-			{
-				Authentication authentication = context.getAuthentication();
-				// authentication.getCredentials();
-				System.out.println("username 11 "
-						+ authentication.getPrincipal().toString());
-				String userName = ((org.acegisecurity.userdetails.User) authentication
-						.getPrincipal()).getUsername();
-				String password = authentication.getCredentials().toString();
-				System.out.println("password 11 "
-						+ authentication.getCredentials().toString());
-				String base64encodedUsernameAndPassword = new String(Base64.encodeBase64((userName + ":" + password).getBytes()));
-				client.header("Authorization", "Basic " + base64encodedUsernameAndPassword);
-			}
-			else
-			{
-				if(secured)
-				{
-					request.setAttribute("message", "Invalid authentication");
-					return SUCCESS;
+			try {
+				Object instance = prepareObject(request);
+				String url = request.getRequestURL().toString();
+				String restURL = url.substring(0, url.indexOf("Update.action"));
+				WebClient client = WebClient.create(restURL);
+				client.path("rest/"
+						+ targetClass.substring(
+								targetClass.lastIndexOf(".") + 1,
+								targetClass.length()));
+				client.type("application/xml").accept("application/xml");
+				if (context != null) {
+					Authentication authentication = context.getAuthentication();
+					// authentication.getCredentials();
+					System.out.println("username 11 "
+							+ authentication.getPrincipal().toString());
+					String userName = ((org.acegisecurity.userdetails.User) authentication
+							.getPrincipal()).getUsername();
+					String password = authentication.getCredentials()
+							.toString();
+					System.out.println("password 11 "
+							+ authentication.getCredentials().toString());
+					String base64encodedUsernameAndPassword = new String(
+							Base64.encodeBase64((userName + ":" + password)
+									.getBytes()));
+					client.header("Authorization", "Basic "
+							+ base64encodedUsernameAndPassword);
+				} else {
+					if (secured) {
+						request.setAttribute("message",
+								"Invalid authentication");
+						return SUCCESS;
+					}
+
 				}
 
-			}
+				System.out.println("instance: " + instance);
+				try {
+					Response r = client.put(instance);
 
-System.out.println("instance: "+instance);
-			try{
-			Response r = client.put(instance);
+					System.out.println("update Status: " + r.getStatus());
 
+					if (r.getStatus() != Status.OK.getStatusCode() && r.getStatus() != Status.NO_CONTENT.getStatusCode()) {
+						System.out.println("update jDoc: " + r.toString());
+						InputStream is = (InputStream) r.getEntity();
 
-			System.out.println("update Status: "+r.getStatus());
+						org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
+								false);
+						org.jdom.Document jDoc = builder.build(is);
 
-			if(r.getStatus() != Status.OK.getStatusCode())
-			{
-				    System.out.println("update jDoc: "+r.toString());
-					InputStream is = (InputStream) r.getEntity();
+						System.out.println("update jDoc: " + jDoc.toString());
+						request.setAttribute("message", "Unsuccessful update: "
+								+ jDoc.getRootElement().getText());
+					} else {
+						String message = "Updated Successfully";
+						request.setAttribute("message", message);
 
-					org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
-							false);
-					org.jdom.Document jDoc = builder.build(is);
-
-					System.out.println("update jDoc: "+jDoc.toString());
-				request.setAttribute("message", "Unsuccessful update: "+jDoc.getRootElement().getText());
-			}
-else
-{
-				String message =  "Updated Successfully";
-				request.setAttribute("message", message);
-
-}
-			}
-			catch(WebApplicationException e)
-			{
-				e.printStackTrace();
-			}
-			}
-			catch(Exception e)
-			{
-				String message =  "Failed to update: "+e.getMessage();
+					}
+				} catch (WebApplicationException e) {
+					e.printStackTrace();
+				}
+			} catch (Exception e) {
+				String message = "Failed to update: " + e.getMessage();
 				request.setAttribute("message", message);
 			}
 		}
@@ -162,42 +154,39 @@ else
 						targetClass.length()) + "/" + idColValue);
 
 		client.type("application/xml").accept("application/xml");
-			if(context != null)
-			{
-				Authentication authentication = context.getAuthentication();
-				// authentication.getCredentials();
-				////System.out.println("username 11 "
-						//+ authentication.getPrincipal().toString());
-				String userName = ((org.acegisecurity.userdetails.User) authentication
-						.getPrincipal()).getUsername();
-				String password = authentication.getCredentials().toString();
-				//System.out.println("password 11 "
-						//+ authentication.getCredentials().toString());
-				String base64encodedUsernameAndPassword = new String(Base64.encodeBase64((userName + ":" + password).getBytes()));
-				client.header("Authorization", "Basic " + base64encodedUsernameAndPassword);
+		if (context != null) {
+			Authentication authentication = context.getAuthentication();
+			// authentication.getCredentials();
+			// //System.out.println("username 11 "
+			// + authentication.getPrincipal().toString());
+			String userName = ((org.acegisecurity.userdetails.User) authentication
+					.getPrincipal()).getUsername();
+			String password = authentication.getCredentials().toString();
+			// System.out.println("password 11 "
+			// + authentication.getCredentials().toString());
+			String base64encodedUsernameAndPassword = new String(
+					Base64.encodeBase64((userName + ":" + password).getBytes()));
+			client.header("Authorization", "Basic "
+					+ base64encodedUsernameAndPassword);
+		} else {
+			if (secured) {
+				request.setAttribute("message", "Invalid authentication");
+				return SUCCESS;
 			}
-			else
-			{
-				if(secured)
-				{
-					request.setAttribute("message", "Invalid authentication");
-					return SUCCESS;
-				}
 
-			}
+		}
 		Response r = client.get();
 
 		InputStream is = (InputStream) r.getEntity();
 
-		org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
-				false);
+		org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(false);
 		org.jdom.Document jDoc = builder.build(is);
 		request.setAttribute("jDoc", jDoc);
 
 		return SUCCESS;
 	}
 
-	private Object prepareObject(HttpServletRequest request) throws Exception{
+	private Object prepareObject(HttpServletRequest request) throws Exception {
 
 		StringBuilder sb = new StringBuilder();
 		Enumeration<String> parameters = request.getParameterNames();
@@ -208,15 +197,17 @@ else
 		instance = klass.newInstance();
 		while (parameters.hasMoreElements()) {
 			String parameterName = (String) parameters.nextElement();
+			System.out.println("update parameterName: "+parameterName);
 			if (!parameterName.equals("klassName")
 					&& !parameterName.equals("searchObj")
 					&& !parameterName.equals("BtnSearch")
 					&& !parameterName.equals("username")
 					&& !parameterName.equals("password")
 					&& !parameterName.equals("selectedDomain")) {
-				//System.out.println("update param = " + parameterName);
-				String parameterValue = (request
-						.getParameter(parameterName)).trim();
+				// System.out.println("update param = " + parameterName);
+				String parameterValue = (request.getParameter(parameterName))
+						.trim();
+				System.out.println("parameterValue: "+parameterValue);
 				setParameterValue(klass, instance, parameterName,
 						parameterValue);
 			}
@@ -240,21 +231,21 @@ else
 
 				Method method = null;
 				while (klass != Object.class) {
-				     try {
-				    	  Method setMethod = klass.getDeclaredMethod("set"+paramName, argTypes);
-				    	  setMethod.setAccessible(true);
-				          setMethod.invoke(instance, convertValue(type, value));
-				          break;
-				     } catch (NoSuchMethodException ex) {
-				    	 klass = klass.getSuperclass();
-				     }
+					try {
+						Method setMethod = klass.getDeclaredMethod("set"
+								+ paramName, argTypes);
+						setMethod.setAccessible(true);
+						setMethod.invoke(instance, convertValue(type, value));
+						break;
+					} catch (NoSuchMethodException ex) {
+						klass = klass.getSuperclass();
+					}
 				}
 			}
 		}
 	}
 
-	public Object convertValue(Class klass, Object value)
-			throws Exception {
+	public Object convertValue(Class klass, Object value) throws Exception {
 
 		String fieldType = klass.getName();
 		Object convertedValue = null;
@@ -284,8 +275,7 @@ else
 			} else {
 				throw new Exception("type mismatch - " + fieldType);
 			}
-		} catch (NumberFormatException e)
-		{
+		} catch (NumberFormatException e) {
 			e.printStackTrace();
 			throw new Exception(e.getMessage());
 		} catch (Exception ex) {

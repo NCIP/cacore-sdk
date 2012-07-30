@@ -130,8 +130,8 @@
 											Are you sure you want to delete?
 											<br>
 											
-											<input type="submit" name="submit" value="Yes">
-											<input type="button" name="close" value="No" onClick="javascript:window.close()">
+											<input type="submit" name="submit" value="Yes" class="actionButton" >
+											<input type="button" name="close" value="No" class="actionButton"  onClick="javascript:window.close()">
 											<input type="hidden" name="confirm" value="true">
 											
 											
@@ -142,7 +142,7 @@
 											{%>
 											<tr>
 											<td class="dataCellText" nowrap="off">
-											<input type="button" name="close" value="Close" onClick="javascript:window.close()">
+											<input type="button" name="close" value="Close" class="actionButton" onClick="javascript:window.close()">
 											</td>
 											</tr>
 											<%}%>

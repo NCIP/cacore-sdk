@@ -188,14 +188,18 @@ public class RestQuery extends BaseActionSupport {
 	}
 
 	/**
-	 * Generates an HTML Document for a given XML document with the given
-	 * stylesheet specification
+	 * Generates an HTML Document for a given XML document 
 	 *
 	 * @param doc
 	 *            Specifies the XML document
-	 * @param styleSheet
-	 *            Specifies the stylesheet
-	 * @return
+	 * @param className
+	 *            Resulting class names
+	 * @param queryStr
+	 * 			  Query string used for the query
+	 * @param roleName
+	 * 			  role name in the query, if used
+	 * @return String
+	 * 			  HTML string
 	 * @throws Exception
 	 */
 	protected String getHTML(Document doc, String className, String queryStr,
@@ -204,6 +208,7 @@ public class RestQuery extends BaseActionSupport {
 			StringBuffer buffer = new StringBuffer();
 			Map<String, String> header = new HashMap<String, String>();
 			Map<String, List<String>> body = new HashMap<String, List<String>>();
+			//Main table
 			buffer.append("<table border=\"0\" bordercolor=\"orange\" summary=\"\" cellpadding=\"0\" cellspacing=\"0\">");
 			buffer.append("<tr>");
 			buffer.append("<td class=\"dataTablePrimaryLabel\" height=\"20\" align=\"left\">");
@@ -214,10 +219,12 @@ public class RestQuery extends BaseActionSupport {
 						queryStr.length());
 			else
 				criteria = queryStr;
+			//Criteria value to display
 			buffer.append("Criteria: " + criteria);
 			buffer.append("<br />");
 
 			Element root = doc.getRootElement();
+			//If resulted XML is a response, capture the message to display
 			if (root.getName().equals("response")) {
 				buffer.append("Result Class: " + className);
 				buffer.append("</td>");
@@ -233,12 +240,14 @@ public class RestQuery extends BaseActionSupport {
 			} else {
 				String classEleName = className;
 
+				//Get resulted class name
 				if (selectedSearchDomain != null
 						&& !selectedSearchDomain.equals("Please choose")) {
 					if (!selectedSearchDomain.equalsIgnoreCase(className)) {
 						classEleName = selectedSearchDomain;
 					}
 				}
+				//If role name used
 				if (roleName != null) {
 					classEleName = getTargetClassName(className, roleName);
 				}
@@ -250,6 +259,7 @@ public class RestQuery extends BaseActionSupport {
 				buffer.append(getPagingLinks(root));
 				buffer.append("</td>");
 
+				//Get Id column. This will be used to display Id column first in the results table
 				String idCol = null;
 				String idColValue = null;
 				try {
@@ -263,18 +273,31 @@ public class RestQuery extends BaseActionSupport {
 				buffer.append("<td>");
 				buffer.append("<table summary=\"Data Summary\" cellpadding=\"3\" cellspacing=\"0\" border=\"0\" class=\"dataTable\" width=\"100%\">");
 				// buffer.append("<tr>");
-				String eleName = classEleName.substring(
-						classEleName.lastIndexOf(".") + 1,
-						classEleName.length());
+				//
+				//String eleName = classEleName.substring(
+				//		classEleName.lastIndexOf(".") + 1,
+				//		classEleName.length());
 
-				List<Element> children = root.getChildren();
-				for (Element child : children) {
+				//For each sub element to the root:
+				//if it is link, skip it. This is link elements for collections representing paging, self
+				//
+				
+				List<Element> tableRows = root.getChildren();
+				List columns = new ArrayList();
+				for (Element child : tableRows) {
 					StringBuffer headerBuffer = new StringBuffer();
 					StringBuffer bodyBuffer = new StringBuffer();
-					String fullClassName = classCache.getPkgNameForClass(child
-							.getName()) + "." + child.getName();
+
+//					StringBuffer recHeaderBuffer = new StringBuffer();
+//					StringBuffer recBodyBuffer = new StringBuffer();
+					
 					if(child.getName().equals("link"))
 						continue;
+
+					//Get element class name. There could be different classes in the given XML 
+					//representing inheritance
+					String fullClassName = classCache.getPkgNameForClass(child
+							.getName()) + "." + child.getName();
 
 					headerBuffer.append("<tr>");
 					bodyBuffer.append("<tr>");
@@ -283,17 +306,20 @@ public class RestQuery extends BaseActionSupport {
 					Field[] fields = classCache.getAllFields(klass);
 					//Arrays.sort(fields);
 
-					if (child.getName().equals("link"))
-						continue;
-
-					List<Element> linkChild = getChildren(child, "link");
+					//Get links for child element and add link ref name to list
 					List<String> refNameList = new ArrayList();
-					for(Element link : linkChild)
-					{
-						Attribute attr = link.getAttribute("ref");
-						if(attr != null && !attr.equals("self"))
-							refNameList.add(attr.getValue());
+					List<String> assocNames = classCache.getAssociations(fullClassName);
+					for (String assocName : assocNames) {
+						System.out.println(assocName);
+						boolean foundLink = false;
+						if(assocName.indexOf("(") == -1)
+							continue;
+						else
+						{
+							refNameList.add(assocName.substring(0, assocName.indexOf("(")).trim());
+						}
 					}
+					
 					String idColName = classCache.getClassIdName(klass);
 
 					// Add id column to the table first
@@ -316,7 +342,7 @@ public class RestQuery extends BaseActionSupport {
 						break;
 					}
 
-					// Add all remaining columns
+					// Add all remaining columns, not including references
 					for (int i = 0; i < fields.length; i++) {
 						Field field = fields[i];
 						if (field.getName().equals(idColName) || field.getName().equals("links") || field.getName().equals("serialVersionUID") || refNameList.contains(field.getName()))
@@ -338,6 +364,51 @@ public class RestQuery extends BaseActionSupport {
 					}
 
 
+					//List<String> assocNames = classCache.getAssociations(fullClassName);
+					List<Element> linkChild = getChildren(child, "link");
+					System.out.println("linkChild: "+linkChild);
+					for (String linkName : refNameList) {
+						System.out.println(linkName);
+						boolean foundLink = false;
+						
+						for (Element link : linkChild) {
+							if(link.getAttribute("ref").getValue().equals(linkName))
+							{
+								System.out.println("found....");
+								headerBuffer
+								.append("<th class=\"dataTableHeader\" scope=\"col\" align=\"center\">");
+								headerBuffer.append("&nbsp;");
+								headerBuffer.append("</th>");
+		
+								bodyBuffer
+										.append("<td class=\"dataCellText\" nowrap=\"off\">");
+								bodyBuffer.append("<A href=\"#\" onclick=\""
+										+ "query('"
+										+ link.getAttribute("href").getValue()
+										+ "');return false;\"" + ">");
+								bodyBuffer.append(link.getAttribute("ref").getValue());
+								bodyBuffer.append("</A>");
+								bodyBuffer.append("</td>");
+								foundLink = true;
+							}
+						}
+						if(!foundLink)
+						{
+							System.out.println("not found....");
+							headerBuffer
+							.append("<th class=\"dataTableHeader\" scope=\"col\" align=\"center\">");
+							headerBuffer.append("&nbsp;");
+							headerBuffer.append("</th>");
+	
+							bodyBuffer
+									.append("<td class=\"dataCellText\" nowrap=\"off\">");
+							bodyBuffer.append("&nbsp;");
+							bodyBuffer.append("</td>");
+							
+						}
+					}
+
+/*					
 					for (Element link : linkChild) {
 						headerBuffer
 								.append("<th class=\"dataTableHeader\" scope=\"col\" align=\"center\">");
@@ -353,8 +424,8 @@ public class RestQuery extends BaseActionSupport {
 						bodyBuffer.append(link.getAttribute("ref").getValue());
 						bodyBuffer.append("</A>");
 						bodyBuffer.append("</td>");
-
 					}
+*/
 					boolean updateLink = supportUpdateLink(classEleName);
 					boolean deleteLink = supportDeleteLink(classEleName);
 
@@ -376,7 +447,6 @@ public class RestQuery extends BaseActionSupport {
 						bodyBuffer.append("Update");
 						bodyBuffer.append("</A>");
 						bodyBuffer.append("</td>");
-
 					}
 
 					if (deleteLink) {

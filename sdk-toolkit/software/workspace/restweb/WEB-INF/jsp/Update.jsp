@@ -232,6 +232,7 @@ if(className != null)
 						<td align="left"><input type="submit" name="BtnSearch" class="actionButton" value="Submit" ></td>
 <input type="hidden" name="submitForm" value="true">
 						<td align="left"><input class="actionButton" type="reset" value="Reset"></td> 
+<td align="left"><input type="button" class="actionButton" name="Close" value="Close" onClick="javascript:window.close()"></td>
 					</tr>
 				</table>
 				<!-- action buttons end -->

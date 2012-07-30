@@ -113,19 +113,47 @@ public class CreateAction extends RestQuery {
 
 			}
 
-		   	Response r = client.post(instance);
-
-				InputStream is = (InputStream) r.getEntity();
-
-				org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
-						false);
-				org.jdom.Document jDoc = builder.build(is);
-				Element root = jDoc.getRootElement();
-				String href = root.getText();
-				String newId = href.substring(href.lastIndexOf("/")+1);
-				String message = "Successfully created "+ selectedDomain.substring(selectedDomain.lastIndexOf(".")+1, selectedDomain.length()) +" with Id: "+newId;
+			try
+			{
+		   		Response r = client.post(instance);
+		   		System.out.println("Create status: "+r.getStatus());
+		   		if(r.getStatus() == Status.OK.getStatusCode() || r.getStatus() == Status.CREATED.getStatusCode())
+		   		{
+					InputStream is = (InputStream) r.getEntity();
+	
+					org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
+							false);
+					org.jdom.Document jDoc = builder.build(is);
+					Element root = jDoc.getRootElement();
+					String href = root.getText();
+					String newId = href.substring(href.lastIndexOf("/")+1);
+					String message = "Successfully created "+ selectedDomain.substring(selectedDomain.lastIndexOf(".")+1, selectedDomain.length()) +" with Id: "+newId;
+					request.setAttribute("message", message);
+					request.setAttribute("created", "true");
+		   		}
+		   		else
+		   		{
+		   			System.out.println(r.toString());
+					InputStream is = (InputStream) r.getEntity();
+					
+					org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
+							false);
+					org.jdom.Document jDoc = builder.build(is);
+					Element root = jDoc.getRootElement();
+					String error = root.getText();
+					String message = "Failed to create: "+error;
+					request.setAttribute("message", message);
+					request.setAttribute("created", "false");
+		   		}
+			}
+			catch(WebApplicationException e)
+			{
+				e.printStackTrace();
+				String message = "Failed to create due to: "+e.getMessage();
 				request.setAttribute("message", message);
-				request.setAttribute("created", "true");
+				request.setAttribute("created", "false");
+			
+			}
 		}
 		return SUCCESS;
 	}

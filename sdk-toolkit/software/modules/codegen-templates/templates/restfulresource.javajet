@@ -857,27 +857,6 @@ if(action != null && action.indexOf("C") != -1 && !transformerUtils.isISO21090En
 			<%
 				}
 			}
-			else if(attrb != null)
-			{
-			String attrType = transformerUtils.isoDatatypeCompleteMap.get(attrb.getDatatype().getName());
-			
-			if(attrType == null)
-				attrType = transformerUtils.javaPrimitiveDatatypeMap.get(attrb.getDatatype().getName());
-			
-			
-			if(attrType.equals("Ii"))
-			{
-			%>
-				id = object.<%=idMethod%>().getExtension();
-			<%
-			}
-			else
-			{
-			%>
-				id = new <%=attrType%>(object.<%=idMethod%>()).toString();	
-			<%
-			}
-			}
 			%>
 			
 			ResponseBuilder builder = Response.status(Status.CREATED);
@@ -888,7 +867,12 @@ if(action != null && action.indexOf("C") != -1 && !transformerUtils.isISO21090En
 		}
 		catch(WebApplicationException e)
 		{
-			throw e;
+			System.out.println("In Create: throwing: "+e.getMessage());
+			return e.getResponse();
+			//ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
+			//builder.type("application/xml");
+			//builder.entity("<error>Failed to create <%=klassName%> due to: "+e.getMessage()+"</error>");
+			//return builder.build();
 		}
 	}
 

@@ -38,9 +38,18 @@ public class WritableORMDAOImpl extends ORMDAOImpl implements WritableDAO
 			SDKQuery q = (SDKQuery) request.getRequest();
 			if (q instanceof InsertExampleQuery)
 			{
+				try
+				{
+					System.out.println("InsertExampleQuery *****************");	
 				Object obj = ((InsertExampleQuery) q).getExample();
 				insert(obj, ((InsertExampleQuery) q).getCommit());
 				result = new SDKQueryResult(obj);
+				}
+				catch(org.springframework.dao.DataAccessException e)
+				{
+					System.out.println(e.getMessage());
+					throw new DAOException(e);
+				}
 			}
 			else if (q instanceof DeleteExampleQuery)
 			{

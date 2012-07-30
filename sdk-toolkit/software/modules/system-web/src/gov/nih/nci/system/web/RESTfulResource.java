@@ -3,7 +3,6 @@ package gov.nih.nci.system.web;
 import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 import gov.nih.nci.system.applicationservice.WritableApplicationService;
-import gov.nih.nci.system.client.ApplicationServiceProvider;
 import gov.nih.nci.system.client.proxy.ApplicationServiceProxy;
 import gov.nih.nci.system.dao.orm.HibernateConfigurationHolder;
 import gov.nih.nci.system.query.SDKQueryResult;
@@ -38,13 +37,13 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
+import org.acegisecurity.Authentication;
 import org.acegisecurity.providers.UsernamePasswordAuthenticationToken;
 import org.aopalliance.aop.Advice;
 import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.jdom.output.XMLOutputter;
 import org.springframework.aop.Advisor;
-import org.acegisecurity.Authentication;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -79,7 +78,7 @@ public class RESTfulResource {
 			classCache = (ClassCache) ctx.getBean("ClassCache");
 			applicationService = (ApplicationService) ctx
 					.getBean("ApplicationServiceImpl");
-			
+
 			try {
 				String pageCount = systemProperties.getProperty("rowCounter");
 				if (pageCount != null) {
@@ -152,8 +151,8 @@ public class RESTfulResource {
 
 	protected void validateCriteria(Map matrixParams, List<Field> searchFields)
 			throws WebApplicationException {
-		System.out.println("matrixParams: "+matrixParams);
-		System.out.println("searchFields: "+searchFields);
+		System.out.println("matrixParams: " + matrixParams);
+		System.out.println("searchFields: " + searchFields);
 		if (matrixParams == null) {
 			ResponseBuilder builder = Response.status(Status.BAD_REQUEST);
 			builder.type("application/xml");
@@ -443,15 +442,17 @@ public class RESTfulResource {
 			List<Field> searchFields, Map matrixParams, UriInfo uriInfo) {
 		int startIndex = -1;
 		int totalSize = -1;
-		 System.out.println("uriInfo.getPathParameters(): "+uriInfo.getPathParameters());
-		 System.out.println("uriInfo.getQueryParameters(): "+uriInfo.getQueryParameters());
+		System.out.println("uriInfo.getPathParameters(): "
+				+ uriInfo.getPathParameters());
+		System.out.println("uriInfo.getQueryParameters(): "
+				+ uriInfo.getQueryParameters());
 		String bStart = uriInfo.getQueryParameters().getFirst("start");
-		 System.out.println("bStart: "+bStart);
+		System.out.println("bStart: " + bStart);
 		if (bStart != null)
 			startIndex = Integer.parseInt(bStart);
 
 		String bSize = uriInfo.getQueryParameters().getFirst("size");
-		System.out.println("bSize: "+bSize);
+		System.out.println("bSize: " + bSize);
 		if (bSize != null)
 			totalSize = Integer.parseInt(bSize);
 
@@ -464,8 +465,8 @@ public class RESTfulResource {
 		String whereCriteria = whereMap.keySet().iterator().next();
 		List params = whereMap.get(whereCriteria);
 		if (whereCriteria.length() > 0)
-			hcriteria = new HQLCriteria("from " + className + " a "
-					+ " where "+whereCriteria, params, startIndex - 1, totalSize);
+			hcriteria = new HQLCriteria("from " + className + " a " + " where "
+					+ whereCriteria, params, startIndex - 1, totalSize);
 		else
 			hcriteria = new HQLCriteria("from " + className + " a ", params,
 					startIndex - 1, totalSize);
@@ -492,16 +493,15 @@ public class RESTfulResource {
 			String idName = classCache.getClassIdName(sourceClass);
 			String assosIdName = classCache.getClassIdName(assocType);
 
-
 			String whereCriteria = null;
 			List params = null;
 
 			if (isCollection) {
-				Map<String, List> whereMap = buildWhereCriteria(sourceClass.getName(),
-						searchFields, matrixParams, uriInfo, "src");
+				Map<String, List> whereMap = buildWhereCriteria(
+						sourceClass.getName(), searchFields, matrixParams,
+						uriInfo, "src");
 
-				if(whereMap.size() == 0)
-				{
+				if (whereMap.size() == 0) {
 					ResponseBuilder builder = Response.status(Status.NOT_FOUND);
 					builder.type("application/xml");
 					builder.entity("<message>Invalid Criteria</message>");
@@ -514,34 +514,34 @@ public class RESTfulResource {
 				hql = "select dest from " + sourceClass.getName()
 						+ " as src inner join src." + associationName
 						+ " dest where " + whereCriteria;
-				System.out.println("hql: collection: "+hql);
+				System.out.println("hql: collection: " + hql);
 			} else {
-				Map<String, List> whereMap = buildWhereCriteria(sourceClass.getName(),
-						searchFields, matrixParams, uriInfo, "src");
+				Map<String, List> whereMap = buildWhereCriteria(
+						sourceClass.getName(), searchFields, matrixParams,
+						uriInfo, "src");
 
 				whereCriteria = whereMap.keySet().iterator().next();
 				params = whereMap.get(whereCriteria);
 
-				if(whereMap.size() == 0)
-				{
+				if (whereMap.size() == 0) {
 					ResponseBuilder builder = Response.status(Status.NOT_FOUND);
 					builder.type("application/xml");
 					builder.entity("<message>Invalid Criteria</message>");
 					throw new WebApplicationException(builder.build());
 				}
-				
+
 				hql = "select dest from " + assocType + " as dest,"
-						+ sourceClass.getName() + " as src where " + whereCriteria + " and src."
-						+ associationName + "." + idName + "=dest."
-						+ assosIdName;
-				System.out.println("hql2: "+hql);
+						+ sourceClass.getName() + " as src where "
+						+ whereCriteria + " and src." + associationName + "."
+						+ idName + "=dest." + assosIdName;
+				System.out.println("hql2: " + hql);
 			}
 
 			// System.out.println("hql: "+hql);
 
-			//Field[] fields = classCache.getAllFields(sourceClass);
-			//Field idField = getIdField(fields, idName);
-			//params.add(convertValues(idField, id));
+			// Field[] fields = classCache.getAllFields(sourceClass);
+			// Field idField = getIdField(fields, idName);
+			// params.add(convertValues(idField, id));
 
 			HQLCriteria hqlCriteria = new HQLCriteria(hql, params, start, size);
 			return hqlCriteria;
@@ -562,7 +562,7 @@ public class RESTfulResource {
 		}
 
 	}
-	
+
 	public HQLCriteria getAssociationCriteria(Class sourceClass,
 			String associationName, String id, int start, int size)
 			throws WebApplicationException {
@@ -620,7 +620,8 @@ public class RESTfulResource {
 	}
 
 	protected Map<String, List> buildWhereCriteria(String className,
-			List<Field> searchFields, Map matrixParams, UriInfo uriInfo, String alias) {
+			List<Field> searchFields, Map matrixParams, UriInfo uriInfo,
+			String alias) {
 		int startIndex = -1;
 		int totalSize = -1;
 		// System.out.println("uriInfo.getPathParameters(): "+uriInfo.getPathParameters());
@@ -677,37 +678,38 @@ public class RESTfulResource {
 					if ((attrValue.indexOf("*") != -1)
 							|| (attrValue.indexOf("%") != -1)) {
 						// params.add(attrValue.replace("*", "%"));
-						criteria.add(((alias != null)? alias+"." : "") +attrName + " like '"
+						criteria.add(((alias != null) ? alias + "." : "")
+								+ attrName + " like '"
 								+ attrValue.replace("*", "%") + "'");
 					} else {
 						params.add(attrValue);
-						criteria.add(((alias != null)? alias+"." : "")+attrName + operator + "? ");
+						criteria.add(((alias != null) ? alias + "." : "")
+								+ attrName + operator + "? ");
 					}
 				} else {
-					if(attrValue.equals("*"))
-					{
-						criteria.add(((alias != null)? alias+"." : "")+attrName + " like '%' ");
-					}
-					else
-					{
-					Object paramValue = convertValues(field, attrValue);
-					if (paramValue != null) {
-
-						params.add(paramValue);
-						criteria.add(((alias != null)? alias+"." : "")+attrName + operator + "? ");
+					if (attrValue.equals("*")) {
+						criteria.add(((alias != null) ? alias + "." : "")
+								+ attrName + " like '%' ");
 					} else {
-						StringBuffer buffer = new StringBuffer();
-						ResponseBuilder builder = Response
-								.status(Status.INTERNAL_SERVER_ERROR);
-						buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-						buffer.append("<response>");
-						buffer.append("<type>ERROR</type>");
-						buffer.append("<code>INTERNAL_ERROR_2</code>");
-						buffer.append("<message>Failed to construct criteria</message>");
-						buffer.append("</response>");
-						builder.entity(buffer.toString());
-						throw new WebApplicationException(builder.build());
-					}
+						Object paramValue = convertValues(field, attrValue);
+						if (paramValue != null) {
+
+							params.add(paramValue);
+							criteria.add(((alias != null) ? alias + "." : "")
+									+ attrName + operator + "? ");
+						} else {
+							StringBuffer buffer = new StringBuffer();
+							ResponseBuilder builder = Response
+									.status(Status.INTERNAL_SERVER_ERROR);
+							buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+							buffer.append("<response>");
+							buffer.append("<type>ERROR</type>");
+							buffer.append("<code>INTERNAL_ERROR_2</code>");
+							buffer.append("<message>Failed to construct criteria</message>");
+							buffer.append("</response>");
+							builder.entity(buffer.toString());
+							throw new WebApplicationException(builder.build());
+						}
 					}
 				}
 			} else {
@@ -715,8 +717,7 @@ public class RESTfulResource {
 			}
 		}
 
-		if (criteria.size() == 0)
-		{
+		if (criteria.size() == 0) {
 			ResponseBuilder builder = Response.status(Status.NOT_FOUND);
 			builder.type("application/xml");
 			builder.entity("<message>Invalid Criteria</message>");
@@ -826,32 +827,33 @@ public class RESTfulResource {
 	}
 
 	protected ApplicationService getApplicationService() throws Exception {
-		//return ApplicationServiceProvider.getApplicationService();
+		// return ApplicationServiceProvider.getApplicationService();
 		return applicationService;
 	}
-	
-	protected ApplicationService getApplicationService(String username, String password) throws Exception {
-		System.out.println("getApplicationService(String username, String password) ------");
-		Authentication auth = new UsernamePasswordAuthenticationToken(username,password);
-		if(applicationService instanceof org.springframework.aop.framework.Advised)
-		{
-			System.out.println("getApplicationService(String username, String password) --aop----");
-			org.springframework.aop.framework.Advised proxy = (org.springframework.aop.framework.Advised)applicationService;
-			for(Advisor advisor: proxy.getAdvisors())
-			{
+
+	protected ApplicationService getApplicationService(String username,
+			String password) throws Exception {
+		System.out
+				.println("getApplicationService(String username, String password) ------");
+		Authentication auth = new UsernamePasswordAuthenticationToken(username,
+				password);
+		if (applicationService instanceof org.springframework.aop.framework.Advised) {
+			System.out
+					.println("getApplicationService(String username, String password) --aop----");
+			org.springframework.aop.framework.Advised proxy = (org.springframework.aop.framework.Advised) applicationService;
+			for (Advisor advisor : proxy.getAdvisors()) {
 				Advice advice = advisor.getAdvice();
-				if(advice instanceof ApplicationServiceProxy)
-				{
-					ApplicationServiceProxy asp = (ApplicationServiceProxy)advice;
+				if (advice instanceof ApplicationServiceProxy) {
+					ApplicationServiceProxy asp = (ApplicationServiceProxy) advice;
 					asp.setApplicationService(applicationService);
 					asp.setAuthentication(auth);
 				}
 			}
 		}
 		return applicationService;
-//		return ApplicationServiceProvider.getApplicationService(username, password);
+		// return ApplicationServiceProvider.getApplicationService(username,
+		// password);
 	}
-	
 
 	public Object save(final Object obj) throws WebApplicationException {
 		try {
@@ -859,9 +861,17 @@ public class RESTfulResource {
 			// writableApplicationService.executeQuery(sdkQuery);
 			final InsertExampleQuery sdkQuery = new InsertExampleQuery(obj);
 			sdkQuery.setCommit(true);
-			SDKQueryResult queryResult = ((WritableApplicationService)applicationService)
+			SDKQueryResult queryResult = ((WritableApplicationService) applicationService)
 					.executeQuery(sdkQuery);
 			return queryResult.getObjectResult();
+		} catch (ApplicationException e) {
+			log.error("Error in Saving REST resource: " + e.getMessage());
+			ResponseBuilder builder = Response
+					.status(Status.INTERNAL_SERVER_ERROR);
+			builder.type("application/xml");
+			builder.entity("<error>Failed to Save due to: " + e.getMessage()
+					+ "</error>");
+			throw new WebApplicationException(builder.build());
 		} catch (Exception e) {
 			log.error("Error in Saving REST resource: " + e.getMessage());
 			ResponseBuilder builder = Response
@@ -884,7 +894,8 @@ public class RESTfulResource {
 
 				@Override
 				public List execute() throws Exception {
-					((WritableApplicationService)applicationService).executeQuery(sdkQuery);
+					((WritableApplicationService) applicationService)
+							.executeQuery(sdkQuery);
 					return null;
 				}
 			}.executeLogic();
@@ -911,7 +922,8 @@ public class RESTfulResource {
 
 				@Override
 				public List execute() throws Exception {
-					((WritableApplicationService)applicationService).executeQuery(sdkQuery);
+					((WritableApplicationService) applicationService)
+							.executeQuery(sdkQuery);
 					return null;
 				}
 			}.executeLogic();
@@ -930,7 +942,8 @@ public class RESTfulResource {
 	public void delete(DeleteHQLQuery query) throws WebApplicationException {
 		try {
 			System.out.println("in delete.......DeleteHQLQuery query.........");
-			((WritableApplicationService)applicationService).executeQuery(query);
+			((WritableApplicationService) applicationService)
+					.executeQuery(query);
 		} catch (ApplicationException e) {
 			e.printStackTrace();
 			log.error("Error in Updating REST resource: " + e.getMessage());
