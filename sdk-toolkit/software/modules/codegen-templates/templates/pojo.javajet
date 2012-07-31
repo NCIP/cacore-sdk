@@ -292,7 +292,7 @@ public List<ResourceLink> buildLinks(String path)
 	href = path+"/<%=assocKlass.getName()%>/"+idStr;
 	link = new ResourceLink("<%=associationEnd.getRoleName()%>", "application/xml", href);
 	links.add(link);
-	}
+	
 <%}%>
 	<%
 			}

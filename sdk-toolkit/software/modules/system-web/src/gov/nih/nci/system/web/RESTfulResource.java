@@ -17,6 +17,8 @@ import gov.nih.nci.system.web.util.HTTPUtils;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -70,6 +72,7 @@ public class RESTfulResource {
 	private String jsonStyleSheet;
 	protected boolean secured = false;
 	protected boolean isoEnabled = false;
+	String isoprefix = "gov.nih.nci.iso21090.";
 
 	/*
 	 * Initialize resource with ApplicationService and other properties 
@@ -161,14 +164,33 @@ public class RESTfulResource {
 		return searchableFields;
 	}
 
+	public List<Object> getSearchableIsoDataTypeFields(String className, String fieldName){
+		Map<String, List<Object>> searchableFieldsMap = classCache.getSearchableFieldsMap().get(className);
+		
+		if (searchableFieldsMap == null){
+			log.error("No searchable ISO data type fields found for class: '"+className + "' and field: '"+fieldName+"'");
+			return (List<Object>)(new ArrayList<Object>());
+		}
+		
+		List<Object> searchableFields = searchableFieldsMap.get(fieldName);
+		
+		if (searchableFields == null || searchableFields.isEmpty()){
+			log.error("No searchable ISO data type fields found for class: '"+className + "' and field: '"+fieldName+"'");
+			return (List<Object>)(new ArrayList<Object>());
+		}
+		
+		return searchableFields;
+	}
+	
 	/*
 	 * Validate given criteria. If not valid, respond with XML including valid fields
 	 * If ISO is enabled, attribute name can have sub attribute
 	 * @param Map matrix params from the request
 	 * @param List<Field> searchable fields for a selected domain class
 	 */
-	protected void validateCriteria(Map matrixParams, List<Field> searchFields)
+	protected void validateCriteria(String className, Map matrixParams, List<Field> searchFields)
 			throws WebApplicationException {
+		System.out.println("Class cache: "+classCache.toString());
 		if (matrixParams == null) {
 			ResponseBuilder builder = Response.status(Status.BAD_REQUEST);
 			builder.type("application/xml");
@@ -180,9 +202,30 @@ public class RESTfulResource {
 			buffer.append("<message>Search criteria is missing</message>");
 			buffer.append("<valid>");
 			for (Field field : searchFields) {
-				buffer.append("<attribute>");
-				buffer.append(field.getName());
-				buffer.append("</attribute>");
+				if(isoEnabled)
+				{
+					System.out.println("ISO Data types are enabled....1");
+					List isoFields = getSearchableIsoDataTypeFields(className, field.getName());
+					if(isoFields != null && isoFields.size() > 0)
+					{
+						Iterator iterator = isoFields.iterator();
+						while(iterator.hasNext())
+						{
+							String attrName = field.getName()+"."+(String)iterator.next();
+							System.out.println("attrName: "+attrName);
+							buffer.append("<attribute>");
+							buffer.append(attrName);
+							buffer.append("</attribute>");
+						}
+					}
+				}
+				else
+				{
+					System.out.println("ISO Data types are NOT enabled....");
+					buffer.append("<attribute>");
+					buffer.append(field.getName());
+					buffer.append("</attribute>");
+				}
 			}
 			buffer.append("</valid>");
 			buffer.append("</response>");
@@ -197,10 +240,29 @@ public class RESTfulResource {
 			boolean found = false;
 			String fullName = (String) iter.next();
 			String attrName = getAttributeName(fullName);
+			System.out.println("fullName " +fullName);
+			System.out.println("attrName " +attrName);
 			for (Field field : searchFields) {
-				if (field.getName().equals(attrName)) {
-					found = true;
-					break;
+				System.out.println("field...."+field.getName());
+				if(isoEnabled)
+				{
+					System.out.println("ISO Data types are enabled....2");
+					List isoFields = getSearchableIsoDataTypeFields(className, field.getName());
+					System.out.println("ISO Data types are enabled....isoFields: "+isoFields);
+					List<String> fNames = getSearchableIsoDataTypeFieldsWithFN(isoFields);
+					
+					if(fNames.contains(attrName))
+					{
+						found = true;
+						break;
+					}
+				}
+				else
+				{
+					if (field.getName().equals(attrName)) {
+						found = true;
+						break;
+					}
 				}
 			}
 			if (!found)
@@ -219,10 +281,32 @@ public class RESTfulResource {
 			buffer.append("<message>Invalid Search criteria</message>");
 			buffer.append("<valid>");
 			for (Field field : searchFields) {
-				buffer.append("<attribute>");
-				buffer.append(field.getName());
-				buffer.append("</attribute>");
+			if(isoEnabled)
+			{
+				System.out.println("ISO Data types are enabled....3");
+
+				List isoFields = getSearchableIsoDataTypeFields(className, field.getName());
+				if(isoFields != null && isoFields.size() > 0)
+				{
+					Iterator iterator = isoFields.iterator();
+					while(iterator.hasNext())
+					{
+						String attrName = field.getName()+"."+(String)iterator.next();
+						System.out.println("attrName....3 "+attrName);
+						buffer.append("<attribute>");
+						buffer.append(attrName);
+						buffer.append("</attribute>");
+					}
+				}
 			}
+			else
+			{
+					buffer.append("<attribute>");
+					buffer.append(field.getName());
+					buffer.append("</attribute>");
+			}
+			}
+			
 			buffer.append("</valid>");
 			buffer.append("<invalid>");
 			for (String attr : invalidAttrs) {
@@ -239,6 +323,130 @@ public class RESTfulResource {
 		}
 	}
 
+	/**
+	 * Convert ISO attr parts into attribute names 
+	 * [{part_0=[value, code, codeSystem, {type=[AL]}]}
+	 * resulting: part_0.value, part_0.code, part_0.codeSystem, part_0.type
+	 * 
+	 * @param attrName
+	 * @param attrs
+	 * @return
+	 */
+	private List<String> convertISOPart(String attrName, Map attrs, List<String> fnAttrs)
+	{
+		//List of ISO fields
+		Iterator iter = attrs.keySet().iterator();
+		while(iter.hasNext())
+		{
+			//part_0
+			String keyName = (String)iter.next();
+			Object value = attrs.get(keyName);
+			
+			if(value instanceof java.lang.String)
+			{
+				//value, code, codeSystem
+				fnAttrs.add(attrName+"."+((String)value));
+			}
+			//{type=[AL]}
+			else if(value instanceof java.util.Map)
+			{
+				Map attrMap = (Map) value;
+				Iterator mapIter = attrMap.keySet().iterator();
+				while(mapIter.hasNext())
+				{
+					String subkeyName = (String) mapIter.next();
+					fnAttrs.add(attrName+"."+subkeyName);
+				}
+			}
+		}
+		System.out.println("convertISOPart: "+fnAttrs);
+		return fnAttrs;
+	}
+	
+	/**
+	 * Convert ISO attr parts into attribute names 
+	 * Expected formats: List< Map< String, List<?> > >
+	 *  ? can be String or a Map<String, String>
+	 * [{part_0=[value, code, codeSystem, {type=[AL]}]}, {part_1=[value, code, codeSystem, {type=[AL]}]}]
+	 * resulting: part_0.value, part_0.code, part_0.codeSystem, part_0.type, part_1.value, part_1.code, part_1.codeSystem, part_1.type
+	 *  
+	 * Expected formats: List< Map< String, List< Map< String, List<?> > > > >
+	 *  ? can be String or a Map<String, String>
+	 * [{item<gov.nih.nci.iso21090.Ad>=[{part_0=[value, code, codeSystem, {type=[AL]}]}, {part_1=[value, code, codeSystem, {type=[AL]}]}]}]
+	 * resulting: item.part_0.value, item.part_0.code, item.part_0.codeSystem, item.part_0.type, item.part_1.value, item.part_1.code, item.part_1.codeSystem, item.part_1.type
+	 * 
+	 *
+	 * @param attrs
+	 * @return
+	 */
+	private List<String> getSearchableIsoDataTypeFieldsWithFN(List attrs)
+	{
+		System.out.println("**********getSearchableIsoDataTypeFieldsWithFN*********");
+		List<String> fnAttrs = new ArrayList();
+		boolean dSet = false;
+		//List of ISO fields
+		Iterator iter = attrs.iterator();
+		while(iter.hasNext())
+		{
+			Object obj = iter.next();
+			if(obj instanceof java.lang.String)
+			{
+				System.out.println("instanceof java.lang.String*******"+obj);
+				fnAttrs.add((String)obj);
+			}
+			else if(obj instanceof java.util.Map)
+			{
+				System.out.println("instanceof java.util.Map*******"+obj);
+				Map attrMap = (Map) obj;
+				Iterator mapIter = attrMap.keySet().iterator();
+				while(mapIter.hasNext())
+				{
+					//part_0
+					//item<gov.nih.nci.iso21090.Ad>
+					String keyName = (String) mapIter.next();
+					String subAttrName = keyName;
+					if(keyName.indexOf("<") > 0){
+						subAttrName = keyName.substring(0,keyName.indexOf("<"));
+						dSet = true;
+					}
+					
+					//value, code, codeSystem, {type=[AL]}
+					//[{part_0=[value, code, codeSystem, {type=[AL]}]}, {part_1=[value, code, codeSystem, {type=[AL]}]}]
+					Object mapKeyObj = attrMap.get(keyName);
+					if(mapKeyObj instanceof java.util.List)
+					{
+						System.out.println("instanceof java.util.List*******"+mapKeyObj);
+						List mapKeyObjValue = (List)attrMap.get(keyName);
+						Iterator mapKeyObjValueIter = mapKeyObjValue.iterator();
+						
+						while(mapKeyObjValueIter.hasNext())
+						{
+							List<String> subAttrNames = new ArrayList();
+							Object mapKeyObjValueObj = mapKeyObjValueIter.next();
+							convertISOPart(subAttrName, (java.util.Map)mapKeyObjValueObj, subAttrNames);
+							for(String partAttrName : subAttrNames)
+							{
+								fnAttrs.add(subAttrName+"."+partAttrName);
+							}
+						}
+						
+					}else if(mapKeyObj instanceof java.util.Map)
+					{
+						System.out.println("instanceof java.util.Map ----- "+mapKeyObj);
+						convertISOPart(subAttrName, (java.util.Map)mapKeyObj, fnAttrs);
+					}
+					else
+					{
+						System.out.println("instanceof I do not know ----- "+mapKeyObj);
+					}
+
+				}
+			}
+		}
+		System.out.println("fnAttrs: "+fnAttrs);
+		return fnAttrs;
+	}
+	
 	private String getAttributeName(String name) {
 		if (name.indexOf(NOT_EQUAL) > 0)
 			return name.substring(0, name.indexOf(NOT_EQUAL));
@@ -246,8 +454,8 @@ public class RESTfulResource {
 			return name.substring(0, name.indexOf(GREATER_THAN));
 		else if (name.indexOf(LESS_THAN) > 0)
 			return name.substring(0, name.indexOf(LESS_THAN));
-		else if (isoEnabled && name.indexOf(".") > 0)
-			return name.substring(0, name.indexOf("."));
+		//else if (isoEnabled && name.indexOf(".") > 0)
+		//	return name.substring(0, name.indexOf("."));
 		else
 			return name;
 	}
@@ -637,9 +845,19 @@ public class RESTfulResource {
 
 	}
 
+	/**
+	 * Build where criteria for query based on given search matrix parameters
+	 * @param className
+	 * @param searchFields
+	 * @param matrixParams
+	 * @param uriInfo
+	 * @param alias
+	 * @return
+	 */
 	protected Map<String, List> buildWhereCriteria(String className,
 			List<Field> searchFields, Map matrixParams, UriInfo uriInfo,
 			String alias) {
+		System.out.println("Building where criteria **************************");
 		int startIndex = -1;
 		int totalSize = -1;
 		// System.out.println("uriInfo.getPathParameters(): "+uriInfo.getPathParameters());
@@ -667,6 +885,7 @@ public class RESTfulResource {
 			boolean found = false;
 			String fullName = (String) iter.next();
 			String attrName = getAttributeName(fullName);
+			System.out.println("Building where criteria attrName "+attrName);	
 			Object attrVal = null;
 			String operator = "=";
 			if (!fullName.equals(attrName)) {
@@ -674,7 +893,8 @@ public class RESTfulResource {
 				operator = getAttributeOperator(fullName);
 			} else
 				attrVal = matrixParams.get(fullName);
-
+			System.out.println("Building where criteria operator "+operator);
+			System.out.println("Building where criteria attrVal "+attrVal);
 			String attrValue = null;
 			if (attrVal instanceof java.util.ArrayList)
 				attrValue = (String) ((ArrayList) attrVal).get(0);
@@ -685,13 +905,31 @@ public class RESTfulResource {
 			Iterator fIter = searchFields.iterator();
 			while (fIter.hasNext()) {
 				field = (Field) fIter.next();
-				if (field.getName().equals(attrName)) {
-					found = true;
-					break;
+				System.out.println("field...."+field.getName());
+				if(isoEnabled)
+				{
+					List isoFields = getSearchableIsoDataTypeFields(className, field.getName());
+					Iterator iterator = isoFields.iterator();
+					while(iterator.hasNext())
+					{
+						String isoAttrName = (String)iterator.next();
+						if ((field.getName()+"."+isoAttrName).equals(attrName)) {
+							found = true;
+							break;
+						}
+					}
+				}
+				else
+				{
+					if (field.getName().equals(attrName)) {
+						found = true;
+						break;
+					}
 				}
 			}
 
 			if (found) {
+				System.out.println("field.getType().getName(): "+field.getType().getName());
 				if (field.getType().getName().equals("java.lang.String")) {
 					if ((attrValue.indexOf("*") != -1)
 							|| (attrValue.indexOf("%") != -1)) {
@@ -756,6 +994,20 @@ public class RESTfulResource {
 		return returnMap;
 	}
 
+	public Object convertISOValues(Field field, Object value)
+	{
+		/*
+		Method getterMethod = getAttributeGetMethodName(object,
+				attribute);
+		value = getterMethod.invoke(childObject);
+		if (value == null) {
+			Type[] genericParameterTypes = attSetMethod
+					.getGenericParameterTypes();
+			value = getFieldTypeObject(genericParameterTypes, field,
+					tempISOParamType);
+		}*/
+		return null;
+	}
 	/**
 	 * Converts the specified value to the field class type
 	 * 
@@ -770,6 +1022,10 @@ public class RESTfulResource {
 	public Object convertValues(Field field, Object value)
 			throws WebApplicationException {
 
+		if (field.getType().getName().startsWith(isoprefix)) {
+			return convertISOValues(field, value);
+		}
+		
 		String fieldType = field.getType().getName();
 		String valueType = value.getClass().getName();
 		Object convertedValue = null;
