@@ -305,7 +305,13 @@ public class RestQuery extends BaseActionSupport {
 								bodyBuffer.append("&nbsp;");
 							else
 							{
-								formatISOElement(childElement);
+								bodyBuffer.append("<table cellpadding=\"0\" cellspacing=\"2\" width=\"100%\" border=\"0\">");
+								bodyBuffer.append("<tbody><tr class=\"dataRowLight\">");
+								bodyBuffer.append("<td class=\"isoDataCellText\" nowrap=\"off\">");
+								bodyBuffer.append(formatISOElement(childElement));
+								bodyBuffer.append("</td></tr>");
+								bodyBuffer.append("</tbody></table>");
+
 							}
 						}
 						else
@@ -470,21 +476,22 @@ public class RestQuery extends BaseActionSupport {
 		System.out.println("formatISOElement: "+element.toString());
 		System.out.println("formatISOElement name: "+element.getName());
 		if(element.getName().equals("link"))
-			continue;
+			return "&nbsp;";
 		List attributes = element.getAttributes();
 		StringBuffer eleBuff = new StringBuffer();
-		eleBuff.append("<table cellpadding=\"0\" cellspacing=\"2\" width=\"100%\" border=\"0\">");
+		eleBuff.append("<table cellpadding=\"3\" cellspacing=\"0\" width=\"100%\" border=\"0\" class=\"isoDataTable\">");
 		eleBuff.append("<tbody><tr class=\"dataRowLight\">");
 		eleBuff.append("<td class=\"isoDataCellText\" nowrap=\"off\">");
 		if(attributes != null)
 		{
 			Iterator iter = attributes.iterator();
-			Attribute attr = (Attribute) iter.next();
+			
 			
 			StringBuffer attrBuff = new StringBuffer();
 			boolean dataAdded = false;
 			while(iter.hasNext())
 			{
+				Attribute attr = (Attribute) iter.next();
 				System.out.println("attr.getName(): "+attr.getName());
 				if(attr.getName().equals("xsi:type") || attr.getName().equals("type"))
 					continue;
@@ -492,24 +499,38 @@ public class RestQuery extends BaseActionSupport {
 				if(iter.hasNext())
 					attrBuff.append(";");
 			}
-			if(!dataAdded)
-				attrBuff.append("&nbsp;");
+			//if(!dataAdded)
+			//	attrBuff.append("&nbsp;");
 			eleBuff.append(attrBuff);
 		}
-		eleBuff.append("</td>");
+		
+		System.out.println(" ele1: "+eleBuff.toString());
 		List children = element.getChildren();
 		if(children != null && children.size() > 0)
 		{
 			Iterator childrenIter = children.iterator();
+			while(childrenIter.hasNext())
+			{
 			Element child = (Element) childrenIter.next();
 			if(child.getName().equals("link"))
-				continue;
+				return "&nbsp;";
+			
+			eleBuff.append("<table cellpadding=\"0\" cellspacing=\"2\" width=\"100%\" border=\"0\">");
+			eleBuff.append("<tbody><tr class=\"dataRowLight\">");
+			eleBuff.append("<td class=\"isoDataCellText\" nowrap=\"off\">");
+			eleBuff.append(child.getName()+": </td>");
 			eleBuff.append("<td width=\"100%\" align=\"left\" nowrap=\"off\">");
 			eleBuff.append(formatISOElement(child));
 			eleBuff.append("</td>");
+			eleBuff.append("</tr>");
+			eleBuff.append("</tbody></table>");
+			}
 		}
+		
+		eleBuff.append("</td>");
 		eleBuff.append("</tr>");
 		eleBuff.append("</tbody></table>");
+		System.out.println("Returning ele: "+eleBuff.toString());
 		return eleBuff.toString();
 	}
 	public String getUnauthorizedHTML(String queryStr, String className, String message)
