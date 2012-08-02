@@ -1119,6 +1119,14 @@ public class HtmlUtils {
 		System.out.println("HTML for ISO data type " +attrType + ": "+finalHtml);
 		log.debug("HTML for ISO data type " +attrType + ": "+finalHtml);
 		
+		try
+		{
+			throw new Exception("formatting");
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
 		return finalHtml;
 	}
 	

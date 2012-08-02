@@ -37,6 +37,7 @@ public class RestQuery extends BaseActionSupport {
 	WebApplicationContext ctx;
 	protected String selectedSearchDomain;
 	boolean secured=false;
+	final String isoprefix = "gov.nih.nci.iso21090.";
 
 	public void init() throws Exception {
 
@@ -72,26 +73,17 @@ public class RestQuery extends BaseActionSupport {
 				String parameterValue = (request.getParameter(parameterName))
 						.trim();
 				if (parameterValue.length() > 0) {
-
+					criteriaList.add(parameterName + "=" + parameterValue);
+					/*
 					if (parameterName.indexOf('.') > 0) { // ISO data type
 															// parameter
 						saveIsoNode(isoDataTypeNodes, parameterName,
 								parameterValue);
 					} else { // non-ISO data type parameter
 						criteriaList.add(parameterName + "=" + parameterValue);
-					}
+					}*/
 				}
 			}
-		}
-
-		Set<String> isoDataTypeNodeNames = isoDataTypeNodes.keySet();
-		Iterator iter = isoDataTypeNodeNames.iterator();
-		String nodeName = null;
-		while (iter.hasNext()) {
-			nodeName = (String) iter.next();
-			sb.append("[@").append(nodeName).append("=");
-			generateIsoQuery(isoDataTypeNodes.get(nodeName), sb);
-			sb.append("]");
 		}
 
 		if (criteriaList.size() > 0) {
@@ -122,69 +114,6 @@ public class RestQuery extends BaseActionSupport {
 			}
 		}
 		return null;
-	}
-
-	protected void saveIsoNode(
-			Map<String, Map<String, List<Object>>> isoDataTypeNodes,
-			String parameterName, String parameterValue) {
-
-		String isoParamPrefix = parameterName.substring(0,
-				parameterName.lastIndexOf('.'));
-		String[] isoParentNodes = isoParamPrefix.split("\\.");
-
-		Object childNode = null;
-		Object parentNode = isoDataTypeNodes.get(isoParentNodes[0]);
-		if (parentNode == null) { // initialize
-			Map<String, List<Object>> map = new HashMap<String, List<Object>>();
-			isoDataTypeNodes.put(isoParentNodes[0], map);
-			parentNode = isoDataTypeNodes.get(isoParentNodes[0]);
-		}
-		for (int i = 1; i < isoParentNodes.length; i++) {
-
-			String isoParentNodeName = isoParentNodes[i];
-			childNode = ((Map<String, List<Object>>) parentNode)
-					.get(isoParentNodeName);
-
-			if (childNode == null) {
-				Map<String, List<Object>> map = new HashMap<String, List<Object>>();
-				ArrayList<Object> tempList = new ArrayList<Object>();
-				tempList.add(map);
-				((Map<String, List<Object>>) parentNode).put(isoParentNodeName,
-						tempList);
-				parentNode = map;
-			} else {
-				parentNode = ((ArrayList<Object>) childNode).get(0);
-			}
-		}
-
-		String isoParamKey = parameterName.substring(parameterName
-				.lastIndexOf('.') + 1);
-		List<Object> nodeList = new ArrayList<Object>();
-		nodeList.add(parameterValue);
-		((Map<String, List<Object>>) parentNode).put(isoParamKey, nodeList);
-	}
-
-	protected void generateIsoQuery(Map<String, List<Object>> isoDataTypeNode,
-			StringBuilder query) {
-		String parentNodeName = null;
-		Set<String> isoParentNodeNames = isoDataTypeNode.keySet();
-		Iterator iter = isoParentNodeNames.iterator();
-		while (iter.hasNext()) {
-			parentNodeName = (String) iter.next();
-
-			query.append("[@").append(parentNodeName).append("=");
-
-			List<Object> valueList = isoDataTypeNode.get(parentNodeName);
-			for (Object nodeElement : valueList) {
-				if (nodeElement instanceof String) {
-					query.append((String) nodeElement).append("]");
-				} else if (nodeElement instanceof java.util.HashMap) {
-					generateIsoQuery((Map<String, List<Object>>) nodeElement,
-							query);
-					query.append("]");
-				}
-			}
-		}
 	}
 
 	/**
@@ -283,6 +212,8 @@ public class RestQuery extends BaseActionSupport {
 				//
 				
 				List<Element> tableRows = root.getChildren();
+				System.out.println("tableRows: "+tableRows.toString());
+				System.out.println("tableRows size: "+tableRows.size());
 				List columns = new ArrayList();
 				for (Element child : tableRows) {
 					StringBuffer headerBuffer = new StringBuffer();
@@ -291,7 +222,10 @@ public class RestQuery extends BaseActionSupport {
 //					StringBuffer recHeaderBuffer = new StringBuffer();
 //					StringBuffer recBodyBuffer = new StringBuffer();
 					
-					if(child.getName().equals("link"))
+					String childName = classEleName.substring(classEleName.lastIndexOf(".")+1, classEleName.length());
+					System.out.println("childName: "+childName);
+					System.out.println("child.getName(): "+child.getName());
+					if(!child.getName().equals(childName))
 						continue;
 
 					//Get element class name. There could be different classes in the given XML 
@@ -310,7 +244,6 @@ public class RestQuery extends BaseActionSupport {
 					List<String> refNameList = new ArrayList();
 					List<String> assocNames = classCache.getAssociations(fullClassName);
 					for (String assocName : assocNames) {
-						System.out.println(assocName);
 						boolean foundLink = false;
 						if(assocName.indexOf("(") == -1)
 							continue;
@@ -355,26 +288,42 @@ public class RestQuery extends BaseActionSupport {
 
 						bodyBuffer
 								.append("<td class=\"dataCellText\" nowrap=\"off\">");
+						System.out.println("Formatting field: "+field.getType().getName());
+						System.out.println("Formatting field: "+field.getName());
 						Attribute attr = child.getAttribute(field.getName());
+						
 						if (attr != null)
+						{
+							System.out.println("Got Attr: "+attr.getName());
 							bodyBuffer.append(attr.getValue());
+						}
+						else if(field.getType().getName().startsWith(isoprefix))
+						{
+							System.out.println("ISO Type*****");
+							Element childElement = getChild(child, field.getName(), true);
+							if(childElement == null)
+								bodyBuffer.append("&nbsp;");
+							else
+							{
+								formatISOElement(childElement);
+							}
+						}
 						else
+						{
 							bodyBuffer.append("&nbsp;");
+						}
 						bodyBuffer.append("</td>");
 					}
 
 
 					//List<String> assocNames = classCache.getAssociations(fullClassName);
 					List<Element> linkChild = getChildren(child, "link");
-					System.out.println("linkChild: "+linkChild);
 					for (String linkName : refNameList) {
-						System.out.println(linkName);
 						boolean foundLink = false;
 						
 						for (Element link : linkChild) {
 							if(link.getAttribute("ref").getValue().equals(linkName))
 							{
-								System.out.println("found....");
 								headerBuffer
 								.append("<th class=\"dataTableHeader\" scope=\"col\" align=\"center\">");
 								headerBuffer.append("&nbsp;");
@@ -394,7 +343,6 @@ public class RestQuery extends BaseActionSupport {
 						}
 						if(!foundLink)
 						{
-							System.out.println("not found....");
 							headerBuffer
 							.append("<th class=\"dataTableHeader\" scope=\"col\" align=\"center\">");
 							headerBuffer.append("&nbsp;");
@@ -517,6 +465,53 @@ public class RestQuery extends BaseActionSupport {
 		}
 	}
 
+	private String formatISOElement(Element element)
+	{
+		System.out.println("formatISOElement: "+element.toString());
+		System.out.println("formatISOElement name: "+element.getName());
+		if(element.getName().equals("link"))
+			continue;
+		List attributes = element.getAttributes();
+		StringBuffer eleBuff = new StringBuffer();
+		eleBuff.append("<table cellpadding=\"0\" cellspacing=\"2\" width=\"100%\" border=\"0\">");
+		eleBuff.append("<tbody><tr class=\"dataRowLight\">");
+		eleBuff.append("<td class=\"isoDataCellText\" nowrap=\"off\">");
+		if(attributes != null)
+		{
+			Iterator iter = attributes.iterator();
+			Attribute attr = (Attribute) iter.next();
+			
+			StringBuffer attrBuff = new StringBuffer();
+			boolean dataAdded = false;
+			while(iter.hasNext())
+			{
+				System.out.println("attr.getName(): "+attr.getName());
+				if(attr.getName().equals("xsi:type") || attr.getName().equals("type"))
+					continue;
+				attrBuff.append(attr.getName() + ": "+attr.getValue());
+				if(iter.hasNext())
+					attrBuff.append(";");
+			}
+			if(!dataAdded)
+				attrBuff.append("&nbsp;");
+			eleBuff.append(attrBuff);
+		}
+		eleBuff.append("</td>");
+		List children = element.getChildren();
+		if(children != null && children.size() > 0)
+		{
+			Iterator childrenIter = children.iterator();
+			Element child = (Element) childrenIter.next();
+			if(child.getName().equals("link"))
+				continue;
+			eleBuff.append("<td width=\"100%\" align=\"left\" nowrap=\"off\">");
+			eleBuff.append(formatISOElement(child));
+			eleBuff.append("</td>");
+		}
+		eleBuff.append("</tr>");
+		eleBuff.append("</tbody></table>");
+		return eleBuff.toString();
+	}
 	public String getUnauthorizedHTML(String queryStr, String className, String message)
 	{
 		StringBuffer buffer = new StringBuffer();
@@ -612,10 +607,16 @@ public class RestQuery extends BaseActionSupport {
 		return null;
 	}
 
-	protected Element getChild(Element root, String name) {
+	protected Element getChild(Element root, String name, boolean ignoreNS) {
 		List<Element> children = root.getChildren();
 		for (Element child : children) {
-			if (child.getName().equals(name))
+			String childName = child.getName();
+			if(ignoreNS)
+			{
+				if(childName.indexOf(":") != -1)
+					childName = childName.substring(childName.indexOf(":")+1, childName.length());
+			}
+			if (childName.equals(name))
 				return child;
 		}
 		return null;
