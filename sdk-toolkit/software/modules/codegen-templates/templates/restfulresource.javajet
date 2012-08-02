@@ -269,7 +269,7 @@ else
 		{
 			appService = getApplicationService();
 		}
-			validateCriteria("<%=fullPackageName%>.<%=klassName%>", matrixParams, searchFields);
+			//validateCriteria("<%=fullPackageName%>.<%=klassName%>", matrixParams, searchFields);
 			HQLCriteria hcriteria = buildHQLCriteria("<%=fullPackageName%>.<%=klassName%>", searchFields, matrixParams, uriInfo);
 			int rowCount = appService.getQueryRowCount(hcriteria, "<%=fullPackageName%>.<%=klassName%>");
 			int maxRowCountPerQuery = appService.getMaxRecordsCount();
@@ -443,7 +443,7 @@ for(UMLAssociation assoc: assocs){
 				}
 				
 				String className = "<%=fullPackageName%>.<%=klassName%>";
-				validateCriteria(className, matrixParams, searchFields);
+				//validateCriteria(className, matrixParams, searchFields);
 				
 				
 				HQLCriteria hqlCriteria = getAssociationCriteria(Class.forName(className), "<%=name%>", startIndex, totalSize, searchFields, matrixParams, uriInfo);
