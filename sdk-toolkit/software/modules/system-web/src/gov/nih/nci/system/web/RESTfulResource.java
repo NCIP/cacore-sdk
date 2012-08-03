@@ -1186,7 +1186,7 @@ public class RESTfulResource {
 						criteria.add(((alias != null) ? alias + "." : "")
 								+ attrName + " like '%' ");
 					} else {
-						Object paramValue = convertValues(field, attrValue);
+						Object paramValue = convertValues(field, attrName, attrValue);
 						if (paramValue != null) {
 
 							params.add(paramValue);
@@ -1233,6 +1233,7 @@ public class RESTfulResource {
 		return returnMap;
 	}
 
+	/*
 	public Object convertISOValues(Field field, Object value) {
 		String fieldType = field.getType().getName();
 		String valueType = value.getClass().getName();
@@ -1258,7 +1259,135 @@ public class RESTfulResource {
 		}
 		return convertedValue;
 	}
+	*/
 
+	public Object getTypeObject(Field field, Object parent, String attr) throws Exception
+	{
+		Object value = null;
+		Method getterMethod = getAttributeGetMethodName(parent,
+				attr);
+		value = getterMethod.invoke(parent);
+		
+		return value;
+
+	}
+
+	private Method getAttributeGetMethodName(Object attObject, String attName) {
+		Method m = getMethod(
+				attObject.getClass(),
+				"get" + attName.substring(0, 1).toUpperCase()
+						+ attName.substring(1));
+		return m;
+	}
+
+	/**
+	 * Returns the method specified by the method name
+	 * @param critClass
+	 * @param methodName
+	 * @return
+	 */
+	@SuppressWarnings("rawtypes")
+	private Method getMethod(Class critClass, String methodName) {
+		Method[] methods = getAllMethods(critClass);
+		Method method = null;
+		for (int i = 0; i < methods.length; i++) {
+			if (methods[i].getName().equalsIgnoreCase(methodName)) {
+				method = methods[i];
+				break;
+			}
+		}
+		return method;
+	}
+	
+	/**
+	 * Gets all the methods for a given class
+	 * @param resultClass
+	 *            - Specifies the class name
+	 * @return - Returns all the methods
+	 */
+	@SuppressWarnings({"rawtypes"})
+	public Method[] getAllMethods(Class resultClass) {
+		List<Method> methodList = new ArrayList<Method>();
+		try {
+			while (resultClass != null && !resultClass.isInterface()
+					&& !resultClass.isPrimitive()) {
+				Method[] method = resultClass.getDeclaredMethods();
+				for (int i = 0; i < method.length; i++) {
+					method[i].setAccessible(true);
+					methodList.add(method[i]);
+				}
+				if (!resultClass.getSuperclass().getName()
+						.equalsIgnoreCase("java.lang.Object")) {
+					resultClass = resultClass.getSuperclass();
+				} else {
+					break;
+				}
+			}
+		} catch (Exception ex) {
+			log.error("ERROR: " + ex.getMessage());
+		}
+		Method[] methods = new Method[methodList.size()];
+		for (int i = 0; i < methodList.size(); i++) {
+			methods[i] = methodList.get(i);
+		}
+		return methods;
+	}
+
+	public Object convertISOValues(Field field, String attrName, Object value) throws WebApplicationException{
+		String fieldType = field.getType().getName();
+		String valueType = value.getClass().getName();
+		
+		if(attrName.indexOf(".") == -1)
+		{
+			String msg = "Invalid attribute name: "+attrName;
+
+			ResponseBuilder builder = Response
+					.status(Status.INTERNAL_SERVER_ERROR);
+			StringBuffer buffer = new StringBuffer();
+			buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+			buffer.append("<response>");
+			buffer.append("<type>ERROR</type>");
+			buffer.append("<code>INTERNAL_ERROR_7</code>");
+			buffer.append("<message>Failed to construct criteria: " + msg
+					+ "</message>");
+			buffer.append("</response>");
+			builder.entity(buffer.toString());
+			throw new WebApplicationException(builder.build());
+		}
+		
+		String subAttrName = attrName;
+		Object attr = null;
+		while(true)
+		{
+			int index = subAttrName.indexOf(".");
+			if(index != -1)
+			{
+				String part = subAttrName.substring(0, subAttrName.indexOf("."));
+				
+			}
+		}
+		System.out.println("convertValues valueType: " + valueType);
+		System.out.println("convertValues fieldType: " + fieldType);
+		Object convertedValue = null;
+
+		if (fieldType.equals("gov.nih.nci.iso21090.Bl")) {
+			convertedValue = new gov.nih.nci.iso21090.Bl();
+			((gov.nih.nci.iso21090.Bl) convertedValue).setValue(new Boolean(
+					(String) value));
+		} else if (fieldType.equals("gov.nih.nci.iso21090.Ed")) {
+			convertedValue = new gov.nih.nci.iso21090.Ed();
+			((gov.nih.nci.iso21090.Ed) convertedValue).setValue((String) value);
+		} else if (fieldType.equals("gov.nih.nci.iso21090.EdText")) {
+			convertedValue = new gov.nih.nci.iso21090.EdText();
+			((gov.nih.nci.iso21090.EdText) convertedValue)
+					.setValue((String) value);
+		} else if (fieldType.equals("gov.nih.nci.iso21090.EdText")) {
+			convertedValue = new gov.nih.nci.iso21090.EdText();
+			((gov.nih.nci.iso21090.EdText) convertedValue)
+					.setValue((String) value);
+		}
+		return convertedValue;
+	}
 	/**
 	 * Converts the specified value to the field class type
 	 * 
@@ -1270,15 +1399,17 @@ public class RESTfulResource {
 	 * @throws Exception
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public Object convertValues(Field field, Object value)
+	public Object convertValues(Field field, String attrName, Object value)
 			throws WebApplicationException {
 
 		if (field.getType().getName().startsWith(isoprefix)) {
-			return convertISOValues(field, value);
+			return convertISOValues(field, attrName, value);
 		}
 
 		String fieldType = field.getType().getName();
 		String valueType = value.getClass().getName();
+		Class fieldClass = field.getClass();
+		
 		System.out.println("convertValues valueType: " + valueType);
 		System.out.println("convertValues fieldType: " + fieldType);
 		Object convertedValue = null;
@@ -1353,6 +1484,54 @@ public class RESTfulResource {
 		return convertedValue;
 	}
 
+	
+	/**
+	 * Returns the field for a given attribute name
+	 * @param className specifies the class name
+	 * @param attributeName - specifies the attribute name
+	 * @return
+	 * @throws Exception
+	 */	
+	@SuppressWarnings("rawtypes")
+	public Field getField(Class className, String attributeName)
+			throws Exception {
+		Field attribute = null;
+		Field[] fields = classCache.getAllFields(className);
+		for (int i = 0; i < fields.length; i++) {
+			if (fields[i].getName().equalsIgnoreCase(attributeName)) {
+				fields[i].setAccessible(true);
+				attribute = fields[i];
+				break;
+			}
+		}
+		if (attribute == null) {
+			throw new Exception("Invalid field name - " + attributeName);
+		}
+		return attribute;
+	}
+	
+	public Object getAttribute(Field field, String attributeName, Class rootClass) throws Exception
+	{
+		Object attribute = null;
+		
+		String fieldName = field.getClass().getName()+"."+field.getName();
+		System.out.println("attributeName "+attributeName);
+		System.out.println("fieldName "+fieldName);
+		if(attributeName.equals(fieldName))
+		{
+			attribute = Class.forName(fieldName).newInstance();
+			System.out.println("Equal returning "+attribute);
+			return attribute;
+		}
+		else if(attributeName.indexOf(fieldName) == -1)
+			throw new Exception("Invalid field and attribute combination.  Field: "+fieldName + " ; attribute:"+attributeName);
+		
+		String subAttributeName = attributeName.substring(attributeName.indexOf(fieldName)+1, attributeName.length());
+		System.out.println("subAttributeName "+subAttributeName);
+		
+		return attribute;
+	}
+	
 	protected ApplicationService getApplicationService() throws Exception {
 		// return ApplicationServiceProvider.getApplicationService();
 		return applicationService;
