@@ -1397,7 +1397,16 @@ public class RESTfulResource {
 					Field partField2 = getField(partField.getType(), part);
 					System.out.println("partField.getDeclaringClass(): " + partField.getType().getName());
 					if(partField2 == null)
-						partField = partField.getType().getDeclaredField(part);
+					{
+						String newPart = part;
+						if(partField.getType().getName().equals("gov.nih.nci.iso21090.Ad"))
+						{
+							if(part.startsWith("part"))
+								newPart = "part_"+part.substring(part.indexOf("part"+4), part.length());
+						}
+						System.out.println("new part: "+newPart);
+						partField = partField.getType().getDeclaredField(newPart);
+					}
 					else
 						partField = partField2;
 					// partObj = getTypeObject(parentTypeObj, part);
