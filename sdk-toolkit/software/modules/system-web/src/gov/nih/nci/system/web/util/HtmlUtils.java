@@ -1116,17 +1116,8 @@ public class HtmlUtils {
 		String finalHtml = html.toString().replaceAll(nameAttribute, nameAttribute + attrName + ".");
 		finalHtml = finalHtml.replaceAll(idAttribute, idAttribute + attrName + ".");
 		
-		System.out.println("HTML for ISO data type " +attrType + ": "+finalHtml);
 		log.debug("HTML for ISO data type " +attrType + ": "+finalHtml);
 		
-		try
-		{
-			throw new Exception("formatting");
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
 		return finalHtml;
 	}
 	
