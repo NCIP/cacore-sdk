@@ -37,6 +37,7 @@ public class RestQuery extends BaseActionSupport {
 	WebApplicationContext ctx;
 	protected String selectedSearchDomain;
 	boolean secured=false;
+	boolean isoEnabled = false;
 	final String isoprefix = "gov.nih.nci.iso21090.";
 
 	public void init() throws Exception {
@@ -51,6 +52,11 @@ public class RestQuery extends BaseActionSupport {
 				.getProperty("securityEnabled");
 		secured = "yes".equalsIgnoreCase(securityEnabled)
 				|| "true".equalsIgnoreCase(securityEnabled);
+		String isoEnabledStr = (String) systemProperties
+				.getProperty("enableISO21090DataTypes");
+		isoEnabled = "yes".equalsIgnoreCase(isoEnabledStr)
+				|| "true".equalsIgnoreCase(isoEnabledStr);
+		
 	}
 
 	protected String getQueryString(String className, String roleName,
@@ -198,6 +204,7 @@ public class RestQuery extends BaseActionSupport {
 					e.printStackTrace();
 				}
 
+				System.out.println("idCol: "+idCol);
 				buffer.append("<tr>");
 				buffer.append("<td>");
 				buffer.append("<table summary=\"Data Summary\" cellpadding=\"3\" cellspacing=\"0\" border=\"0\" class=\"dataTable\" width=\"100%\">");
@@ -254,6 +261,7 @@ public class RestQuery extends BaseActionSupport {
 					}
 					
 					String idColName = classCache.getClassIdName(klass);
+					System.out.println("getHTML: "+idColName);
 
 					// Add id column to the table first
 					for (int i = 0; i < fields.length; i++) {
@@ -268,10 +276,33 @@ public class RestQuery extends BaseActionSupport {
 
 						bodyBuffer
 								.append("<td class=\"dataCellText\" nowrap=\"off\">");
+						System.out.println("child "+child.toString());
 						Attribute attr = child.getAttribute(idColName);
-						bodyBuffer.append(attr.getValue());
+						if (attr != null)
+						{
+							System.out.println("Got Attr: "+attr.getName());
+							bodyBuffer.append(attr.getValue());
+							idColValue = attr.getValue();
+						}
+						else if(field.getType().getName().startsWith(isoprefix))
+						{
+							System.out.println("ISO Type*****");
+							Element childElement = getChild(child, field.getName(), true);
+							if(childElement == null)
+								bodyBuffer.append("&nbsp;");
+							else
+							{
+								bodyBuffer.append("<table cellpadding=\"0\" cellspacing=\"2\" width=\"100%\" border=\"0\">");
+								bodyBuffer.append("<tbody><tr class=\"dataRowLight\">");
+								bodyBuffer.append("<td class=\"isoDataCellText\" nowrap=\"off\">");
+								bodyBuffer.append(formatISOElement(childElement));
+								bodyBuffer.append("</td></tr>");
+								bodyBuffer.append("</tbody></table>");
+							}
+						}
+						
 						bodyBuffer.append("</td>");
-						idColValue = attr.getValue();
+						
 						break;
 					}
 
@@ -654,6 +685,9 @@ public class RestQuery extends BaseActionSupport {
 	}
 
 	protected boolean supportDeleteLink(String className) {
+		if(isoEnabled)
+			return false;
+		
 		String cName = className.substring(className.lastIndexOf(".") + 1,
 				className.length());
 		try {
@@ -674,6 +708,9 @@ public class RestQuery extends BaseActionSupport {
 	}
 
 	protected boolean supportUpdateLink(String className) {
+		if(isoEnabled)
+			return false;
+		
 		String cName = className.substring(className.lastIndexOf(".") + 1,
 				className.length());
 		try {
