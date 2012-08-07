@@ -5,17 +5,17 @@ import gov.nih.nci.system.util.ClassCache;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.Properties;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import org.apache.struts2.ServletActionContext;
 
 import org.apache.log4j.Logger;
 import org.jdom.Attribute;
@@ -23,9 +23,6 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
-import java.util.Properties;
-
-import org.apache.struts2.ServletActionContext;
 
 public class RestQuery extends BaseActionSupport {
 
@@ -122,6 +119,23 @@ public class RestQuery extends BaseActionSupport {
 		return null;
 	}
 
+	public String getResponseHTML(Element root, String className)
+	{
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("Result Class: " + className);
+		buffer.append("</td>");
+
+		buffer.append("<tr>");
+		buffer.append("<td class=\"dataPagingText\" align=\"left\" style=\"border:0px; border-bottom:1px; border-style:solid; border-color:#5C5C5C;\">");
+		buffer.append("<br />");
+		buffer.append(root.getChildText("message"));
+		buffer.append("<br />");
+		buffer.append("<br />");
+		buffer.append("</td>");
+		buffer.append("</tr>");
+		return buffer.toString();
+		
+	}
 	/**
 	 * Generates an HTML Document for a given XML document 
 	 *
@@ -161,17 +175,7 @@ public class RestQuery extends BaseActionSupport {
 			Element root = doc.getRootElement();
 			//If resulted XML is a response, capture the message to display
 			if (root.getName().equals("response")) {
-				buffer.append("Result Class: " + className);
-				buffer.append("</td>");
-
-				buffer.append("<tr>");
-				buffer.append("<td class=\"dataPagingText\" align=\"left\" style=\"border:0px; border-bottom:1px; border-style:solid; border-color:#5C5C5C;\">");
-				buffer.append("<br />");
-				buffer.append(root.getChildText("message"));
-				buffer.append("<br />");
-				buffer.append("<br />");
-				buffer.append("</td>");
-				buffer.append("</tr>");
+				buffer.append(getResponseHTML(root, className));
 			} else {
 				String classEleName = className;
 
@@ -208,16 +212,9 @@ public class RestQuery extends BaseActionSupport {
 				buffer.append("<tr>");
 				buffer.append("<td>");
 				buffer.append("<table summary=\"Data Summary\" cellpadding=\"3\" cellspacing=\"0\" border=\"0\" class=\"dataTable\" width=\"100%\">");
-				// buffer.append("<tr>");
-				//
-				//String eleName = classEleName.substring(
-				//		classEleName.lastIndexOf(".") + 1,
-				//		classEleName.length());
 
 				//For each sub element to the root:
 				//if it is link, skip it. This is link elements for collections representing paging, self
-				//
-				
 				List<Element> tableRows = root.getChildren();
 				System.out.println("tableRows: "+tableRows.toString());
 				System.out.println("tableRows size: "+tableRows.size());
@@ -226,14 +223,11 @@ public class RestQuery extends BaseActionSupport {
 					StringBuffer headerBuffer = new StringBuffer();
 					StringBuffer bodyBuffer = new StringBuffer();
 
-//					StringBuffer recHeaderBuffer = new StringBuffer();
-//					StringBuffer recBodyBuffer = new StringBuffer();
-					
 					String childName = classEleName.substring(classEleName.lastIndexOf(".")+1, classEleName.length());
 					System.out.println("childName: "+childName);
 					System.out.println("child.getName(): "+child.getName());
-					if(!child.getName().equals(childName))
-						continue;
+					//if(!child.getName().equals(childName))
+					//	continue;
 
 					//Get element class name. There could be different classes in the given XML 
 					//representing inheritance
@@ -260,6 +254,7 @@ public class RestQuery extends BaseActionSupport {
 						}
 					}
 					
+					refNameList.add("self");
 					String idColName = classCache.getClassIdName(klass);
 					System.out.println("getHTML: "+idColName);
 
@@ -356,6 +351,7 @@ public class RestQuery extends BaseActionSupport {
 					//List<String> assocNames = classCache.getAssociations(fullClassName);
 					List<Element> linkChild = getChildren(child, "link");
 					for (String linkName : refNameList) {
+						System.out.println("linkName: "+linkName);
 						boolean foundLink = false;
 						
 						for (Element link : linkChild) {

@@ -41,6 +41,8 @@ import java.util.Map;
 import java.util.HashMap;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
 import gov.nih.nci.system.web.RESTfulResource;
+import gov.nih.nci.system.web.util.RESTUtil;
+
 <%if(!transformerUtils.isISO21090Enabled()){
 %>
 import gov.nih.nci.system.query.hql.DeleteHQLQuery;
@@ -221,7 +223,7 @@ else
 		{
 			List<PathSegment> pathSegments = uriInfo.getPathSegments();
 			//System.out.println("pathSegments; "+pathSegments);
-			List<Field> searchFields = getSearchableFields("<%=klassName%>");
+			List<Field> searchFields = RESTUtil.getSearchableFields("<%=klassName%>", classCache);
 			if(pathSegments == null || pathSegments.size() == 0)
 			{			
 				ResponseBuilder builder = Response.status(Status.BAD_REQUEST);
@@ -409,7 +411,7 @@ for(UMLAssociation assoc: assocs){
 
 				List<PathSegment> pathSegments = uriInfo.getPathSegments();
 				//System.out.println("pathSegments; "+pathSegments);
-				List<Field> searchFields = getSearchableFields("<%=klassName%>");
+				List<Field> searchFields = RESTUtil.getSearchableFields("<%=klassName%>", classCache);
 				if(pathSegments == null || pathSegments.size() == 0)
 				{			
 					ResponseBuilder builder = Response.status(Status.BAD_REQUEST);

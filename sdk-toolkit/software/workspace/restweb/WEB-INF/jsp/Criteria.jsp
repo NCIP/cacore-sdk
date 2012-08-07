@@ -196,14 +196,11 @@ String cName = className.substring(className.lastIndexOf(".")+1, className.lengt
 try
 {
 Class klass = Class.forName(className+"Resource");
-System.out.println("className: "+className);
 
 Method[] allMethods = klass.getDeclaredMethods();
 String addName = "add"+cName;
-System.out.println("addName: "+addName);
 for (Method m : allMethods) {
 	String mname = m.getName();
-	System.out.println("mname: "+mname);
 	if(addName.equals(mname))	
 		found = true;
 }

@@ -338,12 +338,10 @@ public class SDKRESTContentHandler implements MessageBodyReader,
 				{
 					for(ResourceLink link: links)
 					{
-						//System.out.println("Adding Link: "+link.toString());
 						Element linkElement = new Element("link");
 						linkElement.setAttribute("ref", link.getRelationship());
 						linkElement.setAttribute("type", link.getType());
 						linkElement.setAttribute("href", link.getHref());
-						//linkElement.setText(link.toString());
 						rootEle.addContent(linkElement);
 					}
 				}
