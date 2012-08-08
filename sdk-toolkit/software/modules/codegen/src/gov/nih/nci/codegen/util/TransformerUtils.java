@@ -1313,6 +1313,22 @@ public class TransformerUtils
 		return getClassIdAttr(klass).getName();
 	}
 
+	public List<UMLAttribute> getClassAttributes(UMLClass klass, boolean includeParents) throws GenerationException
+	{
+
+		List<UMLAttribute> attributes = klass.getAttributes();
+		
+		for(UMLGeneralization gen: klass.getGeneralizations())
+		{
+			if(gen.getSubtype().equals(klass) && !gen.getSupertype().equals(klass))
+			{
+				attributes.addAll(((UMLClass)gen.getSupertype()).getAttributes());
+			}
+		}
+		
+		return attributes;
+	}
+	
 	public UMLAttribute getClassIdAttr(UMLClass klass) throws GenerationException
 	{
 		

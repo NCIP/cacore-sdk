@@ -25,6 +25,7 @@
 				<ref bean="IsoConstantTransformer"/>
 				<ref bean="BeanTransformer"/>
 				<ref bean="RESTfulResourceTransformer"/>
+				<ref bean="RESTfulBeanTransformer"/>
 				<ref bean="RESTfulAppTransformer"/>
 				<ref bean="RESTfulCollectionBeansTransformer"/>
 				<ref bean="JunitPojoTransformer"/>
@@ -189,6 +190,19 @@
 		</property>
 		<property name="enabled" value="@GENERATE_RESTFUL_RESOURCES@"/>
 		<property name="name" value="RESTful Resource Transformer"/>
+		<property name="transformerUtils" ref="TransformerUtils"></property>
+	</bean>
+
+	<bean name="RESTfulBeanTransformer" class="gov.nih.nci.codegen.transformer.jet.RESTfulBeanTransformer">
+		<property name="artifactHandler">
+			<bean class="gov.nih.nci.codegen.handler.FileHandler">
+				<property name="useArtifactSource" value="true"/>
+				<property name="outputDir" value="@OUTPUTDIR@/../rest/src"/>				
+				<property name="suffix" value=".java"/>									
+			</bean>
+		</property>
+		<property name="enabled" value="@GENERATE_RESTFUL_RESOURCES@"/>
+		<property name="name" value="RESTful Bean Transformer"/>
 		<property name="transformerUtils" ref="TransformerUtils"></property>
 	</bean>
 

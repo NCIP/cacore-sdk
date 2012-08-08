@@ -229,6 +229,9 @@ public class RestQuery extends BaseActionSupport {
 					//if(!child.getName().equals(childName))
 					//	continue;
 
+					if(child.getName().equals("link"))
+						continue;
+					
 					//Get element class name. There could be different classes in the given XML 
 					//representing inheritance
 					String fullClassName = classCache.getPkgNameForClass(child

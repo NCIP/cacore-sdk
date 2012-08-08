@@ -77,12 +77,12 @@ public class SDKRESTContentHandler implements MessageBodyReader,
 			WebApplicationException {
 		InputStreamReader reader = new InputStreamReader(is);
 		try {
-			//System.out.println("read from .............: "+is);
-		//System.out.println("readFrom......................."+type.getName());
-		//System.out.println("readFrom......................."+genericType);
-		//System.out.println("readFrom......................."+httpHeaders);
+			System.out.println("read from .............: "+is);
+		System.out.println("readFrom......................."+type.getName());
+		System.out.println("readFrom......................."+genericType);
+		System.out.println("readFrom......................."+httpHeaders);
 			String packageName = type.getName().substring(0, type.getName().lastIndexOf("."));
-			//System.out.println("packageName: "+packageName);
+			System.out.println("packageName: "+packageName);
 
 			Unmarshaller unmarshaller = new JAXBUnmarshaller(true,
 					packageName);
@@ -104,9 +104,9 @@ public class SDKRESTContentHandler implements MessageBodyReader,
 			MultivaluedMap httpHeaders, OutputStream os) throws IOException,
 			WebApplicationException {
 		try {
-			//System.out.println("In writing...."+target);
-			//System.out.println("In writing...."+type);
-			//System.out.println("In writing...."+genericType);
+			System.out.println("In writing...."+target);
+			System.out.println("In writing...."+type);
+			System.out.println("In writing...."+genericType);
 			if(target == null)
 				return;
 
@@ -225,7 +225,7 @@ public class SDKRESTContentHandler implements MessageBodyReader,
 		String collectionType = collectionObj.getType();
 		gov.nih.nci.system.client.proxy.ListProxy proxy = null;
 		String getMethod = "get"+collectionType.substring(collectionType.lastIndexOf(".")+1, collectionType.length())+"s";
-		//System.out.println("getMethod: "+getMethod);
+		System.out.println("getMethod: "+getMethod);
 
 		try
 		{
@@ -256,7 +256,9 @@ public class SDKRESTContentHandler implements MessageBodyReader,
 
 		Object obj = proxy.get(0);
 		String collectionFullName = obj.getClass().getName();
-		String collectionName = collectionFullName.substring(collectionFullName.lastIndexOf(".")+1, collectionFullName.length())+"s";
+		System.out.println("collectionFullName: "+collectionFullName);
+		String collectionName = collectionFullName.substring(collectionFullName.lastIndexOf(".")+1, collectionFullName.lastIndexOf("Bean"))+"s";
+		System.out.println("collectionName: "+collectionName);
 		org.jdom.Element httpQuery = new org.jdom.Element(collectionName,namespace);
 		Collection<ResourceLink> collectionLinks = collectionObj.getLinks();
 		if(collectionLinks != null)

@@ -7,6 +7,7 @@ package <%=fullPackageName%>;
 
 <%=transformerUtils.getImports(klass)%>
 import <%=fullPackageName%>.<%=klassName%>;
+import <%=fullPackageName%>.<%=klassName%>Bean;
 import gov.nih.nci.system.web.SDKResponse;
 import gov.nih.nci.system.web.ResourceLink;
 import gov.nih.nci.system.applicationservice.ApplicationException;
@@ -30,6 +31,7 @@ import javax.ws.rs.WebApplicationException;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
+import gov.nih.nci.system.client.proxy.ListProxy;
 
 import java.net.URI;
 import java.util.List;
@@ -75,7 +77,7 @@ if(action != null && action.indexOf("R") != -1)
 	@GET
 	@Path("{id}")
 	@Produces("application/xml")
-	public <%=klassName%> get<%=klassName%>ById(@PathParam("id") String id, @Context UriInfo uriInfo, @Context HttpServletRequest request) 
+	public <%=klassName%>Bean get<%=klassName%>ById(@PathParam("id") String id, @Context UriInfo uriInfo, @Context HttpServletRequest request) 
 	{
 		try
 		{
@@ -174,10 +176,12 @@ else
 				String fullpath = uriInfo.getAbsolutePath().toString();
 				String path = fullpath.substring(0, fullpath.indexOf("/rest/")+5);
 				//System.out.println("building links: "+path);
-				returnObj.buildLinks(path);
-				//returnMap.put(returnObj, returnObj.buildLinks(path));
-				//SDKResponse responseObj = new SDKResponse(returnMap, null, false);
-				return returnObj;
+				<%=klassName%>Bean bean = new <%=klassName%>Bean(returnObj);
+				bean.buildLinks(path, returnObj);
+				//returnObj.buildLinks(path);
+				//return returnObj;
+				
+				return bean;
 			}
 			else
 			{
@@ -286,13 +290,23 @@ else
 			{
 				String fullpath = uriInfo.getAbsolutePath().toString();
 				String path = fullpath.substring(0, fullpath.indexOf("/rest/")+5);
+				ListProxy beans = new ListProxy();
+				ListProxy proxy = (ListProxy) results;
+				beans.setAppService(appService);
+				beans.setTargetClassName(proxy.getTargetClassName());
+				beans.setOriginalStart(proxy.getOriginalStart());
+				beans.setRealSize(proxy.getRealSize());
+				beans.setMaxRecordsPerQuery(proxy.getMaxRecordsPerQuery());
+				beans.setHasAllRecords(proxy.isHasAllRecords());
 				Iterator iter = results.iterator();
 				while(iter.hasNext())
 				{
 					<%=klassName%> obj = (<%=klassName%>) iter.next();
-					obj.buildLinks(path);
+					<%=klassName%>Bean bean = new <%=klassName%>Bean(obj);
+					bean.buildLinks(path, obj);
+					beans.add(bean);
 				}
-				<%=klassName%>s collection = new <%=klassName%>s((List)results);
+				<%=klassName%>s collection = new <%=klassName%>s(beans);
 				if(nextLink != null)
 					collection.addLink(nextLink);
 				if(previousLink != null)					
@@ -480,12 +494,15 @@ for(UMLAssociation assoc: assocs){
 					String fullpath = uriInfo.getAbsolutePath().toString();
 					String path = fullpath.substring(0, fullpath.indexOf("/rest/")+5);
 					Iterator iter = results.iterator();
+					List beans = new ArrayList();
 					while(iter.hasNext())
 					{
 						<%=assocPackageName%>.<%=assocKlass.getName()%> obj = (<%=assocPackageName%>.<%=assocKlass.getName()%>) iter.next();
-						obj.buildLinks(path);
+						<%=assocPackageName%>.<%=assocKlass.getName()%>Bean bean = new <%=assocPackageName%>.<%=assocKlass.getName()%>Bean(obj);
+						beans.add(bean);
+						bean.buildLinks(path, obj);
 					}
-					<%=assocPackageName%>.<%=assocKlass.getName()%>s collection = new <%=assocPackageName%>.<%=assocKlass.getName()%>s((List)results);
+					<%=assocPackageName%>.<%=assocKlass.getName()%>s collection = new <%=assocPackageName%>.<%=assocKlass.getName()%>s((List)beans);
 					if(nextLink != null)
 						collection.addLink(nextLink);
 					if(previousLink != null)					
@@ -618,12 +635,16 @@ for(UMLAssociation assoc: assocs){
 					String fullpath = uriInfo.getAbsolutePath().toString();
 					String path = fullpath.substring(0, fullpath.indexOf("/rest/")+5);
 					Iterator iter = results.iterator();
+					List beans = new ArrayList();
 					while(iter.hasNext())
 					{
 						<%=assocPackageName%>.<%=assocKlass.getName()%> obj = (<%=assocPackageName%>.<%=assocKlass.getName()%>) iter.next();
-						obj.buildLinks(path);
+<%=assocPackageName%>.<%=assocKlass.getName()%>Bean bean = new <%=assocPackageName%>.<%=assocKlass.getName()%>Bean(obj);
+
+						bean.buildLinks(path, obj);
+						beans.add(bean);
 					}
-					<%=assocPackageName%>.<%=assocKlass.getName()%>s collection = new <%=assocPackageName%>.<%=assocKlass.getName()%>s((List)results);
+					<%=assocPackageName%>.<%=assocKlass.getName()%>s collection = new <%=assocPackageName%>.<%=assocKlass.getName()%>s((List)beans);
 					if(nextLink != null)
 						collection.addLink(nextLink);
 					if(previousLink != null)					
@@ -742,13 +763,15 @@ for(UMLAssociation assoc: assocs){
 				//System.out.println("rowCount: "+rowCount);
 				//System.out.println("maxRowCountPerQuery: "+maxRowCountPerQuery);
 				Collection results = appService.query(hqlCriteria);
+				//List beans = new ArrayList();
 				if(results != null && results.size() > 0)
 				{
 					<%=assocPackageName%>.<%=assocKlass.getName()%> returnObj =  (<%=assocPackageName%>.<%=assocKlass.getName()%>)((List)results).get(0);
+<%=assocPackageName%>.<%=assocKlass.getName()%>Bean bean = new <%=assocPackageName%>.<%=assocKlass.getName()%>Bean(returnObj);
 					String fullpath = uriInfo.getAbsolutePath().toString();
 					String path = fullpath.substring(0, fullpath.indexOf("/rest/")+5);
-					returnObj.buildLinks(path);
-					return returnObj;
+					bean.buildLinks(path, returnObj);
+					return bean;
 				}
 				else
 				{

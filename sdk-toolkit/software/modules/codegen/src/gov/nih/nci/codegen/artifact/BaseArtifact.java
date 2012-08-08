@@ -86,6 +86,15 @@ public class BaseArtifact implements Artifact
 	}
 
 	/**
+	 * Creates the source name for the RESTFul Bean Artifact from the <code>klass</code>
+	 *
+	 * @param klass
+	 */
+	public void createRESTBeanName(UMLClass klass) {
+		sourceName = (transformerUtils.getFullPackageName(klass)+"."+klass.getName()+"Bean").replace('.','/');
+	}
+
+	/**
 	 * Creates the source name for the RESTFul collection bean from the <code>klass</code>
 	 *
 	 * @param klass
