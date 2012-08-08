@@ -158,7 +158,7 @@ public List<ResourceLink> buildLinks(String path, <%=klassName%> instance)
 		else
 		{
 		%>
-			if(<%=transformerUtils.getGetterMethodName(associationEnd)%>() != null && <%=transformerUtils.getGetterMethodName(associationEnd)%>().<%=transformerUtils.getClassIdGetterMthod(assocKlass)%>() != null)
+			if(instance.<%=transformerUtils.getGetterMethodName(associationEnd)%>() != null && instance.<%=transformerUtils.getGetterMethodName(associationEnd)%>().<%=transformerUtils.getClassIdGetterMthod(assocKlass)%>() != null)
 			{
 				idStr = instance.<%=transformerUtils.getGetterMethodName(associationEnd)%>().<%=transformerUtils.getClassIdGetterMthod(assocKlass)%>().toString();		
 		<%
@@ -168,7 +168,7 @@ public List<ResourceLink> buildLinks(String path, <%=klassName%> instance)
 	else
 	{
 	%>
-	if(<%=transformerUtils.getGetterMethodName(associationEnd)%>() != null && <%=transformerUtils.getGetterMethodName(associationEnd)%>().<%=transformerUtils.getClassIdGetterMthod(assocKlass)%>() != null)
+	if(instance.<%=transformerUtils.getGetterMethodName(associationEnd)%>() != null && instance.<%=transformerUtils.getGetterMethodName(associationEnd)%>().<%=transformerUtils.getClassIdGetterMthod(assocKlass)%>() != null)
 	{
 	idStr = instance.<%=transformerUtils.getGetterMethodName(associationEnd)%>().<%=transformerUtils.getClassIdGetterMthod(assocKlass)%>().toString();		
 	<%

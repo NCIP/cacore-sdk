@@ -494,7 +494,15 @@ for(UMLAssociation assoc: assocs){
 					String fullpath = uriInfo.getAbsolutePath().toString();
 					String path = fullpath.substring(0, fullpath.indexOf("/rest/")+5);
 					Iterator iter = results.iterator();
-					List beans = new ArrayList();
+					ListProxy beans = new ListProxy();
+					ListProxy proxy = (ListProxy) results;
+					beans.setAppService(appService);
+					beans.setTargetClassName(proxy.getTargetClassName());
+					beans.setOriginalStart(proxy.getOriginalStart());
+					beans.setRealSize(proxy.getRealSize());
+					beans.setMaxRecordsPerQuery(proxy.getMaxRecordsPerQuery());
+					beans.setHasAllRecords(proxy.isHasAllRecords());
+
 					while(iter.hasNext())
 					{
 						<%=assocPackageName%>.<%=assocKlass.getName()%> obj = (<%=assocPackageName%>.<%=assocKlass.getName()%>) iter.next();
@@ -635,7 +643,14 @@ for(UMLAssociation assoc: assocs){
 					String fullpath = uriInfo.getAbsolutePath().toString();
 					String path = fullpath.substring(0, fullpath.indexOf("/rest/")+5);
 					Iterator iter = results.iterator();
-					List beans = new ArrayList();
+					ListProxy beans = new ListProxy();
+					ListProxy proxy = (ListProxy) results;
+					beans.setAppService(appService);
+					beans.setTargetClassName(proxy.getTargetClassName());
+					beans.setOriginalStart(proxy.getOriginalStart());
+					beans.setRealSize(proxy.getRealSize());
+					beans.setMaxRecordsPerQuery(proxy.getMaxRecordsPerQuery());
+					beans.setHasAllRecords(proxy.isHasAllRecords());
 					while(iter.hasNext())
 					{
 						<%=assocPackageName%>.<%=assocKlass.getName()%> obj = (<%=assocPackageName%>.<%=assocKlass.getName()%>) iter.next();
