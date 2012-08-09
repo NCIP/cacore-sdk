@@ -34,15 +34,50 @@ public <%=klassName%>Bean()
 {
 }
 
-public <%=klassName%>Bean(<%=klassName%> instance)
+public <%=klassName%>Bean(<%=fullPackageName%>.<%=klassName%> obj)
 {	
 	try
 	{
 	<%
 	List<UMLAttribute> attributes = transformerUtils.getClassAttributes(klass, true);
 	for(UMLAttribute attr : attributes){%>
-	<%=transformerUtils.getSetterMethodName(attr)%>(instance.<%=transformerUtils.getGetterMethodName(attr)%>());
+	this.<%=transformerUtils.getSetterMethodName(attr)%>(obj.<%=transformerUtils.getGetterMethodName(attr)%>());
 	<%}%>
+
+	<%
+	List<UMLAssociation> assocns = transformerUtils.getAssociations(klass, true);
+	for(UMLAssociation assoc: assocns){
+		List<UMLAssociationEnd> assocEnds = assoc.getAssociationEnds();
+		List<UMLAssociationEnd> associationEnds = new java.util.ArrayList<UMLAssociationEnd>();
+		UMLAssociationEnd thisEnd = null;
+		UMLAssociationEnd otherEnd = null;
+		try
+		{
+			thisEnd = transformerUtils.getThisEnd(klass,assocEnds, true);
+			otherEnd = transformerUtils.getOtherEnd(klass,assocEnds, true);
+			associationEnds.add(otherEnd);
+		}
+		catch(GenerationException e)
+		{
+			continue;
+		}
+	
+		if(transformerUtils.isBidirectionalSelfAssociation(klass,assocEnds)) { // handle bi-directional self-association 
+			associationEnds.add(thisEnd);
+		}
+		
+		for(UMLAssociationEnd associationEnd : associationEnds)
+		{	
+			if(associationEnd.isNavigable())
+			{
+			%>
+		this.<%=transformerUtils.getSetterMethodName(associationEnd)%>(obj.<%=transformerUtils.getGetterMethodName(associationEnd)%>());
+			<%
+			}
+		}
+	}
+	%>
+
 	}
 	catch(Exception e)
 	{
@@ -51,7 +86,7 @@ public <%=klassName%>Bean(<%=klassName%> instance)
 	}
 }
 
-public List<ResourceLink> buildLinks(String path, <%=klassName%> instance)
+public List<ResourceLink> buildLinks(String path, <%=fullPackageName%>.<%=klassName%> obj)
 {
 	String idStr = null;
 	String href = null;
@@ -76,13 +111,13 @@ public List<ResourceLink> buildLinks(String path, <%=klassName%> instance)
 		if(attrType.equals("Ii"))
 		{
 		%>
-			idStr = instance.<%=idMethod%>().getExtension();
+			idStr = obj.<%=idMethod%>().getExtension();
 		<%
 		}
 		else
 		{
 		%>
-			idStr = instance.<%=transformerUtils.getClassIdGetterMthod(klass)%>().toString();
+			idStr = obj.<%=transformerUtils.getClassIdGetterMthod(klass)%>().toString();
 		<%
 		}
 		}
@@ -90,7 +125,7 @@ public List<ResourceLink> buildLinks(String path, <%=klassName%> instance)
 	else
 	{
 	%>
-	idStr = instance.<%=transformerUtils.getClassIdGetterMthod(klass)%>().toString();
+	idStr = obj.<%=transformerUtils.getClassIdGetterMthod(klass)%>().toString();
 	<%}%>
 	
 	href = path+"/<%=klass.getName()%>/"+idStr;
@@ -152,15 +187,15 @@ public List<ResourceLink> buildLinks(String path, <%=klassName%> instance)
 		if(attrType.equals("Ii"))
 		{
 		%>
-			idStr = instance.<%=idMethod%>().getExtension();
+			idStr = obj.<%=idMethod%>().getExtension();
 		<%
 		}
 		else
 		{
 		%>
-			if(instance.<%=transformerUtils.getGetterMethodName(associationEnd)%>() != null && instance.<%=transformerUtils.getGetterMethodName(associationEnd)%>().<%=transformerUtils.getClassIdGetterMthod(assocKlass)%>() != null)
+			if(obj.<%=transformerUtils.getGetterMethodName(associationEnd)%>() != null && obj.<%=transformerUtils.getGetterMethodName(associationEnd)%>().<%=transformerUtils.getClassIdGetterMthod(assocKlass)%>() != null)
 			{
-				idStr = instance.<%=transformerUtils.getGetterMethodName(associationEnd)%>().<%=transformerUtils.getClassIdGetterMthod(assocKlass)%>().toString();		
+				idStr = obj.<%=transformerUtils.getGetterMethodName(associationEnd)%>().<%=transformerUtils.getClassIdGetterMthod(assocKlass)%>().toString();		
 		<%
 		}
 		}
@@ -168,9 +203,9 @@ public List<ResourceLink> buildLinks(String path, <%=klassName%> instance)
 	else
 	{
 	%>
-	if(instance.<%=transformerUtils.getGetterMethodName(associationEnd)%>() != null && instance.<%=transformerUtils.getGetterMethodName(associationEnd)%>().<%=transformerUtils.getClassIdGetterMthod(assocKlass)%>() != null)
+	if(obj.<%=transformerUtils.getGetterMethodName(associationEnd)%>() != null && obj.<%=transformerUtils.getGetterMethodName(associationEnd)%>().<%=transformerUtils.getClassIdGetterMthod(assocKlass)%>() != null)
 	{
-	idStr = instance.<%=transformerUtils.getGetterMethodName(associationEnd)%>().<%=transformerUtils.getClassIdGetterMthod(assocKlass)%>().toString();		
+	idStr = obj.<%=transformerUtils.getGetterMethodName(associationEnd)%>().<%=transformerUtils.getClassIdGetterMthod(assocKlass)%>().toString();		
 	<%
 	}
 	%>
