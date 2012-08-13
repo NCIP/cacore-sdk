@@ -43,9 +43,9 @@ public class SDKWritableCleanUpTest extends AbstractDependencyInjectionSpringCon
 	
 	@SuppressWarnings("unchecked")
 	public void cleanOracleWritableApiDatabase() {
-		List<Map<String, String>> fktableNames = jdbcTemplate.queryForList(ORACLE_FOREIGN_TABLES_SQL);
-		for (Map<String, String> tableNameMap : fktableNames) {
-			String tableName = tableNameMap.get("TABLE_NAME");
+		List<Map<String, Object>> fktableNames = jdbcTemplate.queryForList(ORACLE_FOREIGN_TABLES_SQL);
+		for (Map<String, Object> tableNameMap : fktableNames) {
+			String tableName = (String)tableNameMap.get("TABLE_NAME");
 			log.info(tableName);
 			Object args[] = new Object[1];
 			args[0] = tableName;
@@ -62,9 +62,9 @@ public class SDKWritableCleanUpTest extends AbstractDependencyInjectionSpringCon
 		}
 		
 		log.info("non foreign key dependent tables ");
-		List<Map<String, String>> tableNames = jdbcTemplate.queryForList(ORACLE_ALL_TABLES_SQL);
-		for (Map<String, String> tableNameMap : tableNames) {
-			String tableName = tableNameMap.get("TABLE_NAME");
+		List<Map<String, Object>> tableNames = jdbcTemplate.queryForList(ORACLE_ALL_TABLES_SQL);
+		for (Map<String, Object> tableNameMap : tableNames) {
+			String tableName = (String)tableNameMap.get("TABLE_NAME");
 			log.info(tableName);
 			Object args[] = new Object[1];
 			args[0] = tableName;
@@ -84,19 +84,19 @@ public class SDKWritableCleanUpTest extends AbstractDependencyInjectionSpringCon
 	@SuppressWarnings("unchecked")
 	public void cleanMySQLWritableApiDatabase() {
 
-		List<Map<String, String>> tableNames = jdbcTemplate.queryForList(MYSQL_ALL_TABLES_SQL);
+		List<Map<String, Object>> tableNames = jdbcTemplate.queryForList(MYSQL_ALL_TABLES_SQL);
 
-		List<Map<String, String>> nonFkTableMap = new ArrayList<Map<String, String>>();
-		for (Map<String, String> tableNameMap : tableNames) {
-			String tableName = tableNameMap.get("TABLE_NAME");
+		List<Map<String, Object>> nonFkTableMap = new ArrayList<Map<String, Object>>();
+		for (Map<String, Object> tableNameMap : tableNames) {
+			String tableName = (String)tableNameMap.get("TABLE_NAME");
 			if(tableName==null) return;
-			List<Map<String, String>> indexList = jdbcTemplate.queryForList("SHOW index FROM " + tableName);
+			List<Map<String, Object>> indexList = jdbcTemplate.queryForList("SHOW index FROM " + tableName);
 			if (indexList.size() > 1) {
 				log.info(tableName);
 				try {
-					for (Map<String, String> pkColumnNameMap : indexList) {
+					for (Map<String, Object> pkColumnNameMap : indexList) {
 						if(pkColumnNameMap.get("INDEX_NAME").equals("PRIMARY")){
-							String pkColumnName = pkColumnNameMap.get("Column_name");
+							String pkColumnName = (String)pkColumnNameMap.get("Column_name");
 							jdbcTemplate.execute("DELETE from " + tableName + " where "+ pkColumnName + " > 10000");
 						}
 					}					
@@ -109,13 +109,13 @@ public class SDKWritableCleanUpTest extends AbstractDependencyInjectionSpringCon
 		}
 
 		log.info("\n non foreign key dependent tables \n");
-		for (Map<String, String> tableNameMap : nonFkTableMap) {
-			String tableName = tableNameMap.get("TABLE_NAME");
+		for (Map<String, Object> tableNameMap : nonFkTableMap) {
+			String tableName = (String)tableNameMap.get("TABLE_NAME");
 			log.info(tableName);
-			List<Map<String, String>> indexList = jdbcTemplate.queryForList("SHOW index FROM " + tableName);
+			List<Map<String, Object>> indexList = jdbcTemplate.queryForList("SHOW index FROM " + tableName);
 			try {
-				Map<String, String> pkColumnNameMap = indexList.get(0);
-				String pkColumnName = pkColumnNameMap.get("Column_name");
+				Map<String, Object> pkColumnNameMap = indexList.get(0);
+				String pkColumnName = (String)pkColumnNameMap.get("Column_name");
 				jdbcTemplate.execute("DELETE from " + tableName + " where "+ pkColumnName + " > 10000");
 			} catch (Exception e) {
 				e.printStackTrace();

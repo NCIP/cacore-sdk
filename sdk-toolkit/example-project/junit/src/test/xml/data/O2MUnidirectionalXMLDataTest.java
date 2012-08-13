@@ -14,13 +14,13 @@ public class O2MUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 	{
 		return "One to Many Unidirectional XML Data Test Case";
 	}
-	
+
 	/**
 	 * Uses Nested Search Criteria for search
-	 * Verifies that the results are returned 
+	 * Verifies that the results are returned
 	 * Verifies size of the result set
 	 * Verifies that none of the attribute is null
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	public void testEntireObjectNestedSearch1() throws Exception
@@ -30,20 +30,20 @@ public class O2MUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 
 		assertNotNull(results);
 		assertEquals(5,results.size());
-		
+
 		for(Iterator i = results.iterator();i.hasNext();)
 		{
 			KeyChain result = (KeyChain)i.next();
 			toXML(result);
-			
+
 			validateClassElements(result);
 			validateAttribute(result,"id",result.getId());
 			validateAttribute(result,"name",result.getName());
-			
+
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
 			KeyChain result2 = (KeyChain)fromXML(result);
-			
+
 			assertNotNull(result2);
 			assertNotNull(result2.getId());
 			assertNotNull(result2.getName());
@@ -52,10 +52,10 @@ public class O2MUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 
 	/**
 	 * Uses Nested Search Criteria for search
-	 * Verifies that the results are returned 
+	 * Verifies that the results are returned
 	 * Verifies size of the result set
 	 * Verifies that none of the attribute is null
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	public void testEntireObjectNestedSearch2() throws Exception
@@ -65,20 +65,20 @@ public class O2MUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 
 		assertNotNull(results);
 		assertEquals(3,results.size());
-		
+
 		for(Iterator i = results.iterator();i.hasNext();)
 		{
 			LatchKey result = (LatchKey)i.next();
 			toXML(result);
-			
+
 			validateClassElements(result);
 			validateAttribute(result,"id",result.getId());
 			validateAttribute(result,"type",result.getType());
-			
+
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
 			LatchKey result2 = (LatchKey)fromXML(result);
-			
+
 			assertNotNull(result2);
 			assertNotNull(result2.getId());
 			assertNotNull(result2.getType());
@@ -87,10 +87,10 @@ public class O2MUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 
 	/**
 	 * Uses Nested Search Criteria for search
-	 * Verifies that the results are returned 
+	 * Verifies that the results are returned
 	 * Verifies size of the result set
 	 * erifies that the associated object is null
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	public void testZeroAssociatedObjectsNestedSearch1() throws Exception
@@ -101,27 +101,27 @@ public class O2MUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 
 		assertNotNull(results);
 		assertEquals(1,results.size());
-		
+
 		Iterator i = results.iterator();
 		KeyChain result = (KeyChain)i.next();
 		toXML(result);
 		KeyChain result2 = (KeyChain)fromXML(result);
-		
+
 		assertNotNull(result2);
 		assertNotNull(result2.getId());
 		assertNotNull(result2.getName());
-		
+
 		Collection keyCollection = result2.getKeyCollection();
 		assertNull(keyCollection);
 	}
-	
+
 	/**
 	 * Uses Nested Search Criteria for search
-	 * Verifies that the results are returned 
+	 * Verifies that the results are returned
 	 * Verifies size of the result set
 	 * Verifies that none of the attribute is null
 	 * Verifies that the associated object has required Id
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	public void testOneAssociatedObjectNestedSearch1() throws Exception
@@ -132,21 +132,21 @@ public class O2MUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 
 		assertNotNull(results);
 		assertEquals(1,results.size());
-		
+
 		Iterator i = results.iterator();
 		KeyChain result = (KeyChain)i.next();
 		toXML(result);
 		KeyChain result2 = (KeyChain)fromXML(result);
-		
+
 		assertNotNull(result2);
 		assertNotNull(result2.getId());
 		assertNotNull(result2.getName());
-		
+
 		validateAssociation(result,"LatchKey","keyCollection", true, false);
-		
+
 		Collection keyCollection = result2.getKeyCollection();
 		assertEquals(true, keyCollection.size()>0);
-		
+
 		Iterator j = keyCollection.iterator();
 		LatchKey key = (LatchKey)j.next();
 		assertNotNull(key);
@@ -157,11 +157,11 @@ public class O2MUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 
 	/**
 	 * Uses Nested Search Criteria for search to get associated object
-	 * Verifies that the results are returned 
+	 * Verifies that the results are returned
 	 * Verifies size of the result set
 	 * Verifies that none of the attribute is null
-	 * Verified the Id attribute's value of the returned object 
-	 * 
+	 * Verified the Id attribute's value of the returned object
+	 *
 	 * @throws Exception
 	 */
 	public void testOneAssociatedObjectNestedSearch2() throws Exception
@@ -172,12 +172,12 @@ public class O2MUnidirectionalXMLDataTest extends SDKXMLDataTestBase
 
 		assertNotNull(results);
 		assertEquals(1,results.size());
-		
+
 		Iterator i = results.iterator();
 		LatchKey result = (LatchKey)i.next();
 		toXML(result);
 		LatchKey result2 = (LatchKey)fromXML(result);
-		
+
 		assertNotNull(result2);
 		assertNotNull(result2.getId());
 		assertNotNull(result2.getType());

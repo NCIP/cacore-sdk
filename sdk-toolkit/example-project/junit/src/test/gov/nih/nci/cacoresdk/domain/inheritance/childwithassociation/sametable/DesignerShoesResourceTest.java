@@ -108,6 +108,7 @@ public class DesignerShoesResourceTest extends SDKRESTfulTestBase
  		myWriter.close();
 	  } catch (Exception e) {
 		e.printStackTrace();
+		throw e;
 	  }
 		
 	}
@@ -334,6 +335,7 @@ public class DesignerShoesResourceTest extends SDKRESTfulTestBase
 		}
 	  } catch (Exception e) {
 		e.printStackTrace();
+		throw e;
 	  }
 		
 	}
@@ -372,6 +374,7 @@ public class DesignerShoesResourceTest extends SDKRESTfulTestBase
  		httpClient.getConnectionManager().shutdown();
 	  } catch (Exception e) {
  		e.printStackTrace();
+ 		throw e;
  	  }
 		
 	}
@@ -397,18 +400,22 @@ public class DesignerShoesResourceTest extends SDKRESTfulTestBase
 // 				+ response.getStatusLine().getStatusCode());
 // 		}
   
- 		BufferedReader br = new BufferedReader(
-                         new InputStreamReader((response.getEntity().getContent())));
-  
- 		String output;
- 		System.out.println("Output from Server .... \n");
- 		while ((output = br.readLine()) != null) {
- 			System.out.println(output);
- 		}
-  
+  		if(response.getEntity() != null)
+  		{
+			BufferedReader br = new BufferedReader(
+				 new InputStreamReader((response.getEntity().getContent())));
+
+			String output;
+			System.out.println("Output from Server .... \n");
+			while ((output = br.readLine()) != null) {
+				System.out.println(output);
+			}
+  		}
+  		
  		httpClient.getConnectionManager().shutdown();
 	  } catch (Exception e) {
  		e.printStackTrace();
+ 		throw e;
 	  }
 		
 	}
