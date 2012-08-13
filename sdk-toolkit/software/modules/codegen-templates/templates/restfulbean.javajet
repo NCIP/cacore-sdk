@@ -6,7 +6,7 @@
 package <%=fullPackageName%>;
 
 <%=transformerUtils.getImports(klass)%>
-import <%=fullPackageName%>.<%=klassName%>;
+
 
 import gov.nih.nci.system.web.ResourceLink;
 import java.util.List;
@@ -34,14 +34,14 @@ public <%=klassName%>Bean()
 {
 }
 
-public <%=klassName%>Bean(<%=fullPackageName%>.<%=klassName%> obj)
+public <%=klassName%>Bean(<%=klassName%> obj)
 {	
 	try
 	{
 	<%
 	List<UMLAttribute> attributes = transformerUtils.getClassAttributes(klass, true);
 	for(UMLAttribute attr : attributes){%>
-	this.<%=transformerUtils.getSetterMethodName(attr)%>(obj.<%=transformerUtils.getGetterMethodName(attr)%>());
+		this.<%=transformerUtils.getSetterMethodName(attr)%>(obj.<%=transformerUtils.getGetterMethodName(attr)%>());
 	<%}%>
 
 	<%
@@ -86,7 +86,7 @@ public <%=klassName%>Bean(<%=fullPackageName%>.<%=klassName%> obj)
 	}
 }
 
-public List<ResourceLink> buildLinks(String path, <%=fullPackageName%>.<%=klassName%> obj)
+public List<ResourceLink> buildLinks(String path, <%=klassName%> obj)
 {
 	String idStr = null;
 	String href = null;

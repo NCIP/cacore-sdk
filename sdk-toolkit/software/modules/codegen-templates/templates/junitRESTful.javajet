@@ -163,6 +163,419 @@ public class <%=klassName%>ResourceTest extends SDKRESTfulTestBase
 		
 	}
 
+	public void testSearch() throws ApplicationException
+	{
+		
+	  try {
+ 
+		<%
+			UMLAttribute attrb3 = transformerUtils.getClassIdAttr(klass);
+			if(attrb3 != null)
+			{
+			
+		%>
+			
+		DefaultHttpClient httpClient = new DefaultHttpClient();
+		String url = baseURL + "/rest/<%=klassName%>/search;<%=attrb3.getName()%>=*";
+		HttpGet getRequest = new HttpGet(url);
+		getRequest.addHeader("accept", "application/xml");
+
+ 
+		HttpResponse response = httpClient.execute(getRequest);
+ 
+		if (response.getStatusLine().getStatusCode() != 200) {
+			throw new RuntimeException("Failed : HTTP error code : "
+			   + response.getStatusLine().getStatusCode());
+		}
+ 
+ 		File myFile = new File("<%=klassName%>_Search"+"XML.xml");						
+		System.out.println("writing data to file "+myFile.getAbsolutePath());
+		FileWriter myWriter = new FileWriter(myFile);
+
+		BufferedReader br = new BufferedReader(
+                         new InputStreamReader((response.getEntity().getContent())));
+ 
+		String output;
+		System.out.println("Output from Server .... \n");
+		while ((output = br.readLine()) != null) {
+			myWriter.write(output);
+			System.out.println(output);
+		}
+ 
+		httpClient.getConnectionManager().shutdown();
+		myWriter.flush();
+ 		myWriter.close();
+ 		<%}%>
+	  } catch (ClientProtocolException e) {
+ 
+		e.printStackTrace();
+ 
+	  } catch (IOException e) {
+ 
+		e.printStackTrace();
+	  }
+		
+	}	
+
+
+
+//***************************************************
+
+
+<%	
+List<UMLAssociation> assocs = transformerUtils.getAssociations(klass, true);
+int counter = 0;
+for(UMLAssociation assoc: assocs)
+{
+	List<UMLAssociationEnd> assocEnds = assoc.getAssociationEnds();
+	List<UMLAssociationEnd> associationEnds = new java.util.ArrayList<UMLAssociationEnd>();
+	UMLAssociationEnd thisEnd = null;
+	UMLAssociationEnd otherEnd = null;
+	try
+	{
+		thisEnd = transformerUtils.getThisEnd(klass,assocEnds, true);
+		otherEnd = transformerUtils.getOtherEnd(klass,assocEnds, true);
+		associationEnds.add(otherEnd);
+	}
+	catch(GenerationException e)
+	{
+		continue;
+	}
+
+	if(transformerUtils.isBidirectionalSelfAssociation(klass,assocEnds)) { // handle bi-directional self-association 
+		associationEnds.add(thisEnd);
+	}
+
+	for(UMLAssociationEnd associationEnd : associationEnds)
+	{	
+		counter++;
+		if(associationEnd.isNavigable())
+		{
+
+			UMLClass assocKlass = (UMLClass)associationEnd.getUMLElement();
+			String assocPackageName=transformerUtils.getFullPackageName(assocKlass);
+			String name = associationEnd.getRoleName(); 
+	%>
+	public void test<%=klassName%><%=counter%>()
+	{
+		try
+		{
+	<%
+			UMLAttribute attrb6 = transformerUtils.getClassIdAttr(klass);
+			if(attrb6 != null)
+			{
+	%>
+		DefaultHttpClient httpClient = new DefaultHttpClient();
+		String url = baseURL + "/rest/<%=klassName%>/search;<%=attrb6.getName()%>=*/<%=name%>";
+		HttpGet getRequest = new HttpGet(url);
+		getRequest.addHeader("accept", "application/xml");
+
+ 
+		HttpResponse response = httpClient.execute(getRequest);
+ 
+		if (response.getStatusLine().getStatusCode() != 200) {
+			throw new RuntimeException("Failed : HTTP error code : "
+			   + response.getStatusLine().getStatusCode());
+		}
+ 
+ 		File myFile = new File("<%=klassName%>_Search"+"XML.xml");						
+		System.out.println("writing data to file "+myFile.getAbsolutePath());
+		FileWriter myWriter = new FileWriter(myFile);
+
+		BufferedReader br = new BufferedReader(
+                         new InputStreamReader((response.getEntity().getContent())));
+ 
+		String output;
+		System.out.println("Output from Server .... \n");
+		while ((output = br.readLine()) != null) {
+			myWriter.write(output);
+			System.out.println(output);
+		}
+ 
+		httpClient.getConnectionManager().shutdown();
+		myWriter.flush();
+ 		myWriter.close();
+ 		<%}%>
+ 		
+		}
+		catch(Exception e)
+		{
+			  log.error("Error in querying REST resource: " + e.getMessage());
+			  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
+			  builder.type("application/xml");
+			  StringBuffer buffer = new StringBuffer();
+			  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+			  buffer.append("<response>");
+			  buffer.append("<type>ERROR</type>");
+			  buffer.append("<code>INTERNAL_ERROR_4</code>");
+			  buffer.append("<message>Failed to Query due to: "+e.getMessage()+"</message>");
+			  buffer.append("</response>");
+			  builder.entity(buffer.toString());
+			  throw new WebApplicationException(builder.build());
+		}
+
+	}
+
+	<%
+
+		if(transformerUtils.isAssociationEndMany(associationEnd))
+		{%>
+
+					
+			
+	public void test<%=transformerUtils.getGetterMethodName(associationEnd)%>()
+	{
+		try
+		{
+		<%=klassName%> searchObject = new <%=klassName%>();
+ 		Collection results4 = getApplicationService().search("<%=fullPackageName%>.<%=klassName%>",searchObject );
+		String id = "";
+		
+		if(results4 != null && results4.size() > 0)
+		{
+			<%=klassName%> obj = (<%=klassName%>) ((List)results4).get(0);
+		<%	
+			UMLAttribute attrb4 = transformerUtils.getClassIdAttr(klass);
+			
+			
+			if(attrb4 != null && !transformerUtils.isISO21090Enabled())
+			{
+				String dataType = TransformerUtils.javaPrimitiveDatatypeMap.get(attrb4.getDatatype().getName());
+			if(attrb4.getDatatype().getName().equals("string"))
+			{
+			%>
+		
+				String idVal = obj.<%=transformerUtils.getClassIdGetterMthod(klass)%>();
+			<%
+			}
+			else
+			{
+			%>
+				<%=attrb4.getDatatype().getName()%> idVal = obj.<%=transformerUtils.getClassIdGetterMthod(klass)%>();
+			<%
+			}
+			%>
+			id = new <%=dataType%>(idVal).toString();
+			<%
+			}
+			else if(attrb4 != null && transformerUtils.isISO21090Enabled())
+			{
+				String dataType = TransformerUtils.isoDatatypeCompleteMap.get(attrb4.getDatatype().getName());
+				if(dataType == null)
+					dataType = TransformerUtils.javaPrimitiveDatatypeMap.get(attrb4.getDatatype().getName());
+			if(dataType.equals("Ii"))
+			{
+			%>
+			         id = obj.<%=transformerUtils.getClassIdGetterMthod(klass)%>().getExtension();
+			<%
+			}
+			else if(dataType.equals("string"))
+			{
+			%>
+		
+				 id = obj.<%=transformerUtils.getClassIdGetterMthod(klass)%>();
+			<%
+			}
+			else
+			{
+			%>
+				<%=dataType%> idVal = obj.<%=transformerUtils.getClassIdGetterMthod(klass)%>();
+				id = new <%=dataType%>(idVal).toString();
+			<%
+			}
+			}
+			
+			%>
+		}
+		else
+			return;
+
+		if(id.equals(""))
+			return;
+			
+	%>
+			DefaultHttpClient httpClient = new DefaultHttpClient();
+			String url = baseURL + "/rest/<%=klassName%>/"+id+"/<%=name%>";
+			HttpGet getRequest = new HttpGet(url);
+			getRequest.addHeader("accept", "application/xml");
+
+
+			HttpResponse response = httpClient.execute(getRequest);
+
+			if (response.getStatusLine().getStatusCode() != 200) {
+				throw new RuntimeException("Failed : HTTP error code : "
+				   + response.getStatusLine().getStatusCode());
+			}
+
+			File myFile = new File("<%=klassName%>_Search"+"XML.xml");						
+			System.out.println("writing data to file "+myFile.getAbsolutePath());
+			FileWriter myWriter = new FileWriter(myFile);
+
+			BufferedReader br = new BufferedReader(
+				 new InputStreamReader((response.getEntity().getContent())));
+
+			String output;
+			System.out.println("Output from Server .... \n");
+			while ((output = br.readLine()) != null) {
+				myWriter.write(output);
+				System.out.println(output);
+			}
+
+			httpClient.getConnectionManager().shutdown();
+			myWriter.flush();
+			myWriter.close();
+		}
+		catch(Exception e)
+		{
+			  log.error("Error in querying REST resource: " + e.getMessage());
+			  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
+			  builder.type("application/xml");
+			  StringBuffer buffer = new StringBuffer();
+			  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+			  buffer.append("<response>");
+			  buffer.append("<type>ERROR</type>");
+			  buffer.append("<code>INTERNAL_ERROR_4</code>");
+			  buffer.append("<message>Failed to Query due to: "+e.getMessage()+"</message>");
+			  buffer.append("</response>");
+			  builder.entity(buffer.toString());
+			  throw new WebApplicationException(builder.build());
+		}
+			
+	}
+	<%}else{
+	%>
+	public void test<%=transformerUtils.getGetterMethodName(associationEnd)%>()
+	{
+		try
+		{
+		<%=klassName%> searchObject = new <%=klassName%>();
+ 		Collection results5 = getApplicationService().search("<%=fullPackageName%>.<%=klassName%>",searchObject );
+		String id = "";
+		
+		if(results5 != null && results5.size() > 0)
+		{
+			<%=klassName%> obj = (<%=klassName%>) ((List)results5).get(0);
+		<%	
+			UMLAttribute attrb5 = transformerUtils.getClassIdAttr(klass);
+			
+			
+			if(attrb5 != null && !transformerUtils.isISO21090Enabled())
+			{
+				String dataType = TransformerUtils.javaPrimitiveDatatypeMap.get(attrb5.getDatatype().getName());
+			if(attrb5.getDatatype().getName().equals("string"))
+			{
+			%>
+		
+				String idVal = obj.<%=transformerUtils.getClassIdGetterMthod(klass)%>();
+			<%
+			}
+			else
+			{
+			%>
+				<%=attrb5.getDatatype().getName()%> idVal = obj.<%=transformerUtils.getClassIdGetterMthod(klass)%>();
+			<%
+			}
+			%>
+			id = new <%=dataType%>(idVal).toString();
+			<%
+			}
+			else if(attrb5 != null && transformerUtils.isISO21090Enabled())
+			{
+				String dataType = TransformerUtils.isoDatatypeCompleteMap.get(attrb5.getDatatype().getName());
+				if(dataType == null)
+					dataType = TransformerUtils.javaPrimitiveDatatypeMap.get(attrb5.getDatatype().getName());
+			if(dataType.equals("Ii"))
+			{
+			%>
+			         id = obj.<%=transformerUtils.getClassIdGetterMthod(klass)%>().getExtension();
+			<%
+			}
+			else if(dataType.equals("string"))
+			{
+			%>
+		
+				 id = obj.<%=transformerUtils.getClassIdGetterMthod(klass)%>();
+			<%
+			}
+			else
+			{
+			%>
+				<%=dataType%> idVal = obj.<%=transformerUtils.getClassIdGetterMthod(klass)%>();
+				id = new <%=dataType%>(idVal).toString();
+			<%
+			}
+			}
+			
+			%>
+		}
+		else
+			return;
+
+		if(id.equals(""))
+			return;
+			
+	%>
+			DefaultHttpClient httpClient = new DefaultHttpClient();
+			String url = baseURL + "/rest/<%=klassName%>/"+id"+"/<%=name%>";
+			HttpGet getRequest = new HttpGet(url);
+			getRequest.addHeader("accept", "application/xml");
+
+
+			HttpResponse response = httpClient.execute(getRequest);
+
+			if (response.getStatusLine().getStatusCode() != 200) {
+				throw new RuntimeException("Failed : HTTP error code : "
+				   + response.getStatusLine().getStatusCode());
+			}
+
+			File myFile = new File("<%=klassName%>_Search"+"XML.xml");						
+			System.out.println("writing data to file "+myFile.getAbsolutePath());
+			FileWriter myWriter = new FileWriter(myFile);
+
+			BufferedReader br = new BufferedReader(
+				 new InputStreamReader((response.getEntity().getContent())));
+
+			String output;
+			System.out.println("Output from Server .... \n");
+			while ((output = br.readLine()) != null) {
+				myWriter.write(output);
+				System.out.println(output);
+			}
+
+			httpClient.getConnectionManager().shutdown();
+			myWriter.flush();
+			myWriter.close();
+ 		
+		}
+		catch(Exception e)
+		{
+		  log.error("Error in querying REST resource: " + e.getMessage());
+		  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
+		  builder.type("application/xml");
+		  StringBuffer buffer = new StringBuffer();
+		  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+		  buffer.append("<response>");
+		  buffer.append("<type>ERROR</type>");
+		  buffer.append("<code>INTERNAL_ERROR_4</code>");
+		  buffer.append("<message>Failed to Query due to: "+e.getMessage()+"</message>");
+		  buffer.append("</response>");
+		  builder.entity(buffer.toString());
+		  throw new WebApplicationException(builder.build());
+		}
+			
+		}
+		
+		<%}%>
+
+	<%			
+	}
+	}
+	%>
+
+<%}%>
+
+//********************************************************End
+
 <%
 if(!transformerUtils.isISO21090Enabled())
 {
