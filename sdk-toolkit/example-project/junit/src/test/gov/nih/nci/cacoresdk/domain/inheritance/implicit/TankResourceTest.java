@@ -8,6 +8,7 @@ import javax.ws.rs.core.Response;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.InputStream;
 import java.io.FileWriter;
 import java.io.File;
 import java.util.List;
@@ -80,7 +81,14 @@ public class TankResourceTest extends SDKRESTfulTestBase
  
 		HttpResponse response = httpClient.execute(getRequest);
  
-		if (response.getStatusLine().getStatusCode() != 200) {
+		if (response.getStatusLine().getStatusCode() == Status.NOT_FOUND) {
+			InputStream is = (InputStream) r.getEntity();
+			org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
+					false);
+			org.jdom.Document jDoc = builder.build(is);
+			assertEquals(jDoc.getName(), "response");
+		}
+ 		else if (response.getStatusLine().getStatusCode() != 200) {
 			throw new RuntimeException("Failed : HTTP error code : "
 			   + response.getStatusLine().getStatusCode());
 		}
@@ -158,7 +166,14 @@ public class TankResourceTest extends SDKRESTfulTestBase
  
 		HttpResponse response = httpClient.execute(deleteRequest);
 		
-		if (response.getStatusLine().getStatusCode() != 200) {
+		if (response.getStatusLine().getStatusCode() == Status.NOT_FOUND) {
+			InputStream is = (InputStream) r.getEntity();
+			org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
+					false);
+			org.jdom.Document jDoc = builder.build(is);
+			assertEquals(jDoc.getName(), "response");
+		}
+ 		else if (response.getStatusLine().getStatusCode() != 200) {
 			throw new RuntimeException("Failed : HTTP error code : "
 			   + response.getStatusLine().getStatusCode());
 		}
