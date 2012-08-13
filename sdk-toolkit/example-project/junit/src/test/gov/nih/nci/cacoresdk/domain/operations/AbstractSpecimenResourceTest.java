@@ -21,6 +21,7 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.entity.FileEntity;
+import org.apache.cxf.jaxrs.client.WebClient;
 
 import org.apache.cxf.common.util.Base64Utility;
 import javax.ws.rs.WebApplicationException;

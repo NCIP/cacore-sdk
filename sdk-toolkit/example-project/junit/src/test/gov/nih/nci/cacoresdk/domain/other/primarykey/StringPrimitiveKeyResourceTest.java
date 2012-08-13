@@ -21,6 +21,7 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.entity.FileEntity;
+import org.apache.cxf.jaxrs.client.WebClient;
 
 import org.apache.cxf.common.util.Base64Utility;
 import javax.ws.rs.WebApplicationException;
@@ -78,24 +79,23 @@ public class StringPrimitiveKeyResourceTest extends SDKRESTfulTestBase
 		if(id.equals(""))
 			return;
 			
-		DefaultHttpClient httpClient = new DefaultHttpClient();
 		String url = baseURL + "/rest/StringPrimitiveKey/"+id;
-		HttpGet getRequest = new HttpGet(url);
-		getRequest.addHeader("accept", "application/xml");
 
  
-		HttpResponse response = httpClient.execute(getRequest);
+		WebClient client = WebClient.create(url);
+		client.type("application/xml").accept("application/xml");		
+		Response response = client.get();
  
-		if (response.getStatusLine().getStatusCode() == Status.NOT_FOUND.getStatusCode()) {
+		if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
 			InputStream is = (InputStream) response.getEntity();
 			org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
 					false);
 			org.jdom.Document jDoc = builder.build(is);
 			assertEquals(jDoc.getRootElement().getName(), "response");
 		}
- 		else if (response.getStatusLine().getStatusCode() != 200) {
+ 		else if (response.getStatus() != 200) {
 			throw new RuntimeException("Failed : HTTP error code : "
-			   + response.getStatusLine().getStatusCode());
+			   + response.getStatus());
 		}
  
  		File myFile = new File("StringPrimitiveKey"+"XML.xml");						
@@ -103,7 +103,7 @@ public class StringPrimitiveKeyResourceTest extends SDKRESTfulTestBase
 		FileWriter myWriter = new FileWriter(myFile);
 
 		BufferedReader br = new BufferedReader(
-                         new InputStreamReader((response.getEntity().getContent())));
+                         new InputStreamReader(((InputStream)response.getEntity())));
  
 		String output;
 		System.out.println("Output from Server .... \n");
@@ -112,7 +112,6 @@ public class StringPrimitiveKeyResourceTest extends SDKRESTfulTestBase
 			System.out.println(output);
 		}
  
-		httpClient.getConnectionManager().shutdown();
 		myWriter.flush();
  		myWriter.close();
 	  } catch (Exception e) {
@@ -129,24 +128,21 @@ public class StringPrimitiveKeyResourceTest extends SDKRESTfulTestBase
  
 		
 			
-		DefaultHttpClient httpClient = new DefaultHttpClient();
 		String url = baseURL + "/rest/StringPrimitiveKey/search;id=*";
-		HttpGet getRequest = new HttpGet(url);
-		getRequest.addHeader("accept", "application/xml");
+		WebClient client = WebClient.create(url);
+		client.type("application/xml").accept("application/xml");		
+		Response response = client.get();
 
- 
-		HttpResponse response = httpClient.execute(getRequest);
- 
-		if (response.getStatusLine().getStatusCode() == Status.NOT_FOUND.getStatusCode()) {
+		if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
 			InputStream is = (InputStream) response.getEntity();
 			org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
 					false);
 			org.jdom.Document jDoc = builder.build(is);
 			assertEquals(jDoc.getRootElement().getName(), "response");
 		}
- 		else if (response.getStatusLine().getStatusCode() != 200) {
+ 		else if (response.getStatus() != 200) {
 			throw new RuntimeException("Failed : HTTP error code : "
-			   + response.getStatusLine().getStatusCode());
+			   + response.getStatus());
 		}
  
  		File myFile = new File("StringPrimitiveKey_Search"+"XML.xml");						
@@ -154,7 +150,7 @@ public class StringPrimitiveKeyResourceTest extends SDKRESTfulTestBase
 		FileWriter myWriter = new FileWriter(myFile);
 
 		BufferedReader br = new BufferedReader(
-                         new InputStreamReader((response.getEntity().getContent())));
+                         new InputStreamReader(((InputStream)response.getEntity())));
  
 		String output;
 		System.out.println("Output from Server .... \n");
@@ -163,7 +159,6 @@ public class StringPrimitiveKeyResourceTest extends SDKRESTfulTestBase
 			System.out.println(output);
 		}
  
-		httpClient.getConnectionManager().shutdown();
 		myWriter.flush();
  		myWriter.close();
  		
@@ -205,24 +200,22 @@ public class StringPrimitiveKeyResourceTest extends SDKRESTfulTestBase
 
 		if(id.equals(""))
 			return;
-			
-		DefaultHttpClient httpClient = new DefaultHttpClient();
-		String url = baseURL + "/rest/StringPrimitiveKey/"+id;
-		HttpDelete deleteRequest = new HttpDelete(url);
-		//deleteRequest.addHeader("accept", "application/xml");
- 
-		HttpResponse response = httpClient.execute(deleteRequest);
 		
-		if (response.getStatusLine().getStatusCode() == Status.NOT_FOUND.getStatusCode()) {
+		String url = baseURL + "/rest/StringPrimitiveKey/"+id;
+		WebClient client = WebClient.create(url);
+		
+		Response response = client.delete();
+		
+		if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
 			InputStream is = (InputStream) response.getEntity();
 			org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
 					false);
 			org.jdom.Document jDoc = builder.build(is);
 			assertEquals(jDoc.getRootElement().getName(), "response");
 		}
- 		else if (response.getStatusLine().getStatusCode() != 200) {
+ 		else if (response.getStatus() != 200) {
 			throw new RuntimeException("Failed : HTTP error code : "
-			   + response.getStatusLine().getStatusCode());
+			   + response.getStatus());
 		}
 	  } catch (Exception e) {
 		e.printStackTrace();
@@ -238,6 +231,7 @@ public class StringPrimitiveKeyResourceTest extends SDKRESTfulTestBase
 	  try {
 		DefaultHttpClient httpClient = new DefaultHttpClient();
 		String url = baseURL + "/rest/StringPrimitiveKey";
+		WebClient client = WebClient.create(url);
 		HttpPost postRequest = new HttpPost(url);
 		File myFile = new File("StringPrimitiveKey"+"XML.xml");						
 		
@@ -254,7 +248,7 @@ public class StringPrimitiveKeyResourceTest extends SDKRESTfulTestBase
 // 		}
   
  		BufferedReader br = new BufferedReader(
-                         new InputStreamReader((response.getEntity().getContent())));
+                         new InputStreamReader(((InputStream)response.getEntity())));
   
  		String output;
  		System.out.println("Output from Server .... \n");
@@ -294,7 +288,7 @@ public class StringPrimitiveKeyResourceTest extends SDKRESTfulTestBase
   		if(response.getEntity() != null)
   		{
 			BufferedReader br = new BufferedReader(
-				 new InputStreamReader((response.getEntity().getContent())));
+				 new InputStreamReader(((InputStream)response.getEntity())));
 
 			String output;
 			System.out.println("Output from Server .... \n");
