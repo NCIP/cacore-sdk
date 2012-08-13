@@ -40,6 +40,9 @@
 	<property name="report.dir.thick-client.cql.query" value="${report.dir}/thick-client-cql" />
 	<property name="report.dir.remote-client.cql.query" value="${report.dir}/remote-client-cql" />
 	<property name="report.dir.thick-client" value="${report.dir}/thick-client" />
+	<property name="report.dir.hql-client" value="${report.dir}/hql-client" />
+	<property name="report.dir.rest-client" value="${report.dir}/rest-client" />
+	<property name="report.dir.systemtest" value="${report.dir}/systemtest" />
 	<property name="report.dir.remote-client" value="${report.dir}/remote-client" />
 	<property name="report.dir.hv-client" value="${report.dir}/hibernate-validator-client" />
 	<property name="report.dir.ws-client" value="${report.dir}/ws-client" />
@@ -119,9 +122,25 @@
 		<fileset dir="${package.client.remote.lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
+		<fileset dir="${package.client.local.lib.dir}">
+			<include name="**/sdk-system-core-*.jar" />
+		</fileset>
 		<path refid="junit-lib" />
 		<pathelement path="${classes.dir}" />
 		<pathelement path="${package.client.remote.conf.dir}" />
+	</path>
+
+	<path id="remote-client-cp-appconfig">
+		<fileset dir="${package.client.remote.lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${package.client.local.lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<path refid="junit-lib" />
+		<pathelement path="${classes.dir}" />
+		<pathelement path="${package.client.remote.conf.dir}" />
+		<pathelement path="${package.client.local.conf.dir}" />
 	</path>
 
 	<path id="ws-client-cp">
@@ -372,6 +391,16 @@
 	<!--                                Run JUnits for Thick client            	                         -->
 	<!-- ************************************************************************************************-->
 
+	<target name="runRESTfulResourceTest" depends="createDir">
+		<SDKCompileJUnit compileClasspath="remote-client-cp" includePattern="**/cacoresdk/**/*Test.java" excludePattern="" />
+		<SDKRunJUnit junitClasspath="remote-client-cp-appconfig" junitOutputDir="${report.dir.rest-client}" includePattern="**/cacoresdk/**/*ResourceTest.class" excludePattern="" junitreportfile="TEST-RESTfulResource.xml" />
+		<SDKGenerateReport junitOutputDir="${report.dir.rest-client}" />
+	</target>
+
+	<!-- ************************************************************************************************-->
+	<!--                                Run JUnits for Thick client            	                         -->
+	<!-- ************************************************************************************************-->
+
 	<target name="readThickClientTest" depends="createDir">
 		<SDKCompileJUnit compileClasspath="local-client-cp" includePattern="**/cacoresdk/**/*Test.java" excludePattern="" />
 		<SDKRunJUnit junitClasspath="local-client-cp" junitOutputDir="${report.dir.thick-client}" includePattern="**/cacoresdk/**/*Test.class" excludePattern="" junitreportfile="TEST-readThickClient.xml" />
@@ -403,7 +432,7 @@
 	<!-- ************************************************************************************************-->
 
 	<target name="appServiceTest" depends="createDir">
-		<SDKCompileJUnit compileClasspath="remote-client-cp" includePattern="**/*AppService*.java" excludePattern="" />
+		<SDKCompileJUnit compileClasspath="local-client-cp" includePattern="**/*AppService*.java" excludePattern="" />
 		<SDKRunJUnit junitClasspath="remote-client-cp" junitOutputDir="${report.dir.app.service}" includePattern="**/*AppService*Test.class" excludePattern="" junitreportfile="TEST-appService.xml" />
 		<SDKGenerateReport junitOutputDir="${report.dir.app.service}" />
 	</target>
@@ -421,7 +450,7 @@
 
 	<target name="xmlDataRemoteClientTest" depends="createDir">
 		<SDKCompileJUnit compileClasspath="remote-client-cp" includePattern="**/*XMLData*.java" excludePattern="" />
-		<SDKRunJUnit junitClasspath="remote-client-cp" junitOutputDir="${report.dir.xml-remote-data-client}" includePattern="**/*XMLData*Test.class" excludePattern="" junitreportfile="TEST-xmlDataRemoteClient.xml"/>
+		<SDKRunJUnit junitClasspath="remote-client-cp-appconfig" junitOutputDir="${report.dir.xml-remote-data-client}" includePattern="**/*XMLData*Test.class" excludePattern="" junitreportfile="TEST-xmlDataRemoteClient.xml"/>
 		<SDKGenerateReport junitOutputDir="${report.dir.xml-remote-data-client}" />
 	</target>
 
@@ -457,7 +486,7 @@
 
 	<target name="readRemoteClientTest" depends="createDir">
 		<SDKCompileJUnit compileClasspath="remote-client-cp" includePattern="**/cacoresdk/**/*Test.java" excludePattern="" />
-		<SDKRunJUnit junitClasspath="remote-client-cp" junitOutputDir="${report.dir.remote-client}" includePattern="**/cacoresdk/**/*Test.class" excludePattern="" junitreportfile="TEST-readRemoteClient.xml"/>
+		<SDKRunJUnit junitClasspath="remote-client-cp-appconfig" junitOutputDir="${report.dir.remote-client}" includePattern="**/cacoresdk/**/*Test.class" excludePattern="" junitreportfile="TEST-readRemoteClient.xml"/>
 		<SDKGenerateReport junitOutputDir="${report.dir.remote-client}" />
 	</target>
 
@@ -603,4 +632,17 @@
 			</then>
 		</if>
 	</target>
+	
+	<target name="runHQLTest" depends="createDir">
+		<SDKCompileJUnit compileClasspath="local-client-cp" includePattern="**/hql/*Test.java" excludePattern="" />
+		<SDKRunJUnit junitClasspath="local-client-cp" junitOutputDir="${report.dir.hql-client}" includePattern="**/hql/*Test.class" excludePattern="" junitreportfile="TEST-runHQLTestThickClient.xml" />
+		<SDKGenerateReport junitOutputDir="${report.dir.thick-client}" />
+	</target>
+
+	<target name="systemTest" depends="createDir">
+		<SDKCompileJUnit compileClasspath="local-client-cp" includePattern="**/system/**/*Test.java" excludePattern="" />
+		<SDKRunJUnit junitClasspath="local-client-cp" junitOutputDir="${report.dir.systemtest}" includePattern="**/system/**/*Test.class" excludePattern="" junitreportfile="TEST-readSystem.xml" />
+		<SDKGenerateReport junitOutputDir="${report.dir.thick-client}" />
+	</target>
+	
 </project>
