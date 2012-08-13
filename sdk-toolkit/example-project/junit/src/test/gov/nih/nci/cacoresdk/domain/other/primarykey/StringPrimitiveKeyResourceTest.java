@@ -86,12 +86,12 @@ public class StringPrimitiveKeyResourceTest extends SDKRESTfulTestBase
  
 		HttpResponse response = httpClient.execute(getRequest);
  
-		if (response.getStatusLine().getStatusCode() == Status.NOT_FOUND) {
-			InputStream is = (InputStream) r.getEntity();
+		if (response.getStatusLine().getStatusCode() == Status.NOT_FOUND.getStatusCode()) {
+			InputStream is = (InputStream) response.getEntity();
 			org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
 					false);
 			org.jdom.Document jDoc = builder.build(is);
-			assertEquals(jDoc.getName(), "response");
+			assertEquals(jDoc.getRootElement().getName(), "response");
 		}
  		else if (response.getStatusLine().getStatusCode() != 200) {
 			throw new RuntimeException("Failed : HTTP error code : "
@@ -137,12 +137,12 @@ public class StringPrimitiveKeyResourceTest extends SDKRESTfulTestBase
  
 		HttpResponse response = httpClient.execute(getRequest);
  
-		if (response.getStatusLine().getStatusCode() == Status.NOT_FOUND) {
-			InputStream is = (InputStream) r.getEntity();
+		if (response.getStatusLine().getStatusCode() == Status.NOT_FOUND.getStatusCode()) {
+			InputStream is = (InputStream) response.getEntity();
 			org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
 					false);
 			org.jdom.Document jDoc = builder.build(is);
-			assertEquals(jDoc.getName(), "response");
+			assertEquals(jDoc.getRootElement().getName(), "response");
 		}
  		else if (response.getStatusLine().getStatusCode() != 200) {
 			throw new RuntimeException("Failed : HTTP error code : "
@@ -213,12 +213,12 @@ public class StringPrimitiveKeyResourceTest extends SDKRESTfulTestBase
  
 		HttpResponse response = httpClient.execute(deleteRequest);
 		
-		if (response.getStatusLine().getStatusCode() == Status.NOT_FOUND) {
-			InputStream is = (InputStream) r.getEntity();
+		if (response.getStatusLine().getStatusCode() == Status.NOT_FOUND.getStatusCode()) {
+			InputStream is = (InputStream) response.getEntity();
 			org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
 					false);
 			org.jdom.Document jDoc = builder.build(is);
-			assertEquals(jDoc.getName(), "response");
+			assertEquals(jDoc.getRootElement().getName(), "response");
 		}
  		else if (response.getStatusLine().getStatusCode() != 200) {
 			throw new RuntimeException("Failed : HTTP error code : "

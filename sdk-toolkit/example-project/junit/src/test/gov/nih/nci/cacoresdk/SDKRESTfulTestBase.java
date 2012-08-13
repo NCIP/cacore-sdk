@@ -11,7 +11,7 @@ public abstract class SDKRESTfulTestBase extends TestCase {
 
 	private ApplicationService appService;
 	private ApplicationService appServiceFromUrl;
-	protected String baseURL = "http://localhost:21080/example";
+	protected String baseURL = "http://localhost:21080/examplerest";
 	static String paths[] = {"application-config-client.xml"};
 	private static ApplicationContext ctx = new ClassPathXmlApplicationContext(
 			paths);;
