@@ -85,7 +85,14 @@ public class TenuredProfessorResourceTest extends SDKRESTfulTestBase
 		client.type("application/xml").accept("application/xml");		
 		Response response = client.get();
  
-		if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
+		if (response.getStatus() == Status.NOT_ACCEPTABLE.getStatusCode()) {
+			InputStream is = (InputStream) response.getEntity();
+			org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
+					false);
+			org.jdom.Document jDoc = builder.build(is);
+			assertEquals(jDoc.getRootElement().getName(), "response");
+		}
+		else if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
 			InputStream is = (InputStream) response.getEntity();
 			org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
 					false);
@@ -133,7 +140,14 @@ public class TenuredProfessorResourceTest extends SDKRESTfulTestBase
 		client.type("application/xml").accept("application/xml");		
 		Response response = client.get();
 
-		if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
+		if (response.getStatus() == Status.NOT_ACCEPTABLE.getStatusCode()) {
+			InputStream is = (InputStream) response.getEntity();
+			org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
+					false);
+			org.jdom.Document jDoc = builder.build(is);
+			assertEquals(jDoc.getRootElement().getName(), "response");
+		}
+		else if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
 			InputStream is = (InputStream) response.getEntity();
 			org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
 					false);
@@ -184,7 +198,14 @@ public class TenuredProfessorResourceTest extends SDKRESTfulTestBase
 		client.type("application/xml").accept("application/xml");		
 		Response response = client.get();
  
-		if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
+		if (response.getStatus() == Status.NOT_ACCEPTABLE.getStatusCode()) {
+			InputStream is = (InputStream) response.getEntity();
+			org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
+					false);
+			org.jdom.Document jDoc = builder.build(is);
+			assertEquals(jDoc.getRootElement().getName(), "response");
+		}
+		else if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
 			InputStream is = (InputStream) response.getEntity();
 			org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
 					false);
@@ -266,7 +287,14 @@ public class TenuredProfessorResourceTest extends SDKRESTfulTestBase
 			client.type("application/xml").accept("application/xml");		
 			Response response = client.get();
 
-			if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
+			if (response.getStatus() == Status.NOT_ACCEPTABLE.getStatusCode()) {
+				InputStream is = (InputStream) response.getEntity();
+				org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
+						false);
+				org.jdom.Document jDoc = builder.build(is);
+				assertEquals(jDoc.getRootElement().getName(), "response");
+			}
+			else if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
 				InputStream is = (InputStream) response.getEntity();
 				org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
 						false);
@@ -348,7 +376,14 @@ public class TenuredProfessorResourceTest extends SDKRESTfulTestBase
 		
 		Response response = client.delete();
 		
-		if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
+		if (response.getStatus() == Status.NOT_ACCEPTABLE.getStatusCode()) {
+			InputStream is = (InputStream) response.getEntity();
+			org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
+					false);
+			org.jdom.Document jDoc = builder.build(is);
+			assertEquals(jDoc.getRootElement().getName(), "response");
+		}
+		else if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
 			InputStream is = (InputStream) response.getEntity();
 			org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
 					false);
