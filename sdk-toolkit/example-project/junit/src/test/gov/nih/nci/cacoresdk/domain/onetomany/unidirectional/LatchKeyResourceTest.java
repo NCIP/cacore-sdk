@@ -247,7 +247,7 @@ public class LatchKeyResourceTest extends SDKRESTfulTestBase
 // 		}
   
  		BufferedReader br = new BufferedReader(
-                         new InputStreamReader(((InputStream)response.getEntity())));
+                         new InputStreamReader((response.getEntity().getContent())));
   
  		String output;
  		System.out.println("Output from Server .... \n");
@@ -287,7 +287,7 @@ public class LatchKeyResourceTest extends SDKRESTfulTestBase
   		if(response.getEntity() != null)
   		{
 			BufferedReader br = new BufferedReader(
-				 new InputStreamReader(((InputStream)response.getEntity())));
+				 new InputStreamReader((response.getEntity().getContent())));
 
 			String output;
 			System.out.println("Output from Server .... \n");
