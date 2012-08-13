@@ -97,7 +97,8 @@ public class MemberO2OBSResourceTest extends SDKRESTfulTestBase
 			   + response.getStatus());
 		}
  
- 		File myFile = new File("MemberO2OBS"+"XML.xml");						
+ 		File myFile = new File("MemberO2OBS"+"XML.xml");	
+ 			
 		System.out.println("writing data to file "+myFile.getAbsolutePath());
 		FileWriter myWriter = new FileWriter(myFile);
 
@@ -515,6 +516,13 @@ public class MemberO2OBSResourceTest extends SDKRESTfulTestBase
 		WebClient client = WebClient.create(url);
 		HttpPost postRequest = new HttpPost(url);
 		File myFile = new File("MemberO2OBS"+"XML.xml");						
+ 		if(!myFile.exists())
+ 		{
+ 			testGet();
+ 			myFile = new File("MemberO2OBS"+"XML.xml");
+ 			if(!myFile.exists())
+				return;
+ 		}
 		
  		FileEntity input = new FileEntity(myFile);
  		input.setContentType("application/xml");
@@ -522,11 +530,6 @@ public class MemberO2OBSResourceTest extends SDKRESTfulTestBase
  		postRequest.setEntity(input);
   
  		HttpResponse response = httpClient.execute(postRequest);
-  
-// 		if (response.getStatusLine().getStatusCode() != 201) {
-// 			throw new RuntimeException("Failed : HTTP error code : "
-// 				+ response.getStatusLine().getStatusCode());
-// 		}
   
  		BufferedReader br = new BufferedReader(
                          new InputStreamReader((response.getEntity().getContent())));
@@ -554,17 +557,19 @@ public class MemberO2OBSResourceTest extends SDKRESTfulTestBase
 		String url = baseURL + "/rest/MemberO2OBS";
 		HttpPut putRequest = new HttpPut(url);
 		File myFile = new File("MemberO2OBS"+"XML.xml");						
+ 		if(!myFile.exists())
+ 		{
+ 			testGet();
+ 			myFile = new File("MemberO2OBS"+"XML.xml");
+ 			if(!myFile.exists())
+				return;
+ 		}
 		
  		FileEntity input = new FileEntity(myFile);
  		input.setContentType("application/xml");
  		putRequest.setEntity(input);
 		
  		HttpResponse response = httpClient.execute(putRequest);
-  
-// 		if (response.getStatusLine().getStatusCode() != 201) {
-// 			throw new RuntimeException("Failed : HTTP error code : "
-// 				+ response.getStatusLine().getStatusCode());
-// 		}
   
   		if(response.getEntity() != null)
   		{

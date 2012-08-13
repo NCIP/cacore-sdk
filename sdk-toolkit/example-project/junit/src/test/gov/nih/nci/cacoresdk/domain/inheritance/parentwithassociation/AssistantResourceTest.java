@@ -97,7 +97,8 @@ public class AssistantResourceTest extends SDKRESTfulTestBase
 			   + response.getStatus());
 		}
  
- 		File myFile = new File("Assistant"+"XML.xml");						
+ 		File myFile = new File("Assistant"+"XML.xml");	
+ 			
 		System.out.println("writing data to file "+myFile.getAbsolutePath());
 		FileWriter myWriter = new FileWriter(myFile);
 
@@ -233,6 +234,13 @@ public class AssistantResourceTest extends SDKRESTfulTestBase
 		WebClient client = WebClient.create(url);
 		HttpPost postRequest = new HttpPost(url);
 		File myFile = new File("Assistant"+"XML.xml");						
+ 		if(!myFile.exists())
+ 		{
+ 			testGet();
+ 			myFile = new File("Assistant"+"XML.xml");
+ 			if(!myFile.exists())
+				return;
+ 		}
 		
  		FileEntity input = new FileEntity(myFile);
  		input.setContentType("application/xml");
@@ -240,11 +248,6 @@ public class AssistantResourceTest extends SDKRESTfulTestBase
  		postRequest.setEntity(input);
   
  		HttpResponse response = httpClient.execute(postRequest);
-  
-// 		if (response.getStatusLine().getStatusCode() != 201) {
-// 			throw new RuntimeException("Failed : HTTP error code : "
-// 				+ response.getStatusLine().getStatusCode());
-// 		}
   
  		BufferedReader br = new BufferedReader(
                          new InputStreamReader((response.getEntity().getContent())));
@@ -272,17 +275,19 @@ public class AssistantResourceTest extends SDKRESTfulTestBase
 		String url = baseURL + "/rest/Assistant";
 		HttpPut putRequest = new HttpPut(url);
 		File myFile = new File("Assistant"+"XML.xml");						
+ 		if(!myFile.exists())
+ 		{
+ 			testGet();
+ 			myFile = new File("Assistant"+"XML.xml");
+ 			if(!myFile.exists())
+				return;
+ 		}
 		
  		FileEntity input = new FileEntity(myFile);
  		input.setContentType("application/xml");
  		putRequest.setEntity(input);
 		
  		HttpResponse response = httpClient.execute(putRequest);
-  
-// 		if (response.getStatusLine().getStatusCode() != 201) {
-// 			throw new RuntimeException("Failed : HTTP error code : "
-// 				+ response.getStatusLine().getStatusCode());
-// 		}
   
   		if(response.getEntity() != null)
   		{
