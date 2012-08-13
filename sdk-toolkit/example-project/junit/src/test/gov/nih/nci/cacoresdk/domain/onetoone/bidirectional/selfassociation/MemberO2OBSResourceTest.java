@@ -50,9 +50,9 @@ public class MemberO2OBSResourceTest extends SDKRESTfulTestBase
 	 * Verifies size of the result set
 	 * Verifies that none of the attributes are null
 	 * 
-	 * @throws ApplicationException
+	 * @throws Exception
 	 */
-	public void testGet() throws ApplicationException
+	public void testGet() throws Exception
 	{
 		
 	  try {
@@ -113,7 +113,7 @@ public class MemberO2OBSResourceTest extends SDKRESTfulTestBase
 		
 	}
 
-	public void testSearch() throws ApplicationException
+	public void testSearch() throws Exception
 	{
 		
 	  try {
@@ -430,7 +430,7 @@ public class MemberO2OBSResourceTest extends SDKRESTfulTestBase
 
 //********************************************************End
 
-	public void testDelete() throws ApplicationException
+	public void testDelete() throws Exception
 	{
 		
 	  try {
@@ -473,7 +473,7 @@ public class MemberO2OBSResourceTest extends SDKRESTfulTestBase
 	}
 
 
-	public void testPost() throws ApplicationException
+	public void testPost() throws Exception
 	{
 		
 	  try {
@@ -512,7 +512,7 @@ public class MemberO2OBSResourceTest extends SDKRESTfulTestBase
 	}
 
 
-	public void testPut() throws ApplicationException
+	public void testPut() throws Exception
 	{
 		
 	  try {
