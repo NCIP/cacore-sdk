@@ -216,6 +216,7 @@ public class ProjectResourceTest extends SDKRESTfulTestBase
 		}
 		catch(Exception e)
 		{
+			  e.printStackTrace();
 			  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
 			  builder.type("application/xml");
 			  StringBuffer buffer = new StringBuffer();
@@ -295,6 +296,7 @@ public class ProjectResourceTest extends SDKRESTfulTestBase
 		}
 		catch(Exception e)
 		{
+			  e.printStackTrace();
 			  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
 			  builder.type("application/xml");
 			  StringBuffer buffer = new StringBuffer();

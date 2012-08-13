@@ -216,6 +216,7 @@ public class MemberM2MBSResourceTest extends SDKRESTfulTestBase
 		}
 		catch(Exception e)
 		{
+			  e.printStackTrace();
 			  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
 			  builder.type("application/xml");
 			  StringBuffer buffer = new StringBuffer();
@@ -295,6 +296,7 @@ public class MemberM2MBSResourceTest extends SDKRESTfulTestBase
 		}
 		catch(Exception e)
 		{
+			  e.printStackTrace();
 			  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
 			  builder.type("application/xml");
 			  StringBuffer buffer = new StringBuffer();
@@ -356,6 +358,7 @@ public class MemberM2MBSResourceTest extends SDKRESTfulTestBase
 		}
 		catch(Exception e)
 		{
+			  e.printStackTrace();
 			  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
 			  builder.type("application/xml");
 			  StringBuffer buffer = new StringBuffer();
@@ -435,6 +438,7 @@ public class MemberM2MBSResourceTest extends SDKRESTfulTestBase
 		}
 		catch(Exception e)
 		{
+			  e.printStackTrace();
 			  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
 			  builder.type("application/xml");
 			  StringBuffer buffer = new StringBuffer();

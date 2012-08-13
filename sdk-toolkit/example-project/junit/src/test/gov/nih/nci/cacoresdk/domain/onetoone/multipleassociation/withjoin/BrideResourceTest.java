@@ -177,146 +177,6 @@ public class BrideResourceTest extends SDKRESTfulTestBase
 		try
 		{
 	
-		String url = baseURL + "/rest/Bride/search;id=*/mother";
- 
-		WebClient client = WebClient.create(url);
-		client.type("application/xml").accept("application/xml");		
-		Response response = client.get();
- 
-		if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
-			InputStream is = (InputStream) response.getEntity();
-			org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
-					false);
-			org.jdom.Document jDoc = builder.build(is);
-			assertEquals(jDoc.getRootElement().getName(), "response");
-		}
- 		else if (response.getStatus() != 200) {
-			throw new RuntimeException("Failed : HTTP error code : "
-			   + response.getStatus());
-		}
- 
- 		File myFile = new File("Bride_Search"+"XML.xml");						
-		System.out.println("writing data to file "+myFile.getAbsolutePath());
-		FileWriter myWriter = new FileWriter(myFile);
-
-		BufferedReader br = new BufferedReader(
-                         new InputStreamReader(((InputStream)response.getEntity())));
- 
-		String output;
-		System.out.println("Output from Server .... \n");
-		while ((output = br.readLine()) != null) {
-			myWriter.write(output);
-			System.out.println(output);
-		}
- 
-		myWriter.flush();
- 		myWriter.close();
- 		
- 		
-		}
-		catch(Exception e)
-		{
-			  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
-			  builder.type("application/xml");
-			  StringBuffer buffer = new StringBuffer();
-			  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-			  buffer.append("<response>");
-			  buffer.append("<type>ERROR</type>");
-			  buffer.append("<code>INTERNAL_ERROR_4</code>");
-			  buffer.append("<message>Failed to Query due to: "+e.getMessage()+"</message>");
-			  buffer.append("</response>");
-			  builder.entity(buffer.toString());
-			  throw new WebApplicationException(builder.build());
-		}
-
-	}
-
-	
-	public void testgetMother()
-	{
-		try
-		{
-		Bride searchObject = new Bride();
- 		Collection results5 = getApplicationService().search("gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation.withjoin.Bride",searchObject );
-		String id = "";
-		
-		if(results5 != null && results5.size() > 0)
-		{
-			Bride obj = (Bride) ((List)results5).get(0);
-		
-				Integer idVal = obj.getId();
-			
-			id = new Integer(idVal).toString();
-			
-		}
-		else
-			return;
-
-		if(id.equals(""))
-			return;
-			
-	
-			String url = baseURL + "/rest/Bride/"+id+"/mother";
-			WebClient client = WebClient.create(url);
-			client.type("application/xml").accept("application/xml");		
-			Response response = client.get();
-
-			if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
-				InputStream is = (InputStream) response.getEntity();
-				org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
-						false);
-				org.jdom.Document jDoc = builder.build(is);
-				assertEquals(jDoc.getRootElement().getName(), "response");
-			}
-			else if (response.getStatusLine().getStatusCode() != 200) {
-				throw new RuntimeException("Failed : HTTP error code : "
-				   + response.getStatusLine().getStatusCode());
-			}
-
-			File myFile = new File("Bride_Search"+"XML.xml");						
-			System.out.println("writing data to file "+myFile.getAbsolutePath());
-			FileWriter myWriter = new FileWriter(myFile);
-
-			BufferedReader br = new BufferedReader(
-				 new InputStreamReader(((InputStream)response.getEntity())));
-
-			String output;
-			System.out.println("Output from Server .... \n");
-			while ((output = br.readLine()) != null) {
-				myWriter.write(output);
-				System.out.println(output);
-			}
-
-			myWriter.flush();
-			myWriter.close();
- 		
-		}
-		catch(Exception e)
-		{
-		  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
-		  builder.type("application/xml");
-		  StringBuffer buffer = new StringBuffer();
-		  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-		  buffer.append("<response>");
-		  buffer.append("<type>ERROR</type>");
-		  buffer.append("<code>INTERNAL_ERROR_4</code>");
-		  buffer.append("<message>Failed to Query due to: "+e.getMessage()+"</message>");
-		  buffer.append("</response>");
-		  builder.entity(buffer.toString());
-		  throw new WebApplicationException(builder.build());
-		}
-			
-		}
-		
-		
-
-	
-
-	public void testBride2()
-	{
-		try
-		{
-	
 		String url = baseURL + "/rest/Bride/search;id=*/father";
  
 		WebClient client = WebClient.create(url);
@@ -356,6 +216,7 @@ public class BrideResourceTest extends SDKRESTfulTestBase
 		}
 		catch(Exception e)
 		{
+			  e.printStackTrace();
 			  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
 			  builder.type("application/xml");
 			  StringBuffer buffer = new StringBuffer();
@@ -408,9 +269,9 @@ public class BrideResourceTest extends SDKRESTfulTestBase
 				org.jdom.Document jDoc = builder.build(is);
 				assertEquals(jDoc.getRootElement().getName(), "response");
 			}
-			else if (response.getStatusLine().getStatusCode() != 200) {
+			else if (response.getStatus() != 200) {
 				throw new RuntimeException("Failed : HTTP error code : "
-				   + response.getStatusLine().getStatusCode());
+				   + response.getStatus());
 			}
 
 			File myFile = new File("Bride_Search"+"XML.xml");						
@@ -433,6 +294,149 @@ public class BrideResourceTest extends SDKRESTfulTestBase
 		}
 		catch(Exception e)
 		{
+		  e.printStackTrace();
+		  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
+		  builder.type("application/xml");
+		  StringBuffer buffer = new StringBuffer();
+		  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+		  buffer.append("<response>");
+		  buffer.append("<type>ERROR</type>");
+		  buffer.append("<code>INTERNAL_ERROR_4</code>");
+		  buffer.append("<message>Failed to Query due to: "+e.getMessage()+"</message>");
+		  buffer.append("</response>");
+		  builder.entity(buffer.toString());
+		  throw new WebApplicationException(builder.build());
+		}
+			
+		}
+		
+		
+
+	
+
+	public void testBride2()
+	{
+		try
+		{
+	
+		String url = baseURL + "/rest/Bride/search;id=*/mother";
+ 
+		WebClient client = WebClient.create(url);
+		client.type("application/xml").accept("application/xml");		
+		Response response = client.get();
+ 
+		if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
+			InputStream is = (InputStream) response.getEntity();
+			org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
+					false);
+			org.jdom.Document jDoc = builder.build(is);
+			assertEquals(jDoc.getRootElement().getName(), "response");
+		}
+ 		else if (response.getStatus() != 200) {
+			throw new RuntimeException("Failed : HTTP error code : "
+			   + response.getStatus());
+		}
+ 
+ 		File myFile = new File("Bride_Search"+"XML.xml");						
+		System.out.println("writing data to file "+myFile.getAbsolutePath());
+		FileWriter myWriter = new FileWriter(myFile);
+
+		BufferedReader br = new BufferedReader(
+                         new InputStreamReader(((InputStream)response.getEntity())));
+ 
+		String output;
+		System.out.println("Output from Server .... \n");
+		while ((output = br.readLine()) != null) {
+			myWriter.write(output);
+			System.out.println(output);
+		}
+ 
+		myWriter.flush();
+ 		myWriter.close();
+ 		
+ 		
+		}
+		catch(Exception e)
+		{
+			  e.printStackTrace();
+			  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
+			  builder.type("application/xml");
+			  StringBuffer buffer = new StringBuffer();
+			  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+			  buffer.append("<response>");
+			  buffer.append("<type>ERROR</type>");
+			  buffer.append("<code>INTERNAL_ERROR_4</code>");
+			  buffer.append("<message>Failed to Query due to: "+e.getMessage()+"</message>");
+			  buffer.append("</response>");
+			  builder.entity(buffer.toString());
+			  throw new WebApplicationException(builder.build());
+		}
+
+	}
+
+	
+	public void testgetMother()
+	{
+		try
+		{
+		Bride searchObject = new Bride();
+ 		Collection results5 = getApplicationService().search("gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation.withjoin.Bride",searchObject );
+		String id = "";
+		
+		if(results5 != null && results5.size() > 0)
+		{
+			Bride obj = (Bride) ((List)results5).get(0);
+		
+				Integer idVal = obj.getId();
+			
+			id = new Integer(idVal).toString();
+			
+		}
+		else
+			return;
+
+		if(id.equals(""))
+			return;
+			
+	
+			String url = baseURL + "/rest/Bride/"+id+"/mother";
+			WebClient client = WebClient.create(url);
+			client.type("application/xml").accept("application/xml");		
+			Response response = client.get();
+
+			if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
+				InputStream is = (InputStream) response.getEntity();
+				org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
+						false);
+				org.jdom.Document jDoc = builder.build(is);
+				assertEquals(jDoc.getRootElement().getName(), "response");
+			}
+			else if (response.getStatus() != 200) {
+				throw new RuntimeException("Failed : HTTP error code : "
+				   + response.getStatus());
+			}
+
+			File myFile = new File("Bride_Search"+"XML.xml");						
+			System.out.println("writing data to file "+myFile.getAbsolutePath());
+			FileWriter myWriter = new FileWriter(myFile);
+
+			BufferedReader br = new BufferedReader(
+				 new InputStreamReader(((InputStream)response.getEntity())));
+
+			String output;
+			System.out.println("Output from Server .... \n");
+			while ((output = br.readLine()) != null) {
+				myWriter.write(output);
+				System.out.println(output);
+			}
+
+			myWriter.flush();
+			myWriter.close();
+ 		
+		}
+		catch(Exception e)
+		{
+		  e.printStackTrace();
 		  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
 		  builder.type("application/xml");
 		  StringBuffer buffer = new StringBuffer();

@@ -216,6 +216,7 @@ public class HardDriveResourceTest extends SDKRESTfulTestBase
 		}
 		catch(Exception e)
 		{
+			  e.printStackTrace();
 			  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
 			  builder.type("application/xml");
 			  StringBuffer buffer = new StringBuffer();
@@ -268,9 +269,9 @@ public class HardDriveResourceTest extends SDKRESTfulTestBase
 				org.jdom.Document jDoc = builder.build(is);
 				assertEquals(jDoc.getRootElement().getName(), "response");
 			}
-			else if (response.getStatusLine().getStatusCode() != 200) {
+			else if (response.getStatus() != 200) {
 				throw new RuntimeException("Failed : HTTP error code : "
-				   + response.getStatusLine().getStatusCode());
+				   + response.getStatus());
 			}
 
 			File myFile = new File("HardDrive_Search"+"XML.xml");						
@@ -293,6 +294,7 @@ public class HardDriveResourceTest extends SDKRESTfulTestBase
 		}
 		catch(Exception e)
 		{
+		  e.printStackTrace();
 		  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
 		  builder.type("application/xml");
 		  StringBuffer buffer = new StringBuffer();
