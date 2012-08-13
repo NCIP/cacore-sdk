@@ -256,13 +256,10 @@ public class SoftTopResourceTest extends SDKRESTfulTestBase
 			return;
 			
 	
-			DefaultHttpClient httpClient = new DefaultHttpClient();
 			String url = baseURL + "/rest/SoftTop/"+id+"/wheel";
-			HttpGet getRequest = new HttpGet(url);
-			getRequest.addHeader("accept", "application/xml");
-
-
-			HttpResponse response = httpClient.execute(getRequest);
+			WebClient client = WebClient.create(url);
+			client.type("application/xml").accept("application/xml");		
+			Response response = client.get();
 
 			if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
 				InputStream is = (InputStream) response.getEntity();

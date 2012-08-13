@@ -172,8 +172,7 @@ public class CardResourceTest extends SDKRESTfulTestBase
 //***************************************************
 
 
-
-	public void testCard2()
+	public void testCard1()
 	{
 		try
 		{
@@ -257,13 +256,10 @@ public class CardResourceTest extends SDKRESTfulTestBase
 			return;
 			
 	
-			DefaultHttpClient httpClient = new DefaultHttpClient();
 			String url = baseURL + "/rest/Card/"+id+"/suit";
-			HttpGet getRequest = new HttpGet(url);
-			getRequest.addHeader("accept", "application/xml");
-
-
-			HttpResponse response = httpClient.execute(getRequest);
+			WebClient client = WebClient.create(url);
+			client.type("application/xml").accept("application/xml");		
+			Response response = client.get();
 
 			if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
 				InputStream is = (InputStream) response.getEntity();
@@ -315,6 +311,7 @@ public class CardResourceTest extends SDKRESTfulTestBase
 		
 
 	
+
 
 
 //********************************************************End
