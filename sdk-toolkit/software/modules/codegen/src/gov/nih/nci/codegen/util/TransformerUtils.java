@@ -2722,23 +2722,33 @@ public class TransformerUtils
 			}
 		}
 		
-		counter = 0;
-		int totalAssocCount = klass.getAssociations().size();
-		if ((totalAttrCount > 0) && (totalAssocCount > 0)){
-			sb.append(", ");
-		}
+		
+		
 		for(UMLAssociation assoc:klass.getAssociations()){
 			List<UMLAssociationEnd> assocEnds = assoc.getAssociationEnds();
 
 			try {
+				UMLAssociationEnd thisEnd = this.getThisEnd(klass,assocEnds);
 				UMLAssociationEnd otherEnd = this.getOtherEnd(klass,assocEnds);
+				List<UMLAssociationEnd> associationEnds = new java.util.ArrayList<UMLAssociationEnd>();
+				associationEnds.add(otherEnd);
+				if(this.isBidirectionalSelfAssociation(klass,assocEnds)) { // handle bi-directional self-association 
+					associationEnds.add(thisEnd);
+				}
 				
-				counter++;
-				if(otherEnd.isNavigable())
+				
+				int totalAssocCount = associationEnds.size();
+				
+				Iterator iter = associationEnds.iterator();
+				while(iter.hasNext())
 				{
-					sb.append("\"").append(otherEnd.getRoleName()).append("\"");
-					if (counter < totalAssocCount){
-						sb.append(", ");
+					UMLAssociationEnd associationEnd = (UMLAssociationEnd)iter.next();
+					if(associationEnd.isNavigable())
+					{
+						if(counter > 0)
+							sb.append(", ");
+						sb.append("\"").append(associationEnd.getRoleName()).append("\"");
+						counter++;
 					}
 				}
 			} catch (GenerationException e) {

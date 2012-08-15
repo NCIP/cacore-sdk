@@ -127,6 +127,7 @@ public class RESTfulResource {
 			{
 				idColName = classCache.getClassIdName(Class
 					.forName(className));
+				System.out.println("idColName4: "+idColName);
 			}
 			catch(ClassNotFoundException e)
 			{
@@ -500,9 +501,28 @@ public class RESTfulResource {
 			String hql = "";
 			boolean isCollection = classCache.isCollection(
 					sourceClass.getName(), associationName);
-			String idName = classCache.getClassIdName(sourceClass);
-			String assosIdName = classCache.getClassIdName(assocType);
+			System.out.println("sourceClass: "+sourceClass);
+			String idName = classCache.getClassIdName(sourceClass, true);
+			System.out.println("idName: "+idName);
+			System.out.println("assocType: "+assocType);
+			String assosIdName = classCache.getClassIdName(Class.forName(assocType), true);
+			if(assosIdName == null || assosIdName.trim().length() == 0)
+			{
+				ResponseBuilder builder = Response
+						.status(Status.NOT_ACCEPTABLE);
+				StringBuffer buffer = new StringBuffer();
+				buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+				buffer.append("<response>");
+				buffer.append("<type>MESSAGE</type>");
+				buffer.append("<code>MESSAGE_100</code>");
+				buffer.append("<message>No primary key present on "+assocType
+						 + ". Aborting Query!</message>");
+				buffer.append("</response>");
+				builder.entity(buffer.toString());
+				throw new WebApplicationException(builder.build());
+			}
 
+			System.out.println("assosIdName: "+assosIdName);
 			String whereCriteria = null;
 			List params = null;
 
@@ -586,8 +606,25 @@ public class RESTfulResource {
 			String hql = "";
 			boolean isCollection = classCache.isCollection(
 					sourceClass.getName(), associationName);
-			String idName = classCache.getClassIdName(sourceClass);
-			String assosIdName = classCache.getClassIdName(assocType);
+			String idName = classCache.getClassIdName(sourceClass, true);
+			System.out.println("idName2: "+idName);
+			String assosIdName = classCache.getClassIdName(Class.forName(assocType), true);
+			System.out.println("assosIdName2: "+assosIdName);
+			if(assosIdName == null || assosIdName.trim().length() == 0)
+			{
+				ResponseBuilder builder = Response
+						.status(Status.NOT_ACCEPTABLE);
+				StringBuffer buffer = new StringBuffer();
+				buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+				buffer.append("<response>");
+				buffer.append("<type>MESSAGE</type>");
+				buffer.append("<code>MESSAGE_100</code>");
+				buffer.append("<message>No primary key present on "+assocType
+						 + ". Aborting Query!</message>");
+				buffer.append("</response>");
+				builder.entity(buffer.toString());
+				throw new WebApplicationException(builder.build());
+			}
 
 			if (isCollection) {
 				hql = "select dest from " + sourceClass.getName()
@@ -675,6 +712,7 @@ public class RESTfulResource {
 		{
 			idColName = classCache.getClassIdName(Class
 				.forName(className));
+			System.out.println("idColName3: "+idColName);
 		}
 		catch(ClassNotFoundException e)
 		{

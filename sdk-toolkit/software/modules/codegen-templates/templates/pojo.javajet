@@ -78,7 +78,7 @@ public<%=transformerUtils.isAbstract(klass)? " abstract" : "" %> class <%=klass.
 				if(transformerUtils.isAssociationEndMany(associationEnd))
 			{%>
 	<%=transformerUtils.getJavaDocs(klass, assoc)%>
-<% if (jaxbEnabled) { %><%=transformerUtils.getJaxbCollectionAnnotations(klass,assocKlass,otherEnd.getRoleName())%><%} %>
+<% if (jaxbEnabled) { %><%=transformerUtils.getJaxbCollectionAnnotations(klass,assocKlass, associationEnd.getRoleName())%><%} %>
 	private Collection<<%=assocKlass.getName()%>> <%=associationEnd.getRoleName()%>;
 	<%=transformerUtils.getGetterMethodJavaDocs(klass, assoc)%>
 <% if (jaxbEnabled) { %><%=transformerUtils.getJaxbXmlTransientAnnotation()%><%} %>
