@@ -33,7 +33,7 @@
             name="SDKArgoTemplate.todo" />
     <historyfile name="" />
   </argo>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Fri Sep 09 14:04:24 EDT 2011'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Wed Aug 15 10:27:25 EDT 2012'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.24(5) revised on $Date: 2006-11-06 19:55:22 +0100 (Mon, 06 Nov 2006) $ </XMI.exporterVersion>
@@ -185,6 +185,17 @@
             <UML:Multiplicity xmi.id = '-64--88-0-1-8238f4:11524461844:-8000:000000000000081D'>
               <UML:Multiplicity.range>
                 <UML:MultiplicityRange xmi.id = '-64--88-0-1-8238f4:11524461844:-8000:000000000000081E'
+                  lower = '0' upper = '1'/>
+              </UML:Multiplicity.range>
+            </UML:Multiplicity>
+          </UML:TagDefinition.multiplicity>
+        </UML:TagDefinition>
+        <UML:TagDefinition xmi.id = '-91-112--123-76-72676ee:1392aac9930:-8000:0000000000000807'
+          name = 'RESTFUL_RESOURCE' isSpecification = 'false' tagType = 'String'>
+          <UML:TagDefinition.multiplicity>
+            <UML:Multiplicity xmi.id = '-91-112--123-76-72676ee:1392aac9930:-8000:000000000000080B'>
+              <UML:Multiplicity.range>
+                <UML:MultiplicityRange xmi.id = '-91-112--123-76-72676ee:1392aac9930:-8000:000000000000080A'
                   lower = '0' upper = '1'/>
               </UML:Multiplicity.range>
             </UML:Multiplicity>

@@ -24,16 +24,16 @@
     
     <searchpath href="PROJECT_DIR" />
     <member type="xmi"
-            name="SDKArgoTemplate.xmi" />
+            name="SDKArgoISOTemplate.xmi" />
     <member type="pgml"
-            name="SDKArgoTemplate_ISODatatypes.pgml"
+            name="SDKArgoISOTemplate_ISODatatypes.pgml"
             diagramclass="org.argouml.uml.diagram.static_structure.ui.UMLClassDiagram"
             diagramname="ISO Datatypes" />
     <member type="todo"
-            name="SDKArgoTemplate.todo" />
+            name="SDKArgoISOTemplate.todo" />
     <historyfile name="" />
   </argo>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Fri Sep 09 14:33:52 EDT 2011'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Wed Aug 15 10:27:46 EDT 2012'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.24(5) revised on $Date: 2006-11-06 19:55:22 +0100 (Mon, 06 Nov 2006) $ </XMI.exporterVersion>
@@ -2972,6 +2972,17 @@
         <UML:DataType xmi.id = '-91-112--123-48-254e4ae7:12874ca1cde:-8000:00000000000028E1'
           name = 'Binary' isSpecification = 'false' isRoot = 'false' isLeaf = 'false'
           isAbstract = 'false'/>
+        <UML:TagDefinition xmi.id = '-91-112--123-76-72676ee:1392aac9930:-8000:0000000000000AE6'
+          name = 'RESTFUL_RESOURCE' isSpecification = 'false' tagType = 'String'>
+          <UML:TagDefinition.multiplicity>
+            <UML:Multiplicity xmi.id = '-91-112--123-76-72676ee:1392aac9930:-8000:0000000000000AEA'>
+              <UML:Multiplicity.range>
+                <UML:MultiplicityRange xmi.id = '-91-112--123-76-72676ee:1392aac9930:-8000:0000000000000AE9'
+                  lower = '0' upper = '1'/>
+              </UML:Multiplicity.range>
+            </UML:Multiplicity>
+          </UML:TagDefinition.multiplicity>
+        </UML:TagDefinition>
       </UML:Namespace.ownedElement>
     </UML:Model>
   </XMI.content>
