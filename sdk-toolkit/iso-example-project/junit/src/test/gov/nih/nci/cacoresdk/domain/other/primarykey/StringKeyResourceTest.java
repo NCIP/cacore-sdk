@@ -8,6 +8,7 @@ import javax.ws.rs.core.Response;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.InputStream;
 import java.io.FileWriter;
 import java.io.File;
 import java.util.List;
@@ -20,8 +21,15 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.entity.FileEntity;
+import org.apache.cxf.jaxrs.client.WebClient;
 
 import org.apache.cxf.common.util.Base64Utility;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
+import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.UriInfo;
 
 import java.lang.reflect.Modifier;
 import java.util.Collection;
@@ -44,9 +52,9 @@ public class StringKeyResourceTest extends SDKRESTfulTestBase
 	 * Verifies size of the result set
 	 * Verifies that none of the attributes are null
 	 * 
-	 * @throws ApplicationException
+	 * @throws Exception
 	 */
-	public void testGet() throws ApplicationException
+	public void testGet() throws Exception
 	{
 		
 	  try {
@@ -69,25 +77,39 @@ public class StringKeyResourceTest extends SDKRESTfulTestBase
 		if(id.equals(""))
 			return;
 			
-		DefaultHttpClient httpClient = new DefaultHttpClient();
 		String url = baseURL + "/rest/StringKey/"+id;
-		HttpGet getRequest = new HttpGet(url);
-		getRequest.addHeader("accept", "application/xml");
 
  
-		HttpResponse response = httpClient.execute(getRequest);
+		WebClient client = WebClient.create(url);
+		client.type("application/xml").accept("application/xml");		
+		Response response = client.get();
  
-		if (response.getStatusLine().getStatusCode() != 200) {
+		if (response.getStatus() == Status.NOT_ACCEPTABLE.getStatusCode()) {
+			InputStream is = (InputStream) response.getEntity();
+			org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
+					false);
+			org.jdom.Document jDoc = builder.build(is);
+			assertEquals(jDoc.getRootElement().getName(), "response");
+		}
+		else if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
+			InputStream is = (InputStream) response.getEntity();
+			org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
+					false);
+			org.jdom.Document jDoc = builder.build(is);
+			assertEquals(jDoc.getRootElement().getName(), "response");
+		}
+ 		else if (response.getStatus() != 200) {
 			throw new RuntimeException("Failed : HTTP error code : "
-			   + response.getStatusLine().getStatusCode());
+			   + response.getStatus());
 		}
  
- 		File myFile = new File("StringKey"+"XML.xml");						
+ 		File myFile = new File("StringKey"+"XML.xml");	
+ 			
 		System.out.println("writing data to file "+myFile.getAbsolutePath());
 		FileWriter myWriter = new FileWriter(myFile);
 
 		BufferedReader br = new BufferedReader(
-                         new InputStreamReader((response.getEntity().getContent())));
+                         new InputStreamReader(((InputStream)response.getEntity())));
  
 		String output;
 		System.out.println("Output from Server .... \n");
@@ -96,18 +118,75 @@ public class StringKeyResourceTest extends SDKRESTfulTestBase
 			System.out.println(output);
 		}
  
-		httpClient.getConnectionManager().shutdown();
 		myWriter.flush();
  		myWriter.close();
-	  } catch (ClientProtocolException e) {
- 
+	  } catch (Exception e) {
 		e.printStackTrace();
- 
-	  } catch (IOException e) {
- 
-		e.printStackTrace();
+		throw e;
 	  }
 		
 	}
+
+	public void testSearch() throws Exception
+	{
+		
+	  try {
+ 
+		
+			
+		String url = baseURL + "/rest/StringKey/search;id=*";
+		WebClient client = WebClient.create(url);
+		client.type("application/xml").accept("application/xml");		
+		Response response = client.get();
+
+		if (response.getStatus() == Status.NOT_ACCEPTABLE.getStatusCode()) {
+			InputStream is = (InputStream) response.getEntity();
+			org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
+					false);
+			org.jdom.Document jDoc = builder.build(is);
+			assertEquals(jDoc.getRootElement().getName(), "response");
+		}
+		else if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
+			InputStream is = (InputStream) response.getEntity();
+			org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
+					false);
+			org.jdom.Document jDoc = builder.build(is);
+			assertEquals(jDoc.getRootElement().getName(), "response");
+		}
+ 		else if (response.getStatus() != 200) {
+			throw new RuntimeException("Failed : HTTP error code : "
+			   + response.getStatus());
+		}
+ 
+ 		File myFile = new File("StringKey_Search"+"XML.xml");						
+		System.out.println("writing data to file "+myFile.getAbsolutePath());
+		FileWriter myWriter = new FileWriter(myFile);
+
+		BufferedReader br = new BufferedReader(
+                         new InputStreamReader(((InputStream)response.getEntity())));
+ 
+		String output;
+		System.out.println("Output from Server .... \n");
+		while ((output = br.readLine()) != null) {
+			myWriter.write(output);
+			System.out.println(output);
+		}
+ 
+		myWriter.flush();
+ 		myWriter.close();
+ 		
+	  } catch (Exception e) {
+		e.printStackTrace();
+	  }
+		
+	}	
+
+
+
+//***************************************************
+
+
+
+//********************************************************End
 
 }
