@@ -401,7 +401,8 @@
 			<if>
 				<socket server="@{jboss.server.hostname}" port="@{jboss.server.jndi.port}" />
 				<then>
-					<fail message="Failed to shutdown jboss server at @{jboss.server.hostname}:@{jboss.server.jndi.port}"/>
+					<echo message="Failed to shutdown jboss server at @{jboss.server.hostname}:@{jboss.server.jndi.port}"/>
+				<!--	<fail message="Failed to shutdown jboss server at @{jboss.server.hostname}:@{jboss.server.jndi.port}"/>-->
 				</then>
 				<else>
 					<echo message="We believe we have shutdown JBoss."/>
