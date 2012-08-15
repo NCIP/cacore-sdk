@@ -16,7 +16,7 @@ public abstract class SDKTestBase extends TestCase {
 	private ApplicationService appService;
 	private ApplicationService appServiceFromUrl;
 	protected String baseURL = "http://localhost:21080/example";
-	static String paths[] = {"application-config-client.xml"};
+	static String paths[] = {"application-config.xml"};
 	private static ApplicationContext ctx = new ClassPathXmlApplicationContext(
 			paths);;
 	private ClassCache classCache;
