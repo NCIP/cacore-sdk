@@ -403,7 +403,7 @@
 
 	<target name="readThickClientTest" depends="createDir">
 		<SDKCompileJUnit compileClasspath="local-client-cp" includePattern="**/cacoresdk/**/*Test.java" excludePattern="" />
-		<SDKRunJUnit junitClasspath="local-client-cp" junitOutputDir="${report.dir.thick-client}" includePattern="**/cacoresdk/**/*Test.class" excludePattern="" junitreportfile="TEST-readThickClient.xml" />
+		<SDKRunJUnit junitClasspath="local-client-cp" junitOutputDir="${report.dir.thick-client}" includePattern="**/cacoresdk/**/*Test.class" excludePattern="**/cacoresdk/**/*ResourceTest.class" junitreportfile="TEST-readThickClient.xml" />
 		<SDKGenerateReport junitOutputDir="${report.dir.thick-client}" />
 	</target>
 
@@ -472,7 +472,7 @@
 
 	<target name="readRemoteClientTest" depends="createDir">
 		<SDKCompileJUnit compileClasspath="remote-client-cp" includePattern="**/cacoresdk/**/*Test.java" excludePattern="" />
-		<SDKRunJUnit junitClasspath="remote-client-cp" junitOutputDir="${report.dir.remote-client}" includePattern="**/cacoresdk/**/*Test.class" excludePattern="" junitreportfile="TEST-readRemoteClient.xml"/>
+		<SDKRunJUnit junitClasspath="remote-client-cp" junitOutputDir="${report.dir.remote-client}" includePattern="**/cacoresdk/**/*Test.class" excludePattern="**/cacoresdk/**/*ResourceTest.class" junitreportfile="TEST-readRemoteClient.xml"/>
 		<SDKGenerateReport junitOutputDir="${report.dir.remote-client}" />
 	</target>
 
