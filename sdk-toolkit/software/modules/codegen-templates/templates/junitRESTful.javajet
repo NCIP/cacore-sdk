@@ -12,6 +12,7 @@ import javax.ws.rs.core.Response;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.InputStream;
 import java.io.FileWriter;
 import java.io.File;
 import java.util.List;
@@ -24,8 +25,15 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.entity.FileEntity;
+import org.apache.cxf.jaxrs.client.WebClient;
 
 import org.apache.cxf.common.util.Base64Utility;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
+import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.UriInfo;
 
 import java.lang.reflect.Modifier;
 import java.util.Collection;
@@ -49,9 +57,9 @@ public class <%=klassName%>ResourceTest extends SDKRESTfulTestBase
 	 * Verifies size of the result set
 	 * Verifies that none of the attributes are null
 	 * 
-	 * @throws ApplicationException
+	 * @throws Exception
 	 */
-	public void testGet() throws ApplicationException
+	public void testGet() throws Exception
 	{
 		
 	  try {
@@ -122,25 +130,39 @@ public class <%=klassName%>ResourceTest extends SDKRESTfulTestBase
 		if(id.equals(""))
 			return;
 			
-		DefaultHttpClient httpClient = new DefaultHttpClient();
 		String url = baseURL + "/rest/<%=klassName%>/"+id;
-		HttpGet getRequest = new HttpGet(url);
-		getRequest.addHeader("accept", "application/xml");
 
  
-		HttpResponse response = httpClient.execute(getRequest);
+		WebClient client = WebClient.create(url);
+		client.type("application/xml").accept("application/xml");		
+		Response response = client.get();
  
-		if (response.getStatusLine().getStatusCode() != 200) {
+		if (response.getStatus() == Status.NOT_ACCEPTABLE.getStatusCode()) {
+			InputStream is = (InputStream) response.getEntity();
+			org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
+					false);
+			org.jdom.Document jDoc = builder.build(is);
+			assertEquals(jDoc.getRootElement().getName(), "response");
+		}
+		else if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
+			InputStream is = (InputStream) response.getEntity();
+			org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
+					false);
+			org.jdom.Document jDoc = builder.build(is);
+			assertEquals(jDoc.getRootElement().getName(), "response");
+		}
+ 		else if (response.getStatus() != 200) {
 			throw new RuntimeException("Failed : HTTP error code : "
-			   + response.getStatusLine().getStatusCode());
+			   + response.getStatus());
 		}
  
- 		File myFile = new File("<%=klassName%>"+"XML.xml");						
+ 		File myFile = new File("<%=klassName%>"+"XML.xml");	
+ 			
 		System.out.println("writing data to file "+myFile.getAbsolutePath());
 		FileWriter myWriter = new FileWriter(myFile);
 
 		BufferedReader br = new BufferedReader(
-                         new InputStreamReader((response.getEntity().getContent())));
+                         new InputStreamReader(((InputStream)response.getEntity())));
  
 		String output;
 		System.out.println("Output from Server .... \n");
@@ -149,21 +171,16 @@ public class <%=klassName%>ResourceTest extends SDKRESTfulTestBase
 			System.out.println(output);
 		}
  
-		httpClient.getConnectionManager().shutdown();
 		myWriter.flush();
  		myWriter.close();
-	  } catch (ClientProtocolException e) {
- 
+	  } catch (Exception e) {
 		e.printStackTrace();
- 
-	  } catch (IOException e) {
- 
-		e.printStackTrace();
+		throw e;
 	  }
 		
 	}
 
-	public void testSearch() throws ApplicationException
+	public void testSearch() throws Exception
 	{
 		
 	  try {
@@ -175,17 +192,28 @@ public class <%=klassName%>ResourceTest extends SDKRESTfulTestBase
 			
 		%>
 			
-		DefaultHttpClient httpClient = new DefaultHttpClient();
 		String url = baseURL + "/rest/<%=klassName%>/search;<%=attrb3.getName()%>=*";
-		HttpGet getRequest = new HttpGet(url);
-		getRequest.addHeader("accept", "application/xml");
+		WebClient client = WebClient.create(url);
+		client.type("application/xml").accept("application/xml");		
+		Response response = client.get();
 
- 
-		HttpResponse response = httpClient.execute(getRequest);
- 
-		if (response.getStatusLine().getStatusCode() != 200) {
+		if (response.getStatus() == Status.NOT_ACCEPTABLE.getStatusCode()) {
+			InputStream is = (InputStream) response.getEntity();
+			org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
+					false);
+			org.jdom.Document jDoc = builder.build(is);
+			assertEquals(jDoc.getRootElement().getName(), "response");
+		}
+		else if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
+			InputStream is = (InputStream) response.getEntity();
+			org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
+					false);
+			org.jdom.Document jDoc = builder.build(is);
+			assertEquals(jDoc.getRootElement().getName(), "response");
+		}
+ 		else if (response.getStatus() != 200) {
 			throw new RuntimeException("Failed : HTTP error code : "
-			   + response.getStatusLine().getStatusCode());
+			   + response.getStatus());
 		}
  
  		File myFile = new File("<%=klassName%>_Search"+"XML.xml");						
@@ -193,7 +221,7 @@ public class <%=klassName%>ResourceTest extends SDKRESTfulTestBase
 		FileWriter myWriter = new FileWriter(myFile);
 
 		BufferedReader br = new BufferedReader(
-                         new InputStreamReader((response.getEntity().getContent())));
+                         new InputStreamReader(((InputStream)response.getEntity())));
  
 		String output;
 		System.out.println("Output from Server .... \n");
@@ -202,16 +230,10 @@ public class <%=klassName%>ResourceTest extends SDKRESTfulTestBase
 			System.out.println(output);
 		}
  
-		httpClient.getConnectionManager().shutdown();
 		myWriter.flush();
  		myWriter.close();
  		<%}%>
-	  } catch (ClientProtocolException e) {
- 
-		e.printStackTrace();
- 
-	  } catch (IOException e) {
- 
+	  } catch (Exception e) {
 		e.printStackTrace();
 	  }
 		
@@ -265,17 +287,29 @@ for(UMLAssociation assoc: assocs)
 			if(attrb6 != null)
 			{
 	%>
-		DefaultHttpClient httpClient = new DefaultHttpClient();
 		String url = baseURL + "/rest/<%=klassName%>/search;<%=attrb6.getName()%>=*/<%=name%>";
-		HttpGet getRequest = new HttpGet(url);
-		getRequest.addHeader("accept", "application/xml");
-
  
-		HttpResponse response = httpClient.execute(getRequest);
+		WebClient client = WebClient.create(url);
+		client.type("application/xml").accept("application/xml");		
+		Response response = client.get();
  
-		if (response.getStatusLine().getStatusCode() != 200) {
+		if (response.getStatus() == Status.NOT_ACCEPTABLE.getStatusCode()) {
+			InputStream is = (InputStream) response.getEntity();
+			org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
+					false);
+			org.jdom.Document jDoc = builder.build(is);
+			assertEquals(jDoc.getRootElement().getName(), "response");
+		}
+		else if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
+			InputStream is = (InputStream) response.getEntity();
+			org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
+					false);
+			org.jdom.Document jDoc = builder.build(is);
+			assertEquals(jDoc.getRootElement().getName(), "response");
+		}
+ 		else if (response.getStatus() != 200) {
 			throw new RuntimeException("Failed : HTTP error code : "
-			   + response.getStatusLine().getStatusCode());
+			   + response.getStatus());
 		}
  
  		File myFile = new File("<%=klassName%>_Search"+"XML.xml");						
@@ -283,7 +317,7 @@ for(UMLAssociation assoc: assocs)
 		FileWriter myWriter = new FileWriter(myFile);
 
 		BufferedReader br = new BufferedReader(
-                         new InputStreamReader((response.getEntity().getContent())));
+                         new InputStreamReader(((InputStream)response.getEntity())));
  
 		String output;
 		System.out.println("Output from Server .... \n");
@@ -292,7 +326,6 @@ for(UMLAssociation assoc: assocs)
 			System.out.println(output);
 		}
  
-		httpClient.getConnectionManager().shutdown();
 		myWriter.flush();
  		myWriter.close();
  		<%}%>
@@ -300,7 +333,7 @@ for(UMLAssociation assoc: assocs)
 		}
 		catch(Exception e)
 		{
-			  log.error("Error in querying REST resource: " + e.getMessage());
+			  e.printStackTrace();
 			  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
 			  builder.type("application/xml");
 			  StringBuffer buffer = new StringBuffer();
@@ -393,18 +426,29 @@ for(UMLAssociation assoc: assocs)
 		if(id.equals(""))
 			return;
 			
-	%>
-			DefaultHttpClient httpClient = new DefaultHttpClient();
 			String url = baseURL + "/rest/<%=klassName%>/"+id+"/<%=name%>";
-			HttpGet getRequest = new HttpGet(url);
-			getRequest.addHeader("accept", "application/xml");
 
+			WebClient client = WebClient.create(url);
+			client.type("application/xml").accept("application/xml");		
+			Response response = client.get();
 
-			HttpResponse response = httpClient.execute(getRequest);
-
-			if (response.getStatusLine().getStatusCode() != 200) {
+			if (response.getStatus() == Status.NOT_ACCEPTABLE.getStatusCode()) {
+				InputStream is = (InputStream) response.getEntity();
+				org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
+						false);
+				org.jdom.Document jDoc = builder.build(is);
+				assertEquals(jDoc.getRootElement().getName(), "response");
+			}
+			else if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
+				InputStream is = (InputStream) response.getEntity();
+				org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
+						false);
+				org.jdom.Document jDoc = builder.build(is);
+				assertEquals(jDoc.getRootElement().getName(), "response");
+			}
+			else if (response.getStatus() != 200) {
 				throw new RuntimeException("Failed : HTTP error code : "
-				   + response.getStatusLine().getStatusCode());
+				   + response.getStatus());
 			}
 
 			File myFile = new File("<%=klassName%>_Search"+"XML.xml");						
@@ -412,7 +456,7 @@ for(UMLAssociation assoc: assocs)
 			FileWriter myWriter = new FileWriter(myFile);
 
 			BufferedReader br = new BufferedReader(
-				 new InputStreamReader((response.getEntity().getContent())));
+				 new InputStreamReader(((InputStream)response.getEntity())));
 
 			String output;
 			System.out.println("Output from Server .... \n");
@@ -421,13 +465,12 @@ for(UMLAssociation assoc: assocs)
 				System.out.println(output);
 			}
 
-			httpClient.getConnectionManager().shutdown();
 			myWriter.flush();
 			myWriter.close();
 		}
 		catch(Exception e)
 		{
-			  log.error("Error in querying REST resource: " + e.getMessage());
+			  e.printStackTrace();
 			  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
 			  builder.type("application/xml");
 			  StringBuffer buffer = new StringBuffer();
@@ -514,18 +557,29 @@ for(UMLAssociation assoc: assocs)
 		if(id.equals(""))
 			return;
 			
-	%>
-			DefaultHttpClient httpClient = new DefaultHttpClient();
-			String url = baseURL + "/rest/<%=klassName%>/"+id"+"/<%=name%>";
-			HttpGet getRequest = new HttpGet(url);
-			getRequest.addHeader("accept", "application/xml");
+	
+			String url = baseURL + "/rest/<%=klassName%>/"+id+"/<%=name%>";
+			WebClient client = WebClient.create(url);
+			client.type("application/xml").accept("application/xml");		
+			Response response = client.get();
 
-
-			HttpResponse response = httpClient.execute(getRequest);
-
-			if (response.getStatusLine().getStatusCode() != 200) {
+			if (response.getStatus() == Status.NOT_ACCEPTABLE.getStatusCode()) {
+				InputStream is = (InputStream) response.getEntity();
+				org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
+					false);
+				org.jdom.Document jDoc = builder.build(is);
+				assertEquals(jDoc.getRootElement().getName(), "response");
+			}
+			else if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
+				InputStream is = (InputStream) response.getEntity();
+				org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
+						false);
+				org.jdom.Document jDoc = builder.build(is);
+				assertEquals(jDoc.getRootElement().getName(), "response");
+			}
+			else if (response.getStatus() != 200) {
 				throw new RuntimeException("Failed : HTTP error code : "
-				   + response.getStatusLine().getStatusCode());
+				   + response.getStatus());
 			}
 
 			File myFile = new File("<%=klassName%>_Search"+"XML.xml");						
@@ -533,7 +587,7 @@ for(UMLAssociation assoc: assocs)
 			FileWriter myWriter = new FileWriter(myFile);
 
 			BufferedReader br = new BufferedReader(
-				 new InputStreamReader((response.getEntity().getContent())));
+				 new InputStreamReader(((InputStream)response.getEntity())));
 
 			String output;
 			System.out.println("Output from Server .... \n");
@@ -542,14 +596,13 @@ for(UMLAssociation assoc: assocs)
 				System.out.println(output);
 			}
 
-			httpClient.getConnectionManager().shutdown();
 			myWriter.flush();
 			myWriter.close();
  		
 		}
 		catch(Exception e)
 		{
-		  log.error("Error in querying REST resource: " + e.getMessage());
+		  e.printStackTrace();
 		  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
 		  builder.type("application/xml");
 		  StringBuffer buffer = new StringBuffer();
@@ -580,7 +633,7 @@ for(UMLAssociation assoc: assocs)
 if(!transformerUtils.isISO21090Enabled())
 {
 %>
-	public void testDelete() throws ApplicationException
+	public void testDelete() throws Exception
 	{
 		
 	  try {
@@ -650,38 +703,54 @@ if(!transformerUtils.isISO21090Enabled())
 
 		if(id.equals(""))
 			return;
-			
-		DefaultHttpClient httpClient = new DefaultHttpClient();
-		String url = baseURL + "/rest/<%=klassName%>/"+id;
-		HttpDelete deleteRequest = new HttpDelete(url);
-		//deleteRequest.addHeader("accept", "application/xml");
- 
-		HttpResponse response = httpClient.execute(deleteRequest);
 		
-		if (response.getStatusLine().getStatusCode() != 200) {
-			throw new RuntimeException("Failed : HTTP error code : "
-			   + response.getStatusLine().getStatusCode());
+		String url = baseURL + "/rest/<%=klassName%>/"+id;
+		WebClient client = WebClient.create(url);
+		
+		Response response = client.delete();
+		
+		if (response.getStatus() == Status.NOT_ACCEPTABLE.getStatusCode()) {
+			InputStream is = (InputStream) response.getEntity();
+			org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
+					false);
+			org.jdom.Document jDoc = builder.build(is);
+			assertEquals(jDoc.getRootElement().getName(), "response");
 		}
-	  } catch (ClientProtocolException e) {
- 
+		else if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
+			InputStream is = (InputStream) response.getEntity();
+			org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
+					false);
+			org.jdom.Document jDoc = builder.build(is);
+			assertEquals(jDoc.getRootElement().getName(), "response");
+		}
+ 		else if (response.getStatus() != 200) {
+			throw new RuntimeException("Failed : HTTP error code : "
+			   + response.getStatus());
+		}
+	  } catch (Exception e) {
 		e.printStackTrace();
- 
-	  } catch (IOException e) {
- 
-		e.printStackTrace();
+		throw e;
 	  }
 		
 	}
 
 
-	public void testPost() throws ApplicationException
+	public void testPost() throws Exception
 	{
 		
 	  try {
 		DefaultHttpClient httpClient = new DefaultHttpClient();
 		String url = baseURL + "/rest/<%=klassName%>";
+		WebClient client = WebClient.create(url);
 		HttpPost postRequest = new HttpPost(url);
 		File myFile = new File("<%=klassName%>"+"XML.xml");						
+ 		if(!myFile.exists())
+ 		{
+ 			testGet();
+ 			myFile = new File("<%=klassName%>"+"XML.xml");
+ 			if(!myFile.exists())
+				return;
+ 		}
 		
  		FileEntity input = new FileEntity(myFile);
  		input.setContentType("application/xml");
@@ -690,11 +759,6 @@ if(!transformerUtils.isISO21090Enabled())
   
  		HttpResponse response = httpClient.execute(postRequest);
   
-// 		if (response.getStatusLine().getStatusCode() != 201) {
-// 			throw new RuntimeException("Failed : HTTP error code : "
-// 				+ response.getStatusLine().getStatusCode());
-// 		}
-  
  		BufferedReader br = new BufferedReader(
                          new InputStreamReader((response.getEntity().getContent())));
   
@@ -705,19 +769,15 @@ if(!transformerUtils.isISO21090Enabled())
  		}
   
  		httpClient.getConnectionManager().shutdown();
-	  } catch (ClientProtocolException e) {
- 
-		e.printStackTrace();
- 
-	  } catch (IOException e) {
- 
-		e.printStackTrace();
-	  }
+	  } catch (Exception e) {
+ 		e.printStackTrace();
+ 		throw e;
+ 	  }
 		
 	}
 
 
-	public void testPut() throws ApplicationException
+	public void testPut() throws Exception
 	{
 		
 	  try {
@@ -725,6 +785,13 @@ if(!transformerUtils.isISO21090Enabled())
 		String url = baseURL + "/rest/<%=klassName%>";
 		HttpPut putRequest = new HttpPut(url);
 		File myFile = new File("<%=klassName%>"+"XML.xml");						
+ 		if(!myFile.exists())
+ 		{
+ 			testGet();
+ 			myFile = new File("<%=klassName%>"+"XML.xml");
+ 			if(!myFile.exists())
+				return;
+ 		}
 		
  		FileEntity input = new FileEntity(myFile);
  		input.setContentType("application/xml");
@@ -732,28 +799,22 @@ if(!transformerUtils.isISO21090Enabled())
 		
  		HttpResponse response = httpClient.execute(putRequest);
   
-// 		if (response.getStatusLine().getStatusCode() != 201) {
-// 			throw new RuntimeException("Failed : HTTP error code : "
-// 				+ response.getStatusLine().getStatusCode());
-// 		}
-  
- 		BufferedReader br = new BufferedReader(
-                         new InputStreamReader((response.getEntity().getContent())));
-  
- 		String output;
- 		System.out.println("Output from Server .... \n");
- 		while ((output = br.readLine()) != null) {
- 			System.out.println(output);
- 		}
-  
+  		if(response.getEntity() != null)
+  		{
+			BufferedReader br = new BufferedReader(
+				 new InputStreamReader((response.getEntity().getContent())));
+
+			String output;
+			System.out.println("Output from Server .... \n");
+			while ((output = br.readLine()) != null) {
+				System.out.println(output);
+			}
+  		}
+  		
  		httpClient.getConnectionManager().shutdown();
-	  } catch (ClientProtocolException e) {
- 
-		e.printStackTrace();
- 
-	  } catch (IOException e) {
- 
-		e.printStackTrace();
+	  } catch (Exception e) {
+ 		e.printStackTrace();
+ 		throw e;
 	  }
 		
 	}

@@ -81,7 +81,6 @@ if(action != null && action.indexOf("R") != -1)
 	{
 		try
 		{
-//System.out.println("in getId……");
 	  		List params = new ArrayList();
 	  		String className = "<%=fullPackageName%>.<%=klassName%>";
 			
@@ -93,12 +92,12 @@ if(action != null && action.indexOf("R") != -1)
 				if(attrb.getDatatype().getName().equals("character") || attrb.getDatatype().getName().equals("Character") || attrb.getDatatype().getName().equals("char"))			
 				{
 			%>
-				params.add(new <%=transformerUtils.javaPrimitiveDatatypeMap.get(attrb.getDatatype().getName())%>(id.charAt(0)));	
+			params.add(new <%=transformerUtils.javaPrimitiveDatatypeMap.get(attrb.getDatatype().getName())%>(id.charAt(0)));	
 			<%	} 
 				else 
 				{
 			%>
-				params.add(new <%=transformerUtils.javaPrimitiveDatatypeMap.get(attrb.getDatatype().getName())%>(id));	
+			params.add(new <%=transformerUtils.javaPrimitiveDatatypeMap.get(attrb.getDatatype().getName())%>(id));	
 			<%
 				}
 			}
@@ -113,21 +112,21 @@ if(action != null && action.indexOf("R") != -1)
 			if(attrType.equals("Ii"))
 			{
 			%>
-				gov.nih.nci.iso21090.Ii idAttr = new gov.nih.nci.iso21090.Ii();
-				idAttr.setExtension(id);
-				params.add(idAttr);	
+			gov.nih.nci.iso21090.Ii idAttr = new gov.nih.nci.iso21090.Ii();
+			idAttr.setExtension(id);
+			params.add(idAttr);	
 			<%
 			}
 			else if(attrb.getDatatype().getName().equals("character") || attrb.getDatatype().getName().equals("Character") || attrb.getDatatype().getName().equals("char"))			
 			{
 			%>
-				params.add(new <%=transformerUtils.javaPrimitiveDatatypeMap.get(attrb.getDatatype().getName())%>(id.charAt(0)));	
+			params.add(new <%=transformerUtils.javaPrimitiveDatatypeMap.get(attrb.getDatatype().getName())%>(id.charAt(0)));	
 			<%
 			}
 			else 
 			{
 			%>
-				params.add(new <%=attrType%>(id));	
+			params.add(new <%=attrType%>(id));	
 			<%
 			}
 			}
@@ -146,21 +145,21 @@ if(action != null && action.indexOf("R") != -1)
 			}
 			%>
 
-ApplicationService appService = null;
+			ApplicationService appService = null;
 
-if(secured)
-{
-	String username = request.getRemoteUser();
-	Principal p = request.getUserPrincipal();
-	String password = null;
-	if(p != null)
-		password = p.getName();
-	appService = getApplicationService(username, password);
-}
-else
-{
-	appService = getApplicationService();
-}
+			if(secured)
+			{
+				String username = request.getRemoteUser();
+				Principal p = request.getUserPrincipal();
+				String password = null;
+				if(p != null)
+					password = p.getName();
+				appService = getApplicationService(username, password);
+			}
+			else
+			{
+				appService = getApplicationService();
+			}
 			
 			HQLCriteria criteria = new HQLCriteria("from <%=fullPackageName%>.<%=klassName%> a where a.<%=transformerUtils.getClassIdAttrName(klass)%> = ?", params);
 			
@@ -222,7 +221,6 @@ else
 	@Produces("application/xml")
 	public <%=klassName%>s get<%=klassName%>(@Context UriInfo uriInfo, @Context HttpServletRequest request)
 	{
-//System.out.println("in search *******");
 		try
 		{
 			List<PathSegment> pathSegments = uriInfo.getPathSegments();
@@ -260,21 +258,21 @@ else
 				  throw new WebApplicationException(builder.build());
 			}
 			
-		ApplicationService appService = null;
+			ApplicationService appService = null;
 
-		if(secured)
-		{
-			String username = request.getRemoteUser();
-			Principal p = request.getUserPrincipal();
-			String password = null;
-			if(p != null)
-				password = p.getName();
-			appService = getApplicationService(username, password);
-		}
-		else
-		{
-			appService = getApplicationService();
-		}
+			if(secured)
+			{
+				String username = request.getRemoteUser();
+				Principal p = request.getUserPrincipal();
+				String password = null;
+				if(p != null)
+					password = p.getName();
+				appService = getApplicationService(username, password);
+			}
+			else
+			{
+				appService = getApplicationService();
+			}
 			//validateCriteria("<%=fullPackageName%>.<%=klassName%>", matrixParams, searchFields);
 			HQLCriteria hcriteria = buildHQLCriteria("<%=fullPackageName%>.<%=klassName%>", searchFields, matrixParams, uriInfo);
 			int rowCount = appService.getQueryRowCount(hcriteria, "<%=fullPackageName%>.<%=klassName%>");
@@ -313,7 +311,6 @@ else
 					collection.addLink(previousLink);
 
 				collection.addLink(selfLink);
-//System.out.println("Returning collection: "+collection.toString());
 				return collection;
 			}
 				
@@ -339,7 +336,7 @@ else
 		}
 		catch(ApplicationException e)
 		{
-e.printStackTrace();
+			  e.printStackTrace();
 			  log.error("Error in querying REST resource: " + e.getMessage());
 			  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
 			  builder.type("application/xml");
@@ -355,8 +352,8 @@ e.printStackTrace();
 		}
 		catch(Exception e)
 		{
-	e.printStackTrace();	
-	  log.error("Error in querying REST resource: " + e.getMessage());
+			  e.printStackTrace();	
+	  		  log.error("Error in querying REST resource: " + e.getMessage());
 			  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
 			  builder.type("application/xml");
 			  StringBuffer buffer = new StringBuffer();
@@ -465,20 +462,20 @@ for(UMLAssociation assoc: assocs){
 				HQLCriteria hqlCriteria = getAssociationCriteria(Class.forName(className), "<%=name%>", startIndex, totalSize, searchFields, matrixParams, uriInfo);
 
 
-		ApplicationService appService = null;
-		if(secured)
-		{
-			String username = request.getRemoteUser();
-			Principal p = request.getUserPrincipal();
-			String password = null;
-			if(p != null)
-				password = p.getName();
-			appService = getApplicationService(username, password);
-		}
-		else
-		{
-			appService = getApplicationService();
-		}
+				ApplicationService appService = null;
+				if(secured)
+				{
+					String username = request.getRemoteUser();
+					Principal p = request.getUserPrincipal();
+					String password = null;
+					if(p != null)
+						password = p.getName();
+					appService = getApplicationService(username, password);
+				}
+				else
+				{
+					appService = getApplicationService();
+				}
 
 				int rowCount = appService.getQueryRowCount(hqlCriteria, "<%=assocPackageName%>.<%=assocKlass.getName()%>");
 				int maxRowCountPerQuery = appService.getMaxRecordsCount();
@@ -613,20 +610,20 @@ for(UMLAssociation assoc: assocs){
 				if (bSize != null)
 					totalSize = Integer.parseInt(bSize);
 
-		ApplicationService appService = null;
-		if(secured)
-		{
-			String username = request.getRemoteUser();
-			Principal p = request.getUserPrincipal();
-			String password = null;
-			if(p != null)
-				password = p.getName();
-			appService = getApplicationService(username, password);
-		}
-		else
-		{
-			appService = getApplicationService();
-		}
+				ApplicationService appService = null;
+				if(secured)
+				{
+					String username = request.getRemoteUser();
+					Principal p = request.getUserPrincipal();
+					String password = null;
+					if(p != null)
+						password = p.getName();
+					appService = getApplicationService(username, password);
+				}
+				else
+				{
+					appService = getApplicationService();
+				}
 					
 				HQLCriteria hqlCriteria = getAssociationCriteria(Class.forName(className), "<%=name%>", id, startIndex, totalSize);
 				int rowCount = appService.getQueryRowCount(hqlCriteria, "<%=assocPackageName%>.<%=assocKlass.getName()%>");
@@ -756,20 +753,20 @@ for(UMLAssociation assoc: assocs){
 				if (bSize != null)
 					totalSize = Integer.parseInt(bSize);
 					
-		ApplicationService appService = null;
-		if(secured)
-		{
-			String username = request.getRemoteUser();
-			Principal p = request.getUserPrincipal();
-			String password = null;
-			if(p != null)
-				password = p.getName();
-			appService = getApplicationService(username, password);
-		}
-		else
-		{
-			appService = getApplicationService();
-		}
+				ApplicationService appService = null;
+				if(secured)
+				{
+					String username = request.getRemoteUser();
+					Principal p = request.getUserPrincipal();
+					String password = null;
+					if(p != null)
+						password = p.getName();
+					appService = getApplicationService(username, password);
+				}
+				else
+				{
+					appService = getApplicationService();
+				}
 					
 					
 				HQLCriteria hqlCriteria = getAssociationCriteria(Class.forName(className), "<%=name%>", id, startIndex, totalSize);
