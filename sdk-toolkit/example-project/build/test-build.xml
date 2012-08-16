@@ -77,6 +77,13 @@
 				</not>
 				<then>
 					<ant antfile="build.xml" dir="${junit.dir}" target="readRemoteClientTest" inheritAll="true" />
+					<if>
+						<equals arg1="${GENERATE_RESTFUL_RESOURCES}" arg2="true" />
+						<then>
+							<ant antfile="build.xml" dir="${junit.dir}" target="runRESTfulResourceTest" inheritAll="true" />
+						</then>
+					</if>
+					
 					<ant antfile="build.xml" dir="${junit.dir}" target="xmlDataRemoteClientTest" inheritAll="true" />
 					<ant antfile="build.xml" dir="${junit.dir}" target="webServicesTest" inheritAll="true" />
 				</then>
@@ -115,6 +122,17 @@
 							<ant antfile="build.xml" dir="${junit.dir}" target="writeThickClientTest" inheritAll="true" />
 						</then>
 					</if>
+				</then>
+			</if>
+
+
+			<if>
+				<and>
+					<equals arg1="${GENERATE_RESTFUL_RESOURCES}" arg2="true" />
+					<equals arg1="${ENABLE_SECURITY}" arg2="true" />
+				</and>
+				<then>
+					<ant antfile="build.xml" dir="${junit.dir}" target="securityRESTfulRemoteClientTest" inheritAll="true" />
 				</then>
 			</if>
 
@@ -219,7 +237,7 @@
 			</fileset>
 		</delete>
 		<java classname="test.gov.nih.nci.cacoresdk.PropertyGenerator">
-			<arg value="${output.property.file.dir}/sdk.xls" />
+			<arg value="${output.property.file.dir}/sdk-mysql-jboss.xls" />
 			<arg value="${output.property.file.dir}" />
 			<jvmarg value="-Xms256M" />
 			<jvmarg value="-Xmx512M" />
