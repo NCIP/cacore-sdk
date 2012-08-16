@@ -1995,12 +1995,10 @@
 							<filter token="jboss.transaction.processid.port" value="@{jboss.transaction.processid.port}"/>
 						</filterset>
 					</copy>
-					<!--
 					<jboss-bindings-validate
 						jboss.server.ports.name="@{jboss.server.ports.name}"
 						jboss.server.bindingfile.location="@{jboss.server.bindingfile.location}"
 						/>
-					-->
 					<!-- change ejb port -->
 					<replaceregexp file="@{jboss.home}/server/@{jboss.server.name}/deploy/ejb3-connectors-jboss-beans.xml" byline="true"
 						match="(.*)&gt;@{search.jboss.ejbinvoker.port}&lt;(.*)"
@@ -2266,6 +2264,110 @@
 			</svn>
 			<var name="lsd.revision" value="${svn.revision}" />
 			<echo> in macrodef - @{my.path} </echo>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="validate-pre-build">
+		<attribute name="application.base.path" default="${application.base.path}"/>
+		<attribute name="require.build.wscore" default="${require.build.wscore}"/>
+		<attribute name="wscore.relative.dir" default="ws-core-4.0.3"/>
+		<attribute name="cacore-sdk.required" default="${cacore-sdk.required}"/>
+		<attribute name="cacore-sdk.src.url" default="${cacore-sdk.src.url}"/>
+		<attribute name="download.dir" default="${download.dir}"/>
+		<attribute name="cacore-sdk.dir" default="${cacore-sdk.dir}"/>
+		<sequential>
+			<if>
+				<equals arg1="@{require.build.wscore}" arg2="true"/>
+				<then>
+					<check-wscore-exists
+						application.base.path="@{application.base.path}"
+						wscore.relative.dir="@{wscore.relative.dir}"
+						/>
+				</then>
+			</if>
+			<get-cacore-sdk
+				cacore-sdk.required="@{cacore-sdk.required}"
+				cacore-sdk.src.url="@{cacore-sdk.src.url}"
+				download.dir="@{download.dir}"
+				cacore-sdk.dir="@{cacore-sdk.dir}"
+				/>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="check-wscore-exists">
+		<attribute name="wscore.download.url" default="http://gforge.nci.nih.gov/svnroot/commonlibrary/trunk/techstack-2006/os-independent/ws-core-enum-4.0.3.zip"/>
+		<attribute name="wscore.relative.dir" default="ws-core-4.0.3"/>
+		<attribute name="application.base.path" default="${application.base.path}"/>
+		<attribute name="download.dir" default="${download.dir}"/>
+		<sequential>
+			<basename property="wscore.file.name" file="@{wscore.download.url}"/>
+			<var name="wscore.dest.file" value="@{download.dir}/${wscore.file.name}"/>
+			<echo message="Checking for existence of GLOBUS_LOCATION envrironment variable."/>
+			<echo message="wscore.relative.dir = @{wscore.relative.dir}"/>
+			<mkdir dir="${temp.dir}"/>
+			<if>
+				<not>
+					<isset property="env.GLOBUS_LOCATION"/>
+				</not>
+				<then>
+					<echo message="GLOBUS_LOCATION not set, downloading and installing @{wscore.download.url}"/>
+					<if>
+						<not>
+							<available file="${wscore.dest.file}"/>
+						</not>
+						<then>
+							<get src="@{wscore.download.url}"
+								dest="${wscore.dest.file}"/>
+							<get src="@{wscore.download.url}.MD5"
+								dest="${wscore.dest.file}.MD5"/>
+							<checksum file="${wscore.dest.file}" verifyProperty="wscore.cksum.ok"/>
+							<if>
+								<equals arg1="${wscore.cksum.ok}" arg2="true"/>
+								<then>
+									<echo message="Downloaded wscore sucessfully"/>
+								</then>
+								<else>
+									<fail message="Failed to download wscore file sucessfully."/>
+								</else>
+							</if>
+						</then>
+					</if>
+					<var name="env.GLOBUS_LOCATION" value="@{application.base.path}/@{wscore.relative.dir}"/>
+					<if>
+						<not>
+							<available file="${env.GLOBUS_LOCATION}"/>
+						</not>
+						<then>
+							<unzip dest="@{application.base.path}" src="${wscore.dest.file}"/>
+							<echo message="Completed install of wscore files into ${env.GLOBUS_LOCATION} "/>
+						</then>
+						<else>
+							<echo message="${env.GLOBUS_LOCATION} already exists."/>
+						</else>
+					</if>
+
+					<!-- no longer needed
+					<osfamily property="os.family"/>
+					<echo message="os.family=${os.family}"/>
+					<switch value="${os.family}">
+						<case value="unix">
+							<echo message="Now you need configure the environment variable GLOBUS_LOCATION."/>
+							<echo message="For bash shell you can edit the $HOME/.bash_profile and add 'export GLOBUS_LOCATION=${application.base.path}/${wscore.relative.dir}'"/>
+							<echo message="For other shells refer to you operating system documentation (you can check your shell by 'echo $SHELL')"/>
+
+						</case>
+						<case value="windows">
+							<echo message="Now you need configure the environment variable GLOBUS_LOCATION."/>
+							<echo message="Right click on MyComputer, select Proeprties, select Advanced tab, click on Environment Variables, click on New under System Variables,  and set GLOBUS_LOCATION to ${application.base.path}/${wscore.relative.dir}"/>
+						</case>
+					</switch>
+					<fail message="Set GLOBUS_LOCATION and build again."/>
+					-->
+				</then>
+				<else>
+					<echo message="GLOBUS_LOCATION is set to ${env.GLOBUS_LOCATION} nothing needs to be done."/>
+				</else>
+			</if>
 		</sequential>
 	</macrodef>
 
@@ -3132,6 +3234,331 @@
 				/>
 		</sequential>
 	</macrodef>
+	<macrodef name="grid-appserver-configure">
+		<attribute name="appserver.home" default="${jboss.home}"/>
+		<attribute name="appserver.server.name" default="${jboss.server.name}"/>
+		<attribute name="appserver.conf.dir" default="${jboss.home}/server/${jboss.server.name}/conf"/>
+		<attribute name="appserver.webapp.dir" default="${jboss.home}/server/${jboss.server.name}/deploy"/>
+		<attribute name="appserver.server-xml.file" default="${jboss.home}/server/${jboss.server.name}/deploy/jbossweb-tomcat55.sar/server.xml"/>
+		<attribute name="appserver.server-xml.service.name" default="jboss.web"/>
+		<attribute name="appserver.port.http" default="${jboss.server.port}"/>
+		<attribute name="appserver.port.ssl" default="${jboss.ssl.port}"/>
+		<attribute name="appserver.hostname" default="${jboss.server.hostname}"/>
+		<attribute name="search.host" default="localhost"/>
+		<attribute name="search.port" default="8080"/>
+		<attribute name="grid.application.name" default="${grid.application.name}"/>
+		<attribute name="grid.application.relative.dir" default="${grid.dir.dest}"/>
+		<attribute name="grid.index.url" default="${grid.index.url}"/>
+		<attribute name="grid.poc.science.affiliation" default="${grid.poc.science.affiliation}"/>
+		<attribute name="grid.poc.science.name.last" default="${grid.poc.science.name.last}"/>
+		<attribute name="grid.poc.science.name.first" default="${grid.poc.science.name.first}" />
+		<attribute name="grid.poc.science.phone" default="${grid.poc.science.phone}"/>
+		<attribute name="grid.poc.science.role" default="${grid.poc.science.role}" />
+		<attribute name="grid.poc.science.email" default="${grid.poc.science.email}" />
+		<attribute name="grid.poc.tech.researchCenter.displayname" default="${grid.poc.tech.researchCenter.displayname}"/>
+		<attribute name="grid.poc.tech.researchCenter.shortname" default="${grid.poc.tech.researchCenter.shortname}"/>
+		<attribute name="grid.poc.tech.addr.country" default="${grid.poc.tech.addr.country}"/>
+		<attribute name="grid.poc.tech.addr.locality" default="${grid.poc.tech.addr.locality}"/>
+		<attribute name="grid.poc.tech.addr.postalCode" default="${grid.poc.tech.addr.postalCode}"/>
+		<attribute name="grid.poc.tech.addr.stateProvince" default="${grid.poc.tech.addr.stateProvince}"/>
+		<attribute name="grid.poc.tech.addr.street1" default="${grid.poc.tech.addr.street1}"/>
+		<attribute name="grid.poc.tech.addr.street2" default="${grid.poc.tech.addr.street2}"/>
+		<attribute name="grid.poc.tech.affiliation" default="${grid.poc.tech.affiliation}"/>
+		<attribute name="grid.poc.tech.name.last" default="${grid.poc.tech.name.last}"/>
+		<attribute name="grid.poc.tech.name.first" default="${grid.poc.tech.name.first}"/>
+		<attribute name="grid.poc.tech.phone" default="${grid.poc.tech.phone}"/>
+		<attribute name="grid.poc.tech.email" default="${grid.poc.tech.email}"/>
+		<attribute name="grid.poc.tech.role" default="${grid.poc.tech.role}"/>
+		<attribute name="grid.external.secure.host" default="${grid.external.secure.host}"/>
+		<attribute name="grid.external.secure.port" default="${grid.external.secure.port}"/>
+		<attribute name="grid.secure.enable" default="${grid.secure.enable}"/>
+		<attribute name="grid.secure.dir" default="${grid.secure.dir}"/>
+		<attribute name="grid.secure.port" default="${grid.secure.port}"/>
+		<attribute name="grid.secure.key.file" default="${grid.secure.key.file}"/>
+		<attribute name="grid.secure.cert.file" default="${grid.secure.cert.file}"/>
+		<attribute name="grid.secdesc.file" default="@{appserver.webapp.dir}/@{grid.application.relative.dir}/WEB-INF/etc/globus_wsrf_core/global_security_descriptor.xml"/>
+		<attribute name="appserver.external.http.host" default="${jboss.external.http.host}"/>
+		<attribute name="appserver.external.http.port" default="${jboss.external.http.port}"/>
+		<!-- appserver-install-sync-gts -->
+		<attribute name="sync-gts.build.dir" default="${sync-gts.build.dir}"/>
+		<attribute name="cagrid-target.dir" default="${cagrid-target.dir}"/>
+		<attribute name="grid.target" default="${grid.target}"/>
+		<attribute name="cagrid-console.dir" default="${basedir}/caGrid-console"/>
+		<attribute name="cagrid-console.target" default="deployJboss"/>
+		<attribute name="wscore.src.url" default="${wscore.src.url}"/>
+		<sequential>
+			<if>
+				<not>
+					<isset property="env.GLOBUS_LOCATION"/>
+				</not>
+				<then>
+					<echo message="env.GLOBUS_LOCATION not set, installing temporary copy"/>
+					<property name="working.dir" location="${basedir}/working"/>
+					<var name="env.GLOBUS_LOCATION" value="${working.dir}/${wscore.binaries.relative.dir}"/>
+					<if>
+						<not>
+							<available file="${env.GLOBUS_LOCATION}"/>
+						</not>
+						<then>
+							<echo message="temporary copy not found, installing"/>
+							<if>
+								<not>
+									<available file="${tools.dist.relative.dir}/ws-core-enum-4.0.3.zip"/>
+								</not>
+								<then>
+									<var name="wscore.src.url.unexpanded" unset="true"/>
+									<propertyregex property="wscore.src.url.unexpanded"
+										input="@{wscore.src.url}"
+										regexp="^\${.*}"
+										select="true"
+										/>
+									<if>
+										<isset property="wscore.src.url.unexpanded"/>
+										<then>
+											<property name="tmp.wscore.src.url" value="http://gforge.nci.nih.gov/svnroot/commonlibrary/trunk/techstack-2006/os-independent/ws-core-enum-4.0.3.zip"/>
+										</then>
+										<else>
+											<property name="tmp.wscore.src.url" value="@{wscore.src.url}"/>
+										</else>
+									</if>
+									<var name="temp.file.name" usnet="true"/>
+									<basename file="" property="temp.file.name"/>
+									<get src="${temp.wscore.src.url}" dest="${tools.dist.relative.dir}/${temp.file.name}"/>
+								</then>
+								<else>
+									<echo message="Installing WSCORE, and continuing onto cagrid-console install"/>
+									<unzip dest="${working.dir}" src="${tools.dist.relative.dir}/ws-core-enum-4.0.3.zip"/>
+								</else>
+							</if>
+						</then>
+					</if>
+				</then>
+				<else>
+					<echo message="GLOBUS_LOCATION (${env.GLOBUS_LOCATION}) found continuing to cagrid-console install"/>
+				</else>
+			</if>
+			<var name="ext.globus.dir" value="${env.GLOBUS_LOCATION}"/>
+			<if>
+				<equals arg1="@{grid.secure.enable}" arg2="true"/>
+				<then>
+					<var name="scheme" value="https"/>
+					<var name="ext.grid.ssl.port.is.set" unset="true"/>
+					<propertyregex property="ext.grid.ssl.port.is.set"
+						input="@{grid.external.secure.port}"
+						regexp="\S+"
+						select="true"
+						/>
+					<if>
+						<isset property="ext.grid.ssl.port.is.set"/>
+						<then>
+							<var name="appserver.default.web.port" value="@{grid.external.secure.port}"/>
+						</then>
+						<else>
+							<var name="appserver.default.web.port" value="@{grid.secure.port}"/>
+						</else>
+					</if>
+				</then>
+				<else>
+					<var name="scheme" value="http"/>
+					<var name="ext.http.port.is.set" unset="true"/>
+					<propertyregex property="ext.http.port.is.set"
+						input="@{appserver.external.http.port}"
+						regexp="\S+"
+						select="true"
+						/>
+					<if>
+						<isset property="ext.http.port.is.set"/>
+						<then>
+							<var name="appserver.default.web.port" value="@{appserver.external.http.port}"/>
+						</then>
+						<else>
+							<var name="appserver.default.web.port" value="@{appserver.port.http}"/>
+						</else>
+					</if>
+				</else>
+			</if>
+
+			<!-- Fix all wsdl files that refer to statically defined host and port -->
+			<echo message="Cleaning up hostname:port refereces in **/*.wsdl"/>
+			<replace dir="@{appserver.webapp.dir}/@{grid.application.relative.dir}" token="http://@{search.host}:@{search.port}" value="${scheme}://@{appserver.hostname}:${appserver.default.web.port}">
+				<include name="**/*.wsdl" />
+			</replace>
+
+			<!-- Fix default jndi-config -->
+			<echo message="Fixing grid jndi-config"/>
+			<replace file="@{appserver.webapp.dir}/@{grid.application.relative.dir}/WEB-INF/etc/globus_resolution_service/jndi-config.xml" token="http://@{search.host}:@{search.port}" value="${scheme}://@{appserver.hostname}:${appserver.default.web.port}"/>
+
+			<!-- fix web.xml -->
+			<echo message="Updating grid web.xml"/>
+			<update-grid-web-xml-protocol
+				appserver.webapp.dir="@{appserver.webapp.dir}"
+				grid.application.relative.dir="@{grid.application.relative.dir}"
+				web-xml.location="@{appserver.webapp.dir}/@{grid.application.relative.dir}/WEB-INF/web.xml"
+				scheme="${scheme}"
+				port="${appserver.default.web.port}"
+				/>
+
+			<!-- Secure Grid configuraiotns -->
+			<if>
+				<equals arg1="@{grid.secure.enable}" arg2="true"/>
+				<then>
+					<echo message="grid.secure.enable=true, configuring secure grid services @{grid.secdesc.file}"/>
+					<grid-secure-configure-secdesc
+						appserver.conf.dir="@{appserver.conf.dir}"
+						appserver.webapp.dir="@{appserver.webapp.dir}"
+						grid.application.relative.dir="@{grid.application.relative.dir}"
+						grid.secdesc.file="@{grid.secdesc.file}"
+						grid.secure.cert.file="@{grid.secure.cert.file}"
+						grid.secure.key.file="@{grid.secure.key.file}"
+						/>
+					<appserver-install-sync-gts
+						appserver.home="@{appserver.home}"
+						appserver.server.name="@{appserver.server.name}"
+						grid.dir.dest="@{grid.application.relative.dir}"
+						appserver.grid.secure.enable="@{grid.secure.enable}"
+						sync-gts.build.dir="@{sync-gts.build.dir}"
+						cagrid-target.dir="@{cagrid-target.dir}"
+						grid.target="@{grid.target}"
+						/>
+				</then>
+				<else>
+					<echo message="grid.secure.enable=false, skipping configuring secure grid services"/>
+				</else>
+
+			</if>
+
+			<!-- Fix service specific jndi-config- don't think this is needed, ssaksa090626
+			<echo message="Fixing second grid jnid-config"/>
+			<replaceregexp file="@{appserver.webapp.dir}/@{grid.application.relative.dir}/WEB-INF/etc/cagrid_@{grid.application.name}/jndi-config.xml"
+				match="(\s+.value.)http://.*\:\d+(\/.*)"
+				replace="\1${scheme}://@{appserver.hostname}:${appserver.default.web.port}\2"
+				flags="g" byline="true"/>
+			-->
+			<!-- Configure grid service to advertise the external URL if server is protected by a NAT -->
+			<grid-configure-server-config
+				appserver.webapp.dir="@{appserver.webapp.dir}"
+				grid.application.relative.dir="@{grid.application.relative.dir}"
+				grid.external.secure.host="@{grid.external.secure.host}"
+				grid.secure.enable="@{grid.secure.enable}"
+				appserver.external.http.host="@{appserver.external.http.host}"
+				/>
+
+			<!-- POC stuff -->
+			<echo message="Updateing POC info @{appserver.webapp.dir}/@{grid.application.relative.dir}/WEB-INF/etc/cagrid_@{grid.application.name}/serviceMetadata.xml"/>
+			<!--
+			<xmltask preservetype="true" source="@{appserver.webapp.dir}/@{grid.application.relative.dir}/WEB-INF/etc/cagrid_@{grid.application.name}/serviceMetadata.xml" dest="@{appserver.webapp.dir}/@{grid.application.relative.dir}/WEB-INF/etc/cagrid_@{grid.application.name}/serviceMetadata.xml">
+				<remove path="/:ServiceMetadata/:serviceDescription/:Service/:pointOfContactCollection/:PointOfContact" />
+				<insert path="/:ServiceMetadata/:serviceDescription/:Service/:pointOfContactCollection">
+					<![CDATA[
+						<ns3:PointOfContact affiliation="@{grid.poc.science.affiliation}" email="@{grid.poc.science.email}" firstName="@{grid.poc.science.name.first}" lastName="@{grid.poc.science.name.last}" phoneNumber="@{grid.poc.science.phone}" role="@{grid.poc.science.role}" "/>
+					]]>
+				</insert>
+			</xmltask>
+			-->
+			<var name="poc.science.string" value=" affiliation=&quot;@{grid.poc.science.affiliation}&quot; email=&quot;@{grid.poc.science.email}&quot; firstName=&quot;@{grid.poc.science.name.first}&quot; lastName=&quot;@{grid.poc.science.name.last}&quot; phoneNumber=&quot;@{grid.poc.science.phone}&quot; role=&quot;@{grid.poc.science.role}&quot; "/>
+
+			<replaceregexp file="@{appserver.webapp.dir}/@{grid.application.relative.dir}/WEB-INF/etc/cagrid_@{grid.application.name}/serviceMetadata.xml"
+				match="^(\s+&lt;ns3:PointOfContact).*(xmlns:ns3.*&gt;)"
+				replace="\1${poc.science.string}\2"
+				flags="g" byline="true"/>
+			<!-- Research Center info -->
+			<var name="research.center.lines" unset="true"/>
+			<loadfile
+				property="research.center.lines"
+				srcFile="@{appserver.webapp.dir}/@{grid.application.relative.dir}/WEB-INF/etc/cagrid_@{grid.application.name}/serviceMetadata.xml">
+				<filterchain>
+					<linecontainsregexp>
+						<regexp pattern=":ResearchCenter"/>
+					</linecontainsregexp>
+				</filterchain>
+			</loadfile>
+			<var name="ns.name" unset="true"/>
+			<propertyregex property="ns.name"
+				input="${research.center.lines}"
+				regexp="^\s*&lt;(.*?):ResearchCenter"
+				select="\1"
+				/>
+			<echo message="Read namespace from :ResearchCenter as ${ns.name}"/>
+
+			<var name="poc.tech.string" value="${line.separator}
+&lt;${ns.name}:ResearchCenter displayName=&quot;@{grid.poc.tech.researchCenter.displayname}&quot; shortName=&quot;@{grid.poc.tech.researchCenter.shortname}&quot; xmlns:${ns.name}=&quot;gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common&quot;&gt;${line.separator}
+&lt;${ns.name}:Address country=&quot;@{grid.poc.tech.addr.country}&quot; locality=&quot;@{grid.poc.tech.addr.locality}&quot; postalCode=&quot;@{grid.poc.tech.addr.postalCode}&quot; stateProvince=&quot;@{grid.poc.tech.addr.stateProvince}&quot; street1=&quot;@{grid.poc.tech.addr.street1}&quot; street2=&quot;@{grid.poc.tech.addr.street2}&quot;/&gt;${line.separator}
+&lt;${ns.name}:pointOfContactCollection&gt;${line.separator}
+&lt;${ns.name}:PointOfContact affiliation=&quot;@{grid.poc.tech.affiliation}&quot; email=&quot;@{grid.poc.tech.email}&quot; firstName=&quot;@{grid.poc.tech.name.first}&quot; lastName=&quot;@{grid.poc.tech.name.last}&quot; phoneNumber=&quot;@{grid.poc.tech.phone}&quot; role=&quot;@{grid.poc.tech.role}&quot;/&gt;${line.separator}
+&lt;/${ns.name}:pointOfContactCollection&gt;${line.separator}
+&lt;/${ns.name}:ResearchCenter&gt;${line.separator}
+"/>
+			<replaceregexp file="@{appserver.webapp.dir}/@{grid.application.relative.dir}/WEB-INF/etc/cagrid_@{grid.application.name}/serviceMetadata.xml"
+				match="&lt;ns1:hostingResearchCenter&gt;.*&lt;\/ns1:hostingResearchCenter&gt;"
+				replace="&lt;ns1:hostingResearchCenter&gt;${poc.tech.string}&lt;\/ns1:hostingResearchCenter&gt;"
+				flags="sg"/>
+
+			<echo message="Updating poll interval grid registration.xml"/>
+			<replaceregexp
+				match="(&lt;agg:PollIntervalMillis&gt;).*(&lt;\/agg:PollIntervalMillis&gt;)"
+				replace="\13600000\2"
+				flags="sg">
+				<fileset dir="@{appserver.webapp.dir}/@{grid.application.relative.dir}/WEB-INF/etc">
+					<include name="**/*_registration.xml"/>
+				</fileset>
+			</replaceregexp>
+			<!-- Change pointer to index service based on property -->
+			<echo message="Updating grid.index.url - @{grid.index.url}"/>
+			<replaceregexp
+				match="(&lt;wsa:Address&gt;).*(&lt;\/wsa:Address&gt;)"
+				replace="\1@{grid.index.url}\2"
+				flags="sg">
+				<fileset dir="@{appserver.webapp.dir}/@{grid.application.relative.dir}/WEB-INF/etc">
+					<include name="**/*_registration.xml"/>
+				</fileset>
+			</replaceregexp>
+
+			<!-- installs cagrid console -->
+			<replaceregexp file="@{cagrid-console.dir}/ivy-build.xml" byline="true"
+				match="ivy.instance"
+				replace="console-jboss"
+				/>
+			
+			<var name="classpath.colon.found" unset="true"/>
+			<propertyregex property="classpath.colon.found"
+				input="${java.classpath}"
+				regexp=":"
+				select="true"
+				/>
+			<if>
+				<equals arg1="${classpath.colon.found}" arg2="true"/>
+				<then>
+					<echo message="not in gui-installer, using ant to run cagrid-console build"/>
+
+					<ant inheritAll="false" inheritRefs="false"
+						antfile="build.xml"
+						target="@{cagrid-console.target}"
+						dir="@{cagrid-console.dir}"
+						>
+						<property name="jboss.dir" value="@{appserver.home}"/>
+						<property name="wsrf.webapp.dir" value="@{appserver.webapp.dir}/@{grid.application.relative.dir}"/>
+						<property name="env.GLOBUS_LOCATION" value="${env.GLOBUS_LOCATION}"/>
+					</ant>
+				</then>
+				<else>
+					<echo message="in gui-installer, using exec to run cagrid-console build"/>
+					<exec osfamily="unix" executable="ant" dir="@{cagrid-console.dir}">
+						<arg line="-Djboss.dir=@{appserver.home} -Dwsrf.webapp.dir=@{appserver.webapp.dir}/@{grid.application.relative.dir} @{cagrid-console.target}"/>
+						<env key="GLOBUS_LOCATION" value="${env.GLOBUS_LOCATION}"/>
+					</exec>
+					<exec osfamily="windows" executable="ant.bat" dir="@{cagrid-console.dir}">
+						<arg line="-Djboss.dir=@{appserver.home} -Dwsrf.webapp.dir=@{appserver.webapp.dir}/@{grid.application.relative.dir} @{cagrid-console.target}"/>
+						<env key="GLOBUS_LOCATION" value="${env.GLOBUS_LOCATION}"/>
+					</exec>
+				</else>
+			</if>
+			<delete>
+				<fileset dir="@{appserver.webapp.dir}/@{grid.application.relative.dir}/WEB-INF/lib">
+					<include name="commons-logging*.jar"/>
+				</fileset>
+			</delete>
+		</sequential>
+	</macrodef>
 	<macrodef name="check-absolute-directory" description="Diagnose the host system before the installation">
 		<attribute name="directory.property" />
 		<sequential>
@@ -3530,7 +3957,6 @@
 			<!-- Cleanup target area -->
 			<delete dir="@{target.dir}/@{izpack.binary.name}" />
 
-			<!-- Extract izpack -->
 			<get src="@{izpack.binary.uri}/@{izpack.binary.file}" dest="@{download.dir}/@{izpack.binary.file}" usetimestamp="true"/>
 			<unzip dest="@{target.dir}" src="@{download.dir}/@{izpack.binary.file}" />
 

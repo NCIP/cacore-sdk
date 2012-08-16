@@ -218,18 +218,19 @@ public class CSMUsernameAuthenticationProvider implements AuthenticationProvider
 	{
 		System.out.println("CSMUsernameAuthenticationProvider*******"+authentication);
 		System.out.println("CSMUsernameAuthenticationProvider*******"+authentication.getName());
+		boolean flag = false;
 		try
 		{
-		boolean flag = (UsernameAuthenticationToken.class.isAssignableFrom(authentication));
+		flag = (UsernameAuthenticationToken.class.isAssignableFrom(authentication));
 		System.out.println("CSMUsernameAuthenticationProvider*******"+flag);
-		throw new Exception();
-		//return flag;
+		//throw new Exception();
+		
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
 		}
-		return true;
+		return flag;
 	}
 
 }
