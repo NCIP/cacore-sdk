@@ -544,6 +544,12 @@
 		<SDKGenerateReport junitOutputDir="${report.dir.security-remote-client}" />
 	</target>
 
+	<target name="securityRESTfulRemoteClientTest" depends="createDir">
+		<SDKCompileJUnit compileClasspath="remote-client-cp-appconfig" includePattern="**/security/SecurityRESTfulTest.java" excludePattern="" />
+		<SDKRunJUnit junitClasspath="remote-client-cp-appconfig" junitOutputDir="${report.dir.security-remote-client}" includePattern="**/security/SecurityRESTfulTest.class" excludePattern="" loginConfig.location="${package.client.remote.conf.dir}" junitreportfile="TEST-securityRestFulRemoteClient.xml"/>
+		<SDKGenerateReport junitOutputDir="${report.dir.security-remote-client}" />
+	</target>
+
 	<!-- ************************************************************************************************-->
 	<!--                                Run JUnits for Database clean-up for Writable API             	 -->
 	<!-- ************************************************************************************************-->
