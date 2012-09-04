@@ -61,6 +61,7 @@ public class <%=klassName%>Resource extends RESTfulResource
 {
 
 	private static Logger log = Logger.getLogger(<%=klassName%>Resource.class);	
+	private String dbType = "<%=transformerUtils.getDatabaseType()%>";
 	
 	public <%=klassName%>Resource(@Context ServletContext context)
 	{
@@ -274,7 +275,7 @@ if(action != null && action.indexOf("R") != -1)
 				appService = getApplicationService();
 			}
 			//validateCriteria("<%=fullPackageName%>.<%=klassName%>", matrixParams, searchFields);
-			HQLCriteria hcriteria = buildHQLCriteria("<%=fullPackageName%>.<%=klassName%>", searchFields, matrixParams, uriInfo);
+			HQLCriteria hcriteria = buildHQLCriteria("<%=fullPackageName%>.<%=klassName%>", searchFields, matrixParams, uriInfo, dbType);
 			int rowCount = appService.getQueryRowCount(hcriteria, "<%=fullPackageName%>.<%=klassName%>");
 			int maxRowCountPerQuery = appService.getMaxRecordsCount();
 			//System.out.println("rowCount: "+rowCount);
@@ -459,7 +460,7 @@ for(UMLAssociation assoc: assocs){
 				//validateCriteria(className, matrixParams, searchFields);
 				
 				
-				HQLCriteria hqlCriteria = getAssociationCriteria(Class.forName(className), "<%=name%>", startIndex, totalSize, searchFields, matrixParams, uriInfo);
+				HQLCriteria hqlCriteria = getAssociationCriteria(Class.forName(className), "<%=name%>", startIndex, totalSize, searchFields, matrixParams, uriInfo, dbType);
 
 
 				ApplicationService appService = null;

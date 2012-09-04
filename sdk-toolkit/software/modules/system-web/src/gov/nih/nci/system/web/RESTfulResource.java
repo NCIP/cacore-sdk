@@ -43,8 +43,8 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
  * Super class for all RESTful resources providing common functionality
- * 
- * 
+ *
+ *
  */
 public class RESTfulResource {
 
@@ -105,9 +105,9 @@ public class RESTfulResource {
 	/*
 	 * Validate given criteria. If not valid, respond with XML including valid
 	 * fields If ISO is enabled, attribute name can have sub attribute
-	 * 
+	 *
 	 * @param Map matrix params from the request
-	 * 
+	 *
 	 * @param List<Field> searchable fields for a selected domain class
 	 */
 	protected void validateCriteria(String className, Map matrixParams,
@@ -436,7 +436,7 @@ public class RESTfulResource {
 	}
 
 	protected HQLCriteria buildHQLCriteria(String className,
-			List<Field> searchFields, Map matrixParams, UriInfo uriInfo) {
+			List<Field> searchFields, Map matrixParams, UriInfo uriInfo, String dbType) {
 		int startIndex = -1;
 		int totalSize = -1;
 		validateCriteria(className, matrixParams, searchFields);
@@ -459,7 +459,7 @@ public class RESTfulResource {
 
 		HQLCriteria hcriteria = null;
 		Map<String, List> whereMap = buildWhereCriteria(className,
-				searchFields, matrixParams, uriInfo, null);
+				searchFields, matrixParams, uriInfo, null, dbType);
 		String whereCriteria = whereMap.keySet().iterator().next();
 		List params = whereMap.get(whereCriteria);
 		if (whereCriteria.length() > 0)
@@ -486,7 +486,7 @@ public class RESTfulResource {
 	 */
 	public HQLCriteria getAssociationCriteria(Class sourceClass,
 			String associationName, int start, int size,
-			List<Field> searchFields, Map matrixParams, UriInfo uriInfo)
+			List<Field> searchFields, Map matrixParams, UriInfo uriInfo, String dbType)
 			throws WebApplicationException {
 
 		try {
@@ -529,7 +529,7 @@ public class RESTfulResource {
 			if (isCollection) {
 				Map<String, List> whereMap = buildWhereCriteria(
 						sourceClass.getName(), searchFields, matrixParams,
-						uriInfo, "src");
+						uriInfo, "src", dbType);
 
 				if (whereMap.size() == 0) {
 					ResponseBuilder builder = Response.status(Status.NOT_FOUND);
@@ -548,7 +548,7 @@ public class RESTfulResource {
 			} else {
 				Map<String, List> whereMap = buildWhereCriteria(
 						sourceClass.getName(), searchFields, matrixParams,
-						uriInfo, "src");
+						uriInfo, "src", dbType);
 
 				whereCriteria = whereMap.keySet().iterator().next();
 				params = whereMap.get(whereCriteria);
@@ -668,7 +668,7 @@ public class RESTfulResource {
 
 	/**
 	 * Build where criteria for query based on given search matrix parameters
-	 * 
+	 *
 	 * @param className
 	 * @param searchFields
 	 * @param matrixParams
@@ -678,7 +678,7 @@ public class RESTfulResource {
 	 */
 	protected Map<String, List> buildWhereCriteria(String className,
 			List<Field> searchFields, Map matrixParams, UriInfo uriInfo,
-			String alias) throws WebApplicationException
+			String alias, String dbType) throws WebApplicationException
 		{
 		//System.out
 		//		.println("Building where criteria **************************");
@@ -718,7 +718,7 @@ public class RESTfulResource {
 		{
 			e.printStackTrace();
 		}
-		
+
 		while (iter.hasNext()) {
 			boolean found = false;
 			boolean adPart = false;
@@ -747,7 +747,7 @@ public class RESTfulResource {
 				//System.out.println("field...." + field.getName());
 				//System.out.println("field...." + field.getType().getName());
 				//System.out.println("field...." + field.getGenericType().toString());
-				
+
 				if (isoEnabled) {
 					List isoFields = RESTUtil.getSearchableIsoDataTypeFields(className,
 							field.getName(), classCache);
@@ -755,10 +755,10 @@ public class RESTfulResource {
 							field, isoFields);
 					if(idColName != null)
 						fNames.add(idColName);
-					
+
 					if (field.getType().getName().equals("gov.nih.nci.iso21090.Ad"))
 						adPart = true;
-							
+
 					if (fNames.contains(attrName)) {
 						found = true;
 						break;
@@ -779,7 +779,7 @@ public class RESTfulResource {
 					convertedAttrName = attrName.substring(0, attrName.indexOf("part")) + "part_" + attrName.substring(attrName.indexOf("part")+4, attrName.length());
 				else if(attrName.equals((idColName + ".extension")))
 					convertedAttrName = idColName;
-				
+
 				//System.out.println("convertedAttrName2: " + convertedAttrName);
 
 				//System.out.println("field.getType().getName(): "
@@ -798,8 +798,16 @@ public class RESTfulResource {
 					}
 				} else {
 					if (attrValue.equals("*")) {
-						criteria.add(((alias != null) ? alias + "." : "")
-								+ convertedAttrName + " like '%' ");
+						if(dbType.equalsIgnoreCase("postgresql"))
+						{
+							String attName = ((alias != null) ? alias + "." : "") + convertedAttrName ;
+							String castName = "CAST("+ attName + " AS text)";
+							criteria.add(castName + " like '%' ");
+						}
+						else
+							criteria.add(((alias != null) ? alias + "." : "")
+									+ convertedAttrName + " like '%' ");
+
 					} else {
 						String fieldType = field.getType().getName();
 						Object paramValue = null;
@@ -868,13 +876,13 @@ public class RESTfulResource {
 		return returnMap;
 	}
 
-	
+
 	public Object convertISOValues(Field field, String attrName, Object value, String idColName) {
 		try {
 			String fieldType = field.getType().getName();
 			//String valueType = value.getClass().getName();
 			//System.out.println("fieldType: "+fieldType);
-			//System.out.println("attrName "+attrName);		
+			//System.out.println("attrName "+attrName);
 			//System.out.println("fieldName "+field.getName());
 			if (!idColName.equals(attrName) && attrName.indexOf(".") == -1) {
 				String msg = "Invalid attribute name: " + attrName;
@@ -901,7 +909,7 @@ public class RESTfulResource {
 			Object attr = null;
 			Field partField = field;
 			Class classType = partField.getDeclaringClass();
-			
+
 			while (true) {
 				int index = subAttrName.indexOf(".");
 				//System.out.println("index: " + index);
@@ -926,7 +934,7 @@ public class RESTfulResource {
 
 						if(partField.getType().getName().equals("java.util.Set"))
 						{
-							
+
 							//System.out.println("partField.getGenericType(): "+partField.getGenericType().toString());
 							Class<?> dataType = null;
 							Type type = partField.getGenericType();
@@ -939,7 +947,7 @@ public class RESTfulResource {
 
 							//System.out.println("partField.getGenericType(): type "+dataType.getName());
 							//System.out.println("partField.getGenericType(): type "+dataType.toString());
-							
+
 							//partField = integerListClass.getDeclaredField(newPart);
 							if(part.startsWith("part"))
 								newPart = "part";
@@ -1005,7 +1013,7 @@ public class RESTfulResource {
 
 	/**
 	 * Converts the specified value to the field class type
-	 * 
+	 *
 	 * @param field
 	 *            Specifies the field
 	 * @param value
@@ -1130,7 +1138,7 @@ public class RESTfulResource {
 
 	/*
 	 * Save Object by calling writalbe API
-	 * 
+	 *
 	 * @param Object
 	 */
 	public Object save(final Object obj) throws WebApplicationException {
@@ -1161,7 +1169,7 @@ public class RESTfulResource {
 
 	/*
 	 * Update Object by calling writalbe API
-	 * 
+	 *
 	 * @param Object
 	 */
 	public void update(Object obj) throws WebApplicationException {
@@ -1190,7 +1198,7 @@ public class RESTfulResource {
 
 	/*
 	 * Delete Object by calling writalbe API
-	 * 
+	 *
 	 * @param Object
 	 */
 	public void delete(Object obj) throws WebApplicationException {
@@ -1220,7 +1228,7 @@ public class RESTfulResource {
 
 	/*
 	 * Delete Object by calling writalbe API
-	 * 
+	 *
 	 * @param Object
 	 */
 	public void delete(DeleteHQLQuery query) throws WebApplicationException {

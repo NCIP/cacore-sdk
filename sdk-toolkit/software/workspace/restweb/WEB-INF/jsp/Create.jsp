@@ -110,7 +110,7 @@ if(className != null)
 	{	
 		jspUtils = JSPUtils.getJSPUtils(config.getServletContext());
 		fieldNames = jspUtils.getSearchableFields(className);
-		domainNames = jspUtils.getToAssociations(className);
+		domainNames = jspUtils.getAssociations(className);
 		
 	}
 	catch(Exception ex){
@@ -170,36 +170,40 @@ if(className != null)
 			<% if(domainNames != null && domainNames.size() > 0)
 			   { 
 			   %>
-		<tr align="left" valign="top">
+		
 			   		<%for(int i=0; i<domainNames.size(); i++)
 			   		{
 			   		String asscName = (String)domainNames.get(i);
+			   		String asscRole = null;
 			   		String asscClass = asscName;
 			   		if(asscName.indexOf("(") != -1)
+			   		{
 			   			asscClass = asscName.substring(asscName.indexOf("(")+1, asscName.lastIndexOf(")"));
+			   			asscRole = asscName.substring(0, asscName.indexOf("("));
+			   		}
 			   			
 			   		if(asscClass.equals("Please choose") || asscClass.equals(className))
 			   			continue;
-			   		System.out.println("asscClass: "+asscClass);
 			   		String idName = jspUtils.getClassIdName(asscClass);
-			   		System.out.println("idName: "+idName);
 			   		String labelName = asscClass + "."+idName;
-			   		System.out.println("labelName: "+labelName);
+			   		if(asscRole != null)
+			   			labelName = asscRole+"("+labelName+")";
+			   			
 			   		String idType = jspUtils.getReturnType(asscClass, idName, true);
 			   		String filedName = labelName.replace(".", "-");
-			   		System.out.println("filedName: "+filedName);
 			   		%>
-		
+		<tr align="left" valign="top">
 			<td class="formRequiredNotice" width="5px">&nbsp;</td>
 			<td class="formLabel" align="right"><label for="<%=labelName%>"><%=labelName%>:</label></td>
 			<td class="formField" width="90%">
 				<%=HtmlUtils.getHtmlFor(filedName,idType)%>
 			</td>
+		</tr>			
 			<%}
 			
 			}// end if(domainNames != null) statement%>			   
 		
-		</tr>
+		
 			   
 		
 		
