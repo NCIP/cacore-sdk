@@ -4,12 +4,27 @@ import gov.nih.nci.system.util.ClassCache;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Collection;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
+import org.apache.cxf.jaxrs.client.WebClient;
+import org.acegisecurity.Authentication;
+import org.apache.commons.codec.binary.Base64;
+import gov.nih.nci.system.client.util.xml.*;
+import javax.servlet.http.HttpServletRequest;
+import org.apache.struts2.dispatcher.SessionMap;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
+import javax.ws.rs.core.Response.Status;
+import java.io.InputStream;
+import java.io.StringReader;
+import java.io.InputStreamReader;
 import org.apache.log4j.Logger;
+import org.jdom.Element;
 
 public class RESTUtil {
 
@@ -17,7 +32,7 @@ public class RESTUtil {
 
 	/**
 	 * Get the list of all searchable Fields for the class
-	 * 
+	 *
 	 * @param className
 	 * @return Field[] of all searchable fields for the given class
 	 */
@@ -87,7 +102,7 @@ public class RESTUtil {
 	 * Convert ISO attr parts into attribute names [{part_0=[value, code,
 	 * codeSystem, {type=[AL]}]} resulting: part_0.value, part_0.code,
 	 * part_0.codeSystem, part_0.type
-	 * 
+	 *
 	 * @param attrName
 	 * @param attrs
 	 * @return
@@ -147,7 +162,7 @@ public class RESTUtil {
 	 * codeSystem, {type=[AL]}]}] resulting: part_0.value, part_0.code,
 	 * part_0.codeSystem, part_0.type, part_1.value, part_1.code,
 	 * part_1.codeSystem, part_1.type
-	 * 
+	 *
 	 * @param field
 	 * @param attrs
 	 * @return
@@ -218,7 +233,7 @@ public class RESTUtil {
 	 * codeSystem, {type=[AL]}]}] resulting: part_0.value, part_0.code,
 	 * part_0.codeSystem, part_0.type, part_1.value, part_1.code,
 	 * part_1.codeSystem, part_1.type
-	 * 
+	 *
 	 * @param field
 	 * @param attrs
 	 * @return
@@ -272,7 +287,7 @@ public class RESTUtil {
 
 	/**
 	 * Convert ISO attr parts into attribute names
-	 * 
+	 *
 	 * Expected formats: List< Map< String, List< Map< String, List<?> > > > > ?
 	 * can be String or a Map<String, String>
 	 * [{item<gov.nih.nci.iso21090.Ad>=[{part_0=[value, code, codeSystem,
@@ -280,7 +295,7 @@ public class RESTUtil {
 	 * resulting: item.part_0.value, item.part_0.code, item.part_0.codeSystem,
 	 * item.part_0.type, item.part_1.value, item.part_1.code,
 	 * item.part_1.codeSystem, item.part_1.type
-	 * 
+	 *
 	 * @param attrs
 	 * @return
 	 */
@@ -385,7 +400,7 @@ public class RESTUtil {
 	 * codeSystem, {type=[AL]}]}] resulting: part_0.value, part_0.code,
 	 * part_0.codeSystem, part_0.type, part_1.value, part_1.code,
 	 * part_1.codeSystem, part_1.type
-	 * 
+	 *
 	 * Expected formats: List< Map< String, List< Map< String, List<?> > > > > ?
 	 * can be String or a Map<String, String>
 	 * [{item<gov.nih.nci.iso21090.Ad>=[{part_0=[value, code, codeSystem,
@@ -393,8 +408,8 @@ public class RESTUtil {
 	 * resulting: item.part_0.value, item.part_0.code, item.part_0.codeSystem,
 	 * item.part_0.type, item.part_1.value, item.part_1.code,
 	 * item.part_1.codeSystem, item.part_1.type
-	 * 
-	 * 
+	 *
+	 *
 	 * @param attrs
 	 * @return
 	 */
@@ -444,7 +459,7 @@ public class RESTUtil {
 	 * codeSystem, {type=[AL]}]}] resulting: part_0.value, part_0.code,
 	 * part_0.codeSystem, part_0.type, part_1.value, part_1.code,
 	 * part_1.codeSystem, part_1.type
-	 * 
+	 *
 	 * Expected formats: List< Map< String, List< Map< String, List<?> > > > > ?
 	 * can be String or a Map<String, String>
 	 * [{item<gov.nih.nci.iso21090.Ad>=[{part_0=[value, code, codeSystem,
@@ -452,8 +467,8 @@ public class RESTUtil {
 	 * resulting: item.part_0.value, item.part_0.code, item.part_0.codeSystem,
 	 * item.part_0.type, item.part_1.value, item.part_1.code,
 	 * item.part_1.codeSystem, item.part_1.type
-	 * 
-	 * 
+	 *
+	 *
 	 * @param attrs
 	 * @return
 	 */
@@ -498,7 +513,7 @@ public class RESTUtil {
 
 	/**
 	 * Returns the field for a given attribute name
-	 * 
+	 *
 	 * @param className
 	 *            specifies the class name
 	 * @param attributeName
@@ -547,7 +562,7 @@ public class RESTUtil {
 
 	/**
 	 * Returns the method specified by the method name
-	 * 
+	 *
 	 * @param critClass
 	 * @param methodName
 	 * @return
@@ -567,7 +582,7 @@ public class RESTUtil {
 
 	/**
 	 * Gets all the methods for a given class
-	 * 
+	 *
 	 * @param resultClass
 	 *            - Specifies the class name
 	 * @return - Returns all the methods
@@ -628,5 +643,260 @@ public class RESTUtil {
 		return true;
 
 	}
+
+	public static Object getObject(String className, String idValue, HttpServletRequest request, String base64encodedUsernameAndPassword)
+	throws gov.nih.nci.system.client.util.xml.XMLUtilityException
+	{
+		 try {
+				String url = request.getRequestURL().toString();
+				String restURL = url.substring(0, url.lastIndexOf("/"));
+				WebClient client = WebClient.create(restURL);
+
+				if (base64encodedUsernameAndPassword != null) {
+					client.header("Authorization", "Basic "
+							+ base64encodedUsernameAndPassword);
+				}
+				String queryStr = "id";
+				String path = "rest/"
+						+ className.substring(
+								className.lastIndexOf(".") + 1,
+								className.length()) + "/" + idValue;
+				client.path(path);
+
+				client.type("application/xml").accept("application/xml");
+				Response r = client.get();
+				System.out.println("Status: "+r.getStatus());
+				if (r.getStatus() != Status.OK.getStatusCode()) {
+					return null;
+				} else {
+					InputStream is = (InputStream) r.getEntity();
+					System.out.println("is: "+is.toString());
+					InputStreamReader in= new InputStreamReader(is);
+					String jaxbContextName = className.substring(0, className.lastIndexOf("."));
+					Unmarshaller unmarshaller = new JAXBUnmarshaller(true,jaxbContextName);
+					XMLUtility myUtil = new XMLUtility(null, unmarshaller);
+					Object obj = myUtil.fromXML(in);
+					System.out.println("obj: "+obj);
+					return obj;
+				}
+			 } catch (Exception ex) {
+				 ex.printStackTrace();
+				 throw new gov.nih.nci.system.client.util.xml.XMLUtilityException("Failed to lookup id: " + idValue + " for class: "+className);
+			 }
+	}
+
+	public static Object queryLink(String targetClass, String url, String base64encodedUsernameAndPassword)
+	throws gov.nih.nci.system.client.util.xml.XMLUtilityException
+	{
+		 try {
+				WebClient client = WebClient.create(url);
+
+				if (base64encodedUsernameAndPassword != null) {
+					client.header("Authorization", "Basic "
+							+ base64encodedUsernameAndPassword);
+				}
+
+				client.type("application/xml").accept("application/xml");
+				Response r = client.get();
+				System.out.println("Status: "+r.getStatus());
+				if (r.getStatus() != Status.OK.getStatusCode()) {
+					return null;
+				} else {
+
+					String resourceStr = url.substring(url.indexOf("/rest/")+6, url.length());
+					boolean isCollection = false;
+					if(resourceStr.indexOf("/") != resourceStr.lastIndexOf("/"))
+						isCollection = true;
+
+					InputStream is = (InputStream) r.getEntity();
+					System.out.println("is: "+is.toString());
+					if(isCollection)
+					{
+						org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
+							false);
+						org.jdom.Document jDoc = builder.build(is);
+						Element rootElement = jDoc.getRootElement();
+						List children = rootElement.getChildren();
+						Iterator iter = children.iterator();
+						String jaxbContextName = targetClass.substring(0, targetClass.lastIndexOf("."));
+						Unmarshaller unmarshaller = new JAXBUnmarshaller(true,jaxbContextName);
+						XMLUtility myUtil = new XMLUtility(null, unmarshaller);
+						List objects = new ArrayList();
+						while(iter.hasNext())
+						{
+							Element child = (Element) iter.next();
+							System.out.println("child : "+child.getName());
+							if(child.getName().equals("link"))
+								continue;
+
+							org.jdom.output.XMLOutputter outputter = new org.jdom.output.XMLOutputter();
+							String outStr = outputter.outputString(child);
+							System.out.println("outStr "+outStr);
+							StringReader in= new StringReader(outStr);
+
+							Object obj = myUtil.fromXML(in);
+							objects.add(obj);
+
+						}
+						System.out.println("objects "+objects.toString());
+						return objects;
+						}
+					else
+					{
+							InputStreamReader in= new InputStreamReader(is);
+							String jaxbContextName = targetClass.substring(0, targetClass.lastIndexOf("."));
+							Unmarshaller unmarshaller = new JAXBUnmarshaller(true,jaxbContextName);
+							XMLUtility myUtil = new XMLUtility(null, unmarshaller);
+							Object obj = myUtil.fromXML(in);
+							System.out.println("obj: "+obj);
+							return obj;
+					}
+				}
+			 } catch (Exception ex) {
+				 ex.printStackTrace();
+				 throw new gov.nih.nci.system.client.util.xml.XMLUtilityException("Failed to query: " + url + " for class: "+targetClass);
+			 }
+	}
+
+	public static void printObject(Object obj, Class klass, boolean includeAssociation) throws Exception {
+		System.out.println("\nPrinting "+ klass.getName());
+		Method[] methods = klass.getMethods();
+		for(Method method:methods)
+		{
+			if(method.getName().startsWith("get") && !method.getName().equals("getClass"))
+			{
+				System.out.print("\t"+method.getName().substring(3)+":");
+				Object val = null;
+				try {
+				val = method.invoke(obj, (Object[])null);
+				} catch(Exception e){
+					val = "ERROR - unable to determine value";
+
+				}
+				if (val instanceof java.util.Set) {
+					Collection list = (Collection)val;
+					for(Object object: list){
+						System.out.println(object.getClass().getName()+":");
+						if (includeAssociation){
+							printObject(object, object.getClass(), false);
+						} else {
+							System.out.println(" -- association has been excluded");
+						}
+					}
+					//System.out.println("size="+((Collection)val).size());
+				}
+				else if(val instanceof ArrayList)
+				{
+					Collection list = (ArrayList) val;
+					System.out.println("\nPrinting Collection.....");
+					for(Object object: list){
+						System.out.println(object.getClass().getName()+":");
+						if (includeAssociation){
+							printObject(object, object.getClass(), false);
+						} else {
+							System.out.println(" -- association has been excluded");
+						}
+					}
+				}
+				else if(val != null && val.getClass().getName().startsWith("gov.nih.nci"))
+				{
+					if (includeAssociation){
+						printObject(val, val.getClass(), false);
+					} else {
+						System.out.println(" -- association has been excluded");
+					}
+				}
+				else
+					System.out.println(val);
+			}
+		}
+	}
+
+		public static String getLinkIdValue(Element rootElement, String linkName, String targetClassName, String targetClassIdName, String base64encodedUsernameAndPassword)
+		throws gov.nih.nci.system.client.util.xml.XMLUtilityException
+		{
+			System.out.println("linkName "+linkName);
+			System.out.println("targetClassName "+targetClassName);
+			if(rootElement == null)
+				return null;
+			String idValue = null;
+
+			try
+			{
+			Element element = rootElement;
+
+			List children = element.getChildren();
+			if(children == null || children.size() == 0)
+				return null;
+
+			Iterator iter = children.iterator();
+			while(iter.hasNext())
+			{
+				Element child = (Element)iter.next();
+				System.out.println("child.getName(): "+child.getName());
+				if(child.getName().equals("link"))
+				{
+					String refName = child.getAttributeValue("ref");
+					System.out.println("refName: "+refName);
+					System.out.println("linkName: "+linkName);
+					if(refName.trim().equals(linkName.trim()))
+					{
+						System.out.println("Equallllllll");
+						String href = child.getAttributeValue("href");
+						System.out.println("href "+href);
+						String resourceStr = href.substring(href.indexOf("/rest/")+6, href.length());
+						boolean isCollection = false;
+						if(resourceStr.indexOf("/") != resourceStr.lastIndexOf("/"))
+							isCollection = true;
+						System.out.println("isCollection "+isCollection);
+
+						if(isCollection)
+						{
+						   Object results = queryLink(targetClassName, href, base64encodedUsernameAndPassword);
+						   System.out.println("results "+results);
+						   Collection collecton = (Collection) results;
+						   Iterator iterator = collecton.iterator();
+						   StringBuffer ids = new StringBuffer();
+						   while(iterator.hasNext())
+						   {
+							   Object resultObj = iterator.next();
+							   Class klass = Class.forName(targetClassName);
+							   Object targetObject = klass.cast(resultObj);
+							   String getIdMethod = "get"+((targetClassIdName.charAt(0)+"").toUpperCase()) + targetClassIdName.substring(1, targetClassIdName.length());
+							   Method method = klass.getMethod(getIdMethod);
+							   Object id = method.invoke(targetObject, null);
+							   System.out.println("id "+id);
+							   ids.append(id.toString());
+							   if(iterator.hasNext())
+							   	ids.append(",");
+
+						   }
+						   return ids.toString();
+						}
+						else
+						{
+							Object results = queryLink(targetClassName, href, base64encodedUsernameAndPassword);
+							System.out.println("results "+results);
+							   Class klass = Class.forName(targetClassName);
+							   Object targetObject = klass.cast(results);
+							   String getIdMethod = "get"+((targetClassIdName.charAt(0)+"").toUpperCase()) + targetClassIdName.substring(1, targetClassIdName.length());
+							   Method method = klass.getMethod(getIdMethod);
+							   Object id = method.invoke(targetObject, null);
+							   return id.toString();
+
+						}
+					}
+				}
+
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+			System.out.println("idValue: "+idValue);
+		return idValue;
+	}
+
 
 }

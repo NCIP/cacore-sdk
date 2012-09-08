@@ -77,12 +77,12 @@ public class SDKRESTContentHandler implements MessageBodyReader,
 			WebApplicationException {
 		InputStreamReader reader = new InputStreamReader(is);
 		try {
-			System.out.println("read from .............: "+is);
-		System.out.println("readFrom......................."+type.getName());
-		System.out.println("readFrom......................."+genericType);
-		System.out.println("readFrom......................."+httpHeaders);
+		//System.out.println("read from .............: "+is);
+		//System.out.println("readFrom......................."+type.getName());
+		//System.out.println("readFrom......................."+genericType);
+		//System.out.println("readFrom......................."+httpHeaders);
 			String packageName = type.getName().substring(0, type.getName().lastIndexOf("."));
-			System.out.println("packageName: "+packageName);
+		//	System.out.println("packageName: "+packageName);
 
 			Unmarshaller unmarshaller = new JAXBUnmarshaller(true,
 					packageName);
@@ -104,9 +104,9 @@ public class SDKRESTContentHandler implements MessageBodyReader,
 			MultivaluedMap httpHeaders, OutputStream os) throws IOException,
 			WebApplicationException {
 		try {
-			System.out.println("In writing...."+target);
-			System.out.println("In writing...."+type);
-			System.out.println("In writing...."+genericType);
+		//	System.out.println("In writing...."+target);
+		//	System.out.println("In writing...."+type);
+		//	System.out.println("In writing...."+genericType);
 			if(target == null)
 				return;
 

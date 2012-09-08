@@ -23,6 +23,7 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
+import gov.nih.nci.system.web.util.RESTUtil;
 
 public class RestQuery extends BaseActionSupport {
 
@@ -53,7 +54,6 @@ public class RestQuery extends BaseActionSupport {
 				.getProperty("enableISO21090DataTypes");
 		isoEnabled = "yes".equalsIgnoreCase(isoEnabledStr)
 				|| "true".equalsIgnoreCase(isoEnabledStr);
-		
 	}
 
 	protected String getQueryString(String className, String roleName,
@@ -134,10 +134,10 @@ public class RestQuery extends BaseActionSupport {
 		buffer.append("</td>");
 		buffer.append("</tr>");
 		return buffer.toString();
-		
+
 	}
 	/**
-	 * Generates an HTML Document for a given XML document 
+	 * Generates an HTML Document for a given XML document
 	 *
 	 * @param doc
 	 *            Specifies the XML document
@@ -208,7 +208,7 @@ public class RestQuery extends BaseActionSupport {
 					e.printStackTrace();
 				}
 
-				System.out.println("idCol: "+idCol);
+				//System.out.println("idCol: "+idCol);
 				buffer.append("<tr>");
 				buffer.append("<td>");
 				buffer.append("<table summary=\"Data Summary\" cellpadding=\"3\" cellspacing=\"0\" border=\"0\" class=\"dataTable\" width=\"100%\">");
@@ -216,23 +216,23 @@ public class RestQuery extends BaseActionSupport {
 				//For each sub element to the root:
 				//if it is link, skip it. This is link elements for collections representing paging, self
 				List<Element> tableRows = root.getChildren();
-				System.out.println("tableRows: "+tableRows.toString());
-				System.out.println("tableRows size: "+tableRows.size());
+				//System.out.println("tableRows: "+tableRows.toString());
+				//System.out.println("tableRows size: "+tableRows.size());
 				List columns = new ArrayList();
 				for (Element child : tableRows) {
 					StringBuffer headerBuffer = new StringBuffer();
 					StringBuffer bodyBuffer = new StringBuffer();
 
 					String childName = classEleName.substring(classEleName.lastIndexOf(".")+1, classEleName.length());
-					System.out.println("childName: "+childName);
-					System.out.println("child.getName(): "+child.getName());
+					//System.out.println("childName: "+childName);
+					//System.out.println("child.getName(): "+child.getName());
 					//if(!child.getName().equals(childName))
 					//	continue;
 
 					if(child.getName().equals("link"))
 						continue;
-					
-					//Get element class name. There could be different classes in the given XML 
+
+					//Get element class name. There could be different classes in the given XML
 					//representing inheritance
 					String fullClassName = classCache.getPkgNameForClass(child
 							.getName()) + "." + child.getName();
@@ -256,10 +256,10 @@ public class RestQuery extends BaseActionSupport {
 							refNameList.add(assocName.substring(0, assocName.indexOf("(")).trim());
 						}
 					}
-					
+
 					refNameList.add("self");
 					String idColName = classCache.getClassIdName(klass);
-					System.out.println("getHTML: "+idColName);
+					//System.out.println("getHTML: "+idColName);
 
 					// Add id column to the table first
 					for (int i = 0; i < fields.length; i++) {
@@ -274,17 +274,17 @@ public class RestQuery extends BaseActionSupport {
 
 						bodyBuffer
 								.append("<td class=\"dataCellText\" nowrap=\"off\">");
-						System.out.println("child "+child.toString());
+						//System.out.println("child "+child.toString());
 						Attribute attr = child.getAttribute(idColName);
 						if (attr != null)
 						{
-							System.out.println("Got Attr: "+attr.getName());
+							//System.out.println("Got Attr: "+attr.getName());
 							bodyBuffer.append(attr.getValue());
 							idColValue = attr.getValue();
 						}
 						else if(field.getType().getName().startsWith(isoprefix))
 						{
-							System.out.println("ISO Type*****");
+							//System.out.println("ISO Type*****");
 							Element childElement = getChild(child, field.getName(), true);
 							if(childElement == null)
 								bodyBuffer.append("&nbsp;");
@@ -298,9 +298,9 @@ public class RestQuery extends BaseActionSupport {
 								bodyBuffer.append("</tbody></table>");
 							}
 						}
-						
+
 						bodyBuffer.append("</td>");
-						
+
 						break;
 					}
 
@@ -317,18 +317,18 @@ public class RestQuery extends BaseActionSupport {
 
 						bodyBuffer
 								.append("<td class=\"dataCellText\" nowrap=\"off\">");
-						System.out.println("Formatting field: "+field.getType().getName());
-						System.out.println("Formatting field: "+field.getName());
+						//System.out.println("Formatting field: "+field.getType().getName());
+						//System.out.println("Formatting field: "+field.getName());
 						Attribute attr = child.getAttribute(field.getName());
-						
+
 						if (attr != null)
 						{
-							System.out.println("Got Attr: "+attr.getName());
+							//System.out.println("Got Attr: "+attr.getName());
 							bodyBuffer.append(attr.getValue());
 						}
 						else if(field.getType().getName().startsWith(isoprefix))
 						{
-							System.out.println("ISO Type*****");
+							//System.out.println("ISO Type*****");
 							Element childElement = getChild(child, field.getName(), true);
 							if(childElement == null)
 								bodyBuffer.append("&nbsp;");
@@ -354,9 +354,9 @@ public class RestQuery extends BaseActionSupport {
 					//List<String> assocNames = classCache.getAssociations(fullClassName);
 					List<Element> linkChild = getChildren(child, "link");
 					for (String linkName : refNameList) {
-						System.out.println("linkName: "+linkName);
+						//System.out.println("linkName: "+linkName);
 						boolean foundLink = false;
-						
+
 						for (Element link : linkChild) {
 							if(link.getAttribute("ref").getValue().equals(linkName))
 							{
@@ -364,7 +364,7 @@ public class RestQuery extends BaseActionSupport {
 								.append("<th class=\"dataTableHeader\" scope=\"col\" align=\"center\">");
 								headerBuffer.append("&nbsp;");
 								headerBuffer.append("</th>");
-		
+
 								bodyBuffer
 										.append("<td class=\"dataCellText\" nowrap=\"off\">");
 								bodyBuffer.append("<A href=\"#\" onclick=\""
@@ -383,16 +383,16 @@ public class RestQuery extends BaseActionSupport {
 							.append("<th class=\"dataTableHeader\" scope=\"col\" align=\"center\">");
 							headerBuffer.append("&nbsp;");
 							headerBuffer.append("</th>");
-	
+
 							bodyBuffer
 									.append("<td class=\"dataCellText\" nowrap=\"off\">");
 							bodyBuffer.append("&nbsp;");
 							bodyBuffer.append("</td>");
-							
+
 						}
 					}
 
-/*					
+/*
 					for (Element link : linkChild) {
 						headerBuffer
 								.append("<th class=\"dataTableHeader\" scope=\"col\" align=\"center\">");
@@ -503,8 +503,8 @@ public class RestQuery extends BaseActionSupport {
 
 	private String formatISOElement(Element element)
 	{
-		System.out.println("formatISOElement: "+element.toString());
-		System.out.println("formatISOElement name: "+element.getName());
+		//System.out.println("formatISOElement: "+element.toString());
+		//System.out.println("formatISOElement name: "+element.getName());
 		if(element.getName().equals("link"))
 			return "&nbsp;";
 		List attributes = element.getAttributes();
@@ -515,14 +515,14 @@ public class RestQuery extends BaseActionSupport {
 		if(attributes != null)
 		{
 			Iterator iter = attributes.iterator();
-			
-			
+
+
 			StringBuffer attrBuff = new StringBuffer();
 			boolean dataAdded = false;
 			while(iter.hasNext())
 			{
 				Attribute attr = (Attribute) iter.next();
-				System.out.println("attr.getName(): "+attr.getName());
+				//System.out.println("attr.getName(): "+attr.getName());
 				if(attr.getName().equals("xsi:type") || attr.getName().equals("type"))
 					continue;
 				attrBuff.append(attr.getName() + ": "+attr.getValue());
@@ -533,8 +533,8 @@ public class RestQuery extends BaseActionSupport {
 			//	attrBuff.append("&nbsp;");
 			eleBuff.append(attrBuff);
 		}
-		
-		System.out.println(" ele1: "+eleBuff.toString());
+
+		//System.out.println(" ele1: "+eleBuff.toString());
 		List children = element.getChildren();
 		if(children != null && children.size() > 0)
 		{
@@ -544,7 +544,7 @@ public class RestQuery extends BaseActionSupport {
 			Element child = (Element) childrenIter.next();
 			if(child.getName().equals("link"))
 				return "&nbsp;";
-			
+
 			eleBuff.append("<table cellpadding=\"0\" cellspacing=\"2\" width=\"100%\" border=\"0\">");
 			eleBuff.append("<tbody><tr class=\"dataRowLight\">");
 			eleBuff.append("<td class=\"isoDataCellText\" nowrap=\"off\">");
@@ -556,11 +556,11 @@ public class RestQuery extends BaseActionSupport {
 			eleBuff.append("</tbody></table>");
 			}
 		}
-		
+
 		eleBuff.append("</td>");
 		eleBuff.append("</tr>");
 		eleBuff.append("</tbody></table>");
-		System.out.println("Returning ele: "+eleBuff.toString());
+		//System.out.println("Returning ele: "+eleBuff.toString());
 		return eleBuff.toString();
 	}
 	public String getUnauthorizedHTML(String queryStr, String className, String message)
@@ -686,7 +686,7 @@ public class RestQuery extends BaseActionSupport {
 	protected boolean supportDeleteLink(String className) {
 		if(isoEnabled)
 			return false;
-		
+
 		String cName = className.substring(className.lastIndexOf(".") + 1,
 				className.length());
 		try {
@@ -709,7 +709,7 @@ public class RestQuery extends BaseActionSupport {
 	protected boolean supportUpdateLink(String className) {
 		if(isoEnabled)
 			return false;
-		
+
 		String cName = className.substring(className.lastIndexOf(".") + 1,
 				className.length());
 		try {
@@ -728,4 +728,100 @@ public class RestQuery extends BaseActionSupport {
 		}
 		return false;
 	}
+
+		protected void prepareAssociations(HttpServletRequest request, Object instance, String className, String base64encodedUsernameAndPassword) throws Exception
+		{
+			List<String> associations = classCache.getAssociations(className);
+			if(associations != null && associations.size() > 0)
+			{
+				for(int i=0; i<associations.size(); i++)
+				{
+					String asscName = (String)associations.get(i);
+					System.out.println("asscName: "+asscName);
+					String asscRole = null;
+					String asscClass = asscName;
+					if(asscName.indexOf("(") != -1)
+					{
+						asscClass = asscName.substring(asscName.indexOf("(")+1, asscName.lastIndexOf(")"));
+						asscRole = asscName.substring(0, asscName.indexOf("("));
+					}
+
+					System.out.println("asscClass: "+asscClass);
+					System.out.println("asscRole: "+asscRole);
+
+
+
+					if(asscClass.equals("Please choose") || asscClass.equals(className))
+						continue;
+					String idName = classCache.getClassIdName(asscClass);
+					String idType = classCache.getReturnType(asscClass, idName, true);
+
+					Enumeration<String> parameters = request.getParameterNames();
+
+					try
+					{
+						String getMethodName = "get"+ (asscRole.charAt(0)+"").toUpperCase()+ asscRole.substring(1,asscRole.length()).trim();
+						Class classType = Class.forName(className);
+						Method getMethod = classType.getMethod(getMethodName.trim(), null);
+						Class returnType = getMethod.getReturnType();
+						System.out.println("returnType "+returnType.getName());
+
+						while(parameters.hasMoreElements())
+						{
+							String parameterName = (String)parameters.nextElement();
+							if(parameterName.startsWith(asscRole) && parameterName.indexOf("(") > 0)
+							{
+								String paramValue = (request.getParameter(parameterName)).trim();
+								if(paramValue != null && paramValue.trim().length() > 0)
+								{
+									Object assocObj = RESTUtil.getObject(asscClass, paramValue, request, base64encodedUsernameAndPassword);
+									//System.out.println("assocObj: "+assocObj);
+									if(assocObj != null)
+									{
+										 try {
+											  Class klass = instance.getClass();
+											  Class type = Class.forName(asscClass);
+											  Class[] argTypes = new Class[] { type };
+											  String methodName = "set"+ (asscRole.charAt(0)+"").toUpperCase()+ asscRole.substring(1,asscRole.length());
+											  //System.out.println("Method name looking for: "+ methodName);
+											  Method[] methods = klass.getDeclaredMethods();
+											  for(int k=0;  k<methods.length; k++)
+											  {
+												  Method method = methods[k];
+												  //System.out.println("Name: "+method.getName());
+												  Class[] types = method.getParameterTypes();
+												  if(types != null)
+												  {
+													  if(method.getName().trim().equals(methodName.trim()))
+													  {
+														  method.invoke(instance, returnType.cast(assocObj));
+														  break;
+													  }
+												  }
+											  }
+											  break;
+										 } catch (Exception ex) {
+											 ex.printStackTrace();
+											 throw ex;
+										 }
+
+									}
+									else
+									{
+										throw new Exception("Invalid id: "+ paramValue  + " for Class: " + className);
+									}
+								}
+							}
+						}
+					}
+					catch(Exception e)
+					{
+						e.printStackTrace();
+						throw e;
+					}
+					//RESTUtil.printObject(instance, instance.getClass(), true);
+				}
+			}
+		}
+
 }

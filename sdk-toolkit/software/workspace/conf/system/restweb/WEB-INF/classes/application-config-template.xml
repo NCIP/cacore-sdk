@@ -27,6 +27,7 @@
 				<prop key="securityEnabled">@SECURITY_ENABLED@</prop>
 				<prop key="enableISO21090DataTypes">@ENABLE_ISO21090_DATATYPES@</prop>
 				<prop key="enableRestfulHtmlInterface">@ENABLE_RESTFUL_HTML_INTERFACE@</prop>
+				<prop key="identityGeneratorType">@IDENTITY_GENERATOR_TYPE@</prop>
 			</props>
 		</constructor-arg>
 	</bean>

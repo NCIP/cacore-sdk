@@ -49,7 +49,6 @@ public class UpdateAction extends RestQuery {
 		HttpServletRequest request = ServletActionContext.getRequest();
 		HttpServletResponse response = ServletActionContext.getResponse();
 		targetClass = request.getParameter("target");
-		System.out.println("Target: " + targetClass);
 		if (targetClass == null || targetClass.trim().length() == 0) {
 			request.setAttribute("Message", "Invalid target");
 			return null;
@@ -83,16 +82,8 @@ public class UpdateAction extends RestQuery {
 
 			System.out.println("Submitting:................");
 			try {
+				String base64encodedUsernameAndPassword = null;
 				Object instance = prepareObject(request);
-				try
-				{
-					Class klass = Class.forName(targetClass);
-				SDKRESTContentHandler.printObject(instance, klass, true);
-				}
-				catch(Exception e)
-				{
-					
-				}
 				String url = request.getRequestURL().toString();
 				String restURL = url.substring(0, url.indexOf("Update.action"));
 				WebClient client = WebClient.create(restURL);
@@ -112,7 +103,7 @@ public class UpdateAction extends RestQuery {
 							.toString();
 					System.out.println("password 11 "
 							+ authentication.getCredentials().toString());
-					String base64encodedUsernameAndPassword = new String(
+					base64encodedUsernameAndPassword = new String(
 							Base64.encodeBase64((userName + ":" + password)
 									.getBytes()));
 					client.header("Authorization", "Basic "
@@ -126,8 +117,8 @@ public class UpdateAction extends RestQuery {
 
 				}
 
-				System.out.println("instance: " + instance);
 				try {
+					prepareAssociations(request, instance, targetClass, base64encodedUsernameAndPassword);
 					Response r = client.put(instance);
 
 					System.out.println("update Status: " + r.getStatus());
@@ -149,6 +140,7 @@ public class UpdateAction extends RestQuery {
 
 					}
 				} catch (WebApplicationException e) {
+					request.setAttribute("Message", "Failed to update: "+e.getMessage());
 					e.printStackTrace();
 				}
 			} catch (Exception e) {

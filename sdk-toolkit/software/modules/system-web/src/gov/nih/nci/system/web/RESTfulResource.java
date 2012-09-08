@@ -499,8 +499,11 @@ public class RESTfulResource {
 				throw new ApplicationException(e);
 			}
 			String hql = "";
+			System.out.println("sourceClass.getName() "+sourceClass.getName());
+			System.out.println("associationName "+associationName);
 			boolean isCollection = classCache.isCollection(
 					sourceClass.getName(), associationName);
+			System.out.println("isCollection "+isCollection);
 			System.out.println("sourceClass: "+sourceClass);
 			String idName = classCache.getClassIdName(sourceClass, true);
 			System.out.println("idName: "+idName);
@@ -544,7 +547,7 @@ public class RESTfulResource {
 				hql = "select dest from " + sourceClass.getName()
 						+ " as src inner join src." + associationName
 						+ " dest where " + whereCriteria;
-				// System.out.println("hql: collection: " + hql);
+				 System.out.println("hql: collection: " + hql);
 			} else {
 				Map<String, List> whereMap = buildWhereCriteria(
 						sourceClass.getName(), searchFields, matrixParams,
@@ -564,7 +567,7 @@ public class RESTfulResource {
 						+ sourceClass.getName() + " as src where "
 						+ whereCriteria + " and src." + associationName + "."
 						+ idName + "=dest." + assosIdName;
-				// System.out.println("hql2: " + hql);
+				 System.out.println("hql2: " + hql);
 			}
 
 			HQLCriteria hqlCriteria = new HQLCriteria(hql, params, start, size);
@@ -606,6 +609,10 @@ public class RESTfulResource {
 			String hql = "";
 			boolean isCollection = classCache.isCollection(
 					sourceClass.getName(), associationName);
+			System.out.println("sourceClass.getName() "+sourceClass.getName());
+			System.out.println("associationName "+associationName);
+			System.out.println("isCollection "+isCollection);
+
 			String idName = classCache.getClassIdName(sourceClass, true);
 			System.out.println("idName2: "+idName);
 			String assosIdName = classCache.getClassIdName(Class.forName(assocType), true);
@@ -629,12 +636,14 @@ public class RESTfulResource {
 			if (isCollection) {
 				hql = "select dest from " + sourceClass.getName()
 						+ " as src inner join src." + associationName
-						+ " dest where dest." + assosIdName + " = ?";
+						+ " dest where src." + assosIdName + " = ?";
+				System.out.println("hql: getAssociationCriteria collection: " + hql);
 			} else {
 				hql = "select dest from " + assocType + " as dest,"
 						+ sourceClass.getName() + " as src where src."
 						+ associationName + "." + idName + "=dest."
 						+ assosIdName + " and dest." + assosIdName + " = ?";
+				System.out.println("hql: getAssociationCriteria : " + hql);
 			}
 
 			// //System.out.println("hql: "+hql);
@@ -1143,6 +1152,7 @@ public class RESTfulResource {
 	 */
 	public Object save(final Object obj) throws WebApplicationException {
 		try {
+			gov.nih.nci.system.web.util.RESTUtil.printObject(obj, obj.getClass(), true);
 			final InsertExampleQuery sdkQuery = new InsertExampleQuery(obj);
 			sdkQuery.setCommit(true);
 			SDKQueryResult queryResult = ((WritableApplicationService) applicationService)
@@ -1174,6 +1184,7 @@ public class RESTfulResource {
 	 */
 	public void update(Object obj) throws WebApplicationException {
 		try {
+			gov.nih.nci.system.web.util.RESTUtil.printObject(obj, obj.getClass(), true);
 			final UpdateExampleQuery sdkQuery = new UpdateExampleQuery(obj);
 			sdkQuery.setCommit(true);
 			new BaseUtilWrapper() {

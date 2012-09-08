@@ -84,7 +84,7 @@ public <%=klassName%>Bean(<%=klassName%> obj)
 		e.printStackTrace();
 	}
 }
-
+
 public List<ResourceLink> buildLinks(String path, <%=klassName%> obj)
 {
 	String idStr = null;
@@ -252,5 +252,63 @@ public void setLinks(List<ResourceLink> links)
 	this.links = links;
 }
 
+
+<%if(!transformerUtils.isAbstract(klass)){%>
+
+public <%=klassName%> getObject()
+{	
+	<%=klassName%> object = null;
+	try
+	{
+		object = new <%=klassName%>();
+	<%
+	List<UMLAttribute> attributes2 = transformerUtils.getClassAttributes(klass, true);
+	for(UMLAttribute attr : attributes2){%>
+		object.<%=transformerUtils.getSetterMethodName(attr)%>(this.<%=transformerUtils.getGetterMethodName(attr)%>());
+	<%}%>
+
+	<%
+	List<UMLAssociation> assocns2 = transformerUtils.getAssociations(klass, true);
+	for(UMLAssociation assoc: assocns2){
+		List<UMLAssociationEnd> assocEnds = assoc.getAssociationEnds();
+		List<UMLAssociationEnd> associationEnds = new java.util.ArrayList<UMLAssociationEnd>();
+		UMLAssociationEnd thisEnd = null;
+		UMLAssociationEnd otherEnd = null;
+		try
+		{
+			thisEnd = transformerUtils.getThisEnd(klass,assocEnds, true);
+			otherEnd = transformerUtils.getOtherEnd(klass,assocEnds, true);
+			associationEnds.add(otherEnd);
+		}
+		catch(GenerationException e)
+		{
+			continue;
+		}
+	
+		if(transformerUtils.isBidirectionalSelfAssociation(klass,assocEnds)) { // handle bi-directional self-association 
+			associationEnds.add(thisEnd);
+		}
+		
+		for(UMLAssociationEnd associationEnd : associationEnds)
+		{	
+			if(associationEnd.isNavigable())
+			{
+			%>
+		object.<%=transformerUtils.getSetterMethodName(associationEnd)%>(this.<%=transformerUtils.getGetterMethodName(associationEnd)%>());
+			<%
+			}
+		}
+	}
+	%>
+	
+	}
+	catch(Exception e)
+	{
+		log.error("Failed to create RESTBean: "+e.getMessage());
+		e.printStackTrace();
+	}
+	return object;
+}
+<%}%>
 
 }

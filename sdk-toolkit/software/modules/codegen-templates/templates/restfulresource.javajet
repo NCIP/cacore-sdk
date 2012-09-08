@@ -403,6 +403,9 @@ for(UMLAssociation assoc: assocs){
 			UMLClass assocKlass = (UMLClass)associationEnd.getUMLElement();
 			String assocPackageName=transformerUtils.getFullPackageName(assocKlass);
 			String name = associationEnd.getRoleName(); 
+			boolean isAbstract1 = transformerUtils.isAbstract(assocKlass);
+			if(!isAbstract1)
+			{
 	%>
 		@GET
 		@Path("/search/<%=name%>")
@@ -860,7 +863,7 @@ for(UMLAssociation assoc: assocs){
 <%			
 			}
 		}
-		
+		}
 	}%>
 
 <%}%>
@@ -874,7 +877,14 @@ if(action != null && action.indexOf("C") != -1 && !transformerUtils.isISO21090En
 	{
 		try
 		{
-			//System.out.println("Adding <%=klassName%>: "+object.toString());
+			System.out.println("Adding <%=klassName%>: "+object.toString());
+			try
+			{
+			gov.nih.nci.system.web.util.RESTUtil.printObject(object, object.getClass(), true);
+			}
+			catch(Exception e)
+			{
+			}
 			<%=klassName%> obj = (<%=klassName%>)save(object);
 			String fullpath = uriInfo.getAbsolutePath().toString();
 			String path = fullpath.substring(0, fullpath.indexOf("/rest/")+5);
@@ -1082,6 +1092,14 @@ if(action != null && action.indexOf("U") != -1 && !transformerUtils.isISO21090En
 	@Consumes("application/xml")
 	public void update<%=klassName%>(<%=klassName%> object)
 	{
+				try
+				{
+				gov.nih.nci.system.web.util.RESTUtil.printObject(object, object.getClass(), true);
+				}
+				catch(Exception e)
+				{
+				}
+
 		try
 		{
 			//System.out.println("object: "+object.getId());

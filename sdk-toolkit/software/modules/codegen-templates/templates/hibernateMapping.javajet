@@ -105,6 +105,7 @@ String discriminatorValueStr = (discriminatorValue==null) ? "" : "discriminator-
 						UMLClass assocKlass = (UMLClass)otherEnd.getUMLElement();
 						String assocKlassName = transformerUtils.getFQCN(assocKlass);
 						String cascadeStyle = transformerUtils.findCascadeStyle(currentKlass, otherEnd.getRoleName(), association);
+						String insertUpdate = transformerUtils.getCascadeInsertUpdate(cascadeStyle);
 						boolean lazy = transformerUtils.isLazyLoad(currentKlass, otherEnd.getRoleName(), association);
 						
 						if(transformerUtils.isAny(thisEnd,otherEnd)) //Association to an implicit parent class
@@ -203,7 +204,7 @@ String discriminatorValueStr = (discriminatorValue==null) ? "" : "discriminator-
 								{	
 									String lazyValue = lazy == true ? "proxy" : "false";							
 									String keyColumnName = transformerUtils.findAssociatedColumn(table,currentKlass,otherEnd,assocKlass,thisEnd, false);%>
-			<%=emptySpace%><many-to-one name="<%=otherEnd.getRoleName()%>" class="<%=assocKlassName%>" column="<%=keyColumnName%>" lazy="<%=lazyValue%>" not-null="<%=notNullFkAttr%>" cascade="<%=cascadeStyle%>" insert="false" update="false" /><%
+			<%=emptySpace%><many-to-one name="<%=otherEnd.getRoleName()%>" class="<%=assocKlassName%>" column="<%=keyColumnName%>" lazy="<%=lazyValue%>" not-null="<%=notNullFkAttr%>" cascade="<%=cascadeStyle%>" <%=insertUpdate%> /><%
 								}else{ // Many to One - Join Table
 						
 										// do nothing; do not generate any <join> elements in this first pass!  Hibernate DTD requires any <set> elements to appear first
@@ -220,13 +221,13 @@ String discriminatorValueStr = (discriminatorValue==null) ? "" : "discriminator-
 								if(thisEnd.isNavigable())
 								{
 									if(keyColumnPresent){%>
-		<%=emptySpace%><many-to-one name="<%=otherEnd.getRoleName()%>" class="<%=assocKlassName%>" column="<%=keyColumnName%>" unique="true" lazy="<%=lazyValue%>" not-null="<%=notNullFkAttr%>" cascade="<%=cascadeStyle%>" insert="false" update="false" /><%
+		<%=emptySpace%><many-to-one name="<%=otherEnd.getRoleName()%>" class="<%=assocKlassName%>" column="<%=keyColumnName%>" unique="true" lazy="<%=lazyValue%>" not-null="<%=notNullFkAttr%>" cascade="<%=cascadeStyle%>" <%=insertUpdate%> /><%
 									}else{%>
 		<%=emptySpace%><one-to-one name="<%=otherEnd.getRoleName()%>" class="<%=assocKlassName%>" property-ref="<%=thisEnd.getRoleName()%>" lazy="<%=lazyValue%>" cascade="<%=cascadeStyle%>"/><%
 									}
 								}else{
 									if(keyColumnPresent){%>
-		<%=emptySpace%><many-to-one name="<%=otherEnd.getRoleName()%>" class="<%=assocKlassName%>" column="<%=keyColumnName%>" unique="true" lazy="<%=lazyValue%>" not-null="<%=notNullFkAttr%>" cascade="<%=cascadeStyle%>" insert="false" update="false"/><%
+		<%=emptySpace%><many-to-one name="<%=otherEnd.getRoleName()%>" class="<%=assocKlassName%>" column="<%=keyColumnName%>" unique="true" lazy="<%=lazyValue%>" not-null="<%=notNullFkAttr%>" cascade="<%=cascadeStyle%>" <%=insertUpdate%> /><%
 									}else {
 									    throw new GenerationException("One to one unidirectional mapping requires key column to be present in the source class"+transformerUtils.getFQCN(currentKlass));
 									}
@@ -242,6 +243,7 @@ String discriminatorValueStr = (discriminatorValue==null) ? "" : "discriminator-
 						UMLClass assocKlass = (UMLClass)otherEnd.getUMLElement();
 						String assocKlassName = transformerUtils.getFQCN(assocKlass);
 						String cascadeStyle = transformerUtils.findCascadeStyle(currentKlass, otherEnd.getRoleName(), association);
+						String insertUpdate = transformerUtils.getCascadeInsertUpdate(cascadeStyle);
 						boolean lazy = transformerUtils.isLazyLoad(currentKlass, otherEnd.getRoleName(), association);
 						
 				        if(transformerUtils.isMany2One(thisEnd,otherEnd)){
@@ -295,6 +297,7 @@ String discriminatorValueStr = (discriminatorValue==null) ? "" : "discriminator-
 						UMLClass assocKlass = (UMLClass)otherEnd.getUMLElement();
 						String assocKlassName = transformerUtils.getFQCN(assocKlass);
 						String cascadeStyle = transformerUtils.findCascadeStyle(currentKlass, otherEnd.getRoleName(), association);
+						String insertUpdate = transformerUtils.getCascadeInsertUpdate(cascadeStyle);
 						boolean lazy = transformerUtils.isLazyLoad(currentKlass, otherEnd.getRoleName(), association);
 						
 						if(transformerUtils.isAny(thisEnd,otherEnd)) //Association to an implicit parent class
@@ -393,7 +396,7 @@ String discriminatorValueStr = (discriminatorValue==null) ? "" : "discriminator-
 								{	
 									String lazyValue = lazy == true ? "proxy" : "false";							
 									String keyColumnName = transformerUtils.findAssociatedColumn(table,currentKlass,otherEnd,assocKlass,thisEnd, false);%>
-			<%=emptySpace%><many-to-one name="<%=otherEnd.getRoleName()%>" class="<%=assocKlassName%>" column="<%=keyColumnName%>" lazy="<%=lazyValue%>" not-null="<%=notNullFkAttr%>" cascade="<%=cascadeStyle%>" insert="false" update="false" /><%
+			<%=emptySpace%><many-to-one name="<%=otherEnd.getRoleName()%>" class="<%=assocKlassName%>" column="<%=keyColumnName%>" lazy="<%=lazyValue%>" not-null="<%=notNullFkAttr%>" cascade="<%=cascadeStyle%>" <%=insertUpdate%> /><%
 								}else{ // Many to One - Join Table
 						
 										// do nothing; do not generate any <join> elements in this first pass!  Hibernate DTD requires any <set> elements to appear first
@@ -410,13 +413,13 @@ String discriminatorValueStr = (discriminatorValue==null) ? "" : "discriminator-
 								if(thisEnd.isNavigable())
 								{
 									if(keyColumnPresent){%>
-		<%=emptySpace%><many-to-one name="<%=otherEnd.getRoleName()%>" class="<%=assocKlassName%>" column="<%=keyColumnName%>" unique="true" lazy="<%=lazyValue%>" not-null="<%=notNullFkAttr%>" cascade="<%=cascadeStyle%>" insert="false" update="false" /><%
+		<%=emptySpace%><many-to-one name="<%=otherEnd.getRoleName()%>" class="<%=assocKlassName%>" column="<%=keyColumnName%>" unique="true" lazy="<%=lazyValue%>" not-null="<%=notNullFkAttr%>" cascade="<%=cascadeStyle%>" <%=insertUpdate%> /><%
 									}else{%>
 		<%=emptySpace%><one-to-one name="<%=otherEnd.getRoleName()%>" class="<%=assocKlassName%>" property-ref="<%=thisEnd.getRoleName()%>" lazy="<%=lazyValue%>" cascade="<%=cascadeStyle%>"/><%
 							}
 								}else{
 									if(keyColumnPresent){%>
-		<%=emptySpace%><many-to-one name="<%=otherEnd.getRoleName()%>" class="<%=assocKlassName%>" column="<%=keyColumnName%>" unique="true" lazy="<%=lazyValue%>" not-null="<%=notNullFkAttr%>" cascade="<%=cascadeStyle%>" insert="false" update="false"/><%
+		<%=emptySpace%><many-to-one name="<%=otherEnd.getRoleName()%>" class="<%=assocKlassName%>" column="<%=keyColumnName%>" unique="true" lazy="<%=lazyValue%>" not-null="<%=notNullFkAttr%>" cascade="<%=cascadeStyle%>" <%=insertUpdate%> /><%
 									}else {
 									    throw new GenerationException("One to one unidirectional mapping requires key column to be present in the source class"+transformerUtils.getFQCN(currentKlass));
 						}

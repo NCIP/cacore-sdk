@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.Reader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -86,6 +88,11 @@ public class JAXBUnmarshaller implements gov.nih.nci.system.client.util.xml.Unma
 		hasBeenInvokedWithoutContext = true;
 	}
 
+	public Object fromXML(InputStream stream) throws XMLUtilityException {
+		InputStreamReader in= new InputStreamReader(stream);
+		return fromXML(in, null);
+	}
+
 	public Object fromXML(Reader reader) throws XMLUtilityException {
 		return fromXML(reader, null);
 	}
@@ -153,7 +160,7 @@ public class JAXBUnmarshaller implements gov.nih.nci.system.client.util.xml.Unma
                 		if(systemId != null)
                 		{
                 			xsdPath = systemId.substring(systemId.lastIndexOf("/")+1);
-                			
+
                 			if(publicId == null)
                 				publicId = xsdPath.substring(0, xsdPath.length()-4);
                 		}

@@ -40,8 +40,9 @@ public class WritableORMDAOImpl extends ORMDAOImpl implements WritableDAO
 			{
 				try
 				{
-					System.out.println("InsertExampleQuery *****************");	
+
 				Object obj = ((InsertExampleQuery) q).getExample();
+				System.out.println("InsertExampleQuery *****************"+obj.toString());
 				insert(obj, ((InsertExampleQuery) q).getCommit());
 				result = new SDKQueryResult(obj);
 				}
@@ -91,6 +92,7 @@ public class WritableORMDAOImpl extends ORMDAOImpl implements WritableDAO
 	public void insert(Object o, boolean commit)
 	{
 		log.info("In the writable DAO. executing the Insert query**********");
+		System.out.println("inserting: "+o.toString());
 		if(commit)
 		{
 			getFlushAutoHibernateTemplate().execute(getSaveHibernateCallback(o));
@@ -102,6 +104,7 @@ public class WritableORMDAOImpl extends ORMDAOImpl implements WritableDAO
 	public void update(Object o, boolean commit)
 	{
 		log.info("In the writable DAO. executing the Update query*********");
+		System.out.println("updating: "+o.toString());
 		if(commit)
 		{
 			getFlushAutoHibernateTemplate().execute(getUpdateHibernateCallback(o));
@@ -113,7 +116,7 @@ public class WritableORMDAOImpl extends ORMDAOImpl implements WritableDAO
 	public void delete(final Object o, boolean commit)
 	{
 		System.out.println("In the writable DAO. executing the Delete query***1111*******");
-
+		System.out.println("deleting: "+o.toString());
 		if(commit)
 		{
 			getFlushAutoHibernateTemplate().execute(getDeleteHibernateCallback(o));

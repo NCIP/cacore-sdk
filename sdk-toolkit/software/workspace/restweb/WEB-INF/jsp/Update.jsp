@@ -5,7 +5,11 @@
 				 gov.nih.nci.system.web.util.HtmlUtils,
 				 java.lang.reflect.*,
 				 org.jdom.Element,
+				 gov.nih.nci.system.web.util.RESTUtil,
 				 org.jdom.Document,
+				 org.apache.struts2.dispatcher.SessionMap,
+				 com.opensymphony.xwork2.ActionContext,
+				 org.acegisecurity.Authentication,
 				 java.util.*" %> 
 			 
 <html>
@@ -126,7 +130,7 @@ if(className != null)
 	{	
 		jspUtils = JSPUtils.getJSPUtils(config.getServletContext());
 		fieldNames = jspUtils.getSearchableFields(className);
-		domainNames = jspUtils.getToAssociations(className);
+		domainNames = jspUtils.getAssociations(className);
 		classIdName = jspUtils.getClassIdName(className);
 		
 	}
@@ -198,24 +202,59 @@ if(className != null)
 
 			<% if(domainNames != null && domainNames.size() > 0)
 			   { 
+				SessionMap session1 = (SessionMap) ActionContext.getContext().get(
+						ActionContext.SESSION.toString());
+				org.acegisecurity.context.SecurityContext context = (org.acegisecurity.context.SecurityContext) session1
+						.get("ACEGI_SECURITY_CONTEXT");
+				String base64encodedUsernameAndPassword = null;
+				if (context != null) {
+					Authentication authentication = context.getAuthentication();
+					// authentication.getCredentials();
+					System.out.println("username 11 "
+							+ authentication.getPrincipal().toString());
+					String userName = ((org.acegisecurity.userdetails.User) authentication
+							.getPrincipal()).getUsername();
+					String password = authentication.getCredentials()
+							.toString();
+					System.out.println("password 11 "
+							+ authentication.getCredentials().toString());
+					base64encodedUsernameAndPassword = new String(
+							org.apache.commons.codec.binary.Base64.encodeBase64((userName + ":" + password)
+									.getBytes()));
+				}			   
 			   %>
 		
 			   		<%for(int i=0; i<domainNames.size(); i++)
 			   		{
 			   		String asscName = (String)domainNames.get(i);
 			   		String asscClass = asscName;
+					String asscRole = null;			   		
+					System.out.println("asscName: "+asscName);
 			   		if(asscName.indexOf("(") != -1)
+			   		{
 			   			asscClass = asscName.substring(asscName.indexOf("(")+1, asscName.lastIndexOf(")"));
+			   			asscRole = asscName.substring(0, asscName.indexOf("("));
+			   		}
 			   			
 			   		if(asscClass.equals("Please choose") || asscClass.equals(className))
 			   			continue;
 			   		String idName = jspUtils.getClassIdName(asscClass);
 			   		String labelName = asscClass + "."+idName;
-			   		String idType = jspUtils.getReturnType(asscClass, idName, true);
+			   		if(asscRole != null)
+			   			labelName = asscRole+"("+labelName+")";
+			   		
 			   		String filedName = labelName.replace(".", "-");
+			   		String idType = jspUtils.getReturnType(asscClass, idName, true);
+			   		
+			   		System.out.println("rootElement: "+rootElement.toString());
 			   		%>
-		
-			<input type="hidden" value="<%=HtmlUtils.getAttributeValue(rootElement, filedName)%>">
+		<tr align="left" valign="top">
+			<td class="formRequiredNotice" width="5px">&nbsp;</td>
+			<td class="formLabel" align="right"><label for="<%=labelName%>"><%=labelName%>:</label></td>
+			<td class="formField" width="90%">
+				<%=HtmlUtils.getHtmlFor(filedName,idType, RESTUtil.getLinkIdValue(rootElement, asscRole, asscClass, idName, base64encodedUsernameAndPassword))%>
+			</td>
+		</tr>			
 			<%}
 			
 			}// end if(domainNames != null) statement%>			   

@@ -2,6 +2,7 @@ package gov.nih.nci.system.client.util.xml;
 
 import java.io.File;
 import java.io.Reader;
+import java.io.InputStream;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Collection;
@@ -21,15 +22,15 @@ public class XMLUtility {
 
 	public XMLUtility(Marshaller marshaller,
 			Unmarshaller unmarshaller) {
-		
+
 		this.marshaller = marshaller;
 		this.unmarshaller = unmarshaller;
 	}
 
 	/**
-	 * 
+	 *
 	 * Serializes an object into xml
-	 * 
+	 *
 	 * @param beanObject
 	 *            The caCORE object to serialize into xml
 	 */
@@ -43,20 +44,20 @@ public class XMLUtility {
 			throws XMLUtilityException {
 		marshaller.toXML(beanObject, stream);
 	}
-	
+
 
 	public void toXML(Object beanObject, Writer stream, String namespacePrefix)
 			throws XMLUtilityException {
-		
+
 		if (!(unmarshaller instanceof JAXBUnmarshaller)){
 			throw new XMLUtilityException("Invalid method invocation.  This method is only valid when the Marshaller is a JAXBMarshaller instance");
 		}
-		
+
 		((JAXBMarshaller)marshaller).toXML(beanObject, stream, namespacePrefix);
 	}
-	
+
 	static public Object convertFromProxy(Object obj, boolean getAssociation) throws XMLUtilityException {
-		
+
 		Object convertedObject = null;
 		try {
 			CastorDomainObjectFieldHandler handler = new CastorDomainObjectFieldHandler();
@@ -65,13 +66,13 @@ public class XMLUtility {
 			log.error("Exception caught trying to convert from proxy to domain object: ", e);
 			throw new XMLUtilityException("Exception caught trying to convert from proxy to domain object: ", e);
 		}
-		
+
 		return convertedObject;
 	}
 
-	
+
 	static public Collection convertFromProxy(Object obj) throws XMLUtilityException {
-		
+
 		Collection convertedCollection = null;
 		try {
 			CastorCollectionFieldHandler handler = new CastorCollectionFieldHandler();
@@ -80,13 +81,13 @@ public class XMLUtility {
 			log.error("Exception caught trying to convert from proxy to domain object: ", e);
 			throw new XMLUtilityException("Exception caught trying to convert from proxy to domain object: ", e);
 		}
-		
+
 		return convertedCollection;
 	}
 	/**
 	 * Instantiates an object from an XML File that contains the serialized output
 	 * of that object.
-	 * 
+	 *
 	 * @param xmlFile
 	 * @return
 	 * @throws XMLUtilityException
@@ -106,45 +107,45 @@ public class XMLUtility {
 	/**
 	 * Instantiates an object from an XML File that contains the serialized output
 	 * of that object. This method should only be used with a JAXBUnmarshaller instance
-	 * 
+	 *
 	 * @param xmlFile
 	 * @return
 	 * @throws XMLUtilityException
-	 */	
+	 */
 	public Object fromXML(Class klazz, File xmlFile) throws XMLUtilityException {
-		
+
 		if (!(unmarshaller instanceof JAXBUnmarshaller)){
 			throw new XMLUtilityException("Invalid method invocation.  This method is only valid when the unmarshaller is a JAXBUnmarshaller instance");
 		}
-		
+
 		Object beanObject = null;
 		beanObject = ((JAXBUnmarshaller)unmarshaller).fromXML(klazz,xmlFile);
 		return beanObject;
 	}
-	
+
 	/**
 	 * Instantiates an object from an XML File that contains the serialized output
 	 * of that object. This method should only be used with a JAXBUnmarshaller instance
-	 * 
+	 *
 	 * @param xmlFile
 	 * @return
 	 * @throws XMLUtilityException
-	 */	
+	 */
 	public Object fromXML(String packageName, File xmlFile) throws XMLUtilityException {
-		
+
 		if (!(unmarshaller instanceof JAXBUnmarshaller)){
 			throw new XMLUtilityException("Invalid method usage.  This method is only valid when the Marshaller is a JAXBUnmarshaller instance");
 		}
-		
+
 		Object beanObject = null;
 		beanObject = ((JAXBUnmarshaller)unmarshaller).fromXML(packageName,xmlFile);
 		return beanObject;
-	}	
+	}
 
 	/**
 	 * Instantiates an object from xml input that contains the serialized output
 	 * of that object.
-	 * 
+	 *
 	 * @param input
 	 *            Reader type
 	 * @return Instantiated object
@@ -155,4 +156,5 @@ public class XMLUtility {
 		beanObject = unmarshaller.fromXML(input);
 		return beanObject;
 	}
+
 }
