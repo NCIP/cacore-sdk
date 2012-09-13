@@ -8,6 +8,7 @@
 				 gov.nih.nci.system.web.util.RESTUtil,
 				 org.jdom.Document,
 				 org.apache.struts2.dispatcher.SessionMap,
+				 gov.nih.nci.sdk.rest.SDKCascadeCache,
 				 com.opensymphony.xwork2.ActionContext,
 				 org.acegisecurity.Authentication,
 				 java.util.*" %> 
@@ -161,9 +162,6 @@ if(className != null)
 	   			attrType = ((Field)fieldNames.get(i)).getType().getName();
 	   			attrGenericTypeClassName = ((Field)fieldNames.get(i)).getGenericType().toString();
 	   	
-	   			//System.out.println("Field Type: "+((Field)fieldNames.get(i)).getType().getName());
-	   			//System.out.println("Field Generic Type: "+((Field)fieldNames.get(i)).getGenericType());
-	   	
 				int beginIndex = attrType.lastIndexOf('.');
 				if (beginIndex > 0) {
 					++beginIndex;
@@ -210,14 +208,10 @@ if(className != null)
 				if (context != null) {
 					Authentication authentication = context.getAuthentication();
 					// authentication.getCredentials();
-					System.out.println("username 11 "
-							+ authentication.getPrincipal().toString());
 					String userName = ((org.acegisecurity.userdetails.User) authentication
 							.getPrincipal()).getUsername();
 					String password = authentication.getCredentials()
 							.toString();
-					System.out.println("password 11 "
-							+ authentication.getCredentials().toString());
 					base64encodedUsernameAndPassword = new String(
 							org.apache.commons.codec.binary.Base64.encodeBase64((userName + ":" + password)
 									.getBytes()));
@@ -229,7 +223,6 @@ if(className != null)
 			   		String asscName = (String)domainNames.get(i);
 			   		String asscClass = asscName;
 					String asscRole = null;			   		
-					System.out.println("asscName: "+asscName);
 			   		if(asscName.indexOf("(") != -1)
 			   		{
 			   			asscClass = asscName.substring(asscName.indexOf("(")+1, asscName.lastIndexOf(")"));
@@ -246,7 +239,8 @@ if(className != null)
 			   		String filedName = labelName.replace(".", "-");
 			   		String idType = jspUtils.getReturnType(asscClass, idName, true);
 			   		
-			   		System.out.println("rootElement: "+rootElement.toString());
+			   		if(SDKCascadeCache.getInstance().canSaveAssociation(className, asscRole))
+			   		{
 			   		%>
 		<tr align="left" valign="top">
 			<td class="formRequiredNotice" width="5px">&nbsp;</td>
@@ -256,6 +250,7 @@ if(className != null)
 			</td>
 		</tr>			
 			<%}
+			}
 			
 			}// end if(domainNames != null) statement%>			   
 		

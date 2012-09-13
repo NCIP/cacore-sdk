@@ -1,0 +1,607 @@
+<%@ jet package="gov.nih.nci.codegen.transformer.jet" 
+        class="SDKCascadeTransformer"
+        skeleton="ModelTransformerBase.skeleton" %>
+package gov.nih.nci.sdk.rest;
+
+import java.util.Collections;
+import java.util.Map;
+import java.util.StringTokenizer;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.HashMap;
+
+
+public class SDKCascadeCache 
+{
+
+	private Map cascadeCache = new HashMap();
+	private Map assocCache = new HashMap();
+	private Map inverseCache = new HashMap();
+	private static SDKCascadeCache cache = new SDKCascadeCache();
+	
+	public static final String CASCADE_ALL = "all";
+	public static final String CASCADE_ALL_DELETE_ORPHAN = "all-delete-orphan";
+	public static final String CASCADE_DELETE = "delete";
+	public static final String CASCADE_DELETE_ORPHAN = "delete-orphan";
+	public static final String CASCADE_EVICT = "evict";
+	public static final String CASCADE_LOCK = "lock";
+	public static final String CASCADE_MERGE = "merge";
+	public static final String CASCADE_NONE = "none";
+	public static final String CASCADE_PERSIST = "persist";
+	public static final String CASCADE_REFRESH = "refresh";
+	public static final String CASCADE_REPLICATE = "replicate";
+	public static final String CASCADE_SAVE_UPDATE = "save-update";
+
+	public static SDKCascadeCache getInstance()
+	{
+		return cache;
+	}
+
+	private SDKCascadeCache()
+	{
+	 init();
+	}
+
+	private void init() {
+		<%
+		for(UMLClass klass:transformerUtils.getAllClasses(model))
+		{
+			UMLAttribute idAttr = transformerUtils.getClassIdAttr(klass);
+			String abstractModifier = transformerUtils.isAbstract(klass) ? "true" : "false";
+			String polymorphismAttr = transformerUtils.hasImplicitParent(klass) ? "implicit" : "explicit";
+			String fqcn = transformerUtils.getFQCN(klass);
+			String fullPackageName=transformerUtils.getFullPackageName(klass);
+			UMLClass table = null;
+			try
+			{
+				table = transformerUtils.getTable(klass);
+			}
+			catch(Exception e)
+			{
+				continue;
+			}
+			String discriminatorColumnName = transformerUtils.findDiscriminatingColumnName(klass);
+
+
+		UMLClass currentKlass = klass;
+		do{
+			for(Object obj :transformerUtils.getSortedByJoinUMLAttribute(currentKlass, idAttr, table))
+			{
+				if (obj instanceof UMLAssociation)
+				{
+					UMLAssociation association = (UMLAssociation)obj;
+					List<UMLAssociationEnd> assocEnds = association.getAssociationEnds();
+					UMLAssociationEnd thisEnd = transformerUtils.getThisEnd(currentKlass,assocEnds);
+					UMLAssociationEnd otherEnd = transformerUtils.getOtherEnd(currentKlass,assocEnds);
+					
+					if(otherEnd.isNavigable())
+					{
+						UMLClass assocKlass = (UMLClass)otherEnd.getUMLElement();
+						String assocKlassName = transformerUtils.getFQCN(assocKlass);
+						String cascadeStyle = transformerUtils.findCascadeStyle(currentKlass, otherEnd.getRoleName(), association);
+						String insertUpdate = transformerUtils.getCascadeInsertUpdate(cascadeStyle);
+						boolean lazy = transformerUtils.isLazyLoad(currentKlass, otherEnd.getRoleName(), association);
+						if(transformerUtils.isAny(thisEnd,otherEnd)) //Association to an implicit parent class
+						{
+							String lazyValue = lazy == true ? "true" : "false";
+							UMLClass implicitClass = (UMLClass)otherEnd.getUMLElement();
+							UMLClass anyTable = transformerUtils.getTable(currentKlass);
+							UMLClass nonImplicitClass = transformerUtils.getNonImplicitSubclasses(implicitClass).get(0);
+							UMLAttribute implicitIdAttr = transformerUtils.getClassIdAttr(nonImplicitClass);
+							String implicitIdType = transformerUtils.getHibernateDataType(nonImplicitClass,implicitIdAttr);
+							String key = fullPackageName+"."+currentKlass.getName().trim()+ ":" + otherEnd.getRoleName().trim();
+						%>
+		assocCache.put("<%=key%>", "any");
+		cascadeCache.put("<%=key%>", "<%=cascadeStyle%>");
+						<%
+						
+						} else if(transformerUtils.isMany2Any(thisEnd,otherEnd)){
+							String lazyValue = lazy == true ? "true" : "false";
+							UMLClass correlationTable = transformerUtils.findCorrelationTable(association, model, assocKlass);
+							String keyColumnName = transformerUtils.findAssociatedColumn(correlationTable,assocKlass,thisEnd, currentKlass,otherEnd, true);
+							String assocColumnName = transformerUtils.findAssociatedColumn(correlationTable,currentKlass,otherEnd, assocKlass, thisEnd, true);
+							String inverseColumnName =  transformerUtils.findInverseColumnValue(correlationTable,assocKlass,thisEnd);
+							String inverseValue = assocColumnName.equals(inverseColumnName) ?"true":"false";
+							String joinTableName = correlationTable.getName();
+							UMLClass implicitClass = (UMLClass)otherEnd.getUMLElement();
+							UMLClass nonImplicitClass = transformerUtils.getNonImplicitSubclasses(implicitClass).get(0);
+							UMLAttribute implicitIdAttr = transformerUtils.getClassIdAttr(nonImplicitClass);
+							String implicitIdType = transformerUtils.getHibernateDataType(nonImplicitClass,implicitIdAttr);
+							String key = fullPackageName+"."+currentKlass.getName().trim()+ ":" + otherEnd.getRoleName().trim();
+						%>
+		assocCache.put("<%=key%>", "many-to-any");
+		inverseCache.put("<%=key%>", "<%=inverseValue%>");
+						<%
+						} else if(transformerUtils.isMany2Many(thisEnd,otherEnd)){
+							String lazyValue = lazy == true ? "true" : "false";
+							UMLClass correlationTable = transformerUtils.findCorrelationTable(association, model, assocKlass);
+							String keyColumnName = transformerUtils.findAssociatedColumn(correlationTable,assocKlass,thisEnd, currentKlass,otherEnd, true);
+							String assocColumnName = transformerUtils.findAssociatedColumn(correlationTable,currentKlass,otherEnd, assocKlass, thisEnd, true);
+							String inverseColumnName =  transformerUtils.findInverseColumnValue(correlationTable,assocKlass,thisEnd);
+							String inverseValue = assocColumnName.equals(inverseColumnName) ?"true":"false";
+							String key = fullPackageName+"."+currentKlass.getName().trim()+ ":" + otherEnd.getRoleName().trim();
+						%>
+		assocCache.put("<%=key%>", "many-to-many");
+		inverseCache.put("<%=key%>", "<%=inverseValue%>");
+						<%
+						}else if(transformerUtils.isOne2Many(thisEnd,otherEnd)){	//One to Many
+							String lazyValue = lazy == true ? "true" : "false";
+							UMLClass correlationTable = transformerUtils.findCorrelationTable(association, model, assocKlass, false);
+							if (correlationTable == null) //One to Many - No Join Table
+							{
+								UMLClass assocTable = transformerUtils.getTable(assocKlass);
+								String notNullFkAttr=transformerUtils.isFKAttributeNull(otherEnd);
+								String keyColumnName = transformerUtils.findAssociatedColumn(assocTable,assocKlass,thisEnd,currentKlass,otherEnd, false);
+								String assocColumnName = transformerUtils.findAssociatedColumn(assocTable,currentKlass,otherEnd,assocKlass,thisEnd, false);
+								String inverseColumnName =  transformerUtils.findInverseColumnValue(assocTable,assocKlass,thisEnd);
+								String inverseValue = assocColumnName.equals(inverseColumnName) ?"true":"false"; 
+								String key = fullPackageName+"."+currentKlass.getName().trim()+ ":" + otherEnd.getRoleName().trim();
+						%>
+		assocCache.put("<%=key%>", "one-to-many");
+		inverseCache.put("<%=key%>", "<%=inverseValue%>");
+		cascadeCache.put("<%=key%>", "<%=cascadeStyle%>");
+							<%
+							}else{ //One to Many - Join Table
+								String keyColumnName = transformerUtils.findAssociatedColumn(correlationTable,assocKlass,thisEnd, currentKlass, otherEnd, true);
+								String assocColumnName = transformerUtils.findAssociatedColumn(correlationTable,currentKlass,otherEnd,assocKlass,thisEnd, true);
+								String inverseColumnName =  transformerUtils.findInverseColumnValue(correlationTable,assocKlass,thisEnd);
+								String inverseValue = assocColumnName.equals(inverseColumnName) ?"true":"false";
+								String joinTableName = correlationTable.getName();
+								String key = fullPackageName+"."+currentKlass.getName().trim()+ ":" + otherEnd.getRoleName().trim();
+						%>
+		assocCache.put("<%=key%>", "many-to-many");
+		inverseCache.put("<%=key%>", "<%=inverseValue%>");
+		cascadeCache.put("<%=key%>", "<%=cascadeStyle%>");
+						<%
+							}
+						}else if(transformerUtils.isMany2One(thisEnd,otherEnd)){
+								String notNullFkAttr=transformerUtils.isFKAttributeNull(otherEnd);
+								UMLClass correlationTable = transformerUtils.findCorrelationTable(association, model, assocKlass, false);
+								if (correlationTable == null) //Many to One - No Join Table
+								{	
+									String lazyValue = lazy == true ? "proxy" : "false";							
+									String keyColumnName = transformerUtils.findAssociatedColumn(table,currentKlass,otherEnd,assocKlass,thisEnd, false);
+									String key = fullPackageName+"."+currentKlass.getName().trim()+ ":" + otherEnd.getRoleName().trim();
+						%>
+		assocCache.put("<%=key%>", "many-to-one");
+		cascadeCache.put("<%=key%>", "<%=cascadeStyle%>");
+						<%
+								}else{ // Many to One - Join Table
+						
+										// do nothing; do not generate any <join> elements in this first pass!  Hibernate DTD requires any <set> elements to appear first
+								}
+						}else{	//One to One
+							String lazyValue = lazy == true ? "proxy" : "false";
+							String notNullFkAttr=transformerUtils.isFKAttributeNull(otherEnd);
+							UMLClass correlationTable = transformerUtils.findCorrelationTable(association, model, assocKlass, false);
+							if (correlationTable == null) //Many to One - No Join Table
+							{
+
+								String keyColumnName = transformerUtils.findAssociatedColumn(table,currentKlass,otherEnd,assocKlass,thisEnd, false, false);
+								Boolean keyColumnPresent = (keyColumnName!=null && !"".equals(keyColumnName));
+								String key = fullPackageName+"."+currentKlass.getName().trim()+ ":" + otherEnd.getRoleName().trim();
+								if(thisEnd.isNavigable())
+								{
+									if(keyColumnPresent){
+							
+								%>
+		assocCache.put("<%=key%>", "many-to-one");
+		cascadeCache.put("<%=key%>", "<%=cascadeStyle%>");
+								<%
+									}else{
+								%>
+		assocCache.put("<%=key%>", "one-to-one");
+		cascadeCache.put("<%=key%>", "<%=cascadeStyle%>");
+								<%
+									}
+								}else{
+									if(keyColumnPresent){
+									%>
+		assocCache.put("<%=key%>", "many-to-one");
+		cascadeCache.put("<%=key%>", "<%=cascadeStyle%>");
+									<%
+									}
+								}
+							}else{ // generate <join> statement
+								// do nothing; do not generate any <join> elements in this first pass!  Hibernate DTD requires any <set> elements to appear first
+							}
+						}
+					}
+					
+					if(otherEnd.isNavigable())
+					{
+						UMLClass assocKlass = (UMLClass)otherEnd.getUMLElement();
+						String assocKlassName = transformerUtils.getFQCN(assocKlass);
+						String cascadeStyle = transformerUtils.findCascadeStyle(currentKlass, otherEnd.getRoleName(), association);
+						String insertUpdate = transformerUtils.getCascadeInsertUpdate(cascadeStyle);
+						boolean lazy = transformerUtils.isLazyLoad(currentKlass, otherEnd.getRoleName(), association);
+						
+						if(transformerUtils.isMany2One(thisEnd,otherEnd)){
+							String notNullFkAttr=transformerUtils.isFKAttributeNull(otherEnd);
+							UMLClass correlationTable = transformerUtils.findCorrelationTable(association, model, assocKlass, false);
+							if (correlationTable != null) //Many to One -  Join Table
+							{
+								String lazyValue = lazy == true ? "proxy" : "false";
+								String keyColumnName = transformerUtils.findAssociatedColumn(correlationTable,assocKlass,thisEnd, currentKlass, otherEnd, true);
+								String assocColumnName = transformerUtils.findAssociatedColumn(correlationTable,currentKlass,otherEnd,assocKlass,thisEnd, true);
+								String inverseColumnName =  transformerUtils.findInverseColumnValue(correlationTable,assocKlass,thisEnd);
+								String inverseValue = assocColumnName.equals(inverseColumnName) ?"true":"false";
+								String joinTableName = correlationTable.getName();
+								String key = fullPackageName+"."+currentKlass.getName().trim()+ ":" + otherEnd.getRoleName().trim();
+				%>
+		assocCache.put("<%=key%>", "many-to-one");
+		inverseCache.put("<%=key%>", "<%=inverseValue%>");
+		cascadeCache.put("<%=key%>", "<%=cascadeStyle%>");
+				<%
+								}
+						}else if(transformerUtils.isOne2One(thisEnd,otherEnd)){	//One to One
+							String lazyValue = lazy == true ? "proxy" : "false";
+							String notNullFkAttr=transformerUtils.isFKAttributeNull(otherEnd);
+							UMLClass correlationTable = transformerUtils.findCorrelationTable(association, model, assocKlass, false);
+							if (correlationTable != null) //Many to One -  Join Table
+							{
+								String keyColumnName = transformerUtils.findAssociatedColumn(correlationTable,assocKlass,thisEnd, currentKlass, otherEnd, true);
+								String assocColumnName = transformerUtils.findAssociatedColumn(correlationTable,currentKlass,otherEnd,assocKlass,thisEnd, true);
+								String inverseColumnName =  transformerUtils.findInverseColumnValue(correlationTable,assocKlass,thisEnd);
+								String inverseValue = assocColumnName.equals(inverseColumnName) ?"true":"false";
+								String joinTableName = correlationTable.getName();
+								String key = fullPackageName+"."+currentKlass.getName().trim()+ ":" + otherEnd.getRoleName().trim();
+				%>
+		assocCache.put("<%=key%>", "many-to-one");
+		inverseCache.put("<%=key%>", "<%=inverseValue%>");
+		cascadeCache.put("<%=key%>", "<%=cascadeStyle%>");
+				<%
+							}
+						}
+					}
+				
+				//Third Pass - process any inverse of bidirectional self-association
+				if(transformerUtils.isBidirectionalSelfAssociation(klass,assocEnds)) 
+				{ 
+
+					// handle bidirectional self-association by 'flipping' otherEnd and thisEnd
+					thisEnd = transformerUtils.getOtherEnd(currentKlass,assocEnds);  
+					otherEnd = transformerUtils.getThisEnd(currentKlass,assocEnds);
+					
+					if(otherEnd.isNavigable())
+					{
+						UMLClass assocKlass = (UMLClass)otherEnd.getUMLElement();
+						String assocKlassName = transformerUtils.getFQCN(assocKlass);
+						String cascadeStyle = transformerUtils.findCascadeStyle(currentKlass, otherEnd.getRoleName(), association);
+						String insertUpdate = transformerUtils.getCascadeInsertUpdate(cascadeStyle);
+						boolean lazy = transformerUtils.isLazyLoad(currentKlass, otherEnd.getRoleName(), association);
+						
+						if(transformerUtils.isAny(thisEnd,otherEnd)) //Association to an implicit parent class
+						{
+							String lazyValue = lazy == true ? "true" : "false";
+							UMLClass implicitClass = (UMLClass)otherEnd.getUMLElement();
+							UMLClass anyTable = transformerUtils.getTable(currentKlass);
+							UMLClass nonImplicitClass = transformerUtils.getNonImplicitSubclasses(implicitClass).get(0);
+							UMLAttribute implicitIdAttr = transformerUtils.getClassIdAttr(nonImplicitClass);
+							String implicitIdType = transformerUtils.getHibernateDataType(nonImplicitClass,implicitIdAttr);
+							String key = fullPackageName+"."+currentKlass.getName().trim()+ ":" + otherEnd.getRoleName().trim();
+				%>
+		assocCache.put("<%=key%>", "any");
+		cascadeCache.put("<%=key%>", "<%=cascadeStyle%>");
+				<%
+						} else if(transformerUtils.isMany2Any(thisEnd,otherEnd)){
+							String lazyValue = lazy == true ? "true" : "false";
+							UMLClass correlationTable = transformerUtils.findCorrelationTable(association, model, assocKlass);
+							String keyColumnName = transformerUtils.findAssociatedColumn(correlationTable,assocKlass,thisEnd, currentKlass,otherEnd, true);
+							String assocColumnName = transformerUtils.findAssociatedColumn(correlationTable,currentKlass,otherEnd, assocKlass, thisEnd, true);
+							String inverseColumnName =  transformerUtils.findInverseColumnValue(correlationTable,assocKlass,thisEnd);
+							String inverseValue = assocColumnName.equals(inverseColumnName) ?"true":"false";
+							String joinTableName = correlationTable.getName();
+							UMLClass implicitClass = (UMLClass)otherEnd.getUMLElement();
+							UMLClass nonImplicitClass = transformerUtils.getNonImplicitSubclasses(implicitClass).get(0);
+							UMLAttribute implicitIdAttr = transformerUtils.getClassIdAttr(nonImplicitClass);
+							String implicitIdType = transformerUtils.getHibernateDataType(nonImplicitClass,implicitIdAttr);
+							String key = fullPackageName+"."+currentKlass.getName().trim()+ ":" + otherEnd.getRoleName().trim();
+				%>
+		assocCache.put("<%=key%>", "many-to-any");
+		inverseCache.put("<%=key%>", "<%=inverseValue%>");
+				<%
+						} else if(transformerUtils.isMany2Many(thisEnd,otherEnd)){
+							String lazyValue = lazy == true ? "true" : "false";
+							UMLClass correlationTable = transformerUtils.findCorrelationTable(association, model, assocKlass);
+							String keyColumnName = transformerUtils.findAssociatedColumn(correlationTable,assocKlass,thisEnd, currentKlass,otherEnd, true);
+							String assocColumnName = transformerUtils.findAssociatedColumn(correlationTable,currentKlass,otherEnd, assocKlass, thisEnd, true);
+							String inverseColumnName =  transformerUtils.findInverseColumnValue(correlationTable,assocKlass,thisEnd);
+							String inverseValue = assocColumnName.equals(inverseColumnName) ?"true":"false";
+							String joinTableName = correlationTable.getName();
+							String key = fullPackageName+"."+currentKlass.getName().trim()+ ":" + otherEnd.getRoleName().trim();
+				%>
+		assocCache.put("<%=key%>", "many-to-many");
+		inverseCache.put("<%=key%>", "<%=inverseValue%>");
+				<%
+						}else if(transformerUtils.isOne2Many(thisEnd,otherEnd)){	//One to Many
+							String lazyValue = lazy == true ? "true" : "false";
+							UMLClass correlationTable = transformerUtils.findCorrelationTable(association, model, assocKlass, false);
+							if (correlationTable == null) //One to Many - No Join Table
+							{
+								UMLClass assocTable = transformerUtils.getTable(assocKlass);
+								String notNullFkAttr=transformerUtils.isFKAttributeNull(otherEnd);
+								String keyColumnName = transformerUtils.findAssociatedColumn(assocTable,assocKlass,thisEnd,currentKlass,otherEnd, false);
+								String assocColumnName = transformerUtils.findAssociatedColumn(assocTable,currentKlass,otherEnd,assocKlass,thisEnd, false);
+								String inverseColumnName =  transformerUtils.findInverseColumnValue(assocTable,assocKlass,thisEnd);
+								String inverseValue = assocColumnName.equals(inverseColumnName) ?"true":"false"; 
+								String key = fullPackageName+"."+currentKlass.getName().trim()+ ":" + otherEnd.getRoleName().trim();
+				%>
+		assocCache.put("<%=key%>", "one-to-many");
+		inverseCache.put("<%=key%>", "<%=inverseValue%>");
+		cascadeCache.put("<%=key%>", "<%=cascadeStyle%>");
+				<%
+							}else{ //One to Many - Join Table
+								String keyColumnName = transformerUtils.findAssociatedColumn(correlationTable,assocKlass,thisEnd, currentKlass, otherEnd, true);
+								String assocColumnName = transformerUtils.findAssociatedColumn(correlationTable,currentKlass,otherEnd,assocKlass,thisEnd, true);
+								String inverseColumnName =  transformerUtils.findInverseColumnValue(correlationTable,assocKlass,thisEnd);
+								String inverseValue = assocColumnName.equals(inverseColumnName) ?"true":"false";
+								String joinTableName = correlationTable.getName();
+								String key = fullPackageName+"."+currentKlass.getName().trim()+ ":" + otherEnd.getRoleName().trim();
+				%>
+		assocCache.put("<%=key%>", "many-to-many");
+		inverseCache.put("<%=key%>", "<%=inverseValue%>");
+		cascadeCache.put("<%=key%>", "<%=cascadeStyle%>");
+				<%
+							}
+						}else if(transformerUtils.isMany2One(thisEnd,otherEnd)){
+								String notNullFkAttr=transformerUtils.isFKAttributeNull(otherEnd);
+								UMLClass correlationTable = transformerUtils.findCorrelationTable(association, model, assocKlass, false);
+								if (correlationTable == null) //Many to One - No Join Table
+								{	
+									String lazyValue = lazy == true ? "proxy" : "false";							
+									String keyColumnName = transformerUtils.findAssociatedColumn(table,currentKlass,otherEnd,assocKlass,thisEnd, false);
+									String key = fullPackageName+"."+currentKlass.getName().trim()+ ":" + otherEnd.getRoleName().trim();
+				%>
+		assocCache.put("<%=key%>", "many-to-one");
+		cascadeCache.put("<%=key%>", "<%=cascadeStyle%>");
+				<%
+								}else{ // Many to One - Join Table
+						
+										// do nothing; do not generate any <join> elements in this first pass!  Hibernate DTD requires any <set> elements to appear first
+								}
+						}else{	//One to One
+							String lazyValue = lazy == true ? "proxy" : "false";
+							String notNullFkAttr=transformerUtils.isFKAttributeNull(otherEnd);
+							UMLClass correlationTable = transformerUtils.findCorrelationTable(association, model, assocKlass, false);
+							if (correlationTable == null) //Many to One - No Join Table
+							{
+
+								String keyColumnName = transformerUtils.findAssociatedColumn(table,currentKlass,otherEnd,assocKlass,thisEnd, false, false);
+								Boolean keyColumnPresent = (keyColumnName!=null && !"".equals(keyColumnName));
+								String key = fullPackageName+"."+currentKlass.getName().trim()+ ":" + otherEnd.getRoleName().trim();
+								if(thisEnd.isNavigable())
+								{
+									if(keyColumnPresent)
+									{
+									%>
+		assocCache.put("<%=key%>", "many-to-one");
+		cascadeCache.put("<%=key%>", "<%=cascadeStyle%>");
+								<%
+									}else{
+								%>
+		assocCache.put("<%=key%>", "one-to-one");
+		cascadeCache.put("<%=key%>", "<%=cascadeStyle%>");
+								<%
+									}
+								}else{
+									if(keyColumnPresent){
+								%>
+		assocCache.put("<%=key%>", "many-to-one");
+		cascadeCache.put("<%=key%>", "<%=cascadeStyle%>");
+								<%
+									}
+								}
+							}
+						}
+					}
+
+				}  // end - transformerUtils.isBidirectionalSelfAssociation(klass,assocEnds)
+				
+				}//end - else if (obj instanceof UMLAssociation) 			
+				
+			}//end -  if(currentKlass.getAssociations().size()>0
+			
+			currentKlass = transformerUtils.getSuperClass(currentKlass);
+		}while(currentKlass!=null && transformerUtils.isImplicitParent(currentKlass));
+		
+		}
+		%>
+	}
+
+	public String getCascadeValue(String className, String roleName)
+	{
+		//System.out.println("getCascadeValue............. ");
+		String key = className.trim() + ":" + roleName.trim();
+		//System.out.println("key: "+key);
+		String value = (String)cascadeCache.get(key);
+		//System.out.println("value: "+value);
+		try
+		{
+			if(value == null)
+			{
+				while(true)
+				{
+					Class klass = Class.forName(className);
+					Class superKlass = klass.getSuperclass();
+					//System.out.println("superKlass.getName(): "+superKlass.getName());
+					key = superKlass.getName() + ":"+ roleName;
+					value = (String)cascadeCache.get(key);
+					if(value != null)
+						return value;
+					if(superKlass.getName().equals("java.lang.Object"))
+						break;
+					className = superKlass.getName();
+				}
+
+			}
+		}
+		catch(Exception e)
+		{
+		}
+		
+		return value;
+	}
+
+	public String getInverseValue(String className, String roleName)
+	{
+		//.println("getInverseValue............. ");
+		String key = className.trim() + ":" + roleName.trim();
+		//System.out.println("key: "+key);
+		String value = (String)inverseCache.get(key);
+		//System.out.println("value: "+value);
+		try
+		{
+			if(value == null)
+			{
+				while(true)
+				{
+					Class klass = Class.forName(className);
+					Class superKlass = klass.getSuperclass();
+					//System.out.println("superKlass.getName(): "+superKlass.getName());
+					key = superKlass.getName() + ":"+ roleName;
+					value = (String)inverseCache.get(key);
+					if(value != null)
+						return value;
+					if(superKlass.getName().equals("java.lang.Object"))
+						break;
+					className = superKlass.getName();
+				}
+
+			}
+		}
+		catch(Exception e)
+		{
+		}
+		
+		return value;
+	}
+
+	public String getAssocationType(String className, String roleName)
+	{
+		String type = null;
+		try
+		{
+		//System.out.println("getAssocationType............. ");
+			className = className.trim();
+			roleName = roleName.trim();
+			String key = className + ":" + roleName;
+			type = (String)assocCache.get(key);
+			//System.out.println("key: "+key);
+			//System.out.println("type: "+type);
+			if(type == null)
+			{
+				while(true)
+				{
+					Class klass = Class.forName(className);
+					Class superKlass = klass.getSuperclass();
+					//System.out.println("superKlass.getName(): "+superKlass.getName());
+					key = superKlass.getName() + ":"+ roleName;
+					type = (String)assocCache.get(key);
+					if(type != null)
+						return type;
+					if(superKlass.getName().equals("java.lang.Object"))
+						break;
+					className = superKlass.getName();
+				}
+
+			}
+		}
+		catch(Exception e)
+		{
+
+		}
+		return type;
+	}
+
+	public boolean checkAssociation(String className, String roleName)
+	{
+		String type = getAssocationType(className, roleName);
+		//System.out.println("type: "+type);
+		if(type != null && (type.equals("many-to-one") || type.equals("one-to-many") || type.equals("any")))
+			return true;
+		else
+			return false;
+	}
+
+
+	public boolean canSaveAssociation(String className, String roleName)
+	{
+		String type = getAssocationType(className, roleName);
+		if(type != null && (type.equals("many-to-one") || type.equals("one-to-many") || type.equals("many-to-many") || type.equals("any")))
+		{
+			String cascades = getCascadeValue(className, roleName);
+			//System.out.println("cascades "+cascades);
+			List<String> values = null;
+			if(cascades == null)
+				return true;
+			if(cascades.indexOf(",") > 0)
+			{
+				values = getSplitValues(cascades);
+			}
+			else
+			{
+				values = new ArrayList<String>();
+				values.add(cascades);
+			}
+			
+			for(String cascade : values)
+			{
+				//System.out.println("cascade "+cascade);
+				if(cascade != null && (cascade.equals(CASCADE_ALL) || cascade.contains(CASCADE_SAVE_UPDATE)))
+					return true;
+				else
+					return false;
+			}
+		} else if(type.equals("many-to-many"))
+		{
+			String inverseValue = getInverseValue(className, roleName);
+			//System.out.println("inverseValue "+inverseValue);
+			if(inverseValue != null && inverseValue.equals("false"))
+				return true;
+			else
+				return false;
+		}
+		
+		
+		return true;
+	}
+
+	public String getDeleteAssociation(String className, String roleName)
+	{
+		String cascades = getCascadeValue(className, roleName);
+		//System.out.println("cascades "+cascades);
+		List<String> values = null;
+		if(cascades == null)
+			return null;
+		else if(cascades.indexOf(",") > 0)
+		{
+			values = getSplitValues(cascades);
+		}
+		else
+		{
+			values = new ArrayList<String>();
+			values.add(cascades);
+		}
+
+		for(String cascade : values)
+		{
+			//System.out.println("cascade "+cascade);
+			if(cascade.equals(CASCADE_ALL) || cascade.equals(CASCADE_DELETE) || cascade.equals(CASCADE_DELETE_ORPHAN) || cascade.equals(CASCADE_ALL_DELETE_ORPHAN))
+				return cascade;
+		}
+
+		return null;
+	}
+	
+	private List<String> getSplitValues(String value)
+	{
+		List<String> values = new ArrayList<String>();
+		StringTokenizer tokenizer = new StringTokenizer(value, ",");
+		while(tokenizer.hasMoreTokens())
+		{
+			values.add((String) tokenizer.nextToken());
+		}
+		return values;
+	}
+}

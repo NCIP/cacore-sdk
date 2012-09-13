@@ -220,7 +220,6 @@ public class ApplicationServiceImpl implements ApplicationService {
 		int maxRows = 0;
 
 		if (criteria instanceof HQLCriteria) {
-			System.out.println("instanceof HQLCriteria**************");
 			HQLCriteria hqlCriteria = (HQLCriteria) criteria;
 			if (hqlCriteria.getFirstRow() != -1) {
 				firstRow = hqlCriteria.getFirstRow();
@@ -228,7 +227,6 @@ public class ApplicationServiceImpl implements ApplicationService {
 			if (hqlCriteria.getNumberOfRows() != -1) {
 				maxRows = hqlCriteria.getNumberOfRows();
 			}
-			System.out.println("instanceof HQLCriteria**************"+firstRow + "   "+maxRows);
 		}
 
 		Request request = new Request(criteria);

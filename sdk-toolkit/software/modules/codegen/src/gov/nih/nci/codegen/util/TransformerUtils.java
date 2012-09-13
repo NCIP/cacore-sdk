@@ -1005,6 +1005,7 @@ public class TransformerUtils
 			sb.append("import javax.xml.bind.annotation.XmlSeeAlso;\n");
 			sb.append("import javax.xml.bind.annotation.XmlTransient;\n");
 			sb.append("import javax.xml.bind.annotation.XmlType;\n");
+			sb.append("import gov.nih.nci.system.client.util.xml.CharAdapter;\n");
 			sb.append("import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;\n");
 
 			sb.append("\n");
@@ -2624,9 +2625,13 @@ public class TransformerUtils
 	public String getJaxbXmlAttributeAnnotation(UMLClass klass, UMLAttribute attr) throws GenerationException{
 		String type = this.getDataType(attr);
 		log.debug("* * * datatype for attribute " + attr.getName()+": " + type);
+		//System.out.println("* * * datatype for attribute " + attr.getName()+": " + type);
 		String collectionType = "";
 		StringBuffer sb = new StringBuffer();
-		if (type.startsWith("Collection")){
+		if (type.equals("Character")){
+			return "@XmlAttribute" + "\n "+ "@XmlJavaTypeAdapter(CharAdapter.class)";
+		}
+		else if (type.startsWith("Collection")){
 			collectionType = type.substring(type.indexOf("<")+1,type.indexOf(">"));
 
 			sb.append("    @XmlElementWrapper(name=\"");

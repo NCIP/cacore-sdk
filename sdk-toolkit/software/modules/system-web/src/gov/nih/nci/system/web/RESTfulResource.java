@@ -16,6 +16,7 @@ import gov.nih.nci.system.web.util.RESTUtil;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.lang.reflect.Method;
 import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -40,6 +41,7 @@ import org.apache.log4j.Logger;
 import org.springframework.aop.Advisor;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
+import org.apache.log4j.Logger;
 
 /**
  * Super class for all RESTful resources providing common functionality
@@ -62,6 +64,7 @@ public class RESTfulResource {
 	protected boolean secured = false;
 	protected boolean isoEnabled = false;
 	String isoprefix = "gov.nih.nci.iso21090.";
+	private static Logger log = Logger.getLogger(RESTfulResource.class.getName());
 
 	/*
 	 * Initialize resource with ApplicationService and other properties
@@ -127,7 +130,6 @@ public class RESTfulResource {
 			{
 				idColName = classCache.getClassIdName(Class
 					.forName(className));
-				System.out.println("idColName4: "+idColName);
 			}
 			catch(ClassNotFoundException e)
 			{
@@ -263,9 +265,9 @@ public class RESTfulResource {
 
 	protected ResourceLink getNextLink(UriInfo uriInfo, int resultsetCount,
 			int totalResults, int maxCountPerQuery) {
-		// //System.out.println("resultsetCount: "+resultsetCount);
-		// //System.out.println("totalResults: "+totalResults);
-		// //System.out.println("maxCountPerQuery: "+maxCountPerQuery);
+		// log.debug.println("resultsetCount: "+resultsetCount);
+		// log.debug.println("totalResults: "+totalResults);
+		// log.debug.println("maxCountPerQuery: "+maxCountPerQuery);
 		if (resultsetCount == totalResults)
 			return null;
 
@@ -318,7 +320,7 @@ public class RESTfulResource {
 			href = path + "?start=" + newStart + "&size=" + newSize;
 
 		link = new ResourceLink("next", "application/xml", href);
-		// //System.out.println(link.toString());
+		// log.debug.println(link.toString());
 		return link;
 
 	}
@@ -378,7 +380,7 @@ public class RESTfulResource {
 			href = path + "?start=" + newStart + "&size=" + newSize;
 
 		link = new ResourceLink("previous", "application/xml", href);
-		// //System.out.println(link.toString());
+		// log.debug.println(link.toString());
 		return link;
 
 	}
@@ -397,32 +399,32 @@ public class RESTfulResource {
 
 		if (startStr != null && fullpath.indexOf(startStr) > 0) {
 			String preHref1 = fullpath.substring(0, fullpath.indexOf(startStr));
-			// //System.out.println("preHref1: "+preHref1);
+			// log.debug.println("preHref1: "+preHref1);
 			if (preHref1.endsWith("&"))
 				preHref1 = preHref1.substring(0, preHref1.length() - 1);
 
 			String preHref2 = fullpath.substring(fullpath.indexOf(startStr)
 					+ startStr.length(), fullpath.length());
-			// //System.out.println("preHref2: "+preHref2);
+			// log.debug.println("preHref2: "+preHref2);
 			preHref = preHref1 + preHref2;
-			// //System.out.println("preHref3: "+preHref1);
+			// log.debug.println("preHref3: "+preHref1);
 
 		} else
 			preHref = fullpath;
 
-		// //System.out.println("preHref: "+preHref);
+		// log.debug.println("preHref: "+preHref);
 
 		if (sizeStr != null && preHref.indexOf(sizeStr) > 0) {
 			String preHref1 = preHref.substring(0, preHref.indexOf(sizeStr));
-			// //System.out.println("preHref4: "+preHref1);
+			// log.debug.println("preHref4: "+preHref1);
 			if (preHref1.endsWith("&"))
 				preHref1 = preHref1.substring(0, preHref1.length() - 1);
 
 			String preHref2 = fullpath.substring(preHref.indexOf(sizeStr)
 					+ sizeStr.length(), preHref.length());
-			// //System.out.println("preHref5: "+preHref2);
+			// log.debug.println("preHref5: "+preHref2);
 			preHref = preHref1 + preHref2;
-			// //System.out.println("preHref6: "+preHref1);
+			// log.debug.println("preHref6: "+preHref1);
 
 		} else {
 			if (preHref == null)
@@ -430,7 +432,7 @@ public class RESTfulResource {
 
 		}
 
-		// //System.out.println("preHref****: "+preHref);
+		// log.debug.println("preHref****: "+preHref);
 		return preHref;
 
 	}
@@ -454,8 +456,8 @@ public class RESTfulResource {
 		if (bSize != null)
 			totalSize = Integer.parseInt(bSize);
 
-		// //System.out.println("startIndex: "+startIndex);
-		// //System.out.println("totalSize: "+totalSize);
+		// log.debug.println("startIndex: "+startIndex);
+		// log.debug.println("totalSize: "+totalSize);
 
 		HQLCriteria hcriteria = null;
 		Map<String, List> whereMap = buildWhereCriteria(className,
@@ -499,15 +501,15 @@ public class RESTfulResource {
 				throw new ApplicationException(e);
 			}
 			String hql = "";
-			System.out.println("sourceClass.getName() "+sourceClass.getName());
-			System.out.println("associationName "+associationName);
+			log.debug.println("sourceClass.getName() "+sourceClass.getName());
+			log.debug.println("associationName "+associationName);
 			boolean isCollection = classCache.isCollection(
 					sourceClass.getName(), associationName);
-			System.out.println("isCollection "+isCollection);
-			System.out.println("sourceClass: "+sourceClass);
+			log.debug.println("isCollection "+isCollection);
+			log.debug.println("sourceClass: "+sourceClass);
 			String idName = classCache.getClassIdName(sourceClass, true);
-			System.out.println("idName: "+idName);
-			System.out.println("assocType: "+assocType);
+			log.debug.println("idName: "+idName);
+			log.debug.println("assocType: "+assocType);
 			String assosIdName = classCache.getClassIdName(Class.forName(assocType), true);
 			if(assosIdName == null || assosIdName.trim().length() == 0)
 			{
@@ -525,7 +527,7 @@ public class RESTfulResource {
 				throw new WebApplicationException(builder.build());
 			}
 
-			System.out.println("assosIdName: "+assosIdName);
+			log.debug.println("assosIdName: "+assosIdName);
 			String whereCriteria = null;
 			List params = null;
 
@@ -547,7 +549,7 @@ public class RESTfulResource {
 				hql = "select dest from " + sourceClass.getName()
 						+ " as src inner join src." + associationName
 						+ " dest where " + whereCriteria;
-				 System.out.println("hql: collection: " + hql);
+				 log.debug.println("hql: collection: " + hql);
 			} else {
 				Map<String, List> whereMap = buildWhereCriteria(
 						sourceClass.getName(), searchFields, matrixParams,
@@ -567,7 +569,7 @@ public class RESTfulResource {
 						+ sourceClass.getName() + " as src where "
 						+ whereCriteria + " and src." + associationName + "."
 						+ idName + "=dest." + assosIdName;
-				 System.out.println("hql2: " + hql);
+				 log.debug.println("hql2: " + hql);
 			}
 
 			HQLCriteria hqlCriteria = new HQLCriteria(hql, params, start, size);
@@ -609,14 +611,14 @@ public class RESTfulResource {
 			String hql = "";
 			boolean isCollection = classCache.isCollection(
 					sourceClass.getName(), associationName);
-			System.out.println("sourceClass.getName() "+sourceClass.getName());
-			System.out.println("associationName "+associationName);
-			System.out.println("isCollection "+isCollection);
+			log.debug.println("sourceClass.getName() "+sourceClass.getName());
+			log.debug.println("associationName "+associationName);
+			log.debug.println("isCollection "+isCollection);
 
 			String idName = classCache.getClassIdName(sourceClass, true);
-			System.out.println("idName2: "+idName);
+			log.debug.println("idName2: "+idName);
 			String assosIdName = classCache.getClassIdName(Class.forName(assocType), true);
-			System.out.println("assosIdName2: "+assosIdName);
+			log.debug.println("assosIdName2: "+assosIdName);
 			if(assosIdName == null || assosIdName.trim().length() == 0)
 			{
 				ResponseBuilder builder = Response
@@ -637,16 +639,16 @@ public class RESTfulResource {
 				hql = "select dest from " + sourceClass.getName()
 						+ " as src inner join src." + associationName
 						+ " dest where src." + assosIdName + " = ?";
-				System.out.println("hql: getAssociationCriteria collection: " + hql);
+				log.debug.println("hql: getAssociationCriteria collection: " + hql);
 			} else {
 				hql = "select dest from " + assocType + " as dest,"
 						+ sourceClass.getName() + " as src where src."
 						+ associationName + "." + idName + "=dest."
 						+ assosIdName + " and dest." + assosIdName + " = ?";
-				System.out.println("hql: getAssociationCriteria : " + hql);
+				log.debug.println("hql: getAssociationCriteria : " + hql);
 			}
 
-			// //System.out.println("hql: "+hql);
+			// log.debug.println("hql: "+hql);
 
 			Field[] fields = classCache.getAllFields(sourceClass);
 			Field idField = RESTUtil.getIdField(fields, idName, classCache);
@@ -689,26 +691,26 @@ public class RESTfulResource {
 			List<Field> searchFields, Map matrixParams, UriInfo uriInfo,
 			String alias, String dbType) throws WebApplicationException
 		{
-		//System.out
+		log.debug
 		//		.println("Building where criteria **************************");
 		int startIndex = -1;
 		int totalSize = -1;
-		//System.out.println("uriInfo.getPathParameters(): "
+		log.debug.println("uriInfo.getPathParameters(): "
 		//		+ uriInfo.getPathParameters());
-		//System.out.println("uriInfo.getQueryParameters(): "
+		log.debug.println("uriInfo.getQueryParameters(): "
 		//		+ uriInfo.getQueryParameters());
 		String bStart = uriInfo.getQueryParameters().getFirst("start");
-		// //System.out.println("bStart: "+bStart);
+		// log.debug.println("bStart: "+bStart);
 		if (bStart != null)
 			startIndex = Integer.parseInt(bStart);
 
 		String bSize = uriInfo.getQueryParameters().getFirst("size");
-		// //System.out.println("bSize: "+bSize);
+		// log.debug.println("bSize: "+bSize);
 		if (bSize != null)
 			totalSize = Integer.parseInt(bSize);
 
-		// //System.out.println("startIndex: "+startIndex);
-		// //System.out.println("totalSize: "+totalSize);
+		// log.debug.println("startIndex: "+startIndex);
+		// log.debug.println("totalSize: "+totalSize);
 
 		String whereCriteria = "";
 		List criteria = new ArrayList();
@@ -721,7 +723,7 @@ public class RESTfulResource {
 		{
 			idColName = classCache.getClassIdName(Class
 				.forName(className));
-			System.out.println("idColName3: "+idColName);
+			log.debug.println("idColName3: "+idColName);
 		}
 		catch(ClassNotFoundException e)
 		{
@@ -733,7 +735,7 @@ public class RESTfulResource {
 			boolean adPart = false;
 			String fullName = (String) iter.next();
 			String attrName = getAttributeName(fullName);
-			//System.out.println("Building where criteria attrName " + attrName);
+			log.debug.println("Building where criteria attrName " + attrName);
 			Object attrVal = null;
 			String operator = "=";
 			if (!fullName.equals(attrName)) {
@@ -741,8 +743,8 @@ public class RESTfulResource {
 				operator = getAttributeOperator(fullName);
 			} else
 				attrVal = matrixParams.get(fullName);
-			//System.out.println("Building where criteria operator " + operator);
-			//System.out.println("Building where criteria attrVal " + attrVal);
+			log.debug.println("Building where criteria operator " + operator);
+			log.debug.println("Building where criteria attrVal " + attrVal);
 			String attrValue = null;
 			if (attrVal instanceof java.util.ArrayList)
 				attrValue = (String) ((ArrayList) attrVal).get(0);
@@ -753,9 +755,9 @@ public class RESTfulResource {
 			Iterator fIter = searchFields.iterator();
 			while (fIter.hasNext()) {
 				field = (Field) fIter.next();
-				//System.out.println("field...." + field.getName());
-				//System.out.println("field...." + field.getType().getName());
-				//System.out.println("field...." + field.getGenericType().toString());
+				log.debug.println("field...." + field.getName());
+				log.debug.println("field...." + field.getType().getName());
+				log.debug.println("field...." + field.getGenericType().toString());
 
 				if (isoEnabled) {
 					List isoFields = RESTUtil.getSearchableIsoDataTypeFields(className,
@@ -782,16 +784,16 @@ public class RESTfulResource {
 
 			if (found) {
 				String convertedAttrName = attrName;
-				//System.out.println("convertedAttrName1: " + convertedAttrName);
-				//System.out.println("(idColName .extension " + (idColName + ".extension"));
+				log.debug.println("convertedAttrName1: " + convertedAttrName);
+				log.debug.println("(idColName .extension " + (idColName + ".extension"));
 				if(adPart)
 					convertedAttrName = attrName.substring(0, attrName.indexOf("part")) + "part_" + attrName.substring(attrName.indexOf("part")+4, attrName.length());
 				else if(attrName.equals((idColName + ".extension")))
 					convertedAttrName = idColName;
 
-				//System.out.println("convertedAttrName2: " + convertedAttrName);
+				log.debug.println("convertedAttrName2: " + convertedAttrName);
 
-				//System.out.println("field.getType().getName(): "
+				log.debug.println("field.getType().getName(): "
 				//		+ field.getType().getName());
 				if (field.getType().getName().equals("java.lang.String")) {
 					if ((attrValue.indexOf("*") != -1)
@@ -879,7 +881,7 @@ public class RESTfulResource {
 				whereCriteria = whereCriteria + " and ";
 		}
 
-		//System.out.println("whereCriteria: "+whereCriteria);
+		log.debug.println("whereCriteria: "+whereCriteria);
 		Map returnMap = new HashMap();
 		returnMap.put(whereCriteria, params);
 		return returnMap;
@@ -890,9 +892,9 @@ public class RESTfulResource {
 		try {
 			String fieldType = field.getType().getName();
 			//String valueType = value.getClass().getName();
-			//System.out.println("fieldType: "+fieldType);
-			//System.out.println("attrName "+attrName);
-			//System.out.println("fieldName "+field.getName());
+			log.debug.println("fieldType: "+fieldType);
+			log.debug.println("attrName "+attrName);
+			log.debug.println("fieldName "+field.getName());
 			if (!idColName.equals(attrName) && attrName.indexOf(".") == -1) {
 				String msg = "Invalid attribute name: " + attrName;
 
@@ -921,30 +923,30 @@ public class RESTfulResource {
 
 			while (true) {
 				int index = subAttrName.indexOf(".");
-				//System.out.println("index: " + index);
+				log.debug.println("index: " + index);
 				if (index != -1) {
 					String part = subAttrName.substring(0,
 							subAttrName.indexOf("."));
-					//System.out.println("part1: " + part);
+					log.debug.println("part1: " + part);
 					Field partField2 = RESTUtil.getField(partField.getType(), part, classCache);
-					//System.out.println("partField2: " + partField2);
-					//System.out.println("partField.getDeclaringClass(): " + partField.getType().getName());
+					log.debug.println("partField2: " + partField2);
+					log.debug.println("partField.getDeclaringClass(): " + partField.getType().getName());
 					if(partField2 == null)
 					{
 						String newPart = part;
-						//System.out.println("new part: "+newPart);
+						log.debug.println("new part: "+newPart);
 
 						if(partField.getType().getName().equals("gov.nih.nci.iso21090.Ad"))
 						{
 							if(part.startsWith("part"))
 								newPart = "part";
 						}
-						//System.out.println("new part: "+newPart);
+						log.debug.println("new part: "+newPart);
 
 						if(partField.getType().getName().equals("java.util.Set"))
 						{
 
-							//System.out.println("partField.getGenericType(): "+partField.getGenericType().toString());
+							log.debug.println("partField.getGenericType(): "+partField.getGenericType().toString());
 							Class<?> dataType = null;
 							Type type = partField.getGenericType();
 							if (type instanceof ParameterizedType) {
@@ -954,8 +956,8 @@ public class RESTfulResource {
 							    dataType = (Class<?>) type;
 							}
 
-							//System.out.println("partField.getGenericType(): type "+dataType.getName());
-							//System.out.println("partField.getGenericType(): type "+dataType.toString());
+							log.debug.println("partField.getGenericType(): type "+dataType.getName());
+							log.debug.println("partField.getGenericType(): type "+dataType.toString());
 
 							//partField = integerListClass.getDeclaredField(newPart);
 							if(part.startsWith("part"))
@@ -967,35 +969,35 @@ public class RESTfulResource {
 					else
 						partField = partField2;
 					subAttrName = subAttrName.substring(subAttrName.indexOf(".") + 1, subAttrName.length());
-					//System.out.println("subAttrName1: " + subAttrName);
-					//System.out.println("partField1: " + partField.getName());
-					//System.out.println("partField1 type "+field.getType().getName());
+					log.debug.println("subAttrName1: " + subAttrName);
+					log.debug.println("partField1: " + partField.getName());
+					log.debug.println("partField1 type "+field.getType().getName());
 				} else {
-					//System.out.println("subAttrName2: " + subAttrName);
-					//System.out.println("partField2: " + partField.getName());
+					log.debug.println("subAttrName2: " + subAttrName);
+					log.debug.println("partField2: " + partField.getName());
 					if(field.getType().getName().equals("gov.nih.nci.iso21090.Ad"))
 					{
-						//System.out.println("partField2222 type "+field.getType().getName());
-						//System.out.println("partField.getType()xxxx "+partField.getType().getName());
-						//System.out.println("subAttrName "+subAttrName);
+						log.debug.println("partField2222 type "+field.getType().getName());
+						log.debug.println("partField.getType()xxxx "+partField.getType().getName());
+						log.debug.println("subAttrName "+subAttrName);
 						Field partFieldAd = null;
 						if(partField.getType().getName().equals("java.util.List"))
 						{
-							//System.out.println("Getting partField");
+							log.debug.println("Getting partField");
 							Class adxpClass = Class.forName("gov.nih.nci.iso21090.Adxp");
 							partField = adxpClass.getDeclaredField(subAttrName);
-							//System.out.println("Getting partField "+partField);
+							log.debug.println("Getting partField "+partField);
 							break;
 						}
 					}
-					//System.out.println("partField2 type "+field.getType().getName());
+					log.debug.println("partField2 type "+field.getType().getName());
 					Field partField2 = RESTUtil.getField(partField.getType(), subAttrName, classCache);
-					//System.out.println("partField.getType(): " + partField.getType());
+					log.debug.println("partField.getType(): " + partField.getType());
 					if(partField2 == null)
 						partField = partField.getType().getDeclaredField(subAttrName);
 					else
 						partField = partField2;
-					//System.out.println("partField2: " + partField.getName());
+					log.debug.println("partField2: " + partField.getName());
 					break;
 				}
 			}
@@ -1037,8 +1039,8 @@ public class RESTfulResource {
 		String fieldType = field.getType().getName();
 		String valueType = value.getClass().getName();
 
-		//System.out.println("convertValues valueType: " + valueType);
-		//System.out.println("convertValues fieldType: " + fieldType);
+		log.debug.println("convertValues valueType: " + valueType);
+		log.debug.println("convertValues fieldType: " + fieldType);
 		Object convertedValue = null;
 		try {
 			if (fieldType.equals("java.lang.Long")) {
@@ -1123,12 +1125,12 @@ public class RESTfulResource {
 
 	protected ApplicationService getApplicationService(String username,
 			String password) throws Exception {
-		//System.outut
+		log.debugut
 		//		.println("getApplicationService(String username, String password) ------");
 		Authentication auth = new UsernamePasswordAuthenticationToken(username,
 				password);
 		if (applicationService instanceof org.springframework.aop.framework.Advised) {
-			//System.outut
+			log.debugut
 			//		.println("getApplicationService(String username, String password) --aop----");
 			org.springframework.aop.framework.Advised proxy = (org.springframework.aop.framework.Advised) applicationService;
 			for (Advisor advisor : proxy.getAdvisors()) {
@@ -1272,4 +1274,36 @@ public class RESTfulResource {
 	}
 
 
+	protected void checkCollections(Object object)
+	{
+		if(object == null)
+			return;
+		try
+		{
+		Class klass = object.getClass();
+		Method[] methods = klass.getMethods();
+		for(int i=0;i<methods.length;i++)
+		{
+			Method method = methods[i];
+			Class returnType = method.getReturnType();
+			if(!returnType.getName().equals("java.util.Collection"))
+				continue;
+
+			String methodName = method.getName();
+			log.debug.println("methodName "+methodName);
+			Object collectionValue = method.invoke(object, null);
+			if(!(collectionValue instanceof java.util.List))
+				continue;
+			String setMethodName = "s"+methodName.substring(1, methodName.length());
+			log.debug.println("setMethod "+setMethodName);
+			Class[] argTypes = new Class[] { returnType };
+			Method setMethod = klass.getMethod(setMethodName, argTypes);
+			setMethod.invoke(object, RESTUtil.convertListToSet((List)collectionValue));
+		}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
 }

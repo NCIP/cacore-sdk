@@ -4,6 +4,7 @@
 <%@ page import="gov.nih.nci.system.web.util.JSPUtils,
 				 gov.nih.nci.system.web.util.HtmlUtils,
 				 java.lang.reflect.*,
+				 gov.nih.nci.sdk.rest.SDKCascadeCache,
 				 java.util.*" %> 
 			 
 <link href="styleSheet.css" type="text/css" rel="stylesheet" />
@@ -69,6 +70,22 @@
 					</td>
 				</tr>
 				<!-- application hdr ends -->
+<%
+JSPUtils jspUtils= null;
+List domainNames=new ArrayList();
+String message = null;
+String className = request.getParameter("target");
+				
+	try
+	{	
+		jspUtils = JSPUtils.getJSPUtils(config.getServletContext());
+		domainNames = jspUtils.getAssociations(className);
+	}
+	catch(Exception ex){
+		message=ex.getMessage();
+	}
+%>
+
 				<tr>
 					<td valign="top">
 						<table summary="" cellpadding="0" cellspacing="0"
@@ -90,13 +107,58 @@
 										</tr>
 										<tr>
 										<td border=0 class="txtHighlight" align="center" nowrap="off">
-										<%String message = (String)request.getAttribute("message");
+										<%message = (String)request.getAttribute("message");
 										if(message == null)
 											message="&nbsp;";
 										%>
 										<%=message%>
 										</td>
 										</tr>
+			<% if(domainNames != null && domainNames.size() > 0)
+			   { 
+			   		for(int i=0; i<domainNames.size(); i++)
+			   		{
+						String asscName = (String)domainNames.get(i);
+						String asscRole = null;
+						String asscClass = asscName;
+						if(asscName.indexOf("(") != -1)
+						{
+							asscClass = asscName.substring(asscName.indexOf("(")+1, asscName.lastIndexOf(")"));
+							asscRole = asscName.substring(0, asscName.indexOf("("));
+						}
+
+						if(asscClass.equals("Please choose") || asscClass.equals(className))
+							continue;
+
+						boolean displayNote = false;
+						String note = "";
+						String deleteType = SDKCascadeCache.getInstance().getDeleteAssociation(className, asscRole);
+	   		%>
+								<tr>
+								<td border=0 class="txtHighlight" align="center" nowrap="off">
+								<%
+								if(deleteType != null && (deleteType.equalsIgnoreCase("delete") || deleteType.equalsIgnoreCase("all")))
+								{
+								%>
+								All references will be deleted!!
+								<%
+								} 
+								else if(deleteType != null && deleteType.equalsIgnoreCase("all-delete-orphan"))
+								{
+								%>
+								 All children that will orphaned by the deletion of the parent will be deleted!!
+								<%
+								} else if(deleteType != null && deleteType.equalsIgnoreCase("delete-orphan"))
+								{
+								%>
+								 Selected orphaned children will be deleted!!
+								<%}%>
+								</td>
+								</tr>
+			<%
+					}
+				}
+			%>
 										<tr>
 											<td valign="top"  align="center">
 											<table border="0" bordercolor="orange" summary="" cellpadding="0" cellspacing="0">
@@ -121,7 +183,6 @@
 											</tr>
 											<%
 											String success = (String)request.getAttribute("successful");
-											System.out.println("success: "+success);
 											if(success == null)
 											{
 											%>

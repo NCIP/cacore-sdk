@@ -71,13 +71,9 @@ public class RestSearchAction extends RestQuery {
 			if (context != null) {
 				Authentication authentication = context.getAuthentication();
 				// authentication.getCredentials();
-				System.out.println("username 11 "
-						+ authentication.getPrincipal().toString());
 				String userName = ((org.acegisecurity.userdetails.User) authentication
 						.getPrincipal()).getUsername();
 				String password = authentication.getCredentials().toString();
-				System.out.println("password 11 "
-						+ authentication.getCredentials().toString());
 				String base64encodedUsernameAndPassword = new String(
 						Base64.encodeBase64((userName + ":" + password)
 								.getBytes()));
@@ -103,7 +99,6 @@ public class RestSearchAction extends RestQuery {
 				org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
 						false);
 				org.jdom.Document jDoc = builder.build(is);
-				System.out.println("Response: " + jDoc.toString());
 				String html = getHTML(jDoc, className, queryStr, null);
 				request.setAttribute("HTMLContent", html);
 				request.setAttribute("targetClass", targetClass);

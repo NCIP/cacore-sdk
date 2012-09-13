@@ -10,6 +10,9 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.StringTokenizer;
 import java.util.Map;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.acegisecurity.Authentication;
@@ -170,13 +173,13 @@ public class RESTUtil {
 	public static List<String> getSearchableIsoDataTypeFieldsForAd(Field field,
 			List attrs) {
 		String fieldName = field.getName();
-		//System.out.println("fieldName: " + fieldName);
+		log.debug.println("fieldName: " + fieldName);
 		String fieldNameWithoutU = fieldName;
 		if (fieldName.indexOf("_") > 0)
 			fieldNameWithoutU = fieldName.substring(0, fieldName.indexOf("_"))
 					+ fieldName.substring(fieldName.indexOf("_") + 1,
 							fieldName.length());
-		//System.out.println("fieldNameWithoutU: " + fieldNameWithoutU);
+		log.debug.println("fieldNameWithoutU: " + fieldNameWithoutU);
 
 		List<String> fnAttrs = new ArrayList();
 		// List of ISO fields
@@ -188,14 +191,14 @@ public class RESTUtil {
 			while (mapIter.hasNext()) {
 				// part_0
 				String keyName = (String) mapIter.next();
-				//System.out.println("keyName: " + keyName);
+				log.debug.println("keyName: " + keyName);
 				String keyNameWithoutU = keyName;
 				if (keyName.indexOf("_") > 0)
 					keyNameWithoutU = keyName
 							.substring(0, keyName.indexOf("_"))
 							+ keyName.substring(keyName.indexOf("_") + 1,
 									keyName.length());
-				//System.out.println("keyNameWithoutU: " + keyNameWithoutU);
+				log.debug.println("keyNameWithoutU: " + keyNameWithoutU);
 				// value, code, codeSystem, {type=[AL]}
 				Object mapKeyObj = attrMap.get(keyName);
 				// System.out.println("instanceof java.util.List*******"
@@ -222,7 +225,7 @@ public class RESTUtil {
 
 			}
 		}
-		//System.out.println("returning Ad fnAttrs: " + fnAttrs);
+		log.debug.println("returning Ad fnAttrs: " + fnAttrs);
 		return fnAttrs;
 	}
 
@@ -257,7 +260,7 @@ public class RESTUtil {
 
 					// value, code, codeSystem, {type=[AL]}
 					Object mapKeyObj = attrMap.get(keyName);
-					// //System.out.println("instanceof java.util.List*******"
+					// log.debug.println("instanceof java.util.List*******"
 					// + mapKeyObj);
 					List mapKeyObjValue = (List) attrMap.get(keyName);
 					Iterator mapKeyObjValueIter = mapKeyObjValue.iterator();
@@ -269,7 +272,7 @@ public class RESTUtil {
 							fnAttrs.add(fieldName + "." + keyName + "."
 									+ mapKeyObjValueObj);
 						} else {
-							// //System.out.println("instanceof not String *******"
+							// log.debug.println("instanceof not String *******"
 							// + mapKeyObj);
 							java.util.Map mapKeyObjValueMap = (java.util.Map) mapKeyObjValueObj;
 							String key = (String) mapKeyObjValueMap.keySet()
@@ -309,11 +312,11 @@ public class RESTUtil {
 		while (iter.hasNext()) {
 			Object obj = iter.next();
 			if (obj instanceof java.lang.String) {
-				// //System.out.println("instanceof java.lang.String*******" +
+				// log.debug.println("instanceof java.lang.String*******" +
 				// obj);
 				fnAttrs.add((String) obj);
 			} else if (obj instanceof java.util.Map) {
-				// //System.out.println("instanceof java.util.Map*******" +
+				// log.debug.println("instanceof java.util.Map*******" +
 				// obj);
 				Map attrMap = (Map) obj;
 				Iterator mapIter = attrMap.keySet().iterator();
@@ -330,7 +333,7 @@ public class RESTUtil {
 					// {part_1=[value, code, codeSystem, {type=[AL]}]}]
 					Object mapKeyObj = attrMap.get(keyName);
 					if (mapKeyObj instanceof java.util.List) {
-						// //System.out.println("instanceof java.util.List*******"
+						// log.debug.println("instanceof java.util.List*******"
 						// + mapKeyObj);
 						List mapKeyObjValue = (List) attrMap.get(keyName);
 						Iterator mapKeyObjValueIter = mapKeyObjValue.iterator();
@@ -352,7 +355,7 @@ public class RESTUtil {
 								for (String partAttrName : subAttrNames) {
 
 									String newPartName = partAttrName;
-									//System.outut.println("newPartName: "
+									log.debugut.println("newPartName: "
 									//		+ newPartName);
 									if (newPartName.indexOf("part_") != -1) {
 										newPartName = "part"
@@ -362,7 +365,7 @@ public class RESTUtil {
 																		.indexOf("part_") + 5,
 																partAttrName
 																		.length());
-										//System.out.println("newPartName: "
+										log.debug.println("newPartName: "
 										//		+ newPartName);
 									}
 
@@ -373,7 +376,7 @@ public class RESTUtil {
 						}
 
 					} else if (mapKeyObj instanceof java.util.Map) {
-						// //System.out.println("instanceof java.util.Map ----- "
+						// log.debug.println("instanceof java.util.Map ----- "
 						// + mapKeyObj);
 						convertISOPart(subAttrName, (java.util.Map) mapKeyObj,
 								fnAttrs);
@@ -445,7 +448,7 @@ public class RESTUtil {
 								+ keyValueName);
 					}
 				}
-				// //System.out.println("Don't know-----------------------");
+				// log.debug.println("Don't know-----------------------");
 			}
 		}
 		// System.out.println("returning fnAttrs: " + fnAttrs);
@@ -476,7 +479,7 @@ public class RESTUtil {
 			Field field, List attrs) {
 
 		String typeName = field.getType().getName();
-		//System.out.println("typeName: " + typeName);
+		log.debug.println("typeName: " + typeName);
 		if (typeName.equals("gov.nih.nci.iso21090.Ad")
 				|| typeName.equals("gov.nih.nci.iso21090.En")
 				|| typeName.equals("gov.nih.nci.iso21090.EnOn")
@@ -542,11 +545,11 @@ public class RESTUtil {
 
 		String fieldName = field.getDeclaringClass().getName() + "."
 				+ field.getName();
-		//System.out.println("attributeName " + attributeName);
-		//System.out.println("fieldName " + fieldName);
+		log.debug.println("attributeName " + attributeName);
+		log.debug.println("fieldName " + fieldName);
 		if (attributeName.equals(fieldName)) {
 			attribute = Class.forName(fieldName).newInstance();
-			//System.out.println("Equal returning " + attribute);
+			log.debug.println("Equal returning " + attribute);
 			return attribute;
 		} else if (attributeName.indexOf(fieldName) == -1)
 			throw new Exception(
@@ -555,7 +558,7 @@ public class RESTUtil {
 
 		String subAttributeName = attributeName.substring(
 				attributeName.indexOf(fieldName) + 1, attributeName.length());
-		//System.out.println("subAttributeName " + subAttributeName);
+		log.debug.println("subAttributeName " + subAttributeName);
 
 		return attribute;
 	}
@@ -644,41 +647,63 @@ public class RESTUtil {
 
 	}
 
-	public static Object getObject(String className, String idValue, HttpServletRequest request, String base64encodedUsernameAndPassword)
+	public static Object getObject(String className, String idValue, HttpServletRequest request, String base64encodedUsernameAndPassword, boolean collection)
 	throws gov.nih.nci.system.client.util.xml.XMLUtilityException
 	{
 		 try {
 				String url = request.getRequestURL().toString();
-				String restURL = url.substring(0, url.lastIndexOf("/"));
-				WebClient client = WebClient.create(restURL);
-
-				if (base64encodedUsernameAndPassword != null) {
-					client.header("Authorization", "Basic "
-							+ base64encodedUsernameAndPassword);
-				}
 				String queryStr = "id";
-				String path = "rest/"
+				List<String> idValues = new ArrayList<String>();
+				if(idValue.indexOf(",") != -1)
+				{
+					StringTokenizer tokenizer = new StringTokenizer(idValue, ",");
+					while(tokenizer.hasMoreTokens())
+						idValues.add(tokenizer.nextToken());
+				}
+				else
+				{
+					idValues.add(idValue);
+				}
+				//Set returnCollection = new HashSet();
+				Collection returnCollection = new HashSet();
+				for(String idStr : idValues)
+				{
+					String restURL = url.substring(0, url.lastIndexOf("/"));
+					WebClient client = WebClient.create(restURL);
+
+					if (base64encodedUsernameAndPassword != null) {
+						client.header("Authorization", "Basic "
+							+ base64encodedUsernameAndPassword);
+					}
+					String path = "rest/"
 						+ className.substring(
 								className.lastIndexOf(".") + 1,
-								className.length()) + "/" + idValue;
+								className.length()) + "/" + idStr;
 				client.path(path);
-
 				client.type("application/xml").accept("application/xml");
 				Response r = client.get();
-				System.out.println("Status: "+r.getStatus());
 				if (r.getStatus() != Status.OK.getStatusCode()) {
-					return null;
+					throw new gov.nih.nci.system.client.util.xml.XMLUtilityException("Failed to lookup id: " + idStr + " for class: "+className);
 				} else {
 					InputStream is = (InputStream) r.getEntity();
-					System.out.println("is: "+is.toString());
 					InputStreamReader in= new InputStreamReader(is);
 					String jaxbContextName = className.substring(0, className.lastIndexOf("."));
 					Unmarshaller unmarshaller = new JAXBUnmarshaller(true,jaxbContextName);
 					XMLUtility myUtil = new XMLUtility(null, unmarshaller);
 					Object obj = myUtil.fromXML(in);
-					System.out.println("obj: "+obj);
-					return obj;
+					if(collection)
+					{
+						returnCollection.add(obj);
+						//return returnCol;
+					}
+					else
+						return obj;
 				}
+			}
+
+			return returnCollection;
+			} catch(gov.nih.nci.system.client.util.xml.XMLUtilityException e) {
+				throw e;
 			 } catch (Exception ex) {
 				 ex.printStackTrace();
 				 throw new gov.nih.nci.system.client.util.xml.XMLUtilityException("Failed to lookup id: " + idValue + " for class: "+className);
@@ -698,7 +723,6 @@ public class RESTUtil {
 
 				client.type("application/xml").accept("application/xml");
 				Response r = client.get();
-				System.out.println("Status: "+r.getStatus());
 				if (r.getStatus() != Status.OK.getStatusCode()) {
 					return null;
 				} else {
@@ -709,7 +733,6 @@ public class RESTUtil {
 						isCollection = true;
 
 					InputStream is = (InputStream) r.getEntity();
-					System.out.println("is: "+is.toString());
 					if(isCollection)
 					{
 						org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
@@ -725,20 +748,17 @@ public class RESTUtil {
 						while(iter.hasNext())
 						{
 							Element child = (Element) iter.next();
-							System.out.println("child : "+child.getName());
 							if(child.getName().equals("link"))
 								continue;
 
 							org.jdom.output.XMLOutputter outputter = new org.jdom.output.XMLOutputter();
 							String outStr = outputter.outputString(child);
-							System.out.println("outStr "+outStr);
 							StringReader in= new StringReader(outStr);
 
 							Object obj = myUtil.fromXML(in);
 							objects.add(obj);
 
 						}
-						System.out.println("objects "+objects.toString());
 						return objects;
 						}
 					else
@@ -748,7 +768,6 @@ public class RESTUtil {
 							Unmarshaller unmarshaller = new JAXBUnmarshaller(true,jaxbContextName);
 							XMLUtility myUtil = new XMLUtility(null, unmarshaller);
 							Object obj = myUtil.fromXML(in);
-							System.out.println("obj: "+obj);
 							return obj;
 					}
 				}
@@ -774,6 +793,7 @@ public class RESTUtil {
 
 				}
 				if (val instanceof java.util.Set) {
+					System.out.println("\n instanceof java.util.Set Printing Collection.....");
 					Collection list = (Collection)val;
 					for(Object object: list){
 						System.out.println(object.getClass().getName()+":");
@@ -783,12 +803,12 @@ public class RESTUtil {
 							System.out.println(" -- association has been excluded");
 						}
 					}
-					//System.out.println("size="+((Collection)val).size());
+					log.debug.println("size="+((Collection)val).size());
 				}
 				else if(val instanceof ArrayList)
 				{
 					Collection list = (ArrayList) val;
-					System.out.println("\nPrinting Collection.....");
+					System.out.println("\n instanceof ArrayList Printing Collection.....");
 					for(Object object: list){
 						System.out.println(object.getClass().getName()+":");
 						if (includeAssociation){
@@ -854,6 +874,8 @@ public class RESTUtil {
 						{
 						   Object results = queryLink(targetClassName, href, base64encodedUsernameAndPassword);
 						   System.out.println("results "+results);
+						   if(results == null)
+						   	return "";
 						   Collection collecton = (Collection) results;
 						   Iterator iterator = collecton.iterator();
 						   StringBuffer ids = new StringBuffer();
@@ -899,4 +921,17 @@ public class RESTUtil {
 	}
 
 
+	public static Collection convertListToSet(List listValues)
+	{
+		Collection setValues = new HashSet();
+		if(listValues == null)
+			return null;
+
+		Iterator iter = listValues.iterator();
+		while(iter.hasNext())
+		{
+			setValues.add(iter.next());
+		}
+		return setValues;
+	}
 }

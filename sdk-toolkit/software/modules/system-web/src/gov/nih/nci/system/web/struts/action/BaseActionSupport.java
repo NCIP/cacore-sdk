@@ -34,29 +34,29 @@ public class BaseActionSupport extends ActionSupport implements
 	public void setSession(Map session) {
 		this.session = session;
 	}
-	
+
 	protected static void debugSessionAttributes(SessionMap session){
-		
-		System.out.println("Debugging Session Attributes");
-		
+
+		log.debug("Debugging Session Attributes");
+
 		Set entrySet = session.entrySet();
 		Iterator entryIter = entrySet.iterator();
-		
+
 		Set keySet = session.keySet();
 		Iterator keyIter = keySet.iterator();
-		
+
 		String key;
 		Object value;
 		while (keyIter.hasNext()){
 			key = (String)keyIter.next();
 			value = session.get(key);
-			System.out.println("Session Key: " + key + "; value = " + value );
+			log.debug("Session Key: " + key + "; value = " + value );
 		}
-		
+
 		Object next;
-		while (entryIter.hasNext()){		
+		while (entryIter.hasNext()){
 			next = entryIter.next();
-			System.out.println(next.getClass().getName() + ": " + next );
+			log.debug(next.getClass().getName() + ": " + next );
 		}
-	}	
+	}
 }

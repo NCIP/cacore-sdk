@@ -77,12 +77,7 @@ public class SDKRESTContentHandler implements MessageBodyReader,
 			WebApplicationException {
 		InputStreamReader reader = new InputStreamReader(is);
 		try {
-		//System.out.println("read from .............: "+is);
-		//System.out.println("readFrom......................."+type.getName());
-		//System.out.println("readFrom......................."+genericType);
-		//System.out.println("readFrom......................."+httpHeaders);
 			String packageName = type.getName().substring(0, type.getName().lastIndexOf("."));
-		//	System.out.println("packageName: "+packageName);
 
 			Unmarshaller unmarshaller = new JAXBUnmarshaller(true,
 					packageName);
@@ -132,7 +127,7 @@ public class SDKRESTContentHandler implements MessageBodyReader,
 				Object convertedObj = XMLUtility.convertFromProxy(target,
 						false);
 
-
+				//printObject(convertedObj, convertedObj.getClass(), true);
 				String namespace = "gme://caCORE.caCORE/4.5/";
 				try
 				{
@@ -149,7 +144,6 @@ public class SDKRESTContentHandler implements MessageBodyReader,
 				{
 					Method method = type.getDeclaredMethod("getLinks", (Class[])null);
 					links = (List)method.invoke(target, null);
-					//System.out.println("links: "+links);
 				} catch (NoSuchMethodException e) {
 					// TODO Auto-generated catch block
 					//e.printStackTrace();
@@ -158,16 +152,15 @@ public class SDKRESTContentHandler implements MessageBodyReader,
 
 				String packageName = convertedObj.getClass().getPackage().getName();
 				//String packageName = type.getName().substring(0, type.getName().lastIndexOf("."));
-				//System.out.println("packageName: "+packageName);
 				StringWriter strWriter = new StringWriter();
 				Marshaller marshaller = new JAXBMarshaller(true,
 						packageName, namespace);
 				marshaller.toXML(convertedObj, strWriter);
 				Reader in = new StringReader(strWriter.toString());
-				//System.out.println("strWriter.toString(): "+strWriter.toString());
 				SAXBuilder builder = new SAXBuilder();
 				Document doc = builder.build(in);
 				Element rootEle = doc.getRootElement();
+				org.jdom.output.XMLOutputter outputt = new org.jdom.output.XMLOutputter();
 				if(links != null)
 				{
 					for(ResourceLink link: links)
@@ -225,7 +218,6 @@ public class SDKRESTContentHandler implements MessageBodyReader,
 		String collectionType = collectionObj.getType();
 		gov.nih.nci.system.client.proxy.ListProxy proxy = null;
 		String getMethod = "get"+collectionType.substring(collectionType.lastIndexOf(".")+1, collectionType.length())+"s";
-		System.out.println("getMethod: "+getMethod);
 
 		try
 		{
@@ -242,7 +234,6 @@ public class SDKRESTContentHandler implements MessageBodyReader,
 		boolean includeAssociations = true;
 		List results = new ArrayList();
 		String targetClassName = proxy.getTargetClassName();
-		//System.out.println("targetClassName: "+targetClassName);
 		//Object convertedObj = null;
 		int counter = proxy.size();
 		String packageName = "";
@@ -251,14 +242,11 @@ public class SDKRESTContentHandler implements MessageBodyReader,
 		StringBuffer outputStr = new StringBuffer();
 
 		//String packageName = type.getName().substring(0, type.getName().lastIndexOf("."));
-		//System.out.println("packageName: "+packageName);
 
 
 		Object obj = proxy.get(0);
 		String collectionFullName = obj.getClass().getName();
-		System.out.println("collectionFullName: "+collectionFullName);
 		String collectionName = collectionFullName.substring(collectionFullName.lastIndexOf(".")+1, collectionFullName.lastIndexOf("Bean"))+"s";
-		System.out.println("collectionName: "+collectionName);
 		org.jdom.Element httpQuery = new org.jdom.Element(collectionName,namespace);
 		Collection<ResourceLink> collectionLinks = collectionObj.getLinks();
 		if(collectionLinks != null)
@@ -276,7 +264,6 @@ public class SDKRESTContentHandler implements MessageBodyReader,
 		}
 
 		for (int i = 0; i < counter; i++) {
-			//System.out.println("Adding: "+proxy.get(i));
 			obj = proxy.get(i);
 			if(obj instanceof ResourceLink)
 			{
@@ -299,7 +286,6 @@ public class SDKRESTContentHandler implements MessageBodyReader,
 			{
 				Method method = obj.getClass().getDeclaredMethod("getLinks", (Class[])null);
 				links = (List)method.invoke(obj, null);
-				//System.out.println("links: "+links);
 			} catch (NoSuchMethodException e) {
 				// TODO Auto-generated catch block
 				//e.printStackTrace();
@@ -332,7 +318,6 @@ public class SDKRESTContentHandler implements MessageBodyReader,
 			SAXBuilder builder = new SAXBuilder();
 			Document doc = builder.build(in);
 
-			//System.out.println("strWriter.toString()(): "+strWriter.toString());
 			try
 			{
 				Element rootEle = (Element)doc.getRootElement().clone();
@@ -353,10 +338,8 @@ public class SDKRESTContentHandler implements MessageBodyReader,
 			{
 				e.printStackTrace();
 			}
-			//System.out.println("httpQuery()(): "+httpQuery.toString());
 		}
 		//httpQuery.setText(outputStr.toString());
-		//System.out.println("Output: "+httpQuery.toString());
 		org.jdom.Document xmlDoc = new org.jdom.Document(httpQuery);
 		XMLOutputter outputter = new XMLOutputter();
 		outputter.output(xmlDoc, writer);
@@ -393,9 +376,7 @@ public class SDKRESTContentHandler implements MessageBodyReader,
 				else if(val instanceof ArrayList)
 				{
 					Collection list = (ArrayList) val;
-					//System.out.println("\nPrinting Collection.....");
 					for(Object object: list){
-						//System.out.println(object.getClass().getName()+":");
 						if (includeAssociation){
 							printObject(object, object.getClass(), false);
 						} else {

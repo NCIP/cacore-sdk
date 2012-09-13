@@ -88,6 +88,7 @@ if(action != null && action.indexOf("R") != -1)
 			
 			<%
 			UMLAttribute attrb = transformerUtils.getClassIdAttr(klass);
+			if(attrb != null && attrb.getDatatype() != null)
 			if(attrb != null && !transformerUtils.isISO21090Enabled())
 			{
 				if(attrb.getDatatype().getName().equals("character") || attrb.getDatatype().getName().equals("Character") || attrb.getDatatype().getName().equals("char"))			
@@ -145,7 +146,6 @@ if(action != null && action.indexOf("R") != -1)
 			<%
 			}
 			%>
-
 			ApplicationService appService = null;
 
 			if(secured)
@@ -169,8 +169,6 @@ if(action != null && action.indexOf("R") != -1)
 			if(results != null && results.size() > 0)
 			{
 				<%=klassName%> returnObj = (<%=klassName%>)results.iterator().next();
-				//System.out.println("returnObj "+returnObj.toString());
-				//System.out.println("returnObj Links"+returnObj.getLinks());
 				
 				Map returnMap = new HashMap();
 				String fullpath = uriInfo.getAbsolutePath().toString();
@@ -195,10 +193,12 @@ if(action != null && action.indexOf("R") != -1)
 		}
 		catch(WebApplicationException e)
 		{
+			e.printStackTrace();
 			throw e;
 		}
 		catch(ApplicationException e)
 		{
+			  e.printStackTrace();
 			  log.error("Error in querying REST resource: " + e.getMessage());
 			  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
 			  builder.type("application/xml");
@@ -877,14 +877,15 @@ if(action != null && action.indexOf("C") != -1 && !transformerUtils.isISO21090En
 	{
 		try
 		{
-			System.out.println("Adding <%=klassName%>: "+object.toString());
-			try
+			//System.out.println("Adding <%=klassName%>: "+object.toString());
+			/*try
 			{
 			gov.nih.nci.system.web.util.RESTUtil.printObject(object, object.getClass(), true);
 			}
 			catch(Exception e)
 			{
-			}
+			}*/
+			checkCollections(object);
 			<%=klassName%> obj = (<%=klassName%>)save(object);
 			String fullpath = uriInfo.getAbsolutePath().toString();
 			String path = fullpath.substring(0, fullpath.indexOf("/rest/")+5);
@@ -916,7 +917,7 @@ if(action != null && action.indexOf("C") != -1 && !transformerUtils.isISO21090En
 		}
 		catch(WebApplicationException e)
 		{
-			System.out.println("In Create: throwing: "+e.getMessage());
+			//System.out.println("In Create: throwing: "+e.getMessage());
 			return e.getResponse();
 			//ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
 			//builder.type("application/xml");
@@ -1092,22 +1093,20 @@ if(action != null && action.indexOf("U") != -1 && !transformerUtils.isISO21090En
 	@Consumes("application/xml")
 	public void update<%=klassName%>(<%=klassName%> object)
 	{
-				try
-				{
-				gov.nih.nci.system.web.util.RESTUtil.printObject(object, object.getClass(), true);
-				}
-				catch(Exception e)
-				{
-				}
-
 		try
 		{
 			//System.out.println("object: "+object.getId());
+			checkCollections(object);
+			gov.nih.nci.system.web.util.RESTUtil.printObject(object, object.getClass(), true);
 			update(object);
 		}
 		catch(WebApplicationException e)
 		{
 			throw e;
+		}
+		catch(Exception e)
+		{
+		e.printStackTrace();
 		}
 	}
 

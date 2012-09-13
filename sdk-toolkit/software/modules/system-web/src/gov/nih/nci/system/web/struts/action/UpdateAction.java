@@ -61,7 +61,7 @@ public class UpdateAction extends RestQuery {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-		System.out.println("idCol: " + idCol);
+		//System.out.println("idCol: " + idCol);
 		if (idCol == null) {
 			request.setAttribute("Message", "Invalid target");
 			return null;
@@ -80,7 +80,7 @@ public class UpdateAction extends RestQuery {
 
 		if (submitted != null && submitted.equals("true")) {
 
-			System.out.println("Submitting:................");
+			//System.out.println("Submitting:................");
 			try {
 				String base64encodedUsernameAndPassword = null;
 				Object instance = prepareObject(request);
@@ -95,14 +95,10 @@ public class UpdateAction extends RestQuery {
 				if (context != null) {
 					Authentication authentication = context.getAuthentication();
 					// authentication.getCredentials();
-					System.out.println("username 11 "
-							+ authentication.getPrincipal().toString());
 					String userName = ((org.acegisecurity.userdetails.User) authentication
 							.getPrincipal()).getUsername();
 					String password = authentication.getCredentials()
 							.toString();
-					System.out.println("password 11 "
-							+ authentication.getCredentials().toString());
 					base64encodedUsernameAndPassword = new String(
 							Base64.encodeBase64((userName + ":" + password)
 									.getBytes()));
@@ -119,19 +115,18 @@ public class UpdateAction extends RestQuery {
 
 				try {
 					prepareAssociations(request, instance, targetClass, base64encodedUsernameAndPassword);
+					//System.out.println("Before update: *******");
+					//gov.nih.nci.system.web.util.RESTUtil.printObject(instance, instance.getClass(), true);
 					Response r = client.put(instance);
-
-					System.out.println("update Status: " + r.getStatus());
+					//System.out.println("update Status: " + r.getStatus());
 
 					if (r.getStatus() != Status.OK.getStatusCode() && r.getStatus() != Status.NO_CONTENT.getStatusCode()) {
-						System.out.println("update jDoc: " + r.toString());
 						InputStream is = (InputStream) r.getEntity();
 
 						org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
 								false);
 						org.jdom.Document jDoc = builder.build(is);
 
-						System.out.println("update jDoc: " + jDoc.toString());
 						request.setAttribute("message", "Unsuccessful update: "
 								+ jDoc.getRootElement().getText());
 					} else {
@@ -160,13 +155,9 @@ public class UpdateAction extends RestQuery {
 		if (context != null) {
 			Authentication authentication = context.getAuthentication();
 			// authentication.getCredentials();
-			// //System.out.println("username 11 "
-			// + authentication.getPrincipal().toString());
 			String userName = ((org.acegisecurity.userdetails.User) authentication
 					.getPrincipal()).getUsername();
 			String password = authentication.getCredentials().toString();
-			// System.out.println("password 11 "
-			// + authentication.getCredentials().toString());
 			String base64encodedUsernameAndPassword = new String(
 					Base64.encodeBase64((userName + ":" + password).getBytes()));
 			client.header("Authorization", "Basic "
@@ -200,17 +191,14 @@ public class UpdateAction extends RestQuery {
 		instance = klass.newInstance();
 		while (parameters.hasMoreElements()) {
 			String parameterName = (String) parameters.nextElement();
-			System.out.println("update parameterName: "+parameterName);
 			if (!parameterName.equals("klassName")
 					&& !parameterName.equals("searchObj")
 					&& !parameterName.equals("BtnSearch")
 					&& !parameterName.equals("username")
 					&& !parameterName.equals("password")
 					&& !parameterName.equals("selectedDomain")) {
-				// System.out.println("update param = " + parameterName);
 				String parameterValue = (request.getParameter(parameterName))
 						.trim();
-				System.out.println("parameterValue: "+parameterValue);
 				setParameterValue(klass, instance, parameterName,
 						parameterValue);
 			}
@@ -221,7 +209,7 @@ public class UpdateAction extends RestQuery {
 	private void setParameterValue(Class klass, Object instance, String name,
 			String value) throws Exception {
 		if (value != null && value.trim().length() == 0)
-			value = null;
+			return;
 
 		String paramName = name.substring(0, 1).toUpperCase()
 				+ name.substring(1);

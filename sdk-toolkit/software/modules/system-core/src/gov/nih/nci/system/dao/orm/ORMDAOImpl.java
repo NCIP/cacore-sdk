@@ -167,8 +167,8 @@ public class ORMDAOImpl extends HibernateDaoSupport implements DAO
 
 			log.info("HQL Query :"+hqlCriteria.getHqlString());
 			Response rsp = new Response();
-			System.out.println("hqlCriteria.getParameters(); "+hqlCriteria.getParameters());
-			System.out.println("hqlCriteria.getHqlString(); "+hqlCriteria.getHqlString());
+			//System.out.println("hqlCriteria.getParameters(); "+hqlCriteria.getParameters());
+			//System.out.println("hqlCriteria.getHqlString(); "+hqlCriteria.getHqlString());
 	    	HibernateCallback callBack = getExecuteFindQueryHibernateCallback(hqlCriteria.getHqlString(),hqlCriteria.getParameters(),
 	    			firstRow, maxRows);
 	    	List rs = (List)getFlushNeverHibernateTemplate().execute(callBack);

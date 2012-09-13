@@ -406,6 +406,7 @@
 			<filter token="GRID_JNDI_NAME" value="${GRID_JNDI_NAME}" />
 			<filter token="ENABLE_ISO21090_DATATYPES" value="${ISO21090_DATATYPES_ENABLED}" />
 			<filter token="ENABLE_RESTFUL_HTML_INTERFACE" value="${RESTFUL_HTML_INTERFACE_ENABLED}" />
+			<filter token="IDENTITY_GENERATOR_TYPE" value="${IDENTITY_GENERATOR_TYPE}" />
 			<filter token="DAO_PAGE_SIZE" value="${DAO_PAGE_SIZE}" />
 			<filter token="RESTFUL_PAGE_SIZE" value="${RESTFUL_PAGE_SIZE}" />
 		</filterset>

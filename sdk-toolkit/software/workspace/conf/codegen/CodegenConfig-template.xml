@@ -28,6 +28,7 @@
 				<ref bean="RESTfulBeanTransformer"/>
 				<ref bean="RESTfulAppTransformer"/>
 				<ref bean="RESTfulCollectionBeansTransformer"/>
+				<ref bean="SDKCascadeTransformer"/>
 				<ref bean="JunitPojoTransformer"/>
 				<ref bean="JunitRESTfulTransformer"/>
 				<ref bean="JunitXmlDataTransformer"/>
@@ -229,6 +230,19 @@
 		</property>
 		<property name="enabled" value="@GENERATE_RESTFUL_RESOURCES@"/>
 		<property name="name" value="RESTful Application Transformer"/>
+		<property name="transformerUtils" ref="TransformerUtils"></property>			
+	</bean>
+
+	<bean name="SDKCascadeTransformer" class="gov.nih.nci.codegen.transformer.jet.SDKCascadeTransformer">
+		<property name="artifactHandler">
+			<bean class="gov.nih.nci.codegen.handler.FileHandler">
+				<property name="useArtifactSource" value="false"/>
+				<property name="outputDir" value="@OUTPUTDIR@/../rest/src/gov/nih/nci/sdk/rest/"/>				
+				<property name="fileName" value="SDKCascadeCache.java"/>						
+			</bean>
+		</property>
+		<property name="enabled" value="@GENERATE_RESTFUL_RESOURCES@"/>
+		<property name="name" value="SDK Cascade Transformer"/>
 		<property name="transformerUtils" ref="TransformerUtils"></property>			
 	</bean>
 	

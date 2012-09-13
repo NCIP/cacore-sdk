@@ -117,7 +117,7 @@ String discriminatorValueStr = (discriminatorValue==null) ? "" : "discriminator-
 							UMLAttribute implicitIdAttr = transformerUtils.getClassIdAttr(nonImplicitClass);
 							String implicitIdType = transformerUtils.getHibernateDataType(nonImplicitClass,implicitIdAttr);
 							%>
-		<%=emptySpace%><any name="<%=otherEnd.getRoleName()%>" meta-type="string" id-type="<%=implicitIdType%>" lazy="<%=lazyValue%>" cascade="<%=cascadeStyle%>"><%
+		<%=emptySpace%><any name="<%=otherEnd.getRoleName()%>" meta-type="string" id-type="<%=implicitIdType%>" lazy="<%=lazyValue%>" cascade="<%=cascadeStyle%>" <%=insertUpdate%> ><%
 							for (UMLClass nonImplicitSubclass:transformerUtils.getNonImplicitSubclasses(implicitClass)){%>
 			<%=emptySpace%><meta-value value="<%=transformerUtils.getDiscriminatorValue(nonImplicitSubclass)%>" class="<%=transformerUtils.getFQCN(nonImplicitSubclass)%>"/><%
 							}//for	%>
@@ -261,7 +261,7 @@ String discriminatorValueStr = (discriminatorValue==null) ? "" : "discriminator-
 									String joinTableName = correlationTable.getName();%>
 		<%=emptySpace%><join table="<%=joinTableName%>" inverse="<%=inverseValue%>" optional="true">
 			<%=emptySpace%><key column="<%=keyColumnName%>" />
-			<%=emptySpace%><many-to-one name="<%=otherEnd.getRoleName()%>" column="<%=assocColumnName%>" class="<%=assocKlassName%>" lazy="<%=lazyValue%>" not-null="<%=notNullFkAttr%>" cascade="<%=cascadeStyle%>"/>
+			<%=emptySpace%><many-to-one name="<%=otherEnd.getRoleName()%>" column="<%=assocColumnName%>" class="<%=assocKlassName%>" lazy="<%=lazyValue%>" not-null="<%=notNullFkAttr%>" cascade="<%=cascadeStyle%>" <%=insertUpdate%>/>
 		<%=emptySpace%></join><%
 								}
 						}else if(transformerUtils.isOne2One(thisEnd,otherEnd)){	//One to One
@@ -279,7 +279,7 @@ String discriminatorValueStr = (discriminatorValue==null) ? "" : "discriminator-
 								String joinTableName = correlationTable.getName();%>
 		<%=emptySpace%><join table="<%=joinTableName%>" inverse="<%=inverseValue%>" optional="true">
 			<%=emptySpace%><key column="<%=keyColumnName%>" />
-			<%=emptySpace%><many-to-one name="<%=otherEnd.getRoleName()%>" column="<%=assocColumnName%>" class="<%=assocKlassName%>" unique="true" lazy="<%=lazyValue%>" not-null="<%=notNullFkAttr%>" cascade="<%=cascadeStyle%>"/>
+			<%=emptySpace%><many-to-one name="<%=otherEnd.getRoleName()%>" column="<%=assocColumnName%>" class="<%=assocKlassName%>" unique="true" lazy="<%=lazyValue%>" not-null="<%=notNullFkAttr%>" cascade="<%=cascadeStyle%>" <%=insertUpdate%>/>
 		<%=emptySpace%></join><%
 							}
 						}
@@ -309,7 +309,7 @@ String discriminatorValueStr = (discriminatorValue==null) ? "" : "discriminator-
 							UMLAttribute implicitIdAttr = transformerUtils.getClassIdAttr(nonImplicitClass);
 							String implicitIdType = transformerUtils.getHibernateDataType(nonImplicitClass,implicitIdAttr);
 							%>
-		<%=emptySpace%><any name="<%=otherEnd.getRoleName()%>" meta-type="string" id-type="<%=implicitIdType%>" lazy="<%=lazyValue%>" cascade="<%=cascadeStyle%>"><%
+		<%=emptySpace%><any name="<%=otherEnd.getRoleName()%>" meta-type="string" id-type="<%=implicitIdType%>" lazy="<%=lazyValue%>" cascade="<%=cascadeStyle%>" <%=insertUpdate%> ><%
 							for (UMLClass nonImplicitSubclass:transformerUtils.getNonImplicitSubclasses(implicitClass)){%>
 			<%=emptySpace%><meta-value value="<%=transformerUtils.getDiscriminatorValue(nonImplicitSubclass)%>" class="<%=transformerUtils.getFQCN(nonImplicitSubclass)%>"/><%
 							}//for	%>
