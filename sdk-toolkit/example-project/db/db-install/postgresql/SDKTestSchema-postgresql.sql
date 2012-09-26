@@ -326,7 +326,7 @@ CREATE TABLE fish (
     FIN_SIZE integer,
     DISCRIMINATOR character varying(150),
     TANK_ID integer,
-    TANK_DISCRIMINATOR character varying(50)
+    TANK_DISCRIMINATOR character varying(150)
 );
 
 DROP TABLE IF EXISTS flight CASCADE;
@@ -368,7 +368,7 @@ CREATE TABLE goverment (
     COUNTRY character varying(50),
     PRIME_MINISTER character varying(50),
     PRESIDENT character varying(50),
-    DEMOCRATIC_DISCRIMINATOR character varying(50)
+    DEMOCRATIC_DISCRIMINATOR character varying(150)
 );
 
 DROP TABLE IF EXISTS graduate_student CASCADE;
