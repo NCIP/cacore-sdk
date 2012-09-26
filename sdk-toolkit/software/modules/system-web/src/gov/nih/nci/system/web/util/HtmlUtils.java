@@ -347,11 +347,8 @@ public class HtmlUtils {
 	}
 
 	private static String getHTML_Boolean(String attrName, String value) {
-		System.out.println("getHTML_Boolean "+attrName);
-		System.out.println("getHTML_Boolean "+value);
 		StringBuilder sb = new StringBuilder();
 		sb.append(getSelect_Boolean(attrName, value));
-		System.out.println("getHTML_Boolean "+sb.toString());
 
 		return sb.toString();
 
@@ -970,31 +967,24 @@ public class HtmlUtils {
 		String validationClass = null;
 
 		if ("Boolean".equalsIgnoreCase(attrType)){
-			System.out.println("Boolean *************");
 			html.append(getHTML_Boolean(attrName));
 		} else if ("Double".equalsIgnoreCase(attrType) || "Float".equalsIgnoreCase(attrType)){
-			System.out.println("Double *************");
 			validationClass = "number";
 			html.append(getHTML(attrName,validationClass));
 		} else if ("Integer".equalsIgnoreCase(attrType) || "Long".equalsIgnoreCase(attrType)){
-			System.out.println("Integer *************");
 			validationClass = "int_long";
 			html.append(getHTML(attrName, validationClass));
 		} else if ("Character".equalsIgnoreCase(attrType)){
-			System.out.println("Character *************");
 			validationClass = "char";
 			html.append(getHTML(attrName, validationClass));
 		} else if ("Date".equalsIgnoreCase(attrType)){
-			System.out.println("Date *************");
 			validationClass = "date";
 			html.append(getHTML(attrName, validationClass));
 		} else {
-			System.out.println("Else *************");
 			validationClass = "";
 			html.append(getHTML(attrName, validationClass));
 		}
 
-		//System.out.println("HTML for non-ISO data type " +attrType + ": "+html);
 		log.debug("HTML for non-ISO data type " +attrType + ": "+html);
 
 		return html.toString();

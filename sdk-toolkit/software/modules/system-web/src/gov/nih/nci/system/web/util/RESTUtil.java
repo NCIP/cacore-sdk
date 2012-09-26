@@ -173,13 +173,13 @@ public class RESTUtil {
 	public static List<String> getSearchableIsoDataTypeFieldsForAd(Field field,
 			List attrs) {
 		String fieldName = field.getName();
-		log.debug.println("fieldName: " + fieldName);
+		log.debug("fieldName: " + fieldName);
 		String fieldNameWithoutU = fieldName;
 		if (fieldName.indexOf("_") > 0)
 			fieldNameWithoutU = fieldName.substring(0, fieldName.indexOf("_"))
 					+ fieldName.substring(fieldName.indexOf("_") + 1,
 							fieldName.length());
-		log.debug.println("fieldNameWithoutU: " + fieldNameWithoutU);
+		log.debug("fieldNameWithoutU: " + fieldNameWithoutU);
 
 		List<String> fnAttrs = new ArrayList();
 		// List of ISO fields
@@ -191,14 +191,14 @@ public class RESTUtil {
 			while (mapIter.hasNext()) {
 				// part_0
 				String keyName = (String) mapIter.next();
-				log.debug.println("keyName: " + keyName);
+				log.debug("keyName: " + keyName);
 				String keyNameWithoutU = keyName;
 				if (keyName.indexOf("_") > 0)
 					keyNameWithoutU = keyName
 							.substring(0, keyName.indexOf("_"))
 							+ keyName.substring(keyName.indexOf("_") + 1,
 									keyName.length());
-				log.debug.println("keyNameWithoutU: " + keyNameWithoutU);
+				log.debug("keyNameWithoutU: " + keyNameWithoutU);
 				// value, code, codeSystem, {type=[AL]}
 				Object mapKeyObj = attrMap.get(keyName);
 				// System.out.println("instanceof java.util.List*******"
@@ -225,7 +225,7 @@ public class RESTUtil {
 
 			}
 		}
-		log.debug.println("returning Ad fnAttrs: " + fnAttrs);
+		log.debug("returning Ad fnAttrs: " + fnAttrs);
 		return fnAttrs;
 	}
 
@@ -260,7 +260,7 @@ public class RESTUtil {
 
 					// value, code, codeSystem, {type=[AL]}
 					Object mapKeyObj = attrMap.get(keyName);
-					// log.debug.println("instanceof java.util.List*******"
+					// log.debug("instanceof java.util.List*******"
 					// + mapKeyObj);
 					List mapKeyObjValue = (List) attrMap.get(keyName);
 					Iterator mapKeyObjValueIter = mapKeyObjValue.iterator();
@@ -272,7 +272,7 @@ public class RESTUtil {
 							fnAttrs.add(fieldName + "." + keyName + "."
 									+ mapKeyObjValueObj);
 						} else {
-							// log.debug.println("instanceof not String *******"
+							// log.debug("instanceof not String *******"
 							// + mapKeyObj);
 							java.util.Map mapKeyObjValueMap = (java.util.Map) mapKeyObjValueObj;
 							String key = (String) mapKeyObjValueMap.keySet()
@@ -312,11 +312,11 @@ public class RESTUtil {
 		while (iter.hasNext()) {
 			Object obj = iter.next();
 			if (obj instanceof java.lang.String) {
-				// log.debug.println("instanceof java.lang.String*******" +
+				// log.debug("instanceof java.lang.String*******" +
 				// obj);
 				fnAttrs.add((String) obj);
 			} else if (obj instanceof java.util.Map) {
-				// log.debug.println("instanceof java.util.Map*******" +
+				// log.debug("instanceof java.util.Map*******" +
 				// obj);
 				Map attrMap = (Map) obj;
 				Iterator mapIter = attrMap.keySet().iterator();
@@ -333,7 +333,7 @@ public class RESTUtil {
 					// {part_1=[value, code, codeSystem, {type=[AL]}]}]
 					Object mapKeyObj = attrMap.get(keyName);
 					if (mapKeyObj instanceof java.util.List) {
-						// log.debug.println("instanceof java.util.List*******"
+						// log.debug("instanceof java.util.List*******"
 						// + mapKeyObj);
 						List mapKeyObjValue = (List) attrMap.get(keyName);
 						Iterator mapKeyObjValueIter = mapKeyObjValue.iterator();
@@ -355,8 +355,8 @@ public class RESTUtil {
 								for (String partAttrName : subAttrNames) {
 
 									String newPartName = partAttrName;
-									log.debugut.println("newPartName: "
-									//		+ newPartName);
+									log.debug("newPartName: "
+											+ newPartName);
 									if (newPartName.indexOf("part_") != -1) {
 										newPartName = "part"
 												+ partAttrName
@@ -365,8 +365,8 @@ public class RESTUtil {
 																		.indexOf("part_") + 5,
 																partAttrName
 																		.length());
-										log.debug.println("newPartName: "
-										//		+ newPartName);
+										log.debug("newPartName: "
+												+ newPartName);
 									}
 
 									fnAttrs.add(fieldName + "." + subAttrName
@@ -376,7 +376,7 @@ public class RESTUtil {
 						}
 
 					} else if (mapKeyObj instanceof java.util.Map) {
-						// log.debug.println("instanceof java.util.Map ----- "
+						// log.debug("instanceof java.util.Map ----- "
 						// + mapKeyObj);
 						convertISOPart(subAttrName, (java.util.Map) mapKeyObj,
 								fnAttrs);
@@ -448,7 +448,7 @@ public class RESTUtil {
 								+ keyValueName);
 					}
 				}
-				// log.debug.println("Don't know-----------------------");
+				// log.debug("Don't know-----------------------");
 			}
 		}
 		// System.out.println("returning fnAttrs: " + fnAttrs);
@@ -479,7 +479,7 @@ public class RESTUtil {
 			Field field, List attrs) {
 
 		String typeName = field.getType().getName();
-		log.debug.println("typeName: " + typeName);
+		log.debug("typeName: " + typeName);
 		if (typeName.equals("gov.nih.nci.iso21090.Ad")
 				|| typeName.equals("gov.nih.nci.iso21090.En")
 				|| typeName.equals("gov.nih.nci.iso21090.EnOn")
@@ -545,11 +545,11 @@ public class RESTUtil {
 
 		String fieldName = field.getDeclaringClass().getName() + "."
 				+ field.getName();
-		log.debug.println("attributeName " + attributeName);
-		log.debug.println("fieldName " + fieldName);
+		log.debug("attributeName " + attributeName);
+		log.debug("fieldName " + fieldName);
 		if (attributeName.equals(fieldName)) {
 			attribute = Class.forName(fieldName).newInstance();
-			log.debug.println("Equal returning " + attribute);
+			log.debug("Equal returning " + attribute);
 			return attribute;
 		} else if (attributeName.indexOf(fieldName) == -1)
 			throw new Exception(
@@ -558,7 +558,7 @@ public class RESTUtil {
 
 		String subAttributeName = attributeName.substring(
 				attributeName.indexOf(fieldName) + 1, attributeName.length());
-		log.debug.println("subAttributeName " + subAttributeName);
+		log.debug("subAttributeName " + subAttributeName);
 
 		return attribute;
 	}
@@ -803,7 +803,7 @@ public class RESTUtil {
 							System.out.println(" -- association has been excluded");
 						}
 					}
-					log.debug.println("size="+((Collection)val).size());
+					log.debug("size="+((Collection)val).size());
 				}
 				else if(val instanceof ArrayList)
 				{
@@ -859,7 +859,7 @@ public class RESTUtil {
 					String refName = child.getAttributeValue("ref");
 					System.out.println("refName: "+refName);
 					System.out.println("linkName: "+linkName);
-					if(refName.trim().equals(linkName.trim()))
+					if(linkName != null && refName.trim().equals(linkName.trim()))
 					{
 						System.out.println("Equallllllll");
 						String href = child.getAttributeValue("href");

@@ -411,11 +411,8 @@ public class SDKCascadeCache
 
 	public String getCascadeValue(String className, String roleName)
 	{
-		//System.out.println("getCascadeValue............. ");
 		String key = className.trim() + ":" + roleName.trim();
-		//System.out.println("key: "+key);
 		String value = (String)cascadeCache.get(key);
-		//System.out.println("value: "+value);
 		try
 		{
 			if(value == null)
@@ -424,9 +421,8 @@ public class SDKCascadeCache
 				{
 					Class klass = Class.forName(className);
 					Class superKlass = klass.getSuperclass();
-					//System.out.println("superKlass.getName(): "+superKlass.getName());
-					key = superKlass.getName() + ":"+ roleName;
-					value = (String)cascadeCache.get(key);
+					key = superKlass.getName() + ":"+ roleName.trim();
+					value = (String)cascadeCache.get(key.trim());
 					if(value != null)
 						return value;
 					if(superKlass.getName().equals("java.lang.Object"))
@@ -445,11 +441,8 @@ public class SDKCascadeCache
 
 	public String getInverseValue(String className, String roleName)
 	{
-		//.println("getInverseValue............. ");
 		String key = className.trim() + ":" + roleName.trim();
-		//System.out.println("key: "+key);
 		String value = (String)inverseCache.get(key);
-		//System.out.println("value: "+value);
 		try
 		{
 			if(value == null)
@@ -458,9 +451,8 @@ public class SDKCascadeCache
 				{
 					Class klass = Class.forName(className);
 					Class superKlass = klass.getSuperclass();
-					//System.out.println("superKlass.getName(): "+superKlass.getName());
-					key = superKlass.getName() + ":"+ roleName;
-					value = (String)inverseCache.get(key);
+					key = superKlass.getName() + ":"+ roleName.trim();
+					value = (String)inverseCache.get(key.trim());
 					if(value != null)
 						return value;
 					if(superKlass.getName().equals("java.lang.Object"))
@@ -482,20 +474,16 @@ public class SDKCascadeCache
 		String type = null;
 		try
 		{
-		//System.out.println("getAssocationType............. ");
 			className = className.trim();
 			roleName = roleName.trim();
 			String key = className + ":" + roleName;
 			type = (String)assocCache.get(key);
-			//System.out.println("key: "+key);
-			//System.out.println("type: "+type);
 			if(type == null)
 			{
 				while(true)
 				{
 					Class klass = Class.forName(className);
 					Class superKlass = klass.getSuperclass();
-					//System.out.println("superKlass.getName(): "+superKlass.getName());
 					key = superKlass.getName() + ":"+ roleName;
 					type = (String)assocCache.get(key);
 					if(type != null)
@@ -517,7 +505,6 @@ public class SDKCascadeCache
 	public boolean checkAssociation(String className, String roleName)
 	{
 		String type = getAssocationType(className, roleName);
-		//System.out.println("type: "+type);
 		if(type != null && (type.equals("many-to-one") || type.equals("one-to-many") || type.equals("any")))
 			return true;
 		else
@@ -528,13 +515,13 @@ public class SDKCascadeCache
 	public boolean canSaveAssociation(String className, String roleName)
 	{
 		String type = getAssocationType(className, roleName);
-		if(type != null && (type.equals("many-to-one") || type.equals("one-to-many") || type.equals("many-to-many") || type.equals("any")))
+		if(type != null && (type.equals("one-to-one") || type.equals("many-to-one") || type.equals("one-to-many")  || type.equals("any")))
 		{
 			String cascades = getCascadeValue(className, roleName);
-			//System.out.println("cascades "+cascades);
 			List<String> values = null;
 			if(cascades == null)
 				return true;
+				
 			if(cascades.indexOf(",") > 0)
 			{
 				values = getSplitValues(cascades);
@@ -547,17 +534,14 @@ public class SDKCascadeCache
 			
 			for(String cascade : values)
 			{
-				//System.out.println("cascade "+cascade);
 				if(cascade != null && (cascade.equals(CASCADE_ALL) || cascade.contains(CASCADE_SAVE_UPDATE)))
 					return true;
-				else
-					return false;
 			}
-		} else if(type.equals("many-to-many"))
+			return false;
+		} else if(type != null && type.equals("many-to-many"))
 		{
 			String inverseValue = getInverseValue(className, roleName);
-			//System.out.println("inverseValue "+inverseValue);
-			if(inverseValue != null && inverseValue.equals("false"))
+			if(inverseValue != null && inverseValue.equalsIgnoreCase("false"))
 				return true;
 			else
 				return false;
@@ -570,7 +554,6 @@ public class SDKCascadeCache
 	public String getDeleteAssociation(String className, String roleName)
 	{
 		String cascades = getCascadeValue(className, roleName);
-		//System.out.println("cascades "+cascades);
 		List<String> values = null;
 		if(cascades == null)
 			return null;
@@ -586,7 +569,6 @@ public class SDKCascadeCache
 
 		for(String cascade : values)
 		{
-			//System.out.println("cascade "+cascade);
 			if(cascade.equals(CASCADE_ALL) || cascade.equals(CASCADE_DELETE) || cascade.equals(CASCADE_DELETE_ORPHAN) || cascade.equals(CASCADE_ALL_DELETE_ORPHAN))
 				return cascade;
 		}

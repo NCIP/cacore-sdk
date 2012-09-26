@@ -26,7 +26,8 @@ public<%=transformerUtils.isAbstract(klass)? " abstract" : "" %> class <%=klass.
 	private static final long serialVersionUID = 1234567890L;
 	
 
-	<%for(UMLAttribute attr:klass.getAttributes()){%>
+	<%for(UMLAttribute attr:klass.getAttributes()){
+	%>
 	<%=transformerUtils.getJavaDocs(attr)%>
 	<%=transformerUtils.getHibernateValidatorConstraints(klass,attr)%>
 	<%=attr.getVisibility().getName()%> <%=transformerUtils.getDataType(attr)%> <%=attr.getName()%>;

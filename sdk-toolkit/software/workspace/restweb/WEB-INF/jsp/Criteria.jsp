@@ -11,13 +11,6 @@
 <script type="text/javascript" src="jquery-ui-1.8.2.custom.min.js"></script>
 <script type="text/javascript" src="iso-21090-datatype.2.1.js"></script>
 
-<script type="text/javascript">
-function create()
-{
-alert("create");
-document.href.location="Create.action";
-}
-</script>
 <%
 JSPUtils jspUtils= null;
 List fieldNames=new ArrayList();
@@ -25,7 +18,7 @@ List domainNames=new ArrayList();
 String message=null, selectedSearchDomain=null;
 String className = (String)request.getAttribute("klassName");
 String nodeId = (String)request.getAttribute("nodeId");
-
+String idColName = null;
 //out.println("className: " + className);
 //session.setAttribute("selectedDomain", className);
 
@@ -36,6 +29,8 @@ if(className != null)
 		jspUtils = JSPUtils.getJSPUtils(config.getServletContext());
 		fieldNames = jspUtils.getSearchableFields(className);
 		domainNames = jspUtils.getAssociations(className);
+		idColName = jspUtils.getClassIdName(className, true);
+		//out.println("idColName:  " + idColName);
 		
 	}
 	catch(Exception ex){
@@ -43,7 +38,7 @@ if(className != null)
 	}
 	
 	//out.println("fieldNames:  " + fieldNames);
-	if(fieldNames != null && fieldNames.size() > 0)
+	if(idColName != null && idColName.trim().length() > 0 && fieldNames != null && fieldNames.size() > 0)
 	{
 %>
 <form method="post" target="_blank" action="Result.action" name="Result" id="Result">

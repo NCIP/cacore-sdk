@@ -229,9 +229,11 @@ if(className != null)
 			   			asscRole = asscName.substring(0, asscName.indexOf("("));
 			   		}
 			   			
-			   		if(asscClass.equals("Please choose") || asscClass.equals(className))
+			   		if(asscClass.equals("Please choose") || (asscRole == null && asscClass.equals(className)))
 			   			continue;
 			   		String idName = jspUtils.getClassIdName(asscClass);
+			   		if(idName == null || idName.trim().length() ==0)
+			   			continue;
 			   		String labelName = asscClass + "."+idName;
 			   		if(asscRole != null)
 			   			labelName = asscRole+"("+labelName+")";

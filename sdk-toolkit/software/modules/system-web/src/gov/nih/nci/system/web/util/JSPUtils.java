@@ -181,6 +181,11 @@ public class JSPUtils {
 		return classCache.getToAssociations(className);
 	}
 
+	public String getClassIdName(String className, boolean includeParent)
+	throws Exception{
+		return classCache.getClassIdName(Class.forName(className), includeParent);
+	}
+
 	public String getClassIdName(String className) {
 		return classCache.getClassIdName(className);
 	}

@@ -81,6 +81,8 @@ public class CreateAction extends RestQuery {
 
 		   	selectedSearchDomain = getSearchObj();
 		   	log.debug("selectedSearchDomain: "+ selectedSearchDomain);
+			try
+			{
 
 		   	Object instance = prepareObject(request);
 
@@ -112,14 +114,12 @@ public class CreateAction extends RestQuery {
 
 			}
 
-			try
-			{
 			   	prepareAssociations(request, instance, className, base64encodedUsernameAndPassword);
-				System.out.println("Before insert: *******");
+				log.debug("Before insert: *******");
 				gov.nih.nci.system.web.util.RESTUtil.printObject(instance, instance.getClass(), true);
 
 				Response r = client.post(instance);
-		   		//System.out.println("Create status: "+r.getStatus());
+		   		//log.debug("Create status: "+r.getStatus());
 		   		if(r.getStatus() == Status.OK.getStatusCode() || r.getStatus() == Status.CREATED.getStatusCode())
 		   		{
 					InputStream is = (InputStream) r.getEntity();
@@ -136,7 +136,7 @@ public class CreateAction extends RestQuery {
 		   		}
 		   		else
 		   		{
-		   			//System.out.println(r.toString());
+		   			//log.debug(r.toString());
 					InputStream is = (InputStream) r.getEntity();
 
 					org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
@@ -153,6 +153,7 @@ public class CreateAction extends RestQuery {
 			{
 				e.printStackTrace();
 				String message = "Failed to create due to: "+e.getMessage();
+				log.debug("message2 "+message);
 				request.setAttribute("message", message);
 				request.setAttribute("created", "false");
 
@@ -161,6 +162,7 @@ public class CreateAction extends RestQuery {
 			{
 				e.printStackTrace();
 				String message = "Failed to create due to: "+e.getMessage();
+				log.debug("message1 "+message);
 				request.setAttribute("message", message);
 				request.setAttribute("created", "false");
 
@@ -202,7 +204,9 @@ public class CreateAction extends RestQuery {
 	}
 
 
-	private Object prepareObject(HttpServletRequest request){
+	private Object prepareObject(HttpServletRequest request)
+	throws Exception
+	{
 
 		StringBuilder sb = new StringBuilder();
 		Enumeration<String> parameters = request.getParameterNames();
@@ -215,24 +219,25 @@ public class CreateAction extends RestQuery {
 	 		while(parameters.hasMoreElements())
 	 		{
 	     		String parameterName = (String)parameters.nextElement();
-	     		//System.out.println("parameterName: "+parameterName);
+	     		log.debug("parameterName: "+parameterName);
 	     		if(!parameterName.equals("klassName") && !parameterName.equals("searchObj") && !parameterName.equals("BtnSearch") && !parameterName.equals("username") && !parameterName.equals("password") && !parameterName.equals("selectedDomain"))
 	     		{
 	     			String parameterValue = (request.getParameter(parameterName)).trim();
-	     			//System.out.println("parameterValue: "+parameterValue);
+	     			log.debug("parameterValue: "+parameterValue);
 	     			setParameterValue(klass, instance, parameterName, parameterValue);
 	     		}
 	     	}
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			throw e;
 		}
 		return instance;
 	}
 
 
 	private void setParameterValue(Class klass, Object instance, String name, String value)
+	throws Exception
 	{
 		if(value != null && value.trim().length()==0)
 			value = null;
@@ -243,7 +248,7 @@ public class CreateAction extends RestQuery {
 			Method[] allMethods = klass.getMethods();
 		    for (Method m : allMethods) {
 				String mname = m.getName();
-				//System.out.println("mname: "+mname);
+				log.debug("mname: "+mname);
 				if(mname.equals("get"+paramName))
 				{
 					Class type = m.getReturnType();
@@ -254,28 +259,35 @@ public class CreateAction extends RestQuery {
 					     try {
 					    	  Method setMethod = klass.getDeclaredMethod("set"+paramName, argTypes);
 					    	  setMethod.setAccessible(true);
-					          setMethod.invoke(instance, convertValue(type, value));
-					          //System.out.println("setParameterValue************* ");
+					    	  Object converted = convertValue(type, value);
+					    	  if(converted != null)
+					          	setMethod.invoke(instance, converted);
+					          log.debug("setParameterValue************* ");
 					          break;
 					     } catch (NoSuchMethodException ex) {
 					    	 klass = klass.getSuperclass();
 					     }
+					     catch(Exception e)
+					     {
+							 throw e;
+						 }
 					}
-					// only needed if the two classes are in different packages
-//					Method setMethod = klass.getDeclaredMethod("set"+paramName, argTypes);
-//				    setMethod.invoke(instance, convertValue(type, value));
 				}
 		    }
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
+			throw e;
 		}
 	}
 
-	public Object convertValue(Class klass, Object value) throws WebApplicationException {
+	public Object convertValue(Class klass, Object value) throws Exception {
 
 		String fieldType = klass.getName();
+		if(value == null)
+			return null;
+
 		Object convertedValue = null;
 		try {
 			if (fieldType.equals("java.lang.Long")) {
@@ -307,6 +319,7 @@ public class CreateAction extends RestQuery {
 		} catch (Exception ex) {
 			 ex.printStackTrace();
 			 log.error("ERROR : " + ex.getMessage());
+			 throw ex;
 		}
 		return convertedValue;
 	}

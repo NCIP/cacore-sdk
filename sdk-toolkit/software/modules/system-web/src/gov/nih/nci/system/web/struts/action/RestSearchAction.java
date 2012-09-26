@@ -81,12 +81,12 @@ public class RestSearchAction extends RestQuery {
 						+ base64encodedUsernameAndPassword);
 			}
 			String queryStr = getQueryString(className, roleName, request);
+			log.debug("queryStr "+queryStr);
 			String path = "rest/"
 					+ selectedDomain.substring(
 							selectedDomain.lastIndexOf(".") + 1,
 							selectedDomain.length()) + "/" + queryStr;
 			client.path(path);
-
 			client.type("application/xml").accept("application/xml");
 			Response r = client.get();
 			if (r.getStatus() == Status.UNAUTHORIZED.getStatusCode()) {

@@ -1317,8 +1317,8 @@ public class TransformerUtils
 	public List<UMLAttribute> getClassAttributes(UMLClass klass, boolean includeParents) throws GenerationException
 	{
 
-		List<UMLAttribute> attributes = klass.getAttributes();
-
+		List<UMLAttribute> attributes = new ArrayList<UMLAttribute>();
+		attributes.addAll(klass.getAttributes());
 		for(UMLGeneralization gen: klass.getGeneralizations())
 		{
 			if(gen.getSubtype().equals(klass) && !gen.getSupertype().equals(klass))
@@ -1326,7 +1326,6 @@ public class TransformerUtils
 				attributes.addAll(((UMLClass)gen.getSupertype()).getAttributes());
 			}
 		}
-
 		return attributes;
 	}
 

@@ -245,12 +245,12 @@ public class ClassCache implements InitializingBean{
 		if (classFields != null)
 			for (int i = 0; i < classFields.length; i++)
 				allFields.add(classFields[i]);
-		
+
 		Field[] fieldArray = new Field[allFields.size()];
 		allFields.toArray(fieldArray);
 		return fieldArray;
 	}
-	
+
 	public String getReturnType(String className, String fieldName)
 	throws ClassNotFoundException, Exception {
 		return getReturnType(className, fieldName, false);
@@ -464,8 +464,8 @@ public class ClassCache implements InitializingBean{
 		//System.out.println("asscs: "+asscs);
 		return asscs;
 	}
-	
-	
+
+
 	public String getAssociationType(Class klass, String associationName)
 	throws Exception {
 		return getAssociationType(klass, associationName, false);

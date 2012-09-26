@@ -713,6 +713,7 @@
 				<include name="cog-axis-4*.jar"/>
 				<include name="cog-jglobus-4*.jar"/>
 				<include name="commons-beanutils-*.jar"/>
+				<include name="commons-configuration-*.jar"/>
 				<include name="commons-codec-*.jar"/>
 				<include name="commons-collections-*.jar"/>
 				<include name="commons-discovery-*.jar"/>
@@ -1017,6 +1018,7 @@
 				<include name="cog-jglobus-4*.jar"/>
 				<include name="commons-beanutils-*.jar"/>
 				<include name="commons-codec-*.jar"/>
+				<include name="commons-configuration-*.jar"/>
 				<include name="commons-collections-*.jar"/>
 				<include name="commons-logging-*.jar"/>
 				<include name="commons-lang-*.jar"/>
@@ -1103,6 +1105,7 @@
 						<include name="cog-jglobus-4*.jar"/>
 						<include name="cog-tomcat-4*.jar"/>
 						<include name="commons-beanutils-*.jar"/>
+						<include name="commons-configuration-*.jar"/>
 						<include name="commons-codec-*.jar"/>
 						<include name="commons-collections-*.jar"/>
 						<include name="commons-digester-*.jar"/>
@@ -1222,6 +1225,7 @@
 				<include name="cglib-*.jar"/>
 				<include name="cog-jglobus-4*.jar"/>
 				<include name="commons-beanutils-*.jar"/>
+				<include name="commons-configuration-*.jar"/>
 				<include name="commons-codec-*.jar"/>
 				<include name="commons-collections-*.jar"/>
 				<include name="commons-logging-*.jar"/>
@@ -1323,6 +1327,7 @@
 						<include name="cog-jglobus-4*.jar"/>
 						<include name="cog-tomcat-4*.jar"/>
 						<include name="commons-beanutils-*.jar"/>
+						<include name="commons-configuration-*.jar"/>
 						<include name="commons-codec-*.jar"/>
 						<include name="commons-collections-*.jar"/>
 						<include name="commons-digester-*.jar"/>
@@ -1479,6 +1484,7 @@
 				<include name="castor-*.jar"/>
 				<include name="cglib-*.jar"/>
 				<include name="commons-beanutils-*.jar"/>				
+				<include name="commons-configuration-*.jar"/>
 				<include name="commons-codec-*.jar"/>
 				<include name="commons-collections-*.jar"/>
 				<include name="commons-discovery-*.jar"/>
@@ -1718,6 +1724,7 @@
 				<include name="castor-*.jar"/>
 				<include name="cglib-*.jar"/>
 				<include name="commons-beanutils-*.jar"/>				
+				<include name="commons-configuration-*.jar"/>
 				<include name="commons-codec-*.jar"/>
 				<include name="commons-collections-*.jar"/>
 				<include name="commons-discovery-*.jar"/>
@@ -2103,6 +2110,7 @@
 				<include name="cog-axis-4*.jar" />
 				<include name="puretls-*.jar" />
 				<include name="commons-beanutils-*.jar" />
+				<include name="commons-configuration-*.jar"/>
 				<include name="commons-codec-*.jar" />
 				<include name="commons-collections-*.jar" />
 				<include name="commons-digester-*.jar" />

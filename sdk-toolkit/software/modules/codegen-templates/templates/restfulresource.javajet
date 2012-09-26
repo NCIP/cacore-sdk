@@ -173,7 +173,7 @@ if(action != null && action.indexOf("R") != -1)
 				Map returnMap = new HashMap();
 				String fullpath = uriInfo.getAbsolutePath().toString();
 				String path = fullpath.substring(0, fullpath.indexOf("/rest/")+5);
-				//System.out.println("building links: "+path);
+				//log.debug("building links: "+path);
 				<%=klassName%>Bean bean = new <%=klassName%>Bean(returnObj);
 				bean.buildLinks(path, returnObj);
 				//returnObj.buildLinks(path);
@@ -225,7 +225,7 @@ if(action != null && action.indexOf("R") != -1)
 		try
 		{
 			List<PathSegment> pathSegments = uriInfo.getPathSegments();
-			//System.out.println("pathSegments; "+pathSegments);
+			log.debug("pathSegments; "+pathSegments);
 			List<Field> searchFields = RESTUtil.getSearchableFields("<%=klassName%>", classCache);
 			if(pathSegments == null || pathSegments.size() == 0)
 			{			
@@ -251,6 +251,7 @@ if(action != null && action.indexOf("R") != -1)
 
 			}
 			Map matrixParams = pathSegments.get(1).getMatrixParameters();
+			log.debug("matrixParams; "+matrixParams);
 			if(searchFields == null || searchFields.size() == 0)
 			{
 				  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
@@ -274,12 +275,11 @@ if(action != null && action.indexOf("R") != -1)
 			{
 				appService = getApplicationService();
 			}
-			//validateCriteria("<%=fullPackageName%>.<%=klassName%>", matrixParams, searchFields);
 			HQLCriteria hcriteria = buildHQLCriteria("<%=fullPackageName%>.<%=klassName%>", searchFields, matrixParams, uriInfo, dbType);
 			int rowCount = appService.getQueryRowCount(hcriteria, "<%=fullPackageName%>.<%=klassName%>");
 			int maxRowCountPerQuery = appService.getMaxRecordsCount();
-			//System.out.println("rowCount: "+rowCount);
-			//System.out.println("maxRowCountPerQuery: "+maxRowCountPerQuery);
+			//log.debug("rowCount: "+rowCount);
+			//log.debug("maxRowCountPerQuery: "+maxRowCountPerQuery);
 			Collection results = appService.query(hcriteria);
 			ResourceLink nextLink = getNextLink(uriInfo, results.size(), rowCount, maxRowCountPerQuery);
 			ResourceLink previousLink = getPreviousLink(uriInfo, results.size(), rowCount, maxRowCountPerQuery);
@@ -425,7 +425,7 @@ for(UMLAssociation assoc: assocs){
 					totalSize = Integer.parseInt(bSize);
 
 				List<PathSegment> pathSegments = uriInfo.getPathSegments();
-				//System.out.println("pathSegments; "+pathSegments);
+				//log.debug("pathSegments; "+pathSegments);
 				List<Field> searchFields = RESTUtil.getSearchableFields("<%=klassName%>", classCache);
 				if(pathSegments == null || pathSegments.size() == 0)
 				{			
@@ -483,8 +483,8 @@ for(UMLAssociation assoc: assocs){
 
 				int rowCount = appService.getQueryRowCount(hqlCriteria, "<%=assocPackageName%>.<%=assocKlass.getName()%>");
 				int maxRowCountPerQuery = appService.getMaxRecordsCount();
-				//System.out.println("rowCount: "+rowCount);
-				//System.out.println("maxRowCountPerQuery: "+maxRowCountPerQuery);
+				//log.debug("rowCount: "+rowCount);
+				//log.debug("maxRowCountPerQuery: "+maxRowCountPerQuery);
 				Collection results = appService.query(hqlCriteria);
 				ResourceLink nextLink = getNextLink(uriInfo, results.size(), rowCount, maxRowCountPerQuery);
 				ResourceLink previousLink = getPreviousLink(uriInfo, results.size(), rowCount, maxRowCountPerQuery);
@@ -632,8 +632,8 @@ for(UMLAssociation assoc: assocs){
 				HQLCriteria hqlCriteria = getAssociationCriteria(Class.forName(className), "<%=name%>", id, startIndex, totalSize);
 				int rowCount = appService.getQueryRowCount(hqlCriteria, "<%=assocPackageName%>.<%=assocKlass.getName()%>");
 				int maxRowCountPerQuery = appService.getMaxRecordsCount();
-				//System.out.println("rowCount: "+rowCount);
-				//System.out.println("maxRowCountPerQuery: "+maxRowCountPerQuery);
+				//log.debug("rowCount: "+rowCount);
+				//log.debug("maxRowCountPerQuery: "+maxRowCountPerQuery);
 				Collection results = appService.query(hqlCriteria);
 				ResourceLink nextLink = getNextLink(uriInfo, results.size(), rowCount, maxRowCountPerQuery);
 				ResourceLink previousLink = getPreviousLink(uriInfo, results.size(), rowCount, maxRowCountPerQuery);
@@ -776,8 +776,8 @@ for(UMLAssociation assoc: assocs){
 				HQLCriteria hqlCriteria = getAssociationCriteria(Class.forName(className), "<%=name%>", id, startIndex, totalSize);
 				int rowCount = appService.getQueryRowCount(hqlCriteria, "<%=assocPackageName%>.<%=assocKlass.getName()%>");
 				int maxRowCountPerQuery = appService.getMaxRecordsCount();
-				//System.out.println("rowCount: "+rowCount);
-				//System.out.println("maxRowCountPerQuery: "+maxRowCountPerQuery);
+				//log.debug("rowCount: "+rowCount);
+				//log.debug("maxRowCountPerQuery: "+maxRowCountPerQuery);
 				Collection results = appService.query(hqlCriteria);
 				//List beans = new ArrayList();
 				if(results != null && results.size() > 0)
@@ -877,7 +877,7 @@ if(action != null && action.indexOf("C") != -1 && !transformerUtils.isISO21090En
 	{
 		try
 		{
-			//System.out.println("Adding <%=klassName%>: "+object.toString());
+			//log.debug("Adding <%=klassName%>: "+object.toString());
 			/*try
 			{
 			gov.nih.nci.system.web.util.RESTUtil.printObject(object, object.getClass(), true);
@@ -917,7 +917,7 @@ if(action != null && action.indexOf("C") != -1 && !transformerUtils.isISO21090En
 		}
 		catch(WebApplicationException e)
 		{
-			//System.out.println("In Create: throwing: "+e.getMessage());
+			//log.debug("In Create: throwing: "+e.getMessage());
 			return e.getResponse();
 			//ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
 			//builder.type("application/xml");
@@ -936,7 +936,7 @@ if(action != null && action.indexOf("D") != -1 && !transformerUtils.isISO21090En
 	@Path("{id}")
 	public Response delete<%=klassName%>(@Context javax.servlet.http.HttpServletRequest request, @Context javax.servlet.http.HttpServletResponse response, @PathParam("id") String id)
 	{
-	//System.out.println("in delete................");
+	//log.debug("in delete................");
 		try
 		{
 
@@ -1019,16 +1019,16 @@ if(action != null && action.indexOf("D") != -1 && !transformerUtils.isISO21090En
 		}
 
 			HQLCriteria criteria = new HQLCriteria("from <%=fullPackageName%>.<%=klassName%> a where a.<%=transformerUtils.getClassIdAttrName(klass)%> = ?", params);
-			//System.out.println("Delete looking for : "+id);
+			//log.debug("Delete looking for : "+id);
 			Collection<<%=klassName%>> results = appService.query(criteria);
 			
 			if(results != null && results.size() > 0)
 			{
 				<%=klassName%> returnObj = (<%=klassName%>)results.iterator().next();
-				//System.out.println("returnObj "+returnObj.toString());
-				//System.out.println("returnObj Links"+returnObj.getLinks());
+				//log.debug("returnObj "+returnObj.toString());
+				//log.debug("returnObj Links"+returnObj.getLinks());
 				String query = "delete from <%=fullPackageName%>.<%=klassName%> a where a.id = ?";
-				//System.out.println("Deleting....<%=klassName%>: "+params);
+				//log.debug("Deleting....<%=klassName%>: "+params);
 				DeleteHQLQuery deleteQuery = new DeleteHQLQuery(query, params);
 				delete(returnObj);
 				ResponseBuilder builder = Response.status(Status.OK);
@@ -1038,7 +1038,7 @@ if(action != null && action.indexOf("D") != -1 && !transformerUtils.isISO21090En
 			}
 			else
 			{
-				  //System.out.println("NOT Found.....................");
+				  //log.debug("NOT Found.....................");
 				  ResponseBuilder builder = Response.status(Status.NOT_FOUND);
 				  builder.type("application/xml");
 				  builder.entity("<message>Not found</message>");
@@ -1095,7 +1095,7 @@ if(action != null && action.indexOf("U") != -1 && !transformerUtils.isISO21090En
 	{
 		try
 		{
-			//System.out.println("object: "+object.getId());
+			//log.debug("object: "+object.getId());
 			checkCollections(object);
 			gov.nih.nci.system.web.util.RESTUtil.printObject(object, object.getClass(), true);
 			update(object);
