@@ -118,6 +118,18 @@
 		</fileset>
 	</path>
 
+	<path id="rest-client-cp">
+		<fileset dir="${package.client.rest.lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${package.client.local.lib.dir}">
+			<include name="**/sdk-system-core-*.jar" />
+		</fileset>
+		<path refid="junit-lib" />
+		<pathelement path="${classes.dir}" />
+		<pathelement path="${package.client.remote.conf.dir}" />
+	</path>
+
 	<path id="remote-client-cp">
 		<fileset dir="${package.client.remote.lib.dir}">
 			<include name="**/*.jar" />
@@ -386,6 +398,11 @@
 		<SDKecho message="${ant.project.name}: Cleaning the classes directory" />
 		<delete dir="${classes.dir}" />
 	</target>
+	
+	<target name="compileRestClient" depends="createDir">
+		<SDKCompileJUnit compileClasspath="rest-client-cp" includePattern="**/system/web/client/*.java" excludePattern="" />
+	</target>
+ 	
 
 	<!-- ************************************************************************************************-->
 	<!--                                Run JUnits for Thick client            	                         -->
@@ -406,6 +423,7 @@
 		<SDKRunJUnit junitClasspath="local-client-cp" junitOutputDir="${report.dir.thick-client}" includePattern="**/cacoresdk/**/*Test.class" excludePattern="" junitreportfile="TEST-readThickClient.xml" />
 		<SDKGenerateReport junitOutputDir="${report.dir.thick-client}" />
 	</target>
+
 
 	<!-- ************************************************************************************************-->
 	<!--                                Run JUnits for Schema (XSD) client 	                             -->
