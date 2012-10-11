@@ -16,7 +16,7 @@ String discriminatorValueStr = (discriminatorValue==null) ? "" : "discriminator-
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping package="<%=transformerUtils.getFullPackageName(klass)%>" auto-import="false" default-cascade="none">
 	<class name="<%=klass.getName()%>" table="<%=table.getName()%>" lazy="true" polymorphism="<%=polymorphismAttr%>" abstract="<%=abstractModifier%>" <%=discriminatorValueStr%>>
-		<cache usage="read-write" /><%
+		<cache usage="transactional" /><%
 		if(transformerUtils.isISO21090Enabled()){%>
 		<tuplizer entity-mode="pojo" class="gov.nih.nci.iso21090.hibernate.tuple.IsoCustomEntityTuplizer"/><%
 		}%>
@@ -56,7 +56,7 @@ String discriminatorValueStr = (discriminatorValue==null) ? "" : "discriminator-
 							String elementColumnName = transformerUtils.getCollectionElementColumnName(collectionTable, currentKlass, attr);
 							String elementType = transformerUtils.getCollectionElementHibernateType(currentKlass, attr);%>
 		<%=emptySpace%><set name="<%=attr.getName()%>" lazy="false" table="<%=collectionTable.getName()%>">
-			<%=emptySpace%><cache usage="read-write" />
+			<%=emptySpace%><cache usage="transactional" />
 			<%=emptySpace%><key column="<%=keyColumnName%>" />
 			<%=emptySpace%><element type="<%=elementType%>" column="<%=elementColumnName%>" />
 		<%=emptySpace%></set>
@@ -140,7 +140,7 @@ String discriminatorValueStr = (discriminatorValue==null) ? "" : "discriminator-
 							String implicitIdType = transformerUtils.getHibernateDataType(nonImplicitClass,implicitIdAttr);
 							%>
 		<%=emptySpace%><set name="<%=otherEnd.getRoleName()%>" table="<%=joinTableName%>" lazy="<%=lazyValue%>" inverse="<%=inverseValue%>">
-			<%=emptySpace%><cache usage="read-write" />
+			<%=emptySpace%><cache usage="transactional" />
 			<%=emptySpace%><key column="<%=keyColumnName%>" />
 			<%=emptySpace%><many-to-any meta-type="string" id-type="<%=implicitIdType%>"><%
 							for (UMLClass nonImplicitSubclass:transformerUtils.getNonImplicitSubclasses(implicitClass)){%>
@@ -161,7 +161,7 @@ String discriminatorValueStr = (discriminatorValue==null) ? "" : "discriminator-
 							String inverseValue = assocColumnName.equals(inverseColumnName) ?"true":"false";
 							String joinTableName = correlationTable.getName();%>
 		<%=emptySpace%><set name="<%=otherEnd.getRoleName()%>" table="<%=joinTableName%>" lazy="<%=lazyValue%>" inverse="<%=inverseValue%>">
-			<%=emptySpace%><cache usage="read-write" />
+			<%=emptySpace%><cache usage="transactional" />
 			<%=emptySpace%><key column="<%=keyColumnName%>" />
 			<%=emptySpace%><many-to-many class="<%=assocKlassName%>" column="<%=assocColumnName%>" />
 		<%=emptySpace%></set><%
@@ -179,7 +179,7 @@ String discriminatorValueStr = (discriminatorValue==null) ? "" : "discriminator-
 									throw new GenerationException("Different columns used for 'implements-association' and 'inverse-of' tags of the same association");
 								String inverseValue = assocColumnName.equals(inverseColumnName) ?"true":"false"; %>
 		<%=emptySpace%><set name="<%=otherEnd.getRoleName()%>" lazy="<%=lazyValue%>" cascade="<%=cascadeStyle%>" inverse="<%=inverseValue%>">
-			<%=emptySpace%><cache usage="read-write" />
+			<%=emptySpace%><cache usage="transactional" />
 			<%=emptySpace%><key column="<%=keyColumnName%>" not-null="<%=notNullFkAttr%>" />
 			<%=emptySpace%><one-to-many class="<%=assocKlassName%>"/>
 		<%=emptySpace%></set><%
@@ -192,7 +192,7 @@ String discriminatorValueStr = (discriminatorValue==null) ? "" : "discriminator-
 								String inverseValue = assocColumnName.equals(inverseColumnName) ?"true":"false";
 								String joinTableName = correlationTable.getName();%>
 		<%=emptySpace%><set name="<%=otherEnd.getRoleName()%>" table="<%=joinTableName%>" lazy="<%=lazyValue%>" cascade="<%=cascadeStyle%>" inverse="<%=inverseValue%>">
-			<%=emptySpace%><cache usage="read-write" />
+			<%=emptySpace%><cache usage="transactional" />
 			<%=emptySpace%><key column="<%=keyColumnName%>" />
 			<%=emptySpace%><many-to-many class="<%=assocKlassName%>" column="<%=assocColumnName%>" unique="true"/>
 		<%=emptySpace%></set><%
@@ -332,7 +332,7 @@ String discriminatorValueStr = (discriminatorValue==null) ? "" : "discriminator-
 							String implicitIdType = transformerUtils.getHibernateDataType(nonImplicitClass,implicitIdAttr);
 							%>
 		<%=emptySpace%><set name="<%=otherEnd.getRoleName()%>" table="<%=joinTableName%>" lazy="<%=lazyValue%>" inverse="<%=inverseValue%>">
-			<%=emptySpace%><cache usage="read-write" />
+			<%=emptySpace%><cache usage="transactional" />
 			<%=emptySpace%><key column="<%=keyColumnName%>" />
 			<%=emptySpace%><many-to-any meta-type="string" id-type="<%=implicitIdType%>"><%
 							for (UMLClass nonImplicitSubclass:transformerUtils.getNonImplicitSubclasses(implicitClass)){%>
@@ -353,7 +353,7 @@ String discriminatorValueStr = (discriminatorValue==null) ? "" : "discriminator-
 							String inverseValue = assocColumnName.equals(inverseColumnName) ?"true":"false";
 							String joinTableName = correlationTable.getName();%>
 		<%=emptySpace%><set name="<%=otherEnd.getRoleName()%>" table="<%=joinTableName%>" lazy="<%=lazyValue%>" inverse="<%=inverseValue%>">
-			<%=emptySpace%><cache usage="read-write" />
+			<%=emptySpace%><cache usage="transactional" />
 			<%=emptySpace%><key column="<%=keyColumnName%>" />
 			<%=emptySpace%><many-to-many class="<%=assocKlassName%>" column="<%=assocColumnName%>" />
 		<%=emptySpace%></set><%
@@ -371,7 +371,7 @@ String discriminatorValueStr = (discriminatorValue==null) ? "" : "discriminator-
 									throw new GenerationException("Different columns used for 'implements-association' and 'inverse-of' tags of the same association");
 								String inverseValue = assocColumnName.equals(inverseColumnName) ?"true":"false"; %>
 		<%=emptySpace%><set name="<%=otherEnd.getRoleName()%>" lazy="<%=lazyValue%>" cascade="<%=cascadeStyle%>" inverse="<%=inverseValue%>">
-			<%=emptySpace%><cache usage="read-write" />
+			<%=emptySpace%><cache usage="transactional" />
 			<%=emptySpace%><key column="<%=keyColumnName%>" not-null="<%=notNullFkAttr%>" />
 			<%=emptySpace%><one-to-many class="<%=assocKlassName%>"/>
 		<%=emptySpace%></set><%
@@ -384,7 +384,7 @@ String discriminatorValueStr = (discriminatorValue==null) ? "" : "discriminator-
 								String inverseValue = assocColumnName.equals(inverseColumnName) ?"true":"false";
 								String joinTableName = correlationTable.getName();%>
 		<%=emptySpace%><set name="<%=otherEnd.getRoleName()%>" table="<%=joinTableName%>" lazy="<%=lazyValue%>" cascade="<%=cascadeStyle%>" inverse="<%=inverseValue%>">
-			<%=emptySpace%><cache usage="read-write" />
+			<%=emptySpace%><cache usage="transactional" />
 			<%=emptySpace%><key column="<%=keyColumnName%>" />
 			<%=emptySpace%><many-to-many class="<%=assocKlassName%>" column="<%=assocColumnName%>" unique="true"/>
 		<%=emptySpace%></set><%

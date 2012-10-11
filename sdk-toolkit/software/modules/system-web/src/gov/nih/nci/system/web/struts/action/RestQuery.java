@@ -721,7 +721,7 @@ public class RestQuery extends BaseActionSupport {
 				for(int i=0; i<associations.size(); i++)
 				{
 					String asscName = (String)associations.get(i);
-					log.debug("asscName: "+asscName);
+					System.out.println("asscName: "+asscName);
 					String asscRole = null;
 					String asscClass = asscName;
 					if(asscName.indexOf("(") != -1)
@@ -730,14 +730,14 @@ public class RestQuery extends BaseActionSupport {
 						asscRole = asscName.substring(0, asscName.indexOf("("));
 					}
 
-					log.debug("asscClass: "+asscClass);
-					log.debug("asscRole: "+asscRole);
+					System.out.println("asscClass: "+asscClass);
+					System.out.println("asscRole: "+asscRole);
 
 
 
 					if(asscClass.equals("Please choose") || (asscRole == null && asscClass.equals(className)))
 					{
-						log.debug("Continue.......");
+						System.out.println("Continue.......");
 						continue;
 					}
 
@@ -753,11 +753,11 @@ public class RestQuery extends BaseActionSupport {
 					try
 					{
 						String getMethodName = "get"+ (asscRole.charAt(0)+"").toUpperCase()+ asscRole.substring(1,asscRole.length()).trim();
-						log.debug("getMethodName "+getMethodName);
+						System.out.println("getMethodName "+getMethodName);
 						Class classType = Class.forName(className);
 						Method getMethod = classType.getMethod(getMethodName.trim(), null);
 						Class returnType = getMethod.getReturnType();
-						log.debug("returnType "+returnType.getName());
+						System.out.println("returnType "+returnType.getName());
 						boolean collection = false;
 						if(returnType.getName().equals("java.util.Collection"))
 							collection = true;
@@ -765,15 +765,15 @@ public class RestQuery extends BaseActionSupport {
 						while(parameters.hasMoreElements())
 						{
 							String parameterName = (String)parameters.nextElement();
-							log.debug("parameterName: "+parameterName);
-							log.debug("asscRole: "+asscRole);
+							System.out.println("parameterName: "+parameterName);
+							System.out.println("asscRole: "+asscRole);
 							if(parameterName.startsWith(asscRole) && parameterName.indexOf("(") > 0)
 							{
 								String paramValue = (request.getParameter(parameterName)).trim();
 								if(paramValue != null && paramValue.trim().length() > 0)
 								{
 									Object assocObj = RESTUtil.getObject(asscClass, paramValue, request, base64encodedUsernameAndPassword, collection);
-									log.debug("assocObj: "+assocObj);
+									System.out.println("assocObj: "+assocObj);
 									if(assocObj != null)
 									{
 										 try {
@@ -781,20 +781,20 @@ public class RestQuery extends BaseActionSupport {
 											  Class type = Class.forName(asscClass);
 											  Class[] argTypes = new Class[] { type };
 											  String methodName = "set"+ (asscRole.charAt(0)+"").toUpperCase()+ asscRole.substring(1,asscRole.length());
-											  log.debug("Method name looking for: "+ methodName);
+											  System.out.println("Method name looking for: "+ methodName);
 											  Method[] methods = klass.getMethods();
 											  for(int k=0;  k<methods.length; k++)
 											  {
 												  Method method = methods[k];
-												  log.debug("Name: "+method.getName());
+												  System.out.println("Name: "+method.getName());
 												  Class[] types = method.getParameterTypes();
 												  if(types != null)
 												  {
 													  if(method.getName().trim().equals(methodName.trim()))
 													  {
-														  log.debug("Instance: "+instance);
-														  log.debug("assocObj: "+assocObj.getClass().getName());
-														  log.debug("returnType.cast(assocObj): "+returnType.cast(assocObj));
+														  System.out.println("Instance: "+instance);
+														  System.out.println("assocObj: "+assocObj.getClass().getName());
+														  System.out.println("returnType.cast(assocObj): "+returnType.cast(assocObj));
 														  method.invoke(instance, assocObj);
 														  break;
 													  }

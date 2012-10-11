@@ -22,6 +22,32 @@ String idColName = null;
 //out.println("className: " + className);
 //session.setAttribute("selectedDomain", className);
 
+
+boolean found = false;
+boolean isResource = true;
+String cName = className.substring(className.lastIndexOf(".")+1, className.length());
+try
+{
+Class klass = Class.forName(className+"Resource");
+
+Method[] allMethods = klass.getDeclaredMethods();
+String addName = "add"+cName;
+for (Method m : allMethods) {
+	String mname = m.getName();
+	if(addName.equals(mname))	
+		found = true;
+}
+
+}
+catch(ClassNotFoundException e)
+{
+	isResource = false;
+}
+catch(Exception e)
+{
+e.printStackTrace();
+}
+
 if(className != null)
 {
 	try
@@ -168,6 +194,8 @@ if(className != null)
 			   <%}%></SELECT></td>
 			<%}// end if(domainNames != null) statement%>			   
 		</tr>
+		<%if(isResource)
+		{%>
 		<tr>
 			<td align="left" colspan="3">
 				<!-- action buttons begins -->
@@ -180,32 +208,13 @@ if(className != null)
 				<!-- action buttons end -->
 			</td>	
 		</tr>
+		<%}%>
 	</table>
 	<s:hidden name="selectedDomain" />
 </form>	
 
 
-<%
-boolean found = false;
-String cName = className.substring(className.lastIndexOf(".")+1, className.length());
-try
-{
-Class klass = Class.forName(className+"Resource");
 
-Method[] allMethods = klass.getDeclaredMethods();
-String addName = "add"+cName;
-for (Method m : allMethods) {
-	String mname = m.getName();
-	if(addName.equals(mname))	
-		found = true;
-}
-
-}
-catch(Exception e)
-{
-e.printStackTrace();
-}
-%>
 
 <%
 if(found)

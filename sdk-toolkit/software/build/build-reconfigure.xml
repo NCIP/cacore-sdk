@@ -1044,6 +1044,7 @@
 			</fileset>
 			<fileset dir="${lib.dir}">
 				<include name="sdk-system-client-*.jar"/>
+				<include name="sdk-system-web-*.jar"/>
 				<include name="sdk-security-client-*.jar"/>
 				<include name="sdk-grid-remoting-*.jar"/>
 			</fileset>
@@ -1503,10 +1504,12 @@
 				<include name="hibernate-annotations-*.jar"/>
 				<include name="hibernate-validator-*.jar"/>
 				<include name="jaxb-*.jar"/>
+				<include name="jaxen-*.jar"/>
 				<include name="jdom-1.1.jar"/>
 				<include name="jta-*.jar"/>
 				<include name="${server-include-list}"/>
 				<include name="mmbase-*.jar"/>
+				<include name="jaxen-*.jar"/>
 				<include name="ognl-*.jar"/>
 				<include name="saaj-*.jar"/>
 				<include name="org.springframework.*.jar"/>
@@ -1735,6 +1738,7 @@
 				<include name="clm-*.jar"/>
 				<include name="csmapi-*.jar"/>
 				<include name="dom4j-*.jar"/>
+				<include name="jaxen-*.jar"/>
 				<include name="ehcache-*.jar"/>
 				<include name="ejb3-persistence-*.jar"/>
 				<include name="freemarker-*.jar"/>
@@ -2184,6 +2188,7 @@
 				<copy todir="${package.client.tomcat.common.lib.dir}">
 					<fileset dir="${build-utils.dir}">
 						<include name="mysql-connector-java-*.jar"/>
+						<include name="bcprov-jdk15on-*.jar"/>
 						<include name="ojdbc14-*.jar"/>
 						<include name="postgresql-*.jar"/>
 					</fileset>
@@ -2247,6 +2252,7 @@
 					</fileset>
 					<fileset dir="${build-utils.dir}">
 						<include name="mysql-connector-java-*.jar"/>
+						<include name="bcprov-jdk15on-*.jar"/>
 						<include name="ojdbc14-*.jar"/>
 						<include name="postgresql-*.jar"/>
 					</fileset>
@@ -2301,6 +2307,7 @@
 				<copy todir="${package.client.jboss.default.lib.dir}">
 					<fileset dir="${build-utils.dir}">
 						<include name="mysql-connector-java-*.jar"/>
+						<include name="bcprov-jdk15on-*.jar"/>
 						<include name="ojdbc14-*.jar"/>
 						<include name="postgres-*.jar"/>
 					</fileset>

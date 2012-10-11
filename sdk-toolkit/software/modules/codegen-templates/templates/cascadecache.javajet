@@ -17,6 +17,7 @@ public class SDKCascadeCache
 	private Map cascadeCache = new HashMap();
 	private Map assocCache = new HashMap();
 	private Map inverseCache = new HashMap();
+	private Map notNullCache = new HashMap();
 	private static SDKCascadeCache cache = new SDKCascadeCache();
 	
 	public static final String CASCADE_ALL = "all";
@@ -140,6 +141,7 @@ public class SDKCascadeCache
 		assocCache.put("<%=key%>", "one-to-many");
 		inverseCache.put("<%=key%>", "<%=inverseValue%>");
 		cascadeCache.put("<%=key%>", "<%=cascadeStyle%>");
+		notNullCache.put("<%=key%>", "<%=notNullFkAttr%>");
 							<%
 							}else{ //One to Many - Join Table
 								String keyColumnName = transformerUtils.findAssociatedColumn(correlationTable,assocKlass,thisEnd, currentKlass, otherEnd, true);
@@ -165,6 +167,7 @@ public class SDKCascadeCache
 						%>
 		assocCache.put("<%=key%>", "many-to-one");
 		cascadeCache.put("<%=key%>", "<%=cascadeStyle%>");
+		notNullCache.put("<%=key%>", "<%=notNullFkAttr%>");
 						<%
 								}else{ // Many to One - Join Table
 						
@@ -187,11 +190,13 @@ public class SDKCascadeCache
 								%>
 		assocCache.put("<%=key%>", "many-to-one");
 		cascadeCache.put("<%=key%>", "<%=cascadeStyle%>");
+		notNullCache.put("<%=key%>", "<%=notNullFkAttr%>");
 								<%
 									}else{
 								%>
 		assocCache.put("<%=key%>", "one-to-one");
 		cascadeCache.put("<%=key%>", "<%=cascadeStyle%>");
+		notNullCache.put("<%=key%>", "<%=notNullFkAttr%>");
 								<%
 									}
 								}else{
@@ -199,6 +204,7 @@ public class SDKCascadeCache
 									%>
 		assocCache.put("<%=key%>", "many-to-one");
 		cascadeCache.put("<%=key%>", "<%=cascadeStyle%>");
+		notNullCache.put("<%=key%>", "<%=notNullFkAttr%>");
 									<%
 									}
 								}
@@ -232,6 +238,7 @@ public class SDKCascadeCache
 		assocCache.put("<%=key%>", "many-to-one");
 		inverseCache.put("<%=key%>", "<%=inverseValue%>");
 		cascadeCache.put("<%=key%>", "<%=cascadeStyle%>");
+		notNullCache.put("<%=key%>", "<%=notNullFkAttr%>");
 				<%
 								}
 						}else if(transformerUtils.isOne2One(thisEnd,otherEnd)){	//One to One
@@ -250,6 +257,7 @@ public class SDKCascadeCache
 		assocCache.put("<%=key%>", "many-to-one");
 		inverseCache.put("<%=key%>", "<%=inverseValue%>");
 		cascadeCache.put("<%=key%>", "<%=cascadeStyle%>");
+		notNullCache.put("<%=key%>", "<%=notNullFkAttr%>");
 				<%
 							}
 						}
@@ -330,6 +338,7 @@ public class SDKCascadeCache
 		assocCache.put("<%=key%>", "one-to-many");
 		inverseCache.put("<%=key%>", "<%=inverseValue%>");
 		cascadeCache.put("<%=key%>", "<%=cascadeStyle%>");
+		notNullCache.put("<%=key%>", "<%=notNullFkAttr%>");
 				<%
 							}else{ //One to Many - Join Table
 								String keyColumnName = transformerUtils.findAssociatedColumn(correlationTable,assocKlass,thisEnd, currentKlass, otherEnd, true);
@@ -355,6 +364,7 @@ public class SDKCascadeCache
 				%>
 		assocCache.put("<%=key%>", "many-to-one");
 		cascadeCache.put("<%=key%>", "<%=cascadeStyle%>");
+		notNullCache.put("<%=key%>", "<%=notNullFkAttr%>");
 				<%
 								}else{ // Many to One - Join Table
 						
@@ -377,11 +387,13 @@ public class SDKCascadeCache
 									%>
 		assocCache.put("<%=key%>", "many-to-one");
 		cascadeCache.put("<%=key%>", "<%=cascadeStyle%>");
+		notNullCache.put("<%=key%>", "<%=notNullFkAttr%>");
 								<%
 									}else{
 								%>
 		assocCache.put("<%=key%>", "one-to-one");
 		cascadeCache.put("<%=key%>", "<%=cascadeStyle%>");
+		notNullCache.put("<%=key%>", "<%=notNullFkAttr%>");
 								<%
 									}
 								}else{
@@ -389,6 +401,7 @@ public class SDKCascadeCache
 								%>
 		assocCache.put("<%=key%>", "many-to-one");
 		cascadeCache.put("<%=key%>", "<%=cascadeStyle%>");
+		notNullCache.put("<%=key%>", "<%=notNullFkAttr%>");
 								<%
 									}
 								}
@@ -467,6 +480,40 @@ public class SDKCascadeCache
 		}
 		
 		return value;
+	}
+
+
+	public String getNotNullValue(String className, String roleName)
+	{
+		String type = null;
+		try
+		{
+			className = className.trim();
+			roleName = roleName.trim();
+			String key = className + ":" + roleName;
+			type = (String)notNullCache.get(key);
+			if(type == null)
+			{
+				while(true)
+				{
+					Class klass = Class.forName(className);
+					Class superKlass = klass.getSuperclass();
+					key = superKlass.getName() + ":"+ roleName;
+					type = (String)notNullCache.get(key);
+					if(type != null)
+						return type;
+					if(superKlass.getName().equals("java.lang.Object"))
+						break;
+					className = superKlass.getName();
+				}
+
+			}
+		}
+		catch(Exception e)
+		{
+
+		}
+		return type;
 	}
 
 	public String getAssocationType(String className, String roleName)

@@ -115,10 +115,10 @@ public class UpdateAction extends RestQuery {
 
 				try {
 					prepareAssociations(request, instance, targetClass, base64encodedUsernameAndPassword);
-					//System.out.println("Before update: *******");
-					//gov.nih.nci.system.web.util.RESTUtil.printObject(instance, instance.getClass(), true);
-					Response r = client.put(instance);
-					//System.out.println("update Status: " + r.getStatus());
+					System.out.println("Before update: *******");
+					gov.nih.nci.system.web.util.RESTUtil.printObject(instance, instance.getClass(), true);
+					Response r = client.post(instance);
+					System.out.println("update Status: " + r.getStatus());
 
 					if (r.getStatus() != Status.OK.getStatusCode() && r.getStatus() != Status.NO_CONTENT.getStatusCode()) {
 						InputStream is = (InputStream) r.getEntity();

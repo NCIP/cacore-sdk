@@ -579,6 +579,8 @@
 				<copy file="${clm.database.driver.file}" todir="${jboss.home}/server/${jboss.server.name}/lib" overwrite="true" failonerror="true"/>
 			</then>
 		</if>
+		<copy file="${build-utils.dir}/bcprov-jdk15on-147.jar" todir="${jboss.home}/server/${jboss.server.name}/lib" overwrite="true" failonerror="true"/>
+		
 	</target>
 
 	<target name="install:jboss:project-webapp" description="Deploy example-webapp and common libraries to jboss installation" unless="exclude.jboss">
@@ -821,6 +823,7 @@
 			</default>
 		</switch>
 		<copy file="${database.driver.file}" todir="${catalina.home}/lib" overwrite="true" failonerror="false"/>
+		<copy file="${build-utils.dir}/bcprov-jdk15on-147.jar" todir="${catalina.home}/lib" overwrite="true" failonerror="false"/>
 		
 	</target>
 

@@ -75,6 +75,7 @@ JSPUtils jspUtils= null;
 List domainNames=new ArrayList();
 String message = null;
 String className = request.getParameter("target");
+String success = (String)request.getAttribute("successful");
 				
 	try
 	{	
@@ -137,21 +138,21 @@ String className = request.getParameter("target");
 								<tr>
 								<td border=0 class="txtHighlight" align="center" nowrap="off">
 								<%
-								if(deleteType != null && (deleteType.equalsIgnoreCase("delete") || deleteType.equalsIgnoreCase("all")))
+								if(success == null && deleteType != null && (deleteType.equalsIgnoreCase("delete") || deleteType.equalsIgnoreCase("all")))
 								{
 								%>
-								All references will be deleted!!
+								All references will be deleted to <%=asscRole%>!!
 								<%
 								} 
-								else if(deleteType != null && deleteType.equalsIgnoreCase("all-delete-orphan"))
+								else if(success == null && deleteType != null && deleteType.equalsIgnoreCase("all-delete-orphan"))
 								{
 								%>
-								 All children that will orphaned by the deletion of the parent will be deleted!!
+								 All children that will orphaned by the deletion of the parent will be deleted to <%=asscRole%>!!
 								<%
-								} else if(deleteType != null && deleteType.equalsIgnoreCase("delete-orphan"))
+								} else if(success == null && deleteType != null && deleteType.equalsIgnoreCase("delete-orphan"))
 								{
 								%>
-								 Selected orphaned children will be deleted!!
+								 Selected orphaned children will be deleted to <%=asscRole%>!!
 								<%}%>
 								</td>
 								</tr>
@@ -182,7 +183,6 @@ String className = request.getParameter("target");
 											</td>
 											</tr>
 											<%
-											String success = (String)request.getAttribute("successful");
 											if(success == null)
 											{
 											%>

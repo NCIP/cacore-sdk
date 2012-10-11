@@ -1,5 +1,6 @@
 package gov.nih.nci.system.client.util.xml;
 
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.HashMap;
@@ -87,6 +88,7 @@ public class JAXBMarshaller implements gov.nih.nci.system.client.util.xml.Marsha
 	        log.debug("Setting JAXB_SCHEMA_LOCATION to " + schemaLocation);
 	        m.setProperty(Marshaller.JAXB_SCHEMA_LOCATION, schemaLocation);
 			m.marshal(object, writer);
+			//System.out.println(writer.toString());
 		} catch(JAXBException e) {
 			log.error("JAXBException caught marshalling " + object.getClass().getName(), e);
 			log.debug("Marshalling using context: " + context);

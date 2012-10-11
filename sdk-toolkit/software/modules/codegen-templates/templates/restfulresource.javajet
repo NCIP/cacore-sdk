@@ -34,6 +34,7 @@ import java.security.Principal;
 import gov.nih.nci.system.client.proxy.ListProxy;
 
 import java.net.URI;
+import java.lang.reflect.Method;
 import java.util.List;
 import java.lang.reflect.Field;
 import java.util.Collection;
@@ -43,6 +44,7 @@ import java.util.Map;
 import java.util.HashMap;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
 import gov.nih.nci.system.web.RESTfulResource;
+import gov.nih.nci.sdk.rest.SDKCascadeCache;
 import gov.nih.nci.system.web.util.RESTUtil;
 
 <%if(!transformerUtils.isISO21090Enabled()){
@@ -139,7 +141,16 @@ if(action != null && action.indexOf("R") != -1)
 			{
 				  ResponseBuilder builder2 = Response.status(Status.NOT_FOUND);
 				  builder2.type("application/xml");
-				  builder2.entity("<message>Not PK Found. Query is not supported.</message>");
+				  StringBuffer buffer = new StringBuffer();
+				  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+				  buffer.append("<response>");
+				  buffer.append("<type>ERROR</type>");
+				  buffer.append("<code>SEARCH_CRITERIA_4</code>");
+				  buffer.append("<resource><%=klassName%></resource>");
+				  buffer.append("<path>id</path>");
+				  buffer.append("<message>Not Primary Key Found. Query is not supported.</message>"); 
+				  buffer.append("</response>");
+				  builder2.entity(buffer.toString());
 				  throw new WebApplicationException(builder2.build());
 			}
 			
@@ -183,10 +194,19 @@ if(action != null && action.indexOf("R") != -1)
 			}
 			else
 			{
-				  ResponseBuilder builder = Response.status(Status.NOT_FOUND);
-				  builder.type("application/xml");
-				  builder.entity("<message>Not found</message>");
-				  throw new WebApplicationException(builder.build());
+				  ResponseBuilder builder3 = Response.status(Status.NOT_FOUND);
+				  builder3.type("application/xml");
+				  StringBuffer buffer = new StringBuffer();
+				  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+				  buffer.append("<response>");
+				  buffer.append("<type>ERROR</type>");
+				  buffer.append("<code>SEARCH_CRITERIA_5</code>");
+				  buffer.append("<resource><%=klassName%></resource>");
+				  buffer.append("<path>id</path>");
+				  buffer.append("<message>Not found</message>"); 
+				  buffer.append("</response>");
+				  builder3.entity(buffer.toString());
+				  throw new WebApplicationException(builder3.build());
 			}
 			
 	  		//query(request, response, criteria, className);
@@ -202,7 +222,16 @@ if(action != null && action.indexOf("R") != -1)
 			  log.error("Error in querying REST resource: " + e.getMessage());
 			  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
 			  builder.type("application/xml");
-			  builder.entity("<error>Failed to Query due to: "+e.getMessage()+"</error>");
+			  StringBuffer buffer = new StringBuffer();
+			  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+			  buffer.append("<response>");
+			  buffer.append("<type>ERROR</type>");
+			  buffer.append("<code>SEARCH_CRITERIA_3</code>");
+			  buffer.append("<resource><%=klassName%></resource>");
+			  buffer.append("<path>search</path>");
+			  buffer.append("<message>Failed to Query due to: "+e.getMessage()+"</message>");
+			  buffer.append("</response>");
+			  builder.entity(buffer.toString());
 			  throw new WebApplicationException(builder.build());
 		}
 		catch(Exception e)
@@ -210,7 +239,16 @@ if(action != null && action.indexOf("R") != -1)
 			  log.error("Error in querying REST resource: " + e.getMessage());
 			  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
 			  builder.type("application/xml");
-			  builder.entity("<error>Failed to Query due to: "+e.getMessage()+"</error>");
+			  StringBuffer buffer = new StringBuffer();
+			  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+			  buffer.append("<response>");
+			  buffer.append("<type>ERROR</type>");
+			  buffer.append("<code>SEARCH_CRITERIA_2</code>");
+			  buffer.append("<resource><%=klassName%></resource>");
+			  buffer.append("<path>search</path>");
+			  buffer.append("<message>Failed to Query due to: "+e.getMessage()+"</message>");
+			  buffer.append("</response>");
+			  builder.entity(buffer.toString());
 			  throw new WebApplicationException(builder.build());
 		}
 		
@@ -235,7 +273,9 @@ if(action != null && action.indexOf("R") != -1)
 				buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 				buffer.append("<response>");
 				buffer.append("<type>ERROR</type>");
-				buffer.append("<code>SEARCH_CRITERIA_3</code>");
+				buffer.append("<code>SEARCH_CRITERIA_1</code>");
+				buffer.append("<resource><%=klassName%></resource>");
+				buffer.append("<path>search</path>");
 				buffer.append("<message>Search criteria is missing</message>");
 				buffer.append("<valid>");
 				for(Field field : searchFields)
@@ -256,7 +296,16 @@ if(action != null && action.indexOf("R") != -1)
 			{
 				  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
 				  builder.type("application/xml");
-				  builder.entity("<error>No searchable fields on this resource" +"</error>");
+				  StringBuffer buffer = new StringBuffer();
+				  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+				  buffer.append("<response>");
+				  buffer.append("<type>ERROR</type>");
+				  buffer.append("<code>SEARCH_CRITERIA_5</code>");
+				  buffer.append("<resource><%=klassName%></resource>");
+				  buffer.append("<path>search</path>");
+				  buffer.append("<message>No searchable fields on this resource</message>");
+				  buffer.append("</response>");
+				  builder.entity(buffer.toString());
 				  throw new WebApplicationException(builder.build());
 			}
 			
@@ -323,7 +372,9 @@ if(action != null && action.indexOf("R") != -1)
 				  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 				  buffer.append("<response>");
 				  buffer.append("<type>MESSAGE</type>");
-				  buffer.append("<code>CRITERIA_SEARCH_1</code>");
+				  buffer.append("<code>SEARCH_CRITERIA_6</code>");
+				  buffer.append("<resource><%=klassName%></resource>");
+				  buffer.append("<path>search</path>");
 				  buffer.append("<message>No matching results</message>");
 				  buffer.append("</response>");
 				  builder.entity(buffer.toString());
@@ -345,7 +396,9 @@ if(action != null && action.indexOf("R") != -1)
 			  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 			  buffer.append("<response>");
 			  buffer.append("<type>ERROR</type>");
-			  buffer.append("<code>INTERNAL_ERROR_1</code>");
+			  buffer.append("<code>APPLICATION_ERROR</code>");
+			  buffer.append("<resource><%=klassName%></resource>");
+			  buffer.append("<path>search</path>");
 			  buffer.append("<message>Failed to Query due to: "+e.getMessage()+"</message>");
 			  buffer.append("</response>");
 			  builder.entity(buffer.toString());
@@ -361,7 +414,9 @@ if(action != null && action.indexOf("R") != -1)
 			  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 			  buffer.append("<response>");
 			  buffer.append("<type>ERROR</type>");
-			  buffer.append("<code>INTERNAL_ERROR_2</code>");
+			  buffer.append("<code>APPLICATION_ERROR</code>");
+			  buffer.append("<resource><%=klassName%></resource>");
+			  buffer.append("<path>search</path>");
 			  buffer.append("<message>Failed to Query due to: "+e.getMessage()+"</message>");
 			  buffer.append("</response>");
 			  builder.entity(buffer.toString());
@@ -435,7 +490,9 @@ for(UMLAssociation assoc: assocs){
 					buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 					buffer.append("<response>");
 					buffer.append("<type>ERROR</type>");
-					buffer.append("<code>SEARCH_CRITERIA_3</code>");
+					buffer.append("<code>SEARCH_CRITERIA_7</code>");
+					buffer.append("<resource><%=klassName%></resource>");
+					buffer.append("<path>search/name</path>");
 					buffer.append("<message>Search criteria is missing</message>");
 					buffer.append("<valid>");
 					for(Field field : searchFields)
@@ -455,7 +512,16 @@ for(UMLAssociation assoc: assocs){
 				{
 					  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
 					  builder.type("application/xml");
-					  builder.entity("<error>No searchable fields on this resource" +"</error>");
+					  StringBuffer buffer = new StringBuffer();
+					  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+					  buffer.append("<response>");
+					  buffer.append("<type>ERROR</type>");
+					  buffer.append("<code>SEARCH_CRITERIA_8</code>");
+					  buffer.append("<resource><%=klassName%></resource>");
+					  buffer.append("<path>search/name</path>");
+					  buffer.append("<message>No searchable fields on this resource</message>");
+					  buffer.append("</response>");
+					  builder.entity(buffer.toString());
 					  throw new WebApplicationException(builder.build());
 				}
 				
@@ -529,7 +595,9 @@ for(UMLAssociation assoc: assocs){
 					  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 					  buffer.append("<response>");
 					  buffer.append("<type>MESSAGE</type>");
-					  buffer.append("<code>CRITERIA_SEARCH_1</code>");
+					  buffer.append("<code>SEARCH_CRITERIA_9</code>");
+					  buffer.append("<resource><%=klassName%></resource>");
+					  buffer.append("<path>search/name</path>");
 					  buffer.append("<message>No matching results</message>");
 					  buffer.append("</response>");
 					  builder.entity(buffer.toString());
@@ -546,7 +614,9 @@ for(UMLAssociation assoc: assocs){
 				  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 				  buffer.append("<response>");
 				  buffer.append("<type>ERROR</type>");
-				  buffer.append("<code>INTERNAL_ERROR_3</code>");
+				  buffer.append("<code>APPLICATION_ERROR</code>");
+				  buffer.append("<resource><%=klassName%></resource>");
+				  buffer.append("<path>search/name</path>");
 				  buffer.append("<message>Failed to Query due to: "+e.getMessage()+"</message>");
 				  buffer.append("</response>");
 				  builder.entity(buffer.toString());
@@ -566,6 +636,8 @@ for(UMLAssociation assoc: assocs){
 				  buffer.append("<response>");
 				  buffer.append("<type>ERROR</type>");
 				  buffer.append("<code>INTERNAL_ERROR_1</code>");
+				  buffer.append("<resource><%=klassName%></resource>");
+				  buffer.append("<path>search/name</path>");
 				  buffer.append("<message>Failed to Query due to: "+e.getMessage()+"</message>");
 				  buffer.append("</response>");
 				  builder.entity(buffer.toString());
@@ -580,7 +652,9 @@ for(UMLAssociation assoc: assocs){
 			  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 			  buffer.append("<response>");
 			  buffer.append("<type>ERROR</type>");
-			  buffer.append("<code>INTERNAL_ERROR_4</code>");
+			  buffer.append("<code>APPLICATION_ERROR</code>");
+			  buffer.append("<resource><%=klassName%></resource>");
+			  buffer.append("<path>search/name</path>");
 			  buffer.append("<message>Failed to Query due to: "+e.getMessage()+"</message>");
 			  buffer.append("</response>");
 			  builder.entity(buffer.toString());
@@ -678,7 +752,9 @@ for(UMLAssociation assoc: assocs){
 					  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 					  buffer.append("<response>");
 					  buffer.append("<type>MESSAGE</type>");
-					  buffer.append("<code>CRITERIA_SEARCH_1</code>");
+					  buffer.append("<code>SEARCH_CRITERIA_10</code>");
+					  buffer.append("<resource><%=klassName%></resource>");
+					  buffer.append("<path>id/name</path>");
 					  buffer.append("<message>No matching results</message>");
 					  buffer.append("</response>");
 					  builder.entity(buffer.toString());
@@ -695,7 +771,9 @@ for(UMLAssociation assoc: assocs){
 				  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 				  buffer.append("<response>");
 				  buffer.append("<type>ERROR</type>");
-				  buffer.append("<code>INTERNAL_ERROR_4</code>");
+				  buffer.append("<code>APPLICATION_ERROR</code>");
+				  buffer.append("<resource><%=klassName%></resource>");
+				  buffer.append("<path>id/name</path>");
 				  buffer.append("<message>Failed to Query due to: "+e.getMessage()+"</message>");
 				  buffer.append("</response>");
 				  builder.entity(buffer.toString());
@@ -714,7 +792,9 @@ for(UMLAssociation assoc: assocs){
 				  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 				  buffer.append("<response>");
 				  buffer.append("<type>ERROR</type>");
-				  buffer.append("<code>INTERNAL_ERROR_1</code>");
+				  buffer.append("<code>APPLICATION_ERROR</code>");
+				  buffer.append("<resource><%=klassName%></resource>");
+				  buffer.append("<path>id/name</path>");
 				  buffer.append("<message>Failed to Query due to: "+e.getMessage()+"</message>");
 				  buffer.append("</response>");
 				  builder.entity(buffer.toString());
@@ -729,7 +809,9 @@ for(UMLAssociation assoc: assocs){
 			  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 			  buffer.append("<response>");
 			  buffer.append("<type>ERROR</type>");
-			  buffer.append("<code>INTERNAL_ERROR_5</code>");
+			  buffer.append("<code>APPLICATION_ERROR</code>");
+			  buffer.append("<resource><%=klassName%></resource>");
+			  buffer.append("<path>id/name</path>");
 			  buffer.append("<message>Failed to Query due to: "+e.getMessage()+"</message>");
 			  buffer.append("</response>");
 			  builder.entity(buffer.toString());
@@ -797,7 +879,9 @@ for(UMLAssociation assoc: assocs){
 					  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 					  buffer.append("<response>");
 					  buffer.append("<type>MESSAGE</type>");
-					  buffer.append("<code>CRITERIA_SEARCH_5</code>");
+					  buffer.append("<code>SEARCH_CRITERIA_11</code>");
+					  buffer.append("<resource><%=klassName%></resource>");
+					  buffer.append("<path>id/name</path>");
 					  buffer.append("<message>No matching results</message>");
 					  buffer.append("</response>");
 					  builder.entity(buffer.toString());
@@ -813,7 +897,9 @@ for(UMLAssociation assoc: assocs){
 				  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 				  buffer.append("<response>");
 				  buffer.append("<type>ERROR</type>");
-				  buffer.append("<code>INTERNAL_ERROR_3</code>");
+				  buffer.append("<code>APPLICATION_ERROR</code>");
+				  buffer.append("<resource><%=klassName%></resource>");
+				  buffer.append("<path>id/name</path>");
 				  buffer.append("<message>Failed to Query due to: "+e.getMessage()+"</message>");
 				  buffer.append("</response>");
 				  builder.entity(buffer.toString());
@@ -832,7 +918,9 @@ for(UMLAssociation assoc: assocs){
 				  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 				  buffer.append("<response>");
 				  buffer.append("<type>ERROR</type>");
-				  buffer.append("<code>INTERNAL_ERROR_1</code>");
+				  buffer.append("<code>APPLICATION_ERROR</code>");
+				  buffer.append("<resource><%=klassName%></resource>");
+				  buffer.append("<path>id/name</path>");
 				  buffer.append("<message>Failed to Query due to: "+e.getMessage()+"</message>");
 				  buffer.append("</response>");
 				  builder.entity(buffer.toString());
@@ -847,7 +935,9 @@ for(UMLAssociation assoc: assocs){
 			  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 			  buffer.append("<response>");
 			  buffer.append("<type>ERROR</type>");
-			  buffer.append("<code>INTERNAL_ERROR_6</code>");
+			  buffer.append("<code>APPLICATION_ERROR</code>");
+			  buffer.append("<resource><%=klassName%></resource>");
+			  buffer.append("<path>id/name</path>");
 			  buffer.append("<message>Failed to Query due to: "+e.getMessage()+"</message>");
 			  buffer.append("</response>");
 			  builder.entity(buffer.toString());
@@ -871,7 +961,7 @@ for(UMLAssociation assoc: assocs){
 <%
 if(action != null && action.indexOf("C") != -1 && !transformerUtils.isISO21090Enabled())
 {%>
-	@POST
+	@PUT
 	@Consumes("application/xml")
 	public Response add<%=klassName%>(<%=klassName%> object, @Context UriInfo uriInfo, @Context HttpServletRequest request)
 	{
@@ -886,6 +976,7 @@ if(action != null && action.indexOf("C") != -1 && !transformerUtils.isISO21090En
 			{
 			}*/
 			checkCollections(object);
+			validateObject(object);
 			<%=klassName%> obj = (<%=klassName%>)save(object);
 			String fullpath = uriInfo.getAbsolutePath().toString();
 			String path = fullpath.substring(0, fullpath.indexOf("/rest/")+5);
@@ -911,18 +1002,22 @@ if(action != null && action.indexOf("C") != -1 && !transformerUtils.isISO21090En
 			
 			ResponseBuilder builder = Response.status(Status.CREATED);
 			builder.type("application/xml");
-			builder.entity("<message>"+path+"/<%=klassName%>/"+id+"</message>");
+			StringBuffer buffer = new StringBuffer();
+			buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+			buffer.append("<response>");
+			buffer.append("<type>MESSAGE</type>");
+			buffer.append("<code>CREATE</code>");
+			buffer.append("<resource><%=klassName%></resource>");
+			buffer.append("<path>PUT</path>");
+			buffer.append("<message>"+path+"/<%=klassName%>/"+id+"</message>"); 
+			buffer.append("</response>");
+			builder.entity(buffer.toString());
 			return builder.build();
-			//return Response.created(URI.create(path+"/<%=klassName%>/"+id)).build();
 		}
 		catch(WebApplicationException e)
 		{
-			//log.debug("In Create: throwing: "+e.getMessage());
+			log.debug("In Create: throwing: "+e.getResponse());
 			return e.getResponse();
-			//ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
-			//builder.type("application/xml");
-			//builder.entity("<error>Failed to create <%=klassName%> due to: "+e.getMessage()+"</error>");
-			//return builder.build();
 		}
 	}
 
@@ -993,10 +1088,19 @@ if(action != null && action.indexOf("D") != -1 && !transformerUtils.isISO21090En
 			%>
 			if(true)
 			{
-				  ResponseBuilder builder3 = Response.status(Status.NOT_FOUND);
-				  builder3.type("application/xml");
-				  builder3.entity("<message>Not PK Found. Query is not supported.</message>");
-				  throw new WebApplicationException(builder3.build());
+				ResponseBuilder builder = Response.status(Status.NOT_FOUND);
+				builder.type("application/xml");
+				StringBuffer buffer = new StringBuffer();
+				buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+				buffer.append("<response>");
+				buffer.append("<type>MESSAGE</type>");
+				buffer.append("<code>CREATE</code>");
+				buffer.append("<resource><%=klassName%></resource>");
+				buffer.append("<path>PUT</path>");
+				buffer.append("<message>Not PK Found. Query is not supported.</message>"); 
+				buffer.append("</response>");
+				builder.entity(buffer.toString());
+				throw new WebApplicationException(builder.build());
 			}
 			
 			<%
@@ -1033,16 +1137,34 @@ if(action != null && action.indexOf("D") != -1 && !transformerUtils.isISO21090En
 				delete(returnObj);
 				ResponseBuilder builder = Response.status(Status.OK);
 				builder.type("application/xml");
-				builder.entity("<message>Successfully deleted <%=klassName%> with ID: "+id+"</message>");
+				StringBuffer buffer = new StringBuffer();
+				buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+				buffer.append("<response>");
+				buffer.append("<type>MESSAGE</type>");
+				buffer.append("<code>DELETE</code>");
+				buffer.append("<resource><%=klassName%></resource>");
+				buffer.append("<path>DELETE</path>");
+				buffer.append("<message>Successfully deleted <%=klassName%> with ID: "+id+"</message>"); 
+				buffer.append("</response>");
+				builder.entity(buffer.toString());
 				return builder.build();
 			}
 			else
 			{
-				  //log.debug("NOT Found.....................");
-				  ResponseBuilder builder = Response.status(Status.NOT_FOUND);
-				  builder.type("application/xml");
-				  builder.entity("<message>Not found</message>");
-				  throw new WebApplicationException(builder.build());
+				//log.debug("NOT Found.....................");
+				ResponseBuilder builder = Response.status(Status.NOT_FOUND);
+				builder.type("application/xml");
+				StringBuffer buffer = new StringBuffer();
+				buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+				buffer.append("<response>");
+				buffer.append("<type>ERROR</type>");
+				buffer.append("<code>NOT_FOUND</code>");
+				buffer.append("<resource><%=klassName%></resource>");
+				buffer.append("<path>DELETE</path>");
+				buffer.append("<message>Not found</message>");
+				buffer.append("</response>");
+				builder.entity(buffer.toString());
+				throw new WebApplicationException(builder.build());
 			}
 		}
 		catch(WebApplicationException e)
@@ -1060,8 +1182,10 @@ if(action != null && action.indexOf("D") != -1 && !transformerUtils.isISO21090En
 			  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 			  buffer.append("<response>");
 			  buffer.append("<type>ERROR</type>");
-			  buffer.append("<code>INTERNAL_ERROR_1</code>");
-			  buffer.append("<message>Failed to Query due to: "+e.getMessage()+"</message>");
+			  buffer.append("<code>APPLICATION_ERROR</code>");
+			  buffer.append("<resource><%=klassName%></resource>");
+			  buffer.append("<path>delete</path>");
+			  buffer.append("<message>Failed to delete due to: "+e.getMessage()+"</message>");
 			  buffer.append("</response>");
 			  builder.entity(buffer.toString());
 			  throw new WebApplicationException(builder.build());
@@ -1075,8 +1199,10 @@ if(action != null && action.indexOf("D") != -1 && !transformerUtils.isISO21090En
 			  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 			  buffer.append("<response>");
 			  buffer.append("<type>ERROR</type>");
-			  buffer.append("<code>INTERNAL_ERROR_7</code>");
-			  buffer.append("<message>Failed to Query due to: "+e.getMessage()+"</message>");
+			  buffer.append("<code>APPLICATION_ERROR</code>");
+			  buffer.append("<resource><%=klassName%></resource>");
+			  buffer.append("<path>delete</path>");
+			  buffer.append("<message>Failed to delete due to: "+e.getMessage()+"</message>");
 			  buffer.append("</response>");
 			  builder.entity(buffer.toString());
 			  throw new WebApplicationException(builder.build());
@@ -1089,16 +1215,29 @@ if(action != null && action.indexOf("D") != -1 && !transformerUtils.isISO21090En
 if(action != null && action.indexOf("U") != -1 && !transformerUtils.isISO21090Enabled())
 {%>
 
-	@PUT
+	@POST
 	@Consumes("application/xml")
-	public void update<%=klassName%>(<%=klassName%> object)
+	public Response update<%=klassName%>(<%=klassName%> object)
 	{
 		try
 		{
-			//log.debug("object: "+object.getId());
 			checkCollections(object);
 			gov.nih.nci.system.web.util.RESTUtil.printObject(object, object.getClass(), true);
 			update(object);
+			ResponseBuilder builder = Response.status(Status.OK);
+			builder.type("application/xml");
+			StringBuffer buffer = new StringBuffer();
+			buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+			buffer.append("<response>");
+			buffer.append("<type>MESSAGE</type>");
+			buffer.append("<code>POST</code>");
+			buffer.append("<resource><%=klassName%></resource>");
+			buffer.append("<path>POST</path>");
+			buffer.append("<message>Successfully updated <%=klassName%></message>");
+			buffer.append("</response>");
+			builder.entity(buffer.toString());
+			return builder.build();
+			
 		}
 		catch(WebApplicationException e)
 		{
@@ -1106,7 +1245,21 @@ if(action != null && action.indexOf("U") != -1 && !transformerUtils.isISO21090En
 		}
 		catch(Exception e)
 		{
-		e.printStackTrace();
+			  log.error("Error in updateing REST resource: " + e.getMessage());
+			  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
+			  builder.type("application/xml");
+			  StringBuffer buffer = new StringBuffer();
+			  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+			  buffer.append("<response>");
+			  buffer.append("<type>ERROR</type>");
+			  buffer.append("<code>APPLICATION_ERROR</code>");
+			  buffer.append("<resource><%=klassName%></resource>");
+			  buffer.append("<path>update</path>");
+			  buffer.append("<message>Failed to update due to: "+e.getMessage()+"</message>");
+			  buffer.append("</response>");
+			  builder.entity(buffer.toString());
+			  throw new WebApplicationException(builder.build());
+		
 		}
 	}
 
@@ -1153,6 +1306,82 @@ if(action != null && action.indexOf("U") != -1 && !transformerUtils.isISO21090En
 	return null;
 
 	}
+
+	private void validateObject(final Object obj)
+	throws WebApplicationException
+	{
+		
+		Class klass = obj.getClass();
+		log.debug("Klass: "+klass.getName());
+		List<String> asscs = classCache.getAssociations(klass.getName());
+		if(asscs == null || asscs.size() == 0)
+			return;
+		
+		for(String asscName : asscs)
+		{
+		try
+		{
+			log.debug("asscName "+asscName);
+			if(asscName.equals("Please choose"))
+				continue;
+			String associationName = asscName.substring(0, asscName.indexOf("(")).trim();
+			log.debug("associationName "+associationName);
+			String notNullValue = SDKCascadeCache.getInstance().getNotNullValue(klass.getName(), associationName);
+			log.debug("notNullValue "+notNullValue);
+			String getMethodName = "get"+ associationName.substring(0,1).toUpperCase()+associationName.substring(1,associationName.length());
+			log.debug("getMethodName "+getMethodName);
+			Method getMethod = klass.getMethod(getMethodName.trim(), null);
+			String inverseStr = SDKCascadeCache.getInstance().getInverseValue(klass.getName(), associationName);
+			Object retn = getMethod.invoke(obj, null);
+			log.debug("retn "+retn);
+			if(notNullValue != null && notNullValue.equalsIgnoreCase("true") && retn == null)
+			{
+				if(inverseStr == null || inverseStr.equalsIgnoreCase("false"))
+				{
+				       log.debug("throwing exception*****************");
+					ResponseBuilder builder = Response.status(Status.NOT_ACCEPTABLE);
+					builder.type("application/xml");
+					StringBuffer buffer = new StringBuffer();
+					buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+					buffer.append("<response>");
+					buffer.append("<type>ERROR</type>");
+					buffer.append("<code>ASSOCIATION_MISSING</code>");
+					buffer.append("<resource><%=klassName%></resource>");
+					buffer.append("<path>Validate</path>");
+					buffer.append("<message>Required association data is missing for "+ associationName +"</message>");
+					buffer.append("</response>");
+					builder.entity(buffer.toString());
+					throw new WebApplicationException(builder.build());
+				}
+			}
+		}
+		catch(WebApplicationException e)
+		{
+			throw e;
+		}
+		catch(NoSuchMethodException e)
+		{
+			e.printStackTrace();
+			ResponseBuilder builder = Response.status(Status.NOT_ACCEPTABLE);
+			builder.type("application/xml");
+			StringBuffer buffer = new StringBuffer();
+			buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+			buffer.append("<response>");
+			buffer.append("<type>ERROR</type>");
+			buffer.append("<code>ASSOCIATION_MISSING</code>");
+			buffer.append("<resource><%=klassName%></resource>");
+			buffer.append("<path>Validate</path>");
+			buffer.append("<message>Validation failure: "+e.getMessage()+"</message>");
+			buffer.append("</response>");
+			builder.entity(buffer.toString());
+			throw new WebApplicationException(builder.build());
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+ 	}
 
 	
 }

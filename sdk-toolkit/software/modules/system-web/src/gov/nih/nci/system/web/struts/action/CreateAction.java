@@ -118,7 +118,7 @@ public class CreateAction extends RestQuery {
 				log.debug("Before insert: *******");
 				gov.nih.nci.system.web.util.RESTUtil.printObject(instance, instance.getClass(), true);
 
-				Response r = client.post(instance);
+				Response r = client.put(instance);
 		   		//log.debug("Create status: "+r.getStatus());
 		   		if(r.getStatus() == Status.OK.getStatusCode() || r.getStatus() == Status.CREATED.getStatusCode())
 		   		{
@@ -128,7 +128,8 @@ public class CreateAction extends RestQuery {
 							false);
 					org.jdom.Document jDoc = builder.build(is);
 					Element root = jDoc.getRootElement();
-					String href = root.getText();
+					Element messageEle = root.getChild("message");
+					String href = messageEle.getText();
 					String newId = href.substring(href.lastIndexOf("/")+1);
 					String message = "Successfully created "+ selectedDomain.substring(selectedDomain.lastIndexOf(".")+1, selectedDomain.length()) +" with Id: "+newId;
 					request.setAttribute("message", message);
@@ -136,16 +137,20 @@ public class CreateAction extends RestQuery {
 		   		}
 		   		else
 		   		{
-		   			//log.debug(r.toString());
+		   			System.out.println("Response: "+r.toString());
 					InputStream is = (InputStream) r.getEntity();
 
 					org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
 							false);
 					org.jdom.Document jDoc = builder.build(is);
 					Element root = jDoc.getRootElement();
+					Element message = root.getChild("message");
 					String error = root.getText();
-					String message = "Failed to create: "+error;
-					request.setAttribute("message", message);
+					if(message != null)
+						error = message.getText();
+					
+					String messageStr = "Failed to create: "+error;
+					request.setAttribute("message", messageStr);
 					request.setAttribute("created", "false");
 		   		}
 			}

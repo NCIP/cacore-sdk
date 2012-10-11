@@ -12,6 +12,7 @@ import gov.nih.nci.system.security.SecurityConstants;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -83,7 +84,23 @@ public class CSMUserDetailsService implements UserDetailsService {
 			grantedAuthorities = new GrantedAuthority[1];
 			grantedAuthorities[0] = dummyGrantedAuthority;			
 		}		
-		UserDetails userDetails = new User(csmUser.getLoginName(), csmUser.getPassword()==null?"":csmUser.getPassword(),true, true, true, true, grantedAuthorities);
+		boolean credentialsNonExpired = true;
+		boolean accountNonExpired = csmUser.getFirstTimeLogin()==1?false:true;
+		boolean enabled = csmUser.getActiveFlag()==1?true:false;
+		boolean accountNonLocked = true;
+		Date expDate = csmUser.getPasswordExpiryDate();
+		if(expDate.before(new Date()))
+		{
+			accountNonLocked = false;
+			credentialsNonExpired = false;
+		}
+		
+		System.out.println("credentialsNonExpired "+credentialsNonExpired);
+		System.out.println("accountNonExpired "+accountNonExpired);
+		System.out.println("enabled "+enabled);
+		System.out.println("accountNonLocked "+accountNonLocked);
+		
+		UserDetails userDetails = new User(csmUser.getLoginName(), csmUser.getPassword()==null?"":csmUser.getPassword(), enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, grantedAuthorities);
 		return userDetails;
 	}
 
