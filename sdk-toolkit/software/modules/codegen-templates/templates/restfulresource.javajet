@@ -1000,7 +1000,7 @@ if(action != null && action.indexOf("C") != -1 && !transformerUtils.isISO21090En
 			}
 			%>
 			
-			ResponseBuilder builder = Response.status(Status.CREATED);
+			ResponseBuilder builder = Response.status(Status.OK);
 			builder.type("application/xml");
 			StringBuffer buffer = new StringBuffer();
 			buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
@@ -1094,9 +1094,9 @@ if(action != null && action.indexOf("D") != -1 && !transformerUtils.isISO21090En
 				buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 				buffer.append("<response>");
 				buffer.append("<type>MESSAGE</type>");
-				buffer.append("<code>CREATE</code>");
+				buffer.append("<code>DELETE</code>");
 				buffer.append("<resource><%=klassName%></resource>");
-				buffer.append("<path>PUT</path>");
+				buffer.append("<path>DELETE</path>");
 				buffer.append("<message>Not PK Found. Query is not supported.</message>"); 
 				buffer.append("</response>");
 				builder.entity(buffer.toString());
@@ -1222,7 +1222,7 @@ if(action != null && action.indexOf("U") != -1 && !transformerUtils.isISO21090En
 		try
 		{
 			checkCollections(object);
-			gov.nih.nci.system.web.util.RESTUtil.printObject(object, object.getClass(), true);
+			validateObject(object);			
 			update(object);
 			ResponseBuilder builder = Response.status(Status.OK);
 			builder.type("application/xml");
@@ -1230,7 +1230,7 @@ if(action != null && action.indexOf("U") != -1 && !transformerUtils.isISO21090En
 			buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 			buffer.append("<response>");
 			buffer.append("<type>MESSAGE</type>");
-			buffer.append("<code>POST</code>");
+			buffer.append("<code>UPDATE</code>");
 			buffer.append("<resource><%=klassName%></resource>");
 			buffer.append("<path>POST</path>");
 			buffer.append("<message>Successfully updated <%=klassName%></message>");
@@ -1254,7 +1254,7 @@ if(action != null && action.indexOf("U") != -1 && !transformerUtils.isISO21090En
 			  buffer.append("<type>ERROR</type>");
 			  buffer.append("<code>APPLICATION_ERROR</code>");
 			  buffer.append("<resource><%=klassName%></resource>");
-			  buffer.append("<path>update</path>");
+			  buffer.append("<path>POST</path>");
 			  buffer.append("<message>Failed to update due to: "+e.getMessage()+"</message>");
 			  buffer.append("</response>");
 			  builder.entity(buffer.toString());
@@ -1324,8 +1324,12 @@ if(action != null && action.indexOf("U") != -1 && !transformerUtils.isISO21090En
 			log.debug("asscName "+asscName);
 			if(asscName.equals("Please choose"))
 				continue;
-			String associationName = asscName.substring(0, asscName.indexOf("(")).trim();
-			log.debug("associationName "+associationName);
+			String associationName = "";
+			if(asscName.indexOf("(") != -1)
+				associationName = asscName.substring(0, asscName.indexOf("(")).trim();
+				
+			if(associationName.trim().length() == 0)
+				continue;
 			String notNullValue = SDKCascadeCache.getInstance().getNotNullValue(klass.getName(), associationName);
 			log.debug("notNullValue "+notNullValue);
 			String getMethodName = "get"+ associationName.substring(0,1).toUpperCase()+associationName.substring(1,associationName.length());
@@ -1359,9 +1363,8 @@ if(action != null && action.indexOf("U") != -1 && !transformerUtils.isISO21090En
 		{
 			throw e;
 		}
-		catch(NoSuchMethodException e)
+		catch(Exception e)
 		{
-			e.printStackTrace();
 			ResponseBuilder builder = Response.status(Status.NOT_ACCEPTABLE);
 			builder.type("application/xml");
 			StringBuffer buffer = new StringBuffer();
@@ -1376,12 +1379,8 @@ if(action != null && action.indexOf("U") != -1 && !transformerUtils.isISO21090En
 			builder.entity(buffer.toString());
 			throw new WebApplicationException(builder.build());
 		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
 	}
- 	}
+}
 
 	
 }
