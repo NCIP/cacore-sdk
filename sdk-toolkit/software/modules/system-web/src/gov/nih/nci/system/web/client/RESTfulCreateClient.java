@@ -70,10 +70,8 @@ public class RESTfulCreateClient {
 			StringBuffer buffer = new StringBuffer();
 			buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 			buffer.append("<response>");
-			System.out.println("Output from Server .... \n");
 			while ((output = br.readLine()) != null) {
 				buffer.append(output);
-				System.out.println(output);
 			}
 
 			ResponseBuilder builder = Response.status(Status.CREATED);

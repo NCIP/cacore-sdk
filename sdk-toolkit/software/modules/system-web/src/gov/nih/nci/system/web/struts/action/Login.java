@@ -24,24 +24,9 @@ public class Login extends ActionSupport implements SessionAware {
 	
 	public String execute() throws Exception {
 
-		log.debug("username: " + getUsername());
-		log.debug("password: " + getPassword());
-		
 		if (isInvalid(getUsername()) || isInvalid(getPassword()))
 			return INPUT;
 
-//		try {
-//			log.debug("Will now try to authenticate user");
-//			securityEnabler = new SecurityEnabler(SecurityConfiguration.getApplicationName());
-//			securityEnabler.authenticate(getUsername(), getPassword());
-//			log.debug("User has been successfully authenticated");
-//		} catch (AuthenticationException ae){
-//			log.error("Authentication Exception caught: ", ae);
-//			return INPUT;
-//		}
-//
-//		session.put(Constant.USER_NAME, getUsername());
-//		session.put(Constant.PASSWORD, getPassword());
 		
 		return SUCCESS;
 	}

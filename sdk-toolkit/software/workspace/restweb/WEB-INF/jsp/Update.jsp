@@ -85,7 +85,7 @@
 											</td>
 										</tr>
 										<tr>
-										<td border=0 class="txtHighlight" nowrap="off" align="center" height="1%">
+										<td border=0 class="txtHighlight" align="center" height="1%">
 										<%String message2 = (String)request.getAttribute("message");
 										if(message2 == null)
 											message2="&nbsp;";
@@ -93,18 +93,6 @@
 										<%=message2%>
 										</td>
 										</tr>
-<%
-											Enumeration enums = request.getParameterNames();
-											while(enums.hasMoreElements())
-											{
-											String name = (String)enums.nextElement();
-											if(name.equals("confirm") || name.equals("submit"))
-												continue;
-											%>
-											<input type="hidden" name="<%=name%>" value="<%=request.getParameter(name)%>">
-											<%
-											}
-											%>											
 														<tr>
 															<td valign="top">
 																<table border="0" bordercolor="orange" summary=""
@@ -115,9 +103,20 @@ JSPUtils jspUtils= null;
 List fieldNames=new ArrayList();
 List domainNames=new ArrayList();
 String message=null, selectedSearchDomain=null;
-String className = (String)request.getParameter("target");
+String className = request.getParameter("target");
+if(className == null)
+	className = (String)request.getAttribute("target");
+
+String idColStr = (String)request.getAttribute("idCol");
+
+String idStr = request.getParameter(idColStr);
+if(idStr == null)
+	idStr = (String)request.getAttribute(idColStr);
+	
 String validationMessage = (String)request.getAttribute("validationmessage");
-//out.println("className: " + className);
+System.out.println("className: " + className);
+System.out.println("idStr: " + idStr);
+
 //session.setAttribute("selectedDomain", className);
 org.jdom.Document jDoc = (org.jdom.Document)request.getAttribute("jDoc");
 Element rootElement = null;
@@ -176,6 +175,8 @@ if(className != null)
 			<td class="formRequiredNotice" width="5px">&nbsp;</td>
 			<td class="formLabel" align="right"><label for="<%=attrNameLabel%>"><%=attrNameLabel%>:</label></td>
 			<td class="formField" width="90%">
+			<input type="hidden" name="target" value="<%=className%>">
+			<input type="hidden" name="<%=idColStr%>" value="<%=idStr%>">
 			<%
 			if(attrName.equals(classIdName))
 			{

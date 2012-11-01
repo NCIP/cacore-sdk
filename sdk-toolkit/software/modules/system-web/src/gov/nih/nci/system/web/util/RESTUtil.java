@@ -117,30 +117,30 @@ public class RESTUtil {
 		while (iter.hasNext()) {
 			// part_0
 			String keyName = (String) iter.next();
-			// System.out.println("keyName: " + keyName);
+			// log.debug("keyName: " + keyName);
 			Object value = attrs.get(keyName);
-			// System.out.println("value: " + value);
+			// log.debug("value: " + value);
 
 			if (value instanceof java.lang.String) {
 				// value, code, codeSystem
-				// System.out.println("instanceof java.lang.String: ");
+				// log.debug("instanceof java.lang.String: ");
 				fnAttrs.add(attrName + "." + ((String) value));
 			}
 			// {type=[AL]}
 			else if (value instanceof java.util.List) {
-				// System.out.println("instanceof java.util.List: ");
+				// log.debug("instanceof java.util.List: ");
 				java.util.List attrList = (java.util.List) value;
 				Iterator valueIter = attrList.iterator();
 				while (valueIter.hasNext()) {
 					Object valueObj = valueIter.next();
-					// System.out.println("instanceof java.util.List: valueObj "
+					// log.debug("instanceof java.util.List: valueObj "
 					// + valueObj);
 					if (valueObj instanceof String) {
-						// System.out.println("instanceof String: valueObj "
+						// log.debug("instanceof String: valueObj "
 						// + valueObj);
 						fnAttrs.add(keyName + "." + ((String) valueObj));
 					} else if (valueObj instanceof java.util.Map) {
-						// System.out.println("instanceof String: valueObj "
+						// log.debug("instanceof String: valueObj "
 						// + valueObj);
 						Iterator mapIter = ((java.util.Map) valueObj).keySet()
 								.iterator();
@@ -151,11 +151,11 @@ public class RESTUtil {
 					}
 				}
 			} else {
-				// System.out.println("value: instance of do not know " +
+				// log.debug("value: instance of do not know " +
 				// value);
 			}
 		}
-		// System.out.println("convertISOPart: " + fnAttrs);
+		// log.debug("convertISOPart: " + fnAttrs);
 	}
 
 	/**
@@ -201,7 +201,7 @@ public class RESTUtil {
 				log.debug("keyNameWithoutU: " + keyNameWithoutU);
 				// value, code, codeSystem, {type=[AL]}
 				Object mapKeyObj = attrMap.get(keyName);
-				// System.out.println("instanceof java.util.List*******"
+				// log.debug("instanceof java.util.List*******"
 				// + mapKeyObj);
 				List mapKeyObjValue = (List) attrMap.get(keyName);
 				Iterator mapKeyObjValueIter = mapKeyObjValue.iterator();
@@ -213,7 +213,7 @@ public class RESTUtil {
 						fnAttrs.add(fieldName + "." + keyNameWithoutU + "."
 								+ mapKeyObjValueObj);
 					} else {
-						// System.out.println("instanceof not String *******"
+						// log.debug("instanceof not String *******"
 						// + mapKeyObj);
 						java.util.Map mapKeyObjValueMap = (java.util.Map) mapKeyObjValueObj;
 						String key = (String) mapKeyObjValueMap.keySet()
@@ -284,7 +284,7 @@ public class RESTUtil {
 				}
 			}
 		}
-		// System.out.println("returning Ad fnAttrs: " + fnAttrs);
+		// log.debug("returning Ad fnAttrs: " + fnAttrs);
 		return fnAttrs;
 	}
 
@@ -381,14 +381,14 @@ public class RESTUtil {
 						convertISOPart(subAttrName, (java.util.Map) mapKeyObj,
 								fnAttrs);
 					} else {
-						// System.out.println("instanceof I do not know ----- "
+						// log.debug("instanceof I do not know ----- "
 						// + mapKeyObj);
 					}
 
 				}
 			}
 		}
-		// System.out.println("returning DsetAd fnAttrs: " + fnAttrs);
+		// log.debug("returning DsetAd fnAttrs: " + fnAttrs);
 		/*
 		 * List returnList = new ArrayList(); for(String attName : fnAttrs) {
 		 * returnList.add(fieldName+"."+attName); }
@@ -433,7 +433,7 @@ public class RESTUtil {
 					fnAttrs.add(value);
 				else
 					fnAttrs.add(field.getName() + "." + value);
-				// System.out.println("instanceof java.lang.String*******" +
+				// log.debug("instanceof java.lang.String*******" +
 				// obj);
 			} else if (obj instanceof java.util.Map) {
 				Map valueMap = (java.util.Map) obj;
@@ -451,7 +451,7 @@ public class RESTUtil {
 				// log.debug("Don't know-----------------------");
 			}
 		}
-		// System.out.println("returning fnAttrs: " + fnAttrs);
+		// log.debug("returning fnAttrs: " + fnAttrs);
 		return fnAttrs;
 	}
 
@@ -506,11 +506,11 @@ public class RESTUtil {
 					fnAttrs.add(value);
 				else
 					fnAttrs.add(field.getName() + "." + value);
-				// System.out.println("instanceof java.lang.String*******" +
+				// log.debug("instanceof java.lang.String*******" +
 				// obj);
 			}
 		}
-		// System.out.println("returning fnAttrs: " + fnAttrs);
+		// log.debug("returning fnAttrs: " + fnAttrs);
 		return fnAttrs;
 	}
 
@@ -835,8 +835,8 @@ public class RESTUtil {
 		public static String getLinkIdValue(Element rootElement, String linkName, String targetClassName, String targetClassIdName, String base64encodedUsernameAndPassword)
 		throws gov.nih.nci.system.client.util.xml.XMLUtilityException
 		{
-			System.out.println("linkName "+linkName);
-			System.out.println("targetClassName "+targetClassName);
+			log.debug("linkName "+linkName);
+			log.debug("targetClassName "+targetClassName);
 			if(rootElement == null)
 				return null;
 			String idValue = null;
@@ -853,27 +853,27 @@ public class RESTUtil {
 			while(iter.hasNext())
 			{
 				Element child = (Element)iter.next();
-				System.out.println("child.getName(): "+child.getName());
+				log.debug("child.getName(): "+child.getName());
 				if(child.getName().equals("link"))
 				{
 					String refName = child.getAttributeValue("ref");
-					System.out.println("refName: "+refName);
-					System.out.println("linkName: "+linkName);
+					log.debug("refName: "+refName);
+					log.debug("linkName: "+linkName);
 					if(linkName != null && refName.trim().equals(linkName.trim()))
 					{
-						System.out.println("Equallllllll");
+						log.debug("Equallllllll");
 						String href = child.getAttributeValue("href");
-						System.out.println("href "+href);
+						log.debug("href "+href);
 						String resourceStr = href.substring(href.indexOf("/rest/")+6, href.length());
 						boolean isCollection = false;
 						if(resourceStr.indexOf("/") != resourceStr.lastIndexOf("/"))
 							isCollection = true;
-						System.out.println("isCollection "+isCollection);
+						log.debug("isCollection "+isCollection);
 
 						if(isCollection)
 						{
 						   Object results = queryLink(targetClassName, href, base64encodedUsernameAndPassword);
-						   System.out.println("results "+results);
+						   log.debug("results "+results);
 						   if(results == null)
 						   	return "";
 						   Collection collecton = (Collection) results;
@@ -887,7 +887,7 @@ public class RESTUtil {
 							   String getIdMethod = "get"+((targetClassIdName.charAt(0)+"").toUpperCase()) + targetClassIdName.substring(1, targetClassIdName.length());
 							   Method method = klass.getMethod(getIdMethod);
 							   Object id = method.invoke(targetObject, null);
-							   System.out.println("id "+id);
+							   log.debug("id "+id);
 							   ids.append(id.toString());
 							   if(iterator.hasNext())
 							   	ids.append(",");
@@ -898,7 +898,7 @@ public class RESTUtil {
 						else
 						{
 							Object results = queryLink(targetClassName, href, base64encodedUsernameAndPassword);
-							System.out.println("results "+results);
+							log.debug("results "+results);
 							   Class klass = Class.forName(targetClassName);
 							   Object targetObject = klass.cast(results);
 							   String getIdMethod = "get"+((targetClassIdName.charAt(0)+"").toUpperCase()) + targetClassIdName.substring(1, targetClassIdName.length());
@@ -916,7 +916,7 @@ public class RESTUtil {
 		{
 			e.printStackTrace();
 		}
-			System.out.println("idValue: "+idValue);
+			log.debug("idValue: "+idValue);
 		return idValue;
 	}
 

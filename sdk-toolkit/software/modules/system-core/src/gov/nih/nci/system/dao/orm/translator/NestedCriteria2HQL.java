@@ -77,7 +77,6 @@ public class NestedCriteria2HQL {
 		processNestedCriteria(hql, criteria);
 		hqlCriteria = prepareQuery(hql);
 		log.debug("HQL Query :" + hqlCriteria.getHqlString());
-		System.out.println("HQL query: " + hql.toString());
 		return hqlCriteria;
 	}
 

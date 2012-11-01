@@ -82,7 +82,6 @@ public class CSMUsernameAuthenticationProvider implements AuthenticationProvider
 			}
 			Assert.notNull(user, "retrieveUser returned null - a violation of the interface contract");
 		}
-
 		if (!user.isCredentialsNonExpired())
 		{
 			throw new CredentialsExpiredException(messages.getMessage("AbstractUserDetailsAuthenticationProvider.expired", "User account credentials are expired"));

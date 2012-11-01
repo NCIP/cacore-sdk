@@ -7,6 +7,8 @@ import gov.nih.nci.security.authorization.domainobjects.Privilege;
 import gov.nih.nci.security.authorization.domainobjects.ProtectionElementPrivilegeContext;
 import gov.nih.nci.security.exceptions.CSConfigurationException;
 import gov.nih.nci.security.exceptions.CSException;
+import gov.nih.nci.security.exceptions.CSInputException;
+import gov.nih.nci.security.exceptions.CSLoginException;
 import gov.nih.nci.security.exceptions.CSObjectNotFoundException;
 import gov.nih.nci.system.security.SecurityConstants;
 
@@ -91,14 +93,8 @@ public class CSMUserDetailsService implements UserDetailsService {
 		Date expDate = csmUser.getPasswordExpiryDate();
 		if(expDate.before(new Date()))
 		{
-			accountNonLocked = false;
 			credentialsNonExpired = false;
 		}
-		
-		System.out.println("credentialsNonExpired "+credentialsNonExpired);
-		System.out.println("accountNonExpired "+accountNonExpired);
-		System.out.println("enabled "+enabled);
-		System.out.println("accountNonLocked "+accountNonLocked);
 		
 		UserDetails userDetails = new User(csmUser.getLoginName(), csmUser.getPassword()==null?"":csmUser.getPassword(), enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, grantedAuthorities);
 		return userDetails;
@@ -112,6 +108,14 @@ public class CSMUserDetailsService implements UserDetailsService {
 			throw new UsernameNotFoundException("Unable to find user by the given user name");
 		return csmUser;
 	}
+	
+	public boolean changePassword(String username, String password, String newPassword, String repeatPassword)
+			 throws CSException, CSLoginException, CSInputException, CSConfigurationException
+	{
+		//	Make sure AuthenticationManager Instance is available.
+		return authenticationManagerInstance().changePassword(username, password, newPassword, repeatPassword);
+	}
+	
 
 	@SuppressWarnings("unchecked")
 	public GrantedAuthority[] getGrantedAuthorityCollection(String csmUserId) {

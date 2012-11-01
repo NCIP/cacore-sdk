@@ -1022,6 +1022,9 @@ public class HtmlUtils {
 
 	public static String getAttributeValue(Element root, String attName)
 	{
+		if(attName == null || root == null)
+			return null;
+		
 		Attribute attr = root.getAttribute(attName);
 		if(attr != null)
 			return attr.getValue();

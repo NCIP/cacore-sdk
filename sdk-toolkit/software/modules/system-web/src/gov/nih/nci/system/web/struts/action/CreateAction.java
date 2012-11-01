@@ -116,7 +116,6 @@ public class CreateAction extends RestQuery {
 
 			   	prepareAssociations(request, instance, className, base64encodedUsernameAndPassword);
 				log.debug("Before insert: *******");
-				gov.nih.nci.system.web.util.RESTUtil.printObject(instance, instance.getClass(), true);
 
 				Response r = client.put(instance);
 		   		//log.debug("Create status: "+r.getStatus());
@@ -137,7 +136,6 @@ public class CreateAction extends RestQuery {
 		   		}
 		   		else
 		   		{
-		   			System.out.println("Response: "+r.toString());
 					InputStream is = (InputStream) r.getEntity();
 
 					org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(

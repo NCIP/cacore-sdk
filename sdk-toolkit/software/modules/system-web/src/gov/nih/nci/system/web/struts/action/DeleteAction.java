@@ -15,6 +15,7 @@ import org.acegisecurity.Authentication;
 import javax.ws.rs.core.Response.Status;
 import com.opensymphony.xwork2.ActionContext;
 import org.apache.commons.codec.binary.Base64;
+import org.jdom.Element;
 
 /**
  * Delete Action using RESTful Delete Implementation
@@ -77,13 +78,9 @@ public class DeleteAction extends RestQuery {
 		{
 			Authentication authentication = context.getAuthentication();
 			// authentication.getCredentials();
-			System.out.println("username 11 "
-					+ authentication.getPrincipal().toString());
 			String userName = ((org.acegisecurity.userdetails.User) authentication
 					.getPrincipal()).getUsername();
 			String password = authentication.getCredentials().toString();
-			System.out.println("password 11 "
-					+ authentication.getCredentials().toString());
 			String base64encodedUsernameAndPassword = new String(Base64.encodeBase64((userName + ":" + password).getBytes()));
 			client.header("Authorization", "Basic " + base64encodedUsernameAndPassword);
 		}
@@ -103,13 +100,31 @@ public class DeleteAction extends RestQuery {
 			request.removeAttribute("confirm");
 			request.setAttribute("successful", "1");
 			// request.removeAttribute("confirm");
+			
+			InputStream is = (InputStream) r.getEntity();
+	
+			org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(false);
+			org.jdom.Document jDoc = builder.build(is);
+			Element root = jDoc.getRootElement();
+			Element messageEle = root.getChild("message");
+			request.setAttribute("message", messageEle.getText());
 		}
-		InputStream is = (InputStream) r.getEntity();
+		else
+		{
+			InputStream is = (InputStream) r.getEntity();
 
-		org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(false);
-		org.jdom.Document jDoc = builder.build(is);
-
-		request.setAttribute("message", jDoc.getRootElement().getText());
+			org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
+					false);
+			org.jdom.Document jDoc = builder.build(is);
+			Element root = jDoc.getRootElement();
+			Element message = root.getChild("message");
+			String error = root.getText();
+			if(message != null)
+				error = message.getText();
+			
+			String messageStr = "Failed to create: "+error;
+			request.setAttribute("message", messageStr);
+		}
 		return SUCCESS;
 	}
 }

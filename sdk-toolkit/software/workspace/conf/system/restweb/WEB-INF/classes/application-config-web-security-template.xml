@@ -13,6 +13,7 @@
 				/http/remoteauthenticationmanager/**=sessionContextIntegrationFilter
 				/services/**=sessionContextIntegrationFilter
 				/home.action/**=sessionContextIntegrationFilter,logoutFilter,securityContextHolderAwareRequestFilter,anonymousProcessingFilter
+				/reset.action/**=logoutFilter,securityContextHolderAwareRequestFilter,anonymousProcessingFilter
 				/http/applicationservice/**=sessionContextIntegrationFilter,x509ProcessingFilter,basicProcessingFilter,basicExceptionTranslationFilter,filterInvocationInterceptor
 				/gethtml/**=sessionContextIntegrationFilter,logoutFilter,basicProcessingFilter,basicExceptionTranslationFilter,filterInvocationInterceptor
 				/getxml/**=sessionContextIntegrationFilter,logoutFilter,basicProcessingFilter,basicExceptionTranslationFilter,filterInvocationInterceptor

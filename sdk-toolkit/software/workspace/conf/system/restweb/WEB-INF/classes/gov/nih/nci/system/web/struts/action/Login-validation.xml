@@ -13,4 +13,20 @@
             <message key="requiredstring"/>
         </field-validator>
     </field>
+    <field name="newPassword">
+        <field-validator type="requiredstring">
+            <message key="requiredstring"/>
+        </field-validator>
+    </field>
+    <field name="repeatPassword">
+        <field-validator type="requiredstring">
+            <message key="requiredstring"/>
+        </field-validator>
+    </field>
+    <field name="oldPassword">
+        <field-validator type="requiredstring">
+            <message key="requiredstring"/>
+        </field-validator>
+    </field>
+    
 </validators>

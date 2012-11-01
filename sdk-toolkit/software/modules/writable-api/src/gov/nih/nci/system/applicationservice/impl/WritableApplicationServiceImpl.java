@@ -80,7 +80,6 @@ public class WritableApplicationServiceImpl extends ApplicationServiceImpl imple
 		//Needed to make sure the pagination and the count queries works.
 		if (query instanceof SearchExampleQuery)
 		{
-			System.out.println("instance of SearchExampleQuery....");
 			Object obj = ((SearchExampleQuery)query).getExample();
 			List<Object> objList = new ArrayList<Object>();
 			objList.add(obj);
@@ -89,7 +88,6 @@ public class WritableApplicationServiceImpl extends ApplicationServiceImpl imple
 		}
 		else if(query instanceof SearchHQLQuery)
 		{
-			System.out.println("instance of SearchHQLQuery....");
 			HQLCriteria oldCriteria = (HQLCriteria)query;
 			HQLCriteria hqlCriteria = new HQLCriteria(oldCriteria.getHqlString(),oldCriteria.getParameters());
 			requestObject = hqlCriteria;

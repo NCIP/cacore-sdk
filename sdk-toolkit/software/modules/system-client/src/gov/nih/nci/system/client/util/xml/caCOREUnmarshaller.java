@@ -52,7 +52,6 @@ public class caCOREUnmarshaller implements gov.nih.nci.system.client.util.xml.Un
 				localMapping.loadMapping(mappIS);
 				return localMapping;
 			} catch (Exception e) {
-				System.out.println("Error reading default xml mapping file: " + e.getMessage());				
 				log.error("Error reading default xml mapping file: ", e); 
 				throw new XMLUtilityException("Error reading default xml mapping file ", e);
 			}
@@ -68,11 +67,9 @@ public class caCOREUnmarshaller implements gov.nih.nci.system.client.util.xml.Un
 			//log.debug("Creating unmarshaller");
 			unmarshaller = new org.exolab.castor.xml.Unmarshaller(this.getMapping());
 		} catch (MappingException e) {
-			System.out.println("XML mapping file is invalid: " + e.getMessage());
 			log.error("XML mapping file is invalid: ", e);
 			throw new XMLUtilityException("XML mapping file invalid: ", e);
 		} catch (Exception e){
-			System.out.println("General Exception caught trying to create unmarshaller: " + e.getMessage());		
 			log.error("General Exception caught trying to create unmarshaller: ", e);
 			throw new XMLUtilityException("General Exception caught trying to create unmarshaller: ", e);
 		}
@@ -81,11 +78,9 @@ public class caCOREUnmarshaller implements gov.nih.nci.system.client.util.xml.Un
 			log.debug("About to unmarshal from input ");
 			beanObject = unmarshaller.unmarshal(input);
 		} catch (MarshalException e) {
-			System.out.println("Error marshalling input: " + e.getMessage());			
 			log.error("Error marshalling input: ", e);
 			throw new XMLUtilityException("Error unmarshalling xml input: " + e.getMessage(),e);
 		} catch (ValidationException e) {
-			System.out.println("Error in xml validation when unmarshalling xml input: " + e.getMessage());			
 			log.error("Error in xml validation when unmarshalling xml input: ", e);
 			throw new XMLUtilityException("Error in xml validation when unmarshalling xml input: ", e);
 		}
@@ -99,7 +94,6 @@ public class caCOREUnmarshaller implements gov.nih.nci.system.client.util.xml.Un
 			FileReader fRead = new FileReader(xmlFile);
 			beanObject = fromXML(fRead);
 		} catch (FileNotFoundException e) {
-			System.out.println("XML input file invalid: " + e.getMessage());
 			log.error("XML input file invalid: ", e);
 			throw new XMLUtilityException("XML input file invalid: ", e);
 		}
@@ -113,7 +107,6 @@ public class caCOREUnmarshaller implements gov.nih.nci.system.client.util.xml.Un
 			FileReader fRead = new FileReader(xmlFile);
 			beanObject = fromXML(fRead);
 		} catch (FileNotFoundException e) {
-			System.out.println("XML input file invalid: " + e.getMessage());
 			log.error("XML input file invalid: ", e);
 			throw new XMLUtilityException("XML input file invalid: ", e);
 		}

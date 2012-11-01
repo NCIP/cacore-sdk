@@ -99,9 +99,9 @@ public class SDKRESTContentHandler implements MessageBodyReader,
 			MultivaluedMap httpHeaders, OutputStream os) throws IOException,
 			WebApplicationException {
 		try {
-		//	System.out.println("In writing...."+target);
-		//	System.out.println("In writing...."+type);
-		//	System.out.println("In writing...."+genericType);
+			log.debug("In writing...."+target);
+			log.debug("In writing...."+type);
+			log.debug("In writing...."+genericType);
 			if(target == null)
 				return;
 
@@ -113,29 +113,17 @@ public class SDKRESTContentHandler implements MessageBodyReader,
 				return;
 			}
 			boolean includeAssociations = true;
-			//SDKResponse response = (SDKResponse) target;
-
-			//if(!response.isCollection())
-			//Object convertedObj = null;
 			if(!(target instanceof CollectionBean))
 			{
-				//Map responseObj = response.getResponse();
-				//Object targetObj = responseObj.keySet().iterator().next();
-				//List<ResourceLink> objLinks = (List<ResourceLink>)responseObj.get(targetObj);
-
-
 				Object convertedObj = XMLUtility.convertFromProxy(target,
 						false);
 
-				//printObject(convertedObj, convertedObj.getClass(), true);
 				String namespace = "gme://caCORE.caCORE/4.5/";
 				try
 				{
 					Method method = type.getDeclaredMethod("getNamespacePrefix", (Class[])null);
 					namespace = (String)method.invoke(target, null);
 				} catch (NoSuchMethodException e) {
-					// TODO Auto-generated catch block
-					//e.printStackTrace();
 					log.error("ERROR: ", e);
 				}
 
@@ -145,13 +133,10 @@ public class SDKRESTContentHandler implements MessageBodyReader,
 					Method method = type.getDeclaredMethod("getLinks", (Class[])null);
 					links = (List)method.invoke(target, null);
 				} catch (NoSuchMethodException e) {
-					// TODO Auto-generated catch block
-					//e.printStackTrace();
 					log.error("ERROR: ", e);
 				}
 
 				String packageName = convertedObj.getClass().getPackage().getName();
-				//String packageName = type.getName().substring(0, type.getName().lastIndexOf("."));
 				StringWriter strWriter = new StringWriter();
 				Marshaller marshaller = new JAXBMarshaller(true,
 						packageName, namespace);
@@ -169,7 +154,6 @@ public class SDKRESTContentHandler implements MessageBodyReader,
 						linkElement.setAttribute("ref", link.getRelationship());
 						linkElement.setAttribute("type", link.getType());
 						linkElement.setAttribute("href", link.getHref());
-						//linkElement.setText(link.toString());
 						rootEle.addContent(linkElement);
 					}
 				}
@@ -183,32 +167,28 @@ public class SDKRESTContentHandler implements MessageBodyReader,
 			}
 
 		} catch (XMLUtilityException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			log.error("ERROR: ", e);
 			throw new WebApplicationException(e);
 		} catch (SecurityException e) {
 			log.error("ERROR: ", e);
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			throw new WebApplicationException(e);
 		} catch (IllegalArgumentException e) {
 			log.error("ERROR: ", e);
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			throw new WebApplicationException(e);
 		} catch (IllegalAccessException e) {
 			log.error("ERROR: ", e);
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			throw new WebApplicationException(e);
 		} catch (InvocationTargetException e) {
 			log.error("ERROR: ", e);
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			throw new WebApplicationException(e);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new WebApplicationException(e);
 		}
 	}
 
@@ -344,65 +324,5 @@ public class SDKRESTContentHandler implements MessageBodyReader,
 		XMLOutputter outputter = new XMLOutputter();
 		outputter.output(xmlDoc, writer);
 	}
-
-
-	public static void printObject(Object obj, Class klass, boolean includeAssociation) throws Exception {
-		System.out.println("\nPrinting "+ klass.getName());
-		Method[] methods = klass.getMethods();
-		for(Method method:methods)
-		{
-			if(method.getName().startsWith("get") && !method.getName().equals("getClass"))
-			{
-				System.out.print("\t"+method.getName().substring(3)+":");
-				Object val = null;
-				try {
-				val = method.invoke(obj, (Object[])null);
-				} catch(Exception e){
-					val = "ERROR - unable to determine value";
-
-				}
-				if (val instanceof java.util.Set) {
-					Collection list = (Collection)val;
-					for(Object object: list){
-						System.out.println(object.getClass().getName()+":");
-						if (includeAssociation){
-							printObject(object, object.getClass(), false);
-						} else {
-							System.out.println(" -- association has been excluded");
-						}
-					}
-					System.out.println("size="+((Collection)val).size());
-				}
-				else if(val instanceof ArrayList)
-				{
-					Collection list = (ArrayList) val;
-					for(Object object: list){
-						if (includeAssociation){
-							printObject(object, object.getClass(), false);
-						} else {
-							System.out.println(" -- association has been excluded");
-						}
-					}
-				}
-				else if(val != null && val.getClass().getName().startsWith("gov.nih.nci"))
-				{
-					if (includeAssociation){
-						printObject(val, val.getClass(), false);
-					} else {
-						System.out.println(" -- association has been excluded");
-					}
-				}
-				else
-					System.out.println(val);
-			}
-		}
-	}
-
-	private void printObject(Object obj, Class klass) throws Exception {
-		printObject(obj,klass,false);
-	}
-
-
-
 
 }

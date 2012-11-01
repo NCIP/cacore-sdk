@@ -96,7 +96,7 @@ public class Result extends BaseActionSupport {
 		   		query = query + "&password=" + password;
 
 		   	log.debug("query: " + query);
-		   	System.out.println("query: " + query);
+		   	log.debug("query: " + query);
 
 		 setQuery(query);
 		}
@@ -153,7 +153,7 @@ public class Result extends BaseActionSupport {
      			String parameterValue = (request.getParameter(parameterName)).trim();
 				if (parameterValue.length() > 0) {
 
-					System.out.println("parameterValue: " + parameterValue);
+					log.debug("parameterValue: " + parameterValue);
 
 					if (parameterName.indexOf('.') > 0) { // ISO data type parameter
 						saveIsoNode(isoDataTypeNodes, parameterName, parameterValue);
@@ -183,9 +183,9 @@ public class Result extends BaseActionSupport {
 	private void saveIsoNode(Map<String, Map<String, List<Object>>> isoDataTypeNodes, String parameterName, String parameterValue){
 
 		String isoParamPrefix =  parameterName.substring(0, parameterName.lastIndexOf('.'));
-		System.out.println("isoParamPrefix: " + isoParamPrefix);
+		log.debug("isoParamPrefix: " + isoParamPrefix);
 		String[] isoParentNodes = isoParamPrefix.split("\\.");
-		System.out.println("isoParentNodes: " + isoParentNodes);
+		log.debug("isoParentNodes: " + isoParentNodes);
 
 		Object childNode = null;
 		Object parentNode = isoDataTypeNodes.get(isoParentNodes[0]);
@@ -211,8 +211,8 @@ public class Result extends BaseActionSupport {
 		}
 
 		String isoParamKey = parameterName.substring(parameterName.lastIndexOf('.')+1);
-		System.out.println("isoParamKey: " + isoParamKey);
-		System.out.println("parameterValue: " + parameterValue);
+		log.debug("isoParamKey: " + isoParamKey);
+		log.debug("parameterValue: " + parameterValue);
 
 		List<Object> nodeList = new ArrayList<Object>();
 		nodeList.add(parameterValue);
@@ -225,7 +225,7 @@ public class Result extends BaseActionSupport {
  		Iterator iter = isoParentNodeNames.iterator();
  		while (iter.hasNext()){
  			parentNodeName = (String)iter.next();
- 			System.out.println("key: " + parentNodeName);
+ 			log.debug("key: " + parentNodeName);
 
  			query.append("[@").append(parentNodeName).append("=");
 

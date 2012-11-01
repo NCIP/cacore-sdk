@@ -117,7 +117,6 @@ public class HTTPQuery extends HttpServlet {
 		String query = null;
 
 		try {
-			System.out.println("request.getQueryString() "+request.getQueryString());
 			if (URLDecoder.decode(request.getQueryString(), "ISO-8859-1") != null) {
 				query = URLDecoder.decode(request.getQueryString(),
 						"ISO-8859-1");
@@ -295,7 +294,6 @@ public class HTTPQuery extends HttpServlet {
 									.append("<font size=4 color=red><b><br><br>\n");
 
 		String msg = ex.getMessage();
-		System.out.println("msg "+msg);
 		Throwable tempEx = ex.getCause();
 		while (tempEx != null) {
 			msg += "<br><br>Caused by: " + tempEx.getMessage();
@@ -303,7 +301,6 @@ public class HTTPQuery extends HttpServlet {
 		}
 
 		msg = org.apache.commons.lang.StringEscapeUtils.escapeHtml(msg);
-		System.out.println("msg "+msg);
 		sb.append(msg);
 
 							sb.append("</b></font>\n")

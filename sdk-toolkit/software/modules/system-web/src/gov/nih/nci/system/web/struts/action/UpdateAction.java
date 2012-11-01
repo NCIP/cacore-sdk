@@ -32,24 +32,23 @@ public class UpdateAction extends RestQuery {
 
 	private static final long serialVersionUID = 1234567890L;
 
-	public static Logger log = Logger.getLogger(CreateAction.class.getName());
-	String targetClass;
-	String btnSearch;
-
-	public String getBtnSearch() {
-		return btnSearch;
-	}
-
-	public void setBtnSearch(String btnSearch) {
-		this.btnSearch = btnSearch;
-	}
+	public static Logger log = Logger.getLogger(UpdateAction.class.getName());
+	String target;
+	String id;
 
 	public String execute() throws Exception {
-		init();
+		try
+		{
+			init();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
 		HttpServletRequest request = ServletActionContext.getRequest();
 		HttpServletResponse response = ServletActionContext.getResponse();
-		targetClass = request.getParameter("target");
-		if (targetClass == null || targetClass.trim().length() == 0) {
+		target = request.getParameter("target");
+		if (target == null || target.trim().length() == 0) {
 			request.setAttribute("Message", "Invalid target");
 			return null;
 		}
@@ -57,16 +56,16 @@ public class UpdateAction extends RestQuery {
 		String idCol = null;
 
 		try {
-			idCol = classCache.getClassIdName(Class.forName(targetClass));
+			idCol = classCache.getClassIdName(Class.forName(target));
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-		//System.out.println("idCol: " + idCol);
 		if (idCol == null) {
 			request.setAttribute("Message", "Invalid target");
 			return null;
 		}
-
+		
+		request.setAttribute("idCol", idCol);
 		String idColValue = request.getParameter(idCol);
 		if (idColValue == null || idColValue.trim().length() == 0) {
 			request.setAttribute("Message", "Invalid target identifier");
@@ -77,10 +76,7 @@ public class UpdateAction extends RestQuery {
 				ActionContext.SESSION.toString());
 		org.acegisecurity.context.SecurityContext context = (org.acegisecurity.context.SecurityContext) session
 				.get("ACEGI_SECURITY_CONTEXT");
-
 		if (submitted != null && submitted.equals("true")) {
-
-			//System.out.println("Submitting:................");
 			try {
 				String base64encodedUsernameAndPassword = null;
 				Object instance = prepareObject(request);
@@ -88,9 +84,9 @@ public class UpdateAction extends RestQuery {
 				String restURL = url.substring(0, url.indexOf("Update.action"));
 				WebClient client = WebClient.create(restURL);
 				client.path("rest/"
-						+ targetClass.substring(
-								targetClass.lastIndexOf(".") + 1,
-								targetClass.length()));
+						+ target.substring(
+								target.lastIndexOf(".") + 1,
+								target.length()));
 				client.type("application/xml").accept("application/xml");
 				if (context != null) {
 					Authentication authentication = context.getAuthentication();
@@ -114,11 +110,8 @@ public class UpdateAction extends RestQuery {
 				}
 
 				try {
-					prepareAssociations(request, instance, targetClass, base64encodedUsernameAndPassword);
-					System.out.println("Before update: *******");
-					gov.nih.nci.system.web.util.RESTUtil.printObject(instance, instance.getClass(), true);
+					prepareAssociations(request, instance, target, base64encodedUsernameAndPassword);
 					Response r = client.post(instance);
-					System.out.println("update Status: " + r.getStatus());
 
 					if (r.getStatus() != Status.OK.getStatusCode() && r.getStatus() != Status.NO_CONTENT.getStatusCode()) {
 						InputStream is = (InputStream) r.getEntity();
@@ -126,9 +119,15 @@ public class UpdateAction extends RestQuery {
 						org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
 								false);
 						org.jdom.Document jDoc = builder.build(is);
+						Element root = jDoc.getRootElement();
+						Element message = root.getChild("message");
+						String error = root.getText();
+						if(message != null)
+							error = message.getText();
 
 						request.setAttribute("message", "Unsuccessful update: "
-								+ jDoc.getRootElement().getText());
+								+ error);
+						//return SUCCESS;
 					} else {
 						String message = "Updated Successfully";
 						request.setAttribute("message", message);
@@ -136,20 +135,21 @@ public class UpdateAction extends RestQuery {
 					}
 				} catch (WebApplicationException e) {
 					request.setAttribute("Message", "Failed to update: "+e.getMessage());
-					e.printStackTrace();
+					//return SUCCESS;
+					//e.printStackTrace();
 				}
 			} catch (Exception e) {
 				String message = "Failed to update: " + e.getMessage();
 				request.setAttribute("message", message);
+				//return SUCCESS;
 			}
 		}
-
 		String url = request.getRequestURL().toString();
 		String restURL = url.substring(0, url.lastIndexOf("/"));
 		WebClient client = WebClient.create(restURL);
 		client.path("rest/"
-				+ targetClass.substring(targetClass.lastIndexOf(".") + 1,
-						targetClass.length()) + "/" + idColValue);
+				+ target.substring(target.lastIndexOf(".") + 1,
+						target.length()) + "/" + idColValue);
 
 		client.type("application/xml").accept("application/xml");
 		if (context != null) {
@@ -176,7 +176,6 @@ public class UpdateAction extends RestQuery {
 		org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(false);
 		org.jdom.Document jDoc = builder.build(is);
 		request.setAttribute("jDoc", jDoc);
-
 		return SUCCESS;
 	}
 
@@ -187,7 +186,7 @@ public class UpdateAction extends RestQuery {
 
 		Map<String, Map<String, List<Object>>> isoDataTypeNodes = new HashMap<String, Map<String, List<Object>>>();
 		Object instance = null;
-		Class klass = Class.forName(targetClass);
+		Class klass = Class.forName(target);
 		instance = klass.newInstance();
 		while (parameters.hasMoreElements()) {
 			String parameterName = (String) parameters.nextElement();

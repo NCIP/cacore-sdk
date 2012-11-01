@@ -154,6 +154,8 @@ public class RESTfulResource {
 			buffer.append("<response>");
 			buffer.append("<type>ERROR</type>");
 			buffer.append("<code>SEARCH_CRITERIA_1</code>");
+			buffer.append("<resource>"+className+"</resource>");
+			buffer.append("<path>search</path>");
 			buffer.append("<message>Search criteria is missing</message>");
 			buffer.append("<valid>");
 			for (String attrName : validAttrs) {
@@ -191,6 +193,8 @@ public class RESTfulResource {
 			buffer.append("<response>");
 			buffer.append("<type>ERROR</type>");
 			buffer.append("<code>SEARCH_CRITERIA_2</code>");
+			buffer.append("<resource>"+className+"</resource>");
+			buffer.append("<path>search</path>");
 			buffer.append("<message>Invalid Search criteria</message>");
 			buffer.append("<valid>");
 			for (String attrName : validAttrs) {
@@ -521,6 +525,8 @@ public class RESTfulResource {
 				buffer.append("<response>");
 				buffer.append("<type>MESSAGE</type>");
 				buffer.append("<code>MESSAGE_100</code>");
+				buffer.append("<resource>"+sourceClass.getName()+"</resource>");
+				buffer.append("<path>search</path>");
 				buffer.append("<message>No primary key present on " + assocType
 						+ ". Aborting Query!</message>");
 				buffer.append("</response>");
@@ -586,6 +592,8 @@ public class RESTfulResource {
 			buffer.append("<response>");
 			buffer.append("<type>ERROR</type>");
 			buffer.append("<code>INTERNAL_ERROR_3</code>");
+			buffer.append("<resource>"+sourceClass.getName()+"</resource>");
+			buffer.append("<path>search</path>");
 			buffer.append("<message>Failed to construct association criteria: "
 					+ ex.getMessage() + "</message>");
 			buffer.append("</response>");
@@ -629,6 +637,8 @@ public class RESTfulResource {
 				buffer.append("<response>");
 				buffer.append("<type>MESSAGE</type>");
 				buffer.append("<code>MESSAGE_100</code>");
+				buffer.append("<resource>"+sourceClass.getName()+"</resource>");
+				buffer.append("<path>search</path>");
 				buffer.append("<message>No primary key present on " + assocType
 						+ ". Aborting Query!</message>");
 				buffer.append("</response>");
@@ -669,6 +679,8 @@ public class RESTfulResource {
 			buffer.append("<response>");
 			buffer.append("<type>ERROR</type>");
 			buffer.append("<code>INTERNAL_ERROR_4</code>");
+			buffer.append("<resource>"+sourceClass.getName()+"</resource>");
+			buffer.append("<path>search</path>");
 			buffer.append("<message>Failed to construct criteria: "
 					+ ex.getMessage() + "</message>");
 			buffer.append("</response>");
@@ -840,6 +852,8 @@ public class RESTfulResource {
 							buffer.append("<response>");
 							buffer.append("<type>ERROR</type>");
 							buffer.append("<code>INTERNAL_ERROR_2</code>");
+							buffer.append("<resource>"+className+"</resource>");
+							buffer.append("<path>search</path>");
 							buffer.append("<message>Failed to construct criteria</message>");
 							buffer.append("</response>");
 							builder.entity(buffer.toString());
@@ -859,6 +873,8 @@ public class RESTfulResource {
 			buffer.append("<response>");
 			buffer.append("<type>ERROR</type>");
 			buffer.append("<code>INVALID_CRITERIA</code>");
+			buffer.append("<resource>"+className+"</resource>");
+			buffer.append("<path>search</path>");
 			buffer.append("<message>Invalid Criteria</message>");
 			buffer.append("</response>");
 			builder.entity(buffer.toString());
@@ -898,6 +914,8 @@ public class RESTfulResource {
 				buffer.append("<response>");
 				buffer.append("<type>ERROR</type>");
 				buffer.append("<code>INTERNAL_ERROR_7</code>");
+				buffer.append("<resource>convertISOValues</resource>");
+				buffer.append("<path>search</path>");
 				buffer.append("<message>Failed to construct criteria: " + msg
 						+ "</message>");
 				buffer.append("</response>");
@@ -1020,6 +1038,8 @@ public class RESTfulResource {
 			buffer.append("<response>");
 			buffer.append("<type>ERROR</type>");
 			buffer.append("<code>INTERNAL_ERROR_8</code>");
+			buffer.append("<resource>convertISOValues</resource>");
+			buffer.append("<path>search</path>");
 			buffer.append("<message>Failed to construct criteria: " + msg
 					+ "</message>");
 			buffer.append("</response>");
@@ -1113,6 +1133,8 @@ public class RESTfulResource {
 			buffer.append("<response>");
 			buffer.append("<type>ERROR</type>");
 			buffer.append("<code>INTERNAL_ERROR_5</code>");
+			buffer.append("<resource>convertValues</resource>");
+			buffer.append("<path>search</path>");
 			buffer.append("<message>Failed to construct criteria: " + msg
 					+ "</message>");
 			buffer.append("</response>");
@@ -1157,8 +1179,8 @@ public class RESTfulResource {
 	 */
 	public Object save(final Object obj) throws WebApplicationException {
 		try {
-			gov.nih.nci.system.web.util.RESTUtil.printObject(obj,
-					obj.getClass(), true);
+			//gov.nih.nci.system.web.util.RESTUtil.printObject(obj,
+			//		obj.getClass(), true);
 			final InsertExampleQuery sdkQuery = new InsertExampleQuery(obj);
 			sdkQuery.setCommit(true);
 			SDKQueryResult queryResult = ((WritableApplicationService) applicationService)
@@ -1196,17 +1218,36 @@ public class RESTfulResource {
 			ResponseBuilder builder = Response
 					.status(Status.INTERNAL_SERVER_ERROR);
 			builder.type("application/xml");
-			builder.entity("<error>Failed to Save due to: " + strEx.toString()
-					+ "</error>");
-			throw new WebApplicationException(builder.build());
+			StringBuffer buffer = new StringBuffer();
+			buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+			buffer.append("<response>");
+			buffer.append("<type>ERROR</type>");
+			buffer.append("<code>INTERNAL_ERROR_5</code>");
+			buffer.append("<resource>"+obj.getClass().getName()+"</resource>");
+			buffer.append("<path>save</path>");
+			buffer.append("<message>>Failed to Save due to: " + strEx.toString()
+					+ "</message>");
+			buffer.append("</response>");
+			builder.entity(buffer.toString());
+			throw new WebApplicationException(builder.build());		
 		} catch (Exception e) {
 			log.error("Error in Saving REST resource: " + e.getMessage());
+
 			ResponseBuilder builder = Response
 					.status(Status.INTERNAL_SERVER_ERROR);
 			builder.type("application/xml");
-			builder.entity("<error>Failed to Save due to: " + e.getMessage()
-					+ "</error>");
-			throw new WebApplicationException(builder.build());
+			StringBuffer buffer = new StringBuffer();
+			buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+			buffer.append("<response>");
+			buffer.append("<type>ERROR</type>");
+			buffer.append("<code>INTERNAL_ERROR_5</code>");
+			buffer.append("<resource>"+obj.getClass().getName()+"</resource>");
+			buffer.append("<path>save</path>");
+			buffer.append("<message>Failed to Save due to: " + e.getMessage()
+					+ "</message>");
+			buffer.append("</response>");
+			builder.entity(buffer.toString());
+			throw new WebApplicationException(builder.build());		
 		}
 	}
 
@@ -1217,8 +1258,8 @@ public class RESTfulResource {
 	 */
 	public void update(Object obj) throws WebApplicationException {
 		try {
-			gov.nih.nci.system.web.util.RESTUtil.printObject(obj,
-					obj.getClass(), true);
+			//gov.nih.nci.system.web.util.RESTUtil.printObject(obj,
+			//		obj.getClass(), true);
 			final UpdateExampleQuery sdkQuery = new UpdateExampleQuery(obj);
 			sdkQuery.setCommit(true);
 			new BaseUtilWrapper() {
@@ -1230,14 +1271,48 @@ public class RESTfulResource {
 					return null;
 				}
 			}.executeLogic();
-		} catch (Exception e) {
-			log.error("Error in Updating REST resource: " + e.getMessage());
+		} catch(RuntimeException e) 
+		{
+			Throwable t = e.getCause();
+			StringBuffer strEx = new StringBuffer();
+			while(t != null)
+			{
+				strEx.append(t.getLocalizedMessage() + ":   ");
+				t = t.getCause();
+			}
+		
+			
 			ResponseBuilder builder = Response
 					.status(Status.INTERNAL_SERVER_ERROR);
 			builder.type("application/xml");
-			builder.entity("<error>Failed to update due to: " + e.getMessage()
-					+ "</error>");
-			throw new WebApplicationException(builder.build());
+			StringBuffer buffer = new StringBuffer();
+			buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+			buffer.append("<response>");
+			buffer.append("<type>ERROR</type>");
+			buffer.append("<code>INTERNAL_ERROR_5</code>");
+			buffer.append("<resource>UPDATE</resource>");
+			buffer.append("<path>UPDATE</path>");
+			buffer.append("<message>Failed to update due to: " +strEx.toString()
+					+ "</message>");
+			buffer.append("</response>");
+			builder.entity(buffer.toString());
+			throw new WebApplicationException(builder.build());		
+		} catch (Exception e) {
+			ResponseBuilder builder = Response
+					.status(Status.INTERNAL_SERVER_ERROR);
+			builder.type("application/xml");
+			StringBuffer buffer = new StringBuffer();
+			buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+			buffer.append("<response>");
+			buffer.append("<type>ERROR</type>");
+			buffer.append("<code>INTERNAL_ERROR_5</code>");
+			buffer.append("<resource>UPDATE</resource>");
+			buffer.append("<path>UPDATE</path>");
+			buffer.append("<message>Failed to update due to: " + e.getMessage()
+					+ "</message>");
+			buffer.append("</response>");
+			builder.entity(buffer.toString());
+			throw new WebApplicationException(builder.build());		
 		}
 	}
 
@@ -1259,15 +1334,52 @@ public class RESTfulResource {
 					return null;
 				}
 			}.executeLogic();
-		} catch (Exception e) {
+		} 
+		catch(RuntimeException e) 
+		{
+			Throwable t = e.getCause();
+			StringBuffer strEx = new StringBuffer();
+			while(t != null)
+			{
+				strEx.append(t.getLocalizedMessage() + ":   ");
+				t = t.getCause();
+			}
+		
+			
+			ResponseBuilder builder = Response
+					.status(Status.INTERNAL_SERVER_ERROR);
+			builder.type("application/xml");
+			StringBuffer buffer = new StringBuffer();
+			buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+			buffer.append("<response>");
+			buffer.append("<type>ERROR</type>");
+			buffer.append("<code>INTERNAL_ERROR_5</code>");
+			buffer.append("<resource>DELETE</resource>");
+			buffer.append("<path>DELETE</path>");
+			buffer.append("<message>Failed to delete due to: " +strEx.toString()
+					+ "</message>");
+			buffer.append("</response>");
+			builder.entity(buffer.toString());
+			throw new WebApplicationException(builder.build());		
+		}	
+		catch (Exception e) {
 			e.printStackTrace();
 			log.error("Error in Updating REST resource: " + e.getMessage());
 			ResponseBuilder builder = Response
 					.status(Status.INTERNAL_SERVER_ERROR);
 			builder.type("application/xml");
-			builder.entity("<error>Failed to update due to: " + e.getMessage()
-					+ "</error>");
-			throw new WebApplicationException(builder.build());
+			StringBuffer buffer = new StringBuffer();
+			buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+			buffer.append("<response>");
+			buffer.append("<type>ERROR</type>");
+			buffer.append("<code>INTERNAL_ERROR_5</code>");
+			buffer.append("<resource>DELETE</resource>");
+			buffer.append("<path>DELETE</path>");
+			buffer.append("<message>Failed to delete due to: " + e.getMessage()
+					+ "</message>");
+			buffer.append("</response>");
+			builder.entity(buffer.toString());
+			throw new WebApplicationException(builder.build());				
 		}
 	}
 
@@ -1286,9 +1398,18 @@ public class RESTfulResource {
 			ResponseBuilder builder = Response
 					.status(Status.INTERNAL_SERVER_ERROR);
 			builder.type("application/xml");
-			builder.entity("<error>Failed to delete due to: " + e.getMessage()
-					+ "</error>");
-			throw new WebApplicationException(builder.build());
+			StringBuffer buffer = new StringBuffer();
+			buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+			buffer.append("<response>");
+			buffer.append("<type>ERROR</type>");
+			buffer.append("<code>INTERNAL_ERROR_5</code>");
+			buffer.append("<resource>DELETE</resource>");
+			buffer.append("<path>DELETE</path>");
+			buffer.append("<message>Failed to delete due to: " + e.getMessage()
+					+ "</message>");
+			buffer.append("</response>");
+			builder.entity(buffer.toString());
+			throw new WebApplicationException(builder.build());		
 		}
 	}
 

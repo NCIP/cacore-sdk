@@ -469,7 +469,6 @@ public class HTTPUtils implements Serializable{
 				targetResult = this.getPackageName(targetResult)+ SystemConstant.DOT +targetResult;
 			}
 			Element queryClass = new Element("class").setText(targetResult);
-			System.out.println("targetResult: "+targetResult);
 			Element queryElement = new Element("query").addContent(queryString).addContent(queryClass);
 			queryRequest.addContent(queryElement);
 			queryRequest.addContent(new org.jdom.Element("criteria").setText(criteria));
@@ -545,7 +544,6 @@ public class HTTPUtils implements Serializable{
 			List<String> classes = new ArrayList<String>();
 			for(int x=start; x<end; x++){
 				resultClass.add(resultSet[x].getClass().getName());
-				System.out.println("resultSet[x].getClass().getName() 11 : "+resultSet[x].getClass().getName());
 			}
 			if(resultClass.size() >1){
 				Object lists[] = new Object[resultClass.size()];
@@ -707,14 +705,12 @@ public class HTTPUtils implements Serializable{
 			List<String> classes = new ArrayList<String>();
 			for(int x=start; x<end; x++){
 				resultClass.add(resultSet[x].getClass().getName());
-				System.out.println("resultSet[x].getClass().getName() "+resultSet[x].getClass().getName());
 			}
 			if(resultClass.size() >1){
 				Object lists[] = new Object[resultClass.size()];
 				int number =0;
 				for(Iterator it= resultClass.iterator(); it.hasNext();){
 					String typeName = (String)it.next();
-					System.out.println("typeName: "+typeName);
 					classes.add(typeName);
 					List<Object> list = new ArrayList<Object>();
 					for(int i=start; i<end ; i++){

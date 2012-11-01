@@ -101,7 +101,7 @@ public class JAXBUnmarshaller implements gov.nih.nci.system.client.util.xml.Unma
 		SAXSource saxSource = null;
 		try
 		{
-			//System.out.println(reader.toString());
+			//log.debug(reader.toString());
 			if (!useContextName && hasBeenInvokedWithoutContext) {
 				throw new XMLUtilityException("No context name was supplied during Unmarshaller instantiation.  Consequently, you must use one of the fromXML() methods that supplies either the template object class or ojbect package name.");
 			}
@@ -136,7 +136,7 @@ public class JAXBUnmarshaller implements gov.nih.nci.system.client.util.xml.Unma
 
 	        Unmarshaller unmarshaller = context.createUnmarshaller();
 
-	        System.out.println("validate: "+validate);
+	        log.debug("validate: "+validate);
 	        if(validate){
 	        	//reset validation events list
 	        	validationEvents = new ArrayList<ValidationEvent>();
@@ -166,9 +166,9 @@ public class JAXBUnmarshaller implements gov.nih.nci.system.client.util.xml.Unma
                 				publicId = xsdPath.substring(0, xsdPath.length()-4);
                 		}
                 		log.debug("Entity resolving publicId... " + publicId);
-                		System.out.println("Entity resolving publicId... " + publicId);
+                		log.debug("Entity resolving publicId... " + publicId);
                 		log.debug("Entity resolving to xsd... " + xsdPath);
-                		System.out.println("Entity resolving to xsd... " + xsdPath);
+                		log.debug("Entity resolving to xsd... " + xsdPath);
 
                 		// InputSource source = new
                 		// InputSource(Thread.currentThread().getContextClassLoader()
@@ -186,7 +186,7 @@ public class JAXBUnmarshaller implements gov.nih.nci.system.client.util.xml.Unma
                 xmlReader.setEntityResolver(entityResolver);
 
                 saxSource = new SAXSource(xmlReader, inSrc);
-                System.out.println("Entity resolver: " + entityResolver);
+                log.debug("Entity resolver: " + entityResolver);
                 log.debug("Entity resolver: " + entityResolver);
 	        }
 	        unmarshaller.setEventHandler(new ValidationHandler());
