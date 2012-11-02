@@ -44,8 +44,6 @@ public class OrderLineCreateClient {
 			RESTfulCreateClient client = new RESTfulCreateClient();
 			Response response = client.create(myFile, url);
 			String resStr = (String) response.getEntity();
-			System.out.println(resStr);
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -28,7 +28,7 @@ public class ProductCreateClient {
 			product.setName("Windows XP");
 			OrderLine line = new OrderLine();
 			line.setName("Microsoft");
-			line.setId(Integer.valueOf(8));
+			line.setId(Integer.valueOf(7));
 			product.setLine(line);
 			
 
