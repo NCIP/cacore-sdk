@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -16,12 +17,20 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
 public class RESTfulUpdateClient {
+	String userName;
+	String password;
 
 	public RESTfulUpdateClient()
 	{
 
 	}
 
+	public RESTfulUpdateClient(String userName, String password)
+	{
+		this.userName = userName;
+		this.password = password;
+	}
+	
 	public Response update(File fileLoc, String url)
 	{
 		try {
@@ -63,6 +72,15 @@ public class RESTfulUpdateClient {
 
 			FileEntity input = new FileEntity(fileLoc);
 			input.setContentType("application/xml");
+		   	if(userName != null && password != null)
+		   	{
+		   		String base64encodedUsernameAndPassword = new String(
+					Base64.encodeBase64((userName + ":" + password)
+							.getBytes()));
+		   		postRequest.addHeader("Authorization", "Basic "
+					+ base64encodedUsernameAndPassword);
+		   	}
+			
 			postRequest.setEntity(input);
 
 			HttpResponse response = httpClient.execute(postRequest);

@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -16,11 +17,19 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
 public class RESTfulCreateClient {
+	String userName;
+	String password;
 	public RESTfulCreateClient()
 	{
 
 	}
 
+	public RESTfulCreateClient(String userName, String password)
+	{
+		this.userName = userName;
+		this.password = password;
+	}
+	
 	public Response create(File fileLoc, String url)
 	{
 		try {
@@ -61,6 +70,15 @@ public class RESTfulCreateClient {
 
 			FileEntity input = new FileEntity(fileLoc);
 			input.setContentType("application/xml");
+		   	if(userName != null && password != null)
+		   	{
+		   		String base64encodedUsernameAndPassword = new String(
+					Base64.encodeBase64((userName + ":" + password)
+							.getBytes()));
+		   		putRequest.addHeader("Authorization", "Basic "
+					+ base64encodedUsernameAndPassword);
+		   	}
+			
 			putRequest.setEntity(input);
 			HttpResponse response = httpClient.execute(putRequest);
 			BufferedReader br = new BufferedReader(new InputStreamReader(
@@ -125,6 +143,14 @@ public class RESTfulCreateClient {
 
 		   	WebClient client = WebClient.create(url);
 		   	client.type("application/xml").accept("application/xml");
+		   	if(userName != null && password != null)
+		   	{
+		   		String base64encodedUsernameAndPassword = new String(
+					Base64.encodeBase64((userName + ":" + password)
+							.getBytes()));
+		   		client.header("Authorization", "Basic "
+					+ base64encodedUsernameAndPassword);
+		   	}
 			Response r = client.put(instance);
 			return r;
 		} catch (Exception e) {
