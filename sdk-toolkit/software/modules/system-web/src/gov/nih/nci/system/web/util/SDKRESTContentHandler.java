@@ -98,14 +98,13 @@ public class SDKRESTContentHandler implements MessageBodyReader,
 			Annotation[] annotations, MediaType mediaType,
 			MultivaluedMap httpHeaders, OutputStream os) throws IOException,
 			WebApplicationException {
+		OutputStreamWriter writer = null;
+		Reader in = null;
 		try {
-			log.debug("In writing...."+target);
-			log.debug("In writing...."+type);
-			log.debug("In writing...."+genericType);
 			if(target == null)
 				return;
 
-			OutputStreamWriter writer = new OutputStreamWriter(os);
+			writer = new OutputStreamWriter(os);
 			if(target instanceof java.lang.String)
 			{
 				writer.write(target.toString());
@@ -141,7 +140,7 @@ public class SDKRESTContentHandler implements MessageBodyReader,
 				Marshaller marshaller = new JAXBMarshaller(true,
 						packageName, namespace);
 				marshaller.toXML(convertedObj, strWriter);
-				Reader in = new StringReader(strWriter.toString());
+				in = new StringReader(strWriter.toString());
 				SAXBuilder builder = new SAXBuilder();
 				Document doc = builder.build(in);
 				Element rootEle = doc.getRootElement();
@@ -159,7 +158,6 @@ public class SDKRESTContentHandler implements MessageBodyReader,
 				}
 				XMLOutputter outputter = new XMLOutputter();
 				outputter.output(doc, writer);
-
 			}
 			else
 			{
@@ -190,6 +188,19 @@ public class SDKRESTContentHandler implements MessageBodyReader,
 			e.printStackTrace();
 			throw new WebApplicationException(e);
 		}
+		finally
+		{
+			if(writer != null)
+			{
+				writer.close();
+				writer = null;
+			}
+			if(in != null)
+			{
+				in.close();
+				in = null;
+			}
+		}
 	}
 
 	private void handleCollection(CollectionBean collectionObj, OutputStreamWriter writer, Class type) throws XMLUtilityException, IOException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, JDOMException
@@ -204,25 +215,17 @@ public class SDKRESTContentHandler implements MessageBodyReader,
 			Method method = collectionObj.getClass().getDeclaredMethod(getMethod, (Class<?>[])null);
 			proxy = (gov.nih.nci.system.client.proxy.ListProxy)method.invoke(collectionObj, null);
 		} catch (NoSuchMethodException e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
 			log.error("ERROR: ", e);
 		}
-
-
 
 		boolean includeAssociations = true;
 		List results = new ArrayList();
 		String targetClassName = proxy.getTargetClassName();
-		//Object convertedObj = null;
 		int counter = proxy.size();
 		String packageName = "";
 		boolean isFirst = true;
 		String namespace = "gme://caCORE.caCORE/4.5/";
 		StringBuffer outputStr = new StringBuffer();
-
-		//String packageName = type.getName().substring(0, type.getName().lastIndexOf("."));
-
 
 		Object obj = proxy.get(0);
 		String collectionFullName = obj.getClass().getName();
@@ -237,9 +240,7 @@ public class SDKRESTContentHandler implements MessageBodyReader,
 				linkElement.setAttribute("ref", link.getRelationship());
 				linkElement.setAttribute("type", link.getType());
 				linkElement.setAttribute("href", link.getHref());
-				//linkElement.setText(link.toString());
 				httpQuery.addContent(linkElement);
-				//httpQuery.addContent(link.toString());
 			}
 		}
 
@@ -252,9 +253,7 @@ public class SDKRESTContentHandler implements MessageBodyReader,
 				linkElement.setAttribute("ref", link.getRelationship());
 				linkElement.setAttribute("type", link.getType());
 				linkElement.setAttribute("href", link.getHref());
-				//linkElement.setText(link.toString());
 				httpQuery.addContent(linkElement);
-				//httpQuery.addContent(((ResourceLink)obj).toString());
 				continue;
 			}
 
@@ -267,15 +266,12 @@ public class SDKRESTContentHandler implements MessageBodyReader,
 				Method method = obj.getClass().getDeclaredMethod("getLinks", (Class[])null);
 				links = (List)method.invoke(obj, null);
 			} catch (NoSuchMethodException e) {
-				// TODO Auto-generated catch block
-				//e.printStackTrace();
 				log.error("ERROR: ", e);
 			}
 
 			Object convertedObj = XMLUtility.convertFromProxy(obj,
 					false);
 			packageName = convertedObj.getClass().getPackage().getName();
-			//results.add(convertedObj);
 			if(isFirst)
 			{
 				try
@@ -283,23 +279,21 @@ public class SDKRESTContentHandler implements MessageBodyReader,
 					Method method = convertedObj.getClass().getDeclaredMethod("getNamespacePrefix", (Class<?>[])null);
 					namespace = (String)method.invoke(convertedObj, null);
 				} catch (NoSuchMethodException e) {
-					// TODO Auto-generated catch block
-					//e.printStackTrace();
 					log.error("ERROR: ", e);
 				}
 				isFirst = false;
 			}
-
-			StringWriter strWriter = new StringWriter();
-			DocumentResult dr = new DocumentResult();
-			marshaller.toXML(convertedObj, strWriter);
-			//outputStr.append(strWriter.toString());
-			Reader in = new StringReader(strWriter.toString());
-			SAXBuilder builder = new SAXBuilder();
-			Document doc = builder.build(in);
-
+			StringWriter strWriter = null;
+			Reader in = null;
 			try
 			{
+				strWriter = new StringWriter();
+				DocumentResult dr = new DocumentResult();
+				marshaller.toXML(convertedObj, strWriter);
+				in = new StringReader(strWriter.toString());
+				SAXBuilder builder = new SAXBuilder();
+				Document doc = builder.build(in);
+
 				Element rootEle = (Element)doc.getRootElement().clone();
 				if(links != null)
 				{
@@ -318,8 +312,20 @@ public class SDKRESTContentHandler implements MessageBodyReader,
 			{
 				e.printStackTrace();
 			}
+			finally
+			{
+				if(strWriter != null)
+				{
+					strWriter.close();
+					strWriter = null;
+				}
+				if(in != null)
+				{
+					in.close();
+					in = null;
+				}
+			}
 		}
-		//httpQuery.setText(outputStr.toString());
 		org.jdom.Document xmlDoc = new org.jdom.Document(httpQuery);
 		XMLOutputter outputter = new XMLOutputter();
 		outputter.output(xmlDoc, writer);
