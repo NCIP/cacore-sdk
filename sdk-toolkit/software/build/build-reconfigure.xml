@@ -743,15 +743,16 @@
 			<fileset dir="${output.target.dir}" />
 		</copy>	
 		
+		<available file="${3RD_PARTY_JARS_DIRECTORY}" property="include.3rdparty.exist" />
 		<if>
-			<equals arg1="${3RD_PARTY_JARS_DIRECTORY}" arg2="true"/>
-		<then>
-		<copy todir="${package.client.local.lib.dir}">
-			<fileset dir="${3RD_PARTY_JARS_DIRECTORY}">
-				<include name="*.jar" />
-			</fileset>
-		</copy>
-		</then>
+			<equals arg1="${include.3rdparty.exist}" arg2="true" />
+			<then>
+			<copy todir="${package.client.local.lib.dir}">
+				<fileset dir="${3RD_PARTY_JARS_DIRECTORY}">
+					<include name="*.jar" />
+				</fileset>
+			</copy>
+			</then>
 		</if>
 
 		<if>
@@ -1066,6 +1067,19 @@
 				<exclude name="**/*template*" />
 			</fileset>
 		</copy>		
+
+		<available file="${3RD_PARTY_JARS_DIRECTORY}" property="include.3rdparty.exist" />
+		<if>
+			<equals arg1="${include.3rdparty.exist}" arg2="true" />
+			<then>
+			<copy todir="${package.client.rest.lib.dir}">
+				<fileset dir="${3RD_PARTY_JARS_DIRECTORY}">
+					<include name="*.jar" />
+				</fileset>
+			</copy>
+			</then>
+		</if>
+
 	</target>
 
 	<target name="-package-rest-client-security" depends="">
@@ -1444,6 +1458,7 @@
 				<include name="jaxrpc-*.jar"/>
 				<include name="saaj-*.jar"/>
 				<include name="wsdl4j-*.jar"/>
+				<include name="jaxb-impl-*.jar"/>
 				<include name="xercesImpl-*.jar"/>
 			</fileset>
 			<fileset dir="${output.target.dir}">
@@ -1537,15 +1552,16 @@
 			</fileset>
 		</copy>
 
+		<available file="${3RD_PARTY_JARS_DIRECTORY}" property="include.3rdparty.exist" />
 		<if>
-			<equals arg1="${3RD_PARTY_JARS_DIRECTORY}" arg2="true"/>
-		<then>
-		<copy todir="${temp.webapp.staging.lib.dir}" overwrite="true">
-			<fileset dir="${3RD_PARTY_JARS_DIRECTORY}">
-				<include name="*.jar" />
-			</fileset>
-		</copy>
-		</then>
+			<equals arg1="${include.3rdparty.exist}" arg2="true" />
+			<then>
+			<copy todir="${temp.webapp.staging.lib.dir}" overwrite="true">
+				<fileset dir="${3RD_PARTY_JARS_DIRECTORY}">
+					<include name="*.jar" />
+				</fileset>
+			</copy>
+			</then>
 		</if>
 
 		<if>
@@ -1790,15 +1806,16 @@
 			</fileset>
 		</copy>
 
+		<available file="${3RD_PARTY_JARS_DIRECTORY}" property="include.3rdparty.exist" />
 		<if>
-			<equals arg1="${3RD_PARTY_JARS_DIRECTORY}" arg2="true"/>
-		<then>
-		<copy todir="${temp.webapp.staging.lib.dir}" overwrite="true">
-			<fileset dir="${3RD_PARTY_JARS_DIRECTORY}">
-				<include name="*.jar" />
-			</fileset>
-		</copy>
-		</then>
+			<equals arg1="${include.3rdparty.exist}" arg2="true" />
+			<then>
+			<copy todir="${temp.webapp.staging.lib.dir}" overwrite="true">
+				<fileset dir="${3RD_PARTY_JARS_DIRECTORY}">
+					<include name="*.jar" />
+				</fileset>
+			</copy>
+			</then>
 		</if>
 
 		<if>
