@@ -622,6 +622,7 @@
 
 	<target name="package-install-system" description="Packages the system" depends="
 		init-install,
+		copy-3rdparty_jars,
 		package-remote-client,
 		package-local-client,
 		package-rest-client,
@@ -686,6 +687,20 @@
 						<include name="mysql-connector-java-3.0.16-ga-bin.jar" />
 					</fileset>
 				</delete>
+			</then>
+		</if>
+	</target>
+
+	<target name="copy-3rdparty_jars" depends="">
+		<available file="${3RD_PARTY_JARS_DIRECTORY}" property="include.3rdparty.exist" />
+		<if>
+			<equals arg1="${include.3rdparty.exist}" arg2="true" />
+			<then>
+			<copy todir="${runtime.lib.dir}">
+				<fileset dir="${3RD_PARTY_JARS_DIRECTORY}">
+					<include name="*.jar" />
+				</fileset>
+			</copy>
 			</then>
 		</if>
 	</target>
@@ -1279,6 +1294,17 @@
 						<include name="wsdl4j-*.jar"/>
 					</fileset>
 				</copy>
+			</then>
+		</if>
+		<available file="${3RD_PARTY_JARS_DIRECTORY}" property="include.3rdparty.exist" />
+		<if>
+			<equals arg1="${include.3rdparty.exist}" arg2="true" />
+			<then>
+			<copy todir="${package.client.remote.lib.dir}" overwrite="true">
+				<fileset dir="${3RD_PARTY_JARS_DIRECTORY}">
+					<include name="*.jar" />
+				</fileset>
+			</copy>
 			</then>
 		</if>
 
