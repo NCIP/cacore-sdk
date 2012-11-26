@@ -654,9 +654,18 @@
 	</target>
 	<target name="-copy-junit-files" depends="">
 		<mkdir dir="${output.codegen.junit.dir}" />
+		<mkdir dir="${output.codegen.junit.dir}/src/test" />
 		<copy todir="${output.codegen.junit.dir}">
 			<fileset dir="${codegen.config.junit.dir}">
 				<include name="**/*" />
+			</fileset>
+			<fileset dir="${workspace.dir}/conf/system/junit">
+				<include name="**/build.xml" />
+			</fileset>
+		</copy>
+		<copy todir="${output.codegen.junit.dir}/src/test">
+			<fileset dir="${workspace.dir}/conf/system/junit">
+				<include name="**/*.java" />
 			</fileset>
 		</copy>
 	</target>
