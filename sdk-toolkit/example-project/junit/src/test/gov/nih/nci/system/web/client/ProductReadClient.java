@@ -29,6 +29,7 @@ import gov.nih.nci.system.web.client.RESTfulReadClient;
 
 public class ProductReadClient {
 	public static void main(String[] args) {
+		InputStream is = null;
 		try {
 			if (args == null || args.length != 1) {
 				System.out
@@ -39,7 +40,7 @@ public class ProductReadClient {
 			RESTfulReadClient client = new RESTfulReadClient();
 			Response response = client.read(url);
 			
-			InputStream is = (InputStream) response.getEntity();
+			is = (InputStream) response.getEntity();
 			org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
 					false);
 			org.jdom.Document jDoc = builder.build(is);
@@ -47,6 +48,11 @@ public class ProductReadClient {
 			System.out.println(outputter.outputString(jDoc));
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+		finally
+		{
+			if(is != null)
+				is.close();
 		}
 
 	}

@@ -88,7 +88,7 @@ public class O2OUnidirectionalXSDTest extends SDKXSDTestBase
 		Class targetClass = Person.class;
 		Class associatedClass = Address.class;
 
-		validateClassAssociationElements(targetClass, associatedClass, "livesAt","0","1");
+		validateClassAssociationElements(targetClass, associatedClass, "livesAt","0","1", false);
 	}	
 	
 	

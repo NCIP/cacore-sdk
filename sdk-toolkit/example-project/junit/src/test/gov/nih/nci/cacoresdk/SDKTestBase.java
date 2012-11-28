@@ -46,14 +46,14 @@ public abstract class SDKTestBase extends TestCase {
 
 	protected ApplicationService getApplicationServiceFromUrl() throws Exception
 	{
-		String url = "http://localhost:8080/example";
+		String url = "http://localhost:21080/example";
 		appServiceFromUrl = ApplicationServiceProvider.getApplicationServiceFromUrl(url);
 		return appServiceFromUrl;
 	}
 
 	protected ApplicationService getBadApplicationServiceFromUrl() throws Exception
 	{
-		String url = "http://badhost:8080/badcontext";
+		String url = "http://badhost:21080/badcontext";
 		appServiceFromUrl = ApplicationServiceProvider.getApplicationServiceFromUrl(url);
 		return appServiceFromUrl;
 	}

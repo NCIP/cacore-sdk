@@ -85,7 +85,7 @@ public class O2OBidirectionalSelfassociationXSDTest extends SDKXSDTestBase
 		Class targetClass = MemberO2OBS.class;
 		Class associatedClass = MemberO2OBS.class;
 
-		validateClassAssociationElements(targetClass, associatedClass, "mentor","0","1");
+		validateClassAssociationElements(targetClass, associatedClass, "mentor","0","1", false);
 	}	
 	
 	
@@ -101,6 +101,6 @@ public class O2OBidirectionalSelfassociationXSDTest extends SDKXSDTestBase
 		Class targetClass = MemberO2OBS.class;
 		Class associatedClass = MemberO2OBS.class;
 
-		validateClassAssociationElements(targetClass, associatedClass, "self","0","1");
+		validateClassAssociationElements(targetClass, associatedClass, "self","0","1", false);
 	}	
 }

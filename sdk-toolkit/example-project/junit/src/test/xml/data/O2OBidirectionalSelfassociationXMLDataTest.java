@@ -262,7 +262,7 @@ public class O2OBidirectionalSelfassociationXMLDataTest extends SDKXMLDataTestBa
 		MemberO2OBS result = (MemberO2OBS)results.iterator().next();
 		toXML(result);
 		MemberO2OBS result2 = (MemberO2OBS)fromXML(result);
-		assertEquals(new Integer(1),result2.getSelf().getId());
+		assertEquals(new Integer(2),result2.getMe().getId());
 
 		searchObject.setId(new Integer(2));
 		results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.selfassociation.MemberO2OBS",searchObject );
@@ -273,7 +273,7 @@ public class O2OBidirectionalSelfassociationXMLDataTest extends SDKXMLDataTestBa
 		result = (MemberO2OBS)results.iterator().next();
 		toXML(result);
 		result2 = (MemberO2OBS)fromXML(result);
-		assertEquals(new Integer(2),result2.getSelf().getId());
+		assertEquals(new Integer(1),result2.getMe().getId());
 
 		searchObject.setId(new Integer(3));
 		results = getApplicationService().search("gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.selfassociation.MemberO2OBS",searchObject );
@@ -284,7 +284,7 @@ public class O2OBidirectionalSelfassociationXMLDataTest extends SDKXMLDataTestBa
 		result = (MemberO2OBS)results.iterator().next();
 		toXML(result);
 		result2 = (MemberO2OBS)fromXML(result);
-		assertNotNull(result2.getSelf());
+		assertNull(result2.getMe());
 
 	}
 
@@ -308,7 +308,7 @@ public class O2OBidirectionalSelfassociationXMLDataTest extends SDKXMLDataTestBa
 			assertNotNull(result2.getName());
 
 			if (result2.getId() < 3){ // MemberO2OBS id = 3 does not have an associated Mentor
-				validateAssociation(result,"MemberO2OBS","mentor");
+				validateAssociation(result,"MemberO2OBS","mentor", true, false);
 				mentor = result2.getMentor();
 				assertNotNull(mentor);
 				assertNotNull(mentor.getId());
@@ -337,7 +337,7 @@ public class O2OBidirectionalSelfassociationXMLDataTest extends SDKXMLDataTestBa
 			assertNotNull(result2.getName());
 
 			if (result2.getId() < 3){ // MemberO2OBS id = 3,4, and 5 don't have an associated MemberO2OBS
-				validateAssociation(result,"MemberO2OBS","mentor");
+				validateAssociation(result,"MemberO2OBS","mentor", true, false);
 				mentor = result2.getMentor();
 				assertNotNull(mentor);
 				assertNotNull(mentor.getId());

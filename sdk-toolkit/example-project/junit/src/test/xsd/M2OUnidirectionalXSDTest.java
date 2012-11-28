@@ -88,7 +88,7 @@ public class M2OUnidirectionalXSDTest extends SDKXSDTestBase
 		Class targetClass = Chef.class;
 		Class associatedClass = Restaurant.class;
 
-		validateClassAssociationElements(targetClass, associatedClass, "restaurant","0","1");
+		validateClassAssociationElements(targetClass, associatedClass, "restaurant","0","1", false);
 	}	
 	
 	

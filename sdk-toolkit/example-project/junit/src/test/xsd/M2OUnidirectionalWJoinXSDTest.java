@@ -88,7 +88,7 @@ public class M2OUnidirectionalWJoinXSDTest extends SDKXSDTestBase
 		Class targetClass = Song.class;
 		Class associatedClass = Album.class;
 
-		validateClassAssociationElements(targetClass, associatedClass, "album","0","1");
+		validateClassAssociationElements(targetClass, associatedClass, "album","0","1", false);
 	}	
 	
 	

@@ -85,7 +85,7 @@ public class O2MBidirectionalSelfassociationXSDTest extends SDKXSDTestBase
 		Class targetClass = MemberO2MBS.class;
 		Class associatedClass = MemberO2MBS.class;
 
-		validateClassAssociationElements(targetClass, associatedClass, "friend","1","1");
+		validateClassAssociationElements(targetClass, associatedClass, "friend","1","1", false);
 	}	
 	
 	

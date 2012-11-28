@@ -85,7 +85,7 @@ public class O2OBidirectionalWJoinXSDTest extends SDKXSDTestBase
 		Class targetClass = Pendant.class;
 		Class associatedClass = Chain.class;
 
-		validateClassAssociationElements(targetClass, associatedClass, "chain","0","1");
+		validateClassAssociationElements(targetClass, associatedClass, "chain","0","1", false);
 	}	
 	
 	
@@ -101,6 +101,6 @@ public class O2OBidirectionalWJoinXSDTest extends SDKXSDTestBase
 		Class targetClass = Chain.class;
 		Class associatedClass = Pendant.class;
 
-		validateClassAssociationElements(targetClass, associatedClass, "pendant","0","1");
+		validateClassAssociationElements(targetClass, associatedClass, "pendant","0","1", false);
 	}	
 }

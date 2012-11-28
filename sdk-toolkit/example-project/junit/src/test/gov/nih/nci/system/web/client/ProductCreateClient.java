@@ -1,34 +1,27 @@
 package test.gov.nih.nci.system.web.client;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
-import org.apache.cxf.jaxrs.client.WebClient;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.FileEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.Product;
 import gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.OrderLine;
-import gov.nih.nci.system.client.util.xml.Marshaller;
-import gov.nih.nci.system.client.util.xml.Unmarshaller;
+import gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.Product;
 import gov.nih.nci.system.client.util.xml.JAXBMarshaller;
 import gov.nih.nci.system.client.util.xml.JAXBUnmarshaller;
+import gov.nih.nci.system.client.util.xml.Marshaller;
+import gov.nih.nci.system.client.util.xml.Unmarshaller;
 import gov.nih.nci.system.client.util.xml.XMLUtility;
 import gov.nih.nci.system.client.util.xml.XMLUtilityException;
 import gov.nih.nci.system.web.client.RESTfulCreateClient;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class ProductCreateClient {
 	public static void main(String[] args) {
 		try {
 			Product product = new Product();
-			product.setName("Windows XP");
+			product.setName("Windows XP1");
 			OrderLine line = new OrderLine();
-			line.setName("Microsoft");
-			line.setId(Integer.valueOf(7));
+			line.setName("Orderline_Name5");
+			line.setId(Integer.valueOf(5));
 			product.setLine(line);
 			
 
@@ -39,13 +32,13 @@ public class ProductCreateClient {
 			}
 			String url = args[0];
 			
-			File myFile = marshall(product);
+			//File myFile = marshall(product);
 			RESTfulCreateClient client = new RESTfulCreateClient();
-			client.create(myFile, url);
+			client.create(product, url);
+			//client.create(myFile, url);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 	}
 	
 	private static File marshall(Product product) throws IOException, XMLUtilityException
