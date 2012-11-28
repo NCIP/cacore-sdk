@@ -107,7 +107,7 @@ String success = (String)request.getAttribute("successful");
 											</td>
 										</tr>
 										<tr>
-										<td border=0 class="txtHighlight" align="center" nowrap="off">
+										<td border=0 class="txtHighlight" align="center">
 										<%message = (String)request.getAttribute("message");
 										if(message == null)
 											message="&nbsp;";
