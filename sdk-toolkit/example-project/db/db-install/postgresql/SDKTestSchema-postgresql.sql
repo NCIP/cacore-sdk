@@ -912,7 +912,6 @@ INSERT INTO address (ID, ZIP) VALUES (5, 'Zip5');
 
 INSERT INTO album (ID, TITLE) VALUES (1.0, 'Venetian Oboe Concertos');
 INSERT INTO album (ID, TITLE) VALUES (2.0, 'The Cello');
-INSERT INTO album (ID, TITLE) VALUES (3.0, 'Test Album');
 
 INSERT INTO album_song (ALBUM_ID, SONG_ID) VALUES (1, 1);
 INSERT INTO album_song (ALBUM_ID, SONG_ID) VALUES (1, 2);
