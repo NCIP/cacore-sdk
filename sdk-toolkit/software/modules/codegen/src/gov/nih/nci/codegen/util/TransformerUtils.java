@@ -1323,7 +1323,8 @@ public class TransformerUtils
 		{
 			if(gen.getSubtype().equals(klass) && !gen.getSupertype().equals(klass))
 			{
-				attributes.addAll(((UMLClass)gen.getSupertype()).getAttributes());
+				attributes.addAll(getClassAttributes((UMLClass)gen.getSupertype(), true));
+				//attributes.addAll(((UMLClass)gen.getSupertype()).getAttributes());
 			}
 		}
 		return attributes;
