@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="windows-1252"?>
-<XMI xmi.version="1.1" xmlns:UML="omg.org/UML1.3" timestamp="2012-11-28 16:49:33">
+<XMI xmi.version="1.1" xmlns:UML="omg.org/UML1.3" timestamp="2012-12-19 12:33:30">
 	<XMI.header>
 		<XMI.documentation>
 			<XMI.exporter>Enterprise Architect</XMI.exporter>
@@ -340,7 +340,6 @@
 										<UML:TaggedValue tag="ea_sourceID" value="844"/>
 										<UML:TaggedValue tag="ea_targetID" value="914"/>
 										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={F7D4BE63-6B60-447b-9012-7C1C869547A3}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={F027AAA5-EDEE-4d97-84BF-3D79C7D11842}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="lb" value="0..*"/>
 										<UML:TaggedValue tag="lt" value="+FK_UNDERGRADUATE_STUDE_STUDENT"/>
@@ -642,7 +641,6 @@
 										<UML:TaggedValue tag="ea_sourceID" value="845"/>
 										<UML:TaggedValue tag="ea_targetID" value="903"/>
 										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={73C2D8F9-351A-48ae-A98B-F71F2E361BD2}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={10D4DEB3-2B23-4ce7-BF94-90EDB69C16E1}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=3;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="lb" value="0..*"/>
 										<UML:TaggedValue tag="lt" value="+FK_SHOES_DESIGNER"/>
@@ -703,7 +701,6 @@
 										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 										<UML:TaggedValue tag="dst_style" value="Owned=0;Navigable=Navigable;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="mb" value=" &#xA;«DataSource»"/>
 									</UML:ModelElement.taggedValue>
@@ -779,7 +776,6 @@
 										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 										<UML:TaggedValue tag="dst_style" value="Owned=0;Navigable=Navigable;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="mb" value=" &#xA;«DataSource»"/>
 									</UML:ModelElement.taggedValue>
@@ -967,7 +963,6 @@
 										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 										<UML:TaggedValue tag="dst_style" value="Owned=0;Navigable=Navigable;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=4;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="mb" value=" &#xA;«DataSource»"/>
 									</UML:ModelElement.taggedValue>
@@ -1329,7 +1324,6 @@
 										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 										<UML:TaggedValue tag="dst_style" value="Owned=0;Navigable=Navigable;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=4;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="mb" value=" &#xA;«DataSource»"/>
 									</UML:ModelElement.taggedValue>
@@ -1566,7 +1560,6 @@
 										<UML:TaggedValue tag="ea_sourceID" value="856"/>
 										<UML:TaggedValue tag="ea_targetID" value="846"/>
 										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={518DC393-51E3-4c5a-BAEF-CCD8F852BE42}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={609E67DF-41E7-4e86-BAF1-3FC2D510A0FB}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="lb" value="0..*"/>
 										<UML:TaggedValue tag="lt" value="+FK_LCD_MONITOR_MONITOR"/>
@@ -1616,7 +1609,6 @@
 										<UML:TaggedValue tag="ea_sourceID" value="888"/>
 										<UML:TaggedValue tag="ea_targetID" value="846"/>
 										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={346B9BD4-68F2-40bc-AD77-0C5C9B415C26}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={70A37FCD-B06F-4401-86F4-F0C27727FC26}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="lb" value="0..*"/>
 										<UML:TaggedValue tag="lt" value="+FK_CRT_MONITOR_MONITOR"/>
@@ -1666,7 +1658,6 @@
 										<UML:TaggedValue tag="ea_sourceID" value="846"/>
 										<UML:TaggedValue tag="ea_targetID" value="928"/>
 										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={2BA01DDC-23B1-4754-BFB1-CEA4480CE409}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={76D5E669-B60F-4647-9495-60B6F56EDEF3}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="lb" value="0..*"/>
 										<UML:TaggedValue tag="lt" value="+FK_MONITOR_DISPLAY"/>
@@ -1923,7 +1914,6 @@
 										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 										<UML:TaggedValue tag="dst_style" value="Owned=0;Navigable=Navigable;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=4;SX=5;SY=-81;EX=5;EY=-34;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="mb" value=" &#xA;«DataSource»"/>
 									</UML:ModelElement.taggedValue>
@@ -2154,7 +2144,6 @@
 										<UML:TaggedValue tag="ea_sourceID" value="847"/>
 										<UML:TaggedValue tag="ea_targetID" value="887"/>
 										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={38B8C28B-11EF-403e-A1C4-53630D5AACA7}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={2DD22DF7-DD80-40f4-AB8A-824819CDF4E8}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=1;SX=-2;SY=11;EX=-2;EY=11;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="lb" value="0..*"/>
 										<UML:TaggedValue tag="lt" value="+FK_TENURED_PROFESSOR_PROFESSOR"/>
@@ -2386,10 +2375,10 @@
 										<UML:Stereotype name="FK"/>
 									</UML:ModelElement.stereotype>
 									<UML:ModelElement.taggedValue>
-										<UML:TaggedValue tag="style" value="2"/>
+										<UML:TaggedValue tag="style" value="3"/>
 										<UML:TaggedValue tag="ea_type" value="Association"/>
 										<UML:TaggedValue tag="direction" value="Source -&gt; Destination"/>
-										<UML:TaggedValue tag="linemode" value="2"/>
+										<UML:TaggedValue tag="linemode" value="3"/>
 										<UML:TaggedValue tag="linecolor" value="-1"/>
 										<UML:TaggedValue tag="linewidth" value="0"/>
 										<UML:TaggedValue tag="seqno" value="0"/>
@@ -2405,7 +2394,6 @@
 										<UML:TaggedValue tag="ea_sourceID" value="929"/>
 										<UML:TaggedValue tag="ea_targetID" value="848"/>
 										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={DC838C18-F496-492b-BD63-D81EEC3E4438}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={5BC8C1E6-45F1-4459-A0D7-58BBA76F48CB}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=3;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="lb" value="0..*"/>
 										<UML:TaggedValue tag="lt" value="+FK_AUTHOR_BOOK_BOOK"/>
@@ -2729,7 +2717,6 @@
 										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 										<UML:TaggedValue tag="dst_style" value="Owned=0;Navigable=Navigable;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=4;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="mb" value=" &#xA;«DataSource»"/>
 									</UML:ModelElement.taggedValue>
@@ -2972,10 +2959,10 @@
 										<UML:Stereotype name="FK"/>
 									</UML:ModelElement.stereotype>
 									<UML:ModelElement.taggedValue>
-										<UML:TaggedValue tag="style" value="2"/>
+										<UML:TaggedValue tag="style" value="3"/>
 										<UML:TaggedValue tag="ea_type" value="Association"/>
 										<UML:TaggedValue tag="direction" value="Source -&gt; Destination"/>
-										<UML:TaggedValue tag="linemode" value="2"/>
+										<UML:TaggedValue tag="linemode" value="3"/>
 										<UML:TaggedValue tag="linecolor" value="-1"/>
 										<UML:TaggedValue tag="linewidth" value="0"/>
 										<UML:TaggedValue tag="seqno" value="0"/>
@@ -2991,7 +2978,6 @@
 										<UML:TaggedValue tag="ea_sourceID" value="850"/>
 										<UML:TaggedValue tag="ea_targetID" value="850"/>
 										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={6757827C-46E2-41c9-B392-D5459512E792}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={70FA728E-8FBC-4292-85AF-B89944051A78}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-										<UML:TaggedValue tag="privatedata5" value="SCME=1;SX=78;SY=-12;EX=78;EY=-12;EDGE=1;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="lb" value="0..*"/>
 										<UML:TaggedValue tag="lt" value="+FK_ELEMENT_ELEMENT"/>
@@ -3169,7 +3155,6 @@
 										<UML:TaggedValue tag="ea_sourceID" value="857"/>
 										<UML:TaggedValue tag="ea_targetID" value="851"/>
 										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={02FFAB0D-1BBC-42ae-B33B-D2D0B5C3309F}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={59EF6771-3807-4ac1-B1A0-2E7755682405}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=3;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="lb" value="0..*"/>
 										<UML:TaggedValue tag="lt" value="+FK_BAG_HANDLE_HANDLE"/>
@@ -3500,10 +3485,10 @@
 										<UML:Stereotype name="FK"/>
 									</UML:ModelElement.stereotype>
 									<UML:ModelElement.taggedValue>
-										<UML:TaggedValue tag="style" value="2"/>
+										<UML:TaggedValue tag="style" value="3"/>
 										<UML:TaggedValue tag="ea_type" value="Association"/>
 										<UML:TaggedValue tag="direction" value="Source -&gt; Destination"/>
-										<UML:TaggedValue tag="linemode" value="2"/>
+										<UML:TaggedValue tag="linemode" value="3"/>
 										<UML:TaggedValue tag="linecolor" value="-1"/>
 										<UML:TaggedValue tag="linewidth" value="0"/>
 										<UML:TaggedValue tag="seqno" value="0"/>
@@ -3519,7 +3504,6 @@
 										<UML:TaggedValue tag="ea_sourceID" value="852"/>
 										<UML:TaggedValue tag="ea_targetID" value="925"/>
 										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={6105E927-2D40-4a7b-B0C4-C8F87CBBA0EE}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={38E71865-982B-4339-9E14-A54F373F809D}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=2;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="lb" value="0..*"/>
 										<UML:TaggedValue tag="lt" value="+FK_CARD_SUIT"/>
@@ -3550,10 +3534,10 @@
 										<UML:Stereotype name="FK"/>
 									</UML:ModelElement.stereotype>
 									<UML:ModelElement.taggedValue>
-										<UML:TaggedValue tag="style" value="2"/>
+										<UML:TaggedValue tag="style" value="3"/>
 										<UML:TaggedValue tag="ea_type" value="Association"/>
 										<UML:TaggedValue tag="direction" value="Source -&gt; Destination"/>
-										<UML:TaggedValue tag="linemode" value="2"/>
+										<UML:TaggedValue tag="linemode" value="3"/>
 										<UML:TaggedValue tag="linecolor" value="-1"/>
 										<UML:TaggedValue tag="linewidth" value="0"/>
 										<UML:TaggedValue tag="seqno" value="0"/>
@@ -3569,7 +3553,6 @@
 										<UML:TaggedValue tag="ea_sourceID" value="892"/>
 										<UML:TaggedValue tag="ea_targetID" value="852"/>
 										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={B2A1C55F-6C3A-4281-80DE-6CA6A3962431}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={557CE33C-4CFA-408f-9A26-DA7A0D4BAED5}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=3;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="lb" value="0..*"/>
 										<UML:TaggedValue tag="lt" value="+FK_HAND_CARD_CARD"/>
@@ -3783,7 +3766,6 @@
 										<UML:TaggedValue tag="ea_sourceID" value="868"/>
 										<UML:TaggedValue tag="ea_targetID" value="853"/>
 										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={F70F8BFF-54FC-4725-BA76-2A7D5A718FCD}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={98EDCA27-62D3-4e0a-8424-F0FC57F55933}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=3;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="lb" value="0..*"/>
 										<UML:TaggedValue tag="lt" value="+FK_BRIDE_MOTHER_IN_LAW_IN_LAW"/>
@@ -3833,7 +3815,6 @@
 										<UML:TaggedValue tag="ea_sourceID" value="907"/>
 										<UML:TaggedValue tag="ea_targetID" value="853"/>
 										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={EDBBCBE0-D277-424e-B624-4502842250C9}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={F065281D-08B0-4875-84EA-1D70D3D68C8F}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=3;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="lb" value="0..*"/>
 										<UML:TaggedValue tag="lt" value="+FK_BRIDE_FATHER_IN_LAW_IN_LAW"/>
@@ -4113,7 +4094,6 @@
 										<UML:TaggedValue tag="ea_sourceID" value="854"/>
 										<UML:TaggedValue tag="ea_targetID" value="865"/>
 										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={34563CB2-5413-499b-8551-77BE56502947}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={BCB3CAE5-DFEF-4463-BB41-7D0795A87569}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=3;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="lb" value="0..*"/>
 										<UML:TaggedValue tag="lt" value="+FK_FLIGHT_PASSANGER_PASSANGER"/>
@@ -4163,7 +4143,6 @@
 										<UML:TaggedValue tag="ea_sourceID" value="854"/>
 										<UML:TaggedValue tag="ea_targetID" value="897"/>
 										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={47E80847-79E2-4e80-9345-AAD9C7963CDE}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={DB832846-FC0A-441b-83C8-6CF68D63B7EA}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="lb" value="0..*"/>
 										<UML:TaggedValue tag="lt" value="+FK_FLIGHT_PASSANGER_FLIGHT"/>
@@ -4429,10 +4408,10 @@
 										<UML:Stereotype name="FK"/>
 									</UML:ModelElement.stereotype>
 									<UML:ModelElement.taggedValue>
-										<UML:TaggedValue tag="style" value="2"/>
+										<UML:TaggedValue tag="style" value="3"/>
 										<UML:TaggedValue tag="ea_type" value="Association"/>
 										<UML:TaggedValue tag="direction" value="Source -&gt; Destination"/>
-										<UML:TaggedValue tag="linemode" value="2"/>
+										<UML:TaggedValue tag="linemode" value="3"/>
 										<UML:TaggedValue tag="linecolor" value="-1"/>
 										<UML:TaggedValue tag="linewidth" value="0"/>
 										<UML:TaggedValue tag="seqno" value="0"/>
@@ -4448,7 +4427,6 @@
 										<UML:TaggedValue tag="ea_sourceID" value="855"/>
 										<UML:TaggedValue tag="ea_targetID" value="887"/>
 										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={D28C0F03-E7F3-44aa-B138-DB8E43D012A0}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={F8FC084F-25BF-4e67-9EF6-67C2F62AF439}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=4;SX=1;SY=26;EX=1;EY=26;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="lb" value="0..*"/>
 										<UML:TaggedValue tag="lt" value="+FK_ASSISTANT_PROFESSOR"/>
@@ -4868,7 +4846,6 @@
 										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 										<UML:TaggedValue tag="dst_style" value="Owned=0;Navigable=Navigable;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=2;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="mb" value=" &#xA;«DataSource»"/>
 									</UML:ModelElement.taggedValue>
@@ -5215,7 +5192,6 @@
 										<UML:TaggedValue tag="ea_sourceID" value="857"/>
 										<UML:TaggedValue tag="ea_targetID" value="911"/>
 										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={07315096-5E52-4167-95D7-B059F3B124EB}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={60E99840-61CF-4daf-93C0-759A71137383}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="lb" value="0..*"/>
 										<UML:TaggedValue tag="lt" value="+FK_BAG_HANDLE_BAG"/>
@@ -5529,7 +5505,6 @@
 										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 										<UML:TaggedValue tag="dst_style" value="Owned=0;Navigable=Navigable;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=2;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="mb" value=" &#xA;«DataSource»"/>
 									</UML:ModelElement.taggedValue>
@@ -5569,7 +5544,6 @@
 										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 										<UML:TaggedValue tag="dst_style" value="Owned=0;Navigable=Navigable;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=2;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="mb" value=" &#xA;«DataSource»"/>
 									</UML:ModelElement.taggedValue>
@@ -5609,7 +5583,6 @@
 										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 										<UML:TaggedValue tag="dst_style" value="Owned=0;Navigable=Navigable;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=2;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="mb" value=" &#xA;«DataSource»"/>
 									</UML:ModelElement.taggedValue>
@@ -5936,7 +5909,6 @@
 										<UML:TaggedValue tag="ea_sourceID" value="862"/>
 										<UML:TaggedValue tag="ea_targetID" value="859"/>
 										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={EBAB7051-3B02-4c7a-A16D-71A35332964B}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={1F3DAA7B-189E-4291-BEF8-C482DCBB41FB}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=3;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 									</UML:ModelElement.taggedValue>
 									<UML:Association.connection>
@@ -6090,10 +6062,10 @@
 										<UML:Stereotype name="FK"/>
 									</UML:ModelElement.stereotype>
 									<UML:ModelElement.taggedValue>
-										<UML:TaggedValue tag="style" value="2"/>
+										<UML:TaggedValue tag="style" value="3"/>
 										<UML:TaggedValue tag="ea_type" value="Association"/>
 										<UML:TaggedValue tag="direction" value="Source -&gt; Destination"/>
-										<UML:TaggedValue tag="linemode" value="2"/>
+										<UML:TaggedValue tag="linemode" value="3"/>
 										<UML:TaggedValue tag="linecolor" value="-1"/>
 										<UML:TaggedValue tag="linewidth" value="0"/>
 										<UML:TaggedValue tag="seqno" value="0"/>
@@ -6109,7 +6081,6 @@
 										<UML:TaggedValue tag="ea_sourceID" value="926"/>
 										<UML:TaggedValue tag="ea_targetID" value="860"/>
 										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={3018F8A1-16C6-41df-ABD8-23BB700F612B}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={15EB3C20-B652-4b7f-B9B0-6D5C7AC0949E}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=3;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="lb" value="0..*"/>
 										<UML:TaggedValue tag="lt" value="+FK_EMPLOYEE_PROJECT_PROJECT"/>
@@ -6496,7 +6467,6 @@
 										<UML:TaggedValue tag="ea_sourceID" value="862"/>
 										<UML:TaggedValue tag="ea_targetID" value="884"/>
 										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={26641616-FE2E-4e0a-A5A8-F313C6A47C70}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={CFCE235C-A921-4dd8-BFE6-6D3567DF635A}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 									</UML:ModelElement.taggedValue>
 									<UML:Association.connection>
@@ -6763,10 +6733,10 @@
 										<UML:Stereotype name="FK"/>
 									</UML:ModelElement.stereotype>
 									<UML:ModelElement.taggedValue>
-										<UML:TaggedValue tag="style" value="2"/>
+										<UML:TaggedValue tag="style" value="3"/>
 										<UML:TaggedValue tag="ea_type" value="Association"/>
 										<UML:TaggedValue tag="direction" value="Source -&gt; Destination"/>
-										<UML:TaggedValue tag="linemode" value="2"/>
+										<UML:TaggedValue tag="linemode" value="3"/>
 										<UML:TaggedValue tag="linecolor" value="-1"/>
 										<UML:TaggedValue tag="linewidth" value="0"/>
 										<UML:TaggedValue tag="seqno" value="0"/>
@@ -6782,7 +6752,6 @@
 										<UML:TaggedValue tag="ea_sourceID" value="863"/>
 										<UML:TaggedValue tag="ea_targetID" value="891"/>
 										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={B29689B8-5BF1-4ba2-A3D1-4399AA5E4D26}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={4D607A04-5BED-4a07-AE8D-F6A8D20B8991}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=2;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="lb" value="0..*"/>
 										<UML:TaggedValue tag="lt" value="+FK_CREDIT_BANK"/>
@@ -6832,7 +6801,6 @@
 										<UML:TaggedValue tag="ea_sourceID" value="863"/>
 										<UML:TaggedValue tag="ea_targetID" value="881"/>
 										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={8F2615E3-6C71-49ae-AF3D-88C867F8F16F}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={69B6BD06-ECFB-402a-AF27-84D0F95D38E8}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="lb" value="0..*"/>
 										<UML:TaggedValue tag="lt" value="+FK_CREDIT_PAYMENT"/>
@@ -7090,7 +7058,6 @@
 										<UML:TaggedValue tag="ea_sourceID" value="864"/>
 										<UML:TaggedValue tag="ea_targetID" value="896"/>
 										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={C46AE795-54DD-468c-993A-0B0C9EA2C537}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={2B1FD444-7B59-4a0c-9DAB-253D00CE7F81}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="lb" value="0..*"/>
 										<UML:TaggedValue tag="lt" value="+FK_HUMAN_MAMMAL"/>
@@ -7786,10 +7753,10 @@
 										<UML:Stereotype name="FK"/>
 									</UML:ModelElement.stereotype>
 									<UML:ModelElement.taggedValue>
-										<UML:TaggedValue tag="style" value="2"/>
+										<UML:TaggedValue tag="style" value="3"/>
 										<UML:TaggedValue tag="ea_type" value="Association"/>
 										<UML:TaggedValue tag="direction" value="Source -&gt; Destination"/>
-										<UML:TaggedValue tag="linemode" value="2"/>
+										<UML:TaggedValue tag="linemode" value="3"/>
 										<UML:TaggedValue tag="linecolor" value="-1"/>
 										<UML:TaggedValue tag="linewidth" value="0"/>
 										<UML:TaggedValue tag="seqno" value="0"/>
@@ -7805,7 +7772,6 @@
 										<UML:TaggedValue tag="ea_sourceID" value="929"/>
 										<UML:TaggedValue tag="ea_targetID" value="867"/>
 										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={CD6DF4E0-AEED-4db1-B031-48A9C3A6C8DD}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={0E1792A2-AAD5-4b1e-84CD-A5EDEFFD4E71}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="lb" value="0..*"/>
 										<UML:TaggedValue tag="lt" value="+FK_AUTHOR_BOOK_AUTHOR"/>
@@ -8328,7 +8294,6 @@
 										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 										<UML:TaggedValue tag="dst_style" value="Owned=0;Navigable=Navigable;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=2;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="mb" value=" &#xA;«DataSource»"/>
 									</UML:ModelElement.taggedValue>
@@ -8675,7 +8640,6 @@
 										<UML:TaggedValue tag="ea_sourceID" value="868"/>
 										<UML:TaggedValue tag="ea_targetID" value="870"/>
 										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={FBBE6887-C0B4-4ec0-9A84-87BB4E4BB6F8}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={64BF2D39-3EAE-439b-BB38-CD22BB64D947}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="lb" value="0..*"/>
 										<UML:TaggedValue tag="lt" value="+FK_BRIDE_MOTHER_IN_LAW_BRIDE"/>
@@ -8970,7 +8934,6 @@
 										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 										<UML:TaggedValue tag="dst_style" value="Owned=0;Navigable=Navigable;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="mb" value=" &#xA;«DataSource»"/>
 									</UML:ModelElement.taggedValue>
@@ -9010,7 +8973,6 @@
 										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 										<UML:TaggedValue tag="dst_style" value="Owned=0;Navigable=Navigable;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="mb" value=" &#xA;«DataSource»"/>
 									</UML:ModelElement.taggedValue>
@@ -9086,7 +9048,6 @@
 										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 										<UML:TaggedValue tag="dst_style" value="Owned=0;Navigable=Navigable;"/>
-										<UML:TaggedValue tag="privatedata5" value="SX=-2;SY=0;EX=-2;EY=0;EDGE=1;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="mb" value=" &#xA;«DataSource»"/>
 									</UML:ModelElement.taggedValue>
@@ -9126,7 +9087,6 @@
 										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 										<UML:TaggedValue tag="dst_style" value="Owned=0;Navigable=Navigable;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="mb" value=" &#xA;«DataSource»"/>
 									</UML:ModelElement.taggedValue>
@@ -9364,7 +9324,6 @@
 										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 										<UML:TaggedValue tag="dst_style" value="Owned=0;Navigable=Navigable;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=4;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="mb" value=" &#xA;«DataSource»"/>
 									</UML:ModelElement.taggedValue>
@@ -9521,7 +9480,6 @@
 										<UML:TaggedValue tag="ea_sourceID" value="907"/>
 										<UML:TaggedValue tag="ea_targetID" value="870"/>
 										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={D193F330-2A79-4371-8C9A-E61304208EF0}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={88839E89-07B7-4428-A999-BFE56D10CE7E}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="lb" value="0..*"/>
 										<UML:TaggedValue tag="lt" value="+FK_BRIDE_FATHER_IN_LAW_BRIDE"/>
@@ -9717,10 +9675,10 @@
 										<UML:Stereotype name="FK"/>
 									</UML:ModelElement.stereotype>
 									<UML:ModelElement.taggedValue>
-										<UML:TaggedValue tag="style" value="2"/>
+										<UML:TaggedValue tag="style" value="3"/>
 										<UML:TaggedValue tag="ea_type" value="Association"/>
 										<UML:TaggedValue tag="direction" value="Source -&gt; Destination"/>
-										<UML:TaggedValue tag="linemode" value="2"/>
+										<UML:TaggedValue tag="linemode" value="3"/>
 										<UML:TaggedValue tag="linecolor" value="-1"/>
 										<UML:TaggedValue tag="linewidth" value="0"/>
 										<UML:TaggedValue tag="seqno" value="0"/>
@@ -9736,7 +9694,6 @@
 										<UML:TaggedValue tag="ea_sourceID" value="924"/>
 										<UML:TaggedValue tag="ea_targetID" value="871"/>
 										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={80009B20-28A3-447a-AD41-B39C5531D413}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={439C1E5F-802D-46cd-B993-DC2FCA9AFB3B}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=1;SX=-46;SY=0;EX=-46;EY=0;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="lb" value="0..*"/>
 										<UML:TaggedValue tag="lt" value="+FK_CHILD_PARENT"/>
@@ -9803,10 +9760,10 @@
 										<UML:Stereotype name="FK"/>
 									</UML:ModelElement.stereotype>
 									<UML:ModelElement.taggedValue>
-										<UML:TaggedValue tag="style" value="2"/>
+										<UML:TaggedValue tag="style" value="3"/>
 										<UML:TaggedValue tag="ea_type" value="Association"/>
 										<UML:TaggedValue tag="direction" value="Source -&gt; Destination"/>
-										<UML:TaggedValue tag="linemode" value="2"/>
+										<UML:TaggedValue tag="linemode" value="3"/>
 										<UML:TaggedValue tag="linecolor" value="-1"/>
 										<UML:TaggedValue tag="linewidth" value="0"/>
 										<UML:TaggedValue tag="seqno" value="0"/>
@@ -9822,7 +9779,6 @@
 										<UML:TaggedValue tag="ea_sourceID" value="924"/>
 										<UML:TaggedValue tag="ea_targetID" value="871"/>
 										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={30F633FF-2CEE-4fee-9EA1-53C5094626BC}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={C9285EB3-975C-4492-944F-C876F23E04EA}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=1;SX=62;SY=0;EX=62;EY=0;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="lb" value="0..*"/>
 										<UML:TaggedValue tag="lt" value="+FK_CHILD_PARENT_M"/>
@@ -10000,7 +9956,6 @@
 										<UML:TaggedValue tag="ea_sourceID" value="902"/>
 										<UML:TaggedValue tag="ea_targetID" value="872"/>
 										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={C9625B0E-F7F1-4bf5-A5B4-C41177380B24}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={37D0E91A-E94B-4ffc-A405-2795EA557AFC}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=3;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="lb" value="0..*"/>
 										<UML:TaggedValue tag="lt" value="+FK_CHAIN_PENDANT_PENDANT"/>
@@ -10196,10 +10151,10 @@
 										<UML:Stereotype name="FK"/>
 									</UML:ModelElement.stereotype>
 									<UML:ModelElement.taggedValue>
-										<UML:TaggedValue tag="style" value="2"/>
+										<UML:TaggedValue tag="style" value="3"/>
 										<UML:TaggedValue tag="ea_type" value="Association"/>
 										<UML:TaggedValue tag="direction" value="Source -&gt; Destination"/>
-										<UML:TaggedValue tag="linemode" value="2"/>
+										<UML:TaggedValue tag="linemode" value="3"/>
 										<UML:TaggedValue tag="linecolor" value="-1"/>
 										<UML:TaggedValue tag="linewidth" value="0"/>
 										<UML:TaggedValue tag="seqno" value="0"/>
@@ -10215,7 +10170,6 @@
 										<UML:TaggedValue tag="ea_sourceID" value="895"/>
 										<UML:TaggedValue tag="ea_targetID" value="873"/>
 										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={545EB6D9-38DC-4915-9FB4-DCFB77C4E7DD}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={56C7EFAB-E807-49f3-A004-ED57ED16AB16}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=3;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="lb" value="0..*"/>
 										<UML:TaggedValue tag="lt" value="+FK_PERSON_ADDRESS"/>
@@ -10396,7 +10350,6 @@
 										<UML:TaggedValue tag="ea_sourceID" value="1169"/>
 										<UML:TaggedValue tag="ea_targetID" value="1168"/>
 										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={2FFDB6F2-DF96-4f8f-B5C1-9B77FC6001EB}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={58E87F7D-A9C7-4af8-AFB4-9CCFA7BA4D2D}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="lb" value="0..*"/>
 										<UML:TaggedValue tag="lt" value="+FK_MEMBER_M2MBS_J_MEMBER_M2MBS"/>
@@ -10457,7 +10410,6 @@
 										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 										<UML:TaggedValue tag="dst_style" value="Owned=0;Navigable=Navigable;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=4;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="mb" value=" &#xA;«DataSource»"/>
 									</UML:ModelElement.taggedValue>
@@ -10672,7 +10624,6 @@
 										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 										<UML:TaggedValue tag="dst_style" value="Owned=0;Navigable=Navigable;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=2;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="mb" value=" &#xA;«DataSource»"/>
 									</UML:ModelElement.taggedValue>
@@ -10712,7 +10663,6 @@
 										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 										<UML:TaggedValue tag="dst_style" value="Owned=0;Navigable=Navigable;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=2;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="mb" value=" &#xA;«DataSource»"/>
 									</UML:ModelElement.taggedValue>
@@ -10752,7 +10702,6 @@
 										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 										<UML:TaggedValue tag="dst_style" value="Owned=0;Navigable=Navigable;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=2;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="mb" value=" &#xA;«DataSource»"/>
 									</UML:ModelElement.taggedValue>
@@ -10909,7 +10858,6 @@
 										<UML:TaggedValue tag="ea_sourceID" value="902"/>
 										<UML:TaggedValue tag="ea_targetID" value="874"/>
 										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={57322E19-E653-4e30-975E-7BD00CB8C0A1}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={11089FCC-A203-4488-9842-801632FA6564}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="lb" value="0..*"/>
 										<UML:TaggedValue tag="lt" value="+FK_CHAIN_PENDANT_CHAIN"/>
@@ -11617,7 +11565,6 @@
 										<UML:TaggedValue tag="ea_sourceID" value="1076"/>
 										<UML:TaggedValue tag="ea_targetID" value="875"/>
 										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={649F0E17-58C5-447e-9DB7-30B22F487950}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={F508FBFE-6025-4f02-BD1C-F822EC546439}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="lb" value="0..*"/>
 										<UML:TaggedValue tag="lt" value="+FK_ALL_DATA_TYPE_ALL_DATA_TYPE"/>
@@ -11875,7 +11822,6 @@
 										<UML:TaggedValue tag="ea_sourceID" value="876"/>
 										<UML:TaggedValue tag="ea_targetID" value="887"/>
 										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={3DD99E98-2D0B-4bf9-AC12-865CBEFCE167}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={B2342F6D-6288-43c1-80C1-CB0606E7EA4C}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=1;SX=43;SY=3;EX=43;EY=3;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="lb" value="0..*"/>
 										<UML:TaggedValue tag="lt" value="+FK_ASSISTANT_PROFESS_PROFESSOR"/>
@@ -12198,10 +12144,10 @@
 										<UML:Stereotype name="FK"/>
 									</UML:ModelElement.stereotype>
 									<UML:ModelElement.taggedValue>
-										<UML:TaggedValue tag="style" value="2"/>
+										<UML:TaggedValue tag="style" value="3"/>
 										<UML:TaggedValue tag="ea_type" value="Association"/>
 										<UML:TaggedValue tag="direction" value="Source -&gt; Destination"/>
-										<UML:TaggedValue tag="linemode" value="2"/>
+										<UML:TaggedValue tag="linemode" value="3"/>
 										<UML:TaggedValue tag="linecolor" value="-1"/>
 										<UML:TaggedValue tag="linewidth" value="0"/>
 										<UML:TaggedValue tag="seqno" value="0"/>
@@ -12219,7 +12165,6 @@
 										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={5D3B2B74-9278-4dbf-A786-B94406E15976}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={12E4C54B-1C15-4d42-AC3A-AA803766D07B}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;$XREFPROP=$XID={1D9B6D6E-96AE-4817-895E-835CE3429C29}$XID;$NAM=Stereotypes$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@STEREO;Name=FK;GUID={42E47DBE-185C-41b3-A855-DD039B43CF08};@ENDSTEREO;$DES;$CLT={12E4C54B-1C15-4d42-AC3A-AA803766D07B}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
 										<UML:TaggedValue tag="$ea_src_xref_property" value=""/>
 										<UML:TaggedValue tag="$ea_dst_xref_property" value=""/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=1;SX=3;SY=0;EX=3;EY=0;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="lb" value="0..*"/>
 										<UML:TaggedValue tag="lt" value="+FK_PRODUCT_ORDERLINE"/>
@@ -12433,7 +12378,6 @@
 										<UML:TaggedValue tag="ea_sourceID" value="917"/>
 										<UML:TaggedValue tag="ea_targetID" value="879"/>
 										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={1B58C6B7-4FD9-49f5-91A8-43B403BB57C0}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={AB379BF2-F63A-4bfa-B437-B3A0C8DA75C3}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=3;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="lb" value="0..*"/>
 										<UML:TaggedValue tag="lt" value="+FK_LUGGAGE_WHEEL"/>
@@ -12629,10 +12573,10 @@
 										<UML:Stereotype name="FK"/>
 									</UML:ModelElement.stereotype>
 									<UML:ModelElement.taggedValue>
-										<UML:TaggedValue tag="style" value="2"/>
+										<UML:TaggedValue tag="style" value="3"/>
 										<UML:TaggedValue tag="ea_type" value="Association"/>
 										<UML:TaggedValue tag="direction" value="Source -&gt; Destination"/>
-										<UML:TaggedValue tag="linemode" value="2"/>
+										<UML:TaggedValue tag="linemode" value="3"/>
 										<UML:TaggedValue tag="linecolor" value="-1"/>
 										<UML:TaggedValue tag="linewidth" value="0"/>
 										<UML:TaggedValue tag="seqno" value="0"/>
@@ -12648,7 +12592,6 @@
 										<UML:TaggedValue tag="ea_sourceID" value="925"/>
 										<UML:TaggedValue tag="ea_targetID" value="880"/>
 										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={69847C4A-20DD-4dcb-9C3D-912A866651E2}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={715B5F7D-8F56-4013-A2F2-A1C4C9C5C84D}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=3;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="lb" value="0..*"/>
 										<UML:TaggedValue tag="lt" value="+FK_SUIT_DECK"/>
@@ -12899,7 +12842,6 @@
 										<UML:TaggedValue tag="ea_sourceID" value="898"/>
 										<UML:TaggedValue tag="ea_targetID" value="881"/>
 										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={B220D710-DD7D-4ec3-9552-0B55F9CE2FC7}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={EEB72C85-59EF-4831-BAC1-C8AEE2E2E6F4}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="lb" value="0..*"/>
 										<UML:TaggedValue tag="lt" value="+FK_CASH_PAYMENT"/>
@@ -13059,10 +13001,10 @@
 										<UML:Stereotype name="FK"/>
 									</UML:ModelElement.stereotype>
 									<UML:ModelElement.taggedValue>
-										<UML:TaggedValue tag="style" value="2"/>
+										<UML:TaggedValue tag="style" value="3"/>
 										<UML:TaggedValue tag="ea_type" value="Association"/>
 										<UML:TaggedValue tag="direction" value="Source -&gt; Destination"/>
-										<UML:TaggedValue tag="linemode" value="2"/>
+										<UML:TaggedValue tag="linemode" value="3"/>
 										<UML:TaggedValue tag="linecolor" value="-1"/>
 										<UML:TaggedValue tag="linewidth" value="0"/>
 										<UML:TaggedValue tag="seqno" value="0"/>
@@ -13078,7 +13020,6 @@
 										<UML:TaggedValue tag="ea_sourceID" value="893"/>
 										<UML:TaggedValue tag="ea_targetID" value="882"/>
 										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={66ED28E3-47BC-46db-933D-9425053648BF}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={3B29C2D2-9A6E-4908-AC93-D195970CF581}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="lb" value="0..*"/>
 										<UML:TaggedValue tag="lt" value="+FK_CHEF_RESTAURANT"/>
@@ -13393,7 +13334,6 @@
 										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 										<UML:TaggedValue tag="dst_style" value="Owned=0;Navigable=Navigable;"/>
-										<UML:TaggedValue tag="privatedata5" value="SX=0;SY=2;EX=0;EY=2;EDGE=1;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="mb" value=" &#xA;«DataSource»"/>
 									</UML:ModelElement.taggedValue>
@@ -13802,10 +13742,10 @@
 										<UML:Stereotype name="FK"/>
 									</UML:ModelElement.stereotype>
 									<UML:ModelElement.taggedValue>
-										<UML:TaggedValue tag="style" value="2"/>
+										<UML:TaggedValue tag="style" value="3"/>
 										<UML:TaggedValue tag="ea_type" value="Association"/>
 										<UML:TaggedValue tag="direction" value="Source -&gt; Destination"/>
-										<UML:TaggedValue tag="linemode" value="2"/>
+										<UML:TaggedValue tag="linemode" value="3"/>
 										<UML:TaggedValue tag="linecolor" value="-1"/>
 										<UML:TaggedValue tag="linewidth" value="0"/>
 										<UML:TaggedValue tag="seqno" value="0"/>
@@ -13821,7 +13761,6 @@
 										<UML:TaggedValue tag="ea_sourceID" value="885"/>
 										<UML:TaggedValue tag="ea_targetID" value="921"/>
 										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={4F6DB72D-4DA6-49a7-B436-5415C505655F}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={91383631-BF27-41c8-B132-30487EC30EB2}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="lb" value="0..*"/>
 										<UML:TaggedValue tag="lt" value="+FK_KEY_KEYCHAIN"/>
@@ -13981,10 +13920,10 @@
 										<UML:Stereotype name="FK"/>
 									</UML:ModelElement.stereotype>
 									<UML:ModelElement.taggedValue>
-										<UML:TaggedValue tag="style" value="2"/>
+										<UML:TaggedValue tag="style" value="3"/>
 										<UML:TaggedValue tag="ea_type" value="Association"/>
 										<UML:TaggedValue tag="direction" value="Source -&gt; Destination"/>
-										<UML:TaggedValue tag="linemode" value="2"/>
+										<UML:TaggedValue tag="linemode" value="3"/>
 										<UML:TaggedValue tag="linecolor" value="-1"/>
 										<UML:TaggedValue tag="linewidth" value="0"/>
 										<UML:TaggedValue tag="seqno" value="0"/>
@@ -14000,7 +13939,6 @@
 										<UML:TaggedValue tag="ea_sourceID" value="906"/>
 										<UML:TaggedValue tag="ea_targetID" value="887"/>
 										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={52394140-747D-4630-BF22-038E45AF06BB}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={125A856F-A995-45eb-B5D7-6253DC5B31DC}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=1;SX=46;SY=-4;EX=46;EY=-4;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="lb" value="0..*"/>
 										<UML:TaggedValue tag="lt" value="+FK_ASSOCIATE_PROFESS_PROFESSOR"/>
@@ -14458,7 +14396,6 @@
 										<UML:TaggedValue tag="ea_targetType" value="Class"/>
 										<UML:TaggedValue tag="ea_sourceID" value="930"/>
 										<UML:TaggedValue tag="ea_targetID" value="889"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 										<UML:TaggedValue tag="lb" value="0..*"/>
 										<UML:TaggedValue tag="lt" value="+FK_HARD_DRIVE_COMPUTER"/>
 										<UML:TaggedValue tag="mb" value=" &#xA;«FK»"/>
@@ -14712,7 +14649,6 @@
 										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 										<UML:TaggedValue tag="dst_style" value="Owned=0;Navigable=Navigable;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=4;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="mb" value=" &#xA;«DataSource»"/>
 									</UML:ModelElement.taggedValue>
@@ -14852,7 +14788,6 @@
 										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 										<UML:TaggedValue tag="dst_style" value="Owned=0;Navigable=Navigable;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=4;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="mb" value=" &#xA;«DataSource»"/>
 									</UML:ModelElement.taggedValue>
@@ -15391,7 +15326,6 @@
 										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 										<UML:TaggedValue tag="dst_style" value="Owned=0;Navigable=Navigable;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=2;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="mb" value=" &#xA;«DataSource»"/>
 									</UML:ModelElement.taggedValue>
@@ -15420,7 +15354,6 @@
 										<UML:TaggedValue tag="ea_sourceID" value="1086"/>
 										<UML:TaggedValue tag="ea_targetID" value="1084"/>
 										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={7BB37D78-207D-48ec-98D4-9A21520D465A}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={7167D5F1-75D2-4bbe-8AC3-75003BD3D2FE}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="lb" value="0..*"/>
 										<UML:TaggedValue tag="lt" value="+FK_PRIVATE_TEACHER_TEACHER"/>
@@ -15701,7 +15634,6 @@
 										<UML:TaggedValue tag="ea_sourceID" value="892"/>
 										<UML:TaggedValue tag="ea_targetID" value="908"/>
 										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={9942D1B8-95B8-4099-904F-C9F3F1179ADD}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={0F457081-2004-4657-8928-D82DECA754FD}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="lb" value="0..*"/>
 										<UML:TaggedValue tag="lt" value="+FK_HAND_CARD_HAND"/>
@@ -17017,7 +16949,6 @@
 										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 										<UML:TaggedValue tag="dst_style" value="Owned=0;Navigable=Navigable;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=4;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="mb" value=" &#xA;«DataSource»"/>
 									</UML:ModelElement.taggedValue>
@@ -17610,7 +17541,6 @@
 										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 										<UML:TaggedValue tag="dst_style" value="Owned=0;Navigable=Navigable;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="mb" value=" &#xA;«DataSource»"/>
 									</UML:ModelElement.taggedValue>
@@ -17650,7 +17580,6 @@
 										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 										<UML:TaggedValue tag="dst_style" value="Owned=0;Navigable=Navigable;"/>
-										<UML:TaggedValue tag="privatedata5" value="SX=2;SY=0;EX=2;EY=0;EDGE=1;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="mb" value=" &#xA;«DataSource»"/>
 									</UML:ModelElement.taggedValue>
@@ -17902,7 +17831,6 @@
 										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 										<UML:TaggedValue tag="dst_style" value="Owned=0;Navigable=Navigable;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=2;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="mb" value=" &#xA;«DataSource»"/>
 									</UML:ModelElement.taggedValue>
@@ -18850,7 +18778,6 @@
 										<UML:TaggedValue tag="ea_sourceID" value="904"/>
 										<UML:TaggedValue tag="ea_targetID" value="922"/>
 										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={C2B419C8-1DD2-452e-A3A5-AF314558BB04}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={654B1E83-D207-4ef3-906F-767B743F2503}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="lb" value="0..*"/>
 										<UML:TaggedValue tag="lt" value="+FK_SHIRT_BUTTON_SHIRT"/>
@@ -18900,7 +18827,6 @@
 										<UML:TaggedValue tag="ea_sourceID" value="904"/>
 										<UML:TaggedValue tag="ea_targetID" value="912"/>
 										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={9F5A1A4F-AE03-4b88-BC33-2AC575A904C5}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={9A0624A2-1C98-438d-95FA-F8EFFE1C1391}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=3;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="lb" value="0..*"/>
 										<UML:TaggedValue tag="lt" value="+FK_SHIRT_BUTTON_BUTTON"/>
@@ -19458,7 +19384,6 @@
 										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 										<UML:TaggedValue tag="dst_style" value="Owned=0;Navigable=Navigable;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=2;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="mb" value=" &#xA;«DataSource»"/>
 									</UML:ModelElement.taggedValue>
@@ -19941,7 +19866,6 @@
 										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 										<UML:TaggedValue tag="dst_style" value="Owned=0;Navigable=Navigable;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=2;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="mb" value=" &#xA;«DataSource»"/>
 									</UML:ModelElement.taggedValue>
@@ -20316,7 +20240,6 @@
 										<UML:TaggedValue tag="ea_sourceID" value="909"/>
 										<UML:TaggedValue tag="ea_targetID" value="914"/>
 										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={94F6C0E5-1A64-4911-8555-F7606BB6CF5E}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={6AA4E5C9-8B59-4663-9047-14DD7C4EC046}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="lb" value="0..*"/>
 										<UML:TaggedValue tag="lt" value="+FK_GRADUATE_STUDENT_STUDENT"/>
@@ -20553,7 +20476,6 @@
 										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 										<UML:TaggedValue tag="dst_style" value="Owned=0;Navigable=Navigable;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=2;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="mb" value=" &#xA;«DataSource»"/>
 									</UML:ModelElement.taggedValue>
@@ -20728,10 +20650,10 @@
 										<UML:Stereotype name="FK"/>
 									</UML:ModelElement.stereotype>
 									<UML:ModelElement.taggedValue>
-										<UML:TaggedValue tag="style" value="2"/>
+										<UML:TaggedValue tag="style" value="3"/>
 										<UML:TaggedValue tag="ea_type" value="Association"/>
 										<UML:TaggedValue tag="direction" value="Source -&gt; Destination"/>
-										<UML:TaggedValue tag="linemode" value="2"/>
+										<UML:TaggedValue tag="linemode" value="3"/>
 										<UML:TaggedValue tag="linecolor" value="-1"/>
 										<UML:TaggedValue tag="linewidth" value="0"/>
 										<UML:TaggedValue tag="seqno" value="0"/>
@@ -20747,7 +20669,6 @@
 										<UML:TaggedValue tag="ea_sourceID" value="926"/>
 										<UML:TaggedValue tag="ea_targetID" value="910"/>
 										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={EB2CB561-A9FE-4180-AC56-E3573D8F6191}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={EF3114F1-4077-48af-AB8D-6D1075900A97}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="lb" value="0..*"/>
 										<UML:TaggedValue tag="lt" value="+FK_EMPLOYEE_PROJECT_EMPLOYEE"/>
@@ -20926,7 +20847,6 @@
 										<UML:TaggedValue tag="ea_sourceID" value="1085"/>
 										<UML:TaggedValue tag="ea_targetID" value="1084"/>
 										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={BEBC8080-9BDD-42c4-AC02-67431E30E958}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={4F8EDCA0-0D1E-4b3a-A7AF-F4F18F11BE32}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=4;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="lb" value="0..*"/>
 										<UML:TaggedValue tag="lt" value="+FK_PUPIL_TEACHER"/>
@@ -20987,7 +20907,6 @@
 										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 										<UML:TaggedValue tag="dst_style" value="Owned=0;Navigable=Navigable;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=2;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="mb" value=" &#xA;«DataSource»"/>
 									</UML:ModelElement.taggedValue>
@@ -21717,7 +21636,6 @@
 										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 										<UML:TaggedValue tag="dst_style" value="Owned=0;Navigable=Navigable;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=2;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="mb" value=" &#xA;«DataSource»"/>
 									</UML:ModelElement.taggedValue>
@@ -21757,7 +21675,6 @@
 										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 										<UML:TaggedValue tag="dst_style" value="Owned=0;Navigable=Navigable;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=2;SX=1;SY=-34;EX=1;EY=-34;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="mb" value=" &#xA;«DataSource»"/>
 									</UML:ModelElement.taggedValue>
@@ -22607,7 +22524,6 @@
 										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 										<UML:TaggedValue tag="dst_style" value="Owned=0;Navigable=Navigable;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=4;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="mb" value=" &#xA;«DataSource»"/>
 									</UML:ModelElement.taggedValue>
@@ -23090,7 +23006,6 @@
 										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 										<UML:TaggedValue tag="dst_style" value="Owned=0;Navigable=Navigable;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=2;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="mb" value=" &#xA;«DataSource»"/>
 									</UML:ModelElement.taggedValue>
@@ -23166,7 +23081,6 @@
 										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 										<UML:TaggedValue tag="dst_style" value="Owned=0;Navigable=Navigable;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=2;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="mb" value=" &#xA;«DataSource»"/>
 									</UML:ModelElement.taggedValue>
@@ -23206,7 +23120,6 @@
 										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 										<UML:TaggedValue tag="dst_style" value="Owned=0;Navigable=Navigable;"/>
-										<UML:TaggedValue tag="privatedata5" value="SX=2;SY=0;EX=2;EY=0;EDGE=1;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="mb" value=" &#xA;«DataSource»"/>
 									</UML:ModelElement.taggedValue>
@@ -24030,7 +23943,6 @@
 										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 										<UML:TaggedValue tag="dst_style" value="Owned=0;Navigable=Navigable;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=4;SX=59;SY=-47;EX=59;EY=-47;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="mb" value=" &#xA;«DataSource»"/>
 									</UML:ModelElement.taggedValue>
@@ -24389,7 +24301,6 @@
 										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 										<UML:TaggedValue tag="dst_style" value="Owned=0;Navigable=Navigable;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="mb" value=" &#xA;«DataSource»"/>
 									</UML:ModelElement.taggedValue>
@@ -24429,7 +24340,6 @@
 										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 										<UML:TaggedValue tag="dst_style" value="Owned=0;Navigable=Navigable;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="mb" value=" &#xA;«DataSource»"/>
 									</UML:ModelElement.taggedValue>
@@ -24494,7 +24404,6 @@
 										<UML:TaggedValue tag="ea_sourceID" value="927"/>
 										<UML:TaggedValue tag="ea_targetID" value="923"/>
 										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={C4A8CDC7-21FE-4ed1-9519-5F44320476DD}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={CA0D1F02-0255-487d-BEB8-168C6584BD52}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="lb" value="0..*"/>
 										<UML:TaggedValue tag="lt" value="+FK_GRAPHIC_CALCULAT_CALCULATOR"/>
@@ -25912,7 +25821,6 @@
 										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 										<UML:TaggedValue tag="dst_style" value="Owned=0;Navigable=Navigable;"/>
-										<UML:TaggedValue tag="privatedata5" value="EDGE=2;"/>
 										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 										<UML:TaggedValue tag="mb" value=" &#xA;«DataSource»"/>
 									</UML:ModelElement.taggedValue>
@@ -27496,7 +27404,6 @@
 																								<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 																								<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 																								<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={AE82EF63-D1DE-4da4-8A12-BBDBC80B5ED3}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isSubstitutable@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={342C12DD-A3FC-47a4-B82F-C760224C4F4D}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																								<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 																								<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																							</UML:ModelElement.taggedValue>
 																						</UML:Generalization>
@@ -27566,6 +27473,8 @@
 																										<UML:TaggedValue tag="ea_guid" value="{0CE262D0-F000-4ce8-AB6D-4DB09ABEBD49}"/>
 																										<UML:TaggedValue tag="ea_localid" value="1716"/>
 																										<UML:TaggedValue tag="styleex" value="volatile=0;"/>
+																										<UML:TaggedValue tag="NCI_CADSR_DE_ID" value="2222323" xmi.id="EAID_452FD580_3079_4b18_AB42_E8FD7BF07CFE"/>
+																										<UML:TaggedValue tag="NCI_CADSR_DE_VERSION" value="1.0" xmi.id="EAID_F678EFE4_20EA_40a8_A5C0_3EF1E2B76E1F"/>
 																									</UML:ModelElement.taggedValue>
 																								</UML:Attribute>
 																							</UML:Classifier.feature>
@@ -27589,7 +27498,6 @@
 																								<UML:TaggedValue tag="ea_sourceID" value="1081"/>
 																								<UML:TaggedValue tag="ea_targetID" value="1083"/>
 																								<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={D608681D-91C4-436d-A7F6-36CEC3B127D0}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={37FCA3EE-B9A8-4f2a-AE19-F2FF906095E9}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																								<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 																								<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																								<UML:TaggedValue tag="lb" value="1"/>
 																								<UML:TaggedValue tag="lt" value="+teacher"/>
@@ -27760,10 +27668,10 @@
 																						</UML:Class>
 																						<UML:Association xmi.id="EAID_62F19555_86B0_4490_99C9_7C327D01A2FF" visibility="public" isRoot="false" isLeaf="false" isAbstract="false">
 																							<UML:ModelElement.taggedValue>
-																								<UML:TaggedValue tag="style" value="2"/>
+																								<UML:TaggedValue tag="style" value="3"/>
 																								<UML:TaggedValue tag="ea_type" value="Association"/>
 																								<UML:TaggedValue tag="direction" value="Source -&gt; Destination"/>
-																								<UML:TaggedValue tag="linemode" value="2"/>
+																								<UML:TaggedValue tag="linemode" value="3"/>
 																								<UML:TaggedValue tag="linecolor" value="-1"/>
 																								<UML:TaggedValue tag="linewidth" value="0"/>
 																								<UML:TaggedValue tag="seqno" value="0"/>
@@ -27777,7 +27685,6 @@
 																								<UML:TaggedValue tag="ea_sourceID" value="950"/>
 																								<UML:TaggedValue tag="ea_targetID" value="953"/>
 																								<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={4DF76E63-A031-448e-93BE-8966152EC3AE}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=0@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={62F19555-86B0-4490-99C9-7C327D01A2FF}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																								<UML:TaggedValue tag="privatedata5" value="EDGE=2;SX=9;SY=-8;EX=9;EY=-8;"/>
 																								<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																								<UML:TaggedValue tag="lb" value="0..*"/>
 																								<UML:TaggedValue tag="lt" value="+credit"/>
@@ -27833,7 +27740,6 @@
 																								<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 																								<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 																								<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={626A9483-46EB-4e4f-977B-62F944430032}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isSubstitutable@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={E3B70B79-00AA-4cc1-9BA9-F94A63297A5C}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																								<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 																								<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																							</UML:ModelElement.taggedValue>
 																						</UML:Generalization>
@@ -27944,7 +27850,6 @@
 																								<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 																								<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 																								<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={C32522C1-A3C4-4924-B4C7-FEAD338610C3}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isSubstitutable@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={48BF81D6-C2C0-47f1-BDEB-49E923F8DE29}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																								<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 																								<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																							</UML:ModelElement.taggedValue>
 																						</UML:Generalization>
@@ -28202,7 +28107,6 @@
 																										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 																										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 																										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={57637065-ADA8-4b69-9226-FFCF853826AD}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isSubstitutable@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={0A1780BB-E863-4dbc-BD12-E2E22ECD7603}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																										<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 																										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																									</UML:ModelElement.taggedValue>
 																								</UML:Generalization>
@@ -28235,7 +28139,6 @@
 																										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 																										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 																										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={07B970C1-E6B0-4ae5-A83C-5C3447B0B5AE}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isSubstitutable@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={99E92632-8353-40d9-8CC6-C0974741C03D}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																										<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 																										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																									</UML:ModelElement.taggedValue>
 																								</UML:Generalization>
@@ -28335,7 +28238,6 @@
 																										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={DA34750C-A0A2-4bfd-AE69-CE0DD7168F54}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={76516F95-5FCC-4b90-9D13-CD61C224383A}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
 																										<UML:TaggedValue tag="$ea_src_xref_property" value=""/>
 																										<UML:TaggedValue tag="$ea_dst_xref_property" value=""/>
-																										<UML:TaggedValue tag="privatedata5" value="EDGE=2;SX=-4;SY=4;EX=-4;EY=4;"/>
 																										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																										<UML:TaggedValue tag="lb" value="*"/>
 																										<UML:TaggedValue tag="rb" value="0..1"/>
@@ -28527,7 +28429,6 @@
 																								<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 																								<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 																								<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={55CF26E7-46FB-45d9-9D19-C3BCF7E259D1}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isSubstitutable@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={866F65A5-1474-473e-A85C-91D96F25ECE2}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																								<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 																								<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																							</UML:ModelElement.taggedValue>
 																						</UML:Generalization>
@@ -28607,7 +28508,6 @@
 																								<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 																								<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 																								<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={76B8905A-7905-406e-BAC3-7572B63B572B}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isSubstitutable@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={E1E3E1A4-1B05-4da7-9D20-6F2FE88496B6}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																								<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 																								<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																							</UML:ModelElement.taggedValue>
 																						</UML:Generalization>
@@ -28655,7 +28555,6 @@
 																								<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={E3644A95-8E55-43fc-96E5-3631EBF8729A}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={735BE062-3151-4f52-8C5D-2FCF3C35357C}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
 																								<UML:TaggedValue tag="$ea_src_xref_property" value=""/>
 																								<UML:TaggedValue tag="$ea_dst_xref_property" value=""/>
-																								<UML:TaggedValue tag="privatedata5" value="EDGE=2;SX=5;SY=7;EX=5;EY=7;"/>
 																								<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																								<UML:TaggedValue tag="lb" value="0..*"/>
 																								<UML:TaggedValue tag="lt" value="+fishCollection"/>
@@ -28709,7 +28608,6 @@
 																								<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 																								<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 																								<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={53BC6304-A07A-4759-AFFA-7431BAD0D5AA}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isSubstitutable@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={866B9E1D-C718-4bc8-B42A-9989D67FF4EA}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																								<UML:TaggedValue tag="privatedata5" value="SX=-12;SY=0;EX=-1;EY=0;EDGE=1;"/>
 																								<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																							</UML:ModelElement.taggedValue>
 																						</UML:Generalization>
@@ -28734,7 +28632,6 @@
 																								<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={EE80A882-9E7F-4cc6-BB18-8E65B2A595F8}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={C45449AE-8CCC-4780-8FE6-3D3CDEC3CF52}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
 																								<UML:TaggedValue tag="$ea_src_xref_property" value=""/>
 																								<UML:TaggedValue tag="$ea_dst_xref_property" value=""/>
-																								<UML:TaggedValue tag="privatedata5" value="EDGE=2;SX=0;SY=-6;EX=0;EY=-6;"/>
 																								<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																								<UML:TaggedValue tag="lb" value="0..*"/>
 																								<UML:TaggedValue tag="lt" value="+tankCollection"/>
@@ -28847,7 +28744,6 @@
 																								<UML:TaggedValue tag="ea_sourceID" value="1121"/>
 																								<UML:TaggedValue tag="ea_targetID" value="1123"/>
 																								<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={6F8C1BF2-3EAA-44ac-A731-74C8260A9C5E}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={3423C96D-1F27-4743-A66B-D1897211AAE8}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																								<UML:TaggedValue tag="privatedata5" value="EDGE=3;"/>
 																								<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																								<UML:TaggedValue tag="lb" value="1"/>
 																								<UML:TaggedValue tag="lt" value="+saltwaterFishTank"/>
@@ -29018,7 +28914,6 @@
 																								<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 																								<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 																								<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={17E97A50-9F7D-4588-BFB1-42ED121F7ADA}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isSubstitutable@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={8456973F-2E98-4a25-B3A3-2EA539C8437F}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																								<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 																								<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																							</UML:ModelElement.taggedValue>
 																						</UML:Generalization>
@@ -29142,7 +29037,6 @@
 																								<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 																								<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 																								<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={2470F267-0948-40ce-88A2-970BA23C8B55}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isSubstitutable@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={C4A3E45B-DBBB-4dd0-B281-58443E6C70DB}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																								<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 																								<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																							</UML:ModelElement.taggedValue>
 																						</UML:Generalization>
@@ -29337,7 +29231,6 @@
 																								<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 																								<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 																								<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={9048F33C-6058-44ad-87BC-BC3FB8F29BC8}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isSubstitutable@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={D4175EB7-490A-415b-B4E0-E359C79EF26F}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																								<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 																								<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																							</UML:ModelElement.taggedValue>
 																						</UML:Generalization>
@@ -29475,7 +29368,6 @@
 																								<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 																								<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 																								<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={F55D7051-59AB-42ae-9A85-39C1EE3FDB8A}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isSubstitutable@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={F066E759-B7F0-471a-87DA-558102615B00}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																								<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 																								<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																							</UML:ModelElement.taggedValue>
 																						</UML:Generalization>
@@ -29653,7 +29545,6 @@
 																										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 																										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 																										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={BF24BE8D-49A7-4594-B779-5B9C791BF938}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isSubstitutable@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={88B3C8DD-2248-46cc-B0A8-8F2BEF2D4DDF}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																										<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 																										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																									</UML:ModelElement.taggedValue>
 																								</UML:Generalization>
@@ -29686,7 +29577,6 @@
 																										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 																										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 																										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={C10FB058-3771-430b-815E-9FAF8B742A06}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isSubstitutable@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={A741880A-74EF-4dbc-9485-64B3B0A01D4E}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																										<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 																										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																									</UML:ModelElement.taggedValue>
 																								</UML:Generalization>
@@ -29895,7 +29785,6 @@
 																								<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 																								<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 																								<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={E4AD0240-39F7-4eea-817F-E7C4EB935908}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isSubstitutable@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={51DCD806-C8D7-4495-BE98-7D04A20C1A21}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																								<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 																								<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																							</UML:ModelElement.taggedValue>
 																						</UML:Generalization>
@@ -30127,7 +30016,6 @@
 																										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 																										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 																										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={3D678263-FB23-4a7e-89A0-5D77B3B80D1F}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isSubstitutable@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={72ADB586-4A15-4af1-83C2-011989D604D6}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																										<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 																										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																									</UML:ModelElement.taggedValue>
 																								</UML:Generalization>
@@ -30310,7 +30198,6 @@
 																								<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 																								<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 																								<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={B13DDECF-3060-46ab-AF7C-228318698845}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isSubstitutable@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={289E0290-19C8-4c35-A095-12DF9BF798A6}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																								<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 																								<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																							</UML:ModelElement.taggedValue>
 																						</UML:Generalization>
@@ -30343,16 +30230,15 @@
 																								<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 																								<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 																								<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={949693E0-68F8-4b6c-8116-15CE70490ECF}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isSubstitutable@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={AE8518B8-E8DA-40ab-818A-4CF243FB09EA}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																								<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 																								<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																							</UML:ModelElement.taggedValue>
 																						</UML:Generalization>
 																						<UML:Association xmi.id="EAID_DD6FBBE0_A141_4524_A096_1662E229AA3E" visibility="public" isRoot="false" isLeaf="false" isAbstract="false">
 																							<UML:ModelElement.taggedValue>
-																								<UML:TaggedValue tag="style" value="2"/>
+																								<UML:TaggedValue tag="style" value="3"/>
 																								<UML:TaggedValue tag="ea_type" value="Association"/>
 																								<UML:TaggedValue tag="direction" value="Source -&gt; Destination"/>
-																								<UML:TaggedValue tag="linemode" value="2"/>
+																								<UML:TaggedValue tag="linemode" value="3"/>
 																								<UML:TaggedValue tag="linecolor" value="-1"/>
 																								<UML:TaggedValue tag="linewidth" value="0"/>
 																								<UML:TaggedValue tag="seqno" value="0"/>
@@ -30366,7 +30252,6 @@
 																								<UML:TaggedValue tag="ea_sourceID" value="971"/>
 																								<UML:TaggedValue tag="ea_targetID" value="973"/>
 																								<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={E7417010-71B5-4d7a-BC6C-2EED8B647E8A}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={DD6FBBE0-A141-4524-A096-1662E229AA3E}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																								<UML:TaggedValue tag="privatedata5" value="EDGE=2;SX=-1;SY=11;EX=-1;EY=11;"/>
 																								<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																								<UML:TaggedValue tag="lb" value="1"/>
 																								<UML:TaggedValue tag="rb" value="0..*"/>
@@ -30392,10 +30277,10 @@
 																						</UML:Association>
 																						<UML:Generalization subtype="EAID_12DBFC9B_D995_4251_96D0_6FB3EB85C0FB" supertype="EAID_00F8EA6B_E027_4bad_B011_41830FF87842" xmi.id="EAID_DEDCDA85_654B_45f6_8EFA_DDB29A9860CF" visibility="public">
 																							<UML:ModelElement.taggedValue>
-																								<UML:TaggedValue tag="style" value="2"/>
+																								<UML:TaggedValue tag="style" value="3"/>
 																								<UML:TaggedValue tag="ea_type" value="Generalization"/>
 																								<UML:TaggedValue tag="direction" value="Source -&gt; Destination"/>
-																								<UML:TaggedValue tag="linemode" value="2"/>
+																								<UML:TaggedValue tag="linemode" value="3"/>
 																								<UML:TaggedValue tag="linecolor" value="-1"/>
 																								<UML:TaggedValue tag="linewidth" value="0"/>
 																								<UML:TaggedValue tag="seqno" value="0"/>
@@ -30419,7 +30304,6 @@
 																								<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 																								<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 																								<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={8515973E-A54C-40a7-BF0A-41BC90E3A084}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isSubstitutable@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={DEDCDA85-654B-45f6-8EFA-DDB29A9860CF}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																								<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 																								<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																							</UML:ModelElement.taggedValue>
 																						</UML:Generalization>
@@ -30779,7 +30663,6 @@
 																										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 																										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 																										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={4CB3234E-BE64-409a-BAE2-3EBB076BF284}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isSubstitutable@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={949D89E2-49F9-4f92-81A2-52DA192499CA}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																										<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 																										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																									</UML:ModelElement.taggedValue>
 																								</UML:Generalization>
@@ -30812,7 +30695,6 @@
 																										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 																										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 																										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={F7BCB818-0065-44ed-ADC0-AB2FABB9A240}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isSubstitutable@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={A04E1EDA-8ECA-42cf-BA02-E7A6D27D570B}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																										<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 																										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																									</UML:ModelElement.taggedValue>
 																								</UML:Generalization>
@@ -30910,7 +30792,6 @@
 																										<UML:TaggedValue tag="ea_sourceID" value="978"/>
 																										<UML:TaggedValue tag="ea_targetID" value="979"/>
 																										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={BE8F53F9-50E5-4683-AAD5-8FA01E65C128}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={4D23641A-C59A-40d2-B028-0EF442CFE9DE}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																										<UML:TaggedValue tag="privatedata5" value="EDGE=2;SX=2;SY=14;EX=2;EY=15;"/>
 																										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																										<UML:TaggedValue tag="lb" value="0..*"/>
 																										<UML:TaggedValue tag="lt" value="+luggage"/>
@@ -30964,7 +30845,6 @@
 																										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 																										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 																										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={A333C042-8EFF-49bd-80C1-6DF5D3C895E2}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isSubstitutable@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={B6D09122-DFF2-4013-805A-08582E81B286}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																										<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 																										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																									</UML:ModelElement.taggedValue>
 																								</UML:Generalization>
@@ -31273,7 +31153,6 @@
 																								<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 																								<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 																								<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={FD25E507-4AC5-49e8-8437-EC16A6593132}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isSubstitutable@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={196BAAF8-17DB-409d-89E7-D98490EE8496}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																								<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 																								<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																							</UML:ModelElement.taggedValue>
 																						</UML:Generalization>
@@ -31357,7 +31236,6 @@
 																								<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 																								<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 																								<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={C640D3EF-8FCA-4025-BEBB-C75C041D2520}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isSubstitutable@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={5CF2F699-4407-4a5a-8192-F434CF7AB662}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																								<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 																								<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																							</UML:ModelElement.taggedValue>
 																						</UML:Generalization>
@@ -31464,10 +31342,10 @@
 																						</UML:Class>
 																						<UML:Generalization subtype="EAID_C7759A44_3482_4c56_97E7_0A7778155F35" supertype="EAID_BD83C679_098A_46a0_B994_50A9478E9896" xmi.id="EAID_FDFBF3FD_4358_4bff_9781_236F2CDB2F25" visibility="public">
 																							<UML:ModelElement.taggedValue>
-																								<UML:TaggedValue tag="style" value="2"/>
+																								<UML:TaggedValue tag="style" value="3"/>
 																								<UML:TaggedValue tag="ea_type" value="Generalization"/>
 																								<UML:TaggedValue tag="direction" value="Source -&gt; Destination"/>
-																								<UML:TaggedValue tag="linemode" value="2"/>
+																								<UML:TaggedValue tag="linemode" value="3"/>
 																								<UML:TaggedValue tag="linecolor" value="-1"/>
 																								<UML:TaggedValue tag="linewidth" value="0"/>
 																								<UML:TaggedValue tag="seqno" value="0"/>
@@ -31491,7 +31369,6 @@
 																								<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 																								<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 																								<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={1B67DBA4-8331-474c-B5FB-56B1528D0464}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isSubstitutable@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={FDFBF3FD-4358-4bff-9781-236F2CDB2F25}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																								<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 																								<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																							</UML:ModelElement.taggedValue>
 																						</UML:Generalization>
@@ -31669,7 +31546,6 @@
 																										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 																										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 																										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={415E32DB-5922-47cf-93FA-70DC41888EA7}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isSubstitutable@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={010FBD3E-C532-4696-97F5-582C2031C8B3}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																										<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 																										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																									</UML:ModelElement.taggedValue>
 																								</UML:Generalization>
@@ -31702,7 +31578,6 @@
 																										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 																										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 																										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={D83E71CF-3C54-490b-85C9-83D60E14B03F}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isSubstitutable@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={542CA101-F856-48b7-A29F-70BD24061197}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																										<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 																										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																									</UML:ModelElement.taggedValue>
 																								</UML:Generalization>
@@ -31785,7 +31660,6 @@
 																										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 																										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 																										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={A58E9687-9ACD-4729-98B2-458630F5D3B9}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isSubstitutable@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={677C4A41-E221-417f-9BEE-4E22692AB76C}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																										<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 																										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																									</UML:ModelElement.taggedValue>
 																								</UML:Generalization>
@@ -31841,7 +31715,6 @@
 																										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 																										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 																										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={BBF608D4-B862-4145-938D-86B369388CCA}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isSubstitutable@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={222DA596-BB02-49da-A43D-960FC168F512}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																										<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 																										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																									</UML:ModelElement.taggedValue>
 																								</UML:Generalization>
@@ -32016,10 +31889,10 @@
 																								</UML:Class>
 																								<UML:Generalization subtype="EAID_EA92F07A_21F0_4e5d_AF19_78393AE49A36" supertype="EAID_47763202_9509_42ae_BA5D_7F05FBA1C014" xmi.id="EAID_B05E169E_522F_49fe_AF5B_20630E2070FB" visibility="public">
 																									<UML:ModelElement.taggedValue>
-																										<UML:TaggedValue tag="style" value="2"/>
+																										<UML:TaggedValue tag="style" value="3"/>
 																										<UML:TaggedValue tag="ea_type" value="Generalization"/>
 																										<UML:TaggedValue tag="direction" value="Source -&gt; Destination"/>
-																										<UML:TaggedValue tag="linemode" value="2"/>
+																										<UML:TaggedValue tag="linemode" value="3"/>
 																										<UML:TaggedValue tag="linecolor" value="-1"/>
 																										<UML:TaggedValue tag="linewidth" value="0"/>
 																										<UML:TaggedValue tag="seqno" value="0"/>
@@ -32043,7 +31916,6 @@
 																										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 																										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 																										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={49746E37-FCAF-4a8a-B6E0-044635DB59A2}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isSubstitutable@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={B05E169E-522F-49fe-AF5B-20630E2070FB}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																										<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 																										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																									</UML:ModelElement.taggedValue>
 																								</UML:Generalization>
@@ -32076,7 +31948,6 @@
 																										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 																										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 																										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={0FAC9E13-F795-4b87-9B4A-2D9756119173}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isSubstitutable@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={DA9CFB50-42DB-451d-BEFA-48156718E45C}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																										<UML:TaggedValue tag="privatedata5" value="EDGE=1;SX=24;SY=8;EX=-29;EY=0;"/>
 																										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																									</UML:ModelElement.taggedValue>
 																								</UML:Generalization>
@@ -32128,10 +31999,10 @@
 																								</UML:Class>
 																								<UML:Generalization subtype="EAID_8C521550_2832_4fa4_A000_42738EFC3AAB" supertype="EAID_EA92F07A_21F0_4e5d_AF19_78393AE49A36" xmi.id="EAID_D45BFAAB_1B07_4d85_93FC_B3A749773EF4" visibility="public">
 																									<UML:ModelElement.taggedValue>
-																										<UML:TaggedValue tag="style" value="2"/>
+																										<UML:TaggedValue tag="style" value="3"/>
 																										<UML:TaggedValue tag="ea_type" value="Generalization"/>
 																										<UML:TaggedValue tag="direction" value="Source -&gt; Destination"/>
-																										<UML:TaggedValue tag="linemode" value="2"/>
+																										<UML:TaggedValue tag="linemode" value="3"/>
 																										<UML:TaggedValue tag="linecolor" value="-1"/>
 																										<UML:TaggedValue tag="linewidth" value="0"/>
 																										<UML:TaggedValue tag="seqno" value="0"/>
@@ -32155,7 +32026,6 @@
 																										<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 																										<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 																										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={8C8027A5-7362-46b0-8F7B-8C9B7ED4A2D1}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isSubstitutable@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={D45BFAAB-1B07-4d85-93FC-B3A749773EF4}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																										<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 																										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																									</UML:ModelElement.taggedValue>
 																								</UML:Generalization>
@@ -32262,7 +32132,6 @@
 																						<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 																						<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 																						<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={A8A6DBD2-E415-440e-9AF3-855AA0ED8D9E}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isSubstitutable@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={8A8358B3-F86A-4b72-A751-D4D84B39A861}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																						<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 																						<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																					</UML:ModelElement.taggedValue>
 																				</UML:Generalization>
@@ -32323,7 +32192,6 @@
 																						<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 																						<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 																						<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={8ABFB561-AA27-4b6e-93D9-95CDD62B65D7}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isSubstitutable@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={3D6E39CB-9601-4dfa-9761-690E7A894320}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																						<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 																						<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																					</UML:ModelElement.taggedValue>
 																				</UML:Generalization>
@@ -32356,7 +32224,6 @@
 																						<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 																						<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 																						<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={8AF3CDAE-2F93-4eae-ADC6-F7A8C050A693}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isSubstitutable@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={B1AF35BD-7E37-4f39-A8B4-28921269E000}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																						<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 																						<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																					</UML:ModelElement.taggedValue>
 																				</UML:Generalization>
@@ -32423,7 +32290,6 @@
 																						<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 																						<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 																						<UML:TaggedValue tag="dst_style" value="Owned=0;Navigable=Navigable;"/>
-																						<UML:TaggedValue tag="privatedata5" value="EDGE=2;"/>
 																						<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																						<UML:TaggedValue tag="mb" value=" &#xA;«realize»"/>
 																					</UML:ModelElement.taggedValue>
@@ -32584,7 +32450,6 @@
 																						<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 																						<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 																						<UML:TaggedValue tag="dst_style" value="Owned=0;Navigable=Navigable;"/>
-																						<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 																						<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																						<UML:TaggedValue tag="mb" value=" &#xA;«realize»"/>
 																					</UML:ModelElement.taggedValue>
@@ -32866,10 +32731,10 @@
 																						</UML:Class>
 																						<UML:Association xmi.id="EAID_8781B31F_62E5_4aaf_8C68_781FA3A0E317" visibility="public" isRoot="false" isLeaf="false" isAbstract="false">
 																							<UML:ModelElement.taggedValue>
-																								<UML:TaggedValue tag="style" value="2"/>
+																								<UML:TaggedValue tag="style" value="3"/>
 																								<UML:TaggedValue tag="ea_type" value="Association"/>
 																								<UML:TaggedValue tag="direction" value="Unspecified"/>
-																								<UML:TaggedValue tag="linemode" value="2"/>
+																								<UML:TaggedValue tag="linemode" value="3"/>
 																								<UML:TaggedValue tag="linecolor" value="-1"/>
 																								<UML:TaggedValue tag="linewidth" value="0"/>
 																								<UML:TaggedValue tag="seqno" value="0"/>
@@ -32883,7 +32748,6 @@
 																								<UML:TaggedValue tag="ea_sourceID" value="1004"/>
 																								<UML:TaggedValue tag="ea_targetID" value="1003"/>
 																								<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={8970D881-B029-4f80-856D-0A2E4609B049}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={8781B31F-62E5-4aaf-8C68-781FA3A0E317}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																								<UML:TaggedValue tag="privatedata5" value="EDGE=2;SX=0;SY=7;EX=0;EY=7;"/>
 																								<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																								<UML:TaggedValue tag="lb" value="0..*"/>
 																								<UML:TaggedValue tag="lt" value="+employeeCollection"/>
@@ -33084,10 +32948,10 @@
 																								</UML:Class>
 																								<UML:Association xmi.id="EAID_ABD3DE55_2BA9_43fc_BDF1_EBC3606F2F9E" visibility="public" isRoot="false" isLeaf="false" isAbstract="false">
 																									<UML:ModelElement.taggedValue>
-																										<UML:TaggedValue tag="style" value="2"/>
+																										<UML:TaggedValue tag="style" value="3"/>
 																										<UML:TaggedValue tag="ea_type" value="Association"/>
 																										<UML:TaggedValue tag="direction" value="Bi-Directional"/>
-																										<UML:TaggedValue tag="linemode" value="2"/>
+																										<UML:TaggedValue tag="linemode" value="3"/>
 																										<UML:TaggedValue tag="linecolor" value="-1"/>
 																										<UML:TaggedValue tag="linewidth" value="1"/>
 																										<UML:TaggedValue tag="seqno" value="0"/>
@@ -33100,7 +32964,6 @@
 																										<UML:TaggedValue tag="ea_targetType" value="Class"/>
 																										<UML:TaggedValue tag="ea_sourceID" value="1159"/>
 																										<UML:TaggedValue tag="ea_targetID" value="1159"/>
-																										<UML:TaggedValue tag="privatedata5" value="EDGE=2;SCTR=1;SCME=1;SX=0;SY=0;EX=0;EY=0;SCTR.LEFT=207;SCTR.TOP=-226;SCTR.RIGHT=353;SCTR.BOTTOM=-66;"/>
 																										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																										<UML:TaggedValue tag="lb" value="0..*"/>
 																										<UML:TaggedValue tag="lt" value="+memberCollection"/>
@@ -33227,10 +33090,10 @@
 																						</UML:Class>
 																						<UML:Association xmi.id="EAID_80122D88_6997_437f_A6ED_8B374ED98F03" visibility="public" isRoot="false" isLeaf="false" isAbstract="false">
 																							<UML:ModelElement.taggedValue>
-																								<UML:TaggedValue tag="style" value="2"/>
+																								<UML:TaggedValue tag="style" value="3"/>
 																								<UML:TaggedValue tag="ea_type" value="Association"/>
 																								<UML:TaggedValue tag="direction" value="Source -&gt; Destination"/>
-																								<UML:TaggedValue tag="linemode" value="2"/>
+																								<UML:TaggedValue tag="linemode" value="3"/>
 																								<UML:TaggedValue tag="linecolor" value="-1"/>
 																								<UML:TaggedValue tag="linewidth" value="0"/>
 																								<UML:TaggedValue tag="seqno" value="0"/>
@@ -33244,7 +33107,6 @@
 																								<UML:TaggedValue tag="ea_sourceID" value="1005"/>
 																								<UML:TaggedValue tag="ea_targetID" value="1006"/>
 																								<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={9FCD5481-C5B8-49b3-A420-6109F026E075}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={80122D88-6997-437f-A6ED-8B374ED98F03}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																								<UML:TaggedValue tag="privatedata5" value="EDGE=2;"/>
 																								<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																								<UML:TaggedValue tag="lb" value="0..*"/>
 																								<UML:TaggedValue tag="rb" value="0..*"/>
@@ -34057,10 +33919,10 @@
 																						</UML:Class>
 																						<UML:Association xmi.id="EAID_64AA7407_1F2B_4b96_8A5E_0724B850D6A3" visibility="public" isRoot="false" isLeaf="false" isAbstract="false">
 																							<UML:ModelElement.taggedValue>
-																								<UML:TaggedValue tag="style" value="2"/>
+																								<UML:TaggedValue tag="style" value="3"/>
 																								<UML:TaggedValue tag="ea_type" value="Association"/>
 																								<UML:TaggedValue tag="direction" value="Bi-Directional"/>
-																								<UML:TaggedValue tag="linemode" value="2"/>
+																								<UML:TaggedValue tag="linemode" value="3"/>
 																								<UML:TaggedValue tag="linecolor" value="-1"/>
 																								<UML:TaggedValue tag="linewidth" value="0"/>
 																								<UML:TaggedValue tag="seqno" value="0"/>
@@ -34074,7 +33936,6 @@
 																								<UML:TaggedValue tag="ea_sourceID" value="1017"/>
 																								<UML:TaggedValue tag="ea_targetID" value="1016"/>
 																								<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={40EA78FC-5848-4d8c-A73D-049B5A9961A9}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={64AA7407-1F2B-4b96-8A5E-0724B850D6A3}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																								<UML:TaggedValue tag="privatedata5" value="EDGE=2;SX=4;SY=-8;EX=4;EY=-8;"/>
 																								<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																								<UML:TaggedValue tag="lb" value="1"/>
 																								<UML:TaggedValue tag="lt" value="+computer"/>
@@ -34326,10 +34187,10 @@
 																								</UML:Class>
 																								<UML:Association xmi.id="EAID_16392C58_833D_4577_8635_E0D4D15C1B93" visibility="public" isRoot="false" isLeaf="false" isAbstract="false">
 																									<UML:ModelElement.taggedValue>
-																										<UML:TaggedValue tag="style" value="2"/>
+																										<UML:TaggedValue tag="style" value="3"/>
 																										<UML:TaggedValue tag="ea_type" value="Association"/>
 																										<UML:TaggedValue tag="direction" value="Unspecified"/>
-																										<UML:TaggedValue tag="linemode" value="2"/>
+																										<UML:TaggedValue tag="linemode" value="3"/>
 																										<UML:TaggedValue tag="linecolor" value="-1"/>
 																										<UML:TaggedValue tag="linewidth" value="0"/>
 																										<UML:TaggedValue tag="seqno" value="0"/>
@@ -34343,7 +34204,6 @@
 																										<UML:TaggedValue tag="ea_sourceID" value="1020"/>
 																										<UML:TaggedValue tag="ea_targetID" value="1019"/>
 																										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={D79D2A9E-A074-40ba-9D40-5F0799AC8112}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={16392C58-833D-4577-8635-E0D4D15C1B93}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																										<UML:TaggedValue tag="privatedata5" value="EDGE=2;SX=4;SY=7;EX=4;EY=7;"/>
 																										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																										<UML:TaggedValue tag="lb" value="1"/>
 																										<UML:TaggedValue tag="lt" value="+flight"/>
@@ -34547,10 +34407,10 @@
 																								</UML:Class>
 																								<UML:Association xmi.id="EAID_5166E020_F4AF_4149_B8AD_E4A3097D0274" visibility="public" isRoot="false" isLeaf="false" isAbstract="false">
 																									<UML:ModelElement.taggedValue>
-																										<UML:TaggedValue tag="style" value="2"/>
+																										<UML:TaggedValue tag="style" value="3"/>
 																										<UML:TaggedValue tag="ea_type" value="Association"/>
 																										<UML:TaggedValue tag="direction" value="Bi-Directional"/>
-																										<UML:TaggedValue tag="linemode" value="2"/>
+																										<UML:TaggedValue tag="linemode" value="3"/>
 																										<UML:TaggedValue tag="linecolor" value="-1"/>
 																										<UML:TaggedValue tag="linewidth" value="1"/>
 																										<UML:TaggedValue tag="seqno" value="0"/>
@@ -34566,7 +34426,6 @@
 																										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={4C72FB70-3580-4f1c-B850-D5C685A97A55}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={5166E020-F4AF-4149-B8AD-E4A3097D0274}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
 																										<UML:TaggedValue tag="$ea_src_xref_property" value=""/>
 																										<UML:TaggedValue tag="$ea_dst_xref_property" value=""/>
-																										<UML:TaggedValue tag="privatedata5" value="EDGE=2;SCTR=1;SCME=1;SX=0;SY=0;EX=0;EY=0;SCTR.LEFT=265;SCTR.TOP=-484;SCTR.RIGHT=333;SCTR.BOTTOM=-369;"/>
 																										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																										<UML:TaggedValue tag="lb" value="0..1"/>
 																										<UML:TaggedValue tag="lt" value="+friend"/>
@@ -34691,10 +34550,10 @@
 																						</UML:Class>
 																						<UML:Association xmi.id="EAID_1014EF95_45A5_465d_B1CC_FC9B70336488" visibility="public" isRoot="false" isLeaf="false" isAbstract="false">
 																							<UML:ModelElement.taggedValue>
-																								<UML:TaggedValue tag="style" value="2"/>
+																								<UML:TaggedValue tag="style" value="3"/>
 																								<UML:TaggedValue tag="ea_type" value="Association"/>
 																								<UML:TaggedValue tag="direction" value="Source -&gt; Destination"/>
-																								<UML:TaggedValue tag="linemode" value="2"/>
+																								<UML:TaggedValue tag="linemode" value="3"/>
 																								<UML:TaggedValue tag="linecolor" value="-1"/>
 																								<UML:TaggedValue tag="linewidth" value="0"/>
 																								<UML:TaggedValue tag="seqno" value="0"/>
@@ -34708,7 +34567,6 @@
 																								<UML:TaggedValue tag="ea_sourceID" value="1021"/>
 																								<UML:TaggedValue tag="ea_targetID" value="1021"/>
 																								<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={FF79EB20-77F9-43ae-AA93-7499BBA3261C}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={1014EF95-45A5-465d-B1CC-FC9B70336488}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																								<UML:TaggedValue tag="privatedata5" value="SCME=1;SX=0;SY=0;EX=0;EY=0;EDGE=3;SCTR=1;SCTR.LEFT=407;SCTR.TOP=-596;SCTR.RIGHT=515;SCTR.BOTTOM=-502;"/>
 																								<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																								<UML:TaggedValue tag="lb" value="1"/>
 																								<UML:TaggedValue tag="lt" value="+parent"/>
@@ -34834,10 +34692,10 @@
 																						</UML:Class>
 																						<UML:Association xmi.id="EAID_D04382EB_0ECD_435b_855D_07A03AD1E887" visibility="public" isRoot="false" isLeaf="false" isAbstract="false">
 																							<UML:ModelElement.taggedValue>
-																								<UML:TaggedValue tag="style" value="2"/>
+																								<UML:TaggedValue tag="style" value="3"/>
 																								<UML:TaggedValue tag="ea_type" value="Association"/>
 																								<UML:TaggedValue tag="direction" value="Source -&gt; Destination"/>
-																								<UML:TaggedValue tag="linemode" value="2"/>
+																								<UML:TaggedValue tag="linemode" value="3"/>
 																								<UML:TaggedValue tag="linecolor" value="-1"/>
 																								<UML:TaggedValue tag="linewidth" value="0"/>
 																								<UML:TaggedValue tag="seqno" value="0"/>
@@ -34851,7 +34709,6 @@
 																								<UML:TaggedValue tag="ea_sourceID" value="1023"/>
 																								<UML:TaggedValue tag="ea_targetID" value="1022"/>
 																								<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={133B3454-5535-4362-A22E-9E7EFA84D9DD}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={D04382EB-0ECD-435b-855D-07A03AD1E887}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																								<UML:TaggedValue tag="privatedata5" value="EDGE=2;SX=-1;SY=0;EX=-1;EY=0;"/>
 																								<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																								<UML:TaggedValue tag="lb" value="1"/>
 																								<UML:TaggedValue tag="rb" value="0..*"/>
@@ -35101,10 +34958,10 @@
 																								</UML:Class>
 																								<UML:Association xmi.id="EAID_46D808A4_3A2C_49c2_803D_068142BF9829" visibility="public" isRoot="false" isLeaf="false" isAbstract="false">
 																									<UML:ModelElement.taggedValue>
-																										<UML:TaggedValue tag="style" value="2"/>
+																										<UML:TaggedValue tag="style" value="3"/>
 																										<UML:TaggedValue tag="ea_type" value="Association"/>
 																										<UML:TaggedValue tag="direction" value="Source -&gt; Destination"/>
-																										<UML:TaggedValue tag="linemode" value="2"/>
+																										<UML:TaggedValue tag="linemode" value="3"/>
 																										<UML:TaggedValue tag="linecolor" value="-1"/>
 																										<UML:TaggedValue tag="linewidth" value="0"/>
 																										<UML:TaggedValue tag="seqno" value="0"/>
@@ -35118,7 +34975,6 @@
 																										<UML:TaggedValue tag="ea_sourceID" value="1025"/>
 																										<UML:TaggedValue tag="ea_targetID" value="1026"/>
 																										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={A7676D06-4A58-4662-A9E6-1ED1045FEA64}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=0@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={46D808A4-3A2C-49c2-803D-068142BF9829}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																										<UML:TaggedValue tag="privatedata5" value="EDGE=2;SX=2;SY=13;EX=2;EY=13;"/>
 																										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																										<UML:TaggedValue tag="lb" value="0..1"/>
 																										<UML:TaggedValue tag="rb" value="0..*"/>
@@ -35320,10 +35176,10 @@
 																								</UML:Class>
 																								<UML:Association xmi.id="EAID_4F8F65FA_4FA7_425d_8867_C69EB4888D52" visibility="public" isRoot="false" isLeaf="false" isAbstract="false">
 																									<UML:ModelElement.taggedValue>
-																										<UML:TaggedValue tag="style" value="2"/>
+																										<UML:TaggedValue tag="style" value="3"/>
 																										<UML:TaggedValue tag="ea_type" value="Association"/>
 																										<UML:TaggedValue tag="direction" value="Source -&gt; Destination"/>
-																										<UML:TaggedValue tag="linemode" value="2"/>
+																										<UML:TaggedValue tag="linemode" value="3"/>
 																										<UML:TaggedValue tag="linecolor" value="-1"/>
 																										<UML:TaggedValue tag="linewidth" value="1"/>
 																										<UML:TaggedValue tag="seqno" value="0"/>
@@ -35336,7 +35192,6 @@
 																										<UML:TaggedValue tag="ea_targetType" value="Class"/>
 																										<UML:TaggedValue tag="ea_sourceID" value="1163"/>
 																										<UML:TaggedValue tag="ea_targetID" value="1163"/>
-																										<UML:TaggedValue tag="privatedata5" value="SX=0;SY=0;EX=0;EY=0;SCME=1;SCTR=1;EDGE=3;SCTR.LEFT=72;SCTR.TOP=-279;SCTR.RIGHT=346;SCTR.BOTTOM=-210;"/>
 																										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																										<UML:TaggedValue tag="lb" value="1"/>
 																										<UML:TaggedValue tag="lt" value="+id"/>
@@ -35565,10 +35420,10 @@
 																						</UML:Class>
 																						<UML:Association xmi.id="EAID_63546342_FF6A_4b44_BC32_49BA1A3893BB" visibility="public" isRoot="false" isLeaf="false" isAbstract="false">
 																							<UML:ModelElement.taggedValue>
-																								<UML:TaggedValue tag="style" value="2"/>
+																								<UML:TaggedValue tag="style" value="3"/>
 																								<UML:TaggedValue tag="ea_type" value="Association"/>
 																								<UML:TaggedValue tag="direction" value="Bi-Directional"/>
-																								<UML:TaggedValue tag="linemode" value="2"/>
+																								<UML:TaggedValue tag="linemode" value="3"/>
 																								<UML:TaggedValue tag="linecolor" value="-1"/>
 																								<UML:TaggedValue tag="linewidth" value="0"/>
 																								<UML:TaggedValue tag="seqno" value="0"/>
@@ -35582,7 +35437,6 @@
 																								<UML:TaggedValue tag="ea_sourceID" value="1030"/>
 																								<UML:TaggedValue tag="ea_targetID" value="1031"/>
 																								<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={A8361A05-AF35-4f34-8B36-3AB05306F168}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={63546342-FF6A-4b44-BC32-49BA1A3893BB}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																								<UML:TaggedValue tag="privatedata5" value="EDGE=2;SX=0;SY=4;EX=0;EY=4;"/>
 																								<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																								<UML:TaggedValue tag="lb" value="0..1"/>
 																								<UML:TaggedValue tag="lt" value="+line"/>
@@ -35851,7 +35705,6 @@
 																										<UML:TaggedValue tag="ea_sourceID" value="1033"/>
 																										<UML:TaggedValue tag="ea_targetID" value="1034"/>
 																										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={6A886F67-24E3-428d-ABBA-0E9F7D62FD70}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={184C23FB-E165-48d2-A0D9-D9AFC573EA99}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																										<UML:TaggedValue tag="privatedata5" value="EDGE=2;SX=-2;SY=-12;EX=-1;EY=-4;"/>
 																										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																										<UML:TaggedValue tag="lb" value="1"/>
 																										<UML:TaggedValue tag="lt" value="+chain"/>
@@ -36076,7 +35929,6 @@
 																										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={40C3A734-5BE6-4d26-AF4A-71782A9F190C}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={A27AEEB9-3954-4cd7-88F6-A0FE22C1E329}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
 																										<UML:TaggedValue tag="$ea_src_xref_property" value="$XREFPROP=$XID={804A7E6A-3BEB-4da4-9CD9-670429246765}$XID;$NAM=CustomProperties$NAM;$TYP=connectorSrcEnd property$TYP;$VIS=Public$VIS;$CLT={A27AEEB9-3954-4cd7-88F6-A0FE22C1E329}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
 																										<UML:TaggedValue tag="$ea_dst_xref_property" value=""/>
-																										<UML:TaggedValue tag="privatedata5" value="SCTR=1;SCME=1;SX=0;SY=0;EX=0;EY=0;EDGE=2;SCTR.LEFT=590;SCTR.TOP=-92;SCTR.RIGHT=649;SCTR.BOTTOM=-12;"/>
 																										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																										<UML:TaggedValue tag="lb" value="0..1"/>
 																										<UML:TaggedValue tag="lt" value="+me"/>
@@ -36232,10 +36084,10 @@
 																						</UML:Class>
 																						<UML:Association xmi.id="EAID_12B89A6B_89E0_4456_B71F_165772645E9A" visibility="public" isRoot="false" isLeaf="false" isAbstract="false">
 																							<UML:ModelElement.taggedValue>
-																								<UML:TaggedValue tag="style" value="2"/>
+																								<UML:TaggedValue tag="style" value="3"/>
 																								<UML:TaggedValue tag="ea_type" value="Association"/>
 																								<UML:TaggedValue tag="direction" value="Source -&gt; Destination"/>
-																								<UML:TaggedValue tag="linemode" value="2"/>
+																								<UML:TaggedValue tag="linemode" value="3"/>
 																								<UML:TaggedValue tag="linecolor" value="-1"/>
 																								<UML:TaggedValue tag="linewidth" value="0"/>
 																								<UML:TaggedValue tag="seqno" value="0"/>
@@ -36249,7 +36101,6 @@
 																								<UML:TaggedValue tag="ea_sourceID" value="1036"/>
 																								<UML:TaggedValue tag="ea_targetID" value="1035"/>
 																								<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={C9019665-BB6F-492a-AF80-6453040BBD42}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=0@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={12B89A6B-89E0-4456-B71F-165772645E9A}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																								<UML:TaggedValue tag="privatedata5" value="SX=-2;SY=-19;EX=-2;EY=-19;EDGE=2;"/>
 																								<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																								<UML:TaggedValue tag="lb" value="0..1"/>
 																								<UML:TaggedValue tag="rb" value="0..1"/>
@@ -36275,10 +36126,10 @@
 																						</UML:Association>
 																						<UML:Association xmi.id="EAID_F3D72441_145C_406c_9CBE_C435158C89BA" visibility="public" isRoot="false" isLeaf="false" isAbstract="false">
 																							<UML:ModelElement.taggedValue>
-																								<UML:TaggedValue tag="style" value="2"/>
+																								<UML:TaggedValue tag="style" value="3"/>
 																								<UML:TaggedValue tag="ea_type" value="Association"/>
 																								<UML:TaggedValue tag="direction" value="Source -&gt; Destination"/>
-																								<UML:TaggedValue tag="linemode" value="2"/>
+																								<UML:TaggedValue tag="linemode" value="3"/>
 																								<UML:TaggedValue tag="linecolor" value="-1"/>
 																								<UML:TaggedValue tag="linewidth" value="0"/>
 																								<UML:TaggedValue tag="seqno" value="0"/>
@@ -36292,7 +36143,6 @@
 																								<UML:TaggedValue tag="ea_sourceID" value="1036"/>
 																								<UML:TaggedValue tag="ea_targetID" value="1035"/>
 																								<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={8F85AB3D-E330-49b7-8CC1-8741C698F3C4}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=0@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={F3D72441-145C-406c-9CBE-C435158C89BA}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																								<UML:TaggedValue tag="privatedata5" value="EDGE=2;SX=-6;SY=21;EX=-6;EY=21;"/>
 																								<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																								<UML:TaggedValue tag="lb" value="0..1"/>
 																								<UML:TaggedValue tag="rb" value="0..1"/>
@@ -36488,10 +36338,10 @@
 																								</UML:Class>
 																								<UML:Association xmi.id="EAID_470AA48F_DC1F_4d61_8C32_2F9A0117BFB3" visibility="public" isRoot="false" isLeaf="false" isAbstract="false">
 																									<UML:ModelElement.taggedValue>
-																										<UML:TaggedValue tag="style" value="2"/>
+																										<UML:TaggedValue tag="style" value="3"/>
 																										<UML:TaggedValue tag="ea_type" value="Association"/>
 																										<UML:TaggedValue tag="direction" value="Source -&gt; Destination"/>
-																										<UML:TaggedValue tag="linemode" value="2"/>
+																										<UML:TaggedValue tag="linemode" value="3"/>
 																										<UML:TaggedValue tag="linecolor" value="-1"/>
 																										<UML:TaggedValue tag="linewidth" value="0"/>
 																										<UML:TaggedValue tag="seqno" value="0"/>
@@ -36505,7 +36355,6 @@
 																										<UML:TaggedValue tag="ea_sourceID" value="1039"/>
 																										<UML:TaggedValue tag="ea_targetID" value="1038"/>
 																										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={7FD30937-8671-4b05-8B11-C9F46D9D3FD6}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={470AA48F-DC1F-4d61-8C32-2F9A0117BFB3}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																										<UML:TaggedValue tag="privatedata5" value="SX=7;SY=-20;EX=7;EY=-20;EDGE=2;"/>
 																										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																										<UML:TaggedValue tag="lb" value="1"/>
 																										<UML:TaggedValue tag="rb" value="1"/>
@@ -36532,10 +36381,10 @@
 																								</UML:Association>
 																								<UML:Association xmi.id="EAID_EBF7B6D1_4E82_47a3_B512_22ECDA404ED5" visibility="public" isRoot="false" isLeaf="false" isAbstract="false">
 																									<UML:ModelElement.taggedValue>
-																										<UML:TaggedValue tag="style" value="2"/>
+																										<UML:TaggedValue tag="style" value="3"/>
 																										<UML:TaggedValue tag="ea_type" value="Association"/>
 																										<UML:TaggedValue tag="direction" value="Source -&gt; Destination"/>
-																										<UML:TaggedValue tag="linemode" value="2"/>
+																										<UML:TaggedValue tag="linemode" value="3"/>
 																										<UML:TaggedValue tag="linecolor" value="-1"/>
 																										<UML:TaggedValue tag="linewidth" value="0"/>
 																										<UML:TaggedValue tag="seqno" value="0"/>
@@ -36549,7 +36398,6 @@
 																										<UML:TaggedValue tag="ea_sourceID" value="1039"/>
 																										<UML:TaggedValue tag="ea_targetID" value="1038"/>
 																										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={71FA0060-F367-496d-98BA-EB37C517476F}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={EBF7B6D1-4E82-47a3-B512-22ECDA404ED5}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																										<UML:TaggedValue tag="privatedata5" value="SX=-1;SY=17;EX=-1;EY=17;EDGE=2;"/>
 																										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																										<UML:TaggedValue tag="lb" value="1"/>
 																										<UML:TaggedValue tag="rb" value="1"/>
@@ -36751,10 +36599,10 @@
 																						</UML:Class>
 																						<UML:Association xmi.id="EAID_3696123F_39AA_40b2_AD92_24A6878219EA" visibility="public" isRoot="false" isLeaf="false" isAbstract="false">
 																							<UML:ModelElement.taggedValue>
-																								<UML:TaggedValue tag="style" value="2"/>
+																								<UML:TaggedValue tag="style" value="3"/>
 																								<UML:TaggedValue tag="ea_type" value="Association"/>
 																								<UML:TaggedValue tag="direction" value="Source -&gt; Destination"/>
-																								<UML:TaggedValue tag="linemode" value="2"/>
+																								<UML:TaggedValue tag="linemode" value="3"/>
 																								<UML:TaggedValue tag="linecolor" value="-1"/>
 																								<UML:TaggedValue tag="linewidth" value="0"/>
 																								<UML:TaggedValue tag="seqno" value="0"/>
@@ -36768,7 +36616,6 @@
 																								<UML:TaggedValue tag="ea_sourceID" value="1040"/>
 																								<UML:TaggedValue tag="ea_targetID" value="1041"/>
 																								<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={2AC748ED-4AE7-4ab2-9BE5-714C92C3CADC}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={3696123F-39AA-40b2-AD92-24A6878219EA}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																								<UML:TaggedValue tag="privatedata5" value="EDGE=2;SX=-11;SY=-7;EX=-11;EY=-7;"/>
 																								<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																								<UML:TaggedValue tag="lb" value="1"/>
 																								<UML:TaggedValue tag="rb" value="0..1"/>
@@ -37020,10 +36867,10 @@
 																								</UML:Class>
 																								<UML:Association xmi.id="EAID_0F407F97_BA76_4c77_B04C_E4BE6E7264C0" visibility="public" isRoot="false" isLeaf="false" isAbstract="false">
 																									<UML:ModelElement.taggedValue>
-																										<UML:TaggedValue tag="style" value="2"/>
+																										<UML:TaggedValue tag="style" value="3"/>
 																										<UML:TaggedValue tag="ea_type" value="Association"/>
 																										<UML:TaggedValue tag="direction" value="Source -&gt; Destination"/>
-																										<UML:TaggedValue tag="linemode" value="2"/>
+																										<UML:TaggedValue tag="linemode" value="3"/>
 																										<UML:TaggedValue tag="linecolor" value="-1"/>
 																										<UML:TaggedValue tag="linewidth" value="0"/>
 																										<UML:TaggedValue tag="seqno" value="0"/>
@@ -37037,7 +36884,6 @@
 																										<UML:TaggedValue tag="ea_sourceID" value="1044"/>
 																										<UML:TaggedValue tag="ea_targetID" value="1043"/>
 																										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={D0E84D68-12C7-4cbb-9875-B928995E6116}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={0F407F97-BA76-4c77-B04C-E4BE6E7264C0}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																										<UML:TaggedValue tag="privatedata5" value="EDGE=2;SX=-2;SY=-11;EX=-2;EY=-11;"/>
 																										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																										<UML:TaggedValue tag="lb" value="0..1"/>
 																										<UML:TaggedValue tag="rb" value="1"/>
@@ -37258,7 +37104,6 @@
 																										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={7EEB3E6C-4109-475a-919E-E7A38433F446}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={65B6ACC1-65E2-4b1d-A2F4-588F1E166CB3}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
 																										<UML:TaggedValue tag="$ea_src_xref_property" value=""/>
 																										<UML:TaggedValue tag="$ea_dst_xref_property" value=""/>
-																										<UML:TaggedValue tag="privatedata5" value="SX=0;SY=0;EX=0;EY=0;SCME=1;SCTR=1;EDGE=3;SCTR.LEFT=291;SCTR.TOP=-98;SCTR.RIGHT=404;SCTR.BOTTOM=-41;"/>
 																										<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																										<UML:TaggedValue tag="lb" value="0..1"/>
 																										<UML:TaggedValue tag="lt" value="+id"/>
@@ -38091,7 +37936,6 @@
 																								<UML:TaggedValue tag="ea_sourceID" value="1131"/>
 																								<UML:TaggedValue tag="ea_targetID" value="1135"/>
 																								<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={B1B93926-C24F-484e-A2A1-EBB20EA917A4}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={0C091223-ADC1-48b0-92D2-A52DF28A2EE4}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																								<UML:TaggedValue tag="privatedata5" value="EDGE=2;SX=1;SY=0;EX=1;EY=0;"/>
 																								<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																								<UML:TaggedValue tag="lb" value="0..*"/>
 																								<UML:TaggedValue tag="lt" value="+dessertCollection"/>
@@ -38147,7 +37991,6 @@
 																								<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 																								<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 																								<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={6128DEF8-703B-4e75-9FEC-0E5ADBD37059}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isSubstitutable@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={1E95CD03-57A8-46de-8312-7776D33C6652}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																								<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 																								<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																							</UML:ModelElement.taggedValue>
 																						</UML:Generalization>
@@ -38180,7 +38023,6 @@
 																								<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 																								<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 																								<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={483FBFD8-DEF9-44b1-86A5-8EFDCBED0801}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isSubstitutable@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={49E11C4E-1CBF-4bf1-8478-85D8E36111C1}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																								<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 																								<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																							</UML:ModelElement.taggedValue>
 																						</UML:Generalization>
@@ -38493,10 +38335,10 @@
 																						</UML:Class>
 																						<UML:Association xmi.id="EAID_276EEBA0_1B52_4180_8D14_D8B5239EBAEF" visibility="public" isRoot="false" isLeaf="false" isAbstract="false">
 																							<UML:ModelElement.taggedValue>
-																								<UML:TaggedValue tag="style" value="2"/>
+																								<UML:TaggedValue tag="style" value="3"/>
 																								<UML:TaggedValue tag="ea_type" value="Association"/>
 																								<UML:TaggedValue tag="direction" value="Bi-Directional"/>
-																								<UML:TaggedValue tag="linemode" value="2"/>
+																								<UML:TaggedValue tag="linemode" value="3"/>
 																								<UML:TaggedValue tag="linecolor" value="-1"/>
 																								<UML:TaggedValue tag="linewidth" value="0"/>
 																								<UML:TaggedValue tag="seqno" value="0"/>
@@ -38510,7 +38352,6 @@
 																								<UML:TaggedValue tag="ea_sourceID" value="1049"/>
 																								<UML:TaggedValue tag="ea_targetID" value="1052"/>
 																								<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={11B9CE7E-4AB9-4e4c-9907-2A1912E63AC2}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={276EEBA0-1B52-4180-8D14-D8B5239EBAEF}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																								<UML:TaggedValue tag="privatedata5" value="EDGE=2;"/>
 																								<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																								<UML:TaggedValue tag="lb" value="1..*"/>
 																								<UML:TaggedValue tag="lt" value="+cardCollection"/>
@@ -38536,10 +38377,10 @@
 																						</UML:Association>
 																						<UML:Association xmi.id="EAID_5F54B24F_3226_47aa_8903_1858EEEE3472" visibility="public" isRoot="false" isLeaf="false" isAbstract="false">
 																							<UML:ModelElement.taggedValue>
-																								<UML:TaggedValue tag="style" value="2"/>
+																								<UML:TaggedValue tag="style" value="3"/>
 																								<UML:TaggedValue tag="ea_type" value="Association"/>
 																								<UML:TaggedValue tag="direction" value="Source -&gt; Destination"/>
-																								<UML:TaggedValue tag="linemode" value="2"/>
+																								<UML:TaggedValue tag="linemode" value="3"/>
 																								<UML:TaggedValue tag="linecolor" value="-1"/>
 																								<UML:TaggedValue tag="linewidth" value="0"/>
 																								<UML:TaggedValue tag="seqno" value="0"/>
@@ -38553,7 +38394,6 @@
 																								<UML:TaggedValue tag="ea_sourceID" value="1051"/>
 																								<UML:TaggedValue tag="ea_targetID" value="1049"/>
 																								<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={72EDBA74-83A4-427a-BBE5-E2D4C03E735C}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={5F54B24F-3226-47aa-8903-1858EEEE3472}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																								<UML:TaggedValue tag="privatedata5" value="EDGE=2;"/>
 																								<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																								<UML:TaggedValue tag="lb" value="0..*"/>
 																								<UML:TaggedValue tag="lt" value="+handCollection"/>
@@ -38656,10 +38496,10 @@
 																						</UML:Class>
 																						<UML:Association xmi.id="EAID_55E10696_0D13_4f64_9FBB_6D476490C522" visibility="public" isRoot="false" isLeaf="false" isAbstract="false">
 																							<UML:ModelElement.taggedValue>
-																								<UML:TaggedValue tag="style" value="2"/>
+																								<UML:TaggedValue tag="style" value="3"/>
 																								<UML:TaggedValue tag="ea_type" value="Association"/>
 																								<UML:TaggedValue tag="direction" value="Bi-Directional"/>
-																								<UML:TaggedValue tag="linemode" value="2"/>
+																								<UML:TaggedValue tag="linemode" value="3"/>
 																								<UML:TaggedValue tag="linecolor" value="-1"/>
 																								<UML:TaggedValue tag="linewidth" value="0"/>
 																								<UML:TaggedValue tag="seqno" value="0"/>
@@ -38673,7 +38513,6 @@
 																								<UML:TaggedValue tag="ea_sourceID" value="1052"/>
 																								<UML:TaggedValue tag="ea_targetID" value="1050"/>
 																								<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={2845CC18-FE8F-47e1-BAE9-0B2B42A49FA9}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isDerived@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=false@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={55E10696-0D13-4f64-9FBB-6D476490C522}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																								<UML:TaggedValue tag="privatedata5" value="EDGE=2;"/>
 																								<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																								<UML:TaggedValue tag="lb" value="1..*"/>
 																								<UML:TaggedValue tag="lt" value="+suitCollection"/>
@@ -40327,7 +40166,6 @@
 																						<UML:TaggedValue tag="ea_targetType" value="Class"/>
 																						<UML:TaggedValue tag="ea_sourceID" value="1149"/>
 																						<UML:TaggedValue tag="ea_targetID" value="1156"/>
-																						<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 																						<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																						<UML:TaggedValue tag="lb" value="1"/>
 																						<UML:TaggedValue tag="rb" value="0..*"/>
@@ -40505,7 +40343,6 @@
 																						<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 																						<UML:TaggedValue tag="src_stereotype" value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Navigable;"/>
 																						<UML:TaggedValue tag="dst_style" value="Owned=0;Navigable=Navigable;"/>
-																						<UML:TaggedValue tag="privatedata5" value="SX=0;SY=0;EX=0;EY=0;EDGE=1;"/>
 																						<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																					</UML:ModelElement.taggedValue>
 																				</UML:Dependency>
@@ -40791,7 +40628,6 @@
 																						<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 																						<UML:TaggedValue tag="src_stereotype" value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Navigable;"/>
 																						<UML:TaggedValue tag="dst_style" value="Owned=0;Navigable=Navigable;"/>
-																						<UML:TaggedValue tag="privatedata5" value="SX=0;SY=0;EX=0;EY=0;EDGE=1;"/>
 																						<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																					</UML:ModelElement.taggedValue>
 																				</UML:Dependency>
@@ -40830,7 +40666,6 @@
 																						<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 																						<UML:TaggedValue tag="src_stereotype" value="Union=0;Derived=0;AllowDuplicates=0;"/>
 																						<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={3505F72B-F316-42ce-9867-FC157C07B1A7}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isSubstitutable@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={8279305A-99E7-4fbe-AA52-952D897B4435}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																						<UML:TaggedValue tag="privatedata5" value="SX=0;SY=0;EX=0;EY=0;EDGE=4;"/>
 																						<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																					</UML:ModelElement.taggedValue>
 																				</UML:Generalization>
@@ -41130,7 +40965,6 @@
 																						<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 																						<UML:TaggedValue tag="src_stereotype" value="Union=0;Derived=0;AllowDuplicates=0;"/>
 																						<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={14BBBFE5-1D2E-4c3b-96B1-CEDF1E689E21}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isSubstitutable@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={24D9B304-7933-4d9e-A316-9031AF2C9F7F}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																						<UML:TaggedValue tag="privatedata5" value="SX=0;SY=0;EX=0;EY=0;EDGE=1;"/>
 																						<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																					</UML:ModelElement.taggedValue>
 																				</UML:Generalization>
@@ -41169,7 +41003,6 @@
 																						<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 																						<UML:TaggedValue tag="src_stereotype" value="Union=0;Derived=0;AllowDuplicates=0;"/>
 																						<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={AF990152-56C8-493a-843D-268A3AF3E0DB}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isSubstitutable@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={63776737-62BB-4da4-940A-F58666EC018F}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																						<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 																						<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																					</UML:ModelElement.taggedValue>
 																				</UML:Generalization>
@@ -41419,7 +41252,6 @@
 																						<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 																						<UML:TaggedValue tag="src_stereotype" value="Union=0;Derived=0;AllowDuplicates=0;"/>
 																						<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={680DBCD9-9FCC-4fd4-AAE1-82295D45ED84}$XID;$NAM=CustomProperties$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$DES=@PROP=@NAME=isSubstitutable@ENDNAME;@TYPE=Boolean@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={FA403070-755B-47f3-9BDC-408745EA8371}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
-																						<UML:TaggedValue tag="privatedata5" value="EDGE=1;"/>
 																						<UML:TaggedValue tag="virtualInheritance" value="0"/>
 																					</UML:ModelElement.taggedValue>
 																				</UML:Generalization>
@@ -42731,14 +42563,14 @@
 				<UML:TaggedValue tag="version" value="1.0"/>
 				<UML:TaggedValue tag="author" value="The Administrator"/>
 				<UML:TaggedValue tag="created_date" value="2006-10-24 12:11:26"/>
-				<UML:TaggedValue tag="modified_date" value="2012-11-28 11:01:48"/>
+				<UML:TaggedValue tag="modified_date" value="2012-12-03 11:59:40"/>
 				<UML:TaggedValue tag="package" value="EAPK_CB699A04_2FDB_43de_9F15_2FBB5DA90527"/>
 				<UML:TaggedValue tag="type" value="Logical"/>
 				<UML:TaggedValue tag="swimlanes" value="locked=false;orientation=0;width=0;inbar=false;names=false;color=0;bold=false;fcol=0;;cls=0;"/>
 				<UML:TaggedValue tag="matrixitems" value="locked=false;matrixactive=false;swimlanesactive=true;width=1;"/>
 				<UML:TaggedValue tag="ea_localid" value="55"/>
 				<UML:TaggedValue tag="EAStyle" value="ShowPrivate=1;ShowProtected=1;ShowPublic=1;HideRelationships=0;Locked=0;Border=1;HighlightForeign=1;PackageContents=1;SequenceNotes=0;ScalePrintImage=0;PPgs.cx=4;PPgs.cy=2;DocSize.cx=799;DocSize.cy=1067;ShowDetails=0;Orientation=P;Zoom=100;ShowTags=0;OpParams=1;VisibleAttributeDetail=0;ShowOpRetType=1;ShowIcons=1;CollabNums=0;HideProps=0;ShowReqs=0;ShowCons=0;PaperSize=1;HideParents=0;UseAlias=0;HideAtts=0;HideOps=0;HideStereo=0;HideElemStereo=0;ShowTests=0;ShowMaint=0;ConnectorNotation=UML 2.1;ExplicitNavigability=0;AdvancedElementProps=1;AdvancedFeatureProps=1;AdvancedConnectorProps=1;ShowNotes=0;SuppressBrackets=0;SuppConnectorLabels=0;PrintPageHeadFoot=0;ShowAsList=0;"/>
-				<UML:TaggedValue tag="styleex" value="SaveTag=B87B3272;ExcludeRTF=0;DocAll=0;HideQuals=0;AttPkg=1;ShowTests=0;ShowMaint=0;SuppressFOC=1;MatrixActive=0;SwimlanesActive=1;MatrixLineWidth=1;MatrixLocked=0;TConnectorNotation=UML 2.1;TExplicitNavigability=0;AdvancedElementProps=1;AdvancedFeatureProps=1;AdvancedConnectorProps=1;ProfileData=;MDGDgm=;STBLDgm=;ShowNotes=0;VisibleAttributeDetail=0;ShowOpRetType=1;SuppressBrackets=0;SuppConnectorLabels=0;PrintPageHeadFoot=0;ShowAsList=0;SuppressedCompartments=;"/>
+				<UML:TaggedValue tag="styleex" value="SaveTag=53D6F7ED;ExcludeRTF=0;DocAll=0;HideQuals=0;AttPkg=1;ShowTests=0;ShowMaint=0;SuppressFOC=1;MatrixActive=0;SwimlanesActive=1;MatrixLineWidth=1;MatrixLocked=0;TConnectorNotation=UML 2.1;TExplicitNavigability=0;AdvancedElementProps=1;AdvancedFeatureProps=1;AdvancedConnectorProps=1;ProfileData=;MDGDgm=;STBLDgm=;ShowNotes=0;VisibleAttributeDetail=0;ShowOpRetType=1;SuppressBrackets=0;SuppConnectorLabels=0;PrintPageHeadFoot=0;ShowAsList=0;SuppressedCompartments=;"/>
 			</UML:ModelElement.taggedValue>
 			<UML:Diagram.element>
 				<UML:DiagramElement geometry="Left=2399;Top=615;Right=2489;Bottom=685;" subject="EAID_33CF06A3_F17D_40f0_823A_07C5757AE74C" seqno="1" style="DUID=4BBEC554;"/>
@@ -42795,7 +42627,7 @@
 				<UML:DiagramElement geometry="Left=50;Top=775;Right=163;Bottom=845;" subject="EAID_848B618E_4867_4115_B819_F79DA3272CC3" seqno="52" style="DUID=7321C235;"/>
 				<UML:DiagramElement geometry="Left=515;Top=773;Right=634;Bottom=853;" subject="EAID_99A644B0_2028_4462_8301_4D34931B9995" seqno="53" style="DUID=4138E02A;"/>
 				<UML:DiagramElement geometry="EDGE=2;SX=0;SY=5;EX=0;EY=2;$LLB=CX=6:CY=13:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=0:DIR=0:ROT=0;LLT=CX=89:CY=13:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=0:DIR=0:ROT=0;LMT=;LMB=;LRT=CX=95:CY=13:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=0:DIR=0:ROT=0;LRB=CX=16:CY=13:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=0:DIR=0:ROT=0;IRHS=;ILHS=;Path=;" subject="EAID_3423C96D_1F27_4743_A66B_D1897211AAE8" style="Mode=3;EOID=4BBEC554;SOID=22A04A15;Color=-1;LWidth=0;Hidden=0;"/>
-				<UML:DiagramElement geometry="EDGE=2;SX=0;SY=6;EX=0;EY=6;$LLB=CX=6:CY=13:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=0:DIR=0:ROT=0;LLT=CX=41:CY=13:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=0:DIR=0:ROT=0;LMT=;LMB=;LRT=CX=78:CY=13:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=0:DIR=0:ROT=0;LRB=CX=16:CY=13:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=0:DIR=0:ROT=0;IRHS=;ILHS=;Path=;" subject="EAID_37FCA3EE_B9A8_4f2a_AE19_F2FF906095E9" style="Mode=3;EOID=FBAF0873;SOID=60C4EA8D;Color=-1;LWidth=0;Hidden=0;"/>
+				<UML:DiagramElement geometry="EDGE=2;SX=0;SY=0;EX=0;EY=0;$LLB=CX=6:CY=13:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=0:DIR=0:ROT=0;LLT=CX=41:CY=13:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=0:DIR=0:ROT=0;LMT=;LMB=;LRT=CX=78:CY=13:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=0:DIR=0:ROT=0;LRB=CX=16:CY=13:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=0:DIR=0:ROT=0;IRHS=;ILHS=;Path=;" subject="EAID_37FCA3EE_B9A8_4f2a_AE19_F2FF906095E9" style="Mode=3;EOID=FBAF0873;SOID=60C4EA8D;Color=-1;LWidth=0;Hidden=0;"/>
 				<UML:DiagramElement geometry="EDGE=1;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_B6D09122_DFF2_4013_805A_08582E81B286" style="Mode=3;EOID=F406E47B;SOID=5A871595;Color=-1;LWidth=0;Hidden=0;"/>
 				<UML:DiagramElement geometry="EDGE=1;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_B05E169E_522F_49fe_AF5B_20630E2070FB" style="Mode=2;EOID=098E3373;SOID=6495586A;Color=-1;LWidth=0;Hidden=0;"/>
 				<UML:DiagramElement geometry="EDGE=1;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_D45BFAAB_1B07_4d85_93FC_B3A749773EF4" style="Mode=2;EOID=6495586A;SOID=BD9989D9;Color=-1;LWidth=0;Hidden=0;"/>
