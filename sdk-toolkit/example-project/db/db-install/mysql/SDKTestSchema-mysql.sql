@@ -205,10 +205,7 @@ CREATE TABLE `ALL_VALIDATION_TYPE` (
 /*!40000 ALTER TABLE `ALL_VALIDATION_TYPE` DISABLE KEYS */;
 SET AUTOCOMMIT=0;
 INSERT INTO `ALL_VALIDATION_TYPE` (`ID`,`EMAIL`,`FUTURE`,`LENGTH`,`MAX_NUMERIC`,`PAST`,`MAX_STRING`,`MIN_NUMERIC`,`MIN_STRING`,`NOT_EMPTY`,`NOT_NULL`,`RANGE_STRING`,`RANGE_NUMERIC`,`PATTERN`) VALUES 
- (1,'name@mail.nih.gov','2008-05-15 00:00:00','123','999',NULL,'999','1','1','abc','abc','3','3','cat'),
- (10,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'asfdasdf'),
- (11,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'asfdasdf',NULL,'asfdasdf'),
- (12,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Invalid Value',NULL,'DEPT');
+ (1,'name@mail.nih.gov','2008-05-15 00:00:00','123','999','2008-05-15 00:00:00','999','1','1','abc','abc','3','3','cat');
 COMMIT;
 /*!40000 ALTER TABLE `ALL_VALIDATION_TYPE` ENABLE KEYS */;
 
@@ -623,58 +620,58 @@ CREATE TABLE `CARD` (
 SET AUTOCOMMIT=0;
 INSERT INTO `CARD` (`ID`,`NAME`,`SUIT_ID`,`IMAGE`) VALUES 
  (1,'Ace',1,'My Ace'),
- (2,'Two',1,NULL),
- (3,'Three',1,NULL),
- (4,'Four',1,NULL),
- (5,'Five',1,NULL),
- (6,'Six',1,NULL),
- (7,'Seven',1,NULL),
- (8,'Eight',1,NULL),
- (9,'Nine',1,NULL),
- (10,'Ten',1,NULL),
- (11,'Jack',1,NULL),
- (12,'Queen',1,NULL),
- (13,'King',1,NULL),
- (14,'Ace',2,NULL),
- (15,'Two',2,NULL),
- (16,'Three',2,NULL),
- (17,'Four',2,NULL),
- (18,'Five',2,NULL),
- (19,'Six',2,NULL),
- (20,'Seven',2,NULL),
- (21,'Eight',2,NULL),
- (22,'Nine',2,NULL),
- (23,'Ten',2,NULL),
- (24,'Jack',2,NULL),
- (25,'Queen',2,NULL),
- (26,'King',2,NULL),
- (27,'Ace',3,NULL),
- (28,'Two',3,NULL),
- (29,'Three',3,NULL),
- (30,'Four',3,NULL),
- (31,'Five',3,NULL),
- (32,'Six',3,NULL),
- (33,'Seven',3,NULL),
- (34,'Eight',3,NULL),
- (35,'Nine',3,NULL),
- (36,'Ten',3,NULL),
- (37,'Jack',3,NULL),
- (38,'Queen',3,NULL),
- (39,'King',3,NULL),
- (40,'Ace',4,NULL),
- (41,'Two',4,NULL),
- (42,'Three',4,NULL),
- (43,'Four',4,NULL),
- (44,'Five',4,NULL),
- (45,'Six',4,NULL),
- (46,'Seven',4,NULL),
- (47,'Eight',4,NULL),
- (48,'Nine',4,NULL),
- (49,'Ten',4,NULL),
- (50,'Jack',4,NULL),
- (51,'Queen',4,NULL),
- (52,'King',4,NULL),
- (53,'Joker',NULL,NULL);
+ (2,'Two',1,'TEST'),
+ (3,'Three',1,'TEST'),
+ (4,'Four',1,'TEST'),
+ (5,'Five',1,'TEST'),
+ (6,'Six',1,'TEST'),
+ (7,'Seven',1,'TEST'),
+ (8,'Eight',1,'TEST'),
+ (9,'Nine',1,'TEST'),
+ (10,'Ten',1,'TEST'),
+ (11,'Jack',1,'TEST'),
+ (12,'Queen',1,'TEST'),
+ (13,'King',1,'TEST'),
+ (14,'Ace',2,'TEST'),
+ (15,'Two',2,'TEST'),
+ (16,'Three',2,'TEST'),
+ (17,'Four',2,'TEST'),
+ (18,'Five',2,'TEST'),
+ (19,'Six',2,'TEST'),
+ (20,'Seven',2,'TEST'),
+ (21,'Eight',2,'TEST'),
+ (22,'Nine',2,'TEST'),
+ (23,'Ten',2,'TEST'),
+ (24,'Jack',2,'TEST'),
+ (25,'Queen',2,'TEST'),
+ (26,'King',2,'TEST'),
+ (27,'Ace',3,'TEST'),
+ (28,'Two',3,'TEST'),
+ (29,'Three',3,'TEST'),
+ (30,'Four',3,'TEST'),
+ (31,'Five',3,'TEST'),
+ (32,'Six',3,'TEST'),
+ (33,'Seven',3,'TEST'),
+ (34,'Eight',3,'TEST'),
+ (35,'Nine',3,'TEST'),
+ (36,'Ten',3,'TEST'),
+ (37,'Jack',3,'TEST'),
+ (38,'Queen',3,'TEST'),
+ (39,'King',3,'TEST'),
+ (40,'Ace',4,'TEST'),
+ (41,'Two',4,'TEST'),
+ (42,'Three',4,'TEST'),
+ (43,'Four',4,'TEST'),
+ (44,'Five',4,'TEST'),
+ (45,'Six',4,'TEST'),
+ (46,'Seven',4,'TEST'),
+ (47,'Eight',4,'TEST'),
+ (48,'Nine',4,'TEST'),
+ (49,'Ten',4,'TEST'),
+ (50,'Jack',4,'TEST'),
+ (51,'Queen',4,'TEST'),
+ (52,'King',4,'TEST'),
+ (53,'Joker',NULL,'TEST');
 COMMIT;
 /*!40000 ALTER TABLE `CARD` ENABLE KEYS */;
 
@@ -3026,11 +3023,11 @@ CREATE TABLE `SITE` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 INSERT INTO `SITE` (`ID`, `ACTIVITY_STATUS`, `EMAIL_ADDRESS`, `NAME`, `TYPE`) VALUES 
- (1, 'ACTIVE', NULL, 'SITE1', 'TYPE1'),
- (2, 'ACTIVE', NULL, 'SITE2', 'TYPE1'),
- (3, 'ACTIVE', NULL, 'SITE3', 'TYPE2'),
- (4, 'ACTIVE', NULL, 'SITE4', 'TYPE2'),
- (5, 'ACTIVE', NULL, 'SITE5', 'TYPE2');
+ (1, 'ACTIVE', 'TEST@TEST.COM', 'SITE1', 'TYPE1'),
+ (2, 'ACTIVE', 'TEST@TEST.COM', 'SITE2', 'TYPE1'),
+ (3, 'ACTIVE', 'TEST@TEST.COM', 'SITE3', 'TYPE2'),
+ (4, 'ACTIVE', 'TEST@TEST.COM', 'SITE4', 'TYPE2'),
+ (5, 'ACTIVE', 'TEST@TEST.COM', 'SITE5', 'TYPE2');
 COMMIT;
 
 
@@ -3047,11 +3044,11 @@ CREATE TABLE `SPECIMEN_COLLECTION_GROUP` (
 
 SET AUTOCOMMIT=0;
 INSERT INTO `SPECIMEN_COLLECTION_GROUP` (`ID`,`NAME`, `COMMENT_TEXT`) VALUES 
- (1,'GROUP1',NULL),
- (2,'GROUP2',NULL),
- (3,'GROUP3',NULL),
- (4,'GROUP4',NULL),
- (5,'GRPUP5',NULL);
+ (1,'GROUP1','COMMENT'),
+ (2,'GROUP2','COMMENT'),
+ (3,'GROUP3','COMMENT'),
+ (4,'GROUP4','COMMENT'),
+ (5,'GRPUP5','COMMENT');
 COMMIT;
 
 
@@ -3075,11 +3072,11 @@ CREATE TABLE `SPECIMEN` (
 
 SET AUTOCOMMIT=0;
 INSERT INTO `SPECIMEN` (`ID`,`ACTIVITY_STATUS`, `AVAILABLE_QTY`, `BARCODE`,`COLLECTION_STATUS`,`COMMENT_TEXT`, `LABEL`, `CREATED_ON`, `IS_AVAILABLE`, `SPECIMEN_COLLECTION_GROUP_ID`) VALUES 
- (1,'ACTIVE',1, NULL, NULL, NULL, 'Specimen1', NULL, 1, 1),
- (2,'ACTIVE',2, NULL, NULL, NULL, 'Specimen1', NULL, 1, 1),
- (3,'ACTIVE',3, NULL, NULL, NULL, 'Specimen1', NULL, 1, 2),
- (4,'ACTIVE',3, NULL, NULL, NULL, 'Specimen1', NULL, 1, 2),
- (5,'ACTIVE',10, NULL, NULL, NULL, 'Specimen1', NULL, 1, 2);
+ (1,'ACTIVE',1, '123', 'STATUS', 'COMMENT', 'Specimen1', '2011-11-11 00:00:00', 1, 1),
+ (2,'ACTIVE',2, '123', 'STATUS', 'COMMENT', 'Specimen1', '2011-11-11 00:00:00', 1, 1),
+ (3,'ACTIVE',3, '123', 'STATUS', 'COMMENT', 'Specimen1', '2011-11-11 00:00:00', 1, 2),
+ (4,'ACTIVE',3, '123', 'STATUS', 'COMMENT', 'Specimen1', '2011-11-11 00:00:00', 1, 2),
+ (5,'ACTIVE',10, '123', 'STATUS', 'COMMENT', 'Specimen1', '2011-11-11 00:00:00', 1, 2);
 COMMIT;
 
 ALTER TABLE SPECIMEN ADD CONSTRAINT PK_SPECIMEN_ID 
