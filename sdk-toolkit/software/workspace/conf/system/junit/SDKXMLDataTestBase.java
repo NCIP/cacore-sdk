@@ -320,7 +320,7 @@ public abstract class SDKXMLDataTestBase extends TestCase {
 			children = roleNameElt.getChildren();
 			assertNotNull(children);
 
-			Element associatedKlassElt = locateChild(children,associatedKlassName);
+			Element associatedKlassElt = locateChild(children, roleName);
 			if(hasAssociation)
 				assertNotNull(associatedKlassElt);
 			else

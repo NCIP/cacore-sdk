@@ -287,7 +287,14 @@
 				<equals arg1="${GENERATE_RESTFUL_RESOURCES}" arg2="yes" casesensitive="false" trim="true" />
 			</or>
 	</condition>
+	<condition property="ENABLE_CADSR_METADATA" value="true" else="false">
+			<or>
+				<equals arg1="${ENABLE_CADSR_METADATA}" arg2="true" casesensitive="false" trim="true" />
+				<equals arg1="${ENABLE_CADSR_METADATA}" arg2="yes" casesensitive="false" trim="true" />
+			</or>
+	</condition>
 
+	
 	<condition property="RESTFUL_CXF_SERVLET_START" value="" else="${xml.comment.start}">
 		<equals arg1="${GENERATE_RESTFUL_RESOURCES}" arg2="true" casesensitive="false" trim="true" />
 	</condition>
@@ -753,6 +760,7 @@
 				<include name="sdk-security-client-*.jar" />
 				<include name="sdk-security-*.jar"/>
 				<include name="sdk-system-client-*.jar"/>
+				<include name="sdk-system-metadata-*.jar"/>
 				<include name="sdk-system-core-*.jar"/>
 			</fileset>
 			<fileset dir="${output.target.dir}" />
@@ -784,7 +792,6 @@
 
 			</then>
 		</if>
-
 		<if>
 			<equals arg1="${USE_CONNECTION_POOL}" arg2="true" />
 			<then>
@@ -1738,6 +1745,7 @@
 		<copy todir="${temp.webapp.staging.classes.dir}">
 			<fileset dir="${output.src.dir}">
 				<include name="IsoConstants.xml"/>
+				<include name="caDSRMetadata.xml"/>
 			</fileset>
 		</copy>
 		
@@ -1992,6 +2000,7 @@
 		<copy todir="${temp.webapp.staging.classes.dir}">
 			<fileset dir="${output.src.dir}">
 				<include name="IsoConstants.xml"/>
+				<include name="caDSRMetadata.xml"/>
 			</fileset>
 		</copy>
 		

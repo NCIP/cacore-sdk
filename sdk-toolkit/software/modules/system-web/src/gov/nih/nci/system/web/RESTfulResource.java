@@ -4,6 +4,7 @@ import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 import gov.nih.nci.system.applicationservice.WritableApplicationService;
 import gov.nih.nci.system.client.proxy.ApplicationServiceProxy;
+import gov.nih.nci.system.metadata.MetadataCache;
 import gov.nih.nci.system.query.SDKQueryResult;
 import gov.nih.nci.system.query.example.DeleteExampleQuery;
 import gov.nih.nci.system.query.example.InsertExampleQuery;
@@ -63,6 +64,7 @@ public class RESTfulResource {
 	protected WritableApplicationService writableApplicationService;
 	protected int pageSize;
 	protected boolean secured = false;
+	protected boolean metadata = false;
 	protected boolean isoEnabled = false;
 	String isoprefix = "gov.nih.nci.iso21090.";
 
@@ -94,6 +96,11 @@ public class RESTfulResource {
 			secured = "yes".equalsIgnoreCase(securityEnabled)
 					|| "true".equalsIgnoreCase(securityEnabled);
 
+			String metadataEnabled = (String) systemProperties
+					.getProperty("caDSRMetadataEnabled");
+			metadata = "yes".equalsIgnoreCase(metadataEnabled)
+					|| "true".equalsIgnoreCase(metadataEnabled);
+			
 			String isoEnabledStr = (String) systemProperties
 					.getProperty("enableISO21090DataTypes");
 			isoEnabled = "yes".equalsIgnoreCase(isoEnabledStr)

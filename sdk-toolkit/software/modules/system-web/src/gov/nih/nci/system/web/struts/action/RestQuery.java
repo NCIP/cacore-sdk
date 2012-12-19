@@ -1,5 +1,9 @@
 package gov.nih.nci.system.web.struts.action;
 
+import gov.nih.nci.system.metadata.Metadata;
+import gov.nih.nci.system.metadata.MetadataCache;
+import gov.nih.nci.system.metadata.MetadataElement;
+import gov.nih.nci.system.metadata.caDSRMetadata;
 import gov.nih.nci.system.util.ClassCache;
 
 import java.lang.reflect.Field;
@@ -35,6 +39,7 @@ public class RestQuery extends BaseActionSupport {
 	WebApplicationContext ctx;
 	protected String selectedSearchDomain;
 	boolean secured=false;
+	boolean metadata=false;
 	boolean isoEnabled = false;
 	final String isoprefix = "gov.nih.nci.iso21090.";
 
@@ -54,6 +59,11 @@ public class RestQuery extends BaseActionSupport {
 				.getProperty("enableISO21090DataTypes");
 		isoEnabled = "yes".equalsIgnoreCase(isoEnabledStr)
 				|| "true".equalsIgnoreCase(isoEnabledStr);
+
+		String metadataEnabled = (String) systemProperties
+				.getProperty("caDSRMetadataEnabled");
+		metadata = "yes".equalsIgnoreCase(metadataEnabled)
+				|| "true".equalsIgnoreCase(metadataEnabled);
 	}
 
 	protected String getQueryString(String className, String roleName,
@@ -210,7 +220,6 @@ public class RestQuery extends BaseActionSupport {
 					e.printStackTrace();
 				}
 
-				log.debug("idCol: "+idCol);
 				buffer.append("<tr>");
 				buffer.append("<td>");
 				buffer.append("<table summary=\"Data Summary\" cellpadding=\"3\" cellspacing=\"0\" border=\"0\" class=\"dataTable\" width=\"100%\">");
@@ -218,18 +227,12 @@ public class RestQuery extends BaseActionSupport {
 				//For each sub element to the root:
 				//if it is link, skip it. This is link elements for collections representing paging, self
 				List<Element> tableRows = root.getChildren();
-				log.debug("tableRows: "+tableRows.toString());
-				log.debug("tableRows size: "+tableRows.size());
 				List columns = new ArrayList();
 				for (Element child : tableRows) {
 					StringBuffer headerBuffer = new StringBuffer();
 					StringBuffer bodyBuffer = new StringBuffer();
 
 					String childName = classEleName.substring(classEleName.lastIndexOf(".")+1, classEleName.length());
-					log.debug("childName: "+childName);
-					log.debug("child.getName(): "+child.getName());
-					//if(!child.getName().equals(childName))
-					//	continue;
 
 					if(child.getName().equals("link"))
 						continue;
@@ -261,32 +264,67 @@ public class RestQuery extends BaseActionSupport {
 
 					refNameList.add("self");
 					String idColName = classCache.getClassIdName(klass);
-					log.debug("getHTML: "+idColName);
-
 					// Add id column to the table first
 					for (int i = 0; i < fields.length; i++) {
+						boolean headerAdded = false;
 						Field field = fields[i];
 						if (!field.getName().equals(idColName))
 							continue;
 
-						headerBuffer
-								.append("<th class=\"dataTableHeader\" scope=\"col\" align=\"center\">");
-						headerBuffer.append(idColName);
-						headerBuffer.append("</th>");
 
 						bodyBuffer
 								.append("<td class=\"dataCellText\" nowrap=\"off\">");
-						log.debug("child "+child.toString());
-						Attribute attr = child.getAttribute(idColName);
-						if (attr != null)
+						
+						if(metadata)
 						{
-							log.debug("Got Attr: "+attr.getName());
-							bodyBuffer.append(attr.getValue());
-							idColValue = attr.getValue();
+							MetadataElement mdata = MetadataCache.getInstance().getMetadata(caDSRMetadata.CONTEXT_NAME, fullClassName, idColName);
+							//System.out.println("mdata "+mdata);
+							if(mdata != null)
+							{
+								Element attrEle = child.getChild(idColName, child.getNamespace());
+								if(attrEle != null)
+								{
+									bodyBuffer.append(attrEle.getValue());
+									idColValue = attrEle.getValue();
+									headerBuffer
+									.append("<th class=\"dataTableHeader\" scope=\"col\" align=\"center\">");
+									headerBuffer.append("<a href=\"javascript:showMetadata("+caDSRMetadata.CONTEXT_NAME+"," + fullClassName +"," + idColName +")\">");
+									headerBuffer.append(idColName);
+									headerBuffer.append("</a>");
+									headerBuffer.append("</th>");
+									headerAdded = true;
+								}
+								
+							}
+							else
+							{
+								Attribute attr = child.getAttribute(idColName);
+								if (attr != null)
+								{
+									bodyBuffer.append(attr.getValue());
+									idColValue = attr.getValue();
+								}
+							}
 						}
-						else if(field.getType().getName().startsWith(isoprefix))
+						else
 						{
-							log.debug("ISO Type*****");
+							Attribute attr = child.getAttribute(idColName);
+							if (attr != null)
+							{
+								bodyBuffer.append(attr.getValue());
+								idColValue = attr.getValue();
+							}
+						}
+						
+						if(!headerAdded)
+						{
+							headerBuffer
+							.append("<th class=\"dataTableHeader\" scope=\"col\" align=\"center\">");
+							headerBuffer.append(idColName);
+							headerBuffer.append("</th>");
+						}
+						if(field.getType().getName().startsWith(isoprefix))
+						{
 							Element childElement = getChild(child, field.getName(), true);
 							if(childElement == null)
 								bodyBuffer.append("&nbsp;");
@@ -308,29 +346,69 @@ public class RestQuery extends BaseActionSupport {
 
 					// Add all remaining columns, not including references
 					for (int i = 0; i < fields.length; i++) {
+						boolean headerAdded = false;
 						Field field = fields[i];
 						if (field.getName().equals(idColName) || field.getName().equals("links") || field.getName().equals("serialVersionUID") || refNameList.contains(field.getName()))
 							continue;
 
-						headerBuffer
-								.append("<th class=\"dataTableHeader\" scope=\"col\" align=\"center\">");
-						headerBuffer.append(field.getName());
-						headerBuffer.append("</th>");
 
 						bodyBuffer
 								.append("<td class=\"dataCellText\" nowrap=\"off\">");
-						log.debug("Formatting field: "+field.getType().getName());
-						log.debug("Formatting field: "+field.getName());
-						Attribute attr = child.getAttribute(field.getName());
 
-						if (attr != null)
+						//System.out.println("metadata "+metadata);
+						//System.out.println("metadata "+fullClassName);
+						//System.out.println(" field.getName() "+ field.getName());
+						if(metadata)
 						{
-							log.debug("Got Attr: "+attr.getName());
-							bodyBuffer.append(attr.getValue());
+							MetadataElement mdata = MetadataCache.getInstance().getMetadata(caDSRMetadata.CONTEXT_NAME, fullClassName, field.getName());	
+							//System.out.println("mdata** "+mdata);
+							//System.out.println("root.getNamespace()** "+root.getNamespace().toString());
+							//System.out.println("child.getNamespace()** "+child.getNamespace().toString());
+							if(mdata != null)
+							{
+								Element attrEle = child.getChild(field.getName(), child.getNamespace());
+								List<Element> children = child.getChildren();
+								
+								if(attrEle != null)
+								{
+									bodyBuffer.append(attrEle.getValue());
+
+									headerBuffer
+									.append("<th class=\"dataTableHeader\" scope=\"col\" align=\"center\">");
+									headerBuffer.append("<a href=\"#\" onclick=\"showMetadata('"+caDSRMetadata.CONTEXT_NAME+"','" + fullClassName +"','" + field.getName() +"');return false;\">");
+									headerBuffer.append(field.getName());
+									headerBuffer.append("</a>");
+									headerBuffer.append("</th>");
+									headerAdded = true;
+								}
+							}
+							else
+							{
+								Attribute attr = child.getAttribute(field.getName());
+								if (attr != null)
+								{
+									bodyBuffer.append(attr.getValue());
+								}
+							}
 						}
-						else if(field.getType().getName().startsWith(isoprefix))
+						else
 						{
-							log.debug("ISO Type*****");
+							Attribute attr = child.getAttribute(field.getName());
+							if (attr != null)
+							{
+								bodyBuffer.append(attr.getValue());
+							}
+						}
+					
+						if(!headerAdded)
+						{
+							headerBuffer
+							.append("<th class=\"dataTableHeader\" scope=\"col\" align=\"center\">");
+							headerBuffer.append(field.getName());
+							headerBuffer.append("</th>");
+						}
+						if(field.getType().getName().startsWith(isoprefix))
+						{
 							Element childElement = getChild(child, field.getName(), true);
 							if(childElement == null)
 								bodyBuffer.append("&nbsp;");
@@ -353,7 +431,6 @@ public class RestQuery extends BaseActionSupport {
 					}
 
 
-					//List<String> assocNames = classCache.getAssociations(fullClassName);
 					List<Element> linkChild = getChildren(child, "link");
 					for (String linkName : refNameList) {
 						log.debug("linkName: "+linkName);
@@ -506,6 +583,10 @@ public class RestQuery extends BaseActionSupport {
 			while(iter.hasNext())
 			{
 				Attribute attr = (Attribute) iter.next();
+				//Skip caDSR metadata attributes
+				if(attr.getName().startsWith("NCI_CADSR_"))
+					continue;
+				
 				log.debug("attr.getName(): "+attr.getName());
 				if(attr.getName().equals("xsi:type") || attr.getName().equals("type"))
 					continue;

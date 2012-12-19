@@ -64,6 +64,13 @@
 		</or>
 	</condition>
 
+	<condition property="ENABLE_CADSR_METADATA" value="true" else="false">
+		<or>
+			<equals arg1="${ENABLE_CADSR_METADATA}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${ENABLE_CADSR_METADATA}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
+	</condition>
+	
 	<condition property="CLASS_LEVEL_SECURITY_ENABLED" value="true" else="false">
 		<or>
 			<equals arg1="${ENABLE_CLASS_LEVEL_SECURITY}" arg2="true" casesensitive="false" trim="true" />
@@ -201,6 +208,13 @@
 		</or>
 	</condition>
 
+	<condition property="ENABLE_CADSR_METADATA" value="true" else="false">
+		<or>
+			<equals arg1="${ENABLE_CADSR_METADATA}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${ENABLE_CADSR_METADATA}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
+	</condition>
+				
 	<condition property="ENABLE_JUNIT_GENERATION" value="true" else="false">
 		<or>
 			<equals arg1="${GENERATE_JUNITS}" arg2="true" casesensitive="false" trim="true" />
@@ -485,6 +499,7 @@
 			<filter token="GENERATE_ISO_CONSTANT" value="${ENABLE_ISO_CONSTANT_GENERATION}" />
 			<filter token="GENERATE_BEANS" value="${ENABLE_BEANS_GENERATION}" />
 			<filter token="GENERATE_RESTFUL_RESOURCES" value="${ENABLE_RESTFUL_GENERATION}" />
+			<filter token="ENABLE_CADSR_METADATA" value="${ENABLE_CADSR_METADATA}" />				
 			<filter token="GENERATE_JUNITS" value="${ENABLE_JUNIT_GENERATION}" />
 			<filter token="GENERATE_CASTOR_MAPPING" value="${ENABLE_CASTOR_MAPPING_GENERATION}" />
 			<filter token="GENERATE_JAXB_MAPPING" value="${ENABLE_JAXB_MAPPING_GENERATION}" />
@@ -502,7 +517,9 @@
 			<filter token="INSTANCE_LEVEL_SECURITY_ENABLED" value="${INSTANCE_LEVEL_SECURITY_ENABLED}" />
 			<filter token="ATTRIBUTE_LEVEL_SECURITY_ENABLED" value="${ATTRIBUTE_LEVEL_SECURITY_ENABLED}" />
 			<filter token="SECURITY_ENABLED" value="${SECURITY_ENABLED}" />
-			<filter token="HTTP_INVOKER" value="${HTTP_INVOKER}" />
+			<filter token="ENABLE_CADSR_METADATA" value="${ENABLE_CADSR_METADATA}" />
+				
+				<filter token="HTTP_INVOKER" value="${HTTP_INVOKER}" />
 			
 			<filter token="IDENTITY_GENERATOR_TAG" value="${IDENTITY_GENERATOR_TAG}" />
 			<filter token="DATABASE_TYPE" value="${DATABASE_TYPE}" />

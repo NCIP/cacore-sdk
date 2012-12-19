@@ -21,8 +21,6 @@ public class RESTfulReadClient {
 	public Response read(String url) {
 	  try {
 			if (url == null) {
-				System.out
-						.println("Invalid URL");
 			ResponseBuilder builder = Response.status(Status.BAD_REQUEST);
 			builder.type("application/xml");
 			StringBuffer buffer = new StringBuffer();
@@ -48,8 +46,6 @@ public class RESTfulReadClient {
 	public Response read(String url, String userName, String password) {
 		  try {
 				if (url == null) {
-					System.out
-							.println("Invalid URL");
 				ResponseBuilder builder = Response.status(Status.BAD_REQUEST);
 				builder.type("application/xml");
 				StringBuffer buffer = new StringBuffer();

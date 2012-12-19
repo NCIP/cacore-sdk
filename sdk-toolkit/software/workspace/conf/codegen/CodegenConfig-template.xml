@@ -23,6 +23,7 @@
 			<list>
 				<ref bean="HibernateMappingTransformer"/>
 				<ref bean="IsoConstantTransformer"/>
+				<ref bean="caDSRMetadataTransformer"/>
 				<ref bean="BeanTransformer"/>
 				<ref bean="RESTfulResourceTransformer"/>
 				<ref bean="RESTfulBeanTransformer"/>
@@ -168,6 +169,19 @@
 		<property name="transformerUtils" ref="TransformerUtils"/>	
 	</bean>
 	
+	<bean name="caDSRMetadataTransformer" class="gov.nih.nci.codegen.transformer.caDSRMetadataTransformer">
+		<property name="artifactHandler">
+			<bean class="gov.nih.nci.codegen.handler.FileHandler">
+				<property name="useArtifactSource" value="false"/>
+				<property name="outputDir" value="@OUTPUTDIR@"/>				
+				<property name="fileName" value="caDSRMetadata.xml"/>						
+			</bean>
+		</property>
+		<property name="enabled" value="true"/>
+		<property name="name" value="caDSR Metadata Transformer" />		
+		<property name="transformerUtils" ref="TransformerUtils"/>	
+	</bean>
+
 	<bean name="BeanTransformer" class="gov.nih.nci.codegen.transformer.jet.POJOTransformer">
 		<property name="artifactHandler">
 			<bean class="gov.nih.nci.codegen.handler.FileHandler">

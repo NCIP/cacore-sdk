@@ -18,6 +18,13 @@ function query(hrefVal)
 	document.LinkResult.targetClass.value="<%=request.getAttribute("targetClass")%>";
 	document.LinkResult.submit();
 }
+
+function showMetadata(context, klass, attribute)
+{
+	title = "Metadata for" + klass + ":" + attribute;
+	urL = "Metadata.action?context="+context+"&target="+klass+"&attribute="+attribute;
+	window.open(urL, title, "location=0,status=1,scrollbars=1,menubar=0,resizable=1,width=350,height=250");
+}
 </script>
 
 </head>

@@ -26,8 +26,6 @@ public class RESTfulDeleteClient {
 	public Response delete(String url) {
 	  try {
 			if (url == null) {
-				System.out
-						.println("Invalid URL");
 			ResponseBuilder builder = Response.status(Status.BAD_REQUEST);
 			builder.type("application/xml");
 			StringBuffer buffer = new StringBuffer();

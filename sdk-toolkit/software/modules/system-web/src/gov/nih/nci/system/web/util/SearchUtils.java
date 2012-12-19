@@ -540,19 +540,14 @@ public class SearchUtils {
 		if (field.getType().isEnum()) {
 			value = getFieldValue(field, attributeValue);
 		} else if (fieldName.startsWith(isoprefix)) {
-			System.out.println("createObject ==================================");
 			Method getterMethod = getAttributeGetMethodName(childObject,
 					attribute);
-			System.out.println("createObject getterMethod: "+getterMethod);
 			value = getterMethod.invoke(childObject);
-			System.out.println("createObject value: "+value);
 			if (value == null) {
 				Type[] genericParameterTypes = attSetMethod
 						.getGenericParameterTypes();
-				System.out.println("createObject value: is null ");
 				value = getFieldTypeObject(genericParameterTypes, field,
 						tempISOParamType);
-				System.out.println("createObject value: "+value);
 			}
 		} else if (field.getType().isAssignableFrom(Set.class)) {
 			Method getterMethod = getAttributeGetMethodName(childObject,
@@ -611,14 +606,11 @@ public class SearchUtils {
 	private Object getFieldTypeObject(Type[] genericParameterTypes,
 			Field field, StringBuffer classISOParamType) throws Exception {
 		Object fieldTypeObject = null;
-		System.out.println("classISOParamType: "+classISOParamType.toString());
 		for (Type genericParameterType : genericParameterTypes) {
 			if (genericParameterType instanceof TypeVariable<?>) {
-				System.out.println("classISOParamType:1 ");
 				fieldTypeObject = Class.forName(classISOParamType.toString())
 						.newInstance();
 			} else if (genericParameterType instanceof ParameterizedType) {
-				System.out.println("classISOParamType:2 ");
 				ParameterizedType pType = (ParameterizedType) genericParameterType;
 				String paramString = pType.toString();
 				int beginIndex = paramString.indexOf("<");
@@ -635,7 +627,6 @@ public class SearchUtils {
 							paramString.substring(0, index)).newInstance();
 				}
 			} else {
-				System.out.println("classISOParamType:3 ");
 				String fieldName = field.getType().getName();
 				boolean isClassISOParamTS = fieldName
 						.equals("gov.nih.nci.iso21090.Qty")

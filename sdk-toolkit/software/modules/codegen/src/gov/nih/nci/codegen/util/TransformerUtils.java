@@ -1012,6 +1012,7 @@ public class TransformerUtils
 		}
 
 		sb.append("import java.io.Serializable;\n");
+		//sb.append("import gov.nih.nci.system.annotate.NCIMetadata;\n");
 
 		return sb.toString();
 	}
@@ -2065,6 +2066,49 @@ public class TransformerUtils
 		return getColumn(table,TV_MAPPED_ATTR_COLUMN,fullyQualifiedAttrName,false,1,1);
 	}
 
+	
+	public String getcaDSRPublicIdCustomTag(UMLTaggableElement tgElt)
+	{
+		return getTagValue(tgElt, "NCI_CADSR_DE_ID");
+	}
+
+	
+	public String getcaDSRPublicVersionCustomTag(UMLTaggableElement tgElt)
+	{
+		return getTagValue(tgElt, "NCI_CADSR_DE_VERSION");
+	}
+	
+	public String getMetadataAnnotation(UMLClass klass, UMLAttribute attr)
+	{
+		StringBuffer buff = new StringBuffer();
+		String idValue = getcaDSRPublicIdCustomTag(attr);
+		String versionValue = getcaDSRPublicVersionCustomTag(attr);
+		if(idValue != null || versionValue != null)
+			buff.append("@gov.nih.nci.system.metadata.NCIMetadata");
+		
+		boolean append = false;
+		if(idValue != null && idValue.trim().length() > 0)
+		{
+			buff.append("(NCI_CADSR_DE_ID=\""+idValue +"\"");
+			append = true;
+		}
+		if(versionValue != null && versionValue.trim().length() > 0)
+		{
+			if(append)
+				buff.append(",");
+			else
+				buff.append("(");
+			buff.append("NCI_CADSR_DE_VERSION=\""+versionValue +"\")");
+		}
+		else
+		{
+			if(append)
+				buff.append(")");
+		}
+		return buff.toString();
+		
+	}
+	
 	/**
 	 * @param tgElt The TaggableElement (UMLClass, UMLAttribute)
 	 * @return		String containing a concatenation of any, all caDSR

@@ -34,8 +34,6 @@ public class RESTfulCreateClient {
 	{
 		try {
 			if (url == null) {
-				System.out
-						.println("Invalid URL");
 			ResponseBuilder builder = Response.status(Status.BAD_REQUEST);
 			builder.type("application/xml");
 			StringBuffer buffer = new StringBuffer();
@@ -50,8 +48,6 @@ public class RESTfulCreateClient {
 			}
 
 			if (fileLoc == null || !fileLoc.exists()) {
-				System.out
-						.println("Invalid file to create");
 			ResponseBuilder builder = Response.status(Status.BAD_REQUEST);
 			builder.type("application/xml");
 			StringBuffer buffer = new StringBuffer();
@@ -109,8 +105,6 @@ public class RESTfulCreateClient {
 	{
 		try {
 			if (url == null) {
-				System.out
-						.println("Invalid URL");
 			ResponseBuilder builder = Response.status(Status.BAD_REQUEST);
 			builder.type("application/xml");
 			StringBuffer buffer = new StringBuffer();
@@ -125,8 +119,6 @@ public class RESTfulCreateClient {
 			}
 
 			if (instance == null) {
-				System.out
-						.println("Invalid instance to create");
 			ResponseBuilder builder = Response.status(Status.BAD_REQUEST);
 			builder.type("application/xml");
 			StringBuffer buffer = new StringBuffer();

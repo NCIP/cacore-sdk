@@ -33,6 +33,12 @@
 			<result name="login" type="chain">Home</result>
 			<result>WEB-INF/jsp/result.jsp</result>
 		</action>
+		<action name="Metadata"
+			class="gov.nih.nci.system.web.struts.action.ShowMetadataAction">
+			<result name="login" type="chain">Home</result>
+			<result>WEB-INF/jsp/metadata.jsp</result>
+		</action>
+
 		<action name="LinkResult"
 			class="gov.nih.nci.system.web.struts.action.RestLinkAction">
 			<result name="login" type="chain">Home</result>

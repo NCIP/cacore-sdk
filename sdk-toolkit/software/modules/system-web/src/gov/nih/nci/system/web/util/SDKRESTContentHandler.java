@@ -7,6 +7,9 @@ import gov.nih.nci.system.client.util.xml.Marshaller;
 import gov.nih.nci.system.client.util.xml.Unmarshaller;
 import gov.nih.nci.system.client.util.xml.XMLUtility;
 import gov.nih.nci.system.client.util.xml.XMLUtilityException;
+import gov.nih.nci.system.metadata.MetadataCache;
+import gov.nih.nci.system.metadata.MetadataInjector;
+import gov.nih.nci.system.metadata.caDSRMetadata;
 import gov.nih.nci.system.web.ResourceLink;
 import gov.nih.nci.system.web.CollectionBean;
 
@@ -50,8 +53,6 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
-
-import com.thoughtworks.xstream.XStream;
 
 @Provider
 @Produces("application/xml")
@@ -99,7 +100,9 @@ public class SDKRESTContentHandler implements MessageBodyReader,
 			MultivaluedMap httpHeaders, OutputStream os) throws IOException,
 			WebApplicationException {
 		OutputStreamWriter writer = null;
+		MetadataCache mCache = null;
 		Reader in = null;
+		StringWriter strWriter = null;
 		try {
 			if(target == null)
 				return;
@@ -112,6 +115,15 @@ public class SDKRESTContentHandler implements MessageBodyReader,
 				return;
 			}
 			boolean includeAssociations = true;
+			try
+			{
+				mCache = MetadataCache.getInstance();
+			}
+			catch(Exception e)
+			{
+				log.error("ERROR: Failed to load Metadata: ", e);
+			}
+			
 			if(!(target instanceof CollectionBean))
 			{
 				Object convertedObj = XMLUtility.convertFromProxy(target,
@@ -136,20 +148,21 @@ public class SDKRESTContentHandler implements MessageBodyReader,
 				}
 
 				String packageName = convertedObj.getClass().getPackage().getName();
-				StringWriter strWriter = new StringWriter();
+				strWriter = new StringWriter();
 				Marshaller marshaller = new JAXBMarshaller(true,
 						packageName, namespace);
 				marshaller.toXML(convertedObj, strWriter);
 				in = new StringReader(strWriter.toString());
 				SAXBuilder builder = new SAXBuilder();
 				Document doc = builder.build(in);
+				if(mCache != null)
+					MetadataInjector.injectMetadata(mCache, caDSRMetadata.CONTEXT_NAME, doc, convertedObj.getClass().getName());
 				Element rootEle = doc.getRootElement();
-				org.jdom.output.XMLOutputter outputt = new org.jdom.output.XMLOutputter();
 				if(links != null)
 				{
 					for(ResourceLink link: links)
 					{
-						Element linkElement = new Element("link");
+						Element linkElement = new Element("link", rootEle.getNamespace());
 						linkElement.setAttribute("ref", link.getRelationship());
 						linkElement.setAttribute("type", link.getType());
 						linkElement.setAttribute("href", link.getHref());
@@ -161,7 +174,7 @@ public class SDKRESTContentHandler implements MessageBodyReader,
 			}
 			else
 			{
-				handleCollection((CollectionBean)target, writer, type);
+				handleCollection((CollectionBean)target, writer, type, mCache);
 			}
 
 		} catch (XMLUtilityException e) {
@@ -195,6 +208,11 @@ public class SDKRESTContentHandler implements MessageBodyReader,
 				writer.close();
 				writer = null;
 			}
+			if(strWriter != null)
+			{
+				strWriter.close();
+				strWriter = null;
+			}
 			if(in != null)
 			{
 				in.close();
@@ -203,7 +221,7 @@ public class SDKRESTContentHandler implements MessageBodyReader,
 		}
 	}
 
-	private void handleCollection(CollectionBean collectionObj, OutputStreamWriter writer, Class type) throws XMLUtilityException, IOException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, JDOMException
+	private void handleCollection(CollectionBean collectionObj, OutputStreamWriter writer, Class type, MetadataCache mCache) throws XMLUtilityException, IOException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, JDOMException
 	{
 
 		String collectionType = collectionObj.getType();
@@ -224,19 +242,29 @@ public class SDKRESTContentHandler implements MessageBodyReader,
 		int counter = proxy.size();
 		String packageName = "";
 		boolean isFirst = true;
-		String namespace = "gme://caCORE.caCORE/4.5/";
 		StringBuffer outputStr = new StringBuffer();
 
 		Object obj = proxy.get(0);
 		String collectionFullName = obj.getClass().getName();
+		String namespace = "gme://caCORE.caCORE/4.5/";
+		try
+		{
+			Class klass = obj.getClass();
+			Method method = klass.getDeclaredMethod("getNamespacePrefix", (Class[])null);
+			namespace = (String)method.invoke(obj, null);
+		} catch (NoSuchMethodException e) {
+			log.error("ERROR: ", e);
+		}
+
 		String collectionName = collectionFullName.substring(collectionFullName.lastIndexOf(".")+1, collectionFullName.lastIndexOf("Bean"))+"s";
+		String className = type.getName().substring(0, type.getName().length()-1);
 		org.jdom.Element httpQuery = new org.jdom.Element(collectionName,namespace);
 		Collection<ResourceLink> collectionLinks = collectionObj.getLinks();
 		if(collectionLinks != null)
 		{
 			for(ResourceLink link : collectionLinks)
 			{
-				Element linkElement = new Element("link");
+				Element linkElement = new Element("link", namespace);
 				linkElement.setAttribute("ref", link.getRelationship());
 				linkElement.setAttribute("type", link.getType());
 				linkElement.setAttribute("href", link.getHref());
@@ -249,7 +277,7 @@ public class SDKRESTContentHandler implements MessageBodyReader,
 			if(obj instanceof ResourceLink)
 			{
 				ResourceLink link = (ResourceLink)obj;
-				Element linkElement = new Element("link");
+				Element linkElement = new Element("link", namespace);
 				linkElement.setAttribute("ref", link.getRelationship());
 				linkElement.setAttribute("type", link.getType());
 				linkElement.setAttribute("href", link.getHref());
@@ -293,13 +321,14 @@ public class SDKRESTContentHandler implements MessageBodyReader,
 				in = new StringReader(strWriter.toString());
 				SAXBuilder builder = new SAXBuilder();
 				Document doc = builder.build(in);
-
+				if(mCache.hasMetadata(caDSRMetadata.CONTEXT_NAME, className))
+					doc = MetadataInjector.injectMetadata(mCache, caDSRMetadata.CONTEXT_NAME, doc, className);
 				Element rootEle = (Element)doc.getRootElement().clone();
 				if(links != null)
 				{
 					for(ResourceLink link: links)
 					{
-						Element linkElement = new Element("link");
+						Element linkElement = new Element("link", rootEle.getNamespace());
 						linkElement.setAttribute("ref", link.getRelationship());
 						linkElement.setAttribute("type", link.getType());
 						linkElement.setAttribute("href", link.getHref());

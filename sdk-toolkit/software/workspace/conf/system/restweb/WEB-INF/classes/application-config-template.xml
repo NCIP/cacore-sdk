@@ -25,6 +25,7 @@
 				<prop key="restfulResultOutputFormatter">restfulResultOutputFormatter.xsl</prop>
 				<prop key="rowCounter">@RESTFUL_PAGE_SIZE@</prop>
 				<prop key="securityEnabled">@SECURITY_ENABLED@</prop>
+				<prop key="caDSRMetadataEnabled">@ENABLE_CADSR_METADATA@</prop>
 				<prop key="enableISO21090DataTypes">@ENABLE_ISO21090_DATATYPES@</prop>
 				<prop key="enableRestfulHtmlInterface">@ENABLE_RESTFUL_HTML_INTERFACE@</prop>
 				<prop key="identityGeneratorType">@IDENTITY_GENERATOR_TYPE@</prop>
