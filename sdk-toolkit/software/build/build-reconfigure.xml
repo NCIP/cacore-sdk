@@ -765,6 +765,17 @@
 			</fileset>
 			<fileset dir="${output.target.dir}" />
 		</copy>	
+
+		<if>
+			<equals arg1="${SECURITY_ENABLED}" arg2="true" />
+			<then>
+			<copy todir="${package.client.local.lib.dir}">
+			<fileset dir="${build-utils.dir}">
+				<include name="bcprov-jdk15on-*.jar"/>
+			</fileset>
+			</copy>
+			</then>
+		</if>
 		
 		<available file="${3RD_PARTY_JARS_DIRECTORY}" property="include.3rdparty.exist" />
 		<if>
@@ -932,6 +943,16 @@
 						<include name="caGrid-metadatautils*.jar" />
 					</fileset>
 				</delete>
+				<if>
+					<equals arg1="${SECURITY_ENABLED}" arg2="true" />
+					<then>
+					<copy todir="${package.client.local.lib.dir}">
+					<fileset dir="${build-utils.dir}">
+						<include name="bcprov-jdk15on-*.jar"/>
+					</fileset>
+					</copy>
+					</then>
+				</if>
 
 				<if>
 					<equals arg1="${GENERATE_RESTFUL_RESOURCES}" arg2="true" />
@@ -1084,6 +1105,17 @@
 			</fileset>
 		</copy>
 
+		<if>
+			<equals arg1="${SECURITY_ENABLED}" arg2="true" />
+			<then>
+			<copy todir="${package.client.rest.lib.dir}">
+			<fileset dir="${build-utils.dir}">
+				<include name="bcprov-jdk15on-*.jar"/>
+			</fileset>
+			</copy>
+			</then>
+		</if>
+
 		<copy todir="${package.client.rest.dir}">
 			<fileset dir="${system.config.client.rest.dir}">
 				<exclude name="**/*template*" />
@@ -1188,6 +1220,17 @@
 						<include name="sdk-grid-remoting-*.jar"/>
 					</fileset>
 				</copy>
+				<if>
+					<equals arg1="${SECURITY_ENABLED}" arg2="true" />
+					<then>
+					<copy todir="${package.client.rest.lib.dir}">
+					<fileset dir="${build-utils.dir}">
+						<include name="bcprov-jdk15on-*.jar"/>
+					</fileset>
+					</copy>
+					</then>
+				</if>
+				
 				<delete>
 					<fileset dir="${package.client.rest.lib.dir}">
 						<include name="caGrid-data-*.jar" />
@@ -1290,6 +1333,17 @@
 				<include name="${schema.file}" />
 			</fileset>
 		</copy>
+		<if>
+			<equals arg1="${SECURITY_ENABLED}" arg2="true" />
+			<then>
+			<copy todir="${package.client.remote.lib.dir}">
+			<fileset dir="${build-utils.dir}">
+				<include name="bcprov-jdk15on-*.jar"/>
+			</fileset>
+			</copy>
+			</then>
+		</if>
+
 		<if>
 			<equals arg1="${GENERATE_RESTFUL_RESOURCES}" arg2="true" />
 			<then>
@@ -1424,6 +1478,16 @@
 						<include name="commons-logging-1.0.3.jar" />
 					</fileset>
 				</delete>
+				<if>
+					<equals arg1="${SECURITY_ENABLED}" arg2="true" />
+					<then>
+					<copy todir="${package.client.remote.lib.dir}">
+					<fileset dir="${build-utils.dir}">
+						<include name="bcprov-jdk15on-*.jar"/>
+					</fileset>
+					</copy>
+					</then>
+				</if>
 
 				<if>
 					<equals arg1="${GENERATE_RESTFUL_RESOURCES}" arg2="true" />
