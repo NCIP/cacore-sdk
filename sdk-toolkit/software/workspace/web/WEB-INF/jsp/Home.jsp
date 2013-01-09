@@ -15,14 +15,9 @@
 	}
 	//out.println("lastUserKey: " + lastUserKey);
 
-	String loginErrorStr = request.getParameter("login_error");
-	boolean isLoginError = false;
-	if (loginErrorStr != null && loginErrorStr.length() > 0) {
-		isLoginError = true;
-	}
-	//out.println("isLoginError: " + isLoginError);
 	JSPUtils jspUtils= JSPUtils.getJSPUtils(config.getServletContext());
 	boolean isSecurityEnabled = jspUtils.isSecurityEnabled();
+	boolean passwordReset = false;
 
 	boolean isAuthenticated = false;
 	String userName = "";
@@ -44,6 +39,38 @@
 	}
 	//out.println("userName: " + userName);
 	boolean webinterfaceDisabled=jspUtils.isWebInterfaceDisabled();
+	
+	String loginErrorStr = request.getParameter("login_error");
+	String passwordResetError = (String)request.getAttribute("password_reset_error");
+	String passwordResetSuccessful = (String)request.getAttribute("password_reset_successful"); 
+	boolean isLoginError = false;
+	boolean isPasswordResetError = false;
+	boolean isPasswordResetSuccessful = false;
+	if (loginErrorStr != null && loginErrorStr.length() > 0) {
+		isLoginError = true;
+	}
+	if (passwordResetError != null && passwordResetError.length() > 0) {
+		isPasswordResetError = true;
+	}
+	if (passwordResetSuccessful != null && passwordResetSuccessful.length() > 0) {
+		isPasswordResetSuccessful = true;
+	}
+
+
+	//out.println("isLoginError2: " + isLoginError);
+	
+	AuthenticationException authException = (AuthenticationException)session.getAttribute(AbstractProcessingFilter.ACEGI_SECURITY_LAST_EXCEPTION_KEY);
+	if(authException != null)
+	{
+		if(authException instanceof org.acegisecurity.BadCredentialsException && isLoginError)
+		{
+			Throwable t = authException.getCause();
+			if(t instanceof gov.nih.nci.security.exceptions.CSCredentialExpiredException)
+				passwordReset = true;
+		}else if(authException instanceof org.acegisecurity.AccountExpiredException && isLoginError)
+			passwordReset = true;
+		
+	}	
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -160,6 +187,8 @@
 																									<s:text name="home.login" />
 																								</td>
 																							</tr>
+																							<%if(!passwordReset)
+																							{%>
 																							<tr>
 																								<td class="sidebarContent">
 																									<s:form method="post"
@@ -167,6 +196,20 @@
 																										name="loginForm" theme="css_xhtml">
 																										<table cellpadding="2" cellspacing="0"
 																											border="0">
+																											<%
+																											if (isPasswordResetSuccessful) {
+																											%>
+																											<tr>
+																												<td class="sidebarLogin" align="left"
+																													colspan="2">
+																													<font color="red"> Your password is reset. Please try login with your new password.
+																														</font>
+																												</td>
+																											</tr>
+																											<%
+																											}
+																											%>
+																											
 																											<%
 																											if (isLoginError) {
 																											%>
@@ -216,6 +259,94 @@
 																									</s:form>
 																								</td>
 																							</tr>
+																							<%}else{%>
+						<tr>
+																								<td class="sidebarContent">
+																									<s:form method="post"
+																										action="reset"
+																										name="loginForm2" theme="css_xhtml">
+																										<table cellpadding="2" cellspacing="0"
+																											border="0">
+																											<%
+																											if (isLoginError) {
+																											%>
+																											<tr>
+																												<td class="sidebarLogin" align="left"
+																													colspan="2">
+																													<font color="red"> Your login
+																														attempt was not successful; please reset your password.
+																														<BR> <BR> Reason: <%=((AuthenticationException) session
+																														.getAttribute(AbstractProcessingFilter.ACEGI_SECURITY_LAST_EXCEPTION_KEY))
+																														.getMessage()%> <BR> <BR> </font>
+																												</td>
+																											</tr>
+																											<%
+																											}
+																											%>
+																											<%
+																											if (isPasswordResetError) {
+																											%>
+																											<tr>
+																												<td class="sidebarLogin" align="left"
+																													colspan="2">
+																													<font color="red"> Your 
+																														attempt to reset password was not successful; please try
+																														again.<BR> <BR> Reason: <%=passwordResetError%> <BR> <BR> </font>
+																												</td>
+																											</tr>
+																											<%
+																											}
+																											%>
+
+																											<tr>
+																												<td class="sidebarLogin" align="left">
+																													<s:text name="home.loginID" />
+																												</td>
+																												<td class="formFieldLogin">
+																													<s:textfield name="userName"
+																														value="%{lastUserKey}"
+																														cssClass="formField" size="14" />
+																												</td>
+																											</tr>
+																											<tr>
+																												<td class="sidebarLogin" align="left">
+																													<s:text name="oldPassword" />
+																												</td>
+																												<td class="formFieldLogin">
+																													<s:password name="oldPassword"
+																														cssClass="formField" size="14" />
+																												</td>
+																											</tr>
+<tr>
+																												<td class="sidebarLogin" align="left">
+																													<s:text name="newPassword" />
+																												</td>
+																												<td class="formFieldLogin">
+																													<s:password name="newPassword"
+																														cssClass="formField" size="14" />
+																												</td>
+																											</tr><tr>
+																												<td class="sidebarLogin" align="left">
+																													<s:text name="repeatPassword" />
+																												</td>
+																												<td class="formFieldLogin">
+																													<s:password name="repeatPassword"
+																														cssClass="formField" size="14" />
+																												</td>
+																											</tr>																											<tr>
+																												<td>
+																													&nbsp;
+																												</td>
+																												<td>
+																													<s:submit cssClass="actionButton"
+																														type="submit" value="Submit" />
+																												</td>
+																											</tr>
+																										</table>
+																									</s:form>
+																								</td>
+																							</tr>																							
+																							<%}%>
 																						</table>
 																						<%
 																						} else {

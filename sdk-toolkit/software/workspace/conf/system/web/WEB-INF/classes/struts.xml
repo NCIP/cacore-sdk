@@ -17,6 +17,11 @@
 			<result type="chain">ShowDynamicTree</result>
 		</action>
 
+		<action name="reset" class="gov.nih.nci.system.web.struts.action.LoginReset">
+			<result name="input" type="chain">Home</result>
+			<result>WEB-INF/jsp/Home.jsp</result>
+		</action>
+
 		<action name="ShowDynamicTree"
 			class="gov.nih.nci.system.web.struts.action.ShowDynamicTree">
 			<result name="login" type="chain">Home</result>
