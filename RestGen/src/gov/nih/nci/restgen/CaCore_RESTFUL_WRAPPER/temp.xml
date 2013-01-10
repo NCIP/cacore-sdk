@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mapping xmlns:ns2="http://cmts.cbiit.nci.nih.gov/core">
+    <links>
+        <link>
+            <source id="/@POJO Jar/@Site/@Create" componentid="Create"/>
+            <target id="/@WSDL/@CreateSpecimen(Specimen)" componentid=""/>
+        </link>
+    </links>
+    <tags/>
+    <views/>
+</mapping>
