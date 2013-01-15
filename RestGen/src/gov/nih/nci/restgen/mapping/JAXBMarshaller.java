@@ -7,12 +7,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
 import javax.xml.bind.JAXBException;
 
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 
-public class JAXBMarshaller implements Marshaller {
+public class JAXBMarshaller implements gov.nih.nci.restgen.mapping.Marshaller {
 	
 	private Map<String, JAXBContext> jaxbContextMap = new HashMap<String, JAXBContext>();
 	private boolean includeXmlDeclaration = true;
