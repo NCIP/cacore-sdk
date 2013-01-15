@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="Component" type="Component"/>
+
+  <xs:element name="Implementation" type="Implementation"/>
+
+  <xs:element name="Input" type="Input"/>
+
+  <xs:element name="Link" type="Link"/>
+
+  <xs:element name="Mapping" type="Mapping"/>
+
+  <xs:element name="Method" type="Method"/>
+
+  <xs:element name="Operation" type="Operation"/>
+
+  <xs:element name="Output" type="Output"/>
+
+  <xs:element name="Resource" type="Resource"/>
+
+  <xs:element name="Source" type="Source"/>
+
+  <xs:element name="Target" type="Target"/>
+
+  <xs:complexType name="Mapping">
+    <xs:sequence>
+      <xs:element name="components" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="Component" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="links" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="Link" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="resources" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="Resource" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string"/>
+    <xs:attribute name="version" type="xs:string"/>
+    <xs:attribute name="description" type="xs:string"/>
+    <xs:attribute name="createdOn" type="xs:dateTime"/>
+    <xs:attribute name="lastUpdatedOn" type="xs:dateTime"/>
+  </xs:complexType>
+
+  <xs:complexType name="Component">
+    <xs:sequence/>
+    <xs:attribute name="id" type="xs:string"/>
+    <xs:attribute name="location" type="xs:string"/>
+    <xs:attribute name="type" type="xs:string"/>
+    <xs:attribute name="kind" type="xs:string"/>
+  </xs:complexType>
+
+  <xs:complexType name="Link">
+    <xs:sequence>
+      <xs:element ref="Source"/>
+      <xs:element ref="Target"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="Source">
+    <xs:sequence/>
+    <xs:attribute name="id" type="xs:string"/>
+    <xs:attribute name="componentId" type="xs:string"/>
+  </xs:complexType>
+
+  <xs:complexType name="Target">
+    <xs:sequence/>
+    <xs:attribute name="id" type="xs:string"/>
+    <xs:attribute name="componentId" type="xs:string"/>
+  </xs:complexType>
+
+  <xs:complexType name="Resource">
+    <xs:sequence>
+      <xs:element name="methods" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="Method" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string"/>
+  </xs:complexType>
+
+  <xs:complexType name="Method">
+    <xs:sequence>
+      <xs:element ref="Implementation"/>
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string"/>
+  </xs:complexType>
+
+  <xs:complexType name="Implementation">
+    <xs:sequence>
+      <xs:element ref="Operation"/>
+    </xs:sequence>
+    <xs:attribute name="type" type="xs:string"/>
+    <xs:attribute name="name" type="xs:string"/>
+    <xs:attribute name="clientType" type="xs:string"/>
+    <xs:attribute name="path" type="xs:string"/>
+    <xs:attribute name="classpath" type="xs:string"/>
+  </xs:complexType>
+
+  <xs:complexType name="Operation">
+    <xs:sequence>
+      <xs:element name="inputs" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="inputs" type="Input" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element ref="Output"/>
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string"/>
+  </xs:complexType>
+
+  <xs:complexType name="Input">
+    <xs:sequence/>
+    <xs:attribute name="type" type="xs:string"/>
+  </xs:complexType>
+
+  <xs:complexType name="Output">
+    <xs:sequence/>
+    <xs:attribute name="type" type="xs:string"/>
+  </xs:complexType>
+</xs:schema>
+
