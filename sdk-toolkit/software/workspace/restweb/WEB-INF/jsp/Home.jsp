@@ -42,6 +42,7 @@
 	
 	String loginErrorStr = request.getParameter("login_error");
 	String passwordResetError = (String)request.getAttribute("password_reset_error");
+	//System.out.println("passwordResetError "+passwordResetError);
 	String passwordResetSuccessful = (String)request.getAttribute("password_reset_successful"); 
 	boolean isLoginError = false;
 	boolean isPasswordResetError = false;
@@ -51,6 +52,7 @@
 	}
 	if (passwordResetError != null && passwordResetError.length() > 0) {
 		isPasswordResetError = true;
+		passwordReset = true;
 	}
 	if (passwordResetSuccessful != null && passwordResetSuccessful.length() > 0) {
 		isPasswordResetSuccessful = true;
