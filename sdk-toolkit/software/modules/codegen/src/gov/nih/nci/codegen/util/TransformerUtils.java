@@ -2089,7 +2089,7 @@ public class TransformerUtils
 		boolean append = false;
 		if(idValue != null && idValue.trim().length() > 0)
 		{
-			buff.append("(NCI_CADSR_DE_ID=\""+idValue +"\"");
+			buff.append("(CADSR_DE_ID=\""+idValue +"\"");
 			append = true;
 		}
 		if(versionValue != null && versionValue.trim().length() > 0)
@@ -2098,7 +2098,7 @@ public class TransformerUtils
 				buff.append(",");
 			else
 				buff.append("(");
-			buff.append("NCI_CADSR_DE_VERSION=\""+versionValue +"\")");
+			buff.append("CADSR_DE_VERSION=\""+versionValue +"\")");
 		}
 		else
 		{
