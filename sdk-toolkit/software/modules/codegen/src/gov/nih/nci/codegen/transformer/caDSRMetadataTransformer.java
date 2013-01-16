@@ -93,7 +93,7 @@ public class caDSRMetadataTransformer implements Transformer {
 						{
 							String tagName = UMLTaggedValue.getName();
 							String tagValue = UMLTaggedValue.getValue();
-							if(tagName.startsWith("NCI_CADSR_"))
+							if(tagName.startsWith("CADSR_"))
 							{
 								if(!classEle)
 								{

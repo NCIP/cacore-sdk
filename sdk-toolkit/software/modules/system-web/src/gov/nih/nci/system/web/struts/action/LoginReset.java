@@ -49,6 +49,7 @@ public class LoginReset extends ActionSupport implements SessionAware {
 		}
 		catch(CSException e)
 		{
+			e.printStackTrace();
 			request.setAttribute("password_reset_error", e.getMessage());
 		}
 		

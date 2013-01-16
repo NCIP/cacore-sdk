@@ -2069,13 +2069,13 @@ public class TransformerUtils
 	
 	public String getcaDSRPublicIdCustomTag(UMLTaggableElement tgElt)
 	{
-		return getTagValue(tgElt, "NCI_CADSR_DE_ID");
+		return getTagValue(tgElt, "CADSR_DE_ID");
 	}
 
 	
 	public String getcaDSRPublicVersionCustomTag(UMLTaggableElement tgElt)
 	{
-		return getTagValue(tgElt, "NCI_CADSR_DE_VERSION");
+		return getTagValue(tgElt, "CADSR_DE_VERSION");
 	}
 	
 	public String getMetadataAnnotation(UMLClass klass, UMLAttribute attr)

@@ -57,9 +57,9 @@ public final class MetadataCache {
 					for (Attribute attr : attrs) {
 						String attrName = attr.getName();
 						String attrValue = attr.getValue();
-						if (attrName.equals("NCI_CADSR_DE_ID"))
+						if (attrName.equals("CADSR_DE_ID"))
 							mData.setPublicId(attrValue);
-						else if (attrName.equals("NCI_CADSR_DE_VERSION"))
+						else if (attrName.equals("CADSR_DE_VERSION"))
 							mData.setVersionId(attrValue);
 						
 						if(!attrName.equals("name"))

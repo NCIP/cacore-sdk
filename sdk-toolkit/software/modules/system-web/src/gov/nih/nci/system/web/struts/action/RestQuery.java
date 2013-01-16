@@ -584,7 +584,7 @@ public class RestQuery extends BaseActionSupport {
 			{
 				Attribute attr = (Attribute) iter.next();
 				//Skip caDSR metadata attributes
-				if(attr.getName().startsWith("NCI_CADSR_"))
+				if(attr.getName().startsWith("CADSR_"))
 					continue;
 				
 				log.debug("attr.getName(): "+attr.getName());
