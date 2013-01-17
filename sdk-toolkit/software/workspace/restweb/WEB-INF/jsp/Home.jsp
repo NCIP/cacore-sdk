@@ -41,6 +41,7 @@
 	boolean webinterfaceDisabled=jspUtils.isWebInterfaceDisabled();
 	
 	String loginErrorStr = request.getParameter("login_error");
+	//System.out.println("loginErrorStr "+loginErrorStr);
 	String passwordResetError = (String)request.getAttribute("password_reset_error");
 	//System.out.println("passwordResetError "+passwordResetError);
 	String passwordResetSuccessful = (String)request.getAttribute("password_reset_successful"); 
@@ -62,12 +63,17 @@
 	//out.println("isLoginError2: " + isLoginError);
 	
 	AuthenticationException authException = (AuthenticationException)session.getAttribute(AbstractProcessingFilter.ACEGI_SECURITY_LAST_EXCEPTION_KEY);
+	//System.out.println("authException "+authException);
+	//System.out.println("isLoginError2: " + isLoginError);
 	if(authException != null)
 	{
 		if(authException instanceof org.acegisecurity.BadCredentialsException && isLoginError)
 		{
 			Throwable t = authException.getCause();
+			//System.out.println("t: "+t);
 			if(t instanceof gov.nih.nci.security.exceptions.CSCredentialExpiredException)
+				passwordReset = true;
+			else if(t instanceof gov.nih.nci.security.exceptions.CSFirstTimeLoginException)
 				passwordReset = true;
 		}else if(authException instanceof org.acegisecurity.AccountExpiredException && isLoginError)
 			passwordReset = true;
