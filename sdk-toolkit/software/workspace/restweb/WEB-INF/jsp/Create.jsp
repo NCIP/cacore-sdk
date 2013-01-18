@@ -82,7 +82,7 @@
 										<%String message2 = (String)request.getAttribute("message");
 										if(message2 != null){
 										%>
-										<%=message2%><br>
+										<%=org.apache.commons.lang.StringEscapeUtils.escapeHtml(message2)%><br>
 												<input type="button" name="Close" value="Close" class="actionButton" onClick="javascript:window.close()">
 										
 										<%}
@@ -283,7 +283,7 @@ if(validationMessage != null && validationMessage.length() > 0)
 %>
 	<table cellpadding="4" cellspacing="0" border="0">
 		<tr align="left">
-			<td align="left"><%=validationMessage%></td>
+			<td align="left"><%=org.apache.commons.lang.StringEscapeUtils.escapeHtml(validationMessage)%></td>
 		</tr>
 	</table>
 

@@ -112,7 +112,7 @@ String success = (String)request.getAttribute("successful");
 										if(message == null)
 											message="&nbsp;";
 										%>
-										<%=message%>
+										<%=org.apache.commons.lang.StringEscapeUtils.escapeHtml(message)%>
 										</td>
 										</tr>
 			<% if(domainNames != null && domainNames.size() > 0)
@@ -175,8 +175,8 @@ String success = (String)request.getAttribute("successful");
 											if(name.equals("confirm") || name.equals("submit"))
 												continue;
 											%>
-											<%=name%> = <%=request.getParameter(name)%><br>
-											<input type="hidden" name="<%=name%>" value="<%=request.getParameter(name)%>">
+											<%=org.apache.commons.lang.StringEscapeUtils.escapeHtml(name)%> = <%=org.apache.commons.lang.StringEscapeUtils.escapeHtml(request.getParameter(name))%><br>
+											<input type="hidden" name="<%=org.apache.commons.lang.StringEscapeUtils.escapeHtml(name)%>" value="<%=org.apache.commons.lang.StringEscapeUtils.escapeHtml(request.getParameter(name))%>">
 											<%
 											}
 											%>

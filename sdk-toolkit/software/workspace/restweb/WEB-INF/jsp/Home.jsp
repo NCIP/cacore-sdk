@@ -226,9 +226,9 @@
 																													colspan="2">
 																													<font color="red"> Your login
 																														attempt was not successful; please try
-																														again.<BR> <BR> Reason: <%=((AuthenticationException) session
+																														again.<BR> <BR> Reason: <%=org.apache.commons.lang.StringEscapeUtils.escapeHtml(((AuthenticationException) session
 												.getAttribute(AbstractProcessingFilter.ACEGI_SECURITY_LAST_EXCEPTION_KEY))
-												.getMessage()%> <BR> <BR> </font>
+												.getMessage())%> <BR> <BR> </font>
 																												</td>
 																											</tr>
 																											<%
@@ -283,9 +283,9 @@
 																													colspan="2">
 																													<font color="red"> Your login
 																														attempt was not successful; please reset your password.
-																														<BR> <BR> Reason: <%=((AuthenticationException) session
+																														<BR> <BR> Reason: <%=org.apache.commons.lang.StringEscapeUtils.escapeHtml(((AuthenticationException) session
 																														.getAttribute(AbstractProcessingFilter.ACEGI_SECURITY_LAST_EXCEPTION_KEY))
-																														.getMessage()%> <BR> <BR> </font>
+																														.getMessage())%> <BR> <BR> </font>
 																												</td>
 																											</tr>
 																											<%
@@ -299,7 +299,7 @@
 																													colspan="2">
 																													<font color="red"> Your 
 																														attempt to reset password was not successful; please try
-																														again.<BR> <BR> Reason: <%=passwordResetError%> <BR> <BR> </font>
+																														again.<BR> <BR> Reason: <%=org.apache.commons.lang.StringEscapeUtils.escapeHtml(passwordResetError)%> <BR> <BR> </font>
 																												</td>
 																											</tr>
 																											<%

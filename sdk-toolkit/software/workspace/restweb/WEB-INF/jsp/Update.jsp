@@ -90,7 +90,7 @@
 										if(message2 == null)
 											message2="&nbsp;";
 										%>
-										<%=message2%>
+										<%=org.apache.commons.lang.StringEscapeUtils.escapeHtml(message2)%>
 										</td>
 										</tr>
 														<tr>
@@ -144,7 +144,7 @@ if(className != null)
 %>
 	<table summary="" cellpadding="3" cellspacing="0" border="0" align="center">
 		<tr>
-			<td class="formTitle" height="20" colspan="3"><%=className%></td>
+			<td class="formTitle" height="20" colspan="3"><%=org.apache.commons.lang.StringEscapeUtils.escapeHtml(className)%></td>
 		</tr>
 <%
 		if(fieldNames != null && fieldNames.size() > 0)
@@ -176,13 +176,13 @@ if(className != null)
 			<td class="formLabel" align="right"><label for="<%=attrNameLabel%>"><%=attrNameLabel%>:</label></td>
 			<td class="formField" width="90%">
 			<input type="hidden" name="target" value="<%=className%>">
-			<input type="hidden" name="<%=idColStr%>" value="<%=idStr%>">
+			<input type="hidden" name="<%=org.apache.commons.lang.StringEscapeUtils.escapeHtml(idColStr)%>" value="<%=idStr%>">
 			<%
 			if(attrName.equals(classIdName))
 			{
 				
 			%>
-			<%=HtmlUtils.getAttributeValue(rootElement, attrName)%>
+			<%=org.apache.commons.lang.StringEscapeUtils.escapeHtml(HtmlUtils.getAttributeValue(rootElement, attrName))%>
 			<input type="hidden" name="<%=attrName%>" value="<%=HtmlUtils.getAttributeValue(rootElement, attrName)%>">
 			<%
 			}
@@ -289,7 +289,7 @@ if(validationMessage != null && validationMessage.length() > 0)
 %>
 	<table cellpadding="4" cellspacing="0" border="0">
 		<tr align="left">
-			<td align="left"><%=validationMessage%></td>
+			<td align="left"><%=org.apache.commons.lang.StringEscapeUtils.escapeHtml(validationMessage)%></td>
 		</tr>
 	</table>
 
