@@ -169,7 +169,7 @@ public class UploadWSDLAction extends AbstractContextAction
     	            /// form the tree here PV...start
     	            
     	            	DefaultTargetTreeNode top = new DefaultTargetTreeNode("WSDL");
-    	            	createNodes(top,operationsList);
+    	            	createNodes(top,operationsList,InputTypes,OutputTypes);
     	                tree = new JTree(top);
     	                TreeSelectionHandler treeSelectionHanderl=new TreeSelectionHandler(mainFrame.getMainFrame().getMappingMainPanel().getGraphController());
     	        		tree.getSelectionModel().addTreeSelectionListener(treeSelectionHanderl);
@@ -188,12 +188,18 @@ public class UploadWSDLAction extends AbstractContextAction
 
     }
     
-private void createNodes(DefaultTargetTreeNode top,ArrayList<String> list) {
+private void createNodes(DefaultTargetTreeNode top,ArrayList<String> list, ArrayList<String> InputType, ArrayList<String> OutputType ) {
 		
 	    Iterator<String> it = list.iterator();
+	    Iterator<String> inputList = InputType.iterator();
+	    Iterator<String> outputList = OutputType.iterator();
 	    while(it.hasNext())
 	    {
-	    	DefaultTargetTreeNode childElement = new DefaultTargetTreeNode((String)it.next());
+	    	String operationName = (String)it.next();
+	    	DefaultTargetTreeNode childElement = new DefaultTargetTreeNode(operationName);
+	    	childElement.setOperationName(operationName);
+	    	childElement.setInputType((String)inputList.next());
+	    	childElement.setOutputType((String)outputList.next());
 	    	top.add(childElement);
 	    }
 	    

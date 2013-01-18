@@ -289,6 +289,7 @@ private void createNodes(DefaultTargetTreeNode top,ArrayList<String> list, File 
 	        			}
 	        		}
 	        		DefaultTargetTreeNode element = new DefaultTargetTreeNode(method.getName());
+	        		element.setOperationName(method.getName());
 	        		element.setInputType(argumentTypes);
 	        		element.setOutputType(returnType.toString());
 	    	    	childElement.add(element);
