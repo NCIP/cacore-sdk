@@ -181,7 +181,7 @@ public class RestQuery extends BaseActionSupport {
 			else
 				criteria = queryStr;
 			//Criteria value to display
-			buffer.append("Criteria: " + criteria);
+			buffer.append("Criteria: " + org.apache.commons.lang.StringEscapeUtils.escapeHtml(criteria));
 			buffer.append("<br />");
 
 			Element root = doc.getRootElement();
@@ -284,7 +284,7 @@ public class RestQuery extends BaseActionSupport {
 								Element attrEle = child.getChild(idColName, child.getNamespace());
 								if(attrEle != null)
 								{
-									bodyBuffer.append(attrEle.getValue());
+									bodyBuffer.append(org.apache.commons.lang.StringEscapeUtils.escapeHtml(attrEle.getValue()));
 									idColValue = attrEle.getValue();
 									headerBuffer
 									.append("<th class=\"dataTableHeader\" scope=\"col\" align=\"center\">");
@@ -301,7 +301,7 @@ public class RestQuery extends BaseActionSupport {
 								Attribute attr = child.getAttribute(idColName);
 								if (attr != null)
 								{
-									bodyBuffer.append(attr.getValue());
+									bodyBuffer.append(org.apache.commons.lang.StringEscapeUtils.escapeHtml(attr.getValue()));
 									idColValue = attr.getValue();
 								}
 							}
@@ -311,7 +311,7 @@ public class RestQuery extends BaseActionSupport {
 							Attribute attr = child.getAttribute(idColName);
 							if (attr != null)
 							{
-								bodyBuffer.append(attr.getValue());
+								bodyBuffer.append(org.apache.commons.lang.StringEscapeUtils.escapeHtml(attr.getValue()));
 								idColValue = attr.getValue();
 							}
 						}
@@ -371,7 +371,7 @@ public class RestQuery extends BaseActionSupport {
 								
 								if(attrEle != null)
 								{
-									bodyBuffer.append(attrEle.getValue());
+									bodyBuffer.append(org.apache.commons.lang.StringEscapeUtils.escapeHtml(attrEle.getValue()));
 
 									headerBuffer
 									.append("<th class=\"dataTableHeader\" scope=\"col\" align=\"center\">");
@@ -387,7 +387,7 @@ public class RestQuery extends BaseActionSupport {
 								Attribute attr = child.getAttribute(field.getName());
 								if (attr != null)
 								{
-									bodyBuffer.append(attr.getValue());
+									bodyBuffer.append(org.apache.commons.lang.StringEscapeUtils.escapeHtml(attr.getValue()));
 								}
 							}
 						}
@@ -396,7 +396,7 @@ public class RestQuery extends BaseActionSupport {
 							Attribute attr = child.getAttribute(field.getName());
 							if (attr != null)
 							{
-								bodyBuffer.append(attr.getValue());
+								bodyBuffer.append(org.apache.commons.lang.StringEscapeUtils.escapeHtml(attr.getValue()));
 							}
 						}
 					
@@ -590,7 +590,7 @@ public class RestQuery extends BaseActionSupport {
 				log.debug("attr.getName(): "+attr.getName());
 				if(attr.getName().equals("xsi:type") || attr.getName().equals("type"))
 					continue;
-				attrBuff.append(attr.getName() + ": "+attr.getValue());
+				attrBuff.append(attr.getName() + ": "+org.apache.commons.lang.StringEscapeUtils.escapeHtml(attr.getValue()));
 				if(iter.hasNext())
 					attrBuff.append(";");
 			}
@@ -641,7 +641,7 @@ public class RestQuery extends BaseActionSupport {
 					queryStr.length());
 		else
 			criteria = queryStr;
-		buffer.append("Criteria: " + criteria);
+		buffer.append("Criteria: " + org.apache.commons.lang.StringEscapeUtils.escapeHtml(criteria));
 		buffer.append("<br />");
 
 			buffer.append("Result Class: " + className);
@@ -650,7 +650,7 @@ public class RestQuery extends BaseActionSupport {
 			buffer.append("<tr>");
 			buffer.append("<td class=\"dataPagingText\" align=\"left\" style=\"border:0px; border-bottom:1px; border-style:solid; border-color:#5C5C5C;\">");
 			buffer.append("<br />");
-			buffer.append(message);
+			buffer.append(org.apache.commons.lang.StringEscapeUtils.escapeHtml(message));
 			buffer.append("<br />");
 			buffer.append("<br />");
 			buffer.append("</td>");

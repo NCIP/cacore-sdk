@@ -126,21 +126,21 @@ public class UpdateAction extends RestQuery {
 							error = message.getText();
 
 						request.setAttribute("message", "Unsuccessful update: "
-								+ error);
+								+ org.apache.commons.lang.StringEscapeUtils.escapeHtml(error));
 						//return SUCCESS;
 					} else {
 						String message = "Updated Successfully";
-						request.setAttribute("message", message);
+						request.setAttribute("message", org.apache.commons.lang.StringEscapeUtils.escapeHtml(message));
 
 					}
 				} catch (WebApplicationException e) {
-					request.setAttribute("Message", "Failed to update: "+e.getMessage());
+					request.setAttribute("Message", "Failed to update: "+org.apache.commons.lang.StringEscapeUtils.escapeHtml(e.getMessage()));
 					//return SUCCESS;
 					//e.printStackTrace();
 				}
 			} catch (Exception e) {
-				String message = "Failed to update: " + e.getMessage();
-				request.setAttribute("message", message);
+				String message = "Failed to update: " + org.apache.commons.lang.StringEscapeUtils.escapeHtml(e.getMessage());
+				request.setAttribute("message", org.apache.commons.lang.StringEscapeUtils.escapeHtml(message));
 				//return SUCCESS;
 			}
 		}

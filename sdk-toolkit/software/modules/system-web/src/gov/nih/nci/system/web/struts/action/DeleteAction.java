@@ -107,7 +107,7 @@ public class DeleteAction extends RestQuery {
 			org.jdom.Document jDoc = builder.build(is);
 			Element root = jDoc.getRootElement();
 			Element messageEle = root.getChild("message");
-			request.setAttribute("message", messageEle.getText());
+			request.setAttribute("message", org.apache.commons.lang.StringEscapeUtils.escapeHtml(messageEle.getText()));
 		}
 		else
 		{
@@ -123,7 +123,7 @@ public class DeleteAction extends RestQuery {
 				error = message.getText();
 			
 			String messageStr = "Failed to create: "+error;
-			request.setAttribute("message", messageStr);
+			request.setAttribute("message", org.apache.commons.lang.StringEscapeUtils.escapeHtml(messageStr));
 		}
 		return SUCCESS;
 	}

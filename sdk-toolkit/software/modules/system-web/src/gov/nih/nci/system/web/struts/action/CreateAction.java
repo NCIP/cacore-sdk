@@ -115,7 +115,6 @@ public class CreateAction extends RestQuery {
 			}
 
 			   	prepareAssociations(request, instance, className, base64encodedUsernameAndPassword);
-				log.debug("Before insert: *******");
 
 				Response r = client.put(instance);
 		   		//log.debug("Create status: "+r.getStatus());
@@ -131,7 +130,7 @@ public class CreateAction extends RestQuery {
 					String href = messageEle.getText();
 					String newId = href.substring(href.lastIndexOf("/")+1);
 					String message = "Successfully created "+ selectedDomain.substring(selectedDomain.lastIndexOf(".")+1, selectedDomain.length()) +" with Id: "+newId;
-					request.setAttribute("message", message);
+					request.setAttribute("message", org.apache.commons.lang.StringEscapeUtils.escapeHtml(message));
 					request.setAttribute("created", "true");
 		   		}
 		   		else
@@ -147,7 +146,7 @@ public class CreateAction extends RestQuery {
 					if(message != null)
 						error = message.getText();
 					
-					String messageStr = "Failed to create: "+error;
+					String messageStr = "Failed to create: "+org.apache.commons.lang.StringEscapeUtils.escapeHtml(error);
 					request.setAttribute("message", messageStr);
 					request.setAttribute("created", "false");
 		   		}
@@ -155,8 +154,17 @@ public class CreateAction extends RestQuery {
 			catch(WebApplicationException e)
 			{
 				e.printStackTrace();
-				String message = "Failed to create due to: "+e.getMessage();
+				String message = "Failed to create due to: "+ org.apache.commons.lang.StringEscapeUtils.escapeHtml(e.getMessage());
 				log.debug("message2 "+message);
+				request.setAttribute("message", message);
+				request.setAttribute("created", "false");
+
+			}
+			catch(NumberFormatException e)
+			{
+				e.printStackTrace();
+				String message = "Failed to create due to: "+org.apache.commons.lang.StringEscapeUtils.escapeHtml(e.getMessage());
+				log.debug("message1 "+message);
 				request.setAttribute("message", message);
 				request.setAttribute("created", "false");
 
@@ -164,7 +172,7 @@ public class CreateAction extends RestQuery {
 			catch(Exception e)
 			{
 				e.printStackTrace();
-				String message = "Failed to create due to: "+e.getMessage();
+				String message = "Failed to create due to: "+ org.apache.commons.lang.StringEscapeUtils.escapeHtml(e.getMessage());
 				log.debug("message1 "+message);
 				request.setAttribute("message", message);
 				request.setAttribute("created", "false");
@@ -208,7 +216,7 @@ public class CreateAction extends RestQuery {
 
 
 	private Object prepareObject(HttpServletRequest request)
-	throws Exception
+	throws NumberFormatException, Exception
 	{
 
 		StringBuilder sb = new StringBuilder();
@@ -222,14 +230,16 @@ public class CreateAction extends RestQuery {
 	 		while(parameters.hasMoreElements())
 	 		{
 	     		String parameterName = (String)parameters.nextElement();
-	     		log.debug("parameterName: "+parameterName);
 	     		if(!parameterName.equals("klassName") && !parameterName.equals("searchObj") && !parameterName.equals("BtnSearch") && !parameterName.equals("username") && !parameterName.equals("password") && !parameterName.equals("selectedDomain"))
 	     		{
 	     			String parameterValue = (request.getParameter(parameterName)).trim();
-	     			log.debug("parameterValue: "+parameterValue);
 	     			setParameterValue(klass, instance, parameterName, parameterValue);
 	     		}
 	     	}
+		}
+		catch(NumberFormatException e)
+		{
+			throw e;
 		}
 		catch(Exception e)
 		{
@@ -240,7 +250,7 @@ public class CreateAction extends RestQuery {
 
 
 	private void setParameterValue(Class klass, Object instance, String name, String value)
-	throws Exception
+	throws NumberFormatException, Exception
 	{
 		if(value != null && value.trim().length()==0)
 			value = null;
@@ -251,7 +261,6 @@ public class CreateAction extends RestQuery {
 			Method[] allMethods = klass.getMethods();
 		    for (Method m : allMethods) {
 				String mname = m.getName();
-				log.debug("mname: "+mname);
 				if(mname.equals("get"+paramName))
 				{
 					Class type = m.getReturnType();
@@ -265,8 +274,9 @@ public class CreateAction extends RestQuery {
 					    	  Object converted = convertValue(type, value);
 					    	  if(converted != null)
 					          	setMethod.invoke(instance, converted);
-					          log.debug("setParameterValue************* ");
 					          break;
+					     } catch(NumberFormatException e) {
+					    	 throw e;
 					     } catch (NoSuchMethodException ex) {
 					    	 klass = klass.getSuperclass();
 					     }
@@ -285,7 +295,7 @@ public class CreateAction extends RestQuery {
 		}
 	}
 
-	public Object convertValue(Class klass, Object value) throws Exception {
+	public Object convertValue(Class klass, Object value) throws NumberFormatException, Exception {
 
 		String fieldType = klass.getName();
 		if(value == null)
@@ -319,7 +329,12 @@ public class CreateAction extends RestQuery {
 				throw new Exception("type mismatch - " + fieldType);
 			}
 
-		} catch (Exception ex) {
+		} catch(NumberFormatException e) {
+			 e.printStackTrace();
+			 log.error("ERROR : " + e.getMessage());
+			 throw e;
+		}
+		catch (Exception ex) {
 			 ex.printStackTrace();
 			 log.error("ERROR : " + ex.getMessage());
 			 throw ex;
