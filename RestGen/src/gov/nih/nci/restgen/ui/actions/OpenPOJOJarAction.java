@@ -1,9 +1,9 @@
 /**
- * The content of this file is subject to the caAdapter Software License (the "License").  
+ * The content of this file is subject to the caCore SDK Software License (the "License").  
  * A copy of the License is available at:
- * [caAdapter CVS home directory]\etc\license\caAdapter_license.txt. or at:
- * http://ncicb.nci.nih.gov/infrastructure/cacore_overview/caadapter/indexContent
- * /docs/caAdapter_License
+ * [caCore SDK CVS home directory]\etc\license\caCore SDK_license.txt. or at:
+ * http://ncicb.nci.nih.gov/infrastructure/cacore_overview/caCore SDK/indexContent
+ * /docs/caCore SDK_License
  */
 
 package gov.nih.nci.restgen.ui.actions;
@@ -27,10 +27,16 @@ import java.util.jar.JarEntry;
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import org.apache.bcel.classfile.ClassParser;
+import org.apache.bcel.classfile.Field;
+import org.apache.bcel.classfile.JavaClass;
+import org.apache.bcel.classfile.Method;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 
 /**
@@ -113,53 +119,35 @@ public class OpenPOJOJarAction extends AbstractContextAction
                 JOptionPane.showMessageDialog(ownerFrame.getMainFrame(), "This file is not a POJO Jar file (" + SOURCE_TREE_FILE_DEFAULT_EXTENTION + ") file : " + file.getName(), "Not a POJO Jar file", JOptionPane.ERROR_MESSAGE);
                 return false;
             }
-            
-            // validate and parse the POJO jar classes here
-     
-         /* InputStream is = new FileInputStream(file);
-           ClassParser cp = new ClassParser(is,file.getName());
-           JavaClass javaClass = cp.parse();
-           for(Method method : javaClass.getMethods()){
-        	   boolean validatePOJOMethods = false;
-        	   for(Field field : javaClass.getFields()){
-        		 
-        		   String fieldCompare = "get"+field.getName();
-        		   if(fieldCompare.equalsIgnoreCase(method.getName()))
-        		   {
-        			   validatePOJOMethods = true;
-        			   break;
-        		   }
-        		   
-        	   }
-        	      
-        	   if(!validatePOJOMethods)
-        	   {
-        		   JOptionPane.showMessageDialog(mainFrame.getMainFrame(), "This file is not a POJO class (" + SOURCE_TREE_FILE_DEFAULT_EXTENTION + ") file : " + file.getName(), "Not a POJO class file", JOptionPane.ERROR_MESSAGE);
-                   return false;
-        	   }
-           }
-           */
-           // validate and parse the POJO jar classes here
-           
+                  
             JarFile jar = new JarFile(file);
             Enumeration<?> en = jar.entries();
             ArrayList<String> classList = new ArrayList<String>();
-            boolean containsClassFile = false;  
+            boolean containsClassFile = false;
+            boolean isValidPOJOClass = false;
               		while (en.hasMoreElements()) {
               			JarEntry entry = (JarEntry) en.nextElement();
+              			isValidPOJOClass = false;
               			if (entry.getName().endsWith(".class")) {
+              				InputStream input = jar.getInputStream(entry);
+              				isValidPOJOClass = validatePOJOClass(input,entry.getName());
+              				if(!isValidPOJOClass)
+              				{
+              					JOptionPane.showMessageDialog(ownerFrame.getMainFrame(), "This class in the Jar file : " + entry.getName()+ ", Not a POJO class file",", Not a POJO class file", JOptionPane.ERROR_MESSAGE);
+              					continue;
+              				}
               				classList.add(entry.getName().replace(".class", ""));
               				containsClassFile = true;
 
               			}
 
               		}
-             if(!containsClassFile)
+             if(!containsClassFile || classList.isEmpty())
              {
             	 JOptionPane.showMessageDialog(ownerFrame.getMainFrame(), "This file is not a POJO Jar File: " + file.getName(), "Does not contain POJO classes", JOptionPane.ERROR_MESSAGE);
                  return false;
              }
-            
+              
             /// form the tree here PV...start
             
                 DefaultSourceTreeNode top = new DefaultSourceTreeNode(file.getName());
@@ -224,6 +212,39 @@ public class OpenPOJOJarAction extends AbstractContextAction
 		return ownerFrame.getAssociatedUIComponent();
 	}
 
+	
+	  // validate and parse the POJO class here
+    public boolean validatePOJOClass(InputStream is,String classFile)throws Exception
+    {
+    boolean validatePOJOMethods = false;	
+    
+     ClassParser cp = new ClassParser(is,classFile);
+     JavaClass javaClass = cp.parse();
+     for(Field field : javaClass.getFields()){
+  	   validatePOJOMethods = false;
+  	   
+  	   if(field.getName().contains("serialVersionUID"))
+  	   continue;
+  		   
+  	   for(Method method : javaClass.getMethods()){
+  	   	   System.out.println("Field names:"+field.getName()+method.getName()+"\n");
+  		   String fieldCompare = "get"+field.getName();
+  		   if(fieldCompare.equalsIgnoreCase(method.getName()))
+  		   {
+  			   System.out.println("Inside if loop..."+"\n");
+  			   validatePOJOMethods = true;
+  			   break;
+  		   }
+  		   
+  	   }
+  	  
+     }
+     
+     return validatePOJOMethods;
+     
+     // validate and parse the POJO class here
+	
+    }
   
 }
 

@@ -106,16 +106,21 @@ public class NewPOJOFileAction extends AbstractContextAction
             
             // validate and parse the POJO class here
      
-         /* InputStream is = new FileInputStream(file);
+          InputStream is = new FileInputStream(file);
            ClassParser cp = new ClassParser(is,file.getName());
            JavaClass javaClass = cp.parse();
-           for(Method method : javaClass.getMethods()){
+           for(Field field : javaClass.getFields()){
         	   boolean validatePOJOMethods = false;
-        	   for(Field field : javaClass.getFields()){
-        		 
+        	   
+        	   if(field.getName().contains("serialVersionUID"))
+        	   continue;
+        		   
+        	   for(Method method : javaClass.getMethods()){
+        	   	   System.out.println("Field names:"+field.getName()+method.getName()+"\n");
         		   String fieldCompare = "get"+field.getName();
         		   if(fieldCompare.equalsIgnoreCase(method.getName()))
         		   {
+        			   System.out.println("Inside if loop..."+"\n");
         			   validatePOJOMethods = true;
         			   break;
         		   }
@@ -128,7 +133,7 @@ public class NewPOJOFileAction extends AbstractContextAction
                    return false;
         	   }
            }
-           */
+           
            // validate and parse the POJO class here
            
             /// form the tree here PV...start

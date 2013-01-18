@@ -1,9 +1,9 @@
 /**
- * The content of this file is subject to the caAdapter Software License (the "License").  
+ * The content of this file is subject to the caCore SDK Software License (the "License").  
  * A copy of the License is available at:
- * [caAdapter CVS home directory]\etc\license\caAdapter_license.txt. or at:
- * http://ncicb.nci.nih.gov/infrastructure/cacore_overview/caadapter/indexContent
- * /docs/caAdapter_License
+ * [caCore SDK CVS home directory]\etc\license\caCore SDK_license.txt. or at:
+ * http://ncicb.nci.nih.gov/infrastructure/cacore_overview/caCore SDK/indexContent
+ * /docs/caCore SDK_License
  */
 package gov.nih.nci.restgen.ui.jgraph;
 
@@ -631,47 +631,6 @@ public class MiddlePanelJGraphController {
 		}
 		return result;
 	}
-
-	/*private boolean createTreeToFunctionBoxPortMapping(
-			MappableNode mappableNode, FunctionBoxGraphPort port,
-			List<DefaultGraphCell> graphCellList) {
-		boolean isDataFromSourceTree = false;
-		if (mappingPanel.getSourceTree().getSelectionPath() != null)
-			isDataFromSourceTree = true;
-
-		AttributeMap treeCellAttributes = null;
-		DefaultGraphCell treeNodeCell = new DefaultGraphCell();
-		treeNodeCell.add(new DefaultPort(mappableNode));
-		if (isDataFromSourceTree) {
-			int treeNodeYpos = calculateScrolledDistanceOnY(mappingPanel
-					.getSourceScrollPane(),
-					(DefaultMutableTreeNode) mappableNode, false);
-			treeCellAttributes = UIHelper.getDefaultInvisibleVertexAttribute(
-					new Point(0, treeNodeYpos), true);
-		} else {
-			int treeNodeYpos = calculateScrolledDistanceOnY(mappingPanel
-					.getTargetScrollPane(),
-					(DefaultMutableTreeNode) mappableNode, false);
-			treeCellAttributes = UIHelper.getDefaultInvisibleVertexAttribute(
-					new Point(getMaximalXValueOnPane(), treeNodeYpos), false);
-		}
-
-		ConnectionSet cs = new ConnectionSet();
-		Map<DefaultGraphCell, AttributeMap> attributes = new Hashtable<DefaultGraphCell, AttributeMap>();
-		DefaultEdge linkEdge = new MappingGraphLink();
-		cs.connect(linkEdge, treeNodeCell.getChildAt(0), port);
-		attributes.put(treeNodeCell, treeCellAttributes);
-		attributes.put(port, port.getAttributes());
-
-		graphCellList.add(treeNodeCell);
-		graphCellList.add(port);
-		graphCellList.add(linkEdge);
-		getMiddlePanel().getGraph().getGraphLayoutCache().insert(
-				new Object[] { treeNodeCell, port, linkEdge }, attributes, cs,
-				null, null);
-		return true;
-	}*/
-
 	private int getMaximalXValueOnPane() {
 		int visibleWidth = (int) getMiddlePanel().getGraphScrollPane()
 				.getVisibleRect().getWidth();

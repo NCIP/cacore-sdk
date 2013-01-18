@@ -1,9 +1,9 @@
 /**
- * The content of this file is subject to the caAdapter Software License (the "License").  
+ * The content of this file is subject to the caCore SDK Software License (the "License").  
  * A copy of the License is available at:
- * [caAdapter CVS home directory]\etc\license\caAdapter_license.txt. or at:
- * http://ncicb.nci.nih.gov/infrastructure/cacore_overview/caadapter/indexContent
- * /docs/caAdapter_License
+ * [caCore SDK CVS home directory]\etc\license\caCore SDK_license.txt. or at:
+ * http://ncicb.nci.nih.gov/infrastructure/cacore_overview/caCore SDK/indexContent
+ * /docs/caCore SDK_License
  */
 
 
@@ -40,7 +40,7 @@ public class OpenMappingAction extends AbstractContextAction
 //	protected static final KeyStroke ACCELERATOR_KEY_STROKE = KeyStroke.getKeyStroke(KeyEvent.VK_F4, Event.CTRL_MASK, false);
 
 	private static final String LOGID = "$RCSfile: CloseAllAction.java,v $";
-	public static String RCSID = "$Header: /share/content/gforge/caadapter/cmts/src/gov/nih/nci/cbiit/cmts/ui/actions/CloseAllAction.java,v 1.2 2009-11-23 18:32:47 wangeug Exp $";
+	public static String RCSID = "$Header: /share/content/gforge/caCore SDK/cmts/src/gov/nih/nci/cbiit/cmts/ui/actions/CloseAllAction.java,v 1.2 2009-11-23 18:32:47 wangeug Exp $";
 
 	protected MainFrameContainer mainFrame = null;
 

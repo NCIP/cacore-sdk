@@ -1,9 +1,9 @@
 /**
- * The content of this file is subject to the caAdapter Software License (the "License").  
+ * The content of this file is subject to the caCore SDK Software License (the "License").  
  * A copy of the License is available at:
- * [caAdapter CVS home directory]\etc\license\caAdapter_license.txt. or at:
- * http://ncicb.nci.nih.gov/infrastructure/cacore_overview/caadapter/indexContent
- * /docs/caAdapter_License
+ * [caCore SDK CVS home directory]\etc\license\caCore SDK_license.txt. or at:
+ * http://ncicb.nci.nih.gov/infrastructure/cacore_overview/caCore SDK/indexContent
+ * /docs/caCore SDK_License
  */
 
 package gov.nih.nci.restgen.ui.actions;
@@ -15,15 +15,22 @@ import gov.nih.nci.restgen.ui.dnd.TreeTransferHandler;
 import gov.nih.nci.restgen.ui.main.MainFrameContainer;
 import gov.nih.nci.restgen.ui.tree.DefaultTargetTreeNode;
 import gov.nih.nci.restgen.ui.tree.TreeSelectionHandler;
+import org.apache.cxf.helpers.CastUtils;
 
+import com.predic8.schema.Element;
 import com.predic8.wsdl.*;
 
+
 import javax.swing.*;
+import javax.xml.namespace.QName;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Collection;
+
 
 
 
@@ -107,12 +114,43 @@ public class UploadWSDLAction extends AbstractContextAction
     	            WSDLParser parser = new WSDLParser();
     	            Definitions defs = parser.parse(file.getPath());
     	            ArrayList<String> operationsList = new ArrayList<String>();
+    	            ArrayList<String> InputTypes = new ArrayList<String>();
+    	            ArrayList<String> OutputTypes = new ArrayList<String>();
+    	            
+    	          
     	            for (PortType pt : defs.getPortTypes())
     	            {       
     	            	System.out.println(pt.getName());
     	            	for (Operation op : pt.getOperations()) {
-    	            			System.out.println(" -" + op.getName()); 
+    	            			System.out.println(" -" + op.getName());
+    	            			String inputType = "";
+    	            			String outputType = "";
     	            			operationsList.add(op.getName());
+    	            			Input input = op.getInput();
+    	            			
+    	                        if (input != null && input.getMessage() != null) {
+    	                            Collection<Part> parts = CastUtils.cast(input.getMessage().getParts());
+    	                            for (Part part : parts) {
+    	                                if (part.getElement() != null || !"".equals(part.getElement())) {
+    	                                	Element type = defs.getElement(part.getElement());
+    	                                	inputType +=type.getType();
+    	                                	
+    	                                }
+    	                            }
+    	                        }
+    	                        Output output = op.getOutput();
+    	                        if (output != null && output.getMessage() != null) {
+    	                            Collection<Part> parts = CastUtils.cast(output.getMessage().getParts());
+    	                            for (Part part : parts) {
+    	                                if (part.getElement() != null || !"".equals(part.getElement())) {
+    	                                	Element type = defs.getElement(part.getElement());
+    	                                	outputType += type.getType(); 
+    	                                }
+    	                            }
+    	                        }
+    	                        System.out.println("WSDL input type and output>>>>"+"...."+inputType+outputType);
+    	                        OutputTypes.add(outputType);
+    	                        InputTypes.add(inputType);
     	            		}  
     	            }
     	            java.util.List<Service>  services = defs.getServices();

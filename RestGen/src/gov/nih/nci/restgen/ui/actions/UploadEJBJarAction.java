@@ -1,9 +1,9 @@
 /**
- * The content of this file is subject to the caAdapter Software License (the "License").  
+ * The content of this file is subject to the caCore SDK Software License (the "License").  
  * A copy of the License is available at:
- * [caAdapter CVS home directory]\etc\license\caAdapter_license.txt. or at:
- * http://ncicb.nci.nih.gov/infrastructure/cacore_overview/caadapter/indexContent
- * /docs/caAdapter_License
+ * [caCore SDK CVS home directory]\etc\license\caCore SDK_license.txt. or at:
+ * http://ncicb.nci.nih.gov/infrastructure/cacore_overview/caCore SDK/indexContent
+ * /docs/caCore SDK_License
  */
 
 package gov.nih.nci.restgen.ui.actions;
@@ -25,6 +25,11 @@ import javax.swing.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.apache.bcel.classfile.ClassParser;
+import org.apache.bcel.classfile.Field;
+import org.apache.bcel.classfile.JavaClass;
+import org.apache.bcel.classfile.Method;
+import org.apache.bcel.generic.Type;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -33,8 +38,10 @@ import org.w3c.dom.NodeList;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -121,8 +128,22 @@ public class UploadEJBJarAction extends AbstractContextAction
     	            mainFrame.getMainFrame().getMappingMainPanel().getTargetLocationArea().setBorder(BorderFactory.createTitledBorder("EJB"));
     	           //PV Validate EJB Jar file here
     	            JarFile jarFile = new JarFile(file);
-    	            JarEntry jarEntry = jarFile.getJarEntry("ejb-jar.xml");
-    	            if (jarEntry != null) {
+    	            boolean ejbjarxml = false;
+    	            Enumeration jarEntries = jarFile.entries();
+    	            JarEntry jarEntry = null;
+    	           
+    	            while (jarEntries.hasMoreElements())
+    	            {
+    	              jarEntry = (JarEntry)jarEntries.nextElement();
+    	              if(jarEntry.getName().contains("ejb-jar.xml"))
+    	              {
+    	            	  ejbjarxml = true;
+    	            	  break;
+    	              }
+
+    	           }
+    	           // JarEntry jarEntry = jarFile.getJarEntry("META-INF\\ejb-jar.xml");
+    	            if (ejbjarxml) {
     	            	InputStream is = jarFile.getInputStream(jarEntry);
     	            	DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
     	            	DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -154,7 +175,7 @@ public class UploadEJBJarAction extends AbstractContextAction
     	            	DefaultTargetTreeNode top = new DefaultTargetTreeNode("EJB");
     	            	if(EJBOperationsList.size()>0)
     	            	{
-    	            		createNodes(top,EJBOperationsList);
+    	            		createNodes(top,EJBOperationsList,file);
     	            	}
     	                tree = new JTree(top);
     	                TreeSelectionHandler treeSelectionHanderl=new TreeSelectionHandler(mainFrame.getMainFrame().getMappingMainPanel().getGraphController());
@@ -216,13 +237,70 @@ private void populateEntriesFromDoc(Document doc)
 }
      	            
     	            
-private void createNodes(DefaultTargetTreeNode top,ArrayList<String> list) {
+private void createNodes(DefaultTargetTreeNode top,ArrayList<String> list, File file) throws IOException {
 		
 	    Iterator<String> it = list.iterator();
+	    JarFile jarFile = new JarFile(file);
 	    while(it.hasNext())
 	    {
-	    	DefaultTargetTreeNode childElement = new DefaultTargetTreeNode((String)it.next());
+	    	String remoteInterfaceClass = (String)it.next();
+	    	System.out.println("remote interface class name begin>>>>:"+remoteInterfaceClass);
+	    	String [] classNameSplit = remoteInterfaceClass.trim().split("\\.");
+	    	if(classNameSplit!=null && classNameSplit.length > 0)
+	    	{
+	    		String splitRemoteInterfaceClass  = classNameSplit[classNameSplit.length-1];
+	    		System.out.println("remote interface class name>>>>:"+splitRemoteInterfaceClass);
+	    		remoteInterfaceClass = splitRemoteInterfaceClass;
+	    	}
+	    	
+	    	DefaultTargetTreeNode childElement = new DefaultTargetTreeNode(remoteInterfaceClass);
+	    	//add children for the remote interface....
+	    	boolean ejbclassFound = false;
+            Enumeration jarEntries = jarFile.entries();
+            JarEntry jarEntry = null;
+           
+            while (jarEntries.hasMoreElements())
+            {
+              jarEntry = (JarEntry)jarEntries.nextElement();
+              if(jarEntry.getName().contains(remoteInterfaceClass))
+              {
+            	  ejbclassFound = true;
+            	  break;
+              }
+
+           }
+	    	if(ejbclassFound)
+	    	{
+	    		///////////
+	    		String argumentTypes = "";
+	    		InputStream input = jarFile.getInputStream(jarEntry);
+	    		ClassParser cp = new ClassParser(input,file.getName());
+	    		JavaClass javaClass = cp.parse();
+	        	for(Method method : javaClass.getMethods())
+	        	{
+	    		    //get input type and outtypes here
+	        		Type [] args = method.getArgumentTypes();
+	        		Type returnType = method.getReturnType();
+	        		
+	        		if(args!=null && args.length>0){
+	        			for (int i=0;i<args.length;i++)
+	        			{
+	        				argumentTypes = args[i].toString()+":";
+	        			}
+	        		}
+	        		DefaultTargetTreeNode element = new DefaultTargetTreeNode(method.getName());
+	        		element.setInputType(argumentTypes);
+	        		element.setOutputType(returnType.toString());
+	    	    	childElement.add(element);
+	    	    	System.out.println("Input Type and Return Type>>>>>"+argumentTypes+"  "+returnType.toString());
+	    	    	    	  
+	    		}
+	    		
+	    		
+	    		///////////
+	    	}
 	    	top.add(childElement);
+	    	
 	    }
 	    
 	}

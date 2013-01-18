@@ -1,9 +1,9 @@
 /**
- * The content of this file is subject to the caAdapter Software License (the "License").  
+ * The content of this file is subject to the caCore SDK Software License (the "License").  
  * A copy of the License is available at:
- * [caAdapter CVS home directory]\etc\license\caAdapter_license.txt. or at:
- * http://ncicb.nci.nih.gov/infrastructure/cacore_overview/caadapter/indexContent
- * /docs/caAdapter_License
+ * [caCore SDK CVS home directory]\etc\license\caCore SDK_license.txt. or at:
+ * http://ncicb.nci.nih.gov/infrastructure/cacore_overview/caCore SDK/indexContent
+ * /docs/caCore SDK_License
  */
 package gov.nih.nci.restgen.ui.mapping;
 
@@ -494,7 +494,7 @@ public class MappingMainPanel extends JPanel implements ActionListener
     }
 
 	public static void saveMapping(File f, Mapping m) throws JAXBException {
-        JAXBContext jc = JAXBContext.newInstance( "gov.nih.nci.cbiit.cmts.core" );
+        JAXBContext jc = JAXBContext.newInstance( "gov.nih.nci.restgen.core" );
         Marshaller u = jc.createMarshaller();
         /*for (Component mapComp:m.getComponents().getComponent())
         {

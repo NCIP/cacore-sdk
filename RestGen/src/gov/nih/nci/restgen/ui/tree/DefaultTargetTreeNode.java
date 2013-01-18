@@ -1,9 +1,9 @@
 /**
- * The content of this file is subject to the caAdapter Software License (the "License").  
+ * The content of this file is subject to the caCore SDK Software License (the "License").  
  * A copy of the License is available at:
- * [caAdapter CVS home directory]\etc\license\caAdapter_license.txt. or at:
- * http://ncicb.nci.nih.gov/infrastructure/cacore_overview/caadapter/indexContent
- * /docs/caAdapter_License
+ * [caCore SDK CVS home directory]\etc\license\caCore SDK_license.txt. or at:
+ * http://ncicb.nci.nih.gov/infrastructure/cacore_overview/caCore SDK/indexContent
+ * /docs/caCore SDK_License
  */
 package gov.nih.nci.restgen.ui.tree;
 
@@ -20,6 +20,14 @@ package gov.nih.nci.restgen.ui.tree;
  */
 public class DefaultTargetTreeNode extends DefaultMappableTreeNode
 {
+	String ImplementationType = ""; // can be either SOAP or EJB
+	String serviceName = ""; // WSDL service name 
+	String endPoint = ""; // WSDL end point
+	String clientType = ""; // for EJB it can be remote/local
+	String operationName = "";// operation name for EJB or WSDL
+	String inputType = ""; //input for the operation
+	String outputType = "";//output for the operation
+	
 	public DefaultTargetTreeNode(Object userObject, boolean allowsChildren)
 	{
 		super(userObject, allowsChildren);
@@ -28,6 +36,62 @@ public class DefaultTargetTreeNode extends DefaultMappableTreeNode
 	public DefaultTargetTreeNode(Object userObject)
 	{
 		super(userObject);
+	}
+
+	public String getImplementationType() {
+		return ImplementationType;
+	}
+
+	public void setImplementationType(String implementationType) {
+		ImplementationType = implementationType;
+	}
+
+	public String getServiceName() {
+		return serviceName;
+	}
+
+	public void setServiceName(String serviceName) {
+		this.serviceName = serviceName;
+	}
+
+	public String getEndPoint() {
+		return endPoint;
+	}
+
+	public void setEndPoint(String endPoint) {
+		this.endPoint = endPoint;
+	}
+
+	public String getClientType() {
+		return clientType;
+	}
+
+	public void setClientType(String clientType) {
+		this.clientType = clientType;
+	}
+
+	public String getOperationName() {
+		return operationName;
+	}
+
+	public void setOperationName(String operationName) {
+		this.operationName = operationName;
+	}
+
+	public String getInputType() {
+		return inputType;
+	}
+
+	public void setInputType(String inputType) {
+		this.inputType = inputType;
+	}
+
+	public String getOutputType() {
+		return outputType;
+	}
+
+	public void setOutputType(String outputType) {
+		this.outputType = outputType;
 	}
 }
 

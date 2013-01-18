@@ -1,9 +1,9 @@
 /**
- * The content of this file is subject to the caAdapter Software License (the "License").  
+ * The content of this file is subject to the caCore SDK Software License (the "License").  
  * A copy of the License is available at:
- * [caAdapter CVS home directory]\etc\license\caAdapter_license.txt. or at:
- * http://ncicb.nci.nih.gov/infrastructure/cacore_overview/caadapter/indexContent
- * /docs/caAdapter_License
+ * [caCore SDK CVS home directory]\etc\license\caCore SDK_license.txt. or at:
+ * http://ncicb.nci.nih.gov/infrastructure/cacore_overview/caCore SDK/indexContent
+ * /docs/caCore SDK_License
  */
 
 package gov.nih.nci.restgen.ui.jgraph;
@@ -53,7 +53,7 @@ public class LinkSelectionHighlighter implements GraphSelectionListener
 	 *
 	 * @see <a href="http://www.visi.com/~gyles19/cgi-bin/fom.cgi?file=63">JBuilder vice javac serial version UID</a>
 	 */
-	public static String RCSID = "$Header: /share/content/gforge/caadapter/cmts/src/gov/nih/nci/cbiit/cmts/ui/jgraph/LinkSelectionHighlighter.java,v 1.7 2009-12-01 17:17:38 wangeug Exp $";  
+	public static String RCSID = "$Header: /share/content/gforge/caCore SDK/cmts/src/gov/nih/nci/cbiit/cmts/ui/jgraph/LinkSelectionHighlighter.java,v 1.7 2009-12-01 17:17:38 wangeug Exp $";  
 	private MiddlePanelJGraphController graphController;
 	public LinkSelectionHighlighter(MiddlePanelJGraphController controller)
 	{

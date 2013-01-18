@@ -1,9 +1,9 @@
 /**
- * The content of this file is subject to the caAdapter Software License (the "License").  
+ * The content of this file is subject to the caCore SDK Software License (the "License").  
  * A copy of the License is available at:
- * [caAdapter CVS home directory]\etc\license\caAdapter_license.txt. or at:
- * http://ncicb.nci.nih.gov/infrastructure/cacore_overview/caadapter/indexContent
- * /docs/caAdapter_License
+ * [caCore SDK CVS home directory]\etc\license\caCore SDK_license.txt. or at:
+ * http://ncicb.nci.nih.gov/infrastructure/cacore_overview/caCore SDK/indexContent
+ * /docs/caCore SDK_License
  */
 package gov.nih.nci.restgen.ui.main;
 import gov.nih.nci.restgen.ui.common.ActionConstants;
@@ -82,7 +82,7 @@ public class MainFrame extends JFrame
 
 
     /* (non-Javadoc)
-	 * @see gov.nih.nci.caadapter.ui.main.AbstractMainFrame#launch()
+	 * @see gov.nih.nci.caCore SDK.ui.main.AbstractMainFrame#launch()
 	 */
 	private void launch()
 	{
@@ -161,7 +161,7 @@ public class MainFrame extends JFrame
 	}
 
 	/* (non-Javadoc)
-	 * @see gov.nih.nci.caadapter.ui.main.AbstractMainFrame#addNewTab(javax.swing.JPanel)
+	 * @see gov.nih.nci.caCore SDK.ui.main.AbstractMainFrame#addNewTab(javax.swing.JPanel)
 	 */
     public void addNewTab(JPanel panel, String tabKind)
     {
@@ -181,7 +181,7 @@ public class MainFrame extends JFrame
     }
 
     /* (non-Javadoc)
-	 * @see gov.nih.nci.caadapter.ui.main.AbstractMainFrame#closeTab()
+	 * @see gov.nih.nci.caCore SDK.ui.main.AbstractMainFrame#closeTab()
 	 */
 	public void closeTab() {
 		Component comp = tabbedPane.getSelectedComponent();
@@ -212,7 +212,7 @@ public class MainFrame extends JFrame
 	}
 
 	/* (non-Javadoc)
-	 * @see gov.nih.nci.caadapter.ui.main.AbstractMainFrame#hasComponentOfGivenClass(java.lang.Class, boolean)
+	 * @see gov.nih.nci.caCore SDK.ui.main.AbstractMainFrame#hasComponentOfGivenClass(java.lang.Class, boolean)
 	 */
 	public JComponent hasComponentOfGivenClass(Class classValue, boolean bringToFront) {
 		JComponent component = tabMap.get(classValue);
@@ -233,7 +233,7 @@ public class MainFrame extends JFrame
 	}
 
 	/* (non-Javadoc)
-	 * @see gov.nih.nci.caadapter.ui.main.AbstractMainFrame#getAllTabs()
+	 * @see gov.nih.nci.caCore SDK.ui.main.AbstractMainFrame#getAllTabs()
 	 */
 	public java.util.List<Component> getAllTabs() {
 		java.util.List<Component> resultList = new java.util.ArrayList<Component>();
@@ -249,7 +249,7 @@ public class MainFrame extends JFrame
 	}
 
 	/* (non-Javadoc)
-	 * @see gov.nih.nci.caadapter.ui.main.AbstractMainFrame#setCurrentPanelTitle(java.lang.String)
+	 * @see gov.nih.nci.caCore SDK.ui.main.AbstractMainFrame#setCurrentPanelTitle(java.lang.String)
 	 */
 	public boolean setCurrentPanelTitle(String newTitle) {
 		int seleIndex = tabbedPane.getSelectedIndex();
@@ -307,7 +307,7 @@ public class MainFrame extends JFrame
 
 
 	/* (non-Javadoc)
-	 * @see gov.nih.nci.caadapter.ui.main.AbstractMainFrame#resetCenterPanel()
+	 * @see gov.nih.nci.caCore SDK.ui.main.AbstractMainFrame#resetCenterPanel()
 	 */
 	public void resetCenterPanel() // inserted by umkis on 01/18/2006, defaect# 252
 	{
@@ -316,7 +316,7 @@ public class MainFrame extends JFrame
 
 
 	/* (non-Javadoc)
-	 * @see gov.nih.nci.caadapter.ui.main.AbstractMainFrame#processWindowEvent(java.awt.event.WindowEvent)
+	 * @see gov.nih.nci.caCore SDK.ui.main.AbstractMainFrame#processWindowEvent(java.awt.event.WindowEvent)
 	 */
 	public void processWindowEvent(WindowEvent e) {
 		//		Log.logInfo(this, "processWindowEvent() invoked with '" + e + "'.");
@@ -346,7 +346,7 @@ public class MainFrame extends JFrame
     }
 
     /* (non-Javadoc)
-	 * @see gov.nih.nci.caadapter.ui.main.AbstractMainFrame#exit()
+	 * @see gov.nih.nci.caCore SDK.ui.main.AbstractMainFrame#exit()
 	 */
 	public void exit() {
 		//    	ContextManager contextManager = ContextManager.getContextManager();

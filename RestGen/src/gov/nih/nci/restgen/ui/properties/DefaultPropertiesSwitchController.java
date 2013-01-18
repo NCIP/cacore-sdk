@@ -1,8 +1,8 @@
 /**
  * <!-- LICENSE_TEXT_START -->
-The contents of this file are subject to the caAdapter Software License (the "License"). You may obtain a copy of the License at the following location: 
-[caAdapter Home Directory]\docs\caAdapter_license.txt, or at:
-http://ncicb.nci.nih.gov/infrastructure/cacore_overview/caadapter/indexContent/docs/caAdapter_License
+The contents of this file are subject to the caCore SDK Software License (the "License"). You may obtain a copy of the License at the following location: 
+[caCore SDK Home Directory]\docs\caCore SDK_license.txt, or at:
+http://ncicb.nci.nih.gov/infrastructure/cacore_overview/caCore SDK/indexContent/docs/caCore SDK_License
  * <!-- LICENSE_TEXT_END -->
  */
 

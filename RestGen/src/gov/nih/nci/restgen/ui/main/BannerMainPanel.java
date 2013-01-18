@@ -67,7 +67,7 @@ public class BannerMainPanel extends JPanel
         else
         {
             doThreeImages("banner_NCI_Red_caBIG_blue_Left.bmp", "banner_NCI_Red_caBIG_blue_middle.bmp", "banner_NCI_Red_caBIG_blue_Right.bmp");
-            //doThreeImages("banner_NCI_Red_caAdapter_blue_Left.bmp", "banner_NCI_Red_caBIG_blue_middle.bmp", "banner_NCI_Red_caBIG_blue_Right.bmp");
+            //doThreeImages("banner_NCI_Red_caCore SDK_blue_Left.bmp", "banner_NCI_Red_caBIG_blue_middle.bmp", "banner_NCI_Red_caBIG_blue_Right.bmp");
         }
     }
 

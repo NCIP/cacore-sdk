@@ -1,9 +1,9 @@
 /**
- * The content of this file is subject to the caAdapter Software License (the "License").
+ * The content of this file is subject to the caCore SDK Software License (the "License").
  * A copy of the License is available at:
- * [caAdapter CVS home directory]\etc\license\caAdapter_license.txt. or at:
- * http://ncicb.nci.nih.gov/infrastructure/cacore_overview/caadapter/indexContent
- * /docs/caAdapter_License
+ * [caCore SDK CVS home directory]\etc\license\caCore SDK_license.txt. or at:
+ * http://ncicb.nci.nih.gov/infrastructure/cacore_overview/caCore SDK/indexContent
+ * /docs/caCore SDK_License
  */
 
 package gov.nih.nci.restgen.ui.main;
@@ -105,7 +105,7 @@ public class MainMenuBar extends JMenuBar
 
 
     /* (non-Javadoc)
-      * @see gov.nih.nci.caadapter.ui.main.AbstractMenuBar#enableAction(java.lang.String, boolean)
+      * @see gov.nih.nci.caCore SDK.ui.main.AbstractMenuBar#enableAction(java.lang.String, boolean)
       */
     public void enableAction(String actionConstant, boolean value)
     {
@@ -122,7 +122,7 @@ public class MainMenuBar extends JMenuBar
     }
 
     /* (non-Javadoc)
-      * @see gov.nih.nci.caadapter.ui.main.AbstractMenuBar#getDefinedAction(java.lang.String)
+      * @see gov.nih.nci.caCore SDK.ui.main.AbstractMenuBar#getDefinedAction(java.lang.String)
       */
     public Action getDefinedAction(String actionConstant)
     {
@@ -237,7 +237,7 @@ public class MainMenuBar extends JMenuBar
 
     
     /* (non-Javadoc)
-      * @see gov.nih.nci.caadapter.ui.main.AbstractMenuBar#resetMenus(boolean)
+      * @see gov.nih.nci.caCore SDK.ui.main.AbstractMenuBar#resetMenus(boolean)
       */
     public void resetMenus(boolean hasActiveDocument)
     {// provide structure for
