@@ -175,15 +175,15 @@ if(className != null)
 			<td class="formRequiredNotice" width="5px">&nbsp;</td>
 			<td class="formLabel" align="right"><label for="<%=attrNameLabel%>"><%=attrNameLabel%>:</label></td>
 			<td class="formField" width="90%">
-			<input type="hidden" name="target" value="<%=className%>">
-			<input type="hidden" name="<%=org.apache.commons.lang.StringEscapeUtils.escapeHtml(idColStr)%>" value="<%=idStr%>">
+			<input type="hidden" name="target" value="<%=org.apache.commons.lang.StringEscapeUtils.escapeHtml(className)%>">
+			<input type="hidden" name="<%=org.apache.commons.lang.StringEscapeUtils.escapeHtml(idColStr)%>" value="<%=org.apache.commons.lang.StringEscapeUtils.escapeHtml(idStr)%>">
 			<%
 			if(attrName.equals(classIdName))
 			{
 				
 			%>
 			<%=org.apache.commons.lang.StringEscapeUtils.escapeHtml(HtmlUtils.getAttributeValue(rootElement, attrName))%>
-			<input type="hidden" name="<%=attrName%>" value="<%=HtmlUtils.getAttributeValue(rootElement, attrName)%>">
+			<input type="hidden" name="<%=attrName%>" value="<%=org.apache.commons.lang.StringEscapeUtils.escapeHtml(HtmlUtils.getAttributeValue(rootElement, attrName))%>">
 			<%
 			}
 			else
