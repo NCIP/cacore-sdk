@@ -15,9 +15,20 @@ public class Method {
 	@XmlAttribute
 	private String name;
 	
+	@XmlAttribute
+	private String pathName;
+
 	@XmlElementRef()
 	private Implementation implementation;
 	
+	public String getPathName() {
+		return pathName;
+	}
+
+	public void setPathName(String pathName) {
+		this.pathName = pathName;
+	}
+
 	public String getName() {
 		return name;
 	}

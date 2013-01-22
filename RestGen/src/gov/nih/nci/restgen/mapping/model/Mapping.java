@@ -26,7 +26,6 @@ public class Mapping implements Serializable{
 	
 	@XmlAttribute
 	private Date lastUpdatedOn;
-	
 
 	@XmlAttribute
 	private Date createdOn;
@@ -37,6 +36,9 @@ public class Mapping implements Serializable{
 	@XmlAttribute
 	private String description;
 
+	@XmlElementRef()
+	private Options options;
+	
 	@XmlElementWrapper(name="resources")
 	@XmlElementRef()
 	private List<Resource> resources;
@@ -111,6 +113,14 @@ public class Mapping implements Serializable{
 	
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public Options getOptions() {
+		return options;
+	}
+
+	public void setOptions(Options options) {
+		this.options = options;
 	}
 
 	@Override
