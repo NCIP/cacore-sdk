@@ -19,6 +19,7 @@ import gov.nih.nci.restgen.ui.tree.TreeSelectionHandler;
 
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.jar.JarFile;
 import java.util.jar.JarEntry;
@@ -37,6 +38,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -53,11 +55,11 @@ public class OpenPOJOJarAction extends AbstractContextAction
 {
 	protected static final String COMMAND_NAME = ActionConstants.OPENPOJO;
 	protected static final Character COMMAND_MNEMONIC = new Character('O');
-	//hotkey//protected static final KeyStroke ACCELERATOR_KEY_STROKE = KeyStroke.getKeyStroke(KeyEvent.VK_F4, Event.CTRL_MASK, false);
-    public static final String TOOL_TIP_DESCRIPTION = "Open POJO Jar";
+	public static final String TOOL_TIP_DESCRIPTION = "Open POJO Jar";
     private static final String OPEN_DIALOG_TITLE_FOR_DEFAULT_SOURCE_FILE = "Open source POJO Jar";
 	private static final String SOURCE_TREE_FILE_DEFAULT_EXTENTION = ".jar";
-
+	private static final HashSet<String> WRAPPER_TYPES = getWrapperTypes();
+	private  String errorString = null; 
     private boolean forceClose = false;
 
     protected MainFrameContainer ownerFrame = null;
@@ -108,9 +110,6 @@ public class OpenPOJOJarAction extends AbstractContextAction
 	
 		// open POJO here PV
 			File file = null;
-        
-        
-        
             file = DefaultSettings.getUserInputOfFileFromGUI(ownerFrame.getOwnerFrame(), //FileUtil.getUIWorkingDirectoryPath(),
                     SOURCE_TREE_FILE_DEFAULT_EXTENTION, OPEN_DIALOG_TITLE_FOR_DEFAULT_SOURCE_FILE, false, false);
             if ((file == null)||(!file.exists())||(!file.isFile())) return true;
@@ -119,60 +118,105 @@ public class OpenPOJOJarAction extends AbstractContextAction
                 JOptionPane.showMessageDialog(ownerFrame.getMainFrame(), "This file is not a POJO Jar file (" + SOURCE_TREE_FILE_DEFAULT_EXTENTION + ") file : " + file.getName(), "Not a POJO Jar file", JOptionPane.ERROR_MESSAGE);
                 return false;
             }
-                  
-            JarFile jar = new JarFile(file);
-            Enumeration<?> en = jar.entries();
-            ArrayList<String> classList = new ArrayList<String>();
-            boolean containsClassFile = false;
-            boolean isValidPOJOClass = false;
-              		while (en.hasMoreElements()) {
-              			JarEntry entry = (JarEntry) en.nextElement();
-              			isValidPOJOClass = false;
-              			if (entry.getName().endsWith(".class")) {
-              				InputStream input = jar.getInputStream(entry);
-              				isValidPOJOClass = validatePOJOClass(input,entry.getName());
-              				if(!isValidPOJOClass)
-              				{
-              					JOptionPane.showMessageDialog(ownerFrame.getMainFrame(), "This class in the Jar file : " + entry.getName()+ ", Not a POJO class file",", Not a POJO class file", JOptionPane.ERROR_MESSAGE);
-              					continue;
-              				}
-              				classList.add(entry.getName().replace(".class", ""));
-              				containsClassFile = true;
+            ownerFrame.getMainFrame().getMappingMainPanel().setMappingSourceFile(file);
+            ownerFrame.getMainFrame().getMappingMainPanel().setSourceFileType("POJOJAR");
+            createSourceTree(file);
+      return true;
+	}
 
-              			}
+	
+	public void createSourceTree(File file) throws Exception
+	{
+		
+	      JarFile jar = new JarFile(file);
+          Enumeration<?> en = jar.entries();
+          ArrayList<String> classList = new ArrayList<String>();
+          boolean containsClassFile = false;
+          boolean isValidPOJOClass = false;
+            		while (en.hasMoreElements()) {
+            			JarEntry entry = (JarEntry) en.nextElement();
+            			isValidPOJOClass = false;
+            			if (entry.getName().endsWith(".class")) {
+            				InputStream input = jar.getInputStream(entry);
+            				isValidPOJOClass = validatePOJOClass(input,entry.getName(),file);
+            				if(!isValidPOJOClass)
+            				{
+         						String errorString = "This class in the Jar file : " + entry.getName()+" is not a POJO class"+"\n";
+            					if(getErrorString()==null)
+            					{
+            						setErrorString(errorString);
+            						//JOptionPane.showMessageDialog(ownerFrame.getMainFrame(), "This class in the Jar file : " + entry.getName()+ "","", JOptionPane.ERROR_MESSAGE);
+            					}
+            					else
+            					{
+            						String currentString = getErrorString();
+            						setErrorString(currentString+errorString+"\n");
+            					}
+            				 
+            				}
+            				else
+            				{
+            					classList.add(entry.getName().replace(".class", ""));
+            					containsClassFile = true;
+            				}
 
-              		}
-             if(!containsClassFile || classList.isEmpty())
-             {
-            	 JOptionPane.showMessageDialog(ownerFrame.getMainFrame(), "This file is not a POJO Jar File: " + file.getName(), "Does not contain POJO classes", JOptionPane.ERROR_MESSAGE);
-                 return false;
-             }
+            			}
+
+       		}
+            if(getErrorString()!=null)
+            {
+                 	   
+               JOptionPane.showMessageDialog(ownerFrame.getMainFrame(),getErrorString(),"", JOptionPane.ERROR_MESSAGE);
+                 	   
+            } 		
+           if(!containsClassFile || classList.isEmpty())
+           {
+        	   String errorString = "This file is not a POJO Jar File: " + file.getName()+", Does not contain POJO classes"+"\n";
+        	   JOptionPane.showMessageDialog(ownerFrame.getMainFrame(),errorString,"", JOptionPane.ERROR_MESSAGE);
+        	   return;
+        	  
+           }
+           else
+           {
+          	 ownerFrame.getMainFrame().getMappingMainPanel().setPOJOClassList(classList);
+           }
+            
+           
+          /// form the tree here PV...start
+          
+              DefaultSourceTreeNode top = new DefaultSourceTreeNode(file.getName());
+              createNodes(top,classList);
+              tree = new JTree(top);
+              TreeSelectionHandler treeSelectionHanderl=new TreeSelectionHandler(ownerFrame.getMainFrame().getMappingMainPanel().getGraphController());
+              tree.getSelectionModel().addTreeSelectionListener(treeSelectionHanderl);
+              tree.addMouseListener(new TreeMouseAdapter(ownerFrame,tree));
+      		tree.setTransferHandler(new TreeTransferHandler(ownerFrame.getMainFrame().getMappingMainPanel()));
+      		tree.setDropMode(DropMode.ON);
+      		tree.setDragEnabled(true);
+  			tree.setDragEnabled(true);
+  			int size = tree.getRowCount();
+  			for (int i = 0; i < size+100; i++)
+  			{
+  				if (i<tree.getRowCount())
+  					tree.expandRow(i);
+  			}
+  			ownerFrame.getMainFrame().getMappingMainPanel().getSourceScrollPane().setViewportView(tree);
+  			ownerFrame.getMainFrame().getMappingMainPanel().setSourceTree(tree);
               
-            /// form the tree here PV...start
-            
-                DefaultSourceTreeNode top = new DefaultSourceTreeNode(file.getName());
-                createNodes(top,classList);
-                tree = new JTree(top);
-                TreeSelectionHandler treeSelectionHanderl=new TreeSelectionHandler(ownerFrame.getMainFrame().getMappingMainPanel().getGraphController());
-                tree.getSelectionModel().addTreeSelectionListener(treeSelectionHanderl);
-                tree.addMouseListener(new TreeMouseAdapter(ownerFrame,tree));
-        		tree.setTransferHandler(new TreeTransferHandler(ownerFrame.getMainFrame().getMappingMainPanel()));
-        		tree.setDropMode(DropMode.ON);
-        		tree.setDragEnabled(true);
-    			tree.setDragEnabled(true);
-    			int size = tree.getRowCount();
-    			for (int i = 0; i < size+10; i++)
-    			{
-    				if (i<tree.getRowCount())
-    					tree.expandRow(i);
-    			}
-    			ownerFrame.getMainFrame().getMappingMainPanel().getSourceScrollPane().setViewportView(tree);
-    			ownerFrame.getMainFrame().getMappingMainPanel().setSourceTree(tree);
-                
-            /// end
-            
-        
-		return true;
+          /// end
+          
+
+		
+	}
+	
+	
+	
+	public String getErrorString() {
+		return errorString;
+	}
+
+	public void setErrorString(String errorString) {
+		this.errorString = errorString;
 	}
 
 	private void createNodes(DefaultSourceTreeNode top,ArrayList<String> list) {
@@ -184,18 +228,22 @@ public class OpenPOJOJarAction extends AbstractContextAction
 	    Iterator<String> it = list.iterator();
 	    while(it.hasNext())
 	    {
-	    	
-	    	DefaultSourceTreeNode element = new DefaultSourceTreeNode((String)it.next());
+	    	String resourceName = (String)it.next();
+	    	DefaultSourceTreeNode element = new DefaultSourceTreeNode(resourceName);
 	    	Createclass = new DefaultSourceTreeNode("Create");
+	    	Createclass.setResourceName(resourceName);
 	    	element.add(Createclass);
 	    
 	    	Updateclass = new DefaultSourceTreeNode("Update");
+	    	Updateclass.setResourceName(resourceName);
 	    	element.add(Updateclass);
 	    
 	    	Readclass = new DefaultSourceTreeNode("Read");
+	    	Readclass.setResourceName(resourceName);
 	    	element.add(Readclass);
 	    
 	    	Deleteclass = new DefaultSourceTreeNode("Delete");
+	    	Deleteclass.setResourceName(resourceName);
 	    	element.add(Deleteclass);
 	    	
 	    	top.add(element);
@@ -214,7 +262,7 @@ public class OpenPOJOJarAction extends AbstractContextAction
 
 	
 	  // validate and parse the POJO class here
-    public boolean validatePOJOClass(InputStream is,String classFile)throws Exception
+    public boolean validatePOJOClass(InputStream is,String classFile,File file)throws Exception
     {
     boolean validatePOJOMethods = false;	
     
@@ -222,21 +270,54 @@ public class OpenPOJOJarAction extends AbstractContextAction
      JavaClass javaClass = cp.parse();
      for(Field field : javaClass.getFields()){
   	   validatePOJOMethods = false;
-  	   
+  	 if(!isWrapperType(field.getType().toString()))
+	   {
+  		String errorString = "Class Contains non-primitive java types field : " + field.getType().toString()+"\n"; 
+  		if(getErrorString()==null)
+		{
+			
+			setErrorString(errorString);
+			//JOptionPane.showMessageDialog(ownerFrame.getMainFrame(), "This class in the Jar file : " + entry.getName()+ "","", JOptionPane.ERROR_MESSAGE);
+		}
+		else
+		{
+			String currentString = getErrorString();
+			setErrorString(getErrorString()+errorString);
+		}
+		  // JOptionPane.showMessageDialog(ownerFrame.getMainFrame(), "This file Contains non-primitive java types (" + SOURCE_TREE_FILE_DEFAULT_EXTENTION + ") file : " + field.getType().toString(), "Not a POJO class file", JOptionPane.ERROR_MESSAGE);
+		   break;
+	   }
   	   if(field.getName().contains("serialVersionUID"))
   	   continue;
   		   
   	   for(Method method : javaClass.getMethods()){
-  	   	   System.out.println("Field names:"+field.getName()+method.getName()+"\n");
-  		   String fieldCompare = "get"+field.getName();
+  	   	   String fieldCompare = "get"+field.getName();
   		   if(fieldCompare.equalsIgnoreCase(method.getName()))
   		   {
-  			   System.out.println("Inside if loop..."+"\n");
+  			   
   			   validatePOJOMethods = true;
   			   break;
   		   }
   		   
   	   }
+  	  if(!validatePOJOMethods)
+  	  {
+  		 
+  		String errorString = "Class does not define get/set method for java field : " + field.getName()+classFile+"\n";
+  		
+  		if(getErrorString()==null)
+		{
+			
+			setErrorString(errorString);
+			//JOptionPane.showMessageDialog(ownerFrame.getMainFrame(), "This class in the Jar file : " + entry.getName()+ "","", JOptionPane.ERROR_MESSAGE);
+		}
+		else
+		{
+			String currentString = getErrorString();
+			setErrorString(getErrorString()+errorString);
+		}
+  		 break; 
+  	  }
   	  
      }
      
@@ -246,6 +327,44 @@ public class OpenPOJOJarAction extends AbstractContextAction
 	
     }
   
+    private boolean checkForJarEntry(String className, File file) throws IOException,Exception
+    {
+    	boolean isPresent = false;
+    	JarFile jar = new JarFile(file);
+        Enumeration<?> en = jar.entries();
+        while (en.hasMoreElements()) {
+  			JarEntry entry = (JarEntry) en.nextElement();
+  			if (entry.getName().contains(className)) {
+  				isPresent = true;
+  			}
+        }
+    	return isPresent;
+    }
+    
+    public static boolean isWrapperType(String clazz)
+    {
+    	if(clazz.contains("java.")||clazz.contains("javax."))
+		{
+			return true;
+		}
+        return WRAPPER_TYPES.contains(clazz);
+    }
+
+    private static HashSet<String> getWrapperTypes()
+    {
+        HashSet<String> ret = new HashSet<String>();
+        ret.add("boolean");
+        ret.add("character");
+        ret.add("byte");
+        ret.add("short");
+        ret.add("integer");
+        ret.add("long");
+        ret.add("float");
+        ret.add("double");
+        ret.add("void");
+        return ret;
+    }
+    
 }
 
 /**

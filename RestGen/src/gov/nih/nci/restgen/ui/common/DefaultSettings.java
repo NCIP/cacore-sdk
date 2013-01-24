@@ -54,7 +54,7 @@ public class DefaultSettings
     };
 
     private static final UIDefaults newDefaults = new UIDefaults(uiDefaults);
-    public static final String MAP_FILE_DEFAULT_EXTENTION = ".map";
+    public static final String MAP_FILE_DEFAULT_EXTENTION = ".xml";
     public static final String XML_DATA_FILE_DEFAULT_EXTENSTION = ".xml";
     public static final String CSV_DATA_FILE_DEFAULT_EXTENSTION = ".csv";
     public static final String HL7_V2_DATA_FILE_DEFAULT_EXTENSTION = ".hl7";

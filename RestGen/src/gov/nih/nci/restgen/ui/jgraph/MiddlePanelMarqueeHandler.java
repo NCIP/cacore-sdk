@@ -10,6 +10,7 @@ package gov.nih.nci.restgen.ui.jgraph;
 
 import gov.nih.nci.restgen.ui.jgraph.action.GraphDeleteAction;
 import gov.nih.nci.restgen.ui.jgraph.action.GraphDeleteAllAction;
+import gov.nih.nci.restgen.ui.jgraph.action.NameMappingAction;
 
 import javax.swing.SwingUtilities;
 import javax.swing.JPopupMenu;
@@ -50,6 +51,7 @@ public class MiddlePanelMarqueeHandler extends BasicMarqueeHandler
 	protected PortView port, firstPort;
 
 	GraphDeleteAction deleteAction = null;
+	NameMappingAction nameMapping = null;
 	private JPopupMenu popupMenu = null;
 
 	/**
@@ -302,21 +304,15 @@ public class MiddlePanelMarqueeHandler extends BasicMarqueeHandler
 
 			popupMenu.add(menuItem);
 			popupMenu.addSeparator();
-
-//			// Insert Function
-//			addFunctionalBoxAction = new AddFunctionalBoxAction(controller.getMiddlePanel(), controller);
-//			menuItem = new JMenuItem(addFunctionalBoxAction);
-//			popupMenu.add(menuItem);
-//	
-//			vacabularyMappingEditAction = new VacabularyMappingEditAction(controller.getMiddlePanel(), controller);
-//			menuItem = new JMenuItem(vacabularyMappingEditAction);
-//			popupMenu.add(menuItem);
-
 			//Delete All Action
 			GraphDeleteAllAction deleteAllAction = new GraphDeleteAllAction(controller.getMiddlePanel(), controller);
 			menuItem = new JMenuItem(deleteAllAction);
 			popupMenu.add(menuItem);
-
+			
+			popupMenu.addSeparator();
+			nameMapping = new NameMappingAction(controller);
+			menuItem = new JMenuItem(nameMapping);
+			popupMenu.add(menuItem);
 		}
 
 		//        vacabularyMappingEditAction.setEnabled(false);

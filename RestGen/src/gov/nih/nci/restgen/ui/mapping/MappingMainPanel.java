@@ -44,6 +44,10 @@ import gov.nih.nci.restgen.core.Component;
 import gov.nih.nci.restgen.core.ComponentType;
 import gov.nih.nci.restgen.core.ElementMeta;
 import gov.nih.nci.restgen.core.Mapping;
+import gov.nih.nci.restgen.ui.actions.NewPOJOFileAction;
+import gov.nih.nci.restgen.ui.actions.OpenPOJOJarAction;
+import gov.nih.nci.restgen.ui.actions.UploadEJBJarAction;
+import gov.nih.nci.restgen.ui.actions.UploadWSDLAction;
 import gov.nih.nci.restgen.ui.common.ActionConstants;
 import gov.nih.nci.restgen.ui.common.DefaultSettings;
 import gov.nih.nci.restgen.ui.dnd.GraphDropTransferHandler;
@@ -81,11 +85,15 @@ public class MappingMainPanel extends JPanel implements ActionListener
 	private static final String SELECT_SOURCE = "Open POJO...";
 	private static final String SELECT_TARGET = "Open WSDL...";
 	private static final String SOURCE_TREE_FILE_DEFAULT_EXTENTION = ".xsd";
+	private static String optionsPath = "";
 	private static final String TARGET_TREE_FILE_DEFAULT_EXTENTION = ".xsd";
 	protected MainFrameContainer mainFrame = null;
     private File mapFile = null;
-    private File mappingSourceFile = null;
-	private File mappingTargetFile = null;
+    private static File mappingSourceFile = null;
+	private static File mappingTargetFile = null;
+	private static String sourceFileType = null;
+	private static String targetFileType = null;
+	public static ArrayList<String> POJOClassList = new ArrayList<String>();
 	private static JTree sTree = null;
 	private static JTree tTree = null;
 	public static JTree getSourceTree() {
@@ -103,6 +111,36 @@ public class MappingMainPanel extends JPanel implements ActionListener
 	}
 
 
+	public static String getOptionsPath() {
+		return optionsPath;
+	}
+
+
+	public File getMappingTargetFile() {
+		return mappingTargetFile;
+	}
+
+
+	public void setMappingTargetFile(File mappingTargetFile) {
+		this.mappingTargetFile = mappingTargetFile;
+	}
+
+
+	public File getMappingSourceFile() {
+		return mappingSourceFile;
+	}
+
+
+	public void setMappingSourceFile(File mappingSourceFile) {
+		this.mappingSourceFile = mappingSourceFile;
+	}
+
+
+	public static void setOptionsPath(String optionsPath) {
+		MappingMainPanel.optionsPath = optionsPath;
+	}
+
+
 	public static void setTargetTree(JTree tTree) {
 		MappingMainPanel.tTree = tTree;
 	}
@@ -117,6 +155,16 @@ public class MappingMainPanel extends JPanel implements ActionListener
 	}
 	
 	
+	public static String getTargetFileType() {
+		return targetFileType;
+	}
+
+
+	public static void setTargetFileType(String targetFileType) {
+		MappingMainPanel.targetFileType = targetFileType;
+	}
+
+
 	public MappingTreeScrollPane getTargetScrollPane() {
 		return targetScrollPane;
 	}
@@ -432,6 +480,26 @@ public class MappingMainPanel extends JPanel implements ActionListener
 	}
 
 
+	public static ArrayList<String> getPOJOClassList() {
+		return POJOClassList;
+	}
+
+
+	public static String getSourceFileType() {
+		return sourceFileType;
+	}
+
+
+	public static void setSourceFileType(String sourceFileType) {
+		MappingMainPanel.sourceFileType = sourceFileType;
+	}
+
+
+	public static void setPOJOClassList(ArrayList<String> pOJOClassList) {
+		POJOClassList = pOJOClassList;
+	}
+
+
 	public void setSourceScrollPane(MappingTreeScrollPane sourceScrollPane) {
 		this.sourceScrollPane = sourceScrollPane;
 	}
@@ -451,10 +519,8 @@ public class MappingMainPanel extends JPanel implements ActionListener
 	{
 
 		MiddlePanelJGraphController mappingManager = getGraphController();//.getMiddlePanel().getGraphController();
-		Mapping mappingData = mappingManager.retrieveMappingData(true);
-		Collections.sort(mappingData.getTags().getTag());
+		gov.nih.nci.restgen.mapping.model.Mapping mappingData = mappingManager.retrieveMappingData(true);
 		
-
 		try {
 			//set relative path for source and target schema files.
 
@@ -493,8 +559,8 @@ public class MappingMainPanel extends JPanel implements ActionListener
         //setChanged(false);
     }
 
-	public static void saveMapping(File f, Mapping m) throws JAXBException {
-        JAXBContext jc = JAXBContext.newInstance( "gov.nih.nci.restgen.core" );
+	public static void saveMapping(File f, gov.nih.nci.restgen.mapping.model.Mapping m) throws JAXBException {
+        JAXBContext jc = JAXBContext.newInstance( "gov.nih.nci.restgen.mapping.model" );
         Marshaller u = jc.createMarshaller();
         /*for (Component mapComp:m.getComponents().getComponent())
         {
@@ -512,7 +578,7 @@ public class MappingMainPanel extends JPanel implements ActionListener
             }
         }*/
         u.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, new Boolean(true));
-        u.marshal(new JAXBElement<Mapping>(new QName("mapping"),Mapping.class, m), f);
+        u.marshal(new JAXBElement<gov.nih.nci.restgen.mapping.model.Mapping>(new QName("mapping"),gov.nih.nci.restgen.mapping.model.Mapping.class, m), f);
 
         //put the unmarshalled children back
         /*for (Component mapComp:m.getComponents().getComponent())
@@ -539,12 +605,12 @@ public class MappingMainPanel extends JPanel implements ActionListener
 	{
         processOpenMapFile(file, null);
     }
-    public void processOpenMapFile(File file, Mapping newMapping) throws Exception
+    public void processOpenMapFile(File file, gov.nih.nci.restgen.mapping.model.Mapping newMapping) throws Exception
 	{
 
 		long stTime=System.currentTimeMillis();
 		// parse the file.
-		Mapping mapping = null;
+		gov.nih.nci.restgen.mapping.model.Mapping mapping = null;
 
         if (newMapping == null)
         {
@@ -552,97 +618,87 @@ public class MappingMainPanel extends JPanel implements ActionListener
         }
         else
         {
-            //System.out.println("CCCCC FF new mapping instance" + newMapping.getLinks().getLink().size());
+   
             mapping = newMapping;
         }
-		//build source tree
-		/*buildSourceTree(mapping, null, false);
-		sTree.setSchemaParser(MappingFactory.sourceParser);
-		sTree.expandAll();*/
-        // get source file, Target file and build the trees
-        
-        
-			Mapping.Components components = mapping.getComponents();
-			List<Component> l = components.getComponent();
+	    	
+			List<gov.nih.nci.restgen.mapping.model.Component> l = mapping.getComponents();
 			String sourceFilePath = null;
 			String targetFilePath = null;
-			for(Component c:l){
-				if(c.getType().equals(ComponentType.SOURCE))
+			for(gov.nih.nci.restgen.mapping.model.Component c:l){
+				if(c.getType().equals("source"))
 				{
 					sourceFilePath = c.getLocation();
+					
 				}
-				else if(c.getType().equals(ComponentType.TARGET))
+				else if(c.getType().equals("target"))
 				{
 					targetFilePath = c.getLocation();
 				}
 			}
-			System.out.println("HERE...sourceFilePath.targetFilePath"+sourceFilePath+"....****"+targetFilePath);
-		
-		//build target tree
-		/*buildTargetTree(mapping, null, false);
-		tTree.setSchemaParser(MappingFactory.targetParser);
-		tTree.expandAll();*/
-        /*for (Component mapComp:mapping.getComponents().getComponent())
+			
+
+		if(sourceFilePath!=null && !sourceFilePath.equals("") && sourceFilePath.contains(".class"))
 		{
-            if (mapComp.getRootElement()==null) continue;
-
-            JTextField tField = null;
-            /*if (mapComp.getType().value().equals(ComponentType.SOURCE.value())) tField = sourceLocationArea;
-            if (mapComp.getType().value().equals(ComponentType.TARGET.value())) tField = targetLocationArea;
-*/
-          /*  if (tField != null)
-            {
-                String c = mapComp.getLocation();
-                if (c == null) c = "";
-                else c = c.trim();
-                if (!c.equals(""))
-                {
-                    tField.setText(mapComp.getLocation());
-                    //tField.setEditable(true);
-                    //tField.setFocusable(false);
-                }
-            }
-            if (mapComp.getType().value().equals(ComponentType.TARGET.value())) targetLocationArea.setText(mapComp.getLocation());
-        }*/
-
-		createSourceTree();
-		createTargetTree();
+			if(new File(sourceFilePath).exists())
+			{
+				NewPOJOFileAction newpojo = new NewPOJOFileAction(mainFrame);
+				newpojo.createSourceTree(new File(sourceFilePath));
+			}
+			else
+			{
+				throw new Exception("Source file path invalid....");
+			}
+			
+		}
+		
+		else 
+		{
+			OpenPOJOJarAction newpojo = new OpenPOJOJarAction(mainFrame);
+			newpojo.createSourceTree(new File(sourceFilePath));
+		}
+		if(targetFilePath!=null && targetFilePath.equals("") && targetFilePath.contains(".jar"))
+		{
+			if(new File(targetFilePath).exists())
+			{
+				UploadEJBJarAction newejb = new UploadEJBJarAction(mainFrame);
+				newejb.createTargetTree(new File(targetFilePath));
+			}
+			else
+			{
+				throw new Exception("Target file path invalid....");
+			}
+		}
+		else
+		{
+			UploadWSDLAction newwsdl = new UploadWSDLAction(mainFrame);
+			newwsdl.createTargetTree(new File(targetFilePath));
+		}
+		
+		// commented rem later PV
 		getGraphController().setMappingData(mapping, true);
-        
-        /*if (file == null)
-        {
-            if (mapFile != null)
-                setSaveFile(mapFile);
-        }
-        else
-        {
-            //System.out.println("CCCCC GGGG : map file = " + file.getAbsolutePath());
-            mapFile = file;
-            setSaveFile(file);
-        }*/
+        // PV
         getMiddlePanel().renderInJGraph();
-		System.out.println("CmtsMappingPanel.processOpenMapFile()..timespending:"+(System.currentTimeMillis()-stTime));
+		
         
     }
     
     
-    public static Mapping loadMapping(File f) throws JAXBException
+    public static gov.nih.nci.restgen.mapping.model.Mapping loadMapping(File f) throws JAXBException
     {
-        Mapping mapLoaded = null;
+    	gov.nih.nci.restgen.mapping.model.Mapping mapLoaded = null;
         String mappingParentPath = null;
 
         System.out.println("MappingFactory.loadMapping()...mappingFile:"+f.getAbsolutePath());
             mappingParentPath=f.getAbsoluteFile().getParentFile().getAbsolutePath();
             System.out.println("MappingFactory.loadMapping()..mapping Parent:"+mappingParentPath);
             JAXBContext jc=null;
-            jc = JAXBContext.newInstance( "gov.nih.nci.cbiit.cmts.core" );
-
-
+            jc = JAXBContext.newInstance( "gov.nih.nci.restgen.mapping.model" );
             Unmarshaller u = jc.createUnmarshaller();
-            JAXBElement<Mapping> jaxbElmt = null;
+            JAXBElement<gov.nih.nci.restgen.mapping.model.Mapping> jaxbElmt = null;
             try
             {
-                jaxbElmt = u.unmarshal(new StreamSource(f), Mapping.class);
+                jaxbElmt = u.unmarshal(new StreamSource(f), gov.nih.nci.restgen.mapping.model.Mapping.class);
             }
             catch(UnmarshalException ee1)
             {

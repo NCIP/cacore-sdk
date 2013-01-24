@@ -221,6 +221,7 @@ public final class UIHelper
 		GraphConstants.setMoveable(lineStyle, false);
 		GraphConstants.setResize(lineStyle, false);
 		GraphConstants.setSizeable(lineStyle, false);
+		GraphConstants.setLabelAlongEdge(lineStyle, true);
 		return lineStyle;
 	}
 

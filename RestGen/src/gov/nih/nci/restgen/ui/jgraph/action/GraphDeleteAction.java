@@ -11,9 +11,11 @@ package gov.nih.nci.restgen.ui.jgraph.action;
 
 
 import org.jgraph.JGraph;
+import org.jgraph.graph.AttributeMap;
 import org.jgraph.graph.DefaultEdge;
 import org.jgraph.graph.DefaultGraphCell;
 import org.jgraph.graph.DefaultPort;
+import org.jgraph.graph.GraphConstants;
 
 import gov.nih.nci.restgen.core.FunctionData;
 import gov.nih.nci.restgen.ui.actions.DefaultAbstractJgraphAction;
@@ -108,7 +110,7 @@ public class GraphDeleteAction extends DefaultAbstractJgraphAction
 					boolean hasMappedColumn=false;
 					
 //					if (!hasMappedColumn)
-						getController().deleteGraphLink();
+					getController().deleteGraphLink();
 				}
 			}
 		}

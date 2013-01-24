@@ -123,79 +123,85 @@ public class UploadEJBJarAction extends AbstractContextAction
     	                JOptionPane.showMessageDialog(mainFrame.getAssociatedUIComponent(), "This file is not a EJB Jar file (" + SOURCE_TREE_FILE_DEFAULT_EXTENTION + ") file : " + file.getName(), "Not a WSDL file", JOptionPane.ERROR_MESSAGE);
     	                return false;
     	            }
-    	        
+    	            mainFrame.getMainFrame().getMappingMainPanel().setMappingTargetFile(file);
     	            // Display EJB Jar details here once the EJB Jar file has been selected!!
+    	            mainFrame.getMainFrame().getMappingMainPanel().setTargetFileType("EJB");
     	            mainFrame.getMainFrame().getMappingMainPanel().getTargetLocationArea().setBorder(BorderFactory.createTitledBorder("EJB"));
-    	           //PV Validate EJB Jar file here
-    	            JarFile jarFile = new JarFile(file);
-    	            boolean ejbjarxml = false;
-    	            Enumeration jarEntries = jarFile.entries();
-    	            JarEntry jarEntry = null;
-    	           
-    	            while (jarEntries.hasMoreElements())
-    	            {
-    	              jarEntry = (JarEntry)jarEntries.nextElement();
-    	              if(jarEntry.getName().contains("ejb-jar.xml"))
-    	              {
-    	            	  ejbjarxml = true;
-    	            	  break;
-    	              }
-
-    	           }
-    	           // JarEntry jarEntry = jarFile.getJarEntry("META-INF\\ejb-jar.xml");
-    	            if (ejbjarxml) {
-    	            	InputStream is = jarFile.getInputStream(jarEntry);
-    	            	DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-    	            	DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-    	            	Document doc = dBuilder.parse(is);
-    	            	doc.getDocumentElement().normalize();
-    	            //do something with the doc
-    	            	populateEntriesFromDoc(doc);
-    	            }
-    	            else
-    	            {
-    	            	
-    	            	JOptionPane.showMessageDialog(mainFrame.getAssociatedUIComponent(), "ejb-jar.xml not found in the jar!!", file.getName(), JOptionPane.ERROR_MESSAGE);
-    	                return false;
-    	            	
-    	            }
-    	            if(EJBNameList.size()>0)
-    	            {
-    	            	String EJBDisplayName=(String)EJBNameList.get(0);
-    	            	for(int i=1;i<EJBNameList.size();i++)
-    	            	{
-    	            		EJBDisplayName = EJBDisplayName+", "+(String)EJBNameList.get(i);
-    	            	}
-    	            	mainFrame.getMainFrame().getMappingMainPanel().getTargetLocationArea().setText("Name:"+EJBDisplayName);
-    	            }
-    	          //PV Validate EJB Jar file here
-    	            
-    	            /// form the tree here PV...start
-    	            
-    	            	DefaultTargetTreeNode top = new DefaultTargetTreeNode("EJB");
-    	            	if(EJBOperationsList.size()>0)
-    	            	{
-    	            		createNodes(top,EJBOperationsList,file);
-    	            	}
-    	                tree = new JTree(top);
-    	                TreeSelectionHandler treeSelectionHanderl=new TreeSelectionHandler(mainFrame.getMainFrame().getMappingMainPanel().getGraphController());
-    	        		tree.getSelectionModel().addTreeSelectionListener(treeSelectionHanderl);
-    	        		tree.setTransferHandler(new TreeTransferHandler(mainFrame.getMainFrame().getMappingMainPanel()));
-    	        		tree.setDropMode(DropMode.ON);
-    	        		tree.setDragEnabled(true);
-    	        		//GraphDropTransferHandler gDropHandler=new GraphDropTransferHandler();
-    	        		//mainFrame.getMainFrame().getMappingMainPanel().getMiddlePanel().getGraph().setTransferHandler(gDropHandler);
-    	    			tree.setDragEnabled(true);
-    	                mainFrame.getMainFrame().getMappingMainPanel().getTargetScrollPane().setViewportView(tree);
-    	                mainFrame.getMainFrame().getFrameMenu().getDefinedMenuItem("Save").setEnabled(true);
-    	            /// end
-    	            
-    	            
+    	            createTargetTree(file);
     			return true;
 
     }
     
- 
+public void createTargetTree(File file) throws Exception
+{
+	
+     //PV Validate EJB Jar file here
+    JarFile jarFile = new JarFile(file);
+    boolean ejbjarxml = false;
+    Enumeration jarEntries = jarFile.entries();
+    JarEntry jarEntry = null;
+    while (jarEntries.hasMoreElements())
+    {
+      jarEntry = (JarEntry)jarEntries.nextElement();
+      if(jarEntry.getName().contains("ejb-jar.xml"))
+      {
+    	  ejbjarxml = true;
+    	  break;
+      }
+    }
+   // JarEntry jarEntry = jarFile.getJarEntry("META-INF\\ejb-jar.xml");
+    if (ejbjarxml) {
+    	InputStream is = jarFile.getInputStream(jarEntry);
+    	DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+    	DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+    	Document doc = dBuilder.parse(is);
+    	doc.getDocumentElement().normalize();
+    //do something with the doc
+    	populateEntriesFromDoc(doc);
+    }
+    else
+    {
+    	
+    	JOptionPane.showMessageDialog(mainFrame.getAssociatedUIComponent(), "ejb-jar.xml descriptor file not found in the jar!!", file.getName(), JOptionPane.ERROR_MESSAGE);
+        return;
+    	
+    }
+    if(EJBNameList.size()>0)
+    {
+    	String EJBDisplayName=(String)EJBNameList.get(0);
+    	for(int i=1;i<EJBNameList.size();i++)
+    	{
+    		EJBDisplayName = EJBDisplayName+", "+(String)EJBNameList.get(i);
+    	}
+    	mainFrame.getMainFrame().getMappingMainPanel().getTargetLocationArea().setText("Name:"+EJBDisplayName);
+    }
+  //PV Validate EJB Jar file here
+    
+    /// form the tree here PV...start
+    
+    	DefaultTargetTreeNode top = new DefaultTargetTreeNode("EJB");
+    	if(EJBOperationsList.size()>0)
+    	{
+    		createNodes(top,EJBOperationsList,file);
+    	}
+        tree = new JTree(top);
+        TreeSelectionHandler treeSelectionHanderl=new TreeSelectionHandler(mainFrame.getMainFrame().getMappingMainPanel().getGraphController());
+		tree.getSelectionModel().addTreeSelectionListener(treeSelectionHanderl);
+		tree.setTransferHandler(new TreeTransferHandler(mainFrame.getMainFrame().getMappingMainPanel()));
+		tree.setDropMode(DropMode.ON);
+		tree.setDragEnabled(true);
+		//GraphDropTransferHandler gDropHandler=new GraphDropTransferHandler();
+		//mainFrame.getMainFrame().getMappingMainPanel().getMiddlePanel().getGraph().setTransferHandler(gDropHandler);
+		tree.setDragEnabled(true);
+        mainFrame.getMainFrame().getMappingMainPanel().getTargetScrollPane().setViewportView(tree);
+        mainFrame.getMainFrame().getFrameMenu().getDefinedMenuItem("Save").setEnabled(true);
+        mainFrame.getMainFrame().getMappingMainPanel().setTargetTree(tree);
+    /// end
+    
+
+	
+	
+}
     	            
 private void populateEntriesFromDoc(Document doc)
 {
@@ -237,7 +243,7 @@ private void populateEntriesFromDoc(Document doc)
 }
      	            
     	            
-private void createNodes(DefaultTargetTreeNode top,ArrayList<String> list, File file) throws IOException {
+private void createNodes(DefaultTargetTreeNode top,ArrayList<String> list, File file) throws IOException, Exception {
 		
 	    Iterator<String> it = list.iterator();
 	    JarFile jarFile = new JarFile(file);
@@ -299,6 +305,12 @@ private void createNodes(DefaultTargetTreeNode top,ArrayList<String> list, File 
 	    		
 	    		
 	    		///////////
+	    	}
+	    	else
+	    	{
+	    		
+	    		throw new Exception("EJB remote interface class not found");
+	    		
 	    	}
 	    	top.add(childElement);
 	    	

@@ -32,6 +32,16 @@ public class DefaultSourceTreeNode extends DefaultMappableTreeNode
 	{
 		super(userObject, allowsChildren);
 	}
+	
+	private String resourceName = "";
+
+	public String getResourceName() {
+		return resourceName;
+	}
+	public void setResourceName(String resourceName) {
+		this.resourceName = resourceName;
+	}
+	
 }
 /**
  * HISTORY: $Log: not supported by cvs2svn $

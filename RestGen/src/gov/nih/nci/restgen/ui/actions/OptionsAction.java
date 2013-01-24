@@ -94,8 +94,18 @@ public class OptionsAction extends AbstractContextAction
 	 * @param e
 	 * @return true if the action is finished successfully; otherwise, return false.
 	 */
+	@SuppressWarnings("static-access")
 	protected boolean doAction(ActionEvent e) throws Exception
 	{
+		File file = null;
+        file = DefaultSettings.getUserInputOfFileFromGUI(mainFrame.getOwnerFrame(),
+                "", "Output folder", false, false);
+        if(file!=null)
+        {
+        	mainFrame.getMainFrame().getMappingMainPanel().setOptionsPath(file.getPath());
+        	System.out.println("Selected directory path ....<<<....>>"+file.getPath());
+        }
+		
 		return true;
 	}
 

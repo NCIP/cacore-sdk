@@ -13,15 +13,21 @@ import gov.nih.nci.restgen.ui.common.ActionConstants;
 import gov.nih.nci.restgen.ui.common.DefaultSettings;
 import gov.nih.nci.restgen.ui.main.MainFrame;
 import gov.nih.nci.restgen.ui.main.MainFrameContainer;
+import gov.nih.nci.restgen.ui.tree.DefaultMappableTreeNode;
+import gov.nih.nci.restgen.ui.tree.DefaultSourceTreeNode;
 
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
+import org.jgraph.graph.DefaultEdge;
+import org.jgraph.graph.DefaultPort;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.util.Iterator;
 
 /**
  * Currently play as place holder to define the general look and feel of a "Delete Node..." action.
@@ -89,9 +95,67 @@ public class DeleteNodeAction extends AbstractContextAction
 		
 		System.out.println("Delete node clicked.......");
        if (treeNode==null)
+       {
+    	   System.out.println("Tree node null returning.......");
 			return false;
-       treeNode.removeFromParent();
-       tree.updateUI();
+       }
+       
+       mainFrame.getMainFrame();
+       DefaultEdge [] linkEdge = null;
+       DefaultEdge linkEdgeTemp = null;
+       DefaultPort [] srcPort = null;
+       DefaultPort srcPortTemp = null;
+       DefaultPort [] tgtPort = null;
+       DefaultPort tgtPortTemp = null;
+	for (Object child:MainFrame.getMappingMainPanel().getMiddlePanel().getGraph().getRoots())
+	{
+			if (child instanceof DefaultEdge)
+			{
+				linkEdge = new DefaultEdge[2];
+				srcPort = new DefaultPort[1];
+				tgtPort = new DefaultPort[1];
+				linkEdgeTemp = (DefaultEdge)child;
+				//linkEdge[0] = linkEdgeTemp;
+				srcPortTemp=(DefaultPort)linkEdgeTemp.getSource();
+				srcPort[0] = srcPortTemp;
+				tgtPortTemp=(DefaultPort)linkEdgeTemp.getTarget();
+				tgtPort[0] = tgtPortTemp;
+				Iterator edges = srcPortTemp.getEdges().iterator();
+				int i=0;
+                while (edges.hasNext())
+                {
+                	linkEdge[i] = (DefaultEdge)edges.next();
+                	i++;
+                }
+
+				Object sourceNode = srcPortTemp.getUserObject();
+				if(sourceNode instanceof DefaultMutableTreeNode)
+				{
+					DefaultMutableTreeNode srcTreeNode = (DefaultMutableTreeNode)sourceNode;
+					if(srcTreeNode.getParent().equals(treeNode))
+					{
+						
+						MainFrame.getMappingMainPanel().getMiddlePanel().getGraphController().removeCells(linkEdge,true);
+						//MainFrame.getMappingMainPanel().getMiddlePanel().getGraphController().removeCells(tgtPort,true);
+						MainFrame.getMappingMainPanel().getTargetScrollPane().repaint();
+					}
+				}
+				
+				
+			}
+		
+	}
+	System.out.println("Before Tree node removal.......");
+	 if(treeNode.getParent()!=null)
+	 {
+		 treeNode.removeFromParent();
+	 }
+	 else
+	 {
+		 tree.removeAll();
+	 }
+	 
+     tree.updateUI();
        return true;
 	}
 

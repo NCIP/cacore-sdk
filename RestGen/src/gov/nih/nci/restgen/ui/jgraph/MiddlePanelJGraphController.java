@@ -13,8 +13,6 @@ import org.jgraph.graph.DefaultEdge;
 import org.jgraph.graph.DefaultGraphCell;
 import org.jgraph.graph.DefaultGraphModel;
 import org.jgraph.graph.DefaultPort;
-import org.jgraph.graph.GraphConstants;
-import org.jgraph.graph.ParentMap;
 
 //import gov.nih.nci.cbiit.cmts.mapping.MappingFactory;
 import gov.nih.nci.restgen.core.Component;
@@ -22,8 +20,7 @@ import gov.nih.nci.restgen.core.ComponentType;
 import gov.nih.nci.restgen.core.KindType;
 import gov.nih.nci.restgen.core.LinkType;
 import gov.nih.nci.restgen.core.LinkpointType;
-import gov.nih.nci.restgen.core.Mapping;
-import gov.nih.nci.restgen.core.ViewType;
+import gov.nih.nci.restgen.mapping.model.*;
 import gov.nih.nci.restgen.core.Mapping.Components;
 import gov.nih.nci.restgen.core.Mapping.Links;
 import gov.nih.nci.restgen.ui.common.MappableNode;
@@ -32,7 +29,6 @@ import gov.nih.nci.restgen.ui.mapping.MappingMainPanel;
 import gov.nih.nci.restgen.ui.mapping.MappingMiddlePanel;
 import gov.nih.nci.restgen.ui.properties.DefaultPropertiesSwitchController;
 import gov.nih.nci.restgen.ui.properties.PropertiesSwitchController;
-import gov.nih.nci.restgen.ui.tree.DefaultMappableTreeNode;
 import gov.nih.nci.restgen.ui.tree.DefaultSourceTreeNode;
 import gov.nih.nci.restgen.ui.tree.DefaultTargetTreeNode;
 
@@ -44,10 +40,8 @@ import javax.swing.tree.TreePath;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.Dimension;
-import java.awt.geom.Point2D;
-import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Hashtable;
 import java.util.Arrays;
@@ -77,8 +71,8 @@ public class MiddlePanelJGraphController {
 	public static final Color DEFAULT_MAPPING_LINK_COLOR = Color.BLUE.darker().darker();
 	private DefaultPropertiesSwitchController propertiesSwitchController;
 
-    private List<LinkpointType> sourceMissedLink = new ArrayList<LinkpointType>();
-    private List<LinkpointType> targetMissedLink = new ArrayList<LinkpointType>();
+    private List<Source> sourceMissedLink = new ArrayList<Source>();
+    private List<Target> targetMissedLink = new ArrayList<Target>();
 
     public MiddlePanelJGraphController(MappingMainPanel mappingPan) {
 		mappingPanel = mappingPan;
@@ -172,7 +166,24 @@ public class MiddlePanelJGraphController {
 		// graph.getModel().edit(portAttributes, null, null, null);
 	}*/
 
+    public class MethodType {
 
+    	public Method method;
+    	public Method getMethod() {
+			return method;
+		}
+		public void setMethod(Method method) {
+			this.method = method;
+		}
+		public String getResourceName() {
+			return resourceName;
+		}
+		public void setResourceName(String resourceName) {
+			this.resourceName = resourceName;
+		}
+		public String resourceName;
+    	
+    }
 
 	/**
 	 * Return the number of pixels changed due to scrolling.
@@ -286,41 +297,41 @@ public class MiddlePanelJGraphController {
 	public Mapping retrieveMappingData(boolean refresh) {
 		if (!refresh)
 			return mappingData;
-
+		List<MethodType> methodList = new ArrayList();
 		// clear out the data before adding.
 		if (mappingData==null)
 		{
 			mappingData = new Mapping();
 		}
-		if (mappingData.getLinks() == null) {
-			mappingData.setLinks(new Mapping.Links());
-		} else {
-			mappingData.getLinks().getLink().clear();
-		}
-		if (mappingData.getTags()==null)
-			mappingData.setTags(new Mapping.Tags());
 		
 // add source and destination components here PV start...
 		
-	    Component startComp = new Component();
-	    startComp.setKind(KindType.XML);
+	    gov.nih.nci.restgen.mapping.model.Component startComp = new gov.nih.nci.restgen.mapping.model.Component();
+	    startComp.setKind(KindType.XML.value());
 	    startComp.setId(getNewComponentId(mappingData));
        // endComp.setLocation(schemaParser.getSchemaURI());
-	    startComp.setLocation("C:\\xyz\\abc");
+	    startComp.setLocation(mappingPanel.getMappingSourceFile().getPath());
         //endComp.setRootElement(e);
-	    startComp.setType(ComponentType.SOURCE);
-        mappingData.getComponents().getComponent().add(startComp);
+	    startComp.setType(ComponentType.SOURCE.value());
+	    if(mappingData.getComponents()==null)
+	    {	
+	    	List<gov.nih.nci.restgen.mapping.model.Component> components = new ArrayList();
+	    	components.add(startComp);
+	    	mappingData.setComponents(components);
+	    }
         
         
-        Component endComp = new Component();
-        endComp.setKind(KindType.XML);
+        gov.nih.nci.restgen.mapping.model.Component endComp = new gov.nih.nci.restgen.mapping.model.Component();
+        endComp.setKind(KindType.XML.value());
         endComp.setId(getNewComponentId(mappingData));
        // endComp.setLocation(schemaParser.getSchemaURI());
-        endComp.setLocation("C:\\xyz\\abc");
+        endComp.setLocation(mappingPanel.getMappingTargetFile().getPath());
         //endComp.setRootElement(e);
-        endComp.setType(ComponentType.TARGET);
-        mappingData.getComponents().getComponent().add(endComp);
-        
+        endComp.setType(ComponentType.TARGET.value());
+        if(mappingData.getComponents()!=null)
+	    {
+        	mappingData.getComponents().add(endComp);
+	    }
 // add source and destination components here PV end...		
 		
 		List<DefaultEdge> graphEdgeLinks = this.getMiddlePanel()
@@ -330,46 +341,43 @@ public class MiddlePanelJGraphController {
 			DefaultPort srcPort = (DefaultPort) linkEdge.getSource();
 			String srcComponentId = "";
 			String srcPath = "";
-			MappableNode sourceNode = (MappableNode) srcPort
-						.getUserObject();
-//				srcComponentId = ((Component) ((ElementMetaLoader.MyTreeObject) ((DefaultMutableTreeNode) sourceNode)
-	//					.getUserObject()).getRootObject()).getId();
-				srcComponentId = sourceNode.toString();
-				srcPath = UIHelper
-						.getPathStringForNode((DefaultSourceTreeNode) sourceNode);
-			
-
+			MappableNode sourceNode = (MappableNode) srcPort.getUserObject();
+			srcPath = UIHelper.getPathStringForNode((DefaultSourceTreeNode) sourceNode);
 			DefaultPort trgtPort = (DefaultPort) linkEdge.getTarget();
 			String tgtComponentId = "";
 			String tgtPath = "";
-			MappableNode targetNode = (MappableNode) trgtPort
-						.getUserObject();
-				//tgtComponentId = ((Component) ((ElementMetaLoader.MyTreeObject) ((DefaultMutableTreeNode) targetNode)
-					//	.getUserObject()).getRootObject()).getId();
-				//tgtComponentId = targetNode.toString();
-				tgtPath = UIHelper
-						.getPathStringForNode((DefaultTargetTreeNode) targetNode);
-		
+			MappableNode targetNode = (MappableNode) trgtPort.getUserObject();
+			tgtPath = UIHelper.getPathStringForNode((DefaultTargetTreeNode) targetNode);
 			addLink(mappingData, srcComponentId, srcPath,tgtComponentId, tgtPath);
-		}
-
-		        
+			MethodType method = addMethods((DefaultSourceTreeNode) sourceNode, (DefaultTargetTreeNode) targetNode);
+			System.out.println("Method Types..."+method.getMethod().getName());
+			methodList.add(method);
+		    }
+		    
+		addResources(mappingData,methodList);
+				        
 		return mappingData;
 	}
 
 	// added PV start
 	
 	private static String getNewComponentId(Mapping m){
-        if(m.getComponents() == null)
-            m.setComponents(new Components());
         int num = 0;
-        for(Component c:m.getComponents().getComponent()){
-            int tmp = -1;
+        if(m.getComponents()!=null)
+        {
+        Iterator it = m.getComponents().iterator();
+        while(it.hasNext())
+        {
+         
             try{
-                tmp = Integer.parseInt(c.getId());
-            }catch(Exception ignored){}
-            if(tmp>=num)
-                num = tmp+1;
+            	Component c = (Component)it.next(); 
+                num = Integer.parseInt(c.getId());
+            }catch(Exception ignored){
+            	
+            }
+            
+        }
+        num = num+1;
         }
         return String.valueOf(num);
     }
@@ -386,19 +394,147 @@ public class MiddlePanelJGraphController {
      * @param tgtPath - target object path
      */
     public static void addLink(Mapping m, String srcComponentId, String srcPath, String tgtComponentId, String tgtPath) {
-        LinkType l = new LinkType();
-        LinkpointType lp = new LinkpointType();
-        lp.setComponentid(srcComponentId);
-        lp.setId(srcPath);
-        l.setSource(lp);
-        lp = new LinkpointType();
-        lp.setComponentid(tgtComponentId);
-        lp.setId(tgtPath);
-        l.setTarget(lp);
-        if(m.getLinks() == null) m.setLinks(new Links());
-        m.getLinks().getLink().add(l);
+        Link l = new Link();
+        Source src = new Source();
+        src.setComponentId(srcComponentId);
+        src.setId(srcPath);
+        Target tgt = new Target();
+        tgt.setComponentId(tgtComponentId);
+        tgt.setId(tgtPath);
+        l.setSource(src);
+        l.setTarget(tgt);
+        if(m.getLinks()==null)
+        {
+        	List<Link> links = new ArrayList();
+        	links.add(l);
+        	m.setLinks(links);
+        }
+        else
+        {
+        	m.getLinks().add(l);
+        }
     }
 	
+    public void addResources(Mapping m, List<MethodType>methodList)
+    {
+    	
+    	List<Resource> resourceList = new ArrayList();
+    	Iterator<String> it = mappingPanel.getPOJOClassList().iterator();
+    	Iterator<MethodType> mt = methodList.iterator();
+    	while(it.hasNext())
+    	{
+    		Resource resource = new Resource();
+    		resource.setName((String)it.next());
+    		resourceList.add(resource);
+    	}
+    	
+    	while(mt.hasNext())
+    	{
+    		MethodType mtype = (MethodType)mt.next();
+    		for(int i=0;i<resourceList.size();i++)
+    		{
+    			Resource rsc = (Resource) resourceList.get(i);
+    			System.out.println("resourcename and method type ..."+mtype.getResourceName()+"  "+rsc.getName());
+    			if(mtype.getResourceName().equals(rsc.getName()))
+    			{
+    			 // add the methods here
+    				if(rsc.getMethods()==null)
+    				{
+    					
+    					List<Method> methods = new ArrayList();
+    					methods.add(mtype.getMethod());
+    					rsc.setMethods(methods);
+    				}
+    				else
+    				{
+    					rsc.getMethods().add(mtype.getMethod());
+    				}
+    			
+    			}
+    		}
+    	}
+    	
+    	// set the resources here
+    	
+    	if(m.getResources()==null)
+    	{
+    		
+    		m.setResources(resourceList);
+    	}
+    	
+    }
+    
+    
+    
+    public MethodType addMethods(DefaultSourceTreeNode sourceNode, DefaultTargetTreeNode targetNode)
+    {
+    	
+    	
+    	MethodType methodType = new MethodType();
+    	Method method = new Method();
+    	Implementation implementation = new Implementation();
+    	Operation operation = new Operation();
+    	Input input = new Input();
+    	Output output = new Output();
+    	
+    	// set the inputs and outputs
+    	if(targetNode.getInputType()!=null)
+    	{
+    		input.setType(targetNode.getInputType());
+    	}
+    	else
+    	{
+    		input.setType("");
+    	}
+    	
+    	if(targetNode.getOutputType()!=null)
+    	{
+    		input.setType(targetNode.getOutputType());
+    	}
+    	else
+    	{
+    		input.setType("");
+    	}
+    	
+    	if(operation.getInputs()==null)
+    	{
+    		List<Input> inputs = new ArrayList();
+    		inputs.add(input);
+    		operation.setInputs(inputs);
+    	}
+    	else
+    	{
+    		operation.getInputs().add(input);
+    	}
+    	
+    	if(operation.getOutput()==null)
+    	{
+    		operation.setOutput(output);
+    	}
+    	operation.setName(targetNode.getOperationName());
+    	implementation.setOperation(operation);
+    	implementation.setType(targetNode.getImplementationType());
+    	implementation.setName(targetNode.getServiceName());
+    	if(targetNode.getImplementationType()=="WSDL")
+    	{
+    		implementation.setClientType(targetNode.getEndPoint());
+    	}
+    	else
+    	{
+    		implementation.setClientType(targetNode.getClientType());
+    	}
+    	implementation.setPath("");
+    	implementation.setClasspath("");
+    	method.setImplementation(implementation);
+    	method.setName(sourceNode.toString());
+    	methodType.setResourceName(sourceNode.getResourceName());
+    	methodType.setMethod(method);
+    	return methodType;
+    	
+    }
+    
+    
+    
 	
 	public void setMappingData(Mapping mappingData, boolean isRebuild) {
 		if (isGraphChanged()
@@ -431,24 +567,22 @@ public class MiddlePanelJGraphController {
 	 * and target tree have been loaded successfully.
 	 */
 	private synchronized void constructMappingGraph() {
-        sourceMissedLink = new ArrayList<LinkpointType>();
-        targetMissedLink = new ArrayList<LinkpointType>();
-        //System.out.println("CCCCC mapping data == constructMappingGraph()");
+        sourceMissedLink = new ArrayList<Source>();
+        targetMissedLink = new ArrayList<Target>();
+        
         if (mappingData.getLinks() == null) {
-			mappingData.setLinks(new Mapping.Links());
-            //System.out.println("CCCCC mapping link data is null.");
+        	List<Link> links = new ArrayList();
+			mappingData.setLinks(links);
+        
         }
-		List<LinkType> linkList = mappingData.getLinks().getLink();
+		List<Link> linkList = mappingData.getLinks();
 		if (linkList == null) {
 			return;
 		}
-		// render functional box first
-		// Log.logInfo(this, "Total function component: '" + functionSize +
-		// "'.");
-		// render map second
-		for (LinkType map : linkList) {
-			LinkpointType sourceMapComp = map.getSource();
-			LinkpointType targetMapComp = map.getTarget();
+		
+		for (Link map : linkList) {
+			Source sourceMapComp = map.getSource();
+			Target targetMapComp = map.getTarget();
 
 			MappableNode sourceNode = null;
 			MappableNode targetNode = null;
@@ -458,9 +592,10 @@ public class MiddlePanelJGraphController {
 				createMapping(sourceNode, targetNode);
 			//}
 		}
+		
 	}
 
-	private MappableNode getSourceMappableNode(LinkpointType sourceMapComp) {
+	private MappableNode getSourceMappableNode(Source sourceMapComp) {
 		MappableNode sourceNode = null;
 		String id = sourceMapComp.getId();
 		sourceNode = UIHelper.constructMappableNodeObjectXmlPath(mappingPanel.getSourceTree().getModel().getRoot(), id);
@@ -478,7 +613,7 @@ public class MiddlePanelJGraphController {
         return sourceNode;
 	}
 
-	private MappableNode getTargetMappableNode(LinkpointType targetMapComp) {
+	private MappableNode getTargetMappableNode(Target targetMapComp) {
 		MappableNode targetNode = null;
 		String id = targetMapComp.getId();
 		targetNode = UIHelper.constructMappableNodeObjectXmlPath(mappingPanel.getTargetTree().getModel().getRoot(), id);
@@ -736,7 +871,7 @@ public class MiddlePanelJGraphController {
 		setGraphChanged(true);
 	}
 
-	private void removeCells(Object[] cells, boolean findAssociatedCells) {
+	public void removeCells(Object[] cells, boolean findAssociatedCells) {
 		unmapCells(cells);
 		// repaint the source and target tree panel if a functionBox is deleted
 		boolean repaintSourceTarget = false;
@@ -835,11 +970,11 @@ public class MiddlePanelJGraphController {
 		this.mappingPanel = mappingPanel;
 	}
 
-    public List<LinkpointType> getSourceMissedLink()
+    public List<Source> getSourceMissedLink()
     {
         return sourceMissedLink;
     }
-    public List<LinkpointType> getTargetMissedLink()
+    public List<Target> getTargetMissedLink()
     {
         return targetMissedLink;
     }

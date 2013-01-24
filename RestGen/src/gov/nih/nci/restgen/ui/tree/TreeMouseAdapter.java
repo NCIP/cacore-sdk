@@ -51,7 +51,7 @@ public class TreeMouseAdapter extends MouseAdapter {
 			{
 				parentC=parentC.getParent();
 			}
-	
+			
 			// Create PopupMenu for the Cell
 			if(treeNode.getChildCount()>0)
 			{
@@ -69,7 +69,7 @@ public class TreeMouseAdapter extends MouseAdapter {
 	 */
 	private JPopupMenu createTreePopupMenu(DefaultMutableTreeNode treeNode, JTree tree, MappingMainPanel parentPanel)
 	{
-        Mapping mappingData = parentPanel.getGraphController().retrieveMappingData(false);
+        //Mapping mappingData = parentPanel.getGraphController().retrieveMappingData(false);
         Object obj = treeNode.getUserObject();
         JPopupMenu popupMenu = new JPopupMenu();
 		popupMenu.add(new JMenuItem(new DeleteNodeAction(mainFrame,tree,treeNode)));
