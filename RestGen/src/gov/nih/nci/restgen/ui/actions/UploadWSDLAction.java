@@ -255,7 +255,7 @@ private void createNodes(DefaultTargetTreeNode top,ArrayList<String> list, Array
 	    	childElement.setOutputType((String)outputList.next());
 	    	childElement.setServiceName(getServiceName());
 	    	childElement.setEndPoint(getServiceEndPoint());
-	    	childElement.setImplementationType("WSDL");
+	    	childElement.setImplementationType("SOAP");
 	    	top.add(childElement);
 	    }
 	    

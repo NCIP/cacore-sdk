@@ -514,17 +514,19 @@ public class MiddlePanelJGraphController {
     	operation.setName(targetNode.getOperationName());
     	implementation.setOperation(operation);
     	implementation.setType(targetNode.getImplementationType());
-    	implementation.setName(targetNode.getServiceName());
-    	if(targetNode.getImplementationType()=="WSDL")
+    	if(targetNode.getImplementationType()=="SOAP")
     	{
     		implementation.setClientType(targetNode.getEndPoint());
+        	implementation.setName(targetNode.getServiceName());
+        	implementation.setClasspath("");
     	}
     	else
     	{
     		implementation.setClientType(targetNode.getClientType());
+    		implementation.setName(targetNode.getEJBName());
+    		implementation.setClasspath(targetNode.getClassPath());
     	}
     	implementation.setPath("");
-    	implementation.setClasspath("");
     	method.setImplementation(implementation);
     	method.setName(sourceNode.toString());
     	methodType.setResourceName(sourceNode.getResourceName());

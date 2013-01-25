@@ -67,7 +67,9 @@ public class UploadEJBJarAction extends AbstractContextAction
     //hotkey//private static final KeyStroke ACCELERATOR_KEY_STROKE = KeyStroke.getKeyStroke(KeyEvent.VK_F4, Event.ALT_MASK, false);
 
     private MainFrameContainer mainFrame;
-    private ArrayList<String> EJBOperationsList = new ArrayList<String>();
+    private ArrayList<String> EJBRemoteOperationsList = new ArrayList<String>();
+    private ArrayList<String> EJBHomeOperationsList = new ArrayList<String>();
+    private ArrayList<String> EJBBeanList = new ArrayList<String>();
     private ArrayList<String> EJBNameList = new ArrayList<String>();
 
     /**
@@ -126,8 +128,8 @@ public class UploadEJBJarAction extends AbstractContextAction
     	            mainFrame.getMainFrame().getMappingMainPanel().setMappingTargetFile(file);
     	            // Display EJB Jar details here once the EJB Jar file has been selected!!
     	            mainFrame.getMainFrame().getMappingMainPanel().setTargetFileType("EJB");
-    	            mainFrame.getMainFrame().getMappingMainPanel().getTargetLocationArea().setBorder(BorderFactory.createTitledBorder("EJB"));
     	            createTargetTree(file);
+    	            mainFrame.getMainFrame().getMappingMainPanel().getTargetLocationArea().setBorder(BorderFactory.createTitledBorder("EJB"));
     			return true;
 
     }
@@ -158,12 +160,20 @@ public void createTargetTree(File file) throws Exception
     	doc.getDocumentElement().normalize();
     //do something with the doc
     	populateEntriesFromDoc(doc);
+    	if(EJBHomeOperationsList.size()>0)
+        {
+    		ValidateHomeInterfaceAndBean(EJBHomeOperationsList, file,"home");
+        }
+    	if(EJBBeanList.size()>0)
+        {
+    	
+    		ValidateHomeInterfaceAndBean(EJBBeanList, file,"ejb-class");
+    	
+        }
     }
     else
     {
-    	
-    	JOptionPane.showMessageDialog(mainFrame.getAssociatedUIComponent(), "ejb-jar.xml descriptor file not found in the jar!!", file.getName(), JOptionPane.ERROR_MESSAGE);
-        return;
+    	throw new Exception("ejb-jar.xml descriptor file not found in the jar!!");
     	
     }
     if(EJBNameList.size()>0)
@@ -180,9 +190,9 @@ public void createTargetTree(File file) throws Exception
     /// form the tree here PV...start
     
     	DefaultTargetTreeNode top = new DefaultTargetTreeNode("EJB");
-    	if(EJBOperationsList.size()>0)
+    	if(EJBRemoteOperationsList.size()>0)
     	{
-    		createNodes(top,EJBOperationsList,file);
+    		createNodes(top,EJBRemoteOperationsList,file);
     	}
         tree = new JTree(top);
         TreeSelectionHandler treeSelectionHanderl=new TreeSelectionHandler(mainFrame.getMainFrame().getMappingMainPanel().getGraphController());
@@ -193,6 +203,12 @@ public void createTargetTree(File file) throws Exception
 		//GraphDropTransferHandler gDropHandler=new GraphDropTransferHandler();
 		//mainFrame.getMainFrame().getMappingMainPanel().getMiddlePanel().getGraph().setTransferHandler(gDropHandler);
 		tree.setDragEnabled(true);
+		int size = tree.getRowCount();
+		for (int i = 0; i < size+100; i++)
+		{
+			if (i<tree.getRowCount())
+				tree.expandRow(i);
+		}
         mainFrame.getMainFrame().getMappingMainPanel().getTargetScrollPane().setViewportView(tree);
         mainFrame.getMainFrame().getFrameMenu().getDefinedMenuItem("Save").setEnabled(true);
         mainFrame.getMainFrame().getMappingMainPanel().setTargetTree(tree);
@@ -227,26 +243,104 @@ private void populateEntriesFromDoc(Document doc)
     		
     		NodeList ejbRemoteInterfaceList = firstSessionElement.getElementsByTagName("remote");
     		if(ejbRemoteInterfaceList != null && ejbRemoteInterfaceList.getLength() > 0) {
-    			for(int j=0; j<ejbNameNodeList.getLength() ; j++){
+    			for(int j=0; j<ejbRemoteInterfaceList.getLength() ; j++){
     			Element el = (Element)ejbRemoteInterfaceList.item(j);
     			String textVal = el.getFirstChild().getNodeValue();
-    			EJBOperationsList.add(textVal);
+    			EJBRemoteOperationsList.add(textVal);
     			System.out.println("remote interface>>>>:"+textVal);
     			}
     		}
     		
+    		NodeList ejbHomeInterfaceList = firstSessionElement.getElementsByTagName("home");
+    		if(ejbHomeInterfaceList != null && ejbHomeInterfaceList.getLength() > 0) {
+    			for(int j=0; j<ejbNameNodeList.getLength() ; j++){
+    			Element el = (Element)ejbHomeInterfaceList.item(j);
+    			String textVal = el.getFirstChild().getNodeValue();
+    			EJBHomeOperationsList.add(textVal);
+    			System.out.println("home interface>>>>:"+textVal);
+    			}
+    		}
     		
+    		NodeList ejbBeanList = firstSessionElement.getElementsByTagName("ejb-class");
+    		if(ejbBeanList != null && ejbBeanList.getLength() > 0) {
+    			for(int j=0; j<ejbNameNodeList.getLength() ; j++){
+    			Element el = (Element)ejbBeanList.item(j);
+    			String textVal = el.getFirstChild().getNodeValue();
+    			EJBBeanList.add(textVal);
+    			System.out.println("ejb-class>>>>:"+textVal);
+    			}
+    		}
+    			
  	 }
  		   
     }
     
 }
-     	            
+     
+
+private boolean ValidateHomeInterfaceAndBean(ArrayList<String> list, File file,String type) throws IOException, Exception {
+	
+    Iterator<String> it = list.iterator();
+    JarFile jarFile = new JarFile(file);
+    boolean ejbclassFound = false;
+    String interfaceClass = null;
+    String [] classNameSplit = null;
+    while(it.hasNext())
+    {
+    	interfaceClass = (String)it.next();
+    	System.out.println("interface/bean class name begin>>>>:"+interfaceClass);
+    	if(interfaceClass!=null)
+    	{
+    		classNameSplit = interfaceClass.trim().split("\\.");
+    	}
+    	
+    	if(classNameSplit!=null && classNameSplit.length > 0)
+    	{
+    		String splitInterfaceClass  = classNameSplit[classNameSplit.length-1];
+    		System.out.println("interface class name>>>>:"+splitInterfaceClass);
+    		interfaceClass = splitInterfaceClass;
+    	}
+    	
+    	ejbclassFound = false;
+        Enumeration jarEntries = jarFile.entries();
+        JarEntry jarEntry = null;
+       
+        while (jarEntries.hasMoreElements())
+        {
+          jarEntry = (JarEntry)jarEntries.nextElement();
+          if(jarEntry.getName().contains(interfaceClass))
+          {
+        	  ejbclassFound = true;
+        	  break;
+          }
+
+       }
+    	if(!ejbclassFound)
+    	{
+    		if(type.equals("home"))
+    		{
+    			throw new Exception("EJB home interface class"+interfaceClass+"not found");
+    		}
+    		else
+    		{
+    			throw new Exception("EJB bean class "+interfaceClass+"not found");
+    		}
+    		///////////
+    	}
+    	
+    }
+    
+    return ejbclassFound;
+    
+}
+
+
     	            
 private void createNodes(DefaultTargetTreeNode top,ArrayList<String> list, File file) throws IOException, Exception {
 		
 	    Iterator<String> it = list.iterator();
 	    JarFile jarFile = new JarFile(file);
+	    int j=0;
 	    while(it.hasNext())
 	    {
 	    	String remoteInterfaceClass = (String)it.next();
@@ -296,9 +390,19 @@ private void createNodes(DefaultTargetTreeNode top,ArrayList<String> list, File 
 	        		}
 	        		DefaultTargetTreeNode element = new DefaultTargetTreeNode(method.getName());
 	        		element.setOperationName(method.getName());
+	        		element.setClientType("remote");
+	        		element.setImplementationType("EJB");
+	        		if(EJBNameList!=null)
+	        		{
+	        			element.setEJBName((String)EJBNameList.get(j));
+	        		}
 	        		element.setInputType(argumentTypes);
 	        		element.setOutputType(returnType.toString());
-	    	    	childElement.add(element);
+	        		if(EJBBeanList!=null)
+	        		{
+	        			element.setClassPath((String)EJBBeanList.get(j));
+	        		}
+	        		childElement.add(element);
 	    	    	System.out.println("Input Type and Return Type>>>>>"+argumentTypes+"  "+returnType.toString());
 	    	    	    	  
 	    		}
@@ -313,7 +417,7 @@ private void createNodes(DefaultTargetTreeNode top,ArrayList<String> list, File 
 	    		
 	    	}
 	    	top.add(childElement);
-	    	
+	    	j++;
 	    }
 	    
 	}

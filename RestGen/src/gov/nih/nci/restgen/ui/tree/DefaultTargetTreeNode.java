@@ -27,7 +27,8 @@ public class DefaultTargetTreeNode extends DefaultMappableTreeNode
 	String operationName = "";// operation name for EJB or WSDL
 	String inputType = ""; //input for the operation
 	String outputType = "";//output for the operation
-	
+	String EJBName = ""; // EJB bean name
+	String classPath = ""; // Classpath
 	public DefaultTargetTreeNode(Object userObject, boolean allowsChildren)
 	{
 		super(userObject, allowsChildren);
@@ -42,6 +43,14 @@ public class DefaultTargetTreeNode extends DefaultMappableTreeNode
 		return ImplementationType;
 	}
 
+	public String getClassPath() {
+		return classPath;
+	}
+
+	public void setClassPath(String classPath) {
+		this.classPath = classPath;
+	}
+
 	public void setImplementationType(String implementationType) {
 		ImplementationType = implementationType;
 	}
@@ -52,6 +61,14 @@ public class DefaultTargetTreeNode extends DefaultMappableTreeNode
 
 	public void setServiceName(String serviceName) {
 		this.serviceName = serviceName;
+	}
+
+	public String getEJBName() {
+		return EJBName;
+	}
+
+	public void setEJBName(String eJBName) {
+		EJBName = eJBName;
 	}
 
 	public String getEndPoint() {
