@@ -42,7 +42,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * This class defines the default close action.
+ * This class defines the OpenPOJOJar action.
  * Descendant classes may implement additional functions.
  *
  * @author Prakash Vinjamuri
