@@ -220,6 +220,7 @@ public final class UIHelper
 		GraphConstants.setEditable(lineStyle, false);
 		GraphConstants.setMoveable(lineStyle, false);
 		GraphConstants.setResize(lineStyle, false);
+		GraphConstants.setValue(lineStyle, "     ");
 		GraphConstants.setSizeable(lineStyle, false);
 		GraphConstants.setLabelAlongEdge(lineStyle, true);
 		return lineStyle;

@@ -341,6 +341,7 @@ public class MiddlePanelJGraphController {
 			DefaultPort srcPort = (DefaultPort) linkEdge.getSource();
 			String srcComponentId = "";
 			String srcPath = "";
+			String path = (String)getMiddlePanel().getGraph().getModel().getValue(linkEdge);
 			MappableNode sourceNode = (MappableNode) srcPort.getUserObject();
 			srcPath = UIHelper.getPathStringForNode((DefaultSourceTreeNode) sourceNode);
 			DefaultPort trgtPort = (DefaultPort) linkEdge.getTarget();
@@ -350,8 +351,7 @@ public class MiddlePanelJGraphController {
 			tgtPath = UIHelper.getPathStringForNode((DefaultTargetTreeNode) targetNode);
 			addLink(mappingData, srcComponentId, srcPath,tgtComponentId, tgtPath);
 			addOptions(mappingData);
-			MethodType method = addMethods((DefaultSourceTreeNode) sourceNode, (DefaultTargetTreeNode) targetNode);
-			System.out.println("Method Types..."+method.getMethod().getName());
+			MethodType method = addMethods((DefaultSourceTreeNode) sourceNode, (DefaultTargetTreeNode) targetNode, path);
 			methodList.add(method);
 		    }
 		    
@@ -489,7 +489,7 @@ public class MiddlePanelJGraphController {
     
     
     
-    public MethodType addMethods(DefaultSourceTreeNode sourceNode, DefaultTargetTreeNode targetNode)
+    public MethodType addMethods(DefaultSourceTreeNode sourceNode, DefaultTargetTreeNode targetNode, String path)
     {
     	
     	
@@ -549,7 +549,14 @@ public class MiddlePanelJGraphController {
     		implementation.setName(targetNode.getEJBName());
     		implementation.setClasspath(targetNode.getClassPath());
     	}
-    	implementation.setPath("");
+    	if(path!=null && path.trim().length()>0)
+    	{
+    		implementation.setPath(path);
+    	}
+    	else
+    	{
+    		implementation.setPath("");
+    	}
     	method.setImplementation(implementation);
     	method.setName(sourceNode.toString());
     	methodType.setResourceName(sourceNode.getResourceName());
