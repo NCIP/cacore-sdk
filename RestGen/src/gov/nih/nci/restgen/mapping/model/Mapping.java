@@ -14,7 +14,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlType(name = "Mapping", propOrder = {"name", "version", "description", "createdOn", "lastUpdatedOn", "components", "links", "resources"})
+@XmlType(name = "Mapping", propOrder = {"name", "version", "description", "createdOn", "lastUpdatedOn", "components", "links", "options", "resources"})
 @XmlRootElement(name="Mapping")
 @XmlSeeAlso({Component.class, Resource.class, Link.class})
 public class Mapping implements Serializable{
@@ -36,6 +36,7 @@ public class Mapping implements Serializable{
 	@XmlAttribute
 	private String description;
 
+	
 	@XmlElementRef()
 	private Options options;
 	

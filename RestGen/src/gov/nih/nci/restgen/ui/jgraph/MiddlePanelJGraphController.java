@@ -349,6 +349,7 @@ public class MiddlePanelJGraphController {
 			MappableNode targetNode = (MappableNode) trgtPort.getUserObject();
 			tgtPath = UIHelper.getPathStringForNode((DefaultTargetTreeNode) targetNode);
 			addLink(mappingData, srcComponentId, srcPath,tgtComponentId, tgtPath);
+			addOptions(mappingData);
 			MethodType method = addMethods((DefaultSourceTreeNode) sourceNode, (DefaultTargetTreeNode) targetNode);
 			System.out.println("Method Types..."+method.getMethod().getName());
 			methodList.add(method);
@@ -383,6 +384,28 @@ public class MiddlePanelJGraphController {
     }
 	
 	// added PV end
+	
+	@SuppressWarnings("static-access")
+	public void addOptions(Mapping m)
+	{
+		
+			if(m.getOptions()==null)
+			{
+				Options options = new Options();
+				if(getMappingPanel().getOptionsPath()!=null)
+				{
+					options.setOutputPath(getMappingPanel().getOptionsPath());
+				}
+				else
+				{
+					options.setOutputPath("");
+				}
+				m.setOptions(options);
+			}
+		
+		
+	}
+	
 	
 	
 	 /**

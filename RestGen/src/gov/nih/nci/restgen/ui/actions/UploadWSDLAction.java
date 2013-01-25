@@ -218,6 +218,12 @@ public void createTargetTree(File file) throws Exception
 		//GraphDropTransferHandler gDropHandler=new GraphDropTransferHandler();
 		//mainFrame.getMainFrame().getMappingMainPanel().getMiddlePanel().getGraph().setTransferHandler(gDropHandler);
 		tree.setDragEnabled(true);
+		int size = tree.getRowCount();
+			for (int i = 0; i < size+100; i++)
+			{
+				if (i<tree.getRowCount())
+					tree.expandRow(i);
+			}
         mainFrame.getMainFrame().getMappingMainPanel().getTargetScrollPane().setViewportView(tree);
         mainFrame.getMainFrame().getFrameMenu().getDefinedMenuItem("Save").setEnabled(true);
         mainFrame.getMainFrame().getMappingMainPanel().setTargetTree(tree);
