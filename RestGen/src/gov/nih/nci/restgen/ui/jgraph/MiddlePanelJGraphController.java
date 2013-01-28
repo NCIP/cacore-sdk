@@ -40,12 +40,15 @@ import javax.swing.tree.TreePath;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Hashtable;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * This is the controller class of Middle Panel JGraph implementation. The
@@ -78,94 +81,7 @@ public class MiddlePanelJGraphController {
 		mappingPanel = mappingPan;
 	}
 
-	/*public boolean addFunction(FunctionDef function, Point2D startPoint) {
-		if (startPoint == null) {// set to default value.
-			startPoint = new Point(25, 25);
-		}
-
-		ViewType functionViewtype = new ViewType();
-
-		functionViewtype.setX(BigInteger.valueOf((int) startPoint.getX()));
-		functionViewtype.setY(BigInteger.valueOf((int) startPoint.getY()));
-
-		FunctionBoxGraphCell functionBox = FunctionBoxUsageManager
-				.getInstance().createOneFunctionBoxGraphCell(function,
-						functionViewtype, mappingPanel.getRootContainer());
-		if (functionBox == null) {
-			return false;
-		}
-		if (functionBox.getInputElements().isEmpty())
-		{
-			functionBox.getViewMeta().setHight(BigInteger.valueOf(50));
-			functionBox.getViewMeta().setWidth(BigInteger.valueOf(100));
-		}
-		else
-		{
-			int viewH=functionBox.getInputElements().size()*20 +28;		
-			functionBox.getViewMeta().setHight(BigInteger.valueOf(viewH));
-		}
-		return addFunctionInstance(functionBox);
-	}
-
-	/*private boolean addFunctionInstance(FunctionBoxGraphCell functionInstance) {
-		FunctionDef function = functionInstance.getFunctionDef();
-		ViewType viewInfo = functionInstance.getViewMeta();
-		Point2D startPoint = new Point(viewInfo.getX().intValue() < 0 ? 25
-				: viewInfo.getX().intValue(),
-				viewInfo.getY().intValue() < 0 ? 25 : viewInfo.getY()
-						.intValue());
-		// Construct Vertex with Label
-		Dimension functionBoxDimension = new Dimension(viewInfo.getWidth()
-				.intValue(), viewInfo.getHight().intValue());
-		// Create a Map that holds the attributes for the functionBoxVertex
-		// functionBoxVertex.getAttributes().applyMap(createCellAttributes(startPoint,
-		// functionBoxDimension));
-		// Color backGroundColor = viewInfo.getColor() == null ?
-		// UIHelper.DEFAULT_VERTEX_COLOR : viewInfo.getColor();
-		Color backGroundColor = UIHelper.DEFAULT_VERTEX_COLOR;
-		Map funcBoxAttrbutes = UIHelper.createBounds(new AttributeMap(),
-				startPoint, functionBoxDimension, backGroundColor, true);
-		GraphConstants.setSizeable(funcBoxAttrbutes, true);
-		// Insert the functionBoxVertex (including child port and attributes)
-		Map portAttributes = new Hashtable();
-		ParentMap parentMap = new ParentMap();
-		int numOfInputs = functionInstance.getInputElements().size();
-		int numOfOutputs = functionInstance.getOutputElements().size();
-		int maximumPorts = Math.max(numOfInputs, numOfOutputs);
-		addFunctionGraphPorts(function, portAttributes, parentMap,
-				functionInstance, funcBoxAttrbutes, numOfInputs, UIHelper
-						.getDefaultFunctionalBoxInputOrientation(),
-				maximumPorts);
-		addFunctionGraphPorts(function, portAttributes, parentMap,
-				functionInstance, funcBoxAttrbutes, numOfOutputs, UIHelper
-						.getDefaultFunctionalBoxOutputOrientation(),
-				maximumPorts);
-		// Create a Map that holds the attributes for the Vertex
-		functionInstance.getAttributes().applyMap(funcBoxAttrbutes);
-		getMiddlePanel().getGraph().getGraphLayoutCache().insert(
-				functionInstance);
-		getMiddlePanel().getGraph().getGraphLayoutCache().insert(
-				functionInstance.getChildren().toArray(), portAttributes, null,
-				parentMap, null);
-		setGraphChanged(true);
-        
-        return true;
-		// EDIT does not work!
-		// graph.getGraphLayoutCache().edit(functionBoxVertex.getChildren().toArray(),
-		// portAttributes);
-		// graph.getGraphLayoutCache().edit(portAttributes);
-		// graph.getGraphLayoutCache().insert(new Object[]{functionBoxVertex},
-		// funcBoxAttrbutes, null, parentMap, null);
-		// Log.logInfo(this, "functionBoxVertex.getChildren().size(): " +
-		// functionBoxVertex.getChildren().size());
-		// this.getGraphLayoutCache().insert(functionBoxVertex.getChildren().toArray(),
-		// portAttributes, null, parentMap);
-		// following received java.lang.ClassCastException
-		// graph.getModel().insert(new Object[]{functionBoxVertex},
-		// funcBoxAttrbutes, null, null, null);
-		// graph.getModel().edit(portAttributes, null, null, null);
-	}*/
-
+	
     public class MethodType {
 
     	public Method method;
@@ -294,7 +210,7 @@ public class MiddlePanelJGraphController {
 	 *            may not be up-to-date;
 	 * @return mapping relation consolidated.
 	 */
-	public Mapping retrieveMappingData(boolean refresh) {
+	public Mapping retrieveMappingData(boolean refresh, String mappingName) {
 		if (!refresh)
 			return mappingData;
 		List<MethodType> methodList = new ArrayList();
@@ -302,6 +218,11 @@ public class MiddlePanelJGraphController {
 		if (mappingData==null)
 		{
 			mappingData = new Mapping();
+			mappingData.setName(mappingName);
+			mappingData.setVersion("1.0");
+			mappingData.setDescription(mappingName);
+			mappingData.setCreatedOn(Calendar.getInstance().getTime());
+			mappingData.setLastUpdatedOn(Calendar.getInstance().getTime());
 		}
 		
 // add source and destination components here PV start...
@@ -348,6 +269,8 @@ public class MiddlePanelJGraphController {
 			String tgtComponentId = "";
 			String tgtPath = "";
 			MappableNode targetNode = (MappableNode) trgtPort.getUserObject();
+			srcComponentId = ((DefaultSourceTreeNode) sourceNode).toString();
+			tgtComponentId = ((DefaultTargetTreeNode) targetNode).getOperationName();
 			tgtPath = UIHelper.getPathStringForNode((DefaultTargetTreeNode) targetNode);
 			addLink(mappingData, srcComponentId, srcPath,tgtComponentId, tgtPath);
 			addOptions(mappingData);

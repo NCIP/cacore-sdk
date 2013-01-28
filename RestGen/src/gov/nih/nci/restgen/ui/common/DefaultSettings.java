@@ -9,6 +9,7 @@
 
 package gov.nih.nci.restgen.ui.common;
 
+import gov.nih.nci.restgen.ui.mapping.MappingMainPanel;
 import gov.nih.nci.restgen.util.FileUtil;
 import gov.nih.nci.restgen.util.GeneralUtilities;
 import gov.nih.nci.restgen.util.SingleFileFilter;
@@ -374,7 +375,7 @@ public class DefaultSettings
                         int userChoice = JOptionPane.showConfirmDialog(parentComponent, msg, "Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                         if (userChoice == JOptionPane.YES_OPTION)
                         {
-                            break;
+                        	break;
                         }
                     }
                     else

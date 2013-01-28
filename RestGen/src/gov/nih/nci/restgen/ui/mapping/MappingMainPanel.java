@@ -145,7 +145,6 @@ public class MappingMainPanel extends JPanel implements ActionListener
 		MappingMainPanel.tTree = tTree;
 	}
 
-
 	private MappingTreeScrollPane sourceScrollPane = new MappingTreeScrollPane(MappingTreeScrollPane.DRAW_NODE_TO_RIGHT);
 	private MappingTreeScrollPane targetScrollPane = new MappingTreeScrollPane(MappingTreeScrollPane.DRAW_NODE_TO_LEFT);
 	private static MiddlePanelJGraphController graphController =null;
@@ -519,7 +518,7 @@ public class MappingMainPanel extends JPanel implements ActionListener
 	{
 
 		MiddlePanelJGraphController mappingManager = getGraphController();//.getMiddlePanel().getGraphController();
-		gov.nih.nci.restgen.mapping.model.Mapping mappingData = mappingManager.retrieveMappingData(true);
+		gov.nih.nci.restgen.mapping.model.Mapping mappingData = mappingManager.retrieveMappingData(true,persistentFile.getName());
 		
 		try {
 			//set relative path for source and target schema files.
@@ -861,6 +860,8 @@ public class MappingMainPanel extends JPanel implements ActionListener
 	    top.add(method5);
         
 	}
+
+
     
 }
 
