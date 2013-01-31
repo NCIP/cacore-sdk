@@ -73,6 +73,7 @@ public class MainFrameContainer
         
     }
 
+    
     public Frame getOwnerFrame()
     {
         if (mainFrame != null) return mainFrame;

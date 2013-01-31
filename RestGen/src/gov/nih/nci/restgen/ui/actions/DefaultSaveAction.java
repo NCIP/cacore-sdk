@@ -125,6 +125,7 @@ public class DefaultSaveAction extends OptionsAction
 			postActionPerformed(mappingMain);
 //			JOptionPane.showMessageDialog(viewerPanel.getParent(), "Mapping data has been saved successfully.", "Save Complete", JOptionPane.INFORMATION_MESSAGE);
 			mappingMain.setSaveFile(file);*/
+			mainFrame.getTabbedPane().setTitleAt(0,file.getName());
 			return true;
 		}
 		catch(Throwable e)

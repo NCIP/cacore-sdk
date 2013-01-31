@@ -25,6 +25,7 @@ import gov.nih.nci.restgen.core.Mapping.Components;
 import gov.nih.nci.restgen.core.Mapping.Links;
 import gov.nih.nci.restgen.ui.common.MappableNode;
 import gov.nih.nci.restgen.ui.common.UIHelper;
+import gov.nih.nci.restgen.ui.main.MainFrameContainer;
 import gov.nih.nci.restgen.ui.mapping.MappingMainPanel;
 import gov.nih.nci.restgen.ui.mapping.MappingMiddlePanel;
 import gov.nih.nci.restgen.ui.properties.DefaultPropertiesSwitchController;
@@ -663,6 +664,13 @@ public class MiddlePanelJGraphController {
 			sourceNode.setMapStatus(true);
 			targetNode.setMapStatus(true);
 			setGraphChanged(true);
+			// if save menu is disabled enable it!!
+			MainFrameContainer mainFrame = getMappingPanel().getMainFrame();
+			
+			if(!mainFrame.getMainMenuBar().getDefinedMenuItem("Save").isEnabled())
+			{
+				mainFrame.getMainMenuBar().getDefinedMenuItem("Save").setEnabled(true);
+			}
 		}
 
         return result;
@@ -746,71 +754,19 @@ public class MiddlePanelJGraphController {
 	}
 
 	/**
-	 * Called by MiddlePanelMarqueeHandler Insert a new Edge between source
-	 * function port to and target function port
-	 */
-	public boolean linkFunctionPortToFunctionPort(DefaultPort source,
-			DefaultPort target) {
-		if (!source.getEdges().isEmpty() || !target.getEdges().isEmpty()) {
-			StringBuffer msg = new StringBuffer();
-			if (!source.getEdges().isEmpty()) {
-				msg.append("This source port number is being used. Input again another port number.");
-			}
-			if (!target.getEdges().isEmpty()) {
-				if (msg.length() > 0) {
-					msg.append("\n");
-				}
-				msg.append("This target port number is being used. Input again another port number.");
-			}
-			JOptionPane.showMessageDialog(getMiddlePanel().getRootPane()
-					.getParent(), msg.toString(), "Mapping Error",
-					JOptionPane.ERROR_MESSAGE);
-			return false;
-		}
-		// Log.logInfo(this, getClass().getName() +
-		// " will link source and target port.");
-		// Construct Edge with no label
-		DefaultEdge edge = new MappingGraphLink();
-		edge.setSource(source);
-		edge.setTarget(target);
-		AttributeMap lineStyle = UIHelper.getDefaultUnmovableEdgeStyle(source);
-		if (getMiddlePanel().getGraph().getModel().acceptsSource(edge, source)
-				&& getMiddlePanel().getGraph().getModel().acceptsTarget(edge,
-						target)) {
-			// Create a Map that holds the attributes for the edge
-			edge.getAttributes().applyMap(lineStyle);
-			MappableNode sourceNode = (MappableNode) source;// getMappableNodeThroughPort(source);
-			MappableNode targetNode = (MappableNode) target;// getMappableNodeThroughPort(target);
-			if (sourceNode == null || targetNode == null) {
-				StringBuffer msg = new StringBuffer(
-						"Cannot find mappable source or target node.");
-				JOptionPane.showMessageDialog(getMiddlePanel().getRootPane()
-						.getParent(), msg.toString(), "Mapping Error",
-						JOptionPane.ERROR_MESSAGE);
-			}
-			// Insert the Edge and its Attributes
-			getMiddlePanel().getGraph().getGraphLayoutCache().insertEdge(edge,
-					source, target);
-			setGraphChanged(true);
-			return true;
-		} else {
-			List reasonList = ((MiddlePanelGraphModel) getMiddlePanel()
-					.getGraph().getModel()).getNotAcceptableReasonList();
-			JOptionPane.showMessageDialog(getMiddlePanel().getGraph()
-					.getRootPane().getParent(), reasonList
-					.toArray(new Object[0]), "Mapping Error",
-					JOptionPane.ERROR_MESSAGE);
-			return false;
-		}
-	}
-
-	/**
 	 * Handle the deletion of graph cells on the middle panel.
 	 */
 	public synchronized void deleteGraphLink() {
 		Object[] cells = getMiddlePanel().getGraph().getSelectionCells();
 		removeCells(cells, true);
 		setGraphChanged(true);
+		// if save menu is disabled enable it!!
+					MainFrameContainer mainFrame = getMappingPanel().getMainFrame();
+					
+					if(!mainFrame.getMainMenuBar().getDefinedMenuItem("Save").isEnabled())
+					{
+						mainFrame.getMainMenuBar().getDefinedMenuItem("Save").setEnabled(true);
+					}
 	}
 
 	/**
@@ -824,6 +780,12 @@ public class MiddlePanelJGraphController {
 		// call to remove all cells
 		removeCells(cells, false);
 		setGraphChanged(true);
+		// if save menu is disabled enable it!!
+		MainFrameContainer mainFrame = getMappingPanel().getMainFrame();
+		if(!mainFrame.getMainMenuBar().getDefinedMenuItem("Save").isEnabled());
+		{
+			mainFrame.getMainMenuBar().getDefinedMenuItem("Save").setEnabled(true);
+		}
 	}
 
 	public void removeCells(Object[] cells, boolean findAssociatedCells) {

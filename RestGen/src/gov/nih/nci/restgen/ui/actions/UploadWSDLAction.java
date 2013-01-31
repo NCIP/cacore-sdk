@@ -225,7 +225,6 @@ public void createTargetTree(File file) throws Exception
 					tree.expandRow(i);
 			}
         mainFrame.getMainFrame().getMappingMainPanel().getTargetScrollPane().setViewportView(tree);
-        mainFrame.getMainFrame().getFrameMenu().getDefinedMenuItem("Save").setEnabled(true);
         mainFrame.getMainFrame().getMappingMainPanel().setTargetTree(tree);
     /// end
     

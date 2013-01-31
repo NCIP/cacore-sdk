@@ -207,21 +207,8 @@ public class MiddlePanelMarqueeHandler extends BasicMarqueeHandler
 		//		System.out.println("mouseReleased(). :(x="+e.getX()+",y="+e.getY()+")" );
 		// If Valid Event, Current and First Port
 		JGraph graph =controller.getMiddlePanel().getGraph();
-		if (e != null && port != null && firstPort != null
-				&& firstPort != port)
-		{
-			if(isValidPort(port) && isValidPort(firstPort))
-			{
-				// Then Establish Connection
-				controller.linkFunctionPortToFunctionPort((DefaultPort) firstPort.getCell(), (DefaultPort) port.getCell());
-				e.consume();
-			}
-		}
-		else
-		{
-			graph.repaint();
-		}
-		// Reset Global Vars
+		graph.repaint();
+				// Reset Global Vars
 		firstPort = port = null;
 		startPoint = currentPoint = null;
 		// Call Superclass

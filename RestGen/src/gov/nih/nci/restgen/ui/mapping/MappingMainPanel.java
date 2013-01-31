@@ -87,7 +87,7 @@ public class MappingMainPanel extends JPanel implements ActionListener
 	private static final String SOURCE_TREE_FILE_DEFAULT_EXTENTION = ".xsd";
 	private static String optionsPath = "";
 	private static final String TARGET_TREE_FILE_DEFAULT_EXTENTION = ".xsd";
-	protected MainFrameContainer mainFrame = null;
+	private MainFrameContainer mainFrame = null;
     private File mapFile = null;
     private static File mappingSourceFile = null;
 	private static File mappingTargetFile = null;
@@ -138,6 +138,16 @@ public class MappingMainPanel extends JPanel implements ActionListener
 
 	public static void setOptionsPath(String optionsPath) {
 		MappingMainPanel.optionsPath = optionsPath;
+	}
+
+
+	public MainFrameContainer getMainFrame() {
+		return mainFrame;
+	}
+
+
+	public void setMainFrame(MainFrameContainer mainFrame) {
+		this.mainFrame = mainFrame;
 	}
 
 

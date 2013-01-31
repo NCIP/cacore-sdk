@@ -11,7 +11,6 @@ package gov.nih.nci.restgen.ui.actions;
 
 import gov.nih.nci.restgen.ui.common.ActionConstants;
 import gov.nih.nci.restgen.ui.common.DefaultSettings;
-import gov.nih.nci.restgen.ui.main.MainFrame;
 import gov.nih.nci.restgen.ui.main.MainFrameContainer;
 
 
@@ -22,7 +21,7 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 
 /**
- * Currently play as place holder to define the general look and feel of a "Save As..." action.
+ * Currently play as place holder to define the general look and feel of a "Options..." action.
  * Descendant class will provide concrete implementation of the action.
  *
  * @author Prakash Vinjamuri
