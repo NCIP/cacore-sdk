@@ -11,8 +11,6 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "Implementation")
 @XmlRootElement(name="Implementation")
 public class Implementation {
-	public final static String EJB="EJB";
-	public final static String SOAP_SERVICE="SOAP_SERVICE";
 	@XmlAttribute
 	private String type;
 	
@@ -26,35 +24,55 @@ public class Implementation {
 	private String path;
 	
 	@XmlAttribute
+	private String portName;
+	
+	@XmlAttribute
 	private String classpath;
 	
 	@XmlElementRef()
 	private Operation operation;
 	
+	
+	public String getPortName() {
+		return portName;
+	}
+	
+	public void setPortName(String portName) {
+		this.portName = portName;
+	}
+	
 	public String getType() {
 		return type;
 	}
+	
 	public void setType(String type) {
 		this.type = type;
 	}
+	
 	public String getName() {
 		return name;
 	}
+	
 	public void setName(String name) {
 		this.name = name;
 	}
+	
 	public String getClientType() {
 		return clientType;
 	}
+	
 	public void setClientType(String clientType) {
 		this.clientType = clientType;
 	}
+	
 	public String getPath() {
 		return path;
 	}
+	
 	public void setPath(String path) {
 		this.path = path;
 	}
+	
 	public String getClasspath() {
 		return classpath;
 	}

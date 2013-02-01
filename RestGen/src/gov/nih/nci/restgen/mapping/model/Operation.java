@@ -24,6 +24,15 @@ public class Operation {
 	@XmlElementRef()
 	private Output output;
 	
+	@XmlElementRef()
+	private String style;
+	
+	public String getStyle() {
+		return style;
+	}
+	public void setStyle(String style) {
+		this.style = style;
+	}
 	public List<Input> getInputs() {
 		return inputs;
 	}

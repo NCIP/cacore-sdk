@@ -45,7 +45,7 @@ public class MarshallTest{
 	  {
 		  //Create Mapping
 		  Mapping mapping = new Mapping();
-		  mapping.setName("example");
+		  mapping.setName("CustomerService");
 		  mapping.setVersion("1.0");
 		  mapping.setCreatedOn(new Date());
 		  mapping.setLastUpdatedOn(new Date());
@@ -95,15 +95,15 @@ public class MarshallTest{
 		  components.add(component2);
 		  
 		  Resource resource1 = new Resource();
-		  resource1.setName("Specimen");
+		  resource1.setName("CustomerService");
 		  List<Method> methods1 = new ArrayList<Method>();
 		  Method readMethod = new Method();
 		  readMethod.setName("read");
 		  Implementation impl1 = new Implementation();
-		  impl1.setName("SpecimenService");
+		  impl1.setName("CustomerServiceService");
 		  impl1.setType("SOAP");
 		  Operation operation1 = new Operation();
-		  operation1.setName("getSpecimen");
+		  operation1.setName("getCustomersByName");
 		  Output output = new Output();
 		  output.setType("Specimen");
 		  List<Input> inputs = new ArrayList<Input>();

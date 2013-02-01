@@ -141,6 +141,8 @@ public class JAXBUnmarshaller implements gov.nih.nci.restgen.mapping.Unmarshalle
                 InputSource inSrc = new InputSource(reader);
                 EntityResolver entityResolver = new EntityResolver() {
                 	public InputSource resolveEntity(String publicId, String systemId) {
+                		System.out.println("publicId "+publicId);
+                		System.out.println("systemId "+systemId);
                 		String xsdPath = null;
 
                 		if(systemId != null)

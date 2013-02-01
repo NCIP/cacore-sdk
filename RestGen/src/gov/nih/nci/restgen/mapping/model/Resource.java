@@ -18,9 +18,23 @@ public class Resource {
 	@XmlAttribute
 	private String name;
 	
+	@XmlAttribute
+	private String path;
+	
+	@XmlAttribute
+	private String pojoLocation;
+	
 	@XmlElementWrapper
 	@XmlElementRef()
 	private List<Method> methods;
+	
+	public String getPojoLocation() {
+		return pojoLocation;
+	}
+	
+	public void setPojoLocation(String pojoLocation) {
+		this.pojoLocation = pojoLocation;
+	}
 	
 	public String getName() {
 		return name;
@@ -33,6 +47,14 @@ public class Resource {
 	}
 	public void setMethods(List<Method> methods) {
 		this.methods = methods;
+	}
+	
+	
+	public String getPath() {
+		return path;
+	}
+	public void setPath(String path) {
+		this.path = path;
 	}
 	@Override
 	public int hashCode() {

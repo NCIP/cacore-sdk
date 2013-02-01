@@ -7,8 +7,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.JAXBException;
+import javax.xml.namespace.QName;
 
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
@@ -52,10 +54,6 @@ public class JAXBMarshaller implements gov.nih.nci.restgen.mapping.Marshaller {
 				throw new XMLUtilityException("Error:  Object supplied to the marshaller is null.  The marshalling process has been aborted.");
 			}
 
-			if (namespacePrefix == null || namespacePrefix.length() < 1){
-				throw new XMLUtilityException("Error: Namespace Prefix is required but has not been set");				
-			}
-			
 			if (useContextName) {
 				context = getJAXBContext();
 			}
@@ -76,8 +74,11 @@ public class JAXBMarshaller implements gov.nih.nci.restgen.mapping.Marshaller {
 				m.setProperty(Marshaller.JAXB_FRAGMENT, true);
 			}
 			
-	        String schemaLocation = namespacePrefix + object.getClass().getPackage().getName() + " " + object.getClass().getPackage().getName() + ".xsd";
-	        m.setProperty(Marshaller.JAXB_SCHEMA_LOCATION, schemaLocation);
+			if(namespacePrefix != null)
+			{
+				String schemaLocation = namespacePrefix + object.getClass().getPackage().getName() + " " + object.getClass().getPackage().getName() + ".xsd";
+				m.setProperty(Marshaller.JAXB_SCHEMA_LOCATION, schemaLocation);
+			}
 			m.marshal(object, writer);
 			//System.out.println(writer.toString());
 		} catch(JAXBException e) {
@@ -87,6 +88,47 @@ public class JAXBMarshaller implements gov.nih.nci.restgen.mapping.Marshaller {
 		}
 	}
 
+	public void toXML(JAXBElement element, Writer writer) throws XMLUtilityException {
+		JAXBContext context = null;
+		try {
+			if (element == null){
+				throw new XMLUtilityException("Error:  Object supplied to the marshaller is null.  The marshalling process has been aborted.");
+			}
+
+			if (useContextName) {
+				context = getJAXBContext();
+			}
+			
+			if (context == null){
+				context = getJAXBContext(element.getValue().getClass().getPackage().getName());
+				
+				if (context == null){
+					throw new XMLUtilityException("Error:  Unable to determine the JAXB context using the supplied object's class package name.");
+				}
+			}
+			
+			Marshaller m = context.createMarshaller();
+			m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+			if (includeXmlDeclaration){
+				m.setProperty(Marshaller.JAXB_FRAGMENT, false);
+			} else {
+				m.setProperty(Marshaller.JAXB_FRAGMENT, true);
+			}
+			
+			if(namespacePrefix != null)
+			{
+				String schemaLocation = namespacePrefix + element.getValue().getClass().getPackage().getName() + " " + object.getClass().getPackage().getName() + ".xsd";
+				m.setProperty(Marshaller.JAXB_SCHEMA_LOCATION, schemaLocation);
+			}
+			m.marshal(element.getValue(), writer);
+			//System.out.println(writer.toString());
+		} catch(JAXBException e) {
+			throw new XMLUtilityException(e.getMessage(), e);
+		} catch(Exception e) {
+			throw new XMLUtilityException(e.getMessage(), e);
+		}
+	}
+	
 	public String toXML(Object object) throws XMLUtilityException {
 		StringWriter strWriter = new StringWriter();
 		toXML(object, strWriter);
