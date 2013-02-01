@@ -30,6 +30,7 @@ public interface ActionConstants
 	String OPEN_MAPPING = "Open Mapping";
 	String SAVE = "Save";
 	String OPTIONS = "Options";
+	String CLOSE = "Close";
 	String EXIT = "Exit";
 	String HELP_TOPIC = "HELP_TOPIC";
 

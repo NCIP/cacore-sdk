@@ -24,7 +24,7 @@ public class Operation {
 	@XmlElementRef()
 	private Output output;
 	
-	@XmlElementRef()
+	@XmlAttribute
 	private String style;
 	
 	public String getStyle() {

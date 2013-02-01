@@ -158,6 +158,7 @@ public class NewPOJOFileAction extends AbstractContextAction
         		classList.add(file.getName());
         		mainFrame.getMainFrame().getMappingMainPanel().setPOJOClassList(classList);
              DefaultSourceTreeNode top = new DefaultSourceTreeNode(file.getName());
+             top.setResourceLocation(javaClass.getSourceFileName());
              createNodes(top,file.getName());
              tree = new JTree(top);
              TreeSelectionHandler treeSelectionHanderl=new TreeSelectionHandler(mainFrame.getMainFrame().getMappingMainPanel().getGraphController());
@@ -178,6 +179,10 @@ public class NewPOJOFileAction extends AbstractContextAction
  			}
              mainFrame.getMainFrame().getMappingMainPanel().getSourceScrollPane().setViewportView(tree);
              mainFrame.getMainFrame().getMappingMainPanel().setSourceTree(tree);
+            if(!mainFrame.getMainFrame().getFrameMenu().getDefinedMenuItem("Close").isEnabled())
+   			{
+            	 mainFrame.getMainFrame().getFrameMenu().getDefinedMenuItem("Close").setEnabled(true);
+   			}
              
          /// end
          
@@ -186,29 +191,33 @@ public class NewPOJOFileAction extends AbstractContextAction
 	
 	
 	
-	private void createNodes(DefaultMutableTreeNode top, String resourceName) {
+	private void createNodes(DefaultSourceTreeNode top, String resourceName) {
 		
-	    DefaultSourceTreeNode Createclass1 = null;
-	    DefaultSourceTreeNode Updateclass1 = null;
-	    DefaultSourceTreeNode Readclass1 = null;
-	    DefaultSourceTreeNode Deleteclass1 = null;
+	    DefaultSourceTreeNode CreateClass = null;
+	    DefaultSourceTreeNode Updateclass = null;
+	    DefaultSourceTreeNode ReadClass = null;
+	    DefaultSourceTreeNode DeleteClass = null;
 	    
-	    Createclass1 = new DefaultSourceTreeNode("Create");
-	    Createclass1.setResourceName(resourceName);
-	    top.add(Createclass1);
+	    CreateClass = new DefaultSourceTreeNode("Create");
+	    CreateClass.setResourceName(resourceName);
+	    CreateClass.setResourceLocation(top.getResourceLocation());
+	    top.add(CreateClass);
 	    
-	    Updateclass1 = new DefaultSourceTreeNode("Update");
-	    Updateclass1.setResourceName(resourceName);
-	    top.add(Updateclass1);
+	    Updateclass = new DefaultSourceTreeNode("Update");
+	    Updateclass.setResourceName(resourceName);
+	    top.add(Updateclass);
 	    
-	    Readclass1 = new DefaultSourceTreeNode("Read");
-	    Readclass1.setResourceName(resourceName);
-	    top.add(Readclass1);
+	    ReadClass = new DefaultSourceTreeNode("Read");
+	    ReadClass.setResourceName(resourceName);
+	    top.add(ReadClass);
 	    
-	    Deleteclass1 = new DefaultSourceTreeNode("Delete");
-	    Deleteclass1.setResourceName(resourceName);
-	    top.add(Deleteclass1);
+	    DeleteClass = new DefaultSourceTreeNode("Delete");
+	    DeleteClass.setResourceName(resourceName);
+	    top.add(DeleteClass);
         
+	    
+	    	    
+	    
 	}
 
 

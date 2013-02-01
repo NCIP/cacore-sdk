@@ -200,8 +200,6 @@ public void createTargetTree(File file) throws Exception
 		tree.setTransferHandler(new TreeTransferHandler(mainFrame.getMainFrame().getMappingMainPanel()));
 		tree.setDropMode(DropMode.ON);
 		tree.setDragEnabled(true);
-		//GraphDropTransferHandler gDropHandler=new GraphDropTransferHandler();
-		//mainFrame.getMainFrame().getMappingMainPanel().getMiddlePanel().getGraph().setTransferHandler(gDropHandler);
 		tree.setDragEnabled(true);
 		int size = tree.getRowCount();
 		for (int i = 0; i < size+100; i++)
@@ -211,6 +209,10 @@ public void createTargetTree(File file) throws Exception
 		}
         mainFrame.getMainFrame().getMappingMainPanel().getTargetScrollPane().setViewportView(tree);
         mainFrame.getMainFrame().getMappingMainPanel().setTargetTree(tree);
+        if(!mainFrame.getMainFrame().getFrameMenu().getDefinedMenuItem("Close").isEnabled())
+		{
+        	 mainFrame.getMainFrame().getFrameMenu().getDefinedMenuItem("Close").setEnabled(true);
+		}
     /// end
     
 

@@ -7,28 +7,14 @@
  */
 package gov.nih.nci.restgen.ui.mapping;
 
-
-
-
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URI;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Hashtable;
 import java.util.List;
-import java.util.Map;
-import java.applet.Applet;
 
 import javax.swing.*;
-import javax.swing.event.TreeExpansionListener;
-import javax.swing.tree.TreeNode;
-import javax.swing.tree.TreeSelectionModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
@@ -39,11 +25,7 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.namespace.QName;
 import javax.xml.transform.stream.StreamSource;
 
-import gov.nih.nci.restgen.core.AttributeMeta;
-import gov.nih.nci.restgen.core.Component;
 import gov.nih.nci.restgen.core.ComponentType;
-import gov.nih.nci.restgen.core.ElementMeta;
-import gov.nih.nci.restgen.core.Mapping;
 import gov.nih.nci.restgen.ui.actions.NewPOJOFileAction;
 import gov.nih.nci.restgen.ui.actions.OpenPOJOJarAction;
 import gov.nih.nci.restgen.ui.actions.UploadEJBJarAction;
@@ -55,7 +37,6 @@ import gov.nih.nci.restgen.ui.dnd.TreeTransferHandler;
 import gov.nih.nci.restgen.ui.jgraph.MiddlePanelJGraphController;
 import gov.nih.nci.restgen.ui.jgraph.MiddlePanelMarqueeHandler;
 import gov.nih.nci.restgen.ui.main.MainFrameContainer;
-import gov.nih.nci.restgen.ui.properties.DefaultPropertiesPage;
 import gov.nih.nci.restgen.ui.tree.DefaultSourceTreeNode;
 import gov.nih.nci.restgen.ui.tree.DefaultTargetTreeNode;
 import gov.nih.nci.restgen.ui.tree.TreeMouseAdapter;
@@ -87,7 +68,7 @@ public class MappingMainPanel extends JPanel implements ActionListener
 	private static final String SOURCE_TREE_FILE_DEFAULT_EXTENTION = ".xsd";
 	private static String optionsPath = "";
 	private static final String TARGET_TREE_FILE_DEFAULT_EXTENTION = ".xsd";
-	private MainFrameContainer mainFrame = null;
+	private static MainFrameContainer mainFrame = null;
     private File mapFile = null;
     private static File mappingSourceFile = null;
 	private static File mappingTargetFile = null;
@@ -141,13 +122,13 @@ public class MappingMainPanel extends JPanel implements ActionListener
 	}
 
 
-	public MainFrameContainer getMainFrame() {
+	public static MainFrameContainer getMainFrame() {
 		return mainFrame;
 	}
 
 
-	public void setMainFrame(MainFrameContainer mainFrame) {
-		this.mainFrame = mainFrame;
+	public static void setMainFrame(MainFrameContainer mainFrame) {
+		mainFrame = mainFrame;
 	}
 
 
@@ -175,6 +156,10 @@ public class MappingMainPanel extends JPanel implements ActionListener
 
 
 	public MappingTreeScrollPane getTargetScrollPane() {
+		if(targetScrollPane==null)
+		{
+			targetScrollPane = new MappingTreeScrollPane(MappingTreeScrollPane.DRAW_NODE_TO_RIGHT);
+		}
 		return targetScrollPane;
 	}
 
@@ -485,6 +470,10 @@ public class MappingMainPanel extends JPanel implements ActionListener
 	
 
 	public MappingTreeScrollPane getSourceScrollPane() {
+		if(sourceScrollPane==null)
+		{
+			sourceScrollPane = new MappingTreeScrollPane(MappingTreeScrollPane.DRAW_NODE_TO_RIGHT);
+		}
 		return sourceScrollPane;
 	}
 

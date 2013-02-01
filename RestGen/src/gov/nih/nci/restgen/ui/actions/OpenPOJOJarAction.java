@@ -110,6 +110,10 @@ public class OpenPOJOJarAction extends AbstractContextAction
 	
 		// open POJO here PV
 			File file = null;
+			if(getErrorString()!=null)
+			{
+				setErrorString(null);
+			}
             file = DefaultSettings.getUserInputOfFileFromGUI(ownerFrame.getOwnerFrame(), //FileUtil.getUIWorkingDirectoryPath(),
                     SOURCE_TREE_FILE_DEFAULT_EXTENTION, OPEN_DIALOG_TITLE_FOR_DEFAULT_SOURCE_FILE, false, false);
             if ((file == null)||(!file.exists())||(!file.isFile())) return true;
@@ -185,6 +189,8 @@ public class OpenPOJOJarAction extends AbstractContextAction
           /// form the tree here PV...start
           
               DefaultSourceTreeNode top = new DefaultSourceTreeNode(file.getName());
+              top.setResourceLocation(file.getPath());
+              top.setResourcePathLocation("");
               createNodes(top,classList);
               tree = new JTree(top);
               TreeSelectionHandler treeSelectionHanderl=new TreeSelectionHandler(ownerFrame.getMainFrame().getMappingMainPanel().getGraphController());
@@ -202,6 +208,10 @@ public class OpenPOJOJarAction extends AbstractContextAction
   			}
   			ownerFrame.getMainFrame().getMappingMainPanel().getSourceScrollPane().setViewportView(tree);
   			ownerFrame.getMainFrame().getMappingMainPanel().setSourceTree(tree);
+  			if(!ownerFrame.getMainFrame().getFrameMenu().getDefinedMenuItem("Close").isEnabled())
+  			{
+  				ownerFrame.getMainFrame().getFrameMenu().getDefinedMenuItem("Close").setEnabled(true);
+  			}
               
           /// end
           
@@ -231,19 +241,28 @@ public class OpenPOJOJarAction extends AbstractContextAction
 	    	String resourceName = (String)it.next();
 	    	DefaultSourceTreeNode element = new DefaultSourceTreeNode(resourceName);
 	    	Createclass = new DefaultSourceTreeNode("Create");
+	    	
+	    	Createclass.setResourceLocation(top.getResourceLocation());
 	    	Createclass.setResourceName(resourceName);
+	    	Createclass.setResourcePathLocation(top.getResourcePathLocation());
 	    	element.add(Createclass);
 	    
 	    	Updateclass = new DefaultSourceTreeNode("Update");
+	    	Updateclass.setResourceLocation(top.getResourceLocation());
 	    	Updateclass.setResourceName(resourceName);
+	    	Updateclass.setResourcePathLocation(top.getResourcePathLocation());
 	    	element.add(Updateclass);
 	    
 	    	Readclass = new DefaultSourceTreeNode("Read");
+	    	Readclass.setResourceLocation(top.getResourceLocation());
 	    	Readclass.setResourceName(resourceName);
+	    	Readclass.setResourcePathLocation(top.getResourcePathLocation());
 	    	element.add(Readclass);
 	    
 	    	Deleteclass = new DefaultSourceTreeNode("Delete");
+	    	Deleteclass.setResourceLocation(top.getResourceLocation());
 	    	Deleteclass.setResourceName(resourceName);
+	    	Deleteclass.setResourcePathLocation(top.getResourcePathLocation());
 	    	element.add(Deleteclass);
 	    	
 	    	top.add(element);

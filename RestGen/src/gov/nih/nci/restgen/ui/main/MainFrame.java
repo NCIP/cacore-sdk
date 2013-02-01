@@ -117,7 +117,7 @@ public class MainFrame extends JFrame
 
 			// added PV start
 			
-			instanceContainer.addNewTab(getMappingMainPanel(), ".map");
+			instanceContainer.addNewTab(getMappingMainPanel(), ".xml");
 			// added PV end
 			
 		} catch (Throwable e) {
@@ -184,9 +184,8 @@ public class MainFrame extends JFrame
 	 * @see gov.nih.nci.caCore SDK.ui.main.AbstractMainFrame#closeTab()
 	 */
 	public void closeTab() {
-		Component comp = tabbedPane.getSelectedComponent();
-		tabbedPane.remove(comp);
-		if (tabbedPane.getTabCount() == 0) {//reset if not tab at all.
+		
+		if (tabbedPane.getTabCount() > 0) {//reset if not tab at all.
 			centerPanel.removeAll();
 			//ImageIcon imgIcon = new ImageIcon(DefaultSettings.getImage("default_scr.gif"));
 			JLabel baseScreenJLabel = new JLabel("");
@@ -195,12 +194,6 @@ public class MainFrame extends JFrame
 			centerPanel.setLayout(new FlowLayout(FlowLayout.LEADING));
 		}
 
-		/* PV commented if( comp != null ){
-			tabMap.remove(comp.getClass());
-			if (comp instanceof ContextManagerClient) {
-				ContextManager.getContextManager().getContextFileManager().removeFileUsageListener((ContextManagerClient) comp);
-			}
-		}*/
 	}
 	/**
 	 * Only accessible by the same package so as to
@@ -263,14 +256,13 @@ public class MainFrame extends JFrame
 
 	public static void main(String[] args)
 	{
-		//Preferences.loadDefaults();
 
         try
 		{
 			try
 			{
                 String os = System.getProperty("os.name");
-                System.out.println("Running restful wrapper on " + os);
+             
                 if (os.toLowerCase().startsWith("windows"))
                     UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
                 else

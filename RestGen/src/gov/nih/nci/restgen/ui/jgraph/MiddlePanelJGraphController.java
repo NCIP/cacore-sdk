@@ -23,6 +23,7 @@ import gov.nih.nci.restgen.core.LinkpointType;
 import gov.nih.nci.restgen.mapping.model.*;
 import gov.nih.nci.restgen.core.Mapping.Components;
 import gov.nih.nci.restgen.core.Mapping.Links;
+import gov.nih.nci.restgen.ui.actions.UploadWSDLAction;
 import gov.nih.nci.restgen.ui.common.MappableNode;
 import gov.nih.nci.restgen.ui.common.UIHelper;
 import gov.nih.nci.restgen.ui.main.MainFrameContainer;
@@ -99,6 +100,21 @@ public class MiddlePanelJGraphController {
 			this.resourceName = resourceName;
 		}
 		public String resourceName;
+		public String resourcePath;
+		public String resourceLocation;
+		
+		public String getResourcePath() {
+			return resourcePath;
+		}
+		public void setResourcePath(String resourcePath) {
+			this.resourcePath = resourcePath;
+		}
+		public String getResourceLocation() {
+			return resourceLocation;
+		}
+		public void setResourceLocation(String resourceLocation) {
+			this.resourceLocation = resourceLocation;
+		}
     	
     }
 
@@ -130,6 +146,10 @@ public class MiddlePanelJGraphController {
 			// System.out.println("To figure out the value via scroll bar positions.");
 			// find the Y coordinate of the node. For example : 300
 			TreePath tp = new TreePath(treeNode.getPath());
+			if((JTree) treeScrollPane.getViewport().getView()==null)
+			{
+				return 0;
+			}
 			JTree tree = ((JTree) treeScrollPane.getViewport().getView());
 			int row = tree.getRowForPath(tp);
 			Rectangle pathBounds = tree.getPathBounds(tp);
@@ -214,6 +234,10 @@ public class MiddlePanelJGraphController {
 	public Mapping retrieveMappingData(boolean refresh, String mappingName) {
 		if (!refresh)
 			return mappingData;
+		if(mappingData!=null)
+		{
+			mappingData= null;
+		}
 		List<MethodType> methodList = new ArrayList();
 		// clear out the data before adding.
 		if (mappingData==null)
@@ -324,6 +348,20 @@ public class MiddlePanelJGraphController {
 				{
 					options.setOutputPath("");
 				}
+				if(UploadWSDLAction.getServiceEndPoint()!=null)
+				{
+					options.setWsdlLocation(UploadWSDLAction.getServiceEndPoint());
+				}
+				
+				if(MappingMainPanel.getTargetFileType().equals("EJB"))
+				{
+					options.setWrapperType(Options.EJB);
+				}
+				else
+				{
+					options.setWrapperType(Options.SOAP_SERVICE);
+				}
+				
 				m.setOptions(options);
 			}
 		
@@ -382,6 +420,8 @@ public class MiddlePanelJGraphController {
     		{
     			Resource rsc = (Resource) resourceList.get(i);
     			System.out.println("resourcename and method type ..."+mtype.getResourceName()+"  "+rsc.getName());
+    			rsc.setPath(mtype.getResourceLocation());
+    			rsc.setPojoLocation(mtype.getResourcePath());
     			if(mtype.getResourceName().equals(rsc.getName()))
     			{
     			 // add the methods here
@@ -416,6 +456,15 @@ public class MiddlePanelJGraphController {
     public MethodType addMethods(DefaultSourceTreeNode sourceNode, DefaultTargetTreeNode targetNode, String path)
     {
     	
+    	/*
+    	 * 
+    	 * 	•Create = PUT
+			•Retrieve = GET
+			•Update = POST
+			•Delete = DELETE
+
+    	 * 
+    	 */
     	
     	MethodType methodType = new MethodType();
     	Method method = new Method();
@@ -458,7 +507,9 @@ public class MiddlePanelJGraphController {
     	{
     		operation.setOutput(output);
     	}
+    	
     	operation.setName(targetNode.getOperationName());
+    	operation.setStyle(targetNode.getOperationStyle());
     	implementation.setOperation(operation);
     	implementation.setType(targetNode.getImplementationType());
     	if(targetNode.getImplementationType()=="SOAP")
@@ -482,8 +533,26 @@ public class MiddlePanelJGraphController {
     		implementation.setPath("");
     	}
     	method.setImplementation(implementation);
-    	method.setName(sourceNode.toString());
+    	if(sourceNode.toString().equals("Create"))
+    	{
+    		method.setName(Method.PUT);
+    	}
+    	else if (sourceNode.toString().equals("Update"))
+    	{
+    		method.setName(Method.POST);
+    	}
+    	else if (sourceNode.toString().equals("Retrieve"))
+    	{
+    		method.setName(Method.GET);
+    	}
+    	else
+    	{
+    		method.setName(Method.DELETE);
+    	}
+    	method.setPathName(((DefaultSourceTreeNode) sourceNode).toString());
     	methodType.setResourceName(sourceNode.getResourceName());
+    	methodType.setResourcePath(sourceNode.getResourceLocation());
+    	methodType.setResourceLocation(sourceNode.getResourcePathLocation());
     	methodType.setMethod(method);
     	return methodType;
     	

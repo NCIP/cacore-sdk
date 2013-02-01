@@ -29,6 +29,8 @@ public class DefaultTargetTreeNode extends DefaultMappableTreeNode
 	String outputType = "";//output for the operation
 	String EJBName = ""; // EJB bean name
 	String classPath = ""; // Classpath
+	String operationStyle = ""; // SOAP operation style
+	String portName = ""; // SOAP port name
 	public DefaultTargetTreeNode(Object userObject, boolean allowsChildren)
 	{
 		super(userObject, allowsChildren);
@@ -109,6 +111,22 @@ public class DefaultTargetTreeNode extends DefaultMappableTreeNode
 
 	public void setOutputType(String outputType) {
 		this.outputType = outputType;
+	}
+
+	public String getOperationStyle() {
+		return operationStyle;
+	}
+
+	public void setOperationStyle(String operationStyle) {
+		this.operationStyle = operationStyle;
+	}
+
+	public String getPortName() {
+		return portName;
+	}
+
+	public void setPortName(String portName) {
+		this.portName = portName;
 	}
 }
 

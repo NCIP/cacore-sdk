@@ -16,18 +16,30 @@ import gov.nih.nci.restgen.ui.main.MainFrameContainer;
 import gov.nih.nci.restgen.ui.tree.DefaultTargetTreeNode;
 import gov.nih.nci.restgen.ui.tree.TreeSelectionHandler;
 import org.apache.cxf.helpers.CastUtils;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import com.predic8.schema.Element;
 import com.predic8.wsdl.*;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+
 
 import javax.swing.*;
-import javax.xml.namespace.QName;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -55,10 +67,39 @@ public class UploadWSDLAction extends AbstractContextAction
 	private static final int REQUESTTIMEOUT=400000;
 	private JTree tree;
 	private String serviceName = "";
-	private String serviceEndPoint = "";
+	private static String serviceEndPoint = "";
     //hotkey//private static final KeyStroke ACCELERATOR_KEY_STROKE = KeyStroke.getKeyStroke(KeyEvent.VK_F4, Event.ALT_MASK, false);
 
+	private class Operation {
+		 
+		 private String name;
+		 private String style;
+		 private String portName;
+		public String getName() {
+			return name;
+		}
+		public void setName(String name) {
+			this.name = name;
+		}
+		public String getStyle() {
+			return style;
+		}
+		public void setStyle(String style) {
+			this.style = style;
+		}
+		public String getPortName() {
+			return portName;
+		}
+		public void setPortName(String portName) {
+			this.portName = portName;
+		}
+		 
+	 }
+	
+	
     private MainFrameContainer mainFrame;
+    
+    
 
     /**
      * Defines an <code>Action</code> object with a default
@@ -100,14 +141,13 @@ public class UploadWSDLAction extends AbstractContextAction
         //do not know how to set the icon location name, or just do not matter.
     }
 
-    public String getServiceEndPoint() {
+    public static String getServiceEndPoint() {
 		return serviceEndPoint;
 	}
 
-	public void setServiceEndPoint(String serviceEndPoint) {
-		this.serviceEndPoint = serviceEndPoint;
+	public static void setServiceEndPoint(String serviceEndPoint) {
+		serviceEndPoint = serviceEndPoint;
 	}
-
 	/**
      * The abstract function that descendant classes must be overridden to provide customsized handling.
      *
@@ -136,6 +176,7 @@ public class UploadWSDLAction extends AbstractContextAction
 
     }
 
+@SuppressWarnings("deprecation")
 public void createTargetTree(File file) throws Exception
 {
 	
@@ -143,25 +184,37 @@ public void createTargetTree(File file) throws Exception
     {
     // Display WSDL details here once the WSDL file has been selected!!
     mainFrame.getMainFrame().getMappingMainPanel().getTargetLocationArea().setBorder(BorderFactory.createTitledBorder("SOAP Webservice"));
+    // parse and keep the file in XML
+    InputStream is = new FileInputStream(file);
+	DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+	DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+	Document doc = dBuilder.parse(is);
+	doc.getDocumentElement().normalize();
+	//
    //PV Validate WSDL file here
     WSDLParser parser = new WSDLParser();
     Definitions defs = parser.parse(file.getPath());
-    ArrayList<String> operationsList = new ArrayList<String>();
+    ArrayList<Operation> operationsList = new ArrayList<Operation>();
     ArrayList<String> InputTypes = new ArrayList<String>();
     ArrayList<String> OutputTypes = new ArrayList<String>();
     
-  
     for (PortType pt : defs.getPortTypes())
     {       
+    	
     	System.out.println(pt.getName());
-    	for (Operation op : pt.getOperations()) {
+    	
+    	for (com.predic8.wsdl.Operation op : pt.getOperations()) {
     			System.out.println(" -" + op.getName());
     			String inputType = "";
     			String outputType = "";
-    			operationsList.add(op.getName());
+    			String style = getSOAPOperationStyle(doc,op.getName());
+    			Operation opObject = new Operation();
+    			opObject.setPortName(pt.getName());
+    			opObject.setName(op.getName());
+    			opObject.setStyle(style);
+    			operationsList.add(opObject);
     			Input input = op.getInput();
-    			
-                if (input != null && input.getMessage() != null) {
+    			if (input != null && input.getMessage() != null) {
                     Collection<Part> parts = CastUtils.cast(input.getMessage().getParts());
                     for (Part part : parts) {
                         if (part.getElement() != null || !"".equals(part.getElement())) {
@@ -190,14 +243,17 @@ public void createTargetTree(File file) throws Exception
 	for (Service svc : services)
 	{
 		serviceName = svc.getName();
+		
 		for (Port port: svc.getPorts())
 		{
+			
 			serviceEndPoint= port.getAddress().getLocation();
 			if(!ping(serviceEndPoint,REQUESTTIMEOUT))
 			{
 				throw new Exception("Request timed out WSDL end point invalid");
 			}
 			System.out.println("SOAP Endpoint : "  + port.getAddress().getLocation());
+			
 		}
 	}
 	setServiceName(serviceName);
@@ -226,6 +282,10 @@ public void createTargetTree(File file) throws Exception
 			}
         mainFrame.getMainFrame().getMappingMainPanel().getTargetScrollPane().setViewportView(tree);
         mainFrame.getMainFrame().getMappingMainPanel().setTargetTree(tree);
+        if(!mainFrame.getMainFrame().getFrameMenu().getDefinedMenuItem("Close").isEnabled())
+		{
+        	 mainFrame.getMainFrame().getFrameMenu().getDefinedMenuItem("Close").setEnabled(true);
+		}
     /// end
     
     }
@@ -246,21 +306,51 @@ public void createTargetTree(File file) throws Exception
 }
     
     
-private void createNodes(DefaultTargetTreeNode top,ArrayList<String> list, ArrayList<String> InputType, ArrayList<String> OutputType ) {
+private String getSOAPOperationStyle(org.w3c.dom.Document doc, String operationName) {
+	// TODO Auto-generated method stub
+	String style = "";
+	org.w3c.dom.NodeList listOfOperations = doc.getElementsByTagName("operation");
+    
+    for(int s=0; s<listOfOperations.getLength() ; s++){
+    	org.w3c.dom.Node nNode = listOfOperations.item(s);
+    		
+    	   
+ 		   if (nNode.getNodeType() == Node.ELEMENT_NODE && nNode.getNodeName().equals(operationName)) {
+
+ 			  org.w3c.dom.Element firstSessionElement = ( org.w3c.dom.Element)nNode;
+    		NodeList soapOperationsList = firstSessionElement.getElementsByTagName("soap:operation");
+    		if(soapOperationsList != null && soapOperationsList.getLength() > 0) {
+    			for(int i=0; i<soapOperationsList.getLength() ; i++){
+    				org.w3c.dom.Element el = (org.w3c.dom.Element)soapOperationsList.item(i);
+    				style = el.getAttribute("style");
+    			System.out.println("style value......>>>>>"+el.getAttribute("style"));
+    			}
+    		}
+    		break;
+ 		   }
+    }
+    
+    return style;
+}
+
+private void createNodes(DefaultTargetTreeNode top,ArrayList<Operation> list, ArrayList<String> InputType, ArrayList<String> OutputType ) {
 		
-	    Iterator<String> it = list.iterator();
+	    Iterator<Operation> it = list.iterator();
 	    Iterator<String> inputList = InputType.iterator();
 	    Iterator<String> outputList = OutputType.iterator();
 	    while(it.hasNext())
 	    {
-	    	String operationName = (String)it.next();
+	    	Operation op = (Operation)it.next();
+	    	String operationName = op.getName();
 	    	DefaultTargetTreeNode childElement = new DefaultTargetTreeNode(operationName);
 	    	childElement.setOperationName(operationName);
 	    	childElement.setInputType((String)inputList.next());
 	    	childElement.setOutputType((String)outputList.next());
 	    	childElement.setServiceName(getServiceName());
 	    	childElement.setEndPoint(getServiceEndPoint());
+	    	childElement.setOperationStyle(op.getStyle());
 	    	childElement.setImplementationType("SOAP");
+	    	childElement.setPortName(op.getPortName());
 	    	top.add(childElement);
 	    }
 	    

@@ -12,6 +12,7 @@ package gov.nih.nci.restgen.ui.main;
 
 import gov.nih.nci.restgen.ui.actions.AboutViewAction;
 import gov.nih.nci.restgen.ui.actions.AbstractContextAction;
+import gov.nih.nci.restgen.ui.actions.CloseAction;
 import gov.nih.nci.restgen.ui.actions.DefaultExitAction;
 import gov.nih.nci.restgen.ui.actions.DefaultSaveAction;
 import gov.nih.nci.restgen.ui.actions.GenerateRESTfulResourceAction;
@@ -177,6 +178,19 @@ public class MainMenuBar extends JMenuBar
         menuItemMap.put(ActionConstants.OPTIONS, optionsMenuItem);
         fileMenu.add(optionsMenuItem);
         fileMenu.addSeparator();
+        
+        // close action item
+        
+        CloseAction closeAction = new CloseAction(mainFrame);
+        JMenuItem closeMenuItem = new JMenuItem(closeAction);
+        actionMap.put(ActionConstants.CLOSE, closeAction);
+        menuItemMap.put(ActionConstants.CLOSE, closeMenuItem);
+        fileMenu.add(closeMenuItem);
+        fileMenu.addSeparator();
+        closeMenuItem.setEnabled(false);
+        
+        
+        
         
         DefaultExitAction exitAction = new DefaultExitAction(mainFrame);//.getAssociatedUIComponent());
         exitMenuItem = new JMenuItem(exitAction);
