@@ -11,6 +11,10 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "Implementation")
 @XmlRootElement(name="Implementation")
 public class Implementation {
+	
+	public static final String EJB_LOCAL = "EJB_LOCAL";
+	public static final String EJB_REMOTE = "EJB_REMOTE";
+	
 	@XmlAttribute
 	private String type;
 	
@@ -27,11 +31,29 @@ public class Implementation {
 	private String portName;
 	
 	@XmlAttribute
-	private String classpath;
+	private String jndiProperties;
+	
+	@XmlAttribute
+	private String jndiName; 
 	
 	@XmlElementRef()
 	private Operation operation;
-	
+
+	public String getJndiProperties() {
+		return jndiProperties;
+	}
+
+	public void setJndiProperties(String jndiProperties) {
+		this.jndiProperties = jndiProperties;
+	}
+
+	public String getJndiName() {
+		return jndiName;
+	}
+
+	public void setJndiName(String jndiName) {
+		this.jndiName = jndiName;
+	}
 	
 	public String getPortName() {
 		return portName;
@@ -73,33 +95,34 @@ public class Implementation {
 		this.path = path;
 	}
 	
-	public String getClasspath() {
-		return classpath;
-	}
-	public void setClasspath(String classpath) {
-		this.classpath = classpath;
-	}
 	public Operation getOperation() {
 		return operation;
 	}
+
 	public void setOperation(Operation operation) {
 		this.operation = operation;
 	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
-				+ ((classpath == null) ? 0 : classpath.hashCode());
-		result = prime * result
 				+ ((clientType == null) ? 0 : clientType.hashCode());
+		result = prime * result
+				+ ((jndiName == null) ? 0 : jndiName.hashCode());
+		result = prime * result
+				+ ((jndiProperties == null) ? 0 : jndiProperties.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result
 				+ ((operation == null) ? 0 : operation.hashCode());
 		result = prime * result + ((path == null) ? 0 : path.hashCode());
+		result = prime * result
+				+ ((portName == null) ? 0 : portName.hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -109,15 +132,20 @@ public class Implementation {
 		if (getClass() != obj.getClass())
 			return false;
 		Implementation other = (Implementation) obj;
-		if (classpath == null) {
-			if (other.classpath != null)
-				return false;
-		} else if (!classpath.equals(other.classpath))
-			return false;
 		if (clientType == null) {
 			if (other.clientType != null)
 				return false;
 		} else if (!clientType.equals(other.clientType))
+			return false;
+		if (jndiName == null) {
+			if (other.jndiName != null)
+				return false;
+		} else if (!jndiName.equals(other.jndiName))
+			return false;
+		if (jndiProperties == null) {
+			if (other.jndiProperties != null)
+				return false;
+		} else if (!jndiProperties.equals(other.jndiProperties))
 			return false;
 		if (name == null) {
 			if (other.name != null)
@@ -134,6 +162,11 @@ public class Implementation {
 				return false;
 		} else if (!path.equals(other.path))
 			return false;
+		if (portName == null) {
+			if (other.portName != null)
+				return false;
+		} else if (!portName.equals(other.portName))
+			return false;
 		if (type == null) {
 			if (other.type != null)
 				return false;
@@ -141,6 +174,5 @@ public class Implementation {
 			return false;
 		return true;
 	}
-
 	
 }

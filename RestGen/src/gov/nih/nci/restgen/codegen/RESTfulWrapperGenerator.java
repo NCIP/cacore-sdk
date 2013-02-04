@@ -1,5 +1,8 @@
 package gov.nih.nci.restgen.codegen;
 
+import gov.nih.nci.restgen.mapping.JAXBUnmarshaller;
+import gov.nih.nci.restgen.mapping.MappingGenerator;
+import gov.nih.nci.restgen.mapping.XMLUtilityException;
 import gov.nih.nci.restgen.mapping.model.Implementation;
 import gov.nih.nci.restgen.mapping.model.Mapping;
 import gov.nih.nci.restgen.mapping.model.Method;
@@ -9,12 +12,11 @@ import gov.nih.nci.restgen.mapping.model.Resource;
 import gov.nih.nci.restgen.util.GeneratorUtil;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.util.List;
 import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
@@ -29,8 +31,10 @@ public class RESTfulWrapperGenerator extends Generator {
 
 	@Override
 	protected void init() throws GeneratorException {
-		// TODO Auto-generated method stub
-
+		if (context.getMappingXMLPath() != null) {
+			Mapping mapping = MappingGenerator.fromXML(context.getMappingXMLPath());
+			context.setMapping(mapping);
+		}
 	}
 
 	@Override
@@ -222,8 +226,14 @@ public class RESTfulWrapperGenerator extends Generator {
 
 	@Override
 	public void runProcess() throws GeneratorException {
-		// Generate SOAP webservice client
-		new WebserviceClientGenerator(context).generate();
+
+		Options options = context.getMapping().getOptions();
+		if (options.getWrapperType().equals(Options.SOAP_SERVICE))
+		{		
+			// Generate SOAP web service client
+			new WebserviceClientGenerator(context).generate();
+		}
+		
 		String libSrc = context.getMapping().getOptions().getRootPath()
 				+ File.separator + "lib";
 		String libDest = context.getMapping().getOptions().getOutputPath()
@@ -250,26 +260,29 @@ public class RESTfulWrapperGenerator extends Generator {
 		if (!compileFlag)
 			throw new GeneratorException(
 					"Failed to compile generated java source. Check the log.");
-		//try {
-			//createJAR("restful.war", context.getMapping().getOptions().getOutputPath()+File.separator+"web", context.getMapping().getOptions().getOutputPath());
-		//} catch (IOException e) {
-			// TODO Auto-generated catch block
-		//	e.printStackTrace();
-		//	throw new GeneratorException("Failed to generate web archive file.", e);
-		//}
+		 try {
+			 createJAR("restful.war",
+					 context.getMapping().getOptions().getOutputPath()+File.separator+"web",
+					 context.getMapping().getOptions().getOutputPath());
+		 } catch (IOException e) {
+			 e.printStackTrace();
+			 throw new GeneratorException("Failed to generate web archive file.",
+					 e);
+		 }
 	}
 
 	@Override
 	protected void postProcess() throws GeneratorException {
-		// TODO Auto-generated method stub
 
 	}
 
-	public void createJar(String jarName, String folderName, String outputPath) throws IOException {
+	public void createJar(String jarName, String folderName, String outputPath)
+			throws IOException {
 		Manifest manifest = new Manifest();
 		manifest.getMainAttributes().put(Attributes.Name.MANIFEST_VERSION,
 				"1.0");
-		JarOutputStream target = new JarOutputStream(new FileOutputStream(outputPath+File.separator+jarName), manifest);
+		JarOutputStream target = new JarOutputStream(new FileOutputStream(
+				outputPath + File.separator + jarName), manifest);
 		add(new File(folderName), target);
 		target.close();
 	}
@@ -310,38 +323,52 @@ public class RESTfulWrapperGenerator extends Generator {
 				in.close();
 		}
 	}
-	
-	public void createJAR(String jarName, String folderName, String outputPath) throws IOException
-	{
-	    File folder = new File(folderName);
-	    File[] files = folder.listFiles();
-	    File file=new File(outputPath+File.separator+jarName);
-	    createJarArchive(file, files);		
-	}
-	
-	private void createJarArchive(File jarFile, File[] listFiles) throws IOException{
-	      byte b[] = new byte[10240];
-	      FileOutputStream fout = new FileOutputStream(jarFile);
-	      JarOutputStream out = new JarOutputStream(fout, new Manifest());
-	      for (int i = 0; i < listFiles.length; i++) {
-	        if (listFiles[i] == null || !listFiles[i].exists()|| listFiles[i].isDirectory())
-	      System.out.println();
-	        JarEntry addFiles = new JarEntry(listFiles[i].getName());
-	        addFiles.setTime(listFiles[i].lastModified());
-	        out.putNextEntry(addFiles);
 
-	        FileInputStream fin = new FileInputStream(listFiles[i]);
-	        while (true) {
-	          int len = fin.read(b, 0, b.length);
-	          if (len <= 0)
-	            break;
-	          out.write(b, 0, len);
-	        }
-	        fin.close();
-	      }
-	      out.close();
-	      fout.close();
-	      System.out.println("Jar File is created successfully.");
-	  }	
+	public void createJAR(String jarName, String folderName, String outputPath)
+			throws IOException {
+		File folder = new File(folderName);
+		File[] files = folder.listFiles();
+		File file = new File(outputPath + File.separator + jarName);
+		createJarArchive(file, files);
+	}
+
+	private void createJarArchive(File jarFile, File[] listFiles)
+			throws IOException {
+		byte b[] = new byte[10240];
+		FileOutputStream fout = new FileOutputStream(jarFile);
+		JarOutputStream out = new JarOutputStream(fout, new Manifest());
+		for (int i = 0; i < listFiles.length; i++) {
+			if (listFiles[i] == null || !listFiles[i].exists()
+					|| listFiles[i].isDirectory())
+				System.out.println();
+			JarEntry addFiles = new JarEntry(listFiles[i].getName());
+			addFiles.setTime(listFiles[i].lastModified());
+			out.putNextEntry(addFiles);
+
+			FileInputStream fin = new FileInputStream(listFiles[i]);
+			while (true) {
+				int len = fin.read(b, 0, b.length);
+				if (len <= 0)
+					break;
+				out.write(b, 0, len);
+			}
+			fin.close();
+		}
+		out.close();
+		fout.close();
+		System.out.println("Jar File is created successfully.");
+	}
+
+	public Mapping readMappingXML(String mappingXML) throws GeneratorException {
+		JAXBUnmarshaller unmarshaller = new JAXBUnmarshaller(true,
+				"gov.nih.nci.restgen.mapping.model");
+		StringReader reader = new StringReader(mappingXML);
+		try {
+			return (Mapping) unmarshaller.fromXML(reader);
+		} catch (XMLUtilityException e) {
+			e.printStackTrace();
+			throw new GeneratorException("Failed to read mapping file: ", e);
+		}
+	}
 
 }

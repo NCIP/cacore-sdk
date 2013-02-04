@@ -1,5 +1,12 @@
 package gov.nih.nci.restgen.codegen;
 
+import java.io.InputStream;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import gov.nih.nci.restgen.mapping.model.Mapping;
 import gov.nih.nci.restgen.mapping.model.Options;
 import gov.nih.nci.restgen.util.GeneratorUtil;
@@ -7,15 +14,16 @@ import gov.nih.nci.restgen.util.GeneratorUtil;
 import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
 import org.apache.cxf.tools.wsdlto.WSDLToJava;
+import org.w3c.dom.Document;
 
 import com.predic8.wsdl.Definitions;
 import com.predic8.wsdl.Operation;
 import com.predic8.wsdl.PortType;
 import com.predic8.wsdl.WSDLParser;
 
-public class WebserviceClientGenerator extends Generator {
+public class EJBClientGenerator extends Generator {
 
-	public WebserviceClientGenerator(GeneratorContext context) {
+	public EJBClientGenerator(GeneratorContext context) {
 		super(context);
 	}
 
@@ -23,12 +31,24 @@ public class WebserviceClientGenerator extends Generator {
 	public void runProcess() throws GeneratorException {
 		Mapping mapping = context.getMapping();
 		Options options = mapping.getOptions();
-		if (!options.getWrapperType().equals(Options.SOAP_SERVICE))
+		if (!options.getWrapperType().equals(Options.EJB))
 			return;
 
-		context.getLogger().info("Generating SOAP Webservice Client");
+		context.getLogger().info("Generating EJB Client");
 
 		String outputPath = options.getOutputPath();
+        JarFile jarFile = new JarFile(file);
+        JarEntry jarEntry = jarFile.getJarEntry("ejb-jar.xml");
+        if (jarEntry != null) {
+        	InputStream is = jarFile.getInputStream(jarEntry);
+        	DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        	DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+        	Document doc = dBuilder.parse(is);
+        	doc.getDocumentElement().normalize();
+        //do something with the doc
+        	populateEntriesFromDoc(doc);
+        }
+		
 		String wsdlLocation = options.getWsdlLocation();
 		try {
 			WSDLParser parser = new WSDLParser();

@@ -10,6 +10,10 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "Input")
 @XmlRootElement(name="Input")
 public class Input {
+	
+	@XmlAttribute
+	private String name;
+	
 	@XmlAttribute
 	private String type;
 
@@ -21,10 +25,20 @@ public class Input {
 		this.type = type;
 	}
 
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		return result;
 	}
@@ -38,6 +52,11 @@ public class Input {
 		if (getClass() != obj.getClass())
 			return false;
 		Input other = (Input) obj;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
 		if (type == null) {
 			if (other.type != null)
 				return false;
@@ -45,6 +64,6 @@ public class Input {
 			return false;
 		return true;
 	}
-	
+
 	
 }

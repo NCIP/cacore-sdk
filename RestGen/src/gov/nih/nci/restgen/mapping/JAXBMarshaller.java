@@ -115,11 +115,6 @@ public class JAXBMarshaller implements gov.nih.nci.restgen.mapping.Marshaller {
 				m.setProperty(Marshaller.JAXB_FRAGMENT, true);
 			}
 			
-			if(namespacePrefix != null)
-			{
-				String schemaLocation = namespacePrefix + element.getValue().getClass().getPackage().getName() + " " + object.getClass().getPackage().getName() + ".xsd";
-				m.setProperty(Marshaller.JAXB_SCHEMA_LOCATION, schemaLocation);
-			}
 			m.marshal(element.getValue(), writer);
 			//System.out.println(writer.toString());
 		} catch(JAXBException e) {
