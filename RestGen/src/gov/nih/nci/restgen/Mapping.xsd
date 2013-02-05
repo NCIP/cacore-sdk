@@ -60,6 +60,11 @@
   <xs:complexType name="Options">
     <xs:sequence/>
     <xs:attribute name="outputPath" type="xs:string"/>
+    <xs:attribute name="rootPath" type="xs:string"/>
+    <xs:attribute name="wrapperType" type="xs:string"/>
+    <xs:attribute name="wsdlLocation" type="xs:string"/>
+    <xs:attribute name="ejbLocation" type="xs:string"/>
+    <xs:attribute name="wsdlBindingFile" type="xs:string"/>
   </xs:complexType>
 
   <xs:complexType name="Resource">
@@ -73,6 +78,8 @@
       </xs:element>
     </xs:sequence>
     <xs:attribute name="name" type="xs:string"/>
+    <xs:attribute name="path" type="xs:string"/>
+    <xs:attribute name="pojoLocation" type="xs:string"/>
   </xs:complexType>
 
   <xs:complexType name="Method">
@@ -91,7 +98,9 @@
     <xs:attribute name="name" type="xs:string"/>
     <xs:attribute name="clientType" type="xs:string"/>
     <xs:attribute name="path" type="xs:string"/>
-    <xs:attribute name="classpath" type="xs:string"/>
+    <xs:attribute name="portName" type="xs:string"/>
+    <xs:attribute name="jndiProperties" type="xs:string"/>
+    <xs:attribute name="jndiName" type="xs:string"/>
   </xs:complexType>
 
   <xs:complexType name="Operation">
@@ -106,15 +115,18 @@
       <xs:element ref="Output"/>
     </xs:sequence>
     <xs:attribute name="name" type="xs:string"/>
+    <xs:attribute name="style" type="xs:string"/>
   </xs:complexType>
 
   <xs:complexType name="Input">
     <xs:sequence/>
+    <xs:attribute name="name" type="xs:string"/>
     <xs:attribute name="type" type="xs:string"/>
   </xs:complexType>
 
   <xs:complexType name="Output">
     <xs:sequence/>
+    <xs:attribute name="name" type="xs:string"/>
     <xs:attribute name="type" type="xs:string"/>
   </xs:complexType>
 
