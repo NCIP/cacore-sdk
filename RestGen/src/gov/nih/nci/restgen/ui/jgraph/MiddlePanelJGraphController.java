@@ -424,8 +424,15 @@ public class MiddlePanelJGraphController {
     	while(it.hasNext())
     	{
     		Resource resource = new Resource();
-    		resource.setName((String)it.next());
+    		String resourceName = (String)it.next();
+    		resource.setName(resourceName);
+    		if(MappingMainPanel.getResourcePathValues()!=null && (String)MappingMainPanel.getResourcePathValues().get(resourceName)!=null)
+        	{
+        		System.out.println("vals...."+(String)MappingMainPanel.getResourcePathValues().get(resourceName));
+        		resource.setPath((String)MappingMainPanel.getResourcePathValues().get(resourceName));
+        	}
     		resourceList.add(resource);
+    		
     	}
     	
     	while(mt.hasNext())
@@ -435,7 +442,6 @@ public class MiddlePanelJGraphController {
     		{
     			Resource rsc = (Resource) resourceList.get(i);
     			System.out.println("resourcename and method type ..."+mtype.getResourceName()+"  "+rsc.getName());
-    			rsc.setPath(mtype.getResourcePath());
     			rsc.setPojoLocation(mtype.getResourceLocation());
     			if(mtype.getResourceName().equals(rsc.getName()))
     			{
@@ -587,11 +593,6 @@ public class MiddlePanelJGraphController {
     	method.setPathName(((DefaultSourceTreeNode) sourceNode).toString());
     	methodType.setResourceName(((DefaultSourceTreeNode) sourceNode).getResourceName());
     	String resourceName = (String)((DefaultSourceTreeNode)sourceNode).getResourceName();
-    	if(MappingMainPanel.getResourcePathValues()!=null && (String)MappingMainPanel.getResourcePathValues().get(resourceName)!=null)
-    	{
-    		methodType.setResourcePath((String)MappingMainPanel.getResourcePathValues().get(resourceName));
-    	}
-    	
     	methodType.setResourceLocation(((DefaultSourceTreeNode) sourceNode).getResourceLocation());
     	methodType.setMethod(method);
     	return methodType;
