@@ -810,7 +810,7 @@ public class MiddlePanelJGraphController {
 			targetCell.add(new DefaultPort(targetNode));
 			AttributeMap targetCellAttributes = UIHelper
 					.getDefaultInvisibleVertexAttribute(new Point(
-							getMaximalXValueOnPane(), targetYpos+100), false);
+							getMaximalXValueOnPane(), targetYpos+190), false);
 			attributes.put(targetCell, targetCellAttributes);
 			// process the edge
 			DefaultEdge linkEdge = new MappingGraphLink();

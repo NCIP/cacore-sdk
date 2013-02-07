@@ -61,12 +61,12 @@ public class MappingMainPanel extends JPanel implements ActionListener
 
 	private static final String Cmps_V3_MESSAGE_FILE_DEFAULT_EXTENSION = ".map";
 	private static final String OPEN_DIALOG_TITLE_FOR_DEFAULT_SOURCE_FILE = "Upload Binding file";
-	private static final String OPEN_DIALOG_TITLE_FOR_DEFAULT_TARGET_FILE = "Select JNDI file";
-	private static final String ENTER_JNDI_NAME = "Enter JNDI name...";
+	private static final String OPEN_DIALOG_TITLE_FOR_DEFAULT_TARGET_FILE = "Select JNDI File";
+	private static final String ENTER_JNDI_NAME = "Enter JNDI name";
 	private static final String SELECT_CSV_TIP = "select POJO";
 	private static final String SELECT_HMD_TIP = "select WSDL";
-	private static final String SELECT_SOURCE = "Upload Binding...";
-	private static final String UPLOAD_JNDI = "Select JNDI...";
+	private static final String SELECT_SOURCE = "Upload Binding File";
+	private static final String UPLOAD_JNDI = "Select JNDI File";
 	private static final String SELECT_TARGET = "Open WSDL...";
 	private static String ejbType = null;
 	private static final String SOURCE_TREE_FILE_DEFAULT_EXTENTION = ".xml";
@@ -85,8 +85,9 @@ public class MappingMainPanel extends JPanel implements ActionListener
 	private static String WSDLBindingFilePath = null;
 	private static String JNDIPropertiesFilePath = null;
 	private static JPanel targetButtonPanel = null;
+	private static JPanel targetRadioButtonPanel = null;
 	private static Hashtable resourcePathValues = null;
-	
+	private static JSplitPane leftRightSplitPane = null;
 	public static Hashtable getResourcePathValues() {
 		return resourcePathValues;
 	}
@@ -131,6 +132,16 @@ public class MappingMainPanel extends JPanel implements ActionListener
 
 	public static JTree getTargetTree() {
 		return tTree;
+	}
+
+
+	public static JPanel getTargetRadioButtonPanel() {
+		return targetRadioButtonPanel;
+	}
+
+
+	public static void setTargetRadioButtonPanel(JPanel targetRadioButtonPanel) {
+		MappingMainPanel.targetRadioButtonPanel = targetRadioButtonPanel;
 	}
 
 
@@ -216,6 +227,15 @@ public class MappingMainPanel extends JPanel implements ActionListener
 
 	public static void setTargetTree(JTree tTree) {
 		MappingMainPanel.tTree = tTree;
+	}
+
+	public static JSplitPane getLeftRightSplitPane() {
+		return leftRightSplitPane;
+	}
+
+
+	public static void setLeftRightSplitPane(JSplitPane leftRightSplitPane) {
+		MappingMainPanel.leftRightSplitPane = leftRightSplitPane;
 	}
 
 	private MappingTreeScrollPane sourceScrollPane = new MappingTreeScrollPane(MappingTreeScrollPane.DRAW_NODE_TO_RIGHT);
@@ -339,7 +359,7 @@ public class MappingMainPanel extends JPanel implements ActionListener
 		 *				bottom: properties panel; -->propertiesPane
 		 */
 
-		JSplitPane leftRightSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+		leftRightSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 		DefaultSettings.setDefaultFeatureForJSplitPane(leftRightSplitPane);
         int locDiv = (int) (mainFrame.getAssociatedUIContainer().getWidth() * 0.85);
         leftRightSplitPane.setDividerLocation(locDiv); //.setDividerLocation(0.85);
@@ -384,7 +404,7 @@ public class MappingMainPanel extends JPanel implements ActionListener
 	}
 
 	
-	protected JPanel getTopLevelLeftPanel()
+	public JPanel getTopLevelLeftPanel()
 	{
 		JPanel topCenterPanel = new JPanel(new BorderLayout());
 		topCenterPanel.setBorder(BorderFactory.createEtchedBorder());
@@ -437,7 +457,7 @@ public class MappingMainPanel extends JPanel implements ActionListener
 		targetLocationArea.setBackground(new Color(212,208,200));
 		targetLocationArea.setEditable(false);
 		//targetLocationArea.setPreferredSize(new Dimension((DefaultSettings.FRAME_DEFAULT_WIDTH / 10), 24));
-        targetLocationArea.setPreferredSize(new Dimension((frameWidth / 10), 24));
+        targetLocationArea.setPreferredSize(new Dimension((frameWidth / 20), 10));
 		targetLocationPanel.add(targetLocationArea, BorderLayout.CENTER);
 		
 		/*JButton openTargetButton = new JButton(SELECT_TARGET);
@@ -452,7 +472,7 @@ public class MappingMainPanel extends JPanel implements ActionListener
 		
 				
 		//targetButtonPanel.setPreferredSize(new Dimension((DefaultSettings.FRAME_DEFAULT_WIDTH / 5), (int) (DefaultSettings.FRAME_DEFAULT_HEIGHT / 1.5)));
-        targetButtonPanel.setPreferredSize(new Dimension((int)((frameWidth*0.85) / 5), (int) (DefaultSettings.FRAME_DEFAULT_HEIGHT / 1.5)));
+        //targetButtonPanel.setPreferredSize(new Dimension((int)((frameWidth*0.85) / 5), (int) (DefaultSettings.FRAME_DEFAULT_HEIGHT / 1.5)));
 
 		//construct middle panel
 		JPanel middleContainerPanel = new JPanel(new BorderLayout());
@@ -512,35 +532,56 @@ public class MappingMainPanel extends JPanel implements ActionListener
 	
 	public void createOpenWSDLBindingFileButton()
 	{
+		if(targetButtonPanel==null)
+		{
+			targetButtonPanel = new JPanel(new BorderLayout(2, 0));
+			targetButtonPanel.setBorder(BorderFactory.createEtchedBorder());
+			targetButtonPanel.setLayout(new GridLayout(5, 5));
+		}
+		if(targetRadioButtonPanel==null)
+		{
+			targetRadioButtonPanel = new JPanel(new BorderLayout(2, 0));
+			targetRadioButtonPanel.setBorder(BorderFactory.createEtchedBorder());
+			targetRadioButtonPanel.setLayout(new GridLayout(5, 5));
+			targetRadioButtonPanel.setPreferredSize(new Dimension((DefaultSettings.FRAME_DEFAULT_WIDTH/ 10), 90));
+		}
 		
-		targetButtonPanel = new JPanel(new BorderLayout(2, 0));
-		targetButtonPanel.setBorder(BorderFactory.createEtchedBorder());
-		targetButtonPanel.setLayout(new GridLayout(5, 5));
 		JButton openSourceButton = new JButton(SELECT_SOURCE);
 		openSourceButton.setMnemonic('S');
 		openSourceButton.setBounds(0, 0, 20, 20);
 		openSourceButton.setToolTipText(SELECT_CSV_TIP);
 		openSourceButton.addActionListener(this);
+		targetButtonPanel.add(Box.createHorizontalStrut(10));
 		targetButtonPanel.add(openSourceButton, BorderLayout.SOUTH);
 		targetLocationPanel.add(targetButtonPanel, BorderLayout.EAST);
+		targetLocationPanel.add(targetRadioButtonPanel, BorderLayout.SOUTH);
 		
 	}
 	
 	public void createEJBJNDIButtons()
 	{
-		
-		targetButtonPanel = new JPanel(new BorderLayout(2, 0));
-		targetButtonPanel.setBorder(BorderFactory.createEtchedBorder());
-		targetButtonPanel.setLayout(new GridLayout(5, 5));
+		if(targetButtonPanel==null)
+		{
+			targetButtonPanel = new JPanel(new BorderLayout(2, 0));
+			targetButtonPanel.setBorder(BorderFactory.createEtchedBorder());
+			targetButtonPanel.setLayout(new GridLayout(5, 5));
+		}
+		if(targetRadioButtonPanel==null)
+		{
+			targetRadioButtonPanel = new JPanel(new BorderLayout(2, 0));
+			targetRadioButtonPanel.setBorder(BorderFactory.createEtchedBorder());
+			targetRadioButtonPanel.setLayout(new GridLayout(5, 5));
+		}
+		targetRadioButtonPanel.setPreferredSize(new Dimension((DefaultSettings.FRAME_DEFAULT_WIDTH/ 10), 90));
 	    // add upload JNDI button here....	
-		 openSourceButton = new JButton("Select JNDI...");
+		openSourceButton = new JButton("Select JNDI File");
 		openSourceButton.setMnemonic('U');
 		openSourceButton.setBounds(0, 0, 20, 20);
 		openSourceButton.setToolTipText(SELECT_CSV_TIP);
 		openSourceButton.addActionListener(this);
 				
 		// Enter JNDI name here....	
-				enterJNDIButton = new JButton("Enter JNDI name...");
+				enterJNDIButton = new JButton("Enter JNDI name");
 				enterJNDIButton.setMnemonic('U');
 				enterJNDIButton.setBounds(0, 0, 20, 20);
 				enterJNDIButton.setToolTipText(SELECT_CSV_TIP);
@@ -563,15 +604,19 @@ public class MappingMainPanel extends JPanel implements ActionListener
 		    ButtonGroup group = new ButtonGroup();
 		    group.add(remoteButton);
 		    group.add(localButton);
-
+		    
 		    //Register a listener for the radio buttons.
 		    remoteButton.addActionListener(this);
 		    localButton.addActionListener(this);
-		    
-		targetButtonPanel.add(remoteButton, BorderLayout.SOUTH);
-		targetButtonPanel.add(localButton, BorderLayout.SOUTH);
+		targetRadioButtonPanel.setBorder(BorderFactory.createTitledBorder("Client Type"));
+		targetRadioButtonPanel.add(remoteButton, BorderLayout.NORTH);
+		targetRadioButtonPanel.add(Box.createHorizontalStrut(10));
+		targetRadioButtonPanel.add(localButton, BorderLayout.SOUTH);
+		targetButtonPanel.add(Box.createHorizontalStrut(10));
 		targetButtonPanel.add(openSourceButton, BorderLayout.SOUTH);
+		targetButtonPanel.add(Box.createHorizontalStrut(10));
 		targetButtonPanel.add(enterJNDIButton, BorderLayout.SOUTH);
+		targetLocationPanel.add(targetRadioButtonPanel, BorderLayout.SOUTH);
 		targetLocationPanel.add(targetButtonPanel, BorderLayout.EAST);
 		
 	}
@@ -594,7 +639,12 @@ public class MappingMainPanel extends JPanel implements ActionListener
 			{
 				getEnterJNDIButton().setEnabled(false);
 				getOpenSourceButton().setEnabled(false);
+				String toReplaceJNDIText = "\n\n"+"JNDI Name:"+getEnterJNDIName();
+				String toReplaceWSDLText = "\n\n"+"JNDI properties file:"+getJNDIPropertiesFilePath();
+				getTargetLocationArea().setText(getTargetLocationArea().getText().replace(toReplaceJNDIText, ""));
+				getTargetLocationArea().setText(getTargetLocationArea().getText().replace(toReplaceWSDLText, ""));
 				setEjbType("EJB_LOCAL");
+				
 				
 			}
 			else if(command.equals("Remote"))
@@ -606,10 +656,24 @@ public class MappingMainPanel extends JPanel implements ActionListener
             
 			else if(command.equals(ENTER_JNDI_NAME))
 			{
-				String jndiName = JOptionPane.showInputDialog(null, "Please enter the name for mapping : ", 
+				String jndiName = JOptionPane.showInputDialog(null, "Please enter the JNDI name: ", 
 					"Mapping Name", 1);
 				if(jndiName!=null)
 				{
+					
+					String toReplace = "\n\n"+"JNDI Name:"+getEnterJNDIName();
+					String currString = "\n\n"+"JNDI Name:"+jndiName;
+					if(getTargetLocationArea().getText().contains("JNDI Name:    "))
+					{
+						String newOne = getTargetLocationArea().getText().replace(toReplace, currString);
+						System.out.println("inside//...."+newOne);
+						getTargetLocationArea().setText(getTargetLocationArea().getText().replace(toReplace, currString));
+						
+					}
+					else
+					{
+						getTargetLocationArea().append("\n\n"+"JNDI Name:"+jndiName);
+					}
 					setEnterJNDIName(jndiName);
 				}
 			}
@@ -641,7 +705,21 @@ public class MappingMainPanel extends JPanel implements ActionListener
             }
             if(file!=null)
             {
-            	setWSDLBindingFilePath(file.getPath());
+            		
+					String toReplace = "\n\n"+"WSDL Binding file:"+getWSDLBindingFilePath();
+					String currString = "\n\n"+"WSDL Binding file:"+file.getPath();
+					if(getTargetLocationArea().getText().contains("WSDL Binding file:"))
+					{
+						String newOne = getTargetLocationArea().getText().replace(toReplace, currString);
+						getTargetLocationArea().setText(getTargetLocationArea().getText().replace(toReplace, currString));
+						
+					}
+					else
+					{
+						getTargetLocationArea().append("\n\n"+"WSDL Binding file:"+file.getPath());
+					}
+					setWSDLBindingFilePath(file.getPath());
+				
             }
         
         }
@@ -658,7 +736,21 @@ public class MappingMainPanel extends JPanel implements ActionListener
         
             if(file!=null)
             {
-            	setJNDIPropertiesFilePath(file.getPath());
+            	
+            	String toReplace = "\n\n"+"JNDI properties file:"+getJNDIPropertiesFilePath();
+				String currString = "\n\n"+"JNDI properties file:"+file.getPath();
+				if(getTargetLocationArea().getText().contains("JNDI properties file:"))
+				{
+					String newOne = getTargetLocationArea().getText().replace(toReplace, currString);
+					getTargetLocationArea().setText(getTargetLocationArea().getText().replace(toReplace, currString));
+					
+				}
+				else
+				{
+					getTargetLocationArea().append("\n\n"+"JNDI properties file:"+file.getPath());
+				}
+				setJNDIPropertiesFilePath(file.getPath());
+            	
             }
         }
             

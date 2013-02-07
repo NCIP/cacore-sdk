@@ -422,6 +422,15 @@ public class DefaultSettings
         return getImage(defaultImageName);
     }
 
+    public static final Image getNCICBImage()
+    {
+        //using default imageFile
+        String defaultImageName="images/ncicb.gif";
+        return getImage(defaultImageName);
+    }
+    
+    
+    
     /**
      * @param imageFileName the name of the file, does not need path information
      * @return the image retrieved from the system.

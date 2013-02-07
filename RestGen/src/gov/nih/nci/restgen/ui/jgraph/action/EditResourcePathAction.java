@@ -143,14 +143,24 @@ public class EditResourcePathAction extends AbstractContextAction
 		    		   Hashtable<String, String> values = new Hashtable();
 		    		   values.put(((DefaultSourceTreeNode)treeNode).getUserObject().toString(), inputString);
 		    		   mainFrame.getMainFrame().getMappingMainPanel().setResourcePathValues(values);
-		    		   System.out.println("inside if");
+		    		   
 		    	   }
 		    	   else
 		    	   {
 		    		   Hashtable<String, String> values = mainFrame.getMainFrame().getMappingMainPanel().getResourcePathValues();
-		    		   values.put(((DefaultSourceTreeNode)treeNode).getUserObject().toString(), inputString);
+		    		   if(values.containsKey(((DefaultSourceTreeNode)treeNode).getUserObject().toString()))
+		    		   {
+		    			   values.remove(((DefaultSourceTreeNode)treeNode).getUserObject().toString());
+		    			   values.put(((DefaultSourceTreeNode)treeNode).getUserObject().toString(), inputString);
+		    			   
+		    		   }
+		    		   else
+		    		   {
+		    			   values.put(((DefaultSourceTreeNode)treeNode).getUserObject().toString(), inputString);
+		    			   
+		    		   }
 		    		   mainFrame.getMainFrame().getMappingMainPanel().setResourcePathValues(values);
-		    		   System.out.println("inside else");
+		    		   
 		    	   }
 		    	   System.out.println("path66666"+((DefaultSourceTreeNode)treeNode).getUserObject().toString());
 		       

@@ -128,6 +128,30 @@ public class UploadEJBJarAction extends AbstractContextAction
     	            mainFrame.getMainFrame().getMappingMainPanel().setMappingTargetFile(file);
     	            // Display EJB Jar details here once the EJB Jar file has been selected!!
     	            mainFrame.getMainFrame().getMappingMainPanel().setTargetFileType("EJB");
+    	            
+    	            /// clear the panels here
+    	            
+    	            if(mainFrame.getMainFrame().getMappingMainPanel().getTargetTree()!=null)
+    	    		{
+    	            	mainFrame.getMainFrame().getMappingMainPanel().getMiddlePanel().getGraphController().handleDeleteAll();
+    	    			mainFrame.getMainFrame().getMappingMainPanel().getTargetScrollPane().setViewportView(null);
+    	    			mainFrame.getMainFrame().getMappingMainPanel().setTargetTree(null);
+    	    			mainFrame.getMainFrame().getMappingMainPanel().getTargetLocationArea().setBorder(BorderFactory.createTitledBorder(""));
+    	    			mainFrame.getMainFrame().getMappingMainPanel().getTargetLocationArea().setText("");
+    	    			mainFrame.getMainFrame().getMappingMainPanel().getTargetButtonPanel().removeAll();
+    	    			mainFrame.getMainFrame().getMappingMainPanel().getTargetRadioButtonPanel().setBorder(BorderFactory.createTitledBorder(""));
+    	    			mainFrame.getMainFrame().getMappingMainPanel().getTargetRadioButtonPanel().removeAll();
+    	    			mainFrame.getMainFrame().getMappingMainPanel().getTargetButtonPanel().updateUI();
+    	    			//mainFrame.getMainFrame().getMappingMainPanel().getTargetScrollPane().setBackground(new Color(212,208,200));
+    	    			
+    	    		}
+    	           EJBRemoteOperationsList = new ArrayList<String>();
+    	           EJBHomeOperationsList = new ArrayList<String>();
+    	           EJBBeanList = new ArrayList<String>();
+    	           EJBNameList = new ArrayList<String>();
+    	            
+    	            ///
+    	            
     	            createTargetTree(file);
     	            mainFrame.getMainFrame().getMappingMainPanel().getTargetLocationArea().setBorder(BorderFactory.createTitledBorder("EJB"));
     	            mainFrame.getMainFrame().getMappingMainPanel().createEJBJNDIButtons();

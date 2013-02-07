@@ -92,11 +92,12 @@ public class MainFrame extends JFrame
             instanceContainer = new MainFrameContainer(this);
             frameMenu=new MainMenuBar(instanceContainer);
 			this.setTitle("caCore RESTFUL WRAPPER Mapping and GenerationService");
+			
 			Container contentPane = this.getContentPane();
 			contentPane.setLayout(new BorderLayout());
 			//set the icon.
-			Image icon = DefaultSettings.getMainframeImage();
-			setIconImage(icon);
+			Image icon = DefaultSettings.getNCICBImage();
+			this.setIconImage(icon);
 			// set the menu bar.
 			setJMenuBar(frameMenu);
 			//set size before constructing each of those panels since some of them

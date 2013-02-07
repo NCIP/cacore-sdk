@@ -94,9 +94,11 @@ public class CloseAction extends AbstractContextAction
 		{
 			mainFrame.getMainFrame().getMappingMainPanel().getTargetScrollPane().setViewportView(null);
 			mainFrame.getMainFrame().getMappingMainPanel().setTargetTree(null);
-			mainFrame.getMainFrame().getMappingMainPanel().getTargetLocationArea().setBorder(null);
-			mainFrame.getMainFrame().getMappingMainPanel().getTargetLocationArea().setText(null);
+			mainFrame.getMainFrame().getMappingMainPanel().getTargetLocationArea().setBorder(BorderFactory.createTitledBorder(""));
+			mainFrame.getMainFrame().getMappingMainPanel().getTargetLocationArea().setText("");
 			mainFrame.getMainFrame().getMappingMainPanel().getTargetButtonPanel().removeAll();
+			mainFrame.getMainFrame().getMappingMainPanel().getTargetRadioButtonPanel().setBorder(BorderFactory.createTitledBorder(""));
+			mainFrame.getMainFrame().getMappingMainPanel().getTargetRadioButtonPanel().removeAll();
 			mainFrame.getMainFrame().getMappingMainPanel().getTargetButtonPanel().updateUI();
 			//mainFrame.getMainFrame().getMappingMainPanel().getTargetScrollPane().setBackground(new Color(212,208,200));
 			

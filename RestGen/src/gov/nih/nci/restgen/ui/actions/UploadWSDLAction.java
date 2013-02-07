@@ -16,6 +16,8 @@ import gov.nih.nci.restgen.ui.main.MainFrameContainer;
 import gov.nih.nci.restgen.ui.tree.DefaultTargetTreeNode;
 import gov.nih.nci.restgen.ui.tree.TreeSelectionHandler;
 import org.apache.cxf.helpers.CastUtils;
+import org.apache.cxf.tools.common.toolspec.ToolSpec;
+import org.apache.cxf.tools.validator.WSDLValidator;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -38,10 +40,13 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Collection;
@@ -158,19 +163,102 @@ public class UploadWSDLAction extends AbstractContextAction
     protected boolean doAction(ActionEvent e) throws Exception
     {
     	// open WSDL here PV
-    				File file = null;
+    				File file = new File("WSDLFile.wsdl");
     				String serviceEndPoint = "";
     				String serviceName = "";
-    	            file = DefaultSettings.getUserInputOfFileFromGUI(mainFrame.getOwnerFrame(), //FileUtil.getUIWorkingDirectoryPath(),
+    				
+    	            /*file = DefaultSettings.getUserInputOfFileFromGUI(mainFrame.getOwnerFrame(), //FileUtil.getUIWorkingDirectoryPath(),
     	                    SOURCE_TREE_FILE_DEFAULT_EXTENTION, OPEN_DIALOG_TITLE_FOR_DEFAULT_SOURCE_FILE, false, false);
     	            if ((file == null)||(!file.exists())||(!file.isFile())) return true;
     	            if (!file.getName().toLowerCase().endsWith(SOURCE_TREE_FILE_DEFAULT_EXTENTION.toLowerCase()))
     	            {
     	                JOptionPane.showMessageDialog(mainFrame.getAssociatedUIComponent(), "This file is not a WSDL file (" + SOURCE_TREE_FILE_DEFAULT_EXTENTION + ") file : " + file.getName(), "Not a WSDL file", JOptionPane.ERROR_MESSAGE);
     	                return false;
-    	            }
+    	            }*/
+    				
+    				char[] specialChars = {'!','@',']','#','$','%','^','&','*'}; 
+    			       
+    			       String inputString = JOptionPane.showInputDialog(null, "Please enter the URL for WSDL file : ", 
+    							"WSDL file upload", 1);
+    					if(inputString!=null)
+    					{
+    						char[] inputStringChars = inputString.toCharArray();
+    						boolean specialCharIsFound = false;  
+
+    						 for(int x = 0; x < inputStringChars.length; x++)  
+    						 {  
+    							 
+    						   for(int y = 0; y < specialChars.length; y++)
+    						   {
+    							   
+    								   if(inputStringChars[x]==specialChars[y]){  
+    									   specialCharIsFound = true;  
+    									   break;  
+    								   }	 
+    							   
+    						   }
+    						   
+    						 }
+
+    					       if( specialCharIsFound){
+    					         
+    					    	   JOptionPane.showMessageDialog(mainFrame.getMainFrame().getMappingMainPanel(), "Please enter a valid path...", "Invalid Path Entry!!!", JOptionPane.ERROR_MESSAGE);
+    					       }
+    					
+    				// added below PV
+    				URLConnection  uCon = null;
+    		        URL wsdlUrl = new URL(inputString);
+    		        uCon = wsdlUrl.openConnection();
+    		        InputStream is = uCon.getInputStream();
+    		        OutputStream os = new FileOutputStream(file);
+    		        int c;
+    		        while ((c = is.read()) != -1) {
+    		        	System.out.print((char) c);
+    		        	os.write(c);
+    		        }
+    		        is.close();
+    		        os.close();
+    		        
+   				///////////
+    				}
+    					
+    				else
+    				{
+    						return false;
+    				}
     	            mainFrame.getMainFrame().getMappingMainPanel().setMappingTargetFile(file);
     	            mainFrame.getMainFrame().getMappingMainPanel().setTargetFileType("WSDL");
+    	            /// clear the panels here
+    	            
+    	            if(mainFrame.getMainFrame().getMappingMainPanel().getTargetTree()!=null)
+    	    		{
+    	            	mainFrame.getMainFrame().getMappingMainPanel().getMiddlePanel().getGraphController().handleDeleteAll();
+    	    			mainFrame.getMainFrame().getMappingMainPanel().getTargetScrollPane().setViewportView(null);
+    	    			mainFrame.getMainFrame().getMappingMainPanel().setTargetTree(null);
+    	    			mainFrame.getMainFrame().getMappingMainPanel().getTargetLocationArea().setBorder(BorderFactory.createTitledBorder(""));
+    	    			mainFrame.getMainFrame().getMappingMainPanel().getTargetLocationArea().setText("");
+    	    			mainFrame.getMainFrame().getMappingMainPanel().getTargetButtonPanel().removeAll();
+    	    			mainFrame.getMainFrame().getMappingMainPanel().getTargetRadioButtonPanel().setBorder(BorderFactory.createTitledBorder(""));
+    	    			mainFrame.getMainFrame().getMappingMainPanel().getTargetRadioButtonPanel().removeAll();
+    	    			mainFrame.getMainFrame().getMappingMainPanel().getTargetButtonPanel().updateUI();
+    	    			//mainFrame.getMainFrame().getMappingMainPanel().getTargetScrollPane().setBackground(new Color(212,208,200));
+    	    			
+    	    		}
+    	            
+    	            ///
+    	         // validate WSDL file
+    	            try
+    	            {
+    	            FileInputStream fis = new FileInputStream(file);
+    		        ToolSpec toolspec = new ToolSpec(fis);
+    		        WSDLValidator wsdlValidator = new WSDLValidator(toolspec);
+    		        wsdlValidator.execute(true);
+    	            }
+    	            catch(Exception ex)
+    	            {
+    	            	throw new Exception("WSDL parse error!!!");
+    	            }
+    		        //
     	            createTargetTree(file);
     			return true;
 
@@ -218,8 +306,11 @@ public void createTargetTree(File file) throws Exception
                     Collection<Part> parts = CastUtils.cast(input.getMessage().getParts());
                     for (Part part : parts) {
                         if (part.getElement() != null || !"".equals(part.getElement())) {
-                        	Element type = defs.getElement(part.getElement());
-                        	inputType +=type.getType();
+                        	if(defs.getElement(part.getElement())!=null)
+                        	{
+                        		Element type = defs.getElement(part.getElement());
+                        		inputType +=type.getType();
+                        	}
                         	
                         }
                     }
@@ -234,6 +325,7 @@ public void createTargetTree(File file) throws Exception
                         }
                     }
                 }
+               
                 System.out.println("WSDL input type and output>>>>"+"...."+inputType+outputType);
                 OutputTypes.add(outputType);
                 InputTypes.add(inputType);
@@ -258,7 +350,7 @@ public void createTargetTree(File file) throws Exception
 	}
 	setServiceName(serviceName);
 	setServiceEndPoint(serviceEndPoint);
-	mainFrame.getMainFrame().getMappingMainPanel().getTargetLocationArea().setText("Name:"+serviceName+"\n"+"Endpoint:"+serviceEndPoint);
+	mainFrame.getMainFrame().getMappingMainPanel().getTargetLocationArea().setText("Name:"+serviceName+"\n\n"+"Endpoint:"+serviceEndPoint);
 	mainFrame.getMainFrame().getMappingMainPanel().createOpenWSDLBindingFileButton();
 	
 	

@@ -158,7 +158,8 @@ public class NewPOJOFileAction extends AbstractContextAction
         		classList.add(file.getName());
         		mainFrame.getMainFrame().getMappingMainPanel().setPOJOClassList(classList);
              DefaultSourceTreeNode top = new DefaultSourceTreeNode(file.getName());
-             top.setResourceLocation(javaClass.getSourceFileName());
+             top.setResourceLocation(file.getPath());
+             top.setResourcePathLocation("");
              createNodes(top,file.getName());
              tree = new JTree(top);
              TreeSelectionHandler treeSelectionHanderl=new TreeSelectionHandler(mainFrame.getMainFrame().getMappingMainPanel().getGraphController());
@@ -199,22 +200,29 @@ public class NewPOJOFileAction extends AbstractContextAction
 	    DefaultSourceTreeNode DeleteClass = null;
 	    
 	    CreateClass = new DefaultSourceTreeNode("Create");
-	    CreateClass.setResourceName(resourceName);
 	    CreateClass.setResourceLocation(top.getResourceLocation());
+	    CreateClass.setResourceName(resourceName);
+	    CreateClass.setResourcePathLocation(top.getResourcePathLocation());
 	    top.add(CreateClass);
 	    
 	    Updateclass = new DefaultSourceTreeNode("Update");
+	    Updateclass.setResourceLocation(top.getResourceLocation());
 	    Updateclass.setResourceName(resourceName);
+	    Updateclass.setResourcePathLocation(top.getResourcePathLocation());
 	    top.add(Updateclass);
 	    
 	    ReadClass = new DefaultSourceTreeNode("Read");
+	    ReadClass.setResourceLocation(top.getResourceLocation());
 	    ReadClass.setResourceName(resourceName);
+	    ReadClass.setResourcePathLocation(top.getResourcePathLocation());
 	    top.add(ReadClass);
 	    
 	    DeleteClass = new DefaultSourceTreeNode("Delete");
+	    DeleteClass.setResourceLocation(top.getResourceLocation());
 	    DeleteClass.setResourceName(resourceName);
+	    DeleteClass.setResourcePathLocation(top.getResourcePathLocation());
 	    top.add(DeleteClass);
-        
+        top.setResourceName(resourceName);
 	    
 	    	    
 	    
