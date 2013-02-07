@@ -348,19 +348,34 @@ public class MiddlePanelJGraphController {
 				{
 					options.setOutputPath("");
 				}
-				if(UploadWSDLAction.getServiceEndPoint()!=null)
-				{
-					options.setWsdlLocation(UploadWSDLAction.getServiceEndPoint());
-				}
 				
 				if(MappingMainPanel.getTargetFileType().equals("EJB"))
 				{
 					options.setWrapperType(Options.EJB);
+					if(getMappingPanel().getMappingTargetFile()!=null)
+					{
+						options.setEjbLocation(getMappingPanel().getMappingTargetFile().getPath());
+					}
 				}
 				else
 				{
 					options.setWrapperType(Options.SOAP_SERVICE);
+					if(getMappingPanel().getMappingTargetFile()!=null)
+					{
+						options.setWsdlLocation(getMappingPanel().getMappingTargetFile().getPath());
+					}
+					if(getMappingPanel().getWSDLBindingFilePath()!=null)
+					{
+						options.setWsdlBindingFile(getMappingPanel().getWSDLBindingFilePath());
+					}
 				}
+				
+				final String dir = System.getProperty("user.dir");
+		        System.out.println("current dir is..... " + dir);
+		        if(dir!=null)
+		        {
+		        	options.setRootPath(dir);
+		        }
 				
 				m.setOptions(options);
 			}
@@ -420,8 +435,8 @@ public class MiddlePanelJGraphController {
     		{
     			Resource rsc = (Resource) resourceList.get(i);
     			System.out.println("resourcename and method type ..."+mtype.getResourceName()+"  "+rsc.getName());
-    			rsc.setPath(mtype.getResourceLocation());
-    			rsc.setPojoLocation(mtype.getResourcePath());
+    			rsc.setPath(mtype.getResourcePath());
+    			rsc.setPojoLocation(mtype.getResourceLocation());
     			if(mtype.getResourceName().equals(rsc.getName()))
     			{
     			 // add the methods here
@@ -514,15 +529,35 @@ public class MiddlePanelJGraphController {
     	implementation.setType(targetNode.getImplementationType());
     	if(targetNode.getImplementationType()=="SOAP")
     	{
-    		implementation.setClientType(targetNode.getEndPoint());
+    		implementation.setClientType(targetNode.getClientType());
         	implementation.setName(targetNode.getServiceName());
-        	implementation.setClasspath("");
+        	
     	}
     	else
     	{
     		implementation.setClientType(targetNode.getClientType());
     		implementation.setName(targetNode.getEJBName());
-    		implementation.setClasspath(targetNode.getClassPath());
+    		if(MappingMainPanel.getEjbType()!=null)
+    		{
+    			implementation.setType(MappingMainPanel.getEjbType());
+    		}
+    		if(MappingMainPanel.getEnterJNDIName()!=null)
+    		{
+    			implementation.setJndiName(MappingMainPanel.getEnterJNDIName());
+    		}
+    		else
+    		{
+    			implementation.setJndiName("");
+    		}
+    		
+    		if(MappingMainPanel.getJNDIPropertiesFilePath()!=null)
+    		{
+    			implementation.setJndiProperties(MappingMainPanel.getJNDIPropertiesFilePath());
+    		}
+    		else
+    		{
+    			implementation.setJndiProperties("");
+    		}
     	}
     	if(path!=null && path.trim().length()>0)
     	{
@@ -550,17 +585,20 @@ public class MiddlePanelJGraphController {
     		method.setName(Method.DELETE);
     	}
     	method.setPathName(((DefaultSourceTreeNode) sourceNode).toString());
-    	methodType.setResourceName(sourceNode.getResourceName());
-    	methodType.setResourcePath(sourceNode.getResourceLocation());
-    	methodType.setResourceLocation(sourceNode.getResourcePathLocation());
+    	methodType.setResourceName(((DefaultSourceTreeNode) sourceNode).getResourceName());
+    	String resourceName = (String)((DefaultSourceTreeNode)sourceNode).getResourceName();
+    	if(MappingMainPanel.getResourcePathValues()!=null && (String)MappingMainPanel.getResourcePathValues().get(resourceName)!=null)
+    	{
+    		methodType.setResourcePath((String)MappingMainPanel.getResourcePathValues().get(resourceName));
+    	}
+    	
+    	methodType.setResourceLocation(((DefaultSourceTreeNode) sourceNode).getResourceLocation());
     	methodType.setMethod(method);
     	return methodType;
     	
     }
     
     
-    
-	
 	public void setMappingData(Mapping mappingData, boolean isRebuild) {
 		if (isGraphChanged()
 				|| getMiddlePanel().getGraph().getRoots().length > 0) {// if
@@ -771,7 +809,7 @@ public class MiddlePanelJGraphController {
 			targetCell.add(new DefaultPort(targetNode));
 			AttributeMap targetCellAttributes = UIHelper
 					.getDefaultInvisibleVertexAttribute(new Point(
-							getMaximalXValueOnPane(), targetYpos+210), false);
+							getMaximalXValueOnPane(), targetYpos+100), false);
 			attributes.put(targetCell, targetCellAttributes);
 			// process the edge
 			DefaultEdge linkEdge = new MappingGraphLink();

@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 
 import javax.swing.*;
@@ -59,26 +60,67 @@ public class MappingMainPanel extends JPanel implements ActionListener
 {
 
 	private static final String Cmps_V3_MESSAGE_FILE_DEFAULT_EXTENSION = ".map";
-	private static final String OPEN_DIALOG_TITLE_FOR_DEFAULT_SOURCE_FILE = "Open source POJO";
-	private static final String OPEN_DIALOG_TITLE_FOR_DEFAULT_TARGET_FILE = "Open target WSDL";
+	private static final String OPEN_DIALOG_TITLE_FOR_DEFAULT_SOURCE_FILE = "Upload Binding file";
+	private static final String OPEN_DIALOG_TITLE_FOR_DEFAULT_TARGET_FILE = "Select JNDI file";
+	private static final String ENTER_JNDI_NAME = "Enter JNDI name...";
 	private static final String SELECT_CSV_TIP = "select POJO";
 	private static final String SELECT_HMD_TIP = "select WSDL";
-	private static final String SELECT_SOURCE = "Open POJO...";
+	private static final String SELECT_SOURCE = "Upload Binding...";
+	private static final String UPLOAD_JNDI = "Select JNDI...";
 	private static final String SELECT_TARGET = "Open WSDL...";
-	private static final String SOURCE_TREE_FILE_DEFAULT_EXTENTION = ".xsd";
+	private static String ejbType = null;
+	private static final String SOURCE_TREE_FILE_DEFAULT_EXTENTION = ".xml";
 	private static String optionsPath = "";
-	private static final String TARGET_TREE_FILE_DEFAULT_EXTENTION = ".xsd";
+	private static String enterJNDIName = null;
+	private static final String TARGET_TREE_FILE_DEFAULT_EXTENTION = ".properties";
 	private static MainFrameContainer mainFrame = null;
     private File mapFile = null;
+    private static JButton enterJNDIButton = null;
+    private static JButton openSourceButton = null;
     private static File mappingSourceFile = null;
 	private static File mappingTargetFile = null;
 	private static String sourceFileType = null;
 	private static String targetFileType = null;
+	private static JPanel targetLocationPanel = null;
+	private static String WSDLBindingFilePath = null;
+	private static String JNDIPropertiesFilePath = null;
+	private static JPanel targetButtonPanel = null;
+	private static Hashtable resourcePathValues = null;
+	
+	public static Hashtable getResourcePathValues() {
+		return resourcePathValues;
+	}
+
+
+	public static void setResourcePathValues(Hashtable resourcePathValues) {
+		MappingMainPanel.resourcePathValues = resourcePathValues;
+	}
+
 	public static ArrayList<String> POJOClassList = new ArrayList<String>();
 	private static JTree sTree = null;
 	private static JTree tTree = null;
 	public static JTree getSourceTree() {
 		return sTree;
+	}
+
+
+	public static JButton getEnterJNDIButton() {
+		return enterJNDIButton;
+	}
+
+
+	public static String getEjbType() {
+		return ejbType;
+	}
+
+
+	public static void setEjbType(String ejbType) {
+		MappingMainPanel.ejbType = ejbType;
+	}
+
+
+	public static void setEnterJNDIButton(JButton enterJNDIButton) {
+		MappingMainPanel.enterJNDIButton = enterJNDIButton;
 	}
 
 
@@ -92,8 +134,38 @@ public class MappingMainPanel extends JPanel implements ActionListener
 	}
 
 
+	public static JButton getOpenSourceButton() {
+		return openSourceButton;
+	}
+
+
+	public static void setOpenSourceButton(JButton openSourceButton) {
+		MappingMainPanel.openSourceButton = openSourceButton;
+	}
+
+
 	public static String getOptionsPath() {
 		return optionsPath;
+	}
+
+
+	public JPanel getTargetButtonPanel() {
+		return targetButtonPanel;
+	}
+
+
+	public static String getEnterJNDIName() {
+		return enterJNDIName;
+	}
+
+
+	public static void setEnterJNDIName(String enterJNDIName) {
+		MappingMainPanel.enterJNDIName = enterJNDIName;
+	}
+
+
+	public void setTargetButtonPanel(JPanel targetButtonPanel) {
+		this.targetButtonPanel = targetButtonPanel;
 	}
 
 
@@ -122,6 +194,16 @@ public class MappingMainPanel extends JPanel implements ActionListener
 	}
 
 
+	public static String getJNDIPropertiesFilePath() {
+		return JNDIPropertiesFilePath;
+	}
+
+
+	public static void setJNDIPropertiesFilePath(String jNDIPropertiesFile) {
+		JNDIPropertiesFilePath = jNDIPropertiesFile;
+	}
+
+
 	public static MainFrameContainer getMainFrame() {
 		return mainFrame;
 	}
@@ -145,6 +227,26 @@ public class MappingMainPanel extends JPanel implements ActionListener
 	}
 	
 	
+	public static JPanel getTargetLocationPanel() {
+		return targetLocationPanel;
+	}
+
+
+	public static String getWSDLBindingFilePath() {
+		return WSDLBindingFilePath;
+	}
+
+
+	public static void setWSDLBindingFilePath(String wSDLBindingFilePath) {
+		WSDLBindingFilePath = wSDLBindingFilePath;
+	}
+
+
+	public static void setTargetLocationPanel(JPanel targetLocationPanel) {
+		MappingMainPanel.targetLocationPanel = targetLocationPanel;
+	}
+
+
 	public static String getTargetFileType() {
 		return targetFileType;
 	}
@@ -323,7 +425,7 @@ public class MappingMainPanel extends JPanel implements ActionListener
 		//construct target panel
 		JPanel targetButtonPanel = new JPanel(new BorderLayout());
 		targetButtonPanel.setBorder(BorderFactory.createEmptyBorder());
-		JPanel targetLocationPanel = new JPanel(new BorderLayout(2, 0));
+		targetLocationPanel = new JPanel(new BorderLayout(2, 0));
 		targetLocationPanel.setBorder(BorderFactory.createEmptyBorder());
 		//		targetTreeCollapseAllAction = new TreeCollapseAllAction(tTree);
 		//		targetTreeExpandAllAction = new TreeExpandAllAction(tTree);
@@ -331,11 +433,11 @@ public class MappingMainPanel extends JPanel implements ActionListener
 		targetTreeToolBar.setFloatable(false);
 		//		targetTreeToolBar.add(targetTreeExpandAllAction);
 		//		targetTreeToolBar.add(targetTreeCollapseAllAction);
-		targetLocationPanel.add(targetTreeToolBar, BorderLayout.WEST);
+		//targetLocationPanel.add(targetTreeToolBar, BorderLayout.WEST);
 		targetLocationArea.setBackground(new Color(212,208,200));
 		targetLocationArea.setEditable(false);
 		//targetLocationArea.setPreferredSize(new Dimension((DefaultSettings.FRAME_DEFAULT_WIDTH / 10), 24));
-        targetLocationArea.setPreferredSize(new Dimension((frameWidth / 10), 240));
+        targetLocationArea.setPreferredSize(new Dimension((frameWidth / 10), 24));
 		targetLocationPanel.add(targetLocationArea, BorderLayout.CENTER);
 		
 		/*JButton openTargetButton = new JButton(SELECT_TARGET);
@@ -408,6 +510,71 @@ public class MappingMainPanel extends JPanel implements ActionListener
 	}*/
 	
 	
+	public void createOpenWSDLBindingFileButton()
+	{
+		
+		targetButtonPanel = new JPanel(new BorderLayout(2, 0));
+		targetButtonPanel.setBorder(BorderFactory.createEtchedBorder());
+		targetButtonPanel.setLayout(new GridLayout(5, 5));
+		JButton openSourceButton = new JButton(SELECT_SOURCE);
+		openSourceButton.setMnemonic('S');
+		openSourceButton.setBounds(0, 0, 20, 20);
+		openSourceButton.setToolTipText(SELECT_CSV_TIP);
+		openSourceButton.addActionListener(this);
+		targetButtonPanel.add(openSourceButton, BorderLayout.SOUTH);
+		targetLocationPanel.add(targetButtonPanel, BorderLayout.EAST);
+		
+	}
+	
+	public void createEJBJNDIButtons()
+	{
+		
+		targetButtonPanel = new JPanel(new BorderLayout(2, 0));
+		targetButtonPanel.setBorder(BorderFactory.createEtchedBorder());
+		targetButtonPanel.setLayout(new GridLayout(5, 5));
+	    // add upload JNDI button here....	
+		 openSourceButton = new JButton("Select JNDI...");
+		openSourceButton.setMnemonic('U');
+		openSourceButton.setBounds(0, 0, 20, 20);
+		openSourceButton.setToolTipText(SELECT_CSV_TIP);
+		openSourceButton.addActionListener(this);
+				
+		// Enter JNDI name here....	
+				enterJNDIButton = new JButton("Enter JNDI name...");
+				enterJNDIButton.setMnemonic('U');
+				enterJNDIButton.setBounds(0, 0, 20, 20);
+				enterJNDIButton.setToolTipText(SELECT_CSV_TIP);
+				enterJNDIButton.addActionListener(this);
+				
+		// add radio button group here
+		
+			JRadioButton remoteButton = new JRadioButton("Remote");
+			remoteButton.setMnemonic('R');
+			remoteButton.setActionCommand("Remote");
+			remoteButton.setSelected(true);
+
+			JRadioButton localButton = new JRadioButton("Local");
+			localButton.setMnemonic('L');
+			localButton.setActionCommand("Local");
+			localButton.setSelected(true);
+			
+
+		    //Group the radio buttons.
+		    ButtonGroup group = new ButtonGroup();
+		    group.add(remoteButton);
+		    group.add(localButton);
+
+		    //Register a listener for the radio buttons.
+		    remoteButton.addActionListener(this);
+		    localButton.addActionListener(this);
+		    
+		targetButtonPanel.add(remoteButton, BorderLayout.SOUTH);
+		targetButtonPanel.add(localButton, BorderLayout.SOUTH);
+		targetButtonPanel.add(openSourceButton, BorderLayout.SOUTH);
+		targetButtonPanel.add(enterJNDIButton, BorderLayout.SOUTH);
+		targetLocationPanel.add(targetButtonPanel, BorderLayout.EAST);
+		
+	}
 	
 	public void actionPerformed(ActionEvent e)
 	{
@@ -416,14 +583,37 @@ public class MappingMainPanel extends JPanel implements ActionListener
 		{
             if (SELECT_SOURCE.equals(command))
 			{
-                //processingButtonOpenSource();
-                processingButtonOpen(ComponentType.SOURCE);
+                processingButtonOpen(SELECT_SOURCE);
             }
-			else if (SELECT_TARGET.equals(command))
+			else if (UPLOAD_JNDI.equals(command))
 			{
-                //processingButtonOpenTarget();
-                processingButtonOpen(ComponentType.TARGET);
+                processingButtonOpen(UPLOAD_JNDI);
             }
+            
+			else if(command.equals("Local"))
+			{
+				getEnterJNDIButton().setEnabled(false);
+				getOpenSourceButton().setEnabled(false);
+				setEjbType("EJB_LOCAL");
+				
+			}
+			else if(command.equals("Remote"))
+			{
+				getEnterJNDIButton().setEnabled(true);
+				getOpenSourceButton().setEnabled(true);
+				setEjbType("EJB_REMOTE");
+			}
+            
+			else if(command.equals(ENTER_JNDI_NAME))
+			{
+				String jndiName = JOptionPane.showInputDialog(null, "Please enter the name for mapping : ", 
+					"Mapping Name", 1);
+				if(jndiName!=null)
+				{
+					setEnterJNDIName(jndiName);
+				}
+			}
+			
 		}
 		catch (Exception e1)
 		{
@@ -433,21 +623,25 @@ public class MappingMainPanel extends JPanel implements ActionListener
 	}
 	
 	
-	private void processingButtonOpen(ComponentType type) throws Exception
+	private void processingButtonOpen(String type) throws Exception
     {
         //this.sourceButtonPanel.repaint();
         File file = null;
         
         
-        if (type.value().equals(ComponentType.SOURCE.value()))
+        if (type.equals(SELECT_SOURCE))
         {
             file = DefaultSettings.getUserInputOfFileFromGUI(this, //FileUtil.getUIWorkingDirectoryPath(),
                     SOURCE_TREE_FILE_DEFAULT_EXTENTION, OPEN_DIALOG_TITLE_FOR_DEFAULT_SOURCE_FILE, false, false);
             if ((file == null)||(!file.exists())||(!file.isFile())) return;
             if (!file.getName().toLowerCase().endsWith(SOURCE_TREE_FILE_DEFAULT_EXTENTION.toLowerCase()))
             {
-                //JOptionPane.showMessageDialog(this, "This file is not a XML schema (" + SOURCE_TREE_FILE_DEFAULT_EXTENTION + ") file : " + file.getName(), "Not a schema file", JOptionPane.ERROR_MESSAGE);
-                //return;
+                JOptionPane.showMessageDialog(this, "This file is not a binding XML file (" + SOURCE_TREE_FILE_DEFAULT_EXTENTION + ") file : " + file.getName(), "Not a binding file", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            if(file!=null)
+            {
+            	setWSDLBindingFilePath(file.getPath());
             }
         
         }
@@ -458,13 +652,15 @@ public class MappingMainPanel extends JPanel implements ActionListener
             if ((file == null)||(!file.exists())||(!file.isFile())) return;
             if (!file.getName().toLowerCase().endsWith(TARGET_TREE_FILE_DEFAULT_EXTENTION.toLowerCase()))
             {
-                //JOptionPane.showMessageDialog(this, "This file is not a XML schema (" + TARGET_TREE_FILE_DEFAULT_EXTENTION + ") file : " + file.getName(), "Not a schema file", JOptionPane.ERROR_MESSAGE);
-                //return;
+                JOptionPane.showMessageDialog(this, "This file is not a JNDI prop file (" + TARGET_TREE_FILE_DEFAULT_EXTENTION + ") file : " + file.getName(), "Not a binding file", JOptionPane.ERROR_MESSAGE);
+                return;
             }
         
+            if(file!=null)
+            {
+            	setJNDIPropertiesFilePath(file.getPath());
+            }
         }
-        
-        
             
     }
 	

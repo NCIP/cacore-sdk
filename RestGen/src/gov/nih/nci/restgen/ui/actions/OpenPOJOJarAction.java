@@ -239,6 +239,7 @@ public class OpenPOJOJarAction extends AbstractContextAction
 	    while(it.hasNext())
 	    {
 	    	String resourceName = (String)it.next();
+	    	System.out.println("resource name....."+resourceName);
 	    	DefaultSourceTreeNode element = new DefaultSourceTreeNode(resourceName);
 	    	Createclass = new DefaultSourceTreeNode("Create");
 	    	
@@ -264,7 +265,7 @@ public class OpenPOJOJarAction extends AbstractContextAction
 	    	Deleteclass.setResourceName(resourceName);
 	    	Deleteclass.setResourcePathLocation(top.getResourcePathLocation());
 	    	element.add(Deleteclass);
-	    	
+	    	top.setResourceName(resourceName);
 	    	top.add(element);
 	    }
 	}

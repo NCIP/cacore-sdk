@@ -130,6 +130,7 @@ public class UploadEJBJarAction extends AbstractContextAction
     	            mainFrame.getMainFrame().getMappingMainPanel().setTargetFileType("EJB");
     	            createTargetTree(file);
     	            mainFrame.getMainFrame().getMappingMainPanel().getTargetLocationArea().setBorder(BorderFactory.createTitledBorder("EJB"));
+    	            mainFrame.getMainFrame().getMappingMainPanel().createEJBJNDIButtons();
     			return true;
 
     }

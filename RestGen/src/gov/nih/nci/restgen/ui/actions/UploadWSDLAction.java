@@ -259,6 +259,9 @@ public void createTargetTree(File file) throws Exception
 	setServiceName(serviceName);
 	setServiceEndPoint(serviceEndPoint);
 	mainFrame.getMainFrame().getMappingMainPanel().getTargetLocationArea().setText("Name:"+serviceName+"\n"+"Endpoint:"+serviceEndPoint);
+	mainFrame.getMainFrame().getMappingMainPanel().createOpenWSDLBindingFileButton();
+	
+	
   //PV Validate WSDL file here
     
     /// form the tree here PV...start

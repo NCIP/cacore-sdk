@@ -4,6 +4,7 @@ package gov.nih.nci.restgen.ui.tree;
 
 import gov.nih.nci.restgen.core.Mapping;
 import gov.nih.nci.restgen.ui.actions.DeleteNodeAction;
+import gov.nih.nci.restgen.ui.jgraph.action.EditResourcePathAction;
 import gov.nih.nci.restgen.ui.main.MainFrameContainer;
 import gov.nih.nci.restgen.ui.mapping.MappingMainPanel;
 
@@ -73,6 +74,7 @@ public class TreeMouseAdapter extends MouseAdapter {
         Object obj = treeNode.getUserObject();
         JPopupMenu popupMenu = new JPopupMenu();
 		popupMenu.add(new JMenuItem(new DeleteNodeAction(mainFrame,tree,treeNode)));
+		popupMenu.add(new JMenuItem(new EditResourcePathAction(mainFrame,tree,treeNode)));
 	    return popupMenu;
 	
 	}

@@ -60,6 +60,7 @@ public interface ActionConstants
 	String NEW_POJO_FILE = "Open POJO";
 	String UPLOADEJBJAR = "EJB JAR";
 	String DELETENODE = "Delete Node";
+	String EDITNODEPATH = "Edit Path";
 
 }
 
