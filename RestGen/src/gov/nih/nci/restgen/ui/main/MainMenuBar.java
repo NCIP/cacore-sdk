@@ -185,12 +185,9 @@ public class MainMenuBar extends JMenuBar
         JMenuItem closeMenuItem = new JMenuItem(closeAction);
         actionMap.put(ActionConstants.CLOSE, closeAction);
         menuItemMap.put(ActionConstants.CLOSE, closeMenuItem);
-        fileMenu.add(closeMenuItem);
-        fileMenu.addSeparator();
+        //fileMenu.add(closeMenuItem);
+        //fileMenu.addSeparator();
         closeMenuItem.setEnabled(false);
-        
-        
-        
         
         DefaultExitAction exitAction = new DefaultExitAction(mainFrame);//.getAssociatedUIComponent());
         exitMenuItem = new JMenuItem(exitAction);
