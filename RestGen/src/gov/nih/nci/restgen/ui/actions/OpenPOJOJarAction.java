@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.StringTokenizer;
 import java.util.jar.JarFile;
 import java.util.jar.JarEntry;
 
@@ -137,11 +138,29 @@ public class OpenPOJOJarAction extends AbstractContextAction
           ArrayList<String> classList = new ArrayList<String>();
           boolean containsClassFile = false;
           boolean isValidPOJOClass = false;
+          String className = "";
             		while (en.hasMoreElements()) {
             			JarEntry entry = (JarEntry) en.nextElement();
             			isValidPOJOClass = false;
             			if (entry.getName().endsWith(".class")) {
             				InputStream input = jar.getInputStream(entry);
+            				StringTokenizer st = new StringTokenizer(entry.getName(),"/");
+            				System.out.println("---- Split by / ------");
+            				if(st.countTokens()>0)
+            				{
+            				while (st.hasMoreElements()) {
+            					String tempclassName = (String)st.nextElement();
+            					if(tempclassName.endsWith(".class"))
+            					{
+            						className = tempclassName;
+            					}
+            				}
+            				}
+            				else
+            				{
+            					className = entry.getName();
+            				}
+
             				isValidPOJOClass = validatePOJOClass(input,entry.getName(),file);
             				if(!isValidPOJOClass)
             				{
@@ -160,7 +179,7 @@ public class OpenPOJOJarAction extends AbstractContextAction
             				}
             				else
             				{
-            					classList.add(entry.getName().replace(".class", ""));
+            					classList.add(className.replace(".class", ""));
             					containsClassFile = true;
             				}
 
@@ -169,8 +188,14 @@ public class OpenPOJOJarAction extends AbstractContextAction
        		}
             if(getErrorString()!=null)
             {
-                 	   
-               JOptionPane.showMessageDialog(ownerFrame.getMainFrame(),getErrorString(),"", JOptionPane.ERROR_MESSAGE);
+            	JTextArea textArea = new JTextArea(getErrorString());
+            	JScrollPane scrollPane = new JScrollPane(textArea);  
+            	textArea.setLineWrap(true);  
+            	textArea.setWrapStyleWord(true); 
+            	scrollPane.setPreferredSize( new Dimension( 500, 500 ) );
+            	JOptionPane.showMessageDialog(ownerFrame.getMainFrame(), scrollPane, "POJO Validation Errors",  
+            	                                       JOptionPane.ERROR_MESSAGE);
+  	   
                  	   
             } 		
            if(!containsClassFile || classList.isEmpty())
@@ -201,7 +226,7 @@ public class OpenPOJOJarAction extends AbstractContextAction
       		tree.setDragEnabled(true);
   			tree.setDragEnabled(true);
   			int size = tree.getRowCount();
-  			for (int i = 0; i < size+100; i++)
+  			for (int i = 0; i < size+1000; i++)
   			{
   				if (i<tree.getRowCount())
   					tree.expandRow(i);
