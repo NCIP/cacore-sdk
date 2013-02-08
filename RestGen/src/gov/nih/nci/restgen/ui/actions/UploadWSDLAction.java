@@ -16,6 +16,7 @@ import gov.nih.nci.restgen.ui.main.MainFrameContainer;
 import gov.nih.nci.restgen.ui.tree.DefaultTargetTreeNode;
 import gov.nih.nci.restgen.ui.tree.TreeSelectionHandler;
 import org.apache.cxf.helpers.CastUtils;
+import org.apache.cxf.tools.common.ToolException;
 import org.apache.cxf.tools.common.toolspec.ToolSpec;
 import org.apache.cxf.tools.validator.WSDLValidator;
 import org.w3c.dom.Document;
@@ -73,6 +74,8 @@ public class UploadWSDLAction extends AbstractContextAction
 	private JTree tree;
 	private String serviceName = "";
 	private static String serviceEndPoint = "";
+	private Boolean verbose = true; 
+	private Boolean quiet = true;
     //hotkey//private static final KeyStroke ACCELERATOR_KEY_STROKE = KeyStroke.getKeyStroke(KeyEvent.VK_F4, Event.ALT_MASK, false);
 
 	private class Operation {
@@ -162,8 +165,9 @@ public class UploadWSDLAction extends AbstractContextAction
      */
     protected boolean doAction(ActionEvent e) throws Exception
     {
-    	// open WSDL here PV
+    				// open WSDL here PV
     				File file = new File("WSDLFile.wsdl");
+    				//File file = null;
     				String serviceEndPoint = "";
     				String serviceName = "";
     				
@@ -174,8 +178,8 @@ public class UploadWSDLAction extends AbstractContextAction
     	            {
     	                JOptionPane.showMessageDialog(mainFrame.getAssociatedUIComponent(), "This file is not a WSDL file (" + SOURCE_TREE_FILE_DEFAULT_EXTENTION + ") file : " + file.getName(), "Not a WSDL file", JOptionPane.ERROR_MESSAGE);
     	                return false;
-    	            }*/
-    				
+    	            }
+    				*/
     				char[] specialChars = {'!','@',']','#','$','%','^','&','*'}; 
     			       
     			       String inputString = JOptionPane.showInputDialog(null, "Please enter the URL for WSDL file : ", 
@@ -249,14 +253,25 @@ public class UploadWSDLAction extends AbstractContextAction
     	         // validate WSDL file
     	            try
     	            {
-    	            FileInputStream fis = new FileInputStream(file);
-    		        ToolSpec toolspec = new ToolSpec(fis);
-    		        WSDLValidator wsdlValidator = new WSDLValidator(toolspec);
-    		        wsdlValidator.execute(true);
+    		        /////////////////
+    		        ArrayList<String> list = new ArrayList<String>(); 
+    		        String[] pargs = list.toArray(new String[list.size()]); 
+    	            FileInputStream toolspecStream = new FileInputStream(file);
+    	                ToolSpec spec = new ToolSpec(toolspecStream,false);
+    	                toolspecStream.close(); 
+    	                WSDLValidator validator = new WSDLValidator(spec);
+    	                validator.execute(false);
+    		        
+    	            }
+    	            catch(ToolException ex)
+    	            {
+    	            	throw new Exception("WSDL parse error!!!");
+    	            	
     	            }
     	            catch(Exception ex)
     	            {
     	            	throw new Exception("WSDL parse error!!!");
+    	            	
     	            }
     		        //
     	            createTargetTree(file);
@@ -305,7 +320,8 @@ public void createTargetTree(File file) throws Exception
     			if (input != null && input.getMessage() != null) {
                     Collection<Part> parts = CastUtils.cast(input.getMessage().getParts());
                     for (Part part : parts) {
-                        if (part.getElement() != null || !"".equals(part.getElement())) {
+                    	if (part.getElement() != null && !"".equals(part.getElement())) {
+                    		System.out.println("Element part...."+part.getElement());
                         	if(defs.getElement(part.getElement())!=null)
                         	{
                         		Element type = defs.getElement(part.getElement());
@@ -319,7 +335,7 @@ public void createTargetTree(File file) throws Exception
                 if (output != null && output.getMessage() != null) {
                     Collection<Part> parts = CastUtils.cast(output.getMessage().getParts());
                     for (Part part : parts) {
-                        if (part.getElement() != null || !"".equals(part.getElement())) {
+                        if (part.getElement() != null && !"".equals(part.getElement())) {
                         	Element type = defs.getElement(part.getElement());
                         	outputType += type.getType(); 
                         }

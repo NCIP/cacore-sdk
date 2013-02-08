@@ -111,28 +111,21 @@ public class DefaultSaveAction extends OptionsAction
 	@SuppressWarnings("unchecked")
 	protected boolean processSaveFile(File file, MappingMainPanel mappingMain) throws Exception
 	{
-	/*	boolean oldChangeValue = mappingMain.isChanged();
-		preActionPerformed(mappingMain);*/
-
+	
 		try
 		{
 			mappingMain.persistFile(file);
-            /*if (!GeneralUtilities.areEqual(defaultFile, file))
-			{//not equal, change it.
-				removeFileUsageListener(defaultFile, mappingMain);
-				defaultFile = file;
-			}
-			postActionPerformed(mappingMain);
-//			JOptionPane.showMessageDialog(viewerPanel.getParent(), "Mapping data has been saved successfully.", "Save Complete", JOptionPane.INFORMATION_MESSAGE);
-			mappingMain.setSaveFile(file);*/
-			mainFrame.getTabbedPane().setTitleAt(0,file.getName());
+			// save this file object globally as an object in GenerateRESTfulResourceAction 
+    		mainFrame.getTabbedPane().setTitleAt(0,file.getName());
+    		GenerateRESTfulResourceAction.setMappingFile(file);
+    		if(!mainFrame.getMainFrame().getFrameMenu().getDefinedMenuItem("RESTful Resource").isEnabled())
+   			{
+            	 mainFrame.getMainFrame().getFrameMenu().getDefinedMenuItem("RESTful Resource").setEnabled(true);
+   			}
 			return true;
 		}
 		catch(Throwable e)
 		{
-			//restore the change value since something occurred and believe the save process is aborted.
-			//mappingMain.setChanged(oldChangeValue);
-			//rethrow the exeception
 			e.printStackTrace();
 			throw new Exception(e);
 		}

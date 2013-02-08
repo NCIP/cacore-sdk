@@ -922,7 +922,7 @@ public class MappingMainPanel extends JPanel implements ActionListener
 					targetFilePath = c.getLocation();
 				}
 			}
-			
+		System.out.println("source file path......target file path"+sourceFilePath+targetFilePath);	
 
 		if(sourceFilePath!=null && !sourceFilePath.equals("") && sourceFilePath.contains(".class"))
 		{
@@ -943,7 +943,7 @@ public class MappingMainPanel extends JPanel implements ActionListener
 			OpenPOJOJarAction newpojo = new OpenPOJOJarAction(mainFrame);
 			newpojo.createSourceTree(new File(sourceFilePath));
 		}
-		if(targetFilePath!=null && targetFilePath.equals("") && targetFilePath.contains(".jar"))
+		if(targetFilePath!=null && !targetFilePath.equals("") && targetFilePath.contains(".jar"))
 		{
 			if(new File(targetFilePath).exists())
 			{

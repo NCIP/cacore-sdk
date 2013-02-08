@@ -39,7 +39,7 @@ public class AboutViewAction extends AbstractContextAction {
 
          String warningMsg=readMessageFromFile(aboutTextPath).toString();
         //String warningMsg  = "<html><head>DDD</head><body>FFF<br><a href=\"http://www.google.com\" target=\"_blank\">CCC</a></body></html>";
-         String frmName="About CMTS";
+         String frmName="About RESTful Wrapper";
             //JOptionPane.showMessageDialog(mainApplet, warningMsg, frmName, JOptionPane.DEFAULT_OPTION);
 //        Object c = JOptionPane.showInputDialog(mainApplet,
 //                                     warningMsg,

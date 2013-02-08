@@ -47,9 +47,9 @@ public class GenerateRESTfulResourceAction extends AbstractContextAction
 {
     private static final String COMMAND_NAME = ActionConstants.GENERATERESTFUL;
     private static final Character COMMAND_MNEMONIC = new Character('E');
-    private static final String OPEN_DIALOG_TITLE_FOR_DEFAULT_SOURCE_FILE = "Selec mapping file!!";
+    private static final String OPEN_DIALOG_TITLE_FOR_DEFAULT_SOURCE_FILE = "Select mapping file!!";
 	private static final String SOURCE_TREE_FILE_DEFAULT_EXTENTION = ".xml";
-
+	private static File mappingFile = null;
 
     private MainFrameContainer mainFrame;
 
@@ -90,26 +90,34 @@ public class GenerateRESTfulResourceAction extends AbstractContextAction
      *
      * @param e
      * @return true if the action is finished successfully; otherwise, return false.
-     * @throws JAXBException 
-     * @throws GeneratorException 
+     * @throws Exception 
      */
-    protected boolean doAction(ActionEvent e) throws JAXBException, GeneratorException
+    protected boolean doAction(ActionEvent e) throws Exception
     {
-    	File file = null;
-		 
-        file = DefaultSettings.getUserInputOfFileFromGUI(mainFrame.getOwnerFrame(), //FileUtil.getUIWorkingDirectoryPath(),
+    	File file = getMappingFile(); 
+        /*file = DefaultSettings.getUserInputOfFileFromGUI(mainFrame.getOwnerFrame(), //FileUtil.getUIWorkingDirectoryPath(),
                 SOURCE_TREE_FILE_DEFAULT_EXTENTION, OPEN_DIALOG_TITLE_FOR_DEFAULT_SOURCE_FILE, false, false);
         if ((file == null)||(!file.exists())||(!file.isFile())) return true;
         if (!file.getName().toLowerCase().endsWith(SOURCE_TREE_FILE_DEFAULT_EXTENTION.toLowerCase()))
         {
             JOptionPane.showMessageDialog(mainFrame.getMainFrame(), "This file is not a mapping file (" + SOURCE_TREE_FILE_DEFAULT_EXTENTION + ") file : " + file.getName(), "Not a POJO Jar file", JOptionPane.ERROR_MESSAGE);
             return false;
-        }
+        }*/
+    	
         if(file!=null)
         {
         	Mapping m = MappingMainPanel.loadMapping(file);
         	GeneratorContext genContext = new GeneratorContext(m);
-        	genContext.setOutputPath("C:\\");
+        	if((mainFrame.getMainFrame().getMappingMainPanel().getOptionsPath())!=null)
+        	{
+        		genContext.setOutputPath(mainFrame.getMainFrame().getMappingMainPanel().getOptionsPath());
+        	}
+        	else
+        	{
+        		// display a error dialog
+        		JOptionPane.showMessageDialog(mainFrame.getMainFrame(), "Please set output path", "Output path not set", JOptionPane.ERROR_MESSAGE);
+        		return false;
+        	}
         	RESTfulWrapperGenerator restfulWrapper = new RESTfulWrapperGenerator(genContext);
         	restfulWrapper.runProcess();
         }
@@ -128,6 +136,14 @@ public class GenerateRESTfulResourceAction extends AbstractContextAction
     {
         return mainFrame.getAssociatedUIComponent();
     }
+
+	public static File getMappingFile() {
+		return mappingFile;
+	}
+
+	public static void setMappingFile(File mappingFile) {
+		GenerateRESTfulResourceAction.mappingFile = mappingFile;
+	}
 }
 
 /**

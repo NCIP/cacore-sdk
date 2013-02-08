@@ -317,6 +317,9 @@ public class OpenPOJOJarAction extends AbstractContextAction
   	   validatePOJOMethods = false;
   	 if(!isWrapperType(field.getType().toString()))
 	   {
+  		 
+  		if(!checkForJarEntry(classFile, file))
+  		{ 
   		String errorString = "Class Contains non-primitive java types field : " + field.getType().toString()+"\n"; 
   		if(getErrorString()==null)
 		{
@@ -331,19 +334,19 @@ public class OpenPOJOJarAction extends AbstractContextAction
 		}
 		  // JOptionPane.showMessageDialog(ownerFrame.getMainFrame(), "This file Contains non-primitive java types (" + SOURCE_TREE_FILE_DEFAULT_EXTENTION + ") file : " + field.getType().toString(), "Not a POJO class file", JOptionPane.ERROR_MESSAGE);
 		   break;
+		   
+  		}  
 	   }
-  	   if(field.getName().contains("serialVersionUID"))
-  	   continue;
-  		   
+  	      
   	   for(Method method : javaClass.getMethods()){
   	   	   String fieldCompare = "get"+field.getName();
-  		   if(fieldCompare.equalsIgnoreCase(method.getName()))
+  		   if(fieldCompare.equalsIgnoreCase(method.getName())||field.getName().contains("serialVersionUID"))
   		   {
   			   
   			   validatePOJOMethods = true;
   			   break;
   		   }
-  		   
+  		  
   	   }
   	  if(!validatePOJOMethods)
   	  {

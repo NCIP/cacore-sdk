@@ -163,6 +163,10 @@ public class OpenMappingAction extends AbstractContextAction
 			
 			// call the main panel open mapping method here PV>>>>>>>>>
 			mainFrame.getMainFrame().getMappingMainPanel().processOpenMapFile(file);
+			if(!mainFrame.getMainFrame().getFrameMenu().getDefinedMenuItem("RESTful Resource").isEnabled())
+   			{
+            	 mainFrame.getMainFrame().getFrameMenu().getDefinedMenuItem("RESTful Resource").setEnabled(true);
+   			}
 			
 		}
 		catch (Throwable t)

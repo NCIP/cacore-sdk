@@ -153,9 +153,7 @@ public class UploadEJBJarAction extends AbstractContextAction
     	            ///
     	            
     	            createTargetTree(file);
-    	            mainFrame.getMainFrame().getMappingMainPanel().getTargetLocationArea().setBorder(BorderFactory.createTitledBorder("EJB"));
-    	            mainFrame.getMainFrame().getMappingMainPanel().createEJBJNDIButtons();
-    			return true;
+    	         return true;
 
     }
     
@@ -240,7 +238,8 @@ public void createTargetTree(File file) throws Exception
 		}
     /// end
     
-
+        mainFrame.getMainFrame().getMappingMainPanel().getTargetLocationArea().setBorder(BorderFactory.createTitledBorder("EJB"));
+        mainFrame.getMainFrame().getMappingMainPanel().createEJBJNDIButtons();
 	
 	
 }
@@ -411,7 +410,11 @@ private void createNodes(DefaultTargetTreeNode top,ArrayList<String> list, File 
 	        		if(args!=null && args.length>0){
 	        			for (int i=0;i<args.length;i++)
 	        			{
-	        				argumentTypes = args[i].toString()+":";
+	        				argumentTypes = args[i].toString();
+	        				if(i>1)
+	        				{
+	        					argumentTypes = argumentTypes+":";
+	        				}
 	        			}
 	        		}
 	        		DefaultTargetTreeNode element = new DefaultTargetTreeNode(method.getName());

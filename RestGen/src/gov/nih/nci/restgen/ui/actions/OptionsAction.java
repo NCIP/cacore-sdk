@@ -96,14 +96,44 @@ public class OptionsAction extends AbstractContextAction
 	@SuppressWarnings("static-access")
 	protected boolean doAction(ActionEvent e) throws Exception
 	{
-		File file = null;
+		/*File file = null;
         file = DefaultSettings.getUserInputOfFileFromGUI(mainFrame.getOwnerFrame(),
-                "", "Output folder", false, false);
-        if(file!=null)
-        {
-        	mainFrame.getMainFrame().getMappingMainPanel().setOptionsPath(file.getPath());
-        	System.out.println("Selected directory path ....<<<....>>"+file.getPath());
-        }
+                "", "Output folder", false, false);*/
+		char[] specialChars = {'!','@',']','#','$','%','^','&','*'}; 
+	       
+	       String inputString = JOptionPane.showInputDialog(null, "Please enter the path for Resource : ", 
+					"Resource Path", 1);
+			if(inputString!=null)
+			{
+				char[] inputStringChars = inputString.toCharArray();
+				boolean specialCharIsFound = false;  
+
+				 for(int x = 0; x < inputStringChars.length; x++)  
+				 {  
+					 
+				   for(int y = 0; y < specialChars.length; y++)
+				   {
+					   
+						   if(inputStringChars[x]==specialChars[y]){  
+							   specialCharIsFound = true;  
+							   break;  
+						   }	 
+					   
+				   }
+				   
+				 }
+
+			       if( specialCharIsFound){
+			         
+			    	   JOptionPane.showMessageDialog(mainFrame.getMainFrame().getMappingMainPanel(), "Please enter a valid path...", "Invalid Path Entry!!!", JOptionPane.ERROR_MESSAGE);
+			       }
+			       else
+			       {
+			    	   mainFrame.getMainFrame().getMappingMainPanel().setOptionsPath(inputString);
+			        	System.out.println("Selected directory path ....<<<....>>"+inputString);
+			       }
+
+			}
 		
 		return true;
 	}

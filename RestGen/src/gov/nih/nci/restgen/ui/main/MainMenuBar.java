@@ -89,8 +89,10 @@ public class MainMenuBar extends JMenuBar
         uploadMenu.add(uploadEJBJarItem);
         
         JMenuItem generateRestfulItem=new JMenuItem(new GenerateRESTfulResourceAction(mainFrame));
+        generateRestfulItem.getAction().setEnabled(false);
+        menuItemMap.put(ActionConstants.RESTFUL, generateRestfulItem);
         generateMenu.add(generateRestfulItem);
-
+        
         // add the main menu Items here PV........end
         JMenu helpMenu=new JMenu("Help");
         

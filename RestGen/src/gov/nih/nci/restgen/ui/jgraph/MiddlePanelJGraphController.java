@@ -506,11 +506,11 @@ public class MiddlePanelJGraphController {
     	
     	if(targetNode.getOutputType()!=null)
     	{
-    		input.setType(targetNode.getOutputType());
+    		output.setType(targetNode.getOutputType());
     	}
     	else
     	{
-    		input.setType("");
+    		output.setType("");
     	}
     	
     	if(operation.getInputs()==null)
