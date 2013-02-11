@@ -425,7 +425,7 @@ public class DefaultSettings
     public static final Image getNCICBImage()
     {
         //using default imageFile
-        String defaultImageName="images/ncicb.gif";
+        String defaultImageName="resources/images/ncicb.gif";
         return getImage(defaultImageName);
     }
     
@@ -454,21 +454,9 @@ public class DefaultSettings
         if (rtnImg != null) return rtnImg;
 
         String imgFilePath="images/";
-        imgFilePath = imgFilePath + imageFileName;
-        //Thread.currentThread().getContextClassLoader().getResource( imgFilePath );
+        imgFilePath = imageFileName;
 
-//		URL imgUrl=Thread.currentThread().getContextClassLoader().getResource( imgFilePath );
-//		return Toolkit.getDefaultToolkit().createImage(imgUrl);
-
-        //URL imgUrl=ClassLoader.getSystemResource(imgFilePath);
         try {
-//            URL url = DefaultSettings.class.getClassLoader().getResource(imgFilePath);
-//            if (url != null)
-//            {
-//                InputStream imgStream=DefaultSettings.class.getClassLoader().getResource(imgFilePath).openStream();
-//                BufferedImage bfImage=ImageIO.read(imgStream);
-//                rtnImg=(Image)bfImage;
-//            }
 
             Enumeration<URL> urls = FileUtil.getResources(imgFilePath);
             if (urls != null)
