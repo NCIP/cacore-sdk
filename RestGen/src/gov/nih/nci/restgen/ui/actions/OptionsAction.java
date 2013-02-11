@@ -101,8 +101,8 @@ public class OptionsAction extends AbstractContextAction
                 "", "Output folder", false, false);*/
 		char[] specialChars = {'!','@',']','#','$','%','^','&','*'}; 
 	       
-	       String inputString = JOptionPane.showInputDialog(null, "Please enter the path for Resource : ", 
-					"Resource Path", 1);
+	       String inputString = JOptionPane.showInputDialog(null, "Please enter the path for output : ", 
+					"Output Path", 1);
 			if(inputString!=null)
 			{
 				char[] inputStringChars = inputString.toCharArray();

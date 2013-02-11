@@ -173,7 +173,7 @@ public class OpenPOJOJarAction extends AbstractContextAction
             					else
             					{
             						String currentString = getErrorString();
-            						setErrorString(currentString+errorString+"\n");
+            						setErrorString(currentString+"\n"+errorString);
             					}
             				 
             				}
@@ -330,7 +330,7 @@ public class OpenPOJOJarAction extends AbstractContextAction
 		else
 		{
 			String currentString = getErrorString();
-			setErrorString(getErrorString()+errorString);
+			setErrorString(getErrorString()+"\n"+errorString);
 		}
 		  // JOptionPane.showMessageDialog(ownerFrame.getMainFrame(), "This file Contains non-primitive java types (" + SOURCE_TREE_FILE_DEFAULT_EXTENTION + ") file : " + field.getType().toString(), "Not a POJO class file", JOptionPane.ERROR_MESSAGE);
 		   break;
@@ -350,9 +350,22 @@ public class OpenPOJOJarAction extends AbstractContextAction
   	   }
   	  if(!validatePOJOMethods)
   	  {
-  		 
-  		String errorString = "Class does not define get/set method for java field : " + field.getName()+classFile+"\n";
+  		String errorString = "";  
+  		if(javaClass.isAbstract())
+  		{
+  			errorString = "This Class is an abstract class : " + field.getName()+classFile+"\n";
+  			
+  		}
+  		else if(javaClass.isInterface())
+  		{
+  			errorString = "This Class is an abstract interface class : " + field.getName()+classFile+"\n";
+  			
+  		}
   		
+  		else
+  		{
+  			errorString = "Class does not define get/set method for java field : " + field.getName()+classFile+"\n";
+  	     }
   		if(getErrorString()==null)
 		{
 			

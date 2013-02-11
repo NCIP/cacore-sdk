@@ -166,12 +166,12 @@ public class UploadWSDLAction extends AbstractContextAction
     protected boolean doAction(ActionEvent e) throws Exception
     {
     				// open WSDL here PV
-    				File file = new File("WSDLFile.wsdl");
-    				//File file = null;
+    				/*File file = new File("WSDLFile.wsdl");*/
+    				File file = null;
     				String serviceEndPoint = "";
     				String serviceName = "";
     				
-    	            /*file = DefaultSettings.getUserInputOfFileFromGUI(mainFrame.getOwnerFrame(), //FileUtil.getUIWorkingDirectoryPath(),
+    	            file = DefaultSettings.getUserInputOfFileFromGUI(mainFrame.getOwnerFrame(), //FileUtil.getUIWorkingDirectoryPath(),
     	                    SOURCE_TREE_FILE_DEFAULT_EXTENTION, OPEN_DIALOG_TITLE_FOR_DEFAULT_SOURCE_FILE, false, false);
     	            if ((file == null)||(!file.exists())||(!file.isFile())) return true;
     	            if (!file.getName().toLowerCase().endsWith(SOURCE_TREE_FILE_DEFAULT_EXTENTION.toLowerCase()))
@@ -179,8 +179,8 @@ public class UploadWSDLAction extends AbstractContextAction
     	                JOptionPane.showMessageDialog(mainFrame.getAssociatedUIComponent(), "This file is not a WSDL file (" + SOURCE_TREE_FILE_DEFAULT_EXTENTION + ") file : " + file.getName(), "Not a WSDL file", JOptionPane.ERROR_MESSAGE);
     	                return false;
     	            }
-    				*/
-    				char[] specialChars = {'!','@',']','#','$','%','^','&','*'}; 
+    				
+    				/*char[] specialChars = {'!','@',']','#','$','%','^','&','*'}; 
     			       
     			       String inputString = JOptionPane.showInputDialog(null, "Please enter the URL for WSDL file : ", 
     							"WSDL file upload", 1);
@@ -229,7 +229,7 @@ public class UploadWSDLAction extends AbstractContextAction
     				else
     				{
     						return false;
-    				}
+    				}*/
     	            mainFrame.getMainFrame().getMappingMainPanel().setMappingTargetFile(file);
     	            mainFrame.getMainFrame().getMappingMainPanel().setTargetFileType("WSDL");
     	            /// clear the panels here
@@ -318,10 +318,13 @@ public void createTargetTree(File file) throws Exception
     			operationsList.add(opObject);
     			Input input = op.getInput();
     			if (input != null && input.getMessage() != null) {
+    		   		System.out.println("Input Message...."+input.getMessage());
                     Collection<Part> parts = CastUtils.cast(input.getMessage().getParts());
+                    System.out.println("Parts size...."+input.getMessage());
                     for (Part part : parts) {
+                    	System.out.println("Element part...."+part.getName());
                     	if (part.getElement() != null && !"".equals(part.getElement())) {
-                    		System.out.println("Element part...."+part.getElement());
+                    		
                         	if(defs.getElement(part.getElement())!=null)
                         	{
                         		Element type = defs.getElement(part.getElement());
@@ -329,16 +332,26 @@ public void createTargetTree(File file) throws Exception
                         	}
                         	
                         }
+                    	else
+                    	{
+                    		inputType +=part.getType();
+                    	}
                     }
                 }
                 Output output = op.getOutput();
                 if (output != null && output.getMessage() != null) {
+                	System.out.println("Output Message...."+output.getMessage());
                     Collection<Part> parts = CastUtils.cast(output.getMessage().getParts());
                     for (Part part : parts) {
                         if (part.getElement() != null && !"".equals(part.getElement())) {
                         	Element type = defs.getElement(part.getElement());
                         	outputType += type.getType(); 
                         }
+                        else
+                    	{
+                        	outputType +=part.getType();
+                    	}
+                        
                     }
                 }
                

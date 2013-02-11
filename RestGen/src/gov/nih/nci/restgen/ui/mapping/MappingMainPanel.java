@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.*;
@@ -27,6 +28,9 @@ import javax.xml.namespace.QName;
 import javax.xml.transform.stream.StreamSource;
 
 import gov.nih.nci.restgen.core.ComponentType;
+import gov.nih.nci.restgen.mapping.model.Implementation;
+import gov.nih.nci.restgen.mapping.model.Method;
+import gov.nih.nci.restgen.mapping.model.Resource;
 import gov.nih.nci.restgen.ui.actions.NewPOJOFileAction;
 import gov.nih.nci.restgen.ui.actions.OpenPOJOJarAction;
 import gov.nih.nci.restgen.ui.actions.UploadEJBJarAction;
@@ -37,6 +41,7 @@ import gov.nih.nci.restgen.ui.dnd.GraphDropTransferHandler;
 import gov.nih.nci.restgen.ui.dnd.TreeTransferHandler;
 import gov.nih.nci.restgen.ui.jgraph.MiddlePanelJGraphController;
 import gov.nih.nci.restgen.ui.jgraph.MiddlePanelMarqueeHandler;
+import gov.nih.nci.restgen.ui.jgraph.MiddlePanelJGraphController.MethodType;
 import gov.nih.nci.restgen.ui.main.MainFrameContainer;
 import gov.nih.nci.restgen.ui.tree.DefaultSourceTreeNode;
 import gov.nih.nci.restgen.ui.tree.DefaultTargetTreeNode;
@@ -88,6 +93,7 @@ public class MappingMainPanel extends JPanel implements ActionListener
 	private static JPanel targetRadioButtonPanel = null;
 	private static Hashtable resourcePathValues = null;
 	private static JSplitPane leftRightSplitPane = null;
+	private static JTextArea textArea = new JTextArea();
 	public static Hashtable getResourcePathValues() {
 		return resourcePathValues;
 	}
@@ -120,6 +126,7 @@ public class MappingMainPanel extends JPanel implements ActionListener
 	}
 
 
+
 	public static void setEnterJNDIButton(JButton enterJNDIButton) {
 		MappingMainPanel.enterJNDIButton = enterJNDIButton;
 	}
@@ -147,6 +154,16 @@ public class MappingMainPanel extends JPanel implements ActionListener
 
 	public static JButton getOpenSourceButton() {
 		return openSourceButton;
+	}
+
+
+	public static JTextArea getTextArea() {
+		return textArea;
+	}
+
+
+	public static void setTextArea(JTextArea textArea) {
+		MappingMainPanel.textArea = textArea;
 	}
 
 
@@ -911,6 +928,66 @@ public class MappingMainPanel extends JPanel implements ActionListener
 			List<gov.nih.nci.restgen.mapping.model.Component> l = mapping.getComponents();
 			String sourceFilePath = null;
 			String targetFilePath = null;
+			String targetFileType = null;
+			String WSDLBindingFilePath = null;
+			String ejbType = null;
+			String enterJNDIName = null;
+			String JNDIPropertiesFilePath = null;
+			Implementation imp = null;
+			targetFileType = mapping.getOptions().getWrapperType();
+			WSDLBindingFilePath = mapping.getOptions().getWsdlBindingFile();
+			List<Resource> rsc =  mapping.getResources();
+			if(rsc!=null && rsc.size()>0)
+			{
+				Iterator<Resource> rscit = rsc.iterator();
+		    	while(rscit.hasNext())
+		    	{
+		    		Resource rscVar =  (Resource) rscit.next();
+		    		List<Method> mtd =  rscVar.getMethods();
+		    		if(mtd!=null && mtd.size()>0)
+					{
+		    		Iterator<Method> mtdit =mtd.iterator();
+		    		while(mtdit.hasNext())
+			    	{
+		    			imp = ((Method)mtdit.next()).getImplementation();
+		    			if(imp!=null)
+		    			{
+		    				break;
+		    			}
+		    		}
+					}
+		    		if(imp!=null)
+	    			{
+	    				break;
+	    			}
+		    		
+		    	}
+			if (imp != null) {
+				ejbType = imp.getClientType();
+				if (ejbType != null) {
+					mainFrame.getMainFrame().getMappingMainPanel()
+							.setEjbType(ejbType);
+				}
+				enterJNDIName = imp.getJndiName();
+				if (enterJNDIName != null) {
+					mainFrame.getMainFrame().getMappingMainPanel()
+							.setEnterJNDIName(enterJNDIName);
+				}
+				JNDIPropertiesFilePath = imp.getJndiProperties();
+				if (JNDIPropertiesFilePath != null) {
+					mainFrame.getMainFrame().getMappingMainPanel()
+							.setJNDIPropertiesFilePath(JNDIPropertiesFilePath);
+				}
+			}
+			}
+			if(targetFileType!=null)
+			{
+				mainFrame.getMainFrame().getMappingMainPanel().setTargetFileType(targetFileType);
+			}
+			if(WSDLBindingFilePath!=null)
+			{
+				mainFrame.getMainFrame().getMappingMainPanel().setWSDLBindingFilePath(WSDLBindingFilePath);
+			}
 			for(gov.nih.nci.restgen.mapping.model.Component c:l){
 				if(c.getType().equals("source"))
 				{
@@ -926,6 +1003,8 @@ public class MappingMainPanel extends JPanel implements ActionListener
 
 		if(sourceFilePath!=null && !sourceFilePath.equals("") && sourceFilePath.contains(".class"))
 		{
+			mainFrame.getMainFrame().getMappingMainPanel().setMappingSourceFile(new File(sourceFilePath));
+			
 			if(new File(sourceFilePath).exists())
 			{
 				NewPOJOFileAction newpojo = new NewPOJOFileAction(mainFrame);
@@ -940,11 +1019,13 @@ public class MappingMainPanel extends JPanel implements ActionListener
 		
 		else 
 		{
+			mainFrame.getMainFrame().getMappingMainPanel().setMappingSourceFile(new File(sourceFilePath));
 			OpenPOJOJarAction newpojo = new OpenPOJOJarAction(mainFrame);
 			newpojo.createSourceTree(new File(sourceFilePath));
 		}
 		if(targetFilePath!=null && !targetFilePath.equals("") && targetFilePath.contains(".jar"))
 		{
+			mainFrame.getMainFrame().getMappingMainPanel().setMappingTargetFile(new File(targetFilePath));
 			if(new File(targetFilePath).exists())
 			{
 				UploadEJBJarAction newejb = new UploadEJBJarAction(mainFrame);
@@ -957,6 +1038,7 @@ public class MappingMainPanel extends JPanel implements ActionListener
 		}
 		else
 		{
+			mainFrame.getMainFrame().getMappingMainPanel().setMappingTargetFile(new File(targetFilePath));
 			UploadWSDLAction newwsdl = new UploadWSDLAction(mainFrame);
 			newwsdl.createTargetTree(new File(targetFilePath));
 		}
