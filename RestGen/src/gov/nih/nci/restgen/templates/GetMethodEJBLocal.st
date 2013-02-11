@@ -1,7 +1,7 @@
 	@GET
 	@Path("$PathParamPath$")
 	@Produces("application/xml")
-	public $ReturnType$ get$MethodName$($PathParam$, @Context UriInfo uriInfo)
+	public $ReturnType$ get$MethodName$($PathParam$ @Context UriInfo uriInfo)
 	{
 		try
 		{
@@ -13,17 +13,16 @@
 	        $HomeInterface$ ejbHome; 
 	        $RemoteInterface$ ejbRemote;
 	 
-	        Properties props = new Properties();
-			props.load(new FileInputStream("$JNDIProperties$"));
-	
-	        InitialContext initContext = null; 
+	         javax.naming.InitialContext initContext = null; 
 	
 	        try { 
 	            initContext = new javax.naming.InitialContext(); 
 	            String JNDIName = "$JNDIName$"; 
-	            $HomeInterface$ homeRef = ($HomeInterface$) initContext.lookup(JNDIName);
+	            Object obj = initContext.lookup("$JNDIName$");
+	            System.out.println(obj.getClass().getName());
+	            $HomeInterface$ homeRef = ($HomeInterface$) initContext.lookup("$JNDIName$");
 	            ejbRemote = ($RemoteInterface$) homeRef.create();  
-				return ejbRemote.$OperationName$($OperationParameters$);
+				return ejbRemote.$OperationName$($OperationParamNames$);
 	        }  
 	        catch (Exception e) { 
 	        	e.printStackTrace();

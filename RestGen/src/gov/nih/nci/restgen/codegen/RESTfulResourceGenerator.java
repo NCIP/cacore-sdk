@@ -11,6 +11,7 @@ import gov.nih.nci.restgen.mapping.model.Resource;
 import gov.nih.nci.restgen.util.GeneratorUtil;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.annotation.Annotation;
@@ -23,17 +24,13 @@ import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
 import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
+import org.apache.bcel.classfile.ClassParser;
+import org.apache.bcel.classfile.JavaClass;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.springframework.core.annotation.AnnotationUtils;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import com.predic8.schema.ComplexType;
 import com.predic8.schema.Element;
@@ -41,29 +38,46 @@ import com.predic8.schema.Schema;
 import com.predic8.wsdl.Binding;
 import com.predic8.wsdl.Definitions;
 import com.predic8.wsdl.Fault;
-import com.predic8.wsdl.Message;
-import com.predic8.wsdl.Part;
 import com.predic8.wsdl.Port;
 import com.predic8.wsdl.PortType;
 import com.predic8.wsdl.Service;
 import com.predic8.wsdl.WSDLParser;
 
+/**
+ * RESTful resource generator
+ * This generator works with EJB and SOAP web service mapping and generate RESTful resources. 
+ * StringTemplate is used to for code template. Generator parsess mapping information and 
+ * populates code template with values.
+ * @author konkapv
+ *
+ */
 public class RESTfulResourceGenerator extends Generator {
+	
+	/**
+	 * Constructor 
+	 * @param context
+	 */
 	public RESTfulResourceGenerator(GeneratorContext context) {
 		super(context);
 	}
 
 	protected void init() {
-		getContext().getLogger().info("Generating RESTful resource...");
+		getContext().getLogger().info("Generating RESTful resource...init");
 	}
 
 	protected void preProcess() {
+		getContext().getLogger().info("Generating RESTful resource...preProcess");
 	}
 
 	protected void validate() {
+		getContext().getLogger().info("Generating RESTful resource...validate");
 	}
 
+	/**
+	 * Generate RESTful resource based on mapping to EJB or SOAP web service.
+	 */
 	public void runProcess() throws GeneratorException {
+		getContext().getLogger().info("Generating RESTful resource...runProcess started");
 		Mapping mapping = context.getMapping();
 		if (mapping.getOptions().getWrapperType().equals(Options.SOAP_SERVICE))
 			runProcessSOAP();
@@ -73,10 +87,14 @@ public class RESTfulResourceGenerator extends Generator {
 			throw new GeneratorException("Invalid wrapper type.");
 	}
 
+	/**
+	 * Generate RESTful resource based on SOAP web service mapaping
+	 * 
+	 * @throws GeneratorException
+	 */
 	private void runProcessSOAP() throws GeneratorException {
 		Mapping mapping = context.getMapping();
 		List<Resource> resources = mapping.getResources();
-		String packageName = "gov.nih.nci.restgen.generated.resource";
 		StringTemplateGroup group = new StringTemplateGroup("restful");
 		StringTemplate getTemplate = group
 				.getInstanceOf("gov/nih/nci/restgen/templates/GetMethodSOAP");
@@ -87,6 +105,7 @@ public class RESTfulResourceGenerator extends Generator {
 		StringTemplate putTemplate = group
 				.getInstanceOf("gov/nih/nci/restgen/templates/putMethodSOAP");
 
+		
 		WSDLParser parser = new WSDLParser();
 
 		Definitions defs = parser.parse(context.getMapping().getOptions()
@@ -123,7 +142,7 @@ public class RESTfulResourceGenerator extends Generator {
 				}
 				counter++;
 			}
-			resourceTemplate.setAttribute("packageName", packageName);
+			resourceTemplate.setAttribute("packageName", Constants.GENERATOR_PKG_NAME);
 			resourceTemplate.setAttribute("ResourcePath", resource.getPath());
 			resourceTemplate.setAttribute("ResourceName", resourceName);
 
@@ -149,10 +168,94 @@ public class RESTfulResourceGenerator extends Generator {
 		}
 	}
 
+	private void processPojo(Resource resource) throws GeneratorException {
+		if (context.getMapping().getOptions().getWrapperType()
+				.equals(Options.EJB)) {
+			String libDest = context.getMapping().getOptions().getOutputPath()
+					+ File.separator + "web" + File.separator + "WEB-INF";
+
+			String sourcePath = resource.getPojoLocation();
+			File jarSrcFile = new File(sourcePath);
+			String jarFileName = null;
+			if (sourcePath.lastIndexOf(File.separator) > 0)
+				jarFileName = sourcePath.substring(
+						sourcePath.lastIndexOf(File.separator) + 1,
+						sourcePath.length());
+			else
+				jarFileName = sourcePath;
+
+			jarFileName = jarFileName.substring(0, jarFileName.indexOf("."))
+					+ ".jar";
+			if (sourcePath.endsWith(".jar")) {
+				File destFile = new File(libDest + File.separator + "lib"
+						+ File.separator + jarFileName);
+				try {
+					GeneratorUtil.copyFile(jarSrcFile, destFile);
+				} catch (IOException e) {
+					e.printStackTrace();
+					throw new GeneratorException(
+							"Failed to copy POJO jar into output lib folder");
+				}
+			} else {
+				try {
+					String pojoLocation = resource.getPojoLocation();
+					File file = new File(pojoLocation);
+					InputStream is = new FileInputStream(file);
+					ClassParser cp = new ClassParser(is, file.getName());
+					JavaClass javaClass = cp.parse();
+					String packageName = javaClass.getPackageName();
+					String dirStart = null;
+					if (packageName.indexOf(".") > 0) {
+						dirStart = packageName.substring(0,
+								packageName.indexOf("."));
+					} else
+						dirStart = packageName;
+					String jarSrcDir = pojoLocation.substring(
+							0,
+							pojoLocation.indexOf(File.separator + dirStart
+									+ File.separator)
+									+ (File.separator + dirStart).length());
+
+					File jarDestFile = new File(libDest + File.separator
+							+ "classes");
+					File jarSrcFolder = new File(jarSrcDir);
+					GeneratorUtil.copyDir(jarSrcDir, libDest + File.separator
+							+ "classes");
+				} catch (IOException e) {
+					e.printStackTrace();
+					throw new GeneratorException(
+							"Failed to generate web archive file.", e);
+				}
+			}
+		}
+	}
+
+	private void processJNDIProperties(Method method) throws GeneratorException {
+		if (method.getImplementation().getClientType() != null
+				&& method.getImplementation().getClientType()
+						.equals(Implementation.EJB_REMOTE)) {
+			String libDest = context.getMapping().getOptions().getOutputPath()
+					+ File.separator + "web" + File.separator + "WEB-INF"
+					+ File.separator + "lib";
+			String jndiFilePath = method.getImplementation()
+					.getJndiProperties();
+			String jndiFileName = jndiFilePath.substring(jndiFilePath
+					.lastIndexOf(File.separator) + 1);
+			File destFile = new File(libDest + File.separator + jndiFileName);
+			File srcFile = new File(jndiFilePath);
+			try {
+				GeneratorUtil.copyFile(srcFile, destFile);
+			} catch (IOException e) {
+				e.printStackTrace();
+				throw new GeneratorException(
+						"Failed to copy POJO jar into output lib folder");
+			}
+		}
+	}
+
 	private void runProcessEJB() throws GeneratorException {
 		Mapping mapping = context.getMapping();
 		List<Resource> resources = mapping.getResources();
-		String packageName = "gov.nih.nci.restgen.generated.resource";
 		StringTemplateGroup group = new StringTemplateGroup("restful");
 		StringTemplate getTemplate = null;
 		StringTemplate postTemplate = null;
@@ -172,49 +275,59 @@ public class RESTfulResourceGenerator extends Generator {
 			for (Method method : methods) {
 				String methodName = resource.getName() + counter;
 				if (method.getName().equals(Method.GET)) {
-					if (method.getImplementation().getClientType().equals(Implementation.EJB_LOCAL))
+					if (method.getImplementation().getClientType()
+							.equals(Implementation.EJB_LOCAL))
 						getTemplate = group
 								.getInstanceOf("gov/nih/nci/restgen/templates/GetMethodEJBLocal");
-					else if (method.getImplementation().getClientType().equals(Implementation.EJB_REMOTE))
+					else if (method.getImplementation().getClientType()
+							.equals(Implementation.EJB_REMOTE))
 						getTemplate = group
 								.getInstanceOf("gov/nih/nci/restgen/templates/GetMethodEJBRemote");
 					String getString = generateMethodEJB(resourceName, method,
 							methodName, getTemplate);
 					getMethodStr.add(getString);
 				} else if (method.getName().equals(Method.PUT)) {
-					if (method.getImplementation().getClientType().equals(Implementation.EJB_LOCAL))
+					if (method.getImplementation().getClientType()
+							.equals(Implementation.EJB_LOCAL))
 						putTemplate = group
 								.getInstanceOf("gov/nih/nci/restgen/templates/PutMethodEJBLocal");
-					else if (method.getImplementation().getClientType().equals(Implementation.EJB_REMOTE))
+					else if (method.getImplementation().getClientType()
+							.equals(Implementation.EJB_REMOTE))
 						putTemplate = group
 								.getInstanceOf("gov/nih/nci/restgen/templates/PutMethodEJBRemote");
 					String putString = generateMethodEJB(resourceName, method,
 							methodName, putTemplate);
 					putMethodStr.add(putString);
 				} else if (method.getName().equals(Method.POST)) {
-					if (method.getImplementation().getClientType().equals(Implementation.EJB_LOCAL))
+					if (method.getImplementation().getClientType()
+							.equals(Implementation.EJB_LOCAL))
 						postTemplate = group
 								.getInstanceOf("gov/nih/nci/restgen/templates/PostMethodEJBLocal");
-					else if (method.getImplementation().getClientType().equals(Implementation.EJB_REMOTE))
+					else if (method.getImplementation().getClientType()
+							.equals(Implementation.EJB_REMOTE))
 						postTemplate = group
 								.getInstanceOf("gov/nih/nci/restgen/templates/PostMethodEJBRemote");
 					String postString = generateMethodEJB(resourceName, method,
 							methodName, postTemplate);
 					postMethodStr.add(postString);
 				} else if (method.getName().equals(Method.DELETE)) {
-					if (method.getImplementation().getClientType().equals(Implementation.EJB_LOCAL))
+					if (method.getImplementation().getClientType()
+							.equals(Implementation.EJB_LOCAL))
 						deleteTemplate = group
 								.getInstanceOf("gov/nih/nci/restgen/templates/DeleteMethodEJBLocal");
-					else if (method.getImplementation().getClientType().equals(Implementation.EJB_REMOTE))
+					else if (method.getImplementation().getClientType()
+							.equals(Implementation.EJB_REMOTE))
 						deleteTemplate = group
 								.getInstanceOf("gov/nih/nci/restgen/templates/DeleteMethodEJBRemote");
 					String deleteString = generateMethodEJB(resourceName,
 							method, methodName, deleteTemplate);
 					deleteMethodStr.add(deleteString);
 				}
+				processJNDIProperties(method);
+				processPojo(resource);
 				counter++;
 			}
-			resourceTemplate.setAttribute("packageName", packageName);
+			resourceTemplate.setAttribute("packageName", Constants.GENERATOR_PKG_NAME);
 			resourceTemplate.setAttribute("ResourcePath", resource.getPath());
 			resourceTemplate.setAttribute("ResourceName", resourceName);
 
@@ -241,7 +354,8 @@ public class RESTfulResourceGenerator extends Generator {
 	}
 
 	private String generateMethodEJB(String resourceName, Method method,
-			String methodName, StringTemplate template) throws GeneratorException {
+			String methodName, StringTemplate template)
+			throws GeneratorException {
 		Implementation impl = method.getImplementation();
 
 		template.setAttribute("MethodName", methodName);
@@ -251,7 +365,7 @@ public class RESTfulResourceGenerator extends Generator {
 		org.jdom2.Document doc = null;
 		try {
 			jarFile = new JarFile(impl.getPath());
-			JarEntry jarEntry = jarFile.getJarEntry("ejb-jar.xml");
+			JarEntry jarEntry = jarFile.getJarEntry("META-INF/ejb-jar.xml");
 			if (jarEntry != null) {
 				InputStream is = jarFile.getInputStream(jarEntry);
 				SAXBuilder sax = new SAXBuilder();
@@ -287,36 +401,50 @@ public class RESTfulResourceGenerator extends Generator {
 			}
 		}
 
-		if(!foundService)
-			throw new GeneratorException("Unable to find EJB from ejb-jar.xml for "+impl.getName());
-		
-		template.setAttribute("PathParamPath", getOperationPathParams(impl));
-		template.setAttribute("PathParam", getOperationPath(impl));
+		if (!foundService)
+			throw new GeneratorException(
+					"Unable to find EJB from ejb-jar.xml for " + impl.getName());
+
+		template.setAttribute("PathParamPath",
+				getOperationPath(impl, method.getPathName()));
+		template.setAttribute("PathParam", getOperationPathParams(impl));
 		template.setAttribute("HomeInterface", ejbHomeName);
 		template.setAttribute("RemoteInterface", ejbRemoteName);
 		template.setAttribute("ReturnType", getOperationReturnType(impl));
 
 		template.setAttribute("OperationName", impl.getOperation().getName());
-		template.setAttribute("OperationParameters", getOperationParams(impl));
+		String operationParams = getOperationParams(impl);
+		if (operationParams != null)
+			operationParams = operationParams + ", ";
+		template.setAttribute("OperationParameters", operationParams);
+		template.setAttribute("RequestType", getRequestTypes(impl));
+		template.setAttribute("OperationParamNames", getOperationParams(impl));
+
 		if (impl.getClientType().equals(Implementation.EJB_REMOTE)) {
-			template.setAttribute("JNDIProperties", impl.getJndiProperties());
-			template.setAttribute("JNDIName", impl.getJndiName());
+			String jndiPath = impl.getJndiProperties();
+			String fileName = jndiPath.substring(jndiPath
+					.lastIndexOf(File.separator) + 1);
+			template.setAttribute("JNDIProperties", fileName);
 		}
+		template.setAttribute("JNDIName", impl.getJndiName());
 		return template.toString();
 	}
-	
+
 	private String getOperationReturnType(Implementation impl) {
 		Operation operation = impl.getOperation();
 		Output output = operation.getOutput();
-		if(output == null)
+		if (output == null)
 			return "void";
 		else
-			return output.getName();
-	}	
+			return output.getType();
+	}
 
 	private String getOperationParams(Implementation impl) {
 		Operation operation = impl.getOperation();
 		List<Input> inputs = operation.getInputs();
+		if (inputs == null || inputs.size() == 0)
+			return null;
+
 		StringBuffer buffer = new StringBuffer();
 		Iterator<Input> iterator = inputs.iterator();
 		while (iterator.hasNext()) {
@@ -329,9 +457,31 @@ public class RESTfulResourceGenerator extends Generator {
 		return buffer.toString();
 	}
 
+	private String getRequestTypes(Implementation impl) {
+		Operation operation = impl.getOperation();
+		List<Input> inputs = operation.getInputs();
+		if (inputs == null || inputs.size() == 0)
+			return null;
+
+		StringBuffer buffer = new StringBuffer();
+		Iterator<Input> iterator = inputs.iterator();
+		while (iterator.hasNext()) {
+			Input input = (Input) iterator.next();
+			buffer.append(input.getType() + " " + input.getName());
+			if (iterator.hasNext())
+				buffer.append(", ");
+		}
+
+		return buffer.toString();
+	}
+
 	private String getOperationPathParams(Implementation impl) {
 		Operation operation = impl.getOperation();
 		List<Input> inputs = operation.getInputs();
+
+		if (inputs == null || inputs.size() == 0)
+			return null;
+
 		StringBuffer buffer = new StringBuffer();
 		Iterator<Input> iterator = inputs.iterator();
 		while (iterator.hasNext()) {
@@ -345,9 +495,17 @@ public class RESTfulResourceGenerator extends Generator {
 		return buffer.toString();
 	}
 
-	private String getOperationPath(Implementation impl) {
+	private String getOperationPath(Implementation impl, String methodPath) {
 		Operation operation = impl.getOperation();
 		List<Input> inputs = operation.getInputs();
+		String path = null;
+
+		if (methodPath != null && methodPath.trim().length() > 0)
+			path = "/" + methodPath;
+
+		if (inputs == null || inputs.size() == 0)
+			return path;
+
 		StringBuffer buffer = new StringBuffer();
 		Iterator<Input> iterator = inputs.iterator();
 		while (iterator.hasNext()) {
@@ -357,7 +515,10 @@ public class RESTfulResourceGenerator extends Generator {
 				buffer.append("/");
 		}
 
-		return buffer.toString();
+		if (path != null)
+			return path + "/" + buffer.toString();
+		else
+			return buffer.toString();
 	}
 
 	private String generateMethod(String resourceName, Method method,

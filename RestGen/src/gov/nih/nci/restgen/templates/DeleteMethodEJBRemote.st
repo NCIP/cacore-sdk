@@ -7,20 +7,25 @@
 	        $HomeInterface$ ejbHome; 
 	        $RemoteInterface$ ejbRemote;
 	 
-	        Properties props = new Properties();
-			props.load(new FileInputStream("$JNDIProperties$"));
+	        java.util.Properties props = new java.util.Properties();
 	
-	        InitialContext initContext = null; 
+	         javax.naming.InitialContext initContext = null; 
 	
 	        try { 
+	        	String jndiPropsFile = "$JNDIProperties$";
+				java.io.InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(jndiPropsFile);
+				if (inputStream == null) {
+					throw new java.io.FileNotFoundException("JNDI property file '" + jndiPropsFile + "' not found in the classpath");
+				}
+				props.load(inputStream);	        
 	            initContext = new javax.naming.InitialContext(props); 
 	            Object objref = initContext.lookup("$JNDIName$"); 
-	            ejbHome = ($HomeInterface$)PortableRemoteObject.narrow(objref,
+	            ejbHome = ($HomeInterface$)javax.rmi.PortableRemoteObject.narrow(objref,
 	                                             $HomeInterface$.class);
 	            ejbRemote = ejbHome.create();  
-				ejbRemote.$OperationName$($OperationParameters$);
+				ejbRemote.$OperationName$($OperationParamNames$);
 	        }  
-	        catch(CreateException e) {
+	        catch(javax.ejb.CreateException e) {
 	        	e.printStackTrace();
 				ResponseBuilder builder = Response.status(Status.BAD_REQUEST);
 				builder.type("application/xml");
@@ -36,7 +41,7 @@
 				builder.entity(buffer.toString());
 				throw new WebApplicationException(builder.build());
 	        }  
-	        catch(RemoteException e) {
+	        catch(java.rmi.RemoteException e) {
 	        	e.printStackTrace();
 				ResponseBuilder builder = Response.status(Status.BAD_REQUEST);
 				builder.type("application/xml");

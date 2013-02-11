@@ -4,29 +4,8 @@
 	{
 		try
 		{
-			if(param0 == null)
-			{			
-				ResponseBuilder builder = Response.status(Status.BAD_REQUEST);
-				builder.type("application/xml");
-				StringBuffer buffer = new StringBuffer();
-				buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-				buffer.append("<response>");
-				buffer.append("<type>ERROR</type>");
-				buffer.append("<code>PUT_1</code>");
-				buffer.append("<resource>$ResourceName$</resource>");
-				buffer.append("<path>PUT</path>");
-				buffer.append("<message>Object is missing to create</message>");
-				buffer.append("</response>");
-				builder.entity(buffer.toString());
-				throw new WebApplicationException(builder.build());
-			}
-
 	        $HomeInterface$ ejbHome; 
 	        $RemoteInterface$ ejbRemote;
-	 
-	        Properties props = new Properties();
-			props.load(new FileInputStream("$JNDIProperties$"));
-	
 	        javax.naming.InitialContext initContext = null; 
 	
 	        try { 
@@ -34,9 +13,9 @@
 	            String JNDIName = "$JNDIName$"; 
 	            $HomeInterface$ homeRef = ($HomeInterface$) initContext.lookup(JNDIName);
 	            ejbRemote = ($RemoteInterface$) homeRef.create();  
-				ejbRemote.$OperationName$(param0);
+				ejbRemote.$OperationName$($OperationParamNames$);
 	        }  
-	        catch(CreateException e) {
+	        catch(javax.ejb.CreateException e) {
 	        	e.printStackTrace();
 				ResponseBuilder builder = Response.status(Status.BAD_REQUEST);
 				builder.type("application/xml");
@@ -52,7 +31,7 @@
 				builder.entity(buffer.toString());
 				throw new WebApplicationException(builder.build());
 	        }  
-	        catch(RemoteException e) {
+	        catch(java.rmi.RemoteException e) {
 	        	e.printStackTrace();
 				ResponseBuilder builder = Response.status(Status.BAD_REQUEST);
 				builder.type("application/xml");

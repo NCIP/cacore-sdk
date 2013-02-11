@@ -16,8 +16,6 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.Context;
-import javax.naming.Context;
-import javax.naming.InitialContext;
 import org.apache.log4j.Logger;
 
 import java.util.List;

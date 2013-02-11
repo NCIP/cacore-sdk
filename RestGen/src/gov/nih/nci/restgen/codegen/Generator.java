@@ -2,6 +2,12 @@ package gov.nih.nci.restgen.codegen;
 
 import java.io.File;
 
+/**
+ * Code Generator with generate operation executing init(), preProcess(), validate(), runProcess() 
+ * and postPross() operations in sequence. 
+ * @author konkapv
+ *
+ */
 public abstract class Generator {
 	public static final String RESOURCE_PACKAGE_NAME = "service";
 	public static final String SERVICE_CLIENT_PACKAGE_NAME = "client";
@@ -17,16 +23,28 @@ public abstract class Generator {
 
 	protected GeneratorContext context;
 
+	/**
+	 * Constructor 
+	 * @param context
+	 */
+	public Generator(GeneratorContext context) {
+		setContext(context);
+	}
+	
+	/**
+	 * Set generator context
+	 * @param context
+	 */
 	public void setContext(GeneratorContext context) {
 		this.context = context;
 	}
 
+	/**
+	 * Get generator context
+	 * @return GeneratorContext
+	 */
 	public GeneratorContext getContext() {
 		return context;
-	}
-
-	public Generator(GeneratorContext context) {
-		setContext(context);
 	}
 
 	protected abstract void init() throws GeneratorException;
@@ -35,22 +53,26 @@ public abstract class Generator {
 
 	protected abstract void validate() throws GeneratorException;
 
-	public abstract void runProcess() throws GeneratorException;
+	protected abstract void runProcess() throws GeneratorException;
 
 	protected abstract void postProcess() throws GeneratorException;
 
+	/**
+	 * Run generator steps
+	 * @throws GeneratorException
+	 */
 	public void generate() throws GeneratorException {
-		context.getLogger().info("Executing init()");
+		context.getLogger().info("Executing Generator init()");
 		init();
-		context.getLogger().info("Executing preProcess()");
+		context.getLogger().info("Executing Generator preProcess()");
 		preProcess();
-		context.getLogger().info("Executing validate()");
+		context.getLogger().info("Executing Generator validate()");
 		validate();
-		context.getLogger().info("Executing runProcess()");
+		context.getLogger().info("Executing Generator runProcess()");
 		runProcess();
-		context.getLogger().info("Executing postProcess()");
+		context.getLogger().info("Executing Generator postProcess()");
 		postProcess();
-		context.getLogger().info("Completed generate()");
+		context.getLogger().info("Completed Generator generate()");
 	}
 
 	protected String getFileOutputPath() {

@@ -23,7 +23,7 @@ http://www.springframework.org/schema/util/spring-util-2.0.xsd">
   </util:list>
 
 
-  <jaxrs:server id="customerService" address="/">
+  <jaxrs:server id="$ResourceName$Service" address="/">
     <jaxrs:serviceBeans>
       $ResourceRefBean; separator="\n"$
     </jaxrs:serviceBeans>

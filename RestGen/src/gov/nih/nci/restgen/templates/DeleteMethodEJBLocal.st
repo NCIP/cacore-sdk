@@ -6,20 +6,16 @@
 		{
 	        $HomeInterface$ ejbHome; 
 	        $RemoteInterface$ ejbRemote;
-	 
-	        Properties props = new Properties();
-			props.load(new FileInputStream("$JNDIProperties$"));
-	
-	        InitialContext initContext = null; 
+	         javax.naming.InitialContext initContext = null; 
 	
 	        try { 
 	            initContext = new javax.naming.InitialContext(); 
 	            String JNDIName = "$JNDIName$"; 
 	            $HomeInterface$ homeRef = ($HomeInterface$) initContext.lookup(JNDIName);
 	            ejbRemote = ($RemoteInterface$) homeRef.create();  
-				ejbRemote.$OperationName$($OperationParameters$);
+				ejbRemote.$OperationName$($OperationParamNames$);
 	        }  
-	        catch(CreateException e) {
+	        catch(javax.ejb.CreateException e) {
 	        	e.printStackTrace();
 				ResponseBuilder builder = Response.status(Status.BAD_REQUEST);
 				builder.type("application/xml");
@@ -35,7 +31,7 @@
 				builder.entity(buffer.toString());
 				throw new WebApplicationException(builder.build());
 	        }  
-	        catch(RemoteException e) {
+	        catch(java.rmi.RemoteException e) {
 	        	e.printStackTrace();
 				ResponseBuilder builder = Response.status(Status.BAD_REQUEST);
 				builder.type("application/xml");

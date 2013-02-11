@@ -10,18 +10,18 @@ import gov.nih.nci.restgen.mapping.model.Operation;
 import gov.nih.nci.restgen.mapping.model.Options;
 import gov.nih.nci.restgen.mapping.model.Resource;
 import gov.nih.nci.restgen.util.GeneratorUtil;
+import gov.nih.nci.restgen.util.JarHelper;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
-import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
-import java.util.jar.JarOutputStream;
-import java.util.jar.Manifest;
+import java.util.jar.JarFile;
+
+import org.apache.commons.io.FileUtils;
 
 public class RESTfulWrapperGenerator extends Generator {
 
@@ -32,7 +32,8 @@ public class RESTfulWrapperGenerator extends Generator {
 	@Override
 	protected void init() throws GeneratorException {
 		if (context.getMappingXMLPath() != null) {
-			Mapping mapping = MappingGenerator.fromXML(context.getMappingXMLPath());
+			Mapping mapping = MappingGenerator.fromXML(context
+					.getMappingXMLPath());
 			context.setMapping(mapping);
 		}
 	}
@@ -140,13 +141,6 @@ public class RESTfulWrapperGenerator extends Generator {
 							+ method.getName() + "Aborting the process!");
 				}
 
-				if (method.getPathName() == null
-						|| method.getPathName().trim().length() == 0) {
-					context.getLogger()
-							.error("No method path name or Invalid method path name. Aborting the process!");
-					throw new GeneratorException(
-							"No method path name or Invalid method path name. Aborting the process!");
-				}
 				if (method.getImplementation() == null) {
 					context.getLogger().error(
 							"Missing method impelementation for "
@@ -171,8 +165,9 @@ public class RESTfulWrapperGenerator extends Generator {
 									+ ". Aborting the process!");
 				}
 
-				if (impl.getPortName() == null
-						|| impl.getPortName().trim().length() == 0) {
+				if (impl.getType().equals(Options.SOAP_SERVICE)
+						&& (impl.getPortName() == null || impl.getPortName()
+								.trim().length() == 0)) {
 					context.getLogger().error(
 							"Missing method impelementation port name for "
 									+ method.getName()
@@ -193,6 +188,31 @@ public class RESTfulWrapperGenerator extends Generator {
 							"Missing method impelementation type for "
 									+ method.getName()
 									+ ". Aborting the process!");
+				}
+
+				if (impl.getType().equals(Options.EJB)
+						&& (impl.getClientType()
+								.equals(Implementation.EJB_REMOTE))) {
+					if (impl.getJndiName() == null
+							|| impl.getJndiName().trim().length() == 0) {
+						context.getLogger().error(
+								"Missing EJB JNDI name for " + impl.getName()
+										+ ". Aborting the process!");
+						throw new GeneratorException(
+								"Missing EJB JNDI name for " + impl.getName()
+										+ ". Aborting the process!");
+					}
+					if (impl.getJndiProperties() == null
+							|| impl.getJndiProperties().trim().length() == 0) {
+						context.getLogger().error(
+								"Missing EJB JNDI properties file for "
+										+ impl.getName()
+										+ ". Aborting the process!");
+						throw new GeneratorException(
+								"Missing EJB JNDI properties file for "
+										+ impl.getName()
+										+ ". Aborting the process!");
+					}
 				}
 
 				if (impl.getOperation() == null) {
@@ -228,12 +248,11 @@ public class RESTfulWrapperGenerator extends Generator {
 	public void runProcess() throws GeneratorException {
 
 		Options options = context.getMapping().getOptions();
-		if (options.getWrapperType().equals(Options.SOAP_SERVICE))
-		{		
+		if (options.getWrapperType().equals(Options.SOAP_SERVICE)) {
 			// Generate SOAP web service client
 			new WebserviceClientGenerator(context).generate();
 		}
-		
+
 		String libSrc = context.getMapping().getOptions().getRootPath()
 				+ File.separator + "lib";
 		String libDest = context.getMapping().getOptions().getOutputPath()
@@ -243,120 +262,68 @@ public class RESTfulWrapperGenerator extends Generator {
 				+ File.separator + "web" + File.separator + "WEB-INF"
 				+ File.separator + "classes";
 
-		// Generate RESTful resources
-		new RESTfulResourceGenerator(context).generate();
-
-		// Generate RESTful Web application resources
-		new RESTfulWebResourceGenerator(context).generate();
-
 		try {
 			GeneratorUtil.copyDir(libSrc, libDest);
 		} catch (IOException e) {
 			throw new GeneratorException("Failed to copy lib folder contents",
 					e);
 		}
+
+		// Generate RESTful resources
+		new RESTfulResourceGenerator(context).generate();
+
+		// Generate RESTful Web application resources
+		new RESTfulWebResourceGenerator(context).generate();
+		if (context.getMapping().getOptions().getWrapperType()
+				.equals(Options.EJB)) {
+			String ejbLoc = context.getMapping().getOptions().getEjbLocation();
+			File src = new File(ejbLoc);
+			String ejbFileName = ejbLoc.substring(ejbLoc
+					.lastIndexOf(File.separator) + 1);
+			String jarDest = context.getMapping().getOptions().getOutputPath()
+					+ File.separator + "web" + File.separator + "WEB-INF"
+					+ File.separator + "lib" + File.separator + ejbFileName;
+			File dest = new File(jarDest);
+			try {
+				GeneratorUtil.copyFile(src, dest);
+				String outputPath = context.getMapping().getOptions().getOutputPath()
+						+ File.separator + "web" + File.separator + "temp";
+				String deletePathName = outputPath + File.separator + "META-INF"; 
+				new JarHelper().removeJarEntry(jarDest, deletePathName, outputPath);
+			} catch (IOException e) {
+				e.printStackTrace();
+				throw new GeneratorException(
+						"Failed to copy EJB jar to output lib folder");
+			}
+		}
 		boolean compileFlag = GeneratorUtil.compileJavaSource(srcFolder,
 				classFolder, libDest + File.separator + "lib", context);
 		if (!compileFlag)
 			throw new GeneratorException(
 					"Failed to compile generated java source. Check the log.");
-		 try {
-			 createJAR("restful.war",
-					 context.getMapping().getOptions().getOutputPath()+File.separator+"web",
-					 context.getMapping().getOptions().getOutputPath());
-		 } catch (IOException e) {
-			 e.printStackTrace();
-			 throw new GeneratorException("Failed to generate web archive file.",
-					 e);
-		 }
+		
+		//Do not need j2ee.jar during execution
+		File j2eeFile = new File(libDest + File.separator + "lib"+ File.separator + "j2ee-1.4.jar"); 
+		FileUtils.deleteQuietly(j2eeFile);
+		
+		try {
+			File dirOrFile2Jar = new File(context.getMapping().getOptions()
+					.getOutputPath()
+					+ File.separator + "web");
+			File destJar = new File(context.getMapping().getOptions()
+					.getOutputPath()
+					+ File.separator + "restful.war");
+			new JarHelper().jarDir(dirOrFile2Jar, destJar);
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new GeneratorException(
+					"Failed to generate web archive file.", e);
+		}
 	}
 
 	@Override
 	protected void postProcess() throws GeneratorException {
 
-	}
-
-	public void createJar(String jarName, String folderName, String outputPath)
-			throws IOException {
-		Manifest manifest = new Manifest();
-		manifest.getMainAttributes().put(Attributes.Name.MANIFEST_VERSION,
-				"1.0");
-		JarOutputStream target = new JarOutputStream(new FileOutputStream(
-				outputPath + File.separator + jarName), manifest);
-		add(new File(folderName), target);
-		target.close();
-	}
-
-	private void add(File source, JarOutputStream target) throws IOException {
-		BufferedInputStream in = null;
-		try {
-			if (source.isDirectory()) {
-				String name = source.getPath().replace("\\", "/");
-				if (!name.isEmpty()) {
-					if (!name.endsWith("/"))
-						name += "/";
-					JarEntry entry = new JarEntry(name);
-					entry.setTime(source.lastModified());
-					target.putNextEntry(entry);
-					target.closeEntry();
-				}
-				for (File nestedFile : source.listFiles())
-					add(nestedFile, target);
-				return;
-			}
-
-			JarEntry entry = new JarEntry(source.getPath().replace("\\", "/"));
-			entry.setTime(source.lastModified());
-			target.putNextEntry(entry);
-			in = new BufferedInputStream(new FileInputStream(source));
-
-			byte[] buffer = new byte[1024];
-			while (true) {
-				int count = in.read(buffer);
-				if (count == -1)
-					break;
-				target.write(buffer, 0, count);
-			}
-			target.closeEntry();
-		} finally {
-			if (in != null)
-				in.close();
-		}
-	}
-
-	public void createJAR(String jarName, String folderName, String outputPath)
-			throws IOException {
-		File folder = new File(folderName);
-		File[] files = folder.listFiles();
-		File file = new File(outputPath + File.separator + jarName);
-		createJarArchive(file, files);
-	}
-
-	private void createJarArchive(File jarFile, File[] listFiles)
-			throws IOException {
-		byte b[] = new byte[10240];
-		FileOutputStream fout = new FileOutputStream(jarFile);
-		JarOutputStream out = new JarOutputStream(fout, new Manifest());
-		for (int i = 0; i < listFiles.length; i++) {
-			if (listFiles[i] == null || !listFiles[i].exists()
-					|| listFiles[i].isDirectory())
-				System.out.println();
-			JarEntry addFiles = new JarEntry(listFiles[i].getName());
-			addFiles.setTime(listFiles[i].lastModified());
-			out.putNextEntry(addFiles);
-
-			FileInputStream fin = new FileInputStream(listFiles[i]);
-			while (true) {
-				int len = fin.read(b, 0, b.length);
-				if (len <= 0)
-					break;
-				out.write(b, 0, len);
-			}
-			fin.close();
-		}
-		out.close();
-		fout.close();
-		System.out.println("Jar File is created successfully.");
 	}
 
 	public Mapping readMappingXML(String mappingXML) throws GeneratorException {

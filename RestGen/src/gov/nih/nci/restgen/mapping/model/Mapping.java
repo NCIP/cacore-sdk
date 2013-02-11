@@ -36,7 +36,6 @@ public class Mapping implements Serializable{
 	@XmlAttribute
 	private String description;
 
-	
 	@XmlElementRef()
 	private Options options;
 	

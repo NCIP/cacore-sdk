@@ -108,6 +108,7 @@ public class GenerateRESTfulResourceAction extends AbstractContextAction
         {
         	Mapping m = MappingMainPanel.loadMapping(file);
         	GeneratorContext genContext = new GeneratorContext(m);
+        	/*
         	if((mainFrame.getMainFrame().getMappingMainPanel().getOptionsPath())!=null)
         	{
         		genContext.setOutputPath(mainFrame.getMainFrame().getMappingMainPanel().getOptionsPath());
@@ -118,8 +119,9 @@ public class GenerateRESTfulResourceAction extends AbstractContextAction
         		JOptionPane.showMessageDialog(mainFrame.getMainFrame(), "Please set output path", "Output path not set", JOptionPane.ERROR_MESSAGE);
         		return false;
         	}
+        	*/
         	RESTfulWrapperGenerator restfulWrapper = new RESTfulWrapperGenerator(genContext);
-        	restfulWrapper.runProcess();
+        	restfulWrapper.generate();
         }
         
         

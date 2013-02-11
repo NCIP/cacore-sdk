@@ -2,6 +2,7 @@ package gov.nih.nci.restgen.util;
 
 import gov.nih.nci.restgen.codegen.GeneratorContext;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,6 +15,10 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.jar.Attributes;
+import java.util.jar.JarEntry;
+import java.util.jar.JarOutputStream;
+import java.util.jar.Manifest;
 
 import javax.tools.Diagnostic;
 import javax.tools.DiagnosticCollector;
@@ -171,13 +176,14 @@ public class GeneratorUtil {
 			success = task.call();
 
 			for (Diagnostic diagnostic : diagnostics.getDiagnostics()) {
-				context.getLogger().info(diagnostic.getCode());
-				context.getLogger().info(diagnostic.getKind().toString());
-				context.getLogger().info(diagnostic.getPosition() + "");
-				context.getLogger().info(diagnostic.getStartPosition() + "");
-				context.getLogger().info(diagnostic.getEndPosition() + "");
-				context.getLogger().info(diagnostic.getSource().toString());
-				context.getLogger().info(diagnostic.toString());
+				context.getLogger().error(diagnostic.getCode());
+				context.getLogger().error(diagnostic.getKind().toString());
+				context.getLogger().error(diagnostic.getPosition() + "");
+				context.getLogger().error(diagnostic.getStartPosition() + "");
+				context.getLogger().error(diagnostic.getEndPosition() + "");
+				context.getLogger().error(diagnostic.getSource().toString());
+				context.getLogger().error(diagnostic.toString());
+				System.out.println(diagnostic.toString());
 			}
 		} catch (Throwable t) {
 			context.getLogger().error("Error compiling java code", t);
@@ -190,7 +196,7 @@ public class GeneratorUtil {
 		return success;
 	}
 
-	public static void copyDir(String srcFolderStr, String destFolderStr)
+	public static void copyDir(String srcFolderStr, String destFolderStr, List<String> excludes)
 			throws IOException {
 		File srcFolder = new File(srcFolderStr);
 		File destFolder = new File(destFolderStr);
@@ -204,10 +210,28 @@ public class GeneratorUtil {
 						+ "  to " + destFolder);
 			}
 			FileUtils.copyDirectoryToDirectory(srcFolder, destFolder);
+			if(excludes != null && excludes.size() > 0)
+			{
+				for(String fileName : excludes)
+				{
+					File deleteFile = new File(destFolder + File.separator + fileName);
+					FileUtils.deleteQuietly(deleteFile);
+				}
+			}
 		}
+	}
+	
+	public static void copyDir(String srcFolderStr, String destFolderStr)
+			throws IOException {
+		copyDir(srcFolderStr, destFolderStr, null);
 	}
 
 	public static void copyFiles(String srcFolderStr, String destFolderStr)
+			throws IOException {
+		copyFiles(srcFolderStr, destFolderStr, null);
+	}	
+	
+	public static void copyFiles(String srcFolderStr, String destFolderStr, List exclude)
 			throws IOException {
 		File srcFolder = new File(srcFolderStr);
 		File destFolder = new File(destFolderStr);
@@ -225,6 +249,8 @@ public class GeneratorUtil {
 
 			for (String file : files) {
 				File srcFile = new File(srcFolder, file);
+				if(exclude != null && exclude.contains(srcFile.getName()))
+						continue;
 				File destFile = new File(destFolder, file);
 				copyFile(srcFile, destFile);
 			}
@@ -251,4 +277,87 @@ public class GeneratorUtil {
 		System.out.println("File copied from " + src + " to " + dest);
 
 	}
+	
+	public static void createJar(String jarName, String folderName, String outputPath)
+			throws IOException {
+		Manifest manifest = new Manifest();
+		manifest.getMainAttributes().put(Attributes.Name.MANIFEST_VERSION,
+				"1.0");
+		JarOutputStream target = new JarOutputStream(new FileOutputStream(
+				outputPath + File.separator + jarName), manifest);
+		add(new File(folderName), target);
+		target.close();
+	}
+
+	private static void add(File source, JarOutputStream target) throws IOException {
+		BufferedInputStream in = null;
+		try {
+			if (source.isDirectory()) {
+				String name = source.getPath().replace("\\", "/");
+				if (!name.isEmpty()) {
+					if (!name.endsWith("/"))
+						name += "/";
+					JarEntry entry = new JarEntry(name);
+					entry.setTime(source.lastModified());
+					target.putNextEntry(entry);
+					target.closeEntry();
+				}
+				for (File nestedFile : source.listFiles())
+					add(nestedFile, target);
+				return;
+			}
+
+			JarEntry entry = new JarEntry(source.getPath().replace("\\", "/"));
+			entry.setTime(source.lastModified());
+			target.putNextEntry(entry);
+			in = new BufferedInputStream(new FileInputStream(source));
+
+			byte[] buffer = new byte[1024];
+			while (true) {
+				int count = in.read(buffer);
+				if (count == -1)
+					break;
+				target.write(buffer, 0, count);
+			}
+			target.closeEntry();
+		} finally {
+			if (in != null)
+				in.close();
+		}
+	}
+
+	public static void createJAR(String jarName, String folderName, String outputPath)
+			throws IOException {
+		File folder = new File(folderName);
+		File[] files = folder.listFiles();
+		File file = new File(outputPath + File.separator + jarName);
+		createJarArchive(file, files);
+	}
+
+	public static void createJarArchive(File jarFile, File[] listFiles)
+			throws IOException {
+		byte b[] = new byte[10240];
+		FileOutputStream fout = new FileOutputStream(jarFile);
+		JarOutputStream out = new JarOutputStream(fout, new Manifest());
+		for (int i = 0; i < listFiles.length; i++) {
+			if (listFiles[i] == null || !listFiles[i].exists()
+					|| listFiles[i].isDirectory())
+				System.out.println();
+			JarEntry addFiles = new JarEntry(listFiles[i].getName());
+			addFiles.setTime(listFiles[i].lastModified());
+			out.putNextEntry(addFiles);
+
+			FileInputStream fin = new FileInputStream(listFiles[i]);
+			while (true) {
+				int len = fin.read(b, 0, b.length);
+				if (len <= 0)
+					break;
+				out.write(b, 0, len);
+			}
+			fin.close();
+		}
+		out.close();
+		fout.close();
+	}
+	
 }
