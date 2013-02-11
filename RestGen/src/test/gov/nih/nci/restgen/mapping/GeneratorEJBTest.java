@@ -25,7 +25,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class SDKGeneratorTest {
+public class GeneratorEJBTest {
 	@BeforeClass
 	public static void testSetup() {
 		// Preparation of the unit tests
@@ -41,7 +41,7 @@ public class SDKGeneratorTest {
 
 		// Create Mapping
 		Mapping mapping = new Mapping();
-		mapping.setName("ExampleService");
+		mapping.setName("Catalog");
 		mapping.setVersion("1.0");
 		mapping.setCreatedOn(new Date());
 		mapping.setLastUpdatedOn(new Date());
@@ -53,14 +53,14 @@ public class SDKGeneratorTest {
 		mapping.setLinks(links);
 		mapping.setComponents(components);
 		mapping.setResources(resources);
-		Options options = new Options();
-		options.setOutputPath("C:\\DEV\\RestGen\\generatedgridsoap");
-		options.setRootPath("C:\\DEV\\RestGen");
-		options.setWrapperType(Options.SOAP_SERVICE);
-		//options.setWsdlLocation("http://localhost:29080/example/services/exampleService?WSDL");
-		options.setWsdlLocation("http://localhost:8080/wsrf/services/cagrid/ExampleService?WSDL");
 		
-		//options.setWsdlLocation("C:\\DEV\\RestGen\\examples\\sdk\\exampleService2.xml");
+		Options options = new Options();
+		options.setOutputPath("C:\\DEV\\RestGen\\generatedejb");
+		options.setRootPath("C:\\DEV\\RestGen");
+		options.setWrapperType(Options.EJB);
+		options.setEjbLocation("C:\\DEV\\RestGen\\examples\\BookCatalog.jar");
+		//options.setWsdlLocation("http://localhost:21080/wsdl_first/services/CustomerServicePort?WSDL");
+		//options.setWsdlLocation("C:\\DEV\\RestGen\\examples\\customerservice\\CustomerService.wsdl");
 		
 		mapping.setOptions(options);
 		Source source1 = new Source();
@@ -100,23 +100,56 @@ public class SDKGeneratorTest {
 		components.add(component2);
 
 		Resource resource1 = new Resource();
-		resource1.setName("ExampleService");
-		resource1.setPath("example");
+		resource1.setName("Catalog");
+		resource1.setPath("catalog");
+		resource1.setPojoLocation("C:\\DEV\\RestGen\\examples\\catalog\\gov\\nih\\nci\\ejb\\book.class");
 		List<Method> methods1 = new ArrayList<Method>();
+		
+		//GET: getCustomersByName
 		Method readMethod = new Method();
-		readMethod.setName("read");
 		Implementation impl1 = new Implementation();
-		impl1.setName("WSQueryImplService");
-		impl1.setType("SOAP");
-		impl1.setPortName("exampleService");
-		impl1.setPath("http://localhost:29080/example/services/exampleService?WSDL");
+		impl1.setName("catalog");
+		impl1.setType("EJB");
+		impl1.setJndiName("catalog");
+		impl1.setClientType(Implementation.EJB_REMOTE);
+		impl1.setJndiProperties("C:\\DEV\\RestGen\\examples\\jndi.properties");
+		impl1.setJndiName("CatalogRemoteHome");
+		impl1.setPath("C:\\DEV\\RestGen\\examples\\BookCatalog.jar");
 		Operation operation1 = new Operation();
-		operation1.setName("queryObject");
+		operation1.setName("getBooks");
+		Output output = new Output();
+		output.setType("java.util.List");
+		operation1.setOutput(output);
 		impl1.setOperation(operation1);
 		readMethod.setImplementation(impl1);
-		readMethod.setPathName("query");
+		readMethod.setPathName("books");
 		readMethod.setName(Method.GET);
 		methods1.add(readMethod);
+
+		//POST: addCustomer
+		Method postMethod = new Method();
+		postMethod.setName(Method.POST);
+		Implementation impl2 = new Implementation();
+		impl2.setName("catalog");
+		impl2.setType("EJB");
+		impl2.setJndiName("CatalogRemoteHome");
+		impl2.setClientType(Implementation.EJB_REMOTE);
+		impl2.setJndiProperties("C:\\DEV\\RestGen\\examples\\jndi.properties");
+		impl2.setJndiName("catalog");
+		impl2.setPath("C:\\DEV\\RestGen\\examples\\BookCatalog.jar");
+		Operation operation2 = new Operation();
+		operation2.setName("addBook");
+		Input input = new Input();
+		input.setName("book");
+		input.setType("gov.nih.nci.ejb.Book");
+		List inputs = new ArrayList();
+		inputs.add(input);
+		operation2.setInputs(inputs);
+		impl2.setOperation(operation2);
+		postMethod.setImplementation(impl2);
+		//postMethod.setPathName("books");
+		methods1.add(postMethod);
+
 		resource1.setMethods(methods1);
 		resources.add(resource1);
 		
