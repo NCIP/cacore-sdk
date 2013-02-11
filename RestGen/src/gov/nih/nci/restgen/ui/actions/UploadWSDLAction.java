@@ -180,8 +180,8 @@ public class UploadWSDLAction extends AbstractContextAction
     protected boolean doAction(ActionEvent e) throws Exception
     {
     				// open WSDL here PV
-    				File file = new File("WSDLFile.wsdl");
-    				/*File file = null;
+    				/*File file = new File("WSDLFile.wsdl");*/
+    				File file = null;
     				String serviceEndPoint = "";
     				String serviceName = "";
     				
@@ -193,8 +193,8 @@ public class UploadWSDLAction extends AbstractContextAction
     	                JOptionPane.showMessageDialog(mainFrame.getAssociatedUIComponent(), "This file is not a WSDL file (" + SOURCE_TREE_FILE_DEFAULT_EXTENTION + ") file : " + file.getName(), "Not a WSDL file", JOptionPane.ERROR_MESSAGE);
     	                return false;
     	            }
-    				*/
-    				char[] specialChars = {'!','@',']','#','$','%','^','&','*'}; 
+    				
+    				/*char[] specialChars = {'!','@',']','#','$','%','^','&','*'}; 
     			       
     			       String inputString = JOptionPane.showInputDialog(null, "Please enter the URL for WSDL file : ", 
     							"WSDL file upload", 1);
@@ -243,7 +243,7 @@ public class UploadWSDLAction extends AbstractContextAction
     				else
     				{
     						return false;
-    				}
+    				}*/
     	            mainFrame.getMainFrame().getMappingMainPanel().setMappingTargetFile(file);
     	            mainFrame.getMainFrame().getMappingMainPanel().setTargetFileType("WSDL");
     	            /// clear the panels here
@@ -314,12 +314,11 @@ public void createTargetTree(File file) throws Exception
     ArrayList<Operation> operationsList = new ArrayList<Operation>();
     ArrayList<String> InputTypes = null;
     ArrayList<String> OutputTypes = null;
-    
+    String portName = "";
     for (PortType pt : defs.getPortTypes())
     {       
     	
     	System.out.println(pt.getName());
-    	
     	for (com.predic8.wsdl.Operation op : pt.getOperations()) {
     			System.out.println(" -" + op.getName());
     			String inputType = "";
@@ -328,7 +327,6 @@ public void createTargetTree(File file) throws Exception
     			OutputTypes = new ArrayList<String>();
     			String style = getSOAPOperationStyle(doc,op.getName());
     			Operation opObject = new Operation();
-    			opObject.setPortName(pt.getName());
     			opObject.setName(op.getName());
     			opObject.setStyle(style);
     			Input input = op.getInput();
@@ -388,6 +386,10 @@ public void createTargetTree(File file) throws Exception
                 OutputTypes.add(outputType);
                 opObject.setInputTypes(InputTypes);
                 opObject.setOutputTypes(OutputTypes);
+                // get port name here
+                portName = getSOAPOperationPortName(doc, defs.getServices());
+                // get port name here
+                opObject.setPortName(portName);
                 operationsList.add(opObject);
     		}  
     }
@@ -487,6 +489,60 @@ private String getSOAPOperationStyle(org.w3c.dom.Document doc, String operationN
     
     return style;
 }
+
+private String getSOAPOperationPortName(org.w3c.dom.Document doc, java.util.List<Service>  services) {
+	// TODO Auto-generated method stub
+	String Binding = "";
+	String portName = "";
+	System.out.println("inside getSOAPOperationPortName>>>>>");
+	org.w3c.dom.NodeList listOfBindings = doc.getElementsByTagName("wsdl:binding");
+	for(int s=0; s<listOfBindings.getLength() ; s++){
+    	org.w3c.dom.Node nNode = listOfBindings.item(s);
+    	   if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+
+ 			  org.w3c.dom.Element firstSessionElement = ( org.w3c.dom.Element)nNode;
+ 			  Binding = firstSessionElement.getAttribute("name");
+    		  NodeList soapOperationsList = firstSessionElement.getElementsByTagName("wsdl:operation");
+    		if(soapOperationsList != null && soapOperationsList.getLength() > 0) {
+    			for(int i=0; i<soapOperationsList.getLength(); i++){
+    			org.w3c.dom.Element el = (org.w3c.dom.Element)soapOperationsList.item(i);
+    			portName = getWSDLOperationPortName(services, Binding);
+    			System.out.println("port name value......>>>>>"+portName);
+    			
+    			}
+    		}
+    	
+ 		   }
+    }
+    
+    return portName;
+}
+
+
+private String getWSDLOperationPortName(java.util.List<Service>  services, String binding)
+{
+	String portName = "";
+	System.out.println("BINDING>>>> : "  + binding);
+	for (Service svc : services)
+	{
+		serviceName = svc.getName();
+		
+		for (Port port: svc.getPorts())
+		{
+			System.out.println("PORT BINDING...>>>> : "  + port.getBinding().getName());
+			if(binding.equals(port.getBinding().getName()))
+			{
+				portName = port.getName();
+			}
+			
+		}
+	}
+	
+	return portName;
+}
+
+
+
 
 private void createNodes(DefaultTargetTreeNode top,ArrayList<Operation> list) {
 		
