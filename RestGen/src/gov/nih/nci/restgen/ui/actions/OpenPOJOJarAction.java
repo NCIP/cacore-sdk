@@ -125,6 +125,11 @@ public class OpenPOJOJarAction extends AbstractContextAction
             }
             ownerFrame.getMainFrame().getMappingMainPanel().setMappingSourceFile(file);
             ownerFrame.getMainFrame().getMappingMainPanel().setSourceFileType("POJOJAR");
+            if(ownerFrame.getMainFrame().getMappingMainPanel().getTargetTree()!=null)
+    		  {
+            	ownerFrame.getMainFrame().getMappingMainPanel().getMiddlePanel().getGraphController().handleDeleteAll();
+            	
+    		  }	
             createSourceTree(file);
       return true;
 	}

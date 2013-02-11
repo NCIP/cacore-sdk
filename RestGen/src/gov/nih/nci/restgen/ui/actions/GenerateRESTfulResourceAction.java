@@ -52,7 +52,8 @@ public class GenerateRESTfulResourceAction extends AbstractContextAction
 	private static File mappingFile = null;
 
     private MainFrameContainer mainFrame;
-
+    private static JPanel logStats = null;
+    private static JTextPane textPane = null;
     /**
      * Defines an <code>Action</code> object with a default
      * description string and default icon.
@@ -121,6 +122,29 @@ public class GenerateRESTfulResourceAction extends AbstractContextAction
         	}
         	*/
         	RESTfulWrapperGenerator restfulWrapper = new RESTfulWrapperGenerator(genContext);
+        	String outputPath = genContext.getMapping().getOptions().getOutputPath();
+        	///////
+        	logStats = new JPanel();
+        	textPane = new JTextPane();
+        	JScrollPane scrollPane = new JScrollPane( logStats );
+        	logStats.setBorder(BorderFactory.createRaisedBevelBorder());
+        	logStats.setLayout(new BorderLayout());
+        	logStats.setSize(new Dimension((DefaultSettings.FRAME_DEFAULT_WIDTH / 3), (int) (DefaultSettings.FRAME_DEFAULT_HEIGHT / 1.5)));
+        	scrollPane.setViewportView(textPane);
+        	logStats.add( textPane );
+        	mainFrame.getMainFrame().addNewTabForLog(logStats, "");
+        	///////
+        	if(outputPath != null && !outputPath.equals(""))
+        	{
+        		restfulWrapper.runProcess();
+        	}
+        	else
+        	{
+        		JOptionPane.showMessageDialog(mainFrame.getMainFrame(), "Please set output path", "Output path not set", JOptionPane.ERROR_MESSAGE);
+        		return false;
+        	}
+
+        	
         	restfulWrapper.generate();
         }
         
@@ -138,6 +162,22 @@ public class GenerateRESTfulResourceAction extends AbstractContextAction
     {
         return mainFrame.getAssociatedUIComponent();
     }
+
+	public static JTextPane getTextPane() {
+		return textPane;
+	}
+
+	public static void setTextPane(JTextPane textPane) {
+		GenerateRESTfulResourceAction.textPane = textPane;
+	}
+
+	public static JPanel getLogStats() {
+		return logStats;
+	}
+
+	public static void setLogStats(JPanel logStats) {
+		GenerateRESTfulResourceAction.logStats = logStats;
+	}
 
 	public static File getMappingFile() {
 		return mappingFile;

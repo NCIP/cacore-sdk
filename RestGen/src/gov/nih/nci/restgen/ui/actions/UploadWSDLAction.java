@@ -83,6 +83,8 @@ public class UploadWSDLAction extends AbstractContextAction
 		 private String name;
 		 private String style;
 		 private String portName;
+		 ArrayList<String> InputTypes = new ArrayList<String>();
+		 ArrayList<String> OutputTypes = new ArrayList<String>();
 		public String getName() {
 			return name;
 		}
@@ -94,6 +96,18 @@ public class UploadWSDLAction extends AbstractContextAction
 		}
 		public void setStyle(String style) {
 			this.style = style;
+		}
+		public ArrayList<String> getOutputTypes() {
+			return OutputTypes;
+		}
+		public void setOutputTypes(ArrayList<String> outputTypes) {
+			OutputTypes = outputTypes;
+		}
+		public ArrayList<String> getInputTypes() {
+			return InputTypes;
+		}
+		public void setInputTypes(ArrayList<String> inputTypes) {
+			InputTypes = inputTypes;
 		}
 		public String getPortName() {
 			return portName;
@@ -298,8 +312,8 @@ public void createTargetTree(File file) throws Exception
     WSDLParser parser = new WSDLParser();
     Definitions defs = parser.parse(file.getPath());
     ArrayList<Operation> operationsList = new ArrayList<Operation>();
-    ArrayList<String> InputTypes = new ArrayList<String>();
-    ArrayList<String> OutputTypes = new ArrayList<String>();
+    ArrayList<String> InputTypes = null;
+    ArrayList<String> OutputTypes = null;
     
     for (PortType pt : defs.getPortTypes())
     {       
@@ -310,12 +324,13 @@ public void createTargetTree(File file) throws Exception
     			System.out.println(" -" + op.getName());
     			String inputType = "";
     			String outputType = "";
+    			InputTypes = new ArrayList<String>();
+    			OutputTypes = new ArrayList<String>();
     			String style = getSOAPOperationStyle(doc,op.getName());
     			Operation opObject = new Operation();
     			opObject.setPortName(pt.getName());
     			opObject.setName(op.getName());
     			opObject.setStyle(style);
-    			operationsList.add(opObject);
     			Input input = op.getInput();
     			if (input != null && input.getMessage() != null) {
     		   		System.out.println("Input Message...."+input.getMessage());
@@ -328,13 +343,24 @@ public void createTargetTree(File file) throws Exception
                         	if(defs.getElement(part.getElement())!=null)
                         	{
                         		Element type = defs.getElement(part.getElement());
-                        		inputType +=type.getType();
+                        		//inputType +=type.getType();
+                        		inputType = type.getType().toString();
+                        		if(inputType!=null && !inputType.equals(""))
+                        		{
+                        			InputTypes.add(inputType);
+                        		}
                         	}
                         	
                         }
                     	else
                     	{
-                    		inputType +=part.getType();
+                    		//inputType +=part.getType();
+                    		inputType = part.getType().toString();
+                    		if(inputType!=null && !inputType.equals(""))
+                    		{
+                    			InputTypes.add(inputType);
+                    		}
+                    		
                     	}
                     }
                 }
@@ -357,7 +383,9 @@ public void createTargetTree(File file) throws Exception
                
                 System.out.println("WSDL input type and output>>>>"+"...."+inputType+outputType);
                 OutputTypes.add(outputType);
-                InputTypes.add(inputType);
+                opObject.setInputTypes(InputTypes);
+                opObject.setOutputTypes(OutputTypes);
+                operationsList.add(opObject);
     		}  
     }
     java.util.List<Service>  services = defs.getServices();
@@ -388,7 +416,7 @@ public void createTargetTree(File file) throws Exception
     /// form the tree here PV...start
     
     	DefaultTargetTreeNode top = new DefaultTargetTreeNode("WSDL");
-    	createNodes(top,operationsList,InputTypes,OutputTypes);
+    	createNodes(top,operationsList);
         tree = new JTree(top);
         TreeSelectionHandler treeSelectionHanderl=new TreeSelectionHandler(mainFrame.getMainFrame().getMappingMainPanel().getGraphController());
 		tree.getSelectionModel().addTreeSelectionListener(treeSelectionHanderl);
@@ -457,19 +485,18 @@ private String getSOAPOperationStyle(org.w3c.dom.Document doc, String operationN
     return style;
 }
 
-private void createNodes(DefaultTargetTreeNode top,ArrayList<Operation> list, ArrayList<String> InputType, ArrayList<String> OutputType ) {
+private void createNodes(DefaultTargetTreeNode top,ArrayList<Operation> list) {
 		
-	    Iterator<Operation> it = list.iterator();
-	    Iterator<String> inputList = InputType.iterator();
-	    Iterator<String> outputList = OutputType.iterator();
+		Iterator<Operation> it = list.iterator();
+	    
 	    while(it.hasNext())
 	    {
 	    	Operation op = (Operation)it.next();
 	    	String operationName = op.getName();
 	    	DefaultTargetTreeNode childElement = new DefaultTargetTreeNode(operationName);
 	    	childElement.setOperationName(operationName);
-	    	childElement.setInputType((String)inputList.next());
-	    	childElement.setOutputType((String)outputList.next());
+	    	childElement.setInputType(op.getInputTypes());
+	    	childElement.setOutputType(op.getOutputTypes().get(0));
 	    	childElement.setServiceName(getServiceName());
 	    	childElement.setEndPoint(getServiceEndPoint());
 	    	childElement.setOperationStyle(op.getStyle());

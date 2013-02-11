@@ -491,17 +491,26 @@ public class MiddlePanelJGraphController {
     	Method method = new Method();
     	Implementation implementation = new Implementation();
     	Operation operation = new Operation();
-    	Input input = new Input();
     	Output output = new Output();
-    	
+    	List<Input> inputs = new ArrayList();
     	// set the inputs and outputs
-    	if(targetNode.getInputType()!=null)
+    	if(targetNode.getInputType()!=null && targetNode.getInputType().size()>0)
     	{
-    		input.setType(targetNode.getInputType());
+    		ArrayList inputsNode = targetNode.getInputType();
+    		Iterator it = inputsNode.iterator();
+    		while(it.hasNext())
+    		{
+    			Input input = new Input();
+    			input.setType((String)it.next());
+    			inputs.add(input);
+    		}
+    		
     	}
     	else
     	{
-    		input.setType("");
+    		Input input = new Input();
+			input.setType("");
+			inputs.add(input);
     	}
     	
     	if(targetNode.getOutputType()!=null)
@@ -515,15 +524,8 @@ public class MiddlePanelJGraphController {
     	
     	if(operation.getInputs()==null)
     	{
-    		List<Input> inputs = new ArrayList();
-    		inputs.add(input);
     		operation.setInputs(inputs);
     	}
-    	else
-    	{
-    		operation.getInputs().add(input);
-    	}
-    	
     	if(operation.getOutput()==null)
     	{
     		operation.setOutput(output);

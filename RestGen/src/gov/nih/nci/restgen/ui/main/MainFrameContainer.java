@@ -74,6 +74,13 @@ public class MainFrameContainer
     }
 
     
+    public void addNewTabForLog(JPanel mappingPanel, String tabKind)
+    {
+        if (mainFrame != null) mainFrame.addNewTabForLog(mappingPanel, tabKind);
+        
+    }
+    
+    
     public Frame getOwnerFrame()
     {
         if (mainFrame != null) return mainFrame;

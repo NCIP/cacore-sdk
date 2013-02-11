@@ -110,6 +110,11 @@ public class NewPOJOFileAction extends AbstractContextAction
             // validate and parse the POJO class here
           mainFrame.getMainFrame().getMappingMainPanel().setMappingSourceFile(file);
           mainFrame.getMainFrame().getMappingMainPanel().setSourceFileType("POJOCLASS");
+          if(mainFrame.getMainFrame().getMappingMainPanel().getTargetTree()!=null)
+  		  {
+          	mainFrame.getMainFrame().getMappingMainPanel().getMiddlePanel().getGraphController().handleDeleteAll();
+          	
+  		  }	
           createSourceTree(file);        
 		return true;
 	}

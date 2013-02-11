@@ -7,6 +7,8 @@
  */
 package gov.nih.nci.restgen.ui.tree;
 
+import java.util.ArrayList;
+
 /**
  * This class extends the default mutable tree node as the tree node used to
  * construct Target Tree for right-pane MetaData.
@@ -25,7 +27,7 @@ public class DefaultTargetTreeNode extends DefaultMappableTreeNode
 	String endPoint = ""; // WSDL end point
 	String clientType = ""; // for EJB it can be remote/local
 	String operationName = "";// operation name for EJB or WSDL
-	String inputType = ""; //input for the operation
+	ArrayList<String> inputType = null; //input for the operation
 	String outputType = "";//output for the operation
 	String EJBName = ""; // EJB bean name
 	String classPath = ""; // Classpath
@@ -55,6 +57,10 @@ public class DefaultTargetTreeNode extends DefaultMappableTreeNode
 
 	public void setImplementationType(String implementationType) {
 		ImplementationType = implementationType;
+	}
+
+	public void setInputType(ArrayList<String> inputType) {
+		this.inputType = inputType;
 	}
 
 	public String getServiceName() {
@@ -97,12 +103,8 @@ public class DefaultTargetTreeNode extends DefaultMappableTreeNode
 		this.operationName = operationName;
 	}
 
-	public String getInputType() {
+	public ArrayList<String> getInputType() {
 		return inputType;
-	}
-
-	public void setInputType(String inputType) {
-		this.inputType = inputType;
 	}
 
 	public String getOutputType() {

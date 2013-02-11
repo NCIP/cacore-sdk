@@ -2,6 +2,7 @@ package gov.nih.nci.restgen.ui.properties;
 
 import java.awt.Dimension;
 
+import gov.nih.nci.restgen.ui.actions.GenerateRESTfulResourceAction;
 import gov.nih.nci.restgen.ui.mapping.MappingMainPanel;
 
 import javax.swing.JOptionPane;
@@ -13,7 +14,7 @@ import org.apache.log4j.Level;
 import org.apache.log4j.spi.LoggingEvent;
 
 /**
- * @author Ashish Tyagi
+ * @author Prakash Vinjamuri
  *
  */
 public class StatusMessageAppender extends AppenderSkeleton {
@@ -24,7 +25,7 @@ public class StatusMessageAppender extends AppenderSkeleton {
         if(event.getLevel().equals(Level.INFO)){
                 //here set the text of your swing component;
                //in my case it is: statusBar.st_STATUS.setText(event.getMessage().toString());
-        	MappingMainPanel.getTextArea().setText(event.getMessage().toString());
+        	/*MappingMainPanel.getTextArea().setText(event.getMessage().toString());
         	if(scrollPane==null){
         		scrollPane = new JScrollPane(MappingMainPanel.getTextArea());
         	}
@@ -34,6 +35,12 @@ public class StatusMessageAppender extends AppenderSkeleton {
         	JOptionPane.showMessageDialog(MappingMainPanel.getMainFrame().getAssociatedUIComponent(), scrollPane, "Wrapper generator log...",  
         	                                       JOptionPane.INFORMATION_MESSAGE);
         	MappingMainPanel.getTextArea().setText(event.getMessage().toString());
+        	*/
+        	if(GenerateRESTfulResourceAction.getTextPane()!=null){
+        		String displayText = GenerateRESTfulResourceAction.getTextPane().getText()+"\n"+event.getMessage().toString();
+        		GenerateRESTfulResourceAction.getTextPane().setText(displayText);
+        	}
+        	
         	
         	
         }

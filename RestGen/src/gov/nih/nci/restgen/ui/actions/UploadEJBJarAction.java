@@ -397,7 +397,7 @@ private void createNodes(DefaultTargetTreeNode top,ArrayList<String> list, File 
 	    	if(ejbclassFound)
 	    	{
 	    		///////////
-	    		String argumentTypes = "";
+	    		ArrayList<String> argumentTypes = new ArrayList();
 	    		InputStream input = jarFile.getInputStream(jarEntry);
 	    		ClassParser cp = new ClassParser(input,file.getName());
 	    		JavaClass javaClass = cp.parse();
@@ -410,11 +410,8 @@ private void createNodes(DefaultTargetTreeNode top,ArrayList<String> list, File 
 	        		if(args!=null && args.length>0){
 	        			for (int i=0;i<args.length;i++)
 	        			{
-	        				argumentTypes = args[i].toString();
-	        				if(i>1)
-	        				{
-	        					argumentTypes = argumentTypes+":";
-	        				}
+	        					argumentTypes.add(args[i].toString());
+	        				
 	        			}
 	        		}
 	        		DefaultTargetTreeNode element = new DefaultTargetTreeNode(method.getName());

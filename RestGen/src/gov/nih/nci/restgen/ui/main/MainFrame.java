@@ -181,6 +181,29 @@ public class MainFrame extends JFrame
         tabMap.put(panel.getClass(), panel);
     }
 
+	/* (non-Javadoc)
+	 * @see gov.nih.nci.caCore SDK.ui.main.AbstractMainFrame#addNewTabForLog(javax.swing.JPanel)
+	 */
+    public void addNewTabForLog(JPanel panel, String tabKind)
+    {
+        if (tabbedPane.getTabCount() == 0) {
+            centerPanel.removeAll();
+            centerPanel.setLayout(new BorderLayout());
+            centerPanel.add(tabbedPane, BorderLayout.CENTER);
+        }
+        String title = "Generate Resource Log";
+        
+        if (tabKind!=null)
+        title =title + tabKind;
+        tabbedPane.addTab(title, panel);
+        tabbedPane.setSelectedComponent(panel);
+        System.out.println("Panel Class: '" + (panel==null?"null":panel.getClass().getName()) + "'.");
+        tabMap.put(panel.getClass(), panel);
+    }
+    
+    
+    
+    
     /* (non-Javadoc)
 	 * @see gov.nih.nci.caCore SDK.ui.main.AbstractMainFrame#closeTab()
 	 */
