@@ -584,7 +584,7 @@ public class MiddlePanelJGraphController {
     	{
     		method.setName(Method.POST);
     	}
-    	else if (sourceNode.toString().equals("Retrieve"))
+    	else if (sourceNode.toString().equals("Read"))
     	{
     		method.setName(Method.GET);
     	}
