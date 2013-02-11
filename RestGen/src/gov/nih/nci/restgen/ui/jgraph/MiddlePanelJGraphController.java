@@ -539,7 +539,7 @@ public class MiddlePanelJGraphController {
     	{
     		implementation.setClientType(targetNode.getClientType());
         	implementation.setName(targetNode.getServiceName());
-        	
+        	implementation.setPortName(targetNode.getPortName());
     	}
     	else
     	{
