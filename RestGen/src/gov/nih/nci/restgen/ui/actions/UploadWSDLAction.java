@@ -180,8 +180,8 @@ public class UploadWSDLAction extends AbstractContextAction
     protected boolean doAction(ActionEvent e) throws Exception
     {
     				// open WSDL here PV
-    				/*File file = new File("WSDLFile.wsdl");*/
-    				File file = null;
+    				File file = new File("WSDLFile.wsdl");
+    				/*File file = null;
     				String serviceEndPoint = "";
     				String serviceName = "";
     				
@@ -193,8 +193,8 @@ public class UploadWSDLAction extends AbstractContextAction
     	                JOptionPane.showMessageDialog(mainFrame.getAssociatedUIComponent(), "This file is not a WSDL file (" + SOURCE_TREE_FILE_DEFAULT_EXTENTION + ") file : " + file.getName(), "Not a WSDL file", JOptionPane.ERROR_MESSAGE);
     	                return false;
     	            }
-    				
-    				/*char[] specialChars = {'!','@',']','#','$','%','^','&','*'}; 
+    				*/
+    				char[] specialChars = {'!','@',']','#','$','%','^','&','*'}; 
     			       
     			       String inputString = JOptionPane.showInputDialog(null, "Please enter the URL for WSDL file : ", 
     							"WSDL file upload", 1);
@@ -243,7 +243,7 @@ public class UploadWSDLAction extends AbstractContextAction
     				else
     				{
     						return false;
-    				}*/
+    				}
     	            mainFrame.getMainFrame().getMappingMainPanel().setMappingTargetFile(file);
     	            mainFrame.getMainFrame().getMappingMainPanel().setTargetFileType("WSDL");
     	            /// clear the panels here
@@ -344,10 +344,13 @@ public void createTargetTree(File file) throws Exception
                         	{
                         		Element type = defs.getElement(part.getElement());
                         		//inputType +=type.getType();
-                        		inputType = type.getType().toString();
-                        		if(inputType!=null && !inputType.equals(""))
+                        		if(type.getType()!=null)
                         		{
-                        			InputTypes.add(inputType);
+                        			inputType = type.getType().toString();
+                        			if(inputType!=null && !inputType.equals(""))
+                        			{
+                        				InputTypes.add(inputType);
+                        			}
                         		}
                         	}
                         	
