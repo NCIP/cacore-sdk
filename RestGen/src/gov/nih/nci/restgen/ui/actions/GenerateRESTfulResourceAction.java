@@ -133,6 +133,7 @@ public class GenerateRESTfulResourceAction extends AbstractContextAction
         	scrollPane.setViewportView(textPane);
         	logStats.add( textPane );
         	mainFrame.getMainFrame().addNewTabForLog(logStats, "");
+        	mainFrame.getTabbedPane().setSelectedIndex(mainFrame.getAllTabs().size()-1);
         	///////
         	if(outputPath != null && !outputPath.equals(""))
         	{
