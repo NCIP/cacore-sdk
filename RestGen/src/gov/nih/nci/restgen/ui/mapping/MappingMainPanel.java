@@ -641,6 +641,7 @@ public class MappingMainPanel extends JPanel implements ActionListener
 	public void actionPerformed(ActionEvent e)
 	{
 		String command = e.getActionCommand();
+		System.out.println("INDSIDEEE>>>> action click.....");
 		try
 		{
             if (SELECT_SOURCE.equals(command))
@@ -1005,47 +1006,51 @@ public class MappingMainPanel extends JPanel implements ActionListener
 			}
 		System.out.println("source file path......target file path"+sourceFilePath+targetFilePath);	
 
-		if(sourceFilePath!=null && !sourceFilePath.equals("") && sourceFilePath.contains(".class"))
+		if(sourceFilePath!=null && !sourceFilePath.equals("") && new File(sourceFilePath).exists())
 		{
 			mainFrame.getMainFrame().getMappingMainPanel().setMappingSourceFile(new File(sourceFilePath));
 			
-			if(new File(sourceFilePath).exists())
+			if(sourceFilePath.contains(".class"))
 			{
 				NewPOJOFileAction newpojo = new NewPOJOFileAction(mainFrame);
 				newpojo.createSourceTree(new File(sourceFilePath));
 			}
-			else
+			else 
 			{
-				throw new Exception("Source file path invalid....");
+				mainFrame.getMainFrame().getMappingMainPanel().setMappingSourceFile(new File(sourceFilePath));
+				OpenPOJOJarAction newpojo = new OpenPOJOJarAction(mainFrame);
+				newpojo.createSourceTree(new File(sourceFilePath));
 			}
 			
 		}
-		
-		else 
+		else
 		{
-			mainFrame.getMainFrame().getMappingMainPanel().setMappingSourceFile(new File(sourceFilePath));
-			OpenPOJOJarAction newpojo = new OpenPOJOJarAction(mainFrame);
-			newpojo.createSourceTree(new File(sourceFilePath));
+			JOptionPane.showMessageDialog(mainFrame.getMainFrame().getMappingMainPanel(), "Source file is not present at the path...", "Source file not found!!!", JOptionPane.ERROR_MESSAGE);
+    		return;
 		}
-		if(targetFilePath!=null && !targetFilePath.equals("") && targetFilePath.contains(".jar"))
+		
+	
+		if(targetFilePath!=null && !targetFilePath.equals("") && new File(targetFilePath).exists()) 
 		{
 			mainFrame.getMainFrame().getMappingMainPanel().setMappingTargetFile(new File(targetFilePath));
-			if(new File(targetFilePath).exists())
+			if(targetFilePath.contains(".jar"))
 			{
 				UploadEJBJarAction newejb = new UploadEJBJarAction(mainFrame);
 				newejb.createTargetTree(new File(targetFilePath));
 			}
 			else
 			{
-				throw new Exception("Target file path invalid....");
+				mainFrame.getMainFrame().getMappingMainPanel().setMappingTargetFile(new File(targetFilePath));
+				UploadWSDLAction newwsdl = new UploadWSDLAction(mainFrame);
+				newwsdl.createTargetTree(new File(targetFilePath));
 			}
 		}
 		else
 		{
-			mainFrame.getMainFrame().getMappingMainPanel().setMappingTargetFile(new File(targetFilePath));
-			UploadWSDLAction newwsdl = new UploadWSDLAction(mainFrame);
-			newwsdl.createTargetTree(new File(targetFilePath));
+			JOptionPane.showMessageDialog(mainFrame.getMainFrame().getMappingMainPanel(), "Target file is not present at the path...", "Target file not found!!!", JOptionPane.ERROR_MESSAGE);
+    		return;
 		}
+		
 		
 		// commented rem later PV
 		getGraphController().setMappingData(mapping, true);
