@@ -199,6 +199,9 @@ public class NewPOJOFileAction extends AbstractContextAction
 	
 	private void createNodes(DefaultSourceTreeNode top, String resourceName) {
 		
+		if(resourceName.contains(".class")){
+			resourceName = resourceName.replace(".class", "");
+		}
 	    DefaultSourceTreeNode CreateClass = null;
 	    DefaultSourceTreeNode Updateclass = null;
 	    DefaultSourceTreeNode ReadClass = null;

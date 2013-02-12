@@ -274,6 +274,9 @@ public class OpenPOJOJarAction extends AbstractContextAction
 	    while(it.hasNext())
 	    {
 	    	String resourceName = (String)it.next();
+	    	if(resourceName.contains(".class")){
+				resourceName = resourceName.replace(".class", "");
+			}
 	    	System.out.println("resource name....."+resourceName);
 	    	DefaultSourceTreeNode element = new DefaultSourceTreeNode(resourceName);
 	    	Createclass = new DefaultSourceTreeNode("Create");
