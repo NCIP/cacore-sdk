@@ -402,10 +402,10 @@ public void createTargetTree(File file) throws Exception
 		{
 			
 			serviceEndPoint= port.getAddress().getLocation();
-			if(!ping(serviceEndPoint,REQUESTTIMEOUT))
+			/*if(!ping(serviceEndPoint,REQUESTTIMEOUT))
 			{
 				throw new Exception("Request timed out WSDL end point invalid");
-			}
+			}*/
 			System.out.println("SOAP Endpoint : "  + port.getAddress().getLocation());
 			
 		}
