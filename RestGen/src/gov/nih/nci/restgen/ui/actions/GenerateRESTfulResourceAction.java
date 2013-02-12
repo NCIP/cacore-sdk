@@ -124,16 +124,29 @@ public class GenerateRESTfulResourceAction extends AbstractContextAction
         	RESTfulWrapperGenerator restfulWrapper = new RESTfulWrapperGenerator(genContext);
         	String outputPath = genContext.getMapping().getOptions().getOutputPath();
         	///////
-        	logStats = new JPanel();
-        	textPane = new JTextPane();
-        	JScrollPane scrollPane = new JScrollPane( logStats );
-        	logStats.setBorder(BorderFactory.createRaisedBevelBorder());
-        	logStats.setLayout(new BorderLayout());
-        	logStats.setSize(new Dimension((DefaultSettings.FRAME_DEFAULT_WIDTH / 3), (int) (DefaultSettings.FRAME_DEFAULT_HEIGHT / 1.5)));
-        	scrollPane.setViewportView(textPane);
-        	logStats.add( textPane );
+        	if(logStats==null)
+        	{
+        		logStats = new JPanel();
+        		textPane = new JTextPane();
+        		JButton close=new JButton("x");
+        		JScrollPane scrollPane = new JScrollPane( logStats );
+        		logStats.setBorder(BorderFactory.createRaisedBevelBorder());
+        		logStats.setLayout(new BorderLayout());
+        		logStats.setSize(new Dimension((DefaultSettings.FRAME_DEFAULT_WIDTH / 3), (int) (DefaultSettings.FRAME_DEFAULT_HEIGHT / 1.5)));
+        		scrollPane.setViewportView(textPane);
+        		logStats.add( textPane );
+        	}
+        	else
+        	{
+        		textPane.setText("");
+        		
+        	}
         	mainFrame.getMainFrame().addNewTabForLog(logStats, "");
-        	mainFrame.getTabbedPane().setSelectedIndex(mainFrame.getAllTabs().size()-1);
+        	/////
+        	/////
+        	
+        	
+        	mainFrame.getTabbedPane().setSelectedIndex(1);
         	///////
         	if(outputPath != null && !outputPath.equals(""))
         	{

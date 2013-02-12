@@ -77,63 +77,10 @@ public class OpenMappingAction extends AbstractContextAction
 	protected boolean doAction(ActionEvent e)
 	{
 //		Log.logInfo(this, "CloseAllAction is called.");
-		java.util.List<Component> componentList = mainFrame.getAllTabs();
-		int count = componentList.size();//tabbedPane.getComponentCount();
-		ArrayList<AbstractContextAction> actionList = new ArrayList<AbstractContextAction>();
-        //boolean closedAllSuccessfully = true;
-
-        String ll = "";
-        int cnt = 0;
-        for (int i = 0; i < count; i++)
-		{//retrieve the list of close actions,
-			//shall call individual after the loop, since the close action will remove the referred tab
-			//which will cause the component count decreased.
-			Component comp = componentList.get(i);
-		}
-        String message = null;
-        String titleT = "Unsaved documents found";
-        if (cnt == 1)
-        {
-            String m2 = "Are you sure to close all tabs?";
-            titleT = "Unsaved document found";
-            if (count == 1) m2 = "Are you sure to close this tab?";
-
-            message = "One document '" + ll.trim() + "' is not saved yet. " + m2;
-        }
-        else if (cnt > 1)
-        {
-            message = "Following "+cnt+" documents are not saved yet. Are you sure to close all tabs?\n" + ll;
-        }
-
-        if (message != null)
-        {
-            int n = JOptionPane.showConfirmDialog(mainFrame.getAssociatedUIComponent(), message, titleT, JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-            if (n != JOptionPane.YES_OPTION) return isSuccessfullyPerformed();
-        }
 
         try
 		{
 			
-			int size = actionList.size();
-			for (int i = 0; i < size; i++)
-			{
-				AbstractContextAction action = actionList.get(i);
-                if (action instanceof OpenPOJOJarAction)
-                {
-                    OpenPOJOJarAction closeA = (OpenPOJOJarAction) action;
-                    //closeA.setForceClose(true);
-                }
-                action.actionPerformed(e);
-				if (!action.isSuccessfullyPerformed())
-				{//stop at the first failed execution of close action.
-					this.setSuccessfullyPerformed(false);
-					break;
-				}
-				else
-				{
-					this.setSuccessfullyPerformed(true);
-				}
-			}
 			File file = null;
 	        while(true)
 	        {
@@ -149,7 +96,7 @@ public class OpenMappingAction extends AbstractContextAction
 	            if (file.getName().toLowerCase().endsWith(".xml")) break;
 	            else
 	            {
-	                int ans = JOptionPane.showConfirmDialog(mainFrame.getAssociatedUIComponent(), "The file type of your selection is not '.map'. : " + file.getName() + "\nDo you want to continue, anyway?",
+	                int ans = JOptionPane.showConfirmDialog(mainFrame.getAssociatedUIComponent(), "The file type of your selection is not '.xml'. : " + file.getName() + "\nDo you want to continue, anyway?",
 	                                              "Not Mapping File", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 	                if (ans == JOptionPane.YES_OPTION) break;
 	                else
@@ -178,27 +125,7 @@ public class OpenMappingAction extends AbstractContextAction
 //			System.err.println("Exception: " + t);
 			t.printStackTrace();
 		}
-		finally
-		{//roll back the mode.
-			if (isSuccessfullyPerformed())
-            {
-                if (mainFrame.getAllTabs().size() == 0)
-                {
-                	// ContextManager.getContextManager().setInClosingAllOrShutdownMode(false, isSuccessfullyPerformed());
-                }
-                   // 
-            }
-            int size = actionList.size();
-            for (int i = 0; i < size; i++)
-            {
-                AbstractContextAction action = actionList.get(i);
-                if (action instanceof OpenPOJOJarAction)
-                {
-                    OpenPOJOJarAction closeA = (OpenPOJOJarAction) action;
-                   // closeA.setForceClose(false);
-                }
-            }
-        }
+		
 		return isSuccessfullyPerformed();
 	}
 

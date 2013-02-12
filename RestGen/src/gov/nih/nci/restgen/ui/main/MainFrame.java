@@ -29,8 +29,8 @@ import java.util.Map;
  */
 public class MainFrame extends JFrame
 {
-	private JTabbedPane tabbedPane = new JTabbedPane();
-
+	//private JTabbedPane tabbedPane = new JTabbedPane();
+	private CloseAndMaxTabbedPane tabbedPane = new CloseAndMaxTabbedPane(true);
 	private JPanel toolBarPanel;
 
 	private JPanel centerPanel ;

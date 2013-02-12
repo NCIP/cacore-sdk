@@ -165,8 +165,13 @@ public class OpenPOJOJarAction extends AbstractContextAction
             				{
             					className = entry.getName();
             				}
-
-            				isValidPOJOClass = validatePOJOClass(input,entry.getName(),file);
+            				ClassParser cp = new ClassParser(input,entry.getName());
+            			    JavaClass javaClass = cp.parse();
+            			    if(javaClass.isEnum() || javaClass.isInterface() || javaClass.isAbstract())
+            			    {
+            			    	continue;
+            			    }
+            				isValidPOJOClass = validatePOJOClass(input,javaClass,entry.getName(),file);
             				if(!isValidPOJOClass)
             				{
          						String errorString = "This class in the Jar file : " + entry.getName()+" is not a POJO class"+"\n";
@@ -312,12 +317,10 @@ public class OpenPOJOJarAction extends AbstractContextAction
 
 	
 	  // validate and parse the POJO class here
-    public boolean validatePOJOClass(InputStream is,String classFile,File file)throws Exception
+    public boolean validatePOJOClass(InputStream is,JavaClass javaClass, String classFile,File file)throws Exception
     {
     boolean validatePOJOMethods = false;	
-    
-     ClassParser cp = new ClassParser(is,classFile);
-     JavaClass javaClass = cp.parse();
+     
      for(Field field : javaClass.getFields()){
   	   validatePOJOMethods = false;
   	 if(!isWrapperType(field.getType().toString()))

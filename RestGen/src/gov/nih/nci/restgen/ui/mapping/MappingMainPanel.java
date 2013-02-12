@@ -823,7 +823,11 @@ public class MappingMainPanel extends JPanel implements ActionListener
 
 		MiddlePanelJGraphController mappingManager = getGraphController();//.getMiddlePanel().getGraphController();
 		gov.nih.nci.restgen.mapping.model.Mapping mappingData = mappingManager.retrieveMappingData(true,persistentFile.getName());
-		
+		if(mappingData.getOptions().getOutputPath()==null || mappingData.getOptions().getOutputPath().equals("") )
+		{
+			JOptionPane.showMessageDialog(this, "Please set the output path...", "Output path!!", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
 		try {
 			//set relative path for source and target schema files.
 

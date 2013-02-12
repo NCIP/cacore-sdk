@@ -104,7 +104,7 @@ public class DefaultSaveAction extends OptionsAction
 
         if (file != null)
 			setSuccessfullyPerformed(processSaveFile(file,mappingMain));
-		
+       
 		return isSuccessfullyPerformed();
 	}
 
