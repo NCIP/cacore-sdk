@@ -31,6 +31,7 @@ public class RESTfulWrapperGenerator extends Generator {
 
 	@Override
 	protected void init() throws GeneratorException {
+		getContext().getLogger().info("Generating RESTful web application...Started!");
 		if (context.getMappingXMLPath() != null) {
 			Mapping mapping = MappingGenerator.fromXML(context
 					.getMappingXMLPath());
@@ -46,6 +47,7 @@ public class RESTfulWrapperGenerator extends Generator {
 
 	@Override
 	protected void validate() throws GeneratorException {
+		getContext().getLogger().info("Validating mapping configuration..");
 		Mapping mapping = context.getMapping();
 		if (mapping == null) {
 			context.getLogger().error(
@@ -323,7 +325,7 @@ public class RESTfulWrapperGenerator extends Generator {
 
 	@Override
 	protected void postProcess() throws GeneratorException {
-
+		getContext().getLogger().info("Generating RESTful web application...Completed!");
 	}
 
 	public Mapping readMappingXML(String mappingXML) throws GeneratorException {

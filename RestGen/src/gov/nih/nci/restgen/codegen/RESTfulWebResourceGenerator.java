@@ -35,6 +35,7 @@ public class RESTfulWebResourceGenerator extends Generator {
 
 	@Override
 	protected void init() throws GeneratorException {
+		getContext().getLogger().info("Generating RESTful web artifacts...Started!");
 		// TODO Auto-generated method stub
 
 	}
@@ -230,6 +231,7 @@ public class RESTfulWebResourceGenerator extends Generator {
 	@Override
 	protected void postProcess() throws GeneratorException {
 		// TODO Auto-generated method stub
+		getContext().getLogger().info("Generating RESTful web artifacts...Completed!");
 
 	}
 

@@ -62,22 +62,22 @@ public class RESTfulResourceGenerator extends Generator {
 	}
 
 	protected void init() {
-		getContext().getLogger().info("Generating RESTful resource...init");
+		getContext().getLogger().info("Generating RESTful resource...");
 	}
 
 	protected void preProcess() {
-		getContext().getLogger().info("Generating RESTful resource...preProcess");
+		//getContext().getLogger().info("Generating RESTful resource...preProcess");
 	}
 
 	protected void validate() {
-		getContext().getLogger().info("Generating RESTful resource...validate");
+		//getContext().getLogger().info("Generating RESTful resource...validate");
 	}
 
 	/**
 	 * Generate RESTful resource based on mapping to EJB or SOAP web service.
 	 */
 	public void runProcess() throws GeneratorException {
-		getContext().getLogger().info("Generating RESTful resource...runProcess started");
+		//getContext().getLogger().info("Generating RESTful resource...runProcess started");
 		Mapping mapping = context.getMapping();
 		if (mapping.getOptions().getWrapperType().equals(Options.SOAP_SERVICE))
 			runProcessSOAP();
@@ -796,6 +796,7 @@ public class RESTfulResourceGenerator extends Generator {
 	}
 
 	protected void postProcess() {
+		getContext().getLogger().info("Generating RESTful resource...Completed!");		
 	}
 
 }

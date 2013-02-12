@@ -80,6 +80,7 @@ public class WebserviceClientGenerator extends Generator {
 
 	@Override
 	protected void init() throws GeneratorException {
+		getContext().getLogger().info("Generating SOAP web service client...Started!");
 		// TODO Auto-generated method stub
 
 	}
@@ -106,7 +107,7 @@ public class WebserviceClientGenerator extends Generator {
 	@Override
 	protected void postProcess() {
 		// TODO Auto-generated method stub
-
+		getContext().getLogger().info("Generating SOAP web service client...Completed!");
 	}
 
 }

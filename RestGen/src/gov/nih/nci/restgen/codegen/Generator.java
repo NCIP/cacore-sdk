@@ -62,17 +62,17 @@ public abstract class Generator {
 	 * @throws GeneratorException
 	 */
 	public void generate() throws GeneratorException {
-		context.getLogger().info("Executing Generator init()");
+		//context.getLogger().info("Executing Generator init()");
 		init();
-		context.getLogger().info("Executing Generator preProcess()");
+		//context.getLogger().info("Executing Generator preProcess()");
 		preProcess();
-		context.getLogger().info("Executing Generator validate()");
+		//context.getLogger().info("Executing Generator validate()");
 		validate();
-		context.getLogger().info("Executing Generator runProcess()");
+		//context.getLogger().info("Executing Generator runProcess()");
 		runProcess();
-		context.getLogger().info("Executing Generator postProcess()");
+		//context.getLogger().info("Executing Generator postProcess()");
 		postProcess();
-		context.getLogger().info("Completed Generator generate()");
+		//context.getLogger().info("Completed Generator generate()");
 	}
 
 	protected String getFileOutputPath() {
