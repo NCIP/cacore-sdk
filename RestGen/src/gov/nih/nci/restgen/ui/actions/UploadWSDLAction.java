@@ -299,6 +299,11 @@ public void createTargetTree(File file) throws Exception
 	
     try
     {
+    	if(!file.exists())
+    	{
+    		JOptionPane.showMessageDialog(mainFrame.getMainFrame().getMappingMainPanel(), "WSDL file is not present at the path...", "WSDL file not found!!!", JOptionPane.ERROR_MESSAGE);
+    		return;
+    	}
     // Display WSDL details here once the WSDL file has been selected!!
     mainFrame.getMainFrame().getMappingMainPanel().getTargetLocationArea().setBorder(BorderFactory.createTitledBorder("SOAP Webservice"));
     // parse and keep the file in XML
