@@ -358,22 +358,9 @@ public class OpenPOJOJarAction extends AbstractContextAction
   	   }
   	  if(!validatePOJOMethods)
   	  {
-  		String errorString = "";  
-  		if(javaClass.isAbstract())
-  		{
-  			errorString = "This Class is an abstract class : " + field.getName()+classFile+"\n";
-  			
-  		}
-  		else if(javaClass.isInterface())
-  		{
-  			errorString = "This Class is an abstract interface class : " + field.getName()+classFile+"\n";
-  			
-  		}
-  		
-  		else
-  		{
-  			errorString = "Class does not define get/set method for java field : " + field.getName()+classFile+"\n";
-  	     }
+  		  
+  		String errorString = "Class does not define get/set method for java field : " + field.getName()+classFile+"\n";
+  	    
   		if(getErrorString()==null)
 		{
 			
