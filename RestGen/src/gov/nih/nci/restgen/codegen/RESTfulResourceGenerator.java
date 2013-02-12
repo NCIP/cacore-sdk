@@ -256,7 +256,7 @@ public class RESTfulResourceGenerator extends Generator {
 	private void runProcessEJB() throws GeneratorException {
 		Mapping mapping = context.getMapping();
 		List<Resource> resources = mapping.getResources();
-		StringTemplateGroup group = new StringTemplateGroup("restful");
+		StringTemplateGroup group = new StringTemplateGroup("restfulejb");
 		StringTemplate getTemplate = null;
 		StringTemplate postTemplate = null;
 		StringTemplate deleteTemplate = null;
@@ -277,48 +277,64 @@ public class RESTfulResourceGenerator extends Generator {
 				if (method.getName().equals(Method.GET)) {
 					if (method.getImplementation().getClientType()
 							.equals(Implementation.EJB_LOCAL))
+					{
 						getTemplate = group
 								.getInstanceOf("gov/nih/nci/restgen/templates/GetMethodEJBLocal");
+					}
 					else if (method.getImplementation().getClientType()
 							.equals(Implementation.EJB_REMOTE))
+					{
 						getTemplate = group
 								.getInstanceOf("gov/nih/nci/restgen/templates/GetMethodEJBRemote");
+					}
 					String getString = generateMethodEJB(resourceName, method,
 							methodName, getTemplate);
 					getMethodStr.add(getString);
 				} else if (method.getName().equals(Method.PUT)) {
 					if (method.getImplementation().getClientType()
 							.equals(Implementation.EJB_LOCAL))
+					{
 						putTemplate = group
 								.getInstanceOf("gov/nih/nci/restgen/templates/PutMethodEJBLocal");
+					}
 					else if (method.getImplementation().getClientType()
 							.equals(Implementation.EJB_REMOTE))
+					{
 						putTemplate = group
 								.getInstanceOf("gov/nih/nci/restgen/templates/PutMethodEJBRemote");
+					}
 					String putString = generateMethodEJB(resourceName, method,
 							methodName, putTemplate);
 					putMethodStr.add(putString);
 				} else if (method.getName().equals(Method.POST)) {
 					if (method.getImplementation().getClientType()
 							.equals(Implementation.EJB_LOCAL))
+					{
 						postTemplate = group
 								.getInstanceOf("gov/nih/nci/restgen/templates/PostMethodEJBLocal");
+					}
 					else if (method.getImplementation().getClientType()
 							.equals(Implementation.EJB_REMOTE))
+					{
 						postTemplate = group
 								.getInstanceOf("gov/nih/nci/restgen/templates/PostMethodEJBRemote");
+					}
 					String postString = generateMethodEJB(resourceName, method,
 							methodName, postTemplate);
 					postMethodStr.add(postString);
 				} else if (method.getName().equals(Method.DELETE)) {
 					if (method.getImplementation().getClientType()
 							.equals(Implementation.EJB_LOCAL))
+					{
 						deleteTemplate = group
 								.getInstanceOf("gov/nih/nci/restgen/templates/DeleteMethodEJBLocal");
+					}
 					else if (method.getImplementation().getClientType()
 							.equals(Implementation.EJB_REMOTE))
+					{
 						deleteTemplate = group
 								.getInstanceOf("gov/nih/nci/restgen/templates/DeleteMethodEJBRemote");
+					}
 					String deleteString = generateMethodEJB(resourceName,
 							method, methodName, deleteTemplate);
 					deleteMethodStr.add(deleteString);
@@ -364,7 +380,7 @@ public class RESTfulResourceGenerator extends Generator {
 		JarFile jarFile = null;
 		org.jdom2.Document doc = null;
 		try {
-			jarFile = new JarFile(impl.getPath());
+			jarFile = new JarFile(context.getMapping().getOptions().getEjbLocation());
 			JarEntry jarEntry = jarFile.getJarEntry("META-INF/ejb-jar.xml");
 			if (jarEntry != null) {
 				InputStream is = jarFile.getInputStream(jarEntry);

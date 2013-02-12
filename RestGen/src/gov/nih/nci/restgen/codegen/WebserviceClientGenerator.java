@@ -58,6 +58,7 @@ public class WebserviceClientGenerator extends Generator {
 						outputPath, "-p",
 						namespace + "=gov.nih.nci.restgen.generated.client",
 						"-b", mapping.getOptions().getWsdlBindingFile(),
+						"-noAddressBinding",
 						// "-b",
 						// mapping.getOptions().getOutputPath()+File.separator+"binding.xml",
 						wsdlLocation });
@@ -67,6 +68,7 @@ public class WebserviceClientGenerator extends Generator {
 						namespace + "=gov.nih.nci.restgen.generated.client",
 						// "-b",
 						// mapping.getOptions().getOutputPath()+File.separator+"binding.xml",
+						"-noAddressBinding",
 						wsdlLocation });
 			}
 		} catch (Exception e) {

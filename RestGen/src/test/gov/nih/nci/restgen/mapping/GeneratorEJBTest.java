@@ -58,7 +58,7 @@ public class GeneratorEJBTest {
 		options.setOutputPath("C:\\DEV\\RestGen\\generatedejb");
 		options.setRootPath("C:\\DEV\\RestGen");
 		options.setWrapperType(Options.EJB);
-		options.setEjbLocation("C:\\DEV\\RestGen\\examples\\BookCatalog.jar");
+		options.setEjbLocation("C:\\DEV\\RestGen\\examples\\catalog\\BookCatalog.jar");
 		//options.setWsdlLocation("http://localhost:21080/wsdl_first/services/CustomerServicePort?WSDL");
 		//options.setWsdlLocation("C:\\DEV\\RestGen\\examples\\customerservice\\CustomerService.wsdl");
 		
@@ -112,9 +112,9 @@ public class GeneratorEJBTest {
 		impl1.setType("EJB");
 		impl1.setJndiName("catalog");
 		impl1.setClientType(Implementation.EJB_REMOTE);
-		impl1.setJndiProperties("C:\\DEV\\RestGen\\examples\\jndi.properties");
+		impl1.setJndiProperties("C:\\DEV\\RestGen\\examples\\catalog\\jndi.properties");
 		impl1.setJndiName("CatalogRemoteHome");
-		impl1.setPath("C:\\DEV\\RestGen\\examples\\BookCatalog.jar");
+		impl1.setPath("C:\\DEV\\RestGen\\examples\\catalog\\BookCatalog.jar");
 		Operation operation1 = new Operation();
 		operation1.setName("getBooks");
 		Output output = new Output();
@@ -134,7 +134,7 @@ public class GeneratorEJBTest {
 		impl2.setType("EJB");
 		impl2.setJndiName("CatalogRemoteHome");
 		impl2.setClientType(Implementation.EJB_REMOTE);
-		impl2.setJndiProperties("C:\\DEV\\RestGen\\examples\\jndi.properties");
+		impl2.setJndiProperties("C:\\DEV\\RestGen\\examples\\catalog\\jndi.properties");
 		impl2.setJndiName("catalog");
 		impl2.setPath("C:\\DEV\\RestGen\\examples\\BookCatalog.jar");
 		Operation operation2 = new Operation();

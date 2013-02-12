@@ -57,7 +57,7 @@ public class GeneratorTest {
 		options.setOutputPath("C:\\DEV\\RestGen\\generatedsoap");
 		options.setRootPath("C:\\DEV\\RestGen");
 		options.setWrapperType(Options.SOAP_SERVICE);
-		options.setWsdlLocation("http://localhost:21080/customerService/services/CustomerServicePort?WSDL");
+		options.setWsdlLocation("http://localhost:29080/wsdl_first/services/CustomerServicePort?WSDL");
 		//options.setWsdlLocation("C:\\DEV\\RestGen\\examples\\customerservice\\CustomerService.wsdl");
 		
 		mapping.setOptions(options);

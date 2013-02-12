@@ -12,8 +12,8 @@ import javax.xml.bind.annotation.XmlType;
 @XmlRootElement(name="Implementation")
 public class Implementation {
 	
-	public static final String EJB_LOCAL = "EJB_LOCAL";
-	public static final String EJB_REMOTE = "EJB_REMOTE";
+	public static final String EJB_LOCAL = "local";
+	public static final String EJB_REMOTE = "remote";
 	
 	@XmlAttribute
 	private String type;
