@@ -103,7 +103,7 @@ public class RESTfulResourceGenerator extends Generator {
 		StringTemplate deleteTemplate = group
 				.getInstanceOf("gov/nih/nci/restgen/templates/DeleteMethodSOAP");
 		StringTemplate putTemplate = group
-				.getInstanceOf("gov/nih/nci/restgen/templates/putMethodSOAP");
+				.getInstanceOf("gov/nih/nci/restgen/templates/PutMethodSOAP");
 
 		
 		WSDLParser parser = new WSDLParser();
