@@ -161,6 +161,11 @@ public void createTargetTree(File file) throws Exception
 {
 	
      //PV Validate EJB Jar file here
+	if(!file.exists())
+	{
+		JOptionPane.showMessageDialog(mainFrame.getMainFrame().getMappingMainPanel(), "EJB jar file is not present at the path...", "EJB Jar file not found!!!", JOptionPane.ERROR_MESSAGE);
+		return;
+	}
     JarFile jarFile = new JarFile(file);
     boolean ejbjarxml = false;
     Enumeration jarEntries = jarFile.entries();
@@ -397,13 +402,14 @@ private void createNodes(DefaultTargetTreeNode top,ArrayList<String> list, File 
 	    	if(ejbclassFound)
 	    	{
 	    		///////////
-	    		ArrayList<String> argumentTypes = new ArrayList();
+	    		
 	    		InputStream input = jarFile.getInputStream(jarEntry);
 	    		ClassParser cp = new ClassParser(input,file.getName());
 	    		JavaClass javaClass = cp.parse();
 	        	for(Method method : javaClass.getMethods())
 	        	{
 	    		    //get input type and outtypes here
+	        		ArrayList<String> argumentTypes = new ArrayList();
 	        		Type [] args = method.getArgumentTypes();
 	        		Type returnType = method.getReturnType();
 	        		

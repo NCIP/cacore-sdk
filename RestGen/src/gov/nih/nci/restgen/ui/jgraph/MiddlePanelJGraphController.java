@@ -496,12 +496,14 @@ public class MiddlePanelJGraphController {
     	// set the inputs and outputs
     	if(targetNode.getInputType()!=null && targetNode.getInputType().size()>0)
     	{
+    		int param = 1;
     		ArrayList inputsNode = targetNode.getInputType();
     		Iterator it = inputsNode.iterator();
     		while(it.hasNext())
     		{
     			Input input = new Input();
     			input.setType((String)it.next());
+    			input.setName("param"+param++);
     			inputs.add(input);
     		}
     		
