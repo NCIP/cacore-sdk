@@ -160,7 +160,8 @@ public class NewPOJOFileAction extends AbstractContextAction
         // validate and parse the POJO class here
         
          /// form the tree here PV...start
-        		classList.add(file.getName());
+        
+        		classList.add(file.getName().replace(".class", ""));
         		mainFrame.getMainFrame().getMappingMainPanel().setPOJOClassList(classList);
              DefaultSourceTreeNode top = new DefaultSourceTreeNode(file.getName());
              top.setResourceLocation(file.getPath());
