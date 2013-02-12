@@ -105,7 +105,11 @@ public class EditResourcePathAction extends AbstractContextAction
        }
        	
        
- 
+       String resourceName = ((DefaultSourceTreeNode)treeNode).getUserObject().toString();
+       if(resourceName.contains(".class"))
+       {
+    	   resourceName = resourceName.replace(".class","");
+       }
 
        char[] specialChars = {'!','@',']','#','$','%','^','&','*'}; 
        
@@ -141,28 +145,28 @@ public class EditResourcePathAction extends AbstractContextAction
 		    	   if(mainFrame.getMainFrame().getMappingMainPanel().getResourcePathValues()==null)
 		    	   {
 		    		   Hashtable<String, String> values = new Hashtable();
-		    		   values.put(((DefaultSourceTreeNode)treeNode).getUserObject().toString(), inputString);
+		    		   values.put(resourceName, inputString);
 		    		   mainFrame.getMainFrame().getMappingMainPanel().setResourcePathValues(values);
 		    		   
 		    	   }
 		    	   else
 		    	   {
 		    		   Hashtable<String, String> values = mainFrame.getMainFrame().getMappingMainPanel().getResourcePathValues();
-		    		   if(values.containsKey(((DefaultSourceTreeNode)treeNode).getUserObject().toString()))
+		    		   if(values.containsKey(resourceName))
 		    		   {
-		    			   values.remove(((DefaultSourceTreeNode)treeNode).getUserObject().toString());
-		    			   values.put(((DefaultSourceTreeNode)treeNode).getUserObject().toString(), inputString);
+		    			   values.remove(resourceName);
+		    			   values.put(resourceName, inputString);
 		    			   
 		    		   }
 		    		   else
 		    		   {
-		    			   values.put(((DefaultSourceTreeNode)treeNode).getUserObject().toString(), inputString);
+		    			   values.put(resourceName, inputString);
 		    			   
 		    		   }
 		    		   mainFrame.getMainFrame().getMappingMainPanel().setResourcePathValues(values);
 		    		   
 		    	   }
-		    	   System.out.println("path66666"+((DefaultSourceTreeNode)treeNode).getUserObject().toString());
+		    	   System.out.println("path66666"+resourceName);
 		       
 		       }
 		       catch(Exception ex)
