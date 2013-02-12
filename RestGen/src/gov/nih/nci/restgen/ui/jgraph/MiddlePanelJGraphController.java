@@ -508,20 +508,10 @@ public class MiddlePanelJGraphController {
     		}
     		
     	}
-    	else
-    	{
-    		Input input = new Input();
-			input.setType("");
-			inputs.add(input);
-    	}
     	
     	if(targetNode.getOutputType()!=null)
     	{
     		output.setType(targetNode.getOutputType());
-    	}
-    	else
-    	{
-    		output.setType("");
     	}
     	
     	if(operation.getInputs()==null)
