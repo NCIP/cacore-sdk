@@ -211,7 +211,19 @@ public void createTargetTree(File file) throws Exception
     	{
     		EJBDisplayName = EJBDisplayName+", "+(String)EJBNameList.get(i);
     	}
-    	mainFrame.getMainFrame().getMappingMainPanel().getTargetLocationArea().setText("Name:"+EJBDisplayName);
+    		mainFrame.getMainFrame().getMappingMainPanel().getTargetLocationArea().setText("Name:"+EJBDisplayName);
+    		String jndiName = mainFrame.getMainFrame().getMappingMainPanel().getEnterJNDIName();
+    		String jndiPropertiesPath = mainFrame.getMainFrame().getMappingMainPanel().getJNDIPropertiesFilePath();
+    		if(jndiName!=null && !jndiName.equals(""))
+    		{
+    			mainFrame.getMainFrame().getMappingMainPanel().getTargetLocationArea().append("\n\n"+"JNDI Name:"+jndiName);
+    		}
+    		if(jndiPropertiesPath!=null && !jndiPropertiesPath.equals(""))
+    		{
+    			mainFrame.getMainFrame().getMappingMainPanel().getTargetLocationArea().append("\n\n"+"JNDI properties file:"+file.getPath());
+    		}
+    		
+    	
     }
   //PV Validate EJB Jar file here
     

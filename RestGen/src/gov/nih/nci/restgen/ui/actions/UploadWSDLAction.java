@@ -417,7 +417,13 @@ public void createTargetTree(File file) throws Exception
 	}
 	setServiceName(serviceName);
 	setServiceEndPoint(serviceEndPoint);
+	String WSDLBindingFile = mainFrame.getMainFrame().getMappingMainPanel().getWSDLBindingFilePath(); 
 	mainFrame.getMainFrame().getMappingMainPanel().getTargetLocationArea().setText("Name:"+serviceName+"\n\n"+"Endpoint:"+serviceEndPoint);
+	if(WSDLBindingFile!=null && !WSDLBindingFile.equals(""))
+	{
+		mainFrame.getMainFrame().getMappingMainPanel().getTargetLocationArea().append("\n\n"+"WSDL Binding file:"+file.getPath());
+	}
+	
 	mainFrame.getMainFrame().getMappingMainPanel().createOpenWSDLBindingFileButton();
 	
 	

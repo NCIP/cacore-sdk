@@ -82,7 +82,11 @@ public class MappingMainPanel extends JPanel implements ActionListener
 	private static MainFrameContainer mainFrame = null;
     private File mapFile = null;
     private static JButton enterJNDIButton = null;
+    private static JRadioButton remoteButton = null;
+    private static JRadioButton localButton = null;
+    private static ButtonGroup group = null;
     private static JButton openSourceButton = null;
+    private static JButton openSourceWSDLButton = null;
     private static File mappingSourceFile = null;
 	private static File mappingTargetFile = null;
 	private static String sourceFileType = null;
@@ -443,6 +447,7 @@ public class MappingMainPanel extends JPanel implements ActionListener
 		//		targetTreeToolBar.add(targetTreeCollapseAllAction);
 		//targetLocationPanel.add(targetTreeToolBar, BorderLayout.WEST);
 		targetLocationArea.setBackground(new Color(212,208,200));
+		targetLocationArea.setLineWrap(true);
 		targetLocationArea.setEditable(false);
 		//targetLocationArea.setPreferredSize(new Dimension((DefaultSettings.FRAME_DEFAULT_WIDTH / 10), 24));
         targetLocationArea.setPreferredSize(new Dimension((frameWidth / 20), 10));
@@ -507,14 +512,16 @@ public class MappingMainPanel extends JPanel implements ActionListener
 			targetRadioButtonPanel.setLayout(new GridLayout(5, 5));
 			targetRadioButtonPanel.setPreferredSize(new Dimension((DefaultSettings.FRAME_DEFAULT_WIDTH/ 10), 90));
 		}
-		
-		JButton openSourceButton = new JButton(SELECT_SOURCE);
-		openSourceButton.setMnemonic('S');
-		openSourceButton.setBounds(0, 0, 20, 20);
-		openSourceButton.setToolTipText(SELECT_CSV_TIP);
-		openSourceButton.addActionListener(this);
+		if(openSourceWSDLButton==null)
+		{
+			openSourceWSDLButton = new JButton(SELECT_SOURCE);
+			openSourceWSDLButton.setMnemonic('S');
+			openSourceWSDLButton.setBounds(0, 0, 20, 20);
+			openSourceWSDLButton.setToolTipText(SELECT_CSV_TIP);
+			openSourceWSDLButton.addActionListener(this);
+		}
 		targetButtonPanel.add(Box.createHorizontalStrut(10));
-		targetButtonPanel.add(openSourceButton, BorderLayout.SOUTH);
+		targetButtonPanel.add(openSourceWSDLButton, BorderLayout.SOUTH);
 		targetLocationPanel.add(targetButtonPanel, BorderLayout.EAST);
 		targetLocationPanel.add(targetRadioButtonPanel, BorderLayout.SOUTH);
 		
@@ -535,41 +542,49 @@ public class MappingMainPanel extends JPanel implements ActionListener
 			targetRadioButtonPanel.setLayout(new GridLayout(5, 5));
 		}
 		targetRadioButtonPanel.setPreferredSize(new Dimension((DefaultSettings.FRAME_DEFAULT_WIDTH/ 10), 90));
-	    // add upload JNDI button here....	
-		openSourceButton = new JButton("Select JNDI File");
-		openSourceButton.setMnemonic('U');
-		openSourceButton.setBounds(0, 0, 20, 20);
-		openSourceButton.setToolTipText(SELECT_CSV_TIP);
-		openSourceButton.addActionListener(this);
-				
-		// Enter JNDI name here....	
+	    // add upload JNDI button here....
+		if(openSourceButton==null)
+		{
+			openSourceButton = new JButton("Select JNDI File");
+			openSourceButton.setMnemonic('U');
+			openSourceButton.setBounds(0, 0, 20, 20);
+			openSourceButton.setToolTipText(SELECT_CSV_TIP);
+			openSourceButton.addActionListener(this);
+		}		
+		// Enter JNDI name here....
+		if(enterJNDIButton==null)
+		{
 				enterJNDIButton = new JButton("Enter JNDI name");
 				enterJNDIButton.setMnemonic('U');
 				enterJNDIButton.setBounds(0, 0, 20, 20);
 				enterJNDIButton.setToolTipText(SELECT_CSV_TIP);
 				enterJNDIButton.addActionListener(this);
-				
+		}		
 		// add radio button group here
-		
-			JRadioButton remoteButton = new JRadioButton("Remote");
+		if(remoteButton==null)
+		{
+			remoteButton = new JRadioButton("Remote");
 			remoteButton.setMnemonic('R');
 			remoteButton.setActionCommand("Remote");
 			remoteButton.setSelected(true);
-
-			JRadioButton localButton = new JRadioButton("Local");
+		}
+		if(localButton==null)
+		{
+			localButton = new JRadioButton("Local");
 			localButton.setMnemonic('L');
 			localButton.setActionCommand("Local");
 			localButton.setSelected(true);
 			
-
-		    //Group the radio buttons.
-		    ButtonGroup group = new ButtonGroup();
+		}
+		if(group==null)
+		{	    //Group the radio buttons.
+		    group = new ButtonGroup();
 		    group.add(remoteButton);
 		    group.add(localButton);
-		    
 		    //Register a listener for the radio buttons.
 		    remoteButton.addActionListener(this);
 		    localButton.addActionListener(this);
+	    }
 		targetRadioButtonPanel.setBorder(BorderFactory.createTitledBorder("Client Type"));
 		targetRadioButtonPanel.add(remoteButton, BorderLayout.NORTH);
 		targetRadioButtonPanel.add(Box.createHorizontalStrut(10));
@@ -603,9 +618,14 @@ public class MappingMainPanel extends JPanel implements ActionListener
 				getEnterJNDIButton().setEnabled(false);
 				getOpenSourceButton().setEnabled(false);
 				String toReplaceJNDIText = "\n\n"+"JNDI Name:"+getEnterJNDIName();
-				String toReplaceWSDLText = "\n\n"+"JNDI properties file:"+getJNDIPropertiesFilePath();
 				getTargetLocationArea().setText(getTargetLocationArea().getText().replace(toReplaceJNDIText, ""));
-				getTargetLocationArea().setText(getTargetLocationArea().getText().replace(toReplaceWSDLText, ""));
+				int index = getTargetLocationArea().getText().indexOf("\n\n"+"JNDI properties file:");
+				if(index>=0)
+				{
+					String toReplaceWSDLText = getTargetLocationArea().getText().substring(index, getTargetLocationArea().getText().length());
+					getTargetLocationArea().setText(getTargetLocationArea().getText().replace(toReplaceWSDLText, ""));
+				}
+				
 				setEjbType("EJB_LOCAL");
 				
 				
@@ -770,11 +790,19 @@ public class MappingMainPanel extends JPanel implements ActionListener
 		MiddlePanelJGraphController mappingManager = getGraphController();//.getMiddlePanel().getGraphController();
 		gov.nih.nci.restgen.mapping.model.Mapping mappingData = mappingManager.retrieveMappingData(true,persistentFile.getName());
 		String errorString = checkForValidMappingData(mappingData);
+
 		if(errorString!=null && !errorString.trim().equals(""))
 		{
-			JOptionPane.showMessageDialog(this, errorString, "Data input errors", JOptionPane.ERROR_MESSAGE);
+			JTextArea textArea = new JTextArea(errorString);
+			JScrollPane scrollPane = new JScrollPane(textArea);  
+			textArea.setLineWrap(true);  
+			textArea.setWrapStyleWord(true); 
+			scrollPane.setPreferredSize( new Dimension( 500, 500 ) );
+			JOptionPane.showMessageDialog(this, scrollPane, "Data input errors",  
+    	                                       JOptionPane.ERROR_MESSAGE);
 			return;
 		}
+		
 		
 		try {
 			saveMapping(persistentFile, mappingData);
@@ -798,17 +826,47 @@ public class MappingMainPanel extends JPanel implements ActionListener
 	private String checkForValidMappingData(Mapping mappingData) {
 		// TODO Auto-generated method stub
 		String errorString = null;
-		String sourceFilePath = null;
-		String targetFilePath = null;
 		String targetFileType = null;
 		String WSDLBindingFilePath = null;
 		String ejbType = null;
 		String enterJNDIName = null;
 		String JNDIPropertiesFilePath = null;
 		Implementation imp = null;
+		String outputPath = mappingData.getOptions().getOutputPath();
 		targetFileType = mappingData.getOptions().getWrapperType();
 		WSDLBindingFilePath = mappingData.getOptions().getWsdlBindingFile();
 		List<Resource> rsc =  mappingData.getResources();
+		if(outputPath.equals(null) || outputPath.equals(""))
+		{
+			if(errorString!=null)
+			{
+				errorString = errorString + "Please Set the Options output path\n";
+			}
+			else{
+				errorString = "Please Set the Options output path\n";
+			}
+	
+		}
+		
+		if(rsc!=null && rsc.size()>0)
+		{
+			Iterator<Resource> rscit = rsc.iterator();
+			while(rscit.hasNext())
+			{
+				Resource rscVar =  (Resource) rscit.next();
+				if(rscVar.getPath()==null || rscVar.getPath().equals("") )
+				{
+					if(errorString!=null)
+					{
+						errorString = errorString + "Please Set the path for resource:"+rscVar.getName()+"\n";
+					}
+					else{
+						errorString = "Please set the path for resource\n";
+					}
+				}
+			}
+		
+		}
 		if(rsc!=null && rsc.size()>0)
 		{
 			Iterator<Resource> rscit = rsc.iterator();
@@ -837,33 +895,43 @@ public class MappingMainPanel extends JPanel implements ActionListener
 			if (imp != null) {
 				if(targetFileType.equals("EJB"))
 				{
-					ejbType = imp.getClientType();
+					ejbType = imp.getType();
 					enterJNDIName = imp.getJndiName();
 					JNDIPropertiesFilePath = imp.getJndiProperties();
 					if(ejbType==null || ejbType.equals(""))
-					{
-						errorString = "Please select EJB Type\n";
-					}
-					if(enterJNDIName==null || enterJNDIName.equals(""))
 					{
 						if(errorString!=null)
 						{
 							errorString = errorString + "Please select EJB Type\n";
 						}
 						else{
-							errorString = "Please select EJB JNDI Name Type\n";
+							errorString = "Please select EJB Type\n";
 						}
+						
 					}
-					if(JNDIPropertiesFilePath==null || JNDIPropertiesFilePath.equals(""))
+					if(ejbType.equals("EJB_REMOTE"))
 					{
-						if(errorString!=null)
+						if(enterJNDIName==null || enterJNDIName.equals(""))
 						{
-							errorString = errorString + "Please select EJB JNDIProperties \n";
+							if(errorString!=null)
+							{
+								errorString = errorString + "Please select EJB JNDI Name Type\n";
+							}
+							else{
+								errorString = "Please select EJB JNDI Name Type\n";
+							}
 						}
-						else{
-							errorString = "Please select EJB JNDIProperties \n";
-						}
+						if(JNDIPropertiesFilePath==null || JNDIPropertiesFilePath.equals(""))
+						{
+							if(errorString!=null)
+							{
+								errorString = errorString + "Please select EJB JNDIProperties \n";
+							}
+							else{
+								errorString = "Please select EJB JNDIProperties \n";
+							}
 
+						}
 					}
 
 				}
@@ -954,14 +1022,15 @@ public class MappingMainPanel extends JPanel implements ActionListener
 		if(sourceFilePath==null || sourceFilePath.equals("") || !new File(sourceFilePath).exists())
 		{
 
-			JOptionPane.showMessageDialog(mainFrame.getMainFrame().getMappingMainPanel(), "Source file is not present at the path...", "Source file not found!!!", JOptionPane.ERROR_MESSAGE);
-    		return;
+			JOptionPane.showMessageDialog(this, "Source file is not present at the path...", "Source file not found!!!", JOptionPane.ERROR_MESSAGE);
+			throw new Exception("Source file not found");
+    		
 
 		}
 		else if(targetFilePath==null || targetFilePath.equals("") || !new File(targetFilePath).exists()) 
 		{
-			JOptionPane.showMessageDialog(mainFrame.getMainFrame().getMappingMainPanel(), "Target file is not present at the path...", "Target file not found!!!", JOptionPane.ERROR_MESSAGE);
-    		return;
+			JOptionPane.showMessageDialog(this, "Target file is not present at the path...", "Target file not found!!!", JOptionPane.ERROR_MESSAGE);
+			throw new Exception("Target file not found");
 
 		}
 
@@ -991,34 +1060,42 @@ public class MappingMainPanel extends JPanel implements ActionListener
 		    		
 		    	}
 			if (imp != null) {
-				ejbType = imp.getClientType();
-				if (ejbType != null) {
-					mainFrame.getMainFrame().getMappingMainPanel()
-							.setEjbType(ejbType);
+				if(targetFileType.equals("EJB"))
+				{
+					ejbType = imp.getType();
+					if (ejbType != null) {
+					setEjbType(ejbType);
+					}
+					enterJNDIName = imp.getJndiName();
+					if (enterJNDIName != null) {
+					
+						setEnterJNDIName(enterJNDIName);
+						
+					}	
+				
+					JNDIPropertiesFilePath = imp.getJndiProperties();
+					if (JNDIPropertiesFilePath != null) {
+							setJNDIPropertiesFilePath(JNDIPropertiesFilePath);
+						
+					}
 				}
-				enterJNDIName = imp.getJndiName();
-				if (enterJNDIName != null) {
-					mainFrame.getMainFrame().getMappingMainPanel()
-							.setEnterJNDIName(enterJNDIName);
-				}
-				JNDIPropertiesFilePath = imp.getJndiProperties();
-				if (JNDIPropertiesFilePath != null) {
-					mainFrame.getMainFrame().getMappingMainPanel()
-							.setJNDIPropertiesFilePath(JNDIPropertiesFilePath);
+				else
+				{
+					if(WSDLBindingFilePath!=null)
+					{
+						setWSDLBindingFilePath(WSDLBindingFilePath);
+							
+					}
 				}
 			}
 			}
 			if(targetFileType!=null)
 			{
-				mainFrame.getMainFrame().getMappingMainPanel().setTargetFileType(targetFileType);
-			}
-			if(WSDLBindingFilePath!=null)
-			{
-				mainFrame.getMainFrame().getMappingMainPanel().setWSDLBindingFilePath(WSDLBindingFilePath);
+				setTargetFileType(targetFileType);
 			}
 			
 		System.out.println("source file path......target file path"+sourceFilePath+targetFilePath);	
-		mainFrame.getMainFrame().getMappingMainPanel().setMappingSourceFile(new File(sourceFilePath));
+		setMappingSourceFile(new File(sourceFilePath));
 			
 			if(sourceFilePath.contains(".class"))
 			{
@@ -1027,11 +1104,27 @@ public class MappingMainPanel extends JPanel implements ActionListener
 			}
 			else 
 			{
-				mainFrame.getMainFrame().getMappingMainPanel().setMappingSourceFile(new File(sourceFilePath));
+				setMappingSourceFile(new File(sourceFilePath));
 				OpenPOJOJarAction newpojo = new OpenPOJOJarAction(mainFrame);
 				newpojo.createSourceTree(new File(sourceFilePath));
 			}
-			mainFrame.getMainFrame().getMappingMainPanel().setMappingTargetFile(new File(targetFilePath));
+			setMappingTargetFile(new File(targetFilePath));
+			// clear the target panel
+			if(getTargetTree()!=null)
+    		{
+            	getMiddlePanel().getGraphController().handleDeleteAll();
+    			getTargetScrollPane().setViewportView(null);
+    			setTargetTree(null);
+    			getTargetLocationArea().setBorder(BorderFactory.createTitledBorder(""));
+    			getTargetLocationArea().setText("");
+    			getTargetButtonPanel().removeAll();
+    			getTargetRadioButtonPanel().setBorder(BorderFactory.createTitledBorder(""));
+    			getTargetRadioButtonPanel().removeAll();
+    			getTargetButtonPanel().updateUI();
+    			//mainFrame.getMainFrame().getMappingMainPanel().getTargetScrollPane().setBackground(new Color(212,208,200));
+    			
+    		}
+			
 			if(targetFilePath.contains(".jar"))
 			{
 				UploadEJBJarAction newejb = new UploadEJBJarAction(mainFrame);
@@ -1039,7 +1132,7 @@ public class MappingMainPanel extends JPanel implements ActionListener
 			}
 			else
 			{
-				mainFrame.getMainFrame().getMappingMainPanel().setMappingTargetFile(new File(targetFilePath));
+				setMappingTargetFile(new File(targetFilePath));
 				UploadWSDLAction newwsdl = new UploadWSDLAction(mainFrame);
 				newwsdl.createTargetTree(new File(targetFilePath));
 			}
@@ -1128,7 +1221,7 @@ public class MappingMainPanel extends JPanel implements ActionListener
             tTree.setDropMode(DropMode.ON);
             tTree.setDragEnabled(true);
     		//GraphDropTransferHandler gDropHandler=new GraphDropTransferHandler();
-    		//mainFrame.getMainFrame().getMappingMainPanel().getMiddlePanel().getGraph().setTransferHandler(gDropHandler);
+    		//""getMiddlePanel().getGraph().setTransferHandler(gDropHandler);
             tTree.setDragEnabled(true);
             getTargetScrollPane().setViewportView(tTree);
         
