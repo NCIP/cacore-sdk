@@ -29,6 +29,7 @@ import javax.xml.transform.stream.StreamSource;
 
 import gov.nih.nci.restgen.core.ComponentType;
 import gov.nih.nci.restgen.mapping.model.Implementation;
+import gov.nih.nci.restgen.mapping.model.Mapping;
 import gov.nih.nci.restgen.mapping.model.Method;
 import gov.nih.nci.restgen.mapping.model.Resource;
 import gov.nih.nci.restgen.ui.actions.NewPOJOFileAction;
@@ -329,36 +330,6 @@ public class MappingMainPanel extends JPanel implements ActionListener
     }
 
 	
-    /*
-    private void refreshPanel()
-    {
-        if (mapping == null) return;
-        MappingFactory.saveMapping(persistentFile, mappingData);
-		try
-		{
-			if (!GeneralUtilities.areEqual(defaultFile, file))
-			{//not equal, change it.
-				removeFileUsageListener(defaultFile, viewerPanel);
-				defaultFile = file;
-			}
-			postActionPerformed(viewerPanel);
-//			JOptionPane.showMessageDialog(viewerPanel.getParent(), "Mapping data has been saved successfully.", "Save Complete", JOptionPane.INFORMATION_MESSAGE);
-			viewerPanel.setSaveFile(file);
-			return true;
-		}
-		catch(Throwable e)
-		{
-			//restore the change value since something occurred and believe the save process is aborted.
-			viewerPanel.setChanged(oldChangeValue);
-			//rethrow the exeception
-			e.printStackTrace();
-			throw new Exception(e);
-		}
-        MappingMainPanel rPanel = new MappingMainPanel(mainFrame);
-            rPanel.processOpenMapFile(mapFile, rMap);
-    }
-    */
-
     
 
 	private JComponent getCenterPanel(boolean functionPaneRequired)
@@ -520,32 +491,6 @@ public class MappingMainPanel extends JPanel implements ActionListener
 
 	}
 
-	/**
-	 * This constructs function and properties panels.
-	 *
-	 * @return the top level right pane.
-	 */
-	/*private JComponent getTopLevelRightPanel()
-	{
-        FunctionLibraryPane functionPane = new FunctionLibraryPane(this);
-		functionPane.setBorder(BorderFactory.createTitledBorder("Functions"));
-
-		DefaultPropertiesPage propertiesPane = new DefaultPropertiesPage(getGraphController().getPropertiesSwitchController());
-        Dimension rightMostDim = new Dimension((DefaultSettings.FRAME_DEFAULT_WIDTH / 11), 50);
-	    propertiesPane.setPreferredSize(rightMostDim);
-		functionPane.setPreferredSize(rightMostDim);
-
-        JSplitPane topBottomSplitPane = null;
-            topBottomSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-            DefaultSettings.setDefaultFeatureForJSplitPane(topBottomSplitPane);
-            int locDiv = (int) (mainFrame.getAssociatedUIContainer().getHeight() * 0.2);
-            if (locDiv < 130) locDiv = 130;
-            topBottomSplitPane.setDividerLocation(locDiv);
-            //System.out.println("VVVV topBottomSplitPane.getDividerLocation():" + topBottomSplitPane.getDividerLocation());
-        
-        return topBottomSplitPane;
-	}*/
-	
 	
 	public void createOpenWSDLBindingFileButton()
 	{
@@ -821,34 +766,17 @@ public class MappingMainPanel extends JPanel implements ActionListener
 	
 	public void persistFile(File persistentFile)
 	{
-
+		
 		MiddlePanelJGraphController mappingManager = getGraphController();//.getMiddlePanel().getGraphController();
 		gov.nih.nci.restgen.mapping.model.Mapping mappingData = mappingManager.retrieveMappingData(true,persistentFile.getName());
-		if(mappingData.getOptions().getOutputPath()==null || mappingData.getOptions().getOutputPath().equals("") )
+		String errorString = checkForValidMappingData(mappingData);
+		if(errorString!=null && !errorString.trim().equals(""))
 		{
-			JOptionPane.showMessageDialog(this, "Please set the output path...", "Output path!!", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, errorString, "Data input errors", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
+		
 		try {
-			//set relative path for source and target schema files.
-
-           /*String sourceRelatve=ResourceUtils.getRelativePath(sTree.getSchemaParser().getSchemaURI(),
-					persistentFile.getCanonicalFile().toURI().toString(),
-					File.separator);
-			String targetRelatve=ResourceUtils.getRelativePath(tTree.getSchemaParser().getSchemaURI(),
-					persistentFile.getCanonicalFile().toURI().toString(),
-					File.separator);
-			for (Component mapComp:mappingData.getComponents().getComponent())
-			{
-				if (mapComp.getRootElement()!=null)
-				{
-	                if (mapComp.getType() == ComponentType.SOURCE)
-	                	mapComp.setLocation(sourceRelatve);
-	                else if ( mapComp.getType() == ComponentType.TARGET)
-	                	mapComp.setLocation(targetRelatve);
-				}
-			}
-*/
 			saveMapping(persistentFile, mappingData);
 			JOptionPane.showMessageDialog(getParent(), "Mapping data has been saved successfully.", "Save Complete", JOptionPane.INFORMATION_MESSAGE);
 		} catch (JAXBException e) {
@@ -867,38 +795,106 @@ public class MappingMainPanel extends JPanel implements ActionListener
         //setChanged(false);
     }
 
+	private String checkForValidMappingData(Mapping mappingData) {
+		// TODO Auto-generated method stub
+		String errorString = null;
+		String sourceFilePath = null;
+		String targetFilePath = null;
+		String targetFileType = null;
+		String WSDLBindingFilePath = null;
+		String ejbType = null;
+		String enterJNDIName = null;
+		String JNDIPropertiesFilePath = null;
+		Implementation imp = null;
+		targetFileType = mappingData.getOptions().getWrapperType();
+		WSDLBindingFilePath = mappingData.getOptions().getWsdlBindingFile();
+		List<Resource> rsc =  mappingData.getResources();
+		if(rsc!=null && rsc.size()>0)
+		{
+			Iterator<Resource> rscit = rsc.iterator();
+			while(rscit.hasNext())
+			{
+				Resource rscVar =  (Resource) rscit.next();
+				List<Method> mtd =  rscVar.getMethods();
+				if(mtd!=null && mtd.size()>0)
+				{
+					Iterator<Method> mtdit =mtd.iterator();
+					while(mtdit.hasNext())
+					{
+						imp = ((Method)mtdit.next()).getImplementation();
+						if(imp!=null)
+						{
+							break;
+						}
+					}
+				}
+				if(imp!=null)
+				{
+					break;
+				}
+
+			}
+			if (imp != null) {
+				if(targetFileType.equals("EJB"))
+				{
+					ejbType = imp.getClientType();
+					enterJNDIName = imp.getJndiName();
+					JNDIPropertiesFilePath = imp.getJndiProperties();
+					if(ejbType==null || ejbType.equals(""))
+					{
+						errorString = "Please select EJB Type\n";
+					}
+					if(enterJNDIName==null || enterJNDIName.equals(""))
+					{
+						if(errorString!=null)
+						{
+							errorString = errorString + "Please select EJB Type\n";
+						}
+						else{
+							errorString = "Please select EJB JNDI Name Type\n";
+						}
+					}
+					if(JNDIPropertiesFilePath==null || JNDIPropertiesFilePath.equals(""))
+					{
+						if(errorString!=null)
+						{
+							errorString = errorString + "Please select EJB JNDIProperties \n";
+						}
+						else{
+							errorString = "Please select EJB JNDIProperties \n";
+						}
+
+					}
+
+				}
+				else
+				{
+
+					if(WSDLBindingFilePath==null ||WSDLBindingFilePath.equals("") )
+					{
+						if(errorString!=null)
+						{
+							errorString = errorString + "Please select WSDL Binding file \n";
+						}
+						else{
+							errorString = "Please select WSDL Binding file \n";
+						}
+					}
+
+				}
+
+			}
+		}
+		return errorString;
+	}
+
+
 	public static void saveMapping(File f, gov.nih.nci.restgen.mapping.model.Mapping m) throws JAXBException {
         JAXBContext jc = JAXBContext.newInstance( "gov.nih.nci.restgen.mapping.model" );
         Marshaller u = jc.createMarshaller();
-        /*for (Component mapComp:m.getComponents().getComponent())
-        {
-            if (mapComp.getRootElement()!=null)
-            {
-                List<ElementMeta> childList=new ArrayList<ElementMeta>();
-                childList.addAll(mapComp.getRootElement().getChildElement());
-                rootChildListHash.put(mapComp.getLocation()+mapComp.getId(), childList);
-                mapComp.getRootElement().getChildElement().clear();
-
-                List<AttributeMeta> attrList=new ArrayList<AttributeMeta>();
-                attrList.addAll(mapComp.getRootElement().getAttrData());
-                rootAttrListHash.put(mapComp.getLocation()+mapComp.getId(), attrList);
-                mapComp.getRootElement().getAttrData().clear();
-            }
-        }*/
         u.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, new Boolean(true));
         u.marshal(new JAXBElement<gov.nih.nci.restgen.mapping.model.Mapping>(new QName("mapping"),gov.nih.nci.restgen.mapping.model.Mapping.class, m), f);
 
-        //put the unmarshalled children back
-        /*for (Component mapComp:m.getComponents().getComponent())
-        {
-            if (mapComp.getRootElement()!=null)
-            {
-                mapComp.getRootElement().getChildElement().addAll(rootChildListHash.get(mapComp.getLocation()+mapComp.getId()));
-                mapComp.getRootElement().getAttrData().addAll(rootAttrListHash.get(mapComp.getLocation()+mapComp.getId()));
-                String xsdLocation=f.getParent()+File.separator+mapComp.getLocation();
-                mapComp.setLocation(xsdLocation);
-            }
-        }*/
     }
 	
 // Added PV start
@@ -942,6 +938,33 @@ public class MappingMainPanel extends JPanel implements ActionListener
 			targetFileType = mapping.getOptions().getWrapperType();
 			WSDLBindingFilePath = mapping.getOptions().getWsdlBindingFile();
 			List<Resource> rsc =  mapping.getResources();
+			// validate the source and target files here and return
+			
+			for(gov.nih.nci.restgen.mapping.model.Component c:l){
+				if(c.getType().equals("source"))
+				{
+					sourceFilePath = c.getLocation();
+					
+				}
+				else if(c.getType().equals("target"))
+				{
+					targetFilePath = c.getLocation();
+				}
+			}
+		if(sourceFilePath==null || sourceFilePath.equals("") || !new File(sourceFilePath).exists())
+		{
+
+			JOptionPane.showMessageDialog(mainFrame.getMainFrame().getMappingMainPanel(), "Source file is not present at the path...", "Source file not found!!!", JOptionPane.ERROR_MESSAGE);
+    		return;
+
+		}
+		else if(targetFilePath==null || targetFilePath.equals("") || !new File(targetFilePath).exists()) 
+		{
+			JOptionPane.showMessageDialog(mainFrame.getMainFrame().getMappingMainPanel(), "Target file is not present at the path...", "Target file not found!!!", JOptionPane.ERROR_MESSAGE);
+    		return;
+
+		}
+
 			if(rsc!=null && rsc.size()>0)
 			{
 				Iterator<Resource> rscit = rsc.iterator();
@@ -993,22 +1016,9 @@ public class MappingMainPanel extends JPanel implements ActionListener
 			{
 				mainFrame.getMainFrame().getMappingMainPanel().setWSDLBindingFilePath(WSDLBindingFilePath);
 			}
-			for(gov.nih.nci.restgen.mapping.model.Component c:l){
-				if(c.getType().equals("source"))
-				{
-					sourceFilePath = c.getLocation();
-					
-				}
-				else if(c.getType().equals("target"))
-				{
-					targetFilePath = c.getLocation();
-				}
-			}
+			
 		System.out.println("source file path......target file path"+sourceFilePath+targetFilePath);	
-
-		if(sourceFilePath!=null && !sourceFilePath.equals("") && new File(sourceFilePath).exists())
-		{
-			mainFrame.getMainFrame().getMappingMainPanel().setMappingSourceFile(new File(sourceFilePath));
+		mainFrame.getMainFrame().getMappingMainPanel().setMappingSourceFile(new File(sourceFilePath));
 			
 			if(sourceFilePath.contains(".class"))
 			{
@@ -1021,17 +1031,6 @@ public class MappingMainPanel extends JPanel implements ActionListener
 				OpenPOJOJarAction newpojo = new OpenPOJOJarAction(mainFrame);
 				newpojo.createSourceTree(new File(sourceFilePath));
 			}
-			
-		}
-		else
-		{
-			JOptionPane.showMessageDialog(mainFrame.getMainFrame().getMappingMainPanel(), "Source file is not present at the path...", "Source file not found!!!", JOptionPane.ERROR_MESSAGE);
-    		return;
-		}
-		
-	
-		if(targetFilePath!=null && !targetFilePath.equals("") && new File(targetFilePath).exists()) 
-		{
 			mainFrame.getMainFrame().getMappingMainPanel().setMappingTargetFile(new File(targetFilePath));
 			if(targetFilePath.contains(".jar"))
 			{
@@ -1044,14 +1043,6 @@ public class MappingMainPanel extends JPanel implements ActionListener
 				UploadWSDLAction newwsdl = new UploadWSDLAction(mainFrame);
 				newwsdl.createTargetTree(new File(targetFilePath));
 			}
-		}
-		else
-		{
-			JOptionPane.showMessageDialog(mainFrame.getMainFrame().getMappingMainPanel(), "Target file is not present at the path...", "Target file not found!!!", JOptionPane.ERROR_MESSAGE);
-    		return;
-		}
-		
-		
 		// commented rem later PV
 		getGraphController().setMappingData(mapping, true);
         // PV
