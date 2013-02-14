@@ -35,7 +35,7 @@ public class AboutViewAction extends AbstractContextAction {
     @Override
     protected boolean doAction(ActionEvent e) throws Exception {
         // TODO Auto-generated method stub
-         String aboutTextPath="/CMTS_About.txt";
+         String aboutTextPath="/RESTFUL_WRAPPER_About.txt";
 
          String warningMsg=readMessageFromFile(aboutTextPath).toString();
         //String warningMsg  = "<html><head>DDD</head><body>FFF<br><a href=\"http://www.google.com\" target=\"_blank\">CCC</a></body></html>";
