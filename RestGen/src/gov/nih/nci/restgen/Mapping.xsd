@@ -27,14 +27,6 @@
 
   <xs:complexType name="Mapping">
     <xs:sequence>
-      <xs:element ref="Options"/>
-      <xs:element name="resources" minOccurs="0">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element ref="Resource" minOccurs="0" maxOccurs="unbounded"/>
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
       <xs:element name="components" minOccurs="0">
         <xs:complexType>
           <xs:sequence>
@@ -49,12 +41,47 @@
           </xs:sequence>
         </xs:complexType>
       </xs:element>
+      <xs:element ref="Options"/>
+      <xs:element name="resources" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="Resource" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
     </xs:sequence>
     <xs:attribute name="name" type="xs:string"/>
-    <xs:attribute name="lastUpdatedOn" type="xs:dateTime"/>
-    <xs:attribute name="createdOn" type="xs:dateTime"/>
     <xs:attribute name="version" type="xs:string"/>
     <xs:attribute name="description" type="xs:string"/>
+    <xs:attribute name="createdOn" type="xs:dateTime"/>
+    <xs:attribute name="lastUpdatedOn" type="xs:dateTime"/>
+  </xs:complexType>
+
+  <xs:complexType name="Component">
+    <xs:sequence/>
+    <xs:attribute name="id" type="xs:string"/>
+    <xs:attribute name="location" type="xs:string"/>
+    <xs:attribute name="type" type="xs:string"/>
+    <xs:attribute name="kind" type="xs:string"/>
+  </xs:complexType>
+
+  <xs:complexType name="Link">
+    <xs:sequence>
+      <xs:element ref="Source"/>
+      <xs:element ref="Target"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="Source">
+    <xs:sequence/>
+    <xs:attribute name="id" type="xs:string"/>
+    <xs:attribute name="componentId" type="xs:string"/>
+  </xs:complexType>
+
+  <xs:complexType name="Target">
+    <xs:sequence/>
+    <xs:attribute name="id" type="xs:string"/>
+    <xs:attribute name="componentId" type="xs:string"/>
   </xs:complexType>
 
   <xs:complexType name="Options">
@@ -128,33 +155,6 @@
     <xs:sequence/>
     <xs:attribute name="name" type="xs:string"/>
     <xs:attribute name="type" type="xs:string"/>
-  </xs:complexType>
-
-  <xs:complexType name="Component">
-    <xs:sequence/>
-    <xs:attribute name="id" type="xs:string"/>
-    <xs:attribute name="location" type="xs:string"/>
-    <xs:attribute name="type" type="xs:string"/>
-    <xs:attribute name="kind" type="xs:string"/>
-  </xs:complexType>
-
-  <xs:complexType name="Link">
-    <xs:sequence>
-      <xs:element ref="Source"/>
-      <xs:element ref="Target"/>
-    </xs:sequence>
-  </xs:complexType>
-
-  <xs:complexType name="Source">
-    <xs:sequence/>
-    <xs:attribute name="id" type="xs:string"/>
-    <xs:attribute name="componentId" type="xs:string"/>
-  </xs:complexType>
-
-  <xs:complexType name="Target">
-    <xs:sequence/>
-    <xs:attribute name="id" type="xs:string"/>
-    <xs:attribute name="componentId" type="xs:string"/>
   </xs:complexType>
 </xs:schema>
 
