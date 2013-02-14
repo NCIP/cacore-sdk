@@ -8,6 +8,10 @@ import java.net.URLConnection;
 import java.io.File;
 import javax.swing.*;
 
+import edu.stanford.ejalbert.BrowserLauncher;
+import edu.stanford.ejalbert.exception.BrowserLaunchingInitializingException;
+import edu.stanford.ejalbert.exception.UnsupportedOperatingSystemException;
+
 
 import gov.nih.nci.restgen.ui.common.ActionConstants;
 import gov.nih.nci.restgen.ui.main.MainFrameContainer;
@@ -45,7 +49,43 @@ public class HelpViewAction extends AbstractContextAction {
         {
             location = null;
         }
+        
+            BrowserLauncher browserLauncher =null;
+            boolean c2 = true;
+            try {
+                browserLauncher=new BrowserLauncher();
+            } catch (BrowserLaunchingInitializingException e1) {
+                c2 = false;
+            } catch (UnsupportedOperatingSystemException e2) {
+                c2 = false;
+            }
 
+            while (c2)
+            {
+                c2 = false;
+
+                if (location != null)
+                {
+                    browserLauncher.openURLinBrowser(location);
+                    c2 = true;
+                    break;
+                }
+                /*String str =  FileUtil.searchFile("CMTS_User_Guide_Document.pdf");
+                if ((str == null)||(str.trim().equals(""))) break;
+                File f = new File(str.trim());
+                if ((!f.exists())||(!f.isFile())) break;
+                URL url = f.toURI().toURL();
+                browserLauncher.openURLinBrowser(url.toString());
+                c2 = true;
+                break;*/
+            }
+
+            if (!c2)
+            {
+                JOptionPane.showMessageDialog(mainFrame.getAssociatedUIComponent(), "Sorry, Help Content is not found.", "Not found Help Content", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+        
       
         return true;
     }

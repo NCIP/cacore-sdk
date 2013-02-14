@@ -200,6 +200,7 @@ public class UploadWSDLAction extends AbstractContextAction
     							"WSDL file upload", 1);
     					if(inputString!=null)
     					{
+    						mainFrame.getMainFrame().getMappingMainPanel().setWsdlURL(inputString);
     						char[] inputStringChars = inputString.toCharArray();
     						boolean specialCharIsFound = false;  
 

@@ -362,7 +362,7 @@ public class MiddlePanelJGraphController {
 					options.setWrapperType(Options.SOAP_SERVICE);
 					if(getMappingPanel().getMappingTargetFile()!=null)
 					{
-						options.setWsdlLocation(getMappingPanel().getMappingTargetFile().getPath());
+						options.setWsdlLocation(getMappingPanel().getWsdlURL());
 					}
 					if(getMappingPanel().getWSDLBindingFilePath()!=null)
 					{

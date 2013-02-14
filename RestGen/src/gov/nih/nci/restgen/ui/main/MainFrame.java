@@ -91,7 +91,7 @@ public class MainFrame extends JFrame
 			tabMap = new HashMap<Class, JComponent>();
             instanceContainer = new MainFrameContainer(this);
             frameMenu=new MainMenuBar(instanceContainer);
-			this.setTitle("caCore RESTFUL WRAPPER Mapping and GenerationService");
+			this.setTitle("caCore RESTFUL WRAPPER");
 			
 			Container contentPane = this.getContentPane();
 			contentPane.setLayout(new BorderLayout());

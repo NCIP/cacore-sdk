@@ -77,6 +77,7 @@ public class MappingMainPanel extends JPanel implements ActionListener
 	private static String ejbType = null;
 	private static final String SOURCE_TREE_FILE_DEFAULT_EXTENTION = ".xml";
 	private static String optionsPath = "";
+	private static String wsdlURL = "";
 	private static String enterJNDIName = null;
 	private static final String TARGET_TREE_FILE_DEFAULT_EXTENTION = ".properties";
 	private static MainFrameContainer mainFrame = null;
@@ -101,6 +102,16 @@ public class MappingMainPanel extends JPanel implements ActionListener
 	private static JTextArea textArea = new JTextArea();
 	public static Hashtable getResourcePathValues() {
 		return resourcePathValues;
+	}
+
+
+	public static String getWsdlURL() {
+		return wsdlURL;
+	}
+
+
+	public static void setWsdlURL(String wsdlURL) {
+		MappingMainPanel.wsdlURL = wsdlURL;
 	}
 
 
