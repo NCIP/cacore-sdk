@@ -22,26 +22,12 @@ public class StatusMessageAppender extends AppenderSkeleton {
 	JScrollPane scrollPane = null;
     
     protected void append(LoggingEvent event) {
-        if(event.getLevel().equals(Level.INFO)){
-                //here set the text of your swing component;
-               //in my case it is: statusBar.st_STATUS.setText(event.getMessage().toString());
-        	/*MappingMainPanel.getTextArea().setText(event.getMessage().toString());
-        	if(scrollPane==null){
-        		scrollPane = new JScrollPane(MappingMainPanel.getTextArea());
+        if(event.getLevel().equals(Level.INFO)||event.getLevel().equals(Level.ERROR)){
+                
+        	if(GenerateRESTfulResourceAction.getTextArea()!=null){
+        		String displayText = GenerateRESTfulResourceAction.getTextArea().getText()+"\n"+event.getMessage().toString();
+        		GenerateRESTfulResourceAction.getTextArea().setText(displayText);
         	}
-        	MappingMainPanel.getTextArea().setLineWrap(true);  
-        	MappingMainPanel.getTextArea().setWrapStyleWord(true); 
-        	scrollPane.setPreferredSize( new Dimension( 500, 500 ) );
-        	JOptionPane.showMessageDialog(MappingMainPanel.getMainFrame().getAssociatedUIComponent(), scrollPane, "Wrapper generator log...",  
-        	                                       JOptionPane.INFORMATION_MESSAGE);
-        	MappingMainPanel.getTextArea().setText(event.getMessage().toString());
-        	*/
-        	if(GenerateRESTfulResourceAction.getTextPane()!=null){
-        		String displayText = GenerateRESTfulResourceAction.getTextPane().getText()+"\n"+event.getMessage().toString();
-        		GenerateRESTfulResourceAction.getTextPane().setText(displayText);
-        	}
-        	
-        	
         	
         }
     }

@@ -595,7 +595,9 @@ public class MappingMainPanel extends JPanel implements ActionListener
 		targetButtonPanel.add(enterJNDIButton, BorderLayout.SOUTH);
 		targetLocationPanel.add(targetRadioButtonPanel, BorderLayout.SOUTH);
 		targetLocationPanel.add(targetButtonPanel, BorderLayout.EAST);
-		
+		// set the EJB type default to "REMOTE"
+				setEjbType("EJB_REMOTE");
+		//
 	}
 	
 	public void actionPerformed(ActionEvent e)
@@ -935,7 +937,7 @@ public class MappingMainPanel extends JPanel implements ActionListener
 					}
 
 				}
-				else
+				/*else
 				{
 
 					if(WSDLBindingFilePath==null ||WSDLBindingFilePath.equals("") )
@@ -949,7 +951,7 @@ public class MappingMainPanel extends JPanel implements ActionListener
 						}
 					}
 
-				}
+				}*/
 
 			}
 		}
@@ -1007,7 +1009,11 @@ public class MappingMainPanel extends JPanel implements ActionListener
 			WSDLBindingFilePath = mapping.getOptions().getWsdlBindingFile();
 			List<Resource> rsc =  mapping.getResources();
 			// validate the source and target files here and return
-			
+			String optionPath = mapping.getOptions().getOutputPath();
+			if(optionPath!=null && !optionPath.equals(""))
+			{
+				setOptionsPath(optionPath);
+			}
 			for(gov.nih.nci.restgen.mapping.model.Component c:l){
 				if(c.getType().equals("source"))
 				{
@@ -1033,7 +1039,29 @@ public class MappingMainPanel extends JPanel implements ActionListener
 			throw new Exception("Target file not found");
 
 		}
-
+		// populate resource paths here
+		
+		if(rsc!=null && rsc.size()>0)
+		{
+			Iterator<Resource> rscit = rsc.iterator();
+			while(rscit.hasNext())
+			{
+				Resource rscVar =  (Resource) rscit.next();
+				if(rscVar.getPath()!=null && !rscVar.getPath().equals("") )
+				{
+						//
+					
+			    		   Hashtable<String, String> values = new Hashtable();
+			    		   values.put(rscVar.getName(), rscVar.getPath());
+			    		   setResourcePathValues(values);
+			    		//
+				}
+			}
+		
+		}
+		
+		// end
+		
 			if(rsc!=null && rsc.size()>0)
 			{
 				Iterator<Resource> rscit = rsc.iterator();
@@ -1141,6 +1169,7 @@ public class MappingMainPanel extends JPanel implements ActionListener
         // PV
         getMiddlePanel().renderInJGraph();
 		
+        getMiddlePanel().setMappingNamesforLinkInGraph(mapping);
         
     }
     

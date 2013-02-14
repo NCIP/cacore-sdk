@@ -21,8 +21,11 @@ import gov.nih.nci.restgen.core.FunctionData;
 import gov.nih.nci.restgen.ui.actions.DefaultAbstractJgraphAction;
 import gov.nih.nci.restgen.ui.jgraph.MiddlePanelJGraphController;
 import gov.nih.nci.restgen.ui.mapping.MappingMiddlePanel;
+import gov.nih.nci.restgen.ui.tree.DefaultSourceTreeNode;
+import gov.nih.nci.restgen.ui.tree.DefaultTargetTreeNode;
 
 import javax.swing.*;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -97,12 +100,30 @@ public class NameMappingAction extends DefaultAbstractJgraphAction
 			if (graphCell instanceof DefaultEdge)
 			{
 				DefaultEdge linkEdge = (DefaultEdge)graphCell;
-				String str = JOptionPane.showInputDialog(null, "Please enter the name for mapping : ", 
-						"Mapping Name", 1);
-				if(str!=null)
+				// get the source node and examine the mapping Name
+				DefaultPort tgtPort=(DefaultPort)linkEdge.getTarget();
+				Object targetNode = tgtPort.getUserObject();
+				DefaultTargetTreeNode tgtNode = (DefaultTargetTreeNode) targetNode;
+				
+				//
+				String prevVal = (String)getController().getMiddlePanel().getGraph().getModel().getValue(linkEdge);
+				String currVal = null;
+				if(prevVal!=null)
 				{
-					getController().getMiddlePanel().getGraph().getModel().valueForCellChanged(linkEdge,str);
+					currVal = JOptionPane.showInputDialog(null, "Please enter the name for mapping : ",
+							prevVal.trim());
+				}
+				else
+				{
+					currVal = JOptionPane.showInputDialog(null, "Please enter the name for mapping : ", 
+							"");
+				}
+				
+				if(currVal!=null)
+				{
+					getController().getMiddlePanel().getGraph().getModel().valueForCellChanged(linkEdge,currVal);
 					getController().getMiddlePanel().getGraph().getSelectionModel().clearSelection();
+					tgtNode.setMappingName(currVal);
 				}
 				
 			}

@@ -48,6 +48,7 @@ public class DefaultSourceTreeNode extends DefaultMappableTreeNode
 	public String getResourceLocation() {
 		return resourceLocation;
 	}
+
 	public void setResourceLocation(String resourceLocation) {
 		this.resourceLocation = resourceLocation;
 	}

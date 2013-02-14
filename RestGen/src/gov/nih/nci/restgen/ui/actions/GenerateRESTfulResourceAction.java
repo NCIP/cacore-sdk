@@ -9,6 +9,7 @@
 package gov.nih.nci.restgen.ui.actions;
 
 
+import gov.nih.nci.restgen.codegen.Generator;
 import gov.nih.nci.restgen.codegen.GeneratorContext;
 import gov.nih.nci.restgen.codegen.GeneratorException;
 import gov.nih.nci.restgen.codegen.RESTfulWrapperGenerator;
@@ -23,6 +24,8 @@ import gov.nih.nci.restgen.ui.mapping.MappingMainPanel;
 
 import javax.swing.*;
 import javax.xml.bind.JAXBException;
+
+import org.apache.log4j.Logger;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -50,10 +53,10 @@ public class GenerateRESTfulResourceAction extends AbstractContextAction
     private static final String OPEN_DIALOG_TITLE_FOR_DEFAULT_SOURCE_FILE = "Select mapping file!!";
 	private static final String SOURCE_TREE_FILE_DEFAULT_EXTENTION = ".xml";
 	private static File mappingFile = null;
-
+	private static Logger log = Logger.getLogger(GenerateRESTfulResourceAction.class);
     private MainFrameContainer mainFrame;
     private static JPanel logStats = null;
-    private static JTextPane textPane = null;
+    private static JTextArea textArea = null;
     /**
      * Defines an <code>Action</code> object with a default
      * description string and default icon.
@@ -107,8 +110,6 @@ public class GenerateRESTfulResourceAction extends AbstractContextAction
     	
         if(file!=null)
         {
-        	Mapping m = MappingMainPanel.loadMapping(file);
-        	GeneratorContext genContext = new GeneratorContext(m);
         	/*
         	if((mainFrame.getMainFrame().getMappingMainPanel().getOptionsPath())!=null)
         	{
@@ -121,24 +122,25 @@ public class GenerateRESTfulResourceAction extends AbstractContextAction
         		return false;
         	}
         	*/
-        	RESTfulWrapperGenerator restfulWrapper = new RESTfulWrapperGenerator(genContext);
-        	String outputPath = genContext.getMapping().getOptions().getOutputPath();
+        	
+        	
         	///////
         	if(logStats==null)
         	{
         		logStats = new JPanel();
-        		textPane = new JTextPane();
-        		JButton close=new JButton("x");
-        		JScrollPane scrollPane = new JScrollPane( logStats );
+        		textArea = new JTextArea();
+        		textArea.setAutoscrolls(true);
+        		textArea.setLineWrap(true);  
+            	textArea.setWrapStyleWord(true);
+            	JScrollPane scrollPane = new JScrollPane( textArea );
         		logStats.setBorder(BorderFactory.createRaisedBevelBorder());
         		logStats.setLayout(new BorderLayout());
         		logStats.setSize(new Dimension((DefaultSettings.FRAME_DEFAULT_WIDTH / 3), (int) (DefaultSettings.FRAME_DEFAULT_HEIGHT / 1.5)));
-        		scrollPane.setViewportView(textPane);
-        		logStats.add( textPane );
+        		logStats.add( scrollPane );
         	}
         	else
         	{
-        		textPane.setText("");
+        		textArea.setText("");
         		
         	}
         	mainFrame.getMainFrame().addNewTabForLog(logStats, "");
@@ -147,19 +149,40 @@ public class GenerateRESTfulResourceAction extends AbstractContextAction
         	
         	
         	mainFrame.getTabbedPane().setSelectedIndex(1);
-        	///////
-        	if(outputPath != null && !outputPath.equals(""))
-        	{
-        		restfulWrapper.runProcess();
-        	}
-        	else
-        	{
-        		JOptionPane.showMessageDialog(mainFrame.getMainFrame(), "Please set output path", "Output path not set", JOptionPane.ERROR_MESSAGE);
-        		return false;
-        	}
-
         	
-        	restfulWrapper.generate();
+        	SwingUtilities.invokeLater(new Runnable()
+        	{
+        		public void run()
+        		{
+        			
+        			File file = getMappingFile(); 
+        			Mapping m = null;
+					try {
+						m = MappingMainPanel.loadMapping(file);
+					} catch (JAXBException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+                	GeneratorContext genContext = new GeneratorContext(m);
+        			RESTfulWrapperGenerator restfulWrapper = new RESTfulWrapperGenerator(genContext);
+        			try {
+						restfulWrapper.runProcess();
+						restfulWrapper.generate();
+					} catch (GeneratorException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						getLogger().error("Exception occured while Generating the RESTful resource........"+e.getMessage());
+					} 
+        			 catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					getLogger().error("Exception occured while Generating the RESTful resource........"+e.getMessage());
+        			 }
+        		}
+        	});
+        	///////
+        	
+        	
         }
         
         
@@ -177,12 +200,12 @@ public class GenerateRESTfulResourceAction extends AbstractContextAction
         return mainFrame.getAssociatedUIComponent();
     }
 
-	public static JTextPane getTextPane() {
-		return textPane;
+	public static JTextArea getTextArea() {
+		return textArea;
 	}
 
-	public static void setTextPane(JTextPane textPane) {
-		GenerateRESTfulResourceAction.textPane = textPane;
+	public static void setTextPane(JTextArea textArea) {
+		GenerateRESTfulResourceAction.textArea = textArea;
 	}
 
 	public static JPanel getLogStats() {
@@ -200,6 +223,10 @@ public class GenerateRESTfulResourceAction extends AbstractContextAction
 	public static void setMappingFile(File mappingFile) {
 		GenerateRESTfulResourceAction.mappingFile = mappingFile;
 	}
+	public Logger getLogger() {
+		return log;
+	}
+
 }
 
 /**

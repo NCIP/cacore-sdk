@@ -33,6 +33,14 @@ public class DefaultTargetTreeNode extends DefaultMappableTreeNode
 	String classPath = ""; // Classpath
 	String operationStyle = ""; // SOAP operation style
 	String portName = ""; // SOAP port name
+	private String mappingName = "";
+	
+	public String getMappingName() {
+		return mappingName;
+	}
+	public void setMappingName(String mappingName) {
+		this.mappingName = mappingName;
+	}
 	public DefaultTargetTreeNode(Object userObject, boolean allowsChildren)
 	{
 		super(userObject, allowsChildren);

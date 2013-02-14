@@ -100,9 +100,19 @@ public class OptionsAction extends AbstractContextAction
         file = DefaultSettings.getUserInputOfFileFromGUI(mainFrame.getOwnerFrame(),
                 "", "Output folder", false, false);*/
 		char[] specialChars = {'!','@',']','#','$','%','^','&','*'}; 
-	       
-	       String inputString = JOptionPane.showInputDialog(null, "Please enter the path for output : ", 
-					"Output Path", 1);
+	    String prevVal = mainFrame.getMainFrame().getMappingMainPanel().getOptionsPath();  
+		String inputString = null;
+		if(prevVal!=null)
+		{
+			inputString = JOptionPane.showInputDialog(null, "Please enter the path for output : ",
+					prevVal.trim());
+		}
+		else
+		{
+			inputString = JOptionPane.showInputDialog(null, "Please enter the path for output : ", 
+					"");
+		}
+
 			if(inputString!=null)
 			{
 				char[] inputStringChars = inputString.toCharArray();

@@ -112,9 +112,25 @@ public class EditResourcePathAction extends AbstractContextAction
        }
 
        char[] specialChars = {'!','@',']','#','$','%','^','&','*'}; 
+       String inputString = null;
        
-       String inputString = JOptionPane.showInputDialog(null, "Please enter the path for Resource : ", 
-				"Resource Path", 1);
+       Hashtable<String, String> currValues = mainFrame.getMainFrame().getMappingMainPanel().getResourcePathValues();
+           		   
+       if(currValues!=null && currValues.containsKey(resourceName))
+       {
+    	   inputString = currValues.get(resourceName);
+		    			   
+       }
+		if(inputString!=null)
+		{
+			inputString = JOptionPane.showInputDialog(null, "Please enter the path for Resource : ", 
+					inputString);
+		}
+		else
+		{
+			inputString = JOptionPane.showInputDialog(null, "Please enter the path for Resource : ", 
+				"");
+		}
 		if(inputString!=null)
 		{
 			char[] inputStringChars = inputString.toCharArray();

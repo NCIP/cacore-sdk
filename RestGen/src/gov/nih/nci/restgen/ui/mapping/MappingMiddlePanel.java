@@ -15,6 +15,11 @@ import org.jgraph.graph.DefaultGraphCell;
 import org.jgraph.graph.DefaultPort;
 import org.jgraph.graph.GraphModel;
 
+import gov.nih.nci.restgen.mapping.model.Link;
+import gov.nih.nci.restgen.mapping.model.Mapping;
+import gov.nih.nci.restgen.mapping.model.Method;
+import gov.nih.nci.restgen.mapping.model.Source;
+import gov.nih.nci.restgen.mapping.model.Target;
 import gov.nih.nci.restgen.ui.common.DefaultSettings;
 import gov.nih.nci.restgen.ui.common.UIHelper;
 import gov.nih.nci.restgen.ui.dnd.GraphDropTransferHandler;
@@ -23,6 +28,8 @@ import gov.nih.nci.restgen.ui.jgraph.MiddlePanelGraphScrollAdjustmentHandler;
 import gov.nih.nci.restgen.ui.jgraph.MiddlePanelJGraphController;
 import gov.nih.nci.restgen.ui.jgraph.MiddlePanelJGraphViewFactory;
 import gov.nih.nci.restgen.ui.jgraph.MiddlePanelMarqueeHandler;
+import gov.nih.nci.restgen.ui.tree.DefaultSourceTreeNode;
+import gov.nih.nci.restgen.ui.tree.DefaultTargetTreeNode;
 
 
 import javax.swing.JPanel;
@@ -37,6 +44,7 @@ import java.awt.BorderLayout;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -145,6 +153,45 @@ public class MappingMiddlePanel extends JPanel
 		}
 		return links;		
 	}
+	
+	
+	public void setMappingNamesforLinkInGraph(Mapping mapping)
+	{
+		List<Link> links =  mapping.getLinks();
+		Link link = null;
+		/** the real renderer */
+		for(DefaultEdge linkEdge:retrieveLinks())
+		{
+			
+			// check for mapping Name here start
+			DefaultPort tgtPort=(DefaultPort)linkEdge.getTarget();
+			Object sourceNode = tgtPort.getUserObject();
+			DefaultTargetTreeNode srcNodeTemp = (DefaultTargetTreeNode) sourceNode;
+			if(links!=null && links.size()>0)
+			{
+    		Iterator<Link> linkit =links.iterator();
+    		while(linkit.hasNext())
+	    	{
+    			link = (Link)linkit.next();
+    			if(link!=null)
+    			{
+    				Target tgt = (Target)link.getTarget();
+    				
+    				if(tgt!=null && tgt.getComponentId().equals(srcNodeTemp.getOperationName()))
+    				{
+    					
+    					getGraph().getModel().valueForCellChanged(linkEdge,link.getPath());
+    					getGraph().getSelectionModel().clearSelection();
+    					break;
+    				}
+    				
+    			}
+    		}
+			}
+			// end			
+		}
+	}		
+	
 	public void renderInJGraph()
 	{
 		/** the real renderer */
@@ -156,7 +203,6 @@ public class MappingMiddlePanel extends JPanel
 			DefaultPort trgtPort=(DefaultPort)linkEdge.getTarget();
 			DefaultGraphCell sourceCell =(DefaultGraphCell)srcPort.getParent();
 			DefaultGraphCell targetCell =(DefaultGraphCell)trgtPort.getParent();
-
 			AttributeMap lineStyle = linkEdge.getAttributes();
 			AttributeMap sourceNodeCellAttribute =null;
 			if (sourceCell!=null)
@@ -168,17 +214,11 @@ public class MappingMiddlePanel extends JPanel
 			Object sourceNode = srcPort.getUserObject();
 			Object targetNode = trgtPort.getUserObject();
 			try {
-				//if ( sourceNode instanceof DefaultMappableTreeNode ) 
-				//{
-					//if ( (targetNode instanceof DefaultMappableTreeNode) ) {
-						// change target node
-						DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode) targetNode;
-						adjustToNewPosition(treeNode, targetNodeCellAttribute);
-					//}
-					// change source node
+					DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode) targetNode;
+					adjustToNewPosition(treeNode, targetNodeCellAttribute);
 					DefaultMutableTreeNode srcNode = (DefaultMutableTreeNode) sourceNode;
 					adjustToNewPosition(srcNode, sourceNodeCellAttribute);
-				//}
+				
 				if ( sourceNodeCellAttribute != null
 						&&targetNodeCellAttribute!=null) {// put in attribute if and only if it is constructed.
 					attributes.put(sourceCell, sourceNodeCellAttribute);

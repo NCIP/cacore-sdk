@@ -297,7 +297,7 @@ public class MiddlePanelJGraphController {
 			srcComponentId = ((DefaultSourceTreeNode) sourceNode).toString();
 			tgtComponentId = ((DefaultTargetTreeNode) targetNode).getOperationName();
 			tgtPath = UIHelper.getPathStringForNode((DefaultTargetTreeNode) targetNode);
-			addLink(mappingData, srcComponentId, srcPath,tgtComponentId, tgtPath);
+			addLink(mappingData, srcComponentId, srcPath,tgtComponentId, tgtPath, path);
 			addOptions(mappingData);
 			MethodType method = addMethods((DefaultSourceTreeNode) sourceNode, (DefaultTargetTreeNode) targetNode, path);
 			methodList.add(method);
@@ -393,7 +393,7 @@ public class MiddlePanelJGraphController {
      * @param tgtComponentId - target component id
      * @param tgtPath - target object path
      */
-    public static void addLink(Mapping m, String srcComponentId, String srcPath, String tgtComponentId, String tgtPath) {
+    public static void addLink(Mapping m, String srcComponentId, String srcPath, String tgtComponentId, String tgtPath, String path) {
         Link l = new Link();
         Source src = new Source();
         src.setComponentId(srcComponentId);
@@ -403,6 +403,7 @@ public class MiddlePanelJGraphController {
         tgt.setId(tgtPath);
         l.setSource(src);
         l.setTarget(tgt);
+        l.setPath(path.trim());
         if(m.getLinks()==null)
         {
         	List<Link> links = new ArrayList();

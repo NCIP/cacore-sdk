@@ -326,10 +326,11 @@ public class OpenPOJOJarAction extends AbstractContextAction
      
      for(Field field : javaClass.getFields()){
   	   validatePOJOMethods = false;
+  	   System.out.println("field class type....******"+field.getType());
   	 if(!isWrapperType(field.getType().toString()))
 	   {
   		 
-  		if(!checkForJarEntry(classFile, file))
+  		if(!checkForJarEntry(field.getType().toString(), file))
   		{ 
   		String errorString = "Class Contains non-primitive java types field : " + field.getType().toString()+"\n"; 
   		if(getErrorString()==null)
@@ -390,11 +391,13 @@ public class OpenPOJOJarAction extends AbstractContextAction
     {
     	boolean isPresent = false;
     	JarFile jar = new JarFile(file);
+    	className = className.replace(".","/");
         Enumeration<?> en = jar.entries();
         while (en.hasMoreElements()) {
-  			JarEntry entry = (JarEntry) en.nextElement();
-  			if (entry.getName().contains(className)) {
+        	JarEntry entry = (JarEntry) en.nextElement();
+        	if (entry.getName().contains(className+".class")) {
   				isPresent = true;
+  				break;
   			}
         }
     	return isPresent;
@@ -414,8 +417,10 @@ public class OpenPOJOJarAction extends AbstractContextAction
         HashSet<String> ret = new HashSet<String>();
         ret.add("boolean");
         ret.add("character");
+        ret.add("char");
         ret.add("byte");
         ret.add("short");
+        ret.add("int");
         ret.add("integer");
         ret.add("long");
         ret.add("float");
