@@ -273,46 +273,39 @@ private void populateEntriesFromDoc(Document doc)
  		   if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 
     		Element firstSessionElement = (Element)nNode;
-    		NodeList ejbNameNodeList = firstSessionElement.getElementsByTagName("ejb-name");
+    		NodeList ejbNameNodeList = firstSessionElement.getChildNodes();
+    		
     		if(ejbNameNodeList != null && ejbNameNodeList.getLength() > 0) {
     			for(int i=0; i<ejbNameNodeList.getLength() ; i++){
-    			Element el = (Element)ejbNameNodeList.item(i);
-    			String textVal = el.getFirstChild().getNodeValue();
-    			EJBNameList.add(textVal);
-    			System.out.println("ejb-name>>>>>"+textVal);
+    			Node node = ejbNameNodeList.item(i);
+    			String textVal = node.getNodeName();
+    			if (node.getNodeType() == Node.ELEMENT_NODE) {
+    				System.out.println("Node name....."+node.getNodeName());
+    			if(textVal.equals("remote"))
+    			{
+    				EJBRemoteOperationsList.add(node.getTextContent());
+    				System.out.println("remote interface>>>>:"+node.getTextContent());
     			}
-    		}
-    		
-    		NodeList ejbRemoteInterfaceList = firstSessionElement.getElementsByTagName("remote");
-    		if(ejbRemoteInterfaceList != null && ejbRemoteInterfaceList.getLength() > 0) {
-    			for(int j=0; j<ejbRemoteInterfaceList.getLength() ; j++){
-    			Element el = (Element)ejbRemoteInterfaceList.item(j);
-    			String textVal = el.getFirstChild().getNodeValue();
-    			EJBRemoteOperationsList.add(textVal);
-    			System.out.println("remote interface>>>>:"+textVal);
+    			else if(textVal.equals("home"))
+    			{
+    				EJBHomeOperationsList.add(node.getTextContent());
+    				System.out.println("home interface>>>>:"+node.getTextContent());
     			}
-    		}
-    		
-    		NodeList ejbHomeInterfaceList = firstSessionElement.getElementsByTagName("home");
-    		if(ejbHomeInterfaceList != null && ejbHomeInterfaceList.getLength() > 0) {
-    			for(int j=0; j<ejbNameNodeList.getLength() ; j++){
-    			Element el = (Element)ejbHomeInterfaceList.item(j);
-    			String textVal = el.getFirstChild().getNodeValue();
-    			EJBHomeOperationsList.add(textVal);
-    			System.out.println("home interface>>>>:"+textVal);
+    			else if(textVal.equals("ejb-class"))
+    			{
+    				EJBBeanList.add(node.getTextContent());
+    				System.out.println("ejb class>>>>:"+node.getTextContent());
     			}
-    		}
-    		
-    		NodeList ejbBeanList = firstSessionElement.getElementsByTagName("ejb-class");
-    		if(ejbBeanList != null && ejbBeanList.getLength() > 0) {
-    			for(int j=0; j<ejbNameNodeList.getLength() ; j++){
-    			Element el = (Element)ejbBeanList.item(j);
-    			String textVal = el.getFirstChild().getNodeValue();
-    			EJBBeanList.add(textVal);
-    			System.out.println("ejb-class>>>>:"+textVal);
+    			else if(textVal.equals("ejb-name"))
+    			{
+    				EJBNameList.add(node.getTextContent());
+    				System.out.println("ejb name>>>>:"+node.getTextContent());
     			}
-    		}
     			
+    			}
+    			}
+    		}
+    		    			
  	 }
  		   
     }
@@ -326,30 +319,21 @@ private boolean ValidateHomeInterfaceAndBean(ArrayList<String> list, File file,S
     JarFile jarFile = new JarFile(file);
     boolean ejbclassFound = false;
     String interfaceClass = null;
-    String [] classNameSplit = null;
+    
     while(it.hasNext())
     {
     	interfaceClass = (String)it.next();
     	System.out.println("interface/bean class name begin>>>>:"+interfaceClass);
-    	if(interfaceClass!=null)
-    	{
-    		classNameSplit = interfaceClass.trim().split("\\.");
-    	}
-    	
-    	if(classNameSplit!=null && classNameSplit.length > 0)
-    	{
-    		String splitInterfaceClass  = classNameSplit[classNameSplit.length-1];
-    		System.out.println("interface class name>>>>:"+splitInterfaceClass);
-    		interfaceClass = splitInterfaceClass;
-    	}
-    	
+    	interfaceClass = interfaceClass.replace(".","/");
+    	interfaceClass = interfaceClass + ".class";
     	ejbclassFound = false;
+    	System.out.println("interface/bean class name after>>>>:"+interfaceClass);
         Enumeration jarEntries = jarFile.entries();
         JarEntry jarEntry = null;
-       
         while (jarEntries.hasMoreElements())
         {
           jarEntry = (JarEntry)jarEntries.nextElement();
+          System.out.println("JAR ENTRY....."+jarEntry);
           if(jarEntry.getName().contains(interfaceClass))
           {
         	  ejbclassFound = true;
