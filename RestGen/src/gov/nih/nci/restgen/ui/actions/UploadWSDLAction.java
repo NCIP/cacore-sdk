@@ -564,7 +564,29 @@ private void createNodes(DefaultTargetTreeNode top,ArrayList<Operation> list) {
 	    {
 	    	Operation op = (Operation)it.next();
 	    	String operationName = op.getName();
-	    	DefaultTargetTreeNode childElement = new DefaultTargetTreeNode(operationName);
+	    	DefaultTargetTreeNode childElement = null;
+	    	ArrayList inputlist = op.getInputTypes();
+	    	String inputString = "";
+	    	
+	    	for(int i=0 ;i<inputlist.size();i++)
+	    	{
+	    		inputString = inputString+inputlist.get(i);
+	    		if(inputlist.size()>1)
+				{
+					if(i < inputlist.size()-1)
+					{
+						inputString = inputString +", ";
+					}
+				}
+	    	}
+	    	if(inputString!=null && !inputString.equals(""))
+	    	{
+	    		childElement = new DefaultTargetTreeNode(operationName+"("+inputString+")");
+	    	}
+	    	else
+	    	{
+	    		childElement = new DefaultTargetTreeNode(operationName+"()");
+	    	}
 	    	childElement.setOperationName(operationName);
 	    	childElement.setInputType(op.getInputTypes());
 	    	childElement.setOutputType(op.getOutputTypes().get(0));

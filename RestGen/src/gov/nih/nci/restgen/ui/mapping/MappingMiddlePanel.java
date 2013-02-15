@@ -166,7 +166,7 @@ public class MappingMiddlePanel extends JPanel
 			// check for mapping Name here start
 			DefaultPort tgtPort=(DefaultPort)linkEdge.getTarget();
 			Object sourceNode = tgtPort.getUserObject();
-			DefaultTargetTreeNode srcNodeTemp = (DefaultTargetTreeNode) sourceNode;
+			DefaultTargetTreeNode tgtNodeTemp = (DefaultTargetTreeNode) sourceNode;
 			if(links!=null && links.size()>0)
 			{
     		Iterator<Link> linkit =links.iterator();
@@ -177,7 +177,7 @@ public class MappingMiddlePanel extends JPanel
     			{
     				Target tgt = (Target)link.getTarget();
     				
-    				if(tgt!=null && tgt.getComponentId().equals(srcNodeTemp.getOperationName()))
+    				if(tgt!=null && tgt.getComponentId().equals(tgtNodeTemp.getOperationName()))
     				{
     					
     					getGraph().getModel().valueForCellChanged(linkEdge,link.getPath());

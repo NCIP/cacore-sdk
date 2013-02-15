@@ -536,11 +536,10 @@ public class MiddlePanelJGraphController {
     	}
     	else
     	{
-    		implementation.setClientType(targetNode.getClientType());
     		implementation.setName(targetNode.getEJBName());
     		if(MappingMainPanel.getEjbType()!=null)
     		{
-    			implementation.setType(MappingMainPanel.getEjbType());
+    			implementation.setClientType(MappingMainPanel.getEjbType());
     		}
     		if(MappingMainPanel.getEnterJNDIName()!=null)
     		{
@@ -569,15 +568,15 @@ public class MiddlePanelJGraphController {
     		implementation.setPath("");
     	}
     	method.setImplementation(implementation);
-    	if(sourceNode.toString().equals("Create"))
+    	if(sourceNode.toString().contains("Create"))
     	{
     		method.setName(Method.PUT);
     	}
-    	else if (sourceNode.toString().equals("Update"))
+    	else if (sourceNode.toString().contains("Update"))
     	{
     		method.setName(Method.POST);
     	}
-    	else if (sourceNode.toString().equals("Read"))
+    	else if (sourceNode.toString().contains("Read"))
     	{
     		method.setName(Method.GET);
     	}
@@ -587,7 +586,6 @@ public class MiddlePanelJGraphController {
     	}
     	method.setPathName(((DefaultSourceTreeNode) sourceNode).toString());
     	methodType.setResourceName(((DefaultSourceTreeNode) sourceNode).getResourceName());
-    	String resourceName = (String)((DefaultSourceTreeNode)sourceNode).getResourceName();
     	methodType.setResourceLocation(((DefaultSourceTreeNode) sourceNode).getResourceLocation());
     	methodType.setMethod(method);
     	return methodType;
@@ -865,10 +863,21 @@ public class MiddlePanelJGraphController {
 		setGraphChanged(true);
 		// if save menu is disabled enable it!!
 					MainFrameContainer mainFrame = getMappingPanel().getMainFrame();
-					
-					if(!mainFrame.getMainMenuBar().getDefinedMenuItem("Save").isEnabled())
+					List<DefaultEdge> graphEdgeLinks = this.getMiddlePanel()
+							.retrieveLinks();
+					if(graphEdgeLinks.size()>0)
 					{
-						mainFrame.getMainMenuBar().getDefinedMenuItem("Save").setEnabled(true);
+						if(!mainFrame.getMainMenuBar().getDefinedMenuItem("Save").isEnabled())
+						{
+							mainFrame.getMainMenuBar().getDefinedMenuItem("Save").setEnabled(true);
+						}
+					}
+					else
+					{
+						if(!mainFrame.getMainMenuBar().getDefinedMenuItem("Save").isEnabled())
+						{
+							mainFrame.getMainMenuBar().getDefinedMenuItem("Save").setEnabled(false);
+						}
 					}
 	}
 
@@ -887,7 +896,7 @@ public class MiddlePanelJGraphController {
 		MainFrameContainer mainFrame = getMappingPanel().getMainFrame();
 		if(!mainFrame.getMainMenuBar().getDefinedMenuItem("Save").isEnabled());
 		{
-			mainFrame.getMainMenuBar().getDefinedMenuItem("Save").setEnabled(true);
+			mainFrame.getMainMenuBar().getDefinedMenuItem("Save").setEnabled(false);
 		}
 	}
 

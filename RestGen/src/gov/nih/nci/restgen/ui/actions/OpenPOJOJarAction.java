@@ -279,26 +279,26 @@ public class OpenPOJOJarAction extends AbstractContextAction
 			}
 	    	System.out.println("resource name....."+resourceName);
 	    	DefaultSourceTreeNode element = new DefaultSourceTreeNode(resourceName);
-	    	Createclass = new DefaultSourceTreeNode("Create");
+	    	Createclass = new DefaultSourceTreeNode("Create(PUT)");
 	    	
 	    	Createclass.setResourceLocation(top.getResourceLocation());
 	    	Createclass.setResourceName(resourceName);
 	    	Createclass.setResourcePathLocation(top.getResourcePathLocation());
 	    	element.add(Createclass);
 	    
-	    	Updateclass = new DefaultSourceTreeNode("Update");
+	    	Updateclass = new DefaultSourceTreeNode("Update(POST)");
 	    	Updateclass.setResourceLocation(top.getResourceLocation());
 	    	Updateclass.setResourceName(resourceName);
 	    	Updateclass.setResourcePathLocation(top.getResourcePathLocation());
 	    	element.add(Updateclass);
 	    
-	    	Readclass = new DefaultSourceTreeNode("Read");
+	    	Readclass = new DefaultSourceTreeNode("Read(GET)");
 	    	Readclass.setResourceLocation(top.getResourceLocation());
 	    	Readclass.setResourceName(resourceName);
 	    	Readclass.setResourcePathLocation(top.getResourcePathLocation());
 	    	element.add(Readclass);
 	    
-	    	Deleteclass = new DefaultSourceTreeNode("Delete");
+	    	Deleteclass = new DefaultSourceTreeNode("Delete(DELETE)");
 	    	Deleteclass.setResourceLocation(top.getResourceLocation());
 	    	Deleteclass.setResourceName(resourceName);
 	    	Deleteclass.setResourcePathLocation(top.getResourcePathLocation());

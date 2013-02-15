@@ -628,17 +628,11 @@ public class MappingMainPanel extends JPanel implements ActionListener
             
 			else if(command.equals("Local"))
 			{
-				getEnterJNDIButton().setEnabled(false);
+				//getEnterJNDIButton().setEnabled(false);
 				getOpenSourceButton().setEnabled(false);
-				String toReplaceJNDIText = "\n\n"+"JNDI Name:"+getEnterJNDIName();
+				String toReplaceJNDIText = "\n\n"+"JNDI properties file:"+getJNDIPropertiesFilePath();
 				getTargetLocationArea().setText(getTargetLocationArea().getText().replace(toReplaceJNDIText, ""));
-				int index = getTargetLocationArea().getText().indexOf("\n\n"+"JNDI properties file:");
-				if(index>=0)
-				{
-					String toReplaceWSDLText = getTargetLocationArea().getText().substring(index, getTargetLocationArea().getText().length());
-					getTargetLocationArea().setText(getTargetLocationArea().getText().replace(toReplaceWSDLText, ""));
-				}
-				
+				setJNDIPropertiesFilePath("");
 				setEjbType("EJB_LOCAL");
 				
 				
@@ -652,14 +646,23 @@ public class MappingMainPanel extends JPanel implements ActionListener
             
 			else if(command.equals(ENTER_JNDI_NAME))
 			{
-				String jndiName = JOptionPane.showInputDialog(null, "Please enter the JNDI name: ", 
-					"Mapping Name", 1);
+				String jndiName = null;
+				
+				if(getEnterJNDIName()!=null && !getEnterJNDIName().equals(""))
+				{
+					jndiName = JOptionPane.showInputDialog(null, "Please enter the JNDI name: ",getEnterJNDIName().trim());
+				}
+				
+				else
+				{
+					jndiName = JOptionPane.showInputDialog(null, "Please enter the JNDI name: ","");
+				}
 				if(jndiName!=null)
 				{
 					
 					String toReplace = "\n\n"+"JNDI Name:"+getEnterJNDIName();
 					String currString = "\n\n"+"JNDI Name:"+jndiName;
-					if(getTargetLocationArea().getText().contains("JNDI Name:    "))
+					if(getTargetLocationArea().getText().contains("JNDI Name:"))
 					{
 						String newOne = getTargetLocationArea().getText().replace(toReplace, currString);
 						System.out.println("inside//...."+newOne);
@@ -810,7 +813,7 @@ public class MappingMainPanel extends JPanel implements ActionListener
 			JScrollPane scrollPane = new JScrollPane(textArea);  
 			textArea.setLineWrap(true);  
 			textArea.setWrapStyleWord(true); 
-			scrollPane.setPreferredSize( new Dimension( 500, 500 ) );
+			scrollPane.setPreferredSize( new Dimension( 300, 200 ) );
 			JOptionPane.showMessageDialog(this, scrollPane, "Data input errors",  
     	                                       JOptionPane.ERROR_MESSAGE);
 			return;
@@ -908,7 +911,7 @@ public class MappingMainPanel extends JPanel implements ActionListener
 			if (imp != null) {
 				if(targetFileType.equals("EJB"))
 				{
-					ejbType = imp.getType();
+					ejbType = imp.getClientType();
 					enterJNDIName = imp.getJndiName();
 					JNDIPropertiesFilePath = imp.getJndiProperties();
 					if(ejbType==null || ejbType.equals(""))
@@ -946,23 +949,21 @@ public class MappingMainPanel extends JPanel implements ActionListener
 
 						}
 					}
-
-				}
-				/*else
-				{
-
-					if(WSDLBindingFilePath==null ||WSDLBindingFilePath.equals("") )
+					else if (ejbType.equals("EJB_LOCAL"))
 					{
-						if(errorString!=null)
+						if(enterJNDIName==null || enterJNDIName.equals(""))
 						{
-							errorString = errorString + "Please select WSDL Binding file \n";
-						}
-						else{
-							errorString = "Please select WSDL Binding file \n";
+							if(errorString!=null)
+							{
+								errorString = errorString + "Please select EJB JNDI Name Type\n";
+							}
+							else{
+								errorString = "Please select EJB JNDI Name Type\n";
+							}
 						}
 					}
 
-				}*/
+				}
 
 			}
 		}

@@ -208,25 +208,25 @@ public class NewPOJOFileAction extends AbstractContextAction
 	    DefaultSourceTreeNode ReadClass = null;
 	    DefaultSourceTreeNode DeleteClass = null;
 	    
-	    CreateClass = new DefaultSourceTreeNode("Create");
+	    CreateClass = new DefaultSourceTreeNode("Create(PUT)");
 	    CreateClass.setResourceLocation(top.getResourceLocation());
 	    CreateClass.setResourceName(resourceName);
 	    CreateClass.setResourcePathLocation(top.getResourcePathLocation());
 	    top.add(CreateClass);
 	    
-	    Updateclass = new DefaultSourceTreeNode("Update");
+	    Updateclass = new DefaultSourceTreeNode("Update(POST)");
 	    Updateclass.setResourceLocation(top.getResourceLocation());
 	    Updateclass.setResourceName(resourceName);
 	    Updateclass.setResourcePathLocation(top.getResourcePathLocation());
 	    top.add(Updateclass);
 	    
-	    ReadClass = new DefaultSourceTreeNode("Read");
+	    ReadClass = new DefaultSourceTreeNode("Read(GET)");
 	    ReadClass.setResourceLocation(top.getResourceLocation());
 	    ReadClass.setResourceName(resourceName);
 	    ReadClass.setResourcePathLocation(top.getResourcePathLocation());
 	    top.add(ReadClass);
 	    
-	    DeleteClass = new DefaultSourceTreeNode("Delete");
+	    DeleteClass = new DefaultSourceTreeNode("Delete(DELETE)");
 	    DeleteClass.setResourceLocation(top.getResourceLocation());
 	    DeleteClass.setResourceName(resourceName);
 	    DeleteClass.setResourcePathLocation(top.getResourcePathLocation());

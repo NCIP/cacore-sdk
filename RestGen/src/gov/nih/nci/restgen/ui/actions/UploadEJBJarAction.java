@@ -220,7 +220,7 @@ public void createTargetTree(File file) throws Exception
     		}
     		if(jndiPropertiesPath!=null && !jndiPropertiesPath.equals(""))
     		{
-    			mainFrame.getMainFrame().getMappingMainPanel().getTargetLocationArea().append("\n\n"+"JNDI properties file:"+file.getPath());
+    			mainFrame.getMainFrame().getMappingMainPanel().getTargetLocationArea().append("\n\n"+"JNDI properties file:"+jndiPropertiesPath);
     		}
     		
     	
@@ -402,10 +402,12 @@ private void createNodes(DefaultTargetTreeNode top,ArrayList<String> list, File 
 	    		InputStream input = jarFile.getInputStream(jarEntry);
 	    		ClassParser cp = new ClassParser(input,file.getName());
 	    		JavaClass javaClass = cp.parse();
+	    		DefaultTargetTreeNode element = null;
 	        	for(Method method : javaClass.getMethods())
 	        	{
 	    		    //get input type and outtypes here
 	        		ArrayList<String> argumentTypes = new ArrayList();
+	        		String argumentTypesCommaSeparated = "";
 	        		Type [] args = method.getArgumentTypes();
 	        		Type returnType = method.getReturnType();
 	        		
@@ -413,18 +415,41 @@ private void createNodes(DefaultTargetTreeNode top,ArrayList<String> list, File 
 	        			for (int i=0;i<args.length;i++)
 	        			{
 	        					argumentTypes.add(args[i].toString());
+	        					argumentTypesCommaSeparated = argumentTypesCommaSeparated +args[i].toString();
+	        					if(args.length>1)
+	        					{
+	        						if(i < args.length-1)
+	        						{
+	        							argumentTypesCommaSeparated = argumentTypesCommaSeparated +", ";
+	        						}
+	        					}
+	        					
 	        				
 	        			}
 	        		}
-	        		DefaultTargetTreeNode element = new DefaultTargetTreeNode(method.getName());
+	        		if(!argumentTypesCommaSeparated.equals("") && argumentTypesCommaSeparated!=null)
+	        		{
+	        			element = new DefaultTargetTreeNode(method.getName()+"("+argumentTypesCommaSeparated+")");
+	        		}
+	        		else
+	        		{
+	        			
+	        			element = new DefaultTargetTreeNode(method.getName()+"()");
+	        		}
 	        		element.setOperationName(method.getName());
-	        		element.setClientType("remote");
+	        		if(mainFrame.getMainFrame().getMappingMainPanel().getEjbType()!=null)
+	        		{
+	        			element.setClientType(mainFrame.getMainFrame().getMappingMainPanel().getEjbType());
+	        		}
 	        		element.setImplementationType("EJB");
 	        		if(EJBNameList!=null)
 	        		{
 	        			element.setEJBName((String)EJBNameList.get(j));
 	        		}
 	        		element.setInputType(argumentTypes);
+	        		System.out.println("argument return type-----***"+returnType.toString());
+					System.out.println("argument return type1----***"+returnType.getType());
+					System.out.println("argument return type2----***"+returnType.getSignature());
 	        		element.setOutputType(returnType.toString());
 	        		if(EJBBeanList!=null)
 	        		{

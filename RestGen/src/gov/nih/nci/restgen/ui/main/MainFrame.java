@@ -53,7 +53,7 @@ public class MainFrame extends JFrame
     
     private static MappingMainPanel mp = null;
 
-    private MainFrame(){
+    MainFrame(){
 		super();
 	}
 
@@ -84,7 +84,7 @@ public class MainFrame extends JFrame
     /* (non-Javadoc)
 	 * @see gov.nih.nci.caCore SDK.ui.main.AbstractMainFrame#launch()
 	 */
-	private void launch()
+	void launch()
 	{
 
 		try {
@@ -120,6 +120,7 @@ public class MainFrame extends JFrame
 			
 			instanceContainer.addNewTab(getMappingMainPanel(), ".xml");
 			// added PV end
+			
 			
 		} catch (Throwable e) {
 			// TODO Auto-generated catch block
