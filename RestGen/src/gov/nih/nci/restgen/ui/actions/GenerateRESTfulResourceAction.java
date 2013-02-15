@@ -32,6 +32,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.net.URL;
 import java.net.MalformedURLException;
 
@@ -88,7 +91,37 @@ public class GenerateRESTfulResourceAction extends AbstractContextAction
         setActionCommandType(DESKTOP_ACTION_TYPE);
         //do not know how to set the icon location name, or just do not matter.
     }
-
+    
+    Runnable myRunnable = new Runnable(){
+    	public void run(){
+	
+    		File file = getMappingFile(); 
+			Mapping m = null;
+			try {
+				m = MappingMainPanel.loadMapping(file);
+			} catch (JAXBException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        	GeneratorContext genContext = new GeneratorContext(m);
+			RESTfulWrapperGenerator restfulWrapper = new RESTfulWrapperGenerator(genContext);
+			try {
+				restfulWrapper.runProcess();
+				restfulWrapper.generate();
+			} catch (GeneratorException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				getLogger().error("Exception occured while Generating the RESTful resource........"+e.getMessage());
+			} 
+			 catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			getLogger().error("Exception occured while Generating the RESTful resource........"+e.getMessage());
+			 }
+		}
+      };
+        
+    
     /**
      * The abstract function that descendant classes must be overridden to provide customsized handling.
      *
@@ -99,89 +132,41 @@ public class GenerateRESTfulResourceAction extends AbstractContextAction
     protected boolean doAction(ActionEvent e) throws Exception
     {
     	File file = getMappingFile(); 
-        /*file = DefaultSettings.getUserInputOfFileFromGUI(mainFrame.getOwnerFrame(), //FileUtil.getUIWorkingDirectoryPath(),
-                SOURCE_TREE_FILE_DEFAULT_EXTENTION, OPEN_DIALOG_TITLE_FOR_DEFAULT_SOURCE_FILE, false, false);
-        if ((file == null)||(!file.exists())||(!file.isFile())) return true;
-        if (!file.getName().toLowerCase().endsWith(SOURCE_TREE_FILE_DEFAULT_EXTENTION.toLowerCase()))
-        {
-            JOptionPane.showMessageDialog(mainFrame.getMainFrame(), "This file is not a mapping file (" + SOURCE_TREE_FILE_DEFAULT_EXTENTION + ") file : " + file.getName(), "Not a POJO Jar file", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }*/
-    	
+        
         if(file!=null)
         {
-        	/*
-        	if((mainFrame.getMainFrame().getMappingMainPanel().getOptionsPath())!=null)
-        	{
-        		genContext.setOutputPath(mainFrame.getMainFrame().getMappingMainPanel().getOptionsPath());
-        	}
-        	else
-        	{
-        		// display a error dialog
-        		JOptionPane.showMessageDialog(mainFrame.getMainFrame(), "Please set output path", "Output path not set", JOptionPane.ERROR_MESSAGE);
-        		return false;
-        	}
-        	*/
         	
-        	
-        	///////
-        	if(logStats==null)
-        	{
-        		logStats = new JPanel();
-        		textArea = new JTextArea();
-        		textArea.setAutoscrolls(true);
-        		textArea.setLineWrap(true);  
-            	textArea.setWrapStyleWord(true);
-            	JScrollPane scrollPane = new JScrollPane( textArea );
-        		logStats.setBorder(BorderFactory.createRaisedBevelBorder());
-        		logStats.setLayout(new BorderLayout());
-        		logStats.setSize(new Dimension((DefaultSettings.FRAME_DEFAULT_WIDTH / 3), (int) (DefaultSettings.FRAME_DEFAULT_HEIGHT / 1.5)));
-        		logStats.add( scrollPane );
-        	}
-        	else
-        	{
-        		textArea.setText("");
-        		
-        	}
-        	mainFrame.getMainFrame().addNewTabForLog(logStats, "");
-        	/////
-        	/////
-        	
-        	
-        	mainFrame.getTabbedPane().setSelectedIndex(1);
-        	
-        	SwingUtilities.invokeLater(new Runnable()
-        	{
-        		public void run()
-        		{
-        			
-        			File file = getMappingFile(); 
-        			Mapping m = null;
-					try {
-						m = MappingMainPanel.loadMapping(file);
-					} catch (JAXBException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-                	GeneratorContext genContext = new GeneratorContext(m);
-        			RESTfulWrapperGenerator restfulWrapper = new RESTfulWrapperGenerator(genContext);
-        			try {
-						restfulWrapper.runProcess();
-						restfulWrapper.generate();
-					} catch (GeneratorException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-						getLogger().error("Exception occured while Generating the RESTful resource........"+e.getMessage());
-					} 
-        			 catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					getLogger().error("Exception occured while Generating the RESTful resource........"+e.getMessage());
-        			 }
-        		}
-        	});
-        	///////
-        	
+
+            
+            	if(logStats==null)
+            	{
+            		logStats = new JPanel();
+            		textArea = new JTextArea();
+            		textArea.setAutoscrolls(true);
+            		textArea.setLineWrap(true);  
+                	textArea.setWrapStyleWord(true);
+                	JScrollPane scrollPane = new JScrollPane( textArea );
+            		logStats.setBorder(BorderFactory.createRaisedBevelBorder());
+            		logStats.setLayout(new BorderLayout());
+            		logStats.setSize(new Dimension((DefaultSettings.FRAME_DEFAULT_WIDTH / 3), (int) (DefaultSettings.FRAME_DEFAULT_HEIGHT / 1.5)));
+            		
+            		logStats.add( scrollPane );
+            	}
+            	else
+            	{
+            		textArea.setText("");
+            		
+            	}
+            	mainFrame.getMainFrame().addNewTabForLog(logStats, "");
+            	/////
+            	/////
+            	
+            	
+            	mainFrame.getTabbedPane().setSelectedIndex(1);
+            	
+            
+        	 Thread thread = new Thread(myRunnable);
+             thread.start();
         	
         }
         
@@ -226,7 +211,7 @@ public class GenerateRESTfulResourceAction extends AbstractContextAction
 	public Logger getLogger() {
 		return log;
 	}
-
+    
 }
 
 /**
