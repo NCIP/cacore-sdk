@@ -176,14 +176,13 @@ public class GeneratorUtil {
 			success = task.call();
 
 			for (Diagnostic diagnostic : diagnostics.getDiagnostics()) {
-				context.getLogger().error(diagnostic.getCode());
-				context.getLogger().error(diagnostic.getKind().toString());
-				context.getLogger().error(diagnostic.getPosition() + "");
-				context.getLogger().error(diagnostic.getStartPosition() + "");
-				context.getLogger().error(diagnostic.getEndPosition() + "");
-				context.getLogger().error(diagnostic.getSource().toString());
+				//context.getLogger().error(diagnostic.getCode());
+				//context.getLogger().error(diagnostic.getKind().toString());
+				//context.getLogger().error(diagnostic.getPosition() + "");
+				//context.getLogger().error(diagnostic.getStartPosition() + "");
+				//context.getLogger().error(diagnostic.getEndPosition() + "");
+				//context.getLogger().error(diagnostic.getSource().toString());
 				context.getLogger().error(diagnostic.toString());
-				System.out.println(diagnostic.toString());
 			}
 		} catch (Throwable t) {
 			context.getLogger().error("Error compiling java code", t);

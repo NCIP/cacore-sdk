@@ -636,6 +636,8 @@ public class RESTfulResourceGenerator extends Generator {
 
 		template.setAttribute("ServiceName", impl.getName());
 		template.setAttribute("OperationName", impl.getOperation().getName());
+		template.setAttribute("ServiceNamespace", defs.getNamespaceContext().toString());
+		template.setAttribute("WSDLURL", context.getMapping().getOptions().getWsdlLocation());
 
 		return template.toString();
 	}

@@ -26,8 +26,6 @@ public class WebserviceClientGenerator extends Generator {
 		if (!options.getWrapperType().equals(Options.SOAP_SERVICE))
 			return;
 
-		context.getLogger().info("Generating SOAP Webservice Client");
-
 		String outputPath = options.getOutputPath();
 		String wsdlLocation = options.getWsdlLocation();
 		try {
@@ -58,17 +56,19 @@ public class WebserviceClientGenerator extends Generator {
 						outputPath, "-p",
 						namespace + "=gov.nih.nci.restgen.generated.client",
 						"-b", mapping.getOptions().getWsdlBindingFile(),
-						"-noAddressBinding",
+						//"-noAddressBinding",
 						// "-b",
 						// mapping.getOptions().getOutputPath()+File.separator+"binding.xml",
+						"-wsdlLocation", wsdlLocation,
 						wsdlLocation });
 			} else {
 				WSDLToJava.main(new String[] { "-client", "-compile", "-d",
 						outputPath, "-p",
 						namespace + "=gov.nih.nci.restgen.generated.client",
-						// "-b",
-						// mapping.getOptions().getOutputPath()+File.separator+"binding.xml",
-						"-noAddressBinding",
+						 //"-b",
+						 //mapping.getOptions().getOutputPath()+java.io.File.separator+"binding.xml",
+						//"-noAddressBinding",
+						"-wsdlLocation", wsdlLocation,
 						wsdlLocation });
 			}
 		} catch (Exception e) {
@@ -109,7 +109,7 @@ public class WebserviceClientGenerator extends Generator {
 	@Override
 	protected void postProcess() {
 		// TODO Auto-generated method stub
-		getContext().getLogger().info("Generating SOAP web service client...Completed!");
+		//getContext().getLogger().info("Generating SOAP web service client...Completed!");
 	}
 
 }
