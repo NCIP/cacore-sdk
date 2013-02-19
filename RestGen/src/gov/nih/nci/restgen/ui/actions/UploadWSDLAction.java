@@ -581,11 +581,11 @@ private void createNodes(DefaultTargetTreeNode top,ArrayList<Operation> list) {
 	    	}
 	    	if(inputString!=null && !inputString.equals(""))
 	    	{
-	    		childElement = new DefaultTargetTreeNode(operationName+"("+inputString+")");
+	    		childElement = new DefaultTargetTreeNode(op.getOutputTypes().get(0)+" "+operationName+"("+inputString+")");
 	    	}
 	    	else
 	    	{
-	    		childElement = new DefaultTargetTreeNode(operationName+"()");
+	    		childElement = new DefaultTargetTreeNode(op.getOutputTypes().get(0)+" "+operationName+"()");
 	    	}
 	    	childElement.setOperationName(operationName);
 	    	childElement.setInputType(op.getInputTypes());

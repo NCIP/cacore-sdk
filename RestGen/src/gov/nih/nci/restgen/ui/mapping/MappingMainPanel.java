@@ -11,6 +11,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -1022,6 +1027,8 @@ public class MappingMainPanel extends JPanel implements ActionListener
 			List<Resource> rsc =  mapping.getResources();
 			// validate the source and target files here and return
 			String optionPath = mapping.getOptions().getOutputPath();
+			String wsdlLocation = mapping.getOptions().getWsdlLocation();
+			
 			if(optionPath!=null && !optionPath.equals(""))
 			{
 				setOptionsPath(optionPath);
@@ -1037,6 +1044,36 @@ public class MappingMainPanel extends JPanel implements ActionListener
 					targetFilePath = c.getLocation();
 				}
 			}
+			
+			// added
+						if(targetFileType.equals("SOAP_SERVICE"))
+						{
+							if(wsdlLocation!=null && !wsdlLocation.equals(""))
+							{
+							File fileWSDL = new File("WSDLFile.wsdl");
+
+							URLConnection  uCon = null;
+							URL wsdlUrl = new URL(wsdlLocation);
+							uCon = wsdlUrl.openConnection();
+							InputStream is = uCon.getInputStream();
+							OutputStream os = new FileOutputStream(fileWSDL);
+							int c;
+							while ((c = is.read()) != -1) {
+							System.out.print((char) c);
+							os.write(c);
+							}
+							is.close();
+							os.close();
+							}
+							else
+							{
+								JOptionPane.showMessageDialog(this, "Target file is not present at the path...", "Target file not found!!!", JOptionPane.ERROR_MESSAGE);
+								throw new Exception("Target file not found");
+							}
+						}
+						
+		   //
+			
 		if(sourceFilePath==null || sourceFilePath.equals("") || !new File(sourceFilePath).exists())
 		{
 

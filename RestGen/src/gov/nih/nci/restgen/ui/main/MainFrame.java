@@ -84,7 +84,7 @@ public class MainFrame extends JFrame
     /* (non-Javadoc)
 	 * @see gov.nih.nci.caCore SDK.ui.main.AbstractMainFrame#launch()
 	 */
-	void launch()
+	public void launch()
 	{
 
 		try {

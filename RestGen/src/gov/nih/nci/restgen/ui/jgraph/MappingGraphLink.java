@@ -57,14 +57,7 @@ public class MappingGraphLink extends DefaultEdge  implements  Serializable, Pro
 		DefaultPort srcPort=(DefaultPort)this.getSource();
 		if (srcPort==null)
 			return null;
-		//if (srcPort instanceof FunctionBoxGraphPort)
-		//{
-		//	FunctionBoxGraphPort fPort=(FunctionBoxGraphPort)srcPort;
-		//	FunctionData fData=(FunctionData)fPort.getUserObject();
-
-		//	return fData.getName()+":"+fData.getValue();
-		//}
-		//else
+		
 		{
 			DefaultMutableTreeNode treeNode=(DefaultMutableTreeNode)srcPort;
 			return treeNode.getUserObject().toString();

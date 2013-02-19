@@ -28,6 +28,7 @@ import java.awt.Font;
 import java.awt.geom.Point2D;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
 import java.util.Enumeration;
 import java.util.StringTokenizer;
@@ -362,17 +363,19 @@ public final class UIHelper
 
 	public static DefaultMutableTreeNode findTreeNodeWithXmlPath(DefaultMutableTreeNode treeNode, String nodeXmlPath)
 	{
+		System.out.println("nodeXmlPath.....:"+nodeXmlPath);
 		if (nodeXmlPath==null)
 		{
 			System.out.println("UIHelper.findTreeNodeWithXmlPath()..invalid node to search:"+nodeXmlPath);
 			return null;
 		}
-
-		StringTokenizer st = new StringTokenizer(nodeXmlPath, "/@");
+		Scanner scanner = new Scanner(nodeXmlPath);
+		scanner.useDelimiter("/@");
 		boolean foundRoot = false;
 		DefaultMutableTreeNode e = treeNode;
-		while(st.hasMoreTokens() && e!=null){
-			String tmp = st.nextToken();
+		while(scanner.hasNext()){
+			String tmp = scanner.next();
+			System.out.println("Target tokens...."+tmp);
 			if(!foundRoot){
 				if(e.toString().equals(tmp)){
 					foundRoot = true;
