@@ -1,4 +1,5 @@
 	@DELETE
+	@Path("$PathParamPath$")
 	@Consumes("application/xml")
 	public $ReturnType$ remove$ResourceName$($PathParam$)
 	{

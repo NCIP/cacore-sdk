@@ -18,21 +18,23 @@
 	
 	        try { 
 	        	String jndiPropsFile = "$JNDIProperties$";
-	        	System.out.println("************ "+jndiPropsFile);
 				java.io.InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(jndiPropsFile);
 				if (inputStream == null) {
 					throw new java.io.FileNotFoundException("JNDI property file '" + jndiPropsFile + "' not found in the classpath");
 				}
 				props.load(inputStream);
-				System.out.println(props);	        
 	            initContext = new javax.naming.InitialContext(props);
-	            System.out.println(" initContext : "+initContext); 
-	            //Object ref = ($HomeInterface$)initContext.lookup("/$JNDIName$"); 
-	            Object ref = initContext.lookup("/$JNDIName$/remote");
-	            ejbHome = ($HomeInterface$)javax.rmi.PortableRemoteObject.narrow(ref,
-	                                             $HomeInterface$.class);
-	            ejbRemote = ejbHome.create();  
-				return ejbRemote.$OperationName$($OperationParameters$);
+	            Object ref = initContext.lookup("$JNDIName$");
+	            
+            	ejbHome = ($HomeInterface$)javax.rmi.PortableRemoteObject.narrow(ref,
+                                             $HomeInterface$.class);
+                ejbRemote = ejbHome.create();
+	              
+				$ReturnType$ returnType = ejbRemote.$OperationName$($OperationParamNames$);
+				javax.xml.bind.JAXBContext jc = javax.xml.bind.JAXBContext.newInstance( $PackageName$ );
+				javax.xml.bind.Marshaller u = jc.createMarshaller();
+		        u.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, new Boolean(true));
+		        return u.marshal(new JAXBElement<$ReturnType$>(new QName("mapping"), $ReturnType$.class, returnType), f);
 	        }  
 	        catch(javax.ejb.CreateException e) {
 	        	e.printStackTrace();

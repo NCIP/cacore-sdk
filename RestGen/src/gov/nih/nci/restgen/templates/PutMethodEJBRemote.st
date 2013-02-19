@@ -1,4 +1,5 @@
 	@PUT
+	@Path("$PathParamPath$")
 	@Consumes("application/xml")
 	public $ReturnType$ update$ResourceName$($RequestType$)
 	{
@@ -16,12 +17,13 @@
 				if (inputStream == null) {
 					throw new java.io.FileNotFoundException("JNDI property file '" + jndiPropsFile + "' not found in the classpath");
 				}
-				props.load(inputStream);	        
-	            initContext = new javax.naming.InitialContext(props); 
-	            Object objref = initContext.lookup("$JNDIName$"); 
-	            ejbHome = ($HomeInterface$)javax.rmi.PortableRemoteObject.narrow(objref,
-	                                             $HomeInterface$.class);
-	            ejbRemote = ejbHome.create();  
+				props.load(inputStream);
+	            initContext = new javax.naming.InitialContext(props);
+	            Object ref = initContext.lookup("$JNDIName$");
+	            
+            	ejbHome = ($HomeInterface$)javax.rmi.PortableRemoteObject.narrow(ref,
+                                             $HomeInterface$.class);
+                ejbRemote = ejbHome.create();
 				ejbRemote.$OperationName$($OperationParamNames$);
 	        }  
 	        catch(javax.ejb.CreateException e) {

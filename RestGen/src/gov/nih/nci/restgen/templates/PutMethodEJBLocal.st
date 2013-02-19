@@ -1,4 +1,5 @@
 	@PUT
+	@Path("$PathParamPath$")
 	@Consumes("application/xml")
 	public $ReturnType$ update$ResourceName$($RequestType$)
 	{

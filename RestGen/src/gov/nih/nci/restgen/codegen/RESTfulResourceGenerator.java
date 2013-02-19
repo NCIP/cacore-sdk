@@ -422,16 +422,16 @@ public class RESTfulResourceGenerator extends Generator {
 					"Unable to find EJB from ejb-jar.xml for " + impl.getName());
 
 		template.setAttribute("PathParamPath",
-				getOperationPath(impl, method.getPathName()));
-		template.setAttribute("PathParam", getOperationPathParams(impl));
+				getOperationPath(impl));
+		template.setAttribute("PathParam", getOperationPathParams(method, impl));
 		template.setAttribute("HomeInterface", ejbHomeName);
 		template.setAttribute("RemoteInterface", ejbRemoteName);
 		template.setAttribute("ReturnType", getOperationReturnType(impl));
 
 		template.setAttribute("OperationName", impl.getOperation().getName());
 		String operationParams = getOperationParams(impl);
-		if (operationParams != null)
-			operationParams = operationParams + ", ";
+		//if (operationParams != null)
+		//	operationParams = operationParams + ", ";
 		template.setAttribute("OperationParameters", operationParams);
 		template.setAttribute("RequestType", getRequestTypes(impl));
 		template.setAttribute("OperationParamNames", getOperationParams(impl));
@@ -491,7 +491,7 @@ public class RESTfulResourceGenerator extends Generator {
 		return buffer.toString();
 	}
 
-	private String getOperationPathParams(Implementation impl) {
+	private String getOperationPathParams(Method method, Implementation impl) {
 		Operation operation = impl.getOperation();
 		List<Input> inputs = operation.getInputs();
 
@@ -500,24 +500,33 @@ public class RESTfulResourceGenerator extends Generator {
 
 		StringBuffer buffer = new StringBuffer();
 		Iterator<Input> iterator = inputs.iterator();
+		boolean append = false;
 		while (iterator.hasNext()) {
 			Input input = (Input) iterator.next();
 			buffer.append("@PathParam(\"" + input.getName() + "\") ");
 			buffer.append(input.getType() + " " + input.getName());
+			append = true;
 			if (iterator.hasNext())
 				buffer.append(", ");
 		}
-
-		return buffer.toString();
+		if(!method.getName().equals(Method.GET))
+			append = false;
+		if(append)
+			return buffer.toString() + ",";
+		else
+			return buffer.toString();
 	}
 
-	private String getOperationPath(Implementation impl, String methodPath) {
+	private String getOperationPath(Implementation impl) {
 		Operation operation = impl.getOperation();
 		List<Input> inputs = operation.getInputs();
 		String path = null;
 
-		if (methodPath != null && methodPath.trim().length() > 0)
-			path = "/" + methodPath;
+		if (impl.getPath() != null && impl.getPath().trim().length() > 0)
+			path = "/" + impl.getPath();
+		
+		//if (methodPath != null && methodPath.trim().length() > 0)
+		//	path = "/" + methodPath;
 
 		if (inputs == null || inputs.size() == 0)
 			return path;
@@ -615,7 +624,7 @@ public class RESTfulResourceGenerator extends Generator {
 
 					String pathParam = constructPathParam(paramTypeNames,
 							paramTypes);
-					String pathParamPath = constructPathParamPath(
+					String pathParamPath = constructPathParamPath(impl,
 							paramTypeNames, paramTypes);
 					String opParams = constructOperationParams(paramTypeNames);
 
@@ -656,11 +665,16 @@ public class RESTfulResourceGenerator extends Generator {
 		return buffer.toString();
 	}
 
-	private String constructPathParamPath(String[] paramNames,
+	private String constructPathParamPath(Implementation impl, String[] paramNames,
 			String[] paramTypes) throws GeneratorException {
+		
+		StringBuffer buffer = new StringBuffer();
+		if(impl.getPath() != null && impl.getPath().trim().length() > 0)
+			buffer.append("/"+impl.getPath());
+		
 		if ((paramNames.length != paramTypes.length) || paramNames.length == 0)
 			throw new GeneratorException("Failed to parse path paramters.");
-		StringBuffer buffer = new StringBuffer();
+		
 		for (int i = 0; i < paramNames.length; i++) {
 			buffer.append("/{" + paramNames[i] + "}");
 		}

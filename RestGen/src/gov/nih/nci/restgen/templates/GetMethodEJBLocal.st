@@ -19,7 +19,6 @@
 	            initContext = new javax.naming.InitialContext(); 
 	            String JNDIName = "$JNDIName$"; 
 	            Object obj = initContext.lookup("$JNDIName$");
-	            System.out.println(obj.getClass().getName());
 	            $HomeInterface$ homeRef = ($HomeInterface$) initContext.lookup("$JNDIName$");
 	            ejbRemote = ($RemoteInterface$) homeRef.create();  
 				return ejbRemote.$OperationName$($OperationParamNames$);

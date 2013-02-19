@@ -1,4 +1,5 @@
 	@POST
+	@Path("$PathParamPath$")
 	@Consumes("application/xml")
 	public $ReturnType$ add$ResourceName$($RequestType$)
 	{
