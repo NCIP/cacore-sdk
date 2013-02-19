@@ -129,6 +129,8 @@ public class NewPOJOFileAction extends AbstractContextAction
         for(Field field : javaClass.getFields()){
         	System.out.println("Java field types...."+field.getType());
      	   boolean validatePOJOMethods = false;
+     	   boolean foundGetMethod = false;
+     	   boolean foundSetMethod = false;
      	    if(!isWrapperType(field.getType().toString()))
      	   {
      		   JOptionPane.showMessageDialog(mainFrame.getMainFrame(), "This file Contains non-primitive java types (" + SOURCE_TREE_FILE_DEFAULT_EXTENTION + ") field class... : " + field.getType().toString(), "Not a POJO class file", JOptionPane.ERROR_MESSAGE);
@@ -140,19 +142,30 @@ public class NewPOJOFileAction extends AbstractContextAction
      		   
      	   for(Method method : javaClass.getMethods()){
      	   	   System.out.println("Field names:"+field.getName()+method.getName()+"\n");
-     		   String fieldCompare = "get"+field.getName();
-     		   if(fieldCompare.equalsIgnoreCase(method.getName()))
+     		   String fieldCompareGet = "get"+field.getName();
+     		   String fieldCompareSet = "set"+field.getName();
+     		   if(fieldCompareGet.equalsIgnoreCase(method.getName()))
      		   {
      			   System.out.println("Inside if loop..."+"\n");
-     			   validatePOJOMethods = true;
-     			   break;
+     			   //validatePOJOMethods = true;
+     			   foundGetMethod = true;
+     			   
      		   }
+     		   else if(fieldCompareSet.equalsIgnoreCase(method.getName()))
+     		   {
+     			  foundSetMethod = true;
+     		   }
+     			   
      		   
+     	   }
+     	   if(foundGetMethod && foundSetMethod )
+     	   {
+     		  validatePOJOMethods = true;
      	   }
      	      
      	   if(!validatePOJOMethods)
      	   {
-     		   JOptionPane.showMessageDialog(mainFrame.getMainFrame(), "This file is not a POJO class (" + SOURCE_TREE_FILE_DEFAULT_EXTENTION + ") file : " + file.getName(), "Not a POJO class file", JOptionPane.ERROR_MESSAGE);
+     		   JOptionPane.showMessageDialog(mainFrame.getMainFrame(),"Does not contain Get/Set methods", "This file is not a POJO class (" + SOURCE_TREE_FILE_DEFAULT_EXTENTION + ") file : " + file.getName(), JOptionPane.ERROR_MESSAGE);
                 return;
      	   }
         }

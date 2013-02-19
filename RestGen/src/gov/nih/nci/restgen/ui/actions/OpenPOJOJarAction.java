@@ -323,7 +323,8 @@ public class OpenPOJOJarAction extends AbstractContextAction
     public boolean validatePOJOClass(InputStream is,JavaClass javaClass, String classFile,File file)throws Exception
     {
     boolean validatePOJOMethods = false;	
-     
+    boolean foundGetMethod = false;
+    boolean foundSetMethod = false;
      for(Field field : javaClass.getFields()){
   	   validatePOJOMethods = false;
   	   System.out.println("field class type....******"+field.getType());
@@ -332,7 +333,7 @@ public class OpenPOJOJarAction extends AbstractContextAction
   		 
   		if(!checkForJarEntry(field.getType().toString(), file))
   		{ 
-  		String errorString = "Class Contains non-primitive java types field : " + field.getType().toString()+"\n"; 
+  		String errorString = "Class Contains non-primitive java types field : " + field.getType().toString(); 
   		if(getErrorString()==null)
 		{
 			
@@ -350,20 +351,33 @@ public class OpenPOJOJarAction extends AbstractContextAction
   		}  
 	   }
   	      
-  	   for(Method method : javaClass.getMethods()){
-  	   	   String fieldCompare = "get"+field.getName();
-  		   if(fieldCompare.equalsIgnoreCase(method.getName())||field.getName().contains("serialVersionUID"))
-  		   {
-  			   
-  			   validatePOJOMethods = true;
-  			   break;
-  		   }
-  		  
-  	   }
+	   
+	   for(Method method : javaClass.getMethods()){
+	   	   System.out.println("Field names:"+field.getName()+method.getName()+"\n");
+		   String fieldCompareGet = "get"+field.getName();
+		   String fieldCompareSet = "set"+field.getName();
+		   if(fieldCompareGet.equalsIgnoreCase(method.getName()))
+		   {
+			   System.out.println("Inside if loop..."+"\n");
+			   //validatePOJOMethods = true;
+			   foundGetMethod = true;
+			   
+		   }
+		   else if(fieldCompareSet.equalsIgnoreCase(method.getName()))
+		   {
+			  foundSetMethod = true;
+		   }
+			   
+		   
+	   }
+	   if(foundGetMethod && foundSetMethod )
+	   {
+		  validatePOJOMethods = true;
+	   }
   	  if(!validatePOJOMethods)
   	  {
   		  
-  		String errorString = "Class does not define get/set method for java field : " + field.getName()+classFile+"\n";
+  		String errorString = "Class does not define get/set method for java field : " + field.getName()+" "+classFile;
   	    
   		if(getErrorString()==null)
 		{

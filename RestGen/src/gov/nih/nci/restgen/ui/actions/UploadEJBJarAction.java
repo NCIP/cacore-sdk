@@ -175,7 +175,8 @@ public class UploadEJBJarAction extends AbstractContextAction
 		while (jarEntries.hasMoreElements())
 		{
 			jarEntry = (JarEntry)jarEntries.nextElement();
-			if(jarEntry.getName().contains("ejb-jar.xml"))
+			System.out.println("JarMMMMM entries...."+jarEntry);
+			if(jarEntry.getName().contains("/ejb-jar.xml"))
 			{
 				ejbjarxml = true;
 				break;
@@ -183,6 +184,7 @@ public class UploadEJBJarAction extends AbstractContextAction
 		}
 		// JarEntry jarEntry = jarFile.getJarEntry("META-INF\\ejb-jar.xml");
 		if (ejbjarxml) {
+			
 			InputStream is = jarFile.getInputStream(jarEntry);
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -206,6 +208,17 @@ public class UploadEJBJarAction extends AbstractContextAction
 			throw new Exception("ejb-jar.xml descriptor file not found in the jar!!");
 
 		}
+		
+		//PV Validate EJB Jar file here
+
+				/// form the tree here PV...start
+
+				DefaultTargetTreeNode top = new DefaultTargetTreeNode("EJB");
+				if(EJBRemoteOperationsList.size()>0)
+				{
+					createNodes(top,EJBRemoteOperationsList,file);
+				}
+
 		if(EJBNameList.size()>0)
 		{
 			String EJBDisplayName=(String)EJBNameList.get(0);
@@ -227,16 +240,7 @@ public class UploadEJBJarAction extends AbstractContextAction
 
 
 		}
-		//PV Validate EJB Jar file here
-
-		/// form the tree here PV...start
-
-		DefaultTargetTreeNode top = new DefaultTargetTreeNode("EJB");
-		if(EJBRemoteOperationsList.size()>0)
-		{
-			createNodes(top,EJBRemoteOperationsList,file);
-		}
-		tree = new JTree(top);
+				tree = new JTree(top);
 		TreeSelectionHandler treeSelectionHanderl=new TreeSelectionHandler(mainFrame.getMainFrame().getMappingMainPanel().getGraphController());
 		tree.getSelectionModel().addTreeSelectionListener(treeSelectionHanderl);
 		tree.setTransferHandler(new TreeTransferHandler(mainFrame.getMainFrame().getMappingMainPanel()));

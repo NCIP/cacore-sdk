@@ -582,14 +582,14 @@ public class MappingMainPanel extends JPanel implements ActionListener
 			remoteButton = new JRadioButton("Remote");
 			remoteButton.setMnemonic('R');
 			remoteButton.setActionCommand("Remote");
-			remoteButton.setSelected(true);
+			remoteButton.setSelected(false);
 		}
 		if(localButton==null)
 		{
 			localButton = new JRadioButton("Local");
 			localButton.setMnemonic('L');
 			localButton.setActionCommand("Local");
-			localButton.setSelected(true);
+			localButton.setSelected(false);
 			
 		}
 		if(group==null)
@@ -612,7 +612,7 @@ public class MappingMainPanel extends JPanel implements ActionListener
 		targetLocationPanel.add(targetRadioButtonPanel, BorderLayout.SOUTH);
 		targetLocationPanel.add(targetButtonPanel, BorderLayout.EAST);
 		// set the EJB type default to "REMOTE"
-				setEjbType("EJB_REMOTE");
+				//setEjbType("EJB_REMOTE");
 		//
 	}
 	
@@ -1206,6 +1206,23 @@ public class MappingMainPanel extends JPanel implements ActionListener
 			{
 				UploadEJBJarAction newejb = new UploadEJBJarAction(mainFrame);
 				newejb.createTargetTree(new File(targetFilePath));
+				if(getEjbType()!=null)
+				{
+					if(getEjbType().equals("EJB_LOCAL"))
+					{
+						if(localButton!=null)
+						{
+							localButton.setSelected(true);
+						}
+					}
+					else
+					{
+						if(remoteButton!=null)
+						{
+							remoteButton.setSelected(true);
+						}
+					}
+				}
 			}
 			else
 			{
