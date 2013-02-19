@@ -882,7 +882,7 @@ public class MappingMainPanel extends JPanel implements ActionListener
 						errorString = errorString + "Please Set the path for resource:"+rscVar.getName()+"\n";
 					}
 					else{
-						errorString = "Please set the path for resource\n";
+						errorString = "Please set the path for resource"+rscVar.getName()+"\n";
 					}
 				}
 			}

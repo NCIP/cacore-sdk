@@ -154,7 +154,10 @@ public class DeleteNodeAction extends AbstractContextAction
 	 {
 		 tree.removeAll();
 	 }
-	 
+	 // remove the resource from the list
+	 MainFrame.getMappingMainPanel().getPOJOClassList().remove(treeNode.toString());
+	 System.out.println("TREENODE STR..."+treeNode.toString());
+	 //
      tree.updateUI();
        return true;
 	}
