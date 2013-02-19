@@ -276,28 +276,6 @@ public class RESTfulWrapperGenerator extends Generator {
 
 		// Generate RESTful Web application resources
 		new RESTfulWebResourceGenerator(context).generate();
-		if (context.getMapping().getOptions().getWrapperType()
-				.equals(Options.EJB)) {
-			String ejbLoc = context.getMapping().getOptions().getEjbLocation();
-			File src = new File(ejbLoc);
-			String ejbFileName = ejbLoc.substring(ejbLoc
-					.lastIndexOf(File.separator) + 1);
-			String jarDest = context.getMapping().getOptions().getOutputPath()
-					+ File.separator + "web" + File.separator + "WEB-INF"
-					+ File.separator + "lib" + File.separator + ejbFileName;
-			File dest = new File(jarDest);
-			try {
-				GeneratorUtil.copyFile(src, dest);
-				String outputPath = context.getMapping().getOptions().getOutputPath()
-						+ File.separator + "web" + File.separator + "temp";
-				String deletePathName = outputPath + File.separator + "META-INF"; 
-				new JarHelper().removeJarEntry(jarDest, deletePathName, outputPath);
-			} catch (IOException e) {
-				e.printStackTrace();
-				throw new GeneratorException(
-						"Failed to copy EJB jar to output lib folder");
-			}
-		}
 		boolean compileFlag = GeneratorUtil.compileJavaSource(srcFolder,
 				classFolder, libDest + File.separator + "lib", context);
 		if (!compileFlag)
@@ -307,7 +285,7 @@ public class RESTfulWrapperGenerator extends Generator {
 		//Do not need j2ee.jar during execution
 		File j2eeFile = new File(libDest + File.separator + "lib"+ File.separator + "j2ee-1.4.jar"); 
 		FileUtils.deleteQuietly(j2eeFile);
-		
+		copySystemClasses();
 		try {
 			File dirOrFile2Jar = new File(context.getMapping().getOptions()
 					.getOutputPath()
@@ -321,8 +299,45 @@ public class RESTfulWrapperGenerator extends Generator {
 			throw new GeneratorException(
 					"Failed to generate web archive file.", e);
 		}
+		
 	}
 
+	private void copySystemClasses() throws GeneratorException
+	{
+		String path = context.getMapping().getOptions()
+				.getOutputPath()
+				+ File.separator + "web" 
+				+ File.separator + "WEB-INF" 
+				+ File.separator +"classes"
+				+ File.separator +"gov"
+				+ File.separator +"nih"
+				+ File.separator +"nci"
+				+ File.separator +"restgen"
+				+ File.separator +"util";
+				
+		File dirSystem = new File(path);
+		if(!dirSystem.exists())
+			dirSystem.mkdirs();
+		String srcPath = context.getMapping().getOptions().getRootPath()
+						+ File.separator +"bin"
+						+ File.separator +"gov"
+						+ File.separator +"nih"
+						+ File.separator +"nci"
+						+ File.separator +"restgen"
+						+ File.separator +"util"
+						+ File.separator +"RESTContentHandler.class";
+		String destPath = path + File.separator + "RESTContentHandler.class";
+		
+		File srcFile = new File(srcPath);
+		File destFile = new File(destPath);
+		try {
+			GeneratorUtil.copyFile(srcFile, destFile);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			throw new GeneratorException("Failed to copy RESTContentHandler to destination");
+		}
+	}
+	
 	@Override
 	protected void postProcess() throws GeneratorException {
 		getContext().getLogger().info("Generating RESTful web application...Completed!");

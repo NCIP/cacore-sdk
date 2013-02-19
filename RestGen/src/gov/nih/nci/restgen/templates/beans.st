@@ -17,6 +17,7 @@ http://www.springframework.org/schema/util/spring-util-2.0.xsd">
   <bean id="jaxbXmlProvider" class="org.apache.cxf.jaxrs.provider.JAXBElementProvider">
         <property name="jaxbElementClassNames" ref="elements"/>
   </bean>
+  $ProviderBean$
  
   <util:list id="elements">
    		$ResourcePojo; separator="\n"$
@@ -32,6 +33,7 @@ http://www.springframework.org/schema/util/spring-util-2.0.xsd">
     </jaxrs:extensionMappings>
     <jaxrs:providers>
         <ref bean="jaxbXmlProvider"/>
+        $ProviderRef$
     </jaxrs:providers>    
  </jaxrs:server>
 

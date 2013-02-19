@@ -61,7 +61,6 @@ public class RESTContentHandler implements MessageBodyReader, MessageBodyWriter 
 		try {
 			String packageName = type.getName().substring(0,
 					type.getName().lastIndexOf("."));
-			System.out.println("Read from................");
             JAXBContext context = JAXBContext.newInstance(packageName );
             Unmarshaller u = context.createUnmarshaller();
 /*
@@ -99,7 +98,7 @@ public class RESTContentHandler implements MessageBodyReader, MessageBodyWriter 
 			WebApplicationException {
 		OutputStreamWriter writer = null;
 		StringWriter strWriter = null;
-		System.out.println("Write to................");
+		//System.out.println("Write to................");
 		try {
 			if (target == null)
 				return;
@@ -109,10 +108,10 @@ public class RESTContentHandler implements MessageBodyReader, MessageBodyWriter 
 				writer.flush();
 				return;
 			}
-			System.out.println(" Package " + type.getPackage().getName());
+			//System.out.println(" Package " + type.getPackage().getName());
 			if(target instanceof java.util.List)
 			{
-				System.out.println("Handling Collection..");
+				//System.out.println("Handling Collection..");
 				marshallTypeCollection((List)target, type, writer);
 			}
 			else
@@ -151,11 +150,11 @@ public class RESTContentHandler implements MessageBodyReader, MessageBodyWriter 
 	    		return;
 	    	
 	        Object obj = value.get(0);
-	        System.out.println("obj.getClass() "+obj.getClass().getName());
+	        //System.out.println("obj.getClass() "+obj.getClass().getName());
 	        String className = obj.getClass().getName();
 			String collectionName = className.substring(className.lastIndexOf(".")+1)+"s";
-			System.out.println("collectionName "+collectionName);
-			System.out.println("package name "+obj.getClass().getPackage().getName());
+			//System.out.println("collectionName "+collectionName);
+			//System.out.println("package name "+obj.getClass().getPackage().getName());
 			org.jdom2.Element httpQuery = new org.jdom2.Element(collectionName, className);
 
 			Iterator iterator = value.iterator();
@@ -210,7 +209,7 @@ public class RESTContentHandler implements MessageBodyReader, MessageBodyWriter 
 	        Class[] classes = new Class[2];
 	        classes[0] = ListHolder.class;
 	        Object obj = value.get(0);
-	        System.out.println("obj.getClass() "+obj.getClass());
+	        //System.out.println("obj.getClass() "+obj.getClass());
 	        classes[1] = obj.getClass();
 	        JAXBContext context = JAXBContext.newInstance(
 	                classes);

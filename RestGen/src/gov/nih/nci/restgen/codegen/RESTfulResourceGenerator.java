@@ -9,6 +9,7 @@ import gov.nih.nci.restgen.mapping.model.Options;
 import gov.nih.nci.restgen.mapping.model.Output;
 import gov.nih.nci.restgen.mapping.model.Resource;
 import gov.nih.nci.restgen.util.GeneratorUtil;
+import gov.nih.nci.restgen.util.JarHelper;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -19,6 +20,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.jar.JarEntry;
@@ -171,6 +173,7 @@ public class RESTfulResourceGenerator extends Generator {
 	private void processPojo(Resource resource) throws GeneratorException {
 		if (context.getMapping().getOptions().getWrapperType()
 				.equals(Options.EJB)) {
+			
 			String libDest = context.getMapping().getOptions().getOutputPath()
 					+ File.separator + "web" + File.separator + "WEB-INF";
 
@@ -184,12 +187,59 @@ public class RESTfulResourceGenerator extends Generator {
 			else
 				jarFileName = sourcePath;
 
+			StringTemplateGroup group = new StringTemplateGroup("restful");
+			StringTemplate indexTemplate = group
+					.getInstanceOf("gov/nih/nci/restgen/templates/JAXBIndex");
+			
 			jarFileName = jarFileName.substring(0, jarFileName.indexOf("."))
 					+ ".jar";
 			if (sourcePath.endsWith(".jar")) {
 				File destFile = new File(libDest + File.separator + "lib"
 						+ File.separator + jarFileName);
 				try {
+					JarFile file = new JarFile(jarSrcFile);
+					String oldDir = "";
+					String dirName = "";
+					boolean firstIter = true;
+					boolean generate = false;
+					for (Enumeration<JarEntry> enums = file.entries(); enums.hasMoreElements();) {   
+					    JarEntry entry = (JarEntry) enums.nextElement();
+					    
+					    if(entry.getName().endsWith(".class"))
+					    {
+					    	dirName = entry.getName().substring(0,entry.getName().lastIndexOf("/"));
+					    	if(firstIter)
+					    	{
+					    		firstIter = false;
+					    		oldDir = dirName;
+					    	}
+					    	String fileName = entry.getName().substring(entry.getName().lastIndexOf("/")+1, entry.getName().indexOf(".class"));
+					    	generate = true;
+					    	indexTemplate.setAttribute("ClassName", fileName);
+					    	if(!oldDir.equals(dirName))
+					    	{
+					    		dirName = dirName.replace("/", File.separator);
+								GeneratorUtil.writeFile(context.getMapping().getOptions().getOutputPath()
+										+ getFileOutputPath() + File.separator + "web" + File.separator + "WEB-INF" +
+										File.separator + "classes"+ File.separator+dirName, "jaxb.index",
+										indexTemplate.toString());
+								indexTemplate = group
+										.getInstanceOf("gov/nih/nci/restgen/templates/JAXBIndex");	
+								generate = false;
+					    	}
+					    }
+					    
+					    System.out.println(entry.getName());   
+					}
+					if(generate)
+					{
+						dirName = dirName.replace("/", File.separator);
+						
+						GeneratorUtil.writeFile(context.getMapping().getOptions().getOutputPath()
+								+ File.separator + "web" + File.separator + "WEB-INF" +
+								File.separator + "classes"+ File.separator+dirName, "jaxb.index",
+								indexTemplate.toString());
+					}
 					GeneratorUtil.copyFile(jarSrcFile, destFile);
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -221,6 +271,15 @@ public class RESTfulResourceGenerator extends Generator {
 					File jarSrcFolder = new File(jarSrcDir);
 					GeneratorUtil.copyDir(jarSrcDir, libDest + File.separator
 							+ "classes");
+					String dirName = packageName.replace(".", File.separator);
+					String entry = javaClass.getFileName().substring(0, javaClass.getFileName().indexOf(".class"));
+					indexTemplate.setAttribute("ClassName", entry);
+					
+					GeneratorUtil.writeFile(context.getMapping().getOptions().getOutputPath()
+							+ File.separator + "web" + File.separator + "WEB-INF" +
+							File.separator + "classes"+ File.separator+dirName, "jaxb.index",
+							indexTemplate.toString());
+					
 				} catch (IOException e) {
 					e.printStackTrace();
 					throw new GeneratorException(
@@ -261,10 +320,12 @@ public class RESTfulResourceGenerator extends Generator {
 		StringTemplate postTemplate = null;
 		StringTemplate deleteTemplate = null;
 		StringTemplate putTemplate = null;
+		StringTemplate resourceTemplate = group
+				.getInstanceOf("gov/nih/nci/restgen/templates/RESTfulResource");
+		StringTemplate indexTemplate = group
+				.getInstanceOf("gov/nih/nci/restgen/templates/JAXBIndex");
 
 		for (Resource resource : resources) {
-			StringTemplate resourceTemplate = group
-					.getInstanceOf("gov/nih/nci/restgen/templates/RESTfulResource");
 			String resourceName = resource.getName();
 			List<Method> methods = resource.getMethods();
 			List<String> getMethodStr = new ArrayList<String>();
@@ -341,6 +402,7 @@ public class RESTfulResourceGenerator extends Generator {
 				}
 				processJNDIProperties(method);
 				processPojo(resource);
+				processEJBJar(method);
 				counter++;
 			}
 			resourceTemplate.setAttribute("packageName", Constants.GENERATOR_PKG_NAME);
@@ -369,6 +431,36 @@ public class RESTfulResourceGenerator extends Generator {
 		}
 	}
 
+	private void processEJBJar(Method method) throws GeneratorException
+	{
+		if (context.getMapping().getOptions().getWrapperType()
+				.equals(Options.EJB)) {
+			String ejbLoc = context.getMapping().getOptions().getEjbLocation();
+			File src = new File(ejbLoc);
+			String ejbFileName = ejbLoc.substring(ejbLoc
+					.lastIndexOf(File.separator) + 1);
+			String jarDest = context.getMapping().getOptions().getOutputPath()
+					+ File.separator + "web" + File.separator + "WEB-INF"
+					+ File.separator + "lib" + File.separator + ejbFileName;
+			File dest = new File(jarDest);
+			try {
+				GeneratorUtil.copyFile(src, dest);
+				String outputPath = context.getMapping().getOptions().getOutputPath()
+						+ File.separator + "web" + File.separator + "temp";
+				if(method.getImplementation().getClientType().equals(Implementation.EJB_REMOTE))
+				{
+					String deletePathName = outputPath + File.separator + "META-INF"; 
+					new JarHelper().removeJarEntry(jarDest, deletePathName, outputPath);
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+				throw new GeneratorException(
+						"Failed to copy EJB jar to output lib folder");
+			}
+		}
+		
+	}
+	
 	private String generateMethodEJB(String resourceName, Method method,
 			String methodName, StringTemplate template)
 			throws GeneratorException {

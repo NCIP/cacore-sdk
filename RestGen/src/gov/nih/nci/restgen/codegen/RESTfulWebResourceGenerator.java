@@ -63,11 +63,20 @@ public class RESTfulWebResourceGenerator extends Generator {
 		StringTemplateGroup group = new StringTemplateGroup("restful");
 		StringTemplate template = group
 				.getInstanceOf("gov/nih/nci/restgen/templates/beans");
+		StringTemplate indexTemplate = group
+				.getInstanceOf("gov/nih/nci/restgen/templates/JAXBIndex");
 
 		Mapping mapping = context.getMapping();
 		try {
 
 			List<Resource> resources = mapping.getResources();
+			if (context.getMapping().getOptions().getWrapperType()
+					.equals(Options.EJB)) 
+			{
+				template.setAttribute("ProviderRef", "<ref bean=\"jaxbXmlContentProvider\"/>");
+				template.setAttribute("ProviderBean", "<bean id=\"jaxbXmlContentProvider\" class=\"gov.nih.nci.restgen.util.RESTContentHandler\"/>");
+			}
+			
 			for (Resource resource : resources) {
 
 				String pojoLocation = resource.getPojoLocation();

@@ -158,7 +158,7 @@ public class GeneratorUtil {
 					new String[] { "jar" }, File.pathSeparator);
 
 			options.add(classPathStr);
-
+			options.add("-nowarn");
 			options.add("-d");
 			options.add(destFolder);
 
