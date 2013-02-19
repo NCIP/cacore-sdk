@@ -1,3 +1,0 @@
-caCore RESTful Wrapper
-Version 1.0 
-
