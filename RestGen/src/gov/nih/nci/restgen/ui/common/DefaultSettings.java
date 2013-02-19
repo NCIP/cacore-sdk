@@ -425,7 +425,7 @@ public class DefaultSettings
     public static final Image getNCICBImage()
     {
         //using default imageFile
-        String defaultImageName="resources/images/ncicb.gif";
+        String defaultImageName="./resources/images/ncicb.gif";
         return getImage(defaultImageName);
     }
     
