@@ -26,6 +26,7 @@ import javax.swing.*;
 import javax.xml.bind.JAXBException;
 
 import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -137,7 +138,7 @@ public class GenerateRESTfulResourceAction extends AbstractContextAction
         {
         	
 
-            
+        		PropertyConfigurator.configure("./resources/log4j.properties");
             	if(logStats==null)
             	{
             		logStats = new JPanel();
