@@ -1,3 +1,0 @@
-RESTful Wrapper Generation tool(RESTful)
-Version 1.0 
-Copyright © 2013 Science Applications International Corporation ("SAIC")
