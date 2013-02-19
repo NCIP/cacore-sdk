@@ -106,7 +106,7 @@ public class GenerateRESTfulResourceAction extends AbstractContextAction
         	GeneratorContext genContext = new GeneratorContext(m);
 			RESTfulWrapperGenerator restfulWrapper = new RESTfulWrapperGenerator(genContext);
 			try {
-				restfulWrapper.runProcess();
+				//restfulWrapper.runProcess();
 				restfulWrapper.generate();
 			} catch (GeneratorException e) {
 				// TODO Auto-generated catch block
