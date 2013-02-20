@@ -1,13 +1,19 @@
 package test.gov.nih.nci.restgen.client;
 
+import static org.junit.Assert.*;
+
 import java.net.MalformedURLException;
 
 import javax.xml.namespace.QName;
 
+import org.junit.Test;
+
 import gov.nih.nci.restgen.generated.client.NoSuchCustomerException;
 
 public class CustomerServiceSOAPClient {
-	public static void main(String args[])
+	
+	@Test
+	public void testSOAPService()
 	{
 		gov.nih.nci.restgen.generated.client.CustomerServiceService service = new gov.nih.nci.restgen.generated.client.CustomerServiceService();
 		
@@ -26,7 +32,8 @@ public class CustomerServiceSOAPClient {
 		
 		gov.nih.nci.restgen.generated.client.CustomerService port = service.getCustomerServicePort();
 		try {
-			port.getCustomersByName("test");
+			java.util.List customers = port.getCustomersByName("test");
+			assertNotNull(customers);
 		} catch (NoSuchCustomerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

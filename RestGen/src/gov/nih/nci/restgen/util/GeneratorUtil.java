@@ -159,9 +159,10 @@ public class GeneratorUtil {
 
 			options.add(classPathStr);
 			options.add("-nowarn");
+			options.add("-Xlint:-unchecked");
 			options.add("-d");
 			options.add(destFolder);
-
+			
 			options.add("-s");
 			options.add(srcFolder);
 

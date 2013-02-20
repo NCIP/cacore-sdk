@@ -41,7 +41,7 @@ import java.util.Iterator;
 
 public class CustomerServiceClient
 {
-	public static String BASE_URL = "http://localhost:21080";
+	public static String BASE_URL = "http://localhost:29080/restful";
 	@BeforeClass 
 	public static void testSetup(){
 	    // Preparation of the unit tests
@@ -59,9 +59,9 @@ public class CustomerServiceClient
 	  try {
  
  		Customer searchObject = new Customer();
-		String id = "";
+		String id = "1";
 		
-		String url = BASE_URL + "/rest/customer/"+id;
+		String url = BASE_URL + "/customer/"+id;
 		WebClient client = WebClient.create(url);
 		
 		Response response = client.delete();
@@ -89,7 +89,7 @@ public class CustomerServiceClient
 		
 	  try {
 		DefaultHttpClient httpClient = new DefaultHttpClient();
-		String url = BASE_URL + "/rest/customer";
+		String url = BASE_URL + "/customer";
 		WebClient client = WebClient.create(url);
 		HttpPost postRequest = new HttpPost(url);
 		File myFile = new File("CustomerXML.xml");						
@@ -125,13 +125,13 @@ public class CustomerServiceClient
 		
 	}
 
-
+	@Test
 	public void testPut() throws Exception
 	{
 		
 	  try {
 		DefaultHttpClient httpClient = new DefaultHttpClient();
-		String url = BASE_URL + "/rest/customer";
+		String url = BASE_URL + "/customer";
 		HttpPut putRequest = new HttpPut(url);
 		File myFile = new File("CustomerXML.xml");						
  		if(!myFile.exists())
@@ -168,13 +168,14 @@ public class CustomerServiceClient
 		
 	}
 
+	@Test
 	public void testGet() throws Exception
 	{
 		
 	  try {
  
 		String name = "test";
-		String url = BASE_URL + "/rest/customer/"+name;
+		String url = BASE_URL + "/customer/"+name;
  
 		WebClient client = WebClient.create(url);
 		client.type("application/xml").accept("application/xml");		
