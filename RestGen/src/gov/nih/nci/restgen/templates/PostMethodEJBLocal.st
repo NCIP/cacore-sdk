@@ -32,6 +32,7 @@
 				 $endif$
 	            	   
 	        }  
+	        $ResourceException; separator="\n"$
 	        catch(javax.ejb.CreateException e) {
 	        	e.printStackTrace();
 				ResponseBuilder builder = Response.status(Status.BAD_REQUEST);

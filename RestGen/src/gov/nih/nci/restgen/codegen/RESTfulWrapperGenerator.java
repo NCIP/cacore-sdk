@@ -319,7 +319,7 @@ public class RESTfulWrapperGenerator extends Generator {
 		if(!dirSystem.exists())
 			dirSystem.mkdirs();
 		String srcPath = context.getMapping().getOptions().getRootPath()
-						+ File.separator +"bin"
+						//+ File.separator +"bin"
 						+ File.separator +"gov"
 						+ File.separator +"nih"
 						+ File.separator +"nci"

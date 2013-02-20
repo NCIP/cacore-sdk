@@ -155,7 +155,7 @@ public class JarHelper {
    * Recursively jars up the given path under the given directory.
    */
   private void jarDir(File dirOrFile2jar, JarOutputStream jos, String path) throws IOException {
-    if (mVerbose)
+    //if (mVerbose)
     {
       //System.out.println("checking " + dirOrFile2jar);
     }
@@ -175,7 +175,7 @@ public class JarHelper {
       }
     } else {
       if (dirOrFile2jar.getCanonicalPath().equals(mDestJarName)) {
-        if (mVerbose)
+        //if (mVerbose)
         {
           //System.out.println("skipping " + dirOrFile2jar.getPath());
         }

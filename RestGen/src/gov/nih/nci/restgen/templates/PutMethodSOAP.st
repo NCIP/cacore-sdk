@@ -24,6 +24,7 @@
 			 $endif$
 				
 		}
+		$ResourceException; separator="\n"$
 		catch(WebApplicationException e)
 		{
 			e.printStackTrace();

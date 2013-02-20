@@ -98,15 +98,10 @@ public class RESTfulResourceGenerator extends Generator {
 		Mapping mapping = context.getMapping();
 		List<Resource> resources = mapping.getResources();
 		StringTemplateGroup group = new StringTemplateGroup("restful");
-		StringTemplate getTemplate = group
-				.getInstanceOf("gov/nih/nci/restgen/templates/GetMethodSOAP");
-		StringTemplate postTemplate = group
-				.getInstanceOf("gov/nih/nci/restgen/templates/PostMethodSOAP");
-		StringTemplate deleteTemplate = group
-				.getInstanceOf("gov/nih/nci/restgen/templates/DeleteMethodSOAP");
-		StringTemplate putTemplate = group
-				.getInstanceOf("gov/nih/nci/restgen/templates/PutMethodSOAP");
-
+		StringTemplate putTemplate = null;
+		StringTemplate postTemplate = null;
+		StringTemplate getTemplate = null;
+		StringTemplate deleteTemplate = null;
 		
 		WSDLParser parser = new WSDLParser();
 
@@ -124,6 +119,14 @@ public class RESTfulResourceGenerator extends Generator {
 			List<String> deleteMethodStr = new ArrayList<String>();
 			int counter = 1;
 			for (Method method : methods) {
+				getTemplate = group
+						.getInstanceOf("gov/nih/nci/restgen/templates/GetMethodSOAP");
+				postTemplate = group
+						.getInstanceOf("gov/nih/nci/restgen/templates/PostMethodSOAP");
+				deleteTemplate = group
+						.getInstanceOf("gov/nih/nci/restgen/templates/DeleteMethodSOAP");
+				putTemplate = group
+						.getInstanceOf("gov/nih/nci/restgen/templates/PutMethodSOAP");
 				String methodName = resource.getName() + counter;
 				if (method.getName().equals(Method.GET)) {
 					String getString = generateMethod(resourceName, method,
@@ -513,13 +516,7 @@ public class RESTfulResourceGenerator extends Generator {
 			throw new GeneratorException(
 					"Unable to find EJB from ejb-jar.xml for " + impl.getName());
 
-		template.setAttribute("PathParamPath",
-				getOperationPath(impl, method.getName()));
-		template.setAttribute("PathParam", getOperationPathParams(method, impl));
-		template.setAttribute("HomeInterface", ejbHomeName);
-		template.setAttribute("RemoteInterface", ejbRemoteName);
 		String returnType = getOperationReturnType(impl);
-		template.setAttribute("ReturnType", returnType);
 		if(!returnType.equals("void"))
 		{
 			template.setAttribute("ReturnTypeNotVoid", true);
@@ -536,6 +533,12 @@ public class RESTfulResourceGenerator extends Generator {
 			
 		}
 
+		template.setAttribute("ReturnType", returnType);
+		template.setAttribute("PathParamPath",
+				getOperationPath(impl, method.getName()));
+		template.setAttribute("PathParam", getOperationPathParams(method, impl));
+		template.setAttribute("HomeInterface", ejbHomeName);
+		template.setAttribute("RemoteInterface", ejbRemoteName);
 		template.setAttribute("OperationName", impl.getOperation().getName());
 		String operationParams = getOperationParams(impl);
 		//if (operationParams != null)
@@ -735,17 +738,11 @@ public class RESTfulResourceGenerator extends Generator {
 					}
 
 					String pathParam = constructPathParam(paramTypeNames,
-							paramTypes);
+							paramTypes, method.getName());
 					String pathParamPath = constructPathParamPath(impl,
 							paramTypeNames, paramTypes, method.getName());
 					String opParams = constructOperationParams(paramTypeNames);
 
-					template.setAttribute("OperationParameters", opParams);
-					template.setAttribute("PathParamPath", pathParamPath);
-					template.setAttribute("PathParam", pathParam);
-
-					template.setAttribute("ParamNames", buffer.toString());
-					template.setAttribute("ReturnType", returnType);
 					if(!returnType.equals("void"))
 					{
 						template.setAttribute("ReturnTypeNotVoid", true);
@@ -760,6 +757,11 @@ public class RESTfulResourceGenerator extends Generator {
 						template.setAttribute("PutReturnType", "Response");
 						template.setAttribute("DeleteReturnType", "Response");
 					}
+					template.setAttribute("ReturnType", returnType);
+					template.setAttribute("OperationParameters", opParams);
+					template.setAttribute("PathParamPath", pathParamPath);
+					template.setAttribute("PathParam", pathParam);
+					template.setAttribute("ParamNames", buffer.toString());
 				}
 			}
 		}
@@ -776,18 +778,23 @@ public class RESTfulResourceGenerator extends Generator {
 		return template.toString();
 	}
 
-	private String constructPathParam(String[] paramNames, String[] paramTypes)
+	private String constructPathParam(String[] paramNames, String[] paramTypes, String methodName)
 			throws GeneratorException {
-		if ((paramNames.length != paramTypes.length) || paramNames.length == 0)
+		if ((paramNames.length != paramTypes.length))
 			throw new GeneratorException("Failed to parse path paramters.");
 		StringBuffer buffer = new StringBuffer();
+		boolean found = false;
 		for (int i = 0; i < paramNames.length; i++) {
 			buffer.append("@PathParam(\"" + paramNames[i] + "\") "
 					+ paramTypes[i] + " " + paramNames[i]);
+			found = true;
 			if (i < paramNames.length - 1)
 				buffer.append(", ");
 		}
-		return buffer.toString();
+		if(found && methodName.equals(Method.GET))
+			return buffer.toString()+",";
+		else
+			return buffer.toString();
 	}
 
 	private String constructPathParamPath(Implementation impl, String[] paramNames,
@@ -802,7 +809,7 @@ public class RESTfulResourceGenerator extends Generator {
 		if(impl.getPath() != null && impl.getPath().trim().length() > 0)
 			buffer.append("/"+impl.getPath());
 		
-		if ((paramNames.length != paramTypes.length) || paramNames.length == 0)
+		if ((paramNames.length != paramTypes.length))
 			throw new GeneratorException("Failed to parse path paramters.");
 		
 		for (int i = 0; i < paramNames.length; i++) {
@@ -814,7 +821,7 @@ public class RESTfulResourceGenerator extends Generator {
 	private String constructOperationParams(String[] paramNames)
 			throws GeneratorException {
 		if (paramNames == null || paramNames.length == 0)
-			throw new GeneratorException("Failed to parse path paramters.");
+			return "";
 		StringBuffer buffer = new StringBuffer();
 		for (int i = 0; i < paramNames.length; i++) {
 			buffer.append(paramNames[i]);
