@@ -179,10 +179,12 @@ public class MappingMiddlePanel extends JPanel
     				
     				if(tgt!=null && tgt.getComponentId().equals(tgtNodeTemp.getOperationName()))
     				{
-    					
-    					getGraph().getModel().valueForCellChanged(linkEdge,link.getPath());
-    					getGraph().getSelectionModel().clearSelection();
-    					break;
+    					if(link.getPath()!=null && !link.getPath().equals(""))
+    					{
+    						getGraph().getModel().valueForCellChanged(linkEdge,link.getPath());
+    						getGraph().getSelectionModel().clearSelection();
+    						break;
+    					}
     				}
     				
     			}

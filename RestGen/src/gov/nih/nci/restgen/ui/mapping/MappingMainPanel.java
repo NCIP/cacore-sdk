@@ -1139,7 +1139,7 @@ public class MappingMainPanel extends JPanel implements ActionListener
 			if (imp != null) {
 				if(targetFileType.equals("EJB"))
 				{
-					ejbType = imp.getType();
+					ejbType = imp.getClientType();
 					if (ejbType != null) {
 					setEjbType(ejbType);
 					}
