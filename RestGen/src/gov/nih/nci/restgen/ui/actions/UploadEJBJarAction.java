@@ -427,8 +427,16 @@ public class UploadEJBJarAction extends AbstractContextAction
 							if(args!=null && args.length>0){
 								for (int i=0;i<args.length;i++)
 								{
-									argumentTypes.add(args[i].toString());
-									argumentTypesCommaSeparated = argumentTypesCommaSeparated +args[i].toString();
+									String argType = "";
+									if(args[i].toString().contains("class")){
+										argType = args[i].toString().replace("class", "").trim();
+									}
+									else
+									{
+										argType = args[i].toString();
+									}
+									argumentTypes.add(argType);
+									argumentTypesCommaSeparated = argumentTypesCommaSeparated +argType;
 									if(args.length>1)
 									{
 										if(i < args.length-1)
@@ -460,7 +468,14 @@ public class UploadEJBJarAction extends AbstractContextAction
 								element.setEJBName((String)EJBNameList.get(j));
 							}
 							element.setInputType(argumentTypes);
-							element.setOutputType(returnType.toString());
+							if(returnType.toString().contains("class"))
+							{
+								element.setOutputType(returnType.toString().replace("class", "").trim());
+							}
+							else
+							{
+								element.setOutputType(returnType.toString());
+							}
 							if(EJBBeanList!=null)
 							{
 								element.setClassPath((String)EJBBeanList.get(j));
