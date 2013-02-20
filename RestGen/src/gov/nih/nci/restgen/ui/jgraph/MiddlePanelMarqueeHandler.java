@@ -104,7 +104,7 @@ public class MiddlePanelMarqueeHandler extends BasicMarqueeHandler
 		JGraph graph =controller.getMiddlePanel().getGraph();
 		if (SwingUtilities.isLeftMouseButton(e))
 		{
-			////System.out.println("mouse Left Pressed().");
+			//System.out.println("mouse Left Pressed().");
 			GraphSelectionModel gModel = graph.getSelectionModel();
 			gModel.clearSelection();
 			/*if(controller.getMappingPanel().getSourceTree()!=null)
@@ -137,7 +137,7 @@ public class MiddlePanelMarqueeHandler extends BasicMarqueeHandler
 	// Find Port under Mouse and Repaint Connector
 	public void mouseDragged(MouseEvent e)
 	{
-		//		//System.out.println("mouseDragged().:(x="+e.getX()+",y="+e.getY()+")" );
+		//		System.out.println("mouseDragged().:(x="+e.getX()+",y="+e.getY()+")" );
 		// If remembered Start Point is Valid
 		if (startPoint != null)
 		{
@@ -204,7 +204,7 @@ public class MiddlePanelMarqueeHandler extends BasicMarqueeHandler
 	// Connect the First Port and the Current Port in the Graph or Repaint
 	public void mouseReleased(MouseEvent e)
 	{
-		//		//System.out.println("mouseReleased(). :(x="+e.getX()+",y="+e.getY()+")" );
+		//		System.out.println("mouseReleased(). :(x="+e.getX()+",y="+e.getY()+")" );
 		// If Valid Event, Current and First Port
 		JGraph graph =controller.getMiddlePanel().getGraph();
 		graph.repaint();
@@ -218,7 +218,7 @@ public class MiddlePanelMarqueeHandler extends BasicMarqueeHandler
 	// Show Special Cursor if Over Port
 	public void mouseMoved(MouseEvent e)
 	{
-		//	//System.out.println("mouseMoved().:(x="+e.getX()+",y="+e.getY()+")" );
+		//	System.out.println("mouseMoved().:(x="+e.getX()+",y="+e.getY()+")" );
 		// Check Mode and Find Port
 		JGraph graph =controller.getMiddlePanel().getGraph();
 		if (e != null && getSourcePortAt(e.getPoint()) != null
@@ -329,7 +329,7 @@ public class MiddlePanelMarqueeHandler extends BasicMarqueeHandler
 			}
 			/*else if (portCell.getParent() instanceof FunctionBoxGraphCell)
 			{
-//				//System.out.println("port " + localPort + "'s parent is FunctionBoxCell. Will return true.");
+//				System.out.println("port " + localPort + "'s parent is FunctionBoxCell. Will return true.");
 				return true;
 			}*/
 			else

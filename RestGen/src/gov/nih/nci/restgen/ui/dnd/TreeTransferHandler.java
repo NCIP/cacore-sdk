@@ -107,6 +107,7 @@ public class TreeTransferHandler extends TreeDragTransferHandler {
        }
        catch(Exception ex)
        {
+    	   ex.printStackTrace();
     	   //System.out.println("Exception"+ex.toString());
        }
        

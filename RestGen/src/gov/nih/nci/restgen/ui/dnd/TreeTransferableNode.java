@@ -38,7 +38,7 @@ public class TreeTransferableNode implements Transferable, Serializable {
 			 throw new UnsupportedFlavorException(flavor);
  
 //	    else {
-//	    //System.out.println("returning latin-1 charset");    
+//	    System.out.println("returning latin-1 charset");    
 //	    return new ByteArrayInputStream(this.string.getBytes("iso8859-1"));
 //	      }
 //	    } else if (StringTransferable.localStringFlavor.equals(flavor)) {

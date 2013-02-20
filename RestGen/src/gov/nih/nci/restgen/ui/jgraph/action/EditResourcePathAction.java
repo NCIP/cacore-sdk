@@ -187,6 +187,7 @@ public class EditResourcePathAction extends AbstractContextAction
 		       }
 		       catch(Exception ex)
 		       {
+		    	   ex.printStackTrace();
 		    	   //System.out.println(ex.toString());
 		       }
 		}

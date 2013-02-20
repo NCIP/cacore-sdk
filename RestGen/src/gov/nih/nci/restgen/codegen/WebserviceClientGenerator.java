@@ -34,12 +34,12 @@ public class WebserviceClientGenerator extends Generator {
 			Definitions defs = parser.parse(wsdlLocation);
 			String namespace = defs.getTargetNamespace();
 
-			for (PortType pt : defs.getPortTypes()) {
-				//System.out.println(pt.getName());
+			/*for (PortType pt : defs.getPortTypes()) {
+				System.out.println(pt.getName());
 				for (Operation op : pt.getOperations()) {
-					//System.out.println(" -" + op.getName());
+					System.out.println(" -" + op.getName());
 				}
-			}
+			}*/
 
 			if (outputPath == null || outputPath.trim().length() == 0)
 				throw new GeneratorException(

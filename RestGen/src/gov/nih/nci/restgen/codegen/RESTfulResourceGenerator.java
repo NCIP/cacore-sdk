@@ -229,7 +229,7 @@ public class RESTfulResourceGenerator extends Generator {
 					    	}
 					    }
 					    
-					    System.out.println(entry.getName());   
+					    //System.out.println(entry.getName());   
 					}
 					if(generate)
 					{

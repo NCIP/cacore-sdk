@@ -371,7 +371,7 @@ public class MappingMainPanel extends JPanel implements ActionListener
 		DefaultSettings.setDefaultFeatureForJSplitPane(leftRightSplitPane);
         int locDiv = (int) (mainFrame.getAssociatedUIContainer().getWidth() * 0.85);
         leftRightSplitPane.setDividerLocation(locDiv); //.setDividerLocation(0.85);
-        ////System.out.println("First locDiv : " + locDiv);
+        //System.out.println("First locDiv : " + locDiv);
         leftRightSplitPane.setLeftComponent(getTopLevelLeftPanel());
         //leftRightSplitPane.setRightComponent(getTopLevelRightPanel());
         // PV commented below 12-11

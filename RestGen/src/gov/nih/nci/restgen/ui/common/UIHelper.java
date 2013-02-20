@@ -350,7 +350,7 @@ public final class UIHelper
                 (dtObjectXmlPath.trim().equals("currentDate"))) {}
             else
             {
-                System.out.println("UIHelper.constructMappableNodeObjectXmlPath():Could not find the data obj in the given tree rooted by '" + treeRoot + "'. path:"+ dtObjectXmlPath);
+                //System.out.println("UIHelper.constructMappableNodeObjectXmlPath():Could not find the data obj in the given tree rooted by '" + treeRoot + "'. path:"+ dtObjectXmlPath);
             }
 
             //Log.logError(internalInstance, (new StringBuilder()).append("Could not find the datatypeBaseObject '").append(dtObjectXmlPath).append("' in the given tree rooted by '").append(treeRoot).append("'.").toString());
@@ -363,10 +363,10 @@ public final class UIHelper
 
 	public static DefaultMutableTreeNode findTreeNodeWithXmlPath(DefaultMutableTreeNode treeNode, String nodeXmlPath)
 	{
-		System.out.println("nodeXmlPath.....:"+nodeXmlPath);
+		//System.out.println("nodeXmlPath.....:"+nodeXmlPath);
 		if (nodeXmlPath==null)
 		{
-			System.out.println("UIHelper.findTreeNodeWithXmlPath()..invalid node to search:"+nodeXmlPath);
+			//System.out.println("UIHelper.findTreeNodeWithXmlPath()..invalid node to search:"+nodeXmlPath);
 			return null;
 		}
 		Scanner scanner = new Scanner(nodeXmlPath);
@@ -375,7 +375,7 @@ public final class UIHelper
 		DefaultMutableTreeNode e = treeNode;
 		while(scanner.hasNext()){
 			String tmp = scanner.next();
-			System.out.println("Target tokens...."+tmp);
+			//System.out.println("Target tokens...."+tmp);
 			if(!foundRoot){
 				if(e.toString().equals(tmp)){
 					foundRoot = true;

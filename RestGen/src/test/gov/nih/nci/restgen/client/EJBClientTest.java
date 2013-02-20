@@ -73,7 +73,7 @@ public class EJBClientTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}  
-        //System.out.println("got : " + theMessage); 
+        System.out.println("got : " + theMessage); 
 		
 	}
 }

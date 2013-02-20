@@ -291,7 +291,7 @@ public class DefaultSettings
                     JOptionPane.showMessageDialog(parentComponent, "No file is selected. Please select a file.", "No file selected", JOptionPane.ERROR_MESSAGE);
                     continue;
                 }
-                ////System.out.println("CCCCC FF 1 : " + file.getName() + ", path=" + file.getAbsolutePath());
+                //System.out.println("CCCCC FF 1 : " + file.getName() + ", path=" + file.getAbsolutePath());
                 String fileName = file.getName();
                 String path = file.getAbsolutePath();
                 boolean isFullPath = false;
@@ -313,7 +313,7 @@ public class DefaultSettings
                         {
                             fileName = path.substring(idx);
                             isFullPath = true;
-                            ////System.out.println("CCCCC FF 1 : " + fileName + ", path=" + file.getAbsolutePath());
+                            //System.out.println("CCCCC FF 1 : " + fileName + ", path=" + file.getAbsolutePath());
                         }
                     }
                 }

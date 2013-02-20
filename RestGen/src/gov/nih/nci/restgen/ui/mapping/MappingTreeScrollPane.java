@@ -75,7 +75,7 @@ public class MappingTreeScrollPane extends JScrollPane
 		try {
 			super.paintComponent(g);
 			//paint the tree
-			////System.out.println("enter MappingTreeScrollPane.paintComponent()");
+			//System.out.println("enter MappingTreeScrollPane.paintComponent()");
 			Component viewComp=this.getViewport().getView();
 			if (viewComp!=null&&viewComp instanceof JTree)
 			{
@@ -85,7 +85,7 @@ public class MappingTreeScrollPane extends JScrollPane
 				recursiveDrawLeaf(g, mappingTree, treeRoot);
 				g.setColor(dftColor);
 			}
-			////System.out.println("leave MappingTreeScrollPane.paintComponent()."+viewComp.getClass()+":"+viewComp.getBounds());
+			//System.out.println("leave MappingTreeScrollPane.paintComponent()."+viewComp.getClass()+":"+viewComp.getBounds());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

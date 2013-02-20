@@ -97,7 +97,9 @@ public class JarHelper {
       byte data[] = new byte[BUFFER_SIZE];
       File destFile = new File(destDir, entry.getName());
       if (mVerbose)
-        System.out.println("unjarring " + destFile + " from " + entry.getName());
+      {
+        //System.out.println("unjarring " + destFile + " from " + entry.getName());
+      }
       FileOutputStream fos = new FileOutputStream(destFile);
       dest = new BufferedOutputStream(fos, BUFFER_SIZE);
       while ((count = jis.read(data, 0, BUFFER_SIZE)) != -1) {
@@ -154,7 +156,9 @@ public class JarHelper {
    */
   private void jarDir(File dirOrFile2jar, JarOutputStream jos, String path) throws IOException {
     if (mVerbose)
+    {
       //System.out.println("checking " + dirOrFile2jar);
+    }
     if (dirOrFile2jar.isDirectory()) {
       String[] dirList = dirOrFile2jar.list();
       String subPath = (path == null) ? "" : (path + dirOrFile2jar.getName() + SEP);
@@ -172,12 +176,16 @@ public class JarHelper {
     } else {
       if (dirOrFile2jar.getCanonicalPath().equals(mDestJarName)) {
         if (mVerbose)
+        {
           //System.out.println("skipping " + dirOrFile2jar.getPath());
+        }
         return;
       }
 
       if (mVerbose)
-        System.out.println("adding " + dirOrFile2jar.getPath());
+      {
+        //System.out.println("adding " + dirOrFile2jar.getPath());
+       }
       FileInputStream fis = new FileInputStream(dirOrFile2jar);
       try {
         JarEntry entry = new JarEntry(path + dirOrFile2jar.getName());
@@ -186,7 +194,9 @@ public class JarHelper {
         while ((mByteCount = fis.read(mBuffer)) != -1) {
           jos.write(mBuffer, 0, mByteCount);
           if (mVerbose)
-            System.out.println("wrote " + mByteCount + " bytes");
+          {
+            //System.out.println("wrote " + mByteCount + " bytes");
+          }
         }
         jos.flush();
         jos.closeEntry();

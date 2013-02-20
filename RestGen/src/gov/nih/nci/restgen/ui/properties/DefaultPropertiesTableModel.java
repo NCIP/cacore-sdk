@@ -177,28 +177,28 @@ public class DefaultPropertiesTableModel extends AbstractTableModel
 			case 0 : //assume the name
 				result = propDescriptor.getName();
 //				String name = propertiesResult[rowIndex].getName();
-//				//System.out.println("getName() returns: '" + name + "'");
+//				System.out.println("getName() returns: '" + name + "'");
 //				name = propertiesResult[rowIndex].getDisplayName();
-//				//System.out.println("getDisplayName() returns: '" + name + "'");
+//				System.out.println("getDisplayName() returns: '" + name + "'");
 //				name = propertiesResult[rowIndex].getShortDescription();
-//				//System.out.println("getShortDescription() returns: '" + name + "'");
+//				System.out.println("getShortDescription() returns: '" + name + "'");
 				break;
 			case 1 : //assume the value
 				{
 					Method getterMethod = propDescriptor.getReadMethod();
 					if (getterMethod == null)
 					{
-//						//System.out.println("getterMethod is null");
+//						System.out.println("getterMethod is null");
 						return emptyContent;
 					}
 					else
 					{
-//						//System.out.println("getterMethod is '" + getterMethod + "'.");
+//						System.out.println("getterMethod is '" + getterMethod + "'.");
 					}
 					Object targetItem = propertiesResult.getTargetObject(propDescriptor);
 					if(targetItem==null)
 					{
-//						//System.out.println("No item is selected.");
+//						System.out.println("No item is selected.");
 						return result;
 					}
 					try
@@ -213,12 +213,12 @@ public class DefaultPropertiesTableModel extends AbstractTableModel
 					}
 					if (result == null)
 					{
-	//                //System.out.println("Value is: '"+obj+"'");
+	//                System.out.println("Value is: '"+obj+"'");
 						result = emptyContent;
 					}
 					else
 					{
-	//                //System.out.println("Value is: '"+obj+"' of type"+obj.getClass().getName());
+	//                System.out.println("Value is: '"+obj+"' of type"+obj.getClass().getName());
 					}
 					break;
 				}//end of case 1:

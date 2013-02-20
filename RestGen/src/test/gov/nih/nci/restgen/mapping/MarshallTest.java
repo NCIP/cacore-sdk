@@ -144,13 +144,13 @@ public class MarshallTest{
 		  
 		  JAXBMarshaller marshaller = new JAXBMarshaller(true, "gov.nih.nci.restgen.mapping.model", "gme://caCORE.caCORE.RESTFul/1.0/");
 		  String xml = marshaller.toXML(mapping);
-		  //System.out.println(xml);
+		  System.out.println(xml);
 		  assertNotNull(xml);
 
 		  JAXBUnmarshaller unmarshaller = new JAXBUnmarshaller(true, "gov.nih.nci.restgen.mapping.model");
 		  StringReader reader = new StringReader(xml);
 		  Mapping uMapping = (Mapping)unmarshaller.fromXML(reader);
-		  //System.out.println("Unmarshalled: "+uMapping);
+		  System.out.println("Unmarshalled: "+uMapping);
 		  assertNotNull(uMapping);
 		  assertEquals(mapping, uMapping);
 	  }

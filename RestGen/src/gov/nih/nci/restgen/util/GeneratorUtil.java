@@ -340,7 +340,9 @@ public class GeneratorUtil {
 		for (int i = 0; i < listFiles.length; i++) {
 			if (listFiles[i] == null || !listFiles[i].exists()
 					|| listFiles[i].isDirectory())
+			{
 				System.out.println();
+			}
 			JarEntry addFiles = new JarEntry(listFiles[i].getName());
 			addFiles.setTime(listFiles[i].lastModified());
 			out.putNextEntry(addFiles);

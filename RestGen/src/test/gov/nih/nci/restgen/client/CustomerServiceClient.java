@@ -103,7 +103,7 @@ public class CustomerServiceClient
 		
  		FileEntity input = new FileEntity(myFile);
  		input.setContentType("application/xml");
- 		//System.out.println("input: "+myFile);
+ 		System.out.println("input: "+myFile);
  		postRequest.setEntity(input);
   
  		HttpResponse response = httpClient.execute(postRequest);
@@ -112,9 +112,9 @@ public class CustomerServiceClient
                          new InputStreamReader((response.getEntity().getContent())));
   
  		String output;
- 		//System.out.println("Output from Server .... \n");
+ 		System.out.println("Output from Server .... \n");
  		while ((output = br.readLine()) != null) {
- 			//System.out.println(output);
+ 			System.out.println(output);
  		}
   
  		httpClient.getConnectionManager().shutdown();
@@ -154,9 +154,9 @@ public class CustomerServiceClient
 				 new InputStreamReader((response.getEntity().getContent())));
 
 			String output;
-			//System.out.println("Output from Server .... \n");
+			System.out.println("Output from Server .... \n");
 			while ((output = br.readLine()) != null) {
-				//System.out.println(output);
+				System.out.println(output);
 			}
   		}
   		
@@ -194,17 +194,17 @@ public class CustomerServiceClient
  
  		File myFile = new File("CustomerXML.xml");	
  			
-		//System.out.println("writing data to file "+myFile.getAbsolutePath());
+		System.out.println("writing data to file "+myFile.getAbsolutePath());
 		FileWriter myWriter = new FileWriter(myFile);
 
 		BufferedReader br = new BufferedReader(
                          new InputStreamReader(((InputStream)response.getEntity())));
  
 		String output;
-		//System.out.println("Output from Server .... \n");
+		System.out.println("Output from Server .... \n");
 		while ((output = br.readLine()) != null) {
 			myWriter.write(output);
-			//System.out.println(output);
+			System.out.println(output);
 		}
  
 		myWriter.flush();

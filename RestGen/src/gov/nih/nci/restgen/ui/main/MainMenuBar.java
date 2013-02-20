@@ -214,7 +214,8 @@ public class MainMenuBar extends JMenuBar
                public void menuSelected(MenuEvent e)
                {
                    URL u = FileUtil.getCodeBase();
-                       if (u != null) {} ////System.out.println("C - Already exist - Applet documentBase=" + u.toString());
+                       if (u != null) {} 
+                       //System.out.println("C - Already exist - Applet documentBase=" + u.toString());
                        
                  }
            }
@@ -366,7 +367,7 @@ public class MainMenuBar extends JMenuBar
     {
         if (mainFrame.getMainFrame() != null)
         {
-            ////System.out.println("Run on the MainFrame");
+            //System.out.println("Run on the MainFrame");
             return true;
         }
        
