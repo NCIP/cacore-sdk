@@ -206,8 +206,7 @@ public class GeneratorUtil {
 			// if directory not exists, create it
 			if (!destFolder.exists()) {
 				destFolder.mkdir();
-				System.out.println("Directory copied from " + srcFolder
-						+ "  to " + destFolder);
+				//System.out.println("Directory copied from " + srcFolder + "  to " + destFolder);
 			}
 			FileUtils.copyDirectoryToDirectory(srcFolder, destFolder);
 			if(excludes != null && excludes.size() > 0)
@@ -241,8 +240,7 @@ public class GeneratorUtil {
 			// if directory not exists, create it
 			if (!destFolder.exists()) {
 				destFolder.mkdir();
-				System.out.println("Directory copied from " + srcFolder
-						+ "  to " + destFolder);
+				//System.out.println("Directory copied from " + srcFolder + "  to " + destFolder);
 			}
 
 			String files[] = srcFolder.list();
@@ -274,7 +272,7 @@ public class GeneratorUtil {
 
 		in.close();
 		out.close();
-		System.out.println("File copied from " + src + " to " + dest);
+		//System.out.println("File copied from " + src + " to " + dest);
 
 	}
 	

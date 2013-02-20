@@ -154,7 +154,7 @@ public class JarHelper {
    */
   private void jarDir(File dirOrFile2jar, JarOutputStream jos, String path) throws IOException {
     if (mVerbose)
-      System.out.println("checking " + dirOrFile2jar);
+      //System.out.println("checking " + dirOrFile2jar);
     if (dirOrFile2jar.isDirectory()) {
       String[] dirList = dirOrFile2jar.list();
       String subPath = (path == null) ? "" : (path + dirOrFile2jar.getName() + SEP);
@@ -172,7 +172,7 @@ public class JarHelper {
     } else {
       if (dirOrFile2jar.getCanonicalPath().equals(mDestJarName)) {
         if (mVerbose)
-          System.out.println("skipping " + dirOrFile2jar.getPath());
+          //System.out.println("skipping " + dirOrFile2jar.getPath());
         return;
       }
 

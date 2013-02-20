@@ -35,7 +35,7 @@ public class TreeSelectionHandler implements TreeSelectionListener {
 		else
 		{
 			//clear graph selection
-			System.out.println("Before clear....");
+			//System.out.println("Before clear....");
 			graphController.getMiddlePanel().getGraph().clearSelection();//.getMiddlePanel().getGraph().clearSelection();
 			DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode) newPath.getLastPathComponent();
 			//clear selection of "the other tree"

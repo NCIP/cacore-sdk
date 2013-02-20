@@ -46,6 +46,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -198,6 +199,8 @@ public class UploadWSDLAction extends AbstractContextAction
     			       
     			       String inputString = JOptionPane.showInputDialog(null, "Please enter the URL for WSDL file : ", 
     							"WSDL file upload", 1);
+    			       try
+    			       {
     					if(inputString!=null)
     					{
     						mainFrame.getMainFrame().getMappingMainPanel().setWsdlURL(inputString);
@@ -245,6 +248,15 @@ public class UploadWSDLAction extends AbstractContextAction
     				{
     						return false;
     				}
+    			  }
+    			    catch(MalformedURLException ex)
+    			    {
+    			    	   throw new Exception("WSDL URL is invalid!!!");
+    			    }
+    			    catch(Exception ex)
+       			    {
+       			    	   throw ex;
+       			    }
     	            mainFrame.getMainFrame().getMappingMainPanel().setMappingTargetFile(file);
     	            mainFrame.getMainFrame().getMappingMainPanel().setTargetFileType("WSDL");
     	            /// clear the panels here
@@ -324,9 +336,9 @@ public void createTargetTree(File file) throws Exception
     for (PortType pt : defs.getPortTypes())
     {       
     	
-    	System.out.println(pt.getName());
+    	//System.out.println(pt.getName());
     	for (com.predic8.wsdl.Operation op : pt.getOperations()) {
-    			System.out.println(" -" + op.getName());
+    			//System.out.println(" -" + op.getName());
     			String inputType = "";
     			String outputType = "";
     			InputTypes = new ArrayList<String>();
@@ -337,11 +349,11 @@ public void createTargetTree(File file) throws Exception
     			opObject.setStyle(style);
     			Input input = op.getInput();
     			if (input != null && input.getMessage() != null) {
-    		   		System.out.println("Input Message...."+input.getMessage());
+    		   		//System.out.println("Input Message...."+input.getMessage());
                     Collection<Part> parts = CastUtils.cast(input.getMessage().getParts());
-                    System.out.println("Parts size...."+input.getMessage());
+                    //System.out.println("Parts size...."+input.getMessage());
                     for (Part part : parts) {
-                    	System.out.println("Element part...."+part.getName());
+                    	//System.out.println("Element part...."+part.getName());
                     	if (part.getElement() != null && !"".equals(part.getElement())) {
                     		
                         	if(defs.getElement(part.getElement())!=null)
@@ -373,7 +385,7 @@ public void createTargetTree(File file) throws Exception
                 }
                 Output output = op.getOutput();
                 if (output != null && output.getMessage() != null) {
-                	System.out.println("Output Message...."+output.getMessage());
+                	//System.out.println("Output Message...."+output.getMessage());
                     Collection<Part> parts = CastUtils.cast(output.getMessage().getParts());
                     for (Part part : parts) {
                         if (part.getElement() != null && !"".equals(part.getElement())) {
@@ -388,7 +400,7 @@ public void createTargetTree(File file) throws Exception
                     }
                 }
                
-                System.out.println("WSDL input type and output>>>>"+"...."+inputType+outputType);
+                //System.out.println("WSDL input type and output>>>>"+"...."+inputType+outputType);
                 OutputTypes.add(outputType);
                 opObject.setInputTypes(InputTypes);
                 opObject.setOutputTypes(OutputTypes);
@@ -412,7 +424,7 @@ public void createTargetTree(File file) throws Exception
 			{
 				throw new Exception("Request timed out WSDL end point invalid");
 			}*/
-			System.out.println("SOAP Endpoint : "  + port.getAddress().getLocation());
+			//System.out.println("SOAP Endpoint : "  + port.getAddress().getLocation());
 			
 		}
 	}
@@ -492,7 +504,7 @@ private String getSOAPOperationStyle(org.w3c.dom.Document doc, String operationN
     			for(int i=0; i<soapOperationsList.getLength() ; i++){
     				org.w3c.dom.Element el = (org.w3c.dom.Element)soapOperationsList.item(i);
     				style = el.getAttribute("style");
-    			System.out.println("style value......>>>>>"+el.getAttribute("style"));
+    			//System.out.println("style value......>>>>>"+el.getAttribute("style"));
     			}
     		}
     		break;
@@ -506,7 +518,7 @@ private String getSOAPOperationPortName(org.w3c.dom.Document doc, java.util.List
 	// TODO Auto-generated method stub
 	String Binding = "";
 	String portName = "";
-	System.out.println("inside getSOAPOperationPortName>>>>>");
+	//System.out.println("inside getSOAPOperationPortName>>>>>");
 	org.w3c.dom.NodeList listOfBindings = doc.getElementsByTagName("wsdl:binding");
 	for(int s=0; s<listOfBindings.getLength() ; s++){
     	org.w3c.dom.Node nNode = listOfBindings.item(s);
@@ -519,7 +531,7 @@ private String getSOAPOperationPortName(org.w3c.dom.Document doc, java.util.List
     			for(int i=0; i<soapOperationsList.getLength(); i++){
     			org.w3c.dom.Element el = (org.w3c.dom.Element)soapOperationsList.item(i);
     			portName = getWSDLOperationPortName(services, Binding);
-    			System.out.println("port name value......>>>>>"+portName);
+    			//System.out.println("port name value......>>>>>"+portName);
     			
     			}
     		}
@@ -534,14 +546,14 @@ private String getSOAPOperationPortName(org.w3c.dom.Document doc, java.util.List
 private String getWSDLOperationPortName(java.util.List<Service>  services, String binding)
 {
 	String portName = "";
-	System.out.println("BINDING>>>> : "  + binding);
+	//System.out.println("BINDING>>>> : "  + binding);
 	for (Service svc : services)
 	{
 		serviceName = svc.getName();
 		
 		for (Port port: svc.getPorts())
 		{
-			System.out.println("PORT BINDING...>>>> : "  + port.getBinding().getName());
+			//System.out.println("PORT BINDING...>>>> : "  + port.getBinding().getName());
 			if(binding.equals(port.getBinding().getName()))
 			{
 				portName = port.getName();
@@ -581,11 +593,11 @@ private void createNodes(DefaultTargetTreeNode top,ArrayList<Operation> list) {
 	    	}
 	    	if(inputString!=null && !inputString.equals(""))
 	    	{
-	    		childElement = new DefaultTargetTreeNode(op.getOutputTypes().get(0)+" "+operationName+"("+inputString+")");
+	    		childElement = new DefaultTargetTreeNode(operationName+"("+inputString+")");
 	    	}
 	    	else
 	    	{
-	    		childElement = new DefaultTargetTreeNode(op.getOutputTypes().get(0)+" "+operationName+"()");
+	    		childElement = new DefaultTargetTreeNode(operationName+"()");
 	    	}
 	    	childElement.setOperationName(operationName);
 	    	childElement.setInputType(op.getInputTypes());

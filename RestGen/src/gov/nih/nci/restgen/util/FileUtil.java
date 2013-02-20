@@ -103,18 +103,18 @@ public class FileUtil
                 {
                     String fName = f.getAbsolutePath();
                     if ((fName.endsWith(".zip"))||(fName.endsWith(".jar"))) zFiles.add(f);
-                    //System.out.println(" === Searching (dir) : " + f.getAbsolutePath() );
+                    ////System.out.println(" === Searching (dir) : " + f.getAbsolutePath() );
                     if (fName.endsWith(sp + nName))
                     {
                         try
                         {
                             URL url = f.toURI().toURL();
-                            //System.out.println("Find File : " + url);
+                            ////System.out.println("Find File : " + url);
                             return url;
                         }
                         catch(MalformedURLException me)
                         {
-                            System.out.println("MalformedURLException (" + f.getAbsolutePath() + ") : " + me.getMessage());
+                            //System.out.println("MalformedURLException (" + f.getAbsolutePath() + ") : " + me.getMessage());
                         }
                     }
                 }
@@ -143,7 +143,7 @@ public class FileUtil
         }
         catch(MalformedURLException me)
         {
-            System.out.println("MalformedURLException(dir) (" + dir.getAbsolutePath() + ") : " + me.getMessage());
+            //System.out.println("MalformedURLException(dir) (" + dir.getAbsolutePath() + ") : " + me.getMessage());
             return null;
         }
 
@@ -154,7 +154,7 @@ public class FileUtil
         }
         catch(IOException ie)
         {
-            System.out.println("This is neither a zip nor a jar file  : " + dir.getAbsolutePath());
+            //System.out.println("This is neither a zip nor a jar file  : " + dir.getAbsolutePath());
             return null;
         }
         Enumeration<JarEntry> entries = jar.entries();
@@ -162,7 +162,7 @@ public class FileUtil
         {
             JarEntry entry = entries.nextElement();
             String entryName = entry.getName();
-            //System.out.println(" === Searching (jar) : " + dir.getAbsolutePath() + " : " + entryName );
+            ////System.out.println(" === Searching (jar) : " + dir.getAbsolutePath() + " : " + entryName );
             if ((entryName.endsWith("/" + nName))||(entryName.equals(nName)))
             {
                 URL fUrl = null;
@@ -173,10 +173,10 @@ public class FileUtil
                 }
                 catch(MalformedURLException me)
                 {
-                    System.out.println("MalformedURLException(entry) (" + strURL + ") : " + me.getMessage());
+                    //System.out.println("MalformedURLException(entry) (" + strURL + ") : " + me.getMessage());
                     return null;
                 }
-                //System.out.println("Find URL (entry) (" + strURL + ") : " + fUrl.toString());
+                ////System.out.println("Find URL (entry) (" + strURL + ") : " + fUrl.toString());
                 return fUrl;
             }
         }
@@ -338,23 +338,23 @@ public class FileUtil
         if (rscName.equals("")) return null;
 
         URL rtnURL=null;
-        //System.out.println("FileUtil.retrieveResourceURL().1.resourceName:"+rscName);
+        ////System.out.println("FileUtil.retrieveResourceURL().1.resourceName:"+rscName);
         rtnURL=Thread.currentThread().getClass().getResource("/"+rscName);
-        //System.out.println("FileUtil.retrieveResourceURL().2.Thread.currentThread().getClass().getResource..standalone URL:/"+rscName+"="+rtnURL);
+        ////System.out.println("FileUtil.retrieveResourceURL().2.Thread.currentThread().getClass().getResource..standalone URL:/"+rscName+"="+rtnURL);
         if (rtnURL==null)
         {
             rtnURL=Thread.currentThread().getClass().getResource(rscName);
-            //System.out.println("FileUtil.retrieveResourceURL().3.Thread.currentThread().getClass().getResource..standalone URL:"+rscName+"="+rtnURL);
+            ////System.out.println("FileUtil.retrieveResourceURL().3.Thread.currentThread().getClass().getResource..standalone URL:"+rscName+"="+rtnURL);
         }
         //load resource for webstart deployment
         if (rtnURL==null)
         {
             rtnURL=FileUtil.class.getClassLoader().getResource(rscName);
-            //System.out.println("FileUtil.retrieveResourceURL().4.FileUtil.class.getClassLoader().getResource..webstart URL:"+rscName+"="+rtnURL);
+            ////System.out.println("FileUtil.retrieveResourceURL().4.FileUtil.class.getClassLoader().getResource..webstart URL:"+rscName+"="+rtnURL);
             if (rtnURL==null)
             {
                 rtnURL=FileUtil.class.getClassLoader().getResource("/"+rscName);
-                //System.out.println("FileUtil.retrieveResourceURL().5.FileUtil.class.getClassLoader().getResource..webstart URL:/"+rscName+"="+rtnURL);
+                ////System.out.println("FileUtil.retrieveResourceURL().5.FileUtil.class.getClassLoader().getResource..webstart URL:/"+rscName+"="+rtnURL);
             }
         }
 
@@ -371,13 +371,15 @@ public class FileUtil
                 }
                 catch(MalformedURLException me)
                 {
-                    System.out.println("FileUtil.retrieveResourceURL().6. MalformedURLException : " + me.getMessage());
+                    //System.out.println("FileUtil.retrieveResourceURL().6. MalformedURLException : " + me.getMessage());
+                	me.printStackTrace();
                 }
             }
-            //else System.out.println("FileUtil.retrieveResourceURL().7.");
+            //else //System.out.println("FileUtil.retrieveResourceURL().7.");
         }
-        //else System.out.println("FileUtil.retrieveResourceURL().8.");
-        if (rtnURL == null) System.out.println("This resource file cannot be found : " + rtnURL);
+        //else //System.out.println("FileUtil.retrieveResourceURL().8.");
+        if (rtnURL == null) 
+        	System.out.println("This resource file cannot be found : " + rtnURL);
         return rtnURL;
     }
 

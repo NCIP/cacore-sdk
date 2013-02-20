@@ -17,7 +17,7 @@ import org.jgraph.graph.DefaultGraphCell;
 import org.jgraph.graph.DefaultPort;
 import org.jgraph.graph.GraphConstants;
 
-import gov.nih.nci.restgen.core.FunctionData;
+
 import gov.nih.nci.restgen.ui.actions.DefaultAbstractJgraphAction;
 import gov.nih.nci.restgen.ui.jgraph.MiddlePanelJGraphController;
 import gov.nih.nci.restgen.ui.mapping.MappingMiddlePanel;

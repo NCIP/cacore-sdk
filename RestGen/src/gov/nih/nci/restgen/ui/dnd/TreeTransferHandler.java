@@ -52,7 +52,7 @@ public class TreeTransferHandler extends TreeDragTransferHandler {
         if (!info.isDataFlavorSupported(DataFlavor.stringFlavor)) {
             return false;
         }
-        System.out.println("Inside can import data...");
+        //System.out.println("Inside can import data...");
         JTree.DropLocation dl = (JTree.DropLocation)info.getDropLocation();
         TreePath path = dl.getPath();
         if (path == null) {
@@ -65,7 +65,7 @@ public class TreeTransferHandler extends TreeDragTransferHandler {
         //only one source is allowed for one target node
         if (dropTreeNode.isMapped())
         	return false;*/
-        System.out.println("Inside can import data before returning true...");
+        //System.out.println("Inside can import data before returning true...");
         return true;
 	}
 
@@ -76,7 +76,7 @@ public class TreeTransferHandler extends TreeDragTransferHandler {
 	@Override
 	public boolean importData(TransferSupport info) {
         Object data;
-        System.out.println("Inside import data...");
+        //System.out.println("Inside import data...");
         try {
            //data = info.getTransferable().getTransferData(DataFlavor.stringFlavor);
            data = info.getTransferable().getTransferData(TreeTransferableNode.mutableTreeNodeFlavor);
@@ -90,7 +90,7 @@ public class TreeTransferHandler extends TreeDragTransferHandler {
        try{
        if (data instanceof DefaultMutableTreeNode )
        {
-    	   System.out.println("inside import data default mutable"+data);
+    	   //System.out.println("inside import data default mutable"+data);
  	        JTree.DropLocation dl = (JTree.DropLocation)info.getDropLocation();
 	        TreePath path = dl.getPath();
 	        DefaultMutableTreeNode targetNode = (DefaultMutableTreeNode) path.getLastPathComponent();
@@ -99,19 +99,19 @@ public class TreeTransferHandler extends TreeDragTransferHandler {
 	        // PV below two lines
 	        //DefaultMutableTreeNode sourceNode = (DefaultMutableTreeNode)data;
 	        DefaultMutableTreeNode sourceNode=UIHelper.findTreeNodeWithXmlPath((DefaultMutableTreeNode)panel.getSourceTree().getModel().getRoot(), srcNodePath);
-	        System.out.println("inside import data before calling create mapping");
+	        //System.out.println("inside import data before calling create mapping");
 	        boolean ret = this.panel.getGraphController().createMapping((MappableNode)sourceNode, (MappableNode)targetNode);
-	        System.out.println("inside import data before returning");
+	        //System.out.println("inside import data before returning");
 	        return ret;
        }
        }
        catch(Exception ex)
        {
-    	   System.out.println("Exception"+ex.toString());
+    	   //System.out.println("Exception"+ex.toString());
        }
        
 	
-       System.out.println("TreeTransferHandler.importData()...not accepted Object:"+data);
+       //System.out.println("TreeTransferHandler.importData()...not accepted Object:"+data);
        return false;
 }
 }

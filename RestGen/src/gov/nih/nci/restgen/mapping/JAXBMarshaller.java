@@ -80,7 +80,7 @@ public class JAXBMarshaller implements gov.nih.nci.restgen.mapping.Marshaller {
 				m.setProperty(Marshaller.JAXB_SCHEMA_LOCATION, schemaLocation);
 			}
 			m.marshal(object, writer);
-			//System.out.println(writer.toString());
+			////System.out.println(writer.toString());
 		} catch(JAXBException e) {
 			throw new XMLUtilityException(e.getMessage(), e);
 		} catch(Exception e) {
@@ -116,7 +116,7 @@ public class JAXBMarshaller implements gov.nih.nci.restgen.mapping.Marshaller {
 			}
 			
 			m.marshal(element.getValue(), writer);
-			//System.out.println(writer.toString());
+			////System.out.println(writer.toString());
 		} catch(JAXBException e) {
 			throw new XMLUtilityException(e.getMessage(), e);
 		} catch(Exception e) {

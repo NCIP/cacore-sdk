@@ -64,7 +64,7 @@ public class SDKExampleSOAPClient {
 	        	query.setCriteria(o);
 	        	query.setStartIndex(1);
 	        	localhost.example.services.exampleservice.WSQueryImplServiceStub.QueryResponse response = stub.query(query);
-				System.out.println("Return "+response.getQueryReturn());
+				//System.out.println("Return "+response.getQueryReturn());
 	        } catch (org.apache.axis2.AxisFault
 				e) {
 				e.printStackTrace();

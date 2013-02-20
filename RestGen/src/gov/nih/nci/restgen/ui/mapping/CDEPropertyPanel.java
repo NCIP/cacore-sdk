@@ -1,7 +1,5 @@
 package gov.nih.nci.restgen.ui.mapping;
 
-import gov.nih.nci.restgen.core.AttributeMeta;
-import gov.nih.nci.restgen.core.ElementMeta;
 //import gov.nih.nci.cbiit.cmts.util.CdeBrowserLauncher;
 
 import java.awt.*;
@@ -15,7 +13,7 @@ import javax.swing.border.TitledBorder;
 
 public class CDEPropertyPanel extends JPanel implements ActionListener {
 
-    private ElementMeta meta;
+
     private JLabel label1;
     private JLabel label2;
     private JLabel metaPublicId;
@@ -75,43 +73,6 @@ public class CDEPropertyPanel extends JPanel implements ActionListener {
         setBorder(titledBorder);
      }
 
-    public ElementMeta getMeta() {
-        return meta;
-    }
-
-    public void setMeta(ElementMeta meta) {
-        if (meta==null)
-            return;
-
-        if (!meta.isCDE_Element())
-        {
-            hasOwnData = false;
-            cdeElementLink.setVisible(false);
-            label1.setVisible(false);
-            label2.setVisible(false);
-            return;
-        }
-
-        String pID = null;
-        String ver = null;
-        for (AttributeMeta attrMeta:meta.getAttrData())
-        {
-            if (attrMeta.getName().equals("PUBLICID")) pID = attrMeta.getFixedValue();
-            else if (attrMeta.getName().equals("VERSION")) ver = attrMeta.getFixedValue();
-        }
-
-        hasOwnData = true;
-        cdeElementLink.setVisible(true);
-        label1.setVisible(true);
-        label2.setVisible(true);
-
-        metaPublicId.setText(pID);
-        cdeElementLink.setEnabled(true);
-        metaVersion.setText(ver);
-
-        //this.repaint();
-    }
-
     public boolean doesHaveOwnData()
     {
         return hasOwnData;
@@ -128,9 +89,7 @@ public class CDEPropertyPanel extends JPanel implements ActionListener {
         hasOwnData = false;
         if (selectedItem==null)
             return;
-
-        if(selectedItem instanceof ElementMeta)
-            setMeta((ElementMeta)selectedItem);
+     
     }
     @Override
     public void actionPerformed(ActionEvent arg0) {

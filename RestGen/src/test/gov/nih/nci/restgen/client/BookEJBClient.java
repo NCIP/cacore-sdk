@@ -39,12 +39,12 @@ public class BookEJBClient {
       while (choice != 2) {
         String bname;
         String bid;
-        System.out.println("Enter choice 1. Add 2. Over");
+        //System.out.println("Enter choice 1. Add 2. Over");
         choice = sc.nextInt();
         if (choice == 1) {
-          System.out.println("Enter book name");
+          //System.out.println("Enter book name");
           bname = sc.next();
-          System.out.println("Enter book id");
+          //System.out.println("Enter book id");
           bid = sc.next();
           
           Book book = new Book();
@@ -58,13 +58,13 @@ public class BookEJBClient {
 
       List v = bean.getBooks();
 
-      System.out.println("Size of vector \t" + v.size());
+      //System.out.println("Size of vector \t" + v.size());
       for (int i = 0; i < v.size(); ++i) {
-        System.out.println((Book) v.get(i));
+        //System.out.println((Book) v.get(i));
       }
 
     } catch (Exception e) {
-      System.out.println(e);
+      //System.out.println(e);
     }
   }
 }

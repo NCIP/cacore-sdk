@@ -150,7 +150,7 @@ public class OpenPOJOJarAction extends AbstractContextAction
             			if (entry.getName().endsWith(".class")) {
             				InputStream input = jar.getInputStream(entry);
             				StringTokenizer st = new StringTokenizer(entry.getName(),"/");
-            				System.out.println("---- Split by / ------");
+            				//System.out.println("---- Split by / ------");
             				if(st.countTokens()>0)
             				{
             				while (st.hasMoreElements()) {
@@ -277,7 +277,7 @@ public class OpenPOJOJarAction extends AbstractContextAction
 	    	if(resourceName.contains(".class")){
 				resourceName = resourceName.replace(".class", "");
 			}
-	    	System.out.println("resource name....."+resourceName);
+	    	//System.out.println("resource name....."+resourceName);
 	    	DefaultSourceTreeNode element = new DefaultSourceTreeNode(resourceName);
 	    	Createclass = new DefaultSourceTreeNode("Create(PUT)");
 	    	
@@ -325,9 +325,10 @@ public class OpenPOJOJarAction extends AbstractContextAction
     boolean validatePOJOMethods = false;	
     boolean foundGetMethod = false;
     boolean foundSetMethod = false;
+    
      for(Field field : javaClass.getFields()){
   	   validatePOJOMethods = false;
-  	   System.out.println("field class type....******"+field.getType());
+  	   //System.out.println("field class type....******"+field.getType());
   	 if(!isWrapperType(field.getType().toString()))
 	   {
   		 
@@ -351,14 +352,16 @@ public class OpenPOJOJarAction extends AbstractContextAction
   		}  
 	   }
   	      
+  	  if(field.getName().contains("serialVersionUID"))
+    	   continue;
 	   
 	   for(Method method : javaClass.getMethods()){
-	   	   System.out.println("Field names:"+field.getName()+method.getName()+"\n");
+	   	   //System.out.println("Field names:"+field.getName()+method.getName()+"\n");
 		   String fieldCompareGet = "get"+field.getName();
 		   String fieldCompareSet = "set"+field.getName();
 		   if(fieldCompareGet.equalsIgnoreCase(method.getName()))
 		   {
-			   System.out.println("Inside if loop..."+"\n");
+			   //System.out.println("Inside if loop..."+"\n");
 			   //validatePOJOMethods = true;
 			   foundGetMethod = true;
 			   

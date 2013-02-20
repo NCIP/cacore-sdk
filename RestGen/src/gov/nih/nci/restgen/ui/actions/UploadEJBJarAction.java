@@ -175,7 +175,7 @@ public class UploadEJBJarAction extends AbstractContextAction
 		while (jarEntries.hasMoreElements())
 		{
 			jarEntry = (JarEntry)jarEntries.nextElement();
-			System.out.println("JarMMMMM entries...."+jarEntry);
+			//System.out.println("JarMMMMM entries...."+jarEntry);
 			if(jarEntry.getName().contains("/ejb-jar.xml"))
 			{
 				ejbjarxml = true;
@@ -286,26 +286,26 @@ public class UploadEJBJarAction extends AbstractContextAction
 						Node node = ejbNameNodeList.item(i);
 						String textVal = node.getNodeName();
 						if (node.getNodeType() == Node.ELEMENT_NODE) {
-							System.out.println("Node name....."+node.getNodeName());
+							//System.out.println("Node name....."+node.getNodeName());
 							if(textVal.equals("remote"))
 							{
 								EJBRemoteOperationsList.add(node.getTextContent());
-								System.out.println("remote interface>>>>:"+node.getTextContent());
+								//System.out.println("remote interface>>>>:"+node.getTextContent());
 							}
 							else if(textVal.equals("home"))
 							{
 								EJBHomeOperationsList.add(node.getTextContent());
-								System.out.println("home interface>>>>:"+node.getTextContent());
+								//System.out.println("home interface>>>>:"+node.getTextContent());
 							}
 							else if(textVal.equals("ejb-class"))
 							{
 								EJBBeanList.add(node.getTextContent());
-								System.out.println("ejb class>>>>:"+node.getTextContent());
+								//System.out.println("ejb class>>>>:"+node.getTextContent());
 							}
 							else if(textVal.equals("ejb-name"))
 							{
 								EJBNameList.add(node.getTextContent());
-								System.out.println("ejb name>>>>:"+node.getTextContent());
+								//System.out.println("ejb name>>>>:"+node.getTextContent());
 							}
 
 						}
@@ -329,17 +329,17 @@ public class UploadEJBJarAction extends AbstractContextAction
 		while(it.hasNext())
 		{
 			interfaceClass = (String)it.next();
-			System.out.println("interface/bean class name begin>>>>:"+interfaceClass);
+			//System.out.println("interface/bean class name begin>>>>:"+interfaceClass);
 			interfaceClass = interfaceClass.replace(".","/");
 			interfaceClass = interfaceClass + ".class";
 			ejbclassFound = false;
-			System.out.println("interface/bean class name after>>>>:"+interfaceClass);
+			//System.out.println("interface/bean class name after>>>>:"+interfaceClass);
 			Enumeration jarEntries = jarFile.entries();
 			JarEntry jarEntry = null;
 			while (jarEntries.hasMoreElements())
 			{
 				jarEntry = (JarEntry)jarEntries.nextElement();
-				System.out.println("JAR ENTRY....."+jarEntry);
+				//System.out.println("JAR ENTRY....."+jarEntry);
 				if(jarEntry.getName().contains(interfaceClass))
 				{
 					ejbclassFound = true;
@@ -377,7 +377,7 @@ public class UploadEJBJarAction extends AbstractContextAction
 		while(it.hasNext())
 		{
 			remoteInterfaceClass = (String)it.next();
-			System.out.println("remote interface class name begin>>>>:"+remoteInterfaceClass);
+			//System.out.println("remote interface class name begin>>>>:"+remoteInterfaceClass);
 			DefaultTargetTreeNode childElement = new DefaultTargetTreeNode(remoteInterfaceClass);
 			//add children for the remote interface....
 			boolean ejbclassFound = false;
@@ -387,7 +387,7 @@ public class UploadEJBJarAction extends AbstractContextAction
 			while (jarEntries.hasMoreElements())
 			{
 				jarEntry = (JarEntry)jarEntries.nextElement();
-				System.out.println("jar entry name.....:"+jarEntry.getName());
+				//System.out.println("jar entry name.....:"+jarEntry.getName());
 				if(jarEntry.getName().equals(remoteInterfaceClass.replace('.','/')+".class"))
 				{
 					ejbclassFound = true;
@@ -422,8 +422,8 @@ public class UploadEJBJarAction extends AbstractContextAction
 							java.lang.reflect.Type[] args = method.getGenericParameterTypes();
 							ArrayList<String> argumentTypes = new ArrayList();
 							String argumentTypesCommaSeparated = "";
-							System.out.println("method generic string..."+method.toGenericString());
-							System.out.println("method return type..."+returnType.toString());
+							//System.out.println("method generic string..."+method.toGenericString());
+							//System.out.println("method return type..."+returnType.toString());
 							if(args!=null && args.length>0){
 								for (int i=0;i<args.length;i++)
 								{
@@ -442,12 +442,12 @@ public class UploadEJBJarAction extends AbstractContextAction
 							}
 							if(!argumentTypesCommaSeparated.equals("") && argumentTypesCommaSeparated!=null)
 							{
-								element = new DefaultTargetTreeNode(returnType+" "+method.getName()+"("+argumentTypesCommaSeparated+")");
+								element = new DefaultTargetTreeNode(method.getName()+"("+argumentTypesCommaSeparated+")");
 							}
 							else
 							{
 
-								element = new DefaultTargetTreeNode(returnType+" "+method.getName()+"()");
+								element = new DefaultTargetTreeNode(method.getName()+"()");
 							}
 							element.setOperationName(method.getName());
 							if(mainFrame.getMainFrame().getMappingMainPanel().getEjbType()!=null)
@@ -466,7 +466,7 @@ public class UploadEJBJarAction extends AbstractContextAction
 								element.setClassPath((String)EJBBeanList.get(j));
 							}
 							childElement.add(element);
-							System.out.println("Input Type and Return Type>>>>>"+argumentTypes+"  "+returnType.toString());
+							//System.out.println("Input Type and Return Type>>>>>"+argumentTypes+"  "+returnType.toString());
 
 						}
 

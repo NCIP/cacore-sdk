@@ -83,7 +83,7 @@ public class DefaultExitAction extends AbstractContextAction
     protected boolean doAction(ActionEvent e)
     {
         
-    	System.out.println("Inside EXIT action....");
+    	//System.out.println("Inside EXIT action....");
         if (mainFrame.getMainFrame() != null)
         {
             WindowEvent we = new WindowEvent(mainFrame.getMainFrame(), WindowEvent.WINDOW_CLOSING);
@@ -94,7 +94,7 @@ public class DefaultExitAction extends AbstractContextAction
       
         JOptionPane.showMessageDialog(getAssociatedUIComponent(), "This web browser cannot be closed by CMTS. \nUse the 'Exit' menu of this Web Browser.", "Exit Failure from Web Browser", JOptionPane.WARNING_MESSAGE);
 
-        System.out.println("*****Exit Failure!!!");
+        //System.out.println("*****Exit Failure!!!");
         setSuccessfullyPerformed(false);
         return false;
 

@@ -172,7 +172,7 @@ public class CloseAndMaxTabbedPane extends JTabbedPane {
 			public void windowLostFocus(WindowEvent e) {
 				end = System.currentTimeMillis();
 				long elapsed = end - start;
-				//System.out.println(elapsed);
+				////System.out.println(elapsed);
 				if (elapsed < 100)
 					frame.toFront();
 
@@ -316,7 +316,7 @@ public class CloseAndMaxTabbedPane extends JTabbedPane {
 		{
 			return;
 		}
-		System.out.println("inside fire...");
+		//System.out.println("inside fire...");
 		EventListener closeListeners[] = getListeners(CloseListener.class);
 		for (int i = 0; i < closeListeners.length; i++) {
 			((CloseListener) closeListeners[i]).closeOperation(e);

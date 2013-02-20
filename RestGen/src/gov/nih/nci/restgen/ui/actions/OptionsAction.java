@@ -140,7 +140,7 @@ public class OptionsAction extends AbstractContextAction
 			       else
 			       {
 			    	   mainFrame.getMainFrame().getMappingMainPanel().setOptionsPath(inputString);
-			        	System.out.println("Selected directory path ....<<<....>>"+inputString);
+			        	//System.out.println("Selected directory path ....<<<....>>"+inputString);
 			       }
 
 			}

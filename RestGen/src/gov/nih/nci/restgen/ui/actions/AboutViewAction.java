@@ -57,7 +57,7 @@ public class AboutViewAction extends AbstractContextAction {
                                            null,
                                            new String[] {"Show License Information", "Close"},
                                            "Close");
-        //System.out.println("Selected : " + c);
+        ////System.out.println("Selected : " + c);
         if (c == 0)
         {
             

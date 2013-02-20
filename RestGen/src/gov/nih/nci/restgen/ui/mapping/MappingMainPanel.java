@@ -32,7 +32,7 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.namespace.QName;
 import javax.xml.transform.stream.StreamSource;
 
-import gov.nih.nci.restgen.core.ComponentType;
+
 import gov.nih.nci.restgen.mapping.model.Implementation;
 import gov.nih.nci.restgen.mapping.model.Mapping;
 import gov.nih.nci.restgen.mapping.model.Method;
@@ -371,7 +371,7 @@ public class MappingMainPanel extends JPanel implements ActionListener
 		DefaultSettings.setDefaultFeatureForJSplitPane(leftRightSplitPane);
         int locDiv = (int) (mainFrame.getAssociatedUIContainer().getWidth() * 0.85);
         leftRightSplitPane.setDividerLocation(locDiv); //.setDividerLocation(0.85);
-        //System.out.println("First locDiv : " + locDiv);
+        ////System.out.println("First locDiv : " + locDiv);
         leftRightSplitPane.setLeftComponent(getTopLevelLeftPanel());
         //leftRightSplitPane.setRightComponent(getTopLevelRightPanel());
         // PV commented below 12-11
@@ -619,7 +619,7 @@ public class MappingMainPanel extends JPanel implements ActionListener
 	public void actionPerformed(ActionEvent e)
 	{
 		String command = e.getActionCommand();
-		System.out.println("INDSIDEEE>>>> action click.....");
+		//System.out.println("INDSIDEEE>>>> action click.....");
 		try
 		{
             if (SELECT_SOURCE.equals(command))
@@ -670,7 +670,7 @@ public class MappingMainPanel extends JPanel implements ActionListener
 					if(getTargetLocationArea().getText().contains("JNDI Name:"))
 					{
 						String newOne = getTargetLocationArea().getText().replace(toReplace, currString);
-						System.out.println("inside//...."+newOne);
+						//System.out.println("inside//...."+newOne);
 						getTargetLocationArea().setText(getTargetLocationArea().getText().replace(toReplace, currString));
 						
 					}
@@ -882,7 +882,7 @@ public class MappingMainPanel extends JPanel implements ActionListener
 						errorString = errorString + "Please Set the path for resource:"+rscVar.getName()+"\n";
 					}
 					else{
-						errorString = "Please set the path for resource"+rscVar.getName()+"\n";
+						errorString = "Please set the path for resource:"+rscVar.getName()+"\n";
 					}
 				}
 			}
@@ -930,7 +930,7 @@ public class MappingMainPanel extends JPanel implements ActionListener
 						}
 						
 					}
-					if(ejbType.equals("EJB_REMOTE"))
+					else if(ejbType.equals("EJB_REMOTE"))
 					{
 						if(enterJNDIName==null || enterJNDIName.equals(""))
 						{
@@ -1171,7 +1171,7 @@ public class MappingMainPanel extends JPanel implements ActionListener
 				setTargetFileType(targetFileType);
 			}
 			
-		System.out.println("source file path......target file path"+sourceFilePath+targetFilePath);	
+		//System.out.println("source file path......target file path"+sourceFilePath+targetFilePath);	
 		setMappingSourceFile(new File(sourceFilePath));
 			
 			if(sourceFilePath.contains(".class"))
@@ -1245,9 +1245,9 @@ public class MappingMainPanel extends JPanel implements ActionListener
     	gov.nih.nci.restgen.mapping.model.Mapping mapLoaded = null;
         String mappingParentPath = null;
 
-        System.out.println("MappingFactory.loadMapping()...mappingFile:"+f.getAbsolutePath());
+        //System.out.println("MappingFactory.loadMapping()...mappingFile:"+f.getAbsolutePath());
             mappingParentPath=f.getAbsoluteFile().getParentFile().getAbsolutePath();
-            System.out.println("MappingFactory.loadMapping()..mapping Parent:"+mappingParentPath);
+            //System.out.println("MappingFactory.loadMapping()..mapping Parent:"+mappingParentPath);
             JAXBContext jc=null;
             jc = JAXBContext.newInstance( "gov.nih.nci.restgen.mapping.model" );
             Unmarshaller u = jc.createUnmarshaller();

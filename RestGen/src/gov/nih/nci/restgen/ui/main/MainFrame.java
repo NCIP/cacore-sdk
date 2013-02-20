@@ -178,7 +178,7 @@ public class MainFrame extends JFrame
         title =title + tabKind;
         tabbedPane.addTab(title, panel);
         tabbedPane.setSelectedComponent(panel);
-        System.out.println("Panel Class: '" + (panel==null?"null":panel.getClass().getName()) + "'.");
+        //System.out.println("Panel Class: '" + (panel==null?"null":panel.getClass().getName()) + "'.");
         tabMap.put(panel.getClass(), panel);
     }
 
@@ -198,7 +198,7 @@ public class MainFrame extends JFrame
         title =title + tabKind;
         tabbedPane.addTab(title, panel);
         tabbedPane.setSelectedComponent(panel);
-        System.out.println("Panel Class: '" + (panel==null?"null":panel.getClass().getName()) + "'.");
+        //System.out.println("Panel Class: '" + (panel==null?"null":panel.getClass().getName()) + "'.");
         tabMap.put(panel.getClass(), panel);
     }
     

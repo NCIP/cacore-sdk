@@ -23,7 +23,7 @@ public class HelloWorldClient {
     	AuthService client = (AuthService) factory.create();
 
     	Employee employee = client.getEmployee("0223938");
-    	System.out.println("Server said: " + employee.getLastName() + ", " + employee.getFirstName());
+    	//System.out.println("Server said: " + employee.getLastName() + ", " + employee.getFirstName());
     	System.exit(0);
 
     }

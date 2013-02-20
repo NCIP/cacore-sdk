@@ -15,14 +15,8 @@ import org.jgraph.graph.DefaultGraphModel;
 import org.jgraph.graph.DefaultPort;
 
 //import gov.nih.nci.cbiit.cmts.mapping.MappingFactory;
-import gov.nih.nci.restgen.core.Component;
-import gov.nih.nci.restgen.core.ComponentType;
-import gov.nih.nci.restgen.core.KindType;
-import gov.nih.nci.restgen.core.LinkType;
-import gov.nih.nci.restgen.core.LinkpointType;
+
 import gov.nih.nci.restgen.mapping.model.*;
-import gov.nih.nci.restgen.core.Mapping.Components;
-import gov.nih.nci.restgen.core.Mapping.Links;
 import gov.nih.nci.restgen.ui.actions.UploadWSDLAction;
 import gov.nih.nci.restgen.ui.common.MappableNode;
 import gov.nih.nci.restgen.ui.common.UIHelper;
@@ -143,7 +137,7 @@ public class MiddlePanelJGraphController {
 			nodePositionBasedOnTotalPanel = DEFAULT_ROOT_Y_VALUE;
 		} else
 		    {
-			// System.out.println("To figure out the value via scroll bar positions.");
+			// //System.out.println("To figure out the value via scroll bar positions.");
 			// find the Y coordinate of the node. For example : 300
 			TreePath tp = new TreePath(treeNode.getPath());
 			if((JTree) treeScrollPane.getViewport().getView()==null)
@@ -156,7 +150,7 @@ public class MiddlePanelJGraphController {
 			if (pathBounds == null) {
 				// Log.logInfo(this, "path bounds is null. tp is '" +
 				// tp.toString() + "'.");
-				// System.out.println("The path bounds is null! on '" + treeNode
+				// //System.out.println("The path bounds is null! on '" + treeNode
 				// + "' of type " + treeNode.getClass().getName());
 				if (reCalculateToNearestParent) {// escape if not reCal or if
 													// the treeNode is the root.
@@ -170,7 +164,7 @@ public class MiddlePanelJGraphController {
 			if (row == -1)// (r==null)
 			{
 				// Log.logInfo(this, "tp is '" + tp.toString() + "'.");
-				// System.out.println("the row value is -1! on '" + treeNode +
+				// //System.out.println("the row value is -1! on '" + treeNode +
 				// "' of type " + treeNode.getClass().getName());
 				if (reCalculateToNearestParent && treeNode.getParent() != null) {// escape
 																					// if
@@ -187,11 +181,11 @@ public class MiddlePanelJGraphController {
 							(DefaultMutableTreeNode) treeNode.getParent(),
 							reCalculateToNearestParent);
 				} else {// default to the root
-					// System.out.println("Default set to the root!");
+					// //System.out.println("Default set to the root!");
 					row = 0;
 				}
 			}
-			// System.out.println("Row value: " + row);
+			// //System.out.println("Row value: " + row);
 			if (row > 0) {
 				Rectangle r = tree.getRowBounds(row);
 				Point point = r.getLocation();
@@ -218,7 +212,7 @@ public class MiddlePanelJGraphController {
 												// NOT_FOUND_VALUE
 			newYpos = DEFAULT_ROOT_Y_VALUE;
 		}
-		System.out.println(treeNode.toString() + " new YPos: '" + newYpos + "'.");
+		//System.out.println(treeNode.toString() + " new YPos: '" + newYpos + "'.");
 		return newYpos;
 	}
 
@@ -371,7 +365,7 @@ public class MiddlePanelJGraphController {
 				}
 				
 				final String dir = System.getProperty("user.dir");
-		        System.out.println("current dir is..... " + dir);
+		        //System.out.println("current dir is..... " + dir);
 		        if(dir!=null)
 		        {
 		        	options.setRootPath(dir);
@@ -429,7 +423,7 @@ public class MiddlePanelJGraphController {
     		resource.setName(resourceName);
     		if(MappingMainPanel.getResourcePathValues()!=null && (String)MappingMainPanel.getResourcePathValues().get(resourceName)!=null)
         	{
-        		System.out.println("vals...."+(String)MappingMainPanel.getResourcePathValues().get(resourceName));
+        		//System.out.println("vals...."+(String)MappingMainPanel.getResourcePathValues().get(resourceName));
         		resource.setPath((String)MappingMainPanel.getResourcePathValues().get(resourceName));
         	}
     		resourceList.add(resource);
@@ -442,7 +436,7 @@ public class MiddlePanelJGraphController {
     		for(int i=0;i<resourceList.size();i++)
     		{
     			Resource rsc = (Resource) resourceList.get(i);
-    			System.out.println("resourcename and method type ..."+mtype.getResourceName()+"  "+rsc.getName());
+    			//System.out.println("resourcename and method type ..."+mtype.getResourceName()+"  "+rsc.getName());
     			rsc.setPojoLocation(mtype.getResourceLocation());
     			if(mtype.getResourceName().equals(rsc.getName()))
     			{
@@ -663,7 +657,7 @@ public class MiddlePanelJGraphController {
             else
             {
                 sourceMissedLink.add(sourceMapComp);
-                //System.out.println("UIHelper.constructMappableNodeObjectXmlPath():Could not find the data obj in the given tree rooted by '" + treeRoot + "'. path:"+ dtObjectXmlPath);
+                ////System.out.println("UIHelper.constructMappableNodeObjectXmlPath():Could not find the data obj in the given tree rooted by '" + treeRoot + "'. path:"+ dtObjectXmlPath);
             }
 
         }
@@ -710,7 +704,7 @@ public class MiddlePanelJGraphController {
 				msg += "! : " + id;
                 //if ((id.equals("currentDate"))||(id.equals("constant"))) {}
                 //else 
-                    System.out.println(msg);
+                    //System.out.println(msg);
                 //throw new Exception(msg);
                 result = false;
 				return result;
@@ -719,10 +713,7 @@ public class MiddlePanelJGraphController {
 			if (sourceNode instanceof DefaultMutableTreeNode) {// drag from tree
 																// to middle
 																// panel
-				/*if (targetNode instanceof FunctionBoxGraphPort) {
-					result = createTreeToFunctionBoxPortMapping(sourceNode,
-							(FunctionBoxGraphPort) targetNode, graphCellList);
-				} else*/
+				
 				if (targetNode instanceof DefaultTargetTreeNode)// targetNode
 																		// instanceof
 																		// DefaultMutableTreeNode
@@ -742,20 +733,9 @@ public class MiddlePanelJGraphController {
 				}
 				
 				else {
-				/*	System.out
-							.println("Not a graph cell or tree node, what is it? '"
-									+ (targetNode == null ? "null" : targetNode
-											.toString()
-											+ " "
-											+ targetNode.getClass().getName())
-									+ "'");
-				*/
 					
 					result = createTreeToTreeDirectMapping(	(DefaultSourceTreeNode)sourceNode,(DefaultTargetTreeNode)targetNode, graphCellList);
 				}
-			} else {
-				System.out.println(sourceNode + " is not accepted by "
-						+ getClass().getName());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -934,7 +914,7 @@ public class MiddlePanelJGraphController {
 	}
 
 	private void unmapCells(Object[] cells) {
-		// System.out.println("middlePanel kind: " + middlePanel.getKind() );
+		// //System.out.println("middlePanel kind: " + middlePanel.getKind() );
 		for (int i = 0; i < cells.length; i++) {
 			if (cells[i] == null || !(cells[i] instanceof DefaultEdge))
 				continue;

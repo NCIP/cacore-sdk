@@ -93,10 +93,10 @@ public class DeleteNodeAction extends AbstractContextAction
 	protected boolean doAction(ActionEvent e) throws Exception
 	{
 		
-		System.out.println("Delete node clicked.......");
+		//System.out.println("Delete node clicked.......");
        if (treeNode==null)
        {
-    	   System.out.println("Tree node null returning.......");
+    	   //System.out.println("Tree node null returning.......");
 			return false;
        }
        
@@ -145,7 +145,7 @@ public class DeleteNodeAction extends AbstractContextAction
 			}
 		
 	}
-	System.out.println("Before Tree node removal.......");
+	//System.out.println("Before Tree node removal.......");
 	 if(treeNode.getParent()!=null)
 	 {
 		 treeNode.removeFromParent();
@@ -156,7 +156,7 @@ public class DeleteNodeAction extends AbstractContextAction
 	 }
 	 // remove the resource from the list
 	 MainFrame.getMappingMainPanel().getPOJOClassList().remove(treeNode.toString());
-	 System.out.println("TREENODE STR..."+treeNode.toString());
+	 //System.out.println("TREENODE STR..."+treeNode.toString());
 	 //
      tree.updateUI();
        return true;

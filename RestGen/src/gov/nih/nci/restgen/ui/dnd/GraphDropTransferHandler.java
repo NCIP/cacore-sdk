@@ -15,8 +15,7 @@ import javax.swing.tree.TreePath;
 import org.jgraph.JGraph;
 import org.jgraph.graph.DefaultGraphCell;
 
-import gov.nih.nci.restgen.core.FunctionData;
-import gov.nih.nci.restgen.core.FunctionDef;
+
 import gov.nih.nci.restgen.ui.common.MappableNode;
 import gov.nih.nci.restgen.ui.mapping.MappingMiddlePanel;
 import gov.nih.nci.restgen.ui.tree.DefaultSourceTreeNode;

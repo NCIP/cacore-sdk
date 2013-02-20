@@ -97,10 +97,10 @@ public class EditResourcePathAction extends AbstractContextAction
 	protected boolean doAction(ActionEvent e) throws Exception
 	{
 		
-		System.out.println("Edit path clicked.......");
+		//System.out.println("Edit path clicked.......");
        if (treeNode==null)
        {
-    	   System.out.println("Tree node null returning.......");
+    	   //System.out.println("Tree node null returning.......");
 			return false;
        }
        	
@@ -182,12 +182,12 @@ public class EditResourcePathAction extends AbstractContextAction
 		    		   mainFrame.getMainFrame().getMappingMainPanel().setResourcePathValues(values);
 		    		   
 		    	   }
-		    	   System.out.println("path66666"+resourceName);
+		    	   //System.out.println("path66666"+resourceName);
 		       
 		       }
 		       catch(Exception ex)
 		       {
-		    	   System.out.println(ex.toString());
+		    	   //System.out.println(ex.toString());
 		       }
 		}
        

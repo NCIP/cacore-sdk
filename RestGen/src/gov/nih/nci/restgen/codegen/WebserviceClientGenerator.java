@@ -35,9 +35,9 @@ public class WebserviceClientGenerator extends Generator {
 			String namespace = defs.getTargetNamespace();
 
 			for (PortType pt : defs.getPortTypes()) {
-				System.out.println(pt.getName());
+				//System.out.println(pt.getName());
 				for (Operation op : pt.getOperations()) {
-					System.out.println(" -" + op.getName());
+					//System.out.println(" -" + op.getName());
 				}
 			}
 

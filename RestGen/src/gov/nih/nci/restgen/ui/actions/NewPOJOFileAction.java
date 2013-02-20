@@ -127,7 +127,7 @@ public class NewPOJOFileAction extends AbstractContextAction
         JavaClass javaClass = cp.parse();
         ArrayList<String> classList = new ArrayList<String>();
         for(Field field : javaClass.getFields()){
-        	System.out.println("Java field types...."+field.getType());
+        	//System.out.println("Java field types...."+field.getType());
      	   boolean validatePOJOMethods = false;
      	   boolean foundGetMethod = false;
      	   boolean foundSetMethod = false;
@@ -141,12 +141,12 @@ public class NewPOJOFileAction extends AbstractContextAction
      	   continue;
      		   
      	   for(Method method : javaClass.getMethods()){
-     	   	   System.out.println("Field names:"+field.getName()+method.getName()+"\n");
+     	   	   //System.out.println("Field names:"+field.getName()+method.getName()+"\n");
      		   String fieldCompareGet = "get"+field.getName();
      		   String fieldCompareSet = "set"+field.getName();
      		   if(fieldCompareGet.equalsIgnoreCase(method.getName()))
      		   {
-     			   System.out.println("Inside if loop..."+"\n");
+     			   //System.out.println("Inside if loop..."+"\n");
      			   //validatePOJOMethods = true;
      			   foundGetMethod = true;
      			   

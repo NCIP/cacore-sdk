@@ -1,8 +1,6 @@
 package gov.nih.nci.restgen.ui.tree;
 
 
-
-import gov.nih.nci.restgen.core.Mapping;
 import gov.nih.nci.restgen.ui.actions.DeleteNodeAction;
 import gov.nih.nci.restgen.ui.jgraph.action.EditResourcePathAction;
 import gov.nih.nci.restgen.ui.main.MainFrameContainer;
