@@ -1,7 +1,7 @@
 	@DELETE
 	@Path("$PathParamPath$")
 	@Consumes("application/xml")
-	public $ReturnType$ remove$ResourceName$($PathParam$)
+	public $DeleteReturnType$ remove$ResourceName$($PathParam$)
 	{
 		try
 		{
@@ -13,8 +13,24 @@
 	            initContext = new javax.naming.InitialContext(); 
 	            String JNDIName = "$JNDIName$"; 
 	            $HomeInterface$ homeRef = ($HomeInterface$) initContext.lookup(JNDIName);
-	            ejbRemote = ($RemoteInterface$) homeRef.create();  
-				ejbRemote.$OperationName$($OperationParamNames$);
+	            ejbRemote = ($RemoteInterface$) homeRef.create();
+					$if(ReturnTypeNotVoid)$ return $endif$ ejbRemote.$OperationName$($OperationParamNames$);
+				$if(ReturnTypeResponse)$				
+				ResponseBuilder builder = Response.status(Status.OK);
+				builder.type("application/xml");
+				StringBuffer buffer = new StringBuffer();
+				buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+				buffer.append("<response>");
+				buffer.append("<type>MESSAGE</type>");
+				buffer.append("<code>DELETE</code>");
+				buffer.append("<resource>$ResourceName$</resource>");
+				buffer.append("<path>$PathParamPath$</path>");
+				buffer.append("<message>Successfully deleted $ResourceName$</message>");
+				buffer.append("</response>");
+				builder.entity(buffer.toString());
+				return builder.build();
+				 $endif$
+					
 	        }  
 	        catch(javax.ejb.CreateException e) {
 	        	e.printStackTrace();

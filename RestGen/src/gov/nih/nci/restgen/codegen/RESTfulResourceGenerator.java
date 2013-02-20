@@ -514,11 +514,27 @@ public class RESTfulResourceGenerator extends Generator {
 					"Unable to find EJB from ejb-jar.xml for " + impl.getName());
 
 		template.setAttribute("PathParamPath",
-				getOperationPath(impl));
+				getOperationPath(impl, method.getName()));
 		template.setAttribute("PathParam", getOperationPathParams(method, impl));
 		template.setAttribute("HomeInterface", ejbHomeName);
 		template.setAttribute("RemoteInterface", ejbRemoteName);
-		template.setAttribute("ReturnType", getOperationReturnType(impl));
+		String returnType = getOperationReturnType(impl);
+		template.setAttribute("ReturnType", returnType);
+		if(!returnType.equals("void"))
+		{
+			template.setAttribute("ReturnTypeNotVoid", true);
+			template.setAttribute("PostReturnType", returnType);
+			template.setAttribute("PutReturnType", returnType);
+			template.setAttribute("DeleteReturnType", returnType);
+		}
+		else
+		{
+			template.setAttribute("ReturnTypeResponse", true);
+			template.setAttribute("PostReturnType", "Response");
+			template.setAttribute("PutReturnType", "Response");
+			template.setAttribute("DeleteReturnType", "Response");
+			
+		}
 
 		template.setAttribute("OperationName", impl.getOperation().getName());
 		String operationParams = getOperationParams(impl);
@@ -609,7 +625,11 @@ public class RESTfulResourceGenerator extends Generator {
 			return buffer.toString();
 	}
 
-	private String getOperationPath(Implementation impl) {
+	private String getOperationPath(Implementation impl, String methodName) {
+		if (methodName.equals(Method.POST) || methodName.equals(Method.PUT)) {
+			if (impl.getPath() != null && impl.getPath().trim().length() > 0)
+				return impl.getPath();
+		}
 		Operation operation = impl.getOperation();
 		List<Input> inputs = operation.getInputs();
 		String path = null;
@@ -696,17 +716,17 @@ public class RESTfulResourceGenerator extends Generator {
 					List<String[]> params = getMethodParameters(portType, impl
 							.getOperation().getName());
 					String[] paramTypes = params.get(0);
+					String[] paramTypeNames = params.get(1);
 					String returnType = getMethodReturnType(portType, impl
 							.getOperation().getName(), defs);
 					StringBuffer buffer = new StringBuffer();
 					for (int i = 0; i < paramTypes.length; i++) {
-						buffer.append(paramTypes[i] + " param" + i);
+						buffer.append(paramTypes[i] + " " +paramTypeNames[i]);
 						if (i < paramTypes.length - 1)
 							buffer.append(", ");
 					}
 					template.setAttribute("RequestType", buffer.toString());
 
-					String[] paramTypeNames = params.get(1);
 					buffer = new StringBuffer();
 					for (int i = 0; i < paramTypeNames.length; i++) {
 						buffer.append("\"" + paramTypeNames[i] + "\"");
@@ -717,7 +737,7 @@ public class RESTfulResourceGenerator extends Generator {
 					String pathParam = constructPathParam(paramTypeNames,
 							paramTypes);
 					String pathParamPath = constructPathParamPath(impl,
-							paramTypeNames, paramTypes);
+							paramTypeNames, paramTypes, method.getName());
 					String opParams = constructOperationParams(paramTypeNames);
 
 					template.setAttribute("OperationParameters", opParams);
@@ -726,7 +746,20 @@ public class RESTfulResourceGenerator extends Generator {
 
 					template.setAttribute("ParamNames", buffer.toString());
 					template.setAttribute("ReturnType", returnType);
-
+					if(!returnType.equals("void"))
+					{
+						template.setAttribute("ReturnTypeNotVoid", true);
+						template.setAttribute("PostReturnType", returnType);
+						template.setAttribute("PutReturnType", returnType);
+						template.setAttribute("DeleteReturnType", returnType);
+					}
+					else
+					{
+						template.setAttribute("ReturnTypeResponse", true);
+						template.setAttribute("PostReturnType", "Response");
+						template.setAttribute("PutReturnType", "Response");
+						template.setAttribute("DeleteReturnType", "Response");
+					}
 				}
 			}
 		}
@@ -758,7 +791,12 @@ public class RESTfulResourceGenerator extends Generator {
 	}
 
 	private String constructPathParamPath(Implementation impl, String[] paramNames,
-			String[] paramTypes) throws GeneratorException {
+			String[] paramTypes, String methodName) throws GeneratorException {
+
+		if (methodName.equals(Method.POST) || methodName.equals(Method.PUT)) {
+			if (impl.getPath() != null && impl.getPath().trim().length() > 0)
+				return impl.getPath();
+		}
 		
 		StringBuffer buffer = new StringBuffer();
 		if(impl.getPath() != null && impl.getPath().trim().length() > 0)
