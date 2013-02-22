@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mapping name="hotel.xml" version="1.0" description="hotel.xml" createdOn="2013-02-21T16:26:13.954-05:00" lastUpdatedOn="2013-02-21T16:26:13.954-05:00">
+    <components>
+        <Component id="0" location="C:\DEV\RestGen\examples\Axis2x\HotelService\HotelService-Beans.jar" type="source" kind="xml"/>
+        <Component id="1" location="WSDLFile.wsdl" type="target" kind="xml"/>
+    </components>
+    <links>
+        <Link path="restaurants">
+            <Source id="/@HotelService-Beans.jar/@Hotel/@Read(GET)" componentId="Read(GET)"/>
+            <Target id="/@WSDL/@getRestaurants()" componentId="getRestaurants"/>
+        </Link>
+        <Link path="chef">
+            <Source id="/@HotelService-Beans.jar/@Hotel/@Read(GET)" componentId="Read(GET)"/>
+            <Target id="/@WSDL/@getRestaurantChef()" componentId="getRestaurantChef"/>
+        </Link>
+        <Link path="">
+            <Source id="/@HotelService-Beans.jar/@Hotel/@Delete(DELETE)" componentId="Delete(DELETE)"/>
+            <Target id="/@WSDL/@fireChef()" componentId="fireChef"/>
+        </Link>
+        <Link path="hotel">
+            <Source id="/@HotelService-Beans.jar/@Hotel/@Read(GET)" componentId="Read(GET)"/>
+            <Target id="/@WSDL/@getHotel()" componentId="getHotel"/>
+        </Link>
+        <Link path="hire">
+            <Source id="/@HotelService-Beans.jar/@Hotel/@Create(PUT)" componentId="Create(PUT)"/>
+            <Target id="/@WSDL/@hireChef()" componentId="hireChef"/>
+        </Link>
+    </links>
+    <Options outputPath="C:\DEV\RestGen\examples\Axis2x\HotelService\generated" rootPath="C:\DEV\RestGen" wrapperType="SOAP_SERVICE" wsdlLocation="http://localhost:29080/HotelSOAPService/services/HotelService?wsdl"/>
+    <resources>
+        <Resource name="Hotel" path="hotel" pojoLocation="C:\DEV\RestGen\examples\Axis2x\HotelService\HotelService-Beans.jar">
+            <methods>
+                <Method name="GET" pathName="Read(GET)">
+                    <Implementation type="SOAP" name="HotelService" clientType="" path="restaurants" portName="HotelServiceHttpEndpoint">
+                        <Operation name="getRestaurants" style="">
+                            <inputs/>
+                            <Output type="null"/>
+                        </Operation>
+                    </Implementation>
+                </Method>
+                <Method name="GET" pathName="Read(GET)">
+                    <Implementation type="SOAP" name="HotelService" clientType="" path="chef" portName="HotelServiceHttpEndpoint">
+                        <Operation name="getRestaurantChef" style="">
+                            <inputs/>
+                            <Output type="null"/>
+                        </Operation>
+                    </Implementation>
+                </Method>
+                <Method name="DELETE" pathName="Delete(DELETE)">
+                    <Implementation type="SOAP" name="HotelService" clientType="" path="" portName="HotelServiceHttpEndpoint">
+                        <Operation name="fireChef" style="">
+                            <inputs/>
+                            <Output type=""/>
+                        </Operation>
+                    </Implementation>
+                </Method>
+                <Method name="GET" pathName="Read(GET)">
+                    <Implementation type="SOAP" name="HotelService" clientType="" path="hotel" portName="HotelServiceHttpEndpoint">
+                        <Operation name="getHotel" style="">
+                            <inputs/>
+                            <Output type="null"/>
+                        </Operation>
+                    </Implementation>
+                </Method>
+                <Method name="PUT" pathName="Create(PUT)">
+                    <Implementation type="SOAP" name="HotelService" clientType="" path="hire" portName="HotelServiceHttpEndpoint">
+                        <Operation name="hireChef" style="">
+                            <inputs/>
+                            <Output type=""/>
+                        </Operation>
+                    </Implementation>
+                </Method>
+            </methods>
+        </Resource>
+    </resources>
+</mapping>

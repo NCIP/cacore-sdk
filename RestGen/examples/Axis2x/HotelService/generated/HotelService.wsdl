@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:ns="http://hotel.example.com" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:ax21="http://hotel.example.com/xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://hotel.example.com">
+    <wsdl:documentation>
+		Please Type your service description here
+	</wsdl:documentation>
+    <wsdl:types>
+        <xs:schema xmlns:ax22="http://hotel.example.com/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://hotel.example.com">
+            <xs:import namespace="http://hotel.example.com/xsd"/>
+            <xs:element name="hireChef">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="chef" nillable="true" type="ax21:Chef"/>
+                        <xs:element minOccurs="0" name="restaurantId" type="xs:int"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getRestaurants">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="hotelName" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getRestaurantsResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax21:Restaurant"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getRestaurantChef">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="restaurantName" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="chefName" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getRestaurantChefResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ax21:Chef"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getHotel">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="name" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getHotelResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ax21:Hotel"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="fireChef">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="chefId" type="xs:int"/>
+                        <xs:element minOccurs="0" name="restaurantId" type="xs:int"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+        <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://hotel.example.com/xsd">
+            <xs:complexType name="Chef">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="id" nillable="true" type="xs:int"/>
+                    <xs:element minOccurs="0" name="name" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Restaurant">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="chefs" nillable="true" type="xs:anyType"/>
+                    <xs:element minOccurs="0" name="id" nillable="true" type="xs:int"/>
+                    <xs:element minOccurs="0" name="name" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Hotel">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="address" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="id" type="xs:int"/>
+                    <xs:element minOccurs="0" name="name" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="restaurants" nillable="true" type="xs:anyType"/>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="getRestaurantsRequest">
+        <wsdl:part name="parameters" element="ns:getRestaurants"/>
+    </wsdl:message>
+    <wsdl:message name="getRestaurantsResponse">
+        <wsdl:part name="parameters" element="ns:getRestaurantsResponse"/>
+    </wsdl:message>
+    <wsdl:message name="getHotelRequest">
+        <wsdl:part name="parameters" element="ns:getHotel"/>
+    </wsdl:message>
+    <wsdl:message name="getHotelResponse">
+        <wsdl:part name="parameters" element="ns:getHotelResponse"/>
+    </wsdl:message>
+    <wsdl:message name="hireChefRequest">
+        <wsdl:part name="parameters" element="ns:hireChef"/>
+    </wsdl:message>
+    <wsdl:message name="getRestaurantChefRequest">
+        <wsdl:part name="parameters" element="ns:getRestaurantChef"/>
+    </wsdl:message>
+    <wsdl:message name="getRestaurantChefResponse">
+        <wsdl:part name="parameters" element="ns:getRestaurantChefResponse"/>
+    </wsdl:message>
+    <wsdl:message name="fireChefRequest">
+        <wsdl:part name="parameters" element="ns:fireChef"/>
+    </wsdl:message>
+    <wsdl:portType name="HotelServicePortType">
+        <wsdl:operation name="getRestaurants">
+            <wsdl:input message="ns:getRestaurantsRequest" wsaw:Action="urn:getRestaurants"/>
+            <wsdl:output message="ns:getRestaurantsResponse" wsaw:Action="urn:getRestaurantsResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="getHotel">
+            <wsdl:input message="ns:getHotelRequest" wsaw:Action="urn:getHotel"/>
+            <wsdl:output message="ns:getHotelResponse" wsaw:Action="urn:getHotelResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="hireChef">
+            <wsdl:input message="ns:hireChefRequest" wsaw:Action="urn:hireChef"/>
+        </wsdl:operation>
+        <wsdl:operation name="getRestaurantChef">
+            <wsdl:input message="ns:getRestaurantChefRequest" wsaw:Action="urn:getRestaurantChef"/>
+            <wsdl:output message="ns:getRestaurantChefResponse" wsaw:Action="urn:getRestaurantChefResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="fireChef">
+            <wsdl:input message="ns:fireChefRequest" wsaw:Action="urn:fireChef"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="HotelServiceSoap11Binding" type="ns:HotelServicePortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="getRestaurants">
+            <soap:operation soapAction="urn:getRestaurants" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getHotel">
+            <soap:operation soapAction="urn:getHotel" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="hireChef">
+            <soap:operation soapAction="urn:hireChef" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="getRestaurantChef">
+            <soap:operation soapAction="urn:getRestaurantChef" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="fireChef">
+            <soap:operation soapAction="urn:fireChef" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="HotelServiceSoap12Binding" type="ns:HotelServicePortType">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="getRestaurants">
+            <soap12:operation soapAction="urn:getRestaurants" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getHotel">
+            <soap12:operation soapAction="urn:getHotel" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="hireChef">
+            <soap12:operation soapAction="urn:hireChef" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="getRestaurantChef">
+            <soap12:operation soapAction="urn:getRestaurantChef" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="fireChef">
+            <soap12:operation soapAction="urn:fireChef" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="HotelServiceHttpBinding" type="ns:HotelServicePortType">
+        <http:binding verb="POST"/>
+        <wsdl:operation name="getRestaurants">
+            <http:operation location="getRestaurants"/>
+            <wsdl:input>
+                <mime:content type="application/xml" part="parameters"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="application/xml" part="parameters"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getHotel">
+            <http:operation location="getHotel"/>
+            <wsdl:input>
+                <mime:content type="application/xml" part="parameters"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="application/xml" part="parameters"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="hireChef">
+            <http:operation location="hireChef"/>
+            <wsdl:input>
+                <mime:content type="application/xml" part="parameters"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="getRestaurantChef">
+            <http:operation location="getRestaurantChef"/>
+            <wsdl:input>
+                <mime:content type="application/xml" part="parameters"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="application/xml" part="parameters"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="fireChef">
+            <http:operation location="fireChef"/>
+            <wsdl:input>
+                <mime:content type="application/xml" part="parameters"/>
+            </wsdl:input>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="HotelService">
+        <wsdl:port name="HotelServiceHttpSoap11Endpoint" binding="ns:HotelServiceSoap11Binding">
+            <soap:address location="http://localhost:8080/HotelService/services/HotelService.HotelServiceHttpSoap11Endpoint/"/>
+        </wsdl:port>
+        <wsdl:port name="HotelServiceHttpSoap12Endpoint" binding="ns:HotelServiceSoap12Binding">
+            <soap12:address location="http://localhost:8080/HotelService/services/HotelService.HotelServiceHttpSoap12Endpoint/"/>
+        </wsdl:port>
+        <wsdl:port name="HotelServiceHttpEndpoint" binding="ns:HotelServiceHttpBinding">
+            <http:address location="http://localhost:8080/HotelService/services/HotelService.HotelServiceHttpEndpoint/"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

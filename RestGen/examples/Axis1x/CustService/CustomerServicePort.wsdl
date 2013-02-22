@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:ns1="http://schemas.xmlsoap.org/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://customerservice.example.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="CustomerServiceService" targetNamespace="http://customerservice.example.com/">
+  <wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://customerservice.example.com/" version="1.0">
+<xs:element name="NoSuchCustomer" type="tns:NoSuchCustomer"/>
+<xs:element name="addCustomer" type="tns:addCustomer"/>
+<xs:element name="deleteCustomer" type="tns:deleteCustomer"/>
+<xs:element name="deleteCustomerById" type="tns:deleteCustomerById"/>
+<xs:element name="getCustomerByName" type="tns:getCustomerByName"/>
+<xs:element name="getCustomerByNameResponse" type="tns:getCustomerByNameResponse"/>
+<xs:element name="getCustomers" type="tns:getCustomers"/>
+<xs:element name="getCustomersByName" type="tns:getCustomersByName"/>
+<xs:element name="getCustomersByNameResponse" type="tns:getCustomersByNameResponse"/>
+<xs:element name="getCustomersResponse" type="tns:getCustomersResponse"/>
+<xs:element name="updateCustomer" type="tns:updateCustomer"/>
+<xs:complexType name="updateCustomer">
+<xs:sequence>
+<xs:element minOccurs="0" name="customer" type="tns:customer"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="customer">
+<xs:sequence>
+<xs:element name="customerId" type="xs:int"/>
+<xs:element minOccurs="0" name="name" type="xs:string"/>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="address" nillable="true" type="xs:string"/>
+<xs:element minOccurs="0" name="numOrders" type="xs:int"/>
+<xs:element name="revenue" type="xs:double"/>
+<xs:element minOccurs="0" name="test" type="xs:decimal"/>
+<xs:element minOccurs="0" name="birthDate" type="xs:date"/>
+<xs:element minOccurs="0" name="type" type="tns:customerType"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getCustomerByName">
+<xs:sequence>
+<xs:element minOccurs="0" name="name" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getCustomerByNameResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="tns:customer"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="NoSuchCustomer">
+<xs:sequence>
+<xs:element name="customerName" nillable="true" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="addCustomer">
+<xs:sequence>
+<xs:element minOccurs="0" name="customer" type="tns:customer"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getCustomers">
+<xs:sequence/>
+</xs:complexType>
+<xs:complexType name="getCustomersResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:customer"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="deleteCustomerById">
+<xs:sequence>
+<xs:element minOccurs="0" name="id" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="deleteCustomer">
+<xs:sequence>
+<xs:element minOccurs="0" name="name" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getCustomersByNameResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:customer"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getCustomersByName">
+<xs:sequence>
+<xs:element minOccurs="0" name="name" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:simpleType name="customerType">
+<xs:restriction base="xs:string">
+<xs:enumeration value="PRIVATE"/>
+<xs:enumeration value="BUSINESS"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="deleteCustomerById">
+    <wsdl:part element="tns:deleteCustomerById" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getCustomersResponse">
+    <wsdl:part element="tns:getCustomersResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getCustomers">
+    <wsdl:part element="tns:getCustomers" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getCustomerByName">
+    <wsdl:part element="tns:getCustomerByName" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="addCustomer">
+    <wsdl:part element="tns:addCustomer" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="updateCustomer">
+    <wsdl:part element="tns:updateCustomer" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="deleteCustomer">
+    <wsdl:part element="tns:deleteCustomer" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="NoSuchCustomerException">
+    <wsdl:part element="tns:NoSuchCustomer" name="NoSuchCustomerException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getCustomerByNameResponse">
+    <wsdl:part element="tns:getCustomerByNameResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="CustomerService">
+    <wsdl:operation name="updateCustomer">
+      <wsdl:input message="tns:updateCustomer" name="updateCustomer">
+    </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="getCustomerByName">
+      <wsdl:input message="tns:getCustomerByName" name="getCustomerByName">
+    </wsdl:input>
+      <wsdl:output message="tns:getCustomerByNameResponse" name="getCustomerByNameResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:NoSuchCustomerException" name="NoSuchCustomerException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="addCustomer">
+      <wsdl:input message="tns:addCustomer" name="addCustomer">
+    </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="getCustomers">
+      <wsdl:input message="tns:getCustomers" name="getCustomers">
+    </wsdl:input>
+      <wsdl:output message="tns:getCustomersResponse" name="getCustomersResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="deleteCustomerById">
+      <wsdl:input message="tns:deleteCustomerById" name="deleteCustomerById">
+    </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="deleteCustomer">
+      <wsdl:input message="tns:deleteCustomer" name="deleteCustomer">
+    </wsdl:input>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="CustomerServiceServiceSoapBinding" type="tns:CustomerService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="updateCustomer">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="updateCustomer">
+        <soap:body use="literal"/>
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="getCustomerByName">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getCustomerByName">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getCustomerByNameResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="NoSuchCustomerException">
+        <soap:fault name="NoSuchCustomerException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="addCustomer">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="addCustomer">
+        <soap:body use="literal"/>
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="deleteCustomerById">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="deleteCustomerById">
+        <soap:body use="literal"/>
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="getCustomers">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getCustomers">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getCustomersResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="deleteCustomer">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="deleteCustomer">
+        <soap:body use="literal"/>
+      </wsdl:input>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="CustomerServiceService">
+    <wsdl:port binding="tns:CustomerServiceServiceSoapBinding" name="CustomerServicePort">
+      <soap:address location="http://localhost:8080/CustService/services/CustomerServicePort"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

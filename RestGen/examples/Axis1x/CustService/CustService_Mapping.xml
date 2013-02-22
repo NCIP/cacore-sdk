@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mapping name="CustService_Mapping.xml" version="1.0" description="CustService_Mapping.xml" createdOn="2013-02-21T12:51:01.038-05:00" lastUpdatedOn="2013-02-21T12:51:01.038-05:00">
+    <components>
+        <Component id="0" location="C:\DEV\RestGen\examples\Axis1x\CustService\CustService-Beans.jar" type="source" kind="xml"/>
+        <Component id="1" location="WSDLFile.wsdl" type="target" kind="xml"/>
+    </components>
+    <links>
+        <Link path="">
+            <Source id="/@CustService-Beans.jar/@Customer/@Create(PUT)" componentId="Create(PUT)"/>
+            <Target id="/@WSDL/@addCustomer()" componentId="addCustomer"/>
+        </Link>
+        <Link path="">
+            <Source id="/@CustService-Beans.jar/@Customer/@Update(POST)" componentId="Update(POST)"/>
+            <Target id="/@WSDL/@updateCustomer()" componentId="updateCustomer"/>
+        </Link>
+        <Link path="ByName">
+            <Source id="/@CustService-Beans.jar/@Customer/@Read(GET)" componentId="Read(GET)"/>
+            <Target id="/@WSDL/@getCustomerByName()" componentId="getCustomerByName"/>
+        </Link>
+        <Link path="customers">
+            <Source id="/@CustService-Beans.jar/@Customer/@Read(GET)" componentId="Read(GET)"/>
+            <Target id="/@WSDL/@getCustomers()" componentId="getCustomers"/>
+        </Link>
+        <Link path="">
+            <Source id="/@CustService-Beans.jar/@Customer/@Delete(DELETE)" componentId="Delete(DELETE)"/>
+            <Target id="/@WSDL/@deleteCustomer()" componentId="deleteCustomer"/>
+        </Link>
+    </links>
+    <Options outputPath="C:\DEV\RestGen\examples\Axis1x\CustService\generated" rootPath="C:\DEV\RestGen" wrapperType="SOAP_SERVICE" wsdlLocation="http://localhost:29080/CustSOAPService/services/CustomerServicePort?WSDL"/>
+    <resources>
+        <Resource name="Customer" path="Service" pojoLocation="C:\DEV\RestGen\examples\Axis1x\CustService\CustService-Beans.jar">
+            <methods>
+                <Method name="PUT" pathName="Create(PUT)">
+                    <Implementation type="SOAP" name="CustomerServiceService" clientType="" path="" portName="CustomerServicePort">
+                        <Operation name="addCustomer" style="">
+                            <inputs/>
+                            <Output type="null"/>
+                        </Operation>
+                    </Implementation>
+                </Method>
+                <Method name="POST" pathName="Update(POST)">
+                    <Implementation type="SOAP" name="CustomerServiceService" clientType="" path="" portName="CustomerServicePort">
+                        <Operation name="updateCustomer" style="">
+                            <inputs/>
+                            <Output type="null"/>
+                        </Operation>
+                    </Implementation>
+                </Method>
+                <Method name="GET" pathName="Read(GET)">
+                    <Implementation type="SOAP" name="CustomerServiceService" clientType="" path="ByName" portName="CustomerServicePort">
+                        <Operation name="getCustomerByName" style="">
+                            <inputs/>
+                            <Output type="null"/>
+                        </Operation>
+                    </Implementation>
+                </Method>
+                <Method name="GET" pathName="Read(GET)">
+                    <Implementation type="SOAP" name="CustomerServiceService" clientType="" path="customers" portName="CustomerServicePort">
+                        <Operation name="getCustomers" style="">
+                            <inputs/>
+                            <Output type="null"/>
+                        </Operation>
+                    </Implementation>
+                </Method>
+                <Method name="DELETE" pathName="Delete(DELETE)">
+                    <Implementation type="SOAP" name="CustomerServiceService" clientType="" path="" portName="CustomerServicePort">
+                        <Operation name="deleteCustomer" style="">
+                            <inputs/>
+                            <Output type="null"/>
+                        </Operation>
+                    </Implementation>
+                </Method>
+            </methods>
+        </Resource>
+    </resources>
+</mapping>
