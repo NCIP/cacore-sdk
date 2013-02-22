@@ -37,6 +37,7 @@ import org.springframework.core.annotation.AnnotationUtils;
 import com.predic8.schema.ComplexType;
 import com.predic8.schema.Element;
 import com.predic8.schema.Schema;
+import com.predic8.schema.TypeDefinition;
 import com.predic8.wsdl.Binding;
 import com.predic8.wsdl.Definitions;
 import com.predic8.wsdl.Fault;
@@ -167,6 +168,8 @@ public class RESTfulResourceGenerator extends Generator {
 				resourceTemplate.setAttribute("DeleteMethods", str);
 			}
 
+			
+			resourceTemplate.setAttribute("importStatements", "import gov.nih.nci.restgen.generated.client.*;");
 			GeneratorUtil.writeFile(mapping.getOptions().getOutputPath()
 					+ getFileOutputPath(), resourceName + "Resource.java",
 					resourceTemplate.toString());
@@ -677,8 +680,12 @@ public class RESTfulResourceGenerator extends Generator {
 					List<Fault> faults = op.getFaults();
 					for (Fault fault : faults) {
 						StringBuffer buffer = new StringBuffer();
+						String faultName = fault.getName();
+						if(!fault.getName().endsWith("Exception"))
+							faultName = fault.getName() + "_Exception";
+						
 						buffer.append("catch(gov.nih.nci.restgen.generated.client."
-								+ fault.getName() + " e)\n");
+								+ faultName + " e)\n");
 						buffer.append("{\n");
 						buffer.append("\t e.printStackTrace();\n");
 						buffer.append("\t throw new WebApplicationException(buildResponseError(\"GET_METHOD\", \""
@@ -931,18 +938,40 @@ public class RESTfulResourceGenerator extends Generator {
 	}
 
 	private String getOperationReturnTypeFromWSDL(String portName,
-			String operationName, Definitions defs) {
+			String operationName, Definitions defs) throws GeneratorException {
 		String returnType = null;
 		for (PortType pt : defs.getPortTypes()) {
 			for (com.predic8.wsdl.Operation op : pt.getOperations()) {
 				if (operationName.equals(op.getName())) {
 					com.predic8.wsdl.Output output = op.getOutput();
 					List<Schema> schemas = defs.getSchemas();
-
+					String outputName = output.getName();
+					if(outputName == null)
+						outputName = output.getMessage().getName();
 					for (Schema schema : schemas) {
-						schema.getElement(output.getName());
-						ComplexType complex = schema.getComplexType(output
-								.getName());
+						//if(schema.getNamespaceContext() != null)
+						//	continue;
+						List<ComplexType> types = schema.getComplexTypes();
+						ComplexType complex = null;
+						if(types.size() != 0)
+						{
+						  complex = schema.getComplexType(outputName);
+						}
+						
+						if(complex == null)
+						{
+							try
+							{
+								Element schemaElement = schema.getElement(outputName);
+								complex = (ComplexType)schemaElement.getEmbeddedType();
+							}
+							catch(Exception e)
+							{
+								continue;
+							}
+						}
+						if(complex == null)
+							throw new GeneratorException("Failed to parse complex type for "+output.getName());
 						List<Element> elements = complex.getSequence()
 								.getElements();
 						Element element = elements.get(0);

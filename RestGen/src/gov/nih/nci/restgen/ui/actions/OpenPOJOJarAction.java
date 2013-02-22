@@ -329,6 +329,9 @@ public class OpenPOJOJarAction extends AbstractContextAction
      for(Field field : javaClass.getFields()){
   	   validatePOJOMethods = false;
   	   //System.out.println("field class type....******"+field.getType());
+  	   //System.out.println("field class name....******"+field.getName());
+   	  if(field.getName().contains("serialVersionUID") || field.isStatic())
+   	   continue;
   	 if(!isWrapperType(field.getType().toString()))
 	   {
   		 
@@ -352,11 +355,9 @@ public class OpenPOJOJarAction extends AbstractContextAction
   		}  
 	   }
   	      
-  	  if(field.getName().contains("serialVersionUID"))
-    	   continue;
 	   
 	   for(Method method : javaClass.getMethods()){
-	   	   //System.out.println("Field names:"+field.getName()+method.getName()+"\n");
+	   	   //System.out.println("method names:"+method.getName()+"\n");
 		   String fieldCompareGet = "get"+field.getName();
 		   String fieldCompareSet = "set"+field.getName();
 		   if(fieldCompareGet.equalsIgnoreCase(method.getName()))
@@ -398,7 +399,7 @@ public class OpenPOJOJarAction extends AbstractContextAction
   	  
      }
      
-     return validatePOJOMethods;
+     return true;
      
      // validate and parse the POJO class here
 	

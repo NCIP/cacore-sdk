@@ -131,14 +131,16 @@ public class NewPOJOFileAction extends AbstractContextAction
      	   boolean validatePOJOMethods = false;
      	   boolean foundGetMethod = false;
      	   boolean foundSetMethod = false;
+   	   	  if(field.getName().contains("serialVersionUID") || field.isStatic())
+   	     	   continue;
      	    if(!isWrapperType(field.getType().toString()))
      	   {
-     		   JOptionPane.showMessageDialog(mainFrame.getMainFrame(), "This file Contains non-primitive java types (" + SOURCE_TREE_FILE_DEFAULT_EXTENTION + ") field class... : " + field.getType().toString(), "Not a POJO class file", JOptionPane.ERROR_MESSAGE);
-     		   //return false;
-     		   break;
+     		   JOptionPane.showMessageDialog(mainFrame.getMainFrame(), "This file Contains non-primitive java types (" + SOURCE_TREE_FILE_DEFAULT_EXTENTION + ") field class... : " + field.getType().toString() +". Try Opening POJO jar with all dependent classes together.", "Open POJO", JOptionPane.ERROR_MESSAGE);
+     		   return;
+     		   //break;
      	   }
-     	   if(field.getName().contains("serialVersionUID"))
-     	   continue;
+   	   	  if(field.getName().contains("serialVersionUID") || field.isStatic())
+     	     	   continue;
      		   
      	   for(Method method : javaClass.getMethods()){
      	   	   //System.out.println("Field names:"+field.getName()+method.getName()+"\n");
@@ -166,7 +168,7 @@ public class NewPOJOFileAction extends AbstractContextAction
      	   if(!validatePOJOMethods)
      	   {
      		   JOptionPane.showMessageDialog(mainFrame.getMainFrame(),"Does not contain Get/Set methods", "This file is not a POJO class (" + SOURCE_TREE_FILE_DEFAULT_EXTENTION + ") file : " + file.getName(), JOptionPane.ERROR_MESSAGE);
-                return;
+                //return;
      	   }
         }
         
@@ -266,7 +268,7 @@ public class NewPOJOFileAction extends AbstractContextAction
 	
 	public static boolean isWrapperType(String clazz)
     {
-		if(clazz.contains("java.")||clazz.contains("javax."))
+		if(clazz.startsWith("java.")||clazz.startsWith("javax."))
 		{
 			return true;
 		}
@@ -277,10 +279,10 @@ public class NewPOJOFileAction extends AbstractContextAction
     {
         HashSet<String> ret = new HashSet<String>();
         ret.add("boolean");
-        ret.add("character");
+        ret.add("char");
         ret.add("byte");
         ret.add("short");
-        ret.add("integer");
+        ret.add("int");
         ret.add("long");
         ret.add("float");
         ret.add("double");

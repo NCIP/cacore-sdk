@@ -1,5 +1,7 @@
 package gov.nih.nci.restgen.codegen;
 
+import java.util.List;
+
 import gov.nih.nci.restgen.mapping.model.Mapping;
 import gov.nih.nci.restgen.mapping.model.Options;
 import gov.nih.nci.restgen.util.GeneratorUtil;
@@ -8,6 +10,7 @@ import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
 import org.apache.cxf.tools.wsdlto.WSDLToJava;
 
+import com.predic8.schema.Schema;
 import com.predic8.wsdl.Definitions;
 import com.predic8.wsdl.Operation;
 import com.predic8.wsdl.PortType;
@@ -32,6 +35,16 @@ public class WebserviceClientGenerator extends Generator {
 			WSDLParser parser = new WSDLParser();
 
 			Definitions defs = parser.parse(wsdlLocation);
+			List<Schema> schemas = defs.getSchemas();
+			String[] ns = new String[schemas.size()*2];
+			StringBuffer targetNamespaces = new StringBuffer();
+			int i=0;
+			for(Schema schema : schemas)
+			{
+				ns[i] = "-p";
+				ns[i+1] = schema.getTargetNamespace()+"=gov.nih.nci.restgen.generated.client";
+				i+=2;
+			}
 			String namespace = defs.getTargetNamespace();
 
 			/*for (PortType pt : defs.getPortTypes()) {
@@ -51,25 +64,43 @@ public class WebserviceClientGenerator extends Generator {
 				throw new GeneratorException(
 						"Failed to generate SOAP client: Invalid namespace");
 
+			
 			if (mapping.getOptions().getWsdlBindingFile() != null) {
-				WSDLToJava.main(new String[] { "-client", "-compile", "-d",
-						outputPath, "-p",
-						namespace + "=gov.nih.nci.restgen.generated.client",
-						"-b", mapping.getOptions().getWsdlBindingFile(),
-						//"-noAddressBinding",
-						// "-b",
-						// mapping.getOptions().getOutputPath()+File.separator+"binding.xml",
-						"-wsdlLocation", wsdlLocation,
-						wsdlLocation });
+				int argsCount = 9 + ns.length;
+				
+				String[] args = new String[argsCount];
+				int counter = 0;
+				args[counter] = "-client";
+				args[counter++] = "-compile";
+				args[counter++] = "-d";
+				args[counter++] = outputPath;
+				args[counter++] = "-b";
+				args[counter++] = mapping.getOptions().getWsdlBindingFile();
+				args[counter++] = "-wsdlLocation";
+				args[counter++] = wsdlLocation;
+				for(int j=0;j<ns.length;j++)
+				{
+					args[counter++] = ns[j];
+				}
+				args[counter++] = wsdlLocation;
+				WSDLToJava.main(args);
 			} else {
-				WSDLToJava.main(new String[] { "-client", "-compile", "-d",
-						outputPath, "-p",
-						namespace + "=gov.nih.nci.restgen.generated.client",
-						 //"-b",
-						 //mapping.getOptions().getOutputPath()+java.io.File.separator+"binding.xml",
-						//"-noAddressBinding",
-						"-wsdlLocation", wsdlLocation,
-						wsdlLocation });
+				int argsCount = 7 + ns.length;
+				
+				String[] args = new String[argsCount];
+				int counter = 0;
+				args[counter++] = "-client";
+				args[counter++] = "-compile";
+				args[counter++] = "-d";
+				args[counter++] = outputPath;
+				args[counter++] = "-wsdlLocation";
+				args[counter++] = wsdlLocation;
+				for(int j=0;j<ns.length;j++)
+				{
+					args[counter++] = ns[j];
+				}
+				args[counter++] = wsdlLocation;
+				WSDLToJava.main(args);
 			}
 		} catch (Exception e) {
 			context.getLogger().error("Failed to generate SOAP client", e);
