@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<mapping name="catalog.xml" version="1.0" description="catalog.xml" createdOn="2013-02-19T13:04:21.659-05:00" lastUpdatedOn="2013-02-19T13:04:21.661-05:00">
+<mapping name="catalog-bean.xml" version="1.0" description="catalog-bean.xml" createdOn="2013-02-20T15:14:34.152-05:00" lastUpdatedOn="2013-02-20T15:14:34.152-05:00">
     <components>
-        <Component id="0" location="C:\DEV\RestGen\examples\catalog\gov\nih\nci\ejb\Book.class" type="source" kind="xml"/>
+        <Component id="0" location="C:\DEV\RestGen\examples\catalog\bean.jar" type="source" kind="xml"/>
         <Component id="1" location="C:\DEV\RestGen\examples\catalog\BookCatalog.jar" type="target" kind="xml"/>
     </components>
     <links>
         <Link path="">
-            <Source id="/@Book.class/@Create(PUT)" componentId="Create(PUT)"/>
-            <Target id="/@EJB/@Catalog/@addBook(gov.nih.nci.ejb.Book)" componentId="addBook"/>
+            <Source id="/@bean.jar/@Book/@Create(PUT)" componentId="Create(PUT)"/>
+            <Target id="/@EJB/@gov.nih.nci.ejb.Catalog/@addBook(gov.nih.nci.ejb.Book)" componentId="addBook"/>
         </Link>
         <Link path="">
-            <Source id="/@Book.class/@Update(POST)" componentId="Update(POST)"/>
-            <Target id="/@EJB/@Catalog/@updateBook(gov.nih.nci.ejb.Book)" componentId="updateBook"/>
+            <Source id="/@bean.jar/@Book/@Update(POST)" componentId="Update(POST)"/>
+            <Target id="/@EJB/@gov.nih.nci.ejb.Catalog/@updateBook(gov.nih.nci.ejb.Book)" componentId="updateBook"/>
         </Link>
         <Link path="book">
-            <Source id="/@Book.class/@Read(GET)" componentId="Read(GET)"/>
-            <Target id="/@EJB/@Catalog/@getBook(java.lang.String)" componentId="getBook"/>
+            <Source id="/@bean.jar/@Book/@Read(GET)" componentId="Read(GET)"/>
+            <Target id="/@EJB/@gov.nih.nci.ejb.Catalog/@getBook(java.lang.String)" componentId="getBook"/>
         </Link>
         <Link path="books">
-            <Source id="/@Book.class/@Read(GET)" componentId="Read(GET)"/>
-            <Target id="/@EJB/@Catalog/@getBooks()" componentId="getBooks"/>
+            <Source id="/@bean.jar/@Book/@Read(GET)" componentId="Read(GET)"/>
+            <Target id="/@EJB/@gov.nih.nci.ejb.Catalog/@getBooks()" componentId="getBooks"/>
         </Link>
         <Link path="">
-            <Source id="/@Book.class/@Delete(DELETE)" componentId="Delete(DELETE)"/>
-            <Target id="/@EJB/@Catalog/@deleteBook(java.lang.String)" componentId="deleteBook"/>
+            <Source id="/@bean.jar/@Book/@Delete(DELETE)" componentId="Delete(DELETE)"/>
+            <Target id="/@EJB/@gov.nih.nci.ejb.Catalog/@deleteBook(java.lang.String)" componentId="deleteBook"/>
         </Link>
     </links>
-    <Options outputPath="C:\DEV\RestGen\demo\ejb" rootPath="C:\DEV\RestGen" wrapperType="EJB" ejbLocation="C:\DEV\RestGen\examples\catalog\BookCatalog.jar"/>
+    <Options outputPath="C:\DEV\RestGen\demo\ejb" rootPath="C:\DEV\RestGen\jar\workingspace" wrapperType="EJB" ejbLocation="C:\DEV\RestGen\examples\catalog\BookCatalog.jar"/>
     <resources>
-        <Resource name="Book" path="catalog" pojoLocation="C:\DEV\RestGen\examples\catalog\gov\nih\nci\ejb\Book.class">
+        <Resource name="Book" path="catalog" pojoLocation="C:\DEV\RestGen\examples\catalog\bean.jar">
             <methods>
                 <Method name="PUT" pathName="Create(PUT)">
                     <Implementation type="EJB" name="catalog" clientType="EJB_LOCAL" path="" jndiProperties="" jndiName="ejb/CatalogRemoteHome">
@@ -64,7 +64,7 @@
                     <Implementation type="EJB" name="catalog" clientType="EJB_LOCAL" path="books" jndiProperties="" jndiName="ejb/CatalogRemoteHome">
                         <Operation name="getBooks" style="">
                             <inputs/>
-                            <Output type="java.util.List"/>
+                            <Output type="java.util.List&lt;gov.nih.nci.ejb.Book&gt;"/>
                         </Operation>
                     </Implementation>
                 </Method>
