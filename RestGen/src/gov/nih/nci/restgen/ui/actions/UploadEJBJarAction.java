@@ -413,6 +413,7 @@ public class UploadEJBJarAction extends AbstractContextAction
 					String className = je.getName().substring(0,je.getName().length()-6);
 					className = className.replace('/', '.');
 					Class c = cl.loadClass(className);
+					
 					if(className.equals(remoteInterfaceClass))
 					{
 						for(java.lang.reflect.Method method : c.getDeclaredMethods())
@@ -468,14 +469,20 @@ public class UploadEJBJarAction extends AbstractContextAction
 								element.setEJBName((String)EJBNameList.get(j));
 							}
 							element.setInputType(argumentTypes);
+							
 							if(returnType.toString().contains("class"))
 							{
 								element.setOutputType(returnType.toString().replace("class", "").trim());
+							}
+							else if(returnType.toString().contains("interface"))
+							{
+								element.setOutputType(returnType.toString().replace("interface", "").trim());
 							}
 							else
 							{
 								element.setOutputType(returnType.toString());
 							}
+							
 							if(EJBBeanList!=null)
 							{
 								element.setClassPath((String)EJBBeanList.get(j));
