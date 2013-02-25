@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mapping name="catalog_mapping.xml" version="1.0" description="catalog_mapping.xml" createdOn="2013-02-25T09:22:28.209-05:00" lastUpdatedOn="2013-02-25T09:22:28.210-05:00">
+    <components>
+        <Component id="0" location="C:\DEV\RestGen\examples\ejb2x\BookCatalog\bean.jar" type="source" kind="xml"/>
+        <Component id="1" location="C:\DEV\RestGen\examples\ejb2x\BookCatalog\BookCatalog.jar" type="target" kind="xml"/>
+    </components>
+    <links>
+        <Link path="">
+            <Source id="/@bean.jar/@Book/@Create(PUT)" componentId="Create(PUT)"/>
+            <Target id="/@EJB/@gov.nih.nci.ejb.Catalog/@addBook(gov.nih.nci.ejb.Book)" componentId="addBook"/>
+        </Link>
+        <Link path="">
+            <Source id="/@bean.jar/@Book/@Update(POST)" componentId="Update(POST)"/>
+            <Target id="/@EJB/@gov.nih.nci.ejb.Catalog/@updateBook(gov.nih.nci.ejb.Book)" componentId="updateBook"/>
+        </Link>
+        <Link path="">
+            <Source id="/@bean.jar/@Book/@Read(GET)" componentId="Read(GET)"/>
+            <Target id="/@EJB/@gov.nih.nci.ejb.Catalog/@getBooks()" componentId="getBooks"/>
+        </Link>
+        <Link path="">
+            <Source id="/@bean.jar/@Book/@Delete(DELETE)" componentId="Delete(DELETE)"/>
+            <Target id="/@EJB/@gov.nih.nci.ejb.Catalog/@deleteBook(java.lang.String)" componentId="deleteBook"/>
+        </Link>
+    </links>
+    <Options outputPath="C:\DEV\RestGen\examples\ejb2x\BookCatalog\generated" rootPath="C:\DEV\RestGen" wrapperType="EJB" ejbLocation="C:\DEV\RestGen\examples\ejb2x\BookCatalog\BookCatalog.jar"/>
+    <resources>
+        <Resource name="Book" path="catalog" pojoLocation="C:\DEV\RestGen\examples\ejb2x\BookCatalog\bean.jar">
+            <methods>
+                <Method name="PUT" pathName="Create(PUT)">
+                    <Implementation type="EJB" name="catalog" clientType="EJB_LOCAL" path="" jndiProperties="" jndiName="CatalogRemoteHome">
+                        <Operation name="addBook" style="">
+                            <inputs>
+<inputs name="param1" type="gov.nih.nci.ejb.Book"/>
+                            </inputs>
+                            <Output type="void"/>
+                        </Operation>
+                    </Implementation>
+                </Method>
+                <Method name="POST" pathName="Update(POST)">
+                    <Implementation type="EJB" name="catalog" clientType="EJB_LOCAL" path="" jndiProperties="" jndiName="CatalogRemoteHome">
+                        <Operation name="updateBook" style="">
+                            <inputs>
+<inputs name="param1" type="gov.nih.nci.ejb.Book"/>
+                            </inputs>
+                            <Output type="void"/>
+                        </Operation>
+                    </Implementation>
+                </Method>
+                <Method name="GET" pathName="Read(GET)">
+                    <Implementation type="EJB" name="catalog" clientType="EJB_LOCAL" path="" jndiProperties="" jndiName="CatalogRemoteHome">
+                        <Operation name="getBooks" style="">
+                            <inputs/>
+                            <Output type="interface java.util.List"/>
+                        </Operation>
+                    </Implementation>
+                </Method>
+                <Method name="DELETE" pathName="Delete(DELETE)">
+                    <Implementation type="EJB" name="catalog" clientType="EJB_LOCAL" path="" jndiProperties="" jndiName="CatalogRemoteHome">
+                        <Operation name="deleteBook" style="">
+                            <inputs>
+<inputs name="param1" type="java.lang.String"/>
+                            </inputs>
+                            <Output type="void"/>
+                        </Operation>
+                    </Implementation>
+                </Method>
+            </methods>
+        </Resource>
+    </resources>
+</mapping>
