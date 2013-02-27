@@ -1,4 +1,5 @@
-package gov.nih.nci.restgen.mapping;
+package gov.nih.nci.restgen.util;
+
 
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -15,7 +16,7 @@ import javax.xml.namespace.QName;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 
-public class JAXBMarshaller implements gov.nih.nci.restgen.mapping.Marshaller {
+public class JAXBMarshaller implements gov.nih.nci.restgen.util.Marshaller {
 	
 	private Map<String, JAXBContext> jaxbContextMap = new HashMap<String, JAXBContext>();
 	private boolean includeXmlDeclaration = true;

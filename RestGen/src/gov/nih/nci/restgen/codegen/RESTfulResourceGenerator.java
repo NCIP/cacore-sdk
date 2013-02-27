@@ -537,8 +537,13 @@ public class RESTfulResourceGenerator extends Generator {
 		}
 
 		template.setAttribute("ReturnType", returnType);
-		template.setAttribute("PathParamPath",
-				getOperationPath(impl, method.getName()));
+		String pathParamPath = getOperationPath(impl, method.getName());
+		if(pathParamPath != null)
+		{
+			template.setAttribute("PathParamPath", "@Path(\""+pathParamPath+"\")");
+			template.setAttribute("PathParamPathShort", pathParamPath);
+		}
+		
 		template.setAttribute("PathParam", getOperationPathParams(method, impl));
 		template.setAttribute("HomeInterface", ejbHomeName);
 		template.setAttribute("RemoteInterface", ejbRemoteName);
@@ -634,7 +639,9 @@ public class RESTfulResourceGenerator extends Generator {
 	private String getOperationPath(Implementation impl, String methodName) {
 		if (methodName.equals(Method.POST) || methodName.equals(Method.PUT)) {
 			if (impl.getPath() != null && impl.getPath().trim().length() > 0)
-				return impl.getPath();
+				return "/"+impl.getPath();
+			else
+				return null;
 		}
 		Operation operation = impl.getOperation();
 		List<Input> inputs = operation.getInputs();
@@ -653,13 +660,11 @@ public class RESTfulResourceGenerator extends Generator {
 		Iterator<Input> iterator = inputs.iterator();
 		while (iterator.hasNext()) {
 			Input input = (Input) iterator.next();
-			buffer.append("{" + input.getName() + "}");
-			if (iterator.hasNext())
-				buffer.append("/");
+			buffer.append("/{" + input.getName() + "}");
 		}
 
 		if (path != null)
-			return path + "/" + buffer.toString();
+			return path + buffer.toString();
 		else
 			return buffer.toString();
 	}
@@ -766,7 +771,11 @@ public class RESTfulResourceGenerator extends Generator {
 					}
 					template.setAttribute("ReturnType", returnType);
 					template.setAttribute("OperationParameters", opParams);
-					template.setAttribute("PathParamPath", pathParamPath);
+					if(pathParamPath != null)
+					{
+						template.setAttribute("PathParamPath", "@Path(\""+pathParamPath+"\")");
+						template.setAttribute("PathParamPathShort", pathParamPath);
+					}
 					template.setAttribute("PathParam", pathParam);
 					template.setAttribute("ParamNames", buffer.toString());
 				}
@@ -809,7 +818,9 @@ public class RESTfulResourceGenerator extends Generator {
 
 		if (methodName.equals(Method.POST) || methodName.equals(Method.PUT)) {
 			if (impl.getPath() != null && impl.getPath().trim().length() > 0)
-				return impl.getPath();
+				return "/"+impl.getPath();
+			else 
+				return null;
 		}
 		
 		StringBuffer buffer = new StringBuffer();

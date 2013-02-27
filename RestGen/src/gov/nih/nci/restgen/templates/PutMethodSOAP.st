@@ -1,4 +1,5 @@
 	@PUT
+	$PathParamPath$	
 	@Consumes("application/xml")
 	public $PutReturnType$ update$ResourceName$($RequestType$)
 	{
@@ -16,7 +17,7 @@
 			buffer.append("<type>MESSAGE</type>");
 			buffer.append("<code>ADD</code>");
 			buffer.append("<resource>$ResourceName$</resource>");
-			buffer.append("<path>PUT</path>");
+			buffer.append("<path>$PathParamPathShort$</path>");
 			buffer.append("<message>Successfully Added $ResourceName$</message>");
 			buffer.append("</response>");
 			builder.entity(buffer.toString());

@@ -1,5 +1,5 @@
 	@DELETE
-	@Path("$PathParamPath$")
+	$PathParamPath$
 	@Consumes("application/xml")
 	public $DeleteReturnType$ remove$ResourceName$($PathParam$)
 	{
@@ -34,7 +34,7 @@
 				buffer.append("<type>MESSAGE</type>");
 				buffer.append("<code>DELETE</code>");
 				buffer.append("<resource>$ResourceName$</resource>");
-				buffer.append("<path>$PathParamPath$</path>");
+				buffer.append("<path>$PathParamPathShort$</path>");
 				buffer.append("<message>Successfully deleted $ResourceName$</message>");
 				buffer.append("</response>");
 				builder.entity(buffer.toString());
@@ -53,7 +53,7 @@
 				buffer.append("<type>ERROR</type>");
 				buffer.append("<code>GET_EJB_LOCAL_1</code>");
 				buffer.append("<resource>$ResourceName$</resource>");
-				buffer.append("<path>GET</path>");
+				buffer.append("<path>$PathParamPathShort$</path>");
 				buffer.append("<message>Failed to create local client for EJB: "+ e.getMessage() + "</message>");
 				buffer.append("</response>");
 				builder.entity(buffer.toString());
@@ -69,7 +69,7 @@
 				buffer.append("<type>ERROR</type>");
 				buffer.append("<code>GET_EJB_LOCAL_1</code>");
 				buffer.append("<resource>$ResourceName$</resource>");
-				buffer.append("<path>GET</path>");
+				buffer.append("<path>$PathParamPathShort$</path>");
 				buffer.append("<message>Failed to create local client for EJB: "+ e.getMessage() + "</message>");
 				buffer.append("</response>");
 				builder.entity(buffer.toString());
@@ -85,7 +85,7 @@
 				buffer.append("<type>ERROR</type>");
 				buffer.append("<code>GET_EJB_LOCAL_1</code>");
 				buffer.append("<resource>$ResourceName$</resource>");
-				buffer.append("<path>GET</path>");
+				buffer.append("<path>$PathParamPathShort$</path>");
 				buffer.append("<message>Failed to create local client for EJB: "+ e.getMessage() + "</message>");
 				buffer.append("</response>");
 				builder.entity(buffer.toString());

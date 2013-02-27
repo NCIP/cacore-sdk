@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<customer>
+    <firstName>Jane</firstName>
+    <lastName>Doe</lastName>
+    <phoneNumbers>
+        <number>555-1111</number>
+        <type>work</type>
+    </phoneNumbers>
+    <phoneNumbers>
+        <number>555-2222</number>
+        <type>home</type>
+    </phoneNumbers>
+</customer>

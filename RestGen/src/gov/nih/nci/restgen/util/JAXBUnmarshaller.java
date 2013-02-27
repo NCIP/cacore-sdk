@@ -1,4 +1,5 @@
-package gov.nih.nci.restgen.mapping;
+package gov.nih.nci.restgen.util;
+
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -32,7 +33,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
-public class JAXBUnmarshaller implements gov.nih.nci.restgen.mapping.Unmarshaller {
+public class JAXBUnmarshaller implements gov.nih.nci.restgen.util.Unmarshaller {
 
 
 	private Map<String, JAXBContext> jaxbContextMap = new HashMap<String, JAXBContext>();
@@ -122,18 +123,23 @@ public class JAXBUnmarshaller implements gov.nih.nci.restgen.mapping.Unmarshalle
 			}
 
 	        Unmarshaller unmarshaller = context.createUnmarshaller();
-
-	        if(validate){
+System.out.println("Context: "+context.toString());
 	        	//reset validation events list
 	        	validationEvents = new ArrayList<ValidationEvent>();
 
 	    		SAXParserFactory parserFactory = SAXParserFactory.newInstance();
-                parserFactory.setNamespaceAware(true);
-                parserFactory.setValidating(true);
+	    		if(validate)
+	    		{
+	    			parserFactory.setNamespaceAware(true);
+	    			parserFactory.setValidating(true);
+	    		}
                 SAXParser saxParser = parserFactory.newSAXParser();
 
                 XMLReader xmlReader = saxParser.getXMLReader();
-                xmlReader.setFeature("http://apache.org/xml/features/validation/schema", true);
+    	        if(validate)
+    	        	xmlReader.setFeature("http://apache.org/xml/features/validation/schema", true);
+    	        else
+    	        	xmlReader.setFeature("http://apache.org/xml/features/validation/schema", false);
                 xmlReader.setFeature("http://xml.org/sax/features/namespace-prefixes", true);
                 xmlReader.setFeature("http://xml.org/sax/features/xmlns-uris", true);
                 xmlReader.setFeature("http://apache.org/xml/features/honour-all-schemaLocations", true);
@@ -165,19 +171,21 @@ public class JAXBUnmarshaller implements gov.nih.nci.restgen.mapping.Unmarshalle
                 xmlReader.setEntityResolver(entityResolver);
 
                 saxSource = new SAXSource(xmlReader, inSrc);
-	        }
-	        unmarshaller.setEventHandler(new ValidationHandler());
-
+	        
+	        unmarshaller.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
+                
 	        hasBeenInvokedWithoutContext = true;
 
 	        return unmarshaller.unmarshal(saxSource);
 		}
 		catch(JAXBException e)
 		{
+			e.printStackTrace();
 			throw new XMLUtilityException(e.getMessage(), e);
 		}
 		catch(Exception e)
 		{
+			e.printStackTrace();
 			throw new XMLUtilityException(e.getMessage(), e);
 		}
 	}

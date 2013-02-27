@@ -1,5 +1,5 @@
 	@DELETE
-	@Path("$PathParamPath$")
+	$PathParamPath$
 	@Consumes("application/xml")
 	public $DeleteReturnType$ remove$ResourceName$($PathParam$)
 	{
@@ -17,7 +17,7 @@
 			buffer.append("<type>MESSAGE</type>");
 			buffer.append("<code>DELETE</code>");
 			buffer.append("<resource>$ResourceName$</resource>");
-			buffer.append("<path>$PathParamPath$</path>");
+			buffer.append("<path>$PathParamPathShort$</path>");
 			buffer.append("<message>Successfully deleted $ResourceName$</message>");
 			buffer.append("</response>");
 			builder.entity(buffer.toString());

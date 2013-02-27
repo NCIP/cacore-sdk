@@ -7,10 +7,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import gov.nih.nci.restgen.mapping.JAXBMarshaller;
-import gov.nih.nci.restgen.mapping.JAXBUnmarshaller;
-import gov.nih.nci.restgen.mapping.Marshaller;
-import gov.nih.nci.restgen.mapping.XMLUtilityException;
 import gov.nih.nci.restgen.mapping.model.Component;
 import gov.nih.nci.restgen.mapping.model.Implementation;
 import gov.nih.nci.restgen.mapping.model.Input;
@@ -22,6 +18,10 @@ import gov.nih.nci.restgen.mapping.model.Output;
 import gov.nih.nci.restgen.mapping.model.Resource;
 import gov.nih.nci.restgen.mapping.model.Source;
 import gov.nih.nci.restgen.mapping.model.Target;
+import gov.nih.nci.restgen.util.JAXBMarshaller;
+import gov.nih.nci.restgen.util.JAXBUnmarshaller;
+import gov.nih.nci.restgen.util.Marshaller;
+import gov.nih.nci.restgen.util.XMLUtilityException;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;

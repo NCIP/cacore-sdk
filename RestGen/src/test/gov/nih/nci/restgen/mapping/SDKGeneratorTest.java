@@ -3,7 +3,6 @@ package test.gov.nih.nci.restgen.mapping;
 import gov.nih.nci.restgen.codegen.GeneratorContext;
 import gov.nih.nci.restgen.codegen.GeneratorException;
 import gov.nih.nci.restgen.codegen.RESTfulWrapperGenerator;
-import gov.nih.nci.restgen.mapping.XMLUtilityException;
 import gov.nih.nci.restgen.mapping.model.Component;
 import gov.nih.nci.restgen.mapping.model.Implementation;
 import gov.nih.nci.restgen.mapping.model.Input;
@@ -16,6 +15,7 @@ import gov.nih.nci.restgen.mapping.model.Output;
 import gov.nih.nci.restgen.mapping.model.Resource;
 import gov.nih.nci.restgen.mapping.model.Source;
 import gov.nih.nci.restgen.mapping.model.Target;
+import gov.nih.nci.restgen.util.XMLUtilityException;
 
 import java.util.ArrayList;
 import java.util.Date;

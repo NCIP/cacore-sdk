@@ -10,7 +10,7 @@ import javax.xml.ws.Service;
 
 import gov.nih.nci.restgen.codegen.WebserviceClientGenerator;
 import gov.nih.nci.restgen.generated.WSQueryImpl;
-import gov.nih.nci.restgen.mapping.XMLUtilityException;
+import gov.nih.nci.restgen.util.XMLUtilityException;
 
 import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.jaxws.endpoint.dynamic.JaxWsDynamicClientFactory;

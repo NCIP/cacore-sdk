@@ -1,8 +1,6 @@
 package gov.nih.nci.restgen.codegen;
 
-import gov.nih.nci.restgen.mapping.JAXBUnmarshaller;
 import gov.nih.nci.restgen.mapping.MappingGenerator;
-import gov.nih.nci.restgen.mapping.XMLUtilityException;
 import gov.nih.nci.restgen.mapping.model.Implementation;
 import gov.nih.nci.restgen.mapping.model.Mapping;
 import gov.nih.nci.restgen.mapping.model.Method;
@@ -10,7 +8,9 @@ import gov.nih.nci.restgen.mapping.model.Operation;
 import gov.nih.nci.restgen.mapping.model.Options;
 import gov.nih.nci.restgen.mapping.model.Resource;
 import gov.nih.nci.restgen.util.GeneratorUtil;
+import gov.nih.nci.restgen.util.JAXBUnmarshaller;
 import gov.nih.nci.restgen.util.JarHelper;
+import gov.nih.nci.restgen.util.XMLUtilityException;
 
 import java.io.File;
 import java.io.IOException;
@@ -304,7 +304,7 @@ public class RESTfulWrapperGenerator extends Generator {
 
 	private void copySystemClasses() throws GeneratorException
 	{
-		String path = context.getMapping().getOptions()
+		String destPath = context.getMapping().getOptions()
 				.getOutputPath()
 				+ File.separator + "web" 
 				+ File.separator + "WEB-INF" 
@@ -312,27 +312,39 @@ public class RESTfulWrapperGenerator extends Generator {
 				+ File.separator +"gov"
 				+ File.separator +"nih"
 				+ File.separator +"nci"
-				+ File.separator +"restgen"
-				+ File.separator +"util";
+				+ File.separator +"restgen";
+				//+ File.separator +"util";
 				
-		File dirSystem = new File(path);
+		File dirSystem = new File(destPath);
 		if(!dirSystem.exists())
 			dirSystem.mkdirs();
 		String srcPath = context.getMapping().getOptions().getRootPath()
-						+ File.separator +"bin"
+						//+ File.separator +"bin"
 						+ File.separator +"gov"
 						+ File.separator +"nih"
 						+ File.separator +"nci"
 						+ File.separator +"restgen"
-						+ File.separator +"util"
-						+ File.separator +"RESTContentHandler.class";
-		String destPath = path + File.separator + "RESTContentHandler.class";
-		System.out.println("srcPath "+srcPath);
-		System.out.println("destPath "+destPath);
+						+ File.separator +"util";
+
 		File srcFile = new File(srcPath);
 		File destFile = new File(destPath);
+		
+		//String srcFile1 = srcPath + File.separator +"RESTContentHandler.class";
+		//String destFile1 = destPath + File.separator + "RESTContentHandler.class";
+		//File srcFile1 = new File(srcFile1);
+		//File destFile1 = new File(destFile1);
+		
 		try {
-			GeneratorUtil.copyFile(srcFile, destFile);
+			List<String> fileNames = new ArrayList<String>();
+			fileNames.add("util"+File.separator+"SingleFileFilter.class");
+			fileNames.add("util"+File.separator+"ListHolder.class");
+			fileNames.add("util"+File.separator+"FileUtil.class");
+			fileNames.add("util"+File.separator+"FileUtil$1.class");
+			fileNames.add("util"+File.separator+"GeneralUtilities.class");
+			fileNames.add("util"+File.separator+"GeneratorUtil.class");
+			fileNames.add("util"+File.separator+"JarHelper.class");
+			
+			GeneratorUtil.copyDir(srcPath, destPath, fileNames);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			throw new GeneratorException("Failed to copy RESTContentHandler to destination");

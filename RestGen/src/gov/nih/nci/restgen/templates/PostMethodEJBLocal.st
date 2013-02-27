@@ -1,5 +1,5 @@
 	@POST
-	@Path("$PathParamPath$")
+	$PathParamPath$
 	@Consumes("application/xml")
 	public $PostReturnType$ add$ResourceName$($RequestType$)
 	{
@@ -24,7 +24,7 @@
 				buffer.append("<type>MESSAGE</type>");
 				buffer.append("<code>UPDATE</code>");
 				buffer.append("<resource>$ResourceName$</resource>");
-				buffer.append("<path>POST</path>");
+				buffer.append("<path>$PathParamPathShort$</path>");
 				buffer.append("<message>Successfully updated $ResourceName$</message>");
 				buffer.append("</response>");
 				builder.entity(buffer.toString());
@@ -43,7 +43,7 @@
 				buffer.append("<type>ERROR</type>");
 				buffer.append("<code>GET_EJB_LOCAL_1</code>");
 				buffer.append("<resource>$ResourceName$</resource>");
-				buffer.append("<path>GET</path>");
+				buffer.append("<path>$PathParamPathShort$</path>");
 				buffer.append("<message>Failed to create local client for EJB: "+ e.getMessage() + "</message>");
 				buffer.append("</response>");
 				builder.entity(buffer.toString());
@@ -59,7 +59,7 @@
 				buffer.append("<type>ERROR</type>");
 				buffer.append("<code>GET_EJB_LOCAL_1</code>");
 				buffer.append("<resource>$ResourceName$</resource>");
-				buffer.append("<path>GET</path>");
+				buffer.append("<path>$PathParamPathShort$</path>");
 				buffer.append("<message>Failed to create local client for EJB: "+ e.getMessage() + "</message>");
 				buffer.append("</response>");
 				builder.entity(buffer.toString());
@@ -75,7 +75,7 @@
 				buffer.append("<type>ERROR</type>");
 				buffer.append("<code>GET_EJB_LOCAL_1</code>");
 				buffer.append("<resource>$ResourceName$</resource>");
-				buffer.append("<path>GET</path>");
+				buffer.append("<path>$PathParamPathShort$</path>");
 				buffer.append("<message>Failed to create local client for EJB: "+ e.getMessage() + "</message>");
 				buffer.append("</response>");
 				builder.entity(buffer.toString());

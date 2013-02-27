@@ -1,4 +1,4 @@
-package gov.nih.nci.restgen.mapping;
+package gov.nih.nci.restgen.util;
 
 public class XMLUtilityException extends Exception {
 

@@ -31,10 +31,15 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.UnmarshalException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.namespace.QName;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamReader;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.log4j.Logger;
 import org.jdom2.JDOMException;
+import org.jdom2.Namespace;
+
+import test.gov.nih.nci.restgen.client.Book;
 
 @Provider
 @Produces("application/xml")
@@ -57,30 +62,27 @@ public class RESTContentHandler implements MessageBodyReader, MessageBodyWriter 
 			Annotation[] annotations, MediaType mediaType,
 			MultivaluedMap httpHeaders, InputStream is) throws IOException,
 			WebApplicationException {
-		InputStreamReader reader = new InputStreamReader(is);
 		try {
-			String packageName = type.getName().substring(0,
-					type.getName().lastIndexOf("."));
-            JAXBContext context = JAXBContext.newInstance(packageName );
+            JAXBContext context = JAXBContext.newInstance(type);
             Unmarshaller u = context.createUnmarshaller();
-/*
-            JAXBElement jaxbElmt = null;
+            XMLInputFactory xmlif = XMLInputFactory.newInstance();
+            XMLStreamReader xmlr = xmlif.createXMLStreamReader(is);        
+
             try
             {
-                jaxbElmt = u.unmarshal(reader, gov.nih.nci.restgen.mapping.model.Mapping.class);
+                JAXBElement je3 = (JAXBElement)u.unmarshal(xmlr, type);
+                return je3.getValue();
             }
-            catch(UnmarshalException ee1)
+            catch(UnmarshalException e)
             {
-                throw new JAXBException(ActionConstants.MESSAGE_NOT_A_MAPPING_FILE  + " (MappingFactory.loadMapping()) : " + f.getName());
+            	e.printStackTrace();
+                throw new JAXBException("Failed to unmarshall : " + type.getName() + " due to; " + e.getMessage());
             }
-            catch(Exception ee2)
+            catch(Exception e)
             {
-                throw new JAXBException("Mapping file opening error : " + f.getAbsolutePath() + "\n" + ee2.getMessage());
+            	e.printStackTrace();
+            	throw new JAXBException("Failed to unmarshall : " + type.getName() + " due to; " + e.getMessage());
             }
-*/
-			gov.nih.nci.restgen.mapping.JAXBUnmarshaller unmarshaller = new gov.nih.nci.restgen.mapping.JAXBUnmarshaller(
-					true, packageName);
-			return unmarshaller.fromXML(reader);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
@@ -119,7 +121,14 @@ public class RESTContentHandler implements MessageBodyReader, MessageBodyWriter 
 				JAXBContext jc = JAXBContext.newInstance( type.getPackage().getName() );
 				Marshaller u = jc.createMarshaller();
 				u.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, new Boolean(true));
-				u.marshal(new JAXBElement(new QName(type.getName()),type, target), writer);
+				String qName = type.getName();
+				if(type.getName().indexOf(".") > 0)
+				{
+					String temp = type.getName().substring(type.getName().lastIndexOf(".")+1);
+					qName = (temp.charAt(0)+"").toLowerCase() + temp.substring(1);
+				}
+				
+				u.marshal(new JAXBElement(new QName(qName),type, target), writer);
 			}
 			//strWriter = new StringWriter();
 			//gov.nih.nci.restgen.mapping.JAXBMarshaller marshaller = new gov.nih.nci.restgen.mapping.JAXBMarshaller(
@@ -150,15 +159,18 @@ public class RESTContentHandler implements MessageBodyReader, MessageBodyWriter 
 	    		return;
 	    	
 	        Object obj = value.get(0);
-	        //System.out.println("obj.getClass() "+obj.getClass().getName());
 	        String className = obj.getClass().getName();
+			String qName = obj.getClass().getName();
+			if(clzz.getName().indexOf(".") > 0)
+			{
+				String temp = obj.getClass().getName().substring(obj.getClass().getName().lastIndexOf(".")+1);
+				qName = (temp.charAt(0)+"").toLowerCase() + temp.substring(1, temp.length());
+			}
 			String collectionName = className.substring(className.lastIndexOf(".")+1)+"s";
-			//System.out.println("collectionName "+collectionName);
-			//System.out.println("package name "+obj.getClass().getPackage().getName());
-			org.jdom2.Element httpQuery = new org.jdom2.Element(collectionName, className);
+			org.jdom2.Element httpQuery = new org.jdom2.Element(collectionName, "");
 
 			Iterator iterator = value.iterator();
-			JAXBContext jc = JAXBContext.newInstance( obj.getClass().getPackage().getName() );
+			JAXBContext jc = JAXBContext.newInstance( obj.getClass().getPackage().getName());
 			Marshaller u = jc.createMarshaller();
 			u.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, new Boolean(true));
 			StringWriter strWriter = null;
@@ -169,7 +181,7 @@ public class RESTContentHandler implements MessageBodyReader, MessageBodyWriter 
 			{
 				Object objValue = iterator.next();
 				strWriter = new StringWriter();
-				u.marshal(new JAXBElement(new QName(obj.getClass().getName()),obj.getClass(), objValue), strWriter);
+				u.marshal(new JAXBElement(new QName(qName),obj.getClass(), objValue), strWriter);
 				in = new StringReader(strWriter.toString());
 				org.jdom2.input.SAXBuilder builder = new org.jdom2.input.SAXBuilder();
 				org.jdom2.Document	doc = builder.build(in);

@@ -1,5 +1,5 @@
 	@GET
-	@Path("$PathParamPath$")
+	$PathParamPath$
 	@Produces("application/xml")
 	public $ReturnType$ get$MethodName$($PathParam$ @Context UriInfo uriInfo)
 	{

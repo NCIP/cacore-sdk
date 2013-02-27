@@ -2,6 +2,9 @@ package gov.nih.nci.restgen.mapping;
 
 import gov.nih.nci.restgen.codegen.GeneratorException;
 import gov.nih.nci.restgen.mapping.model.Mapping;
+import gov.nih.nci.restgen.util.JAXBMarshaller;
+import gov.nih.nci.restgen.util.JAXBUnmarshaller;
+import gov.nih.nci.restgen.util.XMLUtilityException;
 
 import java.io.StringReader;
 

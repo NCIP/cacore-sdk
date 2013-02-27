@@ -1,4 +1,4 @@
-package gov.nih.nci.restgen.mapping;
+package gov.nih.nci.restgen.util;
 
 /**
  * The object used for deserializing an xml rempresentation of an object back to a java bean.
