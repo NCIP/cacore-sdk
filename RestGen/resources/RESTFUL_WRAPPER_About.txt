@@ -1,3 +1,4 @@
 caCore RESTful Wrapper
-Version 1.0 
+Version: @Version_Number@
+Build: @Build_Tag@
 
