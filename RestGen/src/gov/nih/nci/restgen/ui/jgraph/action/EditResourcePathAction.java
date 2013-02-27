@@ -111,7 +111,7 @@ public class EditResourcePathAction extends AbstractContextAction
     	   resourceName = resourceName.replace(".class","");
        }
 
-       char[] specialChars = {'!','@',']','#','$','%','^','&','*'}; 
+       char[] specialChars = {'!','@',']','#','$','%','^','&','*','\\'}; 
        String inputString = null;
        
        Hashtable<String, String> currValues = mainFrame.getMainFrame().getMappingMainPanel().getResourcePathValues();

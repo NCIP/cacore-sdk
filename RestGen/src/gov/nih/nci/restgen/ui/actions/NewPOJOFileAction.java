@@ -125,6 +125,11 @@ public class NewPOJOFileAction extends AbstractContextAction
         InputStream is = new FileInputStream(file);
         ClassParser cp = new ClassParser(is,file.getName());
         JavaClass javaClass = cp.parse();
+        if(javaClass.isEnum() || javaClass.isInterface() || javaClass.isAbstract())
+	    {
+        	JOptionPane.showMessageDialog(mainFrame.getMainFrame(),"Class is an abstract class", "This file is not a POJO class (" + SOURCE_TREE_FILE_DEFAULT_EXTENTION + ") file : " + file.getName(), JOptionPane.ERROR_MESSAGE);
+            return;
+	    }
         ArrayList<String> classList = new ArrayList<String>();
         for(Field field : javaClass.getFields()){
         	//System.out.println("Java field types...."+field.getType());
@@ -168,7 +173,7 @@ public class NewPOJOFileAction extends AbstractContextAction
      	   if(!validatePOJOMethods)
      	   {
      		   JOptionPane.showMessageDialog(mainFrame.getMainFrame(),"Does not contain Get/Set methods", "This file is not a POJO class (" + SOURCE_TREE_FILE_DEFAULT_EXTENTION + ") file : " + file.getName(), JOptionPane.ERROR_MESSAGE);
-                //return;
+                return;
      	   }
         }
         
