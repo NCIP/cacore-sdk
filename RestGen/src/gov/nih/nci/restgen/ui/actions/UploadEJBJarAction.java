@@ -402,7 +402,7 @@ public class UploadEJBJarAction extends AbstractContextAction
 				Enumeration e = jarFile.entries();
 
 				URL[] urls = { new URL("jar:file:" + file+"!/") };
-				URLClassLoader cl = URLClassLoader.newInstance(urls);
+				URLClassLoader cl = URLClassLoader.newInstance(urls,this.getClass().getClassLoader());
 				DefaultTargetTreeNode element = null;
 				while (e.hasMoreElements()) {
 					JarEntry je = (JarEntry) e.nextElement();
