@@ -318,13 +318,24 @@ public class RESTfulWrapperGenerator extends Generator {
 		File dirSystem = new File(destPath);
 		if(!dirSystem.exists())
 			dirSystem.mkdirs();
+		
 		String srcPath = context.getMapping().getOptions().getRootPath()
-						//+ File.separator +"bin"
-						+ File.separator +"gov"
-						+ File.separator +"nih"
-						+ File.separator +"nci"
-						+ File.separator +"restgen"
-						+ File.separator +"util";
+				+ File.separator +"bin"
+				+ File.separator +"gov"
+				+ File.separator +"nih"
+				+ File.separator +"nci"
+				+ File.separator +"restgen"
+				+ File.separator +"util";
+		File srcDir = new File(srcPath);
+		if(!srcDir.exists())
+		{
+			srcPath = context.getMapping().getOptions().getRootPath()
+					+ File.separator +"gov"
+					+ File.separator +"nih"
+					+ File.separator +"nci"
+					+ File.separator +"restgen"
+					+ File.separator +"util";
+		}
 
 		File srcFile = new File(srcPath);
 		File destFile = new File(destPath);

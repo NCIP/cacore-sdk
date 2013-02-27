@@ -66,8 +66,6 @@ public class GeneratorUtil {
 	}
 
 	public static List getFiles(String _dir, String[] _extensions) {
-		java.util.logging.Logger.getLogger("DEBUG").info(
-				"Directory _dir is: " + _dir);
 
 		List<String> files = new ArrayList();
 
@@ -82,18 +80,11 @@ public class GeneratorUtil {
 		} catch (Throwable t) {
 			throw new RuntimeException(t);
 		}
-
-		java.util.logging.Logger.getLogger("DEBUG").info(
-				"Returning these files: " + files);
-
 		return files;
 	}
 
 	public static String getFiles(String _dir, String[] _extensions,
 			String _separator) {
-		java.util.logging.Logger.getLogger("DEBUG").info(
-				"Directory _dir is: " + _dir);
-
 		StringBuffer files = new StringBuffer();
 
 		try {
@@ -107,9 +98,6 @@ public class GeneratorUtil {
 		} catch (Throwable t) {
 			throw new RuntimeException(t);
 		}
-
-		java.util.logging.Logger.getLogger("DEBUG").info(
-				"Returning these files: " + files);
 
 		return files.toString().replaceAll(":$", "");
 	}
