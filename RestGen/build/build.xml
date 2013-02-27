@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<project name="RESTful Wrapper" default="jar" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
+	<property file="build.properties" />
+	<property name="software.dir" location=".." />
+	<property name="src.dir" location="../src" />
+	<property name="bin.dir" location="../bin" />
+	<property name="lib.dir" location="../lib" />
+	<property name="build.dist.dir" location="../dist" />
+	<property name="build.temp.dir" location="${build.dist.dir}/temp" />
+	<property name="build.tag" value="${build.tag}" />
+	<property name="dist.name" value="${dist.name}" />
+	<property name="build.version" value="${build.version}" />
+	<property name="onejar.file" value="${onejar.file}" />
+	<property name="project.name" value="${project.name}" />
+
+	<path id="compile.classpath">
+		<fileset dir="${lib.dir}">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<target name="clean">
+		<delete dir="${bin.dir}" />
+		<delete dir="${build.temp.dir}" />
+		<delete dir="${build.dist.dir}" />
+	</target>
+
+	<target name="build" depends="clean">
+		<mkdir dir="${bin.dir}" />
+		<javac 
+			srcdir="${src.dir}"
+			destdir="${bin.dir}" debug="true" 
+			includes="gov/**"
+			excludes="test/**">
+			<classpath refid="compile.classpath" />
+		</javac>
+	</target>
+
+	<target name="jar" depends="build">
+		<mkdir dir="${bin.dir}/gov/nih/nci/restgen/templates" />
+		<mkdir dir="${build.temp.dir}" />
+		<mkdir dir="${build.temp.dir}/main" />
+		<mkdir dir="${build.temp.dir}/main/jar" />
+		<mkdir dir="${build.temp.dir}/lib" />
+		<copy todir="${build.temp.dir}/main/jar" overwrite="true">
+			<fileset dir="${bin.dir}">
+				<include name="gov/**" />
+			</fileset>
+		</copy>
+		
+		<copy todir="${build.temp.dir}/main/jar/gov/nih/nci/restgen/templates" overwrite="true">
+			<fileset dir="${src.dir}/gov/nih/nci/restgen/templates">
+				<include name="**" />
+			</fileset>
+		</copy>
+		<copy todir="${build.temp.dir}/main/jar/gov/nih/nci/restgen/mapping/model" overwrite="true">
+			<fileset dir="${src.dir}/gov/nih/nci/restgen/mapping/model">
+				<include name="jaxb.index" />
+			</fileset>
+		</copy>
+
+		<copy todir="${build.temp.dir}/lib" overwrite="true">
+			<fileset dir="${software.dir}/lib">
+				<include name="**" />
+			</fileset>
+		</copy>
+
+		<copy todir="${build.temp.dir}/main/jar" overwrite="true">
+			<fileset dir="${software.dir}/resources">
+				<include name="**" />
+			</fileset>
+		</copy>
+		<copy todir="${build.temp.dir}/main/jar" overwrite="true">
+			<fileset dir="${software.dir}/resources/images">
+				<include name="**" />
+			</fileset>
+		</copy>
+		
+		<replace file="${build.temp.dir}/main/jar/RESTFUL_WRAPPER_About.txt" token="@Version_Number@" value="${build.version}"/>
+		<replace file="${build.temp.dir}/main/jar/RESTFUL_WRAPPER_About.txt" token="@Build_Tag@" value="${build.tag}"/>
+		
+		<unzip dest="${build.temp.dir}" src="${software.dir}/build/${onejar.file}"/>
+		<delete dir="${build.temp.dir}/src" />
+		<jar destfile="${build.temp.dir}/main/jar/${project.name}_v${build.version}.jar">
+			<manifest>
+				<attribute name="Generated-By" value="caCORE RESTful Wrapper" />
+				<attribute name="Version" value="${build.version}" />
+			</manifest>
+			<fileset dir="${build.temp.dir}/main/jar" >
+				<include name="**"/>
+			</fileset>
+		</jar>
+
+
+		<copy todir="${build.temp.dir}/main" overwrite="true">
+			<fileset dir="${build.temp.dir}/main/jar/">
+				<include name="${project.name}_v${build.version}.jar" />
+			</fileset>
+		</copy>
+		<delete dir="${build.temp.dir}/main/jar" />
+		<jar destfile="${build.temp.dir}/${dist.name}_v${build.version}.jar">
+			<manifest>
+				<attribute name="Generated-By" value="caCORE RESTful Wrapper" />
+				<attribute name="Main-Class" value="com.simontuffs.onejar.Boot" />
+				<attribute name="One-Jar-Main-Class" value="gov.nih.nci.restgen.ui.main.MainFrame" />
+				<attribute name="Version" value="${build.version}" />
+			</manifest>
+			<fileset dir="${build.temp.dir}" >
+				<include name="**"/>
+			</fileset>
+		</jar>
+		<copy todir="${build.dist.dir}" overwrite="true">
+			<fileset dir="${build.temp.dir}">
+				<include name="${dist.name}_v${build.version}.jar" />
+			</fileset>
+		</copy>
+
+		<delete dir="${build.temp.dir}" />
+	</target>
+</project>
