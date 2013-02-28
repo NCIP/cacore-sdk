@@ -466,8 +466,8 @@ public class MappingMainPanel extends JPanel implements ActionListener
 		targetLocationArea.setLineWrap(true);
 		targetLocationArea.setEditable(false);
 		//targetLocationArea.setPreferredSize(new Dimension((DefaultSettings.FRAME_DEFAULT_WIDTH / 10), 24));
-        targetLocationArea.setPreferredSize(new Dimension((frameWidth / 20), 10));
-		targetLocationPanel.add(targetLocationArea, BorderLayout.CENTER);
+        targetLocationArea.setPreferredSize(new Dimension((frameWidth / 4+70), 10));
+		targetLocationPanel.add(targetLocationArea, BorderLayout.WEST);
 		
 		/*JButton openTargetButton = new JButton(SELECT_TARGET);
 		targetLocationPanel.add(openTargetButton, BorderLayout.EAST);
