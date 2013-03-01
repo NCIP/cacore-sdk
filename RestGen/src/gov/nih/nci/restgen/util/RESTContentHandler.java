@@ -39,7 +39,7 @@ import org.apache.log4j.Logger;
 import org.jdom2.JDOMException;
 import org.jdom2.Namespace;
 
-import test.gov.nih.nci.restgen.client.Book;
+
 
 @Provider
 @Produces("application/xml")
