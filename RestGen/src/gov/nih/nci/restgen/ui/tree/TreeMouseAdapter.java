@@ -52,8 +52,9 @@ public class TreeMouseAdapter extends MouseAdapter {
 			}
 			
 			// Create PopupMenu for the Cell
-			if(treeNode.getChildCount()>0)
+			if((!treeNode.isRoot()&& treeNode.getChildCount()>0)||(treeNode.isRoot()&& !(treeNode.getLeafCount()>4)))
 			{
+				
 				JPopupMenu menu = createTreePopupMenu(treeNode, slctTree, (MappingMainPanel)parentC);
 				menu.show(e.getComponent(), e.getX(), e.getY());
 			}
@@ -71,8 +72,15 @@ public class TreeMouseAdapter extends MouseAdapter {
         //Mapping mappingData = parentPanel.getGraphController().retrieveMappingData(false);
         Object obj = treeNode.getUserObject();
         JPopupMenu popupMenu = new JPopupMenu();
-		popupMenu.add(new JMenuItem(new DeleteNodeAction(mainFrame,tree,treeNode)));
-		popupMenu.add(new JMenuItem(new EditResourcePathAction(mainFrame,tree,treeNode)));
+        if(treeNode.isRoot()&& !(treeNode.getLeafCount()>4))
+        {
+        	popupMenu.add(new JMenuItem(new EditResourcePathAction(mainFrame,tree,treeNode)));
+        }
+        else
+        {
+        	popupMenu.add(new JMenuItem(new DeleteNodeAction(mainFrame,tree,treeNode)));
+        	popupMenu.add(new JMenuItem(new EditResourcePathAction(mainFrame,tree,treeNode)));
+        }
 	    return popupMenu;
 	
 	}

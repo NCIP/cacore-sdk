@@ -9,6 +9,7 @@
 package gov.nih.nci.restgen.ui.actions;
 
 
+import gov.nih.nci.restgen.mapping.model.Mapping;
 import gov.nih.nci.restgen.ui.common.ActionConstants;
 import gov.nih.nci.restgen.ui.common.DefaultSettings;
 import gov.nih.nci.restgen.ui.main.MainFrame;
@@ -100,7 +101,6 @@ public class DeleteNodeAction extends AbstractContextAction
 			return false;
        }
        
-       mainFrame.getMainFrame();
        DefaultEdge [] linkEdge = null;
        DefaultEdge linkEdgeTemp = null;
        DefaultPort [] srcPort = null;
@@ -141,7 +141,6 @@ public class DeleteNodeAction extends AbstractContextAction
 					}
 				}
 				
-				
 			}
 		
 	}
@@ -159,6 +158,17 @@ public class DeleteNodeAction extends AbstractContextAction
 	 //System.out.println("TREENODE STR..."+treeNode.toString());
 	 //
      tree.updateUI();
+     //
+        if(MainFrame.getMappingMainPanel().getMappingTargetFile()!=null)
+        {
+        	Mapping mappingData = MainFrame.getMappingMainPanel().getMiddlePanel().getGraphController().retrieveMappingData(true,"Temp");
+        	if(mappingData!=null)
+        	{
+        		MainFrame.getMappingMainPanel().getMiddlePanel().getGraphController().setMappingData(mappingData, true);
+        		MainFrame.getMappingMainPanel().getMiddlePanel().setMappingNamesforLinkInGraph(mappingData);
+        	}
+		
+        }
        return true;
 	}
 

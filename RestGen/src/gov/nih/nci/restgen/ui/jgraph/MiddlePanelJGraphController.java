@@ -762,6 +762,12 @@ public class MiddlePanelJGraphController {
 			List<DefaultGraphCell> graphCellList) {
 			// PV to allowing mapping of source nodes to multiple target nodes!!
 			//boolean result = sourceNode.isMapped() || targetNode.isMapped();
+		
+		if(((sourceNode.isRoot())||!sourceNode.isRoot()&& sourceNode.getChildCount()>0)||(sourceNode.isRoot()&& !(sourceNode.getLeafCount()>4)))
+		{
+			return false;
+		}
+		
 		boolean result = targetNode.isMapped();
 		if (!result) {// neither one has been mapped before
 			ConnectionSet cs = new ConnectionSet();
