@@ -235,7 +235,7 @@ public class UploadWSDLAction extends AbstractContextAction
     		        OutputStream os = new FileOutputStream(file);
     		        int c;
     		        while ((c = is.read()) != -1) {
-    		        	System.out.print((char) c);
+    		        	//System.out.print((char) c);
     		        	os.write(c);
     		        }
     		        is.close();
