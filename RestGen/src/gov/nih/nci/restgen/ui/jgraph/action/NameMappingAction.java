@@ -20,6 +20,7 @@ import org.jgraph.graph.GraphConstants;
 
 import gov.nih.nci.restgen.ui.actions.DefaultAbstractJgraphAction;
 import gov.nih.nci.restgen.ui.jgraph.MiddlePanelJGraphController;
+import gov.nih.nci.restgen.ui.main.MainFrame;
 import gov.nih.nci.restgen.ui.mapping.MappingMiddlePanel;
 import gov.nih.nci.restgen.ui.tree.DefaultSourceTreeNode;
 import gov.nih.nci.restgen.ui.tree.DefaultTargetTreeNode;
@@ -88,8 +89,10 @@ public class NameMappingAction extends DefaultAbstractJgraphAction
 	 *
 	 * @param e
 	 * @return true if the action is finished successfully; otherwise, return false.
+	 * @throws Exception 
+	 * @throws HeadlessException 
 	 */
-	protected boolean doAction(ActionEvent e)
+	protected boolean doAction(ActionEvent e) throws HeadlessException, Exception
 	{
 //		Log.logInfo(this, "GraphDeleteAction's actionPerformed() is called.");
 		JGraph graph = getController().getMiddlePanel().getGraph();
@@ -108,6 +111,7 @@ public class NameMappingAction extends DefaultAbstractJgraphAction
 				//
 				String prevVal = (String)getController().getMiddlePanel().getGraph().getModel().getValue(linkEdge);
 				String currVal = null;
+				char[] specialChars = {'!','@',']','#','$','%','^','&','*','\\'};
 				if(prevVal!=null)
 				{
 					currVal = JOptionPane.showInputDialog(null, "Please enter the name for mapping : ",
@@ -121,6 +125,30 @@ public class NameMappingAction extends DefaultAbstractJgraphAction
 				
 				if(currVal!=null)
 				{
+					char[] inputStringChars = currVal.toCharArray();
+					boolean specialCharIsFound = false;  
+
+					 for(int x = 0; x < inputStringChars.length; x++)  
+					 {  
+						 
+					   for(int y = 0; y < specialChars.length; y++)
+					   {
+						   
+							   if(inputStringChars[x]==specialChars[y]){  
+								   specialCharIsFound = true;  
+								   break;  
+							   }	 
+						   
+					   }
+					   
+					 }
+
+				       if( specialCharIsFound){
+				         
+				    	   JOptionPane.showMessageDialog(MainFrame.getMappingMainPanel(), "Please enter a valid path...", "Invalid Path Entry!!!", JOptionPane.ERROR_MESSAGE);
+				    	   return false;
+				       }
+					
 					getController().getMiddlePanel().getGraph().getModel().valueForCellChanged(linkEdge,currVal);
 					getController().getMiddlePanel().getGraph().getSelectionModel().clearSelection();
 					tgtNode.setMappingName(currVal);
