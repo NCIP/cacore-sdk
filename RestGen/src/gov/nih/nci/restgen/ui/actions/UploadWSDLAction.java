@@ -49,6 +49,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Collection;
@@ -329,6 +330,7 @@ public void createTargetTree(File file) throws Exception
    //PV Validate WSDL file here
     WSDLParser parser = new WSDLParser();
     Definitions defs = parser.parse(file.getPath());
+    java.util.List<Binding> Bindings =  defs.getBindings();
     ArrayList<Operation> operationsList = new ArrayList<Operation>();
     ArrayList<String> InputTypes = null;
     ArrayList<String> OutputTypes = null;
@@ -405,7 +407,8 @@ public void createTargetTree(File file) throws Exception
                 opObject.setInputTypes(InputTypes);
                 opObject.setOutputTypes(OutputTypes);
                 // get port name here
-                portName = getSOAPOperationPortName(doc, defs.getServices());
+                portName = getSOAPOperationPortName(Bindings, defs.getServices());
+                //System.out.println("Port Name...<<<<"+portName);
                 // get port name here
                 opObject.setPortName(portName);
                 operationsList.add(opObject);
@@ -514,31 +517,19 @@ private String getSOAPOperationStyle(org.w3c.dom.Document doc, String operationN
     return style;
 }
 
-private String getSOAPOperationPortName(org.w3c.dom.Document doc, java.util.List<Service>  services) {
+private String getSOAPOperationPortName(java.util.List<Binding> bindings, java.util.List<Service>  services) {
 	// TODO Auto-generated method stub
 	String Binding = "";
 	String portName = "";
-	//System.out.println("inside getSOAPOperationPortName>>>>>");
-	org.w3c.dom.NodeList listOfBindings = doc.getElementsByTagName("wsdl:binding");
-	for(int s=0; s<listOfBindings.getLength() ; s++){
-    	org.w3c.dom.Node nNode = listOfBindings.item(s);
-    	   if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-
- 			  org.w3c.dom.Element firstSessionElement = ( org.w3c.dom.Element)nNode;
- 			  Binding = firstSessionElement.getAttribute("name");
-    		  NodeList soapOperationsList = firstSessionElement.getElementsByTagName("wsdl:operation");
-    		if(soapOperationsList != null && soapOperationsList.getLength() > 0) {
-    			for(int i=0; i<soapOperationsList.getLength(); i++){
-    			org.w3c.dom.Element el = (org.w3c.dom.Element)soapOperationsList.item(i);
-    			portName = getWSDLOperationPortName(services, Binding);
-    			//System.out.println("port name value......>>>>>"+portName);
-    			
-    			}
-    		}
-    	
- 		   }
-    }
-    
+	//System.out.println("Bindings List size....."+bindings.size());
+	Iterator<Binding> iter =  bindings.iterator();
+	  while(iter.hasNext())
+	  {
+		  Binding = ((Binding)iter.next()).getName();
+		  //System.out.println("Binding names....."+Binding);
+		  portName = getWSDLOperationPortName(services,Binding );
+	  }
+	
     return portName;
 }
 
@@ -553,7 +544,7 @@ private String getWSDLOperationPortName(java.util.List<Service>  services, Strin
 		
 		for (Port port: svc.getPorts())
 		{
-			//System.out.println("PORT BINDING...>>>> : "  + port.getBinding().getName());
+		
 			if(binding.equals(port.getBinding().getName()))
 			{
 				portName = port.getName();
