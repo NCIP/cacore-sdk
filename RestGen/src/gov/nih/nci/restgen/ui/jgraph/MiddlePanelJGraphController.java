@@ -436,7 +436,7 @@ public class MiddlePanelJGraphController {
     		for(int i=0;i<resourceList.size();i++)
     		{
     			Resource rsc = (Resource) resourceList.get(i);
-    			System.out.println("resourcename and method type ..."+mtype.getResourceName()+"  "+rsc.getName());
+    			//System.out.println("resourcename and method type ..."+mtype.getResourceName()+"  "+rsc.getName());
     			rsc.setPojoLocation(mtype.getResourceLocation());
     			if(mtype.getResourceName().equals(rsc.getName()))
     			{

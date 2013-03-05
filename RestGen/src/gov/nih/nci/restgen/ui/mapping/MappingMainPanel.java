@@ -1059,7 +1059,6 @@ public class MappingMainPanel extends JPanel implements ActionListener
 							OutputStream os = new FileOutputStream(fileWSDL);
 							int c;
 							while ((c = is.read()) != -1) {
-							System.out.print((char) c);
 							os.write(c);
 							}
 							is.close();

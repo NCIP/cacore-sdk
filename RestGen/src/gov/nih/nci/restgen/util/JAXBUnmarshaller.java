@@ -123,7 +123,6 @@ public class JAXBUnmarshaller implements gov.nih.nci.restgen.util.Unmarshaller {
 			}
 
 	        Unmarshaller unmarshaller = context.createUnmarshaller();
-System.out.println("Context: "+context.toString());
 	        	//reset validation events list
 	        	validationEvents = new ArrayList<ValidationEvent>();
 
