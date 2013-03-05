@@ -266,17 +266,18 @@ public class RESTfulResourceGenerator extends Generator {
 								packageName.indexOf("."));
 					} else
 						dirStart = packageName;
-					String jarSrcDir = pojoLocation.substring(
-							0,
-							pojoLocation.indexOf(File.separator + dirStart
-									+ File.separator)
-									+ (File.separator + dirStart).length());
 
-					File jarDestFile = new File(libDest + File.separator
-							+ "classes");
-					File jarSrcFolder = new File(jarSrcDir);
-					GeneratorUtil.copyDir(jarSrcDir, libDest + File.separator
-							+ "classes");
+					String outDirName = libDest + File.separator + "classes" + File.separator +  packageName.replace(".", File.separator);
+					File outDir = new File(outDirName);
+					if(!outDir.exists())
+						outDir.mkdirs();
+					
+					File jarDestClassFile = new File(outDirName + File.separator
+							+ javaClass.getFileName());
+					File jarSrcClassFile = new File(pojoLocation);
+					GeneratorUtil.copyFile(jarSrcClassFile, jarDestClassFile);
+//					GeneratorUtil.copyDir(jarSrcDir, libDest + File.separator
+//							+ "classes");
 					String dirName = packageName.replace(".", File.separator);
 					String entry = javaClass.getFileName().substring(0, javaClass.getFileName().indexOf(".class"));
 					indexTemplate.setAttribute("ClassName", entry);
@@ -496,20 +497,21 @@ public class RESTfulResourceGenerator extends Generator {
 		}
 
 		org.jdom2.Element root = doc.getRootElement();
-		org.jdom2.Element eBeans = root.getChild("enterprise-beans");
-		List<org.jdom2.Element> sessionBeans = eBeans.getChildren("session");
+		
+		org.jdom2.Element eBeans = root.getChild("enterprise-beans", root.getNamespace());
+		List<org.jdom2.Element> sessionBeans = eBeans.getChildren("session", root.getNamespace());
 		String ejbHomeName = null;
 		String ejbRemoteName = null;
 
 		boolean foundService = false;
 		for (org.jdom2.Element sessionBean : sessionBeans) {
-			org.jdom2.Element ejbName = sessionBean.getChild("ejb-name");
+			org.jdom2.Element ejbName = sessionBean.getChild("ejb-name", root.getNamespace());
 
 			if (ejbName.getValue().equals(impl.getName())) {
 				foundService = true;
-				org.jdom2.Element ejbHome = sessionBean.getChild("home");
+				org.jdom2.Element ejbHome = sessionBean.getChild("home", root.getNamespace());
 				ejbHomeName = ejbHome.getValue();
-				org.jdom2.Element ejbRemote = sessionBean.getChild("remote");
+				org.jdom2.Element ejbRemote = sessionBean.getChild("remote", root.getNamespace());
 				ejbRemoteName = ejbRemote.getValue();
 				break;
 			}

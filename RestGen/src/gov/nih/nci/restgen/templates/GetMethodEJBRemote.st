@@ -29,19 +29,20 @@
             	ejbHome = ($HomeInterface$)javax.rmi.PortableRemoteObject.narrow(ref,
                                              $HomeInterface$.class);
                 ejbRemote = ejbHome.create();
-	              
-				$ReturnType$ returnType = ejbRemote.$OperationName$($OperationParamNames$);
-				javax.xml.bind.JAXBContext jc = javax.xml.bind.JAXBContext.newInstance( $PackageName$ );
-				javax.xml.bind.Marshaller u = jc.createMarshaller();
-		        u.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, new Boolean(true));
-		        return u.marshal(new JAXBElement<$ReturnType$>(new QName("mapping"), $ReturnType$.class, returnType), f);
+	            return ejbRemote.$OperationName$($OperationParamNames$);
+	            
+				//$ReturnType$ returnType = ejbRemote.$OperationName$($OperationParamNames$);
+				//javax.xml.bind.JAXBContext jc = javax.xml.bind.JAXBContext.newInstance( $PackageName$ );
+				//javax.xml.bind.Marshaller u = jc.createMarshaller();
+		        //u.setProperty(javax.xml.bind.Marshaller.JAXB_FORMATTED_OUTPUT, new Boolean(true));
+		        //return u.marshal(new javax.xml.bind.JAXBElement<$ReturnType$>(new javax.xml.namespace.QName("mapping"), $ReturnType$.class, returnType), f);
 	        }  
 	        catch(javax.ejb.CreateException e) {
 	        	e.printStackTrace();
 				ResponseBuilder builder = Response.status(Status.BAD_REQUEST);
 				builder.type("application/xml");
 				StringBuffer buffer = new StringBuffer();
-				buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+				//buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 				buffer.append("<response>");
 				buffer.append("<type>ERROR</type>");
 				buffer.append("<code>GET_EJB_LOCAL_1</code>");
@@ -57,7 +58,7 @@
 				ResponseBuilder builder = Response.status(Status.BAD_REQUEST);
 				builder.type("application/xml");
 				StringBuffer buffer = new StringBuffer();
-				buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+				//buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 				buffer.append("<response>");
 				buffer.append("<type>ERROR</type>");
 				buffer.append("<code>GET_EJB_LOCAL_1</code>");
@@ -73,7 +74,7 @@
 				ResponseBuilder builder = Response.status(Status.BAD_REQUEST);
 				builder.type("application/xml");
 				StringBuffer buffer = new StringBuffer();
-				buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+				//buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 				buffer.append("<response>");
 				buffer.append("<type>ERROR</type>");
 				buffer.append("<code>GET_EJB_LOCAL_1</code>");

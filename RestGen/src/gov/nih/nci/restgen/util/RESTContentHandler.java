@@ -105,8 +105,12 @@ public class RESTContentHandler implements MessageBodyReader, MessageBodyWriter 
 			if (target == null)
 				return;
 			writer = new OutputStreamWriter(os);
-			if (target instanceof java.lang.String) {
+			if(target.getClass().getPackage().getName().startsWith("java.lang")){
+			//if (target instanceof java.lang.String) {
+				writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
+				writer.write("<result>");
 				writer.write(target.toString());
+				writer.write("</result>");
 				writer.flush();
 				return;
 			}
