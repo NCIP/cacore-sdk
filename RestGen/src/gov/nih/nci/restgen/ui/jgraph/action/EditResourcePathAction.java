@@ -154,6 +154,7 @@ public class EditResourcePathAction extends AbstractContextAction
 		       if( specialCharIsFound){
 		         
 		    	   JOptionPane.showMessageDialog(mainFrame.getMainFrame().getMappingMainPanel(), "Please enter a valid path...", "Invalid Path Entry!!!", JOptionPane.ERROR_MESSAGE);
+		    	   return false;
 		       }
 		       try
 		       {

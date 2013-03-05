@@ -860,7 +860,7 @@ public class MiddlePanelJGraphController {
 					}
 					else
 					{
-						if(!mainFrame.getMainMenuBar().getDefinedMenuItem("Save").isEnabled())
+						if(mainFrame.getMainMenuBar().getDefinedMenuItem("Save").isEnabled())
 						{
 							mainFrame.getMainMenuBar().getDefinedMenuItem("Save").setEnabled(false);
 						}

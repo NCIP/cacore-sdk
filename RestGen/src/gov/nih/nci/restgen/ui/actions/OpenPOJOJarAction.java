@@ -325,7 +325,7 @@ public class OpenPOJOJarAction extends AbstractContextAction
     boolean validatePOJOMethods = false;	
     boolean foundGetMethod = false;
     boolean foundSetMethod = false;
-    
+    boolean validatePOJOClass = true;
      for(Field field : javaClass.getFields()){
   	   validatePOJOMethods = false;
   	   //System.out.println("field class type....******"+field.getType());
@@ -337,7 +337,8 @@ public class OpenPOJOJarAction extends AbstractContextAction
   		 
   		if(!checkForJarEntry(field.getType().toString(), file))
   		{ 
-  		String errorString = "Class Contains non-primitive java types field : " + field.getType().toString(); 
+  		String errorString = "Class Contains non-primitive java types field : " + field.getType().toString();
+  		validatePOJOClass = false;
   		if(getErrorString()==null)
 		{
 			
@@ -382,7 +383,7 @@ public class OpenPOJOJarAction extends AbstractContextAction
   	  {
   		  
   		String errorString = "Class does not define get/set method for java field : " + field.getName()+" "+classFile;
-  	    
+  		validatePOJOClass = false;
   		if(getErrorString()==null)
 		{
 			
@@ -399,7 +400,8 @@ public class OpenPOJOJarAction extends AbstractContextAction
   	  
      }
      
-     return true;
+     
+     return validatePOJOClass;
      
      // validate and parse the POJO class here
 	
