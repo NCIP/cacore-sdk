@@ -110,10 +110,10 @@ public class EditResourcePathAction extends AbstractContextAction
        {
     	   resourceName = resourceName.replace(".class","");
        }
-
-       char[] specialChars = {'!','@',']','#','$','%','^','&','*','\\'}; 
-       String inputString = null;
        
+       char[] specialChars = {'~','`','(',')','!','@',']','#','$','%','^','&','*','\\',' '}; 
+       String inputString = null;
+       String patternString = "[//*]";
        Hashtable<String, String> currValues = mainFrame.getMainFrame().getMappingMainPanel().getResourcePathValues();
            		   
        if(currValues!=null && currValues.containsKey(resourceName))
@@ -135,7 +135,16 @@ public class EditResourcePathAction extends AbstractContextAction
 		{
 			char[] inputStringChars = inputString.toCharArray();
 			boolean specialCharIsFound = false;  
-
+			Pattern pattern = Pattern.compile(patternString, Pattern.CASE_INSENSITIVE);
+		    Matcher matcher = pattern.matcher(inputString);
+		    if(matcher.find()&& matcher.start()>0 || matcher.end()>0)
+		    {
+		    	System.out.println("Find count..."+matcher.start());
+		    	   JOptionPane.showMessageDialog(mainFrame.getMainFrame().getMappingMainPanel(), "Please enter a valid path...", "Invalid Path Entry!!!", JOptionPane.ERROR_MESSAGE);
+		    	   return false;
+		    	
+		    }
+		    
 			 for(int x = 0; x < inputStringChars.length; x++)  
 			 {  
 				 
@@ -150,7 +159,7 @@ public class EditResourcePathAction extends AbstractContextAction
 			   }
 			   
 			 }
-
+			 
 		       if( specialCharIsFound){
 		         
 		    	   JOptionPane.showMessageDialog(mainFrame.getMainFrame().getMappingMainPanel(), "Please enter a valid path...", "Invalid Path Entry!!!", JOptionPane.ERROR_MESSAGE);
