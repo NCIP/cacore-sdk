@@ -772,6 +772,11 @@ public class RESTfulResourceGenerator extends Generator {
 						template.setAttribute("DeleteReturnType", "Response");
 					}
 					template.setAttribute("ReturnType", returnType);
+					if(returnType.startsWith("java.lang"))
+						template.setAttribute("ReturnTypePrimitive", true);
+					else
+						template.setAttribute("ReturnTypePrimitive", false);
+					
 					template.setAttribute("OperationParameters", opParams);
 					if(pathParamPath != null)
 					{
