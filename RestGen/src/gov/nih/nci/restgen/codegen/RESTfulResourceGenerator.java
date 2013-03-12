@@ -936,7 +936,14 @@ public class RESTfulResourceGenerator extends Generator {
 					if (rType.startsWith("java.util.")) {
 						String genericType = getOperationReturnTypeFromWSDL(
 								portName, operationName, defs);
-						return rType + "<" + genericType + ">";
+						if(genericType!=null)
+						{
+							return rType + "<" + genericType + ">";
+						}
+						else
+						{
+							return rType;
+						}
 					}
 					else if (rType.startsWith("java.lang.")) {
 						return "java.lang.String";
