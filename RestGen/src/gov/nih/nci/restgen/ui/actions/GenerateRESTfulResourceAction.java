@@ -138,7 +138,7 @@ public class GenerateRESTfulResourceAction extends AbstractContextAction
         {
         	
 
-        		PropertyConfigurator.configure("resources/log4j.properties");
+        		PropertyConfigurator.configure("log4j.properties");
             	if(logStats==null)
             	{
             		logStats = new JPanel();
