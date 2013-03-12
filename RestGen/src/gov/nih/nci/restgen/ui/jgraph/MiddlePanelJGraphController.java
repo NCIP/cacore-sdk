@@ -864,6 +864,10 @@ public class MiddlePanelJGraphController {
 						{
 							mainFrame.getMainMenuBar().getDefinedMenuItem("Save").setEnabled(false);
 						}
+						if(mainFrame.getMainFrame().getFrameMenu().getDefinedMenuItem("RESTful Resource").isEnabled())
+			   			{
+			            	 mainFrame.getMainFrame().getFrameMenu().getDefinedMenuItem("RESTful Resource").setEnabled(false);
+			   			}
 					}
 	}
 
@@ -880,9 +884,13 @@ public class MiddlePanelJGraphController {
 		setGraphChanged(true);
 		// if save menu is disabled enable it!!
 		MainFrameContainer mainFrame = getMappingPanel().getMainFrame();
-		if(!mainFrame.getMainMenuBar().getDefinedMenuItem("Save").isEnabled());
+		if(mainFrame.getMainMenuBar().getDefinedMenuItem("Save").isEnabled())
 		{
 			mainFrame.getMainMenuBar().getDefinedMenuItem("Save").setEnabled(false);
+		}
+		if(mainFrame.getMainFrame().getFrameMenu().getDefinedMenuItem("RESTful Resource").isEnabled())
+		{
+        	 mainFrame.getMainFrame().getFrameMenu().getDefinedMenuItem("RESTful Resource").setEnabled(false);
 		}
 	}
 

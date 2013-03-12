@@ -31,6 +31,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * This class defines the action to delete selected graphic cells.
@@ -111,7 +113,7 @@ public class NameMappingAction extends DefaultAbstractJgraphAction
 				//
 				String prevVal = (String)getController().getMiddlePanel().getGraph().getModel().getValue(linkEdge);
 				String currVal = null;
-				char[] specialChars = {'!','@',']','#','$','%','^','&','*','\\'};
+				char[] specialChars = {'?','|','{','}','~','`','(',')','!','@',']','[','#','$','%','^','&','*','\\',' ',':',';','"','=','\''};
 				if(prevVal!=null)
 				{
 					currVal = JOptionPane.showInputDialog(null, "Please enter the name for mapping : ",
@@ -127,7 +129,19 @@ public class NameMappingAction extends DefaultAbstractJgraphAction
 				{
 					char[] inputStringChars = currVal.toCharArray();
 					boolean specialCharIsFound = false;  
-
+					String patternString = "[/]+";
+					Pattern pattern = Pattern.compile(patternString, Pattern.CASE_INSENSITIVE);
+				    Matcher matcher = pattern.matcher(currVal);
+				    while(matcher.find())
+				    {
+				    	if(matcher.start()>0 && (matcher.end()-matcher.start()>1))
+				    	{
+				    	   //System.out.println("matcher start...."+matcher.start());
+				    	   JOptionPane.showMessageDialog(MainFrame.getMappingMainPanel(), "Please enter a valid path...", "Invalid Path Entry!!!", JOptionPane.ERROR_MESSAGE);
+				    	   return false;
+				    	}
+				    	
+				    }
 					 for(int x = 0; x < inputStringChars.length; x++)  
 					 {  
 						 

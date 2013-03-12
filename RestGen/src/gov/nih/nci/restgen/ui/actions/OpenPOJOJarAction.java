@@ -323,10 +323,10 @@ public class OpenPOJOJarAction extends AbstractContextAction
     public boolean validatePOJOClass(InputStream is,JavaClass javaClass, String classFile,File file)throws Exception
     {
     boolean validatePOJOMethods = false;	
-    boolean foundGetMethod = false;
-    boolean foundSetMethod = false;
     boolean validatePOJOClass = true;
      for(Field field : javaClass.getFields()){
+       boolean foundGetMethod = false;
+       boolean foundSetMethod = false;
   	   validatePOJOMethods = false;
   	   //System.out.println("field class type....******"+field.getType());
   	   //System.out.println("field class name....******"+field.getName());
@@ -381,8 +381,20 @@ public class OpenPOJOJarAction extends AbstractContextAction
 	   }
   	  if(!validatePOJOMethods)
   	  {
-  		  
-  		String errorString = "Class does not define get/set method for java field : " + field.getName()+" "+classFile;
+  		String errorString = null;
+  		if(!foundGetMethod && !foundSetMethod)
+  		{
+  			errorString = "Class does not define get/set method for java field : " + field.getName();
+  		}
+  		else if(!foundSetMethod)
+  		{
+  			errorString = "Class does not define set method for java field : " + field.getName();
+  		}
+  		else if(!foundGetMethod)
+  		{
+  			errorString = "Class does not define get method for java field : " + field.getName();
+  		}
+  		
   		validatePOJOClass = false;
   		if(getErrorString()==null)
 		{
@@ -393,9 +405,9 @@ public class OpenPOJOJarAction extends AbstractContextAction
 		else
 		{
 			String currentString = getErrorString();
-			setErrorString(getErrorString()+errorString);
+			setErrorString(getErrorString()+"\n"+errorString);
 		}
-  		 break; 
+  		 //break; 
   	  }
   	  
      }

@@ -52,6 +52,7 @@ public class NewPOJOFileAction extends AbstractContextAction
 	private static final String OPEN_DIALOG_TITLE_FOR_DEFAULT_SOURCE_FILE = "Open source POJO";
 	private static final String SOURCE_TREE_FILE_DEFAULT_EXTENTION = ".class";
 	private static final HashSet<String> WRAPPER_TYPES = getWrapperTypes();
+	private String errorString = null; 
 	private MainFrameContainer mainFrame;
 	private JTree tree;
 	/**
@@ -121,7 +122,10 @@ public class NewPOJOFileAction extends AbstractContextAction
 
 	public void createSourceTree(File file) throws Exception
 	{
-		
+		if(getErrorString()!=null)
+		{
+			setErrorString(null);
+		}
         InputStream is = new FileInputStream(file);
         ClassParser cp = new ClassParser(is,file.getName());
         JavaClass javaClass = cp.parse();
@@ -172,9 +176,38 @@ public class NewPOJOFileAction extends AbstractContextAction
      	      
      	   if(!validatePOJOMethods)
      	   {
-     		   JOptionPane.showMessageDialog(mainFrame.getMainFrame(),"Does not contain Get/Set methods", "This file is not a POJO class (" + SOURCE_TREE_FILE_DEFAULT_EXTENTION + ") file : " + file.getName(), JOptionPane.ERROR_MESSAGE);
-                return;
+     		  String errorString = null;
+     	  		if(!foundGetMethod && !foundSetMethod)
+     	  		{
+     	  			errorString = "Class does not define get/set method for java field : " + field.getName();
+     	  		}
+     	  		
+     	  		else if(!foundSetMethod)
+     	  		{
+     	  			errorString = "Class does not define set method for java field : " + field.getName();
+     	  		}
+     	  		else if(!foundGetMethod)
+     	  		{
+     	  			errorString = "Class does not define get method for java field : " + field.getName();
+     	  		}
+     	  		if(getErrorString()==null)
+				{
+					setErrorString(errorString);
+					//JOptionPane.showMessageDialog(ownerFrame.getMainFrame(), "This class in the Jar file : " + entry.getName()+ "","", JOptionPane.ERROR_MESSAGE);
+				}
+				else
+				{
+					String currentString = getErrorString();
+					setErrorString(currentString+"\n"+errorString);
+				}
+     		   //JOptionPane.showMessageDialog(mainFrame.getMainFrame(),errorString, "This file is not a POJO class (" + SOURCE_TREE_FILE_DEFAULT_EXTENTION + ") file : " + file.getName(), JOptionPane.ERROR_MESSAGE);
+               // return;
      	   }
+        }
+        if(getErrorString()!=null)
+        {
+        	   JOptionPane.showMessageDialog(mainFrame.getMainFrame(),errorString, "This file is not a POJO class (" + SOURCE_TREE_FILE_DEFAULT_EXTENTION + ") file : " + file.getName(), JOptionPane.ERROR_MESSAGE);
+        	   return;
         }
         
         // validate and parse the POJO class here
@@ -260,6 +293,14 @@ public class NewPOJOFileAction extends AbstractContextAction
 
 	
 	
+	public String getErrorString() {
+		return errorString;
+	}
+
+	public void setErrorString(String errorString) {
+		this.errorString = errorString;
+	}
+
 	/**
 	 * Return the associated UI component.
 	 *
