@@ -44,7 +44,7 @@ public class $ResourceName$Resource
 			ResponseBuilder builder = Response.status(Status.BAD_REQUEST);
 			builder.type("application/xml");
 			StringBuffer buffer = new StringBuffer();
-			buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+			//buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 			buffer.append("<response>");
 			buffer.append("<type>ERROR</type>");
 			buffer.append("<code>" + code + "</code>");

@@ -13,22 +13,7 @@
 			gov.nih.nci.restgen.generated.client.$ServiceName$ service = new gov.nih.nci.restgen.generated.client.$ServiceName$();
 			gov.nih.nci.restgen.generated.client.$PortType$ port = service.get$PortName$();
 			
-			$if(ReturnTypePrimitive)$
-			String resultType = "$ReturnType$";
-			StringBuffer buffer = new StringBuffer();
-			buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
-			buffer.append("<result>");
-			if(resultType.startsWith("java.lang"))
-			{
-				Object result = port.$OperationName$($OperationParameters$);
-				buffer.append(result.toString());
-			}
-			buffer.append("</result>");
-			return buffer.toString();
-			$endif$
-			$if(!ReturnTypePrimitive)$
-				return port.$OperationName$($OperationParameters$);
-			$endif$			
+			return port.$OperationName$($OperationParameters$);
 		}
 		$ResourceException; separator="\n"$
 		catch(WebApplicationException e)
