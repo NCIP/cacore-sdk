@@ -75,7 +75,6 @@ public class MappingMiddlePanel extends JPanel
 		setSize(new Dimension((DefaultSettings.FRAME_DEFAULT_WIDTH / 3), (int) (DefaultSettings.FRAME_DEFAULT_HEIGHT / 1.5)));
 		// initialize graph
 		initGraph();
-
 		graphScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		graphScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		graphScrollPane.getViewport().setView(graph);
@@ -83,6 +82,7 @@ public class MappingMiddlePanel extends JPanel
 		//update graph as scroll
 		MiddlePanelGraphScrollAdjustmentHandler grapScrollHandler=new MiddlePanelGraphScrollAdjustmentHandler();
 		graphScrollPane.getVerticalScrollBar().addAdjustmentListener(grapScrollHandler);
+		graphScrollPane.getHorizontalScrollBar().addAdjustmentListener(grapScrollHandler);
     }
 	
 	private void initGraph()
