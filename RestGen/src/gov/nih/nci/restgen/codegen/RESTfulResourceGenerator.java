@@ -300,14 +300,20 @@ public class RESTfulResourceGenerator extends Generator {
 		if (method.getImplementation().getClientType() != null
 				&& method.getImplementation().getClientType()
 						.equals(Implementation.EJB_REMOTE)) {
-			String libDest = context.getMapping().getOptions().getOutputPath()
-					+ File.separator + "web" + File.separator + "WEB-INF"
-					+ File.separator + "lib";
+			String jndiDest = context.getMapping().getOptions().getOutputPath()
+					+ File.separator + "web" + File.separator + "WEB-INF" + File.separator + "classes";
+			
+			File jndiDestFolder = new File(jndiDest);
+			if (!jndiDestFolder.exists()) {
+				jndiDestFolder.mkdirs();
+			}
+
+			
 			String jndiFilePath = method.getImplementation()
 					.getJndiProperties();
 			String jndiFileName = jndiFilePath.substring(jndiFilePath
 					.lastIndexOf(File.separator) + 1);
-			File destFile = new File(libDest + File.separator + jndiFileName);
+			File destFile = new File(jndiDest + File.separator + jndiFileName);
 			File srcFile = new File(jndiFilePath);
 			try {
 				GeneratorUtil.copyFile(srcFile, destFile);
