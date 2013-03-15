@@ -189,8 +189,9 @@ public class RESTfulWebResourceGenerator extends Generator {
 			String refBean = "<ref bean=\"" + resource.getName() + "\" />";
 			template.setAttribute("ResourceRefBean", refBean);
 			template.setAttribute("ResourceName", resource.getName());
-
 		}
+		template.setAttribute("ProviderRef", "<ref bean=\"jaxbXmlContentProvider\"/>");
+		template.setAttribute("ProviderBean", "<bean id=\"jaxbXmlContentProvider\" class=\"gov.nih.nci.restgen.util.RESTContentHandler\"/>");
 
 		/*
 		 * if(mapping.getOptions().getWsdlLocation() != null) { WSDLReader
