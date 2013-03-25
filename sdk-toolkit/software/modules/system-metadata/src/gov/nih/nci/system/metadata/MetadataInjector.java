@@ -63,6 +63,8 @@ public final class MetadataInjector {
 */			
 
 				Element subEle = root.getChild(attribute, root.getNamespace());
+				if(subEle == null)
+					continue;
 				Map<String, String> attrs = attrMetadata.getAttributes();
 				Iterator iter = attrs.keySet().iterator();
 				while(iter.hasNext())

@@ -35,6 +35,8 @@ public final class MetadataCache {
 		caDSRMetadata cMetadata = new caDSRMetadata();
 		try {
 			InputStream in = this.getClass().getClassLoader().getResourceAsStream("/"+fileName);
+			if(in != null && in.available() == 0)
+				return metadata;
 			SAXBuilder builder = new SAXBuilder();
 			Document doc = builder.build(in);
 			Element rootEle = doc.getRootElement(); // <metadata>

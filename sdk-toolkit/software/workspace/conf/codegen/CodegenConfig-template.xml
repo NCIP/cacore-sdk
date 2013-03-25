@@ -177,7 +177,7 @@
 				<property name="fileName" value="caDSRMetadata.xml"/>						
 			</bean>
 		</property>
-		<property name="enabled" value="true"/>
+		<property name="enabled" value="@ENABLE_CADSR_METADATA@"/>
 		<property name="name" value="caDSR Metadata Transformer" />		
 		<property name="transformerUtils" ref="TransformerUtils"/>	
 	</bean>
