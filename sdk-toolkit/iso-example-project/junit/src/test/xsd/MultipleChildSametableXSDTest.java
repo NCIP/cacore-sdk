@@ -6,7 +6,6 @@ import gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.sametable.GovtOrga
 
 import org.jdom.Document;
 
-import test.xml.mapping.SDKXSDTestBase;
 
 public class MultipleChildSametableXSDTest extends SDKXSDTestBase
 {

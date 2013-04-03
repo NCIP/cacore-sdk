@@ -88,7 +88,7 @@ public class O2OMultipleAssociationWJoinXSDTest extends SDKXSDTestBase
 		Class targetClass = Bride.class;
 		Class associatedClass = InLaw.class;
 
-		validateClassAssociationElements(targetClass, associatedClass, "father","0","1");
+		validateClassAssociationElements(targetClass, associatedClass, "father","0","1", false);
 	}	
 	
 	
@@ -104,7 +104,7 @@ public class O2OMultipleAssociationWJoinXSDTest extends SDKXSDTestBase
 		Class targetClass = Bride.class;
 		Class associatedClass = InLaw.class;
 
-		validateClassAssociationElements(targetClass, associatedClass, "mother","0","1");
+		validateClassAssociationElements(targetClass, associatedClass, "mother","0","1", false);
 	}	
 		
 	/**

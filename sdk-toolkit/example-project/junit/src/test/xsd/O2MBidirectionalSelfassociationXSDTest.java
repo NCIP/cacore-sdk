@@ -5,7 +5,7 @@ import gov.nih.nci.cacoresdk.domain.onetomany.bidirectional.selfassociation.Memb
 
 import org.jdom.Document;
 
-import test.xml.mapping.SDKXSDTestBase;
+import test.xsd.SDKXSDTestBase;
 
 public class O2MBidirectionalSelfassociationXSDTest extends SDKXSDTestBase
 {
@@ -85,7 +85,7 @@ public class O2MBidirectionalSelfassociationXSDTest extends SDKXSDTestBase
 		Class targetClass = MemberO2MBS.class;
 		Class associatedClass = MemberO2MBS.class;
 
-		validateClassAssociationElements(targetClass, associatedClass, "friend","1","1");
+		validateClassAssociationElements(targetClass, associatedClass, "friend","1","1", false);
 	}	
 	
 	

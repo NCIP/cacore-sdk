@@ -4,11 +4,6 @@ import gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.OrderLine;
 import gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.Product;
 import gov.nih.nci.iso21090.Ii;
 import gov.nih.nci.system.applicationservice.ApplicationException;
-import gov.nih.nci.system.query.cql.CQLAssociation;
-import gov.nih.nci.system.query.cql.CQLAttribute;
-import gov.nih.nci.system.query.cql.CQLObject;
-import gov.nih.nci.system.query.cql.CQLPredicate;
-import gov.nih.nci.system.query.cql.CQLQuery;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
 import java.util.Collection;
@@ -225,46 +220,6 @@ public class O2OBidirectionalTest extends SDKISOTestBase
 		assertNotNull(product.getName());
 		assertEquals("1",product.getId().getExtension());
 	}	
-	/**
-	 * Uses CQL Criteria for search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * Verifies that the associated object has required Id
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testOneAssociatedObjectCQL1() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-		
-		CQLAssociation association = new CQLAssociation();
-		association.setName("gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.Product");
-		association.setAttribute(new CQLAttribute("id",CQLPredicate.EQUAL_TO,"1"));
-		association.setTargetRoleName("product");
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.OrderLine");
-		target.setAssociation(association);
-		cqlQuery.setTarget(target);
-
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(1,results.size());
-		
-		Iterator i = results.iterator();
-		
-		OrderLine orderLine = (OrderLine)i.next();
-		assertNotNull(orderLine);
-		
-		assertNotNull(orderLine);
-		assertNotNull(orderLine.getId());
-		assertEquals(orderLine.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
-		assertNotNull(orderLine.getName());
-		assertEquals("1",orderLine.getId().getExtension());
-	}	
-
 	public void testOneAssociatedObjectHQL1() throws ApplicationException {
 		HQLCriteria hqlCriteria = new HQLCriteria(
 				"from gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.OrderLine orderline "
@@ -286,45 +241,6 @@ public class O2OBidirectionalTest extends SDKISOTestBase
 		assertEquals("1",orderLine.getId().getExtension());	
 	}
 
-	/**
-	 * Uses CQL Criteria for search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * Verifies that the associated object has required Id
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testOneAssociatedObjectCQL2() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-		
-		CQLAssociation association = new CQLAssociation();
-		association.setName("gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.OrderLine");
-		association.setAttribute(new CQLAttribute("id",CQLPredicate.EQUAL_TO,"1"));
-		association.setTargetRoleName("line");
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.Product");
-		target.setAssociation(association);
-		cqlQuery.setTarget(target);
-
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(1,results.size());
-		
-		Iterator i = results.iterator();
-		
-		Product product = (Product)i.next();
-		assertNotNull(product);
-		
-		assertNotNull(product);
-		assertNotNull(product.getId());
-		assertEquals(product.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
-		assertNotNull(product.getName());
-		assertEquals("1",product.getId().getExtension());
-	}	
 	
 	public void testOneAssociatedObjectHQL2() throws ApplicationException {
 		HQLCriteria hqlCriteria = new HQLCriteria(
@@ -345,33 +261,6 @@ public class O2OBidirectionalTest extends SDKISOTestBase
 		assertEquals(product.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 		assertNotNull(product.getName());
 		assertEquals(new Integer(1), new Integer(product.getId().getExtension()));
-	}
-	
-	/**
-	 * Uses CQL Criteria for search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set is 0
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testZeroAssociatedObjectCQL() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-		
-		CQLAssociation association = new CQLAssociation();
-		association.setName("gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.Product");
-		association.setAttribute(new CQLAttribute("id",CQLPredicate.EQUAL_TO,"3"));
-		association.setTargetRoleName("product");
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.OrderLine");
-		target.setAssociation(association);
-		cqlQuery.setTarget(target);
-
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(0,results.size());
 	}
 	
 	public void testGetMethods1() throws ApplicationException

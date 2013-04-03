@@ -85,7 +85,7 @@ public class O2OBidirectionalXSDTest extends SDKXSDTestBase
 		Class targetClass = Product.class;
 		Class associatedClass = OrderLine.class;
 
-		validateClassAssociationElements(targetClass, associatedClass, "line","0","1");
+		validateClassAssociationElements(targetClass, associatedClass, "line","0","1", false);
 	}	
 	
 	
@@ -101,6 +101,6 @@ public class O2OBidirectionalXSDTest extends SDKXSDTestBase
 		Class targetClass = OrderLine.class;
 		Class associatedClass = Product.class;
 
-		validateClassAssociationElements(targetClass, associatedClass, "product","0","1");
+		validateClassAssociationElements(targetClass, associatedClass, "product","0","1", false);
 	}	
 }

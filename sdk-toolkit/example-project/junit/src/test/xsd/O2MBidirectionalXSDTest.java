@@ -85,7 +85,7 @@ public class O2MBidirectionalXSDTest extends SDKXSDTestBase
 		Class targetClass = HardDrive.class;
 		Class associatedClass = Computer.class;
 
-		validateClassAssociationElements(targetClass, associatedClass, "computer","1","1");
+		validateClassAssociationElements(targetClass, associatedClass, "computer","1","1", false);
 	}	
 	
 	

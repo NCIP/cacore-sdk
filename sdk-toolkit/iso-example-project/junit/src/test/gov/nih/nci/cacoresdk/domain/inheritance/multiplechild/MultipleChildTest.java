@@ -5,11 +5,6 @@ import gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.Student;
 import gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.UndergraduateStudent;
 import gov.nih.nci.iso21090.St;
 import gov.nih.nci.system.applicationservice.ApplicationException;
-import gov.nih.nci.system.query.cql.CQLAssociation;
-import gov.nih.nci.system.query.cql.CQLAttribute;
-import gov.nih.nci.system.query.cql.CQLObject;
-import gov.nih.nci.system.query.cql.CQLPredicate;
-import gov.nih.nci.system.query.cql.CQLQuery;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
 import java.util.Collection;
@@ -102,37 +97,6 @@ public class MultipleChildTest extends SDKISOTestBase
 		}
 	}
 	
-	/**
-	 * Uses CQL Criteria for search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testEntireObjectCQL1() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.UndergraduateStudent");
-		cqlQuery.setTarget(target);
-
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(5,results.size());
-		
-		for(Iterator i = results.iterator();i.hasNext();)
-		{
-			UndergraduateStudent result = (UndergraduateStudent)i.next();
-			assertNotNull(result);
-			assertNotNull(result.getId());
-			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
-			assertNotNull(result.getName());
-		}
-	}
-
 	public void testEntireObjectHQL1() throws ApplicationException {
 
 		HQLCriteria hqlCriteria = new HQLCriteria(
@@ -153,7 +117,7 @@ public class MultipleChildTest extends SDKISOTestBase
 	}
 	
 	/**
-	 * Uses CQL Criteria for search
+	 * Uses HQL Criteria for search
 	 * Verifies that the results are returned 
 	 * Verifies size of the result set
 	 * Verifies that none of the attribute is null
@@ -175,61 +139,6 @@ public class MultipleChildTest extends SDKISOTestBase
 			assertNotNull(result.getId());
 			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
 			assertNotNull(result.getName());
-		}
-	}
-
-	public void testEntireObjectCQL2() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.Student");
-		cqlQuery.setTarget(target);
-
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(10,results.size());
-		
-		for(Iterator i = results.iterator();i.hasNext();)
-		{
-			Student result = (Student)i.next();
-			assertNotNull(result);
-			assertNotNull(result.getId());
-			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
-			assertNotNull(result.getName());
-		}
-	}
-
-	/**
-	 * Uses CQL Criteria for search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testEntireObjectCQL3() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.GraduateStudent");
-		cqlQuery.setTarget(target);
-
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(5,results.size());
-		
-		for(Iterator i = results.iterator();i.hasNext();)
-		{
-			GraduateStudent result = (GraduateStudent)i.next();
-			assertNotNull(result);
-			assertNotNull(result.getId());
-			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
-			assertNotNull(result.getName());
-			assertNotNull(result.getProjectName());
 		}
 	}
 
@@ -268,35 +177,6 @@ public class MultipleChildTest extends SDKISOTestBase
 
 		assertNotNull(results);
 		assertEquals(0,results.size());
-	}
-
-	
-	/**
-	 * Uses CQL Search Criteria for inheritance as association in search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testZeroAssociationCQL() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-
-		CQLAssociation association = new CQLAssociation();
-		association.setName("gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.UndergraduateStudent");
-		association.setAttribute(new CQLAttribute("name", CQLPredicate.EQUAL_TO,"Student_Name9"));
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.Student");
-		target.setAssociation(association);
-		cqlQuery.setTarget(target);
-		
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(0,results.size());
-		
 	}
 
 	public void testZeroAssociationHQL() throws ApplicationException {
@@ -397,42 +277,6 @@ public class MultipleChildTest extends SDKISOTestBase
 		}
 	}
 	
-	/**
-	 * Uses CQL Criteria for inheritance as association in search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testAssociationCQL1() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-
-		CQLAssociation association = new CQLAssociation();
-		association.setName("gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.UndergraduateStudent");
-		association.setAttribute(new CQLAttribute("name", CQLPredicate.EQUAL_TO,"Student_Name3"));
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.Student");
-		target.setAssociation(association);
-		cqlQuery.setTarget(target);
-		
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(1,results.size());
-		
-		for(Iterator i = results.iterator();i.hasNext();)
-		{
-			Student result = (Student)i.next();
-			assertNotNull(result);
-			assertNotNull(result.getId());
-			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
-			assertNotNull(result.getName());
-		}
-	}
-
 	public void testAssociationHQL1() throws ApplicationException {
 		HQLCriteria hqlCriteria = new HQLCriteria(
 				"from gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.Student where name='Student_Name3'");
@@ -450,42 +294,6 @@ public class MultipleChildTest extends SDKISOTestBase
 			assertNotNull(result.getName());
 		}
 	}	
-
-	/**
-	 * Uses CQL Criteria for inheritance as association in search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testAssociationCQL2() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-
-		CQLAssociation association = new CQLAssociation();
-		association.setName("gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.Student");
-		association.setAttribute(new CQLAttribute("name", CQLPredicate.EQUAL_TO,"Student_Name4"));
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.UndergraduateStudent");
-		target.setAssociation(association);
-		cqlQuery.setTarget(target);
-		
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(1,results.size());
-		
-		for(Iterator i = results.iterator();i.hasNext();)
-		{
-			UndergraduateStudent result = (UndergraduateStudent)i.next();
-			assertNotNull(result);
-			assertNotNull(result.getId());
-			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
-			assertNotNull(result.getName());
-		}
-	}
 
 	public void testAssociationHQL2() throws ApplicationException {
 		HQLCriteria hqlCriteria = new HQLCriteria(
@@ -505,43 +313,6 @@ public class MultipleChildTest extends SDKISOTestBase
 		}
 	}	
 	
-	/**
-	 * Uses CQL Criteria for inheritance as association in search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testAssociationCQL3() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-
-		CQLAssociation association = new CQLAssociation();
-		association.setName("gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.GraduateStudent");
-		association.setAttribute(new CQLAttribute("name", CQLPredicate.EQUAL_TO,"Student_Name8"));
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.Student");
-		target.setAssociation(association);
-		cqlQuery.setTarget(target);
-		
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(1,results.size());
-		
-		for(Iterator i = results.iterator();i.hasNext();)
-		{
-			Student result = (Student)i.next();
-			assertNotNull(result);
-			assertNotNull(result.getId());
-			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
-			assertNotNull(result.getName());
-		}
-	}
-	
-
 	public void testAssociationHQL3() throws ApplicationException {
 		HQLCriteria hqlCriteria = new HQLCriteria(
 				"from gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.Student where name='Student_Name8'");
@@ -553,42 +324,6 @@ public class MultipleChildTest extends SDKISOTestBase
 
 		for (Iterator i = results.iterator(); i.hasNext();) {
 			Student result = (Student) i.next();
-			assertNotNull(result);
-			assertNotNull(result.getId());
-			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
-			assertNotNull(result.getName());
-		}
-	}
-	
-	/**
-	 * Uses CQL Criteria for inheritance as association in search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testAssociationCQL4() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-
-		CQLAssociation association = new CQLAssociation();
-		association.setName("gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.Student");
-		association.setAttribute(new CQLAttribute("name", CQLPredicate.EQUAL_TO,"Student_Name10"));
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.GraduateStudent");
-		target.setAssociation(association);
-		cqlQuery.setTarget(target);
-		
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(1,results.size());
-		
-		for(Iterator i = results.iterator();i.hasNext();)
-		{
-			GraduateStudent result = (GraduateStudent)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
 			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);

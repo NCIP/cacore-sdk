@@ -15,13 +15,13 @@ public class O2OUnidirectionalSelfassociationXMLDataTest extends SDKXMLDataTestB
 	{
 		return "One to One Unidirectional XML Data Test Case";
 	}
-	
+
 	/**
 	 * Uses Nested Search Criteria for search
-	 * Verifies that the results are returned 
+	 * Verifies that the results are returned
 	 * Verifies size of the result set
 	 * Verifies that none of the attribute is null
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	public void testEntireObjectNestedSearch1() throws Exception
@@ -31,20 +31,20 @@ public class O2OUnidirectionalSelfassociationXMLDataTest extends SDKXMLDataTestB
 
 		assertNotNull(results);
 		assertEquals(5,results.size());
-		
+
 		for(Iterator i = results.iterator();i.hasNext();)
 		{
 			Person result = (Person)i.next();
 			toXML(result);
-			
+
 			validateClassElements(result);
 			validateAttribute(result,"id",result.getId());
 			validateAttribute(result,"name",result.getName());
-			
+
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
 			Person result2 = (Person)fromXML(result);
-			
+
 			assertNotNull(result2);
 			assertNotNull(result2.getId());
 			assertNotNull(result2.getName());
@@ -53,10 +53,10 @@ public class O2OUnidirectionalSelfassociationXMLDataTest extends SDKXMLDataTestB
 
 	/**
 	 * Uses Nested Search Criteria for search
-	 * Verifies that the results are returned 
+	 * Verifies that the results are returned
 	 * Verifies size of the result set
 	 * Verifies that none of the attribute is null
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	public void testEntireObjectNestedSearch2() throws Exception
@@ -66,20 +66,20 @@ public class O2OUnidirectionalSelfassociationXMLDataTest extends SDKXMLDataTestB
 
 		assertNotNull(results);
 		assertEquals(5,results.size());
-		
+
 		for(Iterator i = results.iterator();i.hasNext();)
 		{
 			Address result = (Address)i.next();
 			toXML(result);
-			
+
 			validateClassElements(result);
 			validateAttribute(result,"id",result.getId());
 			validateAttribute(result,"zip",result.getZip());
-			
+
 			assertTrue(validateXMLData(result, searchObject.getClass()));
 
 			Address result2 = (Address)fromXML(result);
-			
+
 			assertNotNull(result2);
 			assertNotNull(result2.getId());
 			assertNotNull(result2.getZip());
@@ -88,10 +88,10 @@ public class O2OUnidirectionalSelfassociationXMLDataTest extends SDKXMLDataTestB
 
 	/**
 	 * Uses Nested Search Criteria for search
-	 * Verifies that the results are returned 
+	 * Verifies that the results are returned
 	 * Verifies size of the result set
 	 * erifies that the associated object is null
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	public void testZeroAssociatedObjectsNestedSearch1() throws Exception
@@ -102,27 +102,27 @@ public class O2OUnidirectionalSelfassociationXMLDataTest extends SDKXMLDataTestB
 
 		assertNotNull(results);
 		assertEquals(1,results.size());
-		
+
 		Iterator i = results.iterator();
 		Person result = (Person)i.next();
 		toXML(result);
 		Person result2 = (Person)fromXML(result);
-		
+
 		assertNotNull(result2);
 		assertNotNull(result2.getId());
 		assertNotNull(result2.getName());
-		
+
 		Address address = result2.getLivesAt();
 		assertNull(address);
 	}
 
 	/**
 	 * Uses Nested Search Criteria for search
-	 * Verifies that the results are returned 
+	 * Verifies that the results are returned
 	 * Verifies size of the result set
 	 * Verifies that none of the attribute is null
 	 * Verifies that the associated object has required Id
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	public void testOneAssociatedObjectNestedSearch1() throws Exception
@@ -133,16 +133,16 @@ public class O2OUnidirectionalSelfassociationXMLDataTest extends SDKXMLDataTestB
 
 		assertNotNull(results);
 		assertEquals(1,results.size());
-		
+
 		Iterator i = results.iterator();
 		Person result = (Person)i.next();
 		toXML(result);
 		Person result2 = (Person)fromXML(result);
-		
+
 		assertNotNull(result2);
 		assertNotNull(result2.getId());
 		assertNotNull(result2.getName());
-		
+
 		Address address = result2.getLivesAt();
 		assertNotNull(address);
 		assertNotNull(address.getId());
@@ -152,11 +152,11 @@ public class O2OUnidirectionalSelfassociationXMLDataTest extends SDKXMLDataTestB
 
 	/**
 	 * Uses Nested Search Criteria for search to get associated object
-	 * Verifies that the results are returned 
+	 * Verifies that the results are returned
 	 * Verifies size of the result set
 	 * Verifies that none of the attribute is null
-	 * Verified the Id attribute's value of the returned object 
-	 * 
+	 * Verified the Id attribute's value of the returned object
+	 *
 	 * @throws Exception
 	 */
 	public void testOneAssociatedObjectNestedSearch2() throws Exception
@@ -167,19 +167,19 @@ public class O2OUnidirectionalSelfassociationXMLDataTest extends SDKXMLDataTestB
 
 		assertNotNull(results);
 		assertEquals(1,results.size());
-		
+
 		Iterator i = results.iterator();
-		
+
 		Address result = (Address)i.next();
 		toXML(result);
 		Address result2 = (Address)fromXML(result);
-		
+
 		assertNotNull(result2);
 		assertNotNull(result2.getId());
 		assertNotNull(result2.getZip());
 		assertEquals(new Integer(1),result2.getId());
 	}
-	
+
 	public void testGetAssociation() throws Exception
 	{
 
@@ -188,27 +188,27 @@ public class O2OUnidirectionalSelfassociationXMLDataTest extends SDKXMLDataTestB
 
 		assertNotNull(results);
 		assertEquals(5,results.size());
-		
+
 		Address address;
 		for(Iterator i = results.iterator();i.hasNext();)
 		{
 			Person result = (Person)i.next();
 			toXML(result);
 			Person result2 = (Person)fromXML(result);
-			
+
 			assertNotNull(result2);
 			assertNotNull(result2.getId());
 			assertNotNull(result2.getName());
-			
+
 			if (result2.getId() < 4){//Person id=1,2,3 have an associated Address; the others don't
-				
-				validateAssociation(result,"Address","livesAt");
-				
+
+				validateAssociation(result,"Address","livesAt", true, false);
+
 				address = result2.getLivesAt();
 				assertNotNull(address);
 				assertNotNull(address.getId());
 				assertNotNull(address.getZip());
 			}
 		}
-	}	
+	}
 }

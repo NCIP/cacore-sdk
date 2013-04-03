@@ -2,10 +2,6 @@ package test.gov.nih.nci.cacoresdk.domain.other.primarykey;
 
 import gov.nih.nci.cacoresdk.domain.other.primarykey.DoublePrimitiveKey;
 import gov.nih.nci.system.applicationservice.ApplicationException;
-import gov.nih.nci.system.query.cql.CQLAttribute;
-import gov.nih.nci.system.query.cql.CQLObject;
-import gov.nih.nci.system.query.cql.CQLPredicate;
-import gov.nih.nci.system.query.cql.CQLQuery;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -60,27 +56,4 @@ public class DoublePrimitiveKeyTest extends SDKTestBase
 		assertNotNull(results);
 		assertEquals(1,results.size());
 	}
-
-	/**
-	 * Uses CQL for search
-	 * Searches by the Double data type
-	 * Verifies size of the result set
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testPrimaryKeyCQL() throws ApplicationException
-	{
-		CQLQuery criteria = new CQLQuery();
-
-		CQLObject object = new CQLObject();
-		object.setName("gov.nih.nci.cacoresdk.domain.other.primarykey.DoublePrimitiveKey");
-		object.setAttribute(new CQLAttribute("id",CQLPredicate.EQUAL_TO,"1.1"));
-		criteria.setTarget(object);
-		
-		Collection results = getApplicationService().query(criteria);
-
-		assertNotNull(results);
-		assertEquals(1,results.size());
-	}
-	
 }

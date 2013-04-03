@@ -141,9 +141,9 @@ public class ChildWithAssociationXSDTest extends SDKXSDTestBase
 		Class associatedClass = Bank.class;
 		
 		if (useGMETags){
-			validateSubclassAssociationElements(targetClass,"CreditGMEAlias", associatedClass,"BankGMEAlias","PaymentGMEAlias","bankAliasRolename","0","1");
+			validateSubclassAssociationElements(targetClass,"CreditGMEAlias", associatedClass,"BankGMEAlias","PaymentGMEAlias","bankAliasRolename","0","1", false);
 		} else {
-			validateSubclassAssociationElements(targetClass, associatedClass, "issuingBank","0","1");
+			validateSubclassAssociationElements(targetClass, associatedClass, "issuingBank","0","1", false);
 		}
 
 	}	

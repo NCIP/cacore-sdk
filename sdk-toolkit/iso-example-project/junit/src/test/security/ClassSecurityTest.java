@@ -5,8 +5,6 @@ import gov.nih.nci.cacoresdk.domain.inheritance.childwithassociation.Cash;
 import gov.nih.nci.cacoresdk.domain.inheritance.childwithassociation.Credit;
 import gov.nih.nci.iso21090.Ii;
 import gov.nih.nci.system.applicationservice.ApplicationException;
-import gov.nih.nci.system.query.cql.CQLObject;
-import gov.nih.nci.system.query.cql.CQLQuery;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
 import java.io.DataInputStream;
@@ -449,63 +447,6 @@ public class ClassSecurityTest extends SDKSecurityTestBase
 			assertNotNull(bank.getName());
 		}
 	}	
-	
-	/**
-	 * Uses Query by Example query API, which takes a CQL query 
-	 * object parameter.
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attributes are null 
-	 * since user1 has access to all target class attributes
-	 * 
-	 * @throws Exception
-	 */
-	public void testCQLQuery() throws Exception
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.childwithassociation.Bank");
-		cqlQuery.setTarget(target);
-
-		Collection results = getAppSvcUser1().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(4,results.size());
-		
-		for(Iterator i = results.iterator();i.hasNext();)
-		{
-			Bank result = (Bank)i.next();
-			assertNotNull(result);
-			assertNotNull(result.getId());
-			assertNotNull(result.getName());
-		}
-	}
-	
-	/**
-	 * Uses Query by Example query API, which takes a CQL query 
-	 * object parameter.
-	 * Verifies that an "AccessDeniedException" is thrown 
-	 * 
-	 * @throws Exception
-	 */
-	public void testAccessDeniedCQLQuery() throws Exception
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.childwithassociation.Cash");
-		cqlQuery.setTarget(target);
-		
-		// Test Access Denied check - user2 does not have access to Cash class
-		boolean flag = false;
-		try {
-			getAppSvcUser2().query(cqlQuery);
-		} catch(AccessDeniedException e){
-			flag = true;
-		}
-		assertTrue(flag);
-	}
 	
 	/**
 	 * Uses Query by Example query API, which takes a HQL Criteria 

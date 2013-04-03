@@ -8,7 +8,7 @@ import java.util.List;
 import org.jdom.Document;
 import org.jdom.Element;
 
-import test.xml.mapping.SDKXSDTestBase;
+import test.xsd.SDKXSDTestBase;
 
 public class O2OUnidirectionalSelfassociationXSDTest extends SDKXSDTestBase
 {
@@ -88,7 +88,7 @@ public class O2OUnidirectionalSelfassociationXSDTest extends SDKXSDTestBase
 		Class targetClass = Person.class;
 		Class associatedClass = Address.class;
 
-		validateClassAssociationElements(targetClass, associatedClass, "livesAt","0","1");
+		validateClassAssociationElements(targetClass, associatedClass, "livesAt","0","1", false);
 	}	
 	
 	

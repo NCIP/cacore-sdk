@@ -204,7 +204,7 @@ public class ImplicitParentWithAssociationXSDTest extends SDKXSDTestBase
 		Class targetClass = Fish.class;
 		Class associatedClass = Tank.class;
 
-		validateClassAssociationElements(targetClass, associatedClass, "tank","1","1");
+		validateClassAssociationElements(targetClass, associatedClass, "tank","1","1", false);
 	}
 
 	/**

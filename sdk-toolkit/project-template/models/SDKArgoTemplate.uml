@@ -33,10 +33,10 @@
             name="SDKArgoTemplate.todo" />
     <historyfile name="" />
   </argo>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Thu Sep 20 14:25:25 PDT 2007'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Wed Aug 15 10:27:25 EDT 2012'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
-      <XMI.exporterVersion>0.24(5) revised on $Date: 2007/09/21 15:08:54 $ </XMI.exporterVersion>
+      <XMI.exporterVersion>0.24(5) revised on $Date: 2006-11-06 19:55:22 +0100 (Mon, 06 Nov 2006) $ </XMI.exporterVersion>
     </XMI.documentation>
     <XMI.metamodel xmi.name="UML" xmi.version="1.4"/></XMI.header>
   <XMI.content>
@@ -89,6 +89,9 @@
                         <UML:Class xmi.id = 'EAID_D2DA7AC3_01F2_405e_995D_672D8DFD6E99' name = 'Double'
                           visibility = 'public' isSpecification = 'false' isRoot = 'false' isLeaf = 'false'
                           isAbstract = 'false' isActive = 'false'/>
+                        <UML:Class xmi.id = '-64--88-1-103-888e6c:122bd951485:-8000:0000000000000806'
+                          name = 'Long' visibility = 'public' isSpecification = 'false' isRoot = 'false'
+                          isLeaf = 'false' isAbstract = 'false' isActive = 'false'/>
                       </UML:Namespace.ownedElement>
                     </UML:Package>
                     <UML:Package xmi.id = 'EAPK_65413A3A_338B_4a5c_96B7_B456DA3809A1' name = 'util'
@@ -97,10 +100,7 @@
                       <UML:Namespace.ownedElement>
                         <UML:Class xmi.id = 'EAID_D50C9E68_E240_456a_A166_F1706281B491' name = 'Date'
                           visibility = 'public' isSpecification = 'false' isRoot = 'false' isLeaf = 'false'
-                          isAbstract = 'false' isActive = 'false'>
-                          <UML:ModelElement.taggedValue>
-                          </UML:ModelElement.taggedValue>
-                        </UML:Class>
+                          isAbstract = 'false' isActive = 'false'/>
                       </UML:Namespace.ownedElement>
                     </UML:Package>
                   </UML:Namespace.ownedElement>
@@ -185,6 +185,17 @@
             <UML:Multiplicity xmi.id = '-64--88-0-1-8238f4:11524461844:-8000:000000000000081D'>
               <UML:Multiplicity.range>
                 <UML:MultiplicityRange xmi.id = '-64--88-0-1-8238f4:11524461844:-8000:000000000000081E'
+                  lower = '0' upper = '1'/>
+              </UML:Multiplicity.range>
+            </UML:Multiplicity>
+          </UML:TagDefinition.multiplicity>
+        </UML:TagDefinition>
+        <UML:TagDefinition xmi.id = '-91-112--123-76-72676ee:1392aac9930:-8000:0000000000000807'
+          name = 'RESTFUL_RESOURCE' isSpecification = 'false' tagType = 'String'>
+          <UML:TagDefinition.multiplicity>
+            <UML:Multiplicity xmi.id = '-91-112--123-76-72676ee:1392aac9930:-8000:000000000000080B'>
+              <UML:Multiplicity.range>
+                <UML:MultiplicityRange xmi.id = '-91-112--123-76-72676ee:1392aac9930:-8000:000000000000080A'
                   lower = '0' upper = '1'/>
               </UML:Multiplicity.range>
             </UML:Multiplicity>

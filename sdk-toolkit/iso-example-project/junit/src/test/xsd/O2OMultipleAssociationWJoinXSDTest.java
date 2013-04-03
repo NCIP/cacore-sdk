@@ -8,7 +8,6 @@ import java.util.List;
 import org.jdom.Document;
 import org.jdom.Element;
 
-import test.xml.mapping.SDKXSDTestBase;
 
 public class O2OMultipleAssociationWJoinXSDTest extends SDKXSDTestBase
 {

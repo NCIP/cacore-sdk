@@ -5,11 +5,6 @@ import gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.sametable.Organiza
 import gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.sametable.GovtOrganization;
 import gov.nih.nci.iso21090.St;
 import gov.nih.nci.system.applicationservice.ApplicationException;
-import gov.nih.nci.system.query.cql.CQLAssociation;
-import gov.nih.nci.system.query.cql.CQLAttribute;
-import gov.nih.nci.system.query.cql.CQLObject;
-import gov.nih.nci.system.query.cql.CQLPredicate;
-import gov.nih.nci.system.query.cql.CQLQuery;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
 import java.util.Collection;
@@ -102,69 +97,6 @@ public class MultipleChildSametableTest extends SDKISOTestBase
 			assertNotNull(result.getCeo());
 		}
 	}
-	
-	/**
-	 * Uses CQL Criteria for search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testEntireObjectCQL1() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.sametable.GovtOrganization");
-		cqlQuery.setTarget(target);
-
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(1,results.size());
-		
-		for(Iterator i = results.iterator();i.hasNext();)
-		{
-			GovtOrganization result = (GovtOrganization)i.next();
-			assertNotNull(result);
-			assertNotNull(result.getId());
-			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);				
-			assertNotNull(result.getName());
-		}
-	}
-
-	
-	/**
-	 * Uses CQL Criteria for search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testEntireObjectCQL2() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.sametable.Organization");
-		cqlQuery.setTarget(target);
-
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(2,results.size());
-		
-		for(Iterator i = results.iterator();i.hasNext();)
-		{
-			Organization result = (Organization)i.next();
-			assertNotNull(result);
-			assertNotNull(result.getId());
-			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);				
-			assertNotNull(result.getName());
-		}
-	}
 
 	public void testEntireObjectHQL2() throws ApplicationException {
 		HQLCriteria hqlCriteria = new HQLCriteria(
@@ -184,38 +116,6 @@ public class MultipleChildSametableTest extends SDKISOTestBase
 		}
 	}
 	
-	/**
-	 * Uses CQL Criteria for search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testEntireObjectCQL3() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.sametable.PvtOrganization");
-		cqlQuery.setTarget(target);
-
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(1,results.size());
-		
-		for(Iterator i = results.iterator();i.hasNext();)
-		{
-			PvtOrganization result = (PvtOrganization)i.next();
-			assertNotNull(result);
-			assertNotNull(result.getId());
-			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);	
-			assertNotNull(result.getName());
-			assertNotNull(result.getCeo());
-		}
-	}
-
 	public void testEntireObjectHQL3() throws ApplicationException {
 		HQLCriteria hqlCriteria = new HQLCriteria(
 				"from gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.sametable.PvtOrganization");
@@ -257,35 +157,6 @@ public class MultipleChildSametableTest extends SDKISOTestBase
 
 	}
 
-
-	/**
-	 * Uses CQL Search Criteria for inheritance as association in search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testZeroAssociationCQL() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-
-		CQLAssociation association = new CQLAssociation();
-		association.setName("gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.sametable.GovtOrganization");
-		association.setAttribute(new CQLAttribute("name", CQLPredicate.EQUAL_TO,"Invalid Org Name"));
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.sametable.Organization");
-		target.setAssociation(association);
-		cqlQuery.setTarget(target);
-		
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(0,results.size());
-		
-	}
-	
 	public void testZeroAssociationHQL() throws ApplicationException
 	{
 		HQLCriteria hqlCriteria = new HQLCriteria(
@@ -383,43 +254,6 @@ public class MultipleChildSametableTest extends SDKISOTestBase
 			assertNotNull(result.getName());
 		}
 	}
-	
-	/**
-	 * Uses CQL Criteria for inheritance as association in search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testAssociationCQL1() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-
-		CQLAssociation association = new CQLAssociation();
-		association.setName("gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.sametable.GovtOrganization");
-		association.setAttribute(new CQLAttribute("name", CQLPredicate.EQUAL_TO,"Public Org Name"));
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.sametable.Organization");
-		target.setAssociation(association);
-		cqlQuery.setTarget(target);
-		
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(1,results.size());
-		
-		for(Iterator i = results.iterator();i.hasNext();)
-		{
-			Organization result = (Organization)i.next();
-			assertNotNull(result);
-			assertNotNull(result.getId());
-			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);				
-			assertNotNull(result.getName());
-		}
-	}
-	
 	public void testAssociationHQL1() throws ApplicationException {
 		HQLCriteria hqlCriteria = new HQLCriteria(
 				"from gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.sametable.GovtOrganization where name='Public Org Name'");
@@ -430,42 +264,6 @@ public class MultipleChildSametableTest extends SDKISOTestBase
 
 		for (Iterator i = results.iterator(); i.hasNext();) {
 			Organization result = (Organization) i.next();
-			assertNotNull(result);
-			assertNotNull(result.getId());
-			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);	
-			assertNotNull(result.getName());
-		}
-	}
-
-	/**
-	 * Uses CQL Criteria for inheritance as association in search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testAssociationCQL2() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-
-		CQLAssociation association = new CQLAssociation();
-		association.setName("gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.sametable.Organization");
-		association.setAttribute(new CQLAttribute("name", CQLPredicate.EQUAL_TO,"Public Org Name"));
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.sametable.GovtOrganization");
-		target.setAssociation(association);
-		cqlQuery.setTarget(target);
-		
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(1,results.size());
-		
-		for(Iterator i = results.iterator();i.hasNext();)
-		{
-			GovtOrganization result = (GovtOrganization)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
 			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);	
@@ -492,42 +290,6 @@ public class MultipleChildSametableTest extends SDKISOTestBase
 		}
 	}
 
-	/**
-	 * Uses CQL Criteria for inheritance as association in search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testAssociationCQL3() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-
-		CQLAssociation association = new CQLAssociation();
-		association.setName("gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.sametable.PvtOrganization");
-		association.setAttribute(new CQLAttribute("name", CQLPredicate.EQUAL_TO,"Private Org Name"));
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.sametable.Organization");
-		target.setAssociation(association);
-		cqlQuery.setTarget(target);
-		
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(1,results.size());
-		
-		for(Iterator i = results.iterator();i.hasNext();)
-		{
-			Organization result = (Organization)i.next();
-			assertNotNull(result);
-			assertNotNull(result.getId());
-			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);	
-			assertNotNull(result.getName());
-		}
-	}
-	
 	public void testAssociationHQL3() throws ApplicationException {
 		HQLCriteria hqlCriteria = new HQLCriteria(
 				"from gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.sametable.PvtOrganization where name='Private Org Name'");
@@ -540,42 +302,6 @@ public class MultipleChildSametableTest extends SDKISOTestBase
 		for(Iterator i = results.iterator();i.hasNext();)
 		{
 			Organization result = (Organization)i.next();
-			assertNotNull(result);
-			assertNotNull(result.getId());
-			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);	
-			assertNotNull(result.getName());
-		}
-	}
-
-	/**
-	 * Uses CQL Criteria for inheritance as association in search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testAssociationCQL4() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-
-		CQLAssociation association = new CQLAssociation();
-		association.setName("gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.sametable.Organization");
-		association.setAttribute(new CQLAttribute("name", CQLPredicate.EQUAL_TO,"Private Org Name"));
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.sametable.PvtOrganization");
-		target.setAssociation(association);
-		cqlQuery.setTarget(target);
-		
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(1,results.size());
-		
-		for(Iterator i = results.iterator();i.hasNext();)
-		{
-			PvtOrganization result = (PvtOrganization)i.next();
 			assertNotNull(result);
 			assertNotNull(result.getId());
 			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);	

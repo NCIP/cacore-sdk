@@ -6,7 +6,6 @@ import gov.nih.nci.cacoresdk.domain.inheritance.abstrakt.Teacher;
 
 import org.jdom.Document;
 
-import test.xml.mapping.SDKXSDTestBase;
 
 public class AbstractParentWithAssociationXSDTest extends SDKXSDTestBase
 {

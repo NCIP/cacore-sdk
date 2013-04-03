@@ -19,7 +19,7 @@ public class WritableApiTestServiceDelegator {
 
 	public void loadWritableApiTestDAO() {
 		if (applicationContext == null) {
-			applicationContext = new ClassPathXmlApplicationContext("/application-config-test.xml");
+			applicationContext = new ClassPathXmlApplicationContext("/application-config.xml");
 		}
 		appservice = (WritableApiTestDAOImpl) applicationContext.getBean("WritableApiTestDAO");
 	}

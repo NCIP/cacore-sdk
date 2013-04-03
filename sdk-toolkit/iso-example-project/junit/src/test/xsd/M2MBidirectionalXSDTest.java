@@ -5,7 +5,6 @@ import gov.nih.nci.cacoresdk.domain.manytomany.bidirectional.Project;
 
 import org.jdom.Document;
 
-import test.xml.mapping.SDKXSDTestBase;
 
 public class M2MBidirectionalXSDTest extends SDKXSDTestBase
 {

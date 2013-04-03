@@ -4,11 +4,6 @@ import gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin.Chain;
 import gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin.Pendant;
 import gov.nih.nci.iso21090.Ii;
 import gov.nih.nci.system.applicationservice.ApplicationException;
-import gov.nih.nci.system.query.cql.CQLAssociation;
-import gov.nih.nci.system.query.cql.CQLAttribute;
-import gov.nih.nci.system.query.cql.CQLObject;
-import gov.nih.nci.system.query.cql.CQLPredicate;
-import gov.nih.nci.system.query.cql.CQLQuery;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
 import java.util.Collection;
@@ -173,46 +168,7 @@ public class O2OBidirectionalWJoinTest extends SDKISOTestBase
 		assertNotNull(pendant.getShape());
 		assertEquals("1",pendant.getId().getExtension());
 	}	
-	/**
-	 * Uses CQL Criteria for search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * Verifies that the associated object has required Id
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testOneAssociatedObjectCQL1() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-		
-		CQLAssociation association = new CQLAssociation();
-		association.setName("gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin.Pendant");
-		association.setAttribute(new CQLAttribute("id",CQLPredicate.EQUAL_TO,"1"));
-		association.setTargetRoleName("pendant");
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin.Chain");
-		target.setAssociation(association);
-		cqlQuery.setTarget(target);
 
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(1,results.size());
-		
-		Iterator i = results.iterator();
-		
-		Chain chain = (Chain)i.next();
-		assertNotNull(chain);
-		
-		assertNotNull(chain);
-		assertNotNull(chain.getId());
-		assertEquals(chain.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
-		assertNotNull(chain.getMetal());
-		assertEquals("1",chain.getId().getExtension());
-	}	
-	
 	public void testOneAssociatedObjectHQL1() throws ApplicationException {
 		HQLCriteria hqlCriteria = new HQLCriteria(
 				"select pendant.chain from gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin.Pendant pendant "
@@ -234,46 +190,6 @@ public class O2OBidirectionalWJoinTest extends SDKISOTestBase
 		assertEquals("1",chain.getId().getExtension());
 	}
 
-	/**
-	 * Uses CQL Criteria for search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * Verifies that the associated object has required Id
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testOneAssociatedObjectCQL2() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-		
-		CQLAssociation association = new CQLAssociation();
-		association.setName("gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin.Chain");
-		association.setAttribute(new CQLAttribute("id",CQLPredicate.EQUAL_TO,"1"));
-		association.setTargetRoleName("chain");
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin.Pendant");
-		target.setAssociation(association);
-		cqlQuery.setTarget(target);
-
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(1,results.size());
-		
-		Iterator i = results.iterator();
-		
-		Pendant pendant = (Pendant)i.next();
-		assertNotNull(pendant);
-		
-		assertNotNull(pendant);
-		assertNotNull(pendant.getId());
-		assertEquals(pendant.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
-		assertNotNull(pendant.getShape());
-		assertEquals("1",pendant.getId().getExtension());	
-	}	
-	
 	public void testOneAssociatedObjectHQL2() throws ApplicationException {
 		HQLCriteria hqlCriteria = new HQLCriteria(
 				"select chain.pendant from gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin.Chain chain "

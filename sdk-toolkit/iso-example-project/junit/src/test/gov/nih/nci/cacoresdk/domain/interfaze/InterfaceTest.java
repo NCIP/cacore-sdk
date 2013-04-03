@@ -7,8 +7,6 @@ import gov.nih.nci.cacoresdk.domain.interfaze.Pet;
 import gov.nih.nci.cacoresdk.domain.interfaze.differentpackage.Canidae;
 import gov.nih.nci.cacoresdk.domain.interfaze.differentpackage.Mammalia;
 import gov.nih.nci.system.applicationservice.ApplicationException;
-import gov.nih.nci.system.query.cql.CQLObject;
-import gov.nih.nci.system.query.cql.CQLQuery;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
 import java.io.Serializable;
@@ -57,38 +55,6 @@ public class InterfaceTest extends SDKISOTestBase
 		}
 	}
 
-	/**
-	 * Uses CQL Criteria for search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute is null
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testEntireObjectCQL1() throws ApplicationException
-	{
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-		
-		target.setName("gov.nih.nci.cacoresdk.domain.interfaze.Dog");
-		cqlQuery.setTarget(target);
-
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		assertEquals(3,results.size());
-		
-		for(Iterator i = results.iterator();i.hasNext();)
-		{
-			Dog result = (Dog)i.next();
-			assertNotNull(result);
-			assertNotNull(result.getId());
-			assertEquals(result.getId().getRoot(),II_ROOT_GLOBAL_CONSTANT_VALUE);
-			assertNotNull(result.getBreed());
-			assertNotNull(result.getGender());
-		}
-	}
-	
 	public void testEntireObjectHQL1() throws ApplicationException {
 		HQLCriteria hqlCriteria = new HQLCriteria(
 				"from gov.nih.nci.cacoresdk.domain.interfaze.Dog");

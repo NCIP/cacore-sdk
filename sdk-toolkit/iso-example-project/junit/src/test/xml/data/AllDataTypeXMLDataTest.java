@@ -5,7 +5,6 @@ import java.util.Iterator;
 
 import gov.nih.nci.cacoresdk.domain.other.datatype.AllDataType;
 
-import test.xml.mapping.SDKXMLDataTestBase;
 
 public class AllDataTypeXMLDataTest extends SDKXMLDataTestBase
 {

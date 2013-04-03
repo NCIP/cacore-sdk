@@ -55,7 +55,7 @@ public abstract class SDKXMLDataTestBase extends TestCase {
 		super.setUp();
 		//appService = ApplicationServiceProvider.getApplicationService("SDKUser1","Psat123!@#");
 		appService = ApplicationServiceProvider.getApplicationService();
-		//String url = "http://localhost:21080/example";
+		//String url = "http://localhost:29080/example";
 		//appService = ApplicationServiceProvider.getApplicationServiceFromUrl(url);
 		
 		marshaller = new caCOREMarshaller("xml-mapping.xml", false);
@@ -320,7 +320,7 @@ public abstract class SDKXMLDataTestBase extends TestCase {
 			children = roleNameElt.getChildren();
 			assertNotNull(children);
 	
-			Element associatedKlassElt = locateChild(children,associatedKlassName);
+			Element associatedKlassElt = locateChild(children, roleName);
 			if(hasAssociation)
 				assertNotNull(associatedKlassElt);
 			else

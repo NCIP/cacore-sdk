@@ -3,7 +3,6 @@ package test.xml.data;
 import java.util.Collection;
 import java.util.Iterator;
 
-import test.xml.mapping.SDKXMLDataTestBase;
 
 import gov.nih.nci.cacoresdk.domain.other.primarykey.StringKey;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;

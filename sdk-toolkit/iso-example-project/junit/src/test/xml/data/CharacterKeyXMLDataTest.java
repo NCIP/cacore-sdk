@@ -7,7 +7,6 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import test.gov.nih.nci.cacoresdk.SDKTestBase;
-import test.xml.mapping.SDKXMLDataTestBase;
 
 public class CharacterKeyXMLDataTest extends SDKXMLDataTestBase
 {

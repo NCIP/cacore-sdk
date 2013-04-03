@@ -116,6 +116,7 @@ public class ChildWithAssociationSametableXSDTest extends SDKXSDTestBase
 		Class targetClass = DesignerShoes.class;
 		Class associatedClass = Designer.class;
 
-		validateSubclassAssociationElements(targetClass, associatedClass, "designer","0","1");
+		validateSubclassAssociationElements(targetClass, associatedClass, "designer","0","1", false);
+		//validateClassAssociationElements(targetClass, associatedClass, "designer","0","1");
 	}	
 }

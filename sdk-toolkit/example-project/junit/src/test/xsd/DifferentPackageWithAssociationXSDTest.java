@@ -16,7 +16,7 @@ public class DifferentPackageWithAssociationXSDTest extends SDKXSDTestBase
 	
 	public static String getTestCaseName()
 	{
-		return "Different Parent With Association XSD Test Case";
+		return "Abstract Parent With Association XSD Test Case";
 	}
 
 	protected void setUp() throws Exception {
@@ -164,9 +164,9 @@ public class DifferentPackageWithAssociationXSDTest extends SDKXSDTestBase
 		Class associatedClass = Utensil.class;
 		
 		if (useGMETags){
-			validateClassAssociationElements(targetClass,"DessertAlias", associatedClass,"UtensilAlias","utensilAliasRoleName","0","unbounded");
+			validateClassAssociationElements(targetClass,"DessertAlias", associatedClass,"UtensilAlias","utensilAliasRoleName","0","unbounded", true);
 		} else {
-			validateClassAssociationElements(targetClass,"Dessert", associatedClass,"gov.nih.nci.cacoresdk.domain.other.differentpackage.associations:Utensil","utensilCollection","0","unbounded");
+			validateClassAssociationElements(targetClass,"Dessert", associatedClass,"gov.nih.nci.cacoresdk.domain.other.differentpackage.associations:Utensil","utensilCollection","0","unbounded", true);
 		}
 
 	}	
@@ -189,9 +189,9 @@ public class DifferentPackageWithAssociationXSDTest extends SDKXSDTestBase
 		Class associatedClass = Dessert.class;
 		
 		if (useGMETags){
-			validateClassAssociationElements(targetClass,"UtensilAlias", associatedClass,"DessertAlias","dessertAliasRoleName","0","unbounded");
+			validateClassAssociationElements(targetClass,"UtensilAlias", associatedClass,"DessertAlias","dessertAliasRoleName","0","unbounded", true);
 		} else {
-			validateClassAssociationElements(targetClass,"Utensil", associatedClass,"gov.nih.nci.cacoresdk.domain.other.differentpackage:Dessert","dessertCollection","0","unbounded");
+			validateClassAssociationElements(targetClass,"Utensil", associatedClass,"gov.nih.nci.cacoresdk.domain.other.differentpackage:Dessert","dessertCollection","0","unbounded", true);
 		}
 	}	
 }

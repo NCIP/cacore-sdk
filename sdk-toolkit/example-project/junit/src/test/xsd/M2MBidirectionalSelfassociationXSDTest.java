@@ -5,7 +5,7 @@ import gov.nih.nci.cacoresdk.domain.manytomany.bidirectional.selfassociation.Mem
 
 import org.jdom.Document;
 
-import test.xml.mapping.SDKXSDTestBase;
+import test.xsd.SDKXSDTestBase;
 
 public class M2MBidirectionalSelfassociationXSDTest extends SDKXSDTestBase
 {

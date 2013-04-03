@@ -233,29 +233,51 @@ public abstract class SDKXSDTestBase extends TestCase {
 	 * 
 	 * @throws Exception
 	 */
+	public void validateClassAssociationElements(Class klass, Class associatedKlass, String rolename, String minOccurs, String maxOccurs, boolean collectionRef)
+	throws Exception {
+		validateClassAssociationElements(klass,klass.getSimpleName(), associatedKlass,associatedKlass.getSimpleName(), rolename, minOccurs,maxOccurs, collectionRef);
+	}
+
 	public void validateClassAssociationElements(Class klass, Class associatedKlass, String rolename, String minOccurs, String maxOccurs)
 	throws Exception {
-		validateClassAssociationElements(klass,klass.getSimpleName(), associatedKlass,associatedKlass.getSimpleName(), rolename, minOccurs,maxOccurs);
+		validateClassAssociationElements(klass,klass.getSimpleName(), associatedKlass,associatedKlass.getSimpleName(), rolename, minOccurs,maxOccurs, true);
 	}
-	public void validateClassAssociationElements(Class klass,String klassAlias,Class associatedKlass,String associatedKlassAlias, String rolename, String minOccurs, String maxOccurs)
+	
+	public void validateClassAssociationElements(Class klass,String klassAlias,Class associatedKlass,String associatedKlassAlias, String rolename, String minOccurs, String maxOccurs, boolean collectionRef)
 	throws Exception {
 
 		Document doc = getDoc();
 
 		validateClassElements(klass,klassAlias);
-
-		String xpath = "/xs:schema/xs:complexType[@name='" + klassAlias + "']" 
+		String xpath = "";
+		if(collectionRef)
+		{
+			xpath = "/xs:schema/xs:complexType[@name='" + klassAlias + "']" 
 			+ "/xs:sequence/xs:element[@name='" + rolename + "']"
 			+ "/xs:complexType/xs:sequence/xs:element[@ref='" + associatedKlassAlias + "']";
-
+		}
+		else
+		{
+			xpath = "/xs:schema/xs:complexType[@name='" + klassAlias + "']" 
+			+ "/xs:sequence/xs:element[@name='" + rolename + "']";
+		}
 		log.debug("* * * xpath: " + xpath);
 		
 		List<Element> elts = queryXSD(doc, xpath);
 		assertEquals(1, elts.size());
 		
 		Element klassElt = elts.get(0);
-		assertEquals(3, klassElt.getAttributes().size()); // ref, minOccurs, maxOccurs
-		assertEquals(klassElt.getAttributeValue("ref"),associatedKlassAlias);
+		if(collectionRef)
+		{
+			assertEquals(3, klassElt.getAttributes().size()); // ref, minOccurs, maxOccurs
+			assertEquals(klassElt.getAttributeValue("ref"),associatedKlassAlias);
+		}
+		else
+		{
+			assertEquals(4, klassElt.getAttributes().size()); // name, type, minOccurs, maxOccurs
+			assertEquals(klassElt.getAttributeValue("name"),rolename);
+			assertEquals(klassElt.getAttributeValue("type"),associatedKlassAlias);
+		}
 		
 		// TODO :: change to honor minOccurs value passed in
 		// ignore 'minOccurs' value for now, as the Code Generator always sets it to zero
@@ -271,28 +293,53 @@ public abstract class SDKXSDTestBase extends TestCase {
 	 * 
 	 * @throws Exception
 	 */
+	public void validateSubclassAssociationElements(Class klass, Class associatedKlass, String rolename, String minOccurs, String maxOccurs, boolean collectionRef)
+	throws Exception {
+		validateSubclassAssociationElements(klass,klass.getSimpleName(), associatedKlass,associatedKlass.getSimpleName(),klass.getSuperclass().getSimpleName(),rolename,minOccurs,maxOccurs,collectionRef);
+	}
+
 	public void validateSubclassAssociationElements(Class klass, Class associatedKlass, String rolename, String minOccurs, String maxOccurs)
 	throws Exception {
-		validateSubclassAssociationElements(klass,klass.getSimpleName(), associatedKlass,associatedKlass.getSimpleName(),klass.getSuperclass().getSimpleName(),rolename,minOccurs,maxOccurs);
+		validateSubclassAssociationElements(klass,klass.getSimpleName(), associatedKlass,associatedKlass.getSimpleName(),klass.getSuperclass().getSimpleName(),rolename,minOccurs,maxOccurs, true);
 	}
-	public void validateSubclassAssociationElements(Class klass,String klassAlias,Class associatedKlass,String associatedKlassAlias,String superklassName,String rolename,String minOccurs,String maxOccurs)
+	public void validateSubclassAssociationElements(Class klass,String klassAlias,Class associatedKlass,String associatedKlassAlias,String superklassName,String rolename,String minOccurs,String maxOccurs, boolean collectionRef)
 	throws Exception {
 
 		Document doc = getDoc();
 
 		validateClassElements(klass,klassAlias);
+		String xpath = "";
 		
-		String xpath = "/xs:schema/xs:complexType[@name='" + klassAlias + "']" 
+		if(collectionRef)
+		{
+			xpath = "/xs:schema/xs:complexType[@name='" + klassAlias + "']" 
+				+ "/xs:complexContent/xs:extension[@base='" + superklassName + "']"
+				+ "/xs:sequence/xs:element[@name='" + rolename + "']"
+				+ "/xs:complexType/xs:sequence/xs:element[@ref='" + associatedKlassAlias + "']";
+		}
+		else
+		{
+			xpath = "/xs:schema/xs:complexType[@name='" + klassAlias + "']" 
 			+ "/xs:complexContent/xs:extension[@base='" + superklassName + "']"
-			+ "/xs:sequence/xs:element[@name='" + rolename + "']"
-			+ "/xs:complexType/xs:sequence/xs:element[@ref='" + associatedKlassAlias + "']";
+			+ "/xs:sequence/xs:element[@name='" + rolename + "']";
+		}
 		
 		List<Element> elts = queryXSD(doc, xpath);
 		assertEquals(1, elts.size());
 		
 		Element klassElt = elts.get(0);
-		assertEquals(3, klassElt.getAttributes().size()); // ref, minOccurs, maxOccurs
-		assertEquals(klassElt.getAttributeValue("ref"),associatedKlassAlias);
+		
+		if(collectionRef)
+		{
+			assertEquals(3, klassElt.getAttributes().size()); // ref, minOccurs, maxOccurs
+			assertEquals(klassElt.getAttributeValue("ref"),associatedKlassAlias);
+		}
+		else
+		{
+			assertEquals(4, klassElt.getAttributes().size()); // name, type, minOccurs, maxOccurs
+			assertEquals(klassElt.getAttributeValue("name"),rolename);
+			assertEquals(klassElt.getAttributeValue("type"),associatedKlassAlias);
+		}
 		
 		// TODO :: change eventually to honor minOccurs value passed in
 		// ignore 'minOccurs' value for now, as the Code Generator always sets it to zero
