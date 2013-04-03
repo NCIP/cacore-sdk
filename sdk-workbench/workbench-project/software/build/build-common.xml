@@ -17,9 +17,8 @@
 	<property name="target.dir" value="${software.dir}/target" />
 	<property name="reports.dir" location="${software.dir}/target/reports" />
 	<property name="common.dir" value="${software.dir}/common" />
-	<property name="bda-download.dir" location="${target.dir}/bda-download" />
-	<property name="bda-utils.dir" location="${target.dir}/bda-utils" />
-	<property name="bda-lib.dir" location="${target.dir}/lib" />
+	<property name="build-utils.dir" location="${target.dir}/build-utils" />
+	<property name="build-lib.dir" location="${target.dir}/lib" />
 
 	<property name="target.module.dir" location="${target.dir}/modules" />
 	
@@ -27,26 +26,22 @@
 	<property file="${project.properties.file}" />
 	<property file="${envpropertyfile}" />
 
-	<ant antfile="${build.dir}/bda-download.xml" target="download-bda" inheritAll="true"/>
-
-	<!-- Ivy -->
-	<property name="ivy-cacore.file" value="ivy-cacore-2.0.0-beta2.jar" />
-	<property name="ivy.settings.dir" value="${common.dir}"/>
-	<property name="ivy.settings.file" value="ivysettings.xml" />
-	<property name="local.repo.dir" location="${software.dir}/local-ivy-repo" />
-	<property name="shared.local.repo.dir" location="${target.dir}/shared-local-ivy-repo" />
-	<property name="ivy.jar" location="${bda-lib.dir}/ivy-2.0.0-beta2.jar" />
-
 	<condition property="taskdef-file" value="build-load-taskdef.xml" else="build-no-taskdef.xml">
 		<not>
 			<typefound name="xmltask"/>
 		</not>
 	</condition>
 
+	<copy todir="${build-utils.dir}" overwrite="true">
+		<fileset dir="${software.dir}/../../common/build-utils">
+			<include name="**/*" />
+		</fileset>
+	</copy>
+
 	<import file="${build.dir}/${taskdef-file}"/>
 	
-	<!-- BDA -->
-	<import file="${bda-utils.dir}\bda-build-utils-${bda.version}.xml" />
+	<!-- build -->
+	<import file="${build-utils.dir}\build-utils-${build.version}.xml" />
 
 	<!-- ******************************************************************* -->
 	<!-- ** IVY TARGETS AND DEPENDENCY PATHS                              ** -->

@@ -145,7 +145,7 @@
 	<macrodef name="verify-password-value">
 		<sequential>
 			<copy tofile="${os.temp.dir}/verifyPasswordValue.groovy"
-				file="${bda-utils.resource.dir}/groovy/verifyPasswordValue.groovy"
+				file="${build-utils.resource.dir}/groovy/verifyPasswordValue.groovy"
 				overwrite="true" />
 			<groovy src="${os.temp.dir}/verifyPasswordValue.groovy" />
 		</sequential>

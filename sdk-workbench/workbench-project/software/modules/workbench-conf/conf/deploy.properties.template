@@ -369,13 +369,19 @@ tomcat.relative.path=${tomcat.binaries.relative.dir}
 exclude.jboss.backup=true
 
 jboss.ncicb-standard.port-config=true
-jboss.server.ports.name=config19280
+jboss.server.ports.name=ports-29080
+jboss.server.hostname=localhost
+jboss.server.name=default
+jboss.web.user=bda
+jboss.web.password=blueprint123!
+exclude.jboss.backup=true
+exclude.jboss-login-config=true
 
 # you still have to have these two ports because they are used by the build process, make sure they match the configuration you chose, refer to https://wiki.nci.nih.gov/x/0gqy for further details
 
 #port numbers 
 jboss.server.hostname=localhost
-jboss.server.port=19280
+jboss.server.port=29080
 jboss.server.ajp.port=21009
 jboss.server.ssl.port=21443
 jboss.server.jndi.port=11299
