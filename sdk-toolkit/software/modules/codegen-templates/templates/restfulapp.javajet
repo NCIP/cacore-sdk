@@ -1,0 +1,32 @@
+<%@ jet package="gov.nih.nci.codegen.transformer.jet" 
+        class="SDKRESTAppTransformer"
+        skeleton="ModelTransformerBase.skeleton" %>
+package gov.nih.nci.sdk.rest;
+
+import java.util.Collections;
+import java.util.Set;
+import java.util.HashSet;
+import javax.ws.rs.core.Application;
+
+
+public class SDKRESTApplication extends Application
+{
+
+public Set<Class<?>> getClasses() {
+        HashSet<Class<?>> set = new HashSet<Class<?>>();
+        set.add(gov.nih.nci.system.web.RESTfulResource.class);
+        set.add(gov.nih.nci.system.web.util.SDKRESTContentHandler.class);
+        
+	<%for(UMLClass klass:transformerUtils.getAllRESTResources()){
+		if(!transformerUtils.isAbstract(klass))
+		{
+	%>
+	set.add(<%=transformerUtils.getFQCN(klass)%>Resource.class);
+	<%
+		}
+	}%>
+        
+        return set;
+    }
+    
+}

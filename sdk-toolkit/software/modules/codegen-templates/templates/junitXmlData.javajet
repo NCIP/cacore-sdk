@@ -46,14 +46,29 @@ public class <%=klassName%>XMLDataTest extends SDKXMLDataTestBase
 			toXML(result);
 			
 			validateClassElements(result);
-			// test attributes<%for(UMLAttribute attr:klass.getAttributes()){%>
-			validateAttribute(result,"<%=attr.getName()%>",result.<%=transformerUtils.getGetterMethodName(attr)%>());<%
+			// test attributes
+			<%for(UMLAttribute attr:klass.getAttributes()){
+				if (attr.getDatatype().getName().startsWith("Collection<") || attr.getDatatype().getName().startsWith("byte[]"))
+					continue;
+	
+				if (attr.getDatatype().getName().startsWith("Date") || attr.getDatatype().getName().startsWith("date")){%>
+					validateDateAttribute(result,"<%=attr.getName()%>",result.<%=transformerUtils.getGetterMethodName(attr)%>());
+				<%}
+				else
+				{%>
+					validateAttribute(result,"<%=attr.getName()%>",result.<%=transformerUtils.getGetterMethodName(attr)%>());
+				<%}
+
 			}%>
 			
 			//assertTrue(validateXMLData(result, searchObject.getClass()));
 
-			<%=klassName%> result2 = (<%=klassName%>)fromXML(result);			
-			// test attributes<%for(UMLAttribute attr:klass.getAttributes()){%>
+			<%=klassName%> result2 = (<%=klassName%>)fromXML(result);
+			// test attributes
+			<%for(UMLAttribute attr:klass.getAttributes()){
+				if (attr.getDatatype().getName().startsWith("Collection<") || attr.getDatatype().getName().startsWith("byte[]"))
+					continue;
+			%>
 			assertNotNull(result2.<%=transformerUtils.getGetterMethodName(attr)%>());<%
 			}%>
 		}	

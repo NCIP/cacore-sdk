@@ -1,0 +1,1386 @@
+<%@ jet package="gov.nih.nci.codegen.transformer.jet" 
+        class="RESTfulResourceTransformer"
+        skeleton="RESTfulResourceTransformerBase.skeleton" %>
+<% String fullPackageName=transformerUtils.getFullPackageName(klass);%>
+<% String klassName=klass.getName();%>        
+package <%=fullPackageName%>;
+
+<%=transformerUtils.getImports(klass)%>
+import <%=fullPackageName%>.<%=klassName%>;
+import <%=fullPackageName%>.<%=klassName%>Bean;
+import gov.nih.nci.system.web.SDKResponse;
+import gov.nih.nci.system.web.ResourceLink;
+import gov.nih.nci.system.applicationservice.ApplicationException;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.PathSegment;
+import javax.ws.rs.MatrixParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
+import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.Context;
+import javax.servlet.ServletContext;
+import javax.ws.rs.WebApplicationException;
+import gov.nih.nci.system.applicationservice.ApplicationService;
+import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
+import gov.nih.nci.system.client.proxy.ListProxy;
+
+import java.net.URI;
+import java.lang.reflect.Method;
+import java.util.List;
+import java.lang.reflect.Field;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
+import gov.nih.nci.system.query.hibernate.HQLCriteria;
+import gov.nih.nci.system.web.RESTfulResource;
+import gov.nih.nci.sdk.rest.SDKCascadeCache;
+import gov.nih.nci.system.web.util.RESTUtil;
+
+<%if(!transformerUtils.isISO21090Enabled()){
+%>
+import gov.nih.nci.system.query.hql.DeleteHQLQuery;
+<%}%>
+import gov.nih.nci.system.applicationservice.ApplicationException;
+
+import org.apache.log4j.Logger;
+import java.util.StringTokenizer;
+import gov.nih.nci.system.web.ResourceLink;
+
+@Path("/<%=klassName%>")
+@Produces("application/xml")
+public class <%=klassName%>Resource extends RESTfulResource
+{
+
+	private static Logger log = Logger.getLogger(<%=klassName%>Resource.class);	
+	private String dbType = "<%=transformerUtils.getDatabaseType()%>";
+	
+	public <%=klassName%>Resource(@Context ServletContext context)
+	{
+		super(context);
+	}
+
+<%	
+String action = transformerUtils.getRestFulResourceAction(klass).toUpperCase();
+if(action != null && action.indexOf("R") != -1)
+{
+
+%>
+	
+	@GET
+	@Path("{id}")
+	@Produces("application/xml")
+	public <%=klassName%>Bean get<%=klassName%>ById(@PathParam("id") String id, @Context UriInfo uriInfo, @Context HttpServletRequest request) 
+	{
+		try
+		{
+	  		List params = new ArrayList();
+	  		String className = "<%=fullPackageName%>.<%=klassName%>";
+			
+			
+			<%
+			UMLAttribute attrb = transformerUtils.getClassIdAttr(klass);
+			if(attrb != null && attrb.getDatatype() != null)
+			if(attrb != null && !transformerUtils.isISO21090Enabled())
+			{
+				if(attrb.getDatatype().getName().equals("character") || attrb.getDatatype().getName().equals("Character") || attrb.getDatatype().getName().equals("char"))			
+				{
+			%>
+			params.add(new <%=transformerUtils.javaPrimitiveDatatypeMap.get(attrb.getDatatype().getName())%>(id.charAt(0)));	
+			<%	} 
+				else 
+				{
+			%>
+			params.add(new <%=transformerUtils.javaPrimitiveDatatypeMap.get(attrb.getDatatype().getName())%>(id));	
+			<%
+				}
+			}
+			else if(attrb != null)
+			{
+			String attrType = transformerUtils.isoDatatypeCompleteMap.get(attrb.getDatatype().getName());
+			
+			if(attrType == null)
+				attrType = transformerUtils.javaPrimitiveDatatypeMap.get(attrb.getDatatype().getName());
+			
+			
+			if(attrType.equals("Ii"))
+			{
+			%>
+			gov.nih.nci.iso21090.Ii idAttr = new gov.nih.nci.iso21090.Ii();
+			idAttr.setExtension(id);
+			params.add(idAttr);	
+			<%
+			}
+			else if(attrb.getDatatype().getName().equals("character") || attrb.getDatatype().getName().equals("Character") || attrb.getDatatype().getName().equals("char"))			
+			{
+			%>
+			params.add(new <%=transformerUtils.javaPrimitiveDatatypeMap.get(attrb.getDatatype().getName())%>(id.charAt(0)));	
+			<%
+			}
+			else 
+			{
+			%>
+			params.add(new <%=attrType%>(id));	
+			<%
+			}
+			}
+			else
+			{
+			%>
+			if(true)
+			{
+				  ResponseBuilder builder2 = Response.status(Status.NOT_FOUND);
+				  builder2.type("application/xml");
+				  StringBuffer buffer = new StringBuffer();
+				  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+				  buffer.append("<response>");
+				  buffer.append("<type>ERROR</type>");
+				  buffer.append("<code>SEARCH_CRITERIA_4</code>");
+				  buffer.append("<resource><%=klassName%></resource>");
+				  buffer.append("<path>id</path>");
+				  buffer.append("<message>Not Primary Key Found. Query is not supported.</message>"); 
+				  buffer.append("</response>");
+				  builder2.entity(buffer.toString());
+				  throw new WebApplicationException(builder2.build());
+			}
+			
+			<%
+			}
+			%>
+			ApplicationService appService = null;
+
+			if(secured)
+			{
+				String username = request.getRemoteUser();
+				Principal p = request.getUserPrincipal();
+				String password = null;
+				if(p != null)
+					password = p.getName();
+				appService = getApplicationService(username, password);
+			}
+			else
+			{
+				appService = getApplicationService();
+			}
+			
+			HQLCriteria criteria = new HQLCriteria("from <%=fullPackageName%>.<%=klassName%> a where a.<%=transformerUtils.getClassIdAttrName(klass)%> = ?", params);
+			
+			Collection<<%=klassName%>> results = appService.query(criteria);
+			
+			if(results != null && results.size() > 0)
+			{
+				<%=klassName%> returnObj = (<%=klassName%>)results.iterator().next();
+				
+				Map returnMap = new HashMap();
+				String fullpath = uriInfo.getAbsolutePath().toString();
+				String path = fullpath.substring(0, fullpath.indexOf("/rest/")+5);
+				//log.debug("building links: "+path);
+				<%=klassName%>Bean bean = new <%=klassName%>Bean(returnObj);
+				bean.buildLinks(path, returnObj);
+				//returnObj.buildLinks(path);
+				//return returnObj;
+				
+				return bean;
+			}
+			else
+			{
+				  ResponseBuilder builder3 = Response.status(Status.NOT_FOUND);
+				  builder3.type("application/xml");
+				  StringBuffer buffer = new StringBuffer();
+				  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+				  buffer.append("<response>");
+				  buffer.append("<type>ERROR</type>");
+				  buffer.append("<code>SEARCH_CRITERIA_5</code>");
+				  buffer.append("<resource><%=klassName%></resource>");
+				  buffer.append("<path>id</path>");
+				  buffer.append("<message>Not found</message>"); 
+				  buffer.append("</response>");
+				  builder3.entity(buffer.toString());
+				  throw new WebApplicationException(builder3.build());
+			}
+			
+	  		//query(request, response, criteria, className);
+		}
+		catch(WebApplicationException e)
+		{
+			e.printStackTrace();
+			throw e;
+		}
+		catch(ApplicationException e)
+		{
+			  e.printStackTrace();
+			  log.error("Error in querying REST resource: " + e.getMessage());
+			  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
+			  builder.type("application/xml");
+			  StringBuffer buffer = new StringBuffer();
+			  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+			  buffer.append("<response>");
+			  buffer.append("<type>ERROR</type>");
+			  buffer.append("<code>SEARCH_CRITERIA_3</code>");
+			  buffer.append("<resource><%=klassName%></resource>");
+			  buffer.append("<path>search</path>");
+			  buffer.append("<message>Failed to Query due to: "+e.getMessage()+"</message>");
+			  buffer.append("</response>");
+			  builder.entity(buffer.toString());
+			  throw new WebApplicationException(builder.build());
+		}
+		catch(Exception e)
+		{
+			  log.error("Error in querying REST resource: " + e.getMessage());
+			  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
+			  builder.type("application/xml");
+			  StringBuffer buffer = new StringBuffer();
+			  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+			  buffer.append("<response>");
+			  buffer.append("<type>ERROR</type>");
+			  buffer.append("<code>SEARCH_CRITERIA_2</code>");
+			  buffer.append("<resource><%=klassName%></resource>");
+			  buffer.append("<path>search</path>");
+			  buffer.append("<message>Failed to Query due to: "+e.getMessage()+"</message>");
+			  buffer.append("</response>");
+			  builder.entity(buffer.toString());
+			  throw new WebApplicationException(builder.build());
+		}
+		
+	}
+	
+
+	@GET
+	@Path("/search")
+	@Produces("application/xml")
+	public <%=klassName%>s get<%=klassName%>(@Context UriInfo uriInfo, @Context HttpServletRequest request)
+	{
+		try
+		{
+			List<PathSegment> pathSegments = uriInfo.getPathSegments();
+			log.debug("pathSegments; "+pathSegments);
+			List<Field> searchFields = RESTUtil.getSearchableFields("<%=klassName%>", classCache);
+			if(pathSegments == null || pathSegments.size() == 0)
+			{			
+				ResponseBuilder builder = Response.status(Status.BAD_REQUEST);
+				builder.type("application/xml");
+				StringBuffer buffer = new StringBuffer();
+				buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+				buffer.append("<response>");
+				buffer.append("<type>ERROR</type>");
+				buffer.append("<code>SEARCH_CRITERIA_1</code>");
+				buffer.append("<resource><%=klassName%></resource>");
+				buffer.append("<path>search</path>");
+				buffer.append("<message>Search criteria is missing</message>");
+				buffer.append("<valid>");
+				for(Field field : searchFields)
+				{
+					buffer.append("<attribute>");
+					buffer.append(field.getName());
+					buffer.append("<attribute>");
+				}
+				buffer.append("</valid>");
+				buffer.append("</response>");
+				builder.entity(buffer.toString());
+				throw new WebApplicationException(builder.build());
+
+			}
+			Map matrixParams = pathSegments.get(1).getMatrixParameters();
+			log.debug("matrixParams; "+matrixParams);
+			if(searchFields == null || searchFields.size() == 0)
+			{
+				  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
+				  builder.type("application/xml");
+				  StringBuffer buffer = new StringBuffer();
+				  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+				  buffer.append("<response>");
+				  buffer.append("<type>ERROR</type>");
+				  buffer.append("<code>SEARCH_CRITERIA_5</code>");
+				  buffer.append("<resource><%=klassName%></resource>");
+				  buffer.append("<path>search</path>");
+				  buffer.append("<message>No searchable fields on this resource</message>");
+				  buffer.append("</response>");
+				  builder.entity(buffer.toString());
+				  throw new WebApplicationException(builder.build());
+			}
+			
+			ApplicationService appService = null;
+
+			if(secured)
+			{
+				String username = request.getRemoteUser();
+				Principal p = request.getUserPrincipal();
+				String password = null;
+				if(p != null)
+					password = p.getName();
+				appService = getApplicationService(username, password);
+			}
+			else
+			{
+				appService = getApplicationService();
+			}
+			HQLCriteria hcriteria = buildHQLCriteria("<%=fullPackageName%>.<%=klassName%>", searchFields, matrixParams, uriInfo, dbType);
+			int rowCount = appService.getQueryRowCount(hcriteria, "<%=fullPackageName%>.<%=klassName%>");
+			int maxRowCountPerQuery = appService.getMaxRecordsCount();
+			//log.debug("rowCount: "+rowCount);
+			//log.debug("maxRowCountPerQuery: "+maxRowCountPerQuery);
+			Collection results = appService.query(hcriteria);
+			ResourceLink nextLink = getNextLink(uriInfo, results.size(), rowCount, maxRowCountPerQuery);
+			ResourceLink previousLink = getPreviousLink(uriInfo, results.size(), rowCount, maxRowCountPerQuery);
+			ResourceLink selfLink = getSelfLink(uriInfo);
+			
+			if(results != null && results.size() > 0)
+			{
+				String fullpath = uriInfo.getAbsolutePath().toString();
+				String path = fullpath.substring(0, fullpath.indexOf("/rest/")+5);
+				ListProxy beans = new ListProxy();
+				ListProxy proxy = (ListProxy) results;
+				beans.setAppService(appService);
+				beans.setTargetClassName(proxy.getTargetClassName());
+				beans.setOriginalStart(proxy.getOriginalStart());
+				beans.setRealSize(proxy.getRealSize());
+				beans.setMaxRecordsPerQuery(proxy.getMaxRecordsPerQuery());
+				beans.setHasAllRecords(proxy.isHasAllRecords());
+				Iterator iter = results.iterator();
+				while(iter.hasNext())
+				{
+					<%=klassName%> obj = (<%=klassName%>) iter.next();
+					<%=klassName%>Bean bean = new <%=klassName%>Bean(obj);
+					bean.buildLinks(path, obj);
+					beans.add(bean);
+				}
+				<%=klassName%>s collection = new <%=klassName%>s(beans);
+				if(nextLink != null)
+					collection.addLink(nextLink);
+				if(previousLink != null)					
+					collection.addLink(previousLink);
+
+				collection.addLink(selfLink);
+				return collection;
+			}
+				
+			else
+			{
+				  ResponseBuilder builder = Response.status(Status.NOT_FOUND);
+				  builder.type("application/xml");
+				  StringBuffer buffer = new StringBuffer();
+				  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+				  buffer.append("<response>");
+				  buffer.append("<type>MESSAGE</type>");
+				  buffer.append("<code>SEARCH_CRITERIA_6</code>");
+				  buffer.append("<resource><%=klassName%></resource>");
+				  buffer.append("<path>search</path>");
+				  buffer.append("<message>No matching results</message>");
+				  buffer.append("</response>");
+				  builder.entity(buffer.toString());
+				  throw new WebApplicationException(builder.build());
+			}
+		}
+		catch(WebApplicationException e)
+		{
+			e.printStackTrace();
+			throw e;
+		}
+		catch(ApplicationException e)
+		{
+			  e.printStackTrace();
+			  log.error("Error in querying REST resource: " + e.getMessage());
+			  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
+			  builder.type("application/xml");
+			  StringBuffer buffer = new StringBuffer();
+			  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+			  buffer.append("<response>");
+			  buffer.append("<type>ERROR</type>");
+			  buffer.append("<code>APPLICATION_ERROR</code>");
+			  buffer.append("<resource><%=klassName%></resource>");
+			  buffer.append("<path>search</path>");
+			  buffer.append("<message>Failed to Query due to: "+e.getMessage()+"</message>");
+			  buffer.append("</response>");
+			  builder.entity(buffer.toString());
+			  throw new WebApplicationException(builder.build());
+		}
+		catch(Exception e)
+		{
+			  e.printStackTrace();	
+	  		  log.error("Error in querying REST resource: " + e.getMessage());
+			  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
+			  builder.type("application/xml");
+			  StringBuffer buffer = new StringBuffer();
+			  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+			  buffer.append("<response>");
+			  buffer.append("<type>ERROR</type>");
+			  buffer.append("<code>APPLICATION_ERROR</code>");
+			  buffer.append("<resource><%=klassName%></resource>");
+			  buffer.append("<path>search</path>");
+			  buffer.append("<message>Failed to Query due to: "+e.getMessage()+"</message>");
+			  buffer.append("</response>");
+			  builder.entity(buffer.toString());
+			  throw new WebApplicationException(builder.build());
+		}
+
+	}
+	
+
+<%	
+List<UMLAssociation> assocs = transformerUtils.getAssociations(klass, true);
+int counter = 0;
+for(UMLAssociation assoc: assocs){
+	List<UMLAssociationEnd> assocEnds = assoc.getAssociationEnds();
+	List<UMLAssociationEnd> associationEnds = new java.util.ArrayList<UMLAssociationEnd>();
+	UMLAssociationEnd thisEnd = null;
+	UMLAssociationEnd otherEnd = null;
+	try
+	{
+		thisEnd = transformerUtils.getThisEnd(klass,assocEnds, true);
+		otherEnd = transformerUtils.getOtherEnd(klass,assocEnds, true);
+		associationEnds.add(otherEnd);
+	}
+	catch(GenerationException e)
+	{
+		continue;
+	}
+
+	if(transformerUtils.isBidirectionalSelfAssociation(klass,assocEnds)) { // handle bi-directional self-association 
+		associationEnds.add(thisEnd);
+	}
+
+	for(UMLAssociationEnd associationEnd : associationEnds)
+	{	
+		counter++;
+		if(associationEnd.isNavigable())
+		{
+
+			UMLClass assocKlass = (UMLClass)associationEnd.getUMLElement();
+			String assocPackageName=transformerUtils.getFullPackageName(assocKlass);
+			String name = associationEnd.getRoleName(); 
+			boolean isAbstract1 = transformerUtils.isAbstract(assocKlass);
+			if(!isAbstract1)
+			{
+	%>
+		@GET
+		@Path("/search/<%=name%>")
+		@Produces("application/xml")
+		public <%=assocPackageName%>.<%=assocKlass.getName()%>s get<%=klassName%><%=counter%>(@Context UriInfo uriInfo, @Context HttpServletRequest request)
+		{
+			try
+			{
+				int startIndex = -1;
+				int totalSize = -1;
+				String bStart = uriInfo.getQueryParameters().getFirst("start");
+				if (bStart != null)
+					startIndex = Integer.parseInt(bStart);
+
+				String bSize = uriInfo.getQueryParameters().getFirst("size");
+				if (bSize != null)
+					totalSize = Integer.parseInt(bSize);
+
+				List<PathSegment> pathSegments = uriInfo.getPathSegments();
+				//log.debug("pathSegments; "+pathSegments);
+				List<Field> searchFields = RESTUtil.getSearchableFields("<%=klassName%>", classCache);
+				if(pathSegments == null || pathSegments.size() == 0)
+				{			
+					ResponseBuilder builder = Response.status(Status.BAD_REQUEST);
+					builder.type("application/xml");
+					StringBuffer buffer = new StringBuffer();
+					buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+					buffer.append("<response>");
+					buffer.append("<type>ERROR</type>");
+					buffer.append("<code>SEARCH_CRITERIA_7</code>");
+					buffer.append("<resource><%=klassName%></resource>");
+					buffer.append("<path>search/name</path>");
+					buffer.append("<message>Search criteria is missing</message>");
+					buffer.append("<valid>");
+					for(Field field : searchFields)
+					{
+						buffer.append("<attribute>");
+						buffer.append(field.getName());
+						buffer.append("<attribute>");
+					}
+					buffer.append("</valid>");
+					buffer.append("</response>");
+					builder.entity(buffer.toString());
+					throw new WebApplicationException(builder.build());
+
+				}
+				Map matrixParams = pathSegments.get(1).getMatrixParameters();
+				if(searchFields == null || searchFields.size() == 0)
+				{
+					  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
+					  builder.type("application/xml");
+					  StringBuffer buffer = new StringBuffer();
+					  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+					  buffer.append("<response>");
+					  buffer.append("<type>ERROR</type>");
+					  buffer.append("<code>SEARCH_CRITERIA_8</code>");
+					  buffer.append("<resource><%=klassName%></resource>");
+					  buffer.append("<path>search/name</path>");
+					  buffer.append("<message>No searchable fields on this resource</message>");
+					  buffer.append("</response>");
+					  builder.entity(buffer.toString());
+					  throw new WebApplicationException(builder.build());
+				}
+				
+				String className = "<%=fullPackageName%>.<%=klassName%>";
+				//validateCriteria(className, matrixParams, searchFields);
+				
+				
+				HQLCriteria hqlCriteria = getAssociationCriteria(Class.forName(className), "<%=name%>", startIndex, totalSize, searchFields, matrixParams, uriInfo, dbType);
+
+
+				ApplicationService appService = null;
+				if(secured)
+				{
+					String username = request.getRemoteUser();
+					Principal p = request.getUserPrincipal();
+					String password = null;
+					if(p != null)
+						password = p.getName();
+					appService = getApplicationService(username, password);
+				}
+				else
+				{
+					appService = getApplicationService();
+				}
+
+				int rowCount = appService.getQueryRowCount(hqlCriteria, "<%=assocPackageName%>.<%=assocKlass.getName()%>");
+				int maxRowCountPerQuery = appService.getMaxRecordsCount();
+				//log.debug("rowCount: "+rowCount);
+				//log.debug("maxRowCountPerQuery: "+maxRowCountPerQuery);
+				Collection results = appService.query(hqlCriteria);
+				ResourceLink nextLink = getNextLink(uriInfo, results.size(), rowCount, maxRowCountPerQuery);
+				ResourceLink previousLink = getPreviousLink(uriInfo, results.size(), rowCount, maxRowCountPerQuery);
+				ResourceLink selfLink = getSelfLink(uriInfo);
+
+				if(results != null && results.size() > 0)
+				{
+					String fullpath = uriInfo.getAbsolutePath().toString();
+					String path = fullpath.substring(0, fullpath.indexOf("/rest/")+5);
+					Iterator iter = results.iterator();
+					ListProxy beans = new ListProxy();
+					ListProxy proxy = (ListProxy) results;
+					beans.setAppService(appService);
+					beans.setTargetClassName(proxy.getTargetClassName());
+					beans.setOriginalStart(proxy.getOriginalStart());
+					beans.setRealSize(proxy.getRealSize());
+					beans.setMaxRecordsPerQuery(proxy.getMaxRecordsPerQuery());
+					beans.setHasAllRecords(proxy.isHasAllRecords());
+
+					while(iter.hasNext())
+					{
+						<%=assocPackageName%>.<%=assocKlass.getName()%> obj = (<%=assocPackageName%>.<%=assocKlass.getName()%>) iter.next();
+						<%=assocPackageName%>.<%=assocKlass.getName()%>Bean bean = new <%=assocPackageName%>.<%=assocKlass.getName()%>Bean(obj);
+						beans.add(bean);
+						bean.buildLinks(path, obj);
+					}
+					<%=assocPackageName%>.<%=assocKlass.getName()%>s collection = new <%=assocPackageName%>.<%=assocKlass.getName()%>s((List)beans);
+					if(nextLink != null)
+						collection.addLink(nextLink);
+					if(previousLink != null)					
+						collection.addLink(previousLink);
+
+					collection.addLink(selfLink);
+					return collection;
+				}
+				
+				else
+				{
+					  ResponseBuilder builder = Response.status(Status.NOT_FOUND);
+					  builder.type("application/xml");
+					  StringBuffer buffer = new StringBuffer();
+					  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+					  buffer.append("<response>");
+					  buffer.append("<type>MESSAGE</type>");
+					  buffer.append("<code>SEARCH_CRITERIA_9</code>");
+					  buffer.append("<resource><%=klassName%></resource>");
+					  buffer.append("<path>search/name</path>");
+					  buffer.append("<message>No matching results</message>");
+					  buffer.append("</response>");
+					  builder.entity(buffer.toString());
+					  throw new WebApplicationException(builder.build());
+				}
+				
+			}
+	  		catch(ClassNotFoundException e)
+	  		{
+				  log.error("Error in querying REST resource association: " + e.getMessage());
+				  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
+				  builder.type("application/xml");
+				  StringBuffer buffer = new StringBuffer();
+				  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+				  buffer.append("<response>");
+				  buffer.append("<type>ERROR</type>");
+				  buffer.append("<code>APPLICATION_ERROR</code>");
+				  buffer.append("<resource><%=klassName%></resource>");
+				  buffer.append("<path>search/name</path>");
+				  buffer.append("<message>Failed to Query due to: "+e.getMessage()+"</message>");
+				  buffer.append("</response>");
+				  builder.entity(buffer.toString());
+				  throw new WebApplicationException(builder.build());
+	  		}
+			catch(WebApplicationException e)
+			{
+				throw e;
+			}
+			catch(ApplicationException e)
+			{
+				  log.error("Error in querying REST resource: " + e.getMessage());
+				  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
+				  builder.type("application/xml");
+				  StringBuffer buffer = new StringBuffer();
+				  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+				  buffer.append("<response>");
+				  buffer.append("<type>ERROR</type>");
+				  buffer.append("<code>INTERNAL_ERROR_1</code>");
+				  buffer.append("<resource><%=klassName%></resource>");
+				  buffer.append("<path>search/name</path>");
+				  buffer.append("<message>Failed to Query due to: "+e.getMessage()+"</message>");
+				  buffer.append("</response>");
+				  builder.entity(buffer.toString());
+				  throw new WebApplicationException(builder.build());
+			}
+		catch(Exception e)
+		{
+			  log.error("Error in querying REST resource: " + e.getMessage());
+			  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
+			  builder.type("application/xml");
+			  StringBuffer buffer = new StringBuffer();
+			  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+			  buffer.append("<response>");
+			  buffer.append("<type>ERROR</type>");
+			  buffer.append("<code>APPLICATION_ERROR</code>");
+			  buffer.append("<resource><%=klassName%></resource>");
+			  buffer.append("<path>search/name</path>");
+			  buffer.append("<message>Failed to Query due to: "+e.getMessage()+"</message>");
+			  buffer.append("</response>");
+			  builder.entity(buffer.toString());
+			  throw new WebApplicationException(builder.build());
+		}
+
+		}
+
+	<%
+
+			if(transformerUtils.isAssociationEndMany(associationEnd))
+		{%>
+
+					
+			
+		@GET
+		@Path("{id}/<%=name%>")
+		@Produces("application/xml")
+		public <%=assocPackageName%>.<%=assocKlass.getName()%>s <%=transformerUtils.getGetterMethodName(associationEnd)%>(@PathParam("id") String id, @Context UriInfo uriInfo, @Context HttpServletRequest request)
+		{
+			try
+			{
+				String className = "<%=fullPackageName%>.<%=klassName%>";
+				int startIndex = -1;
+				int totalSize = -1;
+				String bStart = uriInfo.getQueryParameters().getFirst("start");
+				if (bStart != null)
+					startIndex = Integer.parseInt(bStart);
+
+				String bSize = uriInfo.getQueryParameters().getFirst("size");
+				if (bSize != null)
+					totalSize = Integer.parseInt(bSize);
+
+				ApplicationService appService = null;
+				if(secured)
+				{
+					String username = request.getRemoteUser();
+					Principal p = request.getUserPrincipal();
+					String password = null;
+					if(p != null)
+						password = p.getName();
+					appService = getApplicationService(username, password);
+				}
+				else
+				{
+					appService = getApplicationService();
+				}
+					
+				HQLCriteria hqlCriteria = getAssociationCriteria(Class.forName(className), "<%=name%>", id, startIndex, totalSize);
+				int rowCount = appService.getQueryRowCount(hqlCriteria, "<%=assocPackageName%>.<%=assocKlass.getName()%>");
+				int maxRowCountPerQuery = appService.getMaxRecordsCount();
+				//log.debug("rowCount: "+rowCount);
+				//log.debug("maxRowCountPerQuery: "+maxRowCountPerQuery);
+				Collection results = appService.query(hqlCriteria);
+				ResourceLink nextLink = getNextLink(uriInfo, results.size(), rowCount, maxRowCountPerQuery);
+				ResourceLink previousLink = getPreviousLink(uriInfo, results.size(), rowCount, maxRowCountPerQuery);
+				ResourceLink selfLink = getSelfLink(uriInfo);
+
+				if(results != null && results.size() > 0)
+				{
+					String fullpath = uriInfo.getAbsolutePath().toString();
+					String path = fullpath.substring(0, fullpath.indexOf("/rest/")+5);
+					Iterator iter = results.iterator();
+					ListProxy beans = new ListProxy();
+					ListProxy proxy = (ListProxy) results;
+					beans.setAppService(appService);
+					beans.setTargetClassName(proxy.getTargetClassName());
+					beans.setOriginalStart(proxy.getOriginalStart());
+					beans.setRealSize(proxy.getRealSize());
+					beans.setMaxRecordsPerQuery(proxy.getMaxRecordsPerQuery());
+					beans.setHasAllRecords(proxy.isHasAllRecords());
+					while(iter.hasNext())
+					{
+						<%=assocPackageName%>.<%=assocKlass.getName()%> obj = (<%=assocPackageName%>.<%=assocKlass.getName()%>) iter.next();
+<%=assocPackageName%>.<%=assocKlass.getName()%>Bean bean = new <%=assocPackageName%>.<%=assocKlass.getName()%>Bean(obj);
+
+						bean.buildLinks(path, obj);
+						beans.add(bean);
+					}
+					<%=assocPackageName%>.<%=assocKlass.getName()%>s collection = new <%=assocPackageName%>.<%=assocKlass.getName()%>s((List)beans);
+					if(nextLink != null)
+						collection.addLink(nextLink);
+					if(previousLink != null)					
+						collection.addLink(previousLink);
+
+					collection.addLink(selfLink);
+					return collection;
+				}
+				
+				else
+				{
+					  ResponseBuilder builder = Response.status(Status.NOT_FOUND);
+					  builder.type("application/xml");
+					  StringBuffer buffer = new StringBuffer();
+					  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+					  buffer.append("<response>");
+					  buffer.append("<type>MESSAGE</type>");
+					  buffer.append("<code>SEARCH_CRITERIA_10</code>");
+					  buffer.append("<resource><%=klassName%></resource>");
+					  buffer.append("<path>id/name</path>");
+					  buffer.append("<message>No matching results</message>");
+					  buffer.append("</response>");
+					  builder.entity(buffer.toString());
+					  throw new WebApplicationException(builder.build());
+				}
+				
+			}
+	  		catch(ClassNotFoundException e)
+	  		{
+				  log.error("Error in querying REST resource association: " + e.getMessage());
+				  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
+				  builder.type("application/xml");
+				  StringBuffer buffer = new StringBuffer();
+				  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+				  buffer.append("<response>");
+				  buffer.append("<type>ERROR</type>");
+				  buffer.append("<code>APPLICATION_ERROR</code>");
+				  buffer.append("<resource><%=klassName%></resource>");
+				  buffer.append("<path>id/name</path>");
+				  buffer.append("<message>Failed to Query due to: "+e.getMessage()+"</message>");
+				  buffer.append("</response>");
+				  builder.entity(buffer.toString());
+				  throw new WebApplicationException(builder.build());
+	  		}
+			catch(WebApplicationException e)
+			{
+				throw e;
+			}
+			catch(ApplicationException e)
+			{
+				  log.error("Error in querying REST resource: " + e.getMessage());
+				  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
+				  builder.type("application/xml");
+				  StringBuffer buffer = new StringBuffer();
+				  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+				  buffer.append("<response>");
+				  buffer.append("<type>ERROR</type>");
+				  buffer.append("<code>APPLICATION_ERROR</code>");
+				  buffer.append("<resource><%=klassName%></resource>");
+				  buffer.append("<path>id/name</path>");
+				  buffer.append("<message>Failed to Query due to: "+e.getMessage()+"</message>");
+				  buffer.append("</response>");
+				  builder.entity(buffer.toString());
+				  throw new WebApplicationException(builder.build());
+			}
+		catch(Exception e)
+		{
+			  log.error("Error in querying REST resource: " + e.getMessage());
+			  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
+			  builder.type("application/xml");
+			  StringBuffer buffer = new StringBuffer();
+			  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+			  buffer.append("<response>");
+			  buffer.append("<type>ERROR</type>");
+			  buffer.append("<code>APPLICATION_ERROR</code>");
+			  buffer.append("<resource><%=klassName%></resource>");
+			  buffer.append("<path>id/name</path>");
+			  buffer.append("<message>Failed to Query due to: "+e.getMessage()+"</message>");
+			  buffer.append("</response>");
+			  builder.entity(buffer.toString());
+			  throw new WebApplicationException(builder.build());
+		}
+			
+		}
+	<%}else{
+	%>
+		@GET
+		@Path("{id}/<%=name%>")
+		@Produces("application/xml")
+		public <%=assocPackageName%>.<%=assocKlass.getName()%> <%=transformerUtils.getGetterMethodName(associationEnd)%>(@PathParam("id") String id, @Context UriInfo uriInfo, @Context HttpServletRequest request)
+		{
+			try
+			{
+		  		String className = "<%=fullPackageName%>.<%=klassName%>";
+				int startIndex = -1;
+				int totalSize = -1;
+				String bStart = uriInfo.getQueryParameters().getFirst("start");
+				if (bStart != null)
+					startIndex = Integer.parseInt(bStart);
+
+				String bSize = uriInfo.getQueryParameters().getFirst("size");
+				if (bSize != null)
+					totalSize = Integer.parseInt(bSize);
+					
+				ApplicationService appService = null;
+				if(secured)
+				{
+					String username = request.getRemoteUser();
+					Principal p = request.getUserPrincipal();
+					String password = null;
+					if(p != null)
+						password = p.getName();
+					appService = getApplicationService(username, password);
+				}
+				else
+				{
+					appService = getApplicationService();
+				}
+					
+					
+				HQLCriteria hqlCriteria = getAssociationCriteria(Class.forName(className), "<%=name%>", id, startIndex, totalSize);
+				int rowCount = appService.getQueryRowCount(hqlCriteria, "<%=assocPackageName%>.<%=assocKlass.getName()%>");
+				int maxRowCountPerQuery = appService.getMaxRecordsCount();
+				//log.debug("rowCount: "+rowCount);
+				//log.debug("maxRowCountPerQuery: "+maxRowCountPerQuery);
+				Collection results = appService.query(hqlCriteria);
+				//List beans = new ArrayList();
+				if(results != null && results.size() > 0)
+				{
+					<%=assocPackageName%>.<%=assocKlass.getName()%> returnObj =  (<%=assocPackageName%>.<%=assocKlass.getName()%>)((List)results).get(0);
+<%=assocPackageName%>.<%=assocKlass.getName()%>Bean bean = new <%=assocPackageName%>.<%=assocKlass.getName()%>Bean(returnObj);
+					String fullpath = uriInfo.getAbsolutePath().toString();
+					String path = fullpath.substring(0, fullpath.indexOf("/rest/")+5);
+					bean.buildLinks(path, returnObj);
+					return bean;
+				}
+				else
+				{
+					  ResponseBuilder builder = Response.status(Status.NOT_FOUND);
+					  builder.type("application/xml");
+					  StringBuffer buffer = new StringBuffer();
+					  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+					  buffer.append("<response>");
+					  buffer.append("<type>MESSAGE</type>");
+					  buffer.append("<code>SEARCH_CRITERIA_11</code>");
+					  buffer.append("<resource><%=klassName%></resource>");
+					  buffer.append("<path>id/name</path>");
+					  buffer.append("<message>No matching results</message>");
+					  buffer.append("</response>");
+					  builder.entity(buffer.toString());
+					  throw new WebApplicationException(builder.build());
+				}
+	  		}
+	  		catch(ClassNotFoundException e)
+	  		{
+				  log.error("Error in querying REST resource association: " + e.getMessage());
+				  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
+				  builder.type("application/xml");
+				  StringBuffer buffer = new StringBuffer();
+				  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+				  buffer.append("<response>");
+				  buffer.append("<type>ERROR</type>");
+				  buffer.append("<code>APPLICATION_ERROR</code>");
+				  buffer.append("<resource><%=klassName%></resource>");
+				  buffer.append("<path>id/name</path>");
+				  buffer.append("<message>Failed to Query due to: "+e.getMessage()+"</message>");
+				  buffer.append("</response>");
+				  builder.entity(buffer.toString());
+				  throw new WebApplicationException(builder.build());
+	  		}
+			catch(WebApplicationException e)
+			{
+				throw e;
+			}
+			catch(ApplicationException e)
+			{
+				  log.error("Error in querying REST resource: " + e.getMessage());
+				  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
+				  builder.type("application/xml");
+				  StringBuffer buffer = new StringBuffer();
+				  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+				  buffer.append("<response>");
+				  buffer.append("<type>ERROR</type>");
+				  buffer.append("<code>APPLICATION_ERROR</code>");
+				  buffer.append("<resource><%=klassName%></resource>");
+				  buffer.append("<path>id/name</path>");
+				  buffer.append("<message>Failed to Query due to: "+e.getMessage()+"</message>");
+				  buffer.append("</response>");
+				  builder.entity(buffer.toString());
+				  throw new WebApplicationException(builder.build());
+			}
+		catch(Exception e)
+		{
+			  log.error("Error in querying REST resource: " + e.getMessage());
+			  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
+			  builder.type("application/xml");
+			  StringBuffer buffer = new StringBuffer();
+			  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+			  buffer.append("<response>");
+			  buffer.append("<type>ERROR</type>");
+			  buffer.append("<code>APPLICATION_ERROR</code>");
+			  buffer.append("<resource><%=klassName%></resource>");
+			  buffer.append("<path>id/name</path>");
+			  buffer.append("<message>Failed to Query due to: "+e.getMessage()+"</message>");
+			  buffer.append("</response>");
+			  builder.entity(buffer.toString());
+			  throw new WebApplicationException(builder.build());
+		}
+			
+		}
+		
+		
+			<%}%>
+
+
+<%			
+			}
+		}
+		}
+	}%>
+
+<%}%>
+
+<%
+if(action != null && action.indexOf("C") != -1 && !transformerUtils.isISO21090Enabled())
+{%>
+	@PUT
+	@Consumes("application/xml")
+	public Response add<%=klassName%>(<%=klassName%> object, @Context UriInfo uriInfo, @Context HttpServletRequest request)
+	{
+		try
+		{
+			//log.debug("Adding <%=klassName%>: "+object.toString());
+			/*try
+			{
+			gov.nih.nci.system.web.util.RESTUtil.printObject(object, object.getClass(), true);
+			}
+			catch(Exception e)
+			{
+			}*/
+			checkCollections(object);
+			validateObject(object);
+			<%=klassName%> obj = (<%=klassName%>)save(object);
+			String fullpath = uriInfo.getAbsolutePath().toString();
+			String path = fullpath.substring(0, fullpath.indexOf("/rest/")+5);
+			String id = null;
+			<%
+			UMLAttribute attrb = transformerUtils.getClassIdAttr(klass);
+			String idMethod = transformerUtils.getClassIdGetterMthod(klass);
+			if(attrb != null && !transformerUtils.isISO21090Enabled())
+			{
+				if(attrb.getDatatype().getName().equals("character") || attrb.getDatatype().getName().equals("Character") || attrb.getDatatype().getName().equals("char"))			
+				{
+			%>
+				id = new <%=transformerUtils.javaPrimitiveDatatypeMap.get(attrb.getDatatype().getName())%>(object.<%=idMethod%>()).toString();	
+			<%	} 
+				else 
+				{
+			%>
+				id = new <%=transformerUtils.javaPrimitiveDatatypeMap.get(attrb.getDatatype().getName())%>(object.<%=idMethod%>()).toString();	
+			<%
+				}
+			}
+			%>
+			
+			ResponseBuilder builder = Response.status(Status.OK);
+			builder.type("application/xml");
+			StringBuffer buffer = new StringBuffer();
+			buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+			buffer.append("<response>");
+			buffer.append("<type>MESSAGE</type>");
+			buffer.append("<code>CREATE</code>");
+			buffer.append("<resource><%=klassName%></resource>");
+			buffer.append("<path>PUT</path>");
+			buffer.append("<message>"+path+"/<%=klassName%>/"+id+"</message>"); 
+			buffer.append("</response>");
+			builder.entity(buffer.toString());
+			return builder.build();
+		}
+		catch(WebApplicationException e)
+		{
+			log.debug("In Create: throwing: "+e.getResponse());
+			return e.getResponse();
+		}
+	}
+
+<%}%>
+
+<%
+if(action != null && action.indexOf("D") != -1 && !transformerUtils.isISO21090Enabled())
+{%>
+
+	@DELETE
+	@Path("{id}")
+	public Response delete<%=klassName%>(@Context javax.servlet.http.HttpServletRequest request, @Context javax.servlet.http.HttpServletResponse response, @PathParam("id") String id)
+	{
+	//log.debug("in delete................");
+		try
+		{
+
+	  		List params = new ArrayList();
+	  		String className = "<%=fullPackageName%>.<%=klassName%>";
+			
+			<%
+			UMLAttribute attrb = transformerUtils.getClassIdAttr(klass);
+			if(attrb != null && !transformerUtils.isISO21090Enabled())
+			{
+				if(attrb.getDatatype().getName().equals("character") || attrb.getDatatype().getName().equals("Character") || attrb.getDatatype().getName().equals("char"))			
+				{
+			%>
+				params.add(new <%=transformerUtils.javaPrimitiveDatatypeMap.get(attrb.getDatatype().getName())%>(id.charAt(0)));	
+			<%	} 
+				else 
+				{
+			%>
+				params.add(new <%=transformerUtils.javaPrimitiveDatatypeMap.get(attrb.getDatatype().getName())%>(id));	
+			<%
+				}
+			}
+			else if(attrb != null)
+			{
+			String attrType = transformerUtils.isoDatatypeCompleteMap.get(attrb.getDatatype().getName());
+			
+			if(attrType == null)
+				attrType = transformerUtils.javaPrimitiveDatatypeMap.get(attrb.getDatatype().getName());
+			
+			
+			if(attrType.equals("Ii"))
+			{
+			%>
+				gov.nih.nci.iso21090.Ii idAttr = new gov.nih.nci.iso21090.Ii();
+				idAttr.setExtension(id);
+				params.add(idAttr);	
+			<%
+			}
+			else if(attrb.getDatatype().getName().equals("character") || attrb.getDatatype().getName().equals("Character") || attrb.getDatatype().getName().equals("char"))			
+			{
+			%>
+				params.add(new <%=transformerUtils.javaPrimitiveDatatypeMap.get(attrb.getDatatype().getName())%>(id.charAt(0)));	
+			<%
+			}
+			else
+			{
+			%>
+				params.add(new <%=attrType%>(id));	
+			<%
+			}
+			}
+			else
+			{
+			%>
+			if(true)
+			{
+				ResponseBuilder builder = Response.status(Status.NOT_FOUND);
+				builder.type("application/xml");
+				StringBuffer buffer = new StringBuffer();
+				buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+				buffer.append("<response>");
+				buffer.append("<type>MESSAGE</type>");
+				buffer.append("<code>DELETE</code>");
+				buffer.append("<resource><%=klassName%></resource>");
+				buffer.append("<path>DELETE</path>");
+				buffer.append("<message>Not PK Found. Query is not supported.</message>"); 
+				buffer.append("</response>");
+				builder.entity(buffer.toString());
+				throw new WebApplicationException(builder.build());
+			}
+			
+			<%
+			}
+			%>
+			
+		ApplicationService appService = null;
+		if(secured)
+		{
+			String username = request.getRemoteUser();
+			Principal p = request.getUserPrincipal();
+			String password = null;
+			if(p != null)
+				password = p.getName();
+			appService = getApplicationService(username, password);
+		}
+		else
+		{
+			appService = getApplicationService();
+		}
+
+			HQLCriteria criteria = new HQLCriteria("from <%=fullPackageName%>.<%=klassName%> a where a.<%=transformerUtils.getClassIdAttrName(klass)%> = ?", params);
+			//log.debug("Delete looking for : "+id);
+			Collection<<%=klassName%>> results = appService.query(criteria);
+			
+			if(results != null && results.size() > 0)
+			{
+				<%=klassName%> returnObj = (<%=klassName%>)results.iterator().next();
+				//log.debug("returnObj "+returnObj.toString());
+				//log.debug("returnObj Links"+returnObj.getLinks());
+				String query = "delete from <%=fullPackageName%>.<%=klassName%> a where a.id = ?";
+				//log.debug("Deleting....<%=klassName%>: "+params);
+				DeleteHQLQuery deleteQuery = new DeleteHQLQuery(query, params);
+				delete(returnObj);
+				ResponseBuilder builder = Response.status(Status.OK);
+				builder.type("application/xml");
+				StringBuffer buffer = new StringBuffer();
+				buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+				buffer.append("<response>");
+				buffer.append("<type>MESSAGE</type>");
+				buffer.append("<code>DELETE</code>");
+				buffer.append("<resource><%=klassName%></resource>");
+				buffer.append("<path>DELETE</path>");
+				buffer.append("<message>Successfully deleted <%=klassName%> with ID: "+id+"</message>"); 
+				buffer.append("</response>");
+				builder.entity(buffer.toString());
+				return builder.build();
+			}
+			else
+			{
+				//log.debug("NOT Found.....................");
+				ResponseBuilder builder = Response.status(Status.NOT_FOUND);
+				builder.type("application/xml");
+				StringBuffer buffer = new StringBuffer();
+				buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+				buffer.append("<response>");
+				buffer.append("<type>ERROR</type>");
+				buffer.append("<code>NOT_FOUND</code>");
+				buffer.append("<resource><%=klassName%></resource>");
+				buffer.append("<path>DELETE</path>");
+				buffer.append("<message>Not found</message>");
+				buffer.append("</response>");
+				builder.entity(buffer.toString());
+				throw new WebApplicationException(builder.build());
+			}
+		}
+		catch(WebApplicationException e)
+		{
+			e.printStackTrace();
+			throw e;
+		}
+		catch(ApplicationException e)
+		{
+			e.printStackTrace();
+			  log.error("Error in querying REST resource: " + e.getMessage());
+			  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
+			  builder.type("application/xml");
+			  StringBuffer buffer = new StringBuffer();
+			  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+			  buffer.append("<response>");
+			  buffer.append("<type>ERROR</type>");
+			  buffer.append("<code>APPLICATION_ERROR</code>");
+			  buffer.append("<resource><%=klassName%></resource>");
+			  buffer.append("<path>delete</path>");
+			  buffer.append("<message>Failed to delete due to: "+e.getMessage()+"</message>");
+			  buffer.append("</response>");
+			  builder.entity(buffer.toString());
+			  throw new WebApplicationException(builder.build());
+		}
+		catch(Exception e)
+		{
+			  log.error("Error in querying REST resource: " + e.getMessage());
+			  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
+			  builder.type("application/xml");
+			  StringBuffer buffer = new StringBuffer();
+			  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+			  buffer.append("<response>");
+			  buffer.append("<type>ERROR</type>");
+			  buffer.append("<code>APPLICATION_ERROR</code>");
+			  buffer.append("<resource><%=klassName%></resource>");
+			  buffer.append("<path>delete</path>");
+			  buffer.append("<message>Failed to delete due to: "+e.getMessage()+"</message>");
+			  buffer.append("</response>");
+			  builder.entity(buffer.toString());
+			  throw new WebApplicationException(builder.build());
+		}
+		
+	}
+<%}%>
+
+<%
+if(action != null && action.indexOf("U") != -1 && !transformerUtils.isISO21090Enabled())
+{%>
+
+	@POST
+	@Consumes("application/xml")
+	public Response update<%=klassName%>(<%=klassName%> object)
+	{
+		try
+		{
+			checkCollections(object);
+			validateObject(object);			
+			update(object);
+			ResponseBuilder builder = Response.status(Status.OK);
+			builder.type("application/xml");
+			StringBuffer buffer = new StringBuffer();
+			buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+			buffer.append("<response>");
+			buffer.append("<type>MESSAGE</type>");
+			buffer.append("<code>UPDATE</code>");
+			buffer.append("<resource><%=klassName%></resource>");
+			buffer.append("<path>POST</path>");
+			buffer.append("<message>Successfully updated <%=klassName%></message>");
+			buffer.append("</response>");
+			builder.entity(buffer.toString());
+			return builder.build();
+			
+		}
+		catch(WebApplicationException e)
+		{
+			throw e;
+		}
+		catch(Exception e)
+		{
+			  log.error("Error in updateing REST resource: " + e.getMessage());
+			  ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
+			  builder.type("application/xml");
+			  StringBuffer buffer = new StringBuffer();
+			  buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+			  buffer.append("<response>");
+			  buffer.append("<type>ERROR</type>");
+			  buffer.append("<code>APPLICATION_ERROR</code>");
+			  buffer.append("<resource><%=klassName%></resource>");
+			  buffer.append("<path>POST</path>");
+			  buffer.append("<message>Failed to update due to: "+e.getMessage()+"</message>");
+			  buffer.append("</response>");
+			  builder.entity(buffer.toString());
+			  throw new WebApplicationException(builder.build());
+		
+		}
+	}
+
+<%}%>
+
+
+	public List buildAssocationLinks(<%=klassName%> object, UriInfo uriInfo)
+	{
+	String relHref = uriInfo.getAbsolutePath().toString();
+	
+	<%
+		String idMethod = transformerUtils.getClassIdGetterMthod(klass);
+		List<UMLAssociation> associations = transformerUtils.getAssociations(klass, true);
+		List<UMLAssociationEnd> associationAdds = new java.util.ArrayList<UMLAssociationEnd>();
+		List<String> methodNames = new java.util.ArrayList<String>();
+
+		for(UMLAssociation assoc:associations)
+		{
+			List<UMLAssociationEnd> assocEnds = assoc.getAssociationEnds();
+			methodNames.add("get"+klass.getName());
+			for(UMLAssociationEnd associationEnd : assocEnds)
+			{	
+				if(associationEnd.isNavigable() && !associationAdds.contains(associationEnd))
+				{
+
+					UMLClass assocKlass = (UMLClass)associationEnd.getUMLElement();
+					String name = associationEnd.getRoleName(); 
+					String roleName = name.substring(0,1).toUpperCase()+name.substring(1,name.length());
+					associationAdds.add(associationEnd);	
+					String getterMethodName = transformerUtils.getGetterMethodName(associationEnd);
+
+					if(!methodNames.contains(getterMethodName))
+					{
+							methodNames.add(getterMethodName);
+							if(transformerUtils.isAssociationEndMany(associationEnd))
+							{
+								String href= "";
+							}
+					}
+				}
+			}
+		}
+	%>
+	return null;
+
+	}
+
+	private void validateObject(final Object obj)
+	throws WebApplicationException
+	{
+		
+		Class klass = obj.getClass();
+		log.debug("Klass: "+klass.getName());
+		List<String> asscs = classCache.getAssociations(klass.getName());
+		if(asscs == null || asscs.size() == 0)
+			return;
+		
+		for(String asscName : asscs)
+		{
+		try
+		{
+			log.debug("asscName "+asscName);
+			if(asscName.equals("Please choose"))
+				continue;
+			String associationName = "";
+			if(asscName.indexOf("(") != -1)
+				associationName = asscName.substring(0, asscName.indexOf("(")).trim();
+				
+			if(associationName.trim().length() == 0)
+				continue;
+			String notNullValue = SDKCascadeCache.getInstance().getNotNullValue(klass.getName(), associationName);
+			log.debug("notNullValue "+notNullValue);
+			String getMethodName = "get"+ associationName.substring(0,1).toUpperCase()+associationName.substring(1,associationName.length());
+			log.debug("getMethodName "+getMethodName);
+			Method getMethod = klass.getMethod(getMethodName.trim(), null);
+			String inverseStr = SDKCascadeCache.getInstance().getInverseValue(klass.getName(), associationName);
+			Object retn = getMethod.invoke(obj, null);
+			log.debug("retn "+retn);
+			if(notNullValue != null && notNullValue.equalsIgnoreCase("true") && retn == null)
+			{
+				if(inverseStr == null || inverseStr.equalsIgnoreCase("false"))
+				{
+				       log.debug("throwing exception*****************");
+					ResponseBuilder builder = Response.status(Status.NOT_ACCEPTABLE);
+					builder.type("application/xml");
+					StringBuffer buffer = new StringBuffer();
+					buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+					buffer.append("<response>");
+					buffer.append("<type>ERROR</type>");
+					buffer.append("<code>ASSOCIATION_MISSING</code>");
+					buffer.append("<resource><%=klassName%></resource>");
+					buffer.append("<path>Validate</path>");
+					buffer.append("<message>Required association data is missing for "+ associationName +"</message>");
+					buffer.append("</response>");
+					builder.entity(buffer.toString());
+					throw new WebApplicationException(builder.build());
+				}
+			}
+		}
+		catch(WebApplicationException e)
+		{
+			throw e;
+		}
+		catch(Exception e)
+		{
+			ResponseBuilder builder = Response.status(Status.NOT_ACCEPTABLE);
+			builder.type("application/xml");
+			StringBuffer buffer = new StringBuffer();
+			buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+			buffer.append("<response>");
+			buffer.append("<type>ERROR</type>");
+			buffer.append("<code>ASSOCIATION_MISSING</code>");
+			buffer.append("<resource><%=klassName%></resource>");
+			buffer.append("<path>Validate</path>");
+			buffer.append("<message>Validation failure: "+e.getMessage()+"</message>");
+			buffer.append("</response>");
+			builder.entity(buffer.toString());
+			throw new WebApplicationException(builder.build());
+		}
+	}
+}
+
+	
+}

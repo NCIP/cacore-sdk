@@ -9,11 +9,6 @@ package test.<%=fullPackageName%>;
 import <%=fullPackageName%>.<%=klassName%>;
 
 import gov.nih.nci.system.applicationservice.ApplicationException;
-import gov.nih.nci.system.query.cql.CQLAssociation;
-import gov.nih.nci.system.query.cql.CQLAttribute;
-import gov.nih.nci.system.query.cql.CQLObject;
-import gov.nih.nci.system.query.cql.CQLPredicate;
-import gov.nih.nci.system.query.cql.CQLQuery;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
 import java.lang.reflect.Modifier;
@@ -51,7 +46,12 @@ public class <%=klassName%>Test extends SDKTestBase
 			<%=klassName%> result = (<%=klassName%>)i.next();
 			assertNotNull(result);
 			
-			// test attributes<%for(UMLAttribute attr:klass.getAttributes()){%>
+			// test attributes
+			<%for(UMLAttribute attr:klass.getAttributes()){
+				if (attr.getDatatype().getName().startsWith("byte[]"))
+					continue;
+
+			%>
 			assertNotNull("<%=klassName%>.<%=transformerUtils.getGetterMethodName(attr)%>() returned an unexpected 'null' value",result.<%=transformerUtils.getGetterMethodName(attr)%>());<%
 			}%>
 
@@ -123,7 +123,10 @@ public class <%=klassName%>Test extends SDKTestBase
 		{
 			<%=klassName%> result = (<%=klassName%>)i.next();
 			assertNotNull(result);
-			<%for(UMLAttribute attr:klass.getAttributes()){%>
+			<%for(UMLAttribute attr:klass.getAttributes()){
+			if (attr.getDatatype().getName().startsWith("byte[]"))
+					continue;
+			%>
 			assertNotNull("<%=klassName%>.<%=transformerUtils.getGetterMethodName(attr)%>() returned an unexpected 'null' value",result.<%=transformerUtils.getGetterMethodName(attr)%>());<%
 			}%>
 		}
@@ -140,47 +143,6 @@ public class <%=klassName%>Test extends SDKTestBase
 		}		
 	}
 		
-	/**
-	 * Uses CQL Query API for search
-	 * Verifies that the results are returned 
-	 * Verifies size of the result set
-	 * Verifies that none of the attribute are  null
-	 * 
-	 * @throws ApplicationException
-	 */
-	public void testEntireObjectCqlSearch() throws ApplicationException
-	{
-	
-		CQLQuery cqlQuery = new CQLQuery();
-		CQLObject target = new CQLObject();
-		
-		target.setName("<%=fullPackageName%>.<%=klassName%>");
-		cqlQuery.setTarget(target);
-
-		Collection results = getApplicationService().query(cqlQuery);
-
-		assertNotNull(results);
-		
-		for(Iterator i = results.iterator();i.hasNext();)
-		{
-			<%=klassName%> result = (<%=klassName%>)i.next();
-			assertNotNull(result);
-			<%for(UMLAttribute attr:klass.getAttributes()){%>
-			assertNotNull("<%=klassName%>.<%=transformerUtils.getGetterMethodName(attr)%>() returned an unexpected 'null' value",result.<%=transformerUtils.getGetterMethodName(attr)%>());<%
-			}%>
-		}
-		
-		// print out a sample record
-		for(Iterator i = results.iterator();i.hasNext();)
-		{
-			try {
-				printObject(i.next(), <%=klassName%>.class);
-			} catch (Exception e) {
-				fail("Error encountered while printing out sample record");
-			} 
-			break;		
-		}		
-	}
 
 <%} else {%>	
 	/**

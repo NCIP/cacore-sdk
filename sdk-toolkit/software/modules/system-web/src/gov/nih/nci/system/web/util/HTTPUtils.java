@@ -108,10 +108,10 @@ public class HTTPUtils implements Serializable{
 			put("gov.nih.nci.iso21090.Ivl<gov.nih.nci.iso21090.Int>",new JAXBISOIvlIntAdapter<ANY, Any>());
 			put("gov.nih.nci.iso21090.Ivl<gov.nih.nci.iso21090.Pq>",new JAXBISOIvlPqAdapter<ANY, Any>());
 		}
-	};	
-	
+	};
+
 	private static Marshaller marshaller=null;
-	
+
 	static{
 		try {
 			JAXBContext jaxbContext = JAXBContext.newInstance("org.iso._21090");
@@ -209,7 +209,7 @@ public class HTTPUtils implements Serializable{
 					}
 					else if(param.toLowerCase().startsWith("rolename=")){
 						roleName = param.substring("roleName=".length());
-					}					
+					}
 					else if(param.toLowerCase().startsWith("pagenumber=")){
 						pageNumber = param.substring("pageNumber=".length());
 					}
@@ -268,6 +268,15 @@ public class HTTPUtils implements Serializable{
 	public String getTargetClassName(){
 		return targetClassName;
 	}
+
+	/**
+	 * Returns target class name
+	 * @return
+	 */
+	public void setTargetClassName(String targetClassName){
+		this.targetClassName = targetClassName;
+	}
+
 	/**
 	 * Returns the criteria value
 	 * @return
@@ -380,7 +389,6 @@ public class HTTPUtils implements Serializable{
 	 * @return
 	 */
 	public List<String> getSearchCriteriaList(String criteria) {
-
 		List<String> criteriaList = new ArrayList<String>();
 		String delimiter = null;
 
@@ -432,9 +440,12 @@ public class HTTPUtils implements Serializable{
 		return valid;
 	}
 
+	public org.jdom.Document getXMLDocument(Object[] resultSet, int pageNumber) throws Exception{
+		return getXMLDocument(resultSet, pageNumber, true);
+	}
 	/**
 	 * Generates an org.jdom.Document based on a resultSet
-	 * 
+	 *
 	 * @param resultSet -
 	 *            specifies a list of populated domain objects
 	 * @param pageNumber -
@@ -442,22 +453,212 @@ public class HTTPUtils implements Serializable{
 	 * @return
 	 * @throws Exception
 	 */
-	public org.jdom.Document getXMLDocument(Object[] resultSet, int pageNumber) throws Exception{
+	public org.jdom.Document getXMLDocument(Object[] resultSet, int pageNumber, boolean queryType) throws Exception{
+
+		org.jdom.Element httpQuery = new org.jdom.Element("httpQuery",namespace);
+		org.jdom.Element queryRequest = new org.jdom.Element("queryRequest");
+		String targetResult = targetClassName;
+		if(queryType)
+		{
+			Element queryString = new Element("queryString").setText(query);
+
+			if(targetResult.indexOf(SystemConstant.COMMA)>1){
+				targetResult = targetResult.substring(0, targetResult.indexOf(SystemConstant.COMMA));
+			}
+			if(targetResult.indexOf(SystemConstant.DOT)<0){
+				targetResult = this.getPackageName(targetResult)+ SystemConstant.DOT +targetResult;
+			}
+			Element queryClass = new Element("class").setText(targetResult);
+			Element queryElement = new Element("query").addContent(queryString).addContent(queryClass);
+			queryRequest.addContent(queryElement);
+			queryRequest.addContent(new org.jdom.Element("criteria").setText(criteria));
+
+			httpQuery.addContent(queryRequest);
+		}
+		else
+		{
+			if(targetResult.indexOf(SystemConstant.COMMA)>1){
+				targetResult = targetResult.substring(0, targetResult.indexOf(SystemConstant.COMMA));
+			}
+			if(targetResult.indexOf(SystemConstant.DOT)<0){
+				targetResult = this.getPackageName(targetResult)+ SystemConstant.DOT +targetResult;
+			}
+			Element queryClass = new Element("class").setText(targetResult);
+			Element queryElement = new Element("query").addContent(queryClass);
+			queryRequest.addContent(queryElement);
+
+		}
+		int start = 0;
+		int end = resultSet.length;
+		int rowCount = 0;
+		int index = 0;
+		int resultCount = 0;
+		int nextStartIndex = 0;
+		int totalNumRecords = results.size();
+
+		if(!(startIndex.equals("0") || startIndex == null)){
+			index = Integer.valueOf(startIndex).intValue();
+		}
+
+		if(!(resultCounter.equals("0") ||resultCounter == null )){
+			resultCount = Integer.valueOf(resultCounter).intValue();
+		}
+
+		Element xmlElement = new Element("queryResponse");
+
+		String counter = String.valueOf(totalNumRecords);
+		xmlElement.addContent(new Element("recordCounter").setText(counter));
+
+		if(resultSet.length >0){
+			if(pageSize != null){
+				rowCount = Integer.parseInt(pageSize);
+			}
+			int pageCounter = 1;
+			int size = resultSet.length;
+			if((index + resultCount)> totalNumRecords){
+				size = totalNumRecords - index;
+			}
+			if(rowCount > 0 && rowCount < size){
+				pageCounter = size/rowCount;
+				if((size % rowCount)>0){
+					pageCounter++;
+				}
+			}
+			if(pageNumber > pageCounter){
+				pageNumber = 1;
+			}
+
+			if(pageNumber > 0 && pageNumber <= pageCounter){
+				end = rowCount * pageNumber;
+				start = end - rowCount;
+				if(size < end){
+					end = size;
+				}
+			}
+
+			if(end == 0)
+				end = resultSet.length;
+
+			String recordNum = "";
+			Set<String> resultClass = new HashSet<String>();
+			List<String> classes = new ArrayList<String>();
+			for(int x=start; x<end; x++){
+				resultClass.add(resultSet[x].getClass().getName());
+			}
+			if(resultClass.size() >1){
+				Object lists[] = new Object[resultClass.size()];
+				int number =0;
+				for(Iterator it= resultClass.iterator(); it.hasNext();){
+					String typeName = (String)it.next();
+					classes.add(typeName);
+					List<Object> list = new ArrayList<Object>();
+					for(int i=start; i<end ; i++){
+						if(resultSet[i].getClass().getName().equals(typeName)){
+							list.add(resultSet[i]);
+						}
+					}
+					lists[number]= new Object();
+					lists[number] = list ;
+					number++;
+				}
+				for(int o=0; o<lists.length; o++){
+					List subResults = (List)lists[o];
+					for(int i=0; i< subResults.size(); i++){
+						Object result = subResults.get(i);
+						int recNum = index + i + 1;
+						recordNum = String.valueOf(recNum);
+
+						Element element = getElement(result, recordNum, queryType);
+						xmlElement.addContent(element);
+
+					}
+
+				}
+			} else{
+				for(int i = start; i< end; i++){
+					int recNum = index + i + 1;
+					recordNum = String.valueOf(recNum);
+					Object result = resultSet[i];
+					xmlElement.addContent(getElement(result, recordNum, queryType));
+
+				}
+			}
+			if(queryType)
+			{
+				if((index - resultCount)>=0){
+					nextStartIndex = index - resultCount;
+					String preLink = servletName +"?query="+targetClassName + SystemConstant.AMPERSAND + criteria +"&startIndex="+nextStartIndex+"&resultCounter="+resultCounter;
+					String preText = "<<< "+" PREVIOUS "+ resultCount +" RECORDS";
+					Element preElement = new Element("previous").setAttribute("type","simple",namespace).setAttribute("href",preLink,namespace).setText(preText);
+					xmlElement.addContent(preElement);
+				}
+				String pCount = String.valueOf(pageCounter);
+				Element pagesElement = new Element("pages").setAttribute("count",pCount);
+				if((index + resultCount)< totalNumRecords){
+					nextStartIndex = index + resultCount;
+					String nextLink = servletName +"?query="+targetClassName + SystemConstant.AMPERSAND +criteria +"&startIndex="+nextStartIndex+"&resultCounter="+resultCounter;
+					String nextText = "NEXT "+ resultCount+" RECORDS >>> ";
+					Element nextElement = new Element("next").setAttribute("type","simple",namespace).setAttribute("href",nextLink,namespace).setText(nextText);
+					xmlElement.addContent(nextElement);
+				}
+
+				for(int i=0; i< pageCounter; i++){
+					int p = i + 1;
+					String pageLink = servletName +"?query="+targetClassName+SystemConstant.AMPERSAND+criteria +"&pageNumber="+p+"&resultCounter="+resultCounter+"&startIndex="+startIndex;
+					String page = String.valueOf(p);
+					String pageText = SystemConstant.SPACE + page + SystemConstant.SPACE;
+					Element pElement = new Element("page").setAttribute("number",page).setAttribute("type","simple",namespace).setAttribute("href",pageLink,namespace).setText(pageText);
+					pagesElement.addContent(pElement);
+				}
+				xmlElement.addContent(pagesElement);
+			}
+			httpQuery.addContent(xmlElement);
+			xmlElement.addContent(new Element("recordCounter").setText(counter));
+		}
+		else{
+			xmlElement.addContent(new Element("recordCounter").setText("0"));
+		}
+		if((pageNumber -1)> 0){
+			index += ((pageNumber -1)* rowCount) + 1;
+		}
+		else{
+			index+= 1;
+		}
+		int endRecordNum = rowCount + index - 1;
+		if(endRecordNum > totalNumRecords){
+			endRecordNum = totalNumRecords;
+		}
+		String startCounter = String.valueOf(index);
+		String endCounter = String.valueOf(endRecordNum);
+		Element startElement = new Element("start").setText(startCounter);
+		Element endElement = new Element("end").setText(endCounter);
+		xmlElement.addContent(startElement).addContent(endElement);
+
+		org.jdom.Document xmlDoc = new org.jdom.Document(httpQuery);
+		return xmlDoc;
+	}
+
+
+	/**
+	 * Generates an org.jdom.Document based on a resultSet
+	 *
+	 * @param resultSet -
+	 *            specifies a list of populated domain objects
+	 * @param pageNumber -
+	 *            specifies the page number
+	 * @return
+	 * @throws Exception
+	 */
+	public org.jdom.Document getXMLDocument(Object[] resultSet, String targetClassName) throws Exception{
 
 		org.jdom.Element httpQuery = new org.jdom.Element("httpQuery",namespace);
 		org.jdom.Element queryRequest = new org.jdom.Element("queryRequest");
 
-		Element queryString = new Element("queryString").setText(query);
 		String targetResult = targetClassName;
-		if(targetResult.indexOf(SystemConstant.COMMA)>1){
-			targetResult = targetResult.substring(0, targetResult.indexOf(SystemConstant.COMMA));
-		}
-		if(targetResult.indexOf(SystemConstant.DOT)<0){
-			targetResult = this.getPackageName(targetResult)+ SystemConstant.DOT +targetResult;
-		}
+
 		Element queryClass = new Element("class").setText(targetResult);
-		Element queryElement = new Element("query").addContent(queryString).addContent(queryClass);
-		queryRequest.addContent(queryElement);
+		//Element queryElement = new Element("query").addContent(queryString).addContent(queryClass);
+		//queryRequest.addContent(queryElement);
 		queryRequest.addContent(new org.jdom.Element("criteria").setText(criteria));
 
 		httpQuery.addContent(queryRequest);
@@ -499,16 +700,6 @@ public class HTTPUtils implements Serializable{
 					pageCounter++;
 				}
 			}
-			if(pageNumber > pageCounter){
-				pageNumber = 1;
-			}
-			if(pageNumber > 0 && pageNumber <= pageCounter){
-				end = rowCount * pageNumber;
-				start = end - rowCount;
-				if(size < end){
-					end = size;
-				}
-			}
 			String recordNum = "";
 			Set<String> resultClass = new HashSet<String>();
 			List<String> classes = new ArrayList<String>();
@@ -538,10 +729,10 @@ public class HTTPUtils implements Serializable{
 						Object result = subResults.get(i);
 						int recNum = index + i + 1;
 						recordNum = String.valueOf(recNum);
-						
-						Element element = getElement(result, recordNum);
+
+						Element element = getElement(result, recordNum, true);
 						xmlElement.addContent(element);
-						
+
 					}
 
 				}
@@ -550,7 +741,7 @@ public class HTTPUtils implements Serializable{
 					int recNum = index + i + 1;
 					recordNum = String.valueOf(recNum);
 					Object result = resultSet[i];
-					xmlElement.addContent(getElement(result, recordNum));
+					xmlElement.addContent(getElement(result, recordNum, true));
 
 				}
 			}
@@ -586,12 +777,6 @@ public class HTTPUtils implements Serializable{
 		else{
 			xmlElement.addContent(new Element("recordCounter").setText("0"));
 		}
-		if((pageNumber -1)> 0){
-			index += ((pageNumber -1)* rowCount) + 1;
-		}
-		else{
-			index+= 1;
-		}
 		int endRecordNum = rowCount + index - 1;
 		if(endRecordNum > totalNumRecords){
 			endRecordNum = totalNumRecords;
@@ -615,16 +800,17 @@ public class HTTPUtils implements Serializable{
 	 */
 	private String getCriteriaIdValue(Object result) throws Exception{
 		Field[] fields = classCache.getAllFields(result.getClass());
-		
+
 		String idName = classCache.getClassIdName(result.getClass());
 		Field idField = getIdField(fields,idName);
-		
+
 		if (idField == null)
 			throw new Exception("ERROR: No identifier field found for class " + result.getClass().getName());
-		
+
 		String id = idField.getName();
 
 		String criteriaIdValue = SystemConstant.AT + id + SystemConstant.EQUAL;
+
 		if(idField.getName().indexOf(SystemConstant.DOT)>0){
 			id = id.substring(id.lastIndexOf(SystemConstant.DOT)+1);
 		}
@@ -637,7 +823,7 @@ public class HTTPUtils implements Serializable{
 
 	/**
 	 * Generates an Element for a given result object
-	 * 
+	 *
 	 * @param result
 	 *            - an instance of a class
 	 * @param recordNum
@@ -646,20 +832,21 @@ public class HTTPUtils implements Serializable{
 	 * @throws Exception
 	 */
 	@SuppressWarnings("rawtypes")
-	private Element getElement(Object result, String recordNum)
+	private Element getElement(Object result, String recordNum, boolean queryType)
 			throws Exception {
 
 		Element classElement = new Element("class").setAttribute("name",
 				result.getClass().getName()).setAttribute("recordNumber",
 				recordNum);
 		String criteriaIdValue = getCriteriaIdValue(result);
+
 		String link = null;
 		Field[] fields = classCache.getAllFields(result.getClass());
 		for (int f = 0; f < fields.length; f++) {
 			String criteriaBean = result.getClass().getName();
 			Field field = fields[f];
 			String fieldName = field.getName();
-			if (fieldName.equalsIgnoreCase("serialVersionUID")) {
+			if (fieldName.equalsIgnoreCase("serialVersionUID") || fieldName.equalsIgnoreCase("links")) {
 				continue;
 			}
 			Element fieldElement = new Element("field").setAttribute("name",
@@ -695,19 +882,32 @@ public class HTTPUtils implements Serializable{
 								.lastIndexOf(SystemConstant.DOT) + 1);
 					}
 				}
-				String methodName = "get"
-						+ fieldName.substring(0, 1).toUpperCase()
-						+ fieldName.substring(1);
+				if(queryType)
+				{
+					String methodName = "get"
+							+ fieldName.substring(0, 1).toUpperCase()
+							+ fieldName.substring(1);
 
-				link = servletName + "?query=" + targetBean
-						+ SystemConstant.AMPERSAND + criteriaBean
-						+ SystemConstant.LEFT_BRACKET + criteriaIdValue
-						+ SystemConstant.RIGHT_BRACKET
-						+ SystemConstant.AMPERSAND + "roleName=" + fieldName;
+					link = servletName + "?query=" + targetBean
+							+ SystemConstant.AMPERSAND + criteriaBean
+							+ SystemConstant.LEFT_BRACKET + criteriaIdValue
+							+ SystemConstant.RIGHT_BRACKET
+							+ SystemConstant.AMPERSAND + "roleName=" + fieldName;
 
-				fieldElement.setAttribute("type", "simple", namespace)
-						.setAttribute("href", link, namespace)
-						.setText(methodName);
+					fieldElement.setAttribute("type", "simple", namespace)
+					.setAttribute("href", link, namespace)
+					.setText(methodName);
+				}
+				else
+				{
+					String roleName = fieldName.substring(0, 1).toUpperCase()+ fieldName.substring(1);
+					link = servletName
+					+ SystemConstant.FORWARD_SLASH
+					+ roleName;
+
+					fieldElement.setAttribute("type", "simple", namespace)
+					.setAttribute("href", link, namespace);
+				}
 			}else {
 				String fieldValue = " ";
 				Object value = null;
@@ -742,7 +942,7 @@ public class HTTPUtils implements Serializable{
 								fieldValue = String.valueOf(value);
 								fieldElement.addContent(fieldValue);
 							}
-						}						
+						}
 					}
 				} catch (Exception ex) {
 					fieldValue = " ";
@@ -802,7 +1002,7 @@ public class HTTPUtils implements Serializable{
 		return true;
 
 	}
-	
+
 	/**
 	 * Returns an id field from an array of fields
 	 * @param fields
@@ -841,7 +1041,7 @@ public class HTTPUtils implements Serializable{
 		}
 		return field;
 	}
-	
+
 	/**
 	 * Returns a field value
 	 * @param field - specifies the field
@@ -858,7 +1058,7 @@ public class HTTPUtils implements Serializable{
 				SimpleDateFormat date = new SimpleDateFormat("MM-dd-yyyy");
 				value = date.format((Date)fieldValue);
 			} else if (fieldType.equals("java.lang.Integer")) {
-				value = ((Integer)fieldValue).toString();						
+				value = ((Integer)fieldValue).toString();
 			} else if(fieldType.equals("gov.nih.nci.iso21090.Ii")){
 				String extensionValue = ((Ii)fieldValue).getExtension();
 				value = "[@extension=" + extensionValue + "]";
@@ -895,7 +1095,7 @@ public class HTTPUtils implements Serializable{
 
 	private Object marshalISOObjectTOXml(Field field, Object domain)
 			throws Exception {
-		Object value= field.get(domain);		
+		Object value= field.get(domain);
 		Marshaller isoMarshaller = getJaxbMarshaller(field.getType().getName());
 		if (isoMarshaller != null) {
 			XmlAdapter<ANY, Any> jaxbAdapter = jaxbISOAdapterMap.get(field
@@ -904,12 +1104,12 @@ public class HTTPUtils implements Serializable{
 				jaxbAdapter = jaxbISOAdapterMap.get("defaultAdapter");
 			}
 			org.iso._21090.ANY anyJaxb = jaxbAdapter.marshal((Any) value);
-			
+
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			dbf.setNamespaceAware(true);
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			org.w3c.dom.Document domDoc = db.newDocument();
-			isoMarshaller.marshal(anyJaxb, domDoc);	
+			isoMarshaller.marshal(anyJaxb, domDoc);
 
 			DOMBuilder builder = new DOMBuilder();
 	        org.jdom.Document jdomDoc = builder.build(domDoc);
@@ -917,16 +1117,107 @@ public class HTTPUtils implements Serializable{
 		}
 		return value;
 	}
-	
+
 	private Marshaller getJaxbMarshaller(String fieldName) throws JAXBException,
 			PropertyException {
-		if(!fieldName.startsWith("gov.nih.nci.iso21090.")) return null;		
+		if(!fieldName.startsWith("gov.nih.nci.iso21090.")) return null;
 		return marshaller;
 	}
-	
+
 	/**
 	 * Returns an array of result objects
-	 * 
+	 *
+	 * @return
+	 * @throws Exception
+	 */
+	@SuppressWarnings("rawtypes")
+	public Object[] getResultSet(HQLCriteria hqlCriteria) throws Exception {
+		results = new ArrayList();
+		int index = 0;
+		int counter = 1000;
+		try {
+
+			if (startIndex != null || !startIndex.equals("0")) {
+				index = Integer.parseInt(startIndex);
+			}
+			if (resultCounter != null) {
+				counter = Integer.parseInt(resultCounter);
+			}
+			if (roleName != null) {
+				results = getAssociation(criteria, roleName);
+			} else {
+				results = applicationService.query(hqlCriteria);
+			}
+
+			if (results != null && (results instanceof ListProxy)) {
+				((ListProxy) results).setAppService(applicationService);
+			}
+		} catch (Exception ex) {
+			log.error("Exception: ", ex);
+			throw ex;
+		}
+
+		if ((counter + index) > results.size()) {
+			counter = results.size();
+		} else {
+			counter += index;
+		}
+		Object[] resultSet = new Object[counter];
+		for (int i = index, s = 0; i < counter; i++, s++) {
+			resultSet[s] = results.get(i);
+		}
+		return resultSet;
+	}
+
+	/**
+	 * Returns an array of result objects
+	 *
+	 * @return
+	 * @throws Exception
+	 */
+	@SuppressWarnings("rawtypes")
+	public Object[] getResultSet(String targetClassName, String targetPackageName, String criteriaStr, String roleName) throws Exception {
+		results = new ArrayList();
+		int index = 0;
+		int counter = 1000;
+		try {
+			String searchPath = getSearchClassNames(targetClassName,
+					targetPackageName);
+			List criteriaList = getSearchCriteriaList(criteriaStr);
+			Object criteria = buildSearchCriteria(targetPackageName,
+					criteriaList);
+
+			if (startIndex != null || !startIndex.equals("0")) {
+				index = Integer.parseInt(startIndex);
+			}
+			if (resultCounter != null) {
+				counter = Integer.parseInt(resultCounter);
+			}
+			results = getAssociation(criteria, roleName, true);
+
+			if (results != null && (results instanceof ListProxy)) {
+				((ListProxy) results).setAppService(applicationService);
+			}
+		} catch (Exception ex) {
+			log.error("Exception: ", ex);
+			throw ex;
+		}
+
+		if ((counter + index) > results.size()) {
+			counter = results.size();
+		} else {
+			counter += index;
+		}
+		Object[] resultSet = new Object[counter];
+		for (int i = index, s = 0; i < counter; i++, s++) {
+			resultSet[s] = results.get(i);
+		}
+		return resultSet;
+	}
+
+	/**
+	 * Returns an array of result objects
+	 *
 	 * @return
 	 * @throws Exception
 	 */
@@ -996,7 +1287,7 @@ public class HTTPUtils implements Serializable{
 	 * @param xmlDoc Specifies the xml document
 	 * @param styleIn specifies the stylesheet
 	 * @return
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 
 	public void transform(Document xmlDoc, InputStream styleIn, OutputStream out)
@@ -1081,14 +1372,14 @@ public class HTTPUtils implements Serializable{
 			out.println("<TR BGCOLOR=\"#E3E4FA\">");
 			for(int x=0; x<fields.length; x++){
 				String fName = fields[x].getName();
-				if(!fName.equalsIgnoreCase("serialVersionUID")){
+				if(!(fName.equalsIgnoreCase("serialVersionUID") && fName.equalsIgnoreCase("links"))){
 					out.println("<TD>"+ fName +"</TD>");
 				}
 
 			}
 			for(int x=0; x<superFields.length; x++){
 				String fName = superFields[x].getName();
-				if(!fName.equalsIgnoreCase("serialVersionUID")){
+				if(!(fName.equalsIgnoreCase("serialVersionUID") && fName.equalsIgnoreCase("links"))){
 					out.println("<TD>"+ fName +"</TD>");
 				}
 
@@ -1117,7 +1408,7 @@ public class HTTPUtils implements Serializable{
 					throw new IOException(ex.getMessage());
 				}
 			}
-			else if(fieldName.equalsIgnoreCase("serialVersionUID")){
+			else if(fieldName.equalsIgnoreCase("serialVersionUID") ||  fieldName.equalsIgnoreCase("links")){
 				continue;
 			}
 			boolean bean = false;
@@ -1170,8 +1461,11 @@ public class HTTPUtils implements Serializable{
 		recordNum++;
 		out.println("</TR>");
 	}
-	
+
 	public <E> List<E> getAssociation(Object source, String associationName) throws ApplicationException {
+		return getAssociation(source, associationName, false);
+	}
+	public <E> List<E> getAssociation(Object source, String associationName, boolean includeParent) throws ApplicationException {
 		String assocType = "";
 		try{
 			assocType = classCache.getAssociationType(source.getClass(),associationName);
@@ -1187,37 +1481,37 @@ public class HTTPUtils implements Serializable{
 		else
 			hql = "select dest from "+assocType+" as dest,"+source.getClass().getName()+" as src where src."+associationName+".id=dest.id";
 
-	
+
 		NestedCriteria nestedCriteria = new NestedCriteria();
 		nestedCriteria.setSourceObjectName(source.getClass().getName());
 		nestedCriteria.setTargetObjectName(source.getClass().getName());
-		
+
 		List sourceObjectList = new ArrayList();
 		sourceObjectList.add(source);
 		nestedCriteria.setSourceObjectList(sourceObjectList);
-		
+
 		String srcAlias = "src";
 		NestedCriteria2HQL criteria2hql = new NestedCriteria2HQL(nestedCriteria, configurationHolder.getConfiguration(), false,srcAlias);
-		
+
 		HQLCriteria hqlCriteria=null;
 		try {
 			hqlCriteria = criteria2hql.translate();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		int beginIndex = hqlCriteria.getHqlString().lastIndexOf("where");
 		if (beginIndex > 0){
 			if (isCollection)
 				hql += " where ";
 			else
 				hql += " and ";
-			
-			hql += hqlCriteria.getHqlString().substring(beginIndex + 6);	
+
+			hql += hqlCriteria.getHqlString().substring(beginIndex + 6);
 		}
-		
+
 		hqlCriteria.setHqlString(hql);
-		
+
 		return applicationService.query(hqlCriteria);
-	}	
+	}
 }

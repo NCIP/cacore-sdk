@@ -46,34 +46,34 @@ import org.mmbase.util.Encode;
  * @author Daniel Dumitru
  * @version 1.0
  */
-public class SchemaTransformer implements Transformer { 
+public class SchemaTransformer implements Transformer {
 
 	private static Logger log = Logger.getLogger(SchemaTransformer.class);
 
 	private GeneratorErrors generatorErrors = new GeneratorErrors();
-	
+
 	private Map<String,UMLClass> associatedClasses = new HashMap<String,UMLClass>();
 
 	private ArtifactHandler artifactHandler;
-	
+
 	private Encode xmlEncoder = new Encode("ESCAPE_XML");
 
 	private String namespaceUriPrefix;
-	
+
 	private boolean useGMETags = false;
-	
+
 	private boolean usePermissibleValues = false;
 
 	private boolean enabled = true;
-	
+
 	private String name = SchemaTransformer.class.getName();
-	
+
 	protected TransformerUtils transformerUtils;
 
 	public void setTransformerUtils(TransformerUtils transformerUtils) {
 		this.transformerUtils = transformerUtils;
 	}
-	
+
 	public static final Map<String, String> isoDatatypeMap = new HashMap<String, String>()
 	{
 		{
@@ -110,16 +110,16 @@ public class SchemaTransformer implements Transformer {
 			put("dset<ad>", "DSET_AD");
 			put("ad", "AD");
 		}
-	};	
-	
-	/* @param model The UMLModel containing the classes for which a 
+	};
+
+	/* @param model The UMLModel containing the classes for which a
 	 * Castor Mapping file should be generated
 	 * @see gov.nih.nci.codegen.Transformer#execute(gov.nih.nci.ncicb.xmiinout.domain.UMLModel)
-	 */	
+	 */
 	public GeneratorErrors execute(UMLModel model)
 	{
 		Hashtable<String, Collection<UMLClass>> pkgColl = new Hashtable<String, Collection<UMLClass>>();
-	
+
 		try {
 			if (useGMETags){
 				setModelNamespace(model,transformerUtils.getBasePkgLogicalModel());//if set, override default Namespace prefix
@@ -133,15 +133,15 @@ public class SchemaTransformer implements Transformer {
 			log.error("ERROR: ", ge);
 			generatorErrors.addError(new GeneratorError(getName() + ": " + ge.getMessage(), ge));
 		}
-		
+
 		return generatorErrors;
 	}
 
-	/* @param model The UMLModel containing the classes for which a 
+	/* @param model The UMLModel containing the classes for which a
 	 * Castor Mapping file should be generated.  This method will run any
 	 * necessary validations.
 	 * @see gov.nih.nci.codegen.Transformer#validate(gov.nih.nci.ncicb.xmiinout.domain.UMLModel)
-	 */	
+	 */
 	public GeneratorErrors validate(UMLModel model)
 	{
 		return null;
@@ -163,16 +163,16 @@ public class SchemaTransformer implements Transformer {
 				log.debug("pkg.getName: " + pkgName + " has " + klasses.size() + " classes");
 
 				artifact = new BaseArtifact(transformerUtils);
-				
+
 				if (useGMETags){
 					pkgName=pkgName.replace("://", "_");
 					pkgName=pkgName.replace("/", "_");
 					log.debug("creating XSD artifact: " + pkgName);
 				}
-				
+
 				artifact.createSourceName(pkgName);
 
-				doc = generateRepository(klasses); 
+				doc = generateRepository(klasses);
 
 				XMLOutputter p = new XMLOutputter();
 				p.setFormat(Format.getPrettyFormat());
@@ -188,7 +188,7 @@ public class SchemaTransformer implements Transformer {
 
 	private List<Namespace> getAssociatedNamespaces(Map<String,UMLClass> associatedClasses) {
 		List<Namespace> namespaces = new ArrayList<Namespace>();
-		
+
 
 		for (UMLClass associatedClass:associatedClasses.values()) {
 				String associatedURI = getNamespace(associatedClass);
@@ -196,31 +196,31 @@ public class SchemaTransformer implements Transformer {
 				log.debug("associatedURI: " + associatedURI);
 				log.debug("associatedPackageName: " + associatedPackageName);
 				log.debug("encoded associatedURI: " + encode(associatedURI));
-				log.debug("encoded associatedPackageName: " + encode(associatedPackageName));				
+				log.debug("encoded associatedPackageName: " + encode(associatedPackageName));
 				Namespace associatedNamespace = Namespace.getNamespace(encode(associatedPackageName),encode(associatedURI));
 				namespaces.add(associatedNamespace);
 		}
-		
+
 		if (transformerUtils.isISO21090Enabled()){
 			Namespace iso21090Namespace = Namespace.getNamespace(encode("uri"),encode("uri:iso.org:21090"));
 			log.debug("* * * iso21090Namespace: "+iso21090Namespace);
-			
+
 			namespaces.add(iso21090Namespace);
 		}
-		
+
 		return namespaces;
 	}
 
 	private List<Element> getAssociatedNamespaceImports(String caBIGNS_URI, Map<String,UMLClass> associatedClasses, Namespace w3cNS) {
 		HashSet<Element> elements = new HashSet<Element>();
 		Vector<String> tmpList = new Vector<String>();
-		
+
 		String associatedPackageName;
 		for (UMLClass associatedClass : associatedClasses.values()){
 			associatedPackageName=getPackageName(associatedClass);
-			
+
 			if (!tmpList.contains(associatedPackageName)) {
-				String associatedURI = getNamespace(associatedClass); 
+				String associatedURI = getNamespace(associatedClass);
 				if (!caBIGNS_URI.equalsIgnoreCase(associatedURI)){
 					log.debug("Import associatedURI: " + associatedURI);
 					Element importElement = new Element("import", w3cNS);
@@ -231,8 +231,8 @@ public class SchemaTransformer implements Transformer {
 				}
 			}
 		}
-		
-		if (transformerUtils.isISO21090Enabled()){		
+
+		if (transformerUtils.isISO21090Enabled()){
 			Element importElement = new Element("import", w3cNS);
 			importElement.setAttribute("namespace","uri:iso.org:21090");
 			importElement.setAttribute("schemaLocation", "ISO_datatypes_Narrative.xsd");
@@ -246,14 +246,14 @@ public class SchemaTransformer implements Transformer {
 
 		associatedClasses = new HashMap<String,UMLClass>();
 		String caBIGNS_URI = null;
-		
+
 		UMLClass klass=null;
 		for (Iterator<UMLClass> i = pkgClassCollection.iterator(); i.hasNext();) {
 			klass = (UMLClass) i.next();
 			caBIGNS_URI = getNamespace(klass);
 			break;
 		}
-		
+
 		Namespace w3cNS = Namespace.getNamespace("xs","http://www.w3.org/2001/XMLSchema");
 		Element schemaElem = new Element("schema", w3cNS);
 		Namespace caBIGNS = Namespace.getNamespace(encode(caBIGNS_URI));
@@ -262,19 +262,19 @@ public class SchemaTransformer implements Transformer {
 
 		Attribute targetNSAttr = new Attribute("targetNamespace", caBIGNS_URI);
 		schemaElem.setAttribute(targetNSAttr);
-		
+
 		Attribute formDefault = new Attribute("elementFormDefault","qualified");
-		schemaElem.setAttribute(formDefault);	
+		schemaElem.setAttribute(formDefault);
 
 		for (Iterator<UMLClass> i = pkgClassCollection.iterator(); i.hasNext();) {
 			klass = (UMLClass) i.next();
 			doMapping(klass, schemaElem, w3cNS);
 		}
-		
+
 		//Add namespace declarations
 		for(Namespace rNamespace: getAssociatedNamespaces(associatedClasses)){
 			schemaElem.addNamespaceDeclaration(rNamespace);
-		}        
+		}
 
 		//Add namespace import elements
 		for (Element namespaceImportElement : getAssociatedNamespaceImports(caBIGNS_URI, associatedClasses, w3cNS)){
@@ -296,7 +296,7 @@ public class SchemaTransformer implements Transformer {
 			log.error("Exception caught while getting Superclass for " + klass.getName(), ge);
 			generatorErrors.addError(new GeneratorError(getName() + ": " + ge.getMessage(), ge));
 		}
-		
+
 		if (superClass != null) {
 			String klassPackageName = getPackageName(klass);
 			String superClassPackageName = getPackageName(superClass);
@@ -308,23 +308,23 @@ public class SchemaTransformer implements Transformer {
 				superClassName = superClassPackageName + ':'+getClassName(superClass);
 			}
 		}
-	
+
 		Element classEl = new Element("element", w3cNS);
 		classEl.setAttribute("name",getClassName(klass));
 		classEl.setAttribute("type", getClassName(klass));
-		
+
 		if (transformerUtils.isAbstract(klass)){
 			classEl.setAttribute("abstract", "true");
 		}
-		
+
 		schemaElem.addContent(classEl);
-		
+
 		Element classE2 = new Element("complexType", w3cNS);
 		classE2.setAttribute("name", getClassName(klass));
 		schemaElem.addContent(classE2);
-		
+
 		addCaDSRAnnotation(klass, classE2, w3cNS);
-		
+
 		if (superClassName!=null) {
 			log.debug("superClassName: " + superClassName);
 
@@ -337,11 +337,11 @@ public class SchemaTransformer implements Transformer {
 			extension.addContent(sequence);
 
 			List<UMLAttribute> primitiveCollectionAtts = new ArrayList<UMLAttribute>();
-			
+
 			//Do properties
 			for (Iterator i = klass.getAttributes().iterator(); i.hasNext();) {
 				UMLAttribute attr = (UMLAttribute) i.next();
-				log.debug("att.getName(): " + attr.getName()); 
+				log.debug("att.getName(): " + attr.getName());
 
 				// Only process non-static attributes
 				log.debug("isStatic: " + transformerUtils.isStatic(attr));
@@ -351,29 +351,29 @@ public class SchemaTransformer implements Transformer {
 					String type = getName(transformerUtils.getDataType(attr));
 					log.debug("Attribute type: " + type);
 					if (type.startsWith("xs:collection")) { // handle primitive collections; e.g., collection<string>
-						log.debug("Handling primitive collection type Name: " + type);    
+						log.debug("Handling primitive collection type Name: " + type);
 						primitiveCollectionAtts.add(attr);
 						continue;
 					}
-					
+
 					if (usePermissibleValues){
 						addRestrictionEnumeration(klass,attr,attributeElement,type, w3cNS);
 					} else{
-						attributeElement.setAttribute("type", type);	
+						attributeElement.setAttribute("type", type);
 					}
 
 					extension.addContent(attributeElement);
 				}
 			}
-			
-			// TODO :: refactor			
+
+			// TODO :: refactor
 			// process primitive collections; e.g., collection<string>
 			for ( UMLAttribute att : primitiveCollectionAtts){
 				addSequencePrimitiveCollectionElements(sequence,klass, att, w3cNS);
 			}
-			
+
 			/////////////////////////////// - Start
-			
+
 			//process attributes that should be treated/generated as elements
 			for (Iterator<UMLAttribute> i = klass.getAttributes().iterator(); i.hasNext();) {
 				UMLAttribute attr = (UMLAttribute) i.next();
@@ -389,31 +389,31 @@ public class SchemaTransformer implements Transformer {
 
 					String type = getName(transformerUtils.getDataType(attr));
 					log.debug("Attribute type: " + type);
-					
+
 					if (type.startsWith("xs:collection")) { // handle primitive collections; e.g., collection<string>
-						log.debug("Handling primitive collection type Name: " + type);    
+						log.debug("Handling primitive collection type Name: " + type);
 						primitiveCollectionAtts.add(attr);
 						continue;
-					}				
-					
+					}
+
 					if (usePermissibleValues){
 						addRestrictionEnumeration(klass,attr,elementElement,type, w3cNS);
 					} else{
-						elementElement.setAttribute("type", type);	
+						elementElement.setAttribute("type", type);
 					}
-					
+
 					if (isIsoDatatype(attr)){
-						elementElement.setAttribute("minOccurs","0");   
+						elementElement.setAttribute("minOccurs","0");
 						elementElement.setAttribute("maxOccurs","1");
 					}
-					
+
 					addCaDSRAnnotation(attr, elementElement, w3cNS);
-					
+
 					sequence.addContent(elementElement);
 				}
 			}
-			
-			
+
+
 			////////////////////////////////////  - END
 
 			for (Iterator i = transformerUtils.getAssociationEnds(klass).iterator(); i.hasNext();) {
@@ -428,7 +428,7 @@ public class SchemaTransformer implements Transformer {
 			classE2.addContent(sequence);
 
 			List<UMLAttribute> primitiveCollectionAtts = new ArrayList<UMLAttribute>();
-			
+
 			//Do properties
 			for (Iterator<UMLAttribute> i = klass.getAttributes().iterator(); i.hasNext();) {
 				UMLAttribute attr = (UMLAttribute) i.next();
@@ -443,31 +443,31 @@ public class SchemaTransformer implements Transformer {
 
 					String type = getName(transformerUtils.getDataType(attr));
 					log.debug("Attribute type: " + type);
-					
+
 					if (type.startsWith("xs:collection")) { // handle primitive collections; e.g., collection<string>
-						log.debug("Handling primitive collection type Name: " + type);    
+						log.debug("Handling primitive collection type Name: " + type);
 						primitiveCollectionAtts.add(attr);
 						continue;
-					}				
-					
+					}
+
 					if (usePermissibleValues){
 						addRestrictionEnumeration(klass,attr,attributeElement,type, w3cNS);
 					} else{
-						attributeElement.setAttribute("type", type);	
+						attributeElement.setAttribute("type", type);
 					}
-					
+
 					addCaDSRAnnotation(attr, attributeElement, w3cNS);
-					
+
 					classE2.addContent(attributeElement);
 				}
 			}
-			
-			// TODO :: refactor			
+
+			// TODO :: refactor
 			// process primitive collections; e.g., collection<string>
 			for ( UMLAttribute att : primitiveCollectionAtts){
 				addSequencePrimitiveCollectionElements(sequence,klass, att, w3cNS);
 			}
-			
+
 			//process attributes that should be treated/generated as elements
 			for (Iterator<UMLAttribute> i = klass.getAttributes().iterator(); i.hasNext();) {
 				UMLAttribute attr = (UMLAttribute) i.next();
@@ -483,30 +483,30 @@ public class SchemaTransformer implements Transformer {
 
 					String type = getName(transformerUtils.getDataType(attr));
 					log.debug("Attribute type: " + type);
-					
+
 					if (type.startsWith("xs:collection")) { // handle primitive collections; e.g., collection<string>
-						log.debug("Handling primitive collection type Name: " + type);    
+						log.debug("Handling primitive collection type Name: " + type);
 						primitiveCollectionAtts.add(attr);
 						continue;
-					}				
-					
+					}
+
 					if (usePermissibleValues){
 						addRestrictionEnumeration(klass,attr,elementElement,type, w3cNS);
 					} else{
-						elementElement.setAttribute("type", type);	
+						elementElement.setAttribute("type", type);
 					}
-					
+
 					if (isIsoDatatype(attr)){
-						elementElement.setAttribute("minOccurs","0");   
+						elementElement.setAttribute("minOccurs","0");
 						elementElement.setAttribute("maxOccurs","1");
 					}
-					
+
 					addCaDSRAnnotation(attr, elementElement, w3cNS);
-					
+
 					sequence.addContent(elementElement);
 				}
 			}
-			
+
 			//process associations
 			for (Iterator i = transformerUtils.getAssociationEnds(klass).iterator(); i.hasNext();) {
 				UMLAssociationEnd thisEnd = (UMLAssociationEnd) i.next();
@@ -516,16 +516,16 @@ public class SchemaTransformer implements Transformer {
 			}
 		}
 	}
-	
+
 	private void addCaDSRAnnotation(UMLTaggableElement tgElt, Element elt, Namespace w3cNS) {
 		String caDSRAnnotation = transformerUtils.getCaDSRAnnotationContent(tgElt);
 		if (caDSRAnnotation != null){
 			Element annotationElt = new Element("annotation", w3cNS);
 			Element documentationElt = new Element("documentation", w3cNS);
-			
+
 			documentationElt.addContent(caDSRAnnotation);
 			annotationElt.addContent(documentationElt);
-			
+
 			elt.addContent(annotationElt);
 		}
 	}
@@ -543,16 +543,16 @@ public class SchemaTransformer implements Transformer {
 //			sequence.addContent(associationElement);
 
 			log.debug("otherEndTypeName: "+otherEndTypeName);
-			associationElement.setAttribute("name", getRoleName(otherEnd,otherEndTypeName)); 
+			associationElement.setAttribute("name", getRoleName(otherEnd,otherEndTypeName));
 
 			String maxOccurs = transformerUtils.getUpperBound(otherEnd);
 			log.debug("maxOccurs: " + maxOccurs);
 
-			// A collection - model association as an element with the association name that 
+			// A collection - model association as an element with the association name that
 			// has a sequence of the associated type.  See GForge #1311.
-			associationElement.setAttribute("minOccurs","0");   
+			associationElement.setAttribute("minOccurs","0");
 			associationElement.setAttribute("maxOccurs","1");
-		
+
 			Element complexType = new Element("complexType",w3cNS);
 			Element innerSequence = new Element("sequence", w3cNS);
 			Element associatedObjElement = new Element("element", w3cNS);
@@ -566,7 +566,7 @@ public class SchemaTransformer implements Transformer {
 			log.debug("associationPackage.equals(thisPackage): " + associationPackage.equals(thisPackage));
 
 			String type = (associationPackage.equals(thisPackage)) ? otherEndTypeName : associationPackage + ":" + otherEndTypeName;
-			
+
 			if ("1".equalsIgnoreCase(maxOccurs)){
 				associatedObjElement.setAttribute("name", getRoleName(otherEnd,otherEndTypeName));
 				associatedObjElement.setAttribute("type", type);
@@ -574,10 +574,10 @@ public class SchemaTransformer implements Transformer {
 				associatedObjElement.setAttribute("ref", type);
 			}
 
-			associatedObjElement.setAttribute("minOccurs","0");   
-			associatedObjElement.setAttribute("maxOccurs",maxOccurs);  
+			associatedObjElement.setAttribute("minOccurs","0");
+			associatedObjElement.setAttribute("maxOccurs",maxOccurs);
 
-			
+
 			if ("1".equalsIgnoreCase(maxOccurs)){
 				sequence.addContent(associatedObjElement);
 			} else { // Collection - leave wrapping element
@@ -585,33 +585,33 @@ public class SchemaTransformer implements Transformer {
 				innerSequence.addContent(associatedObjElement);
 				complexType.addContent(innerSequence);
 				associationElement.addContent(complexType);
-				
+
 				sequence.addContent(associationElement);
 			}
 		}
 	}
-	
+
 	private void collectAssociatedClasses(UMLAssociationEnd thisEnd, UMLAssociationEnd otherEnd, Map<String,UMLClass> associatedClassNames) {
 		if (otherEnd.isNavigable()) {
 			String associationPackage = getPackageName(((UMLClass)(otherEnd.getUMLElement())));
 			String thisPackage = getPackageName(((UMLClass)(thisEnd.getUMLElement())));
-			
+
 			log.debug("associationPackage: "+associationPackage+"; thisPackage: "+thisPackage+"; associationPackage.equals(thisPackage): " + associationPackage.equals(thisPackage));
-			
-			 
+
+
 			if (!associationPackage.equalsIgnoreCase(thisPackage)){
 				UMLClass klass = (UMLClass)(otherEnd.getUMLElement());
 				associatedClassNames.put(getClassName(klass), ((UMLClass)(otherEnd.getUMLElement())));
 			}
 		}
 	}
-	
+
 	private void addSequencePrimitiveCollectionElements(Element sequence, UMLClass klass, UMLAttribute att, Namespace w3cNS) {
-	
+
 		Element field = new Element("field");
 
 		String name = att.getName();
-		field.setAttribute("name", name ); 
+		field.setAttribute("name", name );
 
 		String type = transformerUtils.getDataType(att);
 		String collectionType = type.substring(type.lastIndexOf("<")+1, type.lastIndexOf(">"));
@@ -625,9 +625,9 @@ public class SchemaTransformer implements Transformer {
 
 		associationElement.setAttribute("name", name);
 
-		// A collection - model association as an element with the association name that 
+		// A collection - model association as an element with the association name that
 		// has a sequence of the associated type.  See GForge #1311.
-		associationElement.setAttribute("minOccurs","0");   
+		associationElement.setAttribute("minOccurs","0");
 		associationElement.setAttribute("maxOccurs","1");
 
 		Element complexType = new Element("complexType",w3cNS);
@@ -636,14 +636,14 @@ public class SchemaTransformer implements Transformer {
 
 		associatedObjElement.setAttribute("name", collectionTypeName);
 		associatedObjElement.setAttribute("type", collectionType);
-		associatedObjElement.setAttribute("minOccurs","0");   
-		associatedObjElement.setAttribute("maxOccurs","unbounded");  
+		associatedObjElement.setAttribute("minOccurs","0");
+		associatedObjElement.setAttribute("maxOccurs","unbounded");
 
 		innerSequence.addContent(associatedObjElement);
 		complexType.addContent(innerSequence);
 		associationElement.addContent(complexType);
-	}	
-	
+	}
+
 	private void addRestrictionEnumeration(UMLClass klass, UMLAttribute attr, Element attributeElement, String type, Namespace w3cNS){
 		Collection<String> permissibleValues =transformerUtils.getXSDRestrictionValues(klass, attr);
 		log.debug("* * * permissibleValues size: " + permissibleValues.size() + " for class: "+klass.getName()+" and attribute: " +attr.getName());
@@ -656,7 +656,7 @@ public class SchemaTransformer implements Transformer {
 			//	</xs:restriction>
 			//</xs:simpleType>
 			Element simpleTypeElement = new Element("simpleType", w3cNS);
-			
+
 			Element restrictionElement = new Element("restriction", w3cNS);
 			restrictionElement.setAttribute("base", "xs:string");
 
@@ -675,21 +675,21 @@ public class SchemaTransformer implements Transformer {
 	}
 
 	private String getName(String type) {
-		
+
 		if (isIsoDatatype(type)){
 			String isoDataType = isoDatatypeMap.get(type.toLowerCase());
-			
+
 			if (isoDataType != null && isoDataType.length() > 0){
 				return "uri:"+isoDataType;
 			}
 		}
-		
+
 		String finalType = "xs:";
-		
+
 		if (type.indexOf('.') > 0){//java.util.Long, etc.
 			type = type.substring(type.lastIndexOf('.')+1);
 		}
-		
+
 		if ("byte[]".equalsIgnoreCase(type)){
 			finalType = finalType + "base64Binary";  //type "xs:byte[]" would be invalid"
 		} else if ("collection".equalsIgnoreCase(type)
@@ -706,11 +706,11 @@ public class SchemaTransformer implements Transformer {
 	}
 
 	/**
-	 * @param classColl The List of classes to be sorted.  The caCOREMarshaller 
+	 * @param classColl The List of classes to be sorted.  The caCOREMarshaller
 	 * has problem with forward references.
 	 * @return The Sorted list of classes with Generalizations listed first.
 	 */
-	private List<Element> sortImportStatements(HashSet<Element> elementColl) 
+	private List<Element> sortImportStatements(HashSet<Element> elementColl)
 	{
 		class caCOREComparator implements Comparator {
 			public int compare(Object obj1, Object obj2)
@@ -723,10 +723,10 @@ public class SchemaTransformer implements Transformer {
 		Collections.sort(list, new caCOREComparator());
 		return list;
 	}
-	
+
 	private void setModelNamespace(UMLModel model, String basePkgLogicalModel){
 		//override codegen.properties NAMESPACE_PREFIX property with GME namespace tag value, if it exists
-		
+
 		try {
 			String namespaceUriPrefix = transformerUtils.getModelNamespace(model, basePkgLogicalModel);
 			if (namespaceUriPrefix != null) {
@@ -737,7 +737,7 @@ public class SchemaTransformer implements Transformer {
 			generatorErrors.addError(new GeneratorError(getName() + ":" + e.getMessage()));
 		}
 	}
-	
+
 	private String getNamespace(UMLPackage pkg){
 		if (useGMETags){
 			try {
@@ -748,10 +748,10 @@ public class SchemaTransformer implements Transformer {
 				generatorErrors.addError(new GeneratorError(getName() + ": Error getting the GME Namespace value for package: " + transformerUtils.getFullPackageName(pkg), ge));
 			}
 		}
-		
+
 		return namespaceUriPrefix + transformerUtils.getFullPackageName(pkg);
 	}
-	
+
 	private String getNamespace(UMLClass klass){
 		if (useGMETags){
 			try {
@@ -767,10 +767,10 @@ public class SchemaTransformer implements Transformer {
 				generatorErrors.addError(new GeneratorError(getName() + ": Error getting the GME Namespace value for package: " + transformerUtils.getFullPackageName(klass), ge));
 			}
 		}
-		
+
 		return namespaceUriPrefix + transformerUtils.getFullPackageName(klass);
 	}
-	
+
 	private String getPackageName(UMLClass klass){
 		String namespacePkgName = null;
 		if (useGMETags){
@@ -785,7 +785,7 @@ public class SchemaTransformer implements Transformer {
 		}
 		return transformerUtils.getFullPackageName(klass);
 	}
-	
+
 	private String getPackageName(UMLPackage pkg){
 		String namespacePkgName = null;
 		if (useGMETags){
@@ -800,7 +800,7 @@ public class SchemaTransformer implements Transformer {
 		}
 		return transformerUtils.getFullPackageName(pkg);
 	}
-	
+
 	private String getClassName(UMLClass klass){
 		if (useGMETags){
 			try {
@@ -814,7 +814,7 @@ public class SchemaTransformer implements Transformer {
 		}
 		return klass.getName();
 	}
-	
+
 	private String getAttributeName(UMLAttribute attr){
 		if (useGMETags){
 			try {
@@ -828,16 +828,16 @@ public class SchemaTransformer implements Transformer {
 		}
 		return attr.getName();
 	}
-	
+
 	private boolean generateAttributeAsElement(UMLAttribute attr){
-		
+
 		if (transformerUtils.isISO21090Enabled()) {
 			if (isIsoDatatype(attr)){
 				return true;
-			} 
+			}
 			return false;
 		}
-		
+
 		if (useGMETags){
 			try {
 				return transformerUtils.generateXMLAttributeAsElement(attr);
@@ -848,29 +848,29 @@ public class SchemaTransformer implements Transformer {
 		}
 		return false;
 	}
-	
+
 	private boolean isIsoDatatype(UMLAttribute attr){
-		
+
 		String type = transformerUtils.getDataType(attr);
 		log.debug("* * * transformerUtils type: " + type);
 
 		return isIsoDatatype(type);
 	}
-	
+
 	private boolean isIsoDatatype(String type){
-		
+
 		if (!transformerUtils.isISO21090Enabled()){
 			return false;
 		}
-		
+
 		log.debug("* * * transformerUtils type: " + type);
 		String isoDatatype = isoDatatypeMap.get(type.toLowerCase());
 		log.debug("* * * isoDatatype type: " + type);
-		
+
 		if (isoDatatype != null && isoDatatype.length() > 0) {
 			return true;
 		}
-		
+
 		return false;
 	}
 
@@ -879,13 +879,13 @@ public class SchemaTransformer implements Transformer {
 			try {
 				String rolename = transformerUtils.getXMLLocRef(assocEnd, klassName);//use GME class name, if available
 				log.debug("rolename:  "+rolename);
-				
+
 				if (rolename==null){// try non-GME class name
 					klassName = ((UMLClass)(assocEnd.getUMLElement())).getName();
 					rolename = transformerUtils.getXMLLocRef(assocEnd, klassName);
 				}
 				log.debug("rolename:  "+rolename);
-				
+
 				if (rolename!=null)
 					return rolename;
 			} catch(GenerationException ge) {
@@ -895,12 +895,12 @@ public class SchemaTransformer implements Transformer {
 		}
 		return assocEnd.getRoleName();
 	}
-	
+
 	private String getSchemaLocation(String associatedURI, String associatedPackageName){
 		if (useGMETags){
 			String schemaLocation = associatedURI.replace("://", "_");
 			schemaLocation=schemaLocation.replace("/", "_");
-			
+
 			return schemaLocation+".xsd";
 		}
 		return associatedPackageName+".xsd";
@@ -921,18 +921,18 @@ public class SchemaTransformer implements Transformer {
 	{
 		this.artifactHandler = artifactHandler;
 	}
-	
+
 	private String encode(String string){
-		
+
 		return xmlEncoder.encode(string.replace(" ", "_"));
-		
+
 	}
 
 	public void setEnabled(boolean enabled)
 	{
 		this.enabled = enabled;
 	}
-	
+
 	public Boolean isEnabled() {
 		return enabled;
 	}
@@ -948,7 +948,7 @@ public class SchemaTransformer implements Transformer {
 	public void setUseGMETags(boolean useGMETags) {
 		this.useGMETags = useGMETags;
 	}
-	
+
 	public void setUsePermissibleValues(boolean usePermissibleValues) {
 		this.usePermissibleValues = usePermissibleValues;
 	}

@@ -13,6 +13,9 @@ import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 
+import javax.servlet.http.HttpServletRequest;
+import org.apache.struts2.ServletActionContext;
+
 public class ShowDynamicTree extends BaseActionSupport {
 
 	private static final long serialVersionUID = 1234567890L;
@@ -21,12 +24,15 @@ public class ShowDynamicTree extends BaseActionSupport {
 			.getName());
 
 	public String execute() throws Exception {
+		HttpServletRequest request = ServletActionContext.getRequest();
+		Category rootNode = getClassTreeRootNode();
+		request.setAttribute("sdkTreeRootNode", rootNode);
 
 		return SUCCESS;
 	}
 
 	public Category getTreeRootNode() {
-		return Category.getById(1L);
+		return Category.getById("1");
 	}
 
 	public Category getClassTreeRootNode() {
@@ -48,7 +54,7 @@ public class ShowDynamicTree extends BaseActionSupport {
 		int categoryId = 1;
 		String klassName = null;
 
-		Category root = new Category(categoryId++, getText("showdynamictree.root.title"), "",new Category[0]);
+		Category root = new Category(""+categoryId++, getText("showdynamictree.root.title"), "",new Category[0]);
 		if (packageNames != null) {
 
 			Category tmpPackageCat = null;
@@ -73,43 +79,43 @@ public class ShowDynamicTree extends BaseActionSupport {
 							//in case there is no package
 							klassName = className;
 						}
-						
+
 						try {
 							Class klass = Class.forName(className);
-							
+
 							categoryId = collectInterfaceCategories(klass, interfaces, categoryId);//need to preserve current value of categoryId
-							
+
 							if (Modifier.isAbstract(klass.getModifiers())) {
 								klassName += " (abstract)";
 							}
 
 						} catch (ClassNotFoundException e) {
 							log.error("Trying to determine if class " + klassName + " is abstract or has interface(s), but was not able to find such a class", e);
-						}	
-						
-						tmpClassCat = new Category(categoryId++, klassName, packageName, new Category[0]);
+						}
+
+						tmpClassCat = new Category(""+categoryId++, klassName, packageName, new Category[0]);
 						log.debug("About to add Category: " + tmpClassCat);
-						
+
 						classes.add(tmpClassCat);
 					}
 				}
 
-				tmpPackageCat = new Category(categoryId++, packageName, "", classes);
+				tmpPackageCat = new Category(""+categoryId++, packageName, "", classes);
 
 				packages.put(packageName,tmpPackageCat);
-				
+
 				//Reset classes array for the next package
 				classes = new ArrayList<Category>();
 
 			}
 
-		
+
 			//merge interfaces with the classes
 			Category tmpCategory = null;
 			List children = null;
 			for (Category interfazeCat : interfaces){
 				tmpCategory = packages.get(interfazeCat.getPackageName());
-				
+
 				if (tmpCategory != null){
 					children = tmpCategory.getChildren();
 					children.add(interfazeCat);
@@ -117,7 +123,7 @@ public class ShowDynamicTree extends BaseActionSupport {
 				} else {// new package
 					List<Category> tmpList = new ArrayList<Category>();
 					tmpList.add(interfazeCat);
-					tmpPackageCat = new Category(categoryId++, interfazeCat.getPackageName(), "", tmpList);
+					tmpPackageCat = new Category(""+categoryId++, interfazeCat.getPackageName(), "", tmpList);
 					packages.put(interfazeCat.getPackageName(),tmpPackageCat);
 				}
 			}
@@ -149,18 +155,18 @@ public class ShowDynamicTree extends BaseActionSupport {
 		// })
 		// });
 	}
-	
+
 	private int collectInterfaceCategories(Class klass, List<Category> interfaces, int categoryId){
-		
+
 		Category tmpInterfaceCat = null;
 		for (Class interfaze : klass.getInterfaces()){
-			
+
 			Class superInterfaze = interfaze;
 			do {
 				if (!(superInterfaze.getSimpleName().equalsIgnoreCase("Serializable"))
 						&& !(superInterfaze.getSimpleName().equalsIgnoreCase("CycleRecoverable"))){
 					String interfacePackageName = superInterfaze.getPackage().getName();
-					tmpInterfaceCat = new Category(categoryId++, superInterfaze.getSimpleName() + " (interface)", interfacePackageName, new Category[0]);
+					tmpInterfaceCat = new Category(""+categoryId++, superInterfaze.getSimpleName() + " (interface)", interfacePackageName, new Category[0]);
 					log.debug("About to add Category: " + tmpInterfaceCat);
 
 					interfaces.add(tmpInterfaceCat);
@@ -168,7 +174,7 @@ public class ShowDynamicTree extends BaseActionSupport {
 				superInterfaze = superInterfaze.getSuperclass();
 			} while (superInterfaze != null);
 		}
-		
+
 		return categoryId;
 	}
 

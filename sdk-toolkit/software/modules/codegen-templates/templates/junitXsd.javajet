@@ -62,6 +62,8 @@ public class <%=klassName%>XSDTest extends SDKXSDTestBase
 	String datatype = attr.getDatatype().getName();
 	if (datatype.startsWith("Collection<")){
 		continue;
+	} else if (datatype.startsWith("byte[]")){
+		datatype="base64Binary";
 	} else if (datatype.startsWith("Char")){
 		datatype="String";
 	} else if (datatype.startsWith("char")){
@@ -93,24 +95,29 @@ for(UMLAssociation assoc:klass.getAssociations()) {
 		{
 			UMLClass assocKlass = (UMLClass)otherEnd.getUMLElement();
 			String highEndMultiplicity="";
+			String isCollection = "true";
 			if (otherEnd.getHighMultiplicity() < 0){
 				highEndMultiplicity = "unbounded";
+				isCollection = "true";
 			} else { 
 				highEndMultiplicity = "1";
+				isCollection = "false";
 			}
+			
 			
 			String assocPackageName = transformerUtils.getFullPackageName(assocKlass);
 			boolean isTargetAndAssociatedPackagesSame = (fullPackageName.equalsIgnoreCase(assocPackageName));
 			if (transformerUtils.isSubClass(klass)){
 				if (isTargetAndAssociatedPackagesSame) {%>
-		validateSubclassAssociationElements(targetClass, <%=assocPackageName%>.<%=assocKlass.getName()%>.class, "<%=otherEnd.getRoleName()%>","0","<%=highEndMultiplicity%>");
-			 <% } else { %>	
-		validateSubclassAssociationElements(targetClass, <%=assocPackageName%>.<%=assocKlass.getName()%>.class, "<%=otherEnd.getRoleName()%>","0","<%=highEndMultiplicity%>");			<%	}
+		validateSubclassAssociationElements(targetClass, <%=assocPackageName%>.<%=assocKlass.getName()%>.class, "<%=otherEnd.getRoleName()%>","0","<%=highEndMultiplicity%>", <%=isCollection%>);
+			 	<% } else { %>	
+		validateSubclassAssociationElements(targetClass, <%=assocPackageName%>.<%=assocKlass.getName()%>.class, "<%=otherEnd.getRoleName()%>","0","<%=highEndMultiplicity%>", <%=isCollection%>);			
+				<%}
 			} else {
 				if (isTargetAndAssociatedPackagesSame) {%>
-		validateClassAssociationElements(targetClass, <%=assocPackageName%>.<%=assocKlass.getName()%>.class, "<%=otherEnd.getRoleName()%>","0","<%=highEndMultiplicity%>");	
+		validateClassAssociationElements(targetClass, <%=assocPackageName%>.<%=assocKlass.getName()%>.class, "<%=otherEnd.getRoleName()%>","0","<%=highEndMultiplicity%>", <%=isCollection%>);	
 			 <% } else { %>	
-		validateClassAssociationElements(targetClass,"<%=klass.getName()%>", <%=assocPackageName%>.<%=assocKlass.getName()%>.class,"<%=assocPackageName%>:<%=assocKlass.getName()%>","<%=otherEnd.getRoleName()%>","0","<%=highEndMultiplicity%>");
+		validateClassAssociationElements(targetClass,"<%=klass.getName()%>", <%=assocPackageName%>.<%=assocKlass.getName()%>.class,"<%=assocPackageName%>:<%=assocKlass.getName()%>","<%=otherEnd.getRoleName()%>","0","<%=highEndMultiplicity%>", <%=isCollection%>);
 			<%	}			
 			}
 		}

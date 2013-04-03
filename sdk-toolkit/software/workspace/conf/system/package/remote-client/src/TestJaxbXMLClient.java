@@ -38,6 +38,8 @@ import org.w3c.dom.Document;
 
 public class TestJaxbXMLClient extends TestClient
 {
+	private Map gmeNamespaces = new HashMap();
+
 	public static void main(String args[])
 	{
 		TestJaxbXMLClient client = new TestJaxbXMLClient ();
@@ -66,11 +68,11 @@ public class TestJaxbXMLClient extends TestClient
 		String jaxbContextName = getJaxbContextName();
 		//Marshaller marshaller = new JAXBMarshaller(includeXmlDeclaration,jaxbContextName);  // Use this constructor if you plan to pass the namespace prefix with each call instead
 		Marshaller marshaller = new JAXBMarshaller(includeXmlDeclaration,jaxbContextName,namespacePrefix);
-		Unmarshaller unmarshaller = new JAXBUnmarshaller(validate,jaxbContextName);		
+		Unmarshaller unmarshaller = new JAXBUnmarshaller(validate,jaxbContextName);
 
 		// JAXB
 		XMLUtility myUtil = new XMLUtility(marshaller, unmarshaller);
-
+		loadGMENamespaces();
 		for (Class klass : classList) {
 			if (!Modifier.isAbstract(klass.getModifiers())) {
 
@@ -108,8 +110,9 @@ public class TestJaxbXMLClient extends TestClient
 						// JAXB
 //						 Object myObj = (Object) myUtil.fromXML(convertedObj.getClass(), myFile);						// using class package name as a context
 //						 Object myObj = (Object) myUtil.fromXML(convertedObj.getClass().getPackage().getName(), myFile);  // using package name as a context
-						 Object myObj = (Object) myUtil.fromXML(myFile);  // using context name supplied during Unmarshaller instantiation
-
+						String packageName = klass.getName().substring(0,klass.getName().lastIndexOf("."));
+						String gmeNamespace = (String)gmeNamespaces.get(packageName);
+						 Object myObj = (Object) myUtil.fromXML(myFile, gmeNamespace);  // using context name supplied during Unmarshaller instantiation
 						printObject(myObj, convertedObj.getClass(), includeAssocation);
 						break;
 					}
@@ -147,11 +150,47 @@ public class TestJaxbXMLClient extends TestClient
 			if (counter < totalCount)
 				jaxbContextName.append(":");
 		}
-		
-		System.out.println("jaxbContextName: "+jaxbContextName.toString());
-		
+
 		return jaxbContextName.toString();
 
-	}	
+	}
+
+
+	private void loadGMENamespaces() throws Exception
+	{
+		Collection<Class> list = new ArrayList<Class>();
+		JarFile file = null;
+		int count = 0;
+		for(File f:new File("lib").listFiles())
+		{
+			if(f.getName().endsWith("-schema.jar"))
+			{
+				file = new JarFile(f);
+				count++;
+			}
+		}
+		if(file == null) throw new Exception("Could not locate the bean jar");
+		if(count>1) throw new Exception("Found more than one bean jar");
+
+		Enumeration e = file.entries();
+		while(e.hasMoreElements())
+		{
+			JarEntry o = (JarEntry) e.nextElement();
+			if(!o.isDirectory())
+			{
+				String name = o.getName();
+				if(name.endsWith(".xsd"))
+				{
+					String klassName = name.replace('/', '.').substring(0, name.lastIndexOf('.'));
+					if(klassName.startsWith("gme"))
+					{
+						String packageName = klassName.substring(klassName.lastIndexOf("_")+1);
+						String gmeName = klassName.substring(0,klassName.lastIndexOf("_"));
+						gmeNamespaces.put(packageName, gmeName);
+					}
+				}
+			}
+		}
+	}
 
 }

@@ -82,6 +82,15 @@ public class CSMUsernameAuthenticationProvider implements AuthenticationProvider
 			}
 			Assert.notNull(user, "retrieveUser returned null - a violation of the interface contract");
 		}
+		if (!user.isCredentialsNonExpired())
+		{
+			throw new CredentialsExpiredException(messages.getMessage("AbstractUserDetailsAuthenticationProvider.expired", "User account credentials are expired"));
+		}
+		
+		if (!user.isAccountNonExpired())
+		{
+			throw new AccountExpiredException(messages.getMessage("AbstractUserDetailsAuthenticationProvider.expired", "User account has expired"));
+		}
 
 		if (!user.isAccountNonLocked())
 		{
@@ -93,10 +102,6 @@ public class CSMUsernameAuthenticationProvider implements AuthenticationProvider
 			throw new DisabledException(messages.getMessage("AbstractUserDetailsAuthenticationProvider.disabled", "User is disabled"));
 		}
 
-		if (!user.isAccountNonExpired())
-		{
-			throw new AccountExpiredException(messages.getMessage("AbstractUserDetailsAuthenticationProvider.expired", "User account has expired"));
-		}
 
 		// This check must come here, as we don't want to tell users
 		// about account status unless they presented the correct credentials
@@ -216,7 +221,16 @@ public class CSMUsernameAuthenticationProvider implements AuthenticationProvider
 
 	public boolean supports(Class authentication)
 	{
-		return (UsernameAuthenticationToken.class.isAssignableFrom(authentication));
+		boolean flag = false;
+		try
+		{
+			flag = (UsernameAuthenticationToken.class.isAssignableFrom(authentication));
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return flag;
 	}
 
 }

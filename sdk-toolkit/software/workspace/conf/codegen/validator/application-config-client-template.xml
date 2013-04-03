@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+
+	<bean id="CaDsrServiceInfo" class="java.util.HashMap">
+		<constructor-arg>
+			<map>
+				<entry key="APPLICATION_SERVICE_BEAN" value-ref="CaDsrApplicationService"/>
+				<entry key="AUTHENTICATION_SERVICE_BEAN" value-ref="CaDsrAuthenticationManager"/>
+				<entry key="APPLICATION_SERVICE_CONFIG"  value-ref="CaDsrApplicationServiceConfig"/>
+				<entry key="APPLICATION_SERVICE_URL"  value="http://cadsrapi.nci.nih.gov/cadsrapi40"/>
+			</map>
+		</constructor-arg>
+	</bean>
+
+	<bean id="ServiceInfo" class="java.util.HashMap">
+		<constructor-arg>
+			<map>
+				<entry key="APPLICATION_SERVICE_BEAN" value-ref="CaDsrApplicationService"/>
+				<entry key="AUTHENTICATION_SERVICE_BEAN" value-ref="CaDsrAuthenticationManager"/>
+				<entry key="APPLICATION_SERVICE_CONFIG"  value-ref="CaDsrApplicationServiceConfig"/>
+				<entry key="APPLICATION_SERVICE_URL"  value="http://cadsrapi.nci.nih.gov/cadsrapi40"/>
+			</map>
+		</constructor-arg>
+	</bean>
+
+	<bean id="CaDsrInterceptor" class="gov.nih.nci.system.client.proxy.ApplicationServiceProxy" singleton="true">
+		<property name="proxyFactory">
+			<bean class="gov.nih.nci.system.client.proxy.ProxyHelperImpl"/>
+		</property>
+	</bean>
+	
+	<bean id="CaDsrApplicationService" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="target">
+			<bean class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
+				<property name="serviceUrl" value="http://cadsrapi.nci.nih.gov/cadsrapi40/http/applicationService"/>
+				<property name="serviceInterface" value="gov.nih.nci.system.applicationservice.ApplicationService"/>
+				<property name="httpInvokerRequestExecutor">
+				<!--@SIMPLE_HTTP_INVOKER_SRART@-->
+				<bean class="gov.nih.nci.system.springframework.remoting.httpinvoker.HttpInvokerRequestExecutor"/>
+				<!--@SIMPLE_HTTP_INVOKER_END@-->
+				<!--@GSI_HTTP_INVOKER_SRART@-->
+				<bean class="gov.nih.nci.system.springframework.remoting.httpinvoker.GSIHttpInvokerRequestExecutor"/>
+				<!--@GSI_HTTP_INVOKER_END@-->
+				</property>
+			</bean>
+		</property>
+		<property name="interceptorNames" value="CaDsrInterceptor"/>
+		<property name="interfaces" value="gov.nih.nci.system.applicationservice.ApplicationService"/>
+	</bean>	
+	
+	<bean id="CaDsrAuthenticationManager" class="org.acegisecurity.providers.ProviderManager">
+		<property name="providers">
+			<list>
+				<bean class="org.acegisecurity.providers.rcp.RemoteAuthenticationProvider">
+					<property name="remoteAuthenticationManager">
+						<bean class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
+						    <property name="serviceUrl" value="http://cadsrapi.nci.nih.gov/cadsrapi40/http/remoteAuthenticationManager"/>
+						    <property name="serviceInterface" value="org.acegisecurity.providers.rcp.RemoteAuthenticationManager"/>
+						</bean>
+					</property>
+				</bean>
+				<bean class="gov.nih.nci.system.security.acegi.providers.NullGroupNameAuthenticationProvider"/>
+				<bean class="gov.nih.nci.system.security.acegi.providers.NullX509AuthenticationProvider"/>
+				<bean class="gov.nih.nci.system.security.acegi.providers.NullUsernameAuthenticationProvider"/>
+			</list>
+		</property>
+	</bean>
+	
+	
+	<!-- Dont touch this unless you know what you are doing -->
+	<bean id="CaDsrApplicationServiceConfig" class="java.lang.String">
+		<constructor-arg>
+			<value>
+				&lt;bean id=&quot;CaDsrServiceInfo&quot; class=&quot;java.util.HashMap&quot;&gt;
+					&lt;constructor-arg&gt;
+						&lt;map&gt;
+							&lt;entry key=&quot;APPLICATION_SERVICE_BEAN&quot; value-ref=&quot;CaDsrApplicationService&quot;/&gt;
+							&lt;entry key=&quot;AUTHENTICATION_SERVICE_BEAN&quot; value-ref=&quot;CaDsrAuthenticationManager&quot;/&gt;
+						&lt;/map&gt;
+					&lt;/constructor-arg&gt;
+				&lt;/bean&gt;
+			
+				&lt;bean id=&quot;CaDsrInterceptor&quot; class=&quot;gov.nih.nci.system.client.proxy.ApplicationServiceProxy&quot; singleton=&quot;true&quot;&gt;
+					&lt;property name=&quot;proxyFactory&quot;&gt;
+						&lt;bean class=&quot;gov.nih.nci.system.client.proxy.ProxyHelperImpl&quot;/&gt;
+					&lt;/property&gt;
+				&lt;/bean&gt;
+				
+				&lt;bean id=&quot;CaDsrApplicationService&quot; class=&quot;org.springframework.aop.framework.ProxyFactoryBean&quot;&gt;
+					&lt;property name=&quot;target&quot;&gt;
+						&lt;bean class=&quot;org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean&quot;&gt;
+							&lt;property name=&quot;serviceUrl&quot; value=&quot;URL_KEY/http/applicationService&quot;/&gt;
+							&lt;property name=&quot;serviceInterface&quot; value=&quot;gov.nih.nci.system.applicationservice.ApplicationService&quot;/&gt;
+							&lt;property name=&quot;httpInvokerRequestExecutor&quot;&gt;
+							&lt;bean class=&quot;@HTTP_INVOKER@&quot;/&gt;
+							&lt;/property&gt;
+						&lt;/bean&gt;
+					&lt;/property&gt;
+					&lt;property name=&quot;interceptorNames&quot; value=&quot;CaDsrInterceptor&quot;/&gt;
+					&lt;property name=&quot;interfaces&quot; value=&quot;gov.nih.nci.system.applicationservice.ApplicationService&quot;/&gt;
+				&lt;/bean&gt;	
+				
+				&lt;bean id=&quot;CaDsrAuthenticationManager&quot; class=&quot;org.acegisecurity.providers.ProviderManager&quot;&gt;
+					&lt;property name=&quot;providers&quot;&gt;
+						&lt;list&gt;
+							&lt;bean class=&quot;org.acegisecurity.providers.rcp.RemoteAuthenticationProvider&quot;&gt;
+								&lt;property name=&quot;remoteAuthenticationManager&quot;&gt;
+									&lt;bean class=&quot;org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean&quot;&gt;
+									    &lt;property name=&quot;serviceUrl&quot; value=&quot;URL_KEY/http/remoteAuthenticationManager&quot;/&gt;
+									    &lt;property name=&quot;serviceInterface&quot; value=&quot;org.acegisecurity.providers.rcp.RemoteAuthenticationManager&quot;/&gt;
+									&lt;/bean&gt;
+								&lt;/property&gt;
+							&lt;/bean&gt;
+							&lt;bean class=&quot;gov.nih.nci.system.security.acegi.providers.NullGroupNameAuthenticationProvider&quot;/&gt;
+							&lt;bean class=&quot;gov.nih.nci.system.security.acegi.providers.NullX509AuthenticationProvider&quot;/&gt;
+							&lt;bean class=&quot;gov.nih.nci.system.security.acegi.providers.NullUsernameAuthenticationProvider&quot;/&gt;							
+						&lt;/list&gt;
+					&lt;/property&gt;
+				&lt;/bean&gt;
+				
+				&lt;alias alias="ServiceInfo" name="CaDsrServiceInfo"/&gt;
+			</value>
+		</constructor-arg>
+	</bean>
+
+</beans>

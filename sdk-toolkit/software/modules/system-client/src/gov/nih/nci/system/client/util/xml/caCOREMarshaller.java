@@ -99,7 +99,6 @@ public class caCOREMarshaller implements gov.nih.nci.system.client.util.xml.Mars
 		try {
 			marshaller = new org.exolab.castor.xml.Marshaller(stream);
 		} catch (IOException e) {
-			System.out.println("Output stream invalid: " + e.getMessage());
 			log.error("Output stream invalid: ", e);
 			throw new XMLUtilityException("Output stream invalid "  + e.getMessage(), e);
 		}
@@ -121,11 +120,9 @@ public class caCOREMarshaller implements gov.nih.nci.system.client.util.xml.Mars
 			marshaller.setValidation(this.validation);
 			marshaller.marshal(beanObject);
 		} catch (MarshalException e) {
-			System.out.println("Error in marshalling object: " + e.getMessage());
 			log.error("Error in marshalling object: ", e);
 			throw new XMLUtilityException(e.getMessage(),e);
 		} catch (ValidationException e) {
-			System.out.println("Error in xml validation of marshalled object: " + e.getMessage());
 			log.error("Error in xml validation of marshalled object: ", e);
 			throw new XMLUtilityException(e.getMessage(), e);
 		}

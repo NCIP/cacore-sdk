@@ -40,8 +40,6 @@ extends GeneralizedFieldHandler
 			domainClassName = proxyClassName;
 		}
 
-		log.debug("domainClassName: " + domainClassName);
-
 		Object convertedObj = null;
 			convertedObj =  convertObject(oldObj, Class.forName(domainClassName), getAssociation);
 
@@ -50,7 +48,6 @@ extends GeneralizedFieldHandler
 	}
 
 	private static Object convertObject(Object obj, Class klass, boolean getAssociations) throws Exception {
-		log.debug("***  Converting from proxy object: " + obj.getClass().getName());
 
 		Object convertedObject = klass.newInstance();
 
@@ -61,7 +58,6 @@ extends GeneralizedFieldHandler
 			{
 				try {
 					Method setterMethod = convertedObject.getClass().getMethod("set" + method.getName().substring(3), method.getReturnType());
-					log.debug("***  setterMethod Name: " + setterMethod.getName() + "; parameter type: " + method.getReturnType());
 		    		Object value = null;
 		    		Class type = setterMethod.getParameterTypes()[0];
 					if (getAssociations
@@ -69,30 +65,27 @@ extends GeneralizedFieldHandler
 									.getName().startsWith("java")))
 							|| type.isPrimitive() || type.getName().startsWith("gov.nih.nci.iso21090."))
 						value = method.invoke(obj, (Object[])null);
-						
+
 					if (!Hibernate.isInitialized(value)){
 						value = null;
 					} else {
 						if (value != null){
-							log.debug("Value is not null: "+value.getClass().getName());
 
 							if (value instanceof ListProxy) {
-								log.debug("Value is an instance of ListProxy");
 								value = convertListProxy(value);
 							} else {
 								String className = value.getClass().getName();
 								if (className.indexOf('$') > 0) {
-									log.debug(value.getClass().getName() + " is a proxy object; converting now");
 									boolean includeAssociations = false;
 									value = convertObject(value,includeAssociations);
 								}
 							}
 						}
 					}
-					
+
 					Object[] parameters = new Object[1];
 					parameters[0] = value;
-	
+
 					setterMethod.invoke(convertedObject, (Object[])parameters);
 				} catch (NoSuchMethodException e){
 					//ignore - E.g., Strings have getChars(), getBytes() methods with no corresponding Setters
@@ -103,12 +96,12 @@ extends GeneralizedFieldHandler
 		}
 
 		return convertedObject;
-	}   
-	
+	}
+
 	private static Object convertListProxy(Object value) {
-//		log.debug("*** convertUponGet(Object value) called ***");
-//		log.debug("Value: " + value);
-//		log.debug("Value.class: " + value.getClass().getName());
+//		System.out.println("*** convertUponGet(Object value) called ***");
+//		System.out.println("Value: " + value);
+//		System.out.println("Value.class: " + value.getClass().getName());
 
 		if (value == null) return null;
 
@@ -123,7 +116,7 @@ extends GeneralizedFieldHandler
 		HashSet<Object> tempList = new HashSet<Object>();
 		Object[] args = {tempList};
 		Class[] parameterTypes = {Collection.class};
-//		log.debug("args array initialized: " + args[0].getClass().getName());       
+//		System.out.println("args array initialized: " + args[0].getClass().getName());
 
 //		Enumeration collIterator = (Enumeration)value;
 		List list = (ArrayList)value;
@@ -140,32 +133,32 @@ extends GeneralizedFieldHandler
 		}
 
 		Iterator iter = tempCollection.iterator();
-		while (iter.hasNext()){  
+		while (iter.hasNext()){
 			tempObject = iter.next();
 			klass = tempObject.getClass();
 			methods = klass.getMethods();
 
-//			log.debug("Number of methods: " + methods.length);
+//			System.out.println("Number of methods: " + methods.length);
 
 			for (int i=0; i < methods.length; i++){
 
 				tempMethod = methods[i];
 
-//				log.debug("tempMethod[" + i + "].getName(): " + tempMethod.getName());
-//				log.debug("tempMethod[" + i + "].getReturnType().getName(): " + tempMethod.getReturnType().getName());
+//				System.out.println("tempMethod[" + i + "].getName(): " + tempMethod.getName());
+//				System.out.println("tempMethod[" + i + "].getReturnType().getName(): " + tempMethod.getReturnType().getName());
 
-				// 'Erase' any collection attributes in order to prevent recursion 
+				// 'Erase' any collection attributes in order to prevent recursion
 				if ("java.util.Collection".equalsIgnoreCase(tempMethod.getReturnType().getName())){
 					try {
 
 						getMethodName = tempMethod.getName();
-//						log.debug("getMethodName: " + getMethodName);
+//						System.out.println("getMethodName: " + getMethodName);
 						setMethodName = 's' + getMethodName.substring(1);
-//						log.debug("setMethodName: " + setMethodName);
+//						System.out.println("setMethodName: " + setMethodName);
 
 						tempMethod = klass.getMethod(setMethodName, parameterTypes);
 						tempMethod.invoke(tempObject, args);
-//						log.debug("Successful: Collection Attribute set to empty ArrayList for method " + tempMethod.getName());
+//						System.out.println("Successful: Collection Attribute set to empty ArrayList for method " + tempMethod.getName());
 
 					} catch (Exception e) {
 						log.error("Exception: " + e.getMessage());
@@ -175,7 +168,7 @@ extends GeneralizedFieldHandler
 			}
 		}
 
-//		log.debug("*** final tempCollection.size(): " + tempCollection.size());
+//		System.out.println("*** final tempCollection.size(): " + tempCollection.size());
 		if (tempCollection.size() == 0){return null;}
 		return tempCollection;
 	}

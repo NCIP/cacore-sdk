@@ -14,8 +14,8 @@
 	<property name="module.name" value="sdk-modules" />
 	<property name="module.lib.dir" location="${target.module.dir}/lib" />
 
-	<property name="compile.lib.dir" location="${module.lib.dir}/compile" />
-	<property name="runtime.lib.dir" location="${module.lib.dir}/runtime" />
+	<property name="compile.lib.dir" location="${software.dir}/lib/compile" />
+	<property name="runtime.lib.dir" location="${software.dir}/lib/runtime" />
 	<property name="src.java.dir" value="${target.module.dir}/java-src" />
 	<property name="build.classes.dir" value="${target.dir}/modules/classes" />
 	
@@ -31,9 +31,11 @@
 	<property name="grid-jaas-jndi-binder.module.name" value="grid-jaas-jndi-binder" />
 	<property name="grid-remoting.module.name" value="grid-remoting" />
 	<property name="security.module.name" value="security" />
+	<property name="grid-security.module.name" value="grid-security" />
 	<property name="security-client.module.name" value="security-client" />
 	<property name="system-client.module.name" value="system-client" />
 	<property name="system-core.module.name" value="system-core" />
+	<property name="system-metadata.module.name" value="system-metadata" />
 	<property name="system-logging.module.name" value="system-logging" />
 	<property name="system-web.module.name" value="system-web" />
 	<property name="system-ws.module.name" value="system-ws" />
@@ -41,23 +43,9 @@
 	<property name="writable-api-client.module.name" value="writable-api-client" />
 
 	<property name="jar.name" value="test-jar.jar" />
-	<property name="ivy.module.def.file" location="ivy.xml" />
 	<property name="project.properties.file" value="${build.dir}/project.properties" />
 
 		
-	<target name="ivy:init">
-		<property name="ivy.dep.file" value="${ivy.module.def.file}" />
-		<ivy:settings file="${ivy.settings.dir}/${ivy.settings.file}"/>
-	</target>
-
-	<target name="ivy:publish" description="--> publish this project in the ivy repository">
-		<tstamp>
-			<format property="now" pattern="yyyyMMddHHmmss" />
-		</tstamp>
-		<property name="version" value="${sdk.version}" />
-		<ivy:publish artifactspattern="${target.module.dir}/lib/[artifact].[ext]" resolver="shared-local-repo"  
-			pubrevision="${version}" status="release" forcedeliver="true" pubdate="${now}" update="true" overwrite="true" />
-	</target>
 		
 	<target name="clean:dependencies">
 		<delete dir="${compile.lib.dir}" />
@@ -79,20 +67,6 @@
 	<!-- ** MAIN TARGETS                                                  ** -->
 	<!-- ******************************************************************* -->
 
-	<target name="ivy:setup" depends=" 
-	        ivy:setup-compile,ivy:setup-runtime" description="Updates the local ivy repository for all build and test dependencies." />
-
-	<target name="ivy:setup-compile" depends="ivy:init">
-	 <echo>module.lib.dir=${module.lib.dir}</echo>
-
-		<ivy:resolve refresh="true" conf="compile" />
-		<ivy:retrieve pattern="${module.lib.dir}/[conf]/[artifact]-[revision].[ext]" conf="compile" />
-	</target>
-
-	<target name="ivy:setup-runtime" depends="ivy:init">
-		<ivy:resolve refresh="true" conf="runtime" />
-		<ivy:retrieve pattern="${module.lib.dir}/[conf]/[artifact]-[revision].[ext]" conf="runtime" />
-	</target>
 
 	<!-- This will delete all of the files created by the build process -->
 	<target name="-pre-clean">
@@ -102,9 +76,15 @@
 
 	<!-- This sets up all of the neccessary directories -->
 	<target name="-init" depends="-pre-clean">
+		<mkdir dir="${module.lib.dir}"/> 
+		<copy todir="${module.lib.dir}" overwrite="true">
+			<fileset dir="${software.dir}/lib">
+				<include name="**/*" />
+			</fileset>
+		</copy>
 	</target>
 	
-	<target name="-compile:templates" depends="-init, ivy:setup-compile" description="Compiles all subproject code">
+	<target name="-compile:templates" depends="-init" description="Compiles all subproject code">
 		<taskdef name="jetc" classname="ch.paranor.epla.structure.JETCTask" classpathref="project.compile.classpath" />
 		<jetc destDir="${codegen-templates.module.name}/src">
 			<fileset dir="${codegen-templates.module.name}/templates" includes="**/*.javajet"/>
@@ -114,14 +94,26 @@
 		</jetc>
 	</target>
 
-	<target name="compile:application-code" depends="-init, ivy:setup,-compile:templates" description="Compiles all subproject code">
+	<target name="compile:application-code" depends="-init, -compile:templates" description="Compiles all subproject code">
 		<mkdir dir="${build.classes.dir}" />
 		
-		<javac 
-			srcdir="${codegen.module.name}/src:${codegen-templates.module.name}/src:${codegen-validator.module.name}/src:${codegen-validator-templates.module.name}/src:${grid-jaas.module.name}/src:${grid-jaas-client.module.name}/src:${grid-jaas-jndi-binder.module.name}/src:${grid-remoting.module.name}/src:${security.module.name}/src:${security-client.module.name}/src:${system-client.module.name}/src:${system-core.module.name}/src:${system-logging.module.name}/src:${system-web.module.name}/src:${system-ws.module.name}/src:${writable-api.module.name}/src:${writable-api-client.module.name}/src"
-			destdir="${build.classes.dir}" debug="true">
-			<classpath refid="project.compile.classpath" />
-		</javac>
+		<if>
+			<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true"/>
+			<then>
+				<javac 
+					srcdir="${codegen.module.name}/src:${codegen-templates.module.name}/src:${codegen-validator.module.name}/src:${codegen-validator-templates.module.name}/src:${grid-jaas.module.name}/src:${grid-jaas-client.module.name}/src:${grid-jaas-jndi-binder.module.name}/src:${grid-remoting.module.name}/src:${grid-security.module.name}/src:${security.module.name}/src:${security-client.module.name}/src:${system-client.module.name}/src:${system-core.module.name}/src:${system-metadata.module.name}/src:${system-logging.module.name}/src:${system-web.module.name}/src:${system-ws.module.name}/src:${writable-api.module.name}/src:${writable-api-client.module.name}/src"
+					destdir="${build.classes.dir}" debug="true">
+					<classpath refid="project.compile.classpath" />
+				</javac>
+			</then>
+			<else>
+				<javac 
+					srcdir="${codegen.module.name}/src:${codegen-templates.module.name}/src:${codegen-validator.module.name}/src:${codegen-validator-templates.module.name}/src:${security.module.name}/src:${security-client.module.name}/src:${system-client.module.name}/src:${system-core.module.name}/src:${system-metadata.module.name}/src:${system-logging.module.name}/src:${system-web.module.name}/src:${system-ws.module.name}/src:${writable-api.module.name}/src:${writable-api-client.module.name}/src"
+					destdir="${build.classes.dir}" debug="true">
+					<classpath refid="project.compile.classpath" />
+				</javac>
+			</else>
+		</if>
 	</target>
 
 	<macrodef name="create-jar" description="Creates a JAR file">
@@ -131,10 +123,13 @@
 		<attribute name="include-pattern4" default=""/>
 		<attribute name="include-pattern5" default=""/>
 		<attribute name="include-pattern6" default=""/>
+		<attribute name="include-pattern7" default=""/>
 		
 		<attribute name="exclude-pattern1" default=""/>
 		<attribute name="exclude-pattern2" default=""/>
 		<attribute name="exclude-pattern3" default=""/>
+		<attribute name="exclude-pattern4" default=""/>
+		<attribute name="exclude-pattern5" default=""/>
 		<attribute name="module-name" />
 		<sequential>
 			<jar destfile="${module.lib.dir}/${sdk-jar-prefix}-@{module-name}-${sdk.version}.jar">
@@ -149,9 +144,12 @@
 					<include name="@{include-pattern4}"/>
 					<include name="@{include-pattern5}"/>
 					<include name="@{include-pattern6}"/>
+					<include name="@{include-pattern7}"/>
 					<exclude name="@{exclude-pattern1}"/>
 					<exclude name="@{exclude-pattern2}"/>
 					<exclude name="@{exclude-pattern3}"/>
+					<exclude name="@{exclude-pattern4}"/>
+					<exclude name="@{exclude-pattern5}"/>
 				</fileset>
 				<fileset dir="${modules.dir}/@{module-name}/src" >
 					<include name="**/*.java"/>
@@ -189,6 +187,7 @@
 			include-pattern4="gov/nih/nci/system/query/cql/**/*.*" 
 			include-pattern5="gov/nih/nci/system/query/hibernate/**/*.*"
 			include-pattern6="gov/nih/nci/system/query/nestedcriteria/**/*.*"
+			include-pattern7="gov/nih/nci/system/query/*.*"
 			exclude-pattern1="**/impl/**/*.*"
 			exclude-pattern2="gov/nih/nci/system/client/proxy/CLM*.*"
 			exclude-pattern3="**/Writable*.*"/>
@@ -196,8 +195,16 @@
 			include-pattern1="gov/nih/nci/system/applicationservice/impl/**/*.*"  
 			include-pattern2="gov/nih/nci/system/dao/**/*.*" 
 			include-pattern3="gov/nih/nci/system/util/**/*.class" 
+			include-pattern4="gov/nih/nci/system/metadata/*.class" 
 			exclude-pattern1="gov/nih/nci/system/dao/*Exception.*"
 			exclude-pattern2="**/Writable*.*"/>
+		<create-jar module-name="${system-metadata.module.name}" 
+			include-pattern1="gov/nih/nci/system/metadata/*.class" 
+			exclude-pattern1="gov/nih/nci/system/applicationservice/impl/**/*.*"  
+			exclude-pattern2="gov/nih/nci/system/dao/**/*.*" 
+			exclude-pattern3="gov/nih/nci/system/util/**/*.class" 
+			exclude-pattern4="gov/nih/nci/system/dao/*Exception.*"
+			exclude-pattern5="**/Writable*.*"/>
 		<create-jar module-name="${system-logging.module.name}" 
 			include-pattern1="gov/nih/nci/system/client/proxy/CLM*.*"  />
 		<create-jar module-name="${system-web.module.name}" 
@@ -232,7 +239,6 @@
 	
 	<!-- -->
 	<target name="static-analysis" description="Performs static analysis" depends="
-			static-analysis:ivy-init,
 			static-analysis:init,
 			static-analysis:findbugs-init,
 			static-analysis:simian,
@@ -259,14 +265,12 @@
 		</target>
 
 		<target name="static-analysis:pmd" depends="
-			static-analysis:ivy-init,
 			static-analysis:init
 			" description="PMD scans Java source code and looks for Possible bugs,Dead code,Overcomplicated expressions and Duplicate code">
 			<static-analysis-pmd pmd.src.dir="${src.java.dir}" pmd.rpt.dir="${reports.pmd.dir}" pmd.root-dir.name="software" pmd.sub-project.name="sdk-modules" pmd.report-xsl.file="${common.dir}/pmd/pmd-report.xslt" pmd.report-preprocessor.file="${common.dir}/pmd/pmd-hudson-preprocessor.xlst" pmd.rule-set.file="${common.dir}/pmd/pmd-ruleset-basic.xml" pmd.xml.name="pmd-report.xml" pmd.html.name="pmd-report.html" />
 		</target>
 
 		<target name="static-analysis:diff:pmd" depends="
-			static-analysis:ivy-init,
 			static-analysis:init
 			">
 			<static-analysis-diff-pmd differential.file.name="diff_list.txt" pmd.src.dir="${src.java.dir}" pmd.rpt.dir="${reports.pmd.dir}" pmd.root-dir.name="software" pmd.sub-project.name="sdk-modules" pmd.report-xsl.file="${common.dir}/pmd/pmd-report.xslt" pmd.report-preprocessor.file="${common.dir}/pmd/pmd-hudson-preprocessor.xlst" pmd.rule-set.file="${common.dir}/pmd/pmd-ruleset-basic.xml" pmd.xml.name="pmd-report.xml" pmd.html.name="pmd-report.html" />
@@ -278,7 +282,6 @@
 			http://www.kclee.de/clemens/java/javancss/
 			-->
 		<target name="static-analysis:javancss" depends="
-			static-analysis:ivy-init,
 			static-analysis:init
 			" description="Runs JavaNCSS a tool that identifies code Cyclomatic Complexity.">
 			<static-analysis-javancss javancss.src.dir="${src.java.dir}" javancss.rpt.dir="${reports.javancss.dir}" javancss.report-xsl.file="${common.dir}/javancss/javancss2methodhtml.xsl" javancss.xml.name="javancss_metrics_sdk-modules.xml" javancss.html.name="javancss_report_sdk-modules.html" />
@@ -290,7 +293,6 @@
 			-->
 		<target name="static-analysis:findbugs" depends="
 			compile:application-code,
-			static-analysis:ivy-init,
 			static-analysis:findbugs-init,
 			static-analysis:init
 			" description="static analysis to look for bugs in Java code">
@@ -303,14 +305,12 @@
 			http://checkstyle.sourceforge.net/
 			-->
 		<target name="static-analysis:checkstyle" depends="
-			static-analysis:ivy-init,
 			static-analysis:init
 			" description="Runs CheckStyle is a codeing standard violation reporter.">
 			<static-analysis-checkstyle checkstyle.src.dir="${src.java.dir}" checkstyle.rpt.dir="${reports.checkstyle.dir}" checkstyle.report-xsl.file="${common.dir}/checkstyle/checkstyle-simple.xsl" checkstyle.config.file="${checkstyle.config}" checkstyle.xml.name="checkstyle.xml" checkstyle.html.name="checkstyle.html" checkstyle.classpath.ref.name="project.test.checkstyle.classpath" />
 		</target>
 
 		<target name="static-analysis:diff:checkstyle" depends="
-			static-analysis:ivy-init,
 			static-analysis:init
 			">
 			<static-analysis-diff-checkstyle differential.file.name="diff_list.txt" checkstyle.src.dir="${src.java.dir}" checkstyle.rpt.dir="${reports.checkstyle.dir.diff}/changeset" checkstyle.report-xsl.file="${common.dir}/checkstyle/checkstyle-simple.xsl" checkstyle.config.file="${checkstyle.config}" checkstyle.xml.name="checkstyle.xml" checkstyle.html.name="checkstyle.html" checkstyle.classpath.ref.name="project.test.checkstyle.classpath" />
@@ -323,7 +323,6 @@
 			-->
 		<target name="static-analysis:cobertura" depends="
 			compile:application-code,
-			static-analysis:ivy-init,
 			static-analysis:init
 			" description="Cobertura is a free Java tool that calculates the percentage of code accessed by tests.">
 			<mkdir dir="${cobertura.module.lib.dir}/instrumented/sdk" />

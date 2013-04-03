@@ -25,9 +25,9 @@ import com.opensymphony.xwork2.ActionSupport;
 public class Result extends BaseActionSupport {
 
     private static final long serialVersionUID = 1234567890L;
-    
-    private static Logger log = Logger.getLogger(Result.class.getName());    
-    
+
+    private static Logger log = Logger.getLogger(Result.class.getName());
+
     //Query parameters
     private String query;
     private String btnSearch;
@@ -35,15 +35,15 @@ public class Result extends BaseActionSupport {
     private String selectedDomain;
 
 	public String execute() throws Exception {
-		
+
 		HttpServletRequest request = ServletActionContext.getRequest();
-		
-		SessionMap session = (SessionMap) ActionContext.getContext().get(ActionContext.SESSION);
-		
+
+		SessionMap session = (SessionMap) ActionContext.getContext().get(ActionContext.SESSION.toString());
+
 		debugSessionAttributes(session);
-		
+
 		// BEGIN - build query
-		
+
 		String selectedSearchDomain=null;
 		String query=null;
 
@@ -51,16 +51,16 @@ public class Result extends BaseActionSupport {
 		log.debug("submitValue: " + submitValue);
 
 		String className = getSelectedDomain();
-		
+
 		log.debug("className (selectedDomain): "+ getSelectedDomain());
-		
+
 		if(submitValue != null && submitValue.equalsIgnoreCase("Submit"))
 		{
 		    query = "GetHTML?query=";
-		   	
+
 		   	selectedSearchDomain = getSearchObj();
 		   	log.debug("selectedSearchDomain: "+ selectedSearchDomain);
-		   	   	
+
 		   	if (selectedSearchDomain != null && !selectedSearchDomain.equals("Please choose")) {
 		   		String rolename=null;
 		   		if (!selectedSearchDomain.equalsIgnoreCase(className)){
@@ -69,10 +69,10 @@ public class Result extends BaseActionSupport {
 		   		}
 
 				query += selectedSearchDomain + "&";
-				 
+
 		   		if (rolename != null && rolename.length() > 0){
 		   			query += "rolename="+rolename + "&";
-		   		}				
+		   		}
 
 				if (className != null && !className.equals("Please choose")) {
 					query += className;
@@ -86,23 +86,23 @@ public class Result extends BaseActionSupport {
 					query += generateQuery(request);
 				}
 			}
-		   	
-		   	String username = (String) session.get("username");
-		   	String password = (String) session.get("password");
-		   	
+
+		   	String username = (String) session.get("Username");
+		   	String password = (String) session.get("Password");
+
 		   	if ((username != null) && (username.trim()).length() > 0)
 		   		query = query + "&username=" + username;
 		   	if ((password != null) && (password.trim()).length() > 0)
-		   		query = query + "&password=" + password;		   	
-		   		
-		   	log.debug("query: " + query);	
-		   	System.out.println("query: " + query);
-		   	
+		   		query = query + "&password=" + password;
+
+		   	log.debug("query: " + query);
+		   	log.debug("query: " + query);
+
 		 setQuery(query);
 		}
 //		  END - build query
 
-		return SUCCESS; 		
+		return SUCCESS;
 	}
 
 	public String getQuery() {
@@ -111,7 +111,7 @@ public class Result extends BaseActionSupport {
 
 	public void setQuery(String query) {
 		this.query = query;
-	}	
+	}
 
 	public String getBtnSearch() {
 		return btnSearch;
@@ -136,14 +136,14 @@ public class Result extends BaseActionSupport {
 	public void setSelectedDomain(String selectedDomain) {
 		this.selectedDomain = selectedDomain;
 	}
-	
+
 	private String generateQuery(HttpServletRequest request){
-		
+
 		StringBuilder sb = new StringBuilder();
 		Enumeration<String> parameters = request.getParameterNames();
-		
+
 		Map<String, Map<String, List<Object>>> isoDataTypeNodes = new HashMap<String, Map<String, List<Object>>>();
-		
+
  		while(parameters.hasMoreElements())
  		{
      		String parameterName = (String)parameters.nextElement();
@@ -152,8 +152,8 @@ public class Result extends BaseActionSupport {
      		{
      			String parameterValue = (request.getParameter(parameterName)).trim();
 				if (parameterValue.length() > 0) {
-					
-					System.out.println("parameterValue: " + parameterValue);
+
+					log.debug("parameterValue: " + parameterValue);
 
 					if (parameterName.indexOf('.') > 0) { // ISO data type parameter
 						saveIsoNode(isoDataTypeNodes, parameterName, parameterValue);
@@ -162,9 +162,9 @@ public class Result extends BaseActionSupport {
 								.append(parameterValue).append("]");
 					}
 				}
-     		}    
+     		}
      	}
- 		
+
  		Set<String> isoDataTypeNodeNames = isoDataTypeNodes.keySet();
  		Iterator iter = isoDataTypeNodeNames.iterator();
  		String nodeName = null;
@@ -174,7 +174,7 @@ public class Result extends BaseActionSupport {
  			generateIsoQuery(isoDataTypeNodes.get(nodeName), sb);
  			sb.append("]");
  		}
- 		
+
  		//Change 'part#' references to just 'part'
  		return sb.toString().replaceAll("part(\\d+)", "part");
 
@@ -183,9 +183,9 @@ public class Result extends BaseActionSupport {
 	private void saveIsoNode(Map<String, Map<String, List<Object>>> isoDataTypeNodes, String parameterName, String parameterValue){
 
 		String isoParamPrefix =  parameterName.substring(0, parameterName.lastIndexOf('.'));
-		System.out.println("isoParamPrefix: " + isoParamPrefix);
+		log.debug("isoParamPrefix: " + isoParamPrefix);
 		String[] isoParentNodes = isoParamPrefix.split("\\.");
-		System.out.println("isoParentNodes: " + isoParentNodes);
+		log.debug("isoParentNodes: " + isoParentNodes);
 
 		Object childNode = null;
 		Object parentNode = isoDataTypeNodes.get(isoParentNodes[0]);
@@ -196,7 +196,7 @@ public class Result extends BaseActionSupport {
 		}
 		for(int i=1; i < isoParentNodes.length; i++){
 
-			String isoParentNodeName = isoParentNodes[i]; 
+			String isoParentNodeName = isoParentNodes[i];
 			childNode = ((Map<String, List<Object>>)parentNode).get(isoParentNodeName);
 
 			if (childNode==null){
@@ -211,22 +211,22 @@ public class Result extends BaseActionSupport {
 		}
 
 		String isoParamKey = parameterName.substring(parameterName.lastIndexOf('.')+1);
-		System.out.println("isoParamKey: " + isoParamKey);
-		System.out.println("parameterValue: " + parameterValue);
+		log.debug("isoParamKey: " + isoParamKey);
+		log.debug("parameterValue: " + parameterValue);
 
 		List<Object> nodeList = new ArrayList<Object>();
 		nodeList.add(parameterValue);
 		((Map<String, List<Object>>)parentNode).put(isoParamKey,nodeList);
 	}
-	
+
 	private void generateIsoQuery(Map<String, List<Object>> isoDataTypeNode, StringBuilder query){
 		String parentNodeName = null;
  		Set<String> isoParentNodeNames = isoDataTypeNode.keySet();
  		Iterator iter = isoParentNodeNames.iterator();
  		while (iter.hasNext()){
  			parentNodeName = (String)iter.next();
- 			System.out.println("key: " + parentNodeName);
- 			
+ 			log.debug("key: " + parentNodeName);
+
  			query.append("[@").append(parentNodeName).append("=");
 
  			List<Object> valueList = isoDataTypeNode.get(parentNodeName);
@@ -240,7 +240,7 @@ public class Result extends BaseActionSupport {
  			}
  		}
 	}
-	
+
 	private String getRolename(String selectedSearchDomain){
 		return selectedSearchDomain.substring(0,selectedSearchDomain.indexOf(" "));
 	}
@@ -248,7 +248,7 @@ public class Result extends BaseActionSupport {
 	private String removeRolename(String selectedSearchDomain){
 		int beginIndex = selectedSearchDomain.indexOf("(")+1;
 		int endIndex = selectedSearchDomain.indexOf(")");
-		
+
 		return selectedSearchDomain.substring(beginIndex, endIndex);
 	}
 

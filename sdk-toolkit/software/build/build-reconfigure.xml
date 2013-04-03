@@ -1,4 +1,4 @@
-<project name="caCORE SDK - Project Reconfiguration" default="package-install-system" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant" xmlns="antlib:org.apache.tools.ant" xmlns:cs="antlib:com.puppycrawl.tools.checkstyle">
+<project name="caCORE SDK - Project Reconfiguration" default="package-install-system" basedir="." xmlns="antlib:org.apache.tools.ant" xmlns:cs="antlib:com.puppycrawl.tools.checkstyle">
 
 	<property name="output.dir.location" value="."/>
 
@@ -281,24 +281,46 @@
 		</or>
 	</condition>
 
+	<condition property="GENERATE_RESTFUL_RESOURCES" value="true" else="false">
+			<or>
+				<equals arg1="${GENERATE_RESTFUL_RESOURCES}" arg2="true" casesensitive="false" trim="true" />
+				<equals arg1="${GENERATE_RESTFUL_RESOURCES}" arg2="yes" casesensitive="false" trim="true" />
+			</or>
+	</condition>
+	<condition property="ENABLE_CADSR_METADATA" value="true" else="false">
+			<or>
+				<equals arg1="${ENABLE_CADSR_METADATA}" arg2="true" casesensitive="false" trim="true" />
+				<equals arg1="${ENABLE_CADSR_METADATA}" arg2="yes" casesensitive="false" trim="true" />
+			</or>
+	</condition>
+
+	
+	<condition property="RESTFUL_CXF_SERVLET_START" value="" else="${xml.comment.start}">
+		<equals arg1="${GENERATE_RESTFUL_RESOURCES}" arg2="true" casesensitive="false" trim="true" />
+	</condition>
+
+	<condition property="RESTFUL_CXF_SERVLET_END" value="" else="${xml.comment.end}">
+		<equals arg1="${GENERATE_RESTFUL_RESOURCES}" arg2="true" casesensitive="false" trim="true" />
+	</condition>
+
 	<condition property="RESTFUL_XML_INTERFACE_ENABLED" value="true" else="false">
 			<or>
-				<equals arg1="${ENABLE_RESTFUL_XML_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
-				<equals arg1="${ENABLE_RESTFUL_XML_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
+				<equals arg1="${ENABLE_RESTLIKE_XML_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
+				<equals arg1="${ENABLE_RESTLIKE_XML_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
 			</or>
 	</condition>
 
 	<condition property="RESTFUL_HTML_INTERFACE_ENABLED" value="true" else="false">
 		<or>
-			<equals arg1="${ENABLE_RESTFUL_HTML_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
-			<equals arg1="${ENABLE_RESTFUL_HTML_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
+			<equals arg1="${ENABLE_RESTLIKE_HTML_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${ENABLE_RESTLIKE_HTML_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
 		</or>
 	</condition>
 
 	<condition property="RESTFUL_JSON_INTERFACE_ENABLED" value="true" else="false">
 		<or>
-			<equals arg1="${ENABLE_RESTFUL_JSON_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
-			<equals arg1="${ENABLE_RESTFUL_JSON_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
+			<equals arg1="${ENABLE_RESTLIKE_JSON_INTERFACE}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${ENABLE_RESTLIKE_JSON_INTERFACE}" arg2="yes" casesensitive="false" trim="true" />
 		</or>
 	</condition>
 
@@ -391,6 +413,7 @@
 			<filter token="GRID_JNDI_NAME" value="${GRID_JNDI_NAME}" />
 			<filter token="ENABLE_ISO21090_DATATYPES" value="${ISO21090_DATATYPES_ENABLED}" />
 			<filter token="ENABLE_RESTFUL_HTML_INTERFACE" value="${RESTFUL_HTML_INTERFACE_ENABLED}" />
+			<filter token="IDENTITY_GENERATOR_TYPE" value="${IDENTITY_GENERATOR_TYPE}" />
 			<filter token="DAO_PAGE_SIZE" value="${DAO_PAGE_SIZE}" />
 			<filter token="RESTFUL_PAGE_SIZE" value="${RESTFUL_PAGE_SIZE}" />
 		</filterset>
@@ -422,6 +445,11 @@
 			<filter token="RESTFUL_JSON_INTERFACE_START" value="${RESTFUL_JSON_INTERFACE_START}" />
 			<filter token="RESTFUL_JSON_INTERFACE_END" value="${RESTFUL_JSON_INTERFACE_END}" />
 		</filterset>
+		<filterset id="filtertoken5" begintoken="${xml.comment.start}@" endtoken="@${xml.comment.end}" onmissingfiltersfile="fail">
+			<filter token="RESTFUL_CXF_SERVLET_START" value="${RESTFUL_CXF_SERVLET_START}" />
+			<filter token="RESTFUL_CXF_SERVLET_END" value="${RESTFUL_CXF_SERVLET_END}" />
+		</filterset>
+		
 	</target>
 
 	<target name="replacetoken-contents-install-database" depends="-replace-templates-filter-tokens-reconfigure">
@@ -601,8 +629,10 @@
 
 	<target name="package-install-system" description="Packages the system" depends="
 		init-install,
+		copy-3rdparty_jars,
 		package-remote-client,
 		package-local-client,
+		package-rest-client,
 		package-ws-client,
 		package-server
 		"/>
@@ -668,6 +698,20 @@
 		</if>
 	</target>
 
+	<target name="copy-3rdparty_jars" depends="">
+		<available file="${3RD_PARTY_JARS_DIRECTORY}" property="include.3rdparty.exist" />
+		<if>
+			<equals arg1="${include.3rdparty.exist}" arg2="true" />
+			<then>
+			<copy todir="${runtime.lib.dir}">
+				<fileset dir="${3RD_PARTY_JARS_DIRECTORY}">
+					<include name="*.jar" />
+				</fileset>
+			</copy>
+			</then>
+		</if>
+	</target>
+
 
 	<target name="-package-local-client-core" depends="">
 		<delete includeemptydirs="true" failonerror="false">
@@ -676,6 +720,7 @@
 		<copy todir="${package.client.local.lib.dir}">
 			<fileset dir="${runtime.lib.dir}">
 				<include name="acegi-security-*.jar"/>
+				<include name="aopalliance*.jar"/>
 				<include name="antlr-*.jar"/>
 				<include name="asm-*.jar"/>
 				<include name="axis-1.4.jar"/>
@@ -687,9 +732,10 @@
 				<include name="caGrid-*-translator-*.jar"/>
 				<include name="castor-*.jar"/>
 				<include name="cglib-*.jar"/>
-				<include name="cog-axis-*.jar"/>
-				<include name="cog-jglobus-*.jar"/>
+				<include name="cog-axis-4*.jar"/>
+				<include name="cog-jglobus-4*.jar"/>
 				<include name="commons-beanutils-*.jar"/>
+				<include name="commons-configuration-*.jar"/>
 				<include name="commons-codec-*.jar"/>
 				<include name="commons-collections-*.jar"/>
 				<include name="commons-discovery-*.jar"/>
@@ -699,26 +745,64 @@
 				<include name="csmapi-*.jar"/>
 				<include name="dom4j-*.jar"/>
 				<include name="ehcache-*.jar"/>
+				<include name="slf4j*.jar"/>
 				<include name="hibernate-*.jar"/>
 				<include name="jaxen-*.jar"/>
 				<include name="jaxrpc-*.jar"/>
 				<include name="jdom-1.1.jar"/>
 				<include name="jta-*.jar"/>
 				<include name="log4j-*.jar"/>
-				<include name="spring-*.jar"/>
+				<include name="org.springframework.*.jar"/>
+				<include name="slf4j-*.jar"/>
 				<include name="xercesImpl-*.jar"/>
 			</fileset>
 			<fileset dir="${lib.dir}">
 				<include name="sdk-security-client-*.jar" />
 				<include name="sdk-security-*.jar"/>
 				<include name="sdk-system-client-*.jar"/>
+				<include name="sdk-system-metadata-*.jar"/>
 				<include name="sdk-system-core-*.jar"/>
 			</fileset>
-			<fileset dir="${3RD_PARTY_JARS_DIRECTORY}">
-				<include name="*.jar" />
-			</fileset>						
 			<fileset dir="${output.target.dir}" />
 		</copy>	
+
+		<if>
+			<equals arg1="${SECURITY_ENABLED}" arg2="true" />
+			<then>
+			<copy todir="${package.client.local.lib.dir}">
+			<fileset dir="${build-utils.dir}">
+				<include name="bcprov-jdk15on-*.jar"/>
+			</fileset>
+			</copy>
+			</then>
+		</if>
+		
+		<available file="${3RD_PARTY_JARS_DIRECTORY}" property="include.3rdparty.exist" />
+		<if>
+			<equals arg1="${include.3rdparty.exist}" arg2="true" />
+			<then>
+			<copy todir="${package.client.local.lib.dir}">
+				<fileset dir="${3RD_PARTY_JARS_DIRECTORY}">
+					<include name="*.jar" />
+				</fileset>
+			</copy>
+			</then>
+		</if>
+
+		<if>
+			<equals arg1="${GENERATE_RESTFUL_RESOURCES}" arg2="true" />
+			<then>
+				<copy todir="${package.client.local.lib.dir}">
+					<fileset dir="${runtime.lib.dir}">
+						<include name="jsr311-api-*.jar"/>
+						<include name="cxf-*.jar"/>
+						<include name="neethi-*.jar"/>
+						<include name="wsdl4j-*.jar"/>
+					</fileset>
+				</copy>
+
+			</then>
+		</if>
 		<if>
 			<equals arg1="${USE_CONNECTION_POOL}" arg2="true" />
 			<then>
@@ -814,18 +898,19 @@
 						<include name="addressing-*.jar"/>
 						<include name="axis-1.2RC2.jar"/>
 						<include name="caGrid-*.jar"/>
-						<include name="cog-axis-noversion.jar"/>
-						<include name="cog-jglobus-*.jar"/>
-						<include name="cog-tomcat-noversion.jar"/>
+						<include name="cog-axis-4*.jar"/>
+						<include name="cog-jglobus-4*.jar"/>
+						<include name="cog-tomcat-4*.jar"/>
 						<include name="concurrent-*.jar"/>
 						<include name="cryptix-*.jar"/>
 						<include name="cryptix-asn1-*.jar"/>
 						<include name="cryptix32-*.jar"/>
 						<include name="jasciidammit-*.jar"/>
 						<include name="jaxrpc-*.jar"/>
-						<include name="jce-jdk1.*.jar"/>
+						<include name="cryptix.*.jar"/>
 						<include name="jgss-noversion.jar"/>
 						<include name="jprov-jce-*.jar"/>
+						<include name="jce-jdk*.jar" />
 						<include name="mobius_common_client-*.jar"/>
 						<include name="mobius_factories-*.jar"/>
 						<include name="mobius_gme_client-*.jar"/>
@@ -844,6 +929,7 @@
 					<fileset dir="${lib.dir}">
 						<include name="sdk-grid-jaas-*.jar"/>
 						<include name="sdk-grid-jaas-client-*.jar"/>
+						<include name="sdk-grid-security-*.jar" />
 						<include name="sdk-grid-jaas-jndi-binder-*.jar"/>
 						<include name="sdk-grid-remoting-*.jar"/>
 					</fileset>
@@ -857,6 +943,30 @@
 						<include name="caGrid-metadatautils*.jar" />
 					</fileset>
 				</delete>
+				<if>
+					<equals arg1="${SECURITY_ENABLED}" arg2="true" />
+					<then>
+					<copy todir="${package.client.local.lib.dir}">
+					<fileset dir="${build-utils.dir}">
+						<include name="bcprov-jdk15on-*.jar"/>
+					</fileset>
+					</copy>
+					</then>
+				</if>
+
+				<if>
+					<equals arg1="${GENERATE_RESTFUL_RESOURCES}" arg2="true" />
+					<then>
+						<copy todir="${package.client.local.lib.dir}">
+							<fileset dir="${runtime.lib.dir}">
+								<include name="jsr311-api-*.jar"/>
+								<include name="cxf-*.jar"/>
+								<include name="neethi-*.jar"/>
+								<include name="wsdl4j-*.jar"/>
+							</fileset>
+						</copy>
+					</then>
+				</if>
 
 				<copy todir="${package.client.local.dir}" overwrite="true">
 					<fileset dir="${system.config.client.grid-jaas.dir}" />
@@ -906,6 +1016,257 @@
 	</target>
 
 	<!-- #################################################################### -->
+	<!-- ##################### REST Client targets ######################### -->
+	<!-- #################################################################### -->
+
+
+	<target name="package-rest-client" depends="">
+		<if>
+			<equals arg1="${GENERATE_RESTFUL_RESOURCES}" arg2="true" />
+			<then>
+				<antcall target="-package-rest-client-core" />
+				<antcall target="-package-rest-client-security" />
+				<antcall target="-package-rest-client-grid-security" />
+				<antcall target="-package-rest-client-iso-datatype" />
+
+				<include-db-jar target.lib.directory="${package.client.local.lib.dir}" />
+				<!-- delete if present as duplicate mysql jar was added from Grid Services-->
+				<delete>
+					<fileset dir="${package.client.rest.lib.dir}">
+						<include name="mysql-connector-java-3.0.16-ga-bin.jar" />
+					</fileset>
+				</delete>
+			</then>
+		</if>
+	</target>
+
+	<target name="-package-rest-client-core" depends="">
+		<delete includeemptydirs="true" failonerror="false">
+			<fileset dir="${package.client.rest.dir}" includes="**/*.*" />
+		</delete>
+		<echo>=================================</echo>
+		<echo>
+		${package.client.rest.lib.dir}
+		${runtime.lib.dir}
+		${output.target.dir}
+		</echo>
+		<copy todir="${package.client.rest.lib.dir}">
+			<fileset dir="${runtime.lib.dir}">
+				<include name="acegi-security-*.jar"/>
+				<include name="aopalliance*.jar"/>
+				<include name="antlr-*.jar"/>
+				<include name="asm-*.jar"/>
+				<include name="caGrid-CQL-cql.*.jar"/>
+				<include name="castor-*.jar"/>
+				<include name="cglib-*.jar"/>
+				<include name="cog-jglobus-4*.jar"/>
+				<include name="commons-beanutils-*.jar"/>
+				<include name="commons-codec-*.jar"/>
+				<include name="commons-configuration-*.jar"/>
+				<include name="commons-collections-*.jar"/>
+				<include name="commons-logging-*.jar"/>
+				<include name="commons-lang-*.jar"/>
+				<include name="dom4j-*.jar"/>
+				<include name="ejb3-persistence-*.jar"/>
+				<include name="hibernate-*.jar"/>
+				<include name="servlet-*.jar"/>
+				<include name="slf4j*.jar"/>
+				<include name="hibernate-annotations-*.jar"/>
+				<include name="hibernate-validator-*.jar"/>
+				<include name="jaxen-*.jar"/>
+				<include name="jdom-1.1.jar"/>
+				<include name="log4j-*.jar"/>
+				<include name="org.springframework.*.jar"/>
+				<include name="xercesImpl-*.jar"/>
+				<include name="jsr311-api-*.jar"/>
+				<include name="cxf-*.jar"/>
+				<include name="neethi-*.jar"/>
+				<include name="wsdl4j-*.jar"/>
+				<include name="activation-*.jar"/>
+				<include name="jaxb-*.jar"/>
+				<include name="stax-*.jar"/>
+			</fileset>
+			<fileset dir="${lib.dir}">
+				<include name="sdk-system-client-*.jar"/>
+				<include name="sdk-system-web-*.jar"/>
+				<include name="sdk-security-client-*.jar"/>
+				<include name="sdk-grid-remoting-*.jar"/>
+			</fileset>
+			<fileset dir="${output.target.dir}">
+				<include name="${bean.file}" />
+				<include name="${schema.file}" />
+			</fileset>
+		</copy>
+
+		<copy todir="${package.client.rest.lib.dir}">
+			<fileset dir="${lib.dir}">
+				<include name="sdk-security-client-*.jar"/>
+				<include name="sdk-writable-api-client-*.jar"/>
+			</fileset>
+		</copy>
+
+		<if>
+			<equals arg1="${SECURITY_ENABLED}" arg2="true" />
+			<then>
+			<copy todir="${package.client.rest.lib.dir}">
+			<fileset dir="${build-utils.dir}">
+				<include name="bcprov-jdk15on-*.jar"/>
+			</fileset>
+			</copy>
+			</then>
+		</if>
+
+		<copy todir="${package.client.rest.dir}">
+			<fileset dir="${system.config.client.rest.dir}">
+				<exclude name="**/*template*" />
+			</fileset>
+		</copy>		
+
+		<available file="${3RD_PARTY_JARS_DIRECTORY}" property="include.3rdparty.exist" />
+		<if>
+			<equals arg1="${include.3rdparty.exist}" arg2="true" />
+			<then>
+			<copy todir="${package.client.rest.lib.dir}">
+				<fileset dir="${3RD_PARTY_JARS_DIRECTORY}">
+					<include name="*.jar" />
+				</fileset>
+			</copy>
+			</then>
+		</if>
+
+	</target>
+
+	<target name="-package-rest-client-security" depends="">
+		<if>
+			<equals arg1="${SECURITY_ENABLED}" arg2="true" />
+			<then>
+				<echo message="security enabled" />
+				<copy todir="${package.client.rest.lib.dir}" overwrite="true">
+					<fileset dir="${lib.dir}">
+						<include name="sdk-security-client-*.jar"/>
+					</fileset>
+				</copy>
+				<copy todir="${package.client.rest.dir}" overwrite="true">
+					<fileset dir="${system.config.client.csm-security.dir}" includes="**/*.java" />
+				</copy>
+			</then>
+		</if>
+	</target>
+
+	<target name="-package-rest-client-grid-security" depends="">
+		<copy todir="${package.client.rest.lib.dir}" overwrite="true">
+			<fileset dir="${runtime.lib.dir}">
+				<include name="axis-1.2RC2.jar"/>
+				<include name="jaxrpc-*.jar"/>
+			</fileset>
+		</copy>
+		<if>
+			<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true" />
+			<then>
+				<echo message="Grid Jaas enabled" />
+				<copy todir="${package.client.rest.lib.dir}" overwrite="true">
+					<fileset dir="${runtime.lib.dir}">
+						<include name="addressing-*.jar"/>
+						<include name="axis-1.2RC2.jar"/>
+						<include name="caGrid-*.jar"/>
+						<include name="castor-*.jar"/>
+						<include name="cog-axis-4*.jar"/>
+						<include name="cog-jglobus-4*.jar"/>
+						<include name="cog-tomcat-4*.jar"/>
+						<include name="commons-beanutils-*.jar"/>
+						<include name="commons-configuration-*.jar"/>
+						<include name="commons-codec-*.jar"/>
+						<include name="commons-collections-*.jar"/>
+						<include name="commons-digester-*.jar"/>
+						<include name="commons-discovery-*.jar"/>
+						<include name="concurrent-*.jar"/>
+						<include name="cryptix-*.jar"/>
+						<include name="cryptix-asn1-*.jar"/>
+						<include name="cryptix32-*.jar"/>
+						<include name="jasciidammit-*.jar"/>
+						<include name="jaxrpc-*.jar"/>
+						<include name="jce-jdk1.*.jar"/>
+						<include name="jgss-noversion.jar"/>
+						<include name="jdom-*.jar"/>
+						<include name="jprov-jce-*.jar"/>
+						<include name="mobius_common_client-*.jar"/>
+						<include name="mobius_factories-*.jar"/>
+						<include name="mobius_gme_client-*.jar"/>
+						<include name="mobius_mako_client-*.jar"/>
+						<include name="mobius_tools-*.jar"/>
+						<include name="puretls-*.jar"/>
+						<include name="saaj-*.jar"/>
+						<include name="wsdl4j-*.jar"/>
+						<include name="wsrf_core_enum-*.jar"/>
+						<include name="wsrf_core_stubs_enum-*.jar"/>
+						<include name="wss4j-noversion.jar"/>
+						<include name="xalan-*.jar"/>
+						<include name="xercesImpl-*.jar"/>
+						<include name="xmlsec-*.jar"/>
+						<include name="xml-apis-*.jar"/>
+						<include name="jsr311-api-*.jar"/>
+						<include name="cxf-*.jar"/>
+						<include name="neethi-*.jar"/>
+						<include name="wsdl4j-*.jar"/>
+						<include name="activation-*.jar"/>
+						<include name="jaxb-*.jar"/>
+						<include name="stax-*.jar"/>
+					</fileset>
+					<fileset dir="${lib.dir}">
+						<include name="sdk-grid-jaas-*.jar"/>
+						<include name="sdk-grid-jaas-client-*.jar"/>
+						<include name="sdk-grid-security-*.jar" />
+						<include name="sdk-grid-jaas-jndi-binder-*.jar"/>
+						<include name="sdk-grid-remoting-*.jar"/>
+					</fileset>
+				</copy>
+				<if>
+					<equals arg1="${SECURITY_ENABLED}" arg2="true" />
+					<then>
+					<copy todir="${package.client.rest.lib.dir}">
+					<fileset dir="${build-utils.dir}">
+						<include name="bcprov-jdk15on-*.jar"/>
+					</fileset>
+					</copy>
+					</then>
+				</if>
+				
+				<delete>
+					<fileset dir="${package.client.rest.lib.dir}">
+						<include name="caGrid-data-*.jar" />
+						<include name="caGrid-Introduce-serviceTools*.jar" />
+						<include name="caGrid-metadata-data*.jar" />
+						<include name="caGrid-metadatautils*.jar" />
+						<include name="jdom-1.0.jar" />
+						<include name="commons-logging-1.0.3.jar" />
+					</fileset>
+				</delete>
+
+				<copy todir="${package.client.rest.dir}" overwrite="true">
+					<fileset dir="${system.config.client.grid-jaas.dir}" />
+				</copy>
+				<copy todir="${package.client.rest.conf.dir}" overwrite="true">
+					<fileset dir="${system.config.grid.loginService.webinf.dir}/classes">
+						<include name="grid-login-service-config.xml" />
+					</fileset>
+					<fileset dir="${grid.dist.relative.dir}/${TARGET_GRID}" includes="sync-description.xml"/>
+				</copy>
+			</then>
+		</if>
+	</target>
+
+	<target name="-package-rest-client-iso-datatype" depends="">
+		<echo message="ISO datatypes enabled" />
+		<copy todir="${package.client.remote.lib.dir}">
+			<fileset dir="${runtime.lib.dir}">
+				<include name="iso-datatypes-*.jar"/>
+				<exclude name="iso-datatypes-hibernate*.jar" />
+			</fileset>
+		</copy>			
+		<echo message="ISO datatypes enabled - Copy Complete" />
+	</target>	
+
+	<!-- #################################################################### -->
 	<!-- ##################### Remote Client targets ######################## -->
 	<!-- #################################################################### -->
 
@@ -936,13 +1297,15 @@
 		<copy todir="${package.client.remote.lib.dir}">
 			<fileset dir="${runtime.lib.dir}">
 				<include name="acegi-security-*.jar"/>
+				<include name="aopalliance*.jar"/>
 				<include name="antlr-*.jar"/>
 				<include name="asm-*.jar"/>
 				<include name="caGrid-CQL-cql.*.jar"/>
 				<include name="castor-*.jar"/>
 				<include name="cglib-*.jar"/>
-				<include name="cog-jglobus-*.jar"/>
+				<include name="cog-jglobus-4*.jar"/>
 				<include name="commons-beanutils-*.jar"/>
+				<include name="commons-configuration-*.jar"/>
 				<include name="commons-codec-*.jar"/>
 				<include name="commons-collections-*.jar"/>
 				<include name="commons-logging-*.jar"/>
@@ -950,12 +1313,14 @@
 				<include name="dom4j-*.jar"/>
 				<include name="ejb3-persistence-*.jar"/>
 				<include name="hibernate-*.jar"/>
+				<include name="servlet-*.jar"/>
+				<include name="slf4j*.jar"/>
 				<include name="hibernate-annotations-*.jar"/>
 				<include name="hibernate-validator-*.jar"/>
 				<include name="jaxen-*.jar"/>
 				<include name="jdom-1.1.jar"/>
 				<include name="log4j-*.jar"/>
-				<include name="spring-*.jar"/>
+				<include name="org.springframework.*.jar"/>
 				<include name="xercesImpl-*.jar"/>
 			</fileset>
 			<fileset dir="${lib.dir}">
@@ -968,6 +1333,42 @@
 				<include name="${schema.file}" />
 			</fileset>
 		</copy>
+		<if>
+			<equals arg1="${SECURITY_ENABLED}" arg2="true" />
+			<then>
+			<copy todir="${package.client.remote.lib.dir}">
+			<fileset dir="${build-utils.dir}">
+				<include name="bcprov-jdk15on-*.jar"/>
+			</fileset>
+			</copy>
+			</then>
+		</if>
+
+		<if>
+			<equals arg1="${GENERATE_RESTFUL_RESOURCES}" arg2="true" />
+			<then>
+				<copy todir="${package.client.remote.lib.dir}">
+					<fileset dir="${runtime.lib.dir}">
+						<include name="jsr311-api-*.jar"/>
+						<include name="cxf-*.jar"/>
+						<include name="neethi-*.jar"/>
+						<include name="wsdl4j-*.jar"/>
+					</fileset>
+				</copy>
+			</then>
+		</if>
+		<available file="${3RD_PARTY_JARS_DIRECTORY}" property="include.3rdparty.exist" />
+		<if>
+			<equals arg1="${include.3rdparty.exist}" arg2="true" />
+			<then>
+			<copy todir="${package.client.remote.lib.dir}" overwrite="true">
+				<fileset dir="${3RD_PARTY_JARS_DIRECTORY}">
+					<include name="*.jar" />
+				</fileset>
+			</copy>
+			</then>
+		</if>
+
 		<copy todir="${package.client.remote.dir}">
 			<fileset dir="${system.config.client.remote.dir}">
 				<exclude name="**/*template*" />
@@ -1024,10 +1425,12 @@
 						<include name="axis-1.2RC2.jar"/>
 						<include name="caGrid-*.jar"/>
 						<include name="castor-*.jar"/>
-						<include name="cog-axis-noversion.jar"/>
-						<include name="cog-jglobus-*.jar"/>
-						<include name="cog-tomcat-noversion.jar"/>
+						<include name="cog-axis-4*.jar"/>
+						<include name="cog-jglobus-4*.jar"/>
+						<include name="cog-tomcat-4*.jar"/>
 						<include name="commons-beanutils-*.jar"/>
+						<include name="commons-configuration-*.jar"/>
+						<include name="commons-codec-*.jar"/>
 						<include name="commons-collections-*.jar"/>
 						<include name="commons-digester-*.jar"/>
 						<include name="commons-discovery-*.jar"/>
@@ -1060,6 +1463,7 @@
 					<fileset dir="${lib.dir}">
 						<include name="sdk-grid-jaas-*.jar"/>
 						<include name="sdk-grid-jaas-client-*.jar"/>
+						<include name="sdk-grid-security-*.jar" />
 						<include name="sdk-grid-jaas-jndi-binder-*.jar"/>
 						<include name="sdk-grid-remoting-*.jar"/>
 					</fileset>
@@ -1074,6 +1478,30 @@
 						<include name="commons-logging-1.0.3.jar" />
 					</fileset>
 				</delete>
+				<if>
+					<equals arg1="${SECURITY_ENABLED}" arg2="true" />
+					<then>
+					<copy todir="${package.client.remote.lib.dir}">
+					<fileset dir="${build-utils.dir}">
+						<include name="bcprov-jdk15on-*.jar"/>
+					</fileset>
+					</copy>
+					</then>
+				</if>
+
+				<if>
+					<equals arg1="${GENERATE_RESTFUL_RESOURCES}" arg2="true" />
+					<then>
+						<copy todir="${package.client.remote.lib.dir}">
+							<fileset dir="${runtime.lib.dir}">
+								<include name="jsr311-api-*.jar"/>
+								<include name="cxf-*.jar"/>
+								<include name="neethi-*.jar"/>
+								<include name="wsdl4j-*.jar"/>
+							</fileset>
+						</copy>
+					</then>
+				</if>
 
 				<copy todir="${package.client.remote.dir}" overwrite="true">
 					<fileset dir="${system.config.client.grid-jaas.dir}" />
@@ -1127,6 +1555,7 @@
 				<include name="jaxrpc-*.jar"/>
 				<include name="saaj-*.jar"/>
 				<include name="wsdl4j-*.jar"/>
+				<include name="jaxb-impl-*.jar"/>
 				<include name="xercesImpl-*.jar"/>
 			</fileset>
 			<fileset dir="${output.target.dir}">
@@ -1153,6 +1582,7 @@
 		<copy todir="${temp.webapp.staging.lib.dir}" overwrite="true">
 			<fileset dir="${runtime.lib.dir}">
 				<include name="acegi-security-*.jar"/>
+				<include name="aopalliance*.jar"/>
 				<include name="antlr-*.jar"/>
 				<include name="asm-*.jar"/>
 				<include name="axis-1.4.jar"/>
@@ -1167,9 +1597,13 @@
 				<include name="castor-*.jar"/>
 				<include name="cglib-*.jar"/>
 				<include name="commons-beanutils-*.jar"/>				
+				<include name="commons-configuration-*.jar"/>
+				<include name="commons-codec-*.jar"/>
 				<include name="commons-collections-*.jar"/>
 				<include name="commons-discovery-*.jar"/>
 				<include name="commons-lang-*.jar"/>
+				<include name="commons-io-*.jar"/>
+				<include name="commons-fileupload*.jar"/>
 				<include name="commons-logging-*.jar"/>
 				<include name="clm-*.jar"/>
 				<include name="csmapi-*.jar"/>
@@ -1178,22 +1612,29 @@
 				<include name="ejb3-persistence-*.jar"/>
 				<include name="freemarker-*.jar"/>
 				<include name="hibernate-*.jar"/>
+				<include name="slf4j*.jar"/>
 				<include name="hibernate-annotations-*.jar"/>
 				<include name="hibernate-validator-*.jar"/>
 				<include name="jaxb-*.jar"/>
-				<include name="jaxrpc-*.jar"/>
+				<include name="jaxen-*.jar"/>
 				<include name="jdom-1.1.jar"/>
 				<include name="jta-*.jar"/>
 				<include name="${server-include-list}"/>
 				<include name="mmbase-*.jar"/>
+				<include name="jaxen-*.jar"/>
 				<include name="ognl-*.jar"/>
 				<include name="saaj-*.jar"/>
-				<include name="spring-*.jar"/>
+				<include name="org.springframework.*.jar"/>
 				<include name="stax-*.jar"/>
-				<include name="struts2-api-*.jar"/>
-				<include name="struts2-core-*.jar"/>
+				<include name="struts2-*.jar"/>
 				<include name="wsdl4j-*.jar"/>
 				<include name="xwork-*.jar"/>
+				<include name="cxf-*.jar"/>
+				<include name="geronimo-*.jar"/>
+				<include name="neethi-*.jar"/>
+				<include name="stax2-api-*.jar"/>
+				<include name="xml-resolver-*.jar"/>
+				<include name="xmlschema-core-*.jar"/>
 			</fileset>
 			<fileset dir="${lib.dir}">
 				<include name="sdk-security-*.jar"/>
@@ -1206,10 +1647,33 @@
 				<include name="${bean.file}" />
 				<include name="${orm.file}" />
 			</fileset>
-			<fileset dir="${3RD_PARTY_JARS_DIRECTORY}">
-				<include name="*.jar" />
-			</fileset>				
 		</copy>
+
+		<available file="${3RD_PARTY_JARS_DIRECTORY}" property="include.3rdparty.exist" />
+		<if>
+			<equals arg1="${include.3rdparty.exist}" arg2="true" />
+			<then>
+			<copy todir="${temp.webapp.staging.lib.dir}" overwrite="true">
+				<fileset dir="${3RD_PARTY_JARS_DIRECTORY}">
+					<include name="*.jar" />
+				</fileset>
+			</copy>
+			</then>
+		</if>
+
+		<if>
+		<equals arg1="${SERVER_TYPE}" arg2="tomcat" casesensitive="false" trim="true" />
+		<then>
+		<copy todir="${temp.webapp.staging.lib.dir}" overwrite="true">
+			<fileset dir="${runtime.lib.dir}">
+			<include name="jaxrpc-*.jar"/>
+			<include name="javassist-*.jar"/>
+			</fileset>
+		</copy>
+		</then>
+		</if>
+
+
 		<if>
 			<equals arg1="${GENERATE_JAXB_MAPPING}" arg2="true" />
 			<then>
@@ -1307,7 +1771,7 @@
 				<echo message="Grid Jaas enabled" />
 				<copy todir="${temp.webapp.staging.lib.dir}" overwrite="true">
 					<fileset dir="${runtime.lib.dir}">
-						<include name="cog-jglobus-*.jar"/>
+						<include name="cog-jglobus-4*.jar"/>
 					</fileset>
 					<fileset dir="${lib.dir}">
 						<include name="sdk-grid-jaas-client-*.jar"/>
@@ -1345,22 +1809,352 @@
 		<copy todir="${temp.webapp.staging.classes.dir}">
 			<fileset dir="${output.src.dir}">
 				<include name="IsoConstants.xml"/>
+				<include name="caDSRMetadata.xml"/>
 			</fileset>
 		</copy>
+		
 	</target>
 
-	<target name="-build-project-war" depends="-staging-war">
-		<echo message="building war in dir ${param.server.webapps.dir}\${PROJECT_NAME}.war" />
-		<war destfile="${param.server.webapps.dir}\${PROJECT_NAME}.war" webxml="${system.config.client.webapp.dir}/WEB-INF/web.xml">
+	<target name="-staging-rest-war" depends="">
+		<delete dir="${temp.webapp.staging.dir}" includeemptydirs="true">
+		</delete>
+
+		<mkdir dir="${temp.webapp.staging.dir}" />
+		<mkdir dir="${temp.webapp.staging.lib.dir}" />
+		<mkdir dir="${temp.webapp.staging.classes.dir}" />
+
+		<copy todir="${temp.webapp.staging.lib.dir}" overwrite="true">
+			<fileset dir="${runtime.lib.dir}">
+				<include name="acegi-security-*.jar"/>
+				<include name="aopalliance*.jar"/>
+				<include name="antlr-*.jar"/>
+				<include name="asm-*.jar"/>
+				<include name="axis-1.4.jar"/>
+				<include name="backport-util-concurrent-*.jar"/>
+				<include name="caGrid-CQL-cql.1.0-*.jar"/>
+				<include name="caGrid-data-common-*.jar"/>
+				<include name="caGrid-data-stubs-*.jar"/>
+				<include name="caGrid-sdkQuery4-beans-*.jar"/>
+				<include name="caGrid-sdkQuery4-processor-*.jar"/>
+				<include name="caGrid-*-processor-*.jar"/>
+				<include name="caGrid-*-translator-*.jar"/>
+				<include name="castor-*.jar"/>
+				<include name="cglib-*.jar"/>
+				<include name="commons-beanutils-*.jar"/>				
+				<include name="commons-configuration-*.jar"/>
+				<include name="commons-codec-*.jar"/>
+				<include name="commons-collections-*.jar"/>
+				<include name="commons-discovery-*.jar"/>
+				<include name="commons-lang-*.jar"/>
+				<include name="commons-io-*.jar"/>
+				<include name="commons-fileupload*.jar"/>
+				<include name="commons-logging-*.jar"/>
+				<include name="clm-*.jar"/>
+				<include name="csmapi-*.jar"/>
+				<include name="dom4j-*.jar"/>
+				<include name="jaxen-*.jar"/>
+				<include name="ehcache-*.jar"/>
+				<include name="ejb3-persistence-*.jar"/>
+				<include name="freemarker-*.jar"/>
+				<include name="hibernate-*.jar"/>
+				<include name="slf4j*.jar"/>
+				<include name="hibernate-annotations-*.jar"/>
+				<include name="hibernate-validator-*.jar"/>
+				<include name="jaxb-*.jar"/>
+				<include name="jdom-1.1.jar"/>
+				<include name="jta-*.jar"/>
+				<include name="${server-include-list}"/>
+				<include name="mmbase-*.jar"/>
+				<include name="ognl-*.jar"/>
+				<include name="saaj-*.jar"/>
+				<include name="org.springframework.*.jar"/>
+				<include name="stax-*.jar"/>
+				<include name="struts2-*.jar"/>
+				<include name="wsdl4j-*.jar"/>
+				<include name="xwork-*.jar"/>
+				<include name="cxf-*.jar"/>
+				<include name="geronimo-*.jar"/>
+				<include name="neethi-*.jar"/>
+				<include name="stax2-api-*.jar"/>
+				<include name="xml-resolver-*.jar"/>
+				<include name="xmlschema-core-*.jar"/>
+			</fileset>
+			<fileset dir="${lib.dir}">
+				<include name="sdk-security-*.jar"/>
+				<include name="sdk-system-client-*.jar"/>
+				<include name="sdk-system-core-*.jar"/>
+				<include name="sdk-system-web-*.jar"/>
+				<include name="sdk-system-ws-*.jar"/>
+			</fileset>
+			<fileset dir="${output.target.dir}">
+				<include name="${bean.file}" />
+				<include name="${orm.file}" />
+			</fileset>
+		</copy>
+
+		<copy todir="${temp.webapp.staging.lib.dir}">
+			<fileset dir="${runtime.lib.dir}">
+				<include name="jsr311-api-*.jar"/>
+			</fileset>
+			<fileset dir="${output.target.dir}">
+				<include name="${rest.file}"/>
+			</fileset>
+			<fileset dir="${lib.dir}">
+				<include name="sdk-writable-api-client-*.jar"/>
+			</fileset>
+		</copy>
+
+		<available file="${3RD_PARTY_JARS_DIRECTORY}" property="include.3rdparty.exist" />
+		<if>
+			<equals arg1="${include.3rdparty.exist}" arg2="true" />
+			<then>
+			<copy todir="${temp.webapp.staging.lib.dir}" overwrite="true">
+				<fileset dir="${3RD_PARTY_JARS_DIRECTORY}">
+					<include name="*.jar" />
+				</fileset>
+			</copy>
+			</then>
+		</if>
+
+		<if>
+		<equals arg1="${SERVER_TYPE}" arg2="tomcat" casesensitive="false" trim="true" />
+		<then>
+		<copy todir="${temp.webapp.staging.lib.dir}" overwrite="true">
+			<fileset dir="${runtime.lib.dir}">
+			<include name="jaxrpc-*.jar"/>
+			<include name="javassist-*.jar"/>
+			</fileset>
+		</copy>
+		</then>
+		</if>
+
+
+		<if>
+			<equals arg1="${GENERATE_JAXB_MAPPING}" arg2="true" />
+			<then>
+				<echo message="JAXB is enabled.  Copying JAXB related jars to web app staging lib" />
+				<copy todir="${temp.webapp.staging.lib.dir}" overwrite="true">
+					<fileset dir="${runtime.lib.dir}">
+						<include name="activation-*.jar"/>
+						<include name="jaxb-*.jar"/>
+						<include name="stax-*.jar"/>
+					</fileset>
+				</copy>
+			</then>
+		</if>
+		<echo message="ISO21090 Datatypes are enabled.  Copying ISO Datatype related jar files to web app staging lib" />
+		<copy todir="${temp.webapp.staging.lib.dir}" overwrite="true">
+			<fileset dir="${runtime.lib.dir}">
+				<include name="iso-datatypes-*.jar"/>
+				<!--<exclude name="iso-datatypes-extensions*.jar" />-->
+			</fileset>
+		</copy>
+		<if>
+			<equals arg1="${USE_CONNECTION_POOL}" arg2="true" />
+			<then>
+				<echo message="using c3p connection pooling database" />
+				<copy todir="${temp.webapp.staging.lib.dir}" overwrite="true">
+					<fileset dir="${runtime.lib.dir}">
+						<include name="c3p0-*.jar"/>
+					</fileset>
+				</copy>
+				<include-db-jar target.lib.directory="${temp.webapp.staging.lib.dir}"/>
+			</then>
+		</if>
+
+		<if>
+			<equals arg1="${WRITABLE_API_EXTENSION_ENABLED}" arg2="true" />
+			<then>
+				<echo message="writable api enabled" />
+				<copy todir="${temp.webapp.staging.lib.dir}" overwrite="true">
+					<fileset dir="${lib.dir}">
+						<include name="sdk-writable-api-client-*.jar"/>
+						<include name="sdk-writable-api-*.jar"/>
+					</fileset>
+				</copy>
+			</then>
+		</if>
+
+		<if>
+			<equals arg1="${ENABLE_CLM_LOGGER_CFG_GENERATION}" arg2="true" />
+			<then>
+				<echo message="system logging enabled" />
+				<copy todir="${temp.webapp.staging.lib.dir}" overwrite="true">
+					<fileset dir="${lib.dir}">
+						<include name="sdk-system-logging-*.jar"/>
+					</fileset>
+				</copy>
+				<copy todir="${temp.webapp.staging.classes.dir}" overwrite="true">
+					<fileset dir="${output.src.dir}">
+						<include name="${clm.object.state.logger.config}" />
+					</fileset>
+				</copy>
+			</then>
+		</if>
+
+		<if>
+			<equals arg1="${SECURITY_ENABLED}" arg2="true" />
+			<then>
+				<echo message="security enabled" />
+				<copy todir="${temp.webapp.staging.lib.dir}" overwrite="true">
+					<fileset dir="${runtime.lib.dir}">
+						<include name="commons-codec-*.jar"/>
+					</fileset>
+					<fileset dir="${lib.dir}">
+						<include name="sdk-security-*.jar"/>
+						<include name="sdk-security-client-*.jar"/>
+					</fileset>
+				</copy>
+				<copy todir="${temp.webapp.staging.classes.dir}" overwrite="true">
+					<fileset dir="${system.config.client.csm-security.dir}/conf">
+						<include name="login.config" />
+					</fileset>
+				</copy>
+				<copy todir="${temp.webapp.staging.classes.dir}" overwrite="true">
+					<fileset dir="${system.config.security.dir}" includes="${csm.ehcache.file}" />
+					<fileset dir="${system.config.rest.web.classes.dir}">
+						<include name="${application.config.security.file}" />
+					</fileset>
+				</copy>
+				<copy tofile="${temp.webapp.staging.classes.dir}/${csm.security.config.file}" file="${system.config.security.dir}/${csm.security.config.original.file}" overwrite="true" />
+			</then>
+		</if>
+
+		<if>
+			<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true" />
+			<then>
+				<echo message="Grid Jaas enabled" />
+				<copy todir="${temp.webapp.staging.lib.dir}" overwrite="true">
+					<fileset dir="${runtime.lib.dir}">
+						<include name="cog-jglobus-4*.jar"/>
+					</fileset>
+					<fileset dir="${lib.dir}">
+						<include name="sdk-grid-jaas-client-*.jar"/>
+					</fileset>
+				</copy>
+				<delete>
+					<fileset dir="${temp.webapp.staging.lib.dir}">
+						<include name="caGrid-data-*.jar" />
+						<include name="caGrid-metadata-data*.jar" />
+					</fileset>
+				</delete>
+
+				<copy todir="${temp.webapp.staging.classes.dir}" overwrite="true">
+					<fileset dir="${system.config.security.dir}" includes="${csm.ehcache.file}" />
+					<fileset dir="${system.config.rest.web.classes.dir}">
+						<include name="${application.config.security.file}" />
+					</fileset>
+				</copy>
+				<copy tofile="${temp.webapp.staging.classes.dir}/${csm.security.config.file}" file="${system.config.security.dir}/${csm.security.config.original.file}" overwrite="true" />
+			</then>
+		</if>
+
+		<if>
+			<not>
+				<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true" />
+			</not>
+			<then>
+				<copy todir="${temp.webapp.staging.lib.dir}" overwrite="true">
+					<fileset dir="${runtime.lib.dir}">
+						<include name="xalan*.*" />
+					</fileset>
+				</copy>
+			</then>
+		</if>
+		<copy todir="${temp.webapp.staging.classes.dir}">
+			<fileset dir="${output.src.dir}">
+				<include name="IsoConstants.xml"/>
+				<include name="caDSRMetadata.xml"/>
+			</fileset>
+		</copy>
+		
+	</target>
+
+	<target name="-build-project-rest-war" depends="-staging-rest-war">
+		<echo message="building war in dir ${param.server.webapps.dir}\${PROJECT_NAME}rest.war" />
+		<echo message="generate ${GENERATE_RESTFUL_RESOURCES}"/>
+		<echo message="generate ${system.config.client.rest.webapp.dir}"/>
+		
+		<copy todir="${system.config.client.rest.webapp.dir}/WEB-INF">
+			<fileset dir="${system.config.client.rest.webapp.dir}/WEB-INF">
+				<include name="web.xml" />
+			</fileset>
+			<filterset refid="filtertoken5" />
+		</copy>
+
+		<war destfile="${param.server.webapps.dir}\${PROJECT_NAME}rest.war" webxml="${system.config.client.rest.webapp.dir}/WEB-INF/web.xml">
+		
 			<manifest>
 				<attribute name="Generated-By" value="caCORE SDK Code Generator" />
 				<attribute name="Version" value="${VERSION}" />
 			</manifest>
 			<lib dir="${temp.webapp.staging.lib.dir}">
-				<exclude name="cog*.*"/>
+<!--				<exclude name="cog*.*"/>  -->
 				<exclude name="servlet*.*"/>
 				<exclude name="${server-exclude-list}" />
 			</lib>
+			
+			<fileset dir="${output.project.dir}/restweb">
+				<include name="**/*" />
+			</fileset>
+			<fileset dir="${output.codegen.dir}">
+				<include name="${javadoc.relative.dir}/**/*.*" />
+			</fileset>
+			<fileset dir="${system.config.client.rest.webapp.dir}">
+				<include name="**/*" />
+				<exclude name="**/web.xml" />
+				<exclude name="**/*template*.xml" />
+
+				<exclude name="${server-exclude-classes-list}" />
+			</fileset>
+			<webinf dir="${output.src.dir}">
+				<include name="server-config.wsdd" />
+				<include name="RESTfulApp.xml" />
+				<include name="RESTfulBeans.xml" />
+			</webinf>
+
+			<classes dir="${temp.webapp.staging.classes.dir}" />
+		</war>
+		<delete dir="${temp.webapp.staging.dir}" includeemptydirs="true">
+		</delete>
+	</target>
+
+	<target name="-build-project-war" depends="-staging-war">
+		<echo message="building war in dir ${param.server.webapps.dir}\${PROJECT_NAME}.war" />
+		<echo message="generate ${GENERATE_RESTFUL_RESOURCES}"/>
+		<echo message="generate ${system.config.client.webapp.dir}"/>
+		<if>
+			<equals arg1="${GENERATE_RESTFUL_RESOURCES}" arg2="true" />
+			<then>
+				<copy todir="${system.config.client.webapp.dir}/WEB-INF">
+					<fileset dir="${system.config.client.webapp.dir}/WEB-INF">
+						<include name="web.xml" />
+					</fileset>
+					<filterset refid="filtertoken5" />
+				</copy>
+
+<!--
+				<xmltask preservetype="true" failWithoutMatch="true"
+					source="${system.config.client.webapp.dir}/WEB-INF/web.xml"
+					dest="${system.config.client.webapp.dir}/WEB-INF/web.xml">
+					<xmlcatalog refid="build.xml.catalog" />
+					<insert path="//*[local-name()='web-app']/*[local-name()='servlet'][2]/*[local-name()='init-param'][1]/*[local-name()='param-value']" file="${output.src.dir}/RESTResources.txt" />
+				</xmltask>
+-->
+			</then>
+		</if>
+		<war destfile="${param.server.webapps.dir}\${PROJECT_NAME}.war" webxml="${system.config.client.webapp.dir}/WEB-INF/web.xml">
+		
+			<manifest>
+				<attribute name="Generated-By" value="caCORE SDK Code Generator" />
+				<attribute name="Version" value="${VERSION}" />
+			</manifest>
+			<lib dir="${temp.webapp.staging.lib.dir}">
+<!--				<exclude name="cog*.*"/>  -->
+				<exclude name="servlet*.*"/>
+				<exclude name="${server-exclude-list}" />
+			</lib>
+			
 			<fileset dir="${output.project.dir}/web">
 				<include name="**/*" />
 			</fileset>
@@ -1376,6 +2170,8 @@
 			</fileset>
 			<webinf dir="${output.src.dir}">
 				<include name="server-config.wsdd" />
+				<include name="RESTfulApp.xml" />
+				<include name="RESTfulBeans.xml" />
 			</webinf>
 
 			<classes dir="${temp.webapp.staging.classes.dir}" />
@@ -1392,6 +2188,7 @@
 			</manifest>
 			<lib dir="${lib.dir}">
 				<include name="sdk-grid-jaas-*.jar" />
+				<include name="sdk-grid-security-*.jar" />
 				<include name="sdk-grid-jaas-client-*.jar" />
 				<include name="sdk-grid-jaas-jndi-binder-*.jar" />
 				<include name="sdk-grid-remoting-*.jar" />
@@ -1399,6 +2196,7 @@
 			<lib dir="${runtime.lib.dir}">
 				<include name="${server-include-list}" />
 				<include name="acegi-security-*.jar" />
+				<include name="aopalliance*.jar"/>
 				<include name="addressing-*.jar" />
 				<include name="axis-1.2RC2.jar" />
 				<include name="caGrid-advertisement-*.jar" />
@@ -1428,11 +2226,15 @@
 				<include name="caGrid-syncgts-service-*.jar" />
 				<include name="caGrid-syncgts-stubs-*.jar" />
 				<include name="castor-*.jar" />
-				<include name="cog-axis-noversion.jar" />
+				<include name="cog-jglobus-4*.jar" />
+				<include name="cog-axis-4*.jar" />
+				<include name="puretls-*.jar" />
 				<include name="commons-beanutils-*.jar" />
+				<include name="commons-configuration-*.jar"/>
 				<include name="commons-codec-*.jar" />
 				<include name="commons-collections-*.jar" />
 				<include name="commons-digester-*.jar" />
+				<include name="commons-logging-*.jar" />
 				<include name="commons-discovery-*.jar" />
 				<include name="concurrent-*.jar" />
 				<include name="jasciidammit-*.jar" />
@@ -1445,13 +2247,19 @@
 				<include name="mobius_mako_client-*.jar" />
 				<include name="mobius_tools-*.jar" />
 				<include name="saaj-*.jar" />
-				<include name="spring-*.jar" />
+				<include name="org.springframework.*.jar"/>
 				<include name="wsdl4j-*.jar" />
 				<include name="wsrf_core_enum-*.jar" />
 				<include name="wsrf_core_stubs_enum-*.jar" />
 				<include name="wss4j-noversion.jar" />
 				<include name="xalan-*.jar" />
 				<include name="xmlsec-*.jar" />
+				<include name="cxf-*.jar"/>
+				<include name="geronimo-*.jar"/>
+				<include name="neethi-*.jar"/>
+				<include name="stax2-api-*.jar"/>
+				<include name="xml-resolver-*.jar"/>
+				<include name="xmlschema-core-*.jar"/>
 			</lib>
 			<fileset dir="${system.config.grid.loginService.dir}">
 				<include name="**/*" />
@@ -1494,10 +2302,11 @@
 			<then>
 				<copy tofile="${package.client.tomcat.context.dir}/${PROJECT_NAME}.xml" file="${system.config.server.context.dir}/${file.project.Context}" />
 				<copy todir="${package.client.tomcat.common.lib.dir}">
-					<fileset dir="${bda-utils.dir}">
+					<fileset dir="${build-utils.dir}">
 						<include name="mysql-connector-java-*.jar"/>
+						<include name="bcprov-jdk15on-*.jar"/>
 						<include name="ojdbc14-*.jar"/>
-						<include name="postgresql-jdbc3-*.jar"/>
+						<include name="postgresql-*.jar"/>
 					</fileset>
 				</copy>
 				<delete>
@@ -1546,10 +2355,10 @@
 						<include name="**/server*.xml" />
 					</fileset>
 				</copy>
-				<copy todir="${package.client.tomcat.dir}/common/lib">
+				<copy todir="${package.client.tomcat.dir}/lib">
 					<fileset dir="${runtime.lib.dir}">
-						<include name="cog-jglobus*.*" />
-						<include name="cog-axis*.*" />
+						<include name="cog-jglobus-4*.*" />
+						<include name="cog-axis-4*.*" />
 						<include name="cryptix*.*" />
 						<include name="jce-jdk*.*" />
 						<include name="puretls*.*" />
@@ -1557,18 +2366,19 @@
 						<include name="jgss*.*" />
 						<include name="log4j*.*" />
 					</fileset>
-					<fileset dir="${bda-utils.dir}">
+					<fileset dir="${build-utils.dir}">
 						<include name="mysql-connector-java-*.jar"/>
+						<include name="bcprov-jdk15on-*.jar"/>
 						<include name="ojdbc14-*.jar"/>
-						<include name="postgresql-jdbc3-*.jar"/>
+						<include name="postgresql-*.jar"/>
 					</fileset>
 					<fileset dir="${lib.dir}">
 						<include name="sdk-grid-jaas-jndi-binder-*.jar" />
 					</fileset>
 				</copy>
-				<copy todir="${package.client.tomcat.dir}/server/lib">
+				<copy todir="${package.client.tomcat.dir}/lib">
 					<fileset dir="${runtime.lib.dir}">
-						<include name="cog-tomcat*.*" />
+						<include name="cog-tomcat-4*.*" />
 					</fileset>
 				</copy>
 				<copy tofile="${package.client.tomcat.context.dir}/${SDK_GRID_LOGIN_SERVICE_NAME}.xml" file="${system.config.server.context.dir}/${file.grid.loginService.Context}" />
@@ -1611,8 +2421,9 @@
 					file="${system.config.jboss.server.default.deploy.dir}/${file.project.Context}" />
 
 				<copy todir="${package.client.jboss.default.lib.dir}">
-					<fileset dir="${bda-utils.dir}">
+					<fileset dir="${build-utils.dir}">
 						<include name="mysql-connector-java-*.jar"/>
+						<include name="bcprov-jdk15on-*.jar"/>
 						<include name="ojdbc14-*.jar"/>
 						<include name="postgres-*.jar"/>
 					</fileset>
@@ -1653,9 +2464,9 @@
 				</copy>
 				<copy todir="${package.client.jboss.default.lib.dir}">
 					<fileset dir="${runtime.lib.dir}">
-						<include name="cog-jglobus*.*" />
-						<include name="cog-tomcat*.*" />
-						<include name="cog-axis*.*" />
+						<include name="cog-jglobus-4*.*" />
+						<include name="cog-tomcat-4*.*" />
+						<include name="cog-axis-4*.*" />
 						<include name="cryptix*.*" />
 						<include name="jce-jdk*.*" />
 						<include name="puretls*.*" />
@@ -1702,6 +2513,15 @@
 			<param name="param.server.webapps.dir" value="${param.server.webapps.dir}" />
 		</antcall>
 		<if>
+			<equals arg1="${GENERATE_RESTFUL_RESOURCES}" arg2="true" />
+			<then>
+				<antcall target="-build-project-rest-war">
+					<param name="param.server.webapps.dir" value="${param.server.webapps.dir}" />
+				</antcall>
+			</then>
+		</if>
+
+		<if>
 			<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true" />
 			<then>
 				<antcall target="-build-grid-login-service-war">
@@ -1720,7 +2540,7 @@
 				<equals arg1="${DB_TYPE}" arg2="mysql" />
 				<then>
 					<copy todir="@{TARGET.LIB.DIRECTORY}">
-						<fileset dir="${bda-utils.dir}">
+						<fileset dir="${build-utils.dir}">
 							<include name="mysql-connector-java-*.jar" />
 						</fileset>
 					</copy>
@@ -1729,7 +2549,7 @@
 					<equals arg1="${DB_TYPE}" arg2="oracle" />
 					<then>
 						<copy todir="@{TARGET.LIB.DIRECTORY}">
-							<fileset dir="${bda-utils.dir}">
+							<fileset dir="${build-utils.dir}">
 								<include name="ojdbc14-*.jar" />
 							</fileset>
 						</copy>
@@ -1737,7 +2557,7 @@
 				</elseif>
 				<else>
 					<copy todir="@{TARGET.LIB.DIRECTORY}">
-						<fileset dir="${bda-utils.dir}">
+						<fileset dir="${build-utils.dir}">
 							<include name="postgresql-*.jar" />
 						</fileset>
 					</copy>

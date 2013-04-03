@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 
-<project name="caCORE SDK - Installer" default="install" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
+<project name="caCORE SDK - Installer" default="install" basedir=".">
 
 	<property file="codegen.properties" />
 	<property name="project.name" value="${PROJECT_NAME}"/>
 
-	<import file="bda-master-install.xml"/>
+	<import file="build-master-install.xml"/>
 
 	<!-- Grid related properties -->
 	<property name="grid.secure.key.file.location" value="${security.dir.src}/${grid.secure.key.file}" />
@@ -19,6 +19,35 @@
 	<property name="jboss.application.url" value="http://${jboss.server.hostname}:${jboss.server.port}/${PROJECT_NAME}"/>
 	<property name="tomcat.application.url" value="http://${tomcat.hostname}:${tomcat.port.http}/${PROJECT_NAME}"/>
 
+	<property name="sync-gts.dir" location="${basedir}/${sync-gts.dist.relative.dir}"/>
+        <property name="sync-gts.build.dir" location="${sync-gts.dir}/syncgts"/>
+        <property name="cagrid-target.dir" location="${sync-gts.dir}/cagrid-target"/>	
+
+	<property name="grid.dir.dest.jboss" value="wsrf.war" />
+        <property name="grid.dir.dest.tomcat" value="wsrf" />	
+        
+	<!-- Set application.base.path based on platform -->
+	<condition property="application.base.path" value="${application.base.path.linux}">
+	    <or>
+		<os family="unix"/>
+		<os family="mac"/>
+	    </or>
+	</condition>
+
+	<condition property="application.base.path" value="${application.base.path.windows}">
+	    <os family="windows"/>
+	</condition>
+	<echo message="application.base.path=${application.base.path}"/>
+
+	<property name="jboss.home" value="${application.base.path}/${jboss.relative.path}"/>
+                <jboss-version
+                        />
+        <property name="tomcat.home" value="${application.base.path}/${tomcat.relative.path}"/>
+        <property name="catalina.home" value="${application.base.path}/${tomcat.relative.path}"/>
+        
+                <tomcat-version
+                        />
+                        
 	<switch value="${SERVER_TYPE}">
 		<case value="jboss">
 			<property name="SERVER_HOST_NAME" value="${jboss.server.hostname}"/>
@@ -141,6 +170,14 @@
 		</then>
 	</if>
 
+	<target name="deploy:local:install:no-build">
+		<!--<antcall target="install"/>-->
+	</target>
+
+	<target name="deploy:local:install">
+		<!--<antcall target="install"/>-->
+	</target>
+
 	<target name="install" description="Installs and configures JBOSS, creates database, and deploys application" 
 		depends="
 		common:init,
@@ -158,15 +195,28 @@
 				<equals arg1="${RESTFUL_JSON_INTERFACE_ENABLED}" arg2="true" />
 			</or>
 			<then>
-				<antcall target="install:tomcat" />
-				<antcall target="install:jboss" />
+			
+				<if>
+				<equals arg1="${SERVER_TYPE}" arg2="tomcat" casesensitive="false" trim="true" />
+				<then>
+					<antcall target="install:tomcat" />
+				</then>
+				</if>
+				
+				<if>
+				<equals arg1="${SERVER_TYPE}" arg2="jboss" casesensitive="false" trim="true" />
+				<then>
+					<antcall target="install:jboss" />
+				</then>
+				</if>
+
 				<antcall target="install:common:post" />
 				<antcall target="install:common:validation:post-install" />
 			</then>
 		</if>
 	</target>
 
-	<target name="install:jboss" description="Wrapper scripts that calls all required targets to install the jboss container" unless="exclude.jboss"
+	<target name="install:jboss" description="Wrapper scripts that calls all required targets to install the jboss container" 
 		depends="
 		common:jboss:init,
 		common:init,
@@ -205,6 +255,7 @@
 		install:tomcat:start,
 		install:tomcat:validation:post-install
 		">
+		
 	</target>
 
 	<target name="install:jboss:clean" unless="exclude.jboss" depends="common:jboss:init,common:init">
@@ -246,6 +297,8 @@
 						<chmod dir="${tomcat.home}/bin" perm="ugo+rx" includes="**/*.sh" />
 					</then>
 				</if>
+				<tomcat-nci-customizations
+					/>
 			</then>
 		</if>
 	</target>
@@ -275,6 +328,10 @@
 		</if>
 	</target>
 
+	<target name="build:SDK">
+		<antcall target="install:re-configure"/>
+	</target>
+	
 	<target name="install:re-configure" description="Configure example-webapp application, copies over externalized properties or configurations that are not part of the tomcat configuration">
 		<antcall target="package-install-system"/>
 	</target>
@@ -293,8 +350,8 @@
 		</if>
 	</target>
 
+
 	<target name="install:jboss:configure" description="Configure JBoss (bindings, login-config.xml, ect)" unless="exclude.jboss" depends="
-		install:jboss:configure:bindings,
 		install:jboss:configure:grid-ports,
 		install:jboss:configure:login-config,
 		install:jboss:configure:login-config-grid,
@@ -302,13 +359,85 @@
 		install:jboss:configure:libraries,
 		install:jboss:configure:log4j
 		">
+		
+		<jboss-configure
+			jboss.grid.configure="false"
+			jboss.server.bindingfile.location="${jboss.home}/server/${jboss.server.name}/conf/bindingservice.beans/META-INF/bindings-jboss-beans.xml"
+			jboss.server.binding.template.location="${build-utils.dir}/resource/${jboss.binaries.relative.dir}/bindings-jboss-beans.xml"
+			jboss.server-xml.file="${jboss.home}/server/${jboss.server.name}/deploy/jbossweb.sar/server.xml"
+			jboss.server.ports.name="${jboss.server.ports.name}"
+			proxy.update.connector.port.ssl="${jboss.ssl.port}"
+			/>
 	</target>
 
-	<!-- bug in BDA macro -->
-	<target name="install:jboss:configure:log4j" unless="exclude.jboss">
+<!--
+	<target name="install:jboss:configure" description="Configure JBoss (bindings, login-config.xml, ect)" unless="exclude.jboss" depends="
+		install:jboss:configure:grid-ports,
+		install:jboss:configure:login-config,
+		install:jboss:configure:login-config-grid,
+		install:jboss:configure:datasource,
+		install:jboss:configure:libraries,
+		install:jboss:configure:log4j
+		">
+		
+                <jboss-configure
+                        jboss.grid.configure="false"
+                        jboss.server-xml.file="${jboss.home}/server/${jboss.server.name}/deploy/jbossweb.sar/server.xml"
+                        jboss.server.binding.template.location="${jboss.server.binding.template.location}"
+                        jboss.server.bindingfile.location="${jboss.home}/server/${jboss.server.name}/conf/bindingservice.beans/META-INF/bindings-jboss-beans.xml"
+                        proxy.update.connector.port.ssl="${jboss.ssl.port}"/>
+	</target>
+
+-->
+
+	<target name="common:jboss:grid:init" depends="common:init:pre" unless="exclude.jboss">
+                <if>
+                        <isset property="exclude.jboss.grid"/>
+                        <then>
+                                <property name="jboss.grid.enable" value="false"/>
+                        </then>
+                        <else>
+                                <property name="jboss.grid.enable" value="true"/>
+                        </else>
+                </if>
+        </target>
+        <target name="common:tomcat:grid:init" depends="common:init:pre" unless="exclude.tomcat">
+                <if>
+                        <isset property="exclude.tomcat.grid"/>
+                        <then>
+                                <property name="tomcat.grid.enable" value="false"/>
+                        </then>
+                        <else>
+                                <property name="tomcat.grid.enable" value="true"/>
+                        </else>
+                </if>
+        </target>	
+        
+        
+        
+	<target name="deploy:remote:upgrade:ahp" description="Installs and configures the application and required binaries and re-creates the datbase  on a remote machine. Used for NCI tiers (dev, qa, stg, prod)" >
+		<!--
+		  * Will use the target from install.xml specified in ${upgrade.target} (defaults to upgrade unless passed in on command line).
+		  * Requires specifying -Dproperties.file=@file@ on the command line to point installer to correct enviornment to install into.
+		  * Calls ant from exec task to ensure properties are do not carry over from current ant runtime and also to emulate a manual install, if you want properties to be used at install time they must be included in a proeprties file.
+		-->
+		<!-- Call macro to deploy files on desired server -->
+		<echoproperties  prefix="ssh"> <propertyset negate="yes" > <propertyref regex="passw" /> </propertyset> </echoproperties>
+		<deploy-files dist.file="${build-blueprints-webapp.upgrade.zip.file}" />
+		<override-properties-prep
+			override.properties="@{override.properties}"
+			override.properties.string.property.name="override.properties.string"
+			/>
+		<!-- SSH to machine ant run ant command line to install application -->
+		<remote-ssh remotesshcommand=". .bash_profile;cd ${ssh.dir.temp}; ant -Dproperties.file=${properties.file.name} -Dforce.reinstall=true ${override.properties.string} ${upgrade.target}" />
+	</target>
+	
+	
+	<!-- bug in build macro -->
+	<target name="install:jboss:configure:log4j" depends="common:init:pre" unless="exclude.jboss">
 		<property name="log4j.template.file" value="${system.config.client.webapp.dir}/WEB-INF/classes/log4j-jboss.xml" />
-		<copy file="${jboss.home}/server/${jboss.server.name}/conf/log4j.xml" tofile="${jboss.home}/server/${jboss.server.name}/conf/log4j.xml.bak" overwrite="true" />
-		<copy file="${log4j.template.file}" tofile="${jboss.home}/server/${jboss.server.name}/conf/log4j.xml" overwrite="true">
+		<copy file="${jboss.home}/server/${jboss.server.name}/conf/jboss-log4j.xml" tofile="${jboss.home}/server/${jboss.server.name}/conf/log4j.xml.bak" overwrite="true" />
+		<copy file="${log4j.template.file}" tofile="${jboss.home}/server/${jboss.server.name}/conf/jboss-log4j.xml" overwrite="true">
 			<filterset>
 				<filtersfile file="${properties.file}" />
 				<filtersfile file="project.properties" />
@@ -332,11 +461,11 @@
 		<if>
 			<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true" casesensitive="false" trim="true" />
 			<then>
-				<echo message="modifying ${jboss.home}/server/${jboss.server.name}/deploy/jbossweb-tomcat55.sar/server.xml"/>
+				<echo message="modifying ${jboss.home}/server/${jboss.server.name}/deploy/jbossweb.sar/server.xml"/>
 				<echo message="modifying server.xml adding https connector"/>
 				<grid-secure-configure-connector
-						appserver.conf.dir="${jboss.home}/server/${jboss.server.name}/deploy/jbossweb-tomcat55.sar"
-						appserver.server-xml.file="${jboss.home}/server/${jboss.server.name}/deploy/jbossweb-tomcat55.sar/server.xml"
+						appserver.conf.dir="${jboss.home}/server/${jboss.server.name}/deploy/jbossweb.sar"
+						appserver.server-xml.file="${jboss.home}/server/${jboss.server.name}/deploy/jbossweb.sar/server.xml"
 						appserver.server-xml.service.name="jboss.web"
 						grid.secure.dir="${grid.dist.relative.dir}/${TARGET_GRID}"
 						grid.secure.enable="${GRID_LOGIN_MODULE_ENABLED}"
@@ -346,11 +475,11 @@
 				/>
 				<echo message="configuring https valve and connector "/>
 				<grid-secure-configure-valve
-						appserver.server-xml.file="${jboss.home}/server/${jboss.server.name}/deploy/jbossweb-tomcat55.sar/server.xml"
+						appserver.server-xml.file="${jboss.home}/server/${jboss.server.name}/deploy/jbossweb.sar/server.xml"
 						appserver.server-xml.service.name="jboss.web"
 				/>
-				<xmltask source="${jboss.home}/server/${jboss.server.name}/deploy/jbossweb-tomcat55.sar/server.xml"
-					dest="${jboss.home}/server/${jboss.server.name}/deploy/jbossweb-tomcat55.sar/server.xml">
+				<xmltask source="${jboss.home}/server/${jboss.server.name}/deploy/jbossweb.sar/server.xml"
+					dest="${jboss.home}/server/${jboss.server.name}/deploy/jbossweb.sar/server.xml">
 					<remove path="/Server/Service[@name='jboss.web']/ConnenctorEngine[@name='jboss.web']/Valve[@className='org.globus.tomcat.coyote.valves.HTTPSValve55']" />
 					<insert path="/Server/Service[@name='jboss.web']/Engine[@name='jboss.web']">
 						<![CDATA[                               
@@ -369,16 +498,16 @@
 			<then>
 				<switch value="${database.type}">
 					<case value="oracle">
-						<property name="csm.database.driver.file" value="${bda-utils.dir}/ojdbc14-10.2.0.4.0.jar "/>
+						<property name="csm.database.driver.file" value="${build-utils.dir}/ojdbc14-10.2.0.3.0.jar"/>
 					</case>
 					<case value="mysql">
-						<property name="csm.database.driver.file" value="${bda-utils.dir}/mysql-connector-java-5.0.8.jar"/>
+						<property name="csm.database.driver.file" value="${build-utils.dir}/mysql-connector-java-5.1.13.jar"/>
 					</case>
 					<case value="postgresql">
-						<property name="csm.database.driver.file" value="${bda-utils.dir}/postgresql-jdbc3-8.3-604.jar"/>
+						<property name="csm.database.driver.file" value="${build-utils.dir}/postgresql-8.4-701.jdbc3.jar"/>
 					</case>
 					<case value="hsqldb">
-						<property name="csm.database.driver.file" value="${bda-utils.dir}/hsqldb-1.8.0.7.jar"/>
+						<property name="csm.database.driver.file" value="${build-utils.dir}/hsqldb-1.8.0.7.jar"/>
 					</case>
 					<default>
 						<fail message="Invalid or unsupported database type ${database.type}"/>
@@ -433,13 +562,13 @@
 				<echo message="Copying libraries to JBoss" />
 				<switch value="${database.type}">
 					<case value="oracle">
-						<property name="clm.database.driver.file" value="${bda-utils.dir}/ojdbc14-10.2.0.4.0.jar "/>
+						<property name="clm.database.driver.file" value="${build-utils.dir}/ojdbc14-10.2.0.3.0.jar"/>
 					</case>
 					<case value="mysql">
-						<property name="clm.database.driver.file" value="${bda-utils.dir}/mysql-connector-java-5.0.8.jar"/>
+						<property name="clm.database.driver.file" value="${build-utils.dir}/mysql-connector-java-5.1.13.jar"/>
 					</case>
 					<case value="postgresql">
-						<property name="clm.database.driver.file" value="${bda-utils.dir}/postgresql-jdbc3-8.3-604.jar"/>
+						<property name="clm.database.driver.file" value="${build-utils.dir}/postgresql-8.4-701.jdbc3.jar"/>
 					</case>
 					<default>
 						<fail message="Invalid or unsupported database type ${database.type}"/>
@@ -450,6 +579,8 @@
 				<copy file="${clm.database.driver.file}" todir="${jboss.home}/server/${jboss.server.name}/lib" overwrite="true" failonerror="true"/>
 			</then>
 		</if>
+		<copy file="${build-utils.dir}/bcprov-jdk15on-147.jar" todir="${jboss.home}/server/${jboss.server.name}/lib" overwrite="true" failonerror="true"/>
+		
 	</target>
 
 	<target name="install:jboss:project-webapp" description="Deploy example-webapp and common libraries to jboss installation" unless="exclude.jboss">
@@ -457,6 +588,13 @@
 		<delete dir="${jboss.home}/server/${jboss.server.name}/tmp" />
 		<delete dir="${jboss.home}/server/${jboss.server.name}/work" />
 		<copy file="${package.client.jboss.default.deploy.dir}/${PROJECT_NAME}.war" todir="${jboss.home}/server/${jboss.server.name}/deploy" overwrite="true" />
+		<if>
+			<equals arg1="${GENERATE_RESTFUL_RESOURCES}" arg2="true" />
+			<then>
+			<copy file="${package.client.jboss.default.deploy.dir}/${PROJECT_NAME}rest.war" todir="${jboss.home}/server/${jboss.server.name}/deploy" overwrite="true" />
+			</then>
+		</if>
+		
 	</target>
 
 	<target name="install:jboss:coberturaflush-webapp" description="Deploy example-webapp and common libraries to tomcat installation" unless="exclude.jboss">
@@ -479,7 +617,7 @@
 		</if>
 	</target>
 
-	<target name="install:tomcat:configure"  description="Configure tomcat (change ports and login-config)" unless="exclude.tomcat" depends="
+<!--	<target name="install:tomcat:configure"  description="Configure tomcat (change ports and login-config)" unless="exclude.tomcat" depends="
 		install:tomcat:configure:ports,
 		install:tomcat:configure:grid-ports,
 		install:tomcat:configure:login-config,
@@ -489,6 +627,28 @@
 		install:tomcat:configure:libraries
 		">
 	</target>
+-->
+	<target name="install:tomcat:configure" description="Configure tomcat (change ports)" unless="exclude.tomcat" depends="common:init">
+
+		<!-- need to pass ports for new override functionality.  It appears macros attribute defaults get initialized at load time not and invoke.  When I changed the value of the property then called the macro the old values were being used. -->
+
+		<tomcat-configure
+			tomcat.port.http="${tomcat.port.http}"
+			tomcat.port.ajp="${tomcat.port.ajp}"
+			tomcat.port.ssl="${tomcat.port.ssl}"
+			tomcat.port.shutdown="${tomcat.port.shutdown}"
+			tomcat.grid.configure="${tomcat.grid.enable}"
+			tomcat.grid.secure.enable="${tomcat.grid.enable}"
+			/>
+
+		<antcall target="install:tomcat:configure:login-config" />		
+		<antcall target="install:tomcat:configure:project-context" />
+		<antcall target="install:tomcat:configure:grid-login-project-context" />
+		<antcall target="install:tomcat:configure:global-resource" />
+		<antcall target="install:tomcat:configure:libraries" />
+		
+	</target>
+	
 
 	<target name="install:tomcat:configure:ports" unless="exclude.tomcat" >
 		<if>
@@ -496,7 +656,7 @@
 			<then>
 				<echo message="Updating Tomcat Ports"/>
 				<xmltask preservetype="true" source="${tomcat.home}/conf/server.xml" dest="${tomcat.home}/conf/server.xml" failWithoutMatch="true">
-					<xmlcatalog refid="bda.xml.catalog"/>
+					<xmlcatalog refid="build.xml.catalog"/>
 					<replace path="(//Connector)[1]/@port" withtext="${tomcat.port.http}" />
 					<replace path="(//Connector)/@redirectPort" withtext="${tomcat.port.ssl}" />
 					<replace path="(//Connector)[@protocol='AJP/1.3']/@port" withtext="${tomcat.port.ajp}" />
@@ -545,22 +705,22 @@
 			<then>
 				<switch value="${database.type}">
 					<case value="oracle">
-						<property name="csm.database.driver.file" value="${bda-utils.dir}/ojdbc14-10.2.0.4.0.jar "/>
+						<property name="csm.database.driver.file" value="${build-utils.dir}/ojdbc14-10.2.0.3.0.jar"/>
 					</case>
 					<case value="mysql">
-						<property name="csm.database.driver.file" value="${bda-utils.dir}/mysql-connector-java-5.0.8.jar"/>
+						<property name="csm.database.driver.file" value="${build-utils.dir}/mysql-connector-java-5.1.13.jar"/>
 					</case>
 					<case value="postgresql">
-						<property name="csm.database.driver.file" value="${bda-utils.dir}/postgresql-jdbc3-8.3-603.jar"/>
+						<property name="csm.database.driver.file" value="${build-utils.dir}/postgresql-8.4-701.jdbc3.jar"/>
 					</case>
 					<case value="hsqldb">
-						<property name="csm.database.driver.file" value="${bda-utils.dir}/hsqldb-1.8.0.7.jar"/>
+						<property name="csm.database.driver.file" value="${build-utils.dir}/hsqldb-1.8.0.7.jar"/>
 					</case>
 					<default>
 						<fail message="Invalid or unsupported database type ${database.type}"/>
 					</default>
 				</switch>
-				<copy file="${csm.database.driver.file}" todir="${catalina.home}/server/lib" overwrite="true" failonerror="false"/>
+				<copy file="${csm.database.driver.file}" todir="${catalina.home}/lib" overwrite="true" failonerror="false"/>
 				<copyfile src="${package.client.tomcat.serverxml.dir}/login.config" dest="${tomcat.home}/conf/login.config"/>
 				<propertyfile file="${tomcat.home}/conf/catalina.properties" comment="append login.config file path">
 					<entry key="java.security.auth.login.config" value="${catalina.home}/conf/login.config" />
@@ -606,24 +766,24 @@
 
 				<echo message="Inserting ${naming.resource.server.xml} into ${tomcat.home}/conf/server.xml" />
 				<xmltask preservetype="true" source="${tomcat.home}/conf/server.xml">
-					<xmlcatalog refid="bda.xml.catalog"/>
+					<xmlcatalog refid="build.xml.catalog"/>
 					<remove path="//GlobalNamingResources/Resource[2]"/>
 				</xmltask>
 				<xmltask preservetype="true" source="${tomcat.home}/conf/server.xml" dest="${tomcat.home}/conf/server.xml" failWithoutMatch="true">
-					<xmlcatalog refid="bda.xml.catalog" />
+					<xmlcatalog refid="build.xml.catalog" />
 					<insert path="//GlobalNamingResources/Resource" file="${naming.resource.server.xml}" position="after" />
 				</xmltask>
 
 				<!-- 
 				<echo message="Inserting ${naming.resource.param.server.xml} into ${tomcat.home}/conf/server.xml" />
 				<xmltask preservetype="true" source="${tomcat.home}/conf/server.xml">
-					<xmlcatalog refid="bda.xml.catalog"/>
+					<xmlcatalog refid="build.xml.catalog"/>
 					<remove path="//GlobalNamingResources/ResourceParams[2]"/>
 				</xmltask>
 				<xmltask preservetype="true" source="${tomcat.home}/conf/server.xml"
 					dest="${tomcat.home}/conf/server.xml"
 					failWithoutMatch="true">
-					<xmlcatalog refid="bda.xml.catalog"/>
+					<xmlcatalog refid="build.xml.catalog"/>
 					<insert path="//GlobalNamingResources/ResourceParams" file="${naming.resource.param.server.xml}" position="after"/>
 				</xmltask>
 				 -->
@@ -644,11 +804,40 @@
 				<include name="**/*.jar"/>
 			</fileset>
 		</copy>
+		
+		<switch value="${database.type}">
+			<case value="oracle">
+				<property name="database.driver.file" value="${build-utils.dir}/ojdbc14-10.2.0.3.0.jar"/>
+			</case>
+			<case value="mysql">
+				<property name="database.driver.file" value="${build-utils.dir}/mysql-connector-java-5.1.13.jar"/>
+			</case>
+			<case value="postgresql">
+				<property name="database.driver.file" value="${build-utils.dir}/postgresql-8.4-701.jdbc3.jar"/>
+			</case>
+			<case value="hsqldb">
+				<property name="database.driver.file" value="${build-utils.dir}/hsqldb-1.8.0.7.jar"/>
+			</case>
+			<default>
+				<fail message="Invalid or unsupported database type ${database.type}"/>
+			</default>
+		</switch>
+		<copy file="${database.driver.file}" todir="${catalina.home}/lib" overwrite="true" failonerror="false"/>
+		<copy file="${build-utils.dir}/bcprov-jdk15on-147.jar" todir="${catalina.home}/lib" overwrite="true" failonerror="false"/>
+		
 	</target>
 
 	<target name="install:tomcat:project-webapp" description="Deploy example-webapp and common libraries to tomcat installation" unless="exclude.tomcat">
 		<delete dir="${tomcat.home}//webapps/${PROJECT_NAME}" quiet="true"/>
 		<copy file="${package.client.tomcat.webapps.dir}/${PROJECT_NAME}.war" todir="${tomcat.home}/webapps" overwrite="true" />
+		<if>
+			<equals arg1="${GENERATE_RESTFUL_RESOURCES}" arg2="true" />
+			<then>
+				<delete dir="${tomcat.home}//webapps/${PROJECT_NAME}rest" quiet="true"/>
+				<copy file="${package.client.tomcat.webapps.dir}/${PROJECT_NAME}rest.war" todir="${tomcat.home}/webapps" overwrite="true" />
+			</then>
+		</if>
+		
 	</target>
 
 	<target name="install:tomcat:coberturaflush-webapp" description="Deploy example-webapp and common libraries to tomcat installation" unless="exclude.tomcat">
@@ -661,17 +850,23 @@
 		</if>
 	</target>
 
+        
 	<target name="install:tomcat:grid-login-webapp" description="Deploy grid-webapp and common libraries to tomcat installation" unless="exclude.tomcat">
 		<if>
 			<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true" casesensitive="false" trim="true" />
 			<then>
 				<delete dir="${tomcat.home}//webapps/${SDK_GRID_LOGIN_SERVICE_NAME}" quiet="true"/>
 				<copy file="${package.client.tomcat.webapps.dir}/${SDK_GRID_LOGIN_SERVICE_NAME}.war" todir="${tomcat.home}/webapps" overwrite="true" />
+				<copy todir="${tomcat.home}/lib" overwrite="true">
+					<fileset dir="${output.dir}/${PROJECT_NAME}/lib">
+						<include name="sdk-grid-jaas-*.jar"/>				
+					</fileset>
+				</copy>
 			</then>
 		</if>
 	</target>
 
-	<target name="install:jboss:validation:post-install" description="Run post-install checks from bda-utils" unless="exclude.jboss"
+	<target name="install:jboss:validation:post-install" description="Run post-install checks from build-utils" unless="exclude.jboss"
 		depends="
 		common:jboss:init,
 		common:init,
@@ -687,49 +882,91 @@
 		</if>
 	</target>
 
-	<target name="install:jboss:init" depends="common:init:pre" unless="exclude.jboss">
+	<target name="install:jboss:init" depends="common:init:pre"  unless="exclude.jboss">
 		<!-- determine if port configurations or port lists are being called -->
 		<if>
 			<isset property="jboss.ncicb-standard.port-config"/>
 			<then>
 				<!-- Read some port properties from standard bindings file -->
 				<echo message="Using JBoss NCICB Standard port configurations"/>
-				<property name="jboss.server.binding.template.location" value="${basedir}/${jboss-bindings.file}"/>
-				<jboss-read-ports
-					jboss.server.bindingfile.location="${jboss.server.binding.template.location}"
+				<if>
+					<equals arg1="${jboss.major.version}" arg2="4"/>
+					<then>
+						<property name="jboss.server.binding.template.location" value="${basedir}/${jboss-bindings.file}"/>
+						
+						<jboss-read-ports
+							jboss.server.bindingfile.location="${jboss.server.binding.template.location}"
+							/>
+						<jboss-bindings-validate
+							jboss.server.bindingfile.location="${jboss.server.binding.template.location}"
 					/>
+					</then>
+					<elseif>
+						<equals arg1="${jboss.major.version}" arg2="5"/>
+						<then>
+			                        	<property name="jboss.server.binding.template.location" value="${basedir}/${jboss-bindings.file}"/>
+			                        	<property name="jboss.server.bindingfile.location" value="${jboss.home}/server/${jboss.server.name}/conf/bindingservice.beans/META-INF/bindings-jboss-beans.xml"/>
+							<property name="temp.ejb.file" value="${temp.dir}/ejb3-connectors-jboss-beans.xml"/>
+							<copy tofile="${temp.ejb.file}" file="${build-utils.dir}/resource/jboss-5.1.0.GA/ejb3-connectors-jboss-beans.xml"/>
+							<jboss51-bindings-nci
+								jboss.server.bindingfile.location="${basedir}/${jboss-bindings.file}"
+								jboss.server.binding.template.location="${basedir}/${jboss-bindings.file}"
+								
+								/>
+							<jboss51-read-ports-nci
+								jboss.server.bindingfile.location="${basedir}/${jboss-bindings.file}"
+								jboss.server.ejbfile.location="${temp.ejb.file}"
+								/>
+						</then>
+					</elseif>
+				</if>
 				<echo message="http -${jboss.server.port} "/>
 				<echo message="http -${jboss.server.jndi.port} "/>
+                                <if>
+                                        <equals arg1="${jboss.major.version}" arg2="4"/>
+                                        <then>
+                                                <property name="jboss.server.binding.template.location" value="${build-utils.dir}/resource/${jboss.binaries.relative.dir}/bindings.xml"/>
+                                        </then>
+                                        <else>
+                                                <property name="jboss.server.binding.template.location" value="${build-utils.dir}/resource/${jboss.binaries.relative.dir}/bindings-jboss-beans.xml"/>
+
+                                        </else>
+                                </if>
 				<properties-exist
 					properties.list="jboss.server.jndi.port,jboss.server.port,jboss.server.ports.name"
 					/>
-				<!-- Make sure there are not unexpanded tokens and that the jboss.server.ports.name is a configuration in the bindings file. -->
-				<jboss-bindings-validate
-					jboss.server.bindingfile.location="${jboss.server.binding.template.location}"
-					/>
-
 			</then>
 			<else>
-				<!-- else ensure that all ports are set, since these will be removed from install.properties.template we will verify here.  They have to be removed so the validator works with or without the properties or we have to change the format of the file. -->
+				<!-- else ensure that all ports are set, since these will be removed from install-properties.template we will verify here.  They have to be removed so the validator works with or without the properties or we have to change the format of the file. -->
 				<echo message="Using custom JBoss port configurations"/>
-				<property name="jboss.server.binding.template.location" value="${bda-utils.dir}/resource/${jboss.binaries.relative.dir}/bindings.xml"/>
+				<property name="jboss.server.binding.template.location" value="${build-utils.dir}/resource/${jboss.binaries.relative.dir}/bindings.xml"/>
 				<properties-exist
-					properties.list="jboss.server.jndi.port,jboss.server.port,jboss.cobraorb.port,jboss.ejbinvoker.port,jboss.hajndi.port,jboss.hajrmi.port,jboss.jms.port,jboss.jmx-rmi.port,jboss.messaging.port,jboss.pooledha.port,jboss.remoting.port,jboss.server.bind.port,jboss.server.rmi.port,jboss.service.rmiobject.port,jboss.snmp.port,jboss.snmp-trapd.port,jboss.web.service.port"
+					properties.list="jboss.server.jndi.port,jboss.server.port,jboss.cobraorb.port,jboss.hajndi.port,jboss.hajrmi.port,jboss.jmx-rmi.port,jboss.messaging.port,jboss.pooledha.port,jboss.server.bind.port,jboss.server.rmi.port,jboss.service.rmiobject.port,jboss.snmp.port,jboss.snmp-trapd.port,jboss.web.service.port,jboss.unifiedinvoker.port,jboss.hajndi.auto.port,jboss.ssl.port,jboss.jms2.netty.port,jboss.jms2.netty-ssl.port,jboss.transaction.recovery.port,jboss.transaction.status.port,jboss.transaction.processid.port"
 					/>
 			</else>
 		</if>
 	</target>
 
+	<target name="stop:jboss" description="Checks to see if configured ports are listenting and fails buld, meant to be run after jboss:stop" unless="exclude.jboss"
+		depends="
+		install:jboss:stop
+		">
+	</target>
+	
 	<target name="install:jboss:validation:pre-install:ports" description="Checks to see if configured ports are listenting and fails buld, meant to be run after jboss:stop" unless="exclude.jboss"
 		depends="
 		common:init,
 		install:jboss:stop
 		">
 		<validate-pre-jboss-ports
+			hostname="http://${jboss.server.hostname}"
 			/>
 	</target>
 
-	<target name="install:jboss:validation:pre-install" description="Runs pre-install validation checks bda-utils"  unless="exclude.jboss"
+
+	<target name="common:jboss:init" depends="common:init:pre,common:jboss:grid:init" unless="exclude.jboss"/>
+
+	<target name="install:jboss:validation:pre-install" description="Runs pre-install validation checks build-utils"  unless="exclude.jboss"
 		depends="
 		common:jboss:init,common:init,
 		install:common:validation:pre-install
@@ -928,7 +1165,7 @@
 		</copy>
 	</target>
 
-	<target name="install:database:validation:pre-install" description="Runs pre-install validation checks bda-utils" 
+	<target name="install:database:validation:pre-install" description="Runs pre-install validation checks build-utils" 
 		depends="
 		common:init,
 		install:common:validation:pre-install
@@ -961,7 +1198,7 @@
 		</if>-->
 	</target>
 
-	<target name="install:common:validation:pre-install" description="Runs pre-install validation checks bda-utils" depends="common:init">
+	<target name="install:common:validation:pre-install" description="Runs pre-install validation checks build-utils" depends="common:init">
 		<!-- Removed JDK version check
 		<validate-pre-install-common
 			ant.check.version="${ant.minimum.version}"
@@ -1003,7 +1240,7 @@
 	<macrodef name="tomcat-stop" description="Stops a local tomcat instance">
 		<attribute name="tomcat.home" />
 		<sequential>
-			<echo message="Overriding bda-master-util tomcat-stop"/>
+			<echo message="Overriding build-master-util tomcat-stop"/>
 			<echo message="Stopping Tomcat instance at @{tomcat.home}" />
 			<exec executable="sh" osfamily="unix" dir="@{tomcat.home}/bin" spawn="true">
 				<env key="NOPAUSE" value="true" />

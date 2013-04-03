@@ -34,17 +34,17 @@ public class BaseActionSupport extends ActionSupport implements
 	public void setSession(Map session) {
 		this.session = session;
 	}
-	
+
 	protected static void debugSessionAttributes(SessionMap session){
-		
+
 		log.debug("Debugging Session Attributes");
-		
+
 		Set entrySet = session.entrySet();
 		Iterator entryIter = entrySet.iterator();
-		
+
 		Set keySet = session.keySet();
 		Iterator keyIter = keySet.iterator();
-		
+
 		String key;
 		Object value;
 		while (keyIter.hasNext()){
@@ -52,11 +52,11 @@ public class BaseActionSupport extends ActionSupport implements
 			value = session.get(key);
 			log.debug("Session Key: " + key + "; value = " + value );
 		}
-		
+
 		Object next;
-		while (entryIter.hasNext()){		
+		while (entryIter.hasNext()){
 			next = entryIter.next();
 			log.debug(next.getClass().getName() + ": " + next );
 		}
-	}	
+	}
 }

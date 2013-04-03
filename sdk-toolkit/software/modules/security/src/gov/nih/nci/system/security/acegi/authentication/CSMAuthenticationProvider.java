@@ -4,6 +4,9 @@ package gov.nih.nci.system.security.acegi.authentication;
 
 import gov.nih.nci.security.exceptions.CSConfigurationException;
 import gov.nih.nci.security.exceptions.CSException;
+import gov.nih.nci.security.exceptions.CSCredentialExpiredException;
+import gov.nih.nci.security.exceptions.CSFirstTimeLoginException;
+import gov.nih.nci.security.exceptions.CSUserDisabledException;
 import gov.nih.nci.security.exceptions.CSInputException;
 import gov.nih.nci.security.exceptions.CSInsufficientAttributesException;
 import gov.nih.nci.security.exceptions.CSLoginException;
@@ -11,6 +14,8 @@ import gov.nih.nci.security.exceptions.CSLoginException;
 import org.acegisecurity.AuthenticationException;
 import org.acegisecurity.AuthenticationServiceException;
 import org.acegisecurity.BadCredentialsException;
+import org.acegisecurity.AccountExpiredException;
+import org.acegisecurity.CredentialsExpiredException;
 import org.acegisecurity.providers.AuthenticationProvider;
 import org.acegisecurity.providers.UsernamePasswordAuthenticationToken;
 import org.acegisecurity.providers.dao.AbstractUserDetailsAuthenticationProvider;
@@ -39,21 +44,40 @@ public class CSMAuthenticationProvider extends AbstractUserDetailsAuthentication
     	// 	Use CSM authenticationManager to authenticate User.
         try {
 			this.userDetailsService.authenticationManagerInstance().authenticate(userDetails.getUsername(), authentication.getCredentials().toString());
-		} catch (CSLoginException e) {
+		}
+        catch(CSCredentialExpiredException e)
+        {
+        	//System.out.println("CSCredentialExpiredException **********111********");
+        	e.printStackTrace();
+        	//throw e;
+        	
 			 throw new BadCredentialsException(messages.getMessage(
-	                    "AbstractUserDetailsAuthenticationProvider.badCredentials", "Bad credentials"), includeDetailsObject ? userDetails : null);
+	                    "AbstractUserDetailsAuthenticationProvider.badCredentials", "Credentials expired. Need to reset the password."), e);
+        }
+        catch(CSFirstTimeLoginException e)
+        {
+			 throw new BadCredentialsException(messages.getMessage(
+	                    "AbstractUserDetailsAuthenticationProvider.badCredentials", "First time login. Need to reset the password."), e);
+        }
+        catch(CSUserDisabledException e)
+        {
+			 throw new BadCredentialsException(messages.getMessage(
+	                    "AbstractUserDetailsAuthenticationProvider.badCredentials", "Account is not active."), e);
+        } catch (CSLoginException e) {
+			 throw new BadCredentialsException(messages.getMessage(
+	                    "AbstractUserDetailsAuthenticationProvider.badCredentials", "Bad credentials"), e);
 		} catch (CSInputException e) {
 			 throw new BadCredentialsException(messages.getMessage(
-	                    "AbstractUserDetailsAuthenticationProvider.badCredentials", "Bad credentials"), includeDetailsObject ? userDetails : null);
+	                    "AbstractUserDetailsAuthenticationProvider.badCredentials", "Bad credentials"), e);
 		} catch (CSConfigurationException e) {
 			 throw new BadCredentialsException(messages.getMessage(
-	                    "AbstractUserDetailsAuthenticationProvider.badCredentials", "Bad credentials"), includeDetailsObject ? userDetails : null);
+	                    "AbstractUserDetailsAuthenticationProvider.badCredentials", "Bad credentials"), e);
 		} catch (CSInsufficientAttributesException e) {
 			 throw new BadCredentialsException(messages.getMessage(
-	                    "AbstractUserDetailsAuthenticationProvider.badCredentials", "Bad credentials"), includeDetailsObject ? userDetails : null);
+	                    "AbstractUserDetailsAuthenticationProvider.badCredentials", "Bad credentials"), e);
 		} catch (CSException e) {
 			 throw new BadCredentialsException(messages.getMessage(
-	                    "AbstractUserDetailsAuthenticationProvider.badCredentials", "Bad credentials"), includeDetailsObject ? userDetails : null);
+	                    "AbstractUserDetailsAuthenticationProvider.badCredentials", "Bad credentials"), e);
 		}
         
     }
@@ -69,7 +93,7 @@ public class CSMAuthenticationProvider extends AbstractUserDetailsAuthentication
 
     protected final UserDetails retrieveUser(String username, UsernamePasswordAuthenticationToken authentication)
         throws AuthenticationException {
-        UserDetails loadedUser;
+        UserDetails loadedUser = null;
 
         try {
             loadedUser = this.getUserDetailsService().loadUserByUsername(username);

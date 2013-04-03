@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<web-app id="WebApp_9" version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+			/WEB-INF/classes/application-config.xml
+			/WEB-INF/classes/application-config-web.xml
+			/WEB-INF/classes/application-config-security.xml
+			/WEB-INF/classes/application-config-web-security.xml
+		</param-value>
+	</context-param>
+	
+    
+	<filter> 
+		<filter-name>struts2</filter-name> 
+		<filter-class>org.apache.struts2.dispatcher.FilterDispatcher</filter-class>
+		<init-param>
+        	<param-name>actionPackages</param-name>
+        	<param-value>gov.nih.nci.system.struts.action</param-value>
+        </init-param>
+	</filter> 
+
+	<!--@SECURITY_START@-->
+    <filter>
+        <filter-name>AcegiFilters</filter-name>
+        <filter-class>org.acegisecurity.util.FilterToBeanProxy</filter-class>
+        <init-param>
+            <param-name>targetClass</param-name>
+            <param-value>org.acegisecurity.util.FilterChainProxy</param-value>
+        </init-param>
+    </filter>
+
+    <filter-mapping>
+      <filter-name>AcegiFilters</filter-name>
+      <url-pattern>/*</url-pattern>
+    </filter-mapping>	
+	<!--@SECURITY_END@-->
+	
+	<filter-mapping> 
+		<filter-name>struts2</filter-name> 
+		<url-pattern>/*</url-pattern> 
+	</filter-mapping> 
+
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
+    	<servlet>
+		<servlet-name>httpinvoker</servlet-name>
+		<servlet-class>
+			org.springframework.web.servlet.DispatcherServlet
+		</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>	
+
+	<!--@RESTFUL_CXF_SERVLET_START@-->
+	<servlet>
+		 <servlet-name>CXFServlet</servlet-name>
+		 <servlet-class>
+		 	org.apache.cxf.jaxrs.servlet.CXFNonSpringJaxrsServlet
+		 </servlet-class>
+		 <init-param>
+		 	<param-name>javax.ws.rs.Application</param-name>
+		 	<param-value>
+		 	gov.nih.nci.sdk.rest.SDKRESTApplication	      
+		 	</param-value>
+		 </init-param>
+		 <!-- 
+		    This parameter is recognized only starting from CXF 2.3.1
+		    @ApplicationPath value will be ignored if this parameter is set to true
+		 -->
+		 <init-param>
+		 	<param-name>jaxrs.application.address.ignore</param-name>
+		 	<param-value>true</param-value>
+		 </init-param>
+ 		 <init-param>
+		 	<param-name>jaxrs.scope</param-name>
+		 	<param-value>
+		 		prototype
+		 	</param-value>
+		 </init-param>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
+	<!--@RESTFUL_CXF_SERVLET_END@-->
+	
+    <servlet>
+        <servlet-name>AxisServlet</servlet-name>
+        <servlet-class>org.apache.axis.transport.http.AxisServlet</servlet-class> 
+    </servlet>
+
+    <servlet>
+        <servlet-name>GetXML</servlet-name>
+        <servlet-class>gov.nih.nci.system.web.HTTPQuery</servlet-class>        	
+    </servlet>
+
+    <servlet>
+    	<servlet-name>GetHTML</servlet-name>
+    	<servlet-class>gov.nih.nci.system.web.HTTPQuery</servlet-class>        	
+    </servlet>
+    
+    <servlet>
+        <servlet-name>GetJSON</servlet-name>
+        <servlet-class>gov.nih.nci.system.web.HTTPQuery</servlet-class>        	
+    </servlet>
+	<!--@REMOTE_JAVA_INTERFACE_START@-->
+	<servlet-mapping>
+		<servlet-name>CXFServlet</servlet-name>
+		<url-pattern>/rest/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>httpinvoker</servlet-name>
+		<url-pattern>/http/*</url-pattern>
+	</servlet-mapping>
+	<!--@REMOTE_JAVA_INTERFACE_END@-->
+	<!--@WEB_SERVICE_INTERFACE_START@-->
+	<servlet-mapping>
+		<servlet-name>AxisServlet</servlet-name>
+		<url-pattern>/services/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>AxisServlet</servlet-name>
+		<url-pattern>*.jws</url-pattern>
+	</servlet-mapping>
+	<!--@WEB_SERVICE_INTERFACE_END@-->
+	<!--@RESTFUL_XML_INTERFACE_START@-->
+	<servlet-mapping>
+		<servlet-name>GetXML</servlet-name>
+		<url-pattern>/GetXML</url-pattern>
+	</servlet-mapping>
+	<!--@RESTFUL_XML_INTERFACE_END@-->
+	<!--@RESTFUL_HTML_INTERFACE_START@-->
+	<servlet-mapping>
+		<servlet-name>GetHTML</servlet-name>
+		<url-pattern>/GetHTML</url-pattern>
+	</servlet-mapping>
+	<!--@RESTFUL_HTML_INTERFACE_END@-->
+	<!--@RESTFUL_JSON_INTERFACE_START@-->
+	<servlet-mapping>
+		<servlet-name>GetJSON</servlet-name>
+		<url-pattern>/GetJSON</url-pattern>
+	</servlet-mapping>
+	<!--@RESTFUL_JSON_INTERFACE_END@-->
+	<mime-mapping>
+		<extension>wsdl</extension>
+		<mime-type>text/xml</mime-type>
+	</mime-mapping>
+
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+	</welcome-file-list>
+	
+</web-app>

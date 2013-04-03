@@ -24,20 +24,20 @@ import org.globus.gsi.GlobusCredential;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class GridJAASLoginModule implements  LoginModule 
+public class GridJAASLoginModule implements  LoginModule
 {
 	private static Logger log = Logger.getLogger(GridJAASLoginModule.class);
 	private static Logger auditLog = Logger.getLogger("CSM.Audit.Logging.Event.Authentication");
-	
+
 	private static ApplicationContext ctx = new ClassPathXmlApplicationContext("grid-login-service-config.xml");
-	
+
 	private Subject 		subject;
 	private CallbackHandler callbackHandler;
 	private Map 			sharedState;
 	private Map 			options;
-	
 
-	
+
+
 	public void initialize(Subject subject, CallbackHandler callbackHandler, Map sharedState, Map options)
 	{
 		this.subject 			= subject;
@@ -45,10 +45,10 @@ public class GridJAASLoginModule implements  LoginModule
 		this.sharedState 		= sharedState;
 		this.options 			= options;
 	}
-	
+
 	public boolean login() throws LoginException
 	{
-		if (callbackHandler == null){		
+		if (callbackHandler == null){
 			log.debug("Authentication|||login|Failure| Error in obtaining the CallBack Handler |" );
 			throw new LoginException("Error in obtaining Callback Handler");
 		}
@@ -56,13 +56,13 @@ public class GridJAASLoginModule implements  LoginModule
 		char[]		password;
 		String authenticationServiceURL;
 		String dorianServiceURL;
-		
+
 		Callback[] callbacks = new Callback[4];
 		callbacks[0] = new NameCallback("userid: ");
 		callbacks[1] = new PasswordCallback("password: ", false);
 		callbacks[2] = new TextInputCallback("authenticationURL: ");
 		callbacks[3] = new TextInputCallback("dorianServiceURL: ");
-		
+
 		try
 		{
 			callbackHandler.handle(callbacks);
@@ -70,7 +70,7 @@ public class GridJAASLoginModule implements  LoginModule
 			char[] tmpPassword = ((PasswordCallback) callbacks[1]).getPassword();
 			authenticationServiceURL = ((TextInputCallback) callbacks[2]).getText();
 			dorianServiceURL = ((TextInputCallback) callbacks[3]).getText();
-			
+
 			if (tmpPassword == null)
 				tmpPassword = new char[0];
 			password = new char[tmpPassword.length];
@@ -87,11 +87,11 @@ public class GridJAASLoginModule implements  LoginModule
 			log.debug("Authentication|||login|Failure| Error in accessing the CallBack Handler |" + e.getMessage());
 			throw new LoginException("Error in accessing the CallBack Handler");
 		}
-	
+
 		return performAuthentication(userID, password, authenticationServiceURL,dorianServiceURL);
 	}
-	
-	
+
+
 	public boolean commit() throws LoginException
 	{
 		return true;
@@ -108,11 +108,11 @@ public class GridJAASLoginModule implements  LoginModule
 		subject.getPrincipals().clear();
 		return true;
 	}
-	
+
 
 	protected boolean performAuthentication(String userID, char[] password, String authenticationServiceURL,String dorianServiceURL) throws LoginException
 	{
-		try 
+		try
 		{
 			GlobusCredential credential = null;
 			GridAuthenticationService executor = getAuthenticationService();
@@ -125,7 +125,6 @@ public class GridJAASLoginModule implements  LoginModule
 				X509AuthenticationToken auth = new X509AuthenticationToken(credential.getIdentityCertificate());
 				auth.setDetails(credential);
 				subject.getPrincipals().add(auth);
-
 				log.debug("Authentication|||login|Success| Authentication is true |");
 				auditLog.info("Successful Login attempt for user "+ userID);
 				return true;
@@ -133,12 +132,14 @@ public class GridJAASLoginModule implements  LoginModule
 		}
 		catch(CredentialNotFoundException cnfe)
 		{
+			cnfe.printStackTrace();
 			log.debug("Authentication|||login|Failure| Credential not found |" ,cnfe);
 			auditLog.info("Unsuccessful Login attempt for user "+ userID);
 			throw cnfe;
 		}
-		catch (Exception e) 
+		catch (Exception e)
 		{
+			e.printStackTrace();
 			log.debug("Authentication|||login|Failure| General exception in authenticating |" ,e);
 			auditLog.info("Unsuccessful Login attempt for user "+ userID);
 			throw new LoginException(e.getMessage());
@@ -146,7 +147,7 @@ public class GridJAASLoginModule implements  LoginModule
 		auditLog.info("Unsuccessful Login attempt for user "+ userID);
 		throw new FailedLoginException("Invalid Login Credentials");
 	}
-	
+
 	protected GridAuthenticationService getAuthenticationService() throws LoginException{
 		return (GridAuthenticationService)ctx.getBean("AuthenticationService");
 	}

@@ -23,8 +23,15 @@
 			<list>
 				<ref bean="HibernateMappingTransformer"/>
 				<ref bean="IsoConstantTransformer"/>
+				<ref bean="caDSRMetadataTransformer"/>
 				<ref bean="BeanTransformer"/>
+				<ref bean="RESTfulResourceTransformer"/>
+				<ref bean="RESTfulBeanTransformer"/>
+				<ref bean="RESTfulAppTransformer"/>
+				<ref bean="RESTfulCollectionBeansTransformer"/>
+				<ref bean="SDKCascadeTransformer"/>
 				<ref bean="JunitPojoTransformer"/>
+				<ref bean="JunitRESTfulTransformer"/>
 				<ref bean="JunitXmlDataTransformer"/>
 				<ref bean="JunitXsdTransformer"/>				
 				<ref bean="InterfaceTransformer"/>
@@ -60,6 +67,10 @@
 				<prop key="Exclude Namespace">@EXCLUDE_NAMESPACE@</prop>
 				<prop key="Identity Generator Tag"><![CDATA[@IDENTITY_GENERATOR_TAG@]]></prop>
 				<prop key="Database Type">@DATABASE_TYPE@</prop>
+				<prop key="Include REST Package">@RESTFUL_RESOURES_INCLUDE_PACKAGE@</prop>
+				<prop key="Exclude REST Package">@RESTFUL_RESOURES_EXCLUDE_PACKAGE@</prop>
+				<prop key="Exclude REST Name">@RESTFUL_RESOURES_EXCLUDE_NAME@</prop>
+
 			</props>
 		</constructor-arg>
 	</bean>
@@ -158,6 +169,19 @@
 		<property name="transformerUtils" ref="TransformerUtils"/>	
 	</bean>
 	
+	<bean name="caDSRMetadataTransformer" class="gov.nih.nci.codegen.transformer.caDSRMetadataTransformer">
+		<property name="artifactHandler">
+			<bean class="gov.nih.nci.codegen.handler.FileHandler">
+				<property name="useArtifactSource" value="false"/>
+				<property name="outputDir" value="@OUTPUTDIR@"/>				
+				<property name="fileName" value="caDSRMetadata.xml"/>						
+			</bean>
+		</property>
+		<property name="enabled" value="@ENABLE_CADSR_METADATA@"/>
+		<property name="name" value="caDSR Metadata Transformer" />		
+		<property name="transformerUtils" ref="TransformerUtils"/>	
+	</bean>
+
 	<bean name="BeanTransformer" class="gov.nih.nci.codegen.transformer.jet.POJOTransformer">
 		<property name="artifactHandler">
 			<bean class="gov.nih.nci.codegen.handler.FileHandler">
@@ -170,17 +194,95 @@
 		<property name="name" value="Bean Transformer"/>
 		<property name="transformerUtils" ref="TransformerUtils"></property>
 	</bean>
+
+	<bean name="RESTfulResourceTransformer" class="gov.nih.nci.codegen.transformer.jet.RESTfulResourceTransformer">
+		<property name="artifactHandler">
+			<bean class="gov.nih.nci.codegen.handler.FileHandler">
+				<property name="useArtifactSource" value="true"/>
+				<property name="outputDir" value="@OUTPUTDIR@/../rest/src"/>				
+				<property name="suffix" value=".java"/>									
+			</bean>
+		</property>
+		<property name="enabled" value="@GENERATE_RESTFUL_RESOURCES@"/>
+		<property name="name" value="RESTful Resource Transformer"/>
+		<property name="transformerUtils" ref="TransformerUtils"></property>
+	</bean>
+
+	<bean name="RESTfulBeanTransformer" class="gov.nih.nci.codegen.transformer.jet.RESTfulBeanTransformer">
+		<property name="artifactHandler">
+			<bean class="gov.nih.nci.codegen.handler.FileHandler">
+				<property name="useArtifactSource" value="true"/>
+				<property name="outputDir" value="@OUTPUTDIR@/../rest/src"/>				
+				<property name="suffix" value=".java"/>									
+			</bean>
+		</property>
+		<property name="enabled" value="@GENERATE_RESTFUL_RESOURCES@"/>
+		<property name="name" value="RESTful Bean Transformer"/>
+		<property name="transformerUtils" ref="TransformerUtils"></property>
+	</bean>
+
+	<bean name="RESTfulCollectionBeansTransformer" class="gov.nih.nci.codegen.transformer.jet.RESTfulCollectionBeansTransformer">
+		<property name="artifactHandler">
+			<bean class="gov.nih.nci.codegen.handler.FileHandler">
+				<property name="useArtifactSource" value="true"/>
+				<property name="outputDir" value="@OUTPUTDIR@/../rest/src"/>				
+				<property name="suffix" value=".java"/>									
+			</bean>
+		</property>
+		<property name="enabled" value="@GENERATE_RESTFUL_RESOURCES@"/>
+		<property name="name" value="RESTful Collection Beans Transformer"/>
+		<property name="transformerUtils" ref="TransformerUtils"></property>
+	</bean>
+
+	<bean name="RESTfulAppTransformer" class="gov.nih.nci.codegen.transformer.jet.SDKRESTAppTransformer">
+		<property name="artifactHandler">
+			<bean class="gov.nih.nci.codegen.handler.FileHandler">
+				<property name="useArtifactSource" value="false"/>
+				<property name="outputDir" value="@OUTPUTDIR@/../rest/src/gov/nih/nci/sdk/rest/"/>				
+				<property name="fileName" value="SDKRESTApplication.java"/>						
+			</bean>
+		</property>
+		<property name="enabled" value="@GENERATE_RESTFUL_RESOURCES@"/>
+		<property name="name" value="RESTful Application Transformer"/>
+		<property name="transformerUtils" ref="TransformerUtils"></property>			
+	</bean>
+
+	<bean name="SDKCascadeTransformer" class="gov.nih.nci.codegen.transformer.jet.SDKCascadeTransformer">
+		<property name="artifactHandler">
+			<bean class="gov.nih.nci.codegen.handler.FileHandler">
+				<property name="useArtifactSource" value="false"/>
+				<property name="outputDir" value="@OUTPUTDIR@/../rest/src/gov/nih/nci/sdk/rest/"/>				
+				<property name="fileName" value="SDKCascadeCache.java"/>						
+			</bean>
+		</property>
+		<property name="enabled" value="@GENERATE_RESTFUL_RESOURCES@"/>
+		<property name="name" value="SDK Cascade Transformer"/>
+		<property name="transformerUtils" ref="TransformerUtils"></property>			
+	</bean>
 	
 	<bean name="JunitPojoTransformer" class="gov.nih.nci.codegen.transformer.jet.JunitPojoTransformer">
 		<property name="artifactHandler">
 			<bean class="gov.nih.nci.codegen.handler.FileHandler">
 				<property name="useArtifactSource" value="true"/>
 				<property name="outputDir" value="@JUNITOUTPUTDIR@"/>				
-				<property name="suffix" value=".java"/>									
+				<property name="suffix" value=".java"/>	
 			</bean>
 		</property>
 		<property name="enabled" value="@GENERATE_JUNITS@"/>
 		<property name="name" value="Junit POJO Bean Test Transformer"/>
+		<property name="transformerUtils" ref="TransformerUtils"></property>
+	</bean>	
+	
+	<bean name="JunitRESTfulTransformer" class="gov.nih.nci.codegen.transformer.jet.JunitRESTfulTransformer">
+		<property name="artifactHandler">
+			<bean class="gov.nih.nci.codegen.handler.FileHandler">
+				<property name="useArtifactSource" value="true"/>
+				<property name="outputDir" value="@OUTPUTDIR@/../rest/test/src"/>				
+				<property name="suffix" value=".java"/>	
+			</bean>
+		</property>
+		<property name="enabled" value="@GENERATE_JUNITS@"/>
+		<property name="name" value="Junit RESTful Resource Test Transformer"/>
 		<property name="transformerUtils" ref="TransformerUtils"></property>
 	</bean>	
 		
@@ -220,7 +322,7 @@
 		<property name="name" value="Jaxb Index Transformer" />
 		<property name="fileName" value="jaxb.index"/>				
 		<property name="transformerUtils" ref="TransformerUtils"/>
-	</bean>	
+	</bean>
 	<bean name="InterfaceTransformer" class="gov.nih.nci.codegen.transformer.jet.InterfaceTransformer">
 		<property name="artifactHandler">
 			<bean class="gov.nih.nci.codegen.handler.FileHandler">
@@ -292,6 +394,7 @@
 						<entry key="hbm2ddl.auto" value="@HBM2DDL_TYPE@"/>
 						<!--@HBM2DDL_END@-->
 						
+						<entry key="hibernate.current_session_context_class" value="thread"/>
 						<entry key="show_sql" value="@HIBERNATE_SHOW_SQL@"/>
 						<entry key="dialect" value="@DB_DIALECT@"/>
 						<entry key="max_fetch_depth" value="1"/>

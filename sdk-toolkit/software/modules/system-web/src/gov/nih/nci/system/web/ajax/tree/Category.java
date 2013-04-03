@@ -4,18 +4,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  */
 public class Category
 {
 
-    public static Category getById(long id)
+    public static Category getById(String id)
     {
-        return (Category)catMap.get(new Long(id));
+        return (Category)catMap.get(id);
     }
 
-    public Category(long id, String name, String packageName, Category children[])
+    public Category(String id, String name, String packageName, Category children[])
     {
         this.id = id;
         this.name = name;
@@ -29,25 +30,25 @@ public class Category
             this.children.add(child);
         }
 
-        catMap.put(new Long(id), this);
+        catMap.put(id, this);
     }
-    
-    public Category(long id, String name, String packageName, List children)
+
+    public Category(String id, String name, String packageName, List children)
     {
         this.id = id;
         this.name = name;
-        this.packageName = packageName;        
+        this.packageName = packageName;
         this.children = children;
 
-        catMap.put(new Long(id), this);
-    }    
+        catMap.put(id, this);
+    }
 
-    public long getId()
+    public String getId()
     {
         return id;
     }
 
-    public void setId(long id)
+    public void setId(String id)
     {
         this.id = id;
     }
@@ -83,7 +84,7 @@ public class Category
     }
 
     private static Map catMap = new HashMap();
-    private long id;
+    private String id;
     private String packageName;
     private String name;
     private List children;
@@ -91,15 +92,15 @@ public class Category
 
     static 
     {
-        new Category(1L, "Root", "", new Category[] {
-            new Category(2L, "Java", "", new Category[] {
-                new Category(3L, "Web Frameworks", "", new Category[] {
-                    new Category(4L, "Struts", "", new Category[0]), new Category(7L, "Stripes", "", new Category[0]), new Category(8L, "Rife", "", new Category[0])
-                }), new Category(9L, "Persistence", "", new Category[] {
-                    new Category(10L, "iBatis", "", new Category[0]), new Category(11L, "Hibernate", "", new Category[0]), new Category(12L, "JDO", "", new Category[0]), new Category(13L, "JDBC", "", new Category[0])
+        new Category("1", "Root", "", new Category[] {
+            new Category("2", "Java", "", new Category[] {
+                new Category("3", "Web Frameworks", "", new Category[] {
+                    new Category("4", "Struts", "", new Category[0]), new Category("7", "Stripes", "", new Category[0]), new Category("8", "Rife", "", new Category[0])
+                }), new Category("9", "Persistence", "", new Category[] {
+                    new Category("10", "iBatis", "", new Category[0]), new Category("11", "Hibernate", "", new Category[0]), new Category("12", "JDO", "", new Category[0]), new Category("13", "JDBC", "", new Category[0])
                 })
-            }), new Category(14L, "JavaScript", "", new Category[] {
-                new Category(15L, "Dojo", "", new Category[0]), new Category(16L, "Prototype", "", new Category[0]), new Category(17L, "Scriptaculous", "", new Category[0]), new Category(18L, "OpenRico", "", new Category[0]), new Category(19L, "DWR", "", new Category[0])
+            }), new Category("14", "JavaScript", "", new Category[] {
+                new Category("15", "Dojo", "", new Category[0]), new Category("16", "Prototype", "", new Category[0]), new Category("17", "Scriptaculous", "", new Category[0]), new Category("18", "OpenRico", "", new Category[0]), new Category("19", "DWR", "", new Category[0])
             })
         });
     }
@@ -117,5 +118,36 @@ public class Category
 				"Category name: " + this.name + " ||\n " +
 				"Category packageName: " + this.packageName;
 	}
+
+
+	public String getTreeData()
+	{
+		StringBuffer treeData = new StringBuffer();
+		String rootNodeStr = "{ id: '"+getId()+"', name: '"+getName()+"'}";
+
+		treeData.append(rootNodeStr);
+		List children = getChildren();
+		Iterator iter = children.iterator();
+		while(iter.hasNext())
+		{
+			Category childCategory = (Category) iter.next();
+			String nodeStr = "{ id: '"+childCategory.getId()+"', name: '"+childCategory.getName()+"', parent: '"+getId()+"'}";
+			treeData.append(",");
+			treeData.append(nodeStr);
+
+			List grandChildren = childCategory.getChildren();
+			Iterator childIter = grandChildren.iterator();
+			while(childIter.hasNext())
+			{
+				Category childChildCategory = (Category) childIter.next();
+				String childNodeStr = "{ id: '"+childChildCategory.getId()+"', name: '"+childChildCategory.getName()+"', parent: '"+childCategory.getId()+"'}";
+				treeData.append(",");
+				treeData.append(childNodeStr);
+			}
+		}
+		return treeData.toString();
+	}
+
+
 }
 

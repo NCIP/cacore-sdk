@@ -24,7 +24,12 @@
 				<property name="serviceUrl" value="@SERVER_URL@/http/applicationService"/>
 				<property name="serviceInterface" value="@SERVICE_INTERFACE@"/>
 				<property name="httpInvokerRequestExecutor">
+				<!--@SIMPLE_HTTP_INVOKER_SRART@-->
+				<bean class="gov.nih.nci.system.springframework.remoting.httpinvoker.HttpInvokerRequestExecutor"/>
+				<!--@SIMPLE_HTTP_INVOKER_END@-->
+				<!--@GSI_HTTP_INVOKER_SRART@-->
 				<bean class="gov.nih.nci.system.springframework.remoting.httpinvoker.GSIHttpInvokerRequestExecutor"/>
+				<!--@GSI_HTTP_INVOKER_END@-->
 				</property>
 			</bean>
 		</property>
@@ -76,7 +81,7 @@
 							&lt;property name=&quot;serviceUrl&quot; value=&quot;URL_KEY/http/applicationService&quot;/&gt;
 							&lt;property name=&quot;serviceInterface&quot; value=&quot;@SERVICE_INTERFACE@&quot;/&gt;
 							&lt;property name=&quot;httpInvokerRequestExecutor&quot;&gt;
-							&lt;bean class=&quot;gov.nih.nci.system.springframework.remoting.httpinvoker.GSIHttpInvokerRequestExecutor&quot;/&gt;
+							&lt;bean class=&quot;@HTTP_INVOKER@&quot;/&gt;
 							&lt;/property&gt;
 						&lt;/bean&gt;
 					&lt;/property&gt;

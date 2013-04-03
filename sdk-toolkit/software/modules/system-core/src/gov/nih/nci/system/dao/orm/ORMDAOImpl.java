@@ -7,7 +7,6 @@ import gov.nih.nci.system.dao.Response;
 import gov.nih.nci.system.dao.orm.translator.CQL2HQL;
 import gov.nih.nci.system.dao.orm.translator.NestedCriteria2HQL;
 import gov.nih.nci.system.dao.orm.translator.Path2NestedCriteria;
-import gov.nih.nci.system.query.cql.CQLQuery;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
 import gov.nih.nci.system.query.nestedcriteria.NestedCriteria;
 import gov.nih.nci.system.query.nestedcriteria.NestedCriteriaPath;
@@ -38,7 +37,7 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
  * @author Satish Patel, Dan Dumitru
  *
  */
-public class ORMDAOImpl extends HibernateDaoSupport implements DAO 
+public class ORMDAOImpl extends HibernateDaoSupport implements DAO
 {
 	protected static Logger log = Logger.getLogger(DAO.class.getName());
 
@@ -48,7 +47,7 @@ public class ORMDAOImpl extends HibernateDaoSupport implements DAO
 	private boolean caseSensitive;
 	private int resultCountPerQuery;
 
-	
+
 	protected HibernateTemplate createHibernateTemplate(SessionFactory sessionFactory)
 	{
 		if(securityHelper!=null && securityHelper.isSecurityEnabled() && securityHelper.getAuthorizationManager()!=null && (securityHelper.isInstanceLevelSecurityEnabled() || securityHelper.isAttributeLevelSecurityEnabled()))
@@ -57,41 +56,39 @@ public class ORMDAOImpl extends HibernateDaoSupport implements DAO
 			return super.createHibernateTemplate(sessionFactory);
 	}
 
-	public Response query(Request request) throws DAOException 
+	public Response query(Request request) throws DAOException
 	{
 		Object obj = request.getRequest();
 
 		try
 		{
 			log.debug("****** obj: " + obj.getClass());
-			if (obj instanceof DetachedCriteria) 				
-				return query(request, (DetachedCriteria) obj); 	
+			if (obj instanceof DetachedCriteria)
+				return query(request, (DetachedCriteria) obj);
 			else if (obj instanceof NestedCriteriaPath)
-				return query(request, (NestedCriteriaPath) obj); 	
+				return query(request, (NestedCriteriaPath) obj);
 			else if (obj instanceof HQLCriteria)
 				return query(request, (HQLCriteria) obj);
-			else if (obj instanceof CQLQuery)
-				return query(request, (CQLQuery) obj);
 			else
 				throw new DAOException("Can not determine type of the query");
 		} catch (JDBCException ex){
-			log.error("JDBC Exception in ORMDAOImpl: ", ex);
-			throw new DAOException("JDBC Exception in ORMDAOImpl: ", ex);
+			log.error("JDBC Exception in ORMDAOImpl ", ex);
+			throw new DAOException("JDBC Exception in ORMDAOImpl ", ex);
 		} catch(org.hibernate.HibernateException hbmEx)	{
-			log.error("Hibernate Exception in ORMDAOImpl: ", hbmEx);
-			throw new DAOException("Hibernate Exception in ORMDAOImpl: ", hbmEx);
+			log.error(hbmEx.getMessage());
+			throw new DAOException("Hibernate problem ", hbmEx);
 		} catch(Exception e) {
-			log.error("Exception in ORMDAOImpl: ", e);
-			throw new DAOException("Exception in ORMDAOImpl: ", e);
+			log.error("Exception ", e);
+			throw new DAOException("Exception in ORMDAOImpl ", e);
 		}
 	}
-	
+
     public List<String> getAllClassNames(){
-    	
+
     	List<String> allClassNames = new ArrayList<String>();
     	Map allClassMetadata = getSessionFactory().getAllClassMetadata();
-    	
-    	for (Iterator iter = allClassMetadata.keySet().iterator() ; iter.hasNext(); ){	
+
+    	for (Iterator iter = allClassMetadata.keySet().iterator() ; iter.hasNext(); ){
     		String className = (String)iter.next();
     		log.debug("Detected class "+className + " in DAO Class Metadata");
     		if (!className.startsWith("_xxEntityxx_")){
@@ -100,26 +97,26 @@ public class ORMDAOImpl extends HibernateDaoSupport implements DAO
     		}
 
     	}
-    	
+
     	return allClassNames;
     }
-    
+
     public String getClassIdentiferName(String klassname){
-    	
+
     	ClassMetadata classMetadata = getSessionFactory().getClassMetadata(klassname);
-    	
+
     	if (classMetadata==null)
     		return "";
 
     	return classMetadata.getIdentifierPropertyName();
 
     }
-	
+
 	protected Response query(Request request, DetachedCriteria obj) throws Exception
 	{
 		Response rsp = new Response();
 		log.info("Detached Criteria Query :"+obj.toString());
-		
+
 	    if(request.getIsCount() != null && request.getIsCount())
 	    {
 	    	HibernateCallback callBack = getExecuteCountCriteriaHibernateCallback(obj);
@@ -127,32 +124,25 @@ public class ORMDAOImpl extends HibernateDaoSupport implements DAO
 			log.debug("DetachedCriteria ORMDAOImpl ===== count = " + rowCount);
 			rsp.setRowCount(rowCount);
 	    }
-	    else 
+	    else
 	    {
 	    	List rs = getFlushNeverHibernateTemplate().findByCriteria(obj, request.getFirstRow() == null?-1:request.getFirstRow(), resultCountPerQuery);
 	    	rsp.setRowCount(rs.size());
 	        rsp.setResponse(rs);
 	    }
-	    
+
 		return rsp;
-	}	
-	
+	}
+
 	//	if (obj instanceof NestedCriteriaPath)
-	protected Response query(Request request, NestedCriteriaPath obj) throws Exception	
+	protected Response query(Request request, NestedCriteriaPath obj) throws Exception
 	{
 		NestedCriteria nc = Path2NestedCriteria.createNestedCriteria(obj.getpathString(), obj.getParameters(), request.getClassCache());
 		NestedCriteria2HQL converter = new NestedCriteria2HQL(nc, config, caseSensitive);
 		HQLCriteria hqlCriteria = converter.translate();
 		return query(request, hqlCriteria);
 	}
-	
-	//if (obj instanceof CQLQuery)
-	protected Response query(Request request, CQLQuery obj) throws Exception	
-	{
-		CQL2HQL converter = new CQL2HQL(request.getClassCache());
-		HQLCriteria hqlCriteria = converter.translate((CQLQuery)obj, false, caseSensitive);
-		return query(request, hqlCriteria);		
-	}
+
 
 	//if (obj instanceof HQLCriteria)
 	protected Response query(Request request, HQLCriteria hqlCriteria) throws Exception
@@ -166,33 +156,39 @@ public class ORMDAOImpl extends HibernateDaoSupport implements DAO
 			Response rsp = new Response();
 	    	HibernateCallback callBack = getExecuteCountQueryHibernateCallback(countQ,hqlCriteria.getParameters());
 			Integer rowCount = Integer.parseInt(getFlushNeverHibernateTemplate().execute(callBack)+"");
-			log.debug("HQL Query : count = " + rowCount);		
+			log.debug("HQL Query : count = " + rowCount);
 			rsp.setRowCount(rowCount);
 			return rsp;
 		}
-		else 
+		else
 		{
+			int firstRow = request.getFirstRow() == null ? -1 : request.getFirstRow();
+			int maxRows = request.getRecordsCount() == null ? resultCountPerQuery : request.getRecordsCount();
+
 			log.info("HQL Query :"+hqlCriteria.getHqlString());
 			Response rsp = new Response();
-	    	HibernateCallback callBack = getExecuteFindQueryHibernateCallback(hqlCriteria.getHqlString(),hqlCriteria.getParameters(), request.getFirstRow() == null?-1:request.getFirstRow(),resultCountPerQuery);
+			//System.out.println("hqlCriteria.getParameters(); "+hqlCriteria.getParameters());
+			//System.out.println("hqlCriteria.getHqlString(); "+hqlCriteria.getHqlString());
+	    	HibernateCallback callBack = getExecuteFindQueryHibernateCallback(hqlCriteria.getHqlString(),hqlCriteria.getParameters(),
+	    			firstRow, maxRows);
 	    	List rs = (List)getFlushNeverHibernateTemplate().execute(callBack);
 	    	rsp.setRowCount(rs.size());
 	    	rsp.setResponse(rs);
 			return rsp;
 		}
 	}
-	
+
 	protected HibernateCallback getExecuteFindQueryHibernateCallback(final String hql, final List params, final int firstResult, final int maxResult)
 	{
 		HibernateCallback callBack = new HibernateCallback(){
 
 			public Object doInHibernate(Session session) throws HibernateException, SQLException {
 				Query query = session.createQuery(hql);
-				query.setFirstResult(firstResult);	
+				query.setFirstResult(firstResult);
 				if(maxResult>0){
 					query.setMaxResults(maxResult);
 				}
-				
+
 				int count = 0;
 				if(params!=null)
 					for(Object param:params)
@@ -210,7 +206,7 @@ public class ORMDAOImpl extends HibernateDaoSupport implements DAO
 			public Object doInHibernate(Session session) throws HibernateException, SQLException {
 				Query query = session.createQuery(hql);
 				query.setMaxResults(1);
-				
+
 				int count = 0;
 				if(params!=null)
 					for(Object param:params)
@@ -219,7 +215,7 @@ public class ORMDAOImpl extends HibernateDaoSupport implements DAO
 			}
 		};
 		return callBack;
-	}	
+	}
 
 	protected HibernateCallback getExecuteCountCriteriaHibernateCallback(final DetachedCriteria criteria)
 	{
@@ -231,8 +227,8 @@ public class ORMDAOImpl extends HibernateDaoSupport implements DAO
 			}
 		};
 		return callBack;
-	}	
-	
+	}
+
 	private String getCountQuery(String hql)
 	{
 		return NestedCriteria2HQL.getCountQuery(hql);
@@ -269,10 +265,10 @@ public class ORMDAOImpl extends HibernateDaoSupport implements DAO
 	public void setSecurityHelper(SecurityInitializationHelper securityHelper) {
 		this.securityHelper = securityHelper;
 	}
-	
+
 	public HibernateTemplate getFlushNeverHibernateTemplate() {
 		HibernateTemplate template = getHibernateTemplate();
 		template.setFlushMode(HibernateTemplate.FLUSH_NEVER);
 		return template;
-	}	
+	}
 }

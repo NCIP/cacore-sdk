@@ -1,0 +1,314 @@
+<%@ jet package="gov.nih.nci.codegen.transformer.jet" 
+        class="RESTfulBeanTransformer"
+        skeleton="RESTfulBeanTransformerBase.skeleton" %>
+<% String fullPackageName=transformerUtils.getFullPackageName(klass);%>
+<% String klassName=klass.getName();%>        
+package <%=fullPackageName%>;
+
+<%=transformerUtils.getImports(klass)%>
+
+
+import gov.nih.nci.system.web.ResourceLink;
+import java.util.List;
+import java.util.ArrayList;
+import javax.persistence.Transient;
+import org.apache.log4j.Logger;
+
+<% 	boolean jaxbEnabled = transformerUtils.isJaxbEnabled();%>
+<%=transformerUtils.getJavaDocs(klass)%>
+<%=transformerUtils.getHibernateValidatorConstraints(klass)%>
+<% if (jaxbEnabled) { %>
+<%=transformerUtils.getJaxbXmlAccessorTypeAnnotation()%>
+<%=transformerUtils.getJaxbXmlSeeAlsoAnnotation(klass)%>
+<%=transformerUtils.getJaxbXmlRootElementAnnotation(klass)%>
+<%} %>
+
+public <%=transformerUtils.isAbstract(klass)? " abstract" : "" %> class <%=klassName%>Bean extends <%=klassName%>
+{
+
+	private static Logger log = Logger.getLogger(<%=klassName%>Bean.class);	
+List<ResourceLink> links = new ArrayList<ResourceLink>();
+
+public <%=klassName%>Bean()
+{
+}
+
+public <%=klassName%>Bean(<%=klassName%> obj)
+{	
+	try
+	{
+	<%
+	List<UMLAttribute> attributes = transformerUtils.getClassAttributes(klass, true);
+	for(UMLAttribute attr : attributes){%>
+		this.<%=transformerUtils.getSetterMethodName(attr)%>(obj.<%=transformerUtils.getGetterMethodName(attr)%>());
+	<%}%>
+
+	<%
+	List<UMLAssociation> assocns = transformerUtils.getAssociations(klass, true);
+	for(UMLAssociation assoc: assocns){
+		List<UMLAssociationEnd> assocEnds = assoc.getAssociationEnds();
+		List<UMLAssociationEnd> associationEnds = new java.util.ArrayList<UMLAssociationEnd>();
+		UMLAssociationEnd thisEnd = null;
+		UMLAssociationEnd otherEnd = null;
+		try
+		{
+			thisEnd = transformerUtils.getThisEnd(klass,assocEnds, true);
+			otherEnd = transformerUtils.getOtherEnd(klass,assocEnds, true);
+			associationEnds.add(otherEnd);
+		}
+		catch(GenerationException e)
+		{
+			continue;
+		}
+	
+		if(transformerUtils.isBidirectionalSelfAssociation(klass,assocEnds)) { // handle bi-directional self-association 
+			associationEnds.add(thisEnd);
+		}
+		
+		for(UMLAssociationEnd associationEnd : associationEnds)
+		{	
+			if(associationEnd.isNavigable())
+			{
+			%>
+		this.<%=transformerUtils.getSetterMethodName(associationEnd)%>(obj.<%=transformerUtils.getGetterMethodName(associationEnd)%>());
+			<%
+			}
+		}
+	}
+	%>
+
+	}
+	catch(Exception e)
+	{
+		log.error("Failed to create RESTBean: "+e.getMessage());
+		e.printStackTrace();
+	}
+}
+
+public List<ResourceLink> buildLinks(String path, <%=klassName%> obj)
+{
+	String idStr = null;
+	String href = null;
+	ResourceLink link = null;
+<%if(!transformerUtils.isAbstract(klass)) 
+{%>
+
+<%if(transformerUtils.getClassIdGetterMthod(klass) != null) {%>
+
+	<%if(transformerUtils.isISO21090Enabled())
+	{
+		UMLAttribute attrb = transformerUtils.getClassIdAttr(klass);
+		String idMethod = transformerUtils.getClassIdGetterMthod(klass);
+		if(attrb != null)
+		{
+		String attrType = transformerUtils.isoDatatypeCompleteMap.get(attrb.getDatatype().getName());
+
+		if(attrType == null)
+			attrType = transformerUtils.javaPrimitiveDatatypeMap.get(attrb.getDatatype().getName());
+
+
+		if(attrType.equals("Ii"))
+		{
+		%>
+			idStr = obj.<%=idMethod%>().getExtension();
+		<%
+		}
+		else
+		{
+		%>
+			idStr = obj.<%=transformerUtils.getClassIdGetterMthod(klass)%>().toString();
+		<%
+		}
+		}
+	}
+	else
+	{
+	%>
+	idStr = obj.<%=transformerUtils.getClassIdGetterMthod(klass)%>().toString();
+	<%}%>
+	
+	href = path+"/<%=klass.getName()%>/"+idStr;
+	link = new ResourceLink("self", "application/xml", href);
+	links.add(link);
+<%}%>
+	<%
+	List<UMLAssociation> assocs = transformerUtils.getAssociations(klass, true);
+	for(UMLAssociation assoc: assocs){
+		List<UMLAssociationEnd> assocEnds = assoc.getAssociationEnds();
+		List<UMLAssociationEnd> associationEnds = new java.util.ArrayList<UMLAssociationEnd>();
+		UMLAssociationEnd thisEnd = null;
+		UMLAssociationEnd otherEnd = null;
+		try
+		{
+			thisEnd = transformerUtils.getThisEnd(klass,assocEnds, true);
+			otherEnd = transformerUtils.getOtherEnd(klass,assocEnds, true);
+			associationEnds.add(otherEnd);
+		}
+		catch(GenerationException e)
+		{
+			continue;
+		}
+	
+		if(transformerUtils.isBidirectionalSelfAssociation(klass,assocEnds)) { // handle bi-directional self-association 
+			associationEnds.add(thisEnd);
+		}
+		
+		for(UMLAssociationEnd associationEnd : associationEnds)
+		{	
+			if(associationEnd.isNavigable())
+			{
+			
+				UMLClass assocKlass = (UMLClass)associationEnd.getUMLElement();
+				if(transformerUtils.isAssociationEndMany(associationEnd))
+			{%>
+<%if(transformerUtils.getClassIdGetterMthod(klass) != null) {%>			
+	href = path+"/<%=klass.getName()%>/"+idStr + "/" + "<%=associationEnd.getRoleName()%>";
+	link = new ResourceLink("<%=associationEnd.getRoleName()%>", "application/xml", href);
+	links.add(link);
+<%}%>
+			<%}else{%>
+	
+<%if(transformerUtils.getClassIdGetterMthod(assocKlass) != null) {%>	
+
+	<%if(transformerUtils.isISO21090Enabled())
+	{
+
+		UMLAttribute attrb = transformerUtils.getClassIdAttr(klass);
+		String idMethod = transformerUtils.getClassIdGetterMthod(assocKlass);
+		if(attrb != null)
+		{
+		String attrType = transformerUtils.isoDatatypeCompleteMap.get(attrb.getDatatype().getName());
+
+		if(attrType == null)
+			attrType = transformerUtils.javaPrimitiveDatatypeMap.get(attrb.getDatatype().getName());
+
+
+		if(attrType.equals("Ii"))
+		{
+		%>
+			idStr = obj.<%=idMethod%>().getExtension();
+		<%
+		}
+		else
+		{
+		%>
+			if(obj.<%=transformerUtils.getGetterMethodName(associationEnd)%>() != null && obj.<%=transformerUtils.getGetterMethodName(associationEnd)%>().<%=transformerUtils.getClassIdGetterMthod(assocKlass)%>() != null)
+			{
+				idStr = obj.<%=transformerUtils.getGetterMethodName(associationEnd)%>().<%=transformerUtils.getClassIdGetterMthod(assocKlass)%>().toString();		
+		<%
+		}
+		}
+	}
+	else
+	{
+	%>
+	if(obj.<%=transformerUtils.getGetterMethodName(associationEnd)%>() != null && obj.<%=transformerUtils.getGetterMethodName(associationEnd)%>().<%=transformerUtils.getClassIdGetterMthod(assocKlass)%>() != null)
+	{
+	idStr = obj.<%=transformerUtils.getGetterMethodName(associationEnd)%>().<%=transformerUtils.getClassIdGetterMthod(assocKlass)%>().toString();		
+	<%
+	}
+	%>
+	href = path+"/<%=assocKlass.getName()%>/"+idStr;
+	link = new ResourceLink("<%=associationEnd.getRoleName()%>", "application/xml", href);
+	links.add(link);
+	<%if(!transformerUtils.isISO21090Enabled()){%>
+	}
+	<%}%>
+<%}%>
+	<%
+			}
+			}
+		}
+	}
+	%>			
+	return links;
+	
+<% }
+else
+{
+%>
+return null;
+<%}%>
+}	
+	
+public String getNamespacePrefix()
+{
+<%
+String namespace = transformerUtils.getGMENamespace(klass);
+if(namespace == null)
+ namespace = transformerUtils.getNamespaceUriPrefix();
+%>
+	return "<%=namespace%>";
+}
+
+@Transient
+public List<ResourceLink> getLinks()
+{
+	return links;
+}
+
+public void setLinks(List<ResourceLink> links)
+{
+	this.links = links;
+}
+
+
+<%if(!transformerUtils.isAbstract(klass)){%>
+
+public <%=klassName%> getObject()
+{	
+	<%=klassName%> object = null;
+	try
+	{
+		object = new <%=klassName%>();
+	<%
+	List<UMLAttribute> attributes2 = transformerUtils.getClassAttributes(klass, true);
+	for(UMLAttribute attr : attributes2){%>
+		object.<%=transformerUtils.getSetterMethodName(attr)%>(this.<%=transformerUtils.getGetterMethodName(attr)%>());
+	<%}%>
+
+	<%
+	List<UMLAssociation> assocns2 = transformerUtils.getAssociations(klass, true);
+	for(UMLAssociation assoc: assocns2){
+		List<UMLAssociationEnd> assocEnds = assoc.getAssociationEnds();
+		List<UMLAssociationEnd> associationEnds = new java.util.ArrayList<UMLAssociationEnd>();
+		UMLAssociationEnd thisEnd = null;
+		UMLAssociationEnd otherEnd = null;
+		try
+		{
+			thisEnd = transformerUtils.getThisEnd(klass,assocEnds, true);
+			otherEnd = transformerUtils.getOtherEnd(klass,assocEnds, true);
+			associationEnds.add(otherEnd);
+		}
+		catch(GenerationException e)
+		{
+			continue;
+		}
+	
+		if(transformerUtils.isBidirectionalSelfAssociation(klass,assocEnds)) { // handle bi-directional self-association 
+			associationEnds.add(thisEnd);
+		}
+		
+		for(UMLAssociationEnd associationEnd : associationEnds)
+		{	
+			if(associationEnd.isNavigable())
+			{
+			%>
+		object.<%=transformerUtils.getSetterMethodName(associationEnd)%>(this.<%=transformerUtils.getGetterMethodName(associationEnd)%>());
+			<%
+			}
+		}
+	}
+	%>
+	
+	}
+	catch(Exception e)
+	{
+		log.error("Failed to create RESTBean: "+e.getMessage());
+		e.printStackTrace();
+	}
+	return object;
+}
+<%}%>
+
+}
