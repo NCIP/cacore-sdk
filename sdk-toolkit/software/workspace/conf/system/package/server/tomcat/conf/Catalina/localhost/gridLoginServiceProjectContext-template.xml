@@ -1,3 +1,10 @@
+<!--L
+   Copyright Ekagra Software Technologies Ltd.
+   Copyright SAIC
+
+   Distributed under the OSI-approved BSD 3-Clause License.
+   See http://ncip.github.com/cacore-sdk/LICENSE.txt for details.
+L-->
 
 <Context path="/@SDK_GRID_LOGIN_SERVICE_NAME@" docBase="${catalina.home}/webapps/@SDK_GRID_LOGIN_SERVICE_NAME@" 
 	debug="0" privileged="true">

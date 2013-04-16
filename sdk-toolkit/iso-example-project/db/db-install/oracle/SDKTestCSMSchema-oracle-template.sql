@@ -1,3 +1,11 @@
+/*L
+   Copyright Ekagra Software Technologies Ltd.
+   Copyright SAIC
+
+   Distributed under the OSI-approved BSD 3-Clause License.
+   See http://ncip.github.com/cacore-sdk/LICENSE.txt for details.
+L*/
+
 CREATE TABLE CSM_APPLICATION ( 
 	APPLICATION_ID NUMBER(38) NOT NULL,
 	APPLICATION_NAME VARCHAR2(255) NOT NULL,
