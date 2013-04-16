@@ -1,3 +1,11 @@
+/*L
+   Copyright Ekagra Software Technologies Ltd.
+   Copyright SAIC
+
+   Distributed under the OSI-approved BSD 3-Clause License.
+   See http://ncip.github.com/cacore-sdk/LICENSE.txt for details.
+L*/
+
 DROP TABLE IF EXISTS log_message;
 CREATE TABLE  log_message (
   LOG_ID bigint(200) NOT NULL auto_increment,

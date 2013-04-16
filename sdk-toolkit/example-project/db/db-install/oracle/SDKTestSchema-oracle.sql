@@ -1,3 +1,11 @@
+/*L
+   Copyright Ekagra Software Technologies Ltd.
+   Copyright SAIC
+
+   Distributed under the OSI-approved BSD 3-Clause License.
+   See http://ncip.github.com/cacore-sdk/LICENSE.txt for details.
+L*/
+
 CREATE TABLE ALBUM ( ID NUMBER(8) NOT NULL, TITLE VARCHAR2(50 BYTE) ) LOGGING NOCOMPRESS NOCACHE NOPARALLEL MONITORING
 /
 

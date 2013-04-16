@@ -1,3 +1,11 @@
+/*L
+ *  Copyright Ekagra Software Technologies Ltd.
+ *  Copyright SAIC
+ *
+ *  Distributed under the OSI-approved BSD 3-Clause License.
+ *  See http://ncip.github.com/cacore-sdk/LICENSE.txt for details.
+ */
+
 /*******************************************************************************
  * Copyright (c) 2006 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
