@@ -1,3 +1,11 @@
+/*L
+   Copyright Ekagra Software Technologies Ltd.
+   Copyright SAIC
+
+   Distributed under the OSI-approved BSD 3-Clause License.
+   See http://ncip.github.com/cacore-sdk/LICENSE.txt for details.
+L*/
+
 create database if not exists @DB-NAME@;
 grant all privileges on @DB-NAME@.* to @DB-USERNAME@@"%" identified by "@DB-PASSWORD@";
 grant all privileges on @DB-NAME@.* to @DB-USERNAME@@localhost identified by "@DB-PASSWORD@";

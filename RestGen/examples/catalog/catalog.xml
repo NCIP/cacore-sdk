@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<!--L
+   Copyright Ekagra Software Technologies Ltd.
+   Copyright SAIC
+
+   Distributed under the OSI-approved BSD 3-Clause License.
+   See http://ncip.github.com/cacore-sdk/LICENSE.txt for details.
+L-->
+
 <mapping name="catalog.xml" version="1.0" description="catalog.xml" createdOn="2013-02-19T13:04:21.659-05:00" lastUpdatedOn="2013-02-19T13:04:21.661-05:00">
     <components>
         <Component id="0" location="C:\DEV\RestGen\examples\catalog\gov\nih\nci\ejb\Book.class" type="source" kind="xml"/>

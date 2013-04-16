@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<!--L
+   Copyright Ekagra Software Technologies Ltd.
+   Copyright SAIC
+
+   Distributed under the OSI-approved BSD 3-Clause License.
+   See http://ncip.github.com/cacore-sdk/LICENSE.txt for details.
+L-->
+
 <mapping name="CustMapping.xml" version="1.0" description="CustMapping.xml" createdOn="2013-02-25T09:17:52.952-05:00" lastUpdatedOn="2013-02-25T09:17:52.952-05:00">
     <components>
         <Component id="0" location="C:\DEV\RestGen\examples\customerservice\cs-beans.jar" type="source" kind="xml"/>
