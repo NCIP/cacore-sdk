@@ -31,15 +31,15 @@ Please join us in further developing and improving caCORE SDK.
  * [SDK Components] (https://wiki.nci.nih.gov/display/caCORE/Components+of+caCORE+SDK)
  * [How to use SDK] (https://wiki.nci.nih.gov/display/caCORE/How+to+Use+the+caCORE+SDK+-+Guide+for+Users)
  
-# Sub components
+# Related Projects
  * caCORE Workbench
-   The caCORE Workbench is a tool with a graphical user interface (GUI) to facilitate the creation of a caBIG® silver or gold compliant system. The caCORE Workbench acts as a process guide and an integrated platform, enabling the user to more readily create a Data or Analytical service on the Grid. The following caBIG® process workflows are supported:
- 
-   **Creation of a UML Model (ArgoUML, Enterprise Architect)
-   **Semantic integration (SIW, CDE Browser, UML Model Browser, Curation Tool)
-   **Model mapping (caAdapter)
-   ** Application creation and deployment (SDK)
-   **Creation of a grid service (Introduce)
+   
+    The caCORE Workbench is a tool with a graphical user interface (GUI) to facilitate the creation of a caBIG silver or gold compliant system. The caCORE Workbench acts as a process guide and an integrated platform, enabling the user to more readily create a Data or Analytical service on the Grid. The following process workflows are supported:
+   * Creation of a UML Model (ArgoUML, Enterprise Architect)
+   * Semantic integration (SIW, CDE Browser, UML Model Browser, Curation Tool)
+   * Model mapping (caAdapter)
+   * Application creation and deployment (SDK)
+   * Creation of a grid service (Introduce)
    
  * caCORE RESTful Wrapper
  * caCORE Hydra
