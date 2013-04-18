@@ -34,14 +34,24 @@ Please join us in further developing and improving caCORE SDK.
 # Related Projects
  * caCORE Workbench
    
-    The caCORE Workbench is a tool with a graphical user interface (GUI) to facilitate the creation of a caBIG silver or gold compliant system. The caCORE Workbench acts as a process guide and an integrated platform, enabling the user to more readily create a Data or Analytical service on the Grid. The following process workflows are supported:
-   * Creation of a UML Model (ArgoUML, Enterprise Architect)
-   * Semantic integration (SIW, CDE Browser, UML Model Browser, Curation Tool)
-   * Model mapping (caAdapter)
-   * Application creation and deployment (SDK)
-   * Creation of a grid service (Introduce)
+   The caCORE Workbench is a tool with a graphical user interface (GUI) to facilitate the creation of a caBIG silver or gold compliant system. The caCORE Workbench acts as a process guide and an integrated platform, enabling the user to more readily create a Data or Analytical service on the Grid. The following process workflows are supported:
+   1.  Creation of a UML Model (ArgoUML, Enterprise Architect)
+   2.  Semantic integration (SIW, CDE Browser, UML Model Browser, Curation Tool)
+   3.  Model mapping (caAdapter)
+   4.  Application creation and deployment (SDK)
+   5.  Creation of a grid service (Introduce)
+   
+      * [Home Page] (https://wiki.nci.nih.gov/display/caCORE/caCORE+Workbench)
+      * [Binaries packages] (https://wiki.nci.nih.gov/display/caCORE/caCORE+Workbench+Downloads)
+      * [User Guide] (https://wiki.nci.nih.gov/display/caCORE/caCORE+Workbench+Version+0.2+Guide)
+      * [Release Notes] (https://gforge.nci.nih.gov/docman/index.php?group_id=624&selected_doc_group_id=5781&language_id=1)
    
  * caCORE RESTful Wrapper
+   
+   The caCORE RESTful Wrapper is aimed at lowering the barrier to create RESTful services based on existing data sources. The wrapper provides interface in RESTful manner while it internally maps with existing data source to query data. The RESTful Wrapper will provide User Interface where developers can create RESTful resources wrapping existing data services.
+      * [Home Page] (https://wiki.nci.nih.gov/display/caCORE/caCORE+RESTful+Wrapper)
+      * [User Guide] (https://wiki.nci.nih.gov/display/caCORE/caCORE+RESTful+Wrapper+v1.0+User+Guide)
+      * [Release Notes] (https://wiki.nci.nih.gov/display/caCORE/caCORE+RESTful+Wrapper+v1.0+Release+Notes)
  * caCORE Hydra
  
  
