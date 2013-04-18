@@ -1,4 +1,4 @@
-XMI Handler
+caCORE SDK
 Copyright (c) 2006, Ekagra Software Technologies Ltd. ("EKAGRA") and Science Applications International Corporation ("SAIC").
 
 This project is distributed under the BSD 3-Clause License.
@@ -7,10 +7,10 @@ Please see LICENSE file for details.
 
 This project was developed as part of the NCI caBIG initiative.
 
-The XMI Handler provides a set of API to read from and write into XMI files. The XMI Handler parses a given XMI file and represent the model in Java objects. XML Metadata Interchange (XMI) is an interchange format for UML models.
+The caCORE Software Development Kit (SDK) generates a system built on the principles of Model Driven Architecture (MDA), n-tier architecture and a common API for data access. When the caCORE SDK-generated system is combined with controlled vocabularies and registered metadata, the resulting software system, called "caCORE-like" system, is "semantically integrated." All exposed API elements have runtime accessible metadata that defines the meaning of the elements using controlled terminology.
 
 The project was initially developed by Ekagra Software Technologies Ltd. ("EKAGRA")
 and Science Applications International Corporation ("SAIC") under funding from the CBIIT office of the National Cancer Institute.
 
 In 2013, as part of the National Cancer Informatics Program (NCIP) Open Development Initiative, 
-the XMI Handler source code was migrated to GitHub to allow further development by the broader community.
+the caCORE SDK source code was migrated to GitHub to allow further development by the broader community.
