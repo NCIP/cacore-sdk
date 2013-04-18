@@ -22,7 +22,7 @@ You will find more details about the caCORE SDK in the following links:
  * [User Guide] (https://wiki.nci.nih.gov/display/caCORE/caCORE+SDK+User+Guides)
  * [Release Notes] (https://wiki.nci.nih.gov/display/caCORE/caCORE+SDK+Release+Notes)
 
-Please join us in further developing and improving XMI Handler.
+Please join us in further developing and improving caCORE SDK.
 
 # Prerequisites
  * [Minimum software requirements] (https://wiki.nci.nih.gov/display/caCORE/caCORE+SDK+Minimum+System+Requirements) 
@@ -31,8 +31,16 @@ Please join us in further developing and improving XMI Handler.
  * [SDK Components] (https://wiki.nci.nih.gov/display/caCORE/Components+of+caCORE+SDK)
  * [How to use SDK] (https://wiki.nci.nih.gov/display/caCORE/How+to+Use+the+caCORE+SDK+-+Guide+for+Users)
  
- # Sub components
+# Sub components
  * caCORE Workbench
+   The caCORE Workbench is a tool with a graphical user interface (GUI) to facilitate the creation of a caBIG® silver or gold compliant system. The caCORE Workbench acts as a process guide and an integrated platform, enabling the user to more readily create a Data or Analytical service on the Grid. The following caBIG® process workflows are supported:
+ 
+   **Creation of a UML Model (ArgoUML, Enterprise Architect)
+   **Semantic integration (SIW, CDE Browser, UML Model Browser, Curation Tool)
+   **Model mapping (caAdapter)
+   ** Application creation and deployment (SDK)
+   **Creation of a grid service (Introduce)
+   
  * caCORE RESTful Wrapper
  * caCORE Hydra
  
