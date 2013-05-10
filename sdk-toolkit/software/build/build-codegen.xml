@@ -724,7 +724,7 @@ L-->
 		</if>
 	</target>
 
-	<target name="-compile:rest-application-code" depends="-init,-generate-codegen" description="Compiles all subproject code">
+	<target name="-compile:rest-application-code" depends="-init,-generate-codegen,-compile:application-code" description="Compiles all subproject code">
 		<mkdir dir="${build.classes.dir}/../rest/classes" />
 		
 		<available file="${3RD_PARTY_JARS_DIRECTORY}" property="include.3rdparty.exist" />
@@ -736,14 +736,14 @@ L-->
 				<if>
 					<equals arg1="${include.3rdparty.exist}" arg2="true" />
 					<then>
-						<javac srcdir="${src.java.dir}/../rest/src" destdir="${build.classes.dir}/../rest/classes" debug="true">
+						<javac srcdir="${src.java.dir}:${src.java.dir}/../rest/src" destdir="${build.classes.dir}/../rest/classes" debug="true">
 							<classpath refid="codegen.runtime.classpath.with3rdparty" />
 							<classpath refid="cobertura.runtime.classpath" />
 							<classpath refid="beans.classpath" />
 						</javac>
 					</then>
 					<else>
-						<javac srcdir="${src.java.dir}/../rest/src" destdir="${build.classes.dir}/../rest/classes" debug="true">
+						<javac srcdir="${src.java.dir}:${src.java.dir}/../rest/src" destdir="${build.classes.dir}/../rest/classes" debug="true">
 							<classpath refid="codegen.runtime.classpath" />
 							<classpath refid="cobertura.runtime.classpath" />
 							<classpath refid="beans.classpath" />
