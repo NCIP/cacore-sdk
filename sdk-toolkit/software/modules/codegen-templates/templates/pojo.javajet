@@ -83,32 +83,32 @@ public<%=transformerUtils.isAbstract(klass)? " abstract" : "" %> class <%=klass.
 			{%>
 	<%=transformerUtils.getJavaDocs(klass, assoc)%>
 <% if (jaxbEnabled) { %><%=transformerUtils.getJaxbCollectionAnnotations(klass,assocKlass, thisEnd.getRoleName())%><%} %>
-	private Collection<<%=assocKlass.getName()%>> <%=thisEnd.getRoleName()%>;
+	private Collection<<%=transformerUtils.getFullPackageName(assocKlass)%>.<%=assocKlass.getName()%>> <%=thisEnd.getRoleName()%>;
 	<%=transformerUtils.getGetterMethodJavaDocs(klass, assoc)%>
 <% if (jaxbEnabled) { %><%=transformerUtils.getJaxbXmlTransientAnnotation()%><%} %>
-	public Collection<<%=assocKlass.getName()%>> <%=transformerUtils.getGetterMethodName(thisEnd)%>(){
+	public Collection<<%=transformerUtils.getFullPackageName(assocKlass)%>.<%=assocKlass.getName()%>> <%=transformerUtils.getGetterMethodName(thisEnd)%>(){
 		return <%=thisEnd.getRoleName()%>;
 	}
 
 	<%=transformerUtils.getSetterMethodJavaDocs(klass, assoc)%>
-	public void <%=transformerUtils.getSetterMethodName(thisEnd)%>(Collection<<%=assocKlass.getName()%>> <%=thisEnd.getRoleName()%>){
+	public void <%=transformerUtils.getSetterMethodName(thisEnd)%>(Collection<<%=transformerUtils.getFullPackageName(assocKlass)%>.<%=assocKlass.getName()%>> <%=thisEnd.getRoleName()%>){
 		this.<%=thisEnd.getRoleName()%> = <%=thisEnd.getRoleName()%>;
 	}
 		<%}else{%>
 	<%=transformerUtils.getJavaDocs(klass, assoc)%>	
 <% if (jaxbEnabled) { %>
 	@XmlElement(name="<%=thisEnd.getRoleName()%>", 
-				type=<%=assocKlass.getName()%>.class,
+				type=<%=transformerUtils.getFullPackageName(assocKlass)%>.<%=assocKlass.getName()%>.class,
 				namespace="<%=transformerUtils.getNamespaceUriPrefix() +transformerUtils.getFullPackageName(assocKlass)%>")
 <%} %>
-	private <%=assocKlass.getName()%> <%=thisEnd.getRoleName()%>;
+	private <%=transformerUtils.getFullPackageName(assocKlass)%>.<%=assocKlass.getName()%> <%=thisEnd.getRoleName()%>;
 	<%=transformerUtils.getGetterMethodJavaDocs(klass, assoc)%>
 <% if (jaxbEnabled) { %><%=transformerUtils.getJaxbXmlTransientAnnotation()%><%} %>
-	public <%=assocKlass.getName()%> <%=transformerUtils.getGetterMethodName(thisEnd)%>(){
+	public <%=transformerUtils.getFullPackageName(assocKlass)%>.<%=assocKlass.getName()%> <%=transformerUtils.getGetterMethodName(thisEnd)%>(){
 		return <%=thisEnd.getRoleName()%>;
 	}
 	<%=transformerUtils.getSetterMethodJavaDocs(klass, assoc)%>
-	public void <%=transformerUtils.getSetterMethodName(thisEnd)%>(<%=assocKlass.getName()%> <%=thisEnd.getRoleName()%>){
+	public void <%=transformerUtils.getSetterMethodName(thisEnd)%>(<%=transformerUtils.getFullPackageName(assocKlass)%>.<%=assocKlass.getName()%> <%=thisEnd.getRoleName()%>){
 		this.<%=thisEnd.getRoleName()%> = <%=thisEnd.getRoleName()%>;
 	}
 			<%}
@@ -122,32 +122,32 @@ public<%=transformerUtils.isAbstract(klass)? " abstract" : "" %> class <%=klass.
 			{%>
 	<%=transformerUtils.getJavaDocs(klass, assoc)%>
 <% if (jaxbEnabled) { %><%=transformerUtils.getJaxbCollectionAnnotations(klass,assocKlass, otherEnd.getRoleName())%><%} %>
-	private Collection<<%=assocKlass.getName()%>> <%=otherEnd.getRoleName()%>;
+	private Collection<<%=transformerUtils.getFullPackageName(assocKlass)%>.<%=assocKlass.getName()%>> <%=otherEnd.getRoleName()%>;
 	<%=transformerUtils.getGetterMethodJavaDocs(klass, assoc)%>
 <% if (jaxbEnabled) { %><%=transformerUtils.getJaxbXmlTransientAnnotation()%><%} %>
-	public Collection<<%=assocKlass.getName()%>> <%=transformerUtils.getGetterMethodName(otherEnd)%>(){
+	public Collection<<%=transformerUtils.getFullPackageName(assocKlass)%>.<%=assocKlass.getName()%>> <%=transformerUtils.getGetterMethodName(otherEnd)%>(){
 		return <%=otherEnd.getRoleName()%>;
 	}
 
 	<%=transformerUtils.getSetterMethodJavaDocs(klass, assoc)%>
-	public void <%=transformerUtils.getSetterMethodName(otherEnd)%>(Collection<<%=assocKlass.getName()%>> <%=otherEnd.getRoleName()%>){
+	public void <%=transformerUtils.getSetterMethodName(otherEnd)%>(Collection<<%=transformerUtils.getFullPackageName(assocKlass)%>.<%=assocKlass.getName()%>> <%=otherEnd.getRoleName()%>){
 		this.<%=otherEnd.getRoleName()%> = <%=otherEnd.getRoleName()%>;
 	}
 		<%}else{%>
 	<%=transformerUtils.getJavaDocs(klass, assoc)%>	
 <% if (jaxbEnabled) { %>
 	@XmlElement(name="<%=otherEnd.getRoleName()%>", 
-				type=<%=assocKlass.getName()%>.class,
+				type=<%=transformerUtils.getFullPackageName(assocKlass)%>.<%=assocKlass.getName()%>.class,
 				namespace="<%=transformerUtils.getNamespaceUriPrefix() +transformerUtils.getFullPackageName(assocKlass)%>")
 <%} %>
-	private <%=assocKlass.getName()%> <%=otherEnd.getRoleName()%>;
+	private <%=transformerUtils.getFullPackageName(assocKlass)%>.<%=assocKlass.getName()%> <%=otherEnd.getRoleName()%>;
 	<%=transformerUtils.getGetterMethodJavaDocs(klass, assoc)%>
 <% if (jaxbEnabled) { %><%=transformerUtils.getJaxbXmlTransientAnnotation()%><%} %>
-	public <%=assocKlass.getName()%> <%=transformerUtils.getGetterMethodName(otherEnd)%>(){
+	public <%=transformerUtils.getFullPackageName(assocKlass)%>.<%=assocKlass.getName()%> <%=transformerUtils.getGetterMethodName(otherEnd)%>(){
 		return <%=otherEnd.getRoleName()%>;
 	}
 	<%=transformerUtils.getSetterMethodJavaDocs(klass, assoc)%>
-	public void <%=transformerUtils.getSetterMethodName(otherEnd)%>(<%=assocKlass.getName()%> <%=otherEnd.getRoleName()%>){
+	public void <%=transformerUtils.getSetterMethodName(otherEnd)%>(<%=transformerUtils.getFullPackageName(assocKlass)%>.<%=assocKlass.getName()%> <%=otherEnd.getRoleName()%>){
 		this.<%=otherEnd.getRoleName()%> = <%=otherEnd.getRoleName()%>;
 	}
 			<%}

@@ -814,7 +814,7 @@ public class TransformerUtils
 				return "";
 			}
 		else
-			return "extends " + superClass.getName();
+			return "extends " + getFullPackageName(klass)+"."+superClass.getName();
 	}
 
 	public UMLInterface[] getSuperInterface(UMLInterface interfaze) throws GenerationException
@@ -2074,18 +2074,18 @@ public class TransformerUtils
 		return getColumn(table,TV_MAPPED_ATTR_COLUMN,fullyQualifiedAttrName,false,1,1);
 	}
 
-	
+
 	public String getcaDSRPublicIdCustomTag(UMLTaggableElement tgElt)
 	{
 		return getTagValue(tgElt, "CADSR_DE_ID");
 	}
 
-	
+
 	public String getcaDSRPublicVersionCustomTag(UMLTaggableElement tgElt)
 	{
 		return getTagValue(tgElt, "CADSR_DE_VERSION");
 	}
-	
+
 	public String getMetadataAnnotation(UMLClass klass, UMLAttribute attr)
 	{
 		StringBuffer buff = new StringBuffer();
@@ -2093,7 +2093,7 @@ public class TransformerUtils
 		String versionValue = getcaDSRPublicVersionCustomTag(attr);
 		if(idValue != null || versionValue != null)
 			buff.append("@gov.nih.nci.system.metadata.NCIMetadata");
-		
+
 		boolean append = false;
 		if(idValue != null && idValue.trim().length() > 0)
 		{
@@ -2114,9 +2114,9 @@ public class TransformerUtils
 				buff.append(")");
 		}
 		return buff.toString();
-		
+
 	}
-	
+
 	/**
 	 * @param tgElt The TaggableElement (UMLClass, UMLAttribute)
 	 * @return		String containing a concatenation of any, all caDSR
@@ -2833,7 +2833,7 @@ public class TransformerUtils
 	}
 
 	public String getJaxbOnCycleDetectedMethod() {
-		StringBuffer sb = new StringBuffer("    public Object onCycleDetected(Context arg0) {\n");
+		StringBuffer sb = new StringBuffer("    public Object onCycleDetected(com.sun.xml.bind.CycleRecoverable.Context arg0) {\n");
 		sb.append("		return null;\n");
 		sb.append("	}\n");
 

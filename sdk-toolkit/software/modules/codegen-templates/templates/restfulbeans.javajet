@@ -30,7 +30,7 @@ public class <%=klassName%>s implements CollectionBean
 	private Collection<ResourceLink> links;
 	private String type;
 	
-	public <%=klassName%>s(List<<%=klassName%>> results)
+	public <%=klassName%>s(List<<%=fullPackageName%>.<%=klassName%>> results)
 	{
 		this.results = results;
 		links = new ArrayList();
@@ -38,7 +38,7 @@ public class <%=klassName%>s implements CollectionBean
 	}
 	
 	@XmlElementRef
-	public List<<%=klassName%>> get<%=klassName%>s()
+	public List<<%=fullPackageName%>.<%=klassName%>> get<%=klassName%>s()
 	{
 		return results;
 	}
