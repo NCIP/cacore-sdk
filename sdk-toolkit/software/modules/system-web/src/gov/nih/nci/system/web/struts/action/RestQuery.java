@@ -191,7 +191,6 @@ public class RestQuery extends BaseActionSupport {
 			//Criteria value to display
 			buffer.append("Criteria: " + org.apache.commons.lang.StringEscapeUtils.escapeHtml(criteria));
 			buffer.append("<br />");
-
 			Element root = doc.getRootElement();
 			//If resulted XML is a response, capture the message to display
 			if (root.getName().equals("response")) {
@@ -213,11 +212,7 @@ public class RestQuery extends BaseActionSupport {
 
 				buffer.append("Result Class: " + classEleName);
 				buffer.append("</td>");
-
-				buffer.append("<td align=\"right\" class=\"dataPagingText\">");
-				buffer.append(getPagingLinks(root));
-				buffer.append("</td>");
-
+				buffer.append("</tr>");
 				//Get Id column. This will be used to display Id column first in the results table
 				String idCol = null;
 				String idColValue = null;
@@ -228,6 +223,8 @@ public class RestQuery extends BaseActionSupport {
 					e.printStackTrace();
 				}
 
+				buffer.append(getPagingLinks(root));
+			
 				buffer.append("<tr>");
 				buffer.append("<td>");
 				buffer.append("<table summary=\"Data Summary\" cellpadding=\"3\" cellspacing=\"0\" border=\"0\" class=\"dataTable\" width=\"100%\">");
@@ -670,32 +667,135 @@ public class RestQuery extends BaseActionSupport {
 
 	}
 	protected String getPagingLinks(Element root) {
-		List<Element> links = getChildren(root, "links");
+		List<Element> links = getChildren(root, "link");
 		if (links == null || links.size() == 0)
 			return "&nbsp;";
 
+		StringBuffer pageLinks = new StringBuffer();
+		pageLinks.append("<tr>");
+		pageLinks.append("<td align=\"right\" class=\"dataPagingText\">");
+		
+		String totalCount = null;
+		String pageSize = null;
+		String startIndex = null;
 		StringBuffer retStrNext = new StringBuffer();
 		StringBuffer retStrPre = new StringBuffer();
+		boolean hasNext = false;
 		for (Element link : links) {
-			if (link.getName().equalsIgnoreCase("Next")) {
-				retStrNext.append("<A href=\"#\" onclick=\"" + "query('"
+			if (link.getAttribute("ref").getValue().equalsIgnoreCase("Next")) {
+				retStrNext.append("<A href=\"#\" onclick=\"" + "pageQuery('"
 						+ link.getAttribute("href").getValue()
 						+ "');return false;\"" + ">");
 				retStrNext.append("Next");
 				retStrNext.append("</A>");
-			} else if (link.getName().equalsIgnoreCase("Previous")) {
-				retStrPre.append("<A href=\"#\" onclick=\"" + "query('"
+				if(totalCount == null)
+					totalCount = getTotalFromLink(link.getAttribute("href").getValue());
+				if(pageSize == null)
+					pageSize = getSizeFromLink(link.getAttribute("href").getValue());
+
+				if(startIndex == null)
+					startIndex = getStartFromLink(link.getAttribute("href").getValue());
+				hasNext = true;
+				
+			} else if (link.getAttribute("ref").getValue().equalsIgnoreCase("Previous")) {
+				retStrPre.append("<A href=\"#\" onclick=\"" + "pageQuery('"
 						+ link.getAttribute("href").getValue()
 						+ "');return false;\"" + ">");
 				retStrPre.append("Previous");
 				retStrPre.append("</A>");
+				if(totalCount == null)
+					totalCount = getTotalFromLink(link.getAttribute("href").getValue());
+				if(pageSize == null)
+					pageSize = getSizeFromLink(link.getAttribute("href").getValue());
+				if(startIndex == null)
+					startIndex = getStartFromLink(link.getAttribute("href").getValue());
 			}
 		}
 
-		return retStrPre.toString() + "&nbsp;&nbsp;&nbsp;"
-				+ retStrNext.toString();
+		String pagingStr = "";
+		boolean paging = false;
+		if(totalCount != null && pageSize != null  && startIndex != null)
+		{
+			try
+			{
+				int total = Integer.parseInt(totalCount);
+				int size =  Integer.parseInt(pageSize);
+				int start =  Integer.parseInt(startIndex);
+				int pageStart = start-size;
+				if(!hasNext)
+					pageStart = start+size;
+				
+				int pageEnd = start - 1;
+
+				if(!hasNext)
+					pageEnd = start+size+size-1;
+
+				if(pageEnd > total)
+					pageEnd = total;
+				
+				if(start > total)
+					pageEnd = total;
+				
+				pagingStr = pageStart + " to " +  pageEnd  + " of "+ total;
+				paging = true;
+			}
+			catch(Exception e) 
+			{
+				log.error("Failed to render paging: "+e.getMessage());
+			}
+		}		
+		if(paging)
+			return pageLinks.toString() + retStrPre.toString() + "&nbsp;|&nbsp;" +pagingStr +  "&nbsp;|&nbsp;"
+				+ retStrNext.toString() + "</td> </tr>";
+		else
+			return "";
 	}
 
+	private String getTotalFromLink(String href)
+	{
+		int totalIndex = href.lastIndexOf("total=");
+		String totalCount = null;
+		if(totalIndex > 0)
+		{
+			int totalIndexEnd = href.lastIndexOf("&");
+			if (totalIndex > totalIndexEnd)
+				totalCount = href.substring(totalIndex+6, href.length());
+			else
+				totalCount = href.substring(totalIndex+6, totalIndexEnd);
+		}
+		return totalCount;
+	}
+
+	private String getStartFromLink(String href)
+	{
+		int startIndex = href.lastIndexOf("start=");
+		String totalCount = null;
+		if(startIndex > 0)
+		{
+			int totalIndexEnd = href.indexOf("&");
+			if (startIndex > totalIndexEnd)
+				totalCount = href.substring(startIndex+6, href.length());
+			else
+				totalCount = href.substring(startIndex+6, totalIndexEnd);
+		}
+		return totalCount;
+	}
+	
+	private String getSizeFromLink(String href)
+	{
+		int totalIndex = href.lastIndexOf("size=");
+		String totalCount = null;
+		if(totalIndex > 0)
+		{
+			int totalIndexEnd = href.lastIndexOf("&");
+			if (totalIndex > totalIndexEnd)
+				totalCount = href.substring(totalIndex+5, href.length());
+			else
+				totalCount = href.substring(totalIndex+5, totalIndexEnd);
+		}
+		return totalCount;
+	}
+	
 	protected String getClassName(String href) {
 		int index = href.indexOf("/rest/");
 		String postStr = href.substring(index + 6, href.length());

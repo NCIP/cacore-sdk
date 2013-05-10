@@ -253,6 +253,10 @@ public class SDKRESTContentHandler implements MessageBodyReader,
 		StringBuffer outputStr = new StringBuffer();
 
 		Object obj = proxy.get(0);
+		
+		if(obj == null)
+			return;
+		
 		String collectionFullName = obj.getClass().getName();
 		String namespace = "gme://caCORE.caCORE/4.5/";
 		try
