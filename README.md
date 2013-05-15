@@ -31,7 +31,7 @@ Please join us in further developing and improving caCORE SDK.
  * [SDK Components] (https://wiki.nci.nih.gov/display/caCORE/Components+of+caCORE+SDK)
  * [How to use SDK] (https://wiki.nci.nih.gov/display/caCORE/How+to+Use+the+caCORE+SDK+-+Guide+for+Users)
  
-# Related Projects
+# Sub Projects
    * caCORE Workbench
    
      The caCORE Workbench is a tool with a graphical user interface (GUI) to facilitate the creation of a caBIG silver or gold compliant system. The caCORE Workbench acts as a process guide and an integrated platform, enabling the user to more readily create a Data or Analytical service on the Grid. The following process workflows are supported:
@@ -58,3 +58,9 @@ Please join us in further developing and improving caCORE SDK.
    The caCORE Hydra is a pilot project developed as Eclipse IDE plugin (referred to from here on as the plugin) to provide a development environment that fosters the generation of application artifacts from an Ecore model.  The plugin helps developers convert application models created in a variety of meta-model representations into an Ecore model.  From this ecore model, pluggable artifact generators can produce artifacts.  
  
  
+# Related Projects
+  * [Common Security Module] (https://github.com/NCIP/common-security-module)
+  * [Common Logging Module] (https://github.com/NCIP/common-logging-module)
+  * [NCI CBIIT ISO21090 Common Library Module]  (https://github.com/NCIP/iso21090)
+  * [XMI Handler] (https://github.com/NCIP/xmihandler)
+   
