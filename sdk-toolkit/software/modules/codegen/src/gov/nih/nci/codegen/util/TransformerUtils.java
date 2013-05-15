@@ -814,7 +814,7 @@ public class TransformerUtils
 				return "";
 			}
 		else
-			return "extends " + getFullPackageName(klass)+"."+superClass.getName();
+			return "extends " + getFullPackageName(superClass)+"."+superClass.getName();
 	}
 
 	public UMLInterface[] getSuperInterface(UMLInterface interfaze) throws GenerationException
