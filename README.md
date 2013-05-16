@@ -18,7 +18,7 @@ You will find more details about the caCORE SDK in the following links:
  * [Forum] (https://cabig-kc.nci.nih.gov/CaGrid/forums/viewforum.php?f=31&sid=317abcd4b7ae1f07e547e12f9c2b9059)
  * [Issue Tracker] (https://tracker.nci.nih.gov/browse/SDK)
  * [Code Repository] (https://github.com/NCIP/cacore-sdk)
- * [User Guide] (https://wiki.nci.nih.gov/display/caCORE/caCORE+SDK+User+Guides)
+ * [Documentation] (https://wiki.nci.nih.gov/display/caCORE/caCORE+SDK)
  * [Release Notes] (https://wiki.nci.nih.gov/display/caCORE/caCORE+SDK+Release+Notes)
 
 Please join us in further developing and improving caCORE SDK.
