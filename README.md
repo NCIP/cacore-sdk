@@ -60,6 +60,6 @@ Please join us in further developing and improving caCORE SDK.
 # Related Projects
   * [Common Security Module] (https://github.com/NCIP/common-security-module)
   * [Common Logging Module] (https://github.com/NCIP/common-logging-module)
-  * [NCI CBIIT ISO21090 Common Library Module]  (https://github.com/NCIP/iso21090)
+  * [ISO21090 Common Library Module]  (https://github.com/NCIP/iso21090)
   * [XMI Handler] (https://github.com/NCIP/xmihandler)
    
