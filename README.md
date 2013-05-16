@@ -14,12 +14,12 @@ Please see the NOTICE and LICENSE files for details.
 
 You will find more details about the caCORE SDK in the following links:
  * [Community Wiki] (https://wiki.nci.nih.gov/x/XIAI)
- * [Installation Packages] (https://wiki.nci.nih.gov/x/CQFwBg)
- * [Forum] (https://cabig-kc.nci.nih.gov/CaGrid/forums/viewforum.php?f=31&sid=317abcd4b7ae1f07e547e12f9c2b9059)
  * [Issue Tracker] (https://tracker.nci.nih.gov/browse/SDK)
  * [Code Repository] (https://github.com/NCIP/cacore-sdk)
  * [Documentation] (https://wiki.nci.nih.gov/x/zZCPAQ)
  * [Release Notes] (https://wiki.nci.nih.gov/x/DQrx)
+ * [Installation Packages] (https://wiki.nci.nih.gov/x/CQFwBg) 
+ * [Forum] (https://cabig-kc.nci.nih.gov/CaGrid/forums/viewforum.php?f=31&sid=317abcd4b7ae1f07e547e12f9c2b9059)
 
 Please join us in further developing and improving caCORE SDK.
 
