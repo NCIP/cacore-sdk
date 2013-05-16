@@ -40,7 +40,7 @@ Please join us in further developing and improving caCORE SDK.
      4.  Application creation and deployment (SDK)
      5.  Creation of a grid service (Introduce)
    
-      * [Home Page] (https://wiki.nci.nih.gov/display/caCORE/caCORE+Workbench)
+      * [Community Wiki] (https://wiki.nci.nih.gov/display/caCORE/caCORE+Workbench)
       * [Binaries packages] (https://wiki.nci.nih.gov/display/caCORE/caCORE+Workbench+Downloads)
       * [User Guide] (https://wiki.nci.nih.gov/display/caCORE/caCORE+Workbench+Version+0.2+Guide)
       * [Release Notes] (https://gforge.nci.nih.gov/docman/index.php?group_id=624&selected_doc_group_id=5781&language_id=1)
@@ -48,7 +48,7 @@ Please join us in further developing and improving caCORE SDK.
    * caCORE RESTful Wrapper
    
    The caCORE RESTful Wrapper is aimed at lowering the barrier to create RESTful services based on existing data sources. The wrapper provides interface in RESTful manner while it internally maps with existing data source to query data. The RESTful Wrapper will provide User Interface where developers can create RESTful resources wrapping existing data services.
-      * [Home Page] (https://wiki.nci.nih.gov/display/caCORE/caCORE+RESTful+Wrapper)
+      * [Community Wiki] (https://wiki.nci.nih.gov/display/caCORE/caCORE+RESTful+Wrapper)
       * [User Guide] (https://wiki.nci.nih.gov/display/caCORE/caCORE+RESTful+Wrapper+v1.0+User+Guide)
       * [Release Notes] (https://wiki.nci.nih.gov/display/caCORE/caCORE+RESTful+Wrapper+v1.0+Release+Notes)
 
