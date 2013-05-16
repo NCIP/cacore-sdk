@@ -33,12 +33,16 @@ Please join us in further developing and improving caCORE SDK.
 # Sub Projects
    * caCORE Workbench
    
-     The caCORE Workbench is a tool with a graphical user interface (GUI) to facilitate the creation of a caBIG silver or gold compliant system. The caCORE Workbench acts as a process guide and an integrated platform, enabling the user to more readily create a Data or Analytical service on the Grid. The following process workflows are supported:
+     The caCORE Workbench is a tool with a graphical user interface (GUI) to facilitate the creation of 
+     standards-based interoperable systems. The caCORE Workbench acts as a process guide and an integrated 
+     platform, enabling the user to more readily create a Data or Analytical service on the caGrid. 
+
+     The following process workflows are supported:
      1.  Creation of a UML Model (ArgoUML, Enterprise Architect)
      2.  Semantic integration (SIW, CDE Browser, UML Model Browser, Curation Tool)
      3.  Model mapping (caAdapter)
      4.  Application creation and deployment (SDK)
-     5.  Creation of a grid service (Introduce)
+     5.  Creation of a caGrid service (Introduce)
    
       * [Community Wiki] (https://wiki.nci.nih.gov/display/caCORE/caCORE+Workbench)
       * [Binaries packages] (https://wiki.nci.nih.gov/display/caCORE/caCORE+Workbench+Downloads)
