@@ -22,7 +22,7 @@ Getting Started
 * Submit a ticket for your issue at https://tracker.nci.nih.gov/browse/SDK,
   assuming one does not already exist.
 
-  - Click on [Create Issue] (https://tracker.nci.nih.gov/secure/CreateIssue.jspa?pid=10002&issuetype=8) to get a jira account.
+  - Click on https://tracker.nci.nih.gov/secure/CreateIssue.jspa?pid=10002&issuetype=8 to get a jira account.
   - Clearly describe the issue including steps to reproduce when it is a bug.
   - Make sure you fill in the earliest version that you know has the issue.
 
