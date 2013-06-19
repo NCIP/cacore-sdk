@@ -9,6 +9,8 @@ The caCORE SDK has two modules:
 * Code Generation, which accepts a UML model as input and produces java classes and other artifacts such as a standard XML Schema (xsd) that can be used by standard client APIs
 * Middleware, that provides the actual infrastructure including the server and standard client APIs to provide access to the underlying data system through n-tier architecture
 
+The caCORE SDK is an open source project written in Java using Hibernate, Spring Framework, JAXB, Axis, Castor, Struts, Acegi Security, Apache Commons, Apache CXF technologies. 
+
 The caCORE SDK is distributed under the BSD 3-Clause License.
 Please see the NOTICE and LICENSE files for details.
 
