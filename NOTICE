@@ -7,9 +7,5 @@ Please see LICENSE file for details.
 
 This project was developed as part of the NCI caBIG initiative.
 
-The caCORE Software Development Kit (SDK) generates a system built on the principles of Model Driven Architecture (MDA), n-tier architecture and a common API for data access. When the caCORE SDK-generated system is combined with controlled vocabularies and registered metadata, the resulting software system, called "caCORE-like" system, is "semantically integrated." All exposed API elements have runtime accessible metadata that defines the meaning of the elements using controlled terminology.
-
-The project was initially developed by Ekagra Software Technologies Ltd., SAIC and SAIC-Frederick under funding from the CBIIT office of the National Cancer Institute.
-
 In 2013, as part of the National Cancer Informatics Program (NCIP) Open Development Initiative, 
 the caCORE SDK source code was migrated to GitHub to allow further development by the broader community.
