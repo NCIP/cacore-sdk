@@ -96,7 +96,7 @@ public class RESTfulResource {
 				}
 			} catch (Exception ex) {
 				ex.printStackTrace();
-				pageSize = 10000;
+				pageSize = 200;
 			}
 
 			String securityEnabled = (String) systemProperties
@@ -285,8 +285,8 @@ public class RESTfulResource {
 		if (resultsetCount == totalResults)
 			return null;
 
-		int startIndex = -1;
-		int batchSize = -1;
+		int startIndex = 1;
+		int batchSize = pageSize;
 		ResourceLink link = null;
 		String bStart = uriInfo.getQueryParameters().getFirst("start");
 		if (bStart != null)
@@ -299,7 +299,7 @@ public class RESTfulResource {
 
 		String startStr = null;
 		String sizeStr = null;
-		int newStart = 0;
+		int newStart = 1;
 		int newSize = maxCountPerQuery;
 
 		// No start is given
@@ -329,9 +329,9 @@ public class RESTfulResource {
 
 		String href = null;
 		if (path.indexOf("?") > 0)
-			href = path + "&start=" + newStart + "&size=" + newSize;
+			href = path + "&start=" + newStart + "&size=" + newSize + "&total="+totalResults;
 		else
-			href = path + "?start=" + newStart + "&size=" + newSize;
+			href = path + "?start=" + newStart + "&size=" + newSize + "&total="+totalResults;
 
 		link = new ResourceLink("next", "application/xml", href);
 		// log.debug(link.toString());
@@ -344,8 +344,8 @@ public class RESTfulResource {
 		if (resultsetCount == totalResults)
 			return null;
 
-		int startIndex = -1;
-		int batchSize = -1;
+		int startIndex = 1;
+		int batchSize = pageSize;
 		ResourceLink link = null;
 		String bStart = uriInfo.getQueryParameters().getFirst("start");
 		if (bStart != null)
@@ -358,7 +358,7 @@ public class RESTfulResource {
 
 		String startStr = null;
 		String sizeStr = null;
-		int newStart = 0;
+		int newStart = 1;
 		int newSize = maxCountPerQuery;
 
 		// No start is given
@@ -366,13 +366,13 @@ public class RESTfulResource {
 			return null;
 		} else {
 			if (startIndex >= resultsetCount) {
-				newStart = startIndex - resultsetCount;
+				newStart = startIndex - maxCountPerQuery;
 			} else
 				return null;
 
 		}
-		if (newStart < 0)
-			newStart = 0;
+		if (newStart < 1)
+			newStart = 1;
 
 		// No start is given
 		if (batchSize == -1) {
@@ -389,9 +389,9 @@ public class RESTfulResource {
 
 		String href = null;
 		if (path.indexOf("?") > 0)
-			href = path + "&start=" + newStart + "&size=" + newSize;
+			href = path + "&start=" + newStart + "&size=" + newSize + "&total="+totalResults;
 		else
-			href = path + "?start=" + newStart + "&size=" + newSize;
+			href = path + "?start=" + newStart + "&size=" + newSize + "&total="+totalResults;
 
 		link = new ResourceLink("previous", "application/xml", href);
 		// log.debug(link.toString());
@@ -465,12 +465,16 @@ public class RESTfulResource {
 		// System.out.println("bStart: " + bStart);
 		if (bStart != null)
 			startIndex = Integer.parseInt(bStart);
-
+		else 
+			startIndex = 1;
+		
 		String bSize = uriInfo.getQueryParameters().getFirst("size");
 		// System.out.println("bSize: " + bSize);
 		if (bSize != null)
 			totalSize = Integer.parseInt(bSize);
-
+		else 
+			totalSize = pageSize;
+		
 		// log.debug("startIndex: "+startIndex);
 		// log.debug("totalSize: "+totalSize);
 

@@ -25,7 +25,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
-import javax.ws.rs.core.Context;
 import javax.servlet.ServletContext;
 import javax.ws.rs.WebApplicationException;
 import gov.nih.nci.system.applicationservice.ApplicationService;
@@ -65,7 +64,7 @@ public class <%=klassName%>Resource extends RESTfulResource
 	private static Logger log = Logger.getLogger(<%=klassName%>Resource.class);	
 	private String dbType = "<%=transformerUtils.getDatabaseType()%>";
 	
-	public <%=klassName%>Resource(@Context ServletContext context)
+	public <%=klassName%>Resource(@javax.ws.rs.core.Context ServletContext context)
 	{
 		super(context);
 	}
@@ -80,7 +79,7 @@ if(action != null && action.indexOf("R") != -1)
 	@GET
 	@Path("{id}")
 	@Produces("application/xml")
-	public <%=klassName%>Bean get<%=klassName%>ById(@PathParam("id") String id, @Context UriInfo uriInfo, @Context HttpServletRequest request) 
+	public <%=klassName%>Bean get<%=klassName%>ById(@PathParam("id") String id, @javax.ws.rs.core.Context UriInfo uriInfo, @javax.ws.rs.core.Context HttpServletRequest request) 
 	{
 		try
 		{
@@ -258,7 +257,7 @@ if(action != null && action.indexOf("R") != -1)
 	@GET
 	@Path("/search")
 	@Produces("application/xml")
-	public <%=klassName%>s get<%=klassName%>(@Context UriInfo uriInfo, @Context HttpServletRequest request)
+	public <%=klassName%>s get<%=klassName%>(@javax.ws.rs.core.Context UriInfo uriInfo, @javax.ws.rs.core.Context HttpServletRequest request)
 	{
 		try
 		{
@@ -326,9 +325,10 @@ if(action != null && action.indexOf("R") != -1)
 			}
 			HQLCriteria hcriteria = buildHQLCriteria("<%=fullPackageName%>.<%=klassName%>", searchFields, matrixParams, uriInfo, dbType);
 			int rowCount = appService.getQueryRowCount(hcriteria, "<%=fullPackageName%>.<%=klassName%>");
-			int maxRowCountPerQuery = appService.getMaxRecordsCount();
-			//log.debug("rowCount: "+rowCount);
-			//log.debug("maxRowCountPerQuery: "+maxRowCountPerQuery);
+			//int maxRowCountPerQuery = appService.getMaxRecordsCount();
+			int maxRowCountPerQuery = pageSize;
+			System.out.println("rowCount: "+rowCount);
+			System.out.println("maxRowCountPerQuery: "+maxRowCountPerQuery);
 			Collection results = appService.query(hcriteria);
 			ResourceLink nextLink = getNextLink(uriInfo, results.size(), rowCount, maxRowCountPerQuery);
 			ResourceLink previousLink = getPreviousLink(uriInfo, results.size(), rowCount, maxRowCountPerQuery);
@@ -345,7 +345,7 @@ if(action != null && action.indexOf("R") != -1)
 				beans.setOriginalStart(proxy.getOriginalStart());
 				beans.setRealSize(proxy.getRealSize());
 				beans.setMaxRecordsPerQuery(proxy.getMaxRecordsPerQuery());
-				beans.setHasAllRecords(proxy.isHasAllRecords());
+				beans.setHasAllRecords(true);
 				Iterator iter = results.iterator();
 				while(iter.hasNext())
 				{
@@ -465,7 +465,7 @@ for(UMLAssociation assoc: assocs){
 		@GET
 		@Path("/search/<%=name%>")
 		@Produces("application/xml")
-		public <%=assocPackageName%>.<%=assocKlass.getName()%>s get<%=klassName%><%=counter%>(@Context UriInfo uriInfo, @Context HttpServletRequest request)
+		public <%=assocPackageName%>.<%=assocKlass.getName()%>s get<%=klassName%><%=counter%>(@javax.ws.rs.core.Context UriInfo uriInfo, @javax.ws.rs.core.Context HttpServletRequest request)
 		{
 			try
 			{
@@ -548,9 +548,9 @@ for(UMLAssociation assoc: assocs){
 				}
 
 				int rowCount = appService.getQueryRowCount(hqlCriteria, "<%=assocPackageName%>.<%=assocKlass.getName()%>");
-				int maxRowCountPerQuery = appService.getMaxRecordsCount();
-				//log.debug("rowCount: "+rowCount);
-				//log.debug("maxRowCountPerQuery: "+maxRowCountPerQuery);
+				int maxRowCountPerQuery = pageSize;
+				System.out.println("rowCount: "+rowCount);
+				System.out.println("maxRowCountPerQuery: "+maxRowCountPerQuery);
 				Collection results = appService.query(hqlCriteria);
 				ResourceLink nextLink = getNextLink(uriInfo, results.size(), rowCount, maxRowCountPerQuery);
 				ResourceLink previousLink = getPreviousLink(uriInfo, results.size(), rowCount, maxRowCountPerQuery);
@@ -568,7 +568,7 @@ for(UMLAssociation assoc: assocs){
 					beans.setOriginalStart(proxy.getOriginalStart());
 					beans.setRealSize(proxy.getRealSize());
 					beans.setMaxRecordsPerQuery(proxy.getMaxRecordsPerQuery());
-					beans.setHasAllRecords(proxy.isHasAllRecords());
+					beans.setHasAllRecords(true);
 
 					while(iter.hasNext())
 					{
@@ -673,7 +673,7 @@ for(UMLAssociation assoc: assocs){
 		@GET
 		@Path("{id}/<%=name%>")
 		@Produces("application/xml")
-		public <%=assocPackageName%>.<%=assocKlass.getName()%>s <%=transformerUtils.getGetterMethodName(associationEnd)%>(@PathParam("id") String id, @Context UriInfo uriInfo, @Context HttpServletRequest request)
+		public <%=assocPackageName%>.<%=assocKlass.getName()%>s <%=transformerUtils.getGetterMethodName(associationEnd)%>(@PathParam("id") String id, @javax.ws.rs.core.Context UriInfo uriInfo, @javax.ws.rs.core.Context HttpServletRequest request)
 		{
 			try
 			{
@@ -705,9 +705,9 @@ for(UMLAssociation assoc: assocs){
 					
 				HQLCriteria hqlCriteria = getAssociationCriteria(Class.forName(className), "<%=name%>", id, startIndex, totalSize);
 				int rowCount = appService.getQueryRowCount(hqlCriteria, "<%=assocPackageName%>.<%=assocKlass.getName()%>");
-				int maxRowCountPerQuery = appService.getMaxRecordsCount();
-				//log.debug("rowCount: "+rowCount);
-				//log.debug("maxRowCountPerQuery: "+maxRowCountPerQuery);
+				int maxRowCountPerQuery = pageSize;
+				System.out.println("rowCount: "+rowCount);
+				System.out.println("maxRowCountPerQuery: "+maxRowCountPerQuery);
 				Collection results = appService.query(hqlCriteria);
 				ResourceLink nextLink = getNextLink(uriInfo, results.size(), rowCount, maxRowCountPerQuery);
 				ResourceLink previousLink = getPreviousLink(uriInfo, results.size(), rowCount, maxRowCountPerQuery);
@@ -725,7 +725,7 @@ for(UMLAssociation assoc: assocs){
 					beans.setOriginalStart(proxy.getOriginalStart());
 					beans.setRealSize(proxy.getRealSize());
 					beans.setMaxRecordsPerQuery(proxy.getMaxRecordsPerQuery());
-					beans.setHasAllRecords(proxy.isHasAllRecords());
+					beans.setHasAllRecords(true);
 					while(iter.hasNext())
 					{
 						<%=assocPackageName%>.<%=assocKlass.getName()%> obj = (<%=assocPackageName%>.<%=assocKlass.getName()%>) iter.next();
@@ -824,7 +824,7 @@ for(UMLAssociation assoc: assocs){
 		@GET
 		@Path("{id}/<%=name%>")
 		@Produces("application/xml")
-		public <%=assocPackageName%>.<%=assocKlass.getName()%> <%=transformerUtils.getGetterMethodName(associationEnd)%>(@PathParam("id") String id, @Context UriInfo uriInfo, @Context HttpServletRequest request)
+		public <%=assocPackageName%>.<%=assocKlass.getName()%> <%=transformerUtils.getGetterMethodName(associationEnd)%>(@PathParam("id") String id, @javax.ws.rs.core.Context UriInfo uriInfo, @javax.ws.rs.core.Context HttpServletRequest request)
 		{
 			try
 			{
@@ -857,9 +857,9 @@ for(UMLAssociation assoc: assocs){
 					
 				HQLCriteria hqlCriteria = getAssociationCriteria(Class.forName(className), "<%=name%>", id, startIndex, totalSize);
 				int rowCount = appService.getQueryRowCount(hqlCriteria, "<%=assocPackageName%>.<%=assocKlass.getName()%>");
-				int maxRowCountPerQuery = appService.getMaxRecordsCount();
-				//log.debug("rowCount: "+rowCount);
-				//log.debug("maxRowCountPerQuery: "+maxRowCountPerQuery);
+				int maxRowCountPerQuery = pageSize;
+				System.out.println("rowCount: "+rowCount);
+				System.out.println("maxRowCountPerQuery: "+maxRowCountPerQuery);
 				Collection results = appService.query(hqlCriteria);
 				//List beans = new ArrayList();
 				if(results != null && results.size() > 0)
@@ -963,7 +963,7 @@ if(action != null && action.indexOf("C") != -1 && !transformerUtils.isISO21090En
 {%>
 	@PUT
 	@Consumes("application/xml")
-	public Response add<%=klassName%>(<%=klassName%> object, @Context UriInfo uriInfo, @Context HttpServletRequest request)
+	public Response add<%=klassName%>(<%=klassName%> object, @javax.ws.rs.core.Context UriInfo uriInfo, @javax.ws.rs.core.Context HttpServletRequest request)
 	{
 		try
 		{
@@ -1029,7 +1029,7 @@ if(action != null && action.indexOf("D") != -1 && !transformerUtils.isISO21090En
 
 	@DELETE
 	@Path("{id}")
-	public Response delete<%=klassName%>(@Context javax.servlet.http.HttpServletRequest request, @Context javax.servlet.http.HttpServletResponse response, @PathParam("id") String id)
+	public Response delete<%=klassName%>(@javax.ws.rs.core.Context javax.servlet.http.HttpServletRequest request, @javax.ws.rs.core.Context javax.servlet.http.HttpServletResponse response, @PathParam("id") String id)
 	{
 	//log.debug("in delete................");
 		try

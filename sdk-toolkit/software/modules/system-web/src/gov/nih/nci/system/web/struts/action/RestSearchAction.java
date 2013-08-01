@@ -35,6 +35,7 @@ public class RestSearchAction extends RestQuery {
 	// Query parameters
 	private String query;
 	private String btnSearch;
+	private String pageHref;
 	private String searchObj;
 	private String selectedDomain;
 	private ClassCache classCache;
@@ -50,6 +51,9 @@ public class RestSearchAction extends RestQuery {
 		String className = getSelectedDomain();
 		log.debug("className (selectedDomain): " + getSelectedDomain());
 		String targetClass = className;
+		HttpServletRequest request = ServletActionContext.getRequest();
+		SessionMap session = (SessionMap) ActionContext.getContext().get(
+				ActionContext.SESSION.toString());
 
 		if (submitValue != null && submitValue.equalsIgnoreCase("Submit")) {
 			selectedSearchDomain = getSearchObj();
@@ -64,9 +68,6 @@ public class RestSearchAction extends RestQuery {
 					targetClass = selectedSearchDomain;
 				}
 			}
-			HttpServletRequest request = ServletActionContext.getRequest();
-			SessionMap session = (SessionMap) ActionContext.getContext().get(
-					ActionContext.SESSION.toString());
 			debugSessionAttributes(session);
 			// String username = (String) session.get("Username");
 			// String password = (String) session.get("Password");
@@ -112,6 +113,42 @@ public class RestSearchAction extends RestQuery {
 				request.setAttribute("targetClass", targetClass);
 			}
 		}
+		else if(getPageHref() != null && getPageHref().trim().length() > 0)
+		{
+			WebClient client = WebClient.create(getPageHref());
+
+			org.acegisecurity.context.SecurityContext context = (org.acegisecurity.context.SecurityContext) session
+					.get("ACEGI_SECURITY_CONTEXT");
+			if (context != null) {
+				Authentication authentication = context.getAuthentication();
+				// authentication.getCredentials();
+				String userName = ((org.acegisecurity.userdetails.User) authentication
+						.getPrincipal()).getUsername();
+				String password = authentication.getCredentials().toString();
+				String base64encodedUsernameAndPassword = new String(
+						Base64.encodeBase64((userName + ":" + password)
+								.getBytes()));
+				client.header("Authorization", "Basic "
+						+ base64encodedUsernameAndPassword);
+			}
+			client.type("application/xml").accept("application/xml");
+			Response r = client.get();
+			if (r.getStatus() == Status.UNAUTHORIZED.getStatusCode()) {
+				String html = getUnauthorizedHTML(getPageHref(), className,
+						"Unauthorized access");
+				request.setAttribute("HTMLContent", html);
+			} else {
+				InputStream is = (InputStream) r.getEntity();
+
+				org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(
+						false);
+				org.jdom.Document jDoc = builder.build(is);
+				String html = getHTML(jDoc, className, getPageHref(), null);
+				request.setAttribute("HTMLContent", html);
+				request.setAttribute("targetClass", targetClass);
+			}
+			
+		}
 		return SUCCESS;
 	}
 
@@ -131,6 +168,14 @@ public class RestSearchAction extends RestQuery {
 		this.btnSearch = btnSearch;
 	}
 
+	public String getPageHref() {
+		return this.pageHref;
+	}
+	
+	public void setPageHref(String href) {
+		this.pageHref = href;
+	}
+	
 	public String getSearchObj() {
 		return searchObj;
 	}

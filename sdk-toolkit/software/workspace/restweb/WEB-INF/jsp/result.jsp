@@ -27,6 +27,13 @@ function query(hrefVal)
 	document.LinkResult.submit();
 }
 
+function pageQuery(hrefVal)
+{
+	document.PageResult.pageHref.value=hrefVal;
+	document.PageResult.selectedDomain.value="<%=request.getAttribute("targetClass")%>";
+	document.PageResult.submit();
+}
+
 function showMetadata(context, klass, attribute)
 {
 	title = "Metadata for" + klass + ":" + attribute;
@@ -41,6 +48,12 @@ function showMetadata(context, klass, attribute)
 <input type="hidden" name="linkHref"/>
 <input type="hidden" name="targetClass"/>
 </form>
+
+<form method="post" action="Result.action" name="PageResult" id="PageResult">
+<input type="hidden" name="pageHref"/>
+<input type="hidden" name="selectedDomain"/>
+</form>
+
 
 <table summary="" cellpadding="0" cellspacing="0" border="0"
 	width="100%" height="100%">

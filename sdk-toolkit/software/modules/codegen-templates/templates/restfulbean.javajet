@@ -23,7 +23,7 @@ import org.apache.log4j.Logger;
 <%=transformerUtils.getJaxbXmlRootElementAnnotation(klass)%>
 <%} %>
 
-public <%=transformerUtils.isAbstract(klass)? " abstract" : "" %> class <%=klassName%>Bean extends <%=klassName%>
+public <%=transformerUtils.isAbstract(klass)? " abstract" : "" %> class <%=klassName%>Bean extends <%=fullPackageName%>.<%=klassName%>
 {
 
 	private static Logger log = Logger.getLogger(<%=klassName%>Bean.class);	
@@ -33,7 +33,7 @@ public <%=klassName%>Bean()
 {
 }
 
-public <%=klassName%>Bean(<%=klassName%> obj)
+public <%=klassName%>Bean(<%=fullPackageName%>.<%=klassName%> obj)
 {	
 	try
 	{
@@ -85,7 +85,7 @@ public <%=klassName%>Bean(<%=klassName%> obj)
 	}
 }
 
-public List<ResourceLink> buildLinks(String path, <%=klassName%> obj)
+public List<ResourceLink> buildLinks(String path, <%=fullPackageName%>.<%=klassName%> obj)
 {
 	String idStr = null;
 	String href = null;
@@ -255,12 +255,12 @@ public void setLinks(List<ResourceLink> links)
 
 <%if(!transformerUtils.isAbstract(klass)){%>
 
-public <%=klassName%> getObject()
+public <%=fullPackageName%>.<%=klassName%> getObject()
 {	
-	<%=klassName%> object = null;
+	<%=fullPackageName%>.<%=klassName%> object = null;
 	try
 	{
-		object = new <%=klassName%>();
+		object = new <%=fullPackageName%>.<%=klassName%>();
 	<%
 	List<UMLAttribute> attributes2 = transformerUtils.getClassAttributes(klass, true);
 	for(UMLAttribute attr : attributes2){%>
