@@ -93,12 +93,15 @@ L--%>
 											</td>
 										</tr>
 										<tr>
-										<td border=0 class="txtHighlight" align="center" height="1%">
+										<td border=0 class="txtHighlight" align="center" height="1%">&nbsp;
 										<%String message2 = (String)request.getAttribute("message");
-										if(message2 == null)
-											message2="&nbsp;";
+										if(message2 != null)
+										{
 										%>
 										<%=org.apache.commons.lang.StringEscapeUtils.escapeHtml(message2)%>
+										<%
+										}
+										%>
 										</td>
 										</tr>
 														<tr>
