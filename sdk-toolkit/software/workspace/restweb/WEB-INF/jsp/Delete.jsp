@@ -115,12 +115,15 @@ String success = (String)request.getAttribute("successful");
 											</td>
 										</tr>
 										<tr>
-										<td border=0 class="txtHighlight" align="center">
+										<td border=0 class="txtHighlight" align="center">&nbsp;
 										<%message = (String)request.getAttribute("message");
-										if(message == null)
-											message="&nbsp;";
+										if(message != null)
+										{
 										%>
 										<%=org.apache.commons.lang.StringEscapeUtils.escapeHtml(message)%>
+										<%
+										}
+										%>										
 										</td>
 										</tr>
 			<% if(domainNames != null && domainNames.size() > 0)
